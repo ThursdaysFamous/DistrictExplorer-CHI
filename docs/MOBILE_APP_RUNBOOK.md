@@ -51,12 +51,13 @@ Capacitor loads the existing `index.html` into a native WebView shell — no rew
 ```bash
 npm init -y                       # only if there's no package.json yet
 npm install @capacitor/core @capacitor/cli
-npx cap init "Chicago District Explorer" "org.thursdaysfamous.districtexplorer" --web-dir=.
+npx cap init "Chicago District Explorer" "org.thursdaysfamous.districtexplorer" --web-dir=www
 ```
 
-- `--web-dir=.` points Capacitor at the repo root since `index.html` lives there with no build output directory.
+- Capacitor 8+'s CLI hard-rejects `webDir` values of `.`, `./`, `..`, `../`, or `""` — pointing directly at the repo root (as this runbook originally called for) is no longer possible. `www/` is the workaround: a gitignored, disposable copy directory populated by `npm run sync:www` (backed by `scripts/sync_web_assets.sh`), which just copies `index.html`, `manifest.webmanifest`, `sw.js`, and `icons/` verbatim. `index.html` itself remains the single source of truth; `www/` is regenerated, never hand-edited.
+- **Do not use symlinks in `www/` instead of real copies** — Capacitor's asset copy preserves symlinks rather than dereferencing them, so once nested inside `android/app/src/main/assets/public/` or `ios/App/App/public/` the relative symlink targets no longer resolve, silently producing an empty/broken app shell.
 - This creates `capacitor.config.json` — commit it.
-- Do **not** let this introduce a bundler/build step for `index.html` itself; Capacitor just copies the web dir as-is into each native project's assets.
+- `npm run cap:sync` runs `sync:www` then `npx cap sync` in one step; use it instead of calling `npx cap sync` directly so `www/` is never stale.
 
 ### 2b. Add platforms
 
@@ -71,10 +72,10 @@ This generates `android/` and `ios/` native project directories. Commit them (Ca
 ### 2c. Sync after every change to index.html or data/
 
 ```bash
-npx cap sync
+npm run cap:sync
 ```
 
-Run this before every native build — it copies the current `index.html` (and `data/`, if referenced) into both native projects and updates native dependencies.
+Run this before every native build — it regenerates `www/` from the current `index.html` and friends, then copies it into both native projects and updates native dependencies. (`data/` isn't referenced by `index.html` at runtime — the embedded-data layers are inlined into the page itself — so it's intentionally left out of `www/`.)
 
 ### 2d. Permissions
 
@@ -90,6 +91,8 @@ Provide one square source icon (≥1024×1024, no transparency) and one splash s
 npx capacitor-assets generate
 ```
 This generates all iOS/Android icon and splash sizes automatically.
+
+Not yet done as of this writing: the existing `icons/icon-512.png` is a 512×512 PWA icon, not the ≥1024×1024 no-transparency source `capacitor-assets` needs, and no `assets/splash.png` exists — real branded artwork needs to be supplied before running `generate`.
 
 ---
 
