@@ -1249,13 +1249,15 @@
           var feature = findFeatureContaining(geojson, point);
           if (!feature) return null;
           var props = feature.properties || {};
-          var name = findPropCI(props, ["school_nm", "school_name", "schoolname", "sch_name", "name"]);
+          var name = findPropCI(props, ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name", "name"]);
           var schoolId = findPropCI(props, ["school_id", "sch_id", "schoolid", "school_ids"]);
-          return { seq: seq, name: name, schoolId: schoolId };
+          var grades = findPropCI(props, ["boundarygr", "grade_range", "gradelevel"]);
+          return { seq: seq, name: name, schoolId: schoolId, grades: grades };
         });
       },
       render: function (result) {
         var fields = [{ label: "School", value: result.name ? String(result.name) : "Unknown" }];
+        if (result.grades) fields.push({ label: "Grades", value: String(result.grades) });
         var profileHtml = schoolProfileHtml(result.schoolId);
         if (profileHtml) fields.push({ label: "Profile", html: profileHtml });
         return renderFieldList(fields);
@@ -1266,24 +1268,76 @@
   registerSchoolZone({
     id: "cps-elementary",
     label: "Elementary School Zone",
-    datasetId: "5ihw-cbdn",
+    // confirmed via live sample: per-school attendance boundary (school_id, short_name, grade_cat: "ES")
+    datasetId: "x72b-38qv",
     style: { color: "#6A3FA0", weight: 1.5, fillColor: "#6A3FA0", fillOpacity: 0.06, dashArray: "4 3" }
   });
 
   registerSchoolZone({
     id: "cps-high",
     label: "High School Zone",
-    datasetId: "4kfz-zr3a",
+    // confirmed via live sample: per-school attendance boundary (school_id, school_nam, grade_cat: "HS")
+    datasetId: "xg7c-d8rm",
     style: { color: "#0F6F6F", weight: 1.5, fillColor: "#0F6F6F", fillOpacity: 0.06, dashArray: "1 3 4 3" }
   });
 
-  // per the playbook: no current verified middle-zone dataset; this legacy one
-  // only covers ~22 schools, so most points will honestly show "no result"
   registerSchoolZone({
     id: "cps-middle",
-    label: "Middle School Zone (legacy, partial coverage)",
-    datasetId: "9kct-c3uq",
+    label: "Middle School Zone",
+    // confirmed via live sample: same current attendance-boundary schema as
+    // elementary/high (school_id, school_nam, grade_cat: "MS", boundarygr),
+    // superseding the playbook's ~22-school legacy dataset (9kct-c3uq)
+    datasetId: "fyff-53xy",
     style: { color: "#A15C00", weight: 1.5, fillColor: "#A15C00", fillOpacity: 0.06, dashArray: "6 2" }
+  });
+
+  /* ---------- CPS Network (administrative region, not a single school) ----------
+   * Confirmed via live sample: each polygon covers a whole CPS "Network"
+   * (K-8's pnta-kuqa, High School's aupu-jt2g — same schema, separate
+   * datasets) and carries a real named administrator + phone + address —
+   * unlike commander/principal contacts, this one actually is in open data. */
+  function registerCpsNetwork(opts) {
+    // opts: id, label, datasetId, style
+    var loadNetworks = makeCachedLoader(opts.datasetId);
+    registerLayer({
+      id: opts.id,
+      group: "schools",
+      label: opts.label,
+      overlay: { load: loadNetworks, style: opts.style },
+      query: function (point, seq) {
+        return loadNetworks().then(function (geojson) {
+          var feature = findFeatureContaining(geojson, point);
+          if (!feature) return null;
+          var props = feature.properties || {};
+          var network = findPropCI(props, ["network", "networknum", "k12_networ"]);
+          var chief = findPropCI(props, ["admin", "chief", "administrator"]);
+          var phone = findPropCI(props, ["phone"]);
+          var address = findPropCI(props, ["address"]);
+          return { seq: seq, network: network, chief: chief, phone: phone, address: address };
+        });
+      },
+      render: function (result) {
+        var fields = [{ label: "Network", value: result.network ? String(result.network) : "Unknown" }];
+        if (result.chief) fields.push({ label: "Network Chief", value: String(result.chief) });
+        if (result.phone) fields.push({ label: "Phone", value: String(result.phone) });
+        if (result.address) fields.push({ label: "Office Address", value: String(result.address) });
+        return renderFieldList(fields);
+      }
+    });
+  }
+
+  registerCpsNetwork({
+    id: "cps-network",
+    label: "CPS Network (K-8, admin office)",
+    datasetId: "pnta-kuqa",
+    style: { color: "#3D3D7A", weight: 1.5, fillColor: "#3D3D7A", fillOpacity: 0.04, dashArray: "8 4 2 4" }
+  });
+
+  registerCpsNetwork({
+    id: "cps-hs-network",
+    label: "CPS Network (High School, admin office)",
+    datasetId: "aupu-jt2g",
+    style: { color: "#7A2D3D", weight: 1.5, fillColor: "#7A2D3D", fillOpacity: 0.04, dashArray: "10 3" }
   });
 
   /* =========================================================================
