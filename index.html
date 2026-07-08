@@ -424,6 +424,14 @@
   }
 
   .leaflet-popup-content { font-family: var(--font-body); font-size: 13px; }
+
+  /* ---- selected-boundary highlight: SVG drop-shadow filter so the matched
+     region reads as physically lifted above the faded rest of the layer ---- */
+  .chi-region-highlight {
+    filter: drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35));
+    transition: filter 120ms ease-out;
+  }
+  .chi-poi-pin { background: none; border: none; }
 </style>
 </head>
 <body>
@@ -774,38 +782,136 @@
 
   function registerLayer(mod) {
     layers.push(mod);
-    layerRuntime[mod.id] = { overlayLayer: null, overlayLoaded: false, cardBody: null, geojson: null, highlightedLayer: null };
+    layerRuntime[mod.id] = {
+      overlayLayer: null, overlayLoaded: false, cardBody: null, geojson: null,
+      highlightedLayer: null, poiMarker: null
+    };
   }
 
-  /* ---------- highlight whichever boundary the selected point actually falls in.
+  /* ---------- highlight whichever boundary the selected point actually falls in,
+   * and fade every other boundary in that same layer so the match pops.
    * Deliberately generic, not per-module: it re-runs the same shared
    * findFeatureContaining/pointInGeometry check against the overlay's own
    * cached geojson (rt.geojson), then matches the result to the Leaflet
    * sub-layer Leaflet already tagged with `.feature`. Point datasets (e.g.
    * fire stations) never match since pointInGeometry only handles
-   * Polygon/MultiPolygon, so they're unaffected. ---------- */
-  var HIGHLIGHT_STYLE = { color: "#FFD400", weight: 4, opacity: 1, fillOpacity: 0.3, dashArray: null };
+   * Polygon/MultiPolygon, so they're unaffected.
+   *
+   * The drop-shadow "floating" look is a CSS filter (.chi-region-highlight),
+   * applied by mutating the SVG path's class list directly — Leaflet's
+   * `className` style option only takes effect when the path is first
+   * created, not on later setStyle() calls, so setStyle() alone can't do this. */
+  var HIGHLIGHT_STYLE = { color: "#FFD400", weight: 4, opacity: 1, fillOpacity: 0.32, dashArray: null };
+  var HIGHLIGHT_CLASS = "chi-region-highlight";
+
+  function fadedStyle(baseStyle) {
+    return {
+      color: baseStyle.color,
+      weight: Math.max(1, (baseStyle.weight || 1.5) - 0.5),
+      fillColor: baseStyle.fillColor,
+      fillOpacity: Math.min(baseStyle.fillOpacity || 0.06, 0.02),
+      opacity: 0.18,
+      dashArray: baseStyle.dashArray
+    };
+  }
 
   function clearLayerHighlight(mod) {
     var rt = layerRuntime[mod.id];
-    if (rt.highlightedLayer && rt.highlightedLayer.setStyle) {
-      rt.highlightedLayer.setStyle(mod.overlay.style);
-    }
     rt.highlightedLayer = null;
+    if (!rt.overlayLayer) return;
+    rt.overlayLayer.eachLayer(function (subLayer) {
+      if (subLayer.setStyle) subLayer.setStyle(mod.overlay.style);
+      if (subLayer._path) subLayer._path.classList.remove(HIGHLIGHT_CLASS);
+    });
   }
 
   function updateLayerHighlight(mod) {
     var rt = layerRuntime[mod.id];
-    clearLayerHighlight(mod);
-    if (!rt.overlayLayer || !rt.geojson || !state.selectedPoint) return;
+    if (!rt.overlayLayer || !rt.geojson || !state.selectedPoint) { clearLayerHighlight(mod); return; }
     var feature = findFeatureContaining(rt.geojson, state.selectedPoint);
-    if (!feature) return;
+    if (!feature) { clearLayerHighlight(mod); return; }
+
+    var faded = fadedStyle(mod.overlay.style);
     rt.overlayLayer.eachLayer(function (subLayer) {
-      if (subLayer.feature === feature) {
+      var isMatch = subLayer.feature === feature;
+      if (subLayer.setStyle) subLayer.setStyle(isMatch ? HIGHLIGHT_STYLE : faded);
+      if (subLayer._path) {
+        if (isMatch) subLayer._path.classList.add(HIGHLIGHT_CLASS);
+        else subLayer._path.classList.remove(HIGHLIGHT_CLASS);
+      }
+      if (isMatch) {
         rt.highlightedLayer = subLayer;
-        subLayer.setStyle(HIGHLIGHT_STYLE);
         if (subLayer.bringToFront) subLayer.bringToFront();
       }
+    });
+  }
+
+  /* ---------- optional per-module "point of interest" pin (e.g. a school's
+   * street address) — a small marker placed at a geocoded location,
+   * independent of the polygon highlight above. A module opts in by
+   * exposing mod.pointOfInterest(result) => {label, address} | null. ---------- */
+  var poiGeocodeCache = {}; // address string -> {lat,lng} | null, avoids re-geocoding the same address
+
+  function geocodePoiAddress(address) {
+    if (Object.prototype.hasOwnProperty.call(poiGeocodeCache, address)) {
+      return Promise.resolve(poiGeocodeCache[address]);
+    }
+    var viewbox = [CHI_BBOX.minLng, CHI_BBOX.maxLat, CHI_BBOX.maxLng, CHI_BBOX.minLat].join(",");
+    var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&bounded=1&viewbox=" +
+      viewbox + "&q=" + encodeURIComponent(address);
+    return fetchWithRetry(url, { headers: { "Accept": "application/json" } }, 1)
+      .then(function (res) { return res.json(); })
+      .then(function (results) {
+        var hit = results && results[0];
+        var coords = hit ? { lat: parseFloat(hit.lat), lng: parseFloat(hit.lon) } : null;
+        poiGeocodeCache[address] = coords;
+        return coords;
+      })
+      .catch(function () {
+        poiGeocodeCache[address] = null;
+        return null;
+      });
+  }
+
+  var poiPinIconCache = {};
+  function poiPinIcon(color) {
+    if (poiPinIconCache[color]) return poiPinIconCache[color];
+    var icon = L.divIcon({
+      className: "chi-poi-pin",
+      html: '<svg viewBox="0 0 24 32" width="22" height="30" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
+        '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z" fill="' + color + '" stroke="#ffffff" stroke-width="1.5"/>' +
+        '<circle cx="12" cy="12" r="4.2" fill="#ffffff"/>' +
+        "</svg>",
+      iconSize: [22, 30],
+      iconAnchor: [11, 30]
+    });
+    poiPinIconCache[color] = icon;
+    return icon;
+  }
+
+  function clearLayerPoi(mod) {
+    var rt = layerRuntime[mod.id];
+    if (rt.poiMarker) { map.removeLayer(rt.poiMarker); rt.poiMarker = null; }
+  }
+
+  function updateLayerPoi(mod, result, seq) {
+    if (!mod.pointOfInterest) return;
+    var poi = mod.pointOfInterest(result);
+    if (!poi || !poi.address) { clearLayerPoi(mod); return; }
+    geocodePoiAddress(poi.address).then(function (coords) {
+      if (seq !== state.sequence) return; // a newer point was selected meanwhile
+      if (!state.layersOn[mod.id]) return; // toggled off while geocoding
+      clearLayerPoi(mod);
+      if (!coords) return; // couldn't geocode — address is still shown as text in the card
+      var rt = layerRuntime[mod.id];
+      var color = (mod.overlay.style && mod.overlay.style.color) || "#14181C";
+      rt.poiMarker = L.marker([coords.lat, coords.lng], {
+        icon: poiPinIcon(color),
+        keyboard: false,
+        alt: poi.label + " location"
+      })
+        .bindTooltip(sanitize(poi.label), { direction: "top", offset: [0, -26] })
+        .addTo(map);
     });
   }
 
@@ -880,6 +986,7 @@
 
     if (!on) {
       clearLayerHighlight(mod); // revert style before hiding, so it doesn't linger if re-toggled with a different point later
+      clearLayerPoi(mod);
       if (rt.overlayLayer) map.removeLayer(rt.overlayLayer);
       rt.cardBody.className = "layer-card-body state-off";
       rt.cardBody.textContent = "Layer off.";
@@ -951,14 +1058,16 @@
         if (seq !== state.sequence) return; // stale — a newer point was selected meanwhile
         if (!state.layersOn[mod.id]) return; // toggled off while in flight
         updateLayerHighlight(mod);
-        if (!result) { setCardEmpty(mod); return; }
+        if (!result) { setCardEmpty(mod); clearLayerPoi(mod); return; }
         setCardResult(mod, mod.render(result));
+        updateLayerPoi(mod, result, seq);
       })
       .catch(function (err) {
         if (seq !== state.sequence) return;
         if (!state.layersOn[mod.id]) return;
         console.error("[" + mod.id + "] query failed:", err);
         clearLayerHighlight(mod);
+        clearLayerPoi(mod);
         setCardError(mod, "This layer's data source didn't respond. It won't affect other layers.", seq);
       });
   }
@@ -1289,15 +1398,21 @@
           var name = findPropCI(props, ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name", "name"]);
           var schoolId = findPropCI(props, ["school_id", "sch_id", "schoolid", "school_ids"]);
           var grades = findPropCI(props, ["boundarygr", "grade_range", "gradelevel"]);
-          return { seq: seq, name: name, schoolId: schoolId, grades: grades };
+          var address = findPropCI(props, ["school_add", "address", "location_address"]);
+          return { seq: seq, name: name, schoolId: schoolId, grades: grades, address: address };
         });
       },
       render: function (result) {
         var fields = [{ label: "School", value: result.name ? String(result.name) : "Unknown" }];
         if (result.grades) fields.push({ label: "Grades", value: String(result.grades) });
+        if (result.address) fields.push({ label: "Address", value: String(result.address) });
         var profileHtml = schoolProfileHtml(result.schoolId);
         if (profileHtml) fields.push({ label: "Profile", html: profileHtml });
         return renderFieldList(fields);
+      },
+      pointOfInterest: function (result) {
+        if (!result.address) return null;
+        return { label: result.name ? String(result.name) : "School", address: String(result.address) };
       }
     });
   }
