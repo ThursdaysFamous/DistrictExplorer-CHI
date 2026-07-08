@@ -246,6 +246,7 @@
   }
 
   /* ---- Layer toggle drawer ---- */
+  main.layout.rail-hidden { grid-template-columns: 1fr; }
   .layer-toggle-btn {
     position: absolute;
     top: 12px;
@@ -450,7 +451,7 @@
 </header>
 <div class="flag-stripe" aria-hidden="true"></div>
 
-<main class="layout">
+<main class="layout" id="layout">
   <section class="map-col" aria-label="Interactive district map">
     <div id="map" role="application" aria-label="Map of Chicago. Click anywhere to select a point, or use the search box above."></div>
 
@@ -558,6 +559,13 @@
       .replace(/'/g, "&#39;");
   }
 
+  /* ---------- scheme allowlist for href values sourced from external data —
+   * sanitize() escapes quotes/angle brackets but a javascript:/data: URL
+   * contains neither, so it would otherwise pass straight into an href ---------- */
+  function safeHttpUrl(url) {
+    return /^https?:\/\//i.test(String(url || "")) ? String(url) : null;
+  }
+
   /* ---------- point-in-polygon: GeoJSON Polygon / MultiPolygon, holes-aware ---------- */
   function pointInRing(pt, ring) {
     // standard even-odd ray casting against a single ring
@@ -594,8 +602,11 @@
     return false;
   }
 
-  /* ---------- fetch with retry + timeout ---------- */
-  function fetchWithRetry(url, opts, retries) {
+  /* ---------- fetch JSON with retry + timeout. The abort timer stays armed
+   * through the body read, not just the headers — every caller parses JSON,
+   * and a response that stalls mid-body would otherwise hang its layer's
+   * "Loading…" card forever with the cached loader pinning the hung promise. ---------- */
+  function fetchJSONWithRetry(url, opts, retries) {
     opts = opts || {};
     retries = retries === undefined ? 2 : retries;
     var timeoutMs = opts.timeoutMs || 9000;
@@ -605,9 +616,12 @@
       var timer = setTimeout(function () { controller.abort(); }, timeoutMs);
       return fetch(url, Object.assign({}, opts, { signal: controller.signal }))
         .then(function (res) {
-          clearTimeout(timer);
           if (!res.ok) throw new Error("HTTP " + res.status);
-          return res;
+          return res.json();
+        })
+        .then(function (json) {
+          clearTimeout(timer);
+          return json;
         })
         .catch(function (err) {
           clearTimeout(timer);
@@ -627,8 +641,7 @@
   function probeGeometryColumn(datasetId) {
     if (geometryColumnCache[datasetId]) return Promise.resolve(geometryColumnCache[datasetId]);
     var url = "https://data.cityofchicago.org/resource/" + datasetId + ".json?$limit=1";
-    return fetchWithRetry(url, {}, 1)
-      .then(function (res) { return res.json(); })
+    return fetchJSONWithRetry(url, {}, 1)
       .then(function (rows) {
         var row = rows && rows[0];
         var col = "the_geom";
@@ -693,6 +706,18 @@
     setSelectedPoint(c.lat, c.lng, { skipPan: true });
   });
 
+  /* ---------- "Layers" drawer button — collapses the results rail so the
+   * map gets the full width; aria-expanded mirrors the rail state ---------- */
+  var drawerBtn = document.getElementById("layer-drawer-btn");
+  drawerBtn.addEventListener("click", function () {
+    var expanded = drawerBtn.getAttribute("aria-expanded") === "true";
+    drawerBtn.setAttribute("aria-expanded", String(!expanded));
+    document.getElementById("results-col").hidden = expanded;
+    document.getElementById("layout").classList.toggle("rail-hidden", expanded);
+    drawerBtn.textContent = expanded ? "Layers ▸" : "Layers ▾";
+    map.invalidateSize(); // the map container just changed width
+  });
+
   /* =========================================================================
    * GEOCODER — Nominatim, debounced, bounded to Chicago, attributed.
    * Swappable: everything lives behind geocodeAddress().
@@ -729,6 +754,10 @@
       btn.type = "button";
       btn.textContent = r.display_name; // textContent — never innerHTML — for untrusted geocoder output
       btn.addEventListener("click", function () {
+        // cancel any pending debounce fire and in-flight search, so a late
+        // response can't re-open the list over the "Selected:" status
+        clearTimeout(debounceTimer);
+        if (inFlightController) inFlightController.abort();
         setSelectedPoint(parseFloat(r.lat), parseFloat(r.lon));
         geoResultsList.innerHTML = "";
         geoStatus.textContent = "Selected: " + r.display_name;
@@ -756,11 +785,20 @@
   document.getElementById("geocode-input").addEventListener("input", function () {
     var q = this.value.trim();
     clearTimeout(debounceTimer);
-    if (q.length < 4) { geoResultsList.innerHTML = ""; geoStatus.textContent = ""; return; }
+    if (q.length < 4) {
+      // abort any in-flight search too — its late response would otherwise
+      // repopulate the just-cleared list for text no longer in the box
+      if (inFlightController) inFlightController.abort();
+      geoResultsList.innerHTML = "";
+      geoStatus.textContent = "";
+      return;
+    }
     debounceTimer = setTimeout(function () {
       geoStatus.textContent = "Searching…";
       geocodeAddress(q).then(renderGeocodeResults).catch(function (err) {
         if (err.name === "AbortError") return;
+        geoStatus.textContent = "Search failed — Nominatim may be rate-limiting. Try again in a moment.";
+        geoStatus.className = "geo-status err";
       });
     }, 550); // debounced well above Nominatim's 1 req/sec public-usage policy
   });
@@ -859,8 +897,7 @@
     var viewbox = [CHI_BBOX.minLng, CHI_BBOX.maxLat, CHI_BBOX.maxLng, CHI_BBOX.minLat].join(",");
     var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&bounded=1&viewbox=" +
       viewbox + "&q=" + encodeURIComponent(address);
-    return fetchWithRetry(url, { headers: { "Accept": "application/json" } }, 1)
-      .then(function (res) { return res.json(); })
+    return fetchJSONWithRetry(url, { headers: { "Accept": "application/json" } }, 1)
       .then(function (results) {
         var hit = results && results[0];
         var coords = hit ? { lat: parseFloat(hit.lat), lng: parseFloat(hit.lon) } : null;
@@ -868,7 +905,9 @@
         return coords;
       })
       .catch(function () {
-        poiGeocodeCache[address] = null;
+        // transient failure — deliberately NOT cached, so a later selection
+        // can retry after the network recovers. "Address not found" IS
+        // cached (as null, above) since that outcome is stable.
         return null;
       });
   }
@@ -1002,8 +1041,11 @@
           rt.overlayLayer = L.geoJSON(geojson, {
             style: mod.overlay.style,
             pointToLayer: mod.overlay.pointToLayer // optional; used by point datasets (e.g. fire stations)
-          }).addTo(map);
-          if (state.layersOn[mod.id] && !map.hasLayer(rt.overlayLayer)) rt.overlayLayer.addTo(map);
+          });
+          // add only if the layer is STILL on — the user may have toggled it
+          // off while the geojson was downloading (the old unconditional
+          // .addTo(map) left orphaned boundaries on the map in that case)
+          if (state.layersOn[mod.id]) rt.overlayLayer.addTo(map);
         })
         .catch(function (err) {
           rt.overlayLoaded = false;
@@ -1032,7 +1074,9 @@
     retry.type = "button";
     retry.className = "retry-btn";
     retry.textContent = "Retry";
-    retry.addEventListener("click", function () { runLayerQuery(mod); });
+    // retry through onLayerToggled, not runLayerQuery directly — the overlay
+    // load may also have failed, and only the toggle path re-attempts it
+    retry.addEventListener("click", function () { onLayerToggled(mod); });
     body.appendChild(p);
     body.appendChild(retry);
   }
@@ -1141,15 +1185,16 @@
   function loadSocrataGeoJSON(datasetId) {
     var urls = socrataRouteUrls(datasetId);
     function tryRoute(i) {
-      if (i >= urls.length) throw new Error("no route for " + datasetId + " returned usable geometry");
-      return fetchWithRetry(urls[i], {}, i === 0 ? 2 : 1)
-        .then(function (res) { return res.json(); })
+      if (i >= urls.length) return Promise.reject(new Error("no route for " + datasetId + " returned usable geometry"));
+      return fetchJSONWithRetry(urls[i], {}, i === 0 ? 2 : 1)
         .then(function (geojson) {
           if (hasUsableGeometry(geojson)) return geojson;
-          return tryRoute(i + 1);
+          throw new Error("route returned no usable geometry");
         })
-        .catch(function (err) {
-          if (i + 1 >= urls.length) throw err;
+        .catch(function () {
+          // single catch per route: a fetch failure and a "200 but useless"
+          // response both advance to the next route exactly once (the old
+          // .then-recursion + .catch-recursion pair re-ran later routes twice)
           return tryRoute(i + 1);
         });
     }
@@ -1185,8 +1230,7 @@
 
   function loadArcGISGeoJSON(serviceUrl) {
     var url = serviceUrl + "/query?where=1%3D1&outFields=*&f=geojson&outSR=4326";
-    return fetchWithRetry(url, {}, 2)
-      .then(function (res) { return res.json(); })
+    return fetchJSONWithRetry(url, {}, 2)
       .then(function (geojson) {
         if (!hasUsableGeometry(geojson)) throw new Error("no usable geometry from " + serviceUrl);
         return geojson;
@@ -1633,16 +1677,14 @@
       "https://data.cityofchicago.org/api/v3/views/" + datasetId + "/query.json"
     ];
     function tryRoute(i) {
-      if (i >= urls.length) throw new Error("no route for " + datasetId + " returned rows");
-      return fetchWithRetry(urls[i], {}, i === 0 ? 2 : 1)
-        .then(function (res) { return res.json(); })
+      if (i >= urls.length) return Promise.reject(new Error("no route for " + datasetId + " returned rows"));
+      return fetchJSONWithRetry(urls[i], {}, i === 0 ? 2 : 1)
         .then(function (rows) {
           if (Array.isArray(rows) && rows.length) return rows;
-          return tryRoute(i + 1);
+          throw new Error("route returned no rows");
         })
-        .catch(function (err) {
-          if (i + 1 >= urls.length) throw err;
-          return tryRoute(i + 1);
+        .catch(function () {
+          return tryRoute(i + 1); // single catch per route — see loadSocrataGeoJSON
         });
     }
     return tryRoute(0);
@@ -1655,7 +1697,7 @@
     var where = encodeURIComponent("STATE='17'");
     var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/" +
       layerIndex + "/query?where=" + where + "&outFields=*&outSR=4326&f=geojson";
-    return fetchWithRetry(url, {}, 2).then(function (res) { return res.json(); });
+    return fetchJSONWithRetry(url, {}, 2);
   }
 
   /* ---------- district-number lookup with a name-field regex fallback, since
@@ -1728,8 +1770,7 @@
   /* ---------- U.S. House (Congress) ---------- */
   var loadCongressDistricts = makeCached(function () { return loadTigerLayer(0); });
   var loadCongressLegislators = makeCached(function () {
-    return fetchWithRetry("https://unitedstates.github.io/congress-legislators/legislators-current.json", {}, 1)
-      .then(function (res) { return res.json(); });
+    return fetchJSONWithRetry("https://unitedstates.github.io/congress-legislators/legislators-current.json", {}, 1);
   });
   var CONGRESS_DISTRICT_FIELDS = ["cd119fp", "cd118fp", "cdfp", "cd"];
 
@@ -1775,7 +1816,8 @@
       if (result.name) fields.push({ label: "Representative", value: String(result.name) });
       if (result.party) fields.push({ label: "Party", value: String(result.party) });
       if (result.phone) fields.push({ label: "D.C. Office Phone", value: String(result.phone) });
-      if (result.url) fields.push({ label: "Website", html: '<a href="' + sanitize(result.url) + '" target="_blank" rel="noopener">' + sanitize(result.url) + '</a>' });
+      var website = safeHttpUrl(result.url); // scheme-check external URLs before they become an href
+      if (website) fields.push({ label: "Website", html: '<a href="' + sanitize(website) + '" target="_blank" rel="noopener">' + sanitize(website) + '</a>' });
       return renderFieldList(fields);
     }
   });
@@ -2092,16 +2134,22 @@
         if (!feature) return null;
         var props = feature.properties || {};
         var district = findPropCI(props, ["district"]);
+        var longName = findPropCI(props, ["longname"]);
         var member = district != null ? SCHOOL_BOARD_MEMBERS[String(district)] : undefined;
-        return { seq: seq, district: district, member: member };
+        return { seq: seq, district: district, longName: longName, member: member };
       });
     },
     render: function (result) {
       var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
+      // the "1a"/"6b"-style sub-district name — candidate questionnaires and
+      // CPS materials reference districts by this scheme, not the flat number
+      if (result.longName) fields.push({ label: "Sub-district", value: String(result.longName) });
       if (result.member) {
         fields.push({
           label: "Board member",
-          value: result.member === "VACANT" ? "Vacant" : sanitize(result.member)
+          // plain value — renderFieldList renders values via textContent, so
+          // sanitize() here double-escaped quoted nicknames ("Jitu", "Rhymefest")
+          value: result.member === "VACANT" ? "Vacant" : String(result.member)
         });
       }
       fields.push({
@@ -2128,7 +2176,7 @@
     registerLayer: registerLayer,
     sanitize: sanitize,
     pointInGeometry: pointInGeometry,
-    fetchWithRetry: fetchWithRetry,
+    fetchJSONWithRetry: fetchJSONWithRetry,
     probeGeometryColumn: probeGeometryColumn,
     renderFieldList: renderFieldList
   };
