@@ -1154,7 +1154,8 @@
         var nearest = withDistance.slice(0, FIRE_STATION_COUNT).map(function (w) {
           var props = w.feature.properties || {};
           var address = findPropCI(props, ["address", "address_1", "location_address", "adress"]);
-          return { address: address, distanceMi: w.distanceMi };
+          var engine = findPropCI(props, ["engine", "name", "firehouse", "company", "house"]);
+          return { address: address, engine: engine, distanceMi: w.distanceMi };
         });
         return { seq: seq, stations: nearest };
       });
@@ -1170,7 +1171,8 @@
       ol.style.paddingLeft = "20px";
       result.stations.forEach(function (s) {
         var li = document.createElement("li");
-        li.textContent = (s.address ? String(s.address) : "Fire station") + " — " + s.distanceMi.toFixed(2) + " mi";
+        var prefix = s.engine ? "Engine " + String(s.engine) + " — " : "";
+        li.textContent = prefix + (s.address ? String(s.address) : "Fire station") + " — " + s.distanceMi.toFixed(2) + " mi";
         ol.appendChild(li);
       });
       wrap.appendChild(ol);
