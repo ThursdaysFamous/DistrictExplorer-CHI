@@ -244,6 +244,18 @@
     border-radius: 6px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.25);
   }
+  .selected-point-chip .copy-link-btn {
+    margin-left: 10px;
+    background: transparent;
+    color: var(--chi-blue);
+    border: 1px solid var(--chi-blue);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 7px;
+    cursor: pointer;
+  }
+  .selected-point-chip .copy-link-btn:hover { background: rgba(65,182,230,0.15); }
 
   /* ---- Layer toggle drawer ---- */
   main.layout.rail-hidden { grid-template-columns: 1fr; }
@@ -509,6 +521,8 @@
       <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener">unitedstates/congress-legislators</a>
       <a href="https://www.ilga.gov" target="_blank" rel="noopener">Illinois General Assembly</a>
       <a href="https://www.ilsenateredistricting.com" target="_blank" rel="noopener">School board district map (ilsenateredistricting.com)</a>
+      <a href="https://www.illinoiscourts.gov" target="_blank" rel="noopener">IL Supreme Court districts (PA 102-0011 shapefile)</a>
+      <a href="https://www.cookcountyboardofreview.com" target="_blank" rel="noopener">Cook County Board of Review districts (PA 102-0012 shapefile)</a>
     </div>
   </div>
 </footer>
@@ -689,12 +703,83 @@
     if (!opts.skipPan) map.setView([lat, lng], Math.max(map.getZoom(), 15));
 
     pointChip.hidden = false;
-    pointChip.textContent = lat.toFixed(5) + ", " + lng.toFixed(5);
+    pointChip.innerHTML = "";
+    var chipCoords = document.createElement("span");
+    chipCoords.textContent = lat.toFixed(5) + ", " + lng.toFixed(5);
+    pointChip.appendChild(chipCoords);
+    var copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "copy-link-btn";
+    copyBtn.textContent = "Copy link";
+    copyBtn.title = "Copy a shareable link to this point and the layers currently on";
+    copyBtn.addEventListener("click", function () {
+      syncUrlHash(); // make sure the URL reflects the very latest state
+      function done(ok) {
+        copyBtn.textContent = ok ? "Copied!" : "Copy failed";
+        setTimeout(function () { copyBtn.textContent = "Copy link"; }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(location.href).then(function () { done(true); }, function () { done(false); });
+      } else {
+        done(false); // clipboard API unavailable (e.g. some file:// contexts) — the URL bar still has the link
+      }
+    });
+    pointChip.appendChild(copyBtn);
 
     document.getElementById("empty-state").hidden = true;
     document.getElementById("groups-root").hidden = false;
 
     runAllActiveLayerQueries();
+    syncUrlHash();
+  }
+
+  /* =========================================================================
+   * SHAREABLE URL — #point=lat,lng&layers=id1,id2 mirrors the current
+   * selection so any view can be copied out of the URL bar (or via the
+   * point chip's Copy-link button) and restored on load. replaceState, not
+   * location.hash assignment, so clicking around never pollutes the back
+   * button. Parsed once at boot by applyStateFromHash().
+   * ======================================================================= */
+
+  function syncUrlHash() {
+    var parts = [];
+    if (state.selectedPoint) {
+      parts.push("point=" + state.selectedPoint.lat.toFixed(5) + "," + state.selectedPoint.lng.toFixed(5));
+    }
+    var on = layers.filter(function (l) { return state.layersOn[l.id]; })
+      .map(function (l) { return l.id; });
+    if (on.length) parts.push("layers=" + on.join(","));
+    var hash = parts.length ? "#" + parts.join("&") : "";
+    try {
+      history.replaceState(null, "", hash || location.pathname + location.search);
+    } catch (e) {
+      // some file:// contexts refuse replaceState — losing the permalink
+      // there is fine, everything else keeps working
+    }
+  }
+
+  function applyStateFromHash() {
+    var raw = location.hash.replace(/^#/, "");
+    if (!raw) return;
+    var params = {};
+    raw.split("&").forEach(function (kv) {
+      var eq = kv.indexOf("=");
+      if (eq > 0) params[kv.slice(0, eq)] = decodeURIComponent(kv.slice(eq + 1));
+    });
+    if (params.layers) {
+      params.layers.split(",").forEach(function (id) {
+        var box = document.getElementById("toggle-" + id);
+        if (box && !box.checked) box.click(); // a real click, so the change handler runs
+      });
+    }
+    if (params.point) {
+      var pieces = params.point.split(",");
+      var lat = parseFloat(pieces[0]), lng = parseFloat(pieces[1]);
+      // sanity-bound to the greater Chicago area this app serves
+      if (isFinite(lat) && isFinite(lng) && lat > 41 && lat < 42.6 && lng > -88.6 && lng < -87) {
+        setSelectedPoint(lat, lng);
+      }
+    }
   }
 
   map.on("click", function (e) {
@@ -1010,6 +1095,7 @@
         checkbox.addEventListener("change", function () {
           state.layersOn[mod.id] = checkbox.checked;
           onLayerToggled(mod);
+          syncUrlHash();
         });
 
         section.appendChild(block);
@@ -2251,6 +2337,7 @@
    * ======================================================================= */
 
   buildGroupsUI();
+  applyStateFromHash(); // restore a shared #point=…&layers=… link, if present
 
   var verifiedEl = document.getElementById("verified-date");
   verifiedEl.textContent = "July 8, 2026";
