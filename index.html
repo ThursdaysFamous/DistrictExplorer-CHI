@@ -2332,6 +2332,88 @@
     }
   });
 
+  /* ---------- Cook County Commissioner District — the one Political layer
+   * sourced live from Cook County's own GIS server (`politicalBoundary`
+   * MapServer, discovered via a HAR capture of the county's own "Find My
+   * District" app) rather than Socrata/TIGERweb/embedded data. Layer 9 is
+   * the district boundary (fields DISTRICT_INT/DISTRICT_TXT per the
+   * server's own layer metadata); layer 0 is a companion, geometry-less
+   * table of one row per district with the commissioner's name and office
+   * address (fields District/Commission/District_A/Suite/City/Zip_Code),
+   * joined here on district number the same way ward joins boundary +
+   * alderman roster above. Neither endpoint requires a token and both were
+   * confirmed reachable and CORS-open in the captured traffic; field names
+   * have not been live-spot-checked from this sandbox (egress to
+   * gis.cookcountyil.gov is blocked here the same way every other external
+   * host has been for prior threads — see SURPRISE entries throughout this
+   * playbook), so both district-number extraction and the office join
+   * degrade gracefully via findPropCI/extractDistrictNumber's alias
+   * handling if a guessed field name turns out wrong. ---------- */
+  var COOK_COUNTY_POLITICAL_BOUNDARY = "https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/MapServer";
+
+  function loadCookCountyLayerGeoJSON(layerIndex) {
+    var url = COOK_COUNTY_POLITICAL_BOUNDARY + "/" + layerIndex + "/query?where=" +
+      encodeURIComponent("1=1") + "&outFields=*&outSR=4326&f=geojson";
+    return fetchJSONWithRetry(url, {}, 2);
+  }
+
+  function loadCookCountyLayerRows(layerIndex) {
+    var url = COOK_COUNTY_POLITICAL_BOUNDARY + "/" + layerIndex + "/query?where=" +
+      encodeURIComponent("1=1") + "&outFields=*&returnGeometry=false&f=json";
+    return fetchJSONWithRetry(url, {}, 2).then(function (data) {
+      return ((data && data.features) || []).map(function (f) { return f.attributes || {}; });
+    });
+  }
+
+  var loadCommissionerDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(9); });
+  var loadCommissionerOffices = makeCached(function () { return loadCookCountyLayerRows(0); });
+  var COMMISSIONER_DISTRICT_FIELDS = ["district_int", "district_txt", "district"];
+
+  registerLayer({
+    id: "commissioner",
+    group: "political",
+    label: "Cook County Commissioner District",
+    overlay: {
+      load: loadCommissionerDistricts,
+      style: { color: "#B8622E", weight: 2, fillColor: "#B8622E", fillOpacity: 0.05, dashArray: "9 3 3 3" }
+    },
+    query: function (point, seq) {
+      return Promise.all([loadCommissionerDistricts(), loadCommissionerOffices()]).then(function (results) {
+        var geojson = results[0], offices = results[1];
+        var feature = findFeatureContaining(geojson, point);
+        if (!feature) return null;
+        var district = extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
+
+        var office = null;
+        if (district && Array.isArray(offices)) {
+          var districtNum = parseInt(district, 10);
+          office = offices.filter(function (row) {
+            var rowDistrict = findPropCI(row, ["district"]);
+            return rowDistrict !== null && rowDistrict !== undefined && parseInt(rowDistrict, 10) === districtNum;
+          })[0] || null;
+        }
+        return { seq: seq, district: district, office: office };
+      });
+    },
+    render: function (result) {
+      var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
+      var office = result.office;
+      if (office) {
+        var name = findPropCI(office, ["commission"]);
+        if (name) fields.push({ label: "Commissioner", value: String(name) });
+        var addressLines = [findPropCI(office, ["district_a"]), findPropCI(office, ["suite"])].filter(Boolean);
+        var cityZip = [findPropCI(office, ["city"]), findPropCI(office, ["zip_code"])].filter(Boolean).join(" ");
+        if (cityZip) addressLines.push(cityZip);
+        if (addressLines.length) fields.push({ label: "Office Address", html: addressLines.map(sanitize).join("<br>") });
+      }
+      fields.push({
+        label: "Board info",
+        html: '<a href="https://maps.cookcountyil.gov/findmydistrict/" target="_blank" rel="noopener">Cook County Find My District (official)</a>'
+      });
+      return renderFieldList(fields);
+    }
+  });
+
   /* =========================================================================
    * BOOT
    * ======================================================================= */

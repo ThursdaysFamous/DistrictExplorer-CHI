@@ -59,6 +59,7 @@ Rules every module must honor (from the prompt's quality requirements):
 | Community areas | Socrata | `igwz-8jzy` |
 | ZIP codes | Socrata | `gdcf-axmw` |
 | Congress / IL upper / IL lower boundaries | Census TIGERweb Legislative MapServer | layers 0 / 1 / 2 — request `outSR=4326` |
+| Cook County Commissioner districts + office roster | Cook County GIS `politicalBoundary` MapServer | layer 9 (boundary) + layer 0 (office roster, geometry-less), join on district # — discovered via HAR capture of the county's own Find My District app, see §2b |
 | Congress rosters | congress-legislators | filter `state=IL`, join on district # |
 | IL GA rosters | Open States people | **no browser CORS** — fallback to ILGA directory links |
 | School board districts | KML on ilsenateredistricting.com | not on data portal; needs manual convert→host (see §4) |
@@ -81,6 +82,22 @@ Host: `services2.arcgis.com/t3tlzCPfmaQzSWAk/arcgis/rest/services/` (CPD's hoste
 Being CPD-operated rather than the city's central portal, there's no independent update-cadence guarantee; same "not for legal use" caveat applies, arguably more so.
 
 **Update:** `Police_District_Boundary_View` and `Police_District_Stations_View` are no longer just a documented fallback — Thread 2 was rerun on them (see Status log). The other three rows (`Police_Beat_Boundary_View`, `Wards`, `Community_Area_View`) remain fallback/cross-check only, not wired into any module.
+
+### 2b. Cook County GIS — discovered via a HAR capture of the county's own app
+
+Host: `gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/MapServer` (Cook County's own Esri MapServer, powering the county's public "Find My District" tool at `maps.cookcountyil.gov/findmydistrict/`). Discovered by an operator-supplied browser HAR of that app, not a live sandbox fetch — no CORS/auth issues were observed in the captured traffic, but field names below have not been independently spot-checked from this sandbox (egress to this host is blocked here, same as every other external host prior threads hit).
+
+| Layer index | Name (per server metadata) | Key fields | Notes |
+|---|---|---|---|
+| `0` | Commissioner District Office | `District`, `Commission`, `District_A`, `Suite`, `City`, `Zip_Code` | Geometry-less — office roster only, joined to layer 9 on district # |
+| `9` | Cook County Commissioner District (eff. 12/5/22) | `DISTRICT_INT`, `DISTRICT_TXT` | Wired into the `commissioner` module (Thread 4) |
+| `10` | Board of Review (eff. 12/5/22) | — | Redundant with the already-embedded PA 102-0012 `ccbr` layer; not wired |
+| `11` / `12` | State Representative / State Senate (eff. 1/11/23) | — | Redundant with TIGERweb + ILGA roster; not wired |
+| `13` | Congressional (eff. 1/3/23) | `DISTRICT_TXT`, `DISTRICT_INT` | Redundant with TIGERweb; not wired |
+| `2` / `3` / `22` | Municipality / Political Township / Municipal Ward | — | County-wide (all of Cook County, not just Chicago) — out of scope for this Chicago-scoped app unless a future thread wants to expand coverage; not wired |
+| `5`, `15`–`21`, `23`–`25` | Judicial District, school/library/park/fire/TIF/MWRD tax districts | — | Not evaluated; not wired |
+
+Only layer 9 (+ layer 0's office roster) is in scope per this update — added deliberately narrow rather than pulling in the whole county server at once.
 
 ---
 
@@ -172,3 +189,5 @@ _(append handoff notes here as modules complete)_
 - Shareable permalinks ADDED (core) — the URL hash mirrors `#point=lat,lng&layers=id1,id2` via history.replaceState and is restored once at boot; the point chip gained a Copy-link button. Restore drives the real checkbox `.click()` path so module behavior is identical to manual toggling.
 - School-board card now also surfaces the shapefile's `longName` ("District 6b") as a Sub-district row, since CPS materials and candidate questionnaires reference that scheme.
 - Repo reorganized: raw source artifacts (both PA-102 shapefile zips, the ERSB shapefile zip, both KML/KMZ files, the roster xlsx) moved from the repo root to `data/source/raw/`; this playbook moved to `docs/`; README.md added at root. Earlier entries saying the raw files are "kept at repo root" should be read accordingly.
+- `commissioner` (political) NEW, DONE — Cook County Commissioner District, sourced live from Cook County's own GIS server rather than any prior source in this playbook's registry (§2b), found by inspecting an operator-supplied browser HAR of the county's own "Find My District" app. Same live-fetch-and-join pattern as `ward`: layer 9 boundary geojson + layer 0's geometry-less office-roster rows, joined on district number (`extractDistrictNumber`/`findPropCI`, same alias-fallback machinery as every other module). Deliberately scoped to just this one layer even though the county server exposes ~20 more (State Senate/House, Congressional, Board of Review — redundant with existing sources; Municipality/Township/Ward and various tax districts — county-wide, out of this Chicago-scoped app's coverage) — see §2b for the full inventory in case a future thread wants to expand.
+- SURPRISE — same sandboxed-fetch limitation as every prior thread: `gis.cookcountyil.gov` could not be live-queried from here (curl and WebFetch both got a 403 from the environment's own egress proxy, not from the county server). Field names (`DISTRICT_INT`/`DISTRICT_TXT` on layer 9; `District`/`Commission`/`District_A`/`Suite`/`City`/`Zip_Code` on layer 0) come from the layer-metadata (`?f=json`) responses captured in the operator's HAR, which is more reliable than a blind guess but still not a live sample of real feature data — worth a browser spot-check against a known point before fully trusting it, same caveat as Thread 2's ArcGIS swap.
