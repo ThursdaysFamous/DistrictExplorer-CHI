@@ -30,7 +30,8 @@ The reference-of-truth for building this app in small, cheap, focused threads.
     pointToLayer: (feature, latlng) => L.Layer  // optional; point datasets (e.g. fire stations) use this instead of style
   },
   query: (point, seq) => Promise<Result | null>,  // point-in-district + roster join; tag result with seq
-  render: (result) => HTMLElement                  // one result card; all external strings via sanitize()
+  render: (result) => HTMLElement,                  // one result card; all external strings via sanitize()
+  pointOfInterest: (result) => {label, address} | null  // optional; core geocodes `address` and drops a pin colored to match overlay.style.color
 }
 ```
 
@@ -131,3 +132,5 @@ _(append handoff notes here as modules complete)_
 - `cps-middle` corrected — the playbook's `9kct-c3uq` (~22 schools, marked legacy) is superseded. Operator found `fyff-53xy`, live-confirmed to be a current, full attendance boundary with the same schema as elementary/high (`school_id`, `school_nam`, `grade_cat: "MS"`, `boundarygr`). Label dropped the "legacy, partial coverage" caveat since this is no longer the sparse legacy dataset. Confirmed via `query.geojson` too (operator's first sample used `query.json` by mistake) — proper `Feature`/`MultiPolygon` GeoJSON, same schema.
 - All three school-zone datasets (elementary, middle, high) and both CPS Network datasets are now live-confirmed. Thread 3 is in good shape.
 - Selected-boundary highlight ADDED (core feature, not a module) — whichever polygon feature actually contains the selected point now gets a distinct gold outline + brought-to-front, per active layer, reverted correctly on toggle-off/re-toggle/new-point/error. Implemented generically in the core (`updateLayerHighlight`/`clearLayerHighlight`) rather than per-module, so no existing module needed to change.
+- Highlight UPGRADED — every other boundary in that layer now fades (`fadedStyle`: lower stroke/fill opacity, thinner weight) while the match gets a CSS drop-shadow filter (`.chi-region-highlight`) applied by mutating the SVG path's class list directly, since Leaflet's `className` style option only applies at path creation, not on later `setStyle()` calls — that distinction cost one iteration to discover.
+- School address pins ADDED — new optional contract field `mod.pointOfInterest(result) => {label, address} | null`. When present, the core geocodes the address via Nominatim (cached per address string, same Chicago-bounded pattern as the search box) and drops a small pin colored to match the layer's `overlay.style.color`, with a tooltip showing the school name. Wired into `cps-elementary`/`cps-middle`/`cps-high` via their confirmed `school_add` field; the address also now shows as plain text in the sidebar card regardless of whether geocoding succeeds. CPS Network layers don't use this (their `address` field is an admin office, not a per-click point of interest) — left as text-only, matching the original ask's scope.
