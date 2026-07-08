@@ -1728,10 +1728,12 @@
     style: { color: "#8C2E4A", weight: 2, fillColor: "#8C2E4A", fillOpacity: 0.05, dashArray: "5 1 2 1" }
   });
 
-  /* ---------- Elected School Board District — converted from the
-   * ilsenateredistricting.com KML per playbook §4, hosted locally since no
-   * Socrata/TIGERweb source exists for it; no roster endpoint for this newly
-   * elected body, so this links to the board's official page instead ---------- */
+  /* ---------- Elected School Board District — sourced from the official
+   * ERSB_20_Sub_District_Map_FA1_SB_15 shapefile (supersedes the earlier
+   * ilsenateredistricting.com KML conversion from playbook §4), hosted
+   * locally since no Socrata/TIGERweb source exists for it. Member roster
+   * (SCHOOL_BOARD_MEMBERS below) comes from a CPS schools-by-ERSB-district
+   * roster, keyed by the same district number as the geometry. ---------- */
   /* ---------- embedded inline (not fetched) — a relative fetch() of a
    * local file is blocked by the browser's same-origin policy when this
    * page is opened directly via file://, which is how this app is commonly
@@ -1742,6 +1744,12 @@
   var loadSchoolBoardDistricts = makeCached(function () {
     return Promise.resolve(SCHOOL_BOARD_DISTRICTS_GEOJSON);
   });
+
+  /* ---------- Board member roster, keyed by district number. Derived from
+   * a CPS schools-by-ERSB-district roster (one member per district; some
+   * districts show "VACANT" per that roster, surfaced as-is rather than
+   * guessed at). ---------- */
+  var SCHOOL_BOARD_MEMBERS = {"1":"Ed Bannon","2":"Jennifer Custer","3":"Ebony L. DeBerry","4":"Debby Pope","5":"Norma Rios-Sierra","6":"Carlos A. Rivas, Jr.","7":"Karen Zacor","8":"Ellen Rosenfeld","9":"Aaron \"Jitu\" Brown","10":"Michilla Blaise","11":"Anusha Thotakura","12":"Jessica Biggs","13":"Emma Lozano","14":"Yesenia Lopez","15":"Angel Gutierrez","16":"Cydney Sylvan Wallace","17":"VACANT","18":"Therese Boyle","19":"Che \"Rhymefest\" Smith","20":"Olga Bautista"};
 
   registerLayer({
     id: "school-board",
@@ -1757,11 +1765,18 @@
         if (!feature) return null;
         var props = feature.properties || {};
         var district = findPropCI(props, ["district"]);
-        return { seq: seq, district: district };
+        var member = district != null ? SCHOOL_BOARD_MEMBERS[String(district)] : undefined;
+        return { seq: seq, district: district, member: member };
       });
     },
     render: function (result) {
       var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
+      if (result.member) {
+        fields.push({
+          label: "Board member",
+          value: result.member === "VACANT" ? "Vacant" : sanitize(result.member)
+        });
+      }
       fields.push({
         label: "Board info",
         html: '<a href="https://www.cps.edu/about/board-of-education/" target="_blank" rel="noopener">Chicago Board of Education</a>'
