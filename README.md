@@ -13,6 +13,7 @@ Pick a point. The app runs a point-in-district lookup across every layer you hav
 | Group | Layer | What you get |
 |---|---|---|
 | **Political** | City Ward | Ward number, alderman, office phone + address |
+| | Cook County Commissioner District | District number, commissioner, office address |
 | | U.S. House District | District (IL-N), representative, party, D.C. phone, website |
 | | IL State Senate District | Senator, party, Springfield + district offices, ILGA page |
 | | IL State House District | State representative, party, offices, ILGA page |
@@ -63,6 +64,7 @@ Stable core + pluggable layer modules, all inside `index.html`. The full contrac
 |---|---|
 | [Chicago Data Portal](https://data.cityofchicago.org) (Socrata) | Wards + aldermen roster, fire stations, CPS zones + networks, community areas, ZIP codes |
 | CPD ArcGIS (`services2.arcgis.com/t3tlzCPfmaQzSWAk`) | Police district boundaries, police station roster |
+| Cook County GIS (`gis.cookcountyil.gov/traditional/rest/services/politicalBoundary`) | Cook County Commissioner District boundaries + office roster |
 | [U.S. Census TIGERweb](https://tigerweb.geo.census.gov) | Congressional, IL Senate, IL House boundaries |
 | [unitedstates/congress-legislators](https://github.com/unitedstates/congress-legislators) | U.S. House roster |
 | [ilga.gov](https://www.ilga.gov) (scraped weekly by CI) | IL Senate/House member rosters (embedded inline) |
