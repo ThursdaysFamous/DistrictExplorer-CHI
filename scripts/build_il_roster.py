@@ -71,7 +71,16 @@ def resolve_roster(records, chamber):
 
 
 def js_string(value):
-    return json.dumps(value, ensure_ascii=False)
+    out = json.dumps(value, ensure_ascii=False)
+    # This literal lands inside index.html's inline <script> block, where the
+    # HTML parser would end the script at any "</script" regardless of JS
+    # string context — and scraped ILGA text could in principle contain one.
+    # "<\/" is identical to "</" to the JS engine but invisible to the HTML
+    # parser. U+2028/U+2029 are legal in JSON but line terminators in older
+    # JS, so escape those too.
+    out = out.replace("</", "<\\/")
+    out = out.replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
+    return out
 
 
 def js_object_literal(roster, var_name):
