@@ -978,24 +978,36 @@
     return false;
   }
 
-  /* ---------- fetch a Socrata dataset as GeoJSON, with legacy-route fallback ---------- */
-  function loadSocrataGeoJSON(datasetId) {
-    var legacyUrl = "https://data.cityofchicago.org/api/geospatial/" + datasetId + "?method=export&format=GeoJSON";
-    function loadLegacy() {
-      return fetchWithRetry(legacyUrl, {}, 1).then(function (res) { return res.json(); });
-    }
+  /* ---------- fetch a Socrata dataset as GeoJSON, trying each known route in turn
+   * until one returns real geometry. Some datasets 200 with every geometry
+   * stripped to null on one route (confirmed on Police Districts /
+   * ZIP Codes' /resource/{id}.geojson route) but work fine via another —
+   * that's a "succeeded but useless" response, not a fetch failure, so a
+   * plain .catch() never sees it. ---------- */
+  function socrataRouteUrls(datasetId) {
+    return [
+      "https://data.cityofchicago.org/resource/" + datasetId + ".geojson?$limit=1000",
+      "https://data.cityofchicago.org/api/v3/views/" + datasetId + "/query.geojson",
+      "https://data.cityofchicago.org/api/geospatial/" + datasetId + "?method=export&format=GeoJSON"
+    ];
+  }
 
-    var primaryUrl = "https://data.cityofchicago.org/resource/" + datasetId + ".geojson?$limit=1000";
-    return fetchWithRetry(primaryUrl, {}, 2)
-      .then(function (res) { return res.json(); })
-      .then(function (geojson) {
-        if (hasUsableGeometry(geojson)) return geojson;
-        return loadLegacy(); // primary "succeeded" but returned no real geometry
-      })
-      .catch(function () {
-        // primary request itself failed (network/HTTP error) — try the legacy route
-        return loadLegacy();
-      });
+  function loadSocrataGeoJSON(datasetId) {
+    var urls = socrataRouteUrls(datasetId);
+    function tryRoute(i) {
+      if (i >= urls.length) throw new Error("no route for " + datasetId + " returned usable geometry");
+      return fetchWithRetry(urls[i], {}, i === 0 ? 2 : 1)
+        .then(function (res) { return res.json(); })
+        .then(function (geojson) {
+          if (hasUsableGeometry(geojson)) return geojson;
+          return tryRoute(i + 1);
+        })
+        .catch(function (err) {
+          if (i + 1 >= urls.length) throw err;
+          return tryRoute(i + 1);
+        });
+    }
+    return tryRoute(0);
   }
 
   /* ---------- one shared in-flight/cached promise per dataset, so overlay.load()
@@ -1117,7 +1129,10 @@
   }
 
   /* ---------- Police District ---------- */
-  var loadPoliceDistricts = makeCachedLoader("fthy-xz3r");
+  // portal page is Boundaries - Police Districts (fthy-xz3r), but that
+  // dataset's /resource/{id}.geojson route returns null geometry; the
+  // underlying view id 24zt-jpfn serves the same data with real geometry
+  var loadPoliceDistricts = makeCachedLoader("24zt-jpfn");
 
   registerLayer({
     id: "police-district",
