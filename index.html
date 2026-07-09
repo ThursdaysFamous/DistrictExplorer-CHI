@@ -620,12 +620,9 @@
     border-color: var(--chi-blue-deep, #08406e);
   }
 
-  /* the relationship legend, top-right over the map */
+  /* the relationship legend — sits at the top of the bottom-left stack, just
+     above the Hover toggle (see .map-bottom-left) */
   .rel-legend {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 500;
     background: #fff;
     border-radius: 6px;
     padding: 9px 11px;
@@ -698,12 +695,11 @@
     </button>
 
     <div class="map-bottom-left">
+      <div class="rel-legend" id="rel-legend" hidden aria-live="polite"></div>
       <button type="button" class="hover-toggle-btn" id="hover-toggle" aria-pressed="true"
         title="Hover explorer — show the districts under your cursor as you move the mouse">Hover: on</button>
       <div class="selected-point-chip" id="point-chip" hidden></div>
     </div>
-
-    <div class="rel-legend" id="rel-legend" hidden aria-live="polite"></div>
   </section>
 
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
@@ -3486,6 +3482,7 @@
     hoverActive = !hoverActive;
     syncHoverToggle();
     if (!hoverActive) clearHoverVisuals();
+    updateRelLegend(); // the pin legend shows only while hover is on
   });
 
   /* =========================================================================
@@ -3554,18 +3551,24 @@
     return { inside: nIn, cross: nCross, capped: capped };
   }
 
+  var relCounts = null; // last computed {inside, cross, capped}, or null
+
   function refreshRelationshipOutlines() {
     if (!relationshipGroup) relationshipGroup = L.featureGroup().addTo(map);
     relationshipGroup.clearLayers();
     var parentFeature = relationshipParentFeature();
-    if (!parentFeature) { updateRelLegend(null); return; }
-    var counts = drawRelationshipOutlines(parentFeature);
-    updateRelLegend(counts);
+    relCounts = parentFeature ? drawRelationshipOutlines(parentFeature) : null;
+    updateRelLegend();
   }
 
-  function updateRelLegend(counts) {
+  // The legend lives above the Hover toggle and, per the toggle's role as the
+  // explorer's on/off switch, is shown only while hover is on AND a parent is
+  // pinned. (Outlines themselves stay pinned regardless; unpin is still
+  // reachable from the parent's sidebar card when the legend is hidden.)
+  function updateRelLegend() {
     if (!relLegendEl) return;
-    if (!pinnedParentId) { relLegendEl.hidden = true; relLegendEl.innerHTML = ""; return; }
+    if (!pinnedParentId || !hoverActive) { relLegendEl.hidden = true; relLegendEl.innerHTML = ""; return; }
+    var counts = relCounts;
     var mod = getLayerById(pinnedParentId);
     var parentName = mod ? mod.label : "district";
     var summary;
