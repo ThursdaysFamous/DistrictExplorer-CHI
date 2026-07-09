@@ -1284,10 +1284,14 @@
         if (isMatch) subLayer._path.classList.add(HIGHLIGHT_CLASS);
         else subLayer._path.classList.remove(HIGHLIGHT_CLASS);
       }
-      if (isMatch) {
-        rt.highlightedLayer = subLayer;
-        if (subLayer.bringToFront) subLayer.bringToFront();
-      }
+      // NB: deliberately no subLayer.bringToFront() here. Lifting the matched
+      // region to the top of the overlay pane would pull its whole layer above
+      // every other active layer, defeating the area-size stacking that
+      // reorderActiveLayers() maintains (a large district's matched polygon
+      // would cover the smaller layers on top of it). The highlight already
+      // stands out via its darker/thicker outline + drop-shadow styling, so it
+      // needs no z-order lift; size order stays authoritative.
+      if (isMatch) rt.highlightedLayer = subLayer;
     });
   }
 
@@ -1601,6 +1605,7 @@
         if (seq !== state.sequence) return; // stale — a newer point was selected meanwhile
         if (!state.layersOn[mod.id]) return; // toggled off while in flight
         updateLayerHighlight(mod);
+        reorderActiveLayers(); // re-assert area-size stacking now this layer has painted (queries resolve in arbitrary order)
         if (!result) { setCardEmpty(mod); clearLayerPoi(mod); return; }
         setCardResult(mod, mod.render(result));
         updateLayerPoi(mod, result, seq);
