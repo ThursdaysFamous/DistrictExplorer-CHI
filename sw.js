@@ -47,18 +47,21 @@ self.addEventListener("fetch", (event) => {
 
   if (!isShellRequest) return; // let every other request (all live API calls) hit the network normally
 
+  // Network-first for the shell. index.html carries the embedded rosters
+  // (school-board / IL Senate+House / CPD), which the weekly CI refreshes —
+  // a cache-first shell would show every returning visitor last deploy's
+  // officeholders, exactly the staleness this file's header forbids. Online
+  // this matches a plain page load and refreshes the cache; offline it falls
+  // back to the last good cached shell so the app still boots.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const network = fetch(event.request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

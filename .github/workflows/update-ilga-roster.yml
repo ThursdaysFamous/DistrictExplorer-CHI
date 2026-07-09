@@ -34,6 +34,12 @@ jobs:
       - name: Rebuild embedded roster in index.html
         run: python3 scripts/build_il_roster.py /tmp/ilga_network.json index.html
 
+      # Gate the rewrite before it can reach a PR: the splice must not have
+      # broken the inline script, dropped a layer module, or corrupted an
+      # embedded data blob. node is preinstalled on ubuntu-latest.
+      - name: Validate rewritten index.html
+        run: python3 scripts/validate_index.py index.html
+
       - name: Check for changes
         id: diff
         run: |

@@ -8,13 +8,18 @@
 
 All numbers were measured against this working tree unless marked *(not live-verified)* — the same convention the codebase itself uses. Findings were produced by a multi-agent review (5 scoped reviewers + adversarial verification of all 36 findings + a completeness-critic round that added 19 more); everything below survived verification, and the biggest claims were re-derived independently a second time.
 
+**Execution log (this PR):** Matrix items **1, 3, 4 shipped** — school-board geometry simplified, CI validation gate added, service worker switched to network-first.
+- **Item 1 correction:** the plan below (and QW1) originally proposed per-ring Douglas-Peucker simplification. Executing it revealed that per-ring DP is **not topology-aware** — at ~3.3 m tolerance it produced an *overlap* (a point landing in two districts), which is unacceptable for a "which district contains you" coverage. The shipped implementation uses **topology-aware mapshaper** (Visvalingam, keep-shapes, 15% retain, 6-decimal precision) — the same tool the sibling layers used — via the new reproducible `scripts/build_embedded_boundaries.py`. Result: the embedded blob 975,796 → **83,470 B**; `index.html` 1,301,984 → **409,712 B raw / 112,216 B gzip (−69% raw, −74% gzip)**; validated through the app's *own* extracted point-in-polygon functions: **2000/2000 on the repo's protocol, 0 topology breaks, 0 internal wrong-district misses, 20/20 district interiors correct**. (The all-embedded-data externalization to `data/app/*.json`, item 2/P0, is the larger separate follow-up and is *not* in this PR.)
+- **Item 3:** `scripts/validate_index.py` (node --check + registerLayer floor + embedded-blob round-trip + rewrite-target presence), wired into both roster workflows between the rewrite and the PR; tested against a simulated module-deletion and a corrupted-blob.
+- **Item 4:** `sw.js` fetch handler is now network-first with cache fallback.
+
 ---
 
 ## 1. Executive Summary
 
 This is an unusually disciplined codebase: per-layer failure isolation is real, stale async results are sequenced away, external strings pass through one sanitizer, scrapers are polite and PR-gated, and design constraints are written down and mostly honored. The four issues that matter, in order:
 
-1. **75% of the product is one unsimplified data blob — and the file:// rationale for embedding it just expired.** `SCHOOL_BOARD_DISTRICTS_GEOJSON` (`index.html:2553`) is 975,796 bytes — a verbatim copy of `data/school-board-districts.geojson` at up to 15-decimal (sub-nanometer) precision, despite the README's claim that all embedded layers are mapshaper-simplified. Its two siblings actually were simplified (they're 10–15% of their source size). Simplifying it identically cuts it to **57.7 KB (−94%)**, taking `index.html` from **1.30 MB → 384 KB raw (428 KB → 106 KB gzipped)** at 99.98% classification agreement over 5,000 in-district points. And now that `file://` is gone, all three geometry blobs plus the generated rosters can leave the page entirely — fetched lazily, per layer, on first toggle, through the cached-loader machinery that already exists. End state: `index.html` ≈ **165 KB raw / ~45 KB gzipped**, and a user who never toggles the school-board layer never downloads a byte of it.
+1. **75% of the product is one unsimplified data blob — and the file:// rationale for embedding it just expired.** `SCHOOL_BOARD_DISTRICTS_GEOJSON` (`index.html:2553`) is 975,796 bytes — a verbatim copy of `data/school-board-districts.geojson` at up to 15-decimal (sub-nanometer) precision, despite the README's claim that all embedded layers are mapshaper-simplified. Its two siblings actually were simplified (they're 10–15% of their source size). Simplifying it the same way (topology-aware mapshaper — **shipped in this PR**) cuts it to **83 KB (−91%)**, taking `index.html` from **1.30 MB → 410 KB raw (428 KB → 112 KB gzipped)** at 100% agreement on the repo's validation protocol with zero topology breaks. And now that `file://` is gone, all three geometry blobs plus the generated rosters can leave the page entirely — fetched lazily, per layer, on first toggle, through the cached-loader machinery that already exists. End state: `index.html` ≈ **165 KB raw / ~45 KB gzipped**, and a user who never toggles the school-board layer never downloads a byte of it.
 
 2. **The weekly CI rewrite of a 1.3 MB file ships with zero output validation — and the rewrite mechanism can silently delete code.** Both roster workflows regex-rewrite `index.html` and open a PR with no check that the result still parses (`node --check` takes 44 ms). The lazy DOTALL regex in `replace_block` was shown, reproducibly, to be able to overmatch and delete 46 KB of live modules under plausible anchor drift; `build_cpd_roster.py`'s U+2028/U+2029 escaping is a confirmed silent no-op (it replaces the character with itself — drift from its `build_il_roster.py` original, which is correct); and the Playwright boot smoke-test the README describes as existing **is not in the repo** — it was designed and run once, then never committed. Externalizing generated data (unlocked by #1's constraint change) dissolves the regex risk entirely; the validation gap needs fixing either way.
 
@@ -47,15 +52,17 @@ var loadSchoolBoardDistricts = makeCached(function () {
 Effects: `index.html` drops to ~165 KB raw (~45 KB gzip); first paint stops paying for data; each dataset downloads only when its layer first toggles on, with the existing per-layer error card + Retry as the failure surface; the roster builder scripts stop rewriting HTML entirely (see R1); and same-origin fetches need no CORS. Two things to preserve deliberately: (a) the three formerly-embedded layers stop working *offline-first* unless the SW caches `data/app/*` — cache the **geometry** files cache-first (boundaries change ~once a decade) and the **roster** files network-first (same rule as R-sw below); (b) update the six now-obsolete "embedded inline (not fetched)" comments and the README's offline paragraph in the same PR.
 
 **P1 — Simplify the school-board geometry regardless (measured: −918 KB raw standalone; −94% of the fetched file after P0).**
-Whether embedded or externalized, the school-board geometry is 24,904 coordinate pairs at 14–15 decimals for 20 districts. Its siblings were topology-simplified to 4,771 and 2,916 pairs at 5 decimals (10.2%/14.4% keep — `index.html:2605-2619` documents the treatment and its 2,000-point validation; the README extends that claim, incorrectly, to all embedded layers). Applying the same treatment (Douglas-Peucker ε≈5.5 m + 6-decimal rounding, validated in this review):
+Whether embedded or externalized, the school-board geometry is 24,904 coordinate pairs at 14–15 decimals for 20 districts. Its siblings were topology-simplified to 4,771 and 2,916 pairs at 5 decimals (10.2%/14.4% keep — `index.html:2605-2619` documents the treatment and its 2,000-point validation; the README extends that claim, incorrectly, to all embedded layers). **Shipped** (see Execution log — the simplifier must be topology-aware; per-ring DP was found to create district overlaps):
 
 | | Coord pairs | Bytes | index.html raw | index.html gzip |
 |---|---|---|---|---|
+| | Coord pairs | Blob bytes | index.html raw | index.html gzip |
+|---|---|---|---|---|
 | Today | 24,904 | 975,796 | 1,301,984 | 427,836 |
-| 6dp rounding only (zero classification change at 6dp) | 24,904 | 570,353 | 896,595 | 233,544 |
-| Simplified + 6dp (**recommended**) | 2,394 | 57,736 | 383,923 | 105,974 |
+| 6dp rounding only (topology-preserving, 100% agreement) | 24,904 | 570,353 | 896,595 | 233,544 |
+| **Shipped:** mapshaper topology-aware + 6dp | 3,525 | 83,470 | 409,712 | 112,216 |
 
-Validation: 5,000 random points inside the original districts, classified with the app's own even-odd `pointInGeometry` — 4,999/5,000 agree; the single disagreement is ~5 m from a district 4/7 boundary, the same accuracy class as the documented sibling treatment and below GPS error. (Verifier note, kept for honesty: plain 5dp rounding *without* simplification was independently shown to risk boundary-adjacent flips; 6dp rounding is the safe floor.) Do it via the script in R2 so it's reproducible.
+Validation of the shipped result, run through the app's *own* extracted `pointInGeometry`/`findFeatureContaining`: **2000/2000 on the repo's protocol** (100%); over 6,000 random points, **0 points in >1 district** (topology intact), **0 internal wrong-district misses**, and **all 20 district interiors correct** — the only stringent-test disagreement (~0.02%) is an outer-edge boundary point (in no district → district 1), below GPS error. Two options were rejected: **per-ring Douglas-Peucker** (the smaller ~58 KB it produces is *not topology-safe* — it created a district overlap at ~3.3 m, verified) and **6dp-rounding-only** (perfectly safe but only −45% gzip). mapshaper is the tool the sibling layers already used; regeneration is reproducible via `scripts/build_embedded_boundaries.py`.
 
 ### 2.2 Network
 
@@ -153,10 +160,10 @@ Zero `tileerror` handlers (grep-verified); offline users get a booted app (the S
 | # | Task | Impact | Effort | Category |
 |---|------|--------|--------|----------|
 | 0 | ~~Remove Capacitor/Android/iOS stack~~ — **done in this PR** | — | — | Architecture |
-| 1 | Simplify school-board geometry (−918 KB raw / −75% page; validated) — P1 | **High** | **Low** | Data/Assets |
+| 1 | ~~Simplify school-board geometry (−892 KB raw / −74% gzip; topology-aware)~~ — **done in this PR (also covers #13)** | **High** | **Low** | Data/Assets |
 | 2 | Externalize geometry + rosters to `data/app/*.json`, lazy per-layer fetch — P0 | **High** | Medium | Architecture |
-| 3 | `node --check` + output invariants between rewrite and PR in both workflows — R3 | **High** | **Low** | DevEx |
-| 4 | SW shell → network-first (fixes guaranteed-stale rosters) — P-sw | **High** | **Low** | Frontend |
+| 3 | ~~`node --check` + output invariants between rewrite and PR in both workflows~~ — **done in this PR (`scripts/validate_index.py`)** | **High** | **Low** | DevEx |
+| 4 | ~~SW shell → network-first (fixes guaranteed-stale rosters)~~ — **done in this PR** | **High** | **Low** | Frontend |
 | 5 | Commit the Playwright boot smoke test on `pull_request` — R4 | **High** | Medium | DevEx |
 | 6 | Builders emit JSON; shared module; fix U+2028 no-op; fail-on-multi-match — R1 | **High** | Medium | Pipeline |
 | 7 | Surface overlay-load failures (15/18 layers currently silent) — R5 | **High** | **Low** | Frontend |
@@ -165,7 +172,7 @@ Zero `tileerror` handlers (grep-verified); offline users get a booted app (the S
 | 10 | Guard `loadTigerLayer`/`loadCookCountyLayerGeoJSON` against 200-error-envelopes — P5 | Medium | **Low** | Network |
 | 11 | `timeoutMs` overrides for large payloads; tighten route-ladder worst case — P4 | Medium | **Low** | Network |
 | 12 | Single PIP per click + restyle only the 2 changed paths — P7 | Medium | **Low** | Frontend |
-| 13 | Commit `build_app_data.py` (geometry regeneration + validation protocol) — R2 | Medium | **Low** | Pipeline |
+| 13 | ~~Commit geometry-regeneration script + validation protocol~~ — **done in this PR (`scripts/build_embedded_boundaries.py`)** | Medium | **Low** | Pipeline |
 | 14 | Preconnect tile shards + dns-prefetch API origins — P12 | Medium | **Low** | Frontend |
 | 15 | Serialize POI geocoding ≥1 s apart — P6 | Medium | **Low** | Network |
 | 16 | Tile-failure banner (`tileerror`) — R6 | Medium | **Low** | Frontend |
@@ -186,7 +193,9 @@ Coherent PR groupings: **PR-A** (items 1+13, one regenerated line + one script),
 
 ## 5. Quick Wins (exact before/after)
 
-### QW1 — Simplify the school-board blob: −918 KB raw, −322 KB gzipped, one regenerated line
+### QW1 — Simplify the school-board blob: −892 KB raw, −316 KB gzipped, one regenerated line ✅ SHIPPED
+
+*Shipped in this PR via `scripts/build_embedded_boundaries.py` (topology-aware mapshaper, not the per-ring approach sketched below — per-ring DP created a district overlap). Actual result: blob 975,796 → 83,470 B; `index.html` 1,301,984 → 409,712 B raw / 112,216 B gzip. The before/after shape is unchanged; only the numbers below are updated.*
 
 `index.html:2553` today (975,796 bytes on one line; head shown):
 
@@ -194,13 +203,13 @@ Coherent PR groupings: **PR-A** (items 1+13, one regenerated line + one script),
   var SCHOOL_BOARD_DISTRICTS_GEOJSON = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","properties":...   // 24,904 coord pairs, 14-15 decimals
 ```
 
-After (57,736 bytes — same variable, schema, and district properties; geometry simplified exactly like its two sibling layers):
+After (83,470 bytes — same variable, schema, and district properties; geometry topology-simplified like its two sibling layers):
 
 ```js
-  var SCHOOL_BOARD_DISTRICTS_GEOJSON = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","properties":...   // 2,394 coord pairs, 6 decimals
+  var SCHOOL_BOARD_DISTRICTS_GEOJSON = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","properties":...   // 3,525 coord pairs, 6 decimals
 ```
 
-Measured: `index.html` 1,301,984 → 383,923 B (gzip 427,836 → 105,974). Validated with the app's own `pointInGeometry`: 4,999/5,000 in-district points agree; the one disagreement sits ~5 m off a boundary — within the tolerance the repo's own documented protocol accepts. Generate via the committed script (matrix #13), not by hand, and update the provenance comment at 2541-2552. This wins even if you do the externalization later — it's the same bytes, just in a fetched file.
+Measured: `index.html` 1,301,984 → 409,712 B (gzip 427,836 → 112,216). Validated with the app's own `pointInGeometry`/`findFeatureContaining`: 2000/2000 on the repo's protocol, 0 topology breaks, 0 internal wrong-district misses, 20/20 district interiors correct. Generated by the committed `scripts/build_embedded_boundaries.py` (which validates before it rewrites the line and refuses on failure), not by hand; provenance comment updated. This wins even if you do the externalization (P0) later — it's the same bytes, just in a fetched file.
 
 ### QW2 — sw.js: network-first shell (returning visitors currently always see last deploy's rosters)
 
