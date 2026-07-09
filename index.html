@@ -1059,6 +1059,56 @@
     };
   }
 
+  /* ---------- fill-opacity scaling by active layer count: as more layers
+   * are toggled on at once, overlapping translucent fills stack into a
+   * murky mess, so each active polygon layer's fillOpacity is scaled down
+   * as the count grows (and back up as layers are removed). Strokes
+   * (color/weight/dashArray/opacity) are left untouched — those are what
+   * let you trace one layer's boundary apart from another's when several
+   * are on, so only the fill (which is what actually compounds) scales.
+   * baseStyleFor() is the single funnel point for this: initial L.geoJSON
+   * construction, clearLayerHighlight, and fadedStyle's input all read
+   * through it instead of mod.overlay.style directly. Point-dataset layers
+   * (police/fire stations) have no flat style object and are out of scope —
+   * small sparse point markers don't compound into fill-murk the way
+   * overlapping polygons do. ---------- */
+  function activeLayerCount() {
+    return layers.filter(function (l) { return state.layersOn[l.id]; }).length;
+  }
+
+  var OPACITY_SCALE_STEP = 0.12;
+  var OPACITY_SCALE_FLOOR = 0.30;
+
+  function scaleFactorForActiveCount(n) {
+    return Math.max(OPACITY_SCALE_FLOOR, 1 - (n - 1) * OPACITY_SCALE_STEP);
+  }
+
+  function scaledFillOpacity(mod) {
+    var style = mod.overlay && mod.overlay.style;
+    if (!style) return null;
+    var n = Math.max(1, activeLayerCount());
+    return (style.fillOpacity || 0) * scaleFactorForActiveCount(n);
+  }
+
+  function baseStyleFor(mod) {
+    var style = mod.overlay && mod.overlay.style;
+    if (!style) return null;
+    return {
+      color: style.color,
+      weight: style.weight,
+      fillColor: style.fillColor,
+      fillOpacity: scaledFillOpacity(mod),
+      dashArray: style.dashArray
+    };
+  }
+
+  function refreshActiveLayerOpacities() {
+    layers.forEach(function (mod) {
+      if (!state.layersOn[mod.id]) return;
+      if (layerRuntime[mod.id].overlayLayer) updateLayerHighlight(mod);
+    });
+  }
+
   /* ---------- highlight whichever boundary the selected point actually falls in,
    * and fade every other boundary in that same layer so the match pops.
    * Deliberately generic, not per-module: it re-runs the same shared
@@ -1072,7 +1122,33 @@
    * applied by mutating the SVG path's class list directly — Leaflet's
    * `className` style option only takes effect when the path is first
    * created, not on later setStyle() calls, so setStyle() alone can't do this. */
-  var HIGHLIGHT_STYLE = { color: "#FFD400", weight: 4, opacity: 1, fillOpacity: 0.32, dashArray: null };
+  // darken a #rrggbb / #rgb hex color toward black by `amount` (0 = unchanged, 1 = black).
+  // No color library in this codebase — this is the minimal hand-rolled version needed here.
+  function darkenHexColor(hex, amount) {
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex || "");
+    if (!m) return hex;
+    var h = m[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var num = parseInt(h, 16);
+    var mix = function (channel) { return Math.round(channel * (1 - amount)); };
+    var r = mix((num >> 16) & 255), g = mix((num >> 8) & 255), b = mix(num & 255);
+    return "#" + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1);
+  }
+
+  // selection-highlight border: same hue as the layer itself (moduleColor,
+  // defined below — safe to call here since it's a hoisted function
+  // declaration), darkened so the outline pops against that layer's own
+  // lighter fill/stroke instead of an unrelated universal gold.
+  var HIGHLIGHT_DARKEN_AMOUNT = 0.35;
+  function highlightStyleFor(mod) {
+    return {
+      color: darkenHexColor(moduleColor(mod), HIGHLIGHT_DARKEN_AMOUNT),
+      weight: 4,
+      opacity: 1,
+      fillOpacity: 0.32,
+      dashArray: null
+    };
+  }
   var HIGHLIGHT_CLASS = "chi-region-highlight";
 
   function fadedStyle(baseStyle) {
@@ -1091,7 +1167,7 @@
     rt.highlightedLayer = null;
     if (!rt.overlayLayer) return;
     rt.overlayLayer.eachLayer(function (subLayer) {
-      if (subLayer.setStyle) subLayer.setStyle(mod.overlay.style);
+      if (subLayer.setStyle) subLayer.setStyle(baseStyleFor(mod));
       if (subLayer._path) subLayer._path.classList.remove(HIGHLIGHT_CLASS);
     });
   }
@@ -1102,10 +1178,11 @@
     var feature = findFeatureContaining(rt.geojson, state.selectedPoint);
     if (!feature) { clearLayerHighlight(mod); return; }
 
-    var faded = fadedStyle(mod.overlay.style);
+    var faded = fadedStyle(baseStyleFor(mod));
+    var highlight = highlightStyleFor(mod);
     rt.overlayLayer.eachLayer(function (subLayer) {
       var isMatch = subLayer.feature === feature;
-      if (subLayer.setStyle) subLayer.setStyle(isMatch ? HIGHLIGHT_STYLE : faded);
+      if (subLayer.setStyle) subLayer.setStyle(isMatch ? highlight : faded);
       if (subLayer._path) {
         if (isMatch) subLayer._path.classList.add(HIGHLIGHT_CLASS);
         else subLayer._path.classList.remove(HIGHLIGHT_CLASS);
@@ -1281,6 +1358,7 @@
       if (rt.overlayLayer) map.removeLayer(rt.overlayLayer);
       rt.cardBody.className = "layer-card-body state-off";
       rt.cardBody.textContent = "Layer off.";
+      refreshActiveLayerOpacities(); // active count just dropped — remaining active layers get more opaque
       return;
     }
 
@@ -1291,13 +1369,14 @@
         .then(function (geojson) {
           rt.geojson = geojson;
           rt.overlayLayer = L.geoJSON(geojson, {
-            style: mod.overlay.style,
+            style: baseStyleFor(mod) || undefined,
             pointToLayer: mod.overlay.pointToLayer // optional; used by point datasets (e.g. fire stations)
           });
           // add only if the layer is STILL on — the user may have toggled it
           // off while the geojson was downloading (the old unconditional
           // .addTo(map) left orphaned boundaries on the map in that case)
           if (state.layersOn[mod.id]) rt.overlayLayer.addTo(map);
+          refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
         })
         .catch(function (err) {
           rt.overlayLoaded = false;
@@ -1305,6 +1384,7 @@
         });
     } else if (rt.overlayLayer) {
       rt.overlayLayer.addTo(map);
+      refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
     }
 
     runLayerQuery(mod);
