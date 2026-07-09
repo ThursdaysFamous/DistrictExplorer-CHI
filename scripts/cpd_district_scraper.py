@@ -335,9 +335,20 @@ def parse_station_address(soup):
     return clean(match.group(0)) if match else None
 
 
+# Live CPD pages put the commander name inline in the heading, after an en/em
+# dash or hyphen: "Meet your commander – Sheamus Mannion" (verified via CI,
+# 2026-07-09). Group 2 is the name.
+COMMANDER_INLINE_RE = re.compile(
+    r"meet your (acting )?commander\s*[–—\-:]\s*(.+)$", re.IGNORECASE
+)
+
+
 def parse_commander(soup):
-    """Return (name, status) by finding the 'Meet your (acting) commander'
-    heading and taking the next short text block as the name."""
+    """Return (name, status, bio) for the district commander.
+
+    The live layout carries the name inline in the "Meet your commander – NAME"
+    heading; an older layout put it in a short block right after the heading.
+    Handle the inline form first, fall back to the trailing-block form."""
     heading = None
     for tag in soup.find_all(["h1", "h2", "h3", "h4", "h5", "strong", "b", "p"]):
         if COMMANDER_HEADING_RE.search(tag.get_text()):
@@ -346,26 +357,40 @@ def parse_commander(soup):
     if heading is None:
         return None, None, None
 
-    status = "acting_commander" if re.search(r"\bacting\b", heading.get_text(), re.IGNORECASE) else "commander"
+    heading_text = clean(heading.get_text()) or ""
+    status = "acting_commander" if re.search(r"\bacting\b", heading_text, re.IGNORECASE) else "commander"
 
     name, bio = None, None
-    for elem in heading.find_all_next(["h1", "h2", "h3", "h4", "h5", "strong", "b", "p"]):
-        text = clean(elem.get_text())
-        if not text or COMMANDER_HEADING_RE.search(text):
-            continue
-        if name is None:
-            # A name is short and has no sentence-ending punctuation; a bio
-            # paragraph is long prose. If the first block already reads like
-            # prose, there's no separate name element to find — leave name
-            # null rather than guess which words are the name.
-            if len(text) <= 60 and not re.search(r"[.!?]\s", text):
-                name = text
-                continue
-            else:
+    inline = COMMANDER_INLINE_RE.search(heading_text)
+    if inline:
+        candidate = clean(inline.group(2))
+        # A name is short; anything long after the dash is prose, not a name.
+        if candidate and len(candidate) <= 60:
+            name = candidate
+        # Bio: the first substantial following paragraph (not another heading).
+        for elem in heading.find_all_next(["p"]):
+            text = clean(elem.get_text())
+            if text and len(text) > 40 and not COMMANDER_HEADING_RE.search(text):
+                bio = text
                 break
-        else:
-            bio = text
-            break
+    else:
+        for elem in heading.find_all_next(["h1", "h2", "h3", "h4", "h5", "strong", "b", "p"]):
+            text = clean(elem.get_text())
+            if not text or COMMANDER_HEADING_RE.search(text):
+                continue
+            if name is None:
+                # A name is short and has no sentence-ending punctuation; a bio
+                # paragraph is long prose. If the first block already reads like
+                # prose, there's no separate name element to find — leave name
+                # null rather than guess which words are the name.
+                if len(text) <= 60 and not re.search(r"[.!?]\s", text):
+                    name = text
+                    continue
+                else:
+                    break
+            else:
+                bio = text
+                break
     return name, status, bio
 
 
@@ -414,42 +439,17 @@ def parse_district_page(html, district_number, source_url):
     }
 
 
-def _debug_dump_structure(html, number):
-    """Log the heading outline + any 'commander' text context of a page, so the
-    live markup can be inspected from CI when a parser stops matching. Gated on
-    CPD_DEBUG; prints nothing in normal runs."""
-    soup = BeautifulSoup(html, "html.parser")
-    main = soup.select_one("main") or soup
-    print(f"=== CPD_DEBUG district {number}: headings ===", file=sys.stderr)
-    for tag in main.find_all(["h1", "h2", "h3", "h4", "h5"])[:40]:
-        print(f"  <{tag.name}> {clean(tag.get_text())!r}", file=sys.stderr)
-    print(f"=== CPD_DEBUG district {number}: 'commander' contexts ===", file=sys.stderr)
-    for node in main.find_all(string=re.compile("commander", re.I))[:8]:
-        parent = node.parent
-        gp = getattr(parent, "parent", None)
-        print(
-            f"  <{getattr(parent, 'name', '?')}> text={clean(str(node))!r} "
-            f"| parent<{getattr(gp, 'name', '?')}> next={clean((parent.find_next().get_text() if parent.find_next() else '') or '')[:80]!r}",
-            file=sys.stderr,
-        )
-
-
 def scrape_all(fetcher, limit=None, delay=0.5, verbose=True, pages=None):
     if pages is None:
         pages = get_district_pages(fetcher)
     if limit:
         pages = pages[:limit]
-    debug = bool(os.environ.get("CPD_DEBUG"))
-    dumped = False
     results = []
     for i, (number, ordinal, slug, url) in enumerate(pages, 1):
         if verbose:
             print(f"[{i}/{len(pages)}] fetching district {number} ({url})", file=sys.stderr)
         try:
             html = fetcher.fetch(url)
-            if debug and not dumped:
-                _debug_dump_structure(html, number)
-                dumped = True
             record = parse_district_page(html, number, url)
         except Exception as e:
             record = {"district_number": number, "source_url": url, "error": str(e)}
