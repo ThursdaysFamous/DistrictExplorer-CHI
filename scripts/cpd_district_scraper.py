@@ -414,17 +414,42 @@ def parse_district_page(html, district_number, source_url):
     }
 
 
+def _debug_dump_structure(html, number):
+    """Log the heading outline + any 'commander' text context of a page, so the
+    live markup can be inspected from CI when a parser stops matching. Gated on
+    CPD_DEBUG; prints nothing in normal runs."""
+    soup = BeautifulSoup(html, "html.parser")
+    main = soup.select_one("main") or soup
+    print(f"=== CPD_DEBUG district {number}: headings ===", file=sys.stderr)
+    for tag in main.find_all(["h1", "h2", "h3", "h4", "h5"])[:40]:
+        print(f"  <{tag.name}> {clean(tag.get_text())!r}", file=sys.stderr)
+    print(f"=== CPD_DEBUG district {number}: 'commander' contexts ===", file=sys.stderr)
+    for node in main.find_all(string=re.compile("commander", re.I))[:8]:
+        parent = node.parent
+        gp = getattr(parent, "parent", None)
+        print(
+            f"  <{getattr(parent, 'name', '?')}> text={clean(str(node))!r} "
+            f"| parent<{getattr(gp, 'name', '?')}> next={clean((parent.find_next().get_text() if parent.find_next() else '') or '')[:80]!r}",
+            file=sys.stderr,
+        )
+
+
 def scrape_all(fetcher, limit=None, delay=0.5, verbose=True, pages=None):
     if pages is None:
         pages = get_district_pages(fetcher)
     if limit:
         pages = pages[:limit]
+    debug = bool(os.environ.get("CPD_DEBUG"))
+    dumped = False
     results = []
     for i, (number, ordinal, slug, url) in enumerate(pages, 1):
         if verbose:
             print(f"[{i}/{len(pages)}] fetching district {number} ({url})", file=sys.stderr)
         try:
             html = fetcher.fetch(url)
+            if debug and not dumped:
+                _debug_dump_structure(html, number)
+                dumped = True
             record = parse_district_page(html, number, url)
         except Exception as e:
             record = {"district_number": number, "source_url": url, "error": str(e)}
@@ -487,7 +512,15 @@ def main():
     with open(args.out, "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"Wrote {len(results)} records to {args.out}", file=sys.stderr)
+    # Per-field coverage summary — makes parser drift visible at a glance (e.g.
+    # "commander_name 1/22" says the pages were fetched but the commander block
+    # didn't parse), so a red build points straight at the field that broke.
+    ok = [r for r in results if not r.get("error")]
+    fields = ("commander_name", "commander_status", "main_phone", "caps_phone",
+              "caps_email", "station_address", "district_map_url")
+    coverage = "  ".join(f"{f}={sum(1 for r in ok if r.get(f))}/{len(ok)}" for f in fields)
+    print(f"Wrote {len(results)} records to {args.out} ({len(ok)} without error)", file=sys.stderr)
+    print(f"field coverage: {coverage}", file=sys.stderr)
 
 
 if __name__ == "__main__":

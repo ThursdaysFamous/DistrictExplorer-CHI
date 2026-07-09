@@ -36,7 +36,9 @@ jobs:
         run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape CPD district commander/contact pages
-        run: python3 scripts/cpd_district_scraper.py --out /tmp/cpd_district_info.json
+        env:
+          CPD_DEBUG: "1"          # TEMP diagnostic: dump live page structure
+        run: python3 scripts/cpd_district_scraper.py --out /tmp/cpd_district_info.json --limit 3
 
       - name: Rebuild roster data file
         run: python3 scripts/build_cpd_roster.py /tmp/cpd_district_info.json
