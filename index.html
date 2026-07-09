@@ -1048,6 +1048,31 @@
     { id: "geography", label: "Geography" }
   ];
 
+  // Approximate real-world area ranking, largest to smallest, used to keep
+  // smaller/more granular boundaries visible on top of larger ones (see
+  // reorderActiveLayers()). Hand-authored from known geography — there's no
+  // geometry library in this codebase to compute polygon area from data.
+  var LAYER_AREA_RANK = [
+    "il-supreme-court", // judicial district — largest
+    "congress",         // U.S. House district
+    "il-senate",        // IL State Senate district
+    "il-house",         // IL State House district
+    "ccbr",             // Cook County Board of Review district (only 3, county-wide)
+    "commissioner",     // Cook County Commissioner district
+    "school-board",     // Elected School Board district (10, citywide)
+    "cps-hs-network",   // CPS High School Network (admin grouping)
+    "cps-network",      // CPS K-8 Network (admin grouping)
+    "ward",             // City Ward (50)
+    "police-district",  // Police District (22)
+    "community-area",   // Community Area (77)
+    "zip-code",         // ZIP Code
+    "cps-high",         // High School attendance zone
+    "cps-middle",       // Middle School attendance zone
+    "cps-elementary",   // Elementary School attendance zone — smallest polygon layer
+    "police-station",   // point marker — no polygon area, always topmost
+    "fire-station"      // point marker — no polygon area, always topmost
+  ];
+
   var layers = [];       // registered modules
   var layerRuntime = {}; // id -> { overlayLayer, overlayLoaded, cardBody }
 
@@ -1106,6 +1131,21 @@
     layers.forEach(function (mod) {
       if (!state.layersOn[mod.id]) return;
       if (layerRuntime[mod.id].overlayLayer) updateLayerHighlight(mod);
+    });
+  }
+
+  // Restack every active layer per LAYER_AREA_RANK (largest first, smallest
+  // last) so smaller/more granular boundaries always render on top of larger
+  // ones, regardless of toggle order or which layer finished loading first.
+  // bringToFront() moves a layer group above whatever else is currently on
+  // the map, so calling it in largest-to-smallest order leaves the smallest
+  // active layer on top after the last call.
+  function reorderActiveLayers() {
+    LAYER_AREA_RANK.forEach(function (id) {
+      var rt = layerRuntime[id];
+      if (state.layersOn[id] && rt && rt.overlayLayer && map.hasLayer(rt.overlayLayer)) {
+        rt.overlayLayer.bringToFront();
+      }
     });
   }
 
@@ -1359,6 +1399,7 @@
       rt.cardBody.className = "layer-card-body state-off";
       rt.cardBody.textContent = "Layer off.";
       refreshActiveLayerOpacities(); // active count just dropped — remaining active layers get more opaque
+      reorderActiveLayers();
       return;
     }
 
@@ -1377,6 +1418,7 @@
           // .addTo(map) left orphaned boundaries on the map in that case)
           if (state.layersOn[mod.id]) rt.overlayLayer.addTo(map);
           refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
+          reorderActiveLayers();
         })
         .catch(function (err) {
           rt.overlayLoaded = false;
@@ -1385,6 +1427,7 @@
     } else if (rt.overlayLayer) {
       rt.overlayLayer.addTo(map);
       refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
+      reorderActiveLayers();
     }
 
     runLayerQuery(mod);
