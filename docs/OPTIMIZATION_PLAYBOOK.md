@@ -8,10 +8,12 @@
 
 All numbers were measured against this working tree unless marked *(not live-verified)* — the same convention the codebase itself uses. Findings were produced by a multi-agent review (5 scoped reviewers + adversarial verification of all 36 findings + a completeness-critic round that added 19 more); everything below survived verification, and the biggest claims were re-derived independently a second time.
 
-**Execution log (this PR):** Matrix items **1, 3, 4 shipped** — school-board geometry simplified, CI validation gate added, service worker switched to network-first.
+**Execution log (this PR):** Matrix items **1, 3, 4, 9, 10, 11, 13, 14, 15 shipped** (plus the geocoder-submit debounce fix) — school-board geometry simplified, CI validation gate added, service worker switched to network-first, remote Esri loaders made leaner + more resilient, and the Nominatim/geocoder paths made polite.
 - **Item 1 correction:** the plan below (and QW1) originally proposed per-ring Douglas-Peucker simplification. Executing it revealed that per-ring DP is **not topology-aware** — at ~3.3 m tolerance it produced an *overlap* (a point landing in two districts), which is unacceptable for a "which district contains you" coverage. The shipped implementation uses **topology-aware mapshaper** (Visvalingam, keep-shapes, 15% retain, 6-decimal precision) — the same tool the sibling layers used — via the new reproducible `scripts/build_embedded_boundaries.py`. Result: the embedded blob 975,796 → **83,470 B**; `index.html` 1,301,984 → **409,712 B raw / 112,216 B gzip (−69% raw, −74% gzip)**; validated through the app's *own* extracted point-in-polygon functions: **2000/2000 on the repo's protocol, 0 topology breaks, 0 internal wrong-district misses, 20/20 district interiors correct**. (The all-embedded-data externalization to `data/app/*.json`, item 2/P0, is the larger separate follow-up and is *not* in this PR.)
 - **Item 3:** `scripts/validate_index.py` (node --check + registerLayer floor + embedded-blob round-trip + rewrite-target presence), wired into both roster workflows between the rewrite and the PR; tested against a simulated module-deletion and a corrupted-blob.
 - **Item 4:** `sw.js` fetch handler is now network-first with cache fallback.
+- **Items 9/10/11 (remote-loader resilience):** `loadTigerLayer`, `loadCookCountyLayerGeoJSON`, and `loadArcGISGeoJSON` now request `geometryPrecision=6` (~0.11 m; trims coordinate payload, ignored by servers that don't support it). The two big statewide loaders (`loadTigerLayer`, `loadCookCountyLayerGeoJSON`) gained the `hasUsableGeometry` guard the Socrata/CPD loaders already had — an Esri HTTP-200-with-error-envelope no longer gets cached as a permanent session-long success — and a 30 s per-attempt timeout (shared `REMOTE_GEOJSON_TIMEOUT_MS`) so their whole-boundary payloads can finish on a slow link instead of aborting at 9 s. `outFields=*` was deliberately kept (not trimmed) to preserve `extractDistrictNumber`'s name-field fallback across TIGERweb's per-Congress field renames. Guard verified against realistic error-envelope/empty/null-geometry/valid inputs through the app's own `hasUsableGeometry`.
+- **Items 14/15 + geocoder fix (Nominatim politeness):** added `preconnect` for the Leaflet CDN and two tile shards + `dns-prefetch` for the click-time data/geocoder APIs. POI geocoding now flows through a serial, ≥1 s-spaced queue (`enqueuePoiGeocode`) instead of firing up to 9 parallel requests per click at Nominatim's 1-req/s endpoint; a per-call currency check skips the network once the selection moves on, so rapid clicking can't build an unbounded backlog, and the existing per-address cache still short-circuits repeats. The search-box submit handler now `clearTimeout`s the pending input-debounce so an Enter press within 550 ms of typing no longer fires a request the debounce then aborts and duplicates. Queue verified to run serially at ~1 s spacing with in-order results.
 
 ---
 
@@ -168,13 +170,13 @@ Zero `tileerror` handlers (grep-verified); offline users get a booted app (the S
 | 6 | Builders emit JSON; shared module; fix U+2028 no-op; fail-on-multi-match — R1 | **High** | Medium | Pipeline |
 | 7 | Surface overlay-load failures (15/18 layers currently silent) — R5 | **High** | **Low** | Frontend |
 | 8 | Build-time IL congress roster; drop multi-MB runtime fetch — P2 | **High** | Medium | Network |
-| 9 | `geometryPrecision=6` + trimmed `outFields` on 3 Esri loaders — P3 | Medium | **Low** | Network |
-| 10 | Guard `loadTigerLayer`/`loadCookCountyLayerGeoJSON` against 200-error-envelopes — P5 | Medium | **Low** | Network |
-| 11 | `timeoutMs` overrides for large payloads; tighten route-ladder worst case — P4 | Medium | **Low** | Network |
+| 9 | ~~`geometryPrecision=6` on 3 Esri loaders~~ — **done in this PR** (outFields kept `*` to preserve the name-field fallback) | Medium | **Low** | Network |
+| 10 | ~~Guard `loadTigerLayer`/`loadCookCountyLayerGeoJSON` against 200-error-envelopes~~ — **done in this PR** | Medium | **Low** | Network |
+| 11 | ~~`timeoutMs` overrides for large payloads~~ — **done in this PR** (30 s for the two big Esri loaders) | Medium | **Low** | Network |
 | 12 | Single PIP per click + restyle only the 2 changed paths — P7 | Medium | **Low** | Frontend |
 | 13 | ~~Commit geometry-regeneration script + validation protocol~~ — **done in this PR (`scripts/build_embedded_boundaries.py`)** | Medium | **Low** | Pipeline |
-| 14 | Preconnect tile shards + dns-prefetch API origins — P12 | Medium | **Low** | Frontend |
-| 15 | Serialize POI geocoding ≥1 s apart — P6 | Medium | **Low** | Network |
+| 14 | ~~Preconnect tile shards + Leaflet CDN + dns-prefetch API origins~~ — **done in this PR** | Medium | **Low** | Frontend |
+| 15 | ~~Serialize POI geocoding ≥1 s apart~~ — **done in this PR** (+ stale-skip to bound the backlog) | Medium | **Low** | Network |
 | 16 | Tile-failure banner (`tileerror`) — R6 | Medium | **Low** | Frontend |
 | 17 | Toggle-path: skip restyle on toggle-off; opacity-only rescale — P8 | Medium | **Low** | Frontend |
 | 18 | Actions-based Pages deploy (app files only) + `.nojekyll` — R10 | Low-Med | **Low** | DevEx |
