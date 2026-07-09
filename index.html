@@ -755,7 +755,8 @@
    * MAP
    * ======================================================================= */
 
-  var map = L.map("map", { minZoom: 9, maxZoom: 18 }).setView(CHI_CENTER, 11);
+  var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(CHI_CENTER, 11);
+  L.control.zoom({ position: "bottomright" }).addTo(map);
   L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 19,
     subdomains: "abcd",
