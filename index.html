@@ -418,6 +418,21 @@
     margin-bottom: 10px;
     overflow: hidden;
   }
+  /* a sub-selection nested inside its parent's block (e.g. Police Beat under
+     Police District): indented, with a top rule separating it from the parent
+     card so it reads as "part of, but under, the district". */
+  .layer-block-sub {
+    margin: 0 10px 10px 22px;
+    border-top: 1px solid var(--line);
+  }
+  .layer-block-sub .layer-block-head {
+    padding: 8px 10px;
+    background: transparent;
+  }
+  .layer-block-sub .layer-block-head label {
+    font-weight: 500;
+    font-size: 12.5px;
+  }
   .layer-block-head {
     display: flex;
     align-items: center;
@@ -1084,6 +1099,11 @@
     "cps-hs-network",   // CPS High School Network (admin grouping)
     "cps-network",      // CPS K-8 Network (admin grouping)
     "ward",             // City Ward (50)
+    // Deliberately out of pure area order: beats (~277, smaller than a district)
+    // sit just BELOW their parent district so the district's outline renders on
+    // top and frames the beat fills — the "district outline + beats as filler"
+    // look the beat sub-selection is for.
+    "police-beat",      // Police Beat (~277)
     "police-district",  // Police District (22)
     "community-area",   // Community Area (77)
     "zip-code",         // ZIP Code
@@ -1101,8 +1121,19 @@
     layers.push(mod);
     layerRuntime[mod.id] = {
       overlayLayer: null, overlayLoaded: false, cardBody: null, geojson: null,
-      highlightedLayer: null, poiMarker: null
+      highlightedLayer: null, poiMarker: null,
+      // when true the layer draws its outline only (fillOpacity forced to 0),
+      // regardless of its own style — used when a sub-layer takes over the fill
+      // (e.g. Police Beat filling a Police District that's dropped to outline).
+      outlineOnly: false
     };
+  }
+
+  function getLayerById(id) {
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].id === id) return layers[i];
+    }
+    return null;
   }
 
   /* ---------- fill-opacity scaling by active layer count: as more layers
@@ -1139,11 +1170,12 @@
   function baseStyleFor(mod) {
     var style = mod.overlay && mod.overlay.style;
     if (!style) return null;
+    var rt = layerRuntime[mod.id];
     return {
       color: style.color,
       weight: style.weight,
       fillColor: style.fillColor,
-      fillOpacity: scaledFillOpacity(mod),
+      fillOpacity: (rt && rt.outlineOnly) ? 0 : scaledFillOpacity(mod),
       dashArray: style.dashArray
     };
   }
@@ -1202,11 +1234,14 @@
   // lighter fill/stroke instead of an unrelated universal gold.
   var HIGHLIGHT_DARKEN_AMOUNT = 0.35;
   function highlightStyleFor(mod) {
+    var rt = layerRuntime[mod.id];
     return {
       color: darkenHexColor(moduleColor(mod), HIGHLIGHT_DARKEN_AMOUNT),
       weight: 4,
       opacity: 1,
-      fillOpacity: 0.32,
+      // an outline-only layer keeps no fill even when it's the matched region,
+      // so a sub-layer's fill (the beats) shows through unobscured
+      fillOpacity: (rt && rt.outlineOnly) ? 0 : 0.32,
       dashArray: null
     };
   }
@@ -1366,6 +1401,65 @@
     });
   }
 
+  // Build one layer's sidebar block (head with toggle + card body) and wire
+  // its change handler. Returned detached so the caller can append it either
+  // at the group's top level or nested inside a parent block (sub-layers).
+  function buildLayerBlock(mod) {
+    var block = document.createElement("div");
+    block.className = "layer-block";
+    // ties this card's accent border + dot to the same color used for the
+    // layer's map overlay/pins, so the sidebar reads as "this is the box
+    // for the blue layer" at a glance
+    block.style.setProperty("--layer-accent", moduleColor(mod));
+
+    var head = document.createElement("div");
+    head.className = "layer-block-head";
+
+    var checkboxId = "toggle-" + mod.id;
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = checkboxId;
+    checkbox.checked = false;
+
+    var colorDot = document.createElement("span");
+    colorDot.className = "layer-color-dot";
+    colorDot.setAttribute("aria-hidden", "true");
+    colorDot.title = "Layer color on map";
+
+    var label = document.createElement("label");
+    label.setAttribute("for", checkboxId);
+    label.textContent = mod.label;
+
+    head.appendChild(checkbox);
+    head.appendChild(colorDot);
+    head.appendChild(label);
+    if (mod.stub) {
+      var badge = document.createElement("span");
+      badge.className = "stub-badge";
+      badge.textContent = "STUB";
+      badge.title = "Demonstration module — real data source lands in a later build thread.";
+      head.appendChild(badge);
+    }
+    block.appendChild(head);
+
+    var body = document.createElement("div");
+    body.id = "card-" + mod.id;
+    body.className = "layer-card-body state-off";
+    body.setAttribute("aria-live", "polite");
+    body.textContent = "Layer off.";
+    block.appendChild(body);
+
+    layerRuntime[mod.id].cardBody = body;
+
+    checkbox.addEventListener("change", function () {
+      state.layersOn[mod.id] = checkbox.checked;
+      onLayerToggled(mod);
+      syncUrlHash();
+    });
+
+    return block;
+  }
+
   function buildGroupsUI() {
     var root = document.getElementById("groups-root");
     GROUPS.forEach(function (group) {
@@ -1382,59 +1476,19 @@
       heading.innerHTML = '<span class="dot" aria-hidden="true"></span>' + sanitize(group.label);
       section.appendChild(heading);
 
+      // Top-level layers only; a sub-layer (mod.subOf) is rendered nested
+      // inside its parent's block below, not as a sibling in the group.
       groupLayers.forEach(function (mod) {
-        var block = document.createElement("div");
-        block.className = "layer-block";
-        // ties this card's accent border + dot to the same color used for the
-        // layer's map overlay/pins, so the sidebar reads as "this is the box
-        // for the blue layer" at a glance
-        block.style.setProperty("--layer-accent", moduleColor(mod));
-
-        var head = document.createElement("div");
-        head.className = "layer-block-head";
-
-        var checkboxId = "toggle-" + mod.id;
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = checkboxId;
-        checkbox.checked = false;
-
-        var colorDot = document.createElement("span");
-        colorDot.className = "layer-color-dot";
-        colorDot.setAttribute("aria-hidden", "true");
-        colorDot.title = "Layer color on map";
-
-        var label = document.createElement("label");
-        label.setAttribute("for", checkboxId);
-        label.textContent = mod.label;
-
-        head.appendChild(checkbox);
-        head.appendChild(colorDot);
-        head.appendChild(label);
-        if (mod.stub) {
-          var badge = document.createElement("span");
-          badge.className = "stub-badge";
-          badge.textContent = "STUB";
-          badge.title = "Demonstration module — real data source lands in a later build thread.";
-          head.appendChild(badge);
-        }
-        block.appendChild(head);
-
-        var body = document.createElement("div");
-        body.id = "card-" + mod.id;
-        body.className = "layer-card-body state-off";
-        body.setAttribute("aria-live", "polite");
-        body.textContent = "Layer off.";
-        block.appendChild(body);
-
-        layerRuntime[mod.id].cardBody = body;
-
-        checkbox.addEventListener("change", function () {
-          state.layersOn[mod.id] = checkbox.checked;
-          onLayerToggled(mod);
-          syncUrlHash();
+        if (mod.subOf) return;
+        var block = buildLayerBlock(mod);
+        // nest any sub-layers (e.g. Police Beat under Police District) so the
+        // sidebar reads them as a sub-selection of the parent
+        layers.forEach(function (sub) {
+          if (sub.subOf !== mod.id) return;
+          var subBlock = buildLayerBlock(sub);
+          subBlock.classList.add("layer-block-sub");
+          block.appendChild(subBlock);
         });
-
         section.appendChild(block);
       });
 
@@ -1454,6 +1508,7 @@
       rt.cardBody.textContent = "Layer off.";
       refreshActiveLayerOpacities(); // active count just dropped — remaining active layers get more opaque
       reorderActiveLayers();
+      if (mod.onToggle) mod.onToggle(false); // let a layer react to being turned off (e.g. cascade its sub-layer)
       return;
     }
 
@@ -1498,6 +1553,7 @@
     }
 
     runLayerQuery(mod);
+    if (mod.onToggle) mod.onToggle(true); // let a layer react to being turned on (e.g. a sub-layer restyling its parent)
   }
 
   function setCardLoading(mod) {
@@ -1800,6 +1856,34 @@
   var POLICE_DISTRICT_BOUNDARY_SERVICE = arcgisServiceUrl("Police_District_Boundary_View");
   var loadPoliceDistricts = makeCachedLoaderFromFn(function () { return loadArcGISGeoJSON(POLICE_DISTRICT_BOUNDARY_SERVICE); });
 
+  // Police_District_Stations_View (CPD's ArcGIS org) carries station address +
+  // phone per district straight from source, CORS-enabled. Shared by two
+  // consumers: the Police Station layer (nearest-3, below) and the Police
+  // District card, which falls back to it for address/phone when the commander
+  // roster (cpd-district-info.json) is empty or a weekly scrape was blocked.
+  var POLICE_STATION_SERVICE = arcgisServiceUrl("Police_District_Stations_View");
+  var loadPoliceStations = makeCachedLoaderFromFn(function () { return loadArcGISGeoJSON(POLICE_STATION_SERVICE); });
+
+  // Index the station points by bare district number ("8"), memoized on the
+  // FeatureCollection so repeated clicks don't rebuild it.
+  function policeStationsByDistrict(stationGeo) {
+    if (!stationGeo || !stationGeo.features) return {};
+    if (stationGeo.__byDistrict) return stationGeo.__byDistrict;
+    var byDistrict = {};
+    stationGeo.features.forEach(function (f) {
+      var p = f.properties || {};
+      var key = extractDistrictNumber(p, ["district", "dist_num", "dist_number", "dist", "district_number", "district_no"]);
+      if (key && !byDistrict[key]) {
+        byDistrict[key] = {
+          address: findPropCI(p, ["address", "addr", "location", "street_address"]),
+          phone: findPropCI(p, ["phone", "phone_number", "telephone", "phone_no"])
+        };
+      }
+    });
+    stationGeo.__byDistrict = byDistrict;
+    return byDistrict;
+  }
+
   /* ---------- Commander + CAPS/station contact roster, keyed by district
    * number. CPD's per-district pages (chicagopolice.org/{ordinal}-district-
    * {slug}/) are the only source for commander name and CAPS unit phone/
@@ -1828,25 +1912,33 @@
     query: function (point, seq) {
       return Promise.all([
         loadPoliceDistricts(),
-        loadCpdDistrictInfo().catch(function () { return {}; })
+        loadCpdDistrictInfo().catch(function () { return {}; }),
+        // Address/phone have a CORS-native source independent of the commander
+        // scrape; best-effort so a station-fetch failure never blocks the card.
+        loadPoliceStations().catch(function () { return null; })
       ]).then(function (results) {
-        var geojson = results[0], cpdInfo = results[1];
+        var geojson = results[0], cpdInfo = results[1], stationGeo = results[2];
         var feature = findFeatureContaining(geojson, point);
         if (!feature) return null;
         var props = feature.properties || {};
-        var number = findPropCI(props, ["district", "dist_num", "dist_number", "dist", "district_number", "district_no"]);
+        // ArcGIS district views zero-pad ("008"); extractDistrictNumber strips
+        // it to the bare integer so the roster and station joins key alike.
+        var number = extractDistrictNumber(props, ["district", "dist_num", "dist_number", "dist", "district_number", "district_no"]);
         var label = findPropCI(props, ["name", "dist_label", "district_name", "dist_name"]);
-        var info = number ? cpdInfo[String(number)] : null;
+        var info = number ? cpdInfo[number] : null;
+        var station = number ? policeStationsByDistrict(stationGeo)[number] : null;
         return {
           seq: seq,
           number: number,
           label: label,
           commanderName: info ? info.commanderName : null,
           commanderStatus: info ? info.commanderStatus : null,
-          mainPhone: info ? info.mainPhone : null,
+          // Prefer the scraped roster; fall back to the ArcGIS station view so
+          // address/phone still show when the commander scrape is blocked.
+          mainPhone: (info && info.mainPhone) || (station && station.phone) || null,
           capsPhone: info ? info.capsPhone : null,
           capsEmail: info ? info.capsEmail : null,
-          stationAddress: info ? info.stationAddress : null,
+          stationAddress: (info && info.stationAddress) || (station && station.address) || null,
           districtMapUrl: info ? info.districtMapUrl : null
         };
       });
@@ -1867,6 +1959,80 @@
       var districtMap = safeHttpUrl(result.districtMapUrl); // scheme-check external URLs before they become an href
       if (districtMap) fields.push({ label: "District Map", html: '<a href="' + sanitize(districtMap) + '" target="_blank" rel="noopener">' + sanitize(districtMap) + '</a>' });
       return renderFieldList(fields);
+    },
+    onToggle: function (on) {
+      // The Police Beat sub-layer only makes sense as a subdivision of a
+      // visible district, so if the district is turned off, cascade its beat
+      // sub-selection off too (which restores this layer's own fill via the
+      // beat module's onToggle(false)).
+      if (!on && state.layersOn["police-beat"]) {
+        var box = document.getElementById("toggle-police-beat");
+        if (box && box.checked) box.click();
+      }
+    }
+  });
+
+  /* ---------- Police Beat (sub-selection of Police District) ----------
+   * Beats are CPD's smallest patrol unit — each district is tiled by a
+   * handful of beats. Same CPD ArcGIS org as the district/station layers
+   * (Police_Beat_Boundary). Registered with subOf:"police-district" so its
+   * toggle nests under the district in the sidebar and reads as a
+   * sub-selection. Turning it on flips the parent district to outline-only
+   * (see onToggle) so the district's boundary frames the beats and the beat
+   * fills read as the district's interior subdivision. Field names
+   * (BEAT_NUM/BEAT, DISTRICT) per CPD's schema; not live-spot-checkable in
+   * this sandbox (services2.arcgis.com is egress-blocked here, same as the
+   * other CPD layers), so findPropCI's alias lists cover the likely casings
+   * and it degrades gracefully if a guess is wrong. ---------- */
+  var POLICE_BEAT_BOUNDARY_SERVICE = arcgisServiceUrl("Police_Beat_Boundary");
+  var loadPoliceBeats = makeCachedLoaderFromFn(function () { return loadArcGISGeoJSON(POLICE_BEAT_BOUNDARY_SERVICE); });
+
+  registerLayer({
+    id: "police-beat",
+    group: "safety",
+    subOf: "police-district",
+    label: "Police Beat",
+    overlay: {
+      load: loadPoliceBeats,
+      // solid thin outline + visible fill: with the district dropped to
+      // outline-only, the beats carry the interior fill. Same red family as
+      // the district, a shade brighter so the two read as related.
+      style: { color: "#7A0A1C", weight: 1, fillColor: "#E4572E", fillOpacity: 0.14, dashArray: null }
+    },
+    query: function (point, seq) {
+      return loadPoliceBeats().then(function (geojson) {
+        var feature = findFeatureContaining(geojson, point);
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var beat = findPropCI(props, ["beat_num", "beat", "beat_number", "beat_no", "number"]);
+        var district = findPropCI(props, ["district", "dist_num", "dist", "district_number", "district_no"]);
+        return { seq: seq, beat: beat, district: district };
+      });
+    },
+    render: function (result) {
+      var fields = [{ label: "Beat", value: result.beat ? String(result.beat) : "Unknown" }];
+      if (result.district) fields.push({ label: "District", value: String(result.district) });
+      return renderFieldList(fields);
+    },
+    onToggle: function (on) {
+      var districtRt = layerRuntime["police-district"];
+      if (on) {
+        // a sub-selection needs its parent visible — turn the district on (as
+        // the outline frame) if it isn't already. box.click() runs the normal
+        // toggle path (overlay load + query + hash sync).
+        if (!state.layersOn["police-district"]) {
+          var box = document.getElementById("toggle-police-district");
+          if (box && !box.checked) box.click();
+        }
+        districtRt.outlineOnly = true;
+      } else {
+        districtRt.outlineOnly = false;
+      }
+      // Restyle the already-loaded district overlay to reflect the fill change.
+      // If it's still loading (just auto-enabled above), baseStyleFor reads
+      // outlineOnly at L.geoJSON construction time, so no restyle is needed yet.
+      var districtMod = getLayerById("police-district");
+      if (districtMod && districtRt.overlayLayer) updateLayerHighlight(districtMod);
     }
   });
 
@@ -1874,13 +2040,12 @@
    * New layer, not in the original playbook registry — CPD's ArcGIS org
    * (Police_District_Stations_View) surfaces station address + phone
    * straight from source, which the Chicago Data Portal registry never had.
-   * Same nearest-N pattern as Fire Stations below. Field names (NAME,
-   * ADDRESS, DISTRICT, PHONE) per playbook §2a; not live-spot-checked in
-   * this sandbox for the same egress-policy reason as the boundary layer
-   * above. */
+   * Same nearest-N pattern as Fire Stations below. Field names NAME, ADDRESS,
+   * DISTRICT, PHONE live-verified against the FeatureServer (22 stations, one
+   * per district). loadPoliceStations is defined with the boundary loader
+   * above, since the Police District card shares it for its address/phone
+   * fallback. */
   var POLICE_STATION_COUNT = 3;
-  var POLICE_STATION_SERVICE = arcgisServiceUrl("Police_District_Stations_View");
-  var loadPoliceStations = makeCachedLoaderFromFn(function () { return loadArcGISGeoJSON(POLICE_STATION_SERVICE); });
 
   registerLayer({
     id: "police-station",
