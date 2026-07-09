@@ -735,6 +735,14 @@
     return attempt(retries);
   }
 
+  /* ---------- per-attempt timeout for the big whole-boundary remote layers
+   * (TIGERweb statewide legislative districts, Cook County political
+   * boundaries). Those payloads can't finish inside the 9 s default on a slow
+   * mobile link, so every attempt aborts mid-body and the layer can never
+   * load; a larger budget lets a slow-but-working download complete. Small
+   * layers (police districts/stations, Socrata rosters) keep the 9 s default. ---------- */
+  var REMOTE_GEOJSON_TIMEOUT_MS = 30000;
+
   /* ---------- probe a Socrata dataset for its geometry column name ---------- */
   var geometryColumnCache = {};
   function probeGeometryColumn(datasetId) {
@@ -1604,7 +1612,10 @@
   }
 
   function loadArcGISGeoJSON(serviceUrl) {
-    var url = serviceUrl + "/query?where=1%3D1&outFields=*&f=geojson&outSR=4326";
+    // geometryPrecision=6 (~0.11 m) trims coordinate digits the server would
+    // otherwise send at full float precision — no visible or classification
+    // change at any zoom this map allows; a server that ignores it is unharmed.
+    var url = serviceUrl + "/query?where=1%3D1&outFields=*&f=geojson&outSR=4326&geometryPrecision=6";
     return fetchJSONWithRetry(url, {}, 2)
       .then(function (geojson) {
         if (!hasUsableGeometry(geojson)) throw new Error("no usable geometry from " + serviceUrl);
@@ -2114,9 +2125,21 @@
    * filtered to Illinois (STATE FIPS 17) so the payload stays small ---------- */
   function loadTigerLayer(layerIndex) {
     var where = encodeURIComponent("STATE='17'");
+    // geometryPrecision=6 trims the statewide payload; outFields stays * so
+    // extractDistrictNumber's name-field fallback keeps working across the
+    // per-Congress/GA field renames the comment above documents.
     var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/" +
-      layerIndex + "/query?where=" + where + "&outFields=*&outSR=4326&f=geojson";
-    return fetchJSONWithRetry(url, {}, 2);
+      layerIndex + "/query?where=" + where + "&outFields=*&outSR=4326&f=geojson&geometryPrecision=6";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        // Esri REST can answer HTTP 200 with a JSON error envelope (throttling,
+        // bad params) carrying no features; without this guard makeCached would
+        // pin that useless response for the whole session and the layer would
+        // stay dead with no Retry path. Treat it as a failure, same as the
+        // Socrata and CPD-ArcGIS loaders already do.
+        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb layer " + layerIndex + " returned no usable geometry");
+        return geojson;
+      });
   }
 
   /* ---------- district-number lookup with a name-field regex fallback, since
@@ -2712,8 +2735,14 @@
 
   function loadCookCountyLayerGeoJSON(layerIndex) {
     var url = COOK_COUNTY_POLITICAL_BOUNDARY + "/" + layerIndex + "/query?where=" +
-      encodeURIComponent("1=1") + "&outFields=*&outSR=4326&f=geojson";
-    return fetchJSONWithRetry(url, {}, 2);
+      encodeURIComponent("1=1") + "&outFields=*&outSR=4326&f=geojson&geometryPrecision=6";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        // same error-envelope guard as loadTigerLayer — a 200-with-no-features
+        // must not be cached as a successful boundary set for the session.
+        if (!hasUsableGeometry(geojson)) throw new Error("Cook County layer " + layerIndex + " returned no usable geometry");
+        return geojson;
+      });
   }
 
   function loadCookCountyLayerRows(layerIndex) {
