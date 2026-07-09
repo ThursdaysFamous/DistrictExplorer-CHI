@@ -28,30 +28,39 @@ function check(name, ok, detail) {
   if (!ok) failures.push(name);
 }
 
-async function booted(page, url) {
+// Each check runs in its own context with service workers BLOCKED. The app's
+// SW serves data/app/* cache-first and — critically — its requests are not
+// interceptable by page.route, so an active SW would defeat the failure
+// injection in check 3 (it did, flakily, on the first CI run). The SW is a
+// delivery optimization, not what this behaviour test targets, so we take it
+// out of the picture; the app's layer behaviour is identical without it.
+async function booted(context, url, routeFn) {
+  const page = await context.newPage();
+  if (routeFn) await routeFn(page);
   await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => !!window.ChiExplorer, null, { timeout: BOOT_TIMEOUT });
+  return page;
 }
 
 const browser = await chromium.launch();
 try {
   // 1. App boots and registers every layer.
   {
-    const page = await browser.newPage();
-    await booted(page, BASE);
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, BASE);
     check("app boots (window.ChiExplorer exported)", true);
     const n = await page.evaluate(
       () => document.querySelectorAll('input[type=checkbox][id^="toggle-"]').length
     );
     check(`${EXPECT_LAYERS} layers registered`, n === EXPECT_LAYERS, `found ${n}`);
-    await page.close();
+    await context.close();
   }
 
   // 2. The three no-API layers classify a known point against known ground
   //    truth, fetched from data/app/*.json.
   {
-    const page = await browser.newPage();
-    await booted(page, `${BASE}#point=${POINT}&layers=${OFFLINE.join(",")}`);
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, `${BASE}#point=${POINT}&layers=${OFFLINE.join(",")}`);
     const EXPECT_DISTRICT = { "school-board": "12", "il-supreme-court": "1", "ccbr": "3" };
     for (const id of OFFLINE) {
       await page
@@ -83,15 +92,18 @@ try {
       return el ? el.innerText : "";
     });
     check("school-board joins member roster", /Board member/i.test(board), board.replace(/\s+/g, " ").slice(0, 70));
-    await page.close();
+    await context.close();
   }
 
   // 3. A failing data source degrades to that layer's error card + Retry, in
   //    isolation — the app's per-layer failure-isolation rule.
   {
-    const page = await browser.newPage();
-    await page.route("**/data/app/school-board-districts.json", (r) => r.fulfill({ status: 503, body: "down" }));
-    await booted(page, `${BASE}#point=${POINT}&layers=school-board,ccbr`);
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(
+      context,
+      `${BASE}#point=${POINT}&layers=school-board,ccbr`,
+      (p) => p.route("**/data/app/school-board-districts.json", (r) => r.fulfill({ status: 503, body: "down" }))
+    );
     await page
       .waitForFunction(
         () => {
@@ -113,7 +125,7 @@ try {
     });
     check("failed layer shows error card + Retry", res.errored && res.hasRetry);
     check("failure is isolated (other layer still classifies)", res.otherOk);
-    await page.close();
+    await context.close();
   }
 } finally {
   await browser.close();
