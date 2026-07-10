@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Chicago District Explorer: a single-file, dependency-light web app. Click a point in Chicago (or search an address) and it reports every civic district containing that point and who represents you there — wards, county/state/federal legislative districts, police districts/beats, school zones, and more. Deployed as a static site to `ChiDistricts.overberg.co` (see `CNAME`).
+Chicago District Explorer: a single-file, dependency-light web app. Click a point in Chicago (or search an address) and it reports every civic district containing that point and who represents you there — wards, county/state/federal legislative districts, police districts/beats, school zones, and more. Deployed as a static site to `chidistricts.com` (see `CNAME`).
 
 **There is no build step, no framework, and no server-side code.** The entire app — styles, core, and all layer modules — lives inline in `index.html` (~3,500 lines). `sw.js` is the service worker; `data/app/*.json` are runtime-fetched data files. Everything else is data pipeline, scrapers, or CI.
 
