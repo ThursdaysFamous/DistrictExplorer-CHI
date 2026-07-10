@@ -779,18 +779,23 @@
   }
   .hover-popup .leaflet-popup-content { margin: 6px 9px; font-size: 12px; line-height: 1.3; }
   .hover-popup .leaflet-popup-tip { background: rgba(20, 24, 28, 0.92); }
-  /* multi-layer civic snapshot: one row per containing layer, broad→granular */
-  .hover-snapshot { display: grid; grid-template-columns: auto auto 1fr; gap: 2px 6px; align-items: baseline; }
-  .hover-row { display: contents; }
-  .hover-dot { width: 8px; height: 8px; border-radius: 50%; align-self: center; box-shadow: 0 0 0 1px rgba(255,255,255,0.35); }
-  .hover-row-label { opacity: 0.68; font-size: 11px; white-space: nowrap; }
+  /* multi-layer civic snapshot: one entry per containing layer, broad→granular.
+     Each entry is a color dot + a two-line text block — the layer label above,
+     its district number + officeholder/entity name below — so a long name wraps
+     under the label instead of squeezing a narrow value column (the old 3-column
+     grid mangled multi-word names against Leaflet's popup max-width). */
+  .hover-snapshot { display: flex; flex-direction: column; gap: 5px; max-width: 232px; }
+  .hover-row { display: flex; align-items: flex-start; gap: 7px; }
+  .hover-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; margin-top: 3px; box-shadow: 0 0 0 1px rgba(255,255,255,0.35); }
+  .hover-row-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+  .hover-row-label { opacity: 0.68; font-size: 11px; }
   .hover-row-value { font-weight: 600; }
-  /* the name identifier (alderperson, commissioner, network chief, …) sits after
-     the district number in normal weight so the number stays the primary identity
+  /* the name identifier (alderperson, commissioner, network chief, …) follows the
+     district number in normal weight so the number stays the primary identity
      and the name reads as who/what it is. */
   .hover-row-who { font-weight: 400; opacity: 0.82; }
   .hover-row-who::before { content: "\00b7\00a0"; opacity: 0.55; }
-  .hover-row-parent .hover-row-label,
+  .hover-row-parent .hover-row-label { font-size: 11.5px; }
   .hover-row-parent .hover-row-value { font-size: 12.5px; }
 
   /* ---- pin-parent relationships: "Pin as parent" control on each card ---- */
@@ -4052,8 +4057,10 @@
       if (who) valueHtml += '<span class="hover-row-who">' + sanitize(who) + "</span>";
       html += '<div class="hover-row' + (i === 0 ? " hover-row-parent" : "") + '">' +
         '<span class="hover-dot" style="background:' + sanitize(moduleColor(mod)) + '"></span>' +
-        '<span class="hover-row-label">' + sanitize(mod.label) + '</span>' +
-        '<span class="hover-row-value">' + valueHtml + "</span>" +
+        '<span class="hover-row-text">' +
+          '<span class="hover-row-label">' + sanitize(mod.label) + '</span>' +
+          '<span class="hover-row-value">' + valueHtml + "</span>" +
+        "</span>" +
         "</div>";
     }
     return html + "</div>";
