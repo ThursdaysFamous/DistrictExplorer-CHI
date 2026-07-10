@@ -7,3 +7,8 @@ __pycache__/
 node_modules/
 package.json
 package-lock.json
+
+# Transient — Leaflet fetched by scripts/vendor_leaflet.sh so the smoke test can
+# serve it same-origin where the browser can't reach the CDN (Claude Code web).
+# Third-party asset, never committed; production and CI load Leaflet from the CDN.
+scripts/vendor/

@@ -14,6 +14,23 @@
 // Configure the URL with BASE_URL (default http://localhost:8000/).
 
 import { chromium } from "playwright";
+import { readFileSync, existsSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+// Vendored Leaflet fallback for sandboxed environments (e.g. Claude Code web),
+// where the browser (Chromium) cannot reach cdnjs.cloudflare.com — it does not
+// use the agent HTTPS proxy, so the request resets and the app never boots
+// ("L is not defined"). scripts/vendor_leaflet.sh populates this dir via curl,
+// which *can* reach the CDN through the proxy; when present we serve Leaflet
+// same-origin below so the app boots. Absent (production, GitHub Actions CI)
+// the browser loads Leaflet straight from the CDN exactly as before.
+const VENDOR_DIR = join(dirname(fileURLToPath(import.meta.url)), "vendor", "leaflet");
+const VENDORED_LEAFLET =
+  existsSync(join(VENDOR_DIR, "leaflet.js")) && existsSync(join(VENDOR_DIR, "leaflet.css"))
+    ? { js: readFileSync(join(VENDOR_DIR, "leaflet.js")), css: readFileSync(join(VENDOR_DIR, "leaflet.css")) }
+    : null;
+if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
 
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 const POINT = "41.88250,-87.62850"; // downtown Loop — inside Cook County
@@ -36,6 +53,12 @@ function check(name, ok, detail) {
 // out of the picture; the app's layer behaviour is identical without it.
 async function booted(context, url, routeFn) {
   const page = await context.newPage();
+  if (VENDORED_LEAFLET) {
+    await page.route("**/cdnjs.cloudflare.com/**/leaflet.js", (r) =>
+      r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_LEAFLET.js }));
+    await page.route("**/cdnjs.cloudflare.com/**/leaflet.css", (r) =>
+      r.fulfill({ status: 200, contentType: "text/css", body: VENDORED_LEAFLET.css }));
+  }
   if (routeFn) await routeFn(page);
   await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => !!window.ChiExplorer, null, { timeout: BOOT_TIMEOUT });

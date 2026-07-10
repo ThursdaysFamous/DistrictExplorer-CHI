@@ -1,4 +1,16 @@
 {
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/vendor_leaflet.sh"
+          }
+        ]
+      }
+    ]
+  },
   "sandbox": {
     "enabled": true,
     "allowedDomains": [
