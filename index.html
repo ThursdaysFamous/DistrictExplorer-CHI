@@ -2781,6 +2781,54 @@
       });
   }
 
+  /* ---------- paged ArcGIS fetch, for layers that exceed the service's
+   * maxRecordCount transfer cap (commonly 1000-2000 features): loops
+   * resultOffset until the response stops reporting exceededTransferLimit.
+   * No Chicago layer currently needs it (all fit in one response) — kept in
+   * the engine for metro forks, where multi-thousand-feature layers are
+   * common (METRO_EXPANSION_PLAYBOOK §6.6; back-ported from the NYC fork,
+   * which pages its ~4,200 election districts through it). ---------- */
+  function loadArcGISPaged(layerUrl, outFields) {
+    var PAGE = 1000;
+    function page(offset, acc) {
+      var url = layerUrl + "/query?where=1%3D1&outFields=" + encodeURIComponent(outFields || "*") +
+        "&outSR=4326&f=geojson&geometryPrecision=6&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        var feats = (gj && gj.features) || [];
+        acc = acc.concat(feats);
+        var more = gj && (gj.exceededTransferLimit || (gj.properties && gj.properties.exceededTransferLimit));
+        if (more && feats.length === PAGE) return page(offset + feats.length, acc);
+        return { type: "FeatureCollection", features: acc };
+      });
+    }
+    return page(0, []);
+  }
+
+  /* ---------- point-dataset loader for datasets whose .geojson route serves
+   * NO geometry — the coordinates live only in latitude/longitude *properties*
+   * (NYC's facilities DB and firehouse datasets both behave this way). Builds
+   * a real Point FeatureCollection from the .json rows so both the overlay
+   * markers and a nearest-N query work. No Chicago layer currently needs it
+   * (all of Chicago's point sources serve real geometry) — kept in the engine
+   * for metro forks (METRO_EXPANSION_PLAYBOOK §6.9; back-ported from the NYC
+   * fork, where three layers share it). ---------- */
+  function makeSocrataPointLoader(datasetId, whereClause, latField, lngField) {
+    return makeCached(function () {
+      var q = "?$limit=1000" + (whereClause ? "&$where=" + encodeURIComponent(whereClause) : "");
+      var url = "https://data.cityofchicago.org/resource/" + datasetId + ".json" + q;
+      return fetchJSONWithRetry(url, {}, 2).then(function (rows) {
+        var feats = [];
+        (rows || []).forEach(function (r) {
+          var lat = parseFloat(r[latField]), lng = parseFloat(r[lngField]);
+          if (isFinite(lat) && isFinite(lng)) {
+            feats.push({ type: "Feature", properties: r, geometry: { type: "Point", coordinates: [lng, lat] } });
+          }
+        });
+        return { type: "FeatureCollection", features: feats };
+      });
+    });
+  }
+
   /* ---------- case-insensitive property lookup — Socrata field-name casing/
    * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
   function findPropCI(props, candidates) {
@@ -2837,10 +2885,18 @@
   function registerPolygonLayer(opts) {
     var load = opts.loader;
     var keyedFields = opts.fields.filter(function (f) { return f.keys; });
+    var primaryField = keyedFields.filter(function (f) { return f.primary; })[0] || null;
     registerLayer({
       id: opts.id,
       group: opts.group,
       label: opts.label,
+      // hover popup reads the same primary field the card's headline row shows,
+      // so the two surfaces can never disagree on a district's identity
+      // (METRO_EXPANSION_PLAYBOOK §2 hover-parity rule, back-ported from NYC).
+      hoverName: primaryField ? function (feature) {
+        var v = findPropCI(feature.properties || {}, primaryField.keys);
+        return (v == null || v === "") ? null : String(v);
+      } : undefined,
       overlay: { load: load, style: opts.style },
       query: function (point, seq) {
         return load().then(function (geojson) {
@@ -3297,125 +3353,100 @@
    * per district). loadPoliceStations is defined with the boundary loader
    * above, since the Police District card shares it for its address/phone
    * fallback. */
-  var POLICE_STATION_COUNT = 3;
+  /* ---------- declarative nearest-N point layer (haversine, straight-line) ----------
+   * opts: id, group, label, color (marker stroke), fill (marker fill),
+   * loader (cached FeatureCollection promise), intro (card lead-in text),
+   * line(props) (formats one list item from a feature's raw properties),
+   * count (defaults 3 — keep N small so "nearest as the crow flies" stays
+   * obviously honest). Back-ported from the NYC fork, which minted it as the
+   * fifth factory (METRO_EXPANSION_PLAYBOOK §2). ---------- */
+  function registerNearestPointLayer(opts) {
+    var count = opts.count || 3;
+    registerLayer({
+      id: opts.id,
+      group: opts.group,
+      label: opts.label + " (nearest " + count + ")",
+      color: opts.color, // overlay has no flat style object for moduleColor() to read
+      overlay: {
+        load: opts.loader,
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, { radius: 5, color: opts.color, weight: 1.5, fillColor: opts.fill, fillOpacity: 0.85 });
+        }
+      },
+      query: function (point, seq) {
+        return opts.loader().then(function (geojson) {
+          var features = (geojson && geojson.features) || [];
+          var withDistance = [];
+          for (var i = 0; i < features.length; i++) {
+            var latLng = pointFeatureLatLng(features[i]);
+            if (!latLng) continue;
+            withDistance.push({
+              props: features[i].properties || {},
+              distanceMi: haversineMiles(point.lat, point.lng, latLng.lat, latLng.lng)
+            });
+          }
+          if (!withDistance.length) return null;
+          withDistance.sort(function (a, b) { return a.distanceMi - b.distanceMi; });
+          return { seq: seq, items: withDistance.slice(0, count) };
+        });
+      },
+      render: function (result) {
+        var wrap = document.createElement("div");
+        var intro = document.createElement("p");
+        intro.style.margin = "0 0 8px";
+        intro.textContent = opts.intro;
+        wrap.appendChild(intro);
+        var ol = document.createElement("ol");
+        ol.style.margin = "0";
+        ol.style.paddingLeft = "20px";
+        result.items.forEach(function (s) {
+          var li = document.createElement("li");
+          li.textContent = opts.line(s.props) + " — " + s.distanceMi.toFixed(2) + " mi";
+          ol.appendChild(li);
+        });
+        wrap.appendChild(ol);
+        return wrap;
+      }
+    });
+  }
 
-  registerLayer({
+  registerNearestPointLayer({
     id: "police-station",
     group: "safety",
-    label: "Police Station (nearest " + POLICE_STATION_COUNT + ")",
-    color: "#0B5394", // matches the pointToLayer circleMarker below; overlay has no flat style object for moduleColor() to read
-    overlay: {
-      load: loadPoliceStations,
-      // distinct from Fire Station's red circleMarker — blue, matching the flag-stripe hue
-      pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, { radius: 5, color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.85 });
-      }
-    },
-    query: function (point, seq) {
-      return loadPoliceStations().then(function (geojson) {
-        var features = (geojson && geojson.features) || [];
-        var withDistance = [];
-        for (var i = 0; i < features.length; i++) {
-          var latLng = pointFeatureLatLng(features[i]);
-          if (!latLng) continue;
-          withDistance.push({
-            feature: features[i],
-            distanceMi: haversineMiles(point.lat, point.lng, latLng.lat, latLng.lng)
-          });
-        }
-        if (!withDistance.length) return null;
-        withDistance.sort(function (a, b) { return a.distanceMi - b.distanceMi; });
-        var nearest = withDistance.slice(0, POLICE_STATION_COUNT).map(function (w) {
-          var props = w.feature.properties || {};
-          return {
-            name: findPropCI(props, ["name"]),
-            address: findPropCI(props, ["address"]),
-            district: findPropCI(props, ["district"]),
-            phone: findPropCI(props, ["phone"]),
-            distanceMi: w.distanceMi
-          };
-        });
-        return { seq: seq, stations: nearest };
-      });
-    },
-    render: function (result) {
-      var wrap = document.createElement("div");
-      var intro = document.createElement("p");
-      intro.style.margin = "0 0 8px";
-      intro.textContent = "Nearest stations, straight-line distance:";
-      wrap.appendChild(intro);
-      var ol = document.createElement("ol");
-      ol.style.margin = "0";
-      ol.style.paddingLeft = "20px";
-      result.stations.forEach(function (s) {
-        var li = document.createElement("li");
-        var name = s.name ? String(s.name) : "Police station";
-        var districtSuffix = s.district ? " (District " + String(s.district) + ")" : "";
-        var addressPart = s.address ? " — " + String(s.address) : "";
-        var phonePart = s.phone ? " — " + String(s.phone) : "";
-        li.textContent = name + districtSuffix + addressPart + phonePart + " — " + s.distanceMi.toFixed(2) + " mi";
-        ol.appendChild(li);
-      });
-      wrap.appendChild(ol);
-      return wrap;
+    label: "Police Station",
+    // distinct from Fire Station's red circleMarker — blue, matching the flag-stripe hue
+    color: "#0B5394",
+    fill: "#41B6E6",
+    loader: loadPoliceStations,
+    intro: "Nearest stations, straight-line distance:",
+    line: function (props) {
+      var name = findPropCI(props, ["name"]);
+      var district = findPropCI(props, ["district"]);
+      var address = findPropCI(props, ["address"]);
+      var phone = findPropCI(props, ["phone"]);
+      return (name ? String(name) : "Police station") +
+        (district ? " (District " + String(district) + ")" : "") +
+        (address ? " — " + String(address) : "") +
+        (phone ? " — " + String(phone) : "");
     }
   });
 
   /* ---------- Fire Stations (nearest 3, not point-in-polygon) ---------- */
-  var FIRE_STATION_COUNT = 3;
   var loadFireStations = makeCachedLoader("28km-gtjn");
 
-  registerLayer({
+  registerNearestPointLayer({
     id: "fire-station",
     group: "safety",
-    label: "Fire Station (nearest " + FIRE_STATION_COUNT + ")",
-    color: "#7A0B1E", // matches the pointToLayer circleMarker below; overlay has no flat style object for moduleColor() to read
-    overlay: {
-      load: loadFireStations,
-      pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, { radius: 5, color: "#7A0B1E", weight: 1.5, fillColor: "#C8102E", fillOpacity: 0.85 });
-      }
-    },
-    query: function (point, seq) {
-      return loadFireStations().then(function (geojson) {
-        var features = (geojson && geojson.features) || [];
-        var withDistance = [];
-        for (var i = 0; i < features.length; i++) {
-          var latLng = pointFeatureLatLng(features[i]);
-          if (!latLng) continue;
-          withDistance.push({
-            feature: features[i],
-            distanceMi: haversineMiles(point.lat, point.lng, latLng.lat, latLng.lng)
-          });
-        }
-        if (!withDistance.length) return null;
-        withDistance.sort(function (a, b) { return a.distanceMi - b.distanceMi; });
-        var nearest = withDistance.slice(0, FIRE_STATION_COUNT).map(function (w) {
-          var props = w.feature.properties || {};
-          var address = findPropCI(props, ["address", "address_1", "location_address", "adress"]);
-          var engine = findPropCI(props, ["engine", "name", "firehouse", "company", "house"]);
-          return { address: address, engine: engine, distanceMi: w.distanceMi };
-        });
-        return { seq: seq, stations: nearest };
-      });
-    },
-    render: function (result) {
-      var wrap = document.createElement("div");
-      var intro = document.createElement("p");
-      intro.style.margin = "0 0 8px";
-      intro.textContent = "Nearest stations, straight-line distance:";
-      wrap.appendChild(intro);
-      var ol = document.createElement("ol");
-      ol.style.margin = "0";
-      ol.style.paddingLeft = "20px";
-      result.stations.forEach(function (s) {
-        var li = document.createElement("li");
-        var prefix = s.engine ? "Engine " + String(s.engine) + " — " : "";
-        li.textContent = prefix + (s.address ? String(s.address) : "Fire station") + " — " + s.distanceMi.toFixed(2) + " mi";
-        ol.appendChild(li);
-      });
-      wrap.appendChild(ol);
-      return wrap;
+    label: "Fire Station",
+    color: "#7A0B1E",
+    fill: "#C8102E",
+    loader: loadFireStations,
+    intro: "Nearest stations, straight-line distance:",
+    line: function (props) {
+      var engine = findPropCI(props, ["engine", "name", "firehouse", "company", "house"]);
+      var address = findPropCI(props, ["address", "address_1", "location_address", "adress"]);
+      return (engine ? "Engine " + String(engine) + " — " : "") +
+        (address ? String(address) : "Fire station");
     }
   });
 
@@ -3442,6 +3473,12 @@
       id: opts.id,
       group: "schools",
       label: opts.label,
+      // hover popup reads the same name keys the card's query extracts, so the
+      // two surfaces can never disagree on the zoned school's identity.
+      hoverName: function (feature) {
+        var name = findPropCI(feature.properties || {}, ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name", "name"]);
+        return name ? String(name) : null;
+      },
       overlay: { load: loadZones, style: opts.style },
       query: function (point, seq) {
         return loadZones().then(function (geojson) {
@@ -4108,6 +4145,11 @@
       id: opts.id,
       group: "political",
       label: opts.label,
+      // hover popup: same district extraction the card's query uses (chamber-
+      // specific TIGERweb fields + the name-field regex fallback).
+      hoverName: function (feature) {
+        return extractDistrictNumber(feature.properties || {}, opts.districtFields);
+      },
       overlay: { load: loadChamber, style: opts.style },
       query: function (point, seq) {
         return Promise.all([
@@ -4533,9 +4575,14 @@
   // tooltip. {modId, label, address, latlng, color, layerLabel} | null.
   var hoveredPoi = null;
 
-  // Broad district-number key list spanning every polygon layer's own naming,
-  // fed through extractDistrictNumber (which adds a name-field regex fallback
-  // for the layers whose number only lives inside a "…name" string).
+  // FALLBACK district-number key list, fed through extractDistrictNumber
+  // (which adds a name-field regex fallback for the layers whose number only
+  // lives inside a "…name" string). The factories now declare per-layer
+  // hoverName sourced from the same properties each click card reads (the
+  // hover-parity rule, METRO_EXPANSION_PLAYBOOK §2), so for those layers this
+  // generic path only runs if hoverName comes back empty. These keys are
+  // Chicago dataset vocabulary — a metro fork re-seeds them from its own
+  // observed field names, keeping encoded fields out (playbook §1).
   var HOVER_NUMBER_KEYS = [
     "ward", "ward_num", "ward_number", "ward_id",
     "district", "dist_num", "dist", "district_number", "district_no",
