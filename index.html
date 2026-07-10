@@ -21,6 +21,7 @@
 <link rel="preconnect" href="https://b.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://data.cityofchicago.org">
 <link rel="dns-prefetch" href="https://nominatim.openstreetmap.org">
+<link rel="dns-prefetch" href="https://photon.komoot.io">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="" />
@@ -931,7 +932,7 @@
     </div>
     <div class="footer-sources" id="footer-sources">
       <span class="footer-sources-label">Sources</span>
-      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim)</a>
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim &amp; Photon/Komoot)</a>
       <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">Chicago Data Portal</a>
       <a href="https://tigerweb.geo.census.gov" target="_blank" rel="noopener">U.S. Census TIGERweb</a>
       <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener">unitedstates/congress-legislators</a>
@@ -1540,21 +1541,55 @@
   new MutationObserver(refreshSearchShellExpanded).observe(geoStatus, { childList: true, characterData: true, subtree: true });
   new MutationObserver(refreshSearchShellExpanded).observe(geoResultsList, { childList: true, subtree: true });
 
+  /* Builds a Nominatim-style comma-separated label from a Photon feature's
+   * properties, so renderGeocodeResults can stay geocoder-agnostic. */
+  function photonLabel(p) {
+    var streetLine = "";
+    if (p.housenumber && p.street) streetLine = p.housenumber + " " + p.street;
+    else if (p.street) streetLine = p.street;
+    var parts = [];
+    if (p.name && p.name !== p.street) parts.push(p.name);
+    if (streetLine) parts.push(streetLine);
+    if (p.district && p.district !== p.city) parts.push(p.district);
+    if (p.city) parts.push(p.city);
+    if (p.state) parts.push(p.state);
+    if (p.postcode) parts.push(p.postcode);
+    return parts.join(", ");
+  }
+
+  /* Normalizes a Photon GeoJSON FeatureCollection into the {lat, lon,
+   * display_name} shape the rest of the search UI already consumes. */
+  function normalizePhoton(fc) {
+    var feats = (fc && fc.features) || [];
+    return feats.map(function (f) {
+      var c = (f.geometry && f.geometry.coordinates) || [];
+      return { lat: c[1], lon: c[0], display_name: photonLabel(f.properties || {}) };
+    }).filter(function (r) {
+      return r.lat != null && r.lon != null && r.display_name;
+    });
+  }
+
   function geocodeAddress(query) {
     if (inFlightController) inFlightController.abort();
     inFlightController = new AbortController();
-    var viewbox = [CHI_BBOX.minLng, CHI_BBOX.maxLat, CHI_BBOX.maxLng, CHI_BBOX.minLat].join(",");
-    var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" +
-      encodeURIComponent(query + ", Chicago, IL") +
-      "&viewbox=" + viewbox + "&bounded=1&limit=6";
+    // Photon (Komoot) — an OSM-based, autocomplete-optimized geocoder. Unlike
+    // Nominatim's /search, it matches partial street names as you type
+    // ("1901 W Madi" resolves), which is exactly what the search box needs.
+    // Biased toward Chicago's centre and hard-bounded to the city bbox so
+    // results stay in-city. Point-selection and POI geocoding remain on
+    // Nominatim; only this type-ahead box moved.
+    var bbox = [CHI_BBOX.minLng, CHI_BBOX.minLat, CHI_BBOX.maxLng, CHI_BBOX.maxLat].join(",");
+    var url = "https://photon.komoot.io/api/?q=" + encodeURIComponent(query) +
+      "&lang=en&limit=6&lat=41.88&lon=-87.63&bbox=" + bbox;
     return fetch(url, { signal: inFlightController.signal, headers: { "Accept": "application/json" } })
-      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); });
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+      .then(normalizePhoton);
   }
 
   function renderGeocodeResults(results) {
     geoResultsList.innerHTML = "";
     if (!results || results.length === 0) {
-      geoStatus.textContent = "No addresses matched inside Chicago. Try including a street type (Ave, St, Blvd).";
+      geoStatus.textContent = "No addresses matched inside Chicago yet. Keep typing, or check the spelling.";
       geoStatus.className = "geo-status err";
       return;
     }
@@ -1593,7 +1628,7 @@
       .then(renderGeocodeResults)
       .catch(function (err) {
         if (err.name === "AbortError") return;
-        geoStatus.textContent = "Search failed — Nominatim may be rate-limiting. Try again in a moment.";
+        geoStatus.textContent = "Search failed — the geocoder may be busy. Try again in a moment.";
         geoStatus.className = "geo-status err";
       });
   });
@@ -1601,7 +1636,7 @@
   document.getElementById("geocode-input").addEventListener("input", function () {
     var q = this.value.trim();
     clearTimeout(debounceTimer);
-    if (q.length < 4) {
+    if (q.length < 3) {
       // abort any in-flight search too — its late response would otherwise
       // repopulate the just-cleared list for text no longer in the box
       if (inFlightController) inFlightController.abort();
@@ -1613,10 +1648,10 @@
       geoStatus.textContent = "Searching…";
       geocodeAddress(q).then(renderGeocodeResults).catch(function (err) {
         if (err.name === "AbortError") return;
-        geoStatus.textContent = "Search failed — Nominatim may be rate-limiting. Try again in a moment.";
+        geoStatus.textContent = "Search failed — the geocoder may be busy. Try again in a moment.";
         geoStatus.className = "geo-status err";
       });
-    }, 550); // debounced well above Nominatim's 1 req/sec public-usage policy
+    }, 400); // debounced to stay well within Photon's public-usage limits while feeling type-ahead-responsive
   });
 
   /* =========================================================================
