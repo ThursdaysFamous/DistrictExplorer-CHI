@@ -62,6 +62,40 @@ def fail(msg):
     sys.exit(1)
 
 
+# ENGINE fence lint (docs/ENGINE_SYNC.md): the cross-fork byte comparison is
+# scripts/check_engine_parity.py's job; this merge gate only guards fence
+# structure so a bad edit can't silently break the parity check itself.
+ENGINE_MARKER_RE = re.compile(
+    r"^[ \t]*(?:/\*|<!--)[ \t]*==== ENGINE:(BEGIN|END) ([a-z0-9][a-z0-9-]*) ====[ \t]*(?:\*/|-->)[ \t]*$"
+)
+
+
+def check_engine_markers(html):
+    open_name = None
+    names = set()
+    for lineno, line in enumerate(html.splitlines(), 1):
+        m = ENGINE_MARKER_RE.match(line)
+        if not m:
+            continue
+        kind, name = m.groups()
+        if kind == "BEGIN":
+            if open_name is not None:
+                fail("line %d: ENGINE:BEGIN %s while %s is still open" % (lineno, name, open_name))
+            if name in names:
+                fail("line %d: duplicate ENGINE block name %r" % (lineno, name))
+            open_name = name
+            names.add(name)
+        else:
+            if name != open_name:
+                fail("line %d: ENGINE:END %s does not match open block %r" % (lineno, name, open_name))
+            open_name = None
+    if open_name is not None:
+        fail("ENGINE block %s is never closed" % open_name)
+    if not names:
+        fail("no ENGINE blocks found — fences were deleted? (docs/ENGINE_SYNC.md)")
+    return len(names)
+
+
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else "index.html"
     if not os.path.exists(path):
@@ -69,6 +103,9 @@ def main():
     html = open(path).read()
     repo_root = os.path.dirname(os.path.abspath(path))
     app_dir = os.path.join(repo_root, "data", "app")
+
+    # 0. ENGINE fences are structurally sound (docs/ENGINE_SYNC.md)
+    check_engine_markers(html)
 
     # 1. main inline script parses
     scripts = re.findall(r"<script>(.*?)</script>", html, re.DOTALL)
