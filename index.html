@@ -528,60 +528,94 @@
   .result-row dd { margin: 0; font-weight: 600; text-align: right; min-width: 0; overflow-wrap: break-word; }
   dl.result-fields { margin: 0; }
 
+  /* ---- Footer: a dark bookend echoing the masthead ---- */
   footer.site-footer {
-    border-top: 1px solid var(--line);
-    background: var(--panel);
-    padding: 22px 20px 30px;
+    background: var(--ink);
+    padding: 30px 20px 40px;
     font-size: 12.5px;
-    color: var(--slate);
+    color: #C9D4DB;
   }
-  .footer-inner { max-width: 1400px; margin: 0 auto; }
+  .footer-inner { max-width: 1800px; margin: 0 auto; }
   .footer-inner h2 {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
-    color: var(--ink);
-    margin: 0 0 6px;
+    color: #fff;
+    margin: 0 0 12px;
   }
   .footer-disclaimer {
     border-left: 3px solid var(--chi-red);
-    padding: 8px 12px;
-    background: #FBF3F2;
-    margin: 10px 0;
-    max-width: 70ch;
+    padding: 10px 14px;
+    background: rgba(200,16,46,0.14);
+    border-radius: 0 6px 6px 0;
+    margin: 0 0 18px;
+    max-width: 72ch;
+    line-height: 1.5;
+    color: #E4EAEE;
   }
+  .footer-disclaimer strong { color: #fff; }
   .footer-meta {
     font-family: var(--font-mono);
-    margin-top: 10px;
+    font-size: 12px;
+    color: var(--slate-soft);
     display: flex;
     flex-wrap: wrap;
     gap: 4px 18px;
   }
-  .footer-sources { margin-top: 10px; line-height: 1.7; }
-  .footer-sources a { margin-right: 14px; }
-
-  /* ---- footer links: feedback + repo + parent domain ---- */
-  .footer-links {
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
+  .footer-meta strong { color: #fff; font-weight: 600; }
+  .footer-sources {
+    margin-top: 18px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 10px 20px;
+    gap: 8px;
   }
-  .footer-link-btn {
+  .footer-sources-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--slate-soft);
+  }
+  .footer-sources a {
+    color: #C9D4DB;
+    text-decoration: none;
+    border: 1px solid rgba(217,225,231,0.22);
+    border-radius: 999px;
+    padding: 3px 11px;
+    transition: color .12s, border-color .12s, background .12s;
+  }
+  .footer-sources a:hover {
+    color: #fff;
+    border-color: var(--chi-blue);
+    background: rgba(65,182,230,0.14);
+  }
+
+  /* ---- footer links: feedback + repo + parent domain ---- */
+  .footer-links {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(217,225,231,0.15);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 24px;
+  }
+  .footer-link-btn,
+  .footer-links a {
     font: inherit;
     font-weight: 600;
-    color: var(--chi-blue-deep);
+    color: var(--chi-blue);
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: none;
   }
-  .footer-link-btn:hover { color: var(--chi-red-deep); }
-  .footer-links a { font-weight: 600; }
+  .footer-link-btn:hover,
+  .footer-links a:hover { color: #fff; text-decoration: underline; }
 
   /* ---- feedback modal: serverless "report a bug / comment" dialog ---- */
   .feedback-modal[hidden] { display: none; }
@@ -832,6 +866,7 @@
   </section>
 </main>
 
+<div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
   <div class="footer-inner">
     <h2>About this data</h2>
@@ -844,7 +879,7 @@
       <span>Data last verified: <strong id="verified-date"></strong></span>
     </div>
     <div class="footer-sources" id="footer-sources">
-      Sources:
+      <span class="footer-sources-label">Sources</span>
       <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim)</a>
       <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">Chicago Data Portal</a>
       <a href="https://tigerweb.geo.census.gov" target="_blank" rel="noopener">U.S. Census TIGERweb</a>
