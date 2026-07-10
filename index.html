@@ -2338,33 +2338,77 @@
     return found;
   }
 
+  /* ---------- declarative factory for single-source polygon layers ----------
+   * The plain "load a boundary set, find the polygon containing the point, read
+   * a few properties, list them" shape recurs across layers with no async roster
+   * join. Rather than a near-identical query()/render() pair each time, describe
+   * the card as a `fields` list and let this build both from it. Layers that join
+   * a roster or a second source (Police District, Ward, Congress, Commissioner,
+   * CCPSA, …) keep their explicit registerLayer blocks — their multi-source,
+   * Promise.all query() doesn't fit this shape.
+   *
+   * opts: { id, group, label, loader, style, pointOfInterest?, fields: [...] }
+   * Each field is one of:
+   *   { name, label, keys:[...], primary:true } — always shown; findPropCI(keys)
+   *        with an "Unknown" fallback. Conventionally the first field (headline).
+   *   { name, label, keys:[...] }               — shown only when findPropCI hits.
+   *   { label, value:"..." }                    — a fixed text row (e.g. a note).
+   *   { label, html:"..." }                     — a fixed html row (e.g. a link;
+   *        the caller certifies the html exactly as a hand-written render would).
+   * An optional `when(result)` on any field gates it on the extracted values
+   * (e.g. the IL Supreme Court "District 1 is all of Cook County" note). */
+  function registerPolygonLayer(opts) {
+    var load = opts.loader;
+    var keyedFields = opts.fields.filter(function (f) { return f.keys; });
+    registerLayer({
+      id: opts.id,
+      group: opts.group,
+      label: opts.label,
+      overlay: { load: load, style: opts.style },
+      query: function (point, seq) {
+        return load().then(function (geojson) {
+          var feature = findFeatureContaining(geojson, point);
+          if (!feature) return null;
+          var props = feature.properties || {};
+          var result = { seq: seq };
+          keyedFields.forEach(function (f) { result[f.name] = findPropCI(props, f.keys); });
+          return result;
+        });
+      },
+      render: function (result) {
+        var rows = [];
+        opts.fields.forEach(function (f) {
+          if (f.when && !f.when(result)) return;
+          if (f.keys) {
+            var val = result[f.name];
+            if (f.primary) rows.push({ label: f.label, value: val ? String(val) : "Unknown" });
+            else if (val) rows.push({ label: f.label, value: String(val) });
+          } else if (f.html !== undefined) {
+            rows.push({ label: f.label, html: f.html });
+          } else {
+            rows.push({ label: f.label, value: f.value });
+          }
+        });
+        return renderFieldList(rows);
+      },
+      pointOfInterest: opts.pointOfInterest
+    });
+  }
+
   /* ---------- Community Area ---------- */
   var loadCommunityAreas = makeCachedLoader("igwz-8jzy");
 
-  registerLayer({
+  registerPolygonLayer({
     id: "community-area",
     group: "geography",
     label: "Community Area",
-    overlay: {
-      load: loadCommunityAreas,
-      // dashed outline (not just a color) so it's distinguishable from ZIP without relying on hue alone
-      style: { color: "#3D6B49", weight: 1.5, fillColor: "#5C8F6B", fillOpacity: 0.06, dashArray: "5 3" }
-    },
-    query: function (point, seq) {
-      return loadCommunityAreas().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var props = feature.properties || {};
-        var name = findPropCI(props, ["community", "community_area_name", "commarea", "comarea"]);
-        var number = findPropCI(props, ["area_numbe", "area_num_1", "area_number", "community_area_number", "area_num"]);
-        return { seq: seq, name: name, number: number };
-      });
-    },
-    render: function (result) {
-      var fields = [{ label: "Name", value: result.name ? String(result.name) : "Unknown" }];
-      if (result.number) fields.push({ label: "Area #", value: String(result.number) });
-      return renderFieldList(fields);
-    }
+    loader: loadCommunityAreas,
+    // dashed outline (not just a color) so it's distinguishable from ZIP without relying on hue alone
+    style: { color: "#3D6B49", weight: 1.5, fillColor: "#5C8F6B", fillOpacity: 0.06, dashArray: "5 3" },
+    fields: [
+      { name: "name", label: "Name", keys: ["community", "community_area_name", "commarea", "comarea"], primary: true },
+      { name: "number", label: "Area #", keys: ["area_numbe", "area_num_1", "area_number", "community_area_number", "area_num"] }
+    ]
   });
 
   /* ---------- ZIP Code ---------- */
@@ -2373,29 +2417,16 @@
   // view id unjd-c2ca serves the same data with real geometry
   var loadZipCodes = makeCachedLoader("unjd-c2ca");
 
-  registerLayer({
+  registerPolygonLayer({
     id: "zip-code",
     group: "geography",
     label: "ZIP Code",
-    overlay: {
-      load: loadZipCodes,
-      // dotted outline (distinct pattern from Community Area's dashed one) + different hue
-      style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" }
-    },
-    query: function (point, seq) {
-      return loadZipCodes().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var props = feature.properties || {};
-        var zip = findPropCI(props, ["zip", "zip_code", "zipcode", "zcta5ce10"]);
-        return { seq: seq, zip: zip };
-      });
-    },
-    render: function (result) {
-      return renderFieldList([
-        { label: "ZIP Code", value: result.zip ? String(result.zip) : "Unknown" }
-      ]);
-    }
+    loader: loadZipCodes,
+    // dotted outline (distinct pattern from Community Area's dashed one) + different hue
+    style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" },
+    fields: [
+      { name: "zip", label: "ZIP Code", keys: ["zip", "zip_code", "zipcode", "zcta5ce10"], primary: true }
+    ]
   });
 
   /* =========================================================================
@@ -3545,66 +3576,38 @@
     return fetchJSONWithRetry("data/app/il-supreme-court-districts.json", {}, 2);
   });
 
-  registerLayer({
+  registerPolygonLayer({
     id: "il-supreme-court",
     group: "political",
     label: "IL Supreme Court District",
-    overlay: {
-      load: loadSupremeCourtDistricts,
-      style: { color: "#8C6A2E", weight: 2, fillColor: "#8C6A2E", fillOpacity: 0.05, dashArray: "7 3" }
-    },
-    query: function (point, seq) {
-      return loadSupremeCourtDistricts().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var district = findPropCI(feature.properties || {}, ["districtn", "district"]);
-        return { seq: seq, district: district };
-      });
-    },
-    render: function (result) {
-      var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
-      if (String(result.district) === "1") {
-        // structural fact from the Illinois Constitution (art. VI), not
-        // officeholder data: District 1 is Cook County and elects three of
-        // the court's seven justices; districts 2-5 elect one each
-        fields.push({ label: "Note", value: "District 1 is all of Cook County and elects three of the seven justices." });
-      }
-      fields.push({
-        label: "Court info",
-        html: '<a href="https://www.illinoiscourts.gov/courts/supreme-court/" target="_blank" rel="noopener">Illinois Supreme Court</a>'
-      });
-      return renderFieldList(fields);
-    }
+    loader: loadSupremeCourtDistricts,
+    style: { color: "#8C6A2E", weight: 2, fillColor: "#8C6A2E", fillOpacity: 0.05, dashArray: "7 3" },
+    fields: [
+      { name: "district", label: "District", keys: ["districtn", "district"], primary: true },
+      // structural fact from the Illinois Constitution (art. VI), not
+      // officeholder data: District 1 is Cook County and elects three of the
+      // court's seven justices; districts 2-5 elect one each
+      { label: "Note", value: "District 1 is all of Cook County and elects three of the seven justices.",
+        when: function (r) { return String(r.district) === "1"; } },
+      { label: "Court info", html: '<a href="https://www.illinoiscourts.gov/courts/supreme-court/" target="_blank" rel="noopener">Illinois Supreme Court</a>' }
+    ]
   });
 
   var loadCcbrDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/ccbr-districts.json", {}, 2);
   });
 
-  registerLayer({
+  registerPolygonLayer({
     id: "ccbr",
     group: "political",
     label: "Cook County Board of Review District",
-    overlay: {
-      load: loadCcbrDistricts,
-      style: { color: "#1E7A8C", weight: 2, fillColor: "#1E7A8C", fillOpacity: 0.05, dashArray: "4 4" }
-    },
-    query: function (point, seq) {
-      return loadCcbrDistricts().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var district = findPropCI(feature.properties || {}, ["districtn", "district"]);
-        return { seq: seq, district: district };
-      });
-    },
-    render: function (result) {
-      var fields = [
-        { label: "District", value: result.district ? String(result.district) : "Unknown" },
-        { label: "What it does", value: "Hears property-tax assessment appeals; one commissioner is elected per district." },
-        { label: "Board info", html: '<a href="https://www.cookcountyboardofreview.com/" target="_blank" rel="noopener">Cook County Board of Review</a>' }
-      ];
-      return renderFieldList(fields);
-    }
+    loader: loadCcbrDistricts,
+    style: { color: "#1E7A8C", weight: 2, fillColor: "#1E7A8C", fillOpacity: 0.05, dashArray: "4 4" },
+    fields: [
+      { name: "district", label: "District", keys: ["districtn", "district"], primary: true },
+      { label: "What it does", value: "Hears property-tax assessment appeals; one commissioner is elected per district." },
+      { label: "Board info", html: '<a href="https://www.cookcountyboardofreview.com/" target="_blank" rel="noopener">Cook County Board of Review</a>' }
+    ]
   });
 
   /* ---------- Cook County Commissioner District — the one Political layer
