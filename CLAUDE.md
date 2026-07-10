@@ -20,6 +20,10 @@ BASE_URL=http://localhost:8000/ node scripts/smoke_test.mjs   # serve first, the
 
 # Static gate (run after any data/app regeneration or app edit):
 python3 scripts/validate_index.py index.html
+
+# Source-freshness gate (checks upstream datasets haven't gone stale):
+pip install -c scripts/requirements.txt requests
+python3 scripts/validate_sources.py            # add --offline to skip network
 ```
 
 `smoke_test.mjs` is a single end-to-end script, not a framework — there are no "individual tests" to select. It asserts the app boots, registers all layers, classifies a known downtown point against ground truth (school board 12, IL Supreme Court 1, Board of Review 3), and degrades to an isolated error card when a source fails. `node_modules`/`package.json` are intentionally gitignored — this repo never commits build artifacts.
@@ -27,6 +31,8 @@ python3 scripts/validate_index.py index.html
 **Sandboxed environments (Claude Code web) — Leaflet CDN egress:** `index.html` loads Leaflet from `cdnjs.cloudflare.com`. In the Claude Code web/sandbox the headless browser cannot reach that CDN — Chromium doesn't use the agent HTTPS proxy, so the request resets (`ERR_CONNECTION_RESET` → `L is not defined` → the app never boots). This is environmental, **not** a code regression; don't chase it in app code. It's handled automatically: a `SessionStart` hook (`.claude/settings.json`) runs `scripts/vendor_leaflet.sh`, which `curl`s Leaflet (curl *does* go through the proxy) into `scripts/vendor/leaflet/` (gitignored). `smoke_test.mjs` then serves those files same-origin via `page.route`, so the app boots. Production and GitHub Actions CI are untouched — they reach the CDN directly and the vendor dir is absent, so the fallback is skipped. To run the smoke test manually in this env, `bash scripts/vendor_leaflet.sh` first (or just rely on the session-start hook).
 
 `validate_index.py` is the merge gate: it confirms `index.html` passes `node --check`, still registers every layer (a drop in the `registerLayer(` count fails), embeds no dataset inline, and that every `data/app/` file is present with the expected feature/roster counts.
+
+`validate_sources.py` is the **freshness** gate (complements the merge gate above). It catches the failure mode the roster scrapers can't: a publisher silently superseding a dataset the app hardcodes. Chicago Data Portal (Socrata) datasets are re-published under a **new id** each year — the CPS attendance-boundary layers ship a fresh `…SY####` dataset every school year — so the old id keeps returning stale data with no error. The script carries a manifest of every Socrata dataset id and shapefile provenance URL the app depends on and checks: (1) the manifest still matches index.html (drift guard), (2) each Socrata id still resolves and keeps its expected name, searching the portal catalog for a **newer-year edition** of the year-versioned ones, (3) the three shapefile sources (ilsenateredistricting.com / illinoiscourts.gov / cookcountyboardofreview.com) are reachable and their built `data/app/` files present, (4) the live ArcGIS/TIGERweb endpoints resolve. It **never edits the app** — swapping a dataset id is schema-sensitive — it exits non-zero only on hard FAILs and reports a newer edition as a WARN. `.github/workflows/validate-sources.yml` runs it monthly and opens/updates a single tracking issue on any WARN/FAIL (the job stays green; the issue is the signal), matching the roster pattern of "source changes get a human look before they ship." When a dataset id is swapped in index.html, update the manifest in `validate_sources.py` to match.
 
 ## Architecture: stable core + pluggable layer modules
 
@@ -63,6 +69,7 @@ Most layers fetch live public APIs at runtime (Chicago Data Portal / Socrata, CP
 
 - `smoke-test.yml` — runs the behaviour gate on every PR and push to `main`.
 - `update-{ilga,congress,cpd,ccpsa}-roster.yml` — weekly (staggered) roster refreshes. Each re-scrapes, rebuilds `data/app/`, runs `validate_index.py`, and — if anything changed — **opens a PR rather than committing to `main`.** Officeholder data always gets a human review before it ships. Match this pattern for any new roster: never auto-commit roster changes to `main`.
+- `validate-sources.yml` — monthly source-freshness check. Runs `scripts/validate_sources.py`; on any WARN/FAIL (e.g. a Socrata dataset superseded by a newer-year edition, or a shapefile source gone unreachable) it **opens or updates a single tracking issue** rather than editing anything — the job stays green, the issue is the signal. Same "surface for a human, don't auto-apply" convention as the roster PRs.
 
 ## Conventions
 
