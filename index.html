@@ -3309,6 +3309,21 @@
   var loadWards = makeCached(function () { return loadSocrataGeoJSON("p293-wvbd"); });
   var loadAldermen = makeCached(function () { return loadSocrataJSON("htai-wnw4"); });
 
+  // The aldermen roster stores names "Last, First" (e.g. "La Spata, Daniel").
+  // Flip to display order "First Last" on the first comma only, leaving names
+  // without a comma untouched.
+  function formatAldermanName(name) {
+    if (!name) return name;
+    var str = String(name);
+    var i = str.indexOf(",");
+    if (i === -1) return str.trim();
+    var last = str.slice(0, i).trim();
+    var first = str.slice(i + 1).trim();
+    if (!first) return last;
+    if (!last) return first;
+    return first + " " + last;
+  }
+
   registerLayer({
     id: "ward",
     group: "political",
@@ -3333,7 +3348,7 @@
             return rWard !== null && rWard !== undefined && String(rWard).replace(/^0+(?=\d)/, "") === ward;
           })[0] || null;
         }
-        var alderman = aldermanRow ? findPropCI(aldermanRow, ["alderman", "alderman_name", "member", "name"]) : null;
+        var alderman = aldermanRow ? formatAldermanName(findPropCI(aldermanRow, ["alderman", "alderman_name", "member", "name"])) : null;
         var email = aldermanRow ? findPropCI(aldermanRow, ["email", "e_mail", "e-mail"]) : null;
         var phone = aldermanRow ? findPropCI(aldermanRow, ["phone", "ward_office_phone", "office_phone", "telephone"]) : null;
         var address = aldermanRow ? findPropCI(aldermanRow, ["address", "ward_office_address", "office_address", "ward_office"]) : null;
@@ -3368,7 +3383,7 @@
           var w = findPropCI(r, ["ward", "ward_num", "ward_number"]);
           return w !== null && w !== undefined && String(w).replace(/^0+(?=\d)/, "") === ward;
         })[0];
-        return row ? findPropCI(row, ["alderman", "alderman_name", "member", "name"]) : null;
+        return row ? formatAldermanName(findPropCI(row, ["alderman", "alderman_name", "member", "name"])) : null;
       }
     },
     onToggle: function (on) {
