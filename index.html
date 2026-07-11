@@ -1195,6 +1195,32 @@
    * this fork's stylesheet defines them (they carry the fork's palette). */
   var HIGHLIGHT_CLASS = "chi-region-highlight"; // selected-region highlight (drop-shadow filter)
   var POI_PIN_CLASS = "chi-poi-pin";            // geocoded point-of-interest marker
+  // FALLBACK district-number key list, fed through extractDistrictNumber
+  // (which adds a name-field regex fallback for the layers whose number only
+  // lives inside a "…name" string). The factories now declare per-layer
+  // hoverName sourced from the same properties each click card reads (the
+  // hover-parity rule, METRO_EXPANSION_PLAYBOOK §2), so for those layers this
+  // generic path only runs if hoverName comes back empty. These keys are
+  // Chicago dataset vocabulary — a metro fork re-seeds them from its own
+  // observed field names, keeping encoded fields out (playbook §1).
+  var HOVER_NUMBER_KEYS = [
+    "ward", "ward_num", "ward_number", "ward_id",
+    "district", "dist_num", "dist", "district_number", "district_no",
+    "area_numbe", "area_num_1", "area_number", "community_area_number", "area_num",
+    "beat_num", "beat", "beat_number", "beat_no",
+    "zip", "zip_code", "zipcode", "zcta5ce10",
+    "number"
+  ];
+
+  // Name-ish property keys that read better than a bare district number when a
+  // feature carries one — deliberately narrow (community-area + school names).
+  // The generic "name"/"dist_label"/"longname" fields are excluded on purpose:
+  // for the legislative TIGER layers those are just "Congressional District 7",
+  // which duplicates the number this pairs with.
+  var HOVER_NAME_KEYS = [
+    "community", "community_area_name", "commarea", "comarea",
+    "short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"
+  ];
   /* ==== METRO:END config ==== */
 
   /* ==== ENGINE:BEGIN app-token ==== */
@@ -4518,6 +4544,7 @@
       });
   }
 
+  /* ==== ENGINE:BEGIN extract-district-number ==== */
   /* ---------- district-number lookup with a name-field regex fallback, since
    * TIGERweb's numbered-district field name changes with each Congress/GA
    * (e.g. CD119FP) and hasn't been live-verified in this sandbox (see SURPRISE
@@ -4536,6 +4563,7 @@
     }
     return null;
   }
+  /* ==== ENGINE:END extract-district-number ==== */
 
   /* ---------- Ward + Alderman ---------- */
   var loadWards = makeCached(function () { return loadSocrataGeoJSON("p293-wvbd"); });
@@ -5208,6 +5236,7 @@
     }
   });
 
+  /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
    * follows the cursor and names the districts it's over. mousemove is throttled
@@ -5242,33 +5271,6 @@
   // office address under its layer's row — replacing the old white per-pin
   // tooltip. {modId, label, address, latlng, color, layerLabel} | null.
   var hoveredPoi = null;
-
-  // FALLBACK district-number key list, fed through extractDistrictNumber
-  // (which adds a name-field regex fallback for the layers whose number only
-  // lives inside a "…name" string). The factories now declare per-layer
-  // hoverName sourced from the same properties each click card reads (the
-  // hover-parity rule, METRO_EXPANSION_PLAYBOOK §2), so for those layers this
-  // generic path only runs if hoverName comes back empty. These keys are
-  // Chicago dataset vocabulary — a metro fork re-seeds them from its own
-  // observed field names, keeping encoded fields out (playbook §1).
-  var HOVER_NUMBER_KEYS = [
-    "ward", "ward_num", "ward_number", "ward_id",
-    "district", "dist_num", "dist", "district_number", "district_no",
-    "area_numbe", "area_num_1", "area_number", "community_area_number", "area_num",
-    "beat_num", "beat", "beat_number", "beat_no",
-    "zip", "zip_code", "zipcode", "zcta5ce10",
-    "number"
-  ];
-
-  // Name-ish property keys that read better than a bare district number when a
-  // feature carries one — deliberately narrow (community-area + school names).
-  // The generic "name"/"dist_label"/"longname" fields are excluded on purpose:
-  // for the legislative TIGER layers those are just "Congressional District 7",
-  // which duplicates the number this pairs with.
-  var HOVER_NAME_KEYS = [
-    "community", "community_area_name", "commarea", "comarea",
-    "short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"
-  ];
 
   // The bare identity value for one feature (no layer label — the snapshot row
   // prints that separately). A module may override via mod.hoverName(feature);
@@ -5443,7 +5445,9 @@
     // show a control for a feature that can never fire.
     hoverToggleBtn.hidden = true;
   }
+  /* ==== ENGINE:END hover-explorer ==== */
 
+  /* ==== ENGINE:BEGIN relationship-pinning ==== */
   /* =========================================================================
    * PIN-PARENT RELATIONSHIPS — pick a district as the "parent" from its sidebar
    * card, then see how every OTHER active layer's districts relate to it:
@@ -5583,6 +5587,7 @@
     rt.pinBtn = btn;
     rt.cardBody.appendChild(btn);
   }
+  /* ==== ENGINE:END relationship-pinning ==== */
 
   /* =========================================================================
    * BOOT

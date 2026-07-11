@@ -86,18 +86,19 @@ Multiply that by every engine change and the forks stop being the same app.
   also catches "merged but the sibling never shipped." Expect a transient
   WARN while a port is merged-but-undeployed on one side.
 
-## Current ENGINE block inventory (38 in index.html + 2 in sw.js)
+## Current ENGINE block inventory (41 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
 `cached-loaders`, `chamber-factory`, `cps-network-factory`, `exports`,
-`feedback`, `fetch-retry`, `find-prop-ci`, `geolocation`, `groups`,
-`haversine`, `int-field`, `layer-registry`, `metro-links`,
-`metro-links-html`, `metro-portal`, `nearest-point-factory`,
-`office-helpers`, `overlay-cards`, `permalink`, `point-in-polygon`,
-`polygon-containment`, `polygon-factory`, `probe-geometry-column`,
-`render-helper`, `sanitize`, `school-zone-factory`, `scope-mask`,
-`selection-controls`, `socrata-loader`, `socrata-point-loader`, `state`,
-`styles-app`, `styles-core`, `styles-footer`, `styles-hover-responsive`.
+`extract-district-number`, `feedback`, `fetch-retry`, `find-prop-ci`,
+`geolocation`, `groups`, `haversine`, `hover-explorer`, `int-field`,
+`layer-registry`, `metro-links`, `metro-links-html`, `metro-portal`,
+`nearest-point-factory`, `office-helpers`, `overlay-cards`, `permalink`,
+`point-in-polygon`, `polygon-containment`, `polygon-factory`,
+`probe-geometry-column`, `relationship-pinning`, `render-helper`,
+`sanitize`, `school-zone-factory`, `scope-mask`, `selection-controls`,
+`socrata-loader`, `socrata-point-loader`, `state`, `styles-app`,
+`styles-core`, `styles-footer`, `styles-hover-responsive`.
 
 (`layer-registry`/`overlay-cards` fence the registry, styling/highlight
 machinery, and card framework; `HIGHLIGHT_CLASS`/`POI_PIN_CLASS` are METRO
@@ -169,9 +170,12 @@ features, not overwriting:
    `registerNycZone`) and converged Chicago's card headline on NYC's more
    precise "Zoned school" copy; the chamber merge kept Chicago's ILGA copy
    via `profileLabel`/`directoryLabel`/`capitolLabel` opts at its call sites.
-3. **Hover explorer** — two-way drift (now the only unfenced piece of the
-   styling framework), plus per-city `HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS`
-   lists that belong in METRO config.
+3. ~~Hover explorer~~ — **resolved July 2026**: NYC adopted the
+   `hoverDotColor` per-feature dot override (dormant there until a layer
+   defines it), `HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS` moved into each fork's
+   METRO config block (they are city dataset vocabulary, per their own
+   comments), and the machinery is fenced as `hover-explorer`,
+   `relationship-pinning`, and `extract-district-number`.
 4. ~~`LAYER_AREA_RANK`/`LAYER_ORDER` + `GROUPS`~~ — **resolved July 2026**
    with (2): `GROUPS` turned out identical and is fenced, and the consuming
    machinery (`reorderActiveLayers`, the highlight/rescale sweeps) is fenced
