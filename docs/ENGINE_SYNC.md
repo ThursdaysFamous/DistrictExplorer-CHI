@@ -99,9 +99,13 @@ Multiply that by every engine change and the forks stop being the same app.
 `bbox`/`emoji` fields on `METRO_EXPLORERS` entries and expects fork CSS to
 define the `#metro-portal`/`.metro-portal-*`/`.sibling-result*` classes in
 that fork's palette; it sits between the `feedback` fence and the geocoder.
-The *search* trigger — retrying a zero-result query against each sibling's
-bbox and rendering hand-off rows — is geocoder-provider code, so it lives
-with the fork's geocoder, not in the fence; see backlog item 1.)
+Entries without a bbox opt out of the portal; overlapping bboxes resolve to
+the nearest bbox center; per-metro dismissals re-arm on leaving that bbox —
+all so the block survives N metros unchanged. Each fork's
+`validate_index.py` lints the list (see that script). The *search* trigger —
+one unbounded retry of a zero-result query, hits classified into sibling
+bboxes via `siblingMetroAt` — is geocoder-provider code, so it lives with
+the fork's geocoder, not in the fence; see backlog item 1.)
 
 (`scope-mask` shows the seam pattern for engine code that needs a per-metro
 *function*, not a config constant: `drawOutOfScopeMask(loadCoverageGeometry)`
@@ -126,10 +130,12 @@ features, not overwriting:
    queue, rate-limit, render) can be fenced while the provider stays per-metro.
    July 2026 addition to reconcile alongside: Chicago's
    `maybeRenderSiblingMatches()`/`buildSiblingResultRow()` — the search-side
-   trigger for the fenced `metro-portal` easter egg (zero-result query retried
-   against each sibling's bbox, matches rendered as hand-off rows). NYC's
-   GeoSearch only covers NYC, so its port needs a whole-OSM provider (e.g. the
-   same Photon call) for the sibling lookup.
+   trigger for the fenced `metro-portal` easter egg (a zero-result query is
+   retried ONCE unbounded, hits classified into sibling metros via
+   `siblingMetroAt`, matches rendered as hand-off rows — one extra request
+   per miss regardless of metro count). NYC's GeoSearch only covers NYC, so
+   its port needs a whole-OSM provider (e.g. the same Photon call) for the
+   sibling lookup.
 2. **Result-card / overlay styling framework + factories** — Chicago added
    `styleForFeature`/`restyleOverlayFeatures`/`hoverDotColor` (per-feature
    color-coding, School Location); NYC added `primaryField`/`hoverName` to the

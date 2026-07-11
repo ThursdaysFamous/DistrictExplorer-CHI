@@ -1989,14 +1989,34 @@
    * around inside it never nags twice.
    * ======================================================================= */
 
+  /* A metro without a (well-formed) bbox simply opts out of the portal —
+   * it still gets its footer link, so new METRO_EXPLORERS entries can land
+   * before their bbox is decided. */
+  function validMetroBbox(b) {
+    return !!b && isFinite(b.minLat) && isFinite(b.maxLat) &&
+      isFinite(b.minLng) && isFinite(b.maxLng) &&
+      b.minLat < b.maxLat && b.minLng < b.maxLng;
+  }
+
+  function pointInMetroBbox(lat, lng, b) {
+    return lat >= b.minLat && lat <= b.maxLat && lng >= b.minLng && lng <= b.maxLng;
+  }
+
   function siblingMetroAt(lat, lng) {
+    // greater-metro bboxes may overlap once enough metros exist (two nearby
+    // cities) — the nearest bbox center wins, not list order. Squared-degree
+    // distance is plenty for a tie-break between neighbors.
+    var best = null, bestDist = Infinity;
     for (var i = 0; i < METRO_EXPLORERS.length; i++) {
       var m = METRO_EXPLORERS[i];
-      if (m.id === THIS_METRO || !m.bbox) continue;
-      if (lat >= m.bbox.minLat && lat <= m.bbox.maxLat &&
-          lng >= m.bbox.minLng && lng <= m.bbox.maxLng) return m;
+      if (m.id === THIS_METRO || !validMetroBbox(m.bbox)) continue;
+      if (!pointInMetroBbox(lat, lng, m.bbox)) continue;
+      var dLat = lat - (m.bbox.minLat + m.bbox.maxLat) / 2;
+      var dLng = lng - (m.bbox.minLng + m.bbox.maxLng) / 2;
+      var dist = dLat * dLat + dLng * dLng;
+      if (dist < bestDist) { best = m; bestDist = dist; }
     }
-    return null;
+    return best;
   }
 
   function metroPortalUrl(metro, point) {
@@ -2004,9 +2024,9 @@
     return metro.url + "#point=" + point.lat.toFixed(5) + "," + point.lng.toFixed(5);
   }
 
-  var metroPortal = null;            // lazily built {root, emoji, title, note, count, go, stay}
-  var metroPortalTimer = null;       // countdown interval handle
-  var metroPortalDismissedId = null; // sibling dismissed via "Stay"; re-armed on leaving its bbox
+  var metroPortal = null;           // lazily built {root, emoji, title, note, count, go, stay}
+  var metroPortalTimer = null;      // countdown interval handle
+  var metroPortalDismissed = {};    // id -> true, dismissed via "Stay"; each re-arms on leaving THAT bbox
   var metroPortalRestoreFocus = null;
 
   function ensureMetroPortal() {
@@ -2098,7 +2118,7 @@
     }
     p.go.onclick = depart;
     p.stay.onclick = function () {
-      metroPortalDismissedId = metro.id;
+      metroPortalDismissed[metro.id] = true;
       hideMetroPortal();
     };
     renderCountdown();
@@ -2117,10 +2137,20 @@
 
   map.on("moveend", function () {
     var c = map.getCenter();
+    // per-metro re-arm: a dismissal lasts exactly until the center leaves that
+    // sibling's own bbox — with several (possibly adjacent) metros, dismissing
+    // one never mutes another and never un-mutes early
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var m = METRO_EXPLORERS[i];
+      if (metroPortalDismissed[m.id] &&
+          !(validMetroBbox(m.bbox) && pointInMetroBbox(c.lat, c.lng, m.bbox))) {
+        delete metroPortalDismissed[m.id];
+      }
+    }
     var metro = siblingMetroAt(c.lat, c.lng);
-    if (!metro) { metroPortalDismissedId = null; return; } // left any sibling bbox — re-arm
-    if (metro.id === metroPortalDismissedId) return;       // dismissed; quiet until they leave
-    if (metroPortal && !metroPortal.root.hidden) return;   // already showing
+    if (!metro) return;
+    if (metroPortalDismissed[metro.id]) return;           // dismissed; quiet until they leave
+    if (metroPortal && !metroPortal.root.hidden) return;  // already showing
     offerMetroPortal(metro, { source: "wander" });
   });
   /* ==== ENGINE:END metro-portal ==== */
@@ -2272,40 +2302,44 @@
     return li;
   }
 
+  var SIBLING_ROWS_PER_METRO = 2; // keeps a many-metro future from flooding the result list
   function maybeRenderSiblingMatches(query) {
-    var siblings = METRO_EXPLORERS.filter(function (m) { return m.id !== THIS_METRO && m.bbox; });
-    if (!siblings.length) return;
+    var anySibling = METRO_EXPLORERS.some(function (m) { return m.id !== THIS_METRO && m.bbox; });
+    if (!anySibling) return;
     // share the geocoder's abort slot so a new keystroke/search cancels this
     // lookup exactly like it cancels a Chicago one
     inFlightController = new AbortController();
     var signal = inFlightController.signal;
-    return Promise.all(siblings.map(function (metro) {
-      var b = metro.bbox;
-      var url = "https://photon.komoot.io/api/?q=" + encodeURIComponent(query) +
-        "&lang=en&limit=2&lat=" + ((b.minLat + b.maxLat) / 2).toFixed(4) +
-        "&lon=" + ((b.minLng + b.maxLng) / 2).toFixed(4) +
-        "&bbox=" + [b.minLng, b.minLat, b.maxLng, b.maxLat].join(",");
-      return fetch(url, { signal: signal, headers: { "Accept": "application/json" } })
-        .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
-        .then(normalizePhoton)
-        .then(function (results) { return { metro: metro, results: results }; })
-        .catch(function (err) {
-          if (err.name === "AbortError") throw err;
-          return null; // per-sibling isolation: one metro's geocoder being down never breaks the row
+    // one UNBOUNDED query, classified into metros locally (siblingMetroAt) —
+    // exactly one extra Photon request per Chicago miss no matter how many
+    // sibling metros exist; hits outside every sibling metro are dropped
+    var url = "https://photon.komoot.io/api/?q=" + encodeURIComponent(query) + "&lang=en&limit=8";
+    return fetch(url, { signal: signal, headers: { "Accept": "application/json" } })
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+      .then(normalizePhoton)
+      .then(function (results) {
+        if (signal.aborted) return;
+        var perMetro = {}; // id -> rows rendered
+        var labels = [];
+        results.forEach(function (r) {
+          var metro = siblingMetroAt(parseFloat(r.lat), parseFloat(r.lon));
+          if (!metro) return; // not inside any sibling metro
+          perMetro[metro.id] = (perMetro[metro.id] || 0) + 1;
+          if (perMetro[metro.id] > SIBLING_ROWS_PER_METRO) return;
+          if (labels.indexOf(metro.label) === -1) labels.push(metro.label);
+          geoResultsList.appendChild(buildSiblingResultRow(metro, r));
         });
-    })).then(function (hits) {
-      if (signal.aborted) return;
-      hits = hits.filter(function (h) { return h && h.results.length; });
-      if (!hits.length) return; // leave the standard "no matches" status as-is
-      geoStatus.textContent = "Nothing in " + METRO_NAME + " matched — but it looks like you're searching " +
-        hits[0].metro.label + ".";
-      geoStatus.className = "geo-status";
-      hits.forEach(function (hit) {
-        hit.results.forEach(function (r) {
-          geoResultsList.appendChild(buildSiblingResultRow(hit.metro, r));
-        });
+        if (!labels.length) return; // leave the standard "no matches" status as-is
+        geoStatus.textContent = "Nothing in " + METRO_NAME + " matched — but it looks like you're searching " +
+          labels.join(" and ") + ".";
+        geoStatus.className = "geo-status";
+      })
+      .catch(function (err) {
+        if (err.name === "AbortError") throw err; // the callers' handlers ignore aborts
+        // otherwise swallow: the Chicago search itself succeeded, so the honest
+        // state is the standard "no matches" message already on screen — a
+        // failed easter-egg lookup must never surface as a search error
       });
-    });
   }
 
   function runGeocodeSearch(q) {
