@@ -662,8 +662,7 @@
     gap: 4px 18px;
   }
   .footer-meta strong { color: #fff; font-weight: 600; }
-  .footer-sources,
-  .footer-explorers {
+  .footer-sources {
     margin-top: 18px;
     display: flex;
     flex-wrap: wrap;
@@ -671,7 +670,7 @@
     gap: 8px;
   }
   .footer-sources-label,
-  .footer-explorers-label {
+  .footer-metros-label {
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
@@ -679,7 +678,7 @@
     color: var(--slate-soft);
   }
   .footer-sources a,
-  .footer-explorers a {
+  .footer-metros a {
     color: #C9D4DB;
     text-decoration: none;
     border: 1px solid rgba(217,225,231,0.22);
@@ -688,10 +687,21 @@
     transition: color .12s, border-color .12s, background .12s;
   }
   .footer-sources a:hover,
-  .footer-explorers a:hover {
+  .footer-metros a:hover {
     color: #fff;
     border-color: var(--chi-blue);
     background: rgba(65,182,230,0.14);
+  }
+
+  /* ---- footer metros: links to the sibling District Explorer deployments ---- */
+  .footer-metros {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(217,225,231,0.15);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
   }
 
   /* ---- footer links: feedback + repo + parent domain ---- */
@@ -1014,12 +1024,15 @@
       <a href="https://www.illinoiscourts.gov" target="_blank" rel="noopener">IL Supreme Court districts (PA 102-0011 shapefile)</a>
       <a href="https://www.cookcountyboardofreview.com" target="_blank" rel="noopener">Cook County Board of Review districts (PA 102-0012 shapefile)</a>
     </div>
-    <div class="footer-explorers" id="footer-explorers" hidden>
-      <span class="footer-explorers-label">Explore other metros</span>
+    <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
+    <div class="footer-metros" id="footer-metros" hidden>
+      <span class="footer-metros-label">Explore another metro</span>
+      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
     </div>
+    <!-- ==== ENGINE:END metro-links-html ==== -->
     <div class="footer-links">
       <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
-      <a href="https://github.com/ThursdaysFamous/DistrictExplorer" target="_blank" rel="noopener">View source on GitHub</a>
+      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">View source on GitHub</a>
       <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
     </div>
@@ -1051,8 +1064,40 @@
    * CORE — shared across every layer module. Built once; rarely touched.
    * ======================================================================= */
 
-  var CHI_BBOX = { minLng: -87.94, minLat: 41.64, maxLng: -87.52, maxLat: 42.02 };
-  var CHI_CENTER = [41.8781, -87.6298];
+  /* ==== METRO:BEGIN config ==== */
+  /* Everything metro-specific that the shared ENGINE blocks below reference
+   * lives here, so an ENGINE block never needs a per-city edit. Fenced ENGINE
+   * blocks are byte-identical across every metro fork — see
+   * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
+  var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
+  var METRO_NAME = "Chicago";           // used in user-facing strings
+  var METRO_BBOX = { minLng: -87.94, minLat: 41.64, maxLng: -87.52, maxLat: 42.02 };
+  var METRO_CENTER = [41.8781, -87.6298];
+  // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
+  var PERMALINK_GATE = { minLat: 41, maxLat: 42.6, minLng: -88.6, maxLng: -87 };
+  var SOCRATA_HOST = "https://data.cityofchicago.org";
+  // Socrata app token: some metros' portals throttle anonymous requests. It is
+  // a throttling identifier, not a secret — public exposure is Socrata's
+  // intended use (do NOT put an API Key *secret* here). Blank = sent as-is.
+  var SOCRATA_APP_TOKEN = "";
+  var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new";
+  var FEEDBACK_SUBJECT = "Chicago District Explorer feedback";
+  /* Sibling District Explorer deployments — one canonical list shared by every
+   * metro fork. When a new metro launches, add its entry here (and in each
+   * sibling fork). THIS_METRO drops the fork's own entry so the list can be
+   * copied verbatim between forks. */
+  var METRO_EXPLORERS = [
+    { id: "chicago", label: "Chicago", url: "https://chidistricts.com/" },
+    { id: "nyc", label: "New York City", url: "https://nyc.chidistricts.com/" }
+  ];
+  /* ==== METRO:END config ==== */
+
+  /* ==== ENGINE:BEGIN app-token ==== */
+  function withAppToken(url) {
+    if (!SOCRATA_APP_TOKEN) return url;
+    return url + (url.indexOf("?") === -1 ? "?" : "&") + "$$app_token=" + SOCRATA_APP_TOKEN;
+  }
+  /* ==== ENGINE:END app-token ==== */
 
   /* ---------- six-pointed star geometry (used for marker + decorative icons) ---------- */
   function starPath(cx, cy, outerR, innerR) {
@@ -1113,6 +1158,7 @@
     waterTaxiImg.addEventListener("error", function () { finish(false); });
   }
 
+  /* ==== ENGINE:BEGIN sanitize ==== */
   /* ---------- sanitize: escape any external string before it touches innerHTML ---------- */
   function sanitize(str) {
     if (str === null || str === undefined) return "";
@@ -1140,6 +1186,8 @@
     }
   }
 
+  /* ==== ENGINE:END sanitize ==== */
+  /* ==== ENGINE:BEGIN point-in-polygon ==== */
   /* ---------- point-in-polygon: GeoJSON Polygon / MultiPolygon, holes-aware ---------- */
   function pointInRing(pt, ring) {
     // standard even-odd ray casting against a single ring
@@ -1176,6 +1224,8 @@
     return false;
   }
 
+  /* ==== ENGINE:END point-in-polygon ==== */
+  /* ==== ENGINE:BEGIN polygon-containment ==== */
   /* ---------- polygon-in-polygon containment (used by the hover explorer's
    * "districts fully inside the one you're over" outlining). There's no
    * geometry library here, so this is a hand-rolled, vertex-based test:
@@ -1230,7 +1280,7 @@
 
   // planar (degree-space) distance from a [lng,lat] point to a geometry's
   // nearest boundary edge. Only used as a small on-boundary tolerance, so not
-  // scaling longitude by cos(lat) is fine at Chicago's latitude.
+  // scaling longitude by cos(lat) is fine at this metro's latitude.
   function distToBoundary(pt, geometry) {
     var min = Infinity;
     eachRing(geometry, function (ring) {
@@ -1288,6 +1338,8 @@
     return !(x[2] < y[0] || x[0] > y[2] || x[3] < y[1] || x[1] > y[3]);
   }
 
+  /* ==== ENGINE:END polygon-containment ==== */
+  /* ==== ENGINE:BEGIN fetch-retry ==== */
   /* ---------- fetch JSON with retry + timeout. The abort timer stays armed
    * through the body read, not just the headers — every caller parses JSON,
    * and a response that stalls mid-body would otherwise hang its layer's
@@ -1330,11 +1382,13 @@
    * layers (police districts/stations, Socrata rosters) keep the 9 s default. ---------- */
   var REMOTE_GEOJSON_TIMEOUT_MS = 30000;
 
+  /* ==== ENGINE:END fetch-retry ==== */
+  /* ==== ENGINE:BEGIN probe-geometry-column ==== */
   /* ---------- probe a Socrata dataset for its geometry column name ---------- */
   var geometryColumnCache = {};
   function probeGeometryColumn(datasetId) {
     if (geometryColumnCache[datasetId]) return Promise.resolve(geometryColumnCache[datasetId]);
-    var url = "https://data.cityofchicago.org/resource/" + datasetId + ".json?$limit=1";
+    var url = withAppToken(SOCRATA_HOST + "/resource/" + datasetId + ".json?$limit=1");
     return fetchJSONWithRetry(url, {}, 1)
       .then(function (rows) {
         var row = rows && rows[0];
@@ -1352,6 +1406,8 @@
       .catch(function () { return "the_geom"; });
   }
 
+  /* ==== ENGINE:END probe-geometry-column ==== */
+  /* ==== ENGINE:BEGIN state ==== */
   /* ---------- global state ---------- */
   var state = {
     selectedPoint: null,   // {lat, lng}
@@ -1359,11 +1415,12 @@
     layersOn: {}           // id -> boolean
   };
 
+  /* ==== ENGINE:END state ==== */
   /* =========================================================================
    * MAP
    * ======================================================================= */
 
-  var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(CHI_CENTER, 11);
+  var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(METRO_CENTER, 11);
   L.control.zoom({ position: "bottomright" }).addTo(map);
   var baseTiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 19,
@@ -1474,6 +1531,7 @@
     syncUrlHash();
   }
 
+  /* ==== ENGINE:BEGIN permalink ==== */
   /* =========================================================================
    * SHAREABLE URL — #point=lat,lng&layers=id1,id2 mirrors the current
    * selection so any view can be copied out of the URL bar (or via the
@@ -1516,13 +1574,17 @@
     if (params.point) {
       var pieces = params.point.split(",");
       var lat = parseFloat(pieces[0]), lng = parseFloat(pieces[1]);
-      // sanity-bound to the greater Chicago area this app serves
-      if (isFinite(lat) && isFinite(lng) && lat > 41 && lat < 42.6 && lng > -88.6 && lng < -87) {
+      // sanity-bound to the greater metro area this app serves (PERMALINK_GATE)
+      if (isFinite(lat) && isFinite(lng) &&
+          lat > PERMALINK_GATE.minLat && lat < PERMALINK_GATE.maxLat &&
+          lng > PERMALINK_GATE.minLng && lng < PERMALINK_GATE.maxLng) {
         setSelectedPoint(lat, lng);
       }
     }
   }
 
+  /* ==== ENGINE:END permalink ==== */
+  /* ==== ENGINE:BEGIN selection-controls ==== */
   map.on("click", function (e) {
     setSelectedPoint(e.latlng.lat, e.latlng.lng, { skipPan: true });
   });
@@ -1532,6 +1594,8 @@
     setSelectedPoint(c.lat, c.lng, { skipPan: true });
   });
 
+  /* ==== ENGINE:END selection-controls ==== */
+  /* ==== ENGINE:BEGIN geolocation ==== */
   /* =========================================================================
    * GEOLOCATION — "Use my current location" via the browser's
    * navigator.geolocation API. Feeds straight into the same
@@ -1558,8 +1622,8 @@
       function (pos) {
         locateBtn.disabled = false;
         var lat = pos.coords.latitude, lng = pos.coords.longitude;
-        if (lat < CHI_BBOX.minLat || lat > CHI_BBOX.maxLat || lng < CHI_BBOX.minLng || lng > CHI_BBOX.maxLng) {
-          geoStatusEl.textContent = "Your current location looks like it's outside the Chicago area this app covers.";
+        if (lat < METRO_BBOX.minLat || lat > METRO_BBOX.maxLat || lng < METRO_BBOX.minLng || lng > METRO_BBOX.maxLng) {
+          geoStatusEl.textContent = "Your current location looks like it's outside the " + METRO_NAME + " area this app covers.";
           geoStatusEl.className = "geo-status err";
           return;
         }
@@ -1586,6 +1650,7 @@
     );
   });
 
+  /* ==== ENGINE:END geolocation ==== */
   /* ---------- "Layers" drawer button — collapses the results rail so the
    * map gets the full width; aria-expanded mirrors the rail state ---------- */
   var drawerBtn = document.getElementById("layer-drawer-btn");
@@ -1598,6 +1663,7 @@
     map.invalidateSize(); // the map container just changed width
   });
 
+  /* ==== ENGINE:BEGIN feedback ==== */
   /* =========================================================================
    * FEEDBACK — a serverless "report a bug / leave a comment" modal. There is
    * no backend here, so a submission is routed either to a prefilled GitHub
@@ -1605,7 +1671,7 @@
    * report is reproducible. Keep this independent of any layer.
    * ======================================================================= */
   (function wireFeedback() {
-    var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer/issues/new";
+    // REPO_ISSUES + FEEDBACK_SUBJECT come from the METRO config block.
     var EMAIL = "adam@overberg.co";
     var modal = document.getElementById("feedback-modal");
     var openBtn = document.getElementById("feedback-btn");
@@ -1648,7 +1714,7 @@
     // The mailto carries whatever is currently typed, so rebuild it live.
     function refreshMailto() {
       emailLink.href = "mailto:" + EMAIL +
-        "?subject=" + encodeURIComponent("Chicago District Explorer feedback") +
+        "?subject=" + encodeURIComponent(FEEDBACK_SUBJECT) +
         "&body=" + encodeURIComponent(buildBody());
     }
 
@@ -1670,6 +1736,7 @@
     refreshMailto();
   })();
 
+  /* ==== ENGINE:END feedback ==== */
   /* =========================================================================
    * GEOCODER — Nominatim, debounced, bounded to Chicago, attributed.
    * Swappable: everything lives behind geocodeAddress().
@@ -1745,7 +1812,7 @@
     // Biased toward Chicago's centre and hard-bounded to the city bbox so
     // results stay in-city. Point-selection and POI geocoding remain on
     // Nominatim; only this type-ahead box moved.
-    var bbox = [CHI_BBOX.minLng, CHI_BBOX.minLat, CHI_BBOX.maxLng, CHI_BBOX.maxLat].join(",");
+    var bbox = [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",");
     var url = "https://photon.komoot.io/api/?q=" + encodeURIComponent(query) +
       "&lang=en&limit=6&lat=41.88&lon=-87.63&bbox=" + bbox;
     return fetch(url, { signal: inFlightController.signal, headers: { "Accept": "application/json" } })
@@ -2221,7 +2288,7 @@
       // the selection (or this layer) moved on while we were queued — don't
       // spend a rate-limited request whose result would just be discarded.
       if (isCurrent && !isCurrent()) return null;
-      var viewbox = [CHI_BBOX.minLng, CHI_BBOX.maxLat, CHI_BBOX.maxLng, CHI_BBOX.minLat].join(",");
+      var viewbox = [METRO_BBOX.minLng, METRO_BBOX.maxLat, METRO_BBOX.maxLng, METRO_BBOX.minLat].join(",");
       var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&bounded=1&viewbox=" +
         viewbox + "&q=" + encodeURIComponent(cleanPoiAddress(address));
       return fetchJSONWithRetry(url, { headers: { "Accept": "application/json" } }, 1)
@@ -2644,6 +2711,7 @@
     });
   }
 
+  /* ==== ENGINE:BEGIN render-helper ==== */
   /* ---------- small render helper shared by modules ---------- */
   function renderFieldList(fields) {
     // fields: [{label, value}] — value is sanitized here, once, in the shared helper
@@ -2682,6 +2750,7 @@
     return dl;
   }
 
+  /* ==== ENGINE:END render-helper ==== */
   /* =========================================================================
    * THREAD 1 — GEOGRAPHY: Community Area + ZIP Code
    * Both datasets are small (77 community areas, ~60 ZIPs) so each module
@@ -2691,6 +2760,7 @@
    * Replaces Thread 0's demo-radius stub, as planned in the playbook.
    * ======================================================================= */
 
+  /* ==== ENGINE:BEGIN socrata-loader ==== */
   /* ---------- true if at least one feature has real (non-null) geometry.
    * Some older "legacy" Socrata boundary datasets return HTTP 200 from the
    * primary .geojson route with every feature's geometry stripped to null
@@ -2713,10 +2783,10 @@
    * plain .catch() never sees it. ---------- */
   function socrataRouteUrls(datasetId) {
     return [
-      "https://data.cityofchicago.org/resource/" + datasetId + ".geojson?$limit=1000",
-      "https://data.cityofchicago.org/api/v3/views/" + datasetId + "/query.geojson",
-      "https://data.cityofchicago.org/api/geospatial/" + datasetId + "?method=export&format=GeoJSON"
-    ];
+      SOCRATA_HOST + "/resource/" + datasetId + ".geojson?$limit=1000",
+      SOCRATA_HOST + "/api/v3/views/" + datasetId + "/query.geojson",
+      SOCRATA_HOST + "/api/geospatial/" + datasetId + "?method=export&format=GeoJSON"
+    ].map(withAppToken);
   }
 
   /* ---------- walk a list of fallback routes, returning the first response that
@@ -2742,6 +2812,8 @@
     return tryRoutes(socrataRouteUrls(datasetId), hasUsableGeometry, datasetId + " geometry");
   }
 
+  /* ==== ENGINE:END socrata-loader ==== */
+  /* ==== ENGINE:BEGIN cached-loaders ==== */
   /* ---------- one shared in-flight/cached promise per loader fn, so overlay.load()
    * and query() never trigger two separate downloads of the same boundaries ---------- */
   function makeCached(loadFn) {
@@ -2761,6 +2833,7 @@
     return makeCached(function () { return loadSocrataGeoJSON(datasetId); });
   }
 
+  /* ==== ENGINE:END cached-loaders ==== */
   /* ---------- fetch a CPD-hosted ArcGIS FeatureServer layer as GeoJSON.
    * services2.arcgis.com/t3tlzCPfmaQzSWAk is CPD's own hosted org (not the
    * Chicago Data Portal); confirmed CORS-open (Access-Control-Allow-Origin: *)
@@ -2769,6 +2842,7 @@
     return "https://services2.arcgis.com/t3tlzCPfmaQzSWAk/arcgis/rest/services/" + serviceName + "/FeatureServer/0";
   }
 
+  /* ==== ENGINE:BEGIN arcgis-loader ==== */
   function loadArcGISGeoJSON(serviceUrl) {
     // geometryPrecision=6 (~0.11 m) trims coordinate digits the server would
     // otherwise send at full float precision — no visible or classification
@@ -2781,6 +2855,8 @@
       });
   }
 
+  /* ==== ENGINE:END arcgis-loader ==== */
+
   /* ---------- paged ArcGIS fetch, for layers that exceed the service's
    * maxRecordCount transfer cap (commonly 1000-2000 features): loops
    * resultOffset until the response stops reporting exceededTransferLimit.
@@ -2788,6 +2864,7 @@
    * the engine for metro forks, where multi-thousand-feature layers are
    * common (METRO_EXPANSION_PLAYBOOK §6.6; back-ported from the NYC fork,
    * which pages its ~4,200 election districts through it). ---------- */
+  /* ==== ENGINE:BEGIN arcgis-paged-loader ==== */
   function loadArcGISPaged(layerUrl, outFields) {
     var PAGE = 1000;
     function page(offset, acc) {
@@ -2803,6 +2880,7 @@
     }
     return page(0, []);
   }
+  /* ==== ENGINE:END arcgis-paged-loader ==== */
 
   /* ---------- point-dataset loader for datasets whose .geojson route serves
    * NO geometry — the coordinates live only in latitude/longitude *properties*
@@ -2812,10 +2890,11 @@
    * (all of Chicago's point sources serve real geometry) — kept in the engine
    * for metro forks (METRO_EXPANSION_PLAYBOOK §6.9; back-ported from the NYC
    * fork, where three layers share it). ---------- */
+  /* ==== ENGINE:BEGIN socrata-point-loader ==== */
   function makeSocrataPointLoader(datasetId, whereClause, latField, lngField) {
     return makeCached(function () {
       var q = "?$limit=1000" + (whereClause ? "&$where=" + encodeURIComponent(whereClause) : "");
-      var url = "https://data.cityofchicago.org/resource/" + datasetId + ".json" + q;
+      var url = withAppToken(SOCRATA_HOST + "/resource/" + datasetId + ".json" + q);
       return fetchJSONWithRetry(url, {}, 2).then(function (rows) {
         var feats = [];
         (rows || []).forEach(function (r) {
@@ -2828,7 +2907,9 @@
       });
     });
   }
+  /* ==== ENGINE:END socrata-point-loader ==== */
 
+  /* ==== ENGINE:BEGIN find-prop-ci ==== */
   /* ---------- case-insensitive property lookup — Socrata field-name casing/
    * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
   function findPropCI(props, candidates) {
@@ -2863,6 +2944,7 @@
     return found;
   }
 
+  /* ==== ENGINE:END find-prop-ci ==== */
   /* ---------- declarative factory for single-source polygon layers ----------
    * The plain "load a boundary set, find the polygon containing the point, read
    * a few properties, list them" shape recurs across layers with no async roster
@@ -2972,6 +3054,7 @@
    * open data, so this only surfaces what each dataset actually contains.
    * ======================================================================= */
 
+  /* ==== ENGINE:BEGIN haversine ==== */
   /* ---------- great-circle distance in miles ---------- */
   function haversineMiles(lat1, lng1, lat2, lng2) {
     var R = 3958.8;
@@ -2988,6 +3071,7 @@
     return { lat: g.coordinates[1], lng: g.coordinates[0] };
   }
 
+  /* ==== ENGINE:END haversine ==== */
   /* ---------- representative lat/lng for a polygon feature: the vertex-average
    * of its exterior ring(s). Used to give Polygon/MultiPolygon features a single
    * point for the nearest-N proximity pattern below (haversineMiles wants two
@@ -3834,8 +3918,8 @@
    * for roster tables like the alderman list, which have no geometry column ---------- */
   function loadSocrataJSON(datasetId) {
     var urls = [
-      "https://data.cityofchicago.org/resource/" + datasetId + ".json?$limit=1000",
-      "https://data.cityofchicago.org/api/v3/views/" + datasetId + "/query.json"
+      SOCRATA_HOST + "/resource/" + datasetId + ".json?$limit=1000",
+      SOCRATA_HOST + "/api/v3/views/" + datasetId + "/query.json"
     ];
     return tryRoutes(urls, function (rows) { return Array.isArray(rows) && rows.length; }, datasetId + " rows");
   }
@@ -4926,21 +5010,23 @@
   var verifiedEl = document.getElementById("verified-date");
   verifiedEl.textContent = "July 9, 2026";
 
-  // Sibling explorers for other metro areas — add an entry here when a new
-  // city launches and the footer row picks it up automatically.
-  var METRO_EXPLORERS = [
-    { label: "🗽 New York City", url: "https://nyc.chidistricts.com/" }
-  ];
-  var explorersEl = document.getElementById("footer-explorers");
-  METRO_EXPLORERS.forEach(function (metro) {
-    var a = document.createElement("a");
-    a.href = metro.url;
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = metro.label;
-    explorersEl.appendChild(a);
-  });
-  if (METRO_EXPLORERS.length) explorersEl.hidden = false;
+  /* ==== ENGINE:BEGIN metro-links ==== */
+  (function renderMetroLinks() {
+    var row = document.getElementById("footer-metros");
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var metro = METRO_EXPLORERS[i];
+      if (metro.id === THIS_METRO) continue;
+      var a = document.createElement("a");
+      a.href = metro.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = metro.label;
+      row.appendChild(a);
+    }
+    // keep the row hidden if every listed metro is this one (label-only row)
+    if (row.querySelector("a")) row.hidden = false;
+  })();
+  /* ==== ENGINE:END metro-links ==== */
 
   // expose a couple of things for later module threads / debugging, without
   // polluting global scope beyond one namespace

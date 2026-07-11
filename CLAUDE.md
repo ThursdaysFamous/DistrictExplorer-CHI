@@ -36,7 +36,7 @@ python3 scripts/validate_sources.py            # add --offline to skip network
 
 ## Architecture: stable core + pluggable layer modules
 
-All inside `index.html`, wrapped in one IIFE. The full contract and per-thread build log live in `docs/BUILD_PLAYBOOK_1.md`; `docs/OPTIMIZATION_PLAYBOOK.md` holds measured optimization tasks. `docs/METRO_EXPANSION_PLAYBOOK.md` is the recipe for porting the app to a new metro (Chicago is the reference implementation; each metro is its own fork), with `docs/METRO_EXPANSION_NYC.md` preserving the completed NYC port's build record (fork: `github.com/ThursdaysFamous/DistrictExplorer-NYC`).
+All inside `index.html`, wrapped in one IIFE. The full contract and per-thread build log live in `docs/BUILD_PLAYBOOK_1.md`; `docs/OPTIMIZATION_PLAYBOOK.md` holds measured optimization tasks. `docs/METRO_EXPANSION_PLAYBOOK.md` is the recipe for porting the app to a new metro (Chicago is the reference implementation; each metro is its own fork), with the completed NYC port's build record archived at `docs/archive/METRO_EXPANSION_NYC.md` (fork: `github.com/ThursdaysFamous/DistrictExplorer-NYC`).
 
 **Core** provides: the Leaflet map, click-to-select + debounced Chicago-bounded Nominatim geocoder, a global `state` object `{selectedPoint, sequence, layersOn, ...}`, the layer registry + result-card framework, selected-boundary highlight, and URL-hash permalinks (`#point=lat,lng&layers=ward,school-board`). A small namespace is exposed as `window.ChiExplorer` for debugging.
 
@@ -55,6 +55,16 @@ All inside `index.html`, wrapped in one IIFE. The full contract and per-thread b
 2. **Per-layer failure isolation.** Each result card is independent: a layer whose data source is down shows an error + Retry *inside its own card* and never affects the others. Never let one layer's failure throw out of its `query`/`render` into shared code.
 
 **Honesty rules (non-negotiable, enforced in review):** officeholder data is never guessed. Where no verifiable roster source exists, cards link to the official body instead of inventing a name. External strings are always sanitized or set via `textContent`.
+
+## Cross-metro engine parity
+
+This app is one of several sibling metro forks (NYC lives at `ThursdaysFamous/DistrictExplorer-NYC` / nyc.chidistricts.com); **Chicago is the reference implementation**. The metro-agnostic engine inside `index.html` is fenced with `/* ==== ENGINE:BEGIN <name> ==== */ … ENGINE:END` markers and must stay **byte-identical across forks**; everything city-specific those blocks reference lives in the `METRO:BEGIN config` block near the top of the script. When editing:
+
+- Don't edit inside an ENGINE fence unless the change will be ported to every sibling fork — and port it as the **actual git diff**, never by re-describing the feature in a prompt (same prompt ≠ same code; that's exactly how the forks drifted before the fences existed).
+- Region-agnostic changes land in this repo first; siblings apply the diff verbatim.
+- Never inline a city-specific value in an ENGINE block — add a variable to the METRO config block instead.
+- Verify with `python3 scripts/check_engine_parity.py index.html` (fence lint; `validate_index.py` also runs it) or `--against <sibling path or URL> --strict` (byte comparison). A weekly workflow (`engine-parity.yml`) compares this repo against each sibling's deployed site and opens a tracking issue on drift.
+- Full protocol + the known reconciliation backlog: `docs/ENGINE_SYNC.md`.
 
 ## Data pipeline
 
