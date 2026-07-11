@@ -29,10 +29,11 @@
 <style>
   :root {
     /* ---- Chicago flag palette ---- */
-    --chi-blue: #41B6E6;        /* flag stripe blue */
-    --chi-blue-deep: #0B5394;   /* deeper blue for text/links on light bg */
-    --chi-red: #C8102E;         /* flag star red */
-    --chi-red-deep: #9C0B24;
+    --accent: #41B6E6;        /* flag stripe blue */
+    --accent-deep: #0B5394;   /* deeper blue for text/links on light bg */
+    --accent-warm: #C8102E;         /* flag star red */
+    --accent-warm-deep: #9C0B24;
+  /* ==== ENGINE:BEGIN styles-core ==== */
 
     --ink: #14181C;
     --slate: #55626C;
@@ -51,7 +52,7 @@
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
     --radius: 8px;
-    --focus-ring: 3px solid var(--chi-red);
+    --focus-ring: 3px solid var(--accent-warm);
   }
 
   * { box-sizing: border-box; }
@@ -68,7 +69,7 @@
     background: var(--paper);
   }
 
-  a { color: var(--chi-blue-deep); }
+  a { color: var(--accent-deep); }
   a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible, summary:focus-visible {
     outline: var(--focus-ring);
     outline-offset: 2px;
@@ -93,9 +94,9 @@
     height: 10px;
     background: linear-gradient(
       to bottom,
-      var(--chi-blue) 0 30%,
+      var(--accent) 0 30%,
       #fff 30% 70%,
-      var(--chi-blue) 70% 100%
+      var(--accent) 70% 100%
     );
   }
 
@@ -111,10 +112,10 @@
   h1.title {
     margin: 0;
   }
-  /* Star + wordmark live in one non-wrapping row so they can never split onto
-     separate lines; align-items: center keeps the star vertically centered
-     against the title text's line box (the "C" in Chicago) rather than
-     bottom-aligned against the whole heading (title + subtitle). */
+  /* Emblem + wordmark live in one non-wrapping row so they can never split
+     onto separate lines; align-items: center keeps the emblem vertically
+     centered against the title text's line box (the wordmark's first letter)
+     rather than bottom-aligned against the whole heading (title + subtitle). */
   .title-row {
     display: flex;
     align-items: center;
@@ -221,7 +222,7 @@
   }
   .search-row button {
     border: none;
-    background: var(--chi-blue-deep);
+    background: var(--accent-deep);
     color: #fff;
     border-radius: 6px;
     padding: 0 16px;
@@ -280,7 +281,8 @@
   .geo-status.err { color: var(--err); }
 
   /* ---------- sibling-metro portal (easter egg — see ENGINE metro-portal) ---------- */
-  #geocode-results li.sibling-result { border-top: 2px solid var(--chi-blue); }
+  /* ==== ENGINE:END styles-core ==== */
+  #geocode-results li.sibling-result { border-top: 2px solid var(--accent); }
   #geocode-results li.sibling-result button {
     display: flex;
     flex-direction: column;
@@ -290,9 +292,10 @@
   .sibling-result-hint {
     font-size: 11.5px;
     font-weight: 600;
-    color: var(--chi-blue-deep);
+    color: var(--accent-deep);
   }
 
+  /* ==== ENGINE:BEGIN styles-app ==== */
   #metro-portal {
     position: fixed;
     inset: 0;
@@ -307,7 +310,7 @@
   .metro-portal-card {
     background: var(--panel);
     border-radius: var(--radius);
-    border-top: 4px solid var(--chi-red);
+    border-top: 4px solid var(--accent-warm);
     box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
     max-width: 430px;
     width: 100%;
@@ -335,7 +338,7 @@
   .metro-portal-count {
     font-family: var(--font-mono);
     font-size: 12.5px;
-    color: var(--chi-blue-deep);
+    color: var(--accent-deep);
     min-height: 16px;
   }
   .metro-portal-actions {
@@ -354,8 +357,8 @@
     cursor: pointer;
   }
   .metro-portal-go {
-    background: var(--chi-blue-deep);
-    border: 1px solid var(--chi-blue-deep);
+    background: var(--accent-deep);
+    border: 1px solid var(--accent-deep);
     color: #fff;
   }
   .metro-portal-go:hover { background: #08406e; }
@@ -374,7 +377,7 @@
     padding: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--chi-blue-deep);
+    color: var(--accent-deep);
     cursor: pointer;
     font-family: var(--font-body);
   }
@@ -465,7 +468,7 @@
     font-size: 12px;
     padding: 5px 10px;
     background: #fff;
-    color: var(--chi-blue-deep, #08406e);
+    color: var(--accent-deep, #08406e);
     border: 1px solid rgba(20, 24, 28, 0.25);
     border-radius: 4px;
     cursor: pointer;
@@ -473,9 +476,9 @@
   }
   .hover-toggle-btn:hover { background: #EEF4F7; }
   .hover-toggle-btn[aria-pressed="true"] {
-    background: var(--chi-blue-deep, #08406e);
+    background: var(--accent-deep, #08406e);
     color: #fff;
-    border-color: var(--chi-blue-deep, #08406e);
+    border-color: var(--accent-deep, #08406e);
   }
   .selected-point-chip {
     background: var(--ink);
@@ -489,8 +492,8 @@
   .selected-point-chip .copy-link-btn {
     margin-left: 10px;
     background: transparent;
-    color: var(--chi-blue);
-    border: 1px solid var(--chi-blue);
+    color: var(--accent);
+    border: 1px solid var(--accent);
     border-radius: 4px;
     font-family: var(--font-mono);
     font-size: 11px;
@@ -597,8 +600,8 @@
     flex: none;
     border: 2px solid var(--ink);
   }
-  .group-political .dot { background: var(--chi-blue); }
-  .group-safety .dot { background: var(--chi-red); }
+  .group-political .dot { background: var(--accent); }
+  .group-safety .dot { background: var(--accent-warm); }
   .group-schools .dot { background: #E8A324; }
   .group-geography .dot { background: #5C8F6B; }
 
@@ -652,13 +655,13 @@
   }
   .layer-block-head input[type="checkbox"] {
     width: 17px; height: 17px;
-    accent-color: var(--chi-blue-deep);
+    accent-color: var(--accent-deep);
     cursor: pointer;
   }
   .stub-badge {
     font-family: var(--font-mono);
     font-size: 10px;
-    background: var(--chi-red);
+    background: var(--accent-warm);
     color: #fff;
     padding: 2px 6px;
     border-radius: 4px;
@@ -676,7 +679,7 @@
   .spinner {
     width: 14px; height: 14px; border-radius: 50%;
     border: 2px solid var(--line-strong);
-    border-top-color: var(--chi-blue-deep);
+    border-top-color: var(--accent-deep);
     animation: spin 0.8s linear infinite;
     flex: none;
   }
@@ -700,6 +703,7 @@
   .result-row dd .field-pin { display: inline-block; vertical-align: -2px; margin-right: 5px; line-height: 0; }
   dl.result-fields { margin: 0; }
 
+  /* ==== ENGINE:END styles-app ==== */
   /* ---- School Location layer: type filter + color-coded nearest list ---- */
   .school-filter { display: flex; flex-wrap: wrap; gap: 5px 14px; margin: 0 0 10px; }
   .school-filter-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; user-select: none; }
@@ -712,6 +716,7 @@
   .school-list-dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: 1px; }
   .school-list-empty { list-style: none; margin-left: -20px; color: var(--slate); }
 
+  /* ==== ENGINE:BEGIN styles-footer ==== */
   /* ---- Footer: a dark bookend echoing the masthead ---- */
   footer.site-footer {
     background: var(--ink);
@@ -730,7 +735,7 @@
     margin: 0 0 12px;
   }
   .footer-disclaimer {
-    border-left: 3px solid var(--chi-red);
+    border-left: 3px solid var(--accent-warm);
     padding: 10px 14px;
     background: rgba(200,16,46,0.14);
     border-radius: 0 6px 6px 0;
@@ -776,7 +781,7 @@
   .footer-sources a:hover,
   .footer-metros a:hover {
     color: #fff;
-    border-color: var(--chi-blue);
+    border-color: var(--accent);
     background: rgba(65,182,230,0.14);
   }
 
@@ -805,7 +810,7 @@
   .footer-links a {
     font: inherit;
     font-weight: 600;
-    color: var(--chi-blue);
+    color: var(--accent);
     background: none;
     border: none;
     padding: 0;
@@ -835,7 +840,7 @@
     position: relative;
     background: var(--panel);
     border-radius: 8px;
-    border-top: 4px solid var(--chi-red);
+    border-top: 4px solid var(--accent-warm);
     box-shadow: 0 12px 40px rgba(20, 24, 28, 0.35);
     max-width: 460px;
     width: 100%;
@@ -884,14 +889,14 @@
     display: inline-block;
   }
   .feedback-actions .btn-primary {
-    background: var(--chi-blue-deep);
+    background: var(--accent-deep);
     color: #fff;
     border: none;
   }
   .feedback-actions .btn-primary:hover { background: #094377; }
   .feedback-actions .btn-secondary {
     background: var(--paper);
-    color: var(--chi-blue-deep);
+    color: var(--accent-deep);
     border: 1px solid var(--line-strong);
   }
   .feedback-actions .btn-secondary:hover { background: #EEF4F7; }
@@ -922,11 +927,13 @@
 
   /* ---- selected-boundary highlight: SVG drop-shadow filter so the matched
      region reads as physically lifted above the faded rest of the layer ---- */
+  /* ==== ENGINE:END styles-footer ==== */
   .chi-region-highlight {
     filter: drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35));
     transition: filter 120ms ease-out;
   }
   .chi-poi-pin { background: none; border: none; }
+  /* ==== ENGINE:BEGIN styles-hover-responsive ==== */
 
   /* ---- hover explorer: a live popup that follows the cursor and names the
      district under it (largest active layer). pointer-events:none is load-
@@ -970,16 +977,16 @@
     font-size: 12px;
     padding: 4px 10px;
     background: #fff;
-    color: var(--chi-blue-deep, #08406e);
+    color: var(--accent-deep, #08406e);
     border: 1px solid rgba(11, 83, 148, 0.4);
     border-radius: 4px;
     cursor: pointer;
   }
   .pin-parent-btn:hover { background: #EEF4F7; }
   .pin-parent-btn.is-pinned {
-    background: var(--chi-blue-deep, #08406e);
+    background: var(--accent-deep, #08406e);
     color: #fff;
-    border-color: var(--chi-blue-deep, #08406e);
+    border-color: var(--accent-deep, #08406e);
   }
 
   /* the relationship legend — sits at the top of the bottom-left stack, just
@@ -1012,6 +1019,7 @@
     cursor: pointer;
   }
   .rel-unpin-btn:hover { background: #FBECEE; }
+  /* ==== ENGINE:END styles-hover-responsive ==== */
 </style>
 
 <script data-goatcounter="https://chidistricts.goatcounter.com/count"
@@ -1026,7 +1034,7 @@
     <h1 class="title">
       <span class="title-row">
         <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
-          <path fill="var(--chi-red)" id="star-path-header"></path>
+          <path fill="var(--accent-warm)" id="star-path-header"></path>
         </svg>
         <span class="title-text">Chicago District Explorer</span>
       </span>
@@ -1079,7 +1087,7 @@
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
       <svg class="star-outline" viewBox="0 0 100 100" aria-hidden="true">
-        <path fill="none" stroke="var(--chi-blue-deep)" stroke-width="4" id="star-path-empty"></path>
+        <path fill="none" stroke="var(--accent-deep)" stroke-width="4" id="star-path-empty"></path>
       </svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
@@ -1182,6 +1190,36 @@
       bbox: { minLng: -88.6, minLat: 41.0, maxLng: -87.0, maxLat: 42.6 } },
     { id: "nyc", label: "New York City", url: "https://nyc.chidistricts.com/", emoji: "🗽",
       bbox: { minLng: -74.3, minLat: 40.45, maxLng: -73.6, maxLat: 41.0 } }
+  ];
+  /* CSS class names for the fork-branded map chrome: ENGINE code applies them,
+   * this fork's stylesheet defines them (they carry the fork's palette). */
+  var HIGHLIGHT_CLASS = "chi-region-highlight"; // selected-region highlight (drop-shadow filter)
+  var POI_PIN_CLASS = "chi-poi-pin";            // geocoded point-of-interest marker
+  // FALLBACK district-number key list, fed through extractDistrictNumber
+  // (which adds a name-field regex fallback for the layers whose number only
+  // lives inside a "…name" string). The factories now declare per-layer
+  // hoverName sourced from the same properties each click card reads (the
+  // hover-parity rule, METRO_EXPANSION_PLAYBOOK §2), so for those layers this
+  // generic path only runs if hoverName comes back empty. These keys are
+  // Chicago dataset vocabulary — a metro fork re-seeds them from its own
+  // observed field names, keeping encoded fields out (playbook §1).
+  var HOVER_NUMBER_KEYS = [
+    "ward", "ward_num", "ward_number", "ward_id",
+    "district", "dist_num", "dist", "district_number", "district_no",
+    "area_numbe", "area_num_1", "area_number", "community_area_number", "area_num",
+    "beat_num", "beat", "beat_number", "beat_no",
+    "zip", "zip_code", "zipcode", "zcta5ce10",
+    "number"
+  ];
+
+  // Name-ish property keys that read better than a bare district number when a
+  // feature carries one — deliberately narrow (community-area + school names).
+  // The generic "name"/"dist_label"/"longname" fields are excluded on purpose:
+  // for the legislative TIGER layers those are just "Congressional District 7",
+  // which duplicates the number this pairs with.
+  var HOVER_NAME_KEYS = [
+    "community", "community_area_name", "commarea", "comarea",
+    "short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"
   ];
   /* ==== METRO:END config ==== */
 
@@ -2393,12 +2431,14 @@
    * Each module: { id, group, label, overlay:{load,style}, query(point,seq), render(result) }
    * ======================================================================= */
 
+  /* ==== ENGINE:BEGIN groups ==== */
   var GROUPS = [
     { id: "political", label: "Political" },
     { id: "safety", label: "Public Safety" },
     { id: "schools", label: "Schools" },
     { id: "geography", label: "Geography" }
   ];
+  /* ==== ENGINE:END groups ==== */
 
   // Approximate real-world area ranking, largest to smallest, used to keep
   // smaller/more granular boundaries visible on top of larger ones (see
@@ -2438,6 +2478,7 @@
     "fire-station"      // point marker — no polygon area, always topmost
   ];
 
+  /* ==== ENGINE:BEGIN layer-registry ==== */
   var layers = [];       // registered modules
   var layerRuntime = {}; // id -> { overlayLayer, overlayLoaded, cardBody }
 
@@ -2606,10 +2647,11 @@
    * fire stations) never match since pointInGeometry only handles
    * Polygon/MultiPolygon, so they're unaffected.
    *
-   * The drop-shadow "floating" look is a CSS filter (.chi-region-highlight),
-   * applied by mutating the SVG path's class list directly — Leaflet's
-   * `className` style option only takes effect when the path is first
-   * created, not on later setStyle() calls, so setStyle() alone can't do this. */
+   * The drop-shadow "floating" look is a CSS filter (the HIGHLIGHT_CLASS rule
+   * in each fork's stylesheet), applied by mutating the SVG path's class list
+   * directly — Leaflet's `className` style option only takes effect when the
+   * path is first created, not on later setStyle() calls, so setStyle() alone
+   * can't do this. */
   // darken a #rrggbb / #rgb hex color toward black by `amount` (0 = unchanged, 1 = black).
   // No color library in this codebase — this is the minimal hand-rolled version needed here.
   function darkenHexColor(hex, amount) {
@@ -2640,7 +2682,6 @@
       dashArray: null
     };
   }
-  var HIGHLIGHT_CLASS = "chi-region-highlight";
 
   function fadedStyle(baseStyle) {
     return {
@@ -2728,6 +2769,7 @@
     if (style && (style.color || style.fillColor)) return style.color || style.fillColor;
     return mod.color || "#14181C";
   }
+  /* ==== ENGINE:END layer-registry ==== */
 
   var poiGeocodeCache = {}; // address string -> {lat,lng} | null, avoids re-geocoding the same address
 
@@ -2801,11 +2843,12 @@
     });
   }
 
+  /* ==== ENGINE:BEGIN overlay-cards ==== */
   var poiPinIconCache = {};
   function poiPinIcon(color) {
     if (poiPinIconCache[color]) return poiPinIconCache[color];
     var icon = L.divIcon({
-      className: "chi-poi-pin",
+      className: POI_PIN_CLASS,
       html: '<svg viewBox="0 0 24 32" width="22" height="30" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
         '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z" fill="' + color + '" stroke="#ffffff" stroke-width="1.5"/>' +
         '<circle cx="12" cy="12" r="4.2" fill="#ffffff"/>' +
@@ -3204,6 +3247,7 @@
       if (state.layersOn[mod.id]) runLayerQuery(mod);
     });
   }
+  /* ==== ENGINE:END overlay-cards ==== */
 
   /* ==== ENGINE:BEGIN render-helper ==== */
   /* ---------- small render helper shared by modules ---------- */
@@ -3439,6 +3483,7 @@
   }
 
   /* ==== ENGINE:END find-prop-ci ==== */
+  /* ==== ENGINE:BEGIN polygon-factory ==== */
   /* ---------- declarative factory for single-source polygon layers ----------
    * The plain "load a boundary set, find the polygon containing the point, read
    * a few properties, list them" shape recurs across layers with no async roster
@@ -3503,6 +3548,7 @@
       pointOfInterest: opts.pointOfInterest
     });
   }
+  /* ==== ENGINE:END polygon-factory ==== */
 
   /* ---------- Community Area ---------- */
   var loadCommunityAreas = makeCachedLoader("igwz-8jzy");
@@ -3938,6 +3984,7 @@
    * count (defaults 3 — keep N small so "nearest as the crow flies" stays
    * obviously honest). Back-ported from the NYC fork, which minted it as the
    * fifth factory (METRO_EXPANSION_PLAYBOOK §2). ---------- */
+  /* ==== ENGINE:BEGIN nearest-point-factory ==== */
   function registerNearestPointLayer(opts) {
     var count = opts.count || 3;
     registerLayer({
@@ -3987,6 +4034,7 @@
       }
     });
   }
+  /* ==== ENGINE:END nearest-point-factory ==== */
 
   registerNearestPointLayer({
     id: "police-station",
@@ -4037,6 +4085,17 @@
    * an id, and degrade to name-only otherwise.
    * ======================================================================= */
 
+  /* ==== ENGINE:BEGIN int-field ==== */
+  // Normalize a numeric-ish field to its integer string ("15.0" -> "15"); passes
+  // non-numeric values through and null/"" to null. (Socrata sometimes serves
+  // integer district numbers as floats.)
+  function intField(v) {
+    if (v == null || v === "") return null;
+    var n = parseInt(v, 10);
+    return isNaN(n) ? v : String(n);
+  }
+  /* ==== ENGINE:END int-field ==== */
+
   /* ---------- builds a sanitized cps.edu school-profile link, or null if no id ---------- */
   function schoolProfileHtml(schoolId) {
     if (!schoolId) return null;
@@ -4044,37 +4103,67 @@
     return '<a href="' + sanitize(url) + '" target="_blank" rel="noopener">School profile</a>';
   }
 
+  /* ==== ENGINE:BEGIN school-zone-factory ==== */
   function registerSchoolZone(opts) {
-    // opts: id, label, datasetId, style
+    // One point-in-polygon attendance-zone layer per school level. City-specific
+    // dataset schemas and policies stay in opts: { id, label, datasetId, style,
+    // nameKeys, idKeys, districtKeys?, gradeKeys?, addressKeys?, requireId?,
+    // emptyNote?, moreHtml?, profileHtml? }. requireId treats a feature without
+    // an id as "no zoned school" (choice-based catchments carry placeholder
+    // polygons); emptyNote renders that honest empty state (with moreHtml as an
+    // application link) instead of a bare no-result. profileHtml(id) is the
+    // fork's sanitized school-profile link builder — profile URLs are only ever
+    // built from a dataset-supplied id, never guessed from a name.
     var loadZones = makeCachedLoader(opts.datasetId);
+    function zoneField(props, keys) {
+      return props && keys ? findPropCI(props, keys) : null;
+    }
     registerLayer({
       id: opts.id,
       group: "schools",
       label: opts.label,
-      // hover popup reads the same name keys the card's query extracts, so the
-      // two surfaces can never disagree on the zoned school's identity.
+      // hover popup: same identity the card headline shows — the zoned school's
+      // name, or the honest "None" where requireId treats the feature as unzoned.
       hoverName: function (feature) {
-        var name = findPropCI(feature.properties || {}, ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name", "name"]);
+        var props = feature.properties || {};
+        if (opts.requireId && !zoneField(props, opts.idKeys)) return "None";
+        var name = zoneField(props, opts.nameKeys);
         return name ? String(name) : null;
       },
       overlay: { load: loadZones, style: opts.style },
       query: function (point, seq) {
         return loadZones().then(function (geojson) {
           var feature = findFeatureContaining(geojson, point);
+          var props = feature ? (feature.properties || {}) : null;
+          var schoolId = zoneField(props, opts.idKeys);
+          var district = intField(zoneField(props, opts.districtKeys));
+          if (opts.requireId && !schoolId) {
+            return opts.emptyNote ? { seq: seq, none: true, district: district } : null;
+          }
           if (!feature) return null;
-          var props = feature.properties || {};
-          var name = findPropCI(props, ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name", "name"]);
-          var schoolId = findPropCI(props, ["school_id", "sch_id", "schoolid", "school_ids"]);
-          var grades = findPropCI(props, ["boundarygr", "grade_range", "gradelevel"]);
-          var address = findPropCI(props, ["school_add", "address", "location_address"]);
-          return { seq: seq, name: name, schoolId: schoolId, grades: grades, address: address };
+          return {
+            seq: seq,
+            name: zoneField(props, opts.nameKeys),
+            schoolId: schoolId,
+            district: district,
+            grades: zoneField(props, opts.gradeKeys),
+            address: zoneField(props, opts.addressKeys)
+          };
         });
       },
       render: function (result) {
-        var fields = [{ label: "School", value: result.name ? String(result.name) : "Unknown" }];
+        if (result.none) {
+          var f = [{ label: "Zoned school", value: "None" }];
+          if (result.district) f.push({ label: "School district", value: String(result.district) });
+          f.push({ label: "Why", value: opts.emptyNote });
+          if (opts.moreHtml) f.push({ label: "Apply", html: opts.moreHtml });
+          return renderFieldList(f);
+        }
+        var fields = [{ label: "Zoned school", value: result.name ? String(result.name) : "Unknown" }];
+        if (result.district) fields.push({ label: "School district", value: String(result.district) });
         if (result.grades) fields.push({ label: "Grades", value: String(result.grades) });
         if (result.address) fields.push({ label: "Address", value: String(result.address), pin: opts.style.color });
-        var profileHtml = schoolProfileHtml(result.schoolId);
+        var profileHtml = opts.profileHtml ? opts.profileHtml(result.schoolId) : null;
         if (profileHtml) fields.push({ label: "Profile", html: profileHtml });
         return renderFieldList(fields);
       },
@@ -4084,8 +4173,21 @@
       }
     });
   }
+  /* ==== ENGINE:END school-zone-factory ==== */
 
-  registerSchoolZone({
+  /* All three CPS zone levels share one dataset schema (confirmed via live
+   * samples) — one fork-side wrapper wires the keys + profile builder so the
+   * shared registerSchoolZone factory stays city-agnostic. */
+  function registerCpsZone(opts) {
+    opts.nameKeys = ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name", "name"];
+    opts.idKeys = ["school_id", "sch_id", "schoolid", "school_ids"];
+    opts.gradeKeys = ["boundarygr", "grade_range", "gradelevel"];
+    opts.addressKeys = ["school_add", "address", "location_address"];
+    opts.profileHtml = schoolProfileHtml;
+    registerSchoolZone(opts);
+  }
+
+  registerCpsZone({
     id: "cps-elementary",
     label: "CPS Elementary School Zone",
     // confirmed via live sample: per-school attendance boundary (school_id, short_name, grade_cat: "ES")
@@ -4093,7 +4195,7 @@
     style: { color: "#6A3FA0", weight: 1.5, fillColor: "#6A3FA0", fillOpacity: 0.06, dashArray: "4 3" }
   });
 
-  registerSchoolZone({
+  registerCpsZone({
     id: "cps-high",
     label: "CPS High School Zone",
     // confirmed via live sample: per-school attendance boundary (school_id, school_nam, grade_cat: "HS")
@@ -4101,7 +4203,7 @@
     style: { color: "#0F6F6F", weight: 1.5, fillColor: "#0F6F6F", fillOpacity: 0.06, dashArray: "1 3 4 3" }
   });
 
-  registerSchoolZone({
+  registerCpsZone({
     id: "cps-middle",
     label: "CPS Middle School Zone",
     // confirmed via live sample: same current attendance-boundary schema as
@@ -4111,6 +4213,7 @@
     style: { color: "#A15C00", weight: 1.5, fillColor: "#A15C00", fillOpacity: 0.06, dashArray: "6 2" }
   });
 
+  /* ==== ENGINE:BEGIN cps-network-factory ==== */
   /* ---------- CPS Network (administrative region, not a single school) ----------
    * Confirmed via live sample: each polygon covers a whole CPS "Network"
    * (K-8's pnta-kuqa, High School's aupu-jt2g — same schema, separate
@@ -4156,6 +4259,7 @@
       }
     });
   }
+  /* ==== ENGINE:END cps-network-factory ==== */
 
   registerCpsNetwork({
     id: "cps-network",
@@ -4440,6 +4544,7 @@
       });
   }
 
+  /* ==== ENGINE:BEGIN extract-district-number ==== */
   /* ---------- district-number lookup with a name-field regex fallback, since
    * TIGERweb's numbered-district field name changes with each Congress/GA
    * (e.g. CD119FP) and hasn't been live-verified in this sandbox (see SURPRISE
@@ -4458,6 +4563,7 @@
     }
     return null;
   }
+  /* ==== ENGINE:END extract-district-number ==== */
 
   /* ---------- Ward + Alderman ---------- */
   var loadWards = makeCached(function () { return loadSocrataGeoJSON("p293-wvbd"); });
@@ -4685,6 +4791,7 @@
     }
   });
 
+  /* ==== ENGINE:BEGIN office-helpers ==== */
   /* ---------- IL State Senate / IL State House — Open States has no browser
    * CORS (per playbook), so instead of a live roster join these look up the
    * district in a build-side roster served from the same-origin
@@ -4705,19 +4812,27 @@
     return lines.map(sanitize).join("<br>");
   }
 
-  // districtOffice lines mix street/city/zip with phone/fax numbers (e.g.
-  // "(773) 869-9050"); geocoding needs just the postal address, so drop
-  // anything that looks like a phone/fax line before joining.
+  // Extract a geocodable street address from an office's address lines (an array
+  // of strings): drop phone/fax lines, keep the street + city/zip. Used by
+  // registerIlgaChamber's pointOfInterest when a roster supplies office lines.
   function officeAddressForGeocode(lines) {
     if (!lines || !lines.length) return null;
-    var addressLines = lines.filter(function (line) {
-      return !/\(\d{3}\)/.test(line) && !/fax/i.test(line);
+    var kept = lines.filter(function (l) {
+      return !/(?:phone|fax|tel|\(\d{3}\)|\d{3}[-.\s]\d{4})/i.test(String(l));
     });
-    return addressLines.length ? addressLines.join(", ") : null;
+    var addr = (kept.length ? kept : lines).join(", ").trim();
+    return addr || null;
   }
+  /* ==== ENGINE:END office-helpers ==== */
 
+  /* ==== ENGINE:BEGIN chamber-factory ==== */
   function registerIlgaChamber(opts) {
-    // opts: id, label, layerIndex, districtFields, ilgaUrl, roster, memberLabel, style
+    // A TIGERweb legislative chamber (Congress / State Senate / State Assembly)
+    // joined to a same-origin roster keyed by district number. opts: { id, label,
+    // layerIndex, districtFields, loadRoster, memberLabel, style, directoryUrl,
+    // profileLabel?, directoryLabel?, capitolLabel? }. Member rows are
+    // { name, party?, url?, districtOffice?, capitolOffice? }; office fields only
+    // render when the roster supplies them (empty placeholder -> just the link).
     var loadChamber = makeCached(function () { return loadTigerLayer(opts.layerIndex); });
     registerLayer({
       id: opts.id,
@@ -4752,14 +4867,14 @@
           // District office first (it's the local, on-map one this card pins),
           // Springfield second. The pin color ties the District Office address
           // to the teardrop marker dropped at the same spot on the map.
-          var district_ = officeFieldHtml(member.districtOffice);
-          if (district_) fields.push({ label: "District Office", html: district_, pin: opts.style.color });
-          var springfield = officeFieldHtml(member.springfieldOffice);
-          if (springfield) fields.push({ label: "Springfield Office", html: springfield });
+          var districtOfficeHtml = officeFieldHtml(member.districtOffice);
+          if (districtOfficeHtml) fields.push({ label: "District Office", html: districtOfficeHtml, pin: opts.style.color });
+          var capitolHtml = officeFieldHtml(member.capitolOffice || member.springfieldOffice);
+          if (capitolHtml) fields.push({ label: opts.capitolLabel || "Capitol Office", html: capitolHtml });
         }
-        var profileUrl = member && member.url ? member.url : opts.ilgaUrl;
+        var profileUrl = member && member.url ? member.url : (opts.directoryUrl || opts.ilgaUrl);
         fields.push({
-          label: member ? "ILGA profile" : "ILGA member directory",
+          label: member ? (opts.profileLabel || "Member profile") : (opts.directoryLabel || "Member directory"),
           html: '<a href="' + sanitize(profileUrl) + '" target="_blank" rel="noopener">' + sanitize(profileUrl) + '</a>'
         });
         return renderFieldList(fields);
@@ -4784,6 +4899,7 @@
       }
     });
   }
+  /* ==== ENGINE:END chamber-factory ==== */
 
   /* ---------- IL Senate roster (104th General Assembly), district -> current
    * officeholder. Generated by scripts/build_il_roster.py from
@@ -4810,7 +4926,8 @@
     districtFields: ["sldust", "sldu"],
     ilgaUrl: "https://www.ilga.gov/Senate/Members",
     loadRoster: loadIlSenateMembers,
-    memberLabel: "Senator",
+    memberLabel: "Senator", capitolLabel: "Springfield Office",
+    profileLabel: "ILGA profile", directoryLabel: "ILGA member directory",
     style: { color: "#4A2E8C", weight: 2, fillColor: "#4A2E8C", fillOpacity: 0.05, dashArray: "1 5" }
   });
 
@@ -4821,7 +4938,8 @@
     districtFields: ["sldlst", "sldl"],
     ilgaUrl: "https://www.ilga.gov/House/Members",
     loadRoster: loadIlHouseMembers,
-    memberLabel: "State Representative",
+    memberLabel: "State Representative", capitolLabel: "Springfield Office",
+    profileLabel: "ILGA profile", directoryLabel: "ILGA member directory",
     style: { color: "#8C2E4A", weight: 2, fillColor: "#8C2E4A", fillOpacity: 0.05, dashArray: "5 1 2 1" }
   });
 
@@ -5118,6 +5236,7 @@
     }
   });
 
+  /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
    * follows the cursor and names the districts it's over. mousemove is throttled
@@ -5152,33 +5271,6 @@
   // office address under its layer's row — replacing the old white per-pin
   // tooltip. {modId, label, address, latlng, color, layerLabel} | null.
   var hoveredPoi = null;
-
-  // FALLBACK district-number key list, fed through extractDistrictNumber
-  // (which adds a name-field regex fallback for the layers whose number only
-  // lives inside a "…name" string). The factories now declare per-layer
-  // hoverName sourced from the same properties each click card reads (the
-  // hover-parity rule, METRO_EXPANSION_PLAYBOOK §2), so for those layers this
-  // generic path only runs if hoverName comes back empty. These keys are
-  // Chicago dataset vocabulary — a metro fork re-seeds them from its own
-  // observed field names, keeping encoded fields out (playbook §1).
-  var HOVER_NUMBER_KEYS = [
-    "ward", "ward_num", "ward_number", "ward_id",
-    "district", "dist_num", "dist", "district_number", "district_no",
-    "area_numbe", "area_num_1", "area_number", "community_area_number", "area_num",
-    "beat_num", "beat", "beat_number", "beat_no",
-    "zip", "zip_code", "zipcode", "zcta5ce10",
-    "number"
-  ];
-
-  // Name-ish property keys that read better than a bare district number when a
-  // feature carries one — deliberately narrow (community-area + school names).
-  // The generic "name"/"dist_label"/"longname" fields are excluded on purpose:
-  // for the legislative TIGER layers those are just "Congressional District 7",
-  // which duplicates the number this pairs with.
-  var HOVER_NAME_KEYS = [
-    "community", "community_area_name", "commarea", "comarea",
-    "short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"
-  ];
 
   // The bare identity value for one feature (no layer label — the snapshot row
   // prints that separately). A module may override via mod.hoverName(feature);
@@ -5353,7 +5445,9 @@
     // show a control for a feature that can never fire.
     hoverToggleBtn.hidden = true;
   }
+  /* ==== ENGINE:END hover-explorer ==== */
 
+  /* ==== ENGINE:BEGIN relationship-pinning ==== */
   /* =========================================================================
    * PIN-PARENT RELATIONSHIPS — pick a district as the "parent" from its sidebar
    * card, then see how every OTHER active layer's districts relate to it:
@@ -5493,6 +5587,7 @@
     rt.pinBtn = btn;
     rt.cardBody.appendChild(btn);
   }
+  /* ==== ENGINE:END relationship-pinning ==== */
 
   /* =========================================================================
    * BOOT
@@ -5527,9 +5622,13 @@
   })();
   /* ==== ENGINE:END metro-links ==== */
 
+  /* ==== ENGINE:BEGIN exports ==== */
   // expose a couple of things for later module threads / debugging, without
-  // polluting global scope beyond one namespace
-  window.ChiExplorer = {
+  // polluting global scope beyond one namespace. The object is built here so
+  // the member list stays engine; the window property it lands on is fork-
+  // branded, so the assignment below stays outside the fence (twinned with
+  // each fork's smoke_test.mjs).
+  var EXPLORER_EXPORTS = {
     state: state,
     map: map, // debug/programmatic map control (lets tests drive panning, e.g. the metro-portal easter egg)
     registerLayer: registerLayer,
@@ -5540,6 +5639,8 @@
     probeGeometryColumn: probeGeometryColumn,
     renderFieldList: renderFieldList
   };
+  /* ==== ENGINE:END exports ==== */
+  window.ChiExplorer = EXPLORER_EXPORTS;
 })();
 </script>
 <script>
