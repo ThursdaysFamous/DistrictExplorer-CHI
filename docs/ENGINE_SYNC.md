@@ -86,13 +86,20 @@ Multiply that by every engine change and the forks stop being the same app.
   "merged but the sibling never shipped." Expect a transient WARN while a
   port is merged-but-undeployed on one side.
 
-## Current ENGINE block inventory (21)
+## Current ENGINE block inventory (22)
 
 `app-token`, `arcgis-loader`, `arcgis-paged-loader`, `cached-loaders`,
 `feedback`, `fetch-retry`, `find-prop-ci`, `geolocation`, `haversine`,
 `metro-links`, `metro-links-html`, `permalink`, `point-in-polygon`,
 `polygon-containment`, `probe-geometry-column`, `render-helper`, `sanitize`,
-`selection-controls`, `socrata-loader`, `socrata-point-loader`, `state`.
+`scope-mask`, `selection-controls`, `socrata-loader`, `socrata-point-loader`,
+`state`.
+
+(`scope-mask` shows the seam pattern for engine code that needs a per-metro
+*function*, not a config constant: `drawOutOfScopeMask(loadCoverageGeometry)`
+takes the fork's coverage-geometry loader as a parameter at its unfenced BOOT
+call site, so the block body stays byte-identical. The geocoder reconciliation
+below should use the same shape.)
 
 Growing this inventory is encouraged: when you touch shared-looking code that
 isn't fenced yet, reconcile it across forks and fence it as part of the

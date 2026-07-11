@@ -1464,6 +1464,136 @@
     });
   }
 
+  /* ==== ENGINE:BEGIN scope-mask ==== */
+  /* ---------- out-of-scope wash (coverage indicator) ----------
+   * The app only fully covers points inside its metro's coverage geometry,
+   * but the map pans well past it. So coverage is visible before a wasted
+   * click, everything outside gets a subtle gray wash: one world-sized
+   * polygon with the coverage outline's rings cut out as holes (Leaflet
+   * paths fill even-odd, so the holes read through). Regional layers
+   * (county / state / federal) may still resolve under the wash — it marks
+   * where the app's full coverage ends; it is not a no-data claim. The wash
+   * draws in its own pane between the tile and overlay panes so every
+   * district overlay, highlight and marker stays on top, and pointer-events
+   * stay off so clicks fall through to the map.
+   *
+   * drawOutOfScopeMask(loadCoverageGeometry) is called once from BOOT (fork
+   * code): each metro passes an existing cached GeoJSON loader whose
+   * features tile the metro exactly, with shared edges topology-preserved —
+   * coincident coordinates are what lets the dissolve below cancel interior
+   * edges (the playbook's §4 offline anchors qualify). If the fetch fails
+   * the wash is skipped silently — it is a hint, not data, and the owning
+   * layer's own error/Retry surfaces the failure. */
+  var scopeMaskPane = map.createPane("scope-mask");
+  scopeMaskPane.style.zIndex = "350"; // tile pane is 200, overlay pane 400
+  scopeMaskPane.style.pointerEvents = "none";
+
+  /* Dissolve the coverage tiling into its outline: a ring segment traversed
+   * by two features is an interior border (each neighbor walks it once) and
+   * is dropped; the surviving segments are chained back into closed rings.
+   * Rendering the outline instead of the raw per-feature rings matters
+   * because coincident interior edges do NOT cancel cleanly under
+   * antialiased even-odd fill — they leave hairline seams tracing a district
+   * layer that isn't even toggled on. Interior holes in the tiling (e.g. an
+   * enclave municipality) survive as rings and correctly stay washed.
+   * Returns null when a chain fails to close (malformed tiling). */
+  function coverageOutlineRings(feats) {
+    var counts = {}; // endpoint-sorted "x,y|x,y" -> traversal count
+    var segPts = {}; // same key -> [a, b] as [lng,lat] pairs
+    function ptKey(pt) { return pt[0] + "," + pt[1]; }
+    function eachSeg(ring) {
+      for (var i = 0; i < ring.length - 1; i++) {
+        var a = ring[i], b = ring[i + 1];
+        if (a[0] === b[0] && a[1] === b[1]) continue; // zero-length
+        var ka = ptKey(a), kb = ptKey(b);
+        var k = ka < kb ? ka + "|" + kb : kb + "|" + ka;
+        counts[k] = (counts[k] || 0) + 1;
+        segPts[k] = [a, b];
+      }
+    }
+    for (var f = 0; f < feats.length; f++) {
+      var geom = feats[f].geometry;
+      if (!geom) continue;
+      var polys = geom.type === "Polygon" ? [geom.coordinates]
+                : geom.type === "MultiPolygon" ? geom.coordinates : [];
+      for (var p = 0; p < polys.length; p++) {
+        for (var r = 0; r < polys[p].length; r++) eachSeg(polys[p][r]);
+      }
+    }
+    var adj = {}; // "x,y" -> [{key, pt: far endpoint}] over surviving segments
+    var kept = 0;
+    for (var k in counts) {
+      if (counts[k] !== 1) continue;
+      kept++;
+      var a2 = segPts[k][0], b2 = segPts[k][1];
+      (adj[ptKey(a2)] = adj[ptKey(a2)] || []).push({ key: k, pt: b2 });
+      (adj[ptKey(b2)] = adj[ptKey(b2)] || []).push({ key: k, pt: a2 });
+    }
+    var used = {};
+    var rings = [];
+    for (var seed in counts) {
+      if (counts[seed] !== 1 || used[seed]) continue;
+      used[seed] = true;
+      var start = segPts[seed][0];
+      var startKey = ptKey(start);
+      var ring = [start, segPts[seed][1]];
+      var curKey = ptKey(segPts[seed][1]);
+      var guard = kept + 1; // any valid walk closes well before this
+      while (curKey !== startKey && guard-- > 0) {
+        var options = adj[curKey] || [];
+        var next = null;
+        for (var o = 0; o < options.length; o++) {
+          if (!used[options[o].key]) { next = options[o]; break; }
+        }
+        if (!next) return null; // open chain — malformed tiling
+        used[next.key] = true;
+        ring.push(next.pt);
+        curKey = ptKey(next.pt);
+      }
+      if (curKey !== startKey) return null; // guard tripped
+      rings.push(ring);
+    }
+    return rings;
+  }
+
+  function drawOutOfScopeMask(loadCoverageGeometry) {
+    if (typeof loadCoverageGeometry !== "function") return;
+    loadCoverageGeometry().then(function (geo) {
+      var feats = (geo && geo.features) || [];
+      if (!feats.length) return;
+      var outline = coverageOutlineRings(feats);
+      if (!outline || !outline.length) {
+        // fall back to the raw rings: hairline seams beat no wash at all
+        outline = [];
+        for (var i = 0; i < feats.length; i++) {
+          var geom = feats[i].geometry;
+          if (!geom) continue;
+          var polys = geom.type === "Polygon" ? [geom.coordinates]
+                    : geom.type === "MultiPolygon" ? geom.coordinates : [];
+          for (var p = 0; p < polys.length; p++) {
+            for (var r = 0; r < polys[p].length; r++) outline.push(polys[p][r]);
+          }
+        }
+      }
+      // Outer ring spans several world copies so panning far east/west at
+      // low zoom never slips out from under the wash.
+      var rings = [[[-89, -720], [89, -720], [89, 720], [-89, 720]]];
+      for (var j = 0; j < outline.length; j++) {
+        var src = outline[j], hole = [];
+        for (var v = 0; v < src.length; v++) hole.push([src[v][1], src[v][0]]);
+        rings.push(hole);
+      }
+      L.polygon(rings, {
+        pane: "scope-mask",
+        stroke: false,
+        fillColor: "#3E4C59",
+        fillOpacity: 0.18,
+        interactive: false
+      }).addTo(map);
+    }).catch(function () { /* decorative — skip the wash, never surface an error */ });
+  }
+  /* ==== ENGINE:END scope-mask ==== */
+
   var selectedMarker = null;
   var pointChip = document.getElementById("point-chip");
 
@@ -5006,6 +5136,11 @@
 
   buildGroupsUI();
   applyStateFromHash(); // restore a shared #point=…&layers=… link, if present
+  // Out-of-scope wash: the 20 ERSB school-board districts tile the City of
+  // Chicago exactly (offline anchor, topology-preserved shared edges), so
+  // their outer rings are the coverage holes. Passing the layer's own cached
+  // loader means one fetch serves both the wash and the school-board card.
+  drawOutOfScopeMask(loadSchoolBoardDistricts);
 
   var verifiedEl = document.getElementById("verified-date");
   verifiedEl.textContent = "July 9, 2026";
