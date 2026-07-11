@@ -42,6 +42,14 @@ Multiply that by every engine change and the forks stop being the same app.
   add a config variable — don't inline the value.
 - Code outside ENGINE fences is the fork's own (layer modules, branding,
   marker art, geocoder provider, city constants). It never has to match.
+- Fences pin a block's **content**, not its **position**. Where position is
+  user-visible it is part of the contract too: `metro-links-html` sits between
+  the source-attribution row (`.footer-sources`) and the footer-links row
+  (`.footer-links`, the bug-report/source/sponsor line) in every fork. The
+  parity check cannot see placement, so a port places the block at the same
+  relative slot by hand — a mismatch is drift all the same (CHI and NYC
+  shipped the "Explore another metro" row on opposite sides of the bug-report
+  row before this rule was written down).
 
 ## The porting workflow
 
