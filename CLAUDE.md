@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Chicago District Explorer: a single-file, dependency-light web app. Click a point in Chicago (or search an address) and it reports every civic district containing that point and who represents you there — wards, county/state/federal legislative districts, police districts/beats, school zones, and more. Deployed as a static site to `chidistricts.com` (see `CNAME`).
 
-**There is no build step, no framework, and no server-side code.** The entire app — styles, core, and all layer modules — lives inline in `index.html` (~3,500 lines). `sw.js` is the service worker; `data/app/*.json` are runtime-fetched data files. Everything else is data pipeline, scrapers, or CI.
+**There is no build step, no framework, and no server-side code.** The entire app — styles, core, and all layer modules — lives inline in `index.html` (~5,000 lines). `sw.js` is the service worker; `data/app/*.json` are runtime-fetched data files. Everything else is data pipeline, scrapers, or CI.
 
 ## Running & testing
 
@@ -36,7 +36,7 @@ python3 scripts/validate_sources.py            # add --offline to skip network
 
 ## Architecture: stable core + pluggable layer modules
 
-All inside `index.html`, wrapped in one IIFE. The full contract and per-thread build log live in `docs/BUILD_PLAYBOOK_1.md`; `docs/OPTIMIZATION_PLAYBOOK.md` holds measured optimization tasks.
+All inside `index.html`, wrapped in one IIFE. The full contract and per-thread build log live in `docs/BUILD_PLAYBOOK_1.md`; `docs/OPTIMIZATION_PLAYBOOK.md` holds measured optimization tasks. `docs/METRO_EXPANSION_PLAYBOOK.md` is the recipe for porting the app to a new metro (Chicago is the reference implementation; each metro is its own fork), with the completed NYC port's build record archived at `docs/archive/METRO_EXPANSION_NYC.md` (fork: `github.com/ThursdaysFamous/DistrictExplorer-NYC`).
 
 **Core** provides: the Leaflet map, click-to-select + debounced Chicago-bounded Nominatim geocoder, a global `state` object `{selectedPoint, sequence, layersOn, ...}`, the layer registry + result-card framework, selected-boundary highlight, and URL-hash permalinks (`#point=lat,lng&layers=ward,school-board`). A small namespace is exposed as `window.ChiExplorer` for debugging.
 
@@ -44,9 +44,9 @@ All inside `index.html`, wrapped in one IIFE. The full contract and per-thread b
 - `sanitize(str)` / render via `textContent` — all external strings must go through one of these. Injecting scraped or API text as HTML is treated as a real security bug here.
 - `pointInGeometry(pt, geometry)` — the point-in-polygon test every polygon layer's `query` uses.
 - `fetchJSONWithRetry(url, opts, retries)` — the standard data-fetch path (retry + failure isolation).
-- `haversineMiles(...)` — for the nearest-N station layers (police/fire), which use straight-line proximity instead of point-in-polygon.
+- `haversineMiles(...)` — for the nearest-N layers, which use straight-line proximity instead of point-in-polygon (police/fire stations via the `registerNearestPointLayer` factory; `school-site` as a bespoke block).
 
-**A layer module** is registered via `registerLayer({ id, group, label, overlay: {load, style}, query(point, seq), render(result) })`. `group` is one of `political | safety | schools | geography`. Overlays lazy-load their boundaries on first toggle and are cached; `query` runs locally against the cached geometry. Families of similar layers are built by factory helpers (`registerSchoolZone`, `registerCpsNetwork`, `registerIlgaChamber`) — follow the existing factory when adding a sibling. Optional contract field `pointOfInterest(result) => {label, address} | null` drops a geocoded map pin (used by the school-zone layers).
+**A layer module** is registered via `registerLayer({ id, group, label, overlay: {load, style}, query(point, seq), render(result) })`. `group` is one of `political | safety | schools | geography`. Overlays lazy-load their boundaries on first toggle and are cached; `query` runs locally against the cached geometry. Families of similar layers are built by factory helpers (`registerPolygonLayer`, `registerSchoolZone`, `registerCpsNetwork`, `registerIlgaChamber`, `registerNearestPointLayer`) — follow the existing factory when adding a sibling. The factories derive each layer's hover-popup identity (`hoverName`) from the same properties its card reads, so the two surfaces can't disagree; a bespoke `registerLayer` block declares `hoverName(feature)` explicitly. Optional contract field `pointOfInterest(result) => {label, address} | null` drops a geocoded map pin (used by the school-zone layers). Two engine loaders exist purely for metro forks and are unused by Chicago's own layers: `loadArcGISPaged` (transfer-cap paging) and `makeSocrataPointLoader` (point datasets whose coordinates live only in properties) — see `docs/METRO_EXPANSION_PLAYBOOK.md`.
 
 **Two invariants that pervade the code:**
 
@@ -73,7 +73,7 @@ Most layers fetch live public APIs at runtime (Chicago Data Portal / Socrata, CP
 - **Boundary geometry** (`school-board-districts.json`, `il-supreme-court-districts.json`, `ccbr-districts.json`) — mapshaper-simplified from the full-precision GeoJSON in `data/` (originals in `data/source/raw/`). Regenerate with `scripts/build_embedded_boundaries.py` (rare operator step). Service worker serves these **cache-first** (boundaries change ~once a decade).
 - **Officeholder rosters** (`il-{senate,house}-members.json`, `congress-roster.json`, `cpd-district-info.json`, `ccpsa-district-councils.json`, `school-board-members.json`) — regenerated **weekly by CI** from scraper output. Service worker serves these **network-first** so a returning visitor never gets a stale officeholder.
 
-**Scraper → builder pattern** (each roster has a pair): a `*_scraper.py` produces intermediate JSON, a `build_*.py` writes the `data/app/*.json` file with count guards (it refuses to write if too few records resolve). `scripts/requirements.txt` pins deps; the CPD scraper additionally needs Playwright for a Cloudflare managed-challenge fetch. When editing a scraper, keep its `js_string()`-style `</script>` + U+2028/U+2029 escaping — that guard closed a real injection bug.
+**Scraper → builder pattern** (each roster has a pair): a `*_scraper.py` produces intermediate JSON, a `build_*.py` writes the `data/app/*.json` file with count guards (it refuses to write if too few records resolve). `scripts/requirements.txt` pins deps; the CPD scraper additionally needs Playwright for a Cloudflare managed-challenge fetch. Builders emit plain JSON via `json.dump` into `data/app/`, and the app renders every external string through `sanitize()`/`textContent` — together that closes the injection surface for scraped text. (The historical `js_string()`-style `</script>` + U+2028/U+2029 escaping guard existed only when data was spliced directly into the HTML; it closed a real injection bug then, and becomes mandatory again only if scraped text is ever spliced into HTML/JS — don't.)
 
 ## CI workflows (`.github/workflows/`)
 

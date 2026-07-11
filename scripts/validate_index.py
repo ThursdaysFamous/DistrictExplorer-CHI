@@ -32,11 +32,13 @@ import subprocess
 import sys
 import tempfile
 
-# Floor, not a moving target: 1 function definition + 11 direct registerLayer()
-# calls + 4 factory bodies (registerSchoolZone / registerCpsNetwork /
-# registerIlgaChamber / registerPolygonLayer). New layers only raise this; a
-# drop means modules were lost.
-MIN_REGISTER_LAYER = 16
+# Floor, not a moving target: 1 function definition + 9 direct registerLayer()
+# calls + 5 factory bodies (registerSchoolZone / registerCpsNetwork /
+# registerIlgaChamber / registerPolygonLayer / registerNearestPointLayer).
+# New layers only raise this; a drop means modules were lost. (Lowered 16 -> 15
+# when police-station/fire-station moved from direct registerLayer blocks onto
+# the back-ported registerNearestPointLayer factory: -2 direct calls, +1 body.)
+MIN_REGISTER_LAYER = 15
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
 GEOMETRY_FILES = {

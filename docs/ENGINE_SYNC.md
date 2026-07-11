@@ -78,13 +78,13 @@ Multiply that by every engine change and the forks stop being the same app.
   "merged but the sibling never shipped." Expect a transient WARN while a
   port is merged-but-undeployed on one side.
 
-## Current ENGINE block inventory (19)
+## Current ENGINE block inventory (21)
 
-`app-token`, `arcgis-loader`, `cached-loaders`, `feedback`, `fetch-retry`,
-`find-prop-ci`, `geolocation`, `haversine`, `metro-links`,
-`metro-links-html`, `permalink`, `point-in-polygon`, `polygon-containment`,
-`probe-geometry-column`, `render-helper`, `sanitize`, `selection-controls`,
-`socrata-loader`, `state`.
+`app-token`, `arcgis-loader`, `arcgis-paged-loader`, `cached-loaders`,
+`feedback`, `fetch-retry`, `find-prop-ci`, `geolocation`, `haversine`,
+`metro-links`, `metro-links-html`, `permalink`, `point-in-polygon`,
+`polygon-containment`, `probe-geometry-column`, `render-helper`, `sanitize`,
+`selection-controls`, `socrata-loader`, `socrata-point-loader`, `state`.
 
 Growing this inventory is encouraged: when you touch shared-looking code that
 isn't fenced yet, reconcile it across forks and fence it as part of the
@@ -101,10 +101,15 @@ features, not overwriting:
    NYC Planning GeoSearch (Pelias). Needs a provider seam behind
    `geocodeAddress()`/`geocodePoiAddress()` so the engine part (debounce,
    queue, rate-limit, render) can be fenced while the provider stays per-metro.
-2. **Result-card / overlay styling framework** — Chicago added
+2. **Result-card / overlay styling framework + factories** — Chicago added
    `styleForFeature`/`restyleOverlayFeatures`/`hoverDotColor` (per-feature
    color-coding, School Location); NYC added `primaryField`/`hoverName` to the
-   polygon factory. Merge both feature sets, then fence the registry.
+   polygon factory. Chicago's July 2026 back-port (#82) lifted NYC's hover
+   parity + `registerNearestPointLayer`/`loadArcGISPaged`/
+   `makeSocrataPointLoader` into the reference tree, so the *semantics* now
+   match (and the two loaders are already fenced) — but the factory *text*
+   still differs between forks. Reconcile the factories to byte-parity, then
+   fence the registry.
 3. **Hover explorer** — same two-way drift as (2), plus per-city
    `HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS` lists that belong in METRO config.
 4. **`LAYER_AREA_RANK`/`LAYER_ORDER` + `GROUPS`** — city data, but the
