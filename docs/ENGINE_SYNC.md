@@ -86,15 +86,27 @@ Multiply that by every engine change and the forks stop being the same app.
   also catches "merged but the sibling never shipped." Expect a transient
   WARN while a port is merged-but-undeployed on one side.
 
-## Current ENGINE block inventory (28 in index.html + 2 in sw.js)
+## Current ENGINE block inventory (38 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
-`cached-loaders`, `exports`, `feedback`, `fetch-retry`, `find-prop-ci`,
-`geolocation`, `haversine`, `metro-links`, `metro-links-html`, `metro-portal`,
-`permalink`, `point-in-polygon`, `polygon-containment`,
-`probe-geometry-column`, `render-helper`, `sanitize`, `scope-mask`,
+`cached-loaders`, `chamber-factory`, `cps-network-factory`, `exports`,
+`feedback`, `fetch-retry`, `find-prop-ci`, `geolocation`, `groups`,
+`haversine`, `int-field`, `layer-registry`, `metro-links`,
+`metro-links-html`, `metro-portal`, `nearest-point-factory`,
+`office-helpers`, `overlay-cards`, `permalink`, `point-in-polygon`,
+`polygon-containment`, `polygon-factory`, `probe-geometry-column`,
+`render-helper`, `sanitize`, `school-zone-factory`, `scope-mask`,
 `selection-controls`, `socrata-loader`, `socrata-point-loader`, `state`,
 `styles-app`, `styles-core`, `styles-footer`, `styles-hover-responsive`.
+
+(`layer-registry`/`overlay-cards` fence the registry, styling/highlight
+machinery, and card framework; `HIGHLIGHT_CLASS`/`POI_PIN_CLASS` are METRO
+config so the fork-branded CSS class names stay out of the fences. The
+factory blocks keep their Chicago-born function names (`registerIlgaChamber`,
+`registerCpsNetwork`) as shared engine names; per-city dataset schemas enter
+through fork-side wrapper functions at the call sites — Chicago's
+`registerCpsZone`, NYC's `registerNycZone` — so the fenced factories never
+carry a city key list.)
 
 sw.js: `sw-header`, `sw-handlers` — the config between them (cache name +
 URL lists) is the service worker's METRO section.
@@ -146,20 +158,25 @@ features, not overwriting:
    per miss regardless of metro count). NYC's GeoSearch only covers NYC, so
    its port needs a whole-OSM provider (e.g. the same Photon call) for the
    sibling lookup.
-2. **Result-card / overlay styling framework + factories** — Chicago added
-   `styleForFeature`/`restyleOverlayFeatures`/`hoverDotColor` (per-feature
-   color-coding, School Location); NYC added `primaryField`/`hoverName` to the
-   polygon factory. Chicago's July 2026 back-port (#82) lifted NYC's hover
-   parity + `registerNearestPointLayer`/`loadArcGISPaged`/
-   `makeSocrataPointLoader` into the reference tree, so the *semantics* now
-   match (and the two loaders are already fenced) — but the factory *text*
-   still differs between forks. Reconcile the factories to byte-parity, then
-   fence the registry.
-3. **Hover explorer** — same two-way drift as (2), plus per-city
-   `HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS` lists that belong in METRO config.
-4. **`LAYER_AREA_RANK`/`LAYER_ORDER` + `GROUPS`** — city data, but the
-   *consuming* machinery (reorder/highlight sweeps) should be fenced once (2)
-   is reconciled.
+2. ~~Result-card / overlay styling framework + factories~~ — **resolved July
+   2026**: NYC adopted Chicago's `styleForFeature` threading (a dormant seam
+   there until a layer defines it), the factories were reconciled to byte
+   parity and fenced (`polygon-factory`, `nearest-point-factory`,
+   `school-zone-factory`, `cps-network-factory`, `chamber-factory`,
+   `office-helpers`, `int-field`), and the registry + card framework fenced
+   as `groups`/`layer-registry`/`overlay-cards`. The school-zone merge moved
+   city dataset schemas into opts fed by fork wrappers (`registerCpsZone` /
+   `registerNycZone`) and converged Chicago's card headline on NYC's more
+   precise "Zoned school" copy; the chamber merge kept Chicago's ILGA copy
+   via `profileLabel`/`directoryLabel`/`capitolLabel` opts at its call sites.
+3. **Hover explorer** — two-way drift (now the only unfenced piece of the
+   styling framework), plus per-city `HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS`
+   lists that belong in METRO config.
+4. ~~`LAYER_AREA_RANK`/`LAYER_ORDER` + `GROUPS`~~ — **resolved July 2026**
+   with (2): `GROUPS` turned out identical and is fenced, and the consuming
+   machinery (`reorderActiveLayers`, the highlight/rescale sweeps) is fenced
+   inside `layer-registry`. `LAYER_AREA_RANK`'s entries stay city data
+   outside the fences, as designed.
 5. ~~Exports namespace~~ — **resolved July 2026**: the member list is built
    in the fenced `exports` block (`var EXPLORER_EXPORTS = {…}`); only the
    fork-branded window assignment (`window.ChiExplorer` /
