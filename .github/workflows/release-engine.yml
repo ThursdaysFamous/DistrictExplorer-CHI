@@ -1,0 +1,140 @@
+name: Publish engine release
+
+# docs/MECHANIZATION_PLAYBOOK.md, Conversion 1 — the engine is distributed as
+# a versioned, hash-verified release artifact published from CHI (the
+# reference implementation), not by humans porting diffs.
+#
+# On tag push engine-v*:
+#   1. build engine.bundle.js + engine.manifest.json (byte-deterministic;
+#      scripts/build_engine_artifact.py),
+#   2. refuse to publish unless the tag and the built sha256 match the
+#      engine.lock.json pin — CHI consumes its own releases at deploy time,
+#      so a release the lockfile doesn't pin would fail the very next deploy,
+#   3. self-check: round-trip (apply the freshly built bundle into scratch
+#      copies -> byte-identical), then the merge gate + behaviour gate,
+#   4. `gh release create` with the bundle, manifest, and the consume-side
+#      scripts (apply_engine.py + its parser check_engine_parity.py) as
+#      assets — the release is the distribution channel for shared scripts.
+#      OWNER SETUP: enable immutable releases on this repo (Settings ->
+#      General -> Releases) so a published engine can never be re-pointed,
+#   5. fan out repository_dispatch (event_type: engine-release) to every
+#      sibling fork so each opens its own gated version-bump PR. Needs the
+#      ENGINE_DISPATCH_TOKEN secret: a fine-grained PAT scoped to ONLY the
+#      sibling repos, Contents read/write + Metadata read. Payload is capped
+#      at 10 top-level properties; send engine_version + sha256, nothing else.
+#
+# Re-running the workflow is safe: if the release already exists, creation is
+# skipped and only the fan-out repeats (a dispatch is idempotent on the
+# sibling side — its bump PR lives on a fixed bot branch).
+
+on:
+  push:
+    tags: ["engine-v*"]
+
+permissions:
+  contents: write # create the release on this repo
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build engine artifact
+        run: python3 scripts/build_engine_artifact.py --out dist/ --version "$GITHUB_REF_NAME"
+
+      - name: Verify tag + sha256 match the engine.lock.json pin
+        run: |
+          lock_ver="$(jq -r .engine_version engine.lock.json)"
+          lock_sha="$(jq -r .sha256 engine.lock.json)"
+          built_sha="$(jq -r .sha256 dist/engine.manifest.json)"
+          if [ "$GITHUB_REF_NAME" != "$lock_ver" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match the engine.lock.json pin ($lock_ver) — bump the lockfile in a reviewed PR before tagging"
+            exit 1
+          fi
+          if [ "$built_sha" != "$lock_sha" ]; then
+            echo "::error::built bundle sha256 ($built_sha) does not match the engine.lock.json pin ($lock_sha) — the fenced engine changed after the lockfile was written; rebuild and re-pin in a PR"
+            exit 1
+          fi
+
+      - name: Self-check — round-trip apply is byte-identical
+        run: |
+          mkdir rt
+          cp index.html sw.js rt/
+          python3 scripts/apply_engine.py \
+            --bundle dist/engine.bundle.js --manifest dist/engine.manifest.json \
+            --index rt/index.html --sw rt/sw.js
+          cmp index.html rt/index.html
+          cmp sw.js rt/sw.js
+          rm -rf rt
+
+      - name: Self-check — static merge gate
+        run: python3 scripts/validate_index.py index.html
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Same pinned toolchain as smoke-test.yml (node_modules is never
+      # committed — this repo has no build step).
+      - name: Install Playwright + Chromium
+        run: |
+          npm install playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Self-check — behaviour gate (serve + smoke test)
+        env:
+          BASE_URL: http://localhost:8000/
+        run: |
+          python3 -m http.server 8000 &
+          server_pid=$!
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:8000/ >/dev/null && break
+            sleep 0.5
+          done
+          node scripts/smoke_test.mjs
+          status=$?
+          kill "$server_pid" 2>/dev/null || true
+          exit $status
+
+      - name: Publish release (bundle + manifest + consume-side scripts)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="docs/engine-changelog/${GITHUB_REF_NAME#engine-}.md"
+          if [ ! -f "$notes" ]; then
+            echo "::error::missing $notes — every engine release ships human-written changelog notes"
+            exit 1
+          fi
+          # The releases/tags endpoint returns PUBLISHED releases only — a
+          # draft left behind by an earlier failed run 404s here, so it can
+          # never masquerade as published and skip straight to a phantom
+          # fan-out (`gh release view` would). If a leftover draft then makes
+          # `gh release create` fail, that surfaces loudly for a human.
+          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME" --silent 2>/dev/null; then
+            echo "release $GITHUB_REF_NAME already published — skipping create (re-run for fan-out only)"
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              dist/engine.bundle.js dist/engine.manifest.json \
+              scripts/apply_engine.py scripts/check_engine_parity.py \
+              --title "Engine ${GITHUB_REF_NAME#engine-}" \
+              --notes-file "$notes" \
+              --verify-tag
+          fi
+
+      - name: Fan out repository_dispatch to sibling forks
+        env:
+          GH_TOKEN: ${{ secrets.ENGINE_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::secret ENGINE_DISPATCH_TOKEN is not set — create a fine-grained PAT scoped to only the sibling repos (Contents read/write, Metadata read), add it as ENGINE_DISPATCH_TOKEN, then re-run this workflow. The release itself is already published; only the fan-out is pending."
+            exit 1
+          fi
+          sha="$(jq -r .sha256 dist/engine.manifest.json)"
+          for sibling in ThursdaysFamous/DistrictExplorer-NYC; do
+            gh api "repos/$sibling/dispatches" \
+              -f event_type=engine-release \
+              -f "client_payload[engine_version]=$GITHUB_REF_NAME" \
+              -f "client_payload[sha256]=$sha"
+            echo "dispatched engine-release ($GITHUB_REF_NAME) to $sibling"
+          done
