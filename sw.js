@@ -26,6 +26,7 @@
 // (-v3 dropped the duplicate "./index.html" shell entry; -v4 added the two
 // roster files missing from ROSTER_URLS; -v5 added the water-taxi marker
 // icon shown when a point lands on water.)
+/* ==== GENERATED:BEGIN sw-metro-config ==== */
 const CACHE_NAME = "district-explorer-shell-v5";
 
 const SHELL_URLS = [
@@ -38,11 +39,10 @@ const SHELL_URLS = [
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
 ];
 
-// Boundary geometry for the three formerly-embedded layers now lives in
-// data/app/*.json, fetched lazily on first toggle. Boundaries change ~once a
-// decade, so serve them cache-first (instant, and works offline) and refresh
-// in the background. Precached at install so those layers still work offline
-// the way they did when embedded.
+// Boundary geometry (data/app/*.json, fetched lazily on first toggle).
+// Boundaries change ~once a decade, so serve them cache-first (instant, and
+// works offline) and refresh in the background. Precached at install so
+// those layers work offline.
 const GEOMETRY_URLS = [
   "./data/app/school-board-districts.json",
   "./data/app/il-supreme-court-districts.json",
@@ -56,10 +56,11 @@ const ROSTER_URLS = [
   "./data/app/il-senate-members.json",
   "./data/app/il-house-members.json",
   "./data/app/school-board-members.json",
+  "./data/app/congress-roster.json",
   "./data/app/cpd-district-info.json",
   "./data/app/ccpsa-district-councils.json",
-  "./data/app/congress-roster.json",
 ];
+/* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
 
 /* ==== ENGINE:BEGIN sw-handlers ==== */

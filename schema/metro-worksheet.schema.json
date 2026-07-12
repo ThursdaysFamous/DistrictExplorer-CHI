@@ -1,0 +1,224 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chidistricts.com/schema/metro-worksheet.schema.json",
+  "title": "District Explorer metro worksheet",
+  "description": "One per fork (docs/MECHANIZATION_PLAYBOOK.md, Conversion 2). The single machine-readable source every per-fork GENERATED region is emitted from by scripts/generate_metro_files.py. A malformed worksheet fails validation before any file is touched.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "this_metro", "metro_name", "metro_bbox", "metro_center", "permalink_gate",
+    "socrata_host", "socrata_app_token", "repo_issues", "feedback_subject",
+    "metro_explorers", "highlight_class", "poi_pin_class",
+    "hover_number_keys", "hover_name_keys", "layers", "min_register_layer",
+    "anchor_point", "anchors", "negative_point", "data_files", "sw",
+    "data_sources", "workflows", "geocoder", "palette", "domains",
+    "exports_name"
+  ],
+  "properties": {
+    "this_metro": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Key into metro_explorers; drops the fork's own entry from the rendered list." },
+    "metro_name": { "type": "string", "minLength": 1 },
+    "metro_bbox": { "$ref": "#/definitions/bbox" },
+    "metro_center": {
+      "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2,
+      "description": "[lat, lng]"
+    },
+    "permalink_gate": { "$ref": "#/definitions/bbox", "description": "Greater metro area, wider than metro_bbox." },
+    "socrata_host": { "type": "string", "format": "uri" },
+    "socrata_app_token": {
+      "type": "string",
+      "description": "A Socrata app token is a public throttling identifier, not a secret — never put an API Key secret here. Empty string = requests sent anonymous."
+    },
+    "repo_issues": { "type": "string", "format": "uri" },
+    "feedback_subject": { "type": "string" },
+    "metro_explorers": {
+      "type": "array", "minItems": 1,
+      "description": "The fleet list, identical in every fork. Conversion 3 will source this from the canonical fleet manifest (chidistricts.com/metros.json) at generation time; until then it is authored here.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "label", "url", "emoji"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "label": { "type": "string" },
+          "url": { "type": "string", "pattern": "^https://" },
+          "emoji": { "type": "string" },
+          "bbox": { "$ref": "#/definitions/bbox" }
+        }
+      }
+    },
+    "highlight_class": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "poi_pin_class": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "hover_number_keys": { "$ref": "#/definitions/groupedKeys" },
+    "hover_name_keys": { "$ref": "#/definitions/groupedKeys" },
+    "layers": {
+      "type": "array", "minItems": 1,
+      "description": "Every registered layer, in LAYER_AREA_RANK order (largest real-world area first). Drives EXPECT_LAYER_IDS, the index.html LAYER_AREA_RANK array, and the smoke test's layer count.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "label", "group", "area_rank"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "label": { "type": "string" },
+          "group": { "enum": ["political", "safety", "schools", "geography"] },
+          "area_rank": { "type": "integer", "minimum": 1 },
+          "rank_note": { "type": "string", "description": "Inline // comment on the LAYER_AREA_RANK entry." },
+          "rank_comment": {
+            "type": "array", "items": { "type": "string" },
+            "description": "Full-line // comment block emitted immediately before the entry (ordering rationale)."
+          }
+        }
+      }
+    },
+    "min_register_layer": {
+      "type": "integer", "minimum": 1,
+      "description": "validate_index.py floor for the raw registerLayer( count. New layers only raise it."
+    },
+    "layer_count_note": { "type": "string", "description": "Optional inline comment on the smoke test's EXPECT_LAYERS constant." },
+    "anchor_point": { "$ref": "#/definitions/point" },
+    "anchors": {
+      "type": "array", "minItems": 3,
+      "description": ">=3 API-free anchor layers with the district each one must report at anchor_point.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["layer", "expected"],
+        "properties": {
+          "layer": { "type": "string" },
+          "expected": { "type": "string" }
+        }
+      }
+    },
+    "negative_point": { "$ref": "#/definitions/point", "description": "A point where every anchor layer reports no district." },
+    "data_files": {
+      "type": "object", "additionalProperties": false,
+      "required": ["geometry", "rosters"],
+      "properties": {
+        "geometry": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["file", "min_features", "max_features"],
+            "properties": {
+              "file": { "type": "string", "pattern": "\\.json$" },
+              "min_features": { "type": "integer" },
+              "max_features": { "type": "integer" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "rosters": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["file", "min_keys"],
+            "properties": {
+              "file": { "type": "string", "pattern": "\\.json$" },
+              "min_keys": { "type": "integer" },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "sw": {
+      "type": "object", "additionalProperties": false,
+      "required": ["cache_name", "shell_urls"],
+      "properties": {
+        "cache_name": { "type": "string", "description": "Full CACHE_NAME including version suffix; bump the suffix when shell contents change." },
+        "shell_urls": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      }
+    },
+    "data_sources": {
+      "description": "Either a pointer to the fork's machine-checked source registry (preferred — scripts/validate_sources.py already guards manifest<->app drift; a second copy here would just drift against it), or literal registry rows for a fork that has no validator yet.",
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["registry"],
+          "properties": {
+            "registry": { "type": "string" },
+            "note": { "type": "string" }
+          }
+        },
+        {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["id", "layer"],
+            "properties": {
+              "id": { "type": "string" },
+              "layer": { "type": "string" },
+              "kind": { "enum": ["socrata", "shapefile", "arcgis", "tigerweb"] },
+              "vintage": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        }
+      ]
+    },
+    "workflows": {
+      "type": "array", "minItems": 1,
+      "description": "This fork's scraper/builder + freshness workflows with schedules.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["file", "purpose", "schedule"],
+        "properties": {
+          "file": { "type": "string", "pattern": "\\.yml$" },
+          "purpose": { "type": "string" },
+          "schedule": { "type": "string" },
+          "secrets": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "geocoder": {
+      "type": "object", "additionalProperties": false,
+      "required": ["address", "unbounded", "poi"],
+      "description": "Provider names for the three fork-defined functions (geocodeAddress / geocodeUnbounded / poiGeocodeRequest). Descriptive — the provider code itself is fork code by design.",
+      "properties": {
+        "address": { "type": "string" },
+        "unbounded": { "type": "string" },
+        "poi": { "type": "string" }
+      }
+    },
+    "palette": {
+      "type": "object", "additionalProperties": false,
+      "required": ["accent", "accent_deep", "accent_warm", "accent_warm_deep"],
+      "properties": {
+        "accent": { "$ref": "#/definitions/color" },
+        "accent_deep": { "$ref": "#/definitions/color" },
+        "accent_warm": { "$ref": "#/definitions/color" },
+        "accent_warm_deep": { "$ref": "#/definitions/color" }
+      }
+    },
+    "domains": {
+      "type": "object", "additionalProperties": false,
+      "required": ["canonical"],
+      "properties": { "canonical": { "type": "string", "pattern": "^https://" } }
+    },
+    "exports_name": {
+      "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$",
+      "description": "window.<name> debug namespace, twinned with the smoke test."
+    }
+  },
+  "definitions": {
+    "bbox": {
+      "type": "object", "additionalProperties": false,
+      "required": ["minLng", "minLat", "maxLng", "maxLat"],
+      "properties": {
+        "minLng": { "type": "number" }, "minLat": { "type": "number" },
+        "maxLng": { "type": "number" }, "maxLat": { "type": "number" }
+      }
+    },
+    "point": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lat", "lng"],
+      "properties": {
+        "lat": { "type": "number" }, "lng": { "type": "number" },
+        "note": { "type": "string" }
+      }
+    },
+    "groupedKeys": {
+      "type": "array", "minItems": 1,
+      "description": "Array of line-groups: each inner array renders as one source line, preserving the hand-grouped readability of the key lists.",
+      "items": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+    },
+    "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+  }
+}

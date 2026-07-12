@@ -33,9 +33,13 @@ const VENDORED_LEAFLET =
 if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
 
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
+// ==== GENERATED:BEGIN smoke-config ====
 const POINT = "41.88250,-87.62850"; // downtown Loop — inside Cook County
 const OFFLINE = ["school-board", "il-supreme-court", "ccbr"];
+const EXPECT_DISTRICT = { "school-board": "12", "il-supreme-court": "1", "ccbr": "3" };
+const NEGATIVE_POINT = "41.70000,-87.10000"; // Lake Michigan, Indiana waters — outside all three anchor layers
 const EXPECT_LAYERS = 22; // 18 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct
+// ==== GENERATED:END smoke-config ====
 const BOOT_TIMEOUT = 45000; // Leaflet CDN + first paint on a cold CI runner
 const QUERY_TIMEOUT = 25000;
 
@@ -109,7 +113,6 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, `${BASE}#point=${POINT}&layers=${OFFLINE.join(",")}`);
-    const EXPECT_DISTRICT = { "school-board": "12", "il-supreme-court": "1", "ccbr": "3" };
     for (const id of OFFLINE) {
       const info = await cardText(page, id);
       const m = /District\s+(\S+)/i.exec(info.text);
@@ -173,6 +176,23 @@ try {
       toggled.before >= 2 && toggled.afterOff === toggled.before - 1 && toggled.afterOn === toggled.before,
       `before=${toggled.before} afterOff=${toggled.afterOff} afterOn=${toggled.afterOn}`
     );
+    await context.close();
+  }
+
+  // 2b. The negative ground-truth point (from the worksheet: a point outside
+  //     every anchor layer) reports "no district" on each — the honest empty
+  //     state, not an error and not a wrong district.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, `${BASE}#point=${NEGATIVE_POINT}&layers=${OFFLINE.join(",")}`);
+    for (const id of OFFLINE) {
+      const info = await cardText(page, id);
+      check(
+        `${id} reports no district at the negative point`,
+        info.empty && !info.error,
+        info.text.slice(0, 70)
+      );
+    }
     await context.close();
   }
 

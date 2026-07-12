@@ -19,6 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Conversion 2 drift gate (docs/MECHANIZATION_PLAYBOOK.md): every
+      # GENERATED region must match what metro-worksheet.json generates.
+      # Hand-editing a generated region fails here — edit the worksheet and
+      # run scripts/generate_metro_files.py instead.
+      - name: Generated regions match the worksheet
+        run: |
+          pip install -c scripts/requirements.txt jsonschema
+          python3 scripts/generate_metro_files.py --check
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

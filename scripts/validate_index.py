@@ -47,26 +47,28 @@ import subprocess
 import sys
 import tempfile
 
-# Floor, not a moving target: 1 function definition + 9 direct registerLayer()
-# calls + 5 factory bodies (registerSchoolZone / registerCpsNetwork /
-# registerIlgaChamber / registerPolygonLayer / registerNearestPointLayer).
-# New layers only raise this; a drop means modules were lost. (Lowered 16 -> 15
-# when police-station/fire-station moved from direct registerLayer blocks onto
-# the back-ported registerNearestPointLayer factory: -2 direct calls, +1 body.)
+# The constants below are GENERATED from metro-worksheet.json (Conversion 2 —
+# edit the worksheet, run scripts/generate_metro_files.py). Fork history worth
+# keeping by hand: this fork's registerLayer floor arithmetic is 1 function
+# definition + 9 direct registerLayer() calls + 5 factory bodies; it was
+# lowered 16 -> 15 when police-station/fire-station moved onto the
+# registerNearestPointLayer factory (-2 direct calls, +1 body).
+# ==== GENERATED:BEGIN validator-config ====
+# Floor, not a moving target: new layers only raise this; a drop means
+# modules were lost.
 MIN_REGISTER_LAYER = 15
 
-# Every layer id that must be registered in index.html. Because most modules
-# register through the factories (registerPolygonLayer / registerSchoolZone /
-# registerCpsNetwork / registerIlgaChamber / registerNearestPointLayer),
-# deleting a factory-registered layer would NOT lower the raw registerLayer(
-# count above — this per-id list is the direct module-loss guard. Kept in sync
-# with LAYER_AREA_RANK by check 5 below (the two must name the same set).
+# Every layer id that must be registered in index.html. Most modules register
+# through the factories, so deleting one would NOT lower the raw registerLayer(
+# count above — this per-id list is the direct module-loss guard. Emitted in
+# LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "ward", "ward-precinct", "commissioner", "congress", "il-senate", "il-house",
-    "il-supreme-court", "ccbr", "school-board", "ccpsa-district-council",
-    "police-district", "police-beat", "police-station", "fire-station",
-    "school-site", "cps-elementary", "cps-middle", "cps-high", "cps-network",
-    "cps-hs-network", "community-area", "zip-code",
+    "il-supreme-court", "congress", "il-senate", "il-house", "ccbr",
+    "commissioner", "school-board", "cps-hs-network", "cps-network",
+    "ward-precinct", "ward", "police-beat", "police-district",
+    "ccpsa-district-council", "community-area", "zip-code", "cps-high",
+    "cps-middle", "cps-elementary", "school-site", "police-station",
+    "fire-station",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -76,16 +78,16 @@ GEOMETRY_FILES = {
     "ccbr-districts.json": (3, 3),
 }
 
-# file -> minimum key count (officeholder rosters). CPD ships as an empty
-# placeholder until its first scrape lands, so it only has to be a JSON object.
+# file -> minimum key count (officeholder rosters).
 ROSTER_FILES = {
     "il-senate-members.json": 59,
     "il-house-members.json": 118,
     "school-board-members.json": 20,
     "congress-roster.json": 17,
-    "cpd-district-info.json": 0,
+    "cpd-district-info.json": 0,  # ships as an empty placeholder until its first scrape lands
     "ccpsa-district-councils.json": 20,  # 22 councils (13 & 21 retired); floor guards a partial scrape
 }
+# ==== GENERATED:END validator-config ====
 
 
 def fail(msg):
