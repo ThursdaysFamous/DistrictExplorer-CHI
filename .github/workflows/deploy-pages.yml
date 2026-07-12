@@ -68,12 +68,17 @@ jobs:
             --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' --clobber
 
       # The TWO spaces between hash and filename are load-bearing — a single
-      # space (or CRLF) breaks `sha256sum --check` parsing.
+      # space (or CRLF) breaks `sha256sum --check` parsing. The two
+      # --against-bundle lines are the parity checker's demotion (playbook
+      # migration step 4): no longer a cross-fork drift detector, it asserts
+      # post-assembly that the spliced blocks equal the downloaded bundle.
       - name: Verify engine hash, apply, re-run static merge gate
         run: |
           echo "$(jq -r .sha256 engine.lock.json)  engine.bundle.js" | sha256sum --check -
           python3 scripts/apply_engine.py
           python3 scripts/validate_index.py index.html
+          python3 scripts/check_engine_parity.py index.html --against-bundle engine.manifest.json --strict
+          python3 scripts/check_engine_parity.py sw.js --against-bundle engine.manifest.json --strict
 
       - uses: actions/setup-node@v4
         with:
