@@ -1,0 +1,153 @@
+{
+  "this_metro": "chicago",
+  "metro_name": "Chicago",
+  "metro_bbox": { "minLng": -87.94, "minLat": 41.64, "maxLng": -87.52, "maxLat": 42.02 },
+  "metro_center": [41.8781, -87.6298],
+  "permalink_gate": { "minLat": 41, "maxLat": 42.6, "minLng": -88.6, "maxLng": -87 },
+  "socrata_host": "https://data.cityofchicago.org",
+  "socrata_app_token": "",
+  "repo_issues": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new",
+  "feedback_subject": "Chicago District Explorer feedback",
+  "metro_explorers": [
+    { "id": "chicago", "label": "Chicago", "url": "https://chidistricts.com/", "emoji": "🌭",
+      "bbox": { "minLng": -88.6, "minLat": 41.0, "maxLng": -87.0, "maxLat": 42.6 } },
+    { "id": "nyc", "label": "New York City", "url": "https://nyc.chidistricts.com/", "emoji": "🗽",
+      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } }
+  ],
+  "highlight_class": "chi-region-highlight",
+  "poi_pin_class": "chi-poi-pin",
+  "hover_number_keys": [
+    ["ward", "ward_num", "ward_number", "ward_id"],
+    ["district", "dist_num", "dist", "district_number", "district_no"],
+    ["area_numbe", "area_num_1", "area_number", "community_area_number", "area_num"],
+    ["beat_num", "beat", "beat_number", "beat_no"],
+    ["zip", "zip_code", "zipcode", "zcta5ce10"],
+    ["number"]
+  ],
+  "hover_name_keys": [
+    ["community", "community_area_name", "commarea", "comarea"],
+    ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"]
+  ],
+  "layers": [
+    { "id": "il-supreme-court", "label": "IL Supreme Court District", "group": "political", "area_rank": 1,
+      "rank_note": "judicial district — largest" },
+    { "id": "congress", "label": "U.S. House District", "group": "political", "area_rank": 2,
+      "rank_note": "U.S. House district" },
+    { "id": "il-senate", "label": "IL State Senate District", "group": "political", "area_rank": 3,
+      "rank_note": "IL State Senate district" },
+    { "id": "il-house", "label": "IL State House District", "group": "political", "area_rank": 4,
+      "rank_note": "IL State House district" },
+    { "id": "ccbr", "label": "Cook County Board of Review District", "group": "political", "area_rank": 5,
+      "rank_note": "Cook County Board of Review district (only 3, county-wide)" },
+    { "id": "commissioner", "label": "Cook County Commissioner District", "group": "political", "area_rank": 6,
+      "rank_note": "Cook County Commissioner district" },
+    { "id": "school-board", "label": "Elected School Board District", "group": "political", "area_rank": 7,
+      "rank_note": "Elected School Board district (10, citywide)" },
+    { "id": "cps-hs-network", "label": "CPS Network (High School, admin office)", "group": "schools", "area_rank": 8,
+      "rank_note": "CPS High School Network (admin grouping)" },
+    { "id": "cps-network", "label": "CPS Network (K-8, admin office)", "group": "schools", "area_rank": 9,
+      "rank_note": "CPS K-8 Network (admin grouping)" },
+    { "id": "ward-precinct", "label": "Ward Precinct", "group": "political", "area_rank": 10,
+      "rank_note": "Ward Precinct (sub-selection of City Ward)",
+      "rank_comment": [
+        "Same sub-layer rule as beats below: precincts sit just BELOW their parent",
+        "ward so the ward's outline renders on top and frames the precinct fills."
+      ] },
+    { "id": "ward", "label": "City Ward", "group": "political", "area_rank": 11,
+      "rank_note": "City Ward (50)" },
+    { "id": "police-beat", "label": "Police Beat", "group": "safety", "area_rank": 12,
+      "rank_note": "Police Beat (~277)",
+      "rank_comment": [
+        "Deliberately out of pure area order: beats (~277, smaller than a district)",
+        "sit just BELOW their parent district so the district's outline renders on",
+        "top and frames the beat fills — the \"district outline + beats as filler\"",
+        "look the beat sub-selection is for."
+      ] },
+    { "id": "police-district", "label": "Police District", "group": "safety", "area_rank": 13,
+      "rank_note": "Police District (22)" },
+    { "id": "ccpsa-district-council", "label": "CCPSA District Council", "group": "safety", "area_rank": 14,
+      "rank_comment": [
+        "CCPSA District Council shares the police-district geometry exactly (22,",
+        "one council per district); place it just after so its outline draws on",
+        "top when both are on and its distinct teal dash stays legible."
+      ] },
+    { "id": "community-area", "label": "Community Area", "group": "geography", "area_rank": 15,
+      "rank_note": "Community Area (77)" },
+    { "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 16,
+      "rank_note": "ZIP Code" },
+    { "id": "cps-high", "label": "CPS High School Zone", "group": "schools", "area_rank": 17,
+      "rank_note": "High School attendance zone" },
+    { "id": "cps-middle", "label": "CPS Middle School Zone", "group": "schools", "area_rank": 18,
+      "rank_note": "Middle School attendance zone" },
+    { "id": "cps-elementary", "label": "CPS Elementary School Zone", "group": "schools", "area_rank": 19,
+      "rank_note": "Elementary School attendance zone — smallest polygon layer" },
+    { "id": "school-site", "label": "School Location (all, incl. private, nearest N)", "group": "schools", "area_rank": 20,
+      "rank_note": "individual school-campus footprints — smallest polygons, above the zones" },
+    { "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 21,
+      "rank_note": "point marker — no polygon area, always topmost" },
+    { "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 22,
+      "rank_note": "point marker — no polygon area, always topmost" }
+  ],
+  "min_register_layer": 15,
+  "layer_count_note": "18 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct",
+  "anchor_point": { "lat": 41.8825, "lng": -87.6285, "note": "downtown Loop — inside Cook County" },
+  "anchors": [
+    { "layer": "school-board", "expected": "12" },
+    { "layer": "il-supreme-court", "expected": "1" },
+    { "layer": "ccbr", "expected": "3" }
+  ],
+  "negative_point": { "lat": 41.7, "lng": -87.1, "note": "Lake Michigan, Indiana waters — outside all three anchor layers" },
+  "data_files": {
+    "geometry": [
+      { "file": "school-board-districts.json", "min_features": 20, "max_features": 20 },
+      { "file": "il-supreme-court-districts.json", "min_features": 5, "max_features": 5 },
+      { "file": "ccbr-districts.json", "min_features": 3, "max_features": 3 }
+    ],
+    "rosters": [
+      { "file": "il-senate-members.json", "min_keys": 59 },
+      { "file": "il-house-members.json", "min_keys": 118 },
+      { "file": "school-board-members.json", "min_keys": 20 },
+      { "file": "congress-roster.json", "min_keys": 17 },
+      { "file": "cpd-district-info.json", "min_keys": 0,
+        "note": "ships as an empty placeholder until its first scrape lands" },
+      { "file": "ccpsa-district-councils.json", "min_keys": 20,
+        "note": "22 councils (13 & 21 retired); floor guards a partial scrape" }
+    ]
+  },
+  "sw": {
+    "cache_name": "district-explorer-shell-v5",
+    "shell_urls": [
+      "./",
+      "./manifest.webmanifest",
+      "./icons/icon-192.png",
+      "./icons/icon-512.png",
+      "./icons/water-taxi.png",
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css",
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+    ]
+  },
+  "data_sources": {
+    "registry": "scripts/validate_sources.py",
+    "note": "The machine-checked source manifest (Socrata ids, shapefile provenance, live endpoints, year-search patterns) lives in the freshness gate, which already guards manifest<->app drift monthly. A second copy here would drift against it."
+  },
+  "workflows": [
+    { "file": "update-ilga-roster.yml", "purpose": "IL Senate + House rosters (ilga.gov scrape)", "schedule": "Mon 13:00 UTC" },
+    { "file": "update-congress-roster.yml", "purpose": "U.S. House roster (unitedstates/congress-legislators)", "schedule": "Mon 13:00 UTC" },
+    { "file": "update-cpd-roster.yml", "purpose": "CPD district info (Cloudflare-challenged scrape via Playwright)", "schedule": "Tue 13:00 UTC" },
+    { "file": "update-ccpsa-roster.yml", "purpose": "CCPSA district council rosters", "schedule": "Wed 13:00 UTC" },
+    { "file": "validate-sources.yml", "purpose": "source freshness + redistricting watch (opens/updates one tracking issue)", "schedule": "1st of month 14:00 UTC" }
+  ],
+  "geocoder": {
+    "address": "Photon (Chicago-bounded type-ahead)",
+    "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
+    "poi": "Nominatim (office-address pin lookup, serial >=1s queue)"
+  },
+  "palette": {
+    "accent": "#41B6E6",
+    "accent_deep": "#0B5394",
+    "accent_warm": "#C8102E",
+    "accent_warm_deep": "#9C0B24"
+  },
+  "domains": { "canonical": "https://chidistricts.com/" },
+  "exports_name": "ChiExplorer"
+}

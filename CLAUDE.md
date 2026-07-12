@@ -8,6 +8,18 @@ Chicago District Explorer: a single-file, dependency-light web app. Click a poin
 
 **There is no build step, no framework, and no server-side code.** The entire app — styles, core, and all layer modules — lives inline in `index.html` (~5,000 lines). `sw.js` is the service worker; `data/app/*.json` are runtime-fetched data files. Everything else is data pipeline, scrapers, or CI.
 
+<!-- ==== GENERATED:BEGIN metro-facts ==== -->
+**Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
+`python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
+
+- Metro: Chicago (`chicago`) — https://chidistricts.com/
+- Geocoders: address Photon (Chicago-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, serial >=1s queue)
+- Ground truth: 41.88250,-87.62850 (downtown Loop — inside Cook County) → school-board 12; il-supreme-court 1; ccbr 3. Negative point 41.70000,-87.10000 (Lake Michigan, Indiana waters — outside all three anchor layers).
+- Layers: 22 registered (political 9, safety 5, schools 6, geography 2); `registerLayer(` floor 15. Debug namespace `window.ChiExplorer`.
+- Scheduled workflows: `update-ilga-roster.yml` (Mon 13:00 UTC); `update-congress-roster.yml` (Mon 13:00 UTC); `update-cpd-roster.yml` (Tue 13:00 UTC); `update-ccpsa-roster.yml` (Wed 13:00 UTC); `validate-sources.yml` (1st of month 14:00 UTC).
+- Source registry: `scripts/validate_sources.py` (machine-checked monthly)
+<!-- ==== GENERATED:END metro-facts ==== -->
+
 ## Running & testing
 
 ```bash
@@ -20,6 +32,14 @@ BASE_URL=http://localhost:8000/ node scripts/smoke_test.mjs   # serve first, the
 
 # Static gate (run after any data/app regeneration or app edit):
 python3 scripts/validate_index.py index.html
+
+# Generated-region gate (Conversion 2): per-fork facts live ONCE in
+# metro-worksheet.json; GENERATED:BEGIN/END regions in index.html, sw.js,
+# validate_index.py, smoke_test.mjs, CLAUDE.md, and README.md are emitted from
+# it. NEVER hand-edit a GENERATED region — edit the worksheet and regenerate:
+pip install -c scripts/requirements.txt jsonschema
+python3 scripts/generate_metro_files.py            # regenerate in place
+python3 scripts/generate_metro_files.py --check    # the CI drift gate
 
 # Source-freshness gate (checks upstream datasets haven't gone stale):
 pip install -c scripts/requirements.txt requests
