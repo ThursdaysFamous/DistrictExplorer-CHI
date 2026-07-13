@@ -4,7 +4,68 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Chicago District Explorer — find your districts &amp; representatives</title>
-<meta name="description" content="Click any point in Chicago, or search an address, to see every civic district that contains it and who represents it." />
+<meta name="description" content="Find your Chicago ward, police district, community area, congressional and state legislative districts, school zones, and more — plus who represents you." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://chidistricts.com/" />
+
+<!-- Open Graph / social share previews (Facebook, LinkedIn, iMessage, Slack…) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Chicago District Explorer" />
+<meta property="og:title" content="Chicago District Explorer — find your districts and representatives" />
+<meta property="og:description" content="Click the map or search any Chicago address to see every civic district that covers it — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
+<meta property="og:url" content="https://chidistricts.com/" />
+<meta property="og:image" content="https://chidistricts.com/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Chicago District Explorer — a map of Chicago with the question: which districts cover this point, and who represents you?" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Chicago District Explorer — find your districts and representatives" />
+<meta name="twitter:description" content="See every civic district that covers a Chicago address — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
+<meta name="twitter:image" content="https://chidistricts.com/og-image.png" />
+
+<!-- Structured data: help search engines understand what this tool is -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://chidistricts.com/#website",
+      "url": "https://chidistricts.com/",
+      "name": "Chicago District Explorer",
+      "description": "Find every civic district that covers a point or address in Chicago, and who represents you there.",
+      "inLanguage": "en-US",
+      "publisher": { "@id": "https://chidistricts.com/#publisher" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://chidistricts.com/#publisher",
+      "name": "Overberg",
+      "url": "https://overberg.co"
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Chicago District Explorer",
+      "url": "https://chidistricts.com/",
+      "description": "Click any point in Chicago, or search an address, to see every civic district that contains it — ward, police district and beat, community area, U.S. House and Illinois legislative districts, Cook County commissioner and Board of Review, elected school board district, and CPS attendance zones — and who represents you.",
+      "applicationCategory": "Reference",
+      "operatingSystem": "Any (modern web browser)",
+      "browserRequirements": "Requires JavaScript",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "inLanguage": "en-US",
+      "image": "https://chidistricts.com/og-image.png",
+      "areaServed": { "@type": "City", "name": "Chicago", "containedInPlace": { "@type": "State", "name": "Illinois" } },
+      "keywords": "Chicago ward map, what ward am I in, Chicago police district, Chicago community area, congressional district, Illinois legislative district, Cook County commissioner, elected school board district, CPS attendance zone, who represents me Chicago",
+      "isPartOf": { "@id": "https://chidistricts.com/#website" },
+      "sameAs": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI"
+    }
+  ]
+}
+</script>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b3d91">
 
@@ -935,6 +996,10 @@
     transition: filter 120ms ease-out;
   }
   .chi-poi-pin { background: none; border: none; }
+  /* Chicago-specific: the SEO/orientation lede under the empty-state prompt —
+     the district vocabulary a first-time (or crawling) visitor reads before a
+     point is picked. Styled a step down from the primary prompt above it. */
+  .empty-state .empty-state-lede { font-size: 12.5px; margin-top: 12px; max-width: 40ch; color: var(--slate-soft); }
   /* ==== ENGINE:BEGIN styles-hover-responsive ==== */
 
   /* ---- hover explorer: a live popup that follows the cursor and names the
@@ -1093,6 +1158,7 @@
       </svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
+      <p class="empty-state-lede">See your ward, police district and beat, community area, congressional and Illinois legislative districts, Cook County commissioner, elected school board district, and CPS school zones — plus who represents you.</p>
     </div>
     <div id="groups-root" hidden></div>
   </section>
