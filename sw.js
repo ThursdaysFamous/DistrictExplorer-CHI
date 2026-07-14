@@ -27,7 +27,7 @@
 // roster files missing from ROSTER_URLS; -v5 added the water-taxi marker
 // icon shown when a point lands on water.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v5";
+const CACHE_NAME = "district-explorer-shell-v7";
 
 const SHELL_URLS = [
   "./",
@@ -47,6 +47,7 @@ const GEOMETRY_URLS = [
   "./data/app/school-board-districts.json",
   "./data/app/il-supreme-court-districts.json",
   "./data/app/ccbr-districts.json",
+  "./data/app/will-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -59,6 +60,7 @@ const ROSTER_URLS = [
   "./data/app/congress-roster.json",
   "./data/app/cpd-district-info.json",
   "./data/app/ccpsa-district-councils.json",
+  "./data/app/will-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

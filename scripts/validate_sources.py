@@ -139,6 +139,14 @@ ENDPOINTS = [
      "url": "https://services2.arcgis.com/t3tlzCPfmaQzSWAk/arcgis/rest/services/Schools/FeatureServer/0?f=json"},
     {"layer": "Census TIGERweb legislative districts",
      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer?f=json"},
+    {"layer": "Census TIGERweb counties (statewide county layer)",
+     "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer?f=json"},
+    {"layer": "Census TIGERweb county subdivisions + places (township/municipality layers)",
+     "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer?f=json"},
+    {"layer": "Census TIGERweb school districts (unified/secondary/elementary layers)",
+     "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer?f=json"},
+    {"layer": "Will County Board districts 2022 (current 11-district map + reps)",
+     "url": "https://services.arcgis.com/fGsbyIOAuxHnF97m/arcgis/rest/services/County_Board_Districts_2022/FeatureServer/0?f=json"},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

@@ -85,12 +85,15 @@ MIN_REGISTER_LAYER = 15
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "il-supreme-court", "congress", "il-senate", "il-house", "ccbr",
-    "commissioner", "school-board", "cps-hs-network", "cps-network",
-    "ward-precinct", "ward", "police-beat", "police-district",
+    "il-supreme-court", "congress", "il-senate", "il-house", "county",
+    "school-district-secondary", "school-district-unified",
+    "school-district-elementary", "township", "municipality",
+    "will-county-judicial", "will-county-board", "ccbr", "commissioner",
+    "will-county-fire", "will-county-park", "school-board", "cps-hs-network",
+    "cps-network", "ward-precinct", "ward", "police-beat", "police-district",
     "ccpsa-district-council", "community-area", "zip-code", "cps-high",
-    "cps-middle", "cps-elementary", "school-site", "police-station",
-    "fire-station",
+    "cps-middle", "will-county-precinct", "cps-elementary", "school-site",
+    "police-station", "fire-station",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -98,6 +101,7 @@ GEOMETRY_FILES = {
     "school-board-districts.json": (20, 20),
     "il-supreme-court-districts.json": (5, 5),
     "ccbr-districts.json": (3, 3),
+    "will-county-outline.json": (1, 1),
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -108,6 +112,7 @@ ROSTER_FILES = {
     "congress-roster.json": 17,
     "cpd-district-info.json": 0,  # ships as an empty placeholder until its first scrape lands
     "ccpsa-district-councils.json": 20,  # 22 councils (13 & 21 retired); floor guards a partial scrape
+    "will-county-board-members.json": 11,  # 11 board districts (2 members each) scraped weekly from willcountyboard.com
 }
 # ==== GENERATED:END validator-config ====
 
