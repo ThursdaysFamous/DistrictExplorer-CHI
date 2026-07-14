@@ -275,7 +275,25 @@ identity and accept the mismatch. This is a product call, not a technical blocke
   scope-mask loader (grep `drawOutOfScopeMask`) to a 102-county `STATE='17'` loader so the engine
   dissolve (grep `coverageOutlineRings`) washes only genuinely-outside-Illinois. Result: the four
   already-statewide layers resolve for any IL point. Ships as a preview immediately (no engine bytes).
-- **Phase 1 — relevance-hiding + statewide identity layers.** Land Track 1 (the `mod.coverage`
+- **Phase 1 — relevance-hiding + statewide identity layers.**
+  > **STATUS — Track 1 PROTOTYPED (July 2026, this branch).** The `mod.coverage` hide-only capability
+  > is implemented and verified: engine side in the `layer-registry`/`overlay-cards` fences (grep
+  > `layerRelevance`, `setLayerRelevant`, `refreshLayerBlockHidden`, `refreshGroupVisibility`,
+  > `runLayerQueryAt`) plus `coverage: opts.coverage` passthrough in the polygon / nearest-point /
+  > school-zone / cps-network factories; fork side via `chicagoCoverage` / `cookCountyCoverage` (grep
+  > either) declared on the 16 Chicago-only + 2 Cook-only layers. The smoke test's negative-point
+  > checks now assert hide + permalink stability for coverage-declaring anchors. **Ship path:** these
+  > engine-fence edits reach production only through an engine release — deploy splices the pinned
+  > `engine.lock.json` version over the fences. Merging without cutting the release does NOT fail
+  > silently: the deploy's post-assembly smoke test (whose negative-point checks assert the hide
+  > behavior the reverted engine can't produce) goes red and blocks the deploy until the release
+  > lands and the lockfile is bumped. Order therefore: cut `engine-v*` (the smoke-test edit must
+  > ride in the same merge as the lock bump, not before it) → let the bump PR fan out to NYC
+  > (byte-identical there — NYC declares no coverage) → merge. Known deliberate carve-outs, for the
+  > release-hardening pass: no polite-status announcement for AT when layers hide (focus is
+  > released, but the hide itself is silent), and an overlay fetched by an earlier toggle-on is
+  > detached rather than its download skipped.
+  Land Track 1 (the `mod.coverage`
   hide-only capability) via the engine-release pipeline; declare `coverage` on the 16 Chicago-only + 2
   Cook-only layers (they hide outside their areas) and `emptyLabel` where a null is structural. Add the
   FREE TIGER layers (county, township/MCD, municipality/place, school districts ×3) + the derived

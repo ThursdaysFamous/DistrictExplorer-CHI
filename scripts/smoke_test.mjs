@@ -40,6 +40,13 @@ const EXPECT_DISTRICT = { "school-board": "12", "il-supreme-court": "1", "ccbr":
 const NEGATIVE_POINT = "41.70000,-87.10000"; // Lake Michigan, Indiana waters — outside all three anchor layers
 const EXPECT_LAYERS = 22; // 18 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct
 // ==== GENERATED:END smoke-config ====
+// Anchor layers that declare a location-relevance test (mod.coverage) HIDE at
+// an out-of-coverage point instead of reporting an empty card — this list
+// mirrors the fork's coverage declarations in index.html (school-board is
+// Chicago-scoped via chicagoCoverage; ccbr is Cook-scoped via
+// cookCountyCoverage). il-supreme-court declares none and keeps the honest
+// "no district here" empty state at the negative point.
+const NEGATIVE_HIDDEN = ["school-board", "ccbr"];
 const BOOT_TIMEOUT = 45000; // Leaflet CDN + first paint on a cold CI runner
 const QUERY_TIMEOUT = 25000;
 
@@ -180,18 +187,51 @@ try {
   }
 
   // 2b. The negative ground-truth point (from the worksheet: a point outside
-  //     every anchor layer) reports "no district" on each — the honest empty
-  //     state, not an error and not a wrong district.
+  //     every anchor layer). Anchors that declare a location-relevance test
+  //     (mod.coverage — see NEGATIVE_HIDDEN above) HIDE there: the toggle
+  //     block is suppressed, the query is skipped, and the layers= permalink
+  //     is left intact (hide-only — state.layersOn is never mutated). Anchors
+  //     without a coverage test keep the honest empty state — "no district
+  //     here" as a statement of fact, not an error and not a wrong district.
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
-    const page = await booted(context, `${BASE}#point=${NEGATIVE_POINT}&layers=${OFFLINE.join(",")}`);
+    // chicagoCoverage's fallback leg consults the community-area dataset
+    // (Socrata) after an ERSB miss. On a black-holed network (the sandboxed
+    // dev env) that rejection is slow — through the loader's route retries —
+    // which stalls the hide verdict past this check's wait. Abort it so the
+    // fallback's own catch ("stand on the first tiling's verdict") runs
+    // deterministically fast in every environment; the verdict here is
+    // identical either way — the negative point is outside both tilings.
+    const page = await booted(context, `${BASE}#point=${NEGATIVE_POINT}&layers=${OFFLINE.join(",")}`, async (p) => {
+      await p.route("**data.cityofchicago.org**", (r) => r.abort());
+    });
     for (const id of OFFLINE) {
-      const info = await cardText(page, id);
-      check(
-        `${id} reports no district at the negative point`,
-        info.empty && !info.error,
-        info.text.slice(0, 70)
-      );
+      if (NEGATIVE_HIDDEN.includes(id)) {
+        const hidden = await page
+          .waitForFunction((cid) => {
+            const box = document.getElementById("toggle-" + cid);
+            const block = box && box.closest(".layer-block");
+            return block && block.hidden === true;
+          }, id, { timeout: QUERY_TIMEOUT })
+          .then(() => true, () => false);
+        const hashKeepsLayer = await page.evaluate((cid) => location.hash.includes(cid), id);
+        // assert the invariant directly, not just its hash reflection: hide
+        // must never mutate state.layersOn (that's what keeps permalinks and
+        // reappear-on-return working)
+        const stillOn = await page.evaluate((cid) => window.ChiExplorer.state.layersOn[cid] === true, id);
+        check(
+          `${id} hides at the negative point (out of coverage, permalink intact)`,
+          hidden && hashKeepsLayer && stillOn,
+          `hidden=${hidden} permalink=${hashKeepsLayer} layersOn=${stillOn}`
+        );
+      } else {
+        const info = await cardText(page, id);
+        check(
+          `${id} reports no district at the negative point`,
+          info.empty && !info.error,
+          info.text.slice(0, 70)
+        );
+      }
     }
     await context.close();
   }
