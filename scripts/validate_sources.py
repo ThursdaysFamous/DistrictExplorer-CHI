@@ -145,6 +145,8 @@ ENDPOINTS = [
      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer?f=json"},
     {"layer": "Census TIGERweb school districts (unified/secondary/elementary layers)",
      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer?f=json"},
+    {"layer": "Will County Board districts 2022 (current 11-district map + reps)",
+     "url": "https://services.arcgis.com/fGsbyIOAuxHnF97m/arcgis/rest/services/County_Board_Districts_2022/FeatureServer/0?f=json"},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

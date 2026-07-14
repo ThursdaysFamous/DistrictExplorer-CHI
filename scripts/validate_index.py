@@ -87,12 +87,12 @@ MIN_REGISTER_LAYER = 15
 EXPECT_LAYER_IDS = [
     "il-supreme-court", "congress", "il-senate", "il-house", "county",
     "school-district-secondary", "school-district-unified",
-    "school-district-elementary", "township", "municipality", "ccbr",
-    "commissioner", "school-board", "cps-hs-network", "cps-network",
-    "ward-precinct", "ward", "police-beat", "police-district",
-    "ccpsa-district-council", "community-area", "zip-code", "cps-high",
-    "cps-middle", "cps-elementary", "school-site", "police-station",
-    "fire-station",
+    "school-district-elementary", "township", "municipality",
+    "will-county-board", "ccbr", "commissioner", "school-board",
+    "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat",
+    "police-district", "ccpsa-district-council", "community-area", "zip-code",
+    "cps-high", "cps-middle", "cps-elementary", "school-site",
+    "police-station", "fire-station",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.

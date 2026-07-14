@@ -2615,6 +2615,7 @@
     "school-district-elementary", // IL elementary school district (371 statewide)
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
+    "will-county-board", // Will County Board district (11, current Board-Approved-11/2/21 map; live from county GIS, coverage-gated to Will County)
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "commissioner",      // Cook County Commissioner district
     "school-board",      // Elected School Board district (10, citywide)
@@ -4053,6 +4054,63 @@
     fields: [
       { name: "name", label: "District", keys: ["name"], primary: true },
       { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ]
+  });
+
+  /* =========================================================================
+   * WILL COUNTY — per-county layers (first of the collar-county rollout).
+   * These declare coverage so they HIDE outside Will County (mod.coverage),
+   * the intended per-county use of the relevance capability: a Chicago or
+   * downstate click never sees a Will County toggle.
+   *
+   * Coverage is a cheap bounding-box test (the county's exact extent, from
+   * its own board-district geometry). A bbox strictly CONTAINS the county, so
+   * it can only ever over-show (an honest empty card at a corner just outside
+   * the county line) — never false-hide, which is the only direction that
+   * would violate the honesty rules. It's synchronous, so deciding a toggle's
+   * visibility costs no remote fetch. (When more Will County layers land, a
+   * single same-origin county-outline file — the Chicago-tiling pattern —
+   * becomes the shared, exact upgrade.)
+   * ======================================================================= */
+  var WILL_COUNTY_BBOX = { minLng: -88.27, minLat: 41.19, maxLng: -87.52, maxLat: 41.74 };
+  function willCountyCoverage(point) {
+    return point.lng >= WILL_COUNTY_BBOX.minLng && point.lng <= WILL_COUNTY_BBOX.maxLng &&
+           point.lat >= WILL_COUNTY_BBOX.minLat && point.lat <= WILL_COUNTY_BBOX.maxLat;
+  }
+
+  // Will County Board districts — the current 11-district map "Board Approved
+  // 11/2/21" (the 2020-Census redistricting; the older 13-district service is
+  // superseded). Live from the county's own maintained GIS (edited 2025-04),
+  // board-member names joined from the same features — the Cook `commissioner`
+  // live-officeholder pattern. Verified 2026-07: 11 features, Homer Glen -> D4.
+  var loadWillCountyBoard = makeCached(function () {
+    var url = "https://services.arcgis.com/fGsbyIOAuxHnF97m/arcgis/rest/services/" +
+      "County_Board_Districts_2022/FeatureServer/0/query?where=1%3D1" +
+      "&outFields=CTY_BRD_NUMBER,REPRESENTATIVE1,REPRESENTATIVE2&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Will County Board service returned no usable geometry");
+        return geojson;
+      });
+  });
+
+  registerPolygonLayer({
+    id: "will-county-board",
+    group: "political",
+    label: "Will County Board District",
+    coverage: willCountyCoverage,
+    loader: loadWillCountyBoard,
+    style: { color: "#1F6FB2", weight: 2, fillColor: "#3B8FD4", fillOpacity: 0.05, dashArray: "9 3 3 3" },
+    fields: [
+      { name: "district", label: "District", keys: ["cty_brd_number"], primary: true },
+      // two members per district; names live in the boundary features and are
+      // rendered via textContent by the factory, so external text is safe
+      { name: "member1", label: "Board Member", keys: ["representative1"] },
+      { name: "member2", label: "Board Member", keys: ["representative2"] },
+      // honest backstop + the richer roster's home (contact/committees): the
+      // board's official member directory, the planned scraper's source
+      { label: "Official directory",
+        html: '<a href="https://www.willcountyboard.com/board-members.html" target="_blank" rel="noopener">Will County Board members (official)</a>' }
     ]
   });
 
