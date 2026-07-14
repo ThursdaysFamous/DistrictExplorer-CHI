@@ -1293,10 +1293,10 @@
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -87.94, minLat: 41.64, maxLng: -87.52, maxLat: 42.02 };
+  var METRO_BBOX = { minLng: -88.6, minLat: 41.0, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 41, maxLat: 42.6, minLng: -88.6, maxLng: -87 };
+  var PERMALINK_GATE = { minLat: 40.8, maxLat: 42.7, minLng: -88.8, maxLng: -86.9 };
   var SOCRATA_HOST = "https://data.cityofchicago.org";
   // Socrata app token: some metros' portals throttle anonymous requests. It is
   // a throttling identifier, not a secret — public exposure is Socrata's
@@ -2609,6 +2609,12 @@
     "congress",          // U.S. House district
     "il-senate",         // IL State Senate district
     "il-house",          // IL State House district
+    "county",            // IL county (102 statewide; TIGERweb, live-verified 2026-07)
+    "school-district-secondary", // IL secondary school district (105 statewide; only where elem/HS pairs exist)
+    "school-district-unified", // IL unified school district (387 statewide incl. CPS as SD 299)
+    "school-district-elementary", // IL elementary school district (371 statewide)
+    "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
+    "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "commissioner",      // Cook County Commissioner district
     "school-board",      // Elected School Board district (10, citywide)
@@ -3913,6 +3919,142 @@
       }, function () { return false; });
     });
   }
+
+  /* =========================================================================
+   * STATEWIDE ILLINOIS — LOCAL GOVERNMENT (Census TIGERweb)
+   * Six identity layers that resolve for ANY Illinois point — county,
+   * township/county-subdivision, municipality, and the three school-district
+   * tilings — from the same TIGERweb STATE='17' pattern the legislative
+   * layers use. Live-verified 2026-07 (layer indices, field names, feature
+   * counts, and a Homer Glen / Will County ground truth: Will County, Homer
+   * township, Homer Glen village, Lockport Twp HSD 205, Homer CCSD 33C, no
+   * unified district). Identity + geometry only — officeholder joins need a
+   * verifiable statewide roster, which none of these bodies publish; per the
+   * honesty rules the cards name the district, never a guessed official.
+   * These layers declare NO coverage (statewide is this app's whole map), so
+   * outside Illinois they report the honest "No result for this point." —
+   * same behavior as il-supreme-court at the negative ground-truth point.
+   * Payload note: statewide boundary sets are heavy (county 3.5 MB … township
+   * 14.5 MB at geometryPrecision=5, measured 2026-07); they lazy-load on
+   * first toggle and cache for the session, matching every other layer.
+   * ======================================================================= */
+  function loadTigerStatewide(service, layerIndex, outFields, label) {
+    // Mirrors the legislative TIGER loader: trimmed outFields (statewide sets
+    // are an order of magnitude larger than the 118-district SLDL payload,
+    // so outFields=* is off the table), geometryPrecision=5 (~1 m), and the
+    // same no-usable-geometry guard so an Esri 200-with-error-envelope never
+    // gets pinned in the session cache.
+    var where = encodeURIComponent("STATE='17'");
+    var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/" + service +
+      "/MapServer/" + layerIndex + "/query?where=" + where + "&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadIlCounties = makeCached(function () {
+    return loadTigerStatewide("State_County", 1, "GEOID,NAME,BASENAME,STATE,LSADC", "counties");
+  });
+  var loadIlTownships = makeCached(function () {
+    return loadTigerStatewide("Places_CouSub_ConCity_SubMCD", 1, "GEOID,NAME,BASENAME,STATE,COUNTY,LSADC", "county subdivisions");
+  });
+  var loadIlPlaces = makeCached(function () {
+    return loadTigerStatewide("Places_CouSub_ConCity_SubMCD", 4, "GEOID,NAME,BASENAME,STATE,LSADC", "incorporated places");
+  });
+  var loadIlSchoolUnified = makeCached(function () {
+    return loadTigerStatewide("School", 0, "GEOID,NAME,STATE", "unified school districts");
+  });
+  var loadIlSchoolSecondary = makeCached(function () {
+    return loadTigerStatewide("School", 1, "GEOID,NAME,STATE", "secondary school districts");
+  });
+  var loadIlSchoolElementary = makeCached(function () {
+    return loadTigerStatewide("School", 2, "GEOID,NAME,STATE", "elementary school districts");
+  });
+
+  registerPolygonLayer({
+    id: "county",
+    group: "geography",
+    label: "County",
+    loader: loadIlCounties,
+    // solid, slightly heavier stroke — the broadest local boundary on the map
+    style: { color: "#444B54", weight: 2, fillColor: "#6B7280", fillOpacity: 0.04 },
+    fields: [
+      { name: "name", label: "County", keys: ["name"], primary: true },
+      { name: "geoid", label: "FIPS", keys: ["geoid"] }
+    ]
+  });
+
+  registerPolygonLayer({
+    id: "township",
+    group: "geography",
+    label: "Township / County Subdivision",
+    loader: loadIlTownships,
+    // long-dash brown — reads apart from Community Area's short green dash
+    style: { color: "#7A5C3E", weight: 1.5, fillColor: "#A98B6C", fillOpacity: 0.05, dashArray: "7 3" },
+    fields: [
+      // TIGER NAME already carries the honest civil-division type suffix
+      // ("Homer township", "Chicago city") — 17 of 102 counties have no
+      // township government and subdivide as precincts/cities instead,
+      // which is why the layer label says "County Subdivision" too.
+      { name: "name", label: "Subdivision", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ]
+  });
+
+  registerPolygonLayer({
+    id: "municipality",
+    group: "geography",
+    label: "Municipality",
+    loader: loadIlPlaces,
+    // tight magenta dots; an empty card here honestly means "unincorporated"
+    style: { color: "#B0316E", weight: 1.5, fillColor: "#D06A9C", fillOpacity: 0.05, dashArray: "2 3" },
+    fields: [
+      { name: "name", label: "Municipality", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ]
+  });
+
+  registerPolygonLayer({
+    id: "school-district-unified",
+    group: "schools",
+    label: "Unified School District",
+    loader: loadIlSchoolUnified,
+    style: { color: "#2F6B3A", weight: 1.5, fillColor: "#4C8F59", fillOpacity: 0.05, dashArray: "8 3" },
+    fields: [
+      // Unified (K-12) districts and the elementary+secondary pairs tile
+      // mutually exclusive territory: exactly one of this card and the
+      // elementary/high-school pair below resolves for any Illinois point
+      // (CPS appears here as "Chicago Public School District 299").
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ]
+  });
+
+  registerPolygonLayer({
+    id: "school-district-secondary",
+    group: "schools",
+    label: "High School District",
+    loader: loadIlSchoolSecondary,
+    style: { color: "#5E3A8C", weight: 1.5, fillColor: "#8163AE", fillOpacity: 0.05, dashArray: "10 4" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ]
+  });
+
+  registerPolygonLayer({
+    id: "school-district-elementary",
+    group: "schools",
+    label: "Elementary School District",
+    loader: loadIlSchoolElementary,
+    style: { color: "#B26A00", weight: 1.5, fillColor: "#D19133", fillOpacity: 0.05, dashArray: "3 3" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ]
+  });
 
   /* ---------- Community Area ---------- */
   var loadCommunityAreas = makeCachedLoader("igwz-8jzy");

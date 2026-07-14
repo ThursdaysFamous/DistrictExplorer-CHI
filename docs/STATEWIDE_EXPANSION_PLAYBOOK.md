@@ -293,6 +293,29 @@ identity and accept the mismatch. This is a product call, not a technical blocke
   > release-hardening pass: no polite-status announcement for AT when layers hide (focus is
   > released, but the hide itself is silent), and an overlay fetched by an earlier toggle-on is
   > detached rather than its download skipped.
+  > **STATUS — Phase 1 identity layers SHIPPED (July 2026, engine untouched — bundle byte-identical
+  > to the `engine-v1.0.4` pin).** Six statewide TIGERweb layers are live, worksheet-driven
+  > (`metro-worksheet.json` layers[], ranks 5–10) and live-verified against a Homer Glen / Will County
+  > ground truth (Will County; Homer township; Homer Glen village; Lockport Twp HSD 205; Homer CCSD
+  > 33C; no unified district — and Loop: Cook County, Chicago city, Chicago Public School District
+  > 299): `county`, `township` (county subdivisions — 17 commission counties subdivide as
+  > precincts/cities, hence the dual label), `municipality` (empty card = unincorporated),
+  > `school-district-{unified,secondary,elementary}` (grep `loadTigerStatewide`). Identity + geometry
+  > only — no officeholder joins exist statewide, so cards name the district and invent nothing.
+  > The geocoder/permalink shell widened to the greater metro (`metro_bbox` = collar counties + Will;
+  > full-state bbox and the METRO_NAME/brand copy audit belong to the rebrand pass — several strings
+  > compose as "the {METRO_NAME} District Explorer"). The scope-mask wash still marks the city edge
+  > deliberately: it flags where *deep* coverage ends, and regional layers resolve under it.
+  >
+  > **Deferred with structural reasons (Phase 2, per the drop-record convention):**
+  > - `will-county-board` — live service FOUND (`services.arcgis.com/fGsbyIOAuxHnF97m/…/CountyBoard`,
+  >   13 districts, REPRESENTATIVE1/2 fields) but its `lastEditDate` is **2021-02-23**: the
+  >   pre-2022-redistricting 13-district/26-member map, and the named reps could not be confirmed
+  >   against the county's current board page. Shipping it would pin wrong districts AND wrong
+  >   officeholders. Needs the county's current-map service or human confirmation first.
+  > - `judicial-circuit` — the DERIVE table (county→circuit, 705 ILCS 35/2) could not be fetched from
+  >   an authoritative machine-readable source (ilga.gov 403s the fetch; illinoiscourts.gov is
+  >   JS-rendered). Hand-encoding 102 county mappings from memory violates the never-guess rule.
   Land Track 1 (the `mod.coverage`
   hide-only capability) via the engine-release pipeline; declare `coverage` on the 16 Chicago-only + 2
   Cook-only layers (they hide outside their areas) and `emptyLabel` where a null is structural. Add the
