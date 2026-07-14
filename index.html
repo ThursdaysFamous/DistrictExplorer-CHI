@@ -2639,7 +2639,7 @@
     // top when both are on and its distinct teal dash stays legible.
     "ccpsa-district-council",
     "community-area",    // Community Area (77)
-    "zip-code",          // ZIP Code
+    "zip-code",          // ZIP Code (statewide Census ZCTA; ZCTA ≈ USPS ZIP)
     "cps-high",          // High School attendance zone
     "cps-middle",        // Middle School attendance zone
     "will-county-precinct", // Will County voting precinct (310; current 2022 map Precincts_2022, coverage-gated)
@@ -4291,22 +4291,42 @@
     ]
   });
 
-  /* ---------- ZIP Code ---------- */
-  // portal page is Boundaries - ZIP Codes (gdcf-axmw), but that dataset's
-  // /resource/{id}.geojson route returns null geometry; the underlying
-  // view id unjd-c2ca serves the same data with real geometry
-  var loadZipCodes = makeCachedLoader("unjd-c2ca");
+  /* ---------- ZIP Code (statewide ZCTA) ---------- */
+  // Was the Chicago-only Socrata dataset (unjd-c2ca), which stopped at the city
+  // line; the app now serves the whole collar-county footprint, so ZIP resolves
+  // against the Census statewide ZCTA layer like the other statewide identity
+  // layers. TIGERweb's ZCTA layer has NO STATE field (ZCTAs cross state lines),
+  // so it can't use the STATE='17' filter loadTigerStatewide relies on — it's
+  // fetched by an Illinois bounding envelope instead. Raw statewide ZCTAs are
+  // dense (~40 MB of vertices), so the server generalizes them with
+  // maxAllowableOffset (~55 m) down to ~4 MB — visually clean for a ZIP overlay
+  // and on par with the county layer (3.5 MB). ZCTAs are the Census Bureau's
+  // approximation of USPS ZIP delivery areas, not the postal boundaries
+  // themselves — the same caveat every ZCTA-based tool carries.
+  var IL_BBOX_ENVELOPE = { xmin: -91.6, ymin: 36.9, xmax: -87.0, ymax: 42.6 };
+  var loadZipCodes = makeCached(function () {
+    var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query" +
+      "?where=" + encodeURIComponent("1=1") +
+      "&geometry=" + encodeURIComponent(JSON.stringify(IL_BBOX_ENVELOPE)) +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=ZCTA5&returnGeometry=true&outSR=4326&f=geojson" +
+      "&geometryPrecision=4&maxAllowableOffset=0.0005";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb ZCTA layer returned no usable geometry");
+        return geojson;
+      });
+  });
 
   registerPolygonLayer({
     id: "zip-code",
     group: "geography",
     label: "ZIP Code",
-    coverage: chicagoCoverage,
     loader: loadZipCodes,
     // dotted outline (distinct pattern from Community Area's dashed one) + different hue
     style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" },
     fields: [
-      { name: "zip", label: "ZIP Code", keys: ["zip", "zip_code", "zipcode", "zcta5ce10"], primary: true }
+      { name: "zip", label: "ZIP Code", keys: ["zcta5", "zip", "zip_code", "zipcode", "zcta5ce10"], primary: true }
     ]
   });
 
