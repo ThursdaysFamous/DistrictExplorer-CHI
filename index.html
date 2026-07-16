@@ -4034,6 +4034,30 @@
       }, function () { return false; });
     });
   }
+  // Chicago is served by the *unified* CPS District 299, so the elementary and
+  // secondary (high-school) TIGER tilings — mutually exclusive with the unified
+  // tiling — never resolve inside the city. Their cards would only ever read
+  // "No result" there, duplicating (far less usefully) what the CPS zone cards
+  // already answer, so hide the pair inside Chicago; the Unified card, which
+  // *does* resolve here as "Chicago Public School District 299", stays.
+  //
+  // This gates on the ERSB school-board tiling *without* chicagoCoverage's
+  // community-area fallback, and the asymmetry is deliberate. chicagoCoverage
+  // over-approximates the city — safe for a layer that SHOWS inside (a false
+  // show is an honest empty card) — but inverted to drive a HIDE that same
+  // over-approximation would suppress a genuine suburban elementary/secondary
+  // district just past the city line, the honesty bug the coverage notes warn
+  // about. ERSB alone under-approximates the city (it misses lakefill / harbor /
+  // O'Hare-edge slivers), so an edge miss falls to SHOW: at worst an honest
+  // empty card at a city sliver, never a hidden suburban district. It reuses the
+  // small same-origin cached file chicagoCoverage's first leg already loads, so
+  // gating the two cards costs no extra fetch, and a load failure fails open
+  // (the engine shows the layer, exactly as before this test existed).
+  function outsideChicagoSchoolCoverage(point) {
+    return loadSchoolBoardDistricts().then(function (geojson) {
+      return !findFeatureContaining(geojson, point);
+    });
+  }
 
   /* =========================================================================
    * STATEWIDE ILLINOIS — LOCAL GOVERNMENT (Census TIGERweb)
@@ -4179,7 +4203,10 @@
       // Unified (K-12) districts and the elementary+secondary pairs tile
       // mutually exclusive territory: exactly one of this card and the
       // elementary/high-school pair below resolves for any Illinois point
-      // (CPS appears here as "Chicago Public School District 299").
+      // (CPS appears here as "Chicago Public School District 299"). Inside
+      // Chicago the pair is *unified* territory, so those two cards never
+      // resolve and both hide (coverage: outsideChicagoSchoolCoverage) —
+      // this Unified card is the one that answers for a Chicago point.
       { name: "name", label: "District", keys: ["name"], primary: true },
       { name: "geoid", label: "GEOID", keys: ["geoid"] }
     ]
@@ -4190,6 +4217,8 @@
     group: "schools",
     label: "High School District",
     loader: loadIlSchoolSecondary,
+    // hidden inside Chicago (unified CPS 299 territory); see coverage note above
+    coverage: outsideChicagoSchoolCoverage,
     style: { color: "#5E3A8C", weight: 1.5, fillColor: "#8163AE", fillOpacity: 0.05, dashArray: "10 4" },
     fields: [
       { name: "name", label: "District", keys: ["name"], primary: true },
@@ -4202,6 +4231,8 @@
     group: "schools",
     label: "Elementary School District",
     loader: loadIlSchoolElementary,
+    // hidden inside Chicago (unified CPS 299 territory); see coverage note above
+    coverage: outsideChicagoSchoolCoverage,
     style: { color: "#B26A00", weight: 1.5, fillColor: "#D19133", fillOpacity: 0.05, dashArray: "3 3" },
     fields: [
       { name: "name", label: "District", keys: ["name"], primary: true },
