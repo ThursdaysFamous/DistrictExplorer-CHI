@@ -2,6 +2,8 @@
 
 **Repo:** ThursdaysFamous/DistrictExplorer · **Date:** 2026-07-09 · **Scope:** `index.html` (2,811 lines, 1.30 MB), `sw.js`, `scripts/` pipeline, `.github/workflows/`
 
+> **2026-07-16 · Round 2 re-analysis.** The app was re-measured at **33 layers** through three lenses — a Chrome DevTools-Protocol harness (`scripts/perf_profile.mjs`), the **production PageSpeed Insights mobile** run, and a **production Firefox Profiler capture** — written up in `docs/PERFORMANCE_ANALYSIS_2026-07.md`. The 2026-07-09 campaign below shipped the compute + payload wins and **they hold** (production mobile: TBT 0 ms, CLS 0, A11y/BP/SEO 100, 0 boot long tasks). But production mobile **Performance is 75**, and the entire gap is **FCP 3.3 s + LCP 5.0 s** — *load delivery*, dominated by render-blocking third parties, which this (payload-size-focused, sandboxed) 2026-07-09 analysis never saw. The re-prioritized work — plus **two items rejected below as "unmeasured" (P9, P10) that are now measured** — is **[§6 Round 2](#6-round-2--the-load-delivery-campaign-2026-07-16)** at the end of this doc. Read §6 first for current priorities; §1–§5 are the 2026-07-09 record.
+
 **Constraint changes this playbook is built on** (owner decisions, 2026-07-09):
 - The Capacitor/Android/iOS stack is **removed** (done in this PR — 80 files, −2,931 lines; git history retains everything). The app is a website (+ installable PWA) only.
 - The app is hosted (GitHub Pages, `ChiDistricts.overberg.co`); **`file://` support is no longer a constraint.** Every "embedded inline because file:// blocks sibling fetches" decision in the codebase is now renegotiable. The other design values — one hand-readable page, no build step, no framework, per-layer failure isolation, sanitized external strings, never-guess/never-stale officeholder data — remain in force and this playbook works within them.
@@ -238,8 +240,8 @@ Running `cpd_district_scraper.py` returns **HTTP 403 with `cf-mitigated: challen
 | 21 | ~~Declarative `registerPolygonLayer`~~ — **done (R9; 4 pure single-source layers converted; the async-join layers stay custom — see log)** | Medium | Medium | Architecture |
 | 22 | ~~Dedupe SW shell entry; cache-name discipline; trim font weights~~ — **done (P13/P-sw; SW `-v3` + navigate fallback, Big Shoulders 700 dropped; Inter 700 kept — now used by `<strong>`/`<b>`, correcting the playbook premise)** | Low | **Low** | Frontend |
 | 23 | ~~Release Leaflet layer graph on toggle-off~~ — **done (P11; `onLayerToggled` nulls `rt.overlayLayer` on toggle-off, `buildOverlayLayer` rebuilds it from cached `rt.geojson` on re-toggle; smoke-test covered)** | Low | **Low** | Frontend |
-| 24 | ~~Canvas renderer for school-zone layers~~ — **REJECTED (owner decision):** conditional on profiling still showing restyle cost, which P7/P8/P12 already collapsed; canvas breaks the `_path.classList` drop-shadow highlight on those layers (a definite visual regression) for an unmeasured gain. Not worth it. — P10 | Low-Med | Medium | Frontend |
-| 25 | ~~Drop-shadow rasterization: pause filter during pan, or restyle~~ — **REJECTED (owner decision):** a flagged cosmetic choice, only worth it if pan jank is actually observed on low-end devices (it hasn't been); dropping the highlight shadow during pan/zoom is a visible behavioral change for no measured benefit. — P9 | Low | Low | Frontend |
+| 24 | ~~Canvas renderer for school-zone layers~~ — REJECTED 2026-07-09 (unmeasured gain). **REOPENED 2026-07-16 (§6 R2-6):** the Firefox capture measured Leaflet reproject/repaint at **4.15 s / 70 % of page JS** over a real interaction session — the gain is no longer unmeasured. The `_path.classList` highlight objection stands, but R2-5 (moving the drop-shadow off `classList`-during-pan) partly clears it. Now: bbox pre-reject first (R2-6), canvas reconsidered after. — P10 | Medium | Med | Frontend |
+| 25 | ~~Drop-shadow rasterization: pause filter during pan, or restyle~~ — REJECTED 2026-07-09 (jank "not observed"). **REOPENED 2026-07-16 (§6 R2-5):** a controlled sandbox A/B measured the two stacked `drop-shadow()`s at **3.7× pan-frame time** (61.6 vs 16.7 ms, 2.3-Mpx filter region) — it *is* observable, worst on low/mid mobile. Cheap fix: drop `filter` on `movestart`, restore on `moveend`. — P9 | Medium | Low | Frontend |
 | 26 | ~~README: fix embedded→fetched/offline + simplification claims; drop the not-in-repo Playwright claim~~ — **done with #2** (Playwright smoke test itself is still #5) | Low | **Low** | DevEx |
 | 27 | ~~CPD scraper blocked by Cloudflare managed challenge (403)~~ — **DONE & verified live on CI (R11):** headless Chromium clears Turnstile; sitemap discovery finds all 22 districts; `parse_commander` handles the live inline-name heading; roster builds + validates with real data for all 22 (`cpd-district-info.json` `{}` → full roster). Also shipped: app joins station address/phone from CORS `Police_District_Stations_View` (+ zero-pad join-key fix), `--engine auto` requests→Playwright fallback, R3 commander-count guard, R10 dep pinning. Remaining is a **repo setting** (allow Actions to create PRs), not code. | Medium | Medium | Pipeline |
 
@@ -369,3 +371,114 @@ Tiles are requested the moment the inline script runs, from four sharded hosts t
 ### Bonus one-liner — the geocoder's Enter-key double request
 
 `index.html:1003-1005`: the submit handler never cancels the pending input-debounce timer, so pressing Enter within 550 ms of the last keystroke fires the search, then the debounce aborts it and re-issues an identical request (~550 ms + 1 RTT of added latency on the fast-typist path). Add `clearTimeout(debounceTimer);` as the first line of the submit handler — mirroring the guard the result-click handler already has at line 992.
+
+---
+
+## 6. Round 2 — the load-delivery campaign (2026-07-16)
+
+*Source: `docs/PERFORMANCE_ANALYSIS_2026-07.md`. Three lenses at 33 registered layers — a Chrome DevTools-Protocol harness (`scripts/perf_profile.mjs`), the **production PageSpeed Insights mobile** run (Lighthouse 13.4.0, Slow-4G, Moto G Power), and a **production Firefox Profiler capture** (real hardware, warm interaction). Every number below is measured; where a lens can't see something it's labelled.*
+
+The 2026-07-09 campaign (§1–§5) did its job: it attacked **payload size** and **compute**, and production confirms both are solved — mobile posts **TBT 0 ms, CLS 0, Accessibility / Best-Practices / SEO all 100**, with 0 boot long tasks and ~32 ms of script eval. What that campaign could not see — it measured bytes, and ran sandboxed away from the real third parties — is **load *delivery***. Production mobile **Performance is 75**, and the whole 25-point gap is **FCP 3.3 s + LCP 5.0 s**: first paint waits ~2.1 s behind render-blocking third parties, and the LCP element is a CARTO basemap tile. The engine is done; the remaining wins are getting the page *painted* and getting live data *answered*.
+
+**Why the numbers moved.** A first-pass in-sandbox Lighthouse proxy scored **96** because it stubbed Leaflet/fonts/tiles to boot offline — i.e. it deleted exactly the costs that dominate. The real run is **75**. Treat sandbox paint/network numbers as a *lower bound*; only production PSI (or a real-egress Lighthouse) scores the delivery path. (This is the same "environment-independent vs not" caveat the perf report leads with — it bit the score directly.)
+
+### Round 2 matrix
+
+| # | Task | Impact | Effort | Lens |
+|---|------|--------|--------|------|
+| R2-1 | ~~**Kill render-blocking (~2,110 ms):** fonts non-render-blocking (~780 ms) + inline `leaflet.css` (~750 ms) + defer `leaflet.js` (~1,340 ms)~~ ✅ **SHIPPED — all ~2,110 ms addressed** (boot now `DOMContentLoaded`-gated) | **High — every visit** | Low → Med | PSI |
+| R2-2 | ~~Pre-build the **decadal** TIGERweb legislative geometry → cache-first `data/app/*.json` (~5.7 s → ~0.2 s)~~ ✅ **SHIPPED** — congress/il-senate/il-house now same-origin (130/151/185 KB gzip vs ~1-1.8 MB live) | High — interaction | Med | Firefox |
+| R2-3 | ~~Scope-mask: stop pulling the 83 KB school-board geometry at boot~~ ✅ **SHIPPED** — deferred to `requestIdleCallback` (fetch now starts after app-ready) | Medium | Low | PSI + sandbox |
+| R2-4 | ~~Marker icons: lazy-load (46 KB of PNGs warmed at boot)~~ ✅ **SHIPPED** — water-taxi + seal warms deferred to idle | Low-Med | Low | PSI |
+| R2-5 | ~~**REOPEN P9** — drop-shadow pan tax (3.7×): drop `filter` on `movestart`, restore on `moveend`~~ ✅ **SHIPPED** — `.chi-panning` class, verified pause/restore | Medium | Low | sandbox |
+| R2-6 | **REOPEN P10 / P7(c)** — `pointInRing` **1.44 s** measured: bbox pre-reject (ENGINE fence → port to forks); canvas reconsidered | Medium | Low → Med | Firefox |
+| R2-7 | Load hygiene: trim preconnects to ≤ 4 (**reverses QW5's overshoot**); drop `{r}` `@2x` tiles (56 KB); defer per-layer JS (60 KB unused) | Low-Med | Low | PSI |
+
+**Execution log (2026-07-16, PR #113).** Shipped the unfenced, no-tradeoff wins in one pass — **R2-3, R2-4, R2-5, and the fonts half of R2-1** — none touching an ENGINE fence or GENERATED region. Fonts now load `media="print"`→`onload` non-render-blocking (`display=swap` already covered fallback text); the scope-mask wash and the water-taxi/county-seal preloads moved behind a shared `whenIdle()` (rIC + setTimeout fallback); the highlight drop-shadow pauses under a `.chi-panning` class on move/zoom. Verified: smoke test 15/15, a focused Playwright check (drop-shadow pauses on `movestart` / restores on `moveend`; scope-mask fetch starts after app-ready with the wash still rendering; selection marker intact), and the validate/parity/drift gates all green; boot metrics unchanged. **Then, owner-approved: `leaflet.css` inlined (~750 ms more).** The 14.8 KB Leaflet 1.9.4 CSS is now inlined at the top of the `<style>` block and its render-blocking cdnjs `<link>` removed; `metro-worksheet.json` dropped it from `shell_urls` and bumped the cache (`-v8 → -v9`), regenerated into `sw.js`. Safe because every app marker is an `L.divIcon`, so Leaflet CSS's image `url()`s (`marker-icon.png`, `layers.png`) are never matched — no missing assets. Tradeoff accepted: ~14.8 KB (~3.5 KB gzip) inlined into every response, and the inlined CSS is version-coupled to the CDN `leaflet.js` (a prominent comment marks the re-inline command; keep them in lockstep). Verified: `.leaflet-pane` computes `position:absolute` (inlined CSS applied), zero `leaflet.css` network requests, smoke 15/15, screenshot pixel-clean, all gates green. **So ~1,530 ms of the ~2,110 ms render-blocking is now gone.** **Then, `leaflet.js` deferred (~1,340 ms — R2-1 now complete).** The boot IIFE was converted to a named `initChiExplorer()` gated on `DOMContentLoaded`, and the Leaflet `<script>` given `defer`. This is precisely what the §2.4 anti-finding warned a *bare* `defer` would break — it's right that deferring Leaflet while the IIFE still ran at parse time would leave `L` undefined; the fix is to also defer the boot. Deferred scripts execute in order before `DOMContentLoaded`, so `L` is guaranteed defined when `initChiExplorer` runs. Leaflet now downloads in parallel with HTML parsing instead of blocking first paint. Verified in real Chromium: `leaflet.js` carries `defer`, `L` is defined + the map is ready at boot, **zero boot errors**, smoke 15/15, all R2 checks still green, boot metrics unchanged (the ~1,340 ms saving is a production render-blocking effect the sandbox can't show — it serves Leaflet locally/instantly — but the `defer` + parallel load is structurally confirmed). **All ~2,110 ms of PSI's render-blocking is now addressed** (fonts async + `leaflet.css` inline + `leaflet.js` defer). The §2.4 anti-finding is superseded and annotated in `index.html`. Re-run production PSI after deploy to confirm the FCP/LCP/score movement.
+
+**Sequencing.** With R2-1 fully shipped, the render-blocking that held the mobile 75 is gone; **R2-2** (pre-build the decadal legislative geometry — a new builder + workflow, like P0/P2) is now the biggest remaining lever and targets *interaction* time-to-answer rather than load. R2-6's bbox reject is cheap but crosses the ENGINE fence, so it ships with the sibling-fork port. R2-7 is hygiene (the preconnect direction is ambiguous — PSI wants tile preconnects for the LCP tile *and* warns > 4, so it's cleanest after fonts self-hosting frees two slots). **Next PSI run should show the render-blocking opportunity near zero and FCP/LCP down from 3.3 s / 5.0 s.**
+
+---
+
+### R2-1 — Render-blocking third parties: ~2,110 ms of blocked first paint *(finding #1)*
+
+PSI's top opportunity, and the reason mobile is 75. Three render-blocking resources in `<head>` (+ the pre-app `<script>`) gate first paint on a cold cache — which is exactly what Lighthouse measures:
+
+| Resource | `index.html` | PSI block time |
+|---|---|--:|
+| `leaflet.js` (pre-app `<script>`) | `:1278` | 1,340 ms |
+| `leaflet.css` (`<link rel=stylesheet>`) | `:104` | 750 ms |
+| Google-Fonts CSS (`<link rel=stylesheet>`) | `:102` | 780 ms |
+
+The fonts also pull **107 KiB of woff2** (four files, ~513 ms each) into the critical chain, and the **LCP element is a CARTO tile** that can't paint until Leaflet initializes — so cutting render-blocking moves *both* FCP (3.3 s) and LCP (5.0 s). Fixes, cheapest first:
+
+- **Inline `leaflet.css`** into the existing `<style>` block (it's 3.8 KiB). Removes one render-blocking request outright; the SW precache entry for it can go too. Zero behavioral risk.
+- **Self-host + subset the fonts.** Replace the `fonts.googleapis.com` `<link>` with a same-origin `@font-face` block (subset to the glyphs actually used) and commit the woff2. Removes the render-blocking third-party CSS *and* the four cross-origin font fetches; keeps `display=swap`. This is the bigger byte win and drops two of the five preconnects (feeds R2-7).
+- **Async-load `leaflet.js`** — the stretch goal. ⚠️ The §2.4 **anti-finding still holds**: you can *not* just add `defer`, because the boot IIFE dereferences `L` synchronously. Async means restructuring boot to run on Leaflet's `load` event (or importing Leaflet as a module). Medium effort; do it last, after the two cheap wins above already reclaim ~1,530 ms.
+
+*Nuance:* Leaflet + fonts are SW-precached, so **repeat** visits already skip the CDN. Render-blocking is a **first-visit** cost — but that's the visit that decides the PSI score and a new user's first impression, so it's worth fixing. *Fork note:* these are `<head>`/shell edits — confirm they're outside any `ENGINE:` fence before porting (the shell is fork-specific; the fonts/Leaflet URLs live in each fork's own head).
+
+### R2-2 — Pre-build the decadal legislative geometry *(finding #2)*
+
+The Firefox capture measured the real time-to-answer: **TIGERweb legislative query 5.69 s**, Nominatim 2.48 s, ArcGIS 0.90 s. Per-layer failure isolation means a slow source only stalls its own card, but 5.7 s *is* that card's answer time. The U.S. House + Illinois legislative district **geometry** still fetches live from TIGERweb (`loadTigerLayer`) even though those boundaries change **once a decade** (post-census redistricting) — the exact profile that P0 externalized for school-board / IL-Supreme-Court / Board-of-Review and P2 pre-built for the congress *roster*.
+
+Extend that pattern to the geometry: a `build_legislative_boundaries.py` that fetches TIGERweb once, mapshaper-simplifies (the `scripts/build_embedded_boundaries.py` protocol), and writes `data/app/*.json`; the layer loaders swap `loadTigerLayer` → `fetchJSONWithRetry` of the same-origin file (cache-first in the SW). A 5.7 s live query becomes a ~200 ms fetch. **Tradeoffs (name them):** it adds those datasets to the shipped payload *and* to the `validate_sources.py` freshness surface, and it ties into the decadal cadence in `docs/REDISTRICTING_RUNBOOK.md` (redistricting is exactly when these must be regenerated — the runbook already owns that trigger). Medium effort, highest interaction payoff.
+
+**✅ SHIPPED (2026-07-16, PR #113).** New `scripts/build_legislative_boundaries.py` fetches Illinois features (`STATE='17'`) from TIGERweb Legislative layers 0/1/2, simplifies with mapshaper (Visvalingam keep-shapes, congress 12% / senate 10% / house 9%, 6-decimal precision), validates on the 2,000-point protocol, and writes `data/app/{congress,il-senate,il-house}-districts.json` — **all three built at 2000/2000 (100%) point-in-district agreement, 0 topology breaks**, at **130 / 151 / 185 KB gzip** (vs the ~982 KB / 1.35 MB / 1.8 MB live payloads — 7.6–9.7× smaller and now same-origin cache-first). Loader swaps: `congress` was a direct unfenced swap; `il-senate`/`il-house` needed a **backward-compatible `opts.loadDistricts` hook added to the `chamber-factory` ENGINE fence** (forks that don't pre-build still fall back to `loadTigerLayer(opts.layerIndex)` unchanged) — so that one-line engine change **ports to the sibling forks** per `docs/ENGINE_SYNC.md`. `metro-worksheet.json` gained the three geometry files (feature counts 18/60/119, incl. a `ZZ` water pseudo-district each for byte-identical parity with the live query) and bumped the cache `-v9 → -v10`; `sw.js` regenerated (cache-first `GEOMETRY_URLS`); `validate_sources.py` moved TIGERweb-legislative from a live ENDPOINT to PROVENANCE (source reachable + built file present); `docs/REDISTRICTING_RUNBOOK.md` documents the now-mandatory rebuild on redistricting. **Verified** (the smoke test doesn't cover these layers): with TIGERweb *blocked*, congress/il-senate/il-house classify the Loop point to IL-7 / District 3 / District 5 (with roster joins — Davis / Hunter / Du Buclet), 0 TIGERweb requests, files fetched same-origin; smoke 15/15; validate/parity/drift gates green. These layers now also work in the sandbox (they couldn't before — the headless browser can't reach TIGERweb).
+
+### R2-3 — The scope-mask pulls 83 KB of geometry at boot *(finding #3)*
+
+`drawOutOfScopeMask(loadSchoolBoardDistricts)` at `index.html:6508` (→ `:1884`) downloads and `JSON.parse`s the **full 20-district school-board GeoJSON** at every boot to paint a *decorative* gray out-of-coverage wash. PSI confirms the cost independently: `school-board-districts.json` sits **in the initial-navigation critical chain at 669 ms**. This silently undoes P0's "a user who never toggles school-board never downloads a byte of it." Fixes: ship a small pre-dissolved `data/app/coverage-outline.json` (the `will-county-outline.json` pattern already exists — one MultiPolygon, a few KB, and it skips the runtime `coverageOutlineRings` dissolve), **or** defer the whole wash to `requestIdleCallback` so it never touches the boot path. Either is low-risk; the wash is explicitly best-effort (its own `catch` says "decorative — skip the wash").
+
+### R2-4 — Marker icons warmed at boot for conditional markers *(finding #3, cont.)*
+
+`water-taxi.png` (27 KB, `:1401`) and the county seals (`cook-county.png` 18 KB, `:1484`) are eagerly fetched at boot to make the first out-of-Chicago / on-water selection swap instantly — but they appear on a minority of sessions, and PSI flags them again under **cache lifetimes** (a 10-minute TTL, which is a GitHub-Pages platform default, not app-tunable without a CDN). So the lever isn't caching — it's **not fetching them until needed**: lazy-load on the first relevant selection (a single image decode, imperceptible), or at least move the warm into `requestIdleCallback`. ~46 KB off every cold visit.
+
+### R2-5 — Drop-shadow pan tax, now measured *(finding #4; reopens item 25 / P9)*
+
+The 2026-07-09 doc rejected this as "jank not observed." A controlled sandbox A/B now observes it: the two stacked `drop-shadow()`s on `.chi-region-highlight` (`:1010`) cost **3.7× pan-frame time** (61.6 ms vs 16.7 ms with the filter forced off), re-rasterizing a **2.3-Mpx** filter region every frame during pan/zoom (worst on low/mid mobile GPUs and with the huge IL-Supreme-Court "all of Cook County" highlight lit). Cheap, standard fix — the shadow is a static decoration that needn't re-raster mid-pan:
+
+```js
+// on map init:
+map.on("movestart", function () { map.getContainer().classList.add("chi-panning"); });
+map.on("moveend",   function () { map.getContainer().classList.remove("chi-panning"); });
+```
+```css
+/* pause the filter only while the map is moving */
+.chi-panning .chi-region-highlight { filter: none; }
+```
+
+Collapses pan cost to the filter-off baseline with **no change at rest**. (Alternative, permanent: swap the drop-shadow for a wider semi-transparent casing stroke — no raster-time filter at all.) *Fork note:* `.chi-region-highlight` styling is shared engine — port verbatim.
+
+### R2-6 — Point-in-polygon has no bbox pre-reject *(finding #5; reopens P7(c) + item 24 / P10)*
+
+The Firefox capture's hottest *app* function is **`pointInRing` at 1,437 ms** (`:1517`), called per feature by `findFeatureContaining` (`:3892`), which linearly ray-casts every polygon in a boundary set. P7 memoizes the scan per click, but P7(c) — a per-feature bounding-box reject — was measured-but-never-shipped. The capture makes it worth shipping. And the helpers **already exist in the file** (`featureBBox` / `bboxIntersect`, used by the hover-containment feature at `:1627`/`:1659`), just not on the click path:
+
+```js
+function findFeatureContaining(geojson, point) {
+  // …existing memo-cache check…
+  var features = geojson.features || [];
+  var found = null;
+  for (var i = 0; i < features.length; i++) {
+    var f = features[i];
+    var bb = f.__bbox || (f.__bbox = featureBBox(f));           // compute once, cache on the feature
+    if (point.lng < bb[0] || point.lng > bb[2] ||               // cheap reject before the ray-cast
+        point.lat < bb[1] || point.lat > bb[3]) continue;
+    if (pointInGeometry(point, f.geometry)) { found = f; break; }
+  }
+  geojson.__pointQueryCache = { point: point, feature: found };
+  return found;
+}
+```
+
+⚠️ **`findFeatureContaining` and `pointInGeometry` are inside the `ENGINE:BEGIN` fences** — per `docs/ENGINE_SYNC.md` this must ship as the *actual git diff* to every sibling fork, not re-described. **Canvas renderer (item 24 / P10)** is the same story reconsidered: the capture measured Leaflet SVG reproject/repaint at **4.15 s / 70 % of page JS**, so the gain is no longer hypothetical — but canvas still breaks the `_path.classList` highlight, so it's viable only *after* R2-5 moves the drop-shadow off per-path classList during motion. Order: bbox reject now (cheap, big), canvas later (bigger, only if profiling still shows SVG restyle dominating after R2-5).
+
+### R2-7 — Load hygiene *(finding #6)*
+
+- **Trim preconnects to ≤ 4 — this partially reverses QW5 / item 14.** That quick win added `a.` + `b.basemaps.cartocdn.com` preconnects; the page now ships **5** (`:90–98`) and PSI warns *"More than 4 preconnect connections… use sparingly"* plus flags one **unused**. Self-hosting the fonts (R2-1) already removes two; otherwise drop a tile-shard preconnect. Honest note: a prior optimization slightly overshot — the fix is tuning, not reverting the idea.
+- **Oversized `@2x` tiles (56 KB).** The tile template's `{r}` token (`:1750`) resolves to `@2x` on any high-DPR phone, serving 512×512 PNGs for a 448×448 box. Dropping `{r}` serves 256×256 tiles — ~56 KB lighter, slightly softer on retina. A visual-quality tradeoff to decide, not a clear win; CARTO's endpoint has no WebP swap.
+- **Unused / unminifiable JS (60 KB / 41 KB).** Expected for a single-file app that registers all 33 layer modules up front, and it's a **deliberate no-build tradeoff** (gzip already recovers most of the minify delta on the wire). Not a defect to "fix" — but deferring per-layer module bodies until first toggle is the one structural option, and it cuts against the one-readable-file value, so it's an owner call, explicitly *not* recommended lightly.
+
+---
+
+**Coherent PR groupings (Round 2):** **PR-H** (R2-1 cheap half: inline `leaflet.css` + self-host fonts + R2-7 preconnect trim — one `<head>` pass, the biggest score move); **PR-I** (R2-3 + R2-4, boot-payload lazy-loading); **PR-J** (R2-5 + R2-6, the reopened render/PIP items — R2-6 carries the fork port); **PR-K** (R2-2, the legislative-geometry pre-build, standalone like P0/P2); **PR-L** (R2-1 stretch: async Leaflet boot restructure, only if PR-H's gain isn't enough). Land PR-H first — it's low-effort and it's what moves the mobile 75.

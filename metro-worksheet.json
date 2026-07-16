@@ -110,7 +110,13 @@
       { "file": "school-board-districts.json", "min_features": 20, "max_features": 20 },
       { "file": "il-supreme-court-districts.json", "min_features": 5, "max_features": 5 },
       { "file": "ccbr-districts.json", "min_features": 3, "max_features": 3 },
-      { "file": "will-county-outline.json", "min_features": 1, "max_features": 1 }
+      { "file": "will-county-outline.json", "min_features": 1, "max_features": 1 },
+      { "file": "congress-districts.json", "min_features": 18, "max_features": 18,
+        "note": "17 IL U.S. House districts + a ZZ water pseudo-district; pre-built from TIGERweb by scripts/build_legislative_boundaries.py (R2-2)" },
+      { "file": "il-senate-districts.json", "min_features": 60, "max_features": 60,
+        "note": "59 IL Senate districts + ZZ; pre-built from TIGERweb layer 1" },
+      { "file": "il-house-districts.json", "min_features": 119, "max_features": 119,
+        "note": "118 IL House districts + ZZ; pre-built from TIGERweb layer 2" }
     ],
     "rosters": [
       { "file": "il-senate-members.json", "min_keys": 59 },
@@ -126,7 +132,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v8",
+    "cache_name": "district-explorer-shell-v10",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -134,7 +140,6 @@
       "./icons/icon-512.png",
       "./icons/water-taxi.png",
       "./icons/seals/cook-county.png",
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css",
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
     ]
   },
