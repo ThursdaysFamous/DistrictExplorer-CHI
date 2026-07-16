@@ -99,7 +99,13 @@
 <link rel="dns-prefetch" href="https://data.cityofchicago.org">
 <link rel="dns-prefetch" href="https://nominatim.openstreetmap.org">
 <link rel="dns-prefetch" href="https://photon.komoot.io">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Fonts loaded non-render-blocking: media="print" keeps the stylesheet off the
+     critical render path, onload flips it to "all", and display=swap already
+     paints fallback text immediately (so no blank text). Removes ~780 ms of
+     render-blocking CSS from the mobile critical path — PSI's top opportunity
+     (docs/OPTIMIZATION_PLAYBOOK.md R2-1). noscript keeps fonts working without JS. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="" />
 
@@ -1011,6 +1017,12 @@
     filter: drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35));
     transition: filter 120ms ease-out;
   }
+  /* Pause the drop-shadow filter while the map is moving. A controlled A/B
+   * measured the two stacked drop-shadow()s at ~3.7x pan-frame time (re-
+   * rasterizing a ~2.3 Mpx region every frame); this drops it to the filter-off
+   * baseline during pan/zoom with NO change at rest — the base rule's 120 ms
+   * transition fades the shadow back in on moveend. (OPTIMIZATION_PLAYBOOK P9/R2-5.) */
+  .chi-panning .chi-region-highlight { filter: none; transition: none; }
   .chi-poi-pin { background: none; border: none; }
   /* Chicago-specific: the SEO/orientation lede under the empty-state prompt —
      the district vocabulary a first-time (or crawling) visitor reads before a
@@ -1396,13 +1408,22 @@
     iconSize: [50, 50],
     iconAnchor: [25, 25]
   });
-  // Preload once at boot so a water selection swaps instantly; track load state
-  // so a broken/blocked asset never produces a broken-image marker.
+  // Run cb during browser idle (fallback: a short timeout). Used to keep
+  // conditional-marker art and the decorative coverage wash — both of which PSI
+  // measured sitting in the initial-navigation critical chain — OFF the boot
+  // critical path without losing the "swaps instantly later" behavior (R2-3/R2-4).
+  function whenIdle(cb) {
+    return (window.requestIdleCallback || function (fn) { return setTimeout(fn, 200); })(cb);
+  }
+  // Preload at idle (not on the boot critical path) so a water selection still
+  // swaps instantly, but the 27 KB PNG doesn't compete with first paint; the
+  // load-state guard still prevents a broken/blocked asset from ever producing a
+  // broken-image marker.
   var waterTaxiImg = new Image();
   var waterTaxiImgState = "loading"; // "loading" | "ready" | "failed"
   waterTaxiImg.addEventListener("load", function () { waterTaxiImgState = "ready"; });
   waterTaxiImg.addEventListener("error", function () { waterTaxiImgState = "failed"; });
-  waterTaxiImg.src = WATER_TAXI_ICON_URL;
+  whenIdle(function () { waterTaxiImg.src = WATER_TAXI_ICON_URL; });
 
   // Run cb(true) once the logo image has loaded, cb(false) if it failed. Callable
   // any time — resolves synchronously if the state is already known, otherwise
@@ -1480,8 +1501,11 @@
     e.img.addEventListener("load", function () { finish(true); });
     e.img.addEventListener("error", function () { finish(false); });
   }
-  // Warm the seals we ship so the first out-of-city selection swaps instantly.
-  Object.keys(COUNTY_SEAL_URLS).forEach(function (k) { whenSealImgReady(COUNTY_SEAL_URLS[k], function () {}); });
+  // Warm the seals we ship so the first out-of-city selection swaps instantly —
+  // at idle, off the boot critical path (R2-4; PSI flagged these 18 KB+ PNGs).
+  whenIdle(function () {
+    Object.keys(COUNTY_SEAL_URLS).forEach(function (k) { whenSealImgReady(COUNTY_SEAL_URLS[k], function () {}); });
+  });
 
   /* ==== ENGINE:BEGIN sanitize ==== */
   /* ---------- sanitize: escape any external string before it touches innerHTML ---------- */
@@ -1747,6 +1771,13 @@
 
   var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(METRO_CENTER, 11);
   L.control.zoom({ position: "bottomright" }).addTo(map);
+  // Pause the selection-highlight drop-shadow during pan/zoom (see the
+  // .chi-panning CSS rule): the filter's per-frame rasterization is the measured
+  // pan cost (R2-5). A class on the map container flips it off on move/zoom
+  // start and back on end; classList add/remove is idempotent so overlapping
+  // pan+zoom events are harmless.
+  map.on("movestart zoomstart", function () { map.getContainer().classList.add("chi-panning"); });
+  map.on("moveend zoomend", function () { map.getContainer().classList.remove("chi-panning"); });
   var baseTiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 19,
     subdomains: "abcd",
@@ -6505,7 +6536,11 @@
   // Chicago exactly (offline anchor, topology-preserved shared edges), so
   // their outer rings are the coverage holes. Passing the layer's own cached
   // loader means one fetch serves both the wash and the school-board card.
-  drawOutOfScopeMask(loadSchoolBoardDistricts);
+  // At idle, not on the boot critical path: PSI measured this 83 KB (20 KB gzip)
+  // school-board geometry fetch in the 669 ms initial-navigation chain, and the
+  // wash it draws is purely decorative (its own catch already skips it on any
+  // error). Deferring keeps first paint free of it (R2-3).
+  whenIdle(function () { drawOutOfScopeMask(loadSchoolBoardDistricts); });
 
   var verifiedEl = document.getElementById("verified-date");
   verifiedEl.textContent = "July 9, 2026";
