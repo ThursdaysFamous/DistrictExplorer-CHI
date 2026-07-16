@@ -29,9 +29,11 @@
 // outline + board roster; -v8 added the Cook County seal marker icon shown
 // for a point in Cook County outside the City of Chicago; -v9 dropped
 // leaflet.css from the shell — it's now inlined in index.html (was a
-// render-blocking <link>), so the page no longer requests it.)
+// render-blocking <link>), so the page no longer requests it; -v10 added the
+// pre-built legislative-district geometry (congress / il-senate / il-house),
+// moved off live TIGERweb to same-origin cache-first data/app files.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v9";
+const CACHE_NAME = "district-explorer-shell-v10";
 
 const SHELL_URLS = [
   "./",
@@ -52,6 +54,9 @@ const GEOMETRY_URLS = [
   "./data/app/il-supreme-court-districts.json",
   "./data/app/ccbr-districts.json",
   "./data/app/will-county-outline.json",
+  "./data/app/congress-districts.json",
+  "./data/app/il-senate-districts.json",
+  "./data/app/il-house-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI

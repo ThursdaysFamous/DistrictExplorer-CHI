@@ -149,6 +149,18 @@ represents them TODAY; showing not-yet-effective districts is a correctness bug,
    agreement on 2,000 seeded random points against the app's own even-odd point-in-polygon AND zero
    points classified into >1 district (topology break = hard fail), feature count/properties
    unchanged.
+   - **Legislative layers are now pre-built too (R2-2, 2026-07).** The U.S. House / IL Senate / IL
+     House GEOMETRY no longer queries TIGERweb live — it ships as `data/app/{congress,il-senate,il-house}-districts.json`,
+     built by **`scripts/build_legislative_boundaries.py`**. This changes the drill for those layers:
+     the builder fetches TIGERweb directly (`STATE='17'`) and simplifies, so steps 2–4 (shapefile
+     intake / `data/` conversion) don't apply — the builder *is* the intake. On a redistricting or a
+     TIGERweb vintage roll (CD119 → CD121, or a new "State Legislative Districts" layer), update the
+     `LAYERS` dict in `build_legislative_boundaries.py` (TIGERweb layer index, district field,
+     `min_features`), re-run it (same ≥99.5% / zero-topology-break gate), and **update the
+     `data_files.geometry` feature counts in `metro-worksheet.json`** so `validate_index.py` matches.
+     Because the geometry is now static, a redistricting that once "just worked" via live TIGERweb now
+     **requires this manual rebuild** — otherwise the app ships the old maps. (The officeholder rosters
+     are unaffected — still weekly.)
 6. **Regenerate data/app + bump sw.js CACHE_NAME.** Cached old geometry in users' service workers
    must be invalidated; a CACHE_NAME bump is the only thing that forces refetch. Respect the sw.js
    exactly-one-list invariant.

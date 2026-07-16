@@ -105,10 +105,13 @@ SOCRATA = [
      "name_contains": "High School Geographic Networks"},
 ]
 
-# Shapefile-derived boundary layers: no API, decennial. `source_url` is the
-# provenance we cite; `app_file` is the built same-origin data file. These go
-# stale only when the underlying districts are redrawn — the check is a
+# Decennial boundary layers built into same-origin data/app files: no runtime
+# API. `source_url` is the provenance we cite; `app_file` is the built file.
+# These go stale only when the underlying districts are redrawn — the check is a
 # reachability probe plus a standing reminder to re-verify against the source.
+# The first three are shapefile-derived; the three legislative layers are
+# pre-built from Census TIGERweb by scripts/build_legislative_boundaries.py
+# (R2-2 — they used to query TIGERweb live at ~5.7 s per first toggle).
 PROVENANCE = [
     {"layer": "School Board (ERSB) districts",
      "app_file": "school-board-districts.json",
@@ -122,6 +125,18 @@ PROVENANCE = [
      "app_file": "ccbr-districts.json",
      "source_url": "https://www.cookcountyboardofreview.com/",
      "note": "PA 102-0012 shapefile. Redrawn ~once a decade."},
+    {"layer": "U.S. House districts (IL)",
+     "app_file": "congress-districts.json",
+     "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/0?f=json",
+     "note": "TIGERweb Legislative layer 0 (STATE=17), pre-built by build_legislative_boundaries.py. Redrawn ~once a decade."},
+    {"layer": "IL State Senate districts",
+     "app_file": "il-senate-districts.json",
+     "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1?f=json",
+     "note": "TIGERweb Legislative layer 1 (2024 Upper, STATE=17), pre-built. Redrawn ~once a decade."},
+    {"layer": "IL State House districts",
+     "app_file": "il-house-districts.json",
+     "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2?f=json",
+     "note": "TIGERweb Legislative layer 2 (2024 Lower, STATE=17), pre-built. Redrawn ~once a decade."},
 ]
 
 # Live named services the app queries at runtime. These aren't year-versioned
@@ -137,8 +152,6 @@ ENDPOINTS = [
      "url": "https://services2.arcgis.com/t3tlzCPfmaQzSWAk/arcgis/rest/services/Police_Beat_Boundary/FeatureServer/0?f=json"},
     {"layer": "CPS school sites",
      "url": "https://services2.arcgis.com/t3tlzCPfmaQzSWAk/arcgis/rest/services/Schools/FeatureServer/0?f=json"},
-    {"layer": "Census TIGERweb legislative districts",
-     "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer?f=json"},
     {"layer": "Census TIGERweb counties (statewide county layer)",
      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer?f=json"},
     {"layer": "Census TIGERweb county subdivisions + places (township/municipality layers)",

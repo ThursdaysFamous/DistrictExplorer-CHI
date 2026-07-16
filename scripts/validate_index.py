@@ -102,6 +102,9 @@ GEOMETRY_FILES = {
     "il-supreme-court-districts.json": (5, 5),
     "ccbr-districts.json": (3, 3),
     "will-county-outline.json": (1, 1),
+    "congress-districts.json": (18, 18),  # 17 IL U.S. House districts + a ZZ water pseudo-district; pre-built from TIGERweb by scripts/build_legislative_boundaries.py (R2-2)
+    "il-senate-districts.json": (60, 60),  # 59 IL Senate districts + ZZ; pre-built from TIGERweb layer 1
+    "il-house-districts.json": (119, 119),  # 118 IL House districts + ZZ; pre-built from TIGERweb layer 2
 }
 
 # file -> minimum key count (officeholder rosters).
