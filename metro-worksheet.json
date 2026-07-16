@@ -126,7 +126,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v8",
+    "cache_name": "district-explorer-shell-v9",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -134,7 +134,6 @@
       "./icons/icon-512.png",
       "./icons/water-taxi.png",
       "./icons/seals/cook-county.png",
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css",
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
     ]
   },
