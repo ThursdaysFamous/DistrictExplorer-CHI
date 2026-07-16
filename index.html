@@ -110,8 +110,11 @@
      moment it initializes. dns-prefetch for the click-time data APIs is nearly
      free and shaves a round trip off the first layer lookup. -->
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<!-- One tile-shard preconnect (a.) for the LCP basemap tile; the b. shard was
+     dropped to keep total preconnects <= 4 (PSI "preconnect sparingly",
+     OPTIMIZATION_PLAYBOOK R2-7 — reverses QW5's a.+b. overshoot). Tiles from the
+     other shards still load, just without a pre-warmed connection. -->
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com">
-<link rel="preconnect" href="https://b.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://data.cityofchicago.org">
 <link rel="dns-prefetch" href="https://nominatim.openstreetmap.org">
 <link rel="dns-prefetch" href="https://photon.komoot.io">
