@@ -386,15 +386,17 @@ The 2026-07-09 campaign (§1–§5) did its job: it attacked **payload size** an
 
 | # | Task | Impact | Effort | Lens |
 |---|------|--------|--------|------|
-| R2-1 | **Kill render-blocking (~2,110 ms):** inline `leaflet.css`, self-host + subset fonts, async-load `leaflet.js` | **High — every visit** | Low → Med | PSI |
+| R2-1 | **Kill render-blocking (~2,110 ms):** ~~fonts non-render-blocking (~780 ms)~~ ✅; inline `leaflet.css` (~750 ms) + async-load `leaflet.js` (~1,340 ms) remain | **High — every visit** | Low → Med | PSI |
 | R2-2 | Pre-build the **decadal** TIGERweb legislative geometry → cache-first `data/app/*.json` (~5.7 s → ~0.2 s) | High — interaction | Med | Firefox |
-| R2-3 | Scope-mask: stop pulling the **83 KB school-board geometry at boot** (dedicated outline, or `requestIdleCallback`) | Medium | Low | PSI + sandbox |
-| R2-4 | Marker icons: **lazy-load** (46 KB of PNGs, 10-min cache TTL, warmed at boot for conditional markers) | Low-Med | Low | PSI |
-| R2-5 | **REOPEN P9** — drop-shadow pan tax now measured (**3.7×**): drop `filter` on `movestart`, restore on `moveend` | Medium | Low | sandbox |
+| R2-3 | ~~Scope-mask: stop pulling the 83 KB school-board geometry at boot~~ ✅ **SHIPPED** — deferred to `requestIdleCallback` (fetch now starts after app-ready) | Medium | Low | PSI + sandbox |
+| R2-4 | ~~Marker icons: lazy-load (46 KB of PNGs warmed at boot)~~ ✅ **SHIPPED** — water-taxi + seal warms deferred to idle | Low-Med | Low | PSI |
+| R2-5 | ~~**REOPEN P9** — drop-shadow pan tax (3.7×): drop `filter` on `movestart`, restore on `moveend`~~ ✅ **SHIPPED** — `.chi-panning` class, verified pause/restore | Medium | Low | sandbox |
 | R2-6 | **REOPEN P10 / P7(c)** — `pointInRing` **1.44 s** measured: bbox pre-reject (ENGINE fence → port to forks); canvas reconsidered | Medium | Low → Med | Firefox |
 | R2-7 | Load hygiene: trim preconnects to ≤ 4 (**reverses QW5's overshoot**); drop `{r}` `@2x` tiles (56 KB); defer per-layer JS (60 KB unused) | Low-Med | Low | PSI |
 
-**Sequencing.** R2-1 is the single biggest lever on the 75 and is mostly *low* effort (inline one file + self-host fonts covers ~1,530 ms without touching boot order). R2-3/R2-4/R2-5/R2-7 are all small and independent. R2-2 is the one genuinely medium-effort item (a new builder + workflow, like P0/P2) but the biggest *interaction* win. R2-6's bbox reject is cheap but crosses the ENGINE fence, so it ships with the sibling-fork port.
+**Execution log (2026-07-16, PR #113).** Shipped the unfenced, no-tradeoff wins in one pass — **R2-3, R2-4, R2-5, and the fonts half of R2-1** — none touching an ENGINE fence or GENERATED region. Fonts now load `media="print"`→`onload` non-render-blocking (`display=swap` already covered fallback text); the scope-mask wash and the water-taxi/county-seal preloads moved behind a shared `whenIdle()` (rIC + setTimeout fallback); the highlight drop-shadow pauses under a `.chi-panning` class on move/zoom. Verified: smoke test 15/15, a focused Playwright check (drop-shadow pauses on `movestart` / restores on `moveend`; scope-mask fetch starts after app-ready with the wash still rendering; selection marker intact), and the validate/parity/drift gates all green; boot metrics unchanged. **Deliberately paused for an owner call:** inlining `leaflet.css` (the next ~750 ms) is verified-safe (all markers use `L.divIcon`, so Leaflet CSS's image `url()`s are never referenced) but carries a real tradeoff — ~14.8 KB inlined into every response + version-coupling the inlined CSS to the CDN `leaflet.js`, and it needs a `metro-worksheet.json` shell edit + regen + cache bump. Async-loading `leaflet.js` (the big ~1,340 ms) is the boot-restructure stretch (the §2.4 anti-finding holds — no bare `defer`).
+
+**Sequencing.** R2-1's remaining halves are the biggest lever left on the 75. R2-2 is the one genuinely medium-effort item (a new builder + workflow, like P0/P2) but the biggest *interaction* win. R2-6's bbox reject is cheap but crosses the ENGINE fence, so it ships with the sibling-fork port. R2-7 is hygiene (the preconnect direction is ambiguous — PSI wants tile preconnects for the LCP tile *and* warns > 4, so it's cleanest after fonts self-hosting frees two slots).
 
 ---
 
