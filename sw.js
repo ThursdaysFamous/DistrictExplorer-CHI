@@ -31,9 +31,12 @@
 // leaflet.css from the shell — it's now inlined in index.html (was a
 // render-blocking <link>), so the page no longer requests it; -v10 added the
 // pre-built legislative-district geometry (congress / il-senate / il-house),
-// moved off live TIGERweb to same-origin cache-first data/app files.)
+// moved off live TIGERweb to same-origin cache-first data/app files; -v11 added
+// eight more county seal marker icons (Hamilton, Kane, Lake, Macon, Saline,
+// St. Clair, Washington, Will) shown for a point in that county outside the
+// City of Chicago — matching the Cook seal added in -v8.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v10";
+const CACHE_NAME = "district-explorer-shell-v11";
 
 const SHELL_URLS = [
   "./",
@@ -42,6 +45,14 @@ const SHELL_URLS = [
   "./icons/icon-512.png",
   "./icons/water-taxi.png",
   "./icons/seals/cook-county.png",
+  "./icons/seals/hamilton.png",
+  "./icons/seals/kane.png",
+  "./icons/seals/lake.png",
+  "./icons/seals/macon.png",
+  "./icons/seals/saline.png",
+  "./icons/seals/st-clair.png",
+  "./icons/seals/washington.png",
+  "./icons/seals/will.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
 ];
 
