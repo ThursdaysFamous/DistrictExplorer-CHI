@@ -17,7 +17,7 @@ The harness drives the real `index.html` in headless Chromium via CDP and record
 - **Not measured here:** the live-API layers' network cost (community areas, wards, police, congress, TIGERweb statewide, …) and real-CDN / real-tile latency. Findings about those paths are labelled *(inferred)* or sourced from the cross-checks below.
 
 **Two external cross-checks incorporated (2026-07-16).** Because the sandbox can't reach production or the live APIs, two other lenses fill the gaps:
-- **§6 — Lighthouse mobile.** A Lighthouse 13.4.0 run (default mobile config: Moto G4, slow-4G, 4× CPU, *simulated* throttling) against a **local serve of this exact tree**. Chrome in the sandbox can't reach the Leaflet CDN / Google Fonts, so that serve rewrites Leaflet to a same-origin vendored copy and neutralizes the render-blocking font `<link>` — i.e. it measures the **app-intrinsic** mobile profile; production adds its third-party render-blocking + real-tile costs *on top* (reasoned in §6). This stands in for the production PageSpeed Insights mobile run, which couldn't be read directly (its results render client-side and the keyless PSI API is quota-limited). One caveat that matters: Lighthouse's *errors-in-console* / some *best-practices* dings in this run are **harness artifacts** (the sandbox's blocked tile/CDN requests log `ERR_CONNECTION_RESET`), not real app errors — excluded from the findings.
+- **§6 — production PageSpeed Insights (mobile).** The **real** PSI/Lighthouse 13.4.0 mobile run of chidistricts.com (Slow-4G, emulated Moto G Power), read from the PSI report. This is the authoritative mobile-load lens. *(I couldn't reach it programmatically — PSI renders results client-side, the keyless PSI API is quota-limited, and Chrome here has no egress to production — so I first ran a **local proxy** in-sandbox: Lighthouse against a serve of this tree with Leaflet vendored same-origin and the font `<link>` neutralized so it boots. That proxy measured the app-intrinsic profile and scored Performance 96 / FCP 1.8 s — optimistic, because it stubs exactly the third-party render-blocking + tiles the real run shows dominate. §6 reports the production numbers; the proxy is noted only where the divergence is instructive.)*
 - **§7 — production Firefox Profiler capture.** A 58.5 s real-hardware (i7-1065G7, Firefox 152) capture of a **warm interaction session** hitting the live APIs — the one lens that sees real live-API latency, GC pressure, and Leaflet render cost. Single session / point / machine: directional, not a benchmark average.
 
 Field data: the Chrome UX Report (CrUX) has **no real-user data** for this page, so the production PSI card shows Lighthouse *lab* data only — the same kind of lab figures reported here.
@@ -26,20 +26,20 @@ Field data: the Chrome UX Report (CrUX) has **no real-user data** for this page,
 
 ## Executive summary
 
-**The app is fast and lean, and the 2026-07 optimization work clearly holds.** Cold boot (desktop, unthrottled) reaches first contentful paint in ~116 ms and becomes interactive in ~117 ms with **zero long tasks**, ~32 ms of script evaluation, a 3.5 MB heap, and 835 DOM nodes — this despite 33 registered layers. Under **Lighthouse mobile** emulation (Moto G4, slow-4G, 4× CPU throttle) the same page scores **Performance 96 / Accessibility 96 / Best-Practices ~100 / SEO 100**, with FCP 1.8 s, LCP 2.1 s, TBT 100 ms, and **CLS 0.012** (essentially no layout shift). The incremental-restyle fast path (P7) keeps a point-move at ~8 ms of CPU, and the layer-graph release (P11) makes a warm re-toggle a ~3 ms synchronous rebuild. Nothing here is on fire.
+**The app's own code is fast and lean — the mobile *load* score is held back by third-party delivery, not by the app's compute.** Cold boot (desktop, unthrottled) reaches first contentful paint in ~116 ms with **zero long tasks**, ~32 ms of script evaluation, a 3.5 MB heap, and 835 DOM nodes — despite 33 registered layers. That compute cleanliness carries to production: the **real PageSpeed Insights mobile** run scores **Accessibility / Best-Practices / SEO all 100**, **TBT 0 ms**, and **CLS 0** — but **Performance 75** (*needs-improvement*), because **FCP is 3.3 s and LCP 5.0 s**. First paint waits behind render-blocking Leaflet + Google-Fonts, and the LCP element is a CARTO map tile. Interaction is similarly clean in-app (P7 point-move ~8 ms CPU; P11 warm re-toggle ~3 ms) yet gated by live-API latency in the real world (§7). **So: strong engine; load-delivery and live-data are the levers.**
 
-**This revision folds in two external cross-checks** so the report is one combined picture: a **production Firefox Profiler capture** (real hardware, warm interaction session over a Will County point — §7) and a **Lighthouse mobile run** (§6). Findings sourced from those are attributed inline; my own sandbox measurements are the backbone.
+**Three lenses, reconciled** (attribution inline): my **sandbox Chrome** harness (§1–4 — boot compute, payload, the render A/B), the **production PageSpeed Insights mobile** run (§6 — the 75 and its causes), and a **production Firefox Profiler capture** (§7 — live-API + Leaflet-render + GC).
 
-The findings are refinements, ranked by user-perceived impact:
+Findings, ranked by user-perceived impact:
 
-1. **Live-API latency dominates real-world time-to-answer** — TIGERweb legislative ~5.7 s, Nominatim ~2.5 s, ArcGIS ~0.9 s (measured on production by the Firefox capture; my sandbox blocks these APIs). The decadal state/federal legislative districts are a natural pre-build → cache-first `data/app/*.json` candidate, turning a ~5.7 s live query into a ~200 ms same-origin fetch. *(network; highest real-world impact — external capture)*
-2. **The selection-highlight drop-shadow filter ~3.7×'s pan-frame time** (61.6 ms vs 16.7 ms filter-off, over a 2.3-megapixel region). *(rendering; medium — worse on low/mid mobile)*
-3. **Point-in-polygon has no bounding-box pre-reject** — `findFeatureContaining` (`index.html:3892`) ray-casts every feature; the Firefox capture measured **~1.44 s in `pointInRing`**. Bbox helpers already exist in the file (used by the hover feature, not here). *(app code; medium — inside the `point-in-polygon` ENGINE fence, so a fix must port to sibling forks)*
-4. **Boot eagerly downloads the 83 KB school-board geometry (decorative wash) + ~46 KB marker icons every visit** — Lighthouse's byte-weight table independently ranks these as the 2nd–5th heaviest boot resources, corroborating the finding. *(boot payload; medium)*
-5. **Render-blocking + unminified/unused JS** — Lighthouse flags render-blocking Leaflet (~462 ms) and (on production) Google-Fonts CSS, **62 KB unused JS**, and **43 KB unminifiable JS/CSS** — the last a real tension with the deliberate no-build, one-readable-file design. *(FCP / payload; low–medium)*
-6. **One WCAG-AA color-contrast failure** — `.empty-state-lede` (the default pre-selection intro text, `index.html:1189`) is `--slate-soft` #87929B on white ≈ **3.2 : 1**, below the 4.5 : 1 AA bar. *(accessibility; low — one-token fix)*
+1. **Render-blocking third-party delivery (~2,110 ms) — the reason production mobile is 75.** `leaflet.js` (1,340 ms) + `leaflet.css` (750 ms) + Google-Fonts CSS (780 ms) block first paint; the LCP element is then a CARTO tile at 5.0 s. Fixes: inline `leaflet.css`, self-host/subset the fonts (takes 107 KiB of woff2 off the critical path), async-load Leaflet. *(load; highest — every visit; PSI §6)*
+2. **Live-API latency dominates time-to-answer** — TIGERweb ~5.7 s, Nominatim ~2.5 s, ArcGIS ~0.9 s. Pre-build the **decadal** legislative districts → cache-first `data/app/*.json` (a ~5.7 s query becomes a ~200 ms fetch). *(interaction network; high; Firefox §7)*
+3. **Boot eagerly loads the 83 KB scope-mask geometry + ~46 KB marker icons every visit** — PSI independently puts `school-board-districts.json` in the 669 ms initial-navigation critical chain and flags the icons' 10-minute cache TTL, confirming §2.1–2.2. *(boot payload; medium)*
+4. **The selection-highlight drop-shadow filter ~3.7×'s pan-frame time** (61.6 ms vs 16.7 ms filter-off). *(rendering; medium — worse on low/mid mobile)*
+5. **Point-in-polygon has no bounding-box pre-reject** — the Firefox capture measured **~1.44 s in `pointInRing`**; bbox helpers already exist in the file. *(app code; medium — inside the `point-in-polygon` ENGINE fence, so a fix must port to sibling forks)*
+6. **Load hygiene (PSI):** 60 KiB unused JS + 41 KiB minifiable JS (a conscious no-build tradeoff), oversized `@2x` basemap tiles (56 KiB), and 5 `preconnect` hints where Lighthouse wants ≤ 4. *(payload; low–medium)*
 
-Everything else measured — heap growth, DOM growth, toggle/classify latency, and CLS — is healthy. Details and fixes below.
+The app's *own* work is healthy across the board — **TBT 0 ms, CLS 0**, zero boot long tasks, bounded memory, and **Accessibility / Best-Practices / SEO all 100** in production. (My earlier in-sandbox Lighthouse proxy scored Performance 96 / FCP 1.8 s — optimistic because it stubbed exactly the third-parties PSI shows dominate; §6 explains the divergence.) Details and fixes below.
 
 ---
 
@@ -106,9 +106,9 @@ At boot the app eagerly warms two marker images that most sessions never display
 
 The comments are candid about intent ("Warm the seals we ship so the first out-of-city selection swaps instantly"). It's a deliberate latency-for-bandwidth trade, but it spends ~46 KB on **every** visit for markers that appear on a minority of selections. **Fix:** load these lazily on the first out-of-Chicago / on-water selection (the swap is a single image decode — imperceptible), or at worst move the warm into `requestIdleCallback` so it's off the boot path. If the instant-swap is considered essential, leaving it is defensible — but it should be a conscious choice, not invisible boot weight.
 
-### 2.3 — Note: render-blocking third-party font CSS *(low)*
+### 2.3 — FINDING: render-blocking third-party CSS/JS *(this is finding #1 — see §6)*
 
-`index.html:102` loads the Google-Fonts stylesheet as a render-blocking `<link rel="stylesheet">`. Text itself isn't blocked (`display=swap` lets fallbacks paint, and the fonts are `preconnect`ed), but the stylesheet *link* still gates render on one RTT to `fonts.googleapis.com` in production. Self-hosting the `@font-face` CSS (inline, same-origin) removes a third-party dependency from the FCP critical path. Low priority given the existing mitigations; flagged for completeness.
+`index.html:102`/`104`/`1278` load the Google-Fonts stylesheet, `leaflet.css`, and `leaflet.js` — all render-blocking. My sandbox stubbed them, so §1's boot numbers don't reflect their cost; **the production PSI run (§6) does, and puts them at the top: ~2,110 ms of blocked first paint** (`leaflet.js` 1,340 ms + `leaflet.css` 750 ms + Fonts CSS 780 ms), which is the single largest reason production mobile scores 75. Text isn't blocked (`display=swap` + `preconnect`), but the *links* gate render, and the fonts pull 107 KiB of woff2 (four files) into the critical chain. Fixes (finding #1): **inline `leaflet.css`** into the existing `<style>`; **self-host + subset the fonts** (removes the blocking CSS *and* the cross-origin fetches); **async-load `leaflet.js`** and init on its `load` (it can't just be `defer`red — the IIFE needs `L`). This was under-weighted as "low" before the production numbers arrived; it isn't.
 
 ---
 
@@ -179,47 +179,62 @@ Heap and DOM growth are modest and bounded; the delta varies with GC timing (3.5
 
 | # | Area | Finding | Evidence | Suggested fix | Impact |
 |---|---|---|---|---|---|
-| **1** | Network (live API) | Live queries define time-to-answer: TIGERweb ~5.7 s, Nominatim ~2.5 s, ArcGIS ~0.9 s | Firefox capture (§7) | pre-build the **decadal** state/federal legislative districts → cache-first `data/app/*.json` (extends P0/P2); ~5.7 s → ~200 ms | **Highest (real-world)** |
-| **2** | Rendering | Highlight drop-shadow ~3.7×'s pan-frame time (2.3 Mpx filter re-rasterized per frame) | `index.html:1010`; pan A/B 61.6 vs 16.7 ms | drop `filter` during `movestart`→`moveend`, or use a casing stroke | Medium (higher on low/mid mobile) |
-| **3** | App code | Point-in-polygon has no per-feature bbox pre-reject — ~1.44 s in `pointInRing` | `index.html:3892`/`1517`; Firefox capture (§7) | compute+cache each feature's bbox, skip the ray-cast on a miss (helpers `featureBBox`/`bboxIntersect` already exist). **Inside the `point-in-polygon` ENGINE fence → port to sibling forks** | Medium |
-| **4** | Boot payload | Decorative scope-mask parses 83 KB school-board geometry + ~46 KB marker icons every boot | `index.html:6508`→`1884`, `1401`, `1484`; LH byte-weight (§6) | `coverage-outline.json` / `requestIdleCallback`; lazy-load icons | Medium |
-| **5** | FCP / payload | Render-blocking Leaflet (~462 ms) + Google-Fonts CSS; 62 KB unused JS; 43 KB unminifiable JS/CSS | `index.html:102`; LH (§6) | inline/self-host critical CSS; the minify gap is a conscious no-build tradeoff (see §6) | Low–Medium |
-| **6** | Accessibility | `.empty-state-lede` contrast ≈ 3.2 : 1, below WCAG-AA 4.5 : 1 | `index.html:1018`/`1189`; LH color-contrast (§6) | `--slate-soft` → `--slate` (#55626C ≈ 6 : 1) for this rule | Low (trivial) |
+| **1** | Load (render-blocking) | ~2,110 ms of render-blocking third-parties gate first paint — the reason production mobile is **75**; LCP (5.0 s) is then a CARTO tile | PSI §6: `leaflet.js` 1,340 ms + `leaflet.css` 750 ms + Fonts CSS 780 ms; `index.html:102`/`104`/`1278` | inline `leaflet.css`; self-host + subset the fonts (107 KiB woff2 off the critical path); async-load `leaflet.js` | **Highest — every visit** |
+| **2** | Network (live API) | Live queries define time-to-answer: TIGERweb ~5.7 s, Nominatim ~2.5 s, ArcGIS ~0.9 s | Firefox capture (§7) | pre-build the **decadal** state/federal legislative districts → cache-first `data/app/*.json` (extends P0/P2); ~5.7 s → ~200 ms | High (interaction) |
+| **3** | Boot payload | Decorative scope-mask parses 83 KB school-board geometry + ~46 KB marker icons every boot — PSI puts the geometry in the 669 ms critical chain, icons at a 10-min cache TTL | `index.html:6508`→`1884`, `1401`, `1484`; PSI §6 | `coverage-outline.json` / `requestIdleCallback`; lazy-load icons | Medium |
+| **4** | Rendering | Highlight drop-shadow ~3.7×'s pan-frame time (2.3 Mpx filter re-rasterized per frame) | `index.html:1010`; pan A/B 61.6 vs 16.7 ms | drop `filter` during `movestart`→`moveend`, or use a casing stroke | Medium (worse on low/mid mobile) |
+| **5** | App code | Point-in-polygon has no per-feature bbox pre-reject — ~1.44 s in `pointInRing` | `index.html:3892`/`1517`; Firefox capture (§7) | compute+cache each feature's bbox, skip the ray-cast on a miss (helpers `featureBBox`/`bboxIntersect` already exist). **Inside the `point-in-polygon` ENGINE fence → port to sibling forks** | Medium |
+| **6** | Load hygiene (PSI) | 60 KiB unused JS + 41 KiB minifiable JS/CSS (no-build tradeoff); oversized `@2x` tiles (56 KiB); 5 `preconnect`s (> 4) | PSI §6; `index.html:1750` (`{r}`→`@2x`), `90–98` (preconnects) | drop `{r}` for non-retina tiles (tradeoff); trim preconnects to ≤ 4; minify is a conscious no-build call | Low–Medium |
 
-**Priority read.** #1 is the biggest *real-world* win (it's what makes a card feel slow) but the largest change; #2 and #6 are the cheapest high-value fixes (a movestart/moveend class; a one-token color swap); #3 is cheap and reuses existing helpers but must port to sibling forks per the engine-parity rules; #4 restores the "download nothing you don't use" property; #5 is partly a deliberate design tradeoff.
+**Priority read.** #1 is the biggest *load* win and affects every visit — and it's mostly cheap (inline one stylesheet, self-host fonts); it's what moves the mobile 75. #2 is the biggest *interaction* win but the largest change. #3 restores the "download nothing you don't use" property (and helps #1's critical chain). #4 is the cheapest render fix (a movestart/moveend class); #5 is cheap but must port across the ENGINE fence; #6 is hygiene, part deliberate tradeoff. *(Dropped from this list: a color-contrast flag my in-sandbox proxy raised on `.empty-state-lede` — production **Accessibility = 100** doesn't reproduce it, since the empty-state renders below a full-height loaded map on mobile; a one-token darken to `--slate` is optional defensive hygiene. See §6.)*
 
 ### What's healthy (measured, no action)
 
-- Cold boot: 116 ms FCP / ~117 ms interactive (desktop) — **0 long tasks**, 32 ms script eval, 3.5 MB heap, 835 nodes, 33 layers. Under Lighthouse mobile: **CLS 0.012** (no layout shift), **TBT 100 ms**, main-thread work 1.6 s — all in the green.
-- `index.html` at 89 KB gzip; the eleven `data/app/*.json` datasets correctly stay lazy (on-toggle), *except* the school-board file pulled early by finding #4.
+- **Production mobile: TBT 0 ms, CLS 0, Accessibility / Best-Practices / SEO all 100.** The Performance 75 is entirely FCP+LCP (load delivery), not compute or layout.
+- Cold boot (desktop): 116 ms FCP / ~117 ms interactive — **0 long tasks**, 32 ms script eval, 3.5 MB heap, 835 nodes, 33 layers.
+- `index.html` at 89 KB gzip; the eleven `data/app/*.json` datasets correctly stay lazy (on-toggle), *except* the school-board file pulled early by finding #3.
 - Point-move on the P7 incremental path: 8 ms CPU (restyles 2 paths, not all). Warm re-toggle on the P11 path: 3.3 ms synchronous rebuild.
-- Memory/DOM growth bounded and proportionate; no leak observed across repeated toggles. SEO 100; Best-Practices ~100 once the sandbox's blocked-request console noise is excluded.
+- Memory/DOM growth bounded and proportionate; no leak observed across repeated toggles.
 
 ---
 
-## 6. Lighthouse mobile (cross-check)
+## 6. PageSpeed Insights — production mobile (Lighthouse 13.4.0)
 
-A Lighthouse 13.4.0 pass, default **mobile** config (Moto G4, slow-4G, 4× CPU, *simulated* throttling), against a local serve of this tree. This stands in for the production PageSpeed Insights mobile run (unreadable directly — client-rendered results + a quota-limited keyless API + no sandbox egress to production). **Fidelity:** Leaflet is served same-origin and the render-blocking font `<link>` neutralized so the app boots, so this is the **app-intrinsic** profile — production adds third-party render-blocking + real tiles on top, so its scores run a little lower.
+The **real production run** (chidistricts.com, mobile, Slow-4G, emulated Moto G Power, Jul 16 2026). *I first ran a local proxy of this in-sandbox (same-origin Leaflet, stubbed fonts/tiles) which scored Performance 96 / FCP 1.8 s — **optimistic by exactly the third-party costs it couldn't reach**. The production numbers below supersede that proxy; the divergence is itself the lesson (see the note at the end).*
 
-| Category | Score | | Metric (mobile-throttled) | Value |
-|---|--:|---|---|--:|
-| Performance | **96** | | First Contentful Paint | 1.8 s |
-| Accessibility | **96** | | Largest Contentful Paint | 2.1 s |
-| Best Practices | ~100\* | | Total Blocking Time | 100 ms |
-| SEO | **100** | | Cumulative Layout Shift | **0.012** |
-| | | | Speed Index | 3.6 s |
-| | | | Time to Interactive | 2.2 s |
+| Category | Score | | Metric (Slow-4G) | Value | Score points |
+|---|--:|---|---|--:|--:|
+| **Performance** | **75** | | First Contentful Paint | 3.3 s | 4 / 10 |
+| Accessibility | **100** | | **Largest Contentful Paint** | **5.0 s** | **7 / 25** |
+| Best Practices | **100** | | Total Blocking Time | **0 ms** | 30 / 30 ✓ |
+| SEO | **100** | | Cumulative Layout Shift | **0** | 25 / 25 ✓ |
+| Field data (CrUX) | No Data | | Speed Index | 3.4 s | 9 / 10 |
 
-\* *The raw run shows 96, docked only by an `errors-in-console` audit whose entries are all `net::ERR_CONNECTION_RESET` from the **sandbox's blocked tile/CDN requests** — a harness artifact, not a production error. Production's console is clean, so Best-Practices is effectively 100.*
+The score composition is the whole story: **TBT and CLS score full marks (55/55 points); the entire gap to 100 is FCP + LCP.** This is a *load-delivery* problem, not a main-thread or layout-shift problem — which agrees with §1 (0 long tasks) and the production capture (§7): the app's own compute is clean, but first paint waits on third-party resources.
 
-**New findings this surfaces (beyond the sandbox pass):**
+**LCP is a basemap tile.** The LCP element is `c.basemaps.cartocdn.com/…/525/761@2x.png` — a CARTO map tile — with a **900 ms element-render delay + 500 ms load delay**. The tile can't paint until Leaflet initializes, which waits behind the render-blocking resources below. So the LCP lever is *cutting render-blocking*, not the tile.
 
-- **62 KB unused JavaScript at load** — 38 KB of `index.html`'s inline JS + 25 KB of Leaflet. Both are *expected* for this architecture (a single file that registers all 33 layer modules up front, and a full mapping lib used partially) rather than a defect — but it's the largest byte opportunity Lighthouse names. Deferring per-layer module bodies until first toggle would cut initial parse; it also cuts against the "one hand-readable file, no build" value, so it's a design call, not a clear win.
-- **43 KB of unminifiable JS/CSS** (40 KB JS + 3 KB CSS). This is a **direct tension with the deliberate no-build / one-readable-file design** — Lighthouse always wants minification, the repo explicitly ships readable source. Gzip already recovers most of it on the wire (the gzipped delta is far smaller than 43 KB), and a production-only minify step would reintroduce a build. Worth stating as a conscious tradeoff, not silently "failing."
-- **Render-blocking resources** — Lighthouse attributes ~462 ms to Leaflet's `<script>` and ~162 ms to `leaflet.css` under mobile throttle, *plus* (on production, stubbed here) the Google-Fonts stylesheet. Leaflet's script can't simply be `defer`red (the boot IIFE needs `L` synchronously — see the OPTIMIZATION_PLAYBOOK anti-finding), so the realistic wins are self-hosting/inlining the two stylesheets and, longer-term, trimming how much Leaflet loads. Folded into finding #5.
-- **One color-contrast failure (Accessibility)** — the only thing between the app and a 100 a11y score: `.empty-state-lede` (`index.html:1018`) — the intro copy shown in the results panel before any point is picked (`:1189`) — is `--slate-soft` **#87929B on white ≈ 3.2 : 1**, under the 4.5 : 1 AA bar for 12.5 px text. Swapping that one rule to `--slate` (#55626C ≈ 6 : 1) fixes it with no layout change. Finding #6.
+### Opportunities (production, by estimated savings)
 
-**What it corroborates:** Lighthouse's total-byte-weight table (196 KB) ranks the boot resources **index.html 87 KB → leaflet.js 42 KB → water-taxi.png 26 KB → school-board-districts.json 20 KB → cook-county seal 18 KB** — i.e. the eager marker icons and the decorative-wash geometry are independently the 3rd–5th heaviest things loaded at boot, exactly finding #4. And CLS 0.012 / TBT 100 ms confirm the boot compute path is clean.
+| Insight | Est. savings | What it is |
+|---|--:|---|
+| **Render-blocking requests** | **~2,110 ms** | `leaflet.js` (1,340 ms) + `leaflet.css` (750 ms) + Google-Fonts CSS (780 ms) block first paint |
+| Improve image delivery | 56 KiB | CARTO `@2x` tiles are 512×512 for a 448×448 display, and PNG not WebP/AVIF |
+| Efficient cache lifetimes | 42 KiB | `water-taxi.png` (27 KiB) + `cook-county.png` (18 KiB) served with a **10-minute** cache TTL |
+| Reduce unused JavaScript | 60 KiB | 38 KiB of the inline app JS + 21 KiB of Leaflet unused at load |
+| Minify JavaScript | 41 KiB | the inline IIFE (a deliberate no-build tradeoff — see below) |
+| Minify CSS | 3 KiB | the inline `:root` stylesheet |
+| Preconnect hygiene | — | **5 preconnect hints** (Lighthouse warns > 4) + 1 unused |
+
+**Reconciliation with the rest of the report:**
+
+- **Render-blocking (~2,110 ms) is the dominant load cost, and the #1 lever for both FCP (3.3 s) and LCP (5.0 s).** My sandbox stubbed all three culprits, so it never saw this. Realistic fixes, cheapest first: **inline `leaflet.css`** into the existing `<style>` (3.8 KiB — removes one blocking request outright); **self-host the fonts** (the Google-Fonts stylesheet is render-blocking and pulls **107 KiB of woff2** — four files at ~513 ms each in the critical chain; subsetting + same-origin `@font-face` removes both the blocking CSS and the cross-origin fetches); and — harder — restructure boot so `leaflet.js` isn't a synchronous blocker (it can't just be `defer`red, the IIFE needs `L`, so this means loading it async and initializing on its `load`).
+- **Confirms finding #3 (boot payload).** `school-board-districts.json` (20 KiB) appears **in the initial-navigation critical chain at 669 ms** — the decorative scope-mask geometry loaded at boot, exactly as §2.1 found. The marker icons resurface under *cache lifetimes*: their 10-minute TTL is a **GitHub-Pages platform default** (not tunable without a CDN in front), so the lever is loading fewer/smaller icons lazily — again finding #3.
+- **Confirms unused / minify JS.** 60 KiB unused, 41 KiB minifiable — the minify gap being the conscious no-build, one-readable-file tradeoff (gzip already recovers most of it on the wire; a prod-only minify step would reintroduce a build).
+- **New: image delivery + preconnect hygiene.** The `@2x` retina tiles (Leaflet's `{r}` token resolves to `@2x` on any high-DPR phone, `index.html:1750`) are oversized for their CSS display box; dropping `{r}` trades tile crispness for ~56 KiB. And the page ships **5 `preconnect` hints** (`index.html:90–98`) where Lighthouse wants ≤ 4, with one flagged unused — trim the least-important (e.g. a second tile shard).
+- **Corrects my local a11y flag.** Production **Accessibility = 100.** My stubbed local run flagged `.empty-state-lede` contrast (#87929B on white ≈ 3.2 : 1 by the numbers, `index.html:1018`), but production PSI does **not** — on mobile the empty-state renders below a full-height loaded map and isn't caught. It's a *latent* borderline token, not a live finding, so it's **dropped from the prioritized list**; a one-token darkening to `--slate` remains cheap defensive hygiene if desired. **Best-Practices = 100** likewise confirms the earlier "console errors were a harness artifact" call.
+
+**Bottom line + the lesson.** Production mobile is **75 (needs-improvement)**, and essentially everything holding it there is **third-party load delivery** — render-blocking Leaflet + Google Fonts, then a CARTO tile as the LCP element. The app's *own* work is already green (TBT 0 ms, CLS 0, main-thread clean). My in-sandbox proxy scored 96 because it stubbed exactly those third-parties — a textbook case of this report's own "environment-independent vs not" caveat: the boot **compute** numbers (§1) transferred (production TBT is 0 ms), but the **network/paint** numbers did not, and only the real production run surfaces the render-blocking that dominates mobile.
 
 ## 7. Production Firefox Profiler capture (cross-check)
 
@@ -229,12 +244,12 @@ Headline numbers: main thread **28 % busy** (16.4 s CPU over 58.5 s, bursty); **
 
 **What it uniquely establishes, and how it reconciles with the two lab lenses:**
 
-- **Live-API latency is the real time-to-answer** (finding #1) — invisible to my sandbox and to the app-intrinsic Lighthouse pass, both of which stub the network. This is the most important production finding and belongs at the top of the list.
-- **The point-in-polygon bbox gap** (finding #3) — 1.44 s in `pointInRing` over a long session. My sandbox scenario (small offline layers, short session) never stressed it; this capture makes it concrete.
-- **Leaflet SVG reproject/repaint dominates client render** — agrees with my point-move CPU profile (the hot frames are all Leaflet `project`/`_projectLatlngs`/`_clipPoints`) and points to the same structural fix (Canvas renderer / OPTIMIZATION_PLAYBOOK P10). My drop-shadow A/B (finding #2) is a *component* of the Graphics/Layout cost this capture aggregates — real, cheap to fix, but ranked below live-API and the Leaflet-render bulk on real hardware.
-- **Corroborates that cold load isn't the problem** — its aside that "the page itself is light" (610 ms LCP) matches my cold-boot data (116 ms FCP; Lighthouse mobile LCP 2.1 s). The pain is *interaction over live data*, not load.
+- **Live-API latency is the real time-to-answer** (finding #2) — invisible to my sandbox and to the production PSI *load* pass, both of which measure page load, not a live-query interaction session. This is the top *interaction* finding.
+- **The point-in-polygon bbox gap** (finding #5) — 1.44 s in `pointInRing` over a long session. My sandbox scenario (small offline layers, short session) never stressed it; this capture makes it concrete.
+- **Leaflet SVG reproject/repaint dominates client render** — agrees with my point-move CPU profile (the hot frames are all Leaflet `project`/`_projectLatlngs`/`_clipPoints`) and points to the same structural fix (Canvas renderer / OPTIMIZATION_PLAYBOOK P10). My drop-shadow A/B (finding #4) is a *component* of the Graphics/Layout cost this capture aggregates — real, cheap to fix, but ranked below live-API and the Leaflet-render bulk on real hardware.
+- **Compute is light; cold-mobile *load* is not.** The capture's aside that "the page itself is light" (610 ms warm LCP) and my 116 ms desktop FCP both reflect the app's clean *compute* — but they're warm and/or desktop-unthrottled. The production PSI cold-mobile run (§6) shows the load side plainly: render-blocking third-parties push FCP to 3.3 s and LCP (a tile) to 5.0 s. No contradiction — the *engine* is light, the *cold-mobile delivery* is the cost (finding #1), and the *live-data interaction* is this capture's own headline (finding #2).
 
-The three lenses are complementary: **§1–4 (sandbox Chrome)** own cold-boot / payload / the controlled render A/B; **§6 (Lighthouse mobile)** owns the throttled-mobile scores + a11y/minify audits; **§7 (production Firefox)** owns real live-API / GC / Leaflet-render cost. No lens contradicts another where they overlap.
+The three lenses are complementary: **§1–4 (sandbox Chrome)** own cold-boot / payload / the controlled render A/B; **§6 (production PageSpeed Insights)** owns the real mobile scores + the render-blocking / load audits; **§7 (production Firefox)** owns real live-API / GC / Leaflet-render cost. No lens contradicts another where they overlap — and where they do (my proxy's 96 vs PSI's 75), §6 explains why.
 
 ---
 
@@ -252,15 +267,6 @@ BOOT_RUNS=15 node scripts/perf_profile.mjs   # more boot samples for a tighter m
 
 `scripts/perf_profile.mjs` is an operator/analysis tool, not a CI gate (behaviour is gated by `scripts/smoke_test.mjs`; the merge gate is `scripts/validate_index.py`). It depends only on the app shell + the three same-origin no-API layers, so it's deterministic and needs no live district API. Outputs (`perf-results.json`, `docs/perf-app-screenshot.png`) are gitignored transient artifacts, same convention as the smoke test's.
 
-**§6 Lighthouse mobile** (app-intrinsic, per its fidelity note) — serve this tree with Leaflet vendored same-origin, then run Lighthouse's default mobile config:
-
-```bash
-bash scripts/vendor_leaflet.sh          # in a CDN-blocked sandbox
-# serve index.html with the cdnjs Leaflet <link>/<script> rewritten to the
-# vendored copy and the fonts <link> removed (so Chrome can boot it offline), then:
-npx lighthouse http://localhost:<port>/ --form-factor=mobile --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless=new --no-sandbox"
-```
-
-Against production directly (from a machine with real egress, no rewrite needed): `npx lighthouse https://chidistricts.com/ --form-factor=mobile`, or PageSpeed Insights / the PSI API with a key. **§7** is a Firefox Profiler export, not reproducible from this repo — treat its numbers as the cited external capture.
+**§6 production PageSpeed Insights** — the authoritative numbers come from running PSI/Lighthouse against the **live site** (needs real egress this sandbox lacks): [pagespeed.web.dev](https://pagespeed.web.dev/) on `https://chidistricts.com/` (mobile), or `npx lighthouse https://chidistricts.com/ --form-factor=mobile`, or the PSI API with a key. The **in-sandbox proxy** (optimistic; see §6) reproduces as: `bash scripts/vendor_leaflet.sh`, serve `index.html` with the cdnjs Leaflet `<link>`/`<script>` rewritten same-origin and the fonts `<link>` removed so Chrome can boot it offline, then `npx lighthouse http://localhost:<port>/ --form-factor=mobile`. **§7** is a Firefox Profiler export, not reproducible from this repo — treat its numbers as the cited external capture.
 
 **Reading the results as this document does:** trust payload bytes, `ScriptDuration`, node/heap counts, CPU-sample shape, and every A/B ratio as-is; treat raw paint/pan wall-times as *relative* (headless software rendering inflates them); and label any claim about the live-API layers or real CDN/tile latency as inferred — this harness intentionally never touches them.
