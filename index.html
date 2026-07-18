@@ -5462,6 +5462,102 @@ function initChiExplorer() {
     }
   });
 
+  /* ---------- Graceful "live data source is down" fallback (fork code) --------
+   * Every Socrata layer below fetches from the City of Chicago Data Portal at
+   * runtime. When that portal is unreachable the layer's query rejects and,
+   * without this, the card falls back to the generic engine error ("this
+   * layer's data source didn't respond") — which reads as if the app itself
+   * broke. applySourceFallback wraps a registered layer so a query failure
+   * instead resolves to a sentinel that render() turns into a calm, honest
+   * card: it names the source, says plainly the outage is on the data
+   * provider's end (not this tool), links an official self-service lookup where
+   * one exists, and offers the same Retry as the engine error.
+   *
+   * This deliberately lives in fork code and wraps the *registered module*,
+   * rather than being a contract field the engine reads: the card framework and
+   * the layer factories are ENGINE-fenced, and the deploy re-splices those
+   * blocks from the hash-pinned engine release (see deploy-pages.yml /
+   * engine.lock.json), so an edit there would not ship without cutting a new
+   * engine version. Wrapping post-registration keeps the whole feature in this
+   * fork and works uniformly for the factory-built layers too, whose query /
+   * render live inside fences we can't touch here. ------------------------- */
+  var CHICAGO_PORTAL = "The City of Chicago Data Portal";
+  var SOURCE_DOWN_KEY = "__sourceUnavailable";
+
+  function renderSourceUnavailable(dataSource) {
+    var ds = dataSource || {};
+    var wrap = document.createElement("div");
+
+    var notice = document.createElement("p");
+    notice.style.margin = "0 0 10px";
+    notice.style.color = "var(--slate)";
+    notice.style.lineHeight = "1.45";
+    notice.textContent = (ds.label ? ds.label + " — the source for this layer — isn't responding right now."
+                                   : "This layer's live data source isn't responding right now.") +
+      " This is an outage on the data provider's end, not this tool, and it doesn't affect the other layers.";
+    wrap.appendChild(notice);
+
+    // Optional official self-service lookup so users aren't stranded. Static,
+    // developer-supplied URLs (passed through sanitize defensively all the same).
+    if (ds.lookup && ds.lookup.url) {
+      wrap.appendChild(renderFieldList([{
+        label: ds.lookup.label || "In the meantime",
+        html: '<a href="' + sanitize(ds.lookup.url) + '" target="_blank" rel="noopener">' +
+          sanitize(ds.lookup.text || ds.lookup.url) + "</a>"
+      }]));
+    }
+
+    var retry = document.createElement("button");
+    retry.type = "button";
+    retry.className = "retry-btn"; // styled by the shared .layer-card-body .retry-btn rule
+    retry.textContent = "Retry";
+    retry.addEventListener("click", function () {
+      var mod = ds.id ? getLayerById(ds.id) : null;
+      if (mod) onLayerToggled(mod); // re-attempts overlay load + re-runs the query
+    });
+    wrap.appendChild(retry);
+
+    return wrap;
+  }
+
+  // Wrap a registered layer so a data-source failure degrades to the graceful
+  // card above instead of the generic engine error. dataSource: { label,
+  // lookup? }. By the layer contract a query rejection always means "couldn't
+  // obtain the data" — exactly the case to degrade — so any rejection maps to
+  // the sentinel; a genuine logic bug still surfaces (its layer's smoke-test
+  // assertion would see the fallback card instead of the expected result).
+  function applySourceFallback(id, dataSource) {
+    var mod = getLayerById(id);
+    if (!mod) return; // id-typo guard — never break registration over the fallback
+    var ds = dataSource || {};
+    ds.id = id; // Retry needs to locate the module
+    var origQuery = mod.query;
+    var origRender = mod.render;
+    var origPoi = mod.pointOfInterest;
+
+    mod.query = function (point, seq) {
+      return Promise.resolve().then(function () { return origQuery.call(mod, point, seq); })
+        .catch(function (err) {
+          if (typeof console !== "undefined" && console.warn) {
+            console.warn("[" + id + "] data source unavailable — degrading gracefully:", err);
+          }
+          var result = { seq: seq };
+          result[SOURCE_DOWN_KEY] = ds;
+          return result;
+        });
+    };
+    mod.render = function (result) {
+      if (result && result[SOURCE_DOWN_KEY]) return renderSourceUnavailable(result[SOURCE_DOWN_KEY]);
+      return origRender.call(mod, result);
+    };
+    if (origPoi) {
+      mod.pointOfInterest = function (result) {
+        if (result && result[SOURCE_DOWN_KEY]) return null; // no map pin on the fallback card
+        return origPoi.call(mod, result);
+      };
+    }
+  }
+
   /* ---------- Community Area ---------- */
   var loadCommunityAreas = makeCachedLoader("igwz-8jzy");
 
@@ -5478,6 +5574,7 @@ function initChiExplorer() {
       { name: "number", label: "Area #", keys: ["area_numbe", "area_num_1", "area_number", "community_area_number", "area_num"] }
     ]
   });
+  applySourceFallback("community-area", { label: CHICAGO_PORTAL });
 
   /* ---------- ZIP Code (statewide ZCTA) ---------- */
   // Was the Chicago-only Socrata dataset (unjd-c2ca), which stopped at the city
@@ -6015,6 +6112,7 @@ function initChiExplorer() {
         (address ? String(address) : "Fire station");
     }
   });
+  applySourceFallback("fire-station", { label: CHICAGO_PORTAL });
 
   /* =========================================================================
    * THREAD 3 — SCHOOLS: Elementary / Middle / High attendance zones
@@ -6129,6 +6227,9 @@ function initChiExplorer() {
     registerSchoolZone(opts);
   }
 
+  // Shared official fallback for the three CPS attendance-zone layers.
+  var CPS_SCHOOL_LOOKUP = { label: "Find a school", url: "https://www.cps.edu/schools/find-a-school/", text: "CPS Find a School" };
+
   registerCpsZone({
     id: "cps-elementary",
     label: "CPS Elementary School Zone",
@@ -6136,6 +6237,7 @@ function initChiExplorer() {
     datasetId: "x72b-38qv",
     style: { color: "#6A3FA0", weight: 1.5, fillColor: "#6A3FA0", fillOpacity: 0.06, dashArray: "4 3" }
   });
+  applySourceFallback("cps-elementary", { label: CHICAGO_PORTAL, lookup: CPS_SCHOOL_LOOKUP });
 
   registerCpsZone({
     id: "cps-high",
@@ -6144,6 +6246,7 @@ function initChiExplorer() {
     datasetId: "xg7c-d8rm",
     style: { color: "#0F6F6F", weight: 1.5, fillColor: "#0F6F6F", fillOpacity: 0.06, dashArray: "1 3 4 3" }
   });
+  applySourceFallback("cps-high", { label: CHICAGO_PORTAL, lookup: CPS_SCHOOL_LOOKUP });
 
   registerCpsZone({
     id: "cps-middle",
@@ -6154,6 +6257,7 @@ function initChiExplorer() {
     datasetId: "fyff-53xy",
     style: { color: "#A15C00", weight: 1.5, fillColor: "#A15C00", fillOpacity: 0.06, dashArray: "6 2" }
   });
+  applySourceFallback("cps-middle", { label: CHICAGO_PORTAL, lookup: CPS_SCHOOL_LOOKUP });
 
   /* ==== ENGINE:BEGIN cps-network-factory ==== */
   /* ---------- CPS Network (administrative region, not a single school) ----------
@@ -6211,6 +6315,7 @@ function initChiExplorer() {
     datasetId: "pnta-kuqa",
     style: { color: "#3D3D7A", weight: 1.5, fillColor: "#3D3D7A", fillOpacity: 0.04, dashArray: "8 4 2 4" }
   });
+  applySourceFallback("cps-network", { label: CHICAGO_PORTAL });
 
   registerCpsNetwork({
     id: "cps-hs-network",
@@ -6219,6 +6324,7 @@ function initChiExplorer() {
     datasetId: "aupu-jt2g",
     style: { color: "#7A2D3D", weight: 1.5, fillColor: "#7A2D3D", fillOpacity: 0.04, dashArray: "10 3" }
   });
+  applySourceFallback("cps-hs-network", { label: CHICAGO_PORTAL });
 
   /* ---------- School Location — every school SITE, nearest 3 (not point-in-polygon) ----------
    * CPD's ArcGIS org (services2.arcgis.com/.../Schools/FeatureServer/0) publishes
@@ -6530,43 +6636,6 @@ function initChiExplorer() {
     return first + " " + last;
   }
 
-  // When the City of Chicago Data Portal (the upstream source for both the ward
-  // boundaries and the alderperson roster) is unreachable, we can't determine
-  // the ward at all. Rather than the generic engine error, degrade gracefully:
-  // say plainly that the outage is on the data provider's end — not this tool —
-  // point users to the City's official ward lookup so they aren't stranded, and
-  // offer a Retry that re-attempts the load (the cached loaders reset on failure,
-  // so the same toggle path the engine's own Retry uses re-fetches cleanly).
-  function renderWardSourceUnavailable() {
-    var wrap = document.createElement("div");
-
-    var notice = document.createElement("p");
-    notice.style.margin = "0 0 10px";
-    notice.style.color = "var(--slate)";
-    notice.style.lineHeight = "1.45";
-    notice.textContent = "Ward data is temporarily unavailable. The City of Chicago Data Portal — the source for ward boundaries and alderperson info — isn't responding right now. This is an outage on the data provider's end, not this tool, and it doesn't affect the other layers.";
-    wrap.appendChild(notice);
-
-    // Static, trusted URL (mirrors the commissioner card's official-body link),
-    // so it's assembled directly rather than through sanitize().
-    wrap.appendChild(renderFieldList([{
-      label: "In the meantime",
-      html: '<a href="https://www.chicago.gov/city/en/depts/mayor/iframe/lookup_ward_and_alderman.html" target="_blank" rel="noopener">Find your ward &amp; alderperson at chicago.gov</a>'
-    }]));
-
-    var retry = document.createElement("button");
-    retry.type = "button";
-    retry.className = "retry-btn"; // styled by the shared .layer-card-body .retry-btn rule
-    retry.textContent = "Retry";
-    retry.addEventListener("click", function () {
-      var mod = getLayerById("ward");
-      if (mod) onLayerToggled(mod); // re-attempts overlay load + re-runs the query
-    });
-    wrap.appendChild(retry);
-
-    return wrap;
-  }
-
   registerLayer({
     id: "ward",
     group: "political",
@@ -6578,18 +6647,14 @@ function initChiExplorer() {
     },
     query: function (point, seq) {
       // The alderperson roster (htai-wnw4) is secondary: if only it is down we
-      // can still answer "what ward" from the boundary, so swallow its failure
-      // to an empty roster. The ward boundary (p293-wvbd) is load-bearing —
-      // when the City's Data Portal can't serve it we can't determine the ward
-      // at all, so resolve to a sourceUnavailable sentinel that render() turns
-      // into a graceful "the outage is upstream, not this tool" card instead of
-      // throwing into the generic engine error. A logic error after the load
-      // still throws (surfacing real bugs); only a boundary-load failure degrades.
-      var wards = loadWards().then(function (geojson) { return geojson; }, function () { return null; });
+      // still answer "what ward" from the boundary, so swallow its failure to an
+      // empty roster. The ward boundary (p293-wvbd) is load-bearing — if the
+      // City's Data Portal can't serve it the query rejects, and the shared
+      // applySourceFallback("ward", …) wrapper (below the registration) degrades
+      // the card gracefully instead of showing the generic engine error.
       var aldermen = loadAldermen().catch(function () { return []; });
-      return Promise.all([wards, aldermen]).then(function (results) {
+      return Promise.all([loadWards(), aldermen]).then(function (results) {
         var geojson = results[0], roster = results[1];
-        if (!geojson) return { seq: seq, sourceUnavailable: true };
         var feature = findFeatureContaining(geojson, point);
         if (!feature) return null;
         var props = feature.properties || {};
@@ -6612,7 +6677,6 @@ function initChiExplorer() {
       });
     },
     render: function (result) {
-      if (result.sourceUnavailable) return renderWardSourceUnavailable();
       var fields = [{ label: "Ward", value: result.ward ? String(result.ward) : "Unknown" }];
       if (result.alderman) fields.push({ label: "Alderman", value: String(result.alderman) });
       if (result.phone) fields.push({ label: "Office Phone", value: String(result.phone) });
@@ -6651,6 +6715,13 @@ function initChiExplorer() {
         var box = document.getElementById("toggle-ward-precinct");
         if (box && box.checked) box.click();
       }
+    }
+  });
+  applySourceFallback("ward", {
+    label: CHICAGO_PORTAL,
+    lookup: {
+      url: "https://www.chicago.gov/city/en/depts/mayor/iframe/lookup_ward_and_alderman.html",
+      text: "Find your ward & alderperson at chicago.gov"
     }
   });
 
@@ -6718,6 +6789,7 @@ function initChiExplorer() {
       if (wardMod && wardRt.overlayLayer) updateLayerHighlight(wardMod);
     }
   });
+  applySourceFallback("ward-precinct", { label: CHICAGO_PORTAL });
 
   /* ---------- U.S. House (Congress) — TIGERweb boundary joined to a same-origin
    * roster (district -> current IL representative). The roster used to be the
