@@ -22,14 +22,15 @@ in the researched-but-unbuilt backlog.
    NO HONEST ANALOG cell cites its rationale; a concept a fork lacks *without* a recorded
    rationale sits in the Parity debts table until someone either ships it or records the
    drop. (This rule exists because SF's BART-districts candidate silently evaporated
-   between worksheet and launch — see Backlog.)
+   between worksheet and launch; the debt is since paid — `bart-director` shipped
+   July 2026 — but the rule stays.)
 
 <!-- ==== GUIDEBOOK:BEGIN coverage-map ==== -->
 ```json
 {
   "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "will-county-judicial", "will-county-board", "ccbr", "commissioner", "will-county-fire", "will-county-park", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "will-county-precinct", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
-  "sf": ["congress", "ca-senate", "ca-assembly", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"]
+  "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"]
 }
 ```
 <!-- ==== GUIDEBOOK:END coverage-map ==== -->
@@ -53,7 +54,7 @@ Pattern legend (which engine factory a layer uses): **Polygon** `registerPolygon
 `registerNearestPointLayer` (nearest-3 haversine; hover identity built in as of engine
 v1.0.6).
 
-Fleet totals: **Chicago 36 · NYC 27 · SF 14** layers.
+Fleet totals: **Chicago 36 · NYC 27 · SF 16** layers.
 
 ---
 
@@ -67,7 +68,7 @@ Fleet totals: **Chicago 36 · NYC 27 · SF 14** layers.
 | State upper chamber | SHIPPED `il-senate` | SHIPPED `state-senate` | SHIPPED `ca-senate` |
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` (50) | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
-| Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `will-county-precinct` | SHIPPED `election-district` (~4,200) | **GAP** — SF publishes precinct polygons (`jg6x-23ig`); no layer, no recorded drop |
+| Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `will-county-precinct` | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
 | County legislature / commissioner | SHIPPED `commissioner` (Cook) + `will-county-board` | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
@@ -77,7 +78,8 @@ Fleet totals: **Chicago 36 · NYC 27 · SF 14** layers.
 | Community district / board (appointed, labeled so) | n/a | SHIPPED `community-district` | n/a |
 | Elected school board (districted) | SHIPPED `school-board` (ERSB) | NO HONEST ANALOG³ | NO HONEST ANALOG (at-large board)⁴ |
 | Parent-elected education council | n/a | SHIPPED `cec` | n/a |
-| Early-voting / vote-center sites | SHIPPED `early-voting` (hand-curated per election) | SHIPPED `early-voting` (live NYS GIS) | SHIPPED `early-voting` (hand-curated; includes the 37 ballot drop boxes) |
+| Elected regional transit board | NO HONEST ANALOG⁸ | NO HONEST ANALOG⁸ | SHIPPED `bart-director` (9 districts, BART's own ArcGIS + hand-verified roster) |
+| Early-voting / vote-center sites | SHIPPED `early-voting` (hand-curated per election; every site doubles as a secured ballot drop box) | SHIPPED `early-voting` (live NYS GIS) | SHIPPED `early-voting` (hand-curated; includes the 37 ballot drop boxes) |
 
 Recorded drop rationales (full quotes live in the cited docs):
 ¹ NYC counties have no legislature — county government absorbed into the City (*Board of
@@ -86,7 +88,10 @@ Estimate v. Morris*, 1989). ² NYC's Tax Commission is appointed, citywide, no d
 *parent*-elected analog and its card says so. ⁴ SF's Board of Education is elected
 at-large; no district geometry exists. ⁵ SF's assessment-appeals board is appointed.
 ⁶ California Supreme Court is statewide; Courts of Appeal justices are appointed →
-link-only at most. ⁷ SF's DA is one at-large office. (¹–³:
+link-only at most. ⁷ SF's DA is one at-large office. ⁸ Neither sibling elects its
+transit board: the Chicago Transit Board is appointed (4 mayoral + 3 gubernatorial
+appointees, 70 ILCS 3605/19) and the MTA board is appointed (Governor + city/county
+recommendations) — BART is the fleet's only transit board elected by district. (¹–³:
 `docs/METRO_EXPANSION_PLAYBOOK.md` Part II "NO honest NYC analog" table /
 `docs/archive/METRO_EXPANSION_NYC.md` §7; ⁴–⁷: `docs/METRO_EXPANSION_SF_WORKSHEET.md`
 §0 + the SF repo's worksheet drop appendix.)
@@ -97,13 +102,17 @@ link-only at most. ⁷ SF's DA is one at-large office. (¹–³:
 |---|---|---|---|
 | Police district / precinct | SHIPPED `police-district` (22) | SHIPPED `police-precinct` (78) | SHIPPED `police-district` (10) |
 | Police subdivision (beat / sector) | SHIPPED `police-beat` | SHIPPED `police-sector` | NO HONEST ANALOG — SFPD publishes no patrol-beat boundary (the only "beats" dataset is Parking Control's) |
-| Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | **GAP** — SF Police Commission is appointed (defensible no-analog), but no drop is recorded; record it or ship link rows |
+| Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | NO HONEST ANALOG — the SF Police Commission (Charter §4.109) and Department of Police Accountability are appointed (Mayor + Board of Supervisors), citywide, no districts; NYC's labeled-link-row precedent is the upgrade path if oversight links are ever wanted on the card |
 | Fire-service boundary | SHIPPED `will-county-fire` (suburban Fire *Protection* Districts, coverage-gated) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published |
 | Police / fire station points | SHIPPED `police-station` · `fire-station` | SHIPPED | SHIPPED |
 
 Note the fire-boundary concept is not equivalent across forks: NYC maps *operational*
 battalions; CHI maps suburban *taxing* districts. Chicago-proper CFD battalion/division
-boundaries are unmapped in every fork and un-recorded — see Parity debts.
+boundaries are a **recorded drop (verified negative, 2026-07)**: neither the Chicago Data
+Portal nor CFD publishes any battalion/division boundary — the only official CFD spatial
+dataset is the station-point file the `fire-station` layer already uses (`28km-gtjn`);
+the boundary maps that circulate online are hobbyist reconstructions (e.g. FDmaps),
+which the never-guess rule excludes as a source.
 
 ### Schools
 
@@ -126,19 +135,18 @@ boundaries are unmapped in every fork and un-recorded — see Parity debts.
 | Park district | SHIPPED `will-county-park` (Will only) | n/a | n/a |
 | Post office points | SHIPPED `post-office` (USGS National Map L38 — same national source in every fork) | SHIPPED | SHIPPED |
 | Library points | SHIPPED `library` (CPL) | SHIPPED `library` (NYPL/BPL/QPL) | SHIPPED `library` (SFPL) |
-| Ballot drop boxes | **GAP** — not shipped, not recorded | **GAP** — not shipped, not recorded | SHIPPED (inside `early-voting`) |
+| Ballot drop boxes | SHIPPED — folded into `early-voting`: Chicago's 50 secured drop boxes (10 ILCS 5/19-6 collection sites, chicagoelections.gov/voting/drop-boxes) *are* the 50 early-voting sites, and the card intro says so | NO HONEST ANALOG — NYC runs no standalone drop-box program; absentee/mail ballots return by mail, at any poll site, or at BOE offices (vote.nyc / RequestBallot), all already covered by `early-voting` + the card's official links | SHIPPED (inside `early-voting`) |
 
 ---
 
 ## Parity debts (GAPs with no recorded decision — work them or record the drop)
 
-| # | Debt | Owed by | Notes |
-|--:|---|---|---|
-| 1 | Electoral precinct layer | SF | DataSF publishes current precinct polygons (`jg6x-23ig`, 2022 map). CHI and NYC both ship the concept. |
-| 2 | Elected-police-oversight decision | SF | Likely an honest no-analog (appointed Police Commission) — but write the drop row; NYC's precedent adds labeled link rows to the police card. |
-| 3 | Ballot drop boxes | CHI, NYC | SF ships 37 official drop boxes inside `early-voting`. Chicago BOE publishes secure drop-box sites per election (same transcription pipeline as the early-voting file); NYC BOE likewise. Decide: fold into each fork's `early-voting` or record why not. |
-| 4 | Chicago-proper fire battalion/division | CHI | CFD operational boundaries — no drop recorded and no dataset verified either way; investigate, then ship or record. |
-| 5 | BART Director districts decision | SF | The worksheet's flagged "genuinely local add" was silently deferred at launch — see Backlog. Verify sources, then build it or record the drop. |
+_None open._ The original five debts were cleared in July 2026 — the outcomes now live
+in the matrix above: SF shipped `election-precinct` and `bart-director`; the SF
+police-oversight and NYC ballot-drop-box gaps are recorded NO HONEST ANALOG cells;
+Chicago's drop boxes folded into `early-voting` (same 50 sites); and Chicago-proper CFD
+battalions are a verified-negative drop (see the fire-boundary note). New GAP cells go
+here as rows until shipped or recorded.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
@@ -146,10 +154,9 @@ Every entry cites where it's recorded and the blocker. When one ships, move it i
 matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnote.
 
 **San Francisco**
-- **BART Director districts** — elected by district, partly in SF; "a genuinely local,
-  honestly-districted, roster-backed layer with no Chicago analog"
-  (`docs/METRO_EXPANSION_SF_WORKSHEET.md` §0). Blocker: director-district geometry +
-  roster source unverified. The strongest unbuilt candidate in the fleet.
+- _(empty — BART Director districts, formerly the strongest unbuilt candidate in the
+  fleet, shipped as `bart-director` in July 2026: geometry from BART's own ArcGIS org,
+  roster hand-verified against bart.gov/about/bod.)_
 
 **New York City** (from `docs/METRO_EXPANSION_PLAYBOOK.md` Part II "Future layers")
 - Surrogate's Court judges — borough geometry ready; roster unverified.
@@ -220,7 +227,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `fire-station` | Fire Station | safety | NearestPt | Socrata `28km-gtjn` | — | chicagoCoverage |
 | `post-office` | Post Office | geography | NearestPt | USGS National Map structures L38 | — | — |
 | `library` | Library | geography | NearestPt | Socrata `x8fc-8rcq` | — | chicagoCoverage |
-| `early-voting` | Early Voting Site | political | NearestPt | hand-curated `early-voting-sites.json` (per election; WATCH.md row) | — | chicagoCoverage |
+| `early-voting` | Early Voting Site | political | NearestPt | hand-curated `early-voting-sites.json` (per election; sites double as the secured drop boxes; WATCH.md row) | — | chicagoCoverage |
 
 ### NYC — 27 layers
 
@@ -252,13 +259,15 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `library` | Library | geography | NearestPt | Socrata `feuq-due4` (all 3 systems) | — |
 | `early-voting` | Early Voting Site | political | NearestPt | live NYS GIS elections service L1 | — |
 
-### SF — 14 layers
+### SF — 16 layers
 
 | id | label | group | pattern | source | roster / join |
 |---|---|---|---|---|---|
 | `congress` | U.S. House District | political | Chamber | pre-built SF-clipped (TIGERweb L0, STATE=06) | `congress-roster.json` (weekly CI) |
 | `ca-senate` | CA State Senate District | political | Chamber | pre-built SF-clipped (TIGERweb L1) | `ca-senate-members.json` (weekly CI, OpenStates) |
 | `ca-assembly` | CA State Assembly District | political | Chamber | pre-built SF-clipped (TIGERweb L2) | `ca-assembly-members.json` (weekly CI) |
+| `bart-director` | BART Director District | political | Bespoke | BART's own ArcGIS org (Board_of_Directors_District_Boundary, 9 districts) | `bart-directors.json` (hand-verified per election cycle; WATCH.md rows) |
+| `election-precinct` | Election Precinct | political | Bespoke | Socrata `jg6x-23ig` (2022 map, 514 precincts) | — (subOf `supervisor-district`; polling-place lookup link) |
 | `supervisor-district` | Supervisor District | political | Bespoke | pre-built (DataSF `hcgx-vtsb`, water-trimmed; offline anchor) | `sf-supervisor-members.json` (weekly CI) |
 | `police-district` | Police District | safety | Polygon | pre-built (DataSF `d4vc-q76h`; offline anchor) | — |
 | `zip-code` | ZIP Code | geography | Polygon | live TIGERweb ZCTA | — |
