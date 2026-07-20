@@ -70,7 +70,7 @@ What a new metro rewrites is the **layer modules**: everything between the `THRE
 | Debug namespace | `window.ChiExplorer =` — **twinned in `scripts/smoke_test.mjs`** (its boot-wait and `setSelectedPoint` calls) | `window.ChiExplorer` | Rename in both files or neither. |
 | Hover fallback key lists | `var HOVER_NUMBER_KEYS =` (and `HOVER_NAME_KEYS`, top of the `HOVER EXPLORER` block) | Chicago field vocabulary (`ward`, `beat_num`, `area_numbe`, `community`…) | Re-seed from the new city's *observed* field names (§6.1) — no other city's datasets use Chicago's keys, and stale lists fail silently (see the surgery notes). Keep encoded fields (a `boro_cd` `"410"`, an AD·1000+ED) **out** — they need per-layer decoding, which is why `hoverName` is the primary mechanism (§2) and these lists are only a net. |
 | Preconnect/dns-prefetch | `rel="preconnect"` + `rel="dns-prefetch"` lines in `<head>` | cdnjs (Leaflet) + 3 basemap tile shards; dns-prefetch Chicago portal, Nominatim, Photon | `preconnect` the Leaflet CDN + your basemap tile shards (the LCP element is a tile), `dns-prefetch` the click-time data + geocoder hosts, and **cap at ≤4** (PSI warns beyond that). Fonts are self-hosted now (§13.2), so there are no font-CDN warms to keep — that freed the two slots the tile shards use. Full rationale + the render-blocking campaign: §13. |
-| Analytics | `data-goatcounter=` | `chidistricts.goatcounter.com/count` | The fork's own instance, or remove the script. |
+| Analytics | `data-goatcounter=` | `chidistricts.goatcounter.com/count` | The fork's own instance (§3.1 item 14) — never the reference's, and never absent at launch. |
 | Cross-metro footer list | `var METRO_EXPLORERS =` (METRO config block) | canonical list of every deployed explorer | **Shared, not swapped**: the list is identical in every fork (`THIS_METRO` makes the fenced `metro-links` block skip the fork's own entry). When a new metro launches, add its entry in **every** sibling fork — ported as the same small config diff per `docs/ENGINE_SYNC.md`, never re-typed. Each entry also carries `emoji` + `bbox` for the fenced `metro-portal` easter egg (wander/search/geolocate into a sibling metro → hand-off card): `bbox` is that fork's greater-metro box, mirroring its `PERMALINK_GATE`, so a deep-linked `#point=` always passes the target's permalink gate. Omitting `bbox` opts the metro out of the portal until one is decided; `validate_index.py` lints every entry and refuses a sibling bbox that contains the home metro's center (the portal would fire on every pan). Overlapping bboxes are fine — the nearest bbox center wins at runtime. |
 
 **Branding & identity rows (all city-named strings):** `<title>` + meta description (anchor: `<title>Chicago District Explorer`); theme-color meta + the inline SVG favicon (anchor: `<meta name="theme-color"` — the star polygon is Chicago-flag art); the `:root` palette (anchor: `/* ---- Chicago flag palette ---- */` — replace the `--chi-*` custom properties, then grep `var(--chi-` for every downstream use: masthead star, focus ring, legend, empty states); the masthead heading + star SVG (anchor: `class="title-text"`); the city-named a11y strings (anchor: `Map of Chicago. Click anywhere` — map aria-label, search placeholder, visually-hidden label); footer source-attribution links (anchor: `class="footer-sources"`); feedback email (anchor: `var EMAIL =`); repo/sponsor/author links (grep `github.com/ThursdaysFamous` — the source link, the owner-only `github.com/sponsors/` link, and `var REPO_ISSUES =` + `var FEEDBACK_SUBJECT =` in the METRO config block — point them at the fork's **own** repo and name: a stale copy files the new city's bug reports against the reference repo, a bug both existing forks actually shipped).
@@ -190,6 +190,13 @@ carries the new `METRO_EXPLORERS` entry to each sibling.
     `SOCRATA_DOMAIN`/`CATALOG_API` (DataSF, for one, is not in the federated
     us.socrata.com catalog) — a stale reference-city manifest FAILs against the fork's
     app forever.
+14. *(Operator)* Analytics: create the fork's own GoatCounter site
+    (`{metro}districts.goatcounter.com` is the fleet pattern) and set its code in the
+    `data-goatcounter` script tag. Removing the reference's tag is only half the job —
+    the engine's `trackEvent` instrumentation (per-layer toggles, searches, geolocate,
+    permalinks, metro-portal jumps) no-ops silently without a tag, so a missing one is
+    invisible. SF shipped three days with zero analytics this way. The §3.2 sweep greps
+    for it.
 
 ### 3.2 The localization sweep (leftover-reference-city gate)
 
@@ -199,8 +206,15 @@ fingerprints:
 ```bash
 grep -rn -i --exclude-dir=node_modules --exclude-dir=.git \
   -e 'chidistricts.com' -e 'cityofchicago' -e 'ChiExplorer' -e 'chicago' \
+  -e 'data-goatcounter' \
   index.html sw.js README.md CLAUDE.md WATCH.md manifest.webmanifest scripts/ .github/
 ```
+
+The `data-goatcounter` hit must show the **fork's own** GoatCounter site code, never the
+reference's (`chidistricts.goatcounter.com` in a fork = the worse failure, miscounted
+traffic) — and "no hit at all" is a §3.1 item 14 miss, not a pass: the SF fork launched
+with zero analytics because Thread 0 removed the reference tag and nothing prompted
+re-adding the fork's own.
 
 Expected hits (the allowlist): ENGINE-fenced comments that name the reference
 implementation; `engine.lock.json`'s `source_repo`; the `chicago` entry in
