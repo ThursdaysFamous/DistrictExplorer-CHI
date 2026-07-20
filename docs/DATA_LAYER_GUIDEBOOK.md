@@ -155,12 +155,36 @@ Every entry cites where it's recorded and the blocker. When one ships, move it i
 matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnote.
 
 **Fleet-wide**
-- **Card-order conformance audit** — sweep every fork's result cards against the card
-  content-order convention (procedure step 2a: name → identifier → representative(s) →
-  location → contact → link) and against each layer's *source*: where a dataset or roster
-  carries officeholder, address, or contact fields the card doesn't surface yet, either
-  surface them or record the deviation here per layer. Added 2026-07 when the convention
-  was written down; no per-layer sweep has been run yet.
+- **Card-order conformance audit — RUN 2026-07-20** (sweep of all 79 cards against
+  procedure step 2a and against each layer's source). Result: 73 of 79 conform or
+  deviate with a justified reason (nearest-N lists; no-officer geography/identity
+  concepts; honesty-rule link-only judicial bodies). Fixes shipped from the findings:
+  - *Engine v1.0.7*: `cps-network-factory` location-before-contact row swap;
+    `chamber-factory` profile-link label now follows the actual href (a directory
+    fallback no longer masquerades as the member's own page).
+  - *CHI `ward`*: the roster's real phone column (`ward_phone`) was never matched, so
+    the Office Phone row had been silently dead — fixed; rows reordered to
+    location→contact; per-ward `website` (in the roster all along) now rendered, with
+    the chicago.gov lookup as fallback — ward was the only officeholder card with no
+    link.
+  - *NYC*: `police-precinct` latent contact-before-location order fixed; the state
+    legislature scraper/builder now capture each member's official page (Open States
+    `links`) so the chamber cards gain per-member links on the next weekly roster PR.
+  - *SF `early-voting`*: drop-box features' `supervisorial_district` (present on
+    37/38 sites) now surfaces on the card line.
+  Recorded as fine-as-is (checked, no action): NYC school zones carry no school
+  address/grades in the DOE datasets (verified live — `addressKeys`/`gradeKeys`
+  deliberately unwired, now documented in code); CHI/SF/NYC fire-station + SF/NYC
+  library sources genuinely carry no phone; SF `supervisor-district` upstream
+  (`hcgx-vtsb`) carries no contact fields; congress rosters ship the D.C. office only
+  (a builder-scope enrichment candidate, below). Cosmetic unfetched-or-unrendered
+  fields (SF/NYC `post-office` STATE, NYC `school-site` city/zip, NYC `early-voting`
+  county) trimmed or left recorded here.
+- **Congress district-office enrichment** — every fork's `congress-roster.json`
+  carries only the D.C. office because `build_congress_roster.py` reads
+  unitedstates/congress-legislators, which has no district offices. If a verifiable
+  per-member district-office source is adopted, all three forks' congress cards gain
+  a local office row with no app change (the chamber factory already renders it).
 
 **San Francisco**
 - _(empty — BART Director districts, formerly the strongest unbuilt candidate in the

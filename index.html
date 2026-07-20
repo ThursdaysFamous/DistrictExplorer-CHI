@@ -6405,8 +6405,9 @@ function initChiExplorer() {
       render: function (result) {
         var fields = [{ label: "Network", value: result.network ? String(result.network) : "Unknown" }];
         if (result.chief) fields.push({ label: "Network Chief", value: String(result.chief) });
-        if (result.phone) fields.push({ label: "Phone", value: String(result.phone) });
+        // Card convention: office location before contact.
         if (result.address) fields.push({ label: "Office Address", value: String(result.address), pin: opts.style.color });
+        if (result.phone) fields.push({ label: "Phone", value: String(result.phone) });
         return renderFieldList(fields);
       },
       pointOfInterest: function (result) {
@@ -6787,19 +6788,33 @@ function initChiExplorer() {
         }
         var alderman = aldermanRow ? formatAldermanName(findPropCI(aldermanRow, ["alderman", "alderman_name", "member", "name"])) : null;
         var email = aldermanRow ? findPropCI(aldermanRow, ["email", "e_mail", "e-mail"]) : null;
-        var phone = aldermanRow ? findPropCI(aldermanRow, ["phone", "ward_office_phone", "office_phone", "telephone"]) : null;
+        // The live roster's actual column is `ward_phone` (findPropCI is an
+        // exact-key match, so it must be listed explicitly).
+        var phone = aldermanRow ? findPropCI(aldermanRow, ["ward_phone", "phone", "ward_office_phone", "office_phone", "telephone"]) : null;
         var address = aldermanRow ? findPropCI(aldermanRow, ["address", "ward_office_address", "office_address", "ward_office"]) : null;
+        // `website` is a Socrata url-type column: an object {url: "..."}.
+        var websiteRaw = aldermanRow ? findPropCI(aldermanRow, ["website", "web_site", "url"]) : null;
+        var website = websiteRaw && typeof websiteRaw === "object" ? websiteRaw.url : websiteRaw;
 
-        return { seq: seq, ward: ward, alderman: alderman, email: email, phone: phone, address: address };
+        return { seq: seq, ward: ward, alderman: alderman, email: email, phone: phone, address: address, website: website };
       });
     },
     render: function (result) {
+      // Card convention: identifier → representative → location → contact → link.
       var fields = [{ label: "Ward", value: result.ward ? String(result.ward) : "Unknown" }];
       if (result.alderman) fields.push({ label: "Alderman", value: String(result.alderman) });
-      if (result.phone) fields.push({ label: "Office Phone", value: String(result.phone) });
       if (result.address) fields.push({ label: "Office Address", value: String(result.address), pin: "#0B5394" });
+      if (result.phone) fields.push({ label: "Office Phone", value: String(result.phone) });
       if (result.email) {
         fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(result.email) + '">' + sanitize(result.email) + '</a>' });
+      }
+      var wardSite = result.website ? safeHttpUrl(result.website) : null;
+      if (wardSite) {
+        fields.push({ label: "Website", html: '<a href="' + sanitize(wardSite) + '" target="_blank" rel="noopener">' + sanitize(wardSite) + '</a>' });
+      } else {
+        // No per-ward site in the roster row: fall back to the official
+        // citywide lookup rather than shipping a card with no link at all.
+        fields.push({ label: "More", html: '<a href="https://www.chicago.gov/city/en/depts/mayor/iframe/lookup_ward_and_alderman.html" target="_blank" rel="noopener">Find your ward &amp; alderperson at chicago.gov</a>' });
       }
       return renderFieldList(fields);
     },
@@ -7072,8 +7087,11 @@ function initChiExplorer() {
         // case, which previously emitted href="" (a self-link).
         var memberUrl = member && member.url ? safeHttpUrl(member.url) : null;
         var profileUrl = memberUrl || opts.directoryUrl || opts.ilgaUrl;
+        // Label follows the actual href: only a roster-supplied member URL gets
+        // the per-member label — a directory fallback must not masquerade as
+        // the member's own page (rosters without url fields hit this daily).
         fields.push({
-          label: member ? (opts.profileLabel || "Member profile") : (opts.directoryLabel || "Member directory"),
+          label: memberUrl ? (opts.profileLabel || "Member profile") : (opts.directoryLabel || "Member directory"),
           html: '<a href="' + sanitize(profileUrl) + '" target="_blank" rel="noopener">' + sanitize(profileUrl) + '</a>'
         });
         return renderFieldList(fields);
