@@ -5636,10 +5636,9 @@ function initChiExplorer() {
   // never pinned in the session cache — the same loader pattern the Will County
   // and TIGER layers use. The boundary feature carries the district number and
   // the official per-district map URL on dupagecounty.gov, but no member names,
-  // so the card links to the official body rather than inventing names (honesty
-  // rule). A per-district member roster is a planned enrichment: DuPage's board
-  // directory is JS-rendered, so it needs a Playwright scrape (the CPD pattern),
-  // after which member rows join here by district with no further app change.
+  // so names come from the weekly-scraped roster joined below (never guessed);
+  // where the roster is absent the card still shows the district + official
+  // links. The Board Chair, elected countywide, appears on every district card.
   var DUPAGE_GIS = "https://services.arcgis.com/neJvtQ4PXvnQ86MJ/arcgis/rest/services/";
   var loadDupageCountyBoard = makeCached(function () {
     var url = DUPAGE_GIS + "County_Board_Dist_new/FeatureServer/0" +
@@ -5649,6 +5648,16 @@ function initChiExplorer() {
         if (!hasUsableGeometry(geojson)) throw new Error("DuPage County Board returned no usable geometry");
         return geojson;
       });
+  });
+  // Board members (name, email, profile page) scraped weekly from
+  // dupagecounty.gov's directory into a same-origin roster, keyed by district
+  // and joined to the boundary by district number — the Will County board
+  // pattern. Names/emails are read verbatim from the county's own pages (see
+  // scripts/dupage_county_board_scraper.py), never guessed; the countywide
+  // Board Chair is carried under a "chair" key. A missing roster degrades to the
+  // district + official links (best-effort .catch below).
+  var loadDupageCountyBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dupage-county-board-members.json", {}, 2);
   });
   registerLayer({
     id: "dupage-county-board",
@@ -5663,15 +5672,39 @@ function initChiExplorer() {
       style: { color: "#2E7D32", weight: 2, fillColor: "#66BB6A", fillOpacity: 0.05, dashArray: "9 3 3 3" }
     },
     query: function (point, seq) {
-      return loadDupageCountyBoard().then(function (geojson) {
+      return Promise.all([
+        loadDupageCountyBoard(),
+        loadDupageCountyBoardMembers().catch(function () { return {}; })
+      ]).then(function (results) {
+        var geojson = results[0], roster = results[1];
         var feature = findFeatureContaining(geojson, point);
         if (!feature) return null;
         var props = feature.properties || {};
-        return { seq: seq, district: findPropCI(props, ["district"]), props: props };
+        var district = findPropCI(props, ["district"]);
+        var entry = district != null ? roster[String(district)] : null;
+        return { seq: seq, district: district, entry: entry, chair: roster.chair || null, props: props };
       });
     },
     render: function (result) {
       var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
+      // One row per board member of this district (name + email + profile), from
+      // the weekly roster; every external string sanitized before it is HTML.
+      function personRow(label, m) {
+        var lines = ["<strong>" + sanitize(m.name) + "</strong>" + (m.role ? " — " + sanitize(m.role) : "")];
+        var link = [];
+        if (m.email) link.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
+        var prof = safeHttpUrl(m.url);
+        if (prof) link.push('<a href="' + sanitize(prof) + '" target="_blank" rel="noopener">profile</a>');
+        if (link.length) lines.push(link.join(" · "));
+        fields.push({ label: label, html: lines.join("<br>") });
+      }
+      var members = result.entry && result.entry.members;
+      if (members && members.length) {
+        members.forEach(function (m) { personRow("Board Member", m); });
+      }
+      // The Board Chair is elected countywide, so she represents every DuPage
+      // resident — surface her on every district's card.
+      if (result.chair && result.chair.name) personRow("Board Chair (countywide)", result.chair);
       // Official per-district map link carried on the boundary feature itself.
       var mapUrl = safeHttpUrl(findPropCI(result.props, ["url"]));
       if (mapUrl && result.district) {
@@ -5680,13 +5713,22 @@ function initChiExplorer() {
           html: '<a href="' + sanitize(mapUrl) + '" target="_blank" rel="noopener">DuPage County Board District ' + sanitize(String(result.district)) + ' — map (official)</a>'
         });
       }
-      // Three County Board members represent each district; the boundary carries
-      // no names, so link the official directory instead of guessing.
       fields.push({
-        label: "Board members",
-        html: '<a href="https://www.dupagecounty.gov/government/county_board/county_board_members/" target="_blank" rel="noopener">DuPage County Board members (official directory)</a>'
+        label: "Official directory",
+        html: '<a href="https://www.dupagecounty.gov/government/county_board/county_board_members/" target="_blank" rel="noopener">DuPage County Board members (official)</a>'
       });
       return renderFieldList(fields);
+    },
+    // hover popup: name this district's board members from the prefetched roster.
+    hoverOfficial: {
+      load: loadDupageCountyBoardMembers,
+      name: function (feature, roster) {
+        if (!roster) return null;
+        var d = findPropCI(feature.properties || {}, ["district"]);
+        var entry = d != null ? roster[String(d)] : null;
+        var members = entry && entry.members;
+        return members && members.length ? members.map(function (m) { return m.name; }).join(", ") : null;
+      }
     }
   });
 

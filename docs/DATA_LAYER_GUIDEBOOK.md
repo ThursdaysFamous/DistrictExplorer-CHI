@@ -228,9 +228,11 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 - Statewide voting precincts — hardest class: 102 clerks, non-uniform, frequently
   redrawn; collar-first plan recorded (suburban Cook `k7sw-w3b8`, Lake, …).
 - Collar-county boards (Lake, Kane, McHenry, Kendall) — per-county ArcGIS Hubs;
-  Cook + Will + DuPage shipped (DuPage board 2026-07: boundary + coverage +
-  link-only card; a Playwright-scraped member roster is the next increment,
-  since dupagecounty.gov's directory is JS-rendered).
+  Cook + Will + DuPage shipped (DuPage board 2026-07: boundary + coverage + a
+  weekly-scraped member roster — 18 members across 6 districts + the countywide
+  Chair, with published @dupagecounty.gov emails. The directory turned out to be
+  static server-rendered HTML, so a plain requests+bs4 scrape sufficed — no
+  Playwright).
 - Park districts statewide (~350) — no statewide GIS; per-county sources.
 - Cook County GIS layers never wired — library/park/fire/TIF/MWRD/forest-preserve tax
   districts on `gis.cookcountyil.gov` (`politicalBoundary` server), "not evaluated" in
@@ -256,7 +258,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `municipality` | Municipality | geography | Polygon | live TIGERweb Places | — | — |
 | `will-county-judicial` | Judicial Subcircuit (12th Circuit) | political | Polygon | Will County ArcGIS | link-only | willCountyCoverage |
 | `will-county-board` | Will County Board District | political | Bespoke | Will County ArcGIS | `will-county-board-members.json` (weekly CI) | willCountyCoverage |
-| `dupage-county-board` | DuPage County Board District | political | Bespoke | DuPage County ArcGIS (`County_Board_Dist_new`) | link-only (official per-district map + directory; member roster is a Playwright-scrape follow-up) | dupageCountyCoverage |
+| `dupage-county-board` | DuPage County Board District | political | Bespoke | DuPage County ArcGIS (`County_Board_Dist_new`) | `dupage-county-board-members.json` (weekly CI from dupagecounty.gov; + countywide Chair) | dupageCountyCoverage |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |
 | `commissioner` | Cook County Commissioner District | political | Bespoke | Cook County GIS L9 | live office join (same server) | cookCountyCoverage |
 | `will-county-fire` | Fire Protection District | safety | Polygon | Will County ArcGIS | trustees in GIS attrs | willCountyCoverage |
