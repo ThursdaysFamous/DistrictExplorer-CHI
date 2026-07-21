@@ -1,0 +1,124 @@
+{
+  "1": {
+    "members": [
+      {
+        "name": "Cindy Cronin Cahill",
+        "email": "Cindy.CroninCahill@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/cahill.php"
+      },
+      {
+        "name": "Michael Childress",
+        "email": "Michael.Childress@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/childress.php"
+      },
+      {
+        "name": "Sam Tornatore",
+        "email": "sam.tornatore@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/tornatore.php"
+      }
+    ],
+    "sourceUrl": "https://www.dupagecounty.gov/government/county_board/county_board_members/"
+  },
+  "2": {
+    "members": [
+      {
+        "name": "Paula Deacon Garcia",
+        "email": "paula.deacongarcia@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/garcia.php"
+      },
+      {
+        "name": "Andrew Honig"
+      },
+      {
+        "name": "Yeena Yoo",
+        "email": "Yeena.Yoo@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/yoo.php"
+      }
+    ],
+    "sourceUrl": "https://www.dupagecounty.gov/government/county_board/county_board_members/"
+  },
+  "3": {
+    "members": [
+      {
+        "name": "Lucy Chang Evans",
+        "email": "Lucy.Evans@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/evans.php"
+      },
+      {
+        "name": "Kari Galassi",
+        "email": "kari.galassi@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/galassi.php"
+      },
+      {
+        "name": "Brian Krajewski",
+        "email": "brian.krajewski@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/krajewski.php"
+      }
+    ],
+    "sourceUrl": "https://www.dupagecounty.gov/government/county_board/county_board_members/"
+  },
+  "4": {
+    "members": [
+      {
+        "name": "Grant Eckhoff",
+        "email": "grant.eckhoff@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/eckhoff.php"
+      },
+      {
+        "name": "Lynn LaPlante",
+        "email": "lynn.laplante@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/laplante.php"
+      },
+      {
+        "name": "Mary FitzGerald Ozog",
+        "email": "mary.ozog@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/ozog.php"
+      }
+    ],
+    "sourceUrl": "https://www.dupagecounty.gov/government/county_board/county_board_members/"
+  },
+  "5": {
+    "members": [
+      {
+        "name": "Sadia Covert",
+        "email": "sadia.covert@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/covert.php"
+      },
+      {
+        "name": "Dawn DeSart",
+        "email": "dawn.desart@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/desart.php"
+      },
+      {
+        "name": "Saba Haider"
+      }
+    ],
+    "sourceUrl": "https://www.dupagecounty.gov/government/county_board/county_board_members/"
+  },
+  "6": {
+    "members": [
+      {
+        "name": "Melissa Martinez",
+        "email": "melissa.martinez@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/martinez.php"
+      },
+      {
+        "name": "Greg Schwarze",
+        "email": "greg.schwarze@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/schwarze.php"
+      },
+      {
+        "name": "James Zay",
+        "email": "james.zay@dupagecounty.gov",
+        "url": "https://www.dupagecounty.gov/government/county_board/zay.php"
+      }
+    ],
+    "sourceUrl": "https://www.dupagecounty.gov/government/county_board/county_board_members/"
+  },
+  "chair": {
+    "name": "Deborah Conroy",
+    "role": "Chair",
+    "email": "chair@dupagecounty.gov",
+    "url": "https://www.dupagecounty.gov/government/county_board/conroy.php"
+  }
+}

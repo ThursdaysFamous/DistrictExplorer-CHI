@@ -121,6 +121,7 @@ ROSTER_FILES = {
     "early-voting-sites.json": 3,  # GeoJSON FeatureCollection (type/metadata/features — key floor is shape-only); hand-curated per election from chicagoelections.gov, network-first so a new election's list is never served stale
     "ccbr-roster.json": 3,
     "il-county-clerks.json": 101,
+    "dupage-county-board-members.json": 6,
 }
 # ==== GENERATED:END validator-config ====
 

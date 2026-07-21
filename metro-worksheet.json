@@ -506,11 +506,15 @@
       {
         "file": "il-county-clerks.json",
         "min_keys": 101
+      },
+      {
+        "file": "dupage-county-board-members.json",
+        "min_keys": 6
       }
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v15",
+    "cache_name": "district-explorer-shell-v16",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -563,6 +567,11 @@
       "file": "update-county-clerk-roster.yml",
       "purpose": "Illinois county clerk roster (ISBE election-authority directory scrape)",
       "schedule": "Sat 13:00 UTC"
+    },
+    {
+      "file": "update-dupage-county-board-roster.yml",
+      "purpose": "DuPage County Board roster (dupagecounty.gov directory scrape)",
+      "schedule": "Sun 13:00 UTC"
     },
     {
       "file": "validate-sources.yml",
