@@ -1859,7 +1859,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ---- selected-boundary highlight: SVG drop-shadow filter so the matched
      region reads as physically lifted above the faded rest of the layer ---- */
   /* ==== ENGINE:END styles-footer ==== */
-  .chi-region-highlight {
+  /* ==== ENGINE:BEGIN styles-markers ==== */
+  .region-highlight {
     filter: drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35));
     transition: filter 120ms ease-out;
   }
@@ -1868,8 +1869,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
    * rasterizing a ~2.3 Mpx region every frame); this drops it to the filter-off
    * baseline during pan/zoom with NO change at rest — the base rule's 120 ms
    * transition fades the shadow back in on moveend. (OPTIMIZATION_PLAYBOOK P9/R2-5.) */
-  .chi-panning .chi-region-highlight { filter: none; transition: none; }
-  .chi-poi-pin { background: none; border: none; }
+  .map-panning .region-highlight { filter: none; transition: none; }
+  .poi-pin { background: none; border: none; }
+  /* ==== ENGINE:END styles-markers ==== */
   /* Chicago-specific: the SEO/orientation lede under the empty-state prompt —
      the district vocabulary a first-time (or crawling) visitor reads before a
      point is picked. Styled a step down from the primary prompt above it. */
@@ -2192,10 +2194,6 @@ function initChiExplorer() {
     { id: "sf", label: "San Francisco", url: "https://sf.chidistricts.com/", emoji: "🌉",
       bbox: { minLng: -122.6, minLat: 37.6, maxLng: -122.3, maxLat: 37.95 } }
   ];
-  /* CSS class names for the fork-branded map chrome: ENGINE code applies them,
-   * this fork's stylesheet defines them (they carry the fork's palette). */
-  var HIGHLIGHT_CLASS = "chi-region-highlight"; // selected-region highlight (drop-shadow filter)
-  var POI_PIN_CLASS = "chi-poi-pin";           // geocoded point-of-interest marker
   // FALLBACK district-number key list, fed through extractDistrictNumber
   // (which adds a name-field regex fallback for the layers whose number only
   // lives inside a "…name" string). The factories declare per-layer hoverName
@@ -2222,6 +2220,16 @@ function initChiExplorer() {
   ];
   /* ==== GENERATED:END metro-config ==== */
   /* ==== METRO:END config ==== */
+
+  /* ==== ENGINE:BEGIN map-chrome-classes ==== */
+  /* Neutral class names for the shared map chrome, applied by engine code and
+   * styled by the fenced styles-markers CSS. Formerly fork-prefixed and worksheet-
+   * driven (docs/ENGINE_SYNC.md item 6); neutralized to byte-identical engine
+   * constants so the names and their CSS match across every fork. */
+  var HIGHLIGHT_CLASS = "region-highlight"; // selected-region highlight (drop-shadow filter)
+  var POI_PIN_CLASS = "poi-pin";            // geocoded point-of-interest marker
+  var PANNING_CLASS = "map-panning";        // map-container class that pauses the highlight filter mid-pan
+  /* ==== ENGINE:END map-chrome-classes ==== */
 
   /* ==== ENGINE:BEGIN app-token ==== */
   function withAppToken(url) {
@@ -2644,13 +2652,15 @@ function initChiExplorer() {
 
   var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(METRO_CENTER, 11);
   L.control.zoom({ position: "bottomright" }).addTo(map);
+  /* ==== ENGINE:BEGIN map-pan-filter ==== */
   // Pause the selection-highlight drop-shadow during pan/zoom (see the
-  // .chi-panning CSS rule): the filter's per-frame rasterization is the measured
+  // .map-panning CSS rule): the filter's per-frame rasterization is the measured
   // pan cost (R2-5). A class on the map container flips it off on move/zoom
   // start and back on end; classList add/remove is idempotent so overlapping
   // pan+zoom events are harmless.
-  map.on("movestart zoomstart", function () { map.getContainer().classList.add("chi-panning"); });
-  map.on("moveend zoomend", function () { map.getContainer().classList.remove("chi-panning"); });
+  map.on("movestart zoomstart", function () { map.getContainer().classList.add(PANNING_CLASS); });
+  map.on("moveend zoomend", function () { map.getContainer().classList.remove(PANNING_CLASS); });
+  /* ==== ENGINE:END map-pan-filter ==== */
   var baseTiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 19,
     subdomains: "abcd",

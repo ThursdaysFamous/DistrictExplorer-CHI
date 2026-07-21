@@ -8,7 +8,7 @@
   "required": [
     "this_metro", "metro_name", "metro_bbox", "metro_center", "permalink_gate",
     "socrata_host", "socrata_app_token", "repo_issues", "feedback_subject",
-    "metro_explorers", "highlight_class", "poi_pin_class",
+    "metro_explorers",
     "hover_number_keys", "hover_name_keys", "layers", "min_register_layer",
     "anchor_point", "anchors", "negative_point", "data_files", "sw",
     "data_sources", "workflows", "geocoder", "palette", "domains",
@@ -45,8 +45,6 @@
         }
       }
     },
-    "highlight_class": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-    "poi_pin_class": { "type": "string", "pattern": "^[a-z0-9-]+$" },
     "hover_number_keys": { "$ref": "#/definitions/groupedKeys" },
     "hover_name_keys": { "$ref": "#/definitions/groupedKeys" },
     "layers": {

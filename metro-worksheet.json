@@ -59,8 +59,6 @@
       }
     }
   ],
-  "highlight_class": "chi-region-highlight",
-  "poi_pin_class": "chi-poi-pin",
   "hover_number_keys": [
     [
       "ward",

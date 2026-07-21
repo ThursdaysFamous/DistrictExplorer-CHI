@@ -294,7 +294,7 @@ try {
     await pageB.waitForTimeout(1200);
     const loaded = Object.fromEntries((await cdpB.send("Performance.getMetrics")).metrics.map((x) => [x.name, x.value]));
     const dom = await pageB.evaluate(() => {
-      const hi = [...document.querySelectorAll("#map .chi-region-highlight")];
+      const hi = [...document.querySelectorAll("#map .region-highlight")];
       let filterPx = 0; for (const p of hi) { const b = p.getBoundingClientRect(); filterPx += Math.round(b.width * b.height); }
       let ds = 0; for (const s of document.styleSheets) { try { for (const r of s.cssRules) if (/drop-shadow/.test(r.cssText)) ds++; } catch (e) {} }
       return { nodes: document.querySelectorAll("*").length, mapPaths: document.querySelectorAll("#map path").length,
@@ -307,7 +307,7 @@ try {
         requestAnimationFrame(() => { last = performance.now(); requestAnimationFrame(step); }); });
     });
     const panOn = await panRun();
-    await pageB.evaluate(() => { const s = document.createElement("style"); s.textContent = ".chi-region-highlight{filter:none !important;}"; document.head.appendChild(s); });
+    await pageB.evaluate(() => { const s = document.createElement("style"); s.textContent = ".region-highlight{filter:none !important;}"; document.head.appendChild(s); });
     await pageB.waitForTimeout(200);
     const panOff = await panRun();
     const panSorted = [...panOn].sort((a, b) => a - b);

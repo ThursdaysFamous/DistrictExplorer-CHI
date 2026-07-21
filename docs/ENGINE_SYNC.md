@@ -255,17 +255,19 @@ directions, so reconciling means merging features, not overwriting:
    fork-branded window assignment (`window.ChiExplorer` /
    `window.NycExplorer`, twinned with each fork's `smoke_test.mjs`) stays
    fork code. The `.chi-*`/`.nyc-*` CSS class prefixes on the marker /
-   region-highlight styles are the same flavor of namespace drift and remain
-   open — see (6)'s leftovers.
+   region-highlight styles were the same flavor of namespace drift —
+   **resolved in item 10.**
 6. ~~CSS palette namespace~~ — **resolved July 2026**: both palettes renamed
    to neutral `--accent`/`--accent-deep`/`--accent-warm`/`--accent-warm-deep`
    (values stay per-fork in `:root`) and the shared layout CSS fenced as
    `styles-core`/`styles-app`/`styles-footer`/`styles-hover-responsive`.
    Still deliberately fork CSS: the `:root` palette values, `.sibling-result*`
-   (rides with the geocoder, item 1), Chicago's School Location styles, NYC's
-   borough-seal marker styles, and the marker-art/region-highlight region
-   whose `.chi-*`/`.nyc-*` class names are still fork-named (JS and each
-   smoke test reference them — rename both to neutral names to fence it).
+   (rides with the geocoder, item 1), Chicago's School Location styles, and the
+   fork-specific marker *art* (NYC's borough-seal, Chicago's water-taxi /
+   county-seal, and each fork's palette-colored selection-marker divIcon — which
+   carry no shared CSS rule, just a divIcon className). The shared marker /
+   region-highlight *chrome* that used to sit unfenced beside them was
+   neutralized and fenced — **item 10.**
 7. ~~`sw.js`~~ — **resolved July 2026**: comments neutralized, handler logic
    fenced (`sw-header`/`sw-handlers`, METRO config between them),
    `validate_index.py` lints the fences, and `engine-parity.yml` compares
@@ -283,3 +285,21 @@ directions, so reconciling means merging features, not overwriting:
    archived at `docs/archive/METRO_EXPANSION_NYC.md` in the Chicago repo.
    The authoritative stubbed-vs-not-carried list is
    `METRO_EXPANSION_PLAYBOOK.md` §3.1 item 11.
+10. ~~Marker / region-highlight class namespace~~ — **resolved July 2026**
+   (the last leftover of items 5–6): the three shared map-chrome classes were
+   fork-prefixed (`chi-`/`nyc-`/`sf-region-highlight`, `-poi-pin`, `-panning`)
+   with their CSS sitting unfenced beside fork content, the class strings
+   worksheet-driven (`highlight_class`/`poi_pin_class`), and NYC missing the
+   pan-pause optimization entirely. Neutralized to `region-highlight` /
+   `poi-pin` / `map-panning` and fenced three ways: the CSS trio as
+   `styles-markers`, the JS constants (`HIGHLIGHT_CLASS` / `POI_PIN_CLASS` /
+   `PANNING_CLASS`) as `map-chrome-classes` (promoted out of the worksheet +
+   generator + schema into byte-identical engine constants — the "they carry
+   the fork's palette" comment was false; the rules are identical dark
+   drop-shadows), and the movestart/moveend toggle as `map-pan-filter`.
+   Reconciling merged features rather than overwriting: **NYC gained the
+   pan-pause drop-shadow optimization** (CSS rule + toggle JS) it had never
+   adopted. Result: **48/48 ENGINE blocks byte-identical across CHI/NYC/SF**
+   (strict parity, 0 drift). Each fork's `smoke_test.mjs` highlight selector
+   moved to `.region-highlight`. The only still-fork-named map classes are the
+   genuine marker *art* divIcons (item 6).
