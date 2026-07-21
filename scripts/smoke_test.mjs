@@ -171,7 +171,7 @@ try {
         if (el && !el.querySelector(".loading-row") && /District\s+4\b/i.test(el.innerText)) break;
         await new Promise((r) => setTimeout(r, 100));
       }
-      const highlights = document.querySelectorAll("#map .chi-region-highlight").length;
+      const highlights = document.querySelectorAll("#map .region-highlight").length;
       return { text: el ? el.innerText.replace(/\s+/g, " ").trim() : "(no card)", highlights };
     });
     check(
@@ -193,7 +193,7 @@ try {
     // rebuild produced a working, highlightable overlay with no refetch.
     const toggled = await page.evaluate(async () => {
       const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-      const count = () => document.querySelectorAll("#map .chi-region-highlight").length;
+      const count = () => document.querySelectorAll("#map .region-highlight").length;
       const box = document.getElementById("toggle-ccbr");
       const before = count();
       box.click(); // ccbr off

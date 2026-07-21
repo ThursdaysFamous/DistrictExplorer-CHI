@@ -135,12 +135,6 @@ def render_metro_config(w):
         else:
             a(head.rstrip(",") + " }%s" % tail)
     a("  ];")
-    a("  /* CSS class names for the fork-branded map chrome: ENGINE code applies them,")
-    a("   * this fork's stylesheet defines them (they carry the fork's palette). */")
-    stmt("var HIGHLIGHT_CLASS = %s;" % js_str(w["highlight_class"]),
-         "selected-region highlight (drop-shadow filter)", pad=44)
-    stmt("var POI_PIN_CLASS = %s;" % js_str(w["poi_pin_class"]),
-         "geocoded point-of-interest marker", pad=44)
     a("  // FALLBACK district-number key list, fed through extractDistrictNumber")
     a("  // (which adds a name-field regex fallback for the layers whose number only")
     a("  // lives inside a \"…name\" string). The factories declare per-layer hoverName")
