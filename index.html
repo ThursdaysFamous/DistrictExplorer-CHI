@@ -3684,10 +3684,8 @@ function initChiExplorer() {
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "will-county-judicial", // Will County judicial subcircuit (5; PA 102-0693 Judicial_Districts_2022, coverage-gated)
     "dupage-county-judicial", // DuPage judicial subcircuit (7; PA 102-0693, the 18th Judicial Circuit's subcircuits, live from county GIS, coverage-gated to DuPage). Ranked beside will-county-judicial (the analogous collar-county layer); the two never co-render, being gated to different counties.
-    "will-county-board", // Will County Board district (11, current Board-Approved-11/2/21 map; live from county GIS, coverage-gated to Will County)
-    "dupage-county-board", // DuPage County Board district (6 districts, each electing 3 of 18 members; live from county GIS, coverage-gated to DuPage). Ranked beside will-county-board (the analogous collar-county layer); the two never co-render, being gated to different counties.
+    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
-    "commissioner",      // Cook County Commissioner district
     "will-county-fire",  // Will County fire protection district (37; trustees live from county GIS, coverage-gated)
     "dupage-county-fire", // DuPage fire protection district (30; partial coverage, live from county GIS, coverage-gated to DuPage; GIS carries no trustee/contact fields, so name-only). Ranked beside will-county-fire (the analogous collar-county layer); the two never co-render, being gated to different counties.
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
@@ -3696,14 +3694,14 @@ function initChiExplorer() {
     "school-board",      // Elected School Board district (10, citywide)
     "cps-hs-network",    // CPS High School Network (admin grouping)
     "cps-network",       // CPS K-8 Network (admin grouping)
-    "ward",              // City Ward (50)
     // Smaller than its parent ward, so it renders on top (smallest-on-top); turning it
     // on drops the ward to outline-only, framing the precinct fills from underneath.
     "ward-precinct",     // Ward Precinct (sub-selection of City Ward)
-    "police-district",   // Police District (22)
+    "ward",              // City Ward (50)
     // Smaller than its parent district, so it renders on top (smallest-on-top);
     // turning it on drops the district to outline-only, framing the beat fills from underneath.
     "police-beat",       // Police Beat (~277)
+    "police-district",   // Police District (22)
     // CCPSA District Council shares the police-district geometry exactly (22,
     // one council per district); place it just after so its outline draws on
     // top when both are on and its distinct teal dash stays legible.
@@ -5457,74 +5455,11 @@ function initChiExplorer() {
   var loadWillCountyBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/will-county-board-members.json", {}, 2);
   });
-  registerLayer({
-    id: "will-county-board",
-    group: "political",
-    label: "Will County Board District",
-    coverage: willCountyCoverage,
-    hoverName: function (feature) {
-      return findPropCI(feature.properties || {}, ["cty_brd_number"]) || null;
-    },
-    overlay: {
-      load: loadWillCountyBoard,
-      style: { color: "#1F6FB2", weight: 2, fillColor: "#3B8FD4", fillOpacity: 0.05, dashArray: "9 3 3 3" }
-    },
-    query: function (point, seq) {
-      return Promise.all([
-        loadWillCountyBoard(),
-        loadWillCountyBoardMembers().catch(function () { return {}; })
-      ]).then(function (results) {
-        var geojson = results[0], roster = results[1];
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var props = feature.properties || {};
-        var district = findPropCI(props, ["cty_brd_number"]);
-        var entry = district != null ? roster[String(district)] : null;
-        return { seq: seq, district: district, entry: entry, props: props };
-      });
-    },
-    render: function (result) {
-      var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
-      var members = result.entry && result.entry.members;
-      if (members && members.length) {
-        members.forEach(function (m) {
-          // one rich row per member; every external string sanitized before it
-          // becomes innerHTML (name, role, city, phone, email, committees)
-          var head = "<strong>" + sanitize(m.name) + "</strong>" +
-            (m.role ? " — " + sanitize(m.role) : "") + (m.city ? " (" + sanitize(m.city) + ")" : "");
-          var contact = [];
-          if (m.phone) contact.push(sanitize(m.phone));
-          if (m.email) contact.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-          var lines = [head];
-          if (contact.length) lines.push(contact.join(" · "));
-          if (m.committees && m.committees.length) {
-            lines.push("Committees: " + m.committees.map(sanitize).join(", "));
-          }
-          fields.push({ label: "Board Member", html: lines.join("<br>") });
-        });
-      } else {
-        var r1 = findPropCI(result.props, ["representative1"]);
-        var r2 = findPropCI(result.props, ["representative2"]);
-        if (r1) fields.push({ label: "Board Member", value: String(r1) });
-        if (r2) fields.push({ label: "Board Member", value: String(r2) });
-      }
-      fields.push({
-        label: "Official directory",
-        html: '<a href="https://www.willcountyboard.com/board-members.html" target="_blank" rel="noopener">Will County Board members (official)</a>'
-      });
-      return renderFieldList(fields);
-    },
-    hoverOfficial: {
-      load: loadWillCountyBoardMembers,
-      name: function (feature, roster) {
-        if (!roster) return null;
-        var d = findPropCI(feature.properties || {}, ["cty_brd_number"]);
-        var e = d != null ? roster[String(d)] : null;
-        if (!e || !e.members || !e.members.length) return null;
-        return e.members.map(function (m) { return m.name; }).join(", ");
-      }
-    }
-  });
+  // The Will County Board's card/query/hover live as the "will" dispatch entry
+  // of the consolidated `county-board` layer (grep registerCountyLayer; see
+  // docs/COUNTY_LAYER_CONSOLIDATION.md). The geometry + roster loaders above
+  // stay here: the county-board entry and the Voting Precinct card's
+  // board-district spatial join both consume them.
 
   // Will County judicial subcircuits — the 5 subcircuits of the 12th Judicial
   // Circuit (PA 102-0693). Identity only; judges aren't in the data, so the
@@ -5727,71 +5662,11 @@ function initChiExplorer() {
   var loadDupageCountyBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/dupage-county-board-members.json", {}, 2);
   });
-  registerLayer({
-    id: "dupage-county-board",
-    group: "political",
-    label: "DuPage County Board District",
-    coverage: dupageCountyCoverage,
-    hoverName: function (feature) {
-      return findPropCI(feature.properties || {}, ["district"]) || null;
-    },
-    overlay: {
-      load: loadDupageCountyBoard,
-      style: { color: "#2E7D32", weight: 2, fillColor: "#66BB6A", fillOpacity: 0.05, dashArray: "9 3 3 3" }
-    },
-    query: function (point, seq) {
-      return Promise.all([
-        loadDupageCountyBoard(),
-        loadDupageCountyBoardMembers().catch(function () { return {}; })
-      ]).then(function (results) {
-        var geojson = results[0], roster = results[1];
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var props = feature.properties || {};
-        var district = findPropCI(props, ["district"]);
-        var entry = district != null ? roster[String(district)] : null;
-        return { seq: seq, district: district, entry: entry, chair: roster.chair || null, props: props };
-      });
-    },
-    render: function (result) {
-      var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
-      // One row per board member of this district (name + email + profile), from
-      // the weekly roster; every external string sanitized before it is HTML.
-      function personRow(label, m) {
-        var lines = ["<strong>" + sanitize(m.name) + "</strong>" + (m.role ? " — " + sanitize(m.role) : "")];
-        var link = [];
-        if (m.phone) link.push(sanitize(m.phone));
-        if (m.email) link.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-        var prof = safeHttpUrl(m.url);
-        if (prof) link.push('<a href="' + sanitize(prof) + '" target="_blank" rel="noopener">profile</a>');
-        if (link.length) lines.push(link.join(" · "));
-        fields.push({ label: label, html: lines.join("<br>") });
-      }
-      var members = result.entry && result.entry.members;
-      if (members && members.length) {
-        members.forEach(function (m) { personRow("Board Member", m); });
-      }
-      // The Board Chair is elected countywide, so she represents every DuPage
-      // resident — surface her on every district's card.
-      if (result.chair && result.chair.name) personRow("Board Chair (countywide)", result.chair);
-      fields.push({
-        label: "Official directory",
-        html: '<a href="https://www.dupagecounty.gov/government/county_board/county_board_members/" target="_blank" rel="noopener">DuPage County Board members (official)</a>'
-      });
-      return renderFieldList(fields);
-    },
-    // hover popup: name this district's board members from the prefetched roster.
-    hoverOfficial: {
-      load: loadDupageCountyBoardMembers,
-      name: function (feature, roster) {
-        if (!roster) return null;
-        var d = findPropCI(feature.properties || {}, ["district"]);
-        var entry = d != null ? roster[String(d)] : null;
-        var members = entry && entry.members;
-        return members && members.length ? members.map(function (m) { return m.name; }).join(", ") : null;
-      }
-    }
-  });
+  // The DuPage County Board's card/query/hover live as the "dupage" dispatch
+  // entry of the consolidated `county-board` layer (grep registerCountyLayer;
+  // see docs/COUNTY_LAYER_CONSOLIDATION.md). The geometry + roster loaders
+  // above stay here: the county-board entry and the Voting Precinct card's
+  // board-district spatial join both consume them.
 
   // DuPage County judicial subcircuits — the 7 subcircuits of the 18th Judicial
   // Circuit (DuPage County), created by PA 102-0693 (the same act that drew
@@ -7868,12 +7743,12 @@ function initChiExplorer() {
     }
   });
 
-  /* ---------- Cook County Commissioner District — the one Political layer
-   * sourced live from Cook County's own GIS server (`politicalBoundary`
-   * MapServer, discovered via a HAR capture of the county's own "Find My
-   * District" app) rather than Socrata/TIGERweb/embedded data. Layer 9 is
-   * the district boundary (fields DISTRICT_INT/DISTRICT_TXT per the
-   * server's own layer metadata).
+  /* ---------- Cook County Commissioner data — sourced live from Cook
+   * County's own GIS server (`politicalBoundary` MapServer, discovered via a
+   * HAR capture of the county's own "Find My District" app) rather than
+   * Socrata/TIGERweb/embedded data; it feeds the "cook" dispatch entry of the
+   * consolidated `county-board` layer below. Layer 9 is the district boundary
+   * (fields DISTRICT_INT/DISTRICT_TXT per the server's own layer metadata).
    *
    * The officeholder join used to hit layer 0 ("Commissioner District
    * Office"), but that table is a stale mirror — it still named Luis
@@ -7942,84 +7817,379 @@ function initChiExplorer() {
     return lines;
   }
 
-  registerLayer({
-    id: "commissioner",
-    group: "political",
-    label: "Cook County Commissioner District",
-    coverage: cookCountyCoverage,
-    // its district lives in district_int/district_txt, not the generic keys the
-    // hover extractor knows — name it explicitly so the popup shows the number.
-    hoverName: function (feature) {
-      return extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS) || null;
-    },
-    overlay: {
-      load: loadCommissionerDistricts,
-      style: { color: "#B8622E", weight: 2, fillColor: "#B8622E", fillOpacity: 0.05, dashArray: "9 3 3 3" }
-    },
-    query: function (point, seq) {
-      return Promise.all([loadCommissionerDistricts(), loadCommissionerOffices()]).then(function (results) {
-        var geojson = results[0], offices = results[1];
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var district = extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
+  /* ---------- Consolidated cross-county concept layers (fork dispatcher) ----
+   * One layer per district CONCEPT, holding a per-county dispatch table — see
+   * docs/COUNTY_LAYER_CONSOLIDATION.md for the full decision record. The
+   * per-county footprints are disjoint (a point is in exactly one county), so
+   * separate per-county toggles bought the user nothing and scale hostilely
+   * with each new county; a dispatch entry replaces a whole layer. This is
+   * fork code composing the existing registerLayer contract — no ENGINE fence
+   * is involved, and per-county data paths (loaders, rosters, CI) are exactly
+   * the ones the separate layers used.
+   *
+   * Entry contract: { key, coverage, loadGeometry, query, render, hoverName,
+   * hoverOfficial?, pointOfInterest? } — the same pieces a standalone layer
+   * declares, moved into a table row keyed by county. */
+  function registerCountyLayer(opts) {
+    var entries = opts.counties;
+    var byKey = {};
+    entries.forEach(function (entry) { byKey[entry.key] = entry; });
 
-        var office = null;
-        if (district && Array.isArray(offices)) {
-          var relateKey = ("commissionerdistrict_" + parseInt(district, 10));
-          office = offices.filter(function (row) {
-            var rowKey = findPropCI(row, ["relate_key"]);
-            return rowKey && String(rowKey).toLowerCase() === relateKey;
-          })[0] || null;
-        }
-        return { seq: seq, district: district, office: office };
+    // Union overlay: one attempt per county, each feature WRAPPED (never
+    // mutating the per-county caches — other cards spatial-join against them)
+    // and stamped dxCounty so hover dispatches per feature. A county whose
+    // source is down drops out of the drawing while the others still render;
+    // only if every county fails does the load reject (overlay error + Retry).
+    // Deliberately not makeCached: the per-county loaders underneath already
+    // cache, and a re-toggle should retry a previously-failed county.
+    function loadUnion() {
+      return Promise.all(entries.map(function (entry) {
+        return entry.loadGeometry().then(function (geojson) {
+          return (geojson.features || []).map(function (f) {
+            return { type: "Feature", geometry: f.geometry, properties: f.properties, dxCounty: entry.key };
+          });
+        }, function () { return null; });
+      })).then(function (parts) {
+        var loaded = parts.filter(Boolean);
+        if (!loaded.length) throw new Error(opts.label + ": no county source responded");
+        return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
       });
-    },
-    render: function (result) {
-      var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
-      var office = result.office;
-      if (office) {
-        var name = commissionerName(office);
-        if (name) fields.push({ label: "Commissioner", value: name });
-        var addressLines = commissionerAddressLines(office);
-        if (addressLines.length) fields.push({ label: "Office Address", html: addressLines.map(sanitize).join("<br>"), pin: "#B8622E" });
-        var phone = findPropCI(office, ["phone1"]);
-        if (phone) fields.push({ label: "Phone", value: String(phone) });
-        var email = findPropCI(office, ["email1"]);
-        if (email) fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(String(email)) + '">' + sanitize(String(email)) + '</a>' });
-        var website = safeHttpUrl(findPropCI(office, ["url1"])); // scheme-check before it becomes an href
-        if (website) fields.push({ label: "Website", html: '<a href="' + sanitize(website) + '" target="_blank" rel="noopener">' + sanitize(website) + '</a>' });
-      }
-      fields.push({
-        label: "Board info",
-        html: '<a href="https://maps.cookcountyil.gov/findmydistrict/" target="_blank" rel="noopener">Cook County Find My District (official)</a>'
-      });
-      return renderFieldList(fields);
-    },
-    pointOfInterest: function (result) {
-      var office = result.office;
-      if (!office) return null;
-      var name = commissionerName(office);
-      var addressLines = commissionerAddressLines(office);
-      if (!addressLines.length) return null;
-      return { label: name || "Commissioner Office", address: addressLines.join(", ") };
-    },
-    // hover popup: name the commissioner from the prefetched electedOfficials
-    // table (same relate_key join as the query, run against the cached roster).
-    hoverOfficial: {
-      load: loadCommissionerOffices,
-      name: function (feature, offices) {
-        if (!Array.isArray(offices)) return null;
-        var district = extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
-        if (!district) return null;
-        var relateKey = "commissionerdistrict_" + parseInt(district, 10);
-        var office = offices.filter(function (row) {
-          var k = findPropCI(row, ["relate_key"]);
-          return k && String(k).toLowerCase() === relateKey;
-        })[0];
-        return office ? (commissionerName(office) || null) : null;
-      }
     }
+
+    var anyHoverOfficial = entries.some(function (entry) { return !!entry.hoverOfficial; });
+
+    registerLayer({
+      id: opts.id,
+      group: opts.group,
+      label: opts.label,
+      // OR of the per-county coverage tests, in table order (each a cached
+      // same-origin outline check). A throwing test falls through to the next
+      // county; if none matched and one threw, the error propagates so the
+      // engine's fail-open applies — a coverage outage never hides the layer.
+      coverage: function (point) {
+        var i = 0, firstErr = null;
+        function next() {
+          if (i >= entries.length) {
+            if (firstErr) throw firstErr;
+            return false;
+          }
+          var entry = entries[i++];
+          return Promise.resolve().then(function () { return entry.coverage(point); })
+            .then(function (inside) { return inside ? true : next(); },
+                  function (err) { if (!firstErr) firstErr = err; return next(); });
+        }
+        return Promise.resolve().then(next);
+      },
+      hoverName: function (feature) {
+        var entry = byKey[feature.dxCounty];
+        return entry && entry.hoverName ? entry.hoverName(feature) : null;
+      },
+      overlay: { load: loadUnion, style: opts.style },
+      // Dispatch by CONTAINMENT, not coverage: the footprints are disjoint, so
+      // at most one county's query returns a hit. A downed county is skipped
+      // while the others still resolve; if nothing matched and a county
+      // errored, that error propagates — a point in the downed county gets the
+      // honest error card + Retry, never a lying "No result for this point."
+      query: function (point, seq) {
+        var i = 0, firstErr = null;
+        function next() {
+          if (i >= entries.length) {
+            if (firstErr) throw firstErr;
+            return null;
+          }
+          var entry = entries[i++];
+          return entry.query(point, seq).then(function (result) {
+            if (result) { result.dxCounty = entry.key; return result; }
+            return next();
+          }, function (err) { if (!firstErr) firstErr = err; return next(); });
+        }
+        return next();
+      },
+      render: function (result) {
+        return byKey[result.dxCounty].render(result);
+      },
+      pointOfInterest: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.pointOfInterest ? entry.pointOfInterest(result) : null;
+      },
+      hoverOfficial: anyHoverOfficial ? {
+        // composite prefetch: every county's officeholder data, best-effort,
+        // keyed by county for the per-feature dispatch in name()
+        load: function () {
+          return Promise.all(entries.map(function (entry) {
+            if (!entry.hoverOfficial) return Promise.resolve(null);
+            return entry.hoverOfficial.load().then(function (data) { return data; },
+                                                   function () { return null; });
+          })).then(function (results) {
+            var byCounty = {};
+            entries.forEach(function (entry, idx) { byCounty[entry.key] = results[idx]; });
+            return byCounty;
+          });
+        },
+        name: function (feature, byCounty) {
+          var entry = byKey[feature.dxCounty];
+          if (!entry || !entry.hoverOfficial || !byCounty || !byCounty[entry.key]) return null;
+          return entry.hoverOfficial.name(feature, byCounty[entry.key]);
+        }
+      } : undefined
+    });
+  }
+
+  /* ---------- County Board District — the consolidated county-legislature
+   * layer: Cook's Board of Commissioners (17 single-member districts, live
+   * officeholder join from the county GIS), the Will County Board (11
+   * districts, weekly-scraped roster), and the DuPage County Board (6
+   * districts electing 3 members each, weekly-scraped roster + countywide
+   * Chair) as dispatch entries of ONE toggle. Each card carries a Body row
+   * naming its county's board, so the generic label never obscures which
+   * body a district belongs to. Card content is otherwise exactly what the
+   * three pre-consolidation layers rendered. ---------- */
+  registerCountyLayer({
+    id: "county-board",
+    group: "political",
+    label: "County Board District",
+    // one legend identity for the concept (the pre-consolidation Will blue)
+    style: { color: "#1F6FB2", weight: 2, fillColor: "#3B8FD4", fillOpacity: 0.05, dashArray: "9 3 3 3" },
+    counties: [
+      {
+        key: "cook",
+        coverage: cookCountyCoverage,
+        loadGeometry: loadCommissionerDistricts,
+        // its district lives in district_int/district_txt, not the generic keys
+        // the hover extractor knows — name it explicitly for the popup.
+        hoverName: function (feature) {
+          return extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS) || null;
+        },
+        query: function (point, seq) {
+          return Promise.all([loadCommissionerDistricts(), loadCommissionerOffices()]).then(function (results) {
+            var geojson = results[0], offices = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var district = extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
+
+            var office = null;
+            if (district && Array.isArray(offices)) {
+              var relateKey = ("commissionerdistrict_" + parseInt(district, 10));
+              office = offices.filter(function (row) {
+                var rowKey = findPropCI(row, ["relate_key"]);
+                return rowKey && String(rowKey).toLowerCase() === relateKey;
+              })[0] || null;
+            }
+            return { seq: seq, district: district, office: office };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "District", value: result.district ? String(result.district) : "Unknown" },
+            { label: "Body", value: "Cook County Board of Commissioners" }
+          ];
+          var office = result.office;
+          if (office) {
+            var name = commissionerName(office);
+            if (name) fields.push({ label: "Commissioner", value: name });
+            var addressLines = commissionerAddressLines(office);
+            if (addressLines.length) fields.push({ label: "Office Address", html: addressLines.map(sanitize).join("<br>"), pin: "#1F6FB2" });
+            var phone = findPropCI(office, ["phone1"]);
+            if (phone) fields.push({ label: "Phone", value: String(phone) });
+            var email = findPropCI(office, ["email1"]);
+            if (email) fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(String(email)) + '">' + sanitize(String(email)) + '</a>' });
+            var website = safeHttpUrl(findPropCI(office, ["url1"])); // scheme-check before it becomes an href
+            if (website) fields.push({ label: "Website", html: '<a href="' + sanitize(website) + '" target="_blank" rel="noopener">' + sanitize(website) + '</a>' });
+          }
+          fields.push({
+            label: "Board info",
+            html: '<a href="https://maps.cookcountyil.gov/findmydistrict/" target="_blank" rel="noopener">Cook County Find My District (official)</a>'
+          });
+          return renderFieldList(fields);
+        },
+        pointOfInterest: function (result) {
+          var office = result.office;
+          if (!office) return null;
+          var name = commissionerName(office);
+          var addressLines = commissionerAddressLines(office);
+          if (!addressLines.length) return null;
+          return { label: name || "Commissioner Office", address: addressLines.join(", ") };
+        },
+        // hover popup: name the commissioner from the prefetched
+        // electedOfficials table (same relate_key join as the query).
+        hoverOfficial: {
+          load: loadCommissionerOffices,
+          name: function (feature, offices) {
+            if (!Array.isArray(offices)) return null;
+            var district = extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
+            if (!district) return null;
+            var relateKey = "commissionerdistrict_" + parseInt(district, 10);
+            var office = offices.filter(function (row) {
+              var k = findPropCI(row, ["relate_key"]);
+              return k && String(k).toLowerCase() === relateKey;
+            })[0];
+            return office ? (commissionerName(office) || null) : null;
+          }
+        }
+      },
+      {
+        key: "will",
+        coverage: willCountyCoverage,
+        loadGeometry: loadWillCountyBoard,
+        hoverName: function (feature) {
+          return findPropCI(feature.properties || {}, ["cty_brd_number"]) || null;
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWillCountyBoard(),
+            loadWillCountyBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var geojson = results[0], roster = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["cty_brd_number"]);
+            var entry = district != null ? roster[String(district)] : null;
+            return { seq: seq, district: district, entry: entry, props: props };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "District", value: result.district ? String(result.district) : "Unknown" },
+            { label: "Body", value: "Will County Board" }
+          ];
+          var members = result.entry && result.entry.members;
+          if (members && members.length) {
+            members.forEach(function (m) {
+              // one rich row per member; every external string sanitized before
+              // it becomes innerHTML (name, role, city, phone, email, committees)
+              var head = "<strong>" + sanitize(m.name) + "</strong>" +
+                (m.role ? " — " + sanitize(m.role) : "") + (m.city ? " (" + sanitize(m.city) + ")" : "");
+              var contact = [];
+              if (m.phone) contact.push(sanitize(m.phone));
+              if (m.email) contact.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
+              var lines = [head];
+              if (contact.length) lines.push(contact.join(" · "));
+              if (m.committees && m.committees.length) {
+                lines.push("Committees: " + m.committees.map(sanitize).join(", "));
+              }
+              fields.push({ label: "Board Member", html: lines.join("<br>") });
+            });
+          } else {
+            var r1 = findPropCI(result.props, ["representative1"]);
+            var r2 = findPropCI(result.props, ["representative2"]);
+            if (r1) fields.push({ label: "Board Member", value: String(r1) });
+            if (r2) fields.push({ label: "Board Member", value: String(r2) });
+          }
+          fields.push({
+            label: "Official directory",
+            html: '<a href="https://www.willcountyboard.com/board-members.html" target="_blank" rel="noopener">Will County Board members (official)</a>'
+          });
+          return renderFieldList(fields);
+        },
+        hoverOfficial: {
+          load: loadWillCountyBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["cty_brd_number"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      {
+        key: "dupage",
+        coverage: dupageCountyCoverage,
+        loadGeometry: loadDupageCountyBoard,
+        hoverName: function (feature) {
+          return findPropCI(feature.properties || {}, ["district"]) || null;
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDupageCountyBoard(),
+            loadDupageCountyBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var geojson = results[0], roster = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var entry = district != null ? roster[String(district)] : null;
+            return { seq: seq, district: district, entry: entry, chair: roster.chair || null, props: props };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "District", value: result.district ? String(result.district) : "Unknown" },
+            { label: "Body", value: "DuPage County Board" }
+          ];
+          // One row per board member of this district (name + email + profile),
+          // from the weekly roster; every external string sanitized before it
+          // is HTML.
+          function personRow(label, m) {
+            var lines = ["<strong>" + sanitize(m.name) + "</strong>" + (m.role ? " — " + sanitize(m.role) : "")];
+            var link = [];
+            if (m.phone) link.push(sanitize(m.phone));
+            if (m.email) link.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
+            var prof = safeHttpUrl(m.url);
+            if (prof) link.push('<a href="' + sanitize(prof) + '" target="_blank" rel="noopener">profile</a>');
+            if (link.length) lines.push(link.join(" · "));
+            fields.push({ label: label, html: lines.join("<br>") });
+          }
+          var members = result.entry && result.entry.members;
+          if (members && members.length) {
+            members.forEach(function (m) { personRow("Board Member", m); });
+          }
+          // The Board Chair is elected countywide, so she represents every
+          // DuPage resident — surface her on every district's card.
+          if (result.chair && result.chair.name) personRow("Board Chair (countywide)", result.chair);
+          fields.push({
+            label: "Official directory",
+            html: '<a href="https://www.dupagecounty.gov/government/county_board/county_board_members/" target="_blank" rel="noopener">DuPage County Board members (official)</a>'
+          });
+          return renderFieldList(fields);
+        },
+        hoverOfficial: {
+          load: loadDupageCountyBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var entry = d != null ? roster[String(d)] : null;
+            var members = entry && entry.members;
+            return members && members.length ? members.map(function (m) { return m.name; }).join(", ") : null;
+          }
+        }
+      }
+    ]
   });
+
+  // Permalink compatibility for consolidated layers: pre-consolidation ids in
+  // a shared #layers= list are rewritten to the consolidated id BEFORE the
+  // boot-time applyStateFromHash parse reads the hash (unknown ids there are
+  // otherwise dropped silently, so an old link would simply lose the layer).
+  // Every future consolidation appends its retired ids here.
+  var CONSOLIDATED_LAYER_ALIASES = {
+    "commissioner": "county-board",
+    "will-county-board": "county-board",
+    "dupage-county-board": "county-board"
+  };
+  (function rewriteAliasedPermalink() {
+    var raw = location.hash.replace(/^#/, "");
+    var m = /(^|&)layers=([^&]*)/.exec(raw);
+    if (!m) return;
+    var seen = {};
+    var ids = m[2].split(",").map(function (id) {
+      return CONSOLIDATED_LAYER_ALIASES[id] || id;
+    }).filter(function (id) { // aliasing can duplicate the target — keep one
+      if (seen[id]) return false;
+      seen[id] = true;
+      return true;
+    });
+    if (ids.join(",") === m[2]) return;
+    var newHash = "#" + raw.replace(/(^|&)layers=[^&]*/, "$1layers=" + ids.join(","));
+    try {
+      history.replaceState(null, "", newHash);
+    } catch (e) {
+      // some file:// contexts refuse replaceState — the old link degrades to
+      // default layers there, everything else keeps working
+    }
+  }());
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
