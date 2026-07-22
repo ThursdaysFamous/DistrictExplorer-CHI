@@ -29,7 +29,7 @@ in the researched-but-unbuilt backlog.
 <!-- ==== GUIDEBOOK:BEGIN coverage-map ==== -->
 ```json
 {
-  "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "will-county-judicial", "will-county-board", "dupage-county-board", "ccbr", "commissioner", "will-county-fire", "dupage-county-fire", "will-county-park", "dupage-county-park", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "will-county-precinct", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
+  "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "will-county-judicial", "will-county-board", "dupage-county-board", "ccbr", "commissioner", "will-county-fire", "dupage-county-fire", "dupage-county-special-police", "will-county-park", "dupage-county-park", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "will-county-precinct", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"]
 }
@@ -55,7 +55,7 @@ Pattern legend (which engine factory a layer uses): **Polygon** `registerPolygon
 `registerNearestPointLayer` (nearest-3 haversine; hover identity built in as of engine
 v1.0.6).
 
-Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
+Fleet totals: **Chicago 40 · NYC 27 · SF 16** layers.
 
 ---
 
@@ -115,6 +115,7 @@ entries with per-office source URLs, and label appointed clerks as appointed. (�
 | Police subdivision (beat / sector) | SHIPPED `police-beat` | SHIPPED `police-sector` | NO HONEST ANALOG — SFPD publishes no patrol-beat boundary (the only "beats" dataset is Parking Control's) |
 | Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | NO HONEST ANALOG — the SF Police Commission (Charter §4.109) and Department of Police Accountability are appointed (Mayor + Board of Supervisors), citywide, no districts; NYC's labeled-link-row precedent is the upgrade path if oversight links are ever wanted on the card |
 | Fire-service boundary | SHIPPED `will-county-fire` · `dupage-county-fire` (suburban Fire *Protection* Districts, coverage-gated to Will / DuPage; DuPage is name-only — its GIS carries no trustees) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published |
+| Township police-service tax district | SHIPPED `dupage-county-special-police` (unincorporated-area township tax districts that fund supplemental DuPage County Sheriff patrol; card links the elected Sheriff, coverage-gated) | NO HONEST ANALOG — NYC has no townships | NO HONEST ANALOG — SF has no townships |
 | Police / fire station points | SHIPPED `police-station` · `fire-station` | SHIPPED | SHIPPED |
 
 Note the fire-boundary concept is not equivalent across forks: NYC maps *operational*
@@ -244,7 +245,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
 ## Per-fork inventories
 
-### Chicago — 39 layers
+### Chicago — 40 layers
 
 | id | label | group | pattern | source | roster / join | coverage |
 |---|---|---|---|---|---|---|
@@ -265,6 +266,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `commissioner` | Cook County Commissioner District | political | Bespoke | Cook County GIS L9 | live office join (same server) | cookCountyCoverage |
 | `will-county-fire` | Fire Protection District | safety | Polygon | Will County ArcGIS | trustees in GIS attrs | willCountyCoverage |
 | `dupage-county-fire` | DuPage Fire Protection District | safety | Polygon | DuPage County ArcGIS (`Fire_Protection_Districts_`) | name-only (GIS carries no trustee/contact) | dupageCountyCoverage |
+| `dupage-county-special-police` | DuPage Special Police District | safety | Polygon | DuPage County ArcGIS (`Special_Police_Districts_`, "Real Estate Tax Code polygons") | link-only (elected DuPage County Sheriff; unincorporated-area police-tax district) | dupageCountyCoverage |
 | `will-county-park` | Park District | geography | Polygon | Will County ArcGIS | commissioners in GIS attrs | willCountyCoverage |
 | `dupage-county-park` | DuPage Park District | geography | Polygon | DuPage County ArcGIS (`Park_Districts_`) | name-only (GIS carries no commissioner/contact) | dupageCountyCoverage |
 | `school-board` | Elected School Board District | political | Bespoke | pre-built (ERSB SB15 shapefile) | `school-board-members.json` (hand-curated) | chicagoCoverage |
