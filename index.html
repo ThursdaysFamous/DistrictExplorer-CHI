@@ -3683,6 +3683,7 @@ function initChiExplorer() {
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "will-county-judicial", // Will County judicial subcircuit (5; PA 102-0693 Judicial_Districts_2022, coverage-gated)
+    "dupage-county-judicial", // DuPage judicial subcircuit (7; PA 102-0693, the 18th Judicial Circuit's subcircuits, live from county GIS, coverage-gated to DuPage). Ranked beside will-county-judicial (the analogous collar-county layer); the two never co-render, being gated to different counties.
     "will-county-board", // Will County Board district (11, current Board-Approved-11/2/21 map; live from county GIS, coverage-gated to Will County)
     "dupage-county-board", // DuPage County Board district (6 districts, each electing 3 of 18 members; live from county GIS, coverage-gated to DuPage). Ranked beside will-county-board (the analogous collar-county layer); the two never co-render, being gated to different counties.
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
@@ -5786,6 +5787,39 @@ function initChiExplorer() {
         return members && members.length ? members.map(function (m) { return m.name; }).join(", ") : null;
       }
     }
+  });
+
+  // DuPage County judicial subcircuits — the 7 subcircuits of the 18th Judicial
+  // Circuit (DuPage County), created by PA 102-0693 (the same act that drew
+  // Will's) and first used at the 2024 election. Identity only; judges aren't in
+  // the data, so the card links to the county's own 18th Circuit Court. Live
+  // from DuPage County's own maintained GIS (Judicial_Subcircuits, edited
+  // 2026-04; field DISTRICT = the subcircuit number 1-7), the same loader
+  // pattern as the other DuPage layers. The DuPage analog of
+  // will-county-judicial (Will = 12th Circuit, 5 subcircuits); the two never
+  // co-render, being gated to different counties.
+  var loadDupageJudicial = makeCached(function () {
+    var url = DUPAGE_GIS + "Judicial_Subcircuits/FeatureServer/0" +
+      "/query?where=1%3D1&outFields=DISTRICT&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("DuPage Judicial Subcircuits returned no usable geometry");
+        return geojson;
+      });
+  });
+  registerPolygonLayer({
+    id: "dupage-county-judicial",
+    group: "political",
+    label: "Judicial Subcircuit (18th Circuit)",
+    coverage: dupageCountyCoverage,
+    loader: loadDupageJudicial,
+    style: { color: "#6B4FA0", weight: 2, fillColor: "#8A6FBF", fillOpacity: 0.05, dashArray: "6 3" },
+    fields: [
+      { name: "subcircuit", label: "Subcircuit", keys: ["district"], primary: true },
+      { label: "Court", value: "18th Judicial Circuit (DuPage County)" },
+      { label: "Judges",
+        html: '<a href="https://www.dupagecourts.gov/" target="_blank" rel="noopener">18th Judicial Circuit Court (official)</a>' }
+    ]
   });
 
   // DuPage County fire protection districts — the DuPage analog of the Will

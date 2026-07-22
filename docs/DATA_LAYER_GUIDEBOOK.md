@@ -29,7 +29,7 @@ in the researched-but-unbuilt backlog.
 <!-- ==== GUIDEBOOK:BEGIN coverage-map ==== -->
 ```json
 {
-  "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "will-county-judicial", "will-county-board", "dupage-county-board", "ccbr", "commissioner", "will-county-fire", "dupage-county-fire", "dupage-county-special-police", "will-county-park", "dupage-county-park", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "will-county-precinct", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
+  "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "will-county-judicial", "dupage-county-judicial", "will-county-board", "dupage-county-board", "ccbr", "commissioner", "will-county-fire", "dupage-county-fire", "dupage-county-special-police", "will-county-park", "dupage-county-park", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "will-county-precinct", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"]
 }
@@ -55,7 +55,7 @@ Pattern legend (which engine factory a layer uses): **Polygon** `registerPolygon
 `registerNearestPointLayer` (nearest-3 haversine; hover identity built in as of engine
 v1.0.6).
 
-Fleet totals: **Chicago 40 · NYC 27 · SF 16** layers.
+Fleet totals: **Chicago 41 · NYC 27 · SF 16** layers.
 
 ---
 
@@ -73,7 +73,7 @@ Fleet totals: **Chicago 40 · NYC 27 · SF 16** layers.
 | County legislature / commissioner | SHIPPED `commissioner` (Cook) + `will-county-board` | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
-| Trial/civil-court sub-district | SHIPPED `will-county-judicial` (12th-Circuit subcircuits) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
+| Trial/civil-court sub-district | SHIPPED `will-county-judicial` (12th-Circuit subcircuits) · `dupage-county-judicial` (18th-Circuit subcircuits, PA 102-0693) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
 | District Attorney (districted) | n/a (Cook State's Attorney is one countywide office) | SHIPPED `district-attorney` (5 borough DAs) | NO HONEST ANALOG (one citywide DA)⁷ |
 | Borough president / by-county executive | n/a | SHIPPED `borough-president` | n/a |
 | Community district / board (appointed, labeled so) | n/a | SHIPPED `community-district` | n/a |
@@ -245,7 +245,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
 ## Per-fork inventories
 
-### Chicago — 40 layers
+### Chicago — 41 layers
 
 | id | label | group | pattern | source | roster / join | coverage |
 |---|---|---|---|---|---|---|
@@ -260,6 +260,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `township` | Township / County Subdivision | geography | Polygon | live TIGERweb CouSub | — | — (subOf `county`) |
 | `municipality` | Municipality | geography | Polygon | live TIGERweb Places | — | — |
 | `will-county-judicial` | Judicial Subcircuit (12th Circuit) | political | Polygon | Will County ArcGIS | link-only | willCountyCoverage |
+| `dupage-county-judicial` | Judicial Subcircuit (18th Circuit) | political | Polygon | DuPage County ArcGIS (`Judicial_Subcircuits`) | link-only (18th Judicial Circuit Court) | dupageCountyCoverage |
 | `will-county-board` | Will County Board District | political | Bespoke | Will County ArcGIS | `will-county-board-members.json` (weekly CI) | willCountyCoverage |
 | `dupage-county-board` | DuPage County Board District | political | Bespoke | DuPage County ArcGIS (`County_Board_Dist_new`) | `dupage-county-board-members.json` (weekly CI from dupagecounty.gov; + countywide Chair) | dupageCountyCoverage |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |
