@@ -8,6 +8,7 @@
 <script>
   (function () {
     if (location.hostname !== 'chidistricts.com') return;
+    if (window.top !== window.self) return; // top-level only — no Google Analytics inside an embedded iframe (the cookieless GoatCounter still counts)
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=G-YPJ570LWJB';
@@ -2921,6 +2922,12 @@ function initChiExplorer() {
     opts = opts || {};
     state.selectedPoint = { lat: lat, lng: lng };
     state.sequence += 1;
+
+    // Aggregate "where are people looking" signal — one GoatCounter hit per point
+    // selection (map click, address search, geolocate, or a shared/permalink load),
+    // coordinates coarsened to ~1km (2 decimals) so it maps interest, never an
+    // address. Cookieless and identity-free (GoatCounter), like every event here.
+    trackEvent("select", lat.toFixed(2) + "," + lng.toFixed(2));
 
     if (selectedMarker) map.removeLayer(selectedMarker);
     selectedMarker = L.marker([lat, lng], { icon: starDivIcon, alt: "Selected point" }).addTo(map);
