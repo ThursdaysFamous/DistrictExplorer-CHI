@@ -60,7 +60,7 @@ survive:** they encode lat/lng, not district ids, so a point permalink still res
 resolves to the NEW district after geometry updates, which is correct behavior. This is confirmed
 against the architecture: permalinks are lat/lng-based, so no permalink migration is needed.
 
-### CHI (42 layers)
+### CHI (40 layers)
 
 | Layer | Exposure class | Enacting authority | What breaks |
 |---|---|---|---|
@@ -69,15 +69,14 @@ against the architecture: permalinks are lat/lng-based, so no permalink migratio
 | IL Supreme Court districts | Almost-never | IL General Assembly | geometry (see note) |
 | Cook County Board of Review | Almost-never | statute | geometry |
 | Wards (50) | Decennial-municipal | Chicago City Council | geometry, roster join, anchor if used |
-| Cook County commissioner (17) | Decennial-municipal | County Board | geometry, roster join |
+| County board districts (consolidated: Cook 17 / Will 11 / DuPage 6) | Decennial-municipal | each county's board | per-county geometry + roster joins inside the one `county-board` layer |
 | ERSB school-board districts | New + volatile | IL statute (SB15) | geometry, numbering, roster join |
 | Chicago police districts (22) | Administrative-rare | CPD | geometry, anchor, roster join |
 | Community areas (77) | Never (frozen) | geography | none expected |
 | CPS attendance boundaries | Annual | CPS | dataset id every year |
 | ZIP codes | USPS-driven, not census | USPS | occasional |
-| Will County Board (11) | Decennial-municipal | Will County Board | geometry, roster join |
-| Will judicial subcircuits (12th Cir.) | Statutory, rare | IL General Assembly | geometry |
-| Will fire / park / precinct | Administrative / per-election | districts + county clerk | geometry (precincts redraw with county maps) |
+| Will / DuPage judicial subcircuits (12th / 18th Cir.) | Statutory, rare | IL General Assembly | geometry |
+| Will / DuPage fire / park / precinct (+ DuPage special-police) | Administrative / per-election | districts + county clerks | geometry (precincts redraw with county maps; DuPage's current map is the 2024 consolidation) |
 | County / township / municipality (statewide) | Annexation-driven, rolling | local referenda; TIGERweb vintages | TIGERweb vintage rolls |
 | Statewide school districts (3 TIGERweb layers) | Consolidation-driven | ISBE / referenda | TIGERweb vintage rolls |
 
