@@ -116,6 +116,11 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
    Districts from municipal Library Funds — a Chicago click resolves the City of
    Chicago Library Fund), Will (trustees in GIS attrs), DuPage (name-only), and
    Lake (office contact in GIS attrs) as day-one entries of one toggle.
+2c. **Existing concepts absorb new counties as entries** — Cook joined `fire-district`
+   (40, the Clerk's fire tax-agency tiling) and `park-district` (99, incl. the
+   Chicago Park District — a Loop click now resolves the city's own park taxing
+   body) in 2026-07: two loaders + two `polygonCountyEntry` rows, no other surface
+   changed.
 3. **Future counties ship as dispatch entries from day one** — proven by **Lake
    (DONE, 2026-07)**: the first county to land with **zero new layers and zero
    scrapers** — five `lake` entries (board 19 / judicial 12 / fire 22 / park 23 /

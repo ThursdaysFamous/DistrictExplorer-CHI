@@ -3685,9 +3685,9 @@ function initChiExplorer() {
     "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
     "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members carried on the county GIS) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
-    "fire-district",     // Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
+    "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
-    "park-district",     // Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
+    "park-district",     // Consolidated park-district layer — Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "library-district",  // Consolidated library-district layer — Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "school-board",      // Elected School Board district (10, citywide)
     "cps-hs-network",    // CPS High School Network (admin grouping)
@@ -8224,20 +8224,33 @@ function initChiExplorer() {
     ]
   });
 
-  /* ---------- Fire Protection District — consolidated: Will (37 districts,
-   * trustees in GIS attrs — falsy slots dropped by the field semantics, a
-   * real "Office is vacant" string shown as-is) + DuPage (30, name-only — its
-   * GIS carries no trustee/contact fields). Partial coverage in both
-   * counties: fire protection districts are the suburban taxing bodies
-   * serving areas outside the municipal fire departments, so an in-county
-   * point with none honestly reports "No result for this point." A County
-   * row keeps each card's origin legible under the generic label. ---------- */
+  /* ---------- Fire Protection District — consolidated: Cook (40, the
+   * Clerk's fire-protection tax-agency tiling on the county GIS, name-only)
+   * + Will (37 districts, trustees in GIS attrs — falsy slots dropped by the
+   * field semantics, a real "Office is vacant" string shown as-is) + DuPage
+   * (30, name-only — its GIS carries no trustee/contact fields) + Lake (22,
+   * office contact in GIS attrs). Partial coverage in every county: fire
+   * protection districts are the suburban taxing bodies serving areas
+   * outside the municipal fire departments, so an in-county point with none
+   * — the Loop included (CFD is a city department) — honestly reports "No
+   * result for this point." A County row keeps each card's origin legible
+   * under the generic label. ---------- */
+  var loadCookFireDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(17); });
   registerCountyLayer({
     id: "fire-district",
     group: "safety",
     label: "Fire Protection District",
     style: { color: "#B0342A", weight: 1.5, fillColor: "#D0564C", fillOpacity: 0.05, dashArray: "5 3" },
     counties: [
+      polygonCountyEntry({
+        key: "cook",
+        coverage: cookCountyCoverage,
+        loader: loadCookFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["agency_description"], primary: true },
+          { label: "County", value: "Cook County" }
+        ]
+      }),
       polygonCountyEntry({
         key: "will",
         coverage: willCountyCoverage,
@@ -8299,17 +8312,30 @@ function initChiExplorer() {
     ]
   });
 
-  /* ---------- Park District — consolidated: Will (22, commissioners in GIS
+  /* ---------- Park District — consolidated: Cook (99, the Clerk's park
+   * tax-agency tiling on the county GIS, name-only — and it includes the
+   * CHICAGO PARK DISTRICT, so a Loop click resolves the city's own park
+   * taxing body; live-verified 2026-07) + Will (22, commissioners in GIS
    * attrs) + DuPage (39, name-only — its GIS carries no commissioner/contact
-   * fields). Partial coverage in both counties — park districts don't tile
-   * either county, so an in-county point outside every district honestly
-   * reports "No result for this point." ---------- */
+   * fields) + Lake (23, office contact in GIS attrs). Partial coverage —
+   * park districts don't tile any county (a city-department parks town like
+   * Evanston honestly reports "No result"). ---------- */
+  var loadCookParkDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(23); });
   registerCountyLayer({
     id: "park-district",
     group: "geography",
     label: "Park District",
     style: { color: "#2E7D46", weight: 1.5, fillColor: "#4FA06A", fillOpacity: 0.05, dashArray: "2 3" },
     counties: [
+      polygonCountyEntry({
+        key: "cook",
+        coverage: cookCountyCoverage,
+        loader: loadCookParkDistricts,
+        fields: [
+          { name: "name", label: "Park District", keys: ["agency_description"], primary: true },
+          { label: "County", value: "Cook County" }
+        ]
+      }),
       polygonCountyEntry({
         key: "will",
         coverage: willCountyCoverage,
