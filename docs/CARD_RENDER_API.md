@@ -1,6 +1,20 @@
-# Card Render API — draft helper surface for the info-card redesign
+# Card Render API — helper surface for the info-card redesign
 
-**Status: DRAFT for review — nothing here is implemented yet.**
+**Status: IMPLEMENTED** — engine release N (`card-helpers` + `styles-card-v2`
+fences, shell mounts, chamber/nearest/polygon-compact factories) and the
+Chicago fork wave (county-board ×7 counties, school-board, ccbr, ward, ccpsa,
+county clerk, police-district, ward-precinct/police-beat compact, 4c footer
+links) are live. Two additive extensions landed during implementation:
+`renderLinkRow` also accepts `phone`/`email` (office-like rows such as a CAPS
+desk), and `registerPolygonLayer` passes through `opts.primaryLink`.
+**Still on `renderFieldList`** (the wave-3 remainder, all needing an opts
+evolution or a shared-renderer refactor): `polygonCountyEntry` and the
+bespoke county-concept entries (judicial-subcircuit, fire/park/library
+districts, county-precinct), `school-zone-factory` + `cps-network-factory`
+(their `profileHtml` caller-HTML opts can't migrate additively), and the
+generic non-compact `polygon-factory` path. `school-site` keeps its bespoke
+filter card by design. The retirement release stays gated on a fleet-wide
+zero-call-site grep.
 
 This is the engineering contract for implementing the card redesign specified in
 `docs/design_handoff_county_board_card/` (Handoff 1, County Board card, design

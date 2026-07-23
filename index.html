@@ -1824,6 +1824,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
   .card-footer .pin-parent-btn:hover { background: #f3f7fd; }
   .card-footer-link { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--card-link); text-decoration: none; white-space: nowrap; }
+  .card-footer-link::after { content: " ↗"; }
   .card-footer-link:hover { color: var(--card-link-hover); }
 
   /* Mobile deltas (Handoff 1 §mobile) keyed to the cards column's own width,
@@ -5248,10 +5249,12 @@ function initChiExplorer() {
     return frag;
   }
   function renderLinkRow(spec) {
-    // { title?, links: [{label, url}] } — a name + link line (Handoff 2 §4c).
+    // { title?, phone?, email?, links?: [{label, url}] } — a name + contact
+    // line (Handoff 2 §4c; phone/email serve office-like rows such as a CAPS
+    // desk, rendered under the same rules as a person's contact line).
     var el = cardEl("div", "card-linkrow card-row-b");
     if (spec.title) el.appendChild(cardEl("div", "card-linkrow-title", spec.title));
-    var contact = cardContactLine({ links: spec.links });
+    var contact = cardContactLine({ phone: spec.phone, email: spec.email, links: spec.links });
     if (contact) el.appendChild(contact);
     return el;
   }
@@ -5536,6 +5539,7 @@ function initChiExplorer() {
       coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
       subOf: opts.subOf,       // optional sub-selection parent (nests under it)
       onToggle: opts.onToggle, // optional toggle reaction (e.g. a sub-layer framing its parent)
+      primaryLink: opts.primaryLink, // optional footer link (docs/CARD_RENDER_API.md) — link-only (4c) layers put their official site here
       // 4b name-only presentation (docs/CARD_RENDER_API.md): a fork opts a
       // layer in with opts.compact — the header then carries the primary
       // field's value (same value hoverName shows, so the surfaces agree)
@@ -5767,24 +5771,29 @@ function initChiExplorer() {
     },
     render: function (result) {
       // Card convention: identifier → representative → location → contact → link.
-      var fields = [{ label: "County", value: result.name != null ? String(result.name) : "Unknown" }];
-      if (result.geoid != null) fields.push({ label: "FIPS", value: String(result.geoid) });
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown county",
+        note: result.geoid != null ? "FIPS " + String(result.geoid) : null
+      }));
       var clerk = result.clerk;
       if (clerk && clerk.name) {
         // Names render as ISBE publishes them (all-caps): title-casing would
         // corrupt surnames like McHENRY / O'BRIEN, and guessing is worse.
-        fields.push({ label: "County Clerk", value: String(clerk.name) });
-        if (clerk.address) fields.push({ label: "Clerk's Office", value: String(clerk.address), pin: "#444B54" });
-        if (clerk.phone) fields.push({ label: "Phone", value: String(clerk.phone) });
-        if (clerk.email) {
-          fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(String(clerk.email)) + '">' + sanitize(String(clerk.email)) + '</a>' });
+        var person = { name: String(clerk.name), badge: "County Clerk" };
+        if (clerk.phone) person.phone = String(clerk.phone);
+        if (clerk.email) person.email = String(clerk.email);
+        wrap.appendChild(renderPersonRows([person]));
+        if (clerk.address) {
+          wrap.appendChild(renderOfficeGroup({
+            offices: [{ label: "Clerk's Office", lines: [String(clerk.address)] }]
+          }));
         }
       }
-      fields.push({
-        label: "Directory",
-        html: '<a href="https://www.elections.il.gov/ElectionOperations/ElectionAuthorities.aspx" target="_blank" rel="noopener">ISBE election-authority directory</a>'
-      });
-      return renderFieldList(fields);
+      return wrap;
+    },
+    primaryLink: function () {
+      return { label: "ISBE election-authority directory", url: "https://www.elections.il.gov/ElectionOperations/ElectionAuthorities.aspx" };
     },
     pointOfInterest: function (result) {
       if (!result.clerk || !result.clerk.address) return null;
@@ -6165,9 +6174,11 @@ function initChiExplorer() {
     style: { color: "#3949AB", weight: 1.5, fillColor: "#5C6BC0", fillOpacity: 0.06, dashArray: "4 3" },
     fields: [
       { name: "name", label: "Township", keys: ["special_police"], primary: true },
-      { label: "About", value: "A township property-tax district funding supplemental DuPage County Sheriff patrol of this unincorporated area; only unincorporated parcels are taxed." },
-      { label: "Law enforcement", html: '<a href="https://www.dupagesheriff.org" target="_blank" rel="noopener">DuPage County Sheriff\'s Office (official)</a>' }
-    ]
+      { label: "About", value: "A township property-tax district funding supplemental DuPage County Sheriff patrol of this unincorporated area; only unincorporated parcels are taxed." }
+    ],
+    primaryLink: function () {
+      return { label: "DuPage County Sheriff (official)", url: "https://www.dupagesheriff.org" };
+    }
   });
 
   // DuPage County park districts — partial coverage: park districts don't tile
@@ -6901,22 +6912,43 @@ function initChiExplorer() {
       });
     },
     render: function (result) {
-      var fields = [{ label: "District", value: result.number ? String(result.number) : "Unknown" }];
+      // 4a-shaped card: commander person row, the station as an office
+      // block, and the CAPS community-policing desk as a contact row.
+      var wrap = cardEl("div", "card-flush");
       var cleanName = cleanPoliceDistrictLabel(result.label);
-      if (cleanName) fields.push({ label: "Name", value: cleanName });
+      wrap.appendChild(renderBodyIntro({ title: cleanName ? cleanName + " District" : "Chicago Police Department" }));
       if (result.commanderName) {
-        var commanderLabel = result.commanderStatus === "acting_commander" ? "Commander (Acting)" : "Commander";
-        fields.push({ label: commanderLabel, value: String(result.commanderName) });
+        wrap.appendChild(renderPersonRows([{
+          name: String(result.commanderName),
+          // an acting commander is tagged so the card doesn't imply a
+          // permanent posting (same rule as the hover popup)
+          badge: result.commanderStatus === "acting_commander" ? "Commander (Acting)" : "Commander"
+        }]));
       }
-      if (result.stationAddress) fields.push({ label: "Station Address", value: String(result.stationAddress), pin: "#9C0B24" });
-      if (result.mainPhone) fields.push({ label: "Station Phone", value: String(result.mainPhone) });
-      if (result.capsPhone) fields.push({ label: "CAPS Phone", value: String(result.capsPhone) });
-      if (result.capsEmail) {
-        fields.push({ label: "CAPS Email", html: '<a href="mailto:' + sanitize(result.capsEmail) + '">' + sanitize(result.capsEmail) + '</a>' });
+      if (result.stationAddress || result.mainPhone) {
+        wrap.appendChild(renderOfficeGroup({
+          offices: [{
+            label: "Station",
+            lines: result.stationAddress ? [String(result.stationAddress)] : [],
+            phone: result.mainPhone ? String(result.mainPhone) : null
+          }]
+        }));
       }
+      if (result.capsPhone || result.capsEmail) {
+        wrap.appendChild(renderLinkRow({
+          title: "CAPS (community policing)",
+          phone: result.capsPhone ? String(result.capsPhone) : null,
+          email: result.capsEmail ? String(result.capsEmail) : null
+        }));
+      }
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.number ? "District " + String(result.number) : null;
+    },
+    primaryLink: function (result) {
       var districtPage = safeHttpUrl(result.sourceUrl); // scheme-check external URLs before they become an href
-      if (districtPage) fields.push({ label: "District Website", html: '<a href="' + sanitize(districtPage) + '" target="_blank" rel="noopener">' + sanitize(districtPage) + '</a>' });
-      return renderFieldList(fields);
+      return districtPage ? { label: "District website", url: districtPage } : null;
     },
     // hover popup: name the district commander from the prefetched CPD info
     // (keyed by the zero-pad-stripped district number, same as the query). An
@@ -7003,10 +7035,14 @@ function initChiExplorer() {
         return { seq: seq, beat: beat, district: district };
       });
     },
-    render: function (result) {
-      var fields = [{ label: "Beat", value: result.beat ? String(result.beat) : "Unknown" }];
-      if (result.district) fields.push({ label: "District", value: String(result.district) });
-      return renderFieldList(fields);
+    // 4b compact: the header carries "Beat NNNN" with the parent district as
+    // the meta line; no render() — the engine skips it for compact layers
+    compact: true,
+    cardIdentifier: function (result) {
+      return result.beat ? "Beat " + String(result.beat) : "Unknown";
+    },
+    cardMeta: function (result) {
+      return result.district ? "District " + String(result.district) : null;
     },
     onToggle: function (on) {
       var districtRt = layerRuntime["police-district"];
@@ -7082,22 +7118,28 @@ function initChiExplorer() {
       });
     },
     render: function (result) {
-      var fields = [{ label: "District", value: result.number ? String(result.number) : "Unknown" }];
-      var members = result.members || [];
-      members.forEach(function (m) {
-        if (!m || !m.name) return;
-        var label = m.role ? String(m.role) : "Councilor";
-        var profile = safeHttpUrl(m.profileUrl); // scheme-check the external URL before it becomes an href
-        if (profile) {
-          fields.push({ label: label, html: '<a href="' + sanitize(profile) + '" target="_blank" rel="noopener">' + sanitize(m.name) + '</a>' });
-        } else {
-          fields.push({ label: label, value: String(m.name) });
-        }
-      });
-      if (!members.length) fields.push({ label: "Councilors", value: "Not available" });
+      var members = (result.members || []).filter(function (m) { return m && m.name; });
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: "Police District Council",
+        note: members.length ? members.length + " elected councilors" : "Councilor roster not available"
+      }));
+      if (members.length) {
+        wrap.appendChild(renderPersonRows(members.map(function (m) {
+          var person = { name: String(m.name), badge: m.role ? String(m.role) : "Councilor" };
+          var profile = safeHttpUrl(m.profileUrl); // scheme-check the external URL before it becomes an href
+          if (profile) person.links = [{ label: "Profile", url: profile }];
+          return person;
+        })));
+      }
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.number ? "District " + String(result.number) : null;
+    },
+    primaryLink: function (result) {
       var councilPage = safeHttpUrl(result.sourceUrl);
-      if (councilPage) fields.push({ label: "Council page", html: '<a href="' + sanitize(councilPage) + '" target="_blank" rel="noopener">ccpsa.chicago.gov</a>' });
-      return renderFieldList(fields);
+      return councilPage ? { label: "Council page (ccpsa.chicago.gov)", url: councilPage } : null;
     },
     // hover popup: a district council is a body of three, so name the first
     // councilor and note the rest with "+N" to keep the row to one line — the
@@ -8011,23 +8053,31 @@ function initChiExplorer() {
       });
     },
     render: function (result) {
-      // Card convention: identifier → representative → location → contact → link.
-      var fields = [{ label: "Ward", value: result.ward ? String(result.ward) : "Unknown" }];
-      if (result.alderman) fields.push({ label: "Alderman", value: String(result.alderman) });
-      if (result.address) fields.push({ label: "Office Address", value: String(result.address), pin: "#0B5394" });
-      if (result.phone) fields.push({ label: "Office Phone", value: String(result.phone) });
-      if (result.email) {
-        fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(result.email) + '">' + sanitize(result.email) + '</a>' });
+      // Card convention: identifier (pill) → representative → office → contact.
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({ title: "Chicago City Council" }));
+      if (result.alderman) {
+        var person = { name: String(result.alderman), badge: "Alderman" };
+        if (result.phone) person.phone = String(result.phone);
+        if (result.email) person.email = String(result.email);
+        wrap.appendChild(renderPersonRows([person]));
       }
+      if (result.address) {
+        wrap.appendChild(renderOfficeGroup({
+          offices: [{ label: "Ward Office", lines: [String(result.address)] }]
+        }));
+      }
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.ward ? "Ward " + String(result.ward) : null;
+    },
+    primaryLink: function (result) {
       var wardSite = result.website ? safeHttpUrl(result.website) : null;
-      if (wardSite) {
-        fields.push({ label: "Website", html: '<a href="' + sanitize(wardSite) + '" target="_blank" rel="noopener">' + sanitize(wardSite) + '</a>' });
-      } else {
-        // No per-ward site in the roster row: fall back to the official
-        // citywide lookup rather than shipping a card with no link at all.
-        fields.push({ label: "More", html: '<a href="https://www.chicago.gov/city/en/depts/mayor/iframe/lookup_ward_and_alderman.html" target="_blank" rel="noopener">Find your ward &amp; alderperson at chicago.gov</a>' });
-      }
-      return renderFieldList(fields);
+      if (wardSite) return { label: "Ward website", url: wardSite };
+      // No per-ward site in the roster row: fall back to the official
+      // citywide lookup rather than shipping a card with no link at all.
+      return { label: "Find your ward at chicago.gov", url: "https://www.chicago.gov/city/en/depts/mayor/iframe/lookup_ward_and_alderman.html" };
     },
     pointOfInterest: function (result) {
       if (!result.address) return null;
@@ -8106,10 +8156,14 @@ function initChiExplorer() {
         return { seq: seq, precinct: precinct, ward: ward };
       });
     },
-    render: function (result) {
-      var fields = [{ label: "Precinct", value: result.precinct ? String(result.precinct) : "Unknown" }];
-      if (result.ward) fields.push({ label: "Ward", value: String(result.ward) });
-      return renderFieldList(fields);
+    // 4b compact: the header carries "Precinct N" with the parent ward as
+    // the meta line; no render() — the engine skips it for compact layers
+    compact: true,
+    cardIdentifier: function (result) {
+      return result.precinct ? "Precinct " + String(result.precinct) : "Unknown";
+    },
+    cardMeta: function (result) {
+      return result.ward ? "Ward " + String(result.ward) : null;
     },
     onToggle: function (on) {
       var wardRt = layerRuntime["ward"];
@@ -8454,23 +8508,29 @@ function initChiExplorer() {
       });
     },
     render: function (result) {
-      var fields = [{ label: "District", value: result.district ? String(result.district) : "Unknown" }];
+      var wrap = cardEl("div", "card-flush");
       // the "1a"/"6b"-style sub-district name — candidate questionnaires and
       // CPS materials reference districts by this scheme, not the flat number
-      if (result.longName) fields.push({ label: "Sub-district", value: String(result.longName) });
+      wrap.appendChild(renderBodyIntro({
+        title: "Chicago Board of Education",
+        note: result.longName ? "Sub-district " + String(result.longName) : null
+      }));
       if (result.member) {
-        fields.push({
-          label: "Board member",
-          // plain value — renderFieldList renders values via textContent, so
-          // sanitize() here double-escaped quoted nicknames ("Jitu", "Rhymefest")
-          value: result.member === "VACANT" ? "Vacant" : String(result.member)
-        });
+        // names render exactly as the roster stores them (textContent —
+        // quoted nicknames like "Jitu"/"Rhymefest" need no escaping here);
+        // a VACANT seat is surfaced as such, never guessed at
+        wrap.appendChild(renderPersonRows([{
+          name: result.member === "VACANT" ? "Vacant" : String(result.member),
+          badge: "Board member"
+        }]));
       }
-      fields.push({
-        label: "Board info",
-        html: '<a href="https://www.cps.edu/about/chicago-board-of-education/" target="_blank" rel="noopener">Chicago Board of Education</a>'
-      });
-      return renderFieldList(fields);
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.district ? "District " + String(result.district) : null;
+    },
+    primaryLink: function () {
+      return { label: "Chicago Board of Education", url: "https://www.cps.edu/about/chicago-board-of-education/" };
     },
     // hover popup: name the board member from the prefetched roster (keyed by
     // district number; the roster stores a bare name string, "VACANT" for empty
@@ -8520,9 +8580,11 @@ function initChiExplorer() {
       // officeholder data: District 1 is Cook County and elects three of the
       // court's seven justices; districts 2-5 elect one each
       { label: "Note", value: "District 1 is all of Cook County and elects three of the seven justices.",
-        when: function (r) { return String(r.district) === "1"; } },
-      { label: "Court info", html: '<a href="https://www.illinoiscourts.gov/courts/supreme-court/" target="_blank" rel="noopener">Illinois Supreme Court</a>' }
-    ]
+        when: function (r) { return String(r.district) === "1"; } }
+    ],
+    primaryLink: function () {
+      return { label: "Illinois Supreme Court", url: "https://www.illinoiscourts.gov/courts/supreme-court/" };
+    }
   });
 
   var loadCcbrDistricts = makeCached(function () {
@@ -8568,21 +8630,28 @@ function initChiExplorer() {
       });
     },
     render: function (result) {
-      // Card convention: identifier → representative → contact → link.
-      var fields = [{ label: "District", value: result.district != null ? String(result.district) : "Unknown" }];
+      // Card convention: identifier (pill) → representative → contact → link.
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: "Cook County Board of Review",
+        note: "Hears property-tax assessment appeals; one commissioner is elected per district."
+      }));
       var m = result.member;
-      if (m && m.name) fields.push({ label: "Commissioner", value: String(m.name) });
-      if (m && m.email) {
-        fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(String(m.email)) + '">' + sanitize(String(m.email)) + '</a>' });
+      if (m && m.name) {
+        var person = { name: String(m.name), badge: "Commissioner" };
+        if (m.phone) person.phone = String(m.phone);
+        if (m.email) person.email = String(m.email);
+        var page = safeHttpUrl(m.url);
+        if (page) person.links = [{ label: "Commissioner page", url: page }];
+        wrap.appendChild(renderPersonRows([person]));
       }
-      if (m && m.phone) fields.push({ label: "Phone", value: String(m.phone) });
-      var page = m ? safeHttpUrl(m.url) : null;
-      if (page) {
-        fields.push({ label: "Commissioner page", html: '<a href="' + sanitize(page) + '" target="_blank" rel="noopener">' + sanitize(page) + '</a>' });
-      }
-      fields.push({ label: "What it does", value: "Hears property-tax assessment appeals; one commissioner is elected per district." });
-      fields.push({ label: "Board info", html: '<a href="https://www.cookcountyboardofreview.com/" target="_blank" rel="noopener">Cook County Board of Review</a>' });
-      return renderFieldList(fields);
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.district != null ? "District " + String(result.district) : null;
+    },
+    primaryLink: function () {
+      return { label: "Cook County Board of Review", url: "https://www.cookcountyboardofreview.com/" };
     },
     // hover popup: name the commissioner from the prefetched roster (same
     // district-number join as the query, run synchronously against the cache).
@@ -8729,10 +8798,11 @@ function initChiExplorer() {
       // the Clerk keys every TIF report to this agency number — the row makes
       // the card's link actionable
       { name: "agencyNum", label: "Clerk agency number", keys: ["agencynum"] },
-      { label: "County", value: "Cook County" },
-      { label: "Revenue & reports",
-        html: '<a href="https://www.cookcountyclerkil.gov/service/tif-reports" target="_blank" rel="noopener">Cook County Clerk — TIF reports (official)</a>' }
-    ]
+      { label: "County", value: "Cook County" }
+    ],
+    primaryLink: function () {
+      return { label: "Clerk TIF reports (official)", url: "https://www.cookcountyclerkil.gov/service/tif-reports" };
+    }
   });
 
   registerPolygonLayer({
@@ -8744,10 +8814,11 @@ function initChiExplorer() {
     style: { color: "#0E7C86", weight: 2, fillColor: "#19A0AD", fillOpacity: 0.06, dashArray: "10 4" },
     fields: [
       { name: "name", label: "District", keys: ["max_agency_desc"], primary: true },
-      { label: "Commissioners", value: "Nine commissioners elected at large, district-wide" },
-      { label: "Board",
-        html: '<a href="https://mwrd.org/board-commissioners" target="_blank" rel="noopener">MWRD Board of Commissioners (official)</a>' }
-    ]
+      { label: "Commissioners", value: "Nine commissioners elected at large, district-wide" }
+    ],
+    primaryLink: function () {
+      return { label: "MWRD Board of Commissioners", url: "https://mwrd.org/board-commissioners" };
+    }
   });
   var COMMISSIONER_DISTRICT_FIELDS = ["district_int", "district_txt", "district"];
 
@@ -8790,6 +8861,48 @@ function initChiExplorer() {
    * Entry contract: { key, coverage, loadGeometry, query, render, hoverName,
    * hoverOfficial?, pointOfInterest? } — the same pieces a standalone layer
    * declares, moved into a table row keyed by county. */
+  // Roster member -> renderPersonRows person, shared by the officeholder
+  // cards (county-board entries and kin). The role wins the badge slot with
+  // party riding the note; a fixed opts.badge (e.g. "Board Chair" for a
+  // countywide chair) pushes the member's own role to the note instead.
+  // Hometown/city joins the note. Absent fields render nothing (honesty
+  // rules — never a guessed officeholder).
+  function boardMemberPerson(m, opts) {
+    var person = { name: String(m.name) };
+    var role = m.role ? String(m.role) : null;
+    var party = m.party ? String(m.party) : null;
+    var noteBits = [];
+    if (opts && opts.badge) {
+      person.badge = opts.badge;
+      if (role && role !== opts.badge) noteBits.push(role);
+      if (party) noteBits.push(party);
+    } else if (role) {
+      person.badge = role;
+      if (party) noteBits.push(party);
+    } else if (party) {
+      person.badge = party;
+    }
+    if (m.city) noteBits.push(String(m.city));
+    if (noteBits.length) person.note = noteBits.join(" · ");
+    if (m.phone) person.phone = String(m.phone);
+    if (m.email) person.email = String(m.email);
+    var url = m.url ? safeHttpUrl(m.url) : null;
+    if (url) person.links = [{ label: (opts && opts.linkLabel) || "Profile", url: url }];
+    if (m.committees && m.committees.length) {
+      person.details = { label: "Committees", items: m.committees.map(String) };
+    }
+    return person;
+  }
+  // the Handoff 1 count line ("3 district members · 1 countywide chair");
+  // omitted for a single-member district with no countywide section
+  function boardCountNote(memberCount, chairLabel) {
+    if (memberCount <= 1 && !chairLabel) return null;
+    var parts = [];
+    if (memberCount >= 1) parts.push(memberCount + " district member" + (memberCount === 1 ? "" : "s"));
+    if (chairLabel) parts.push("1 countywide " + chairLabel);
+    return parts.length ? parts.join(" · ") : null;
+  }
+
   function registerCountyLayer(opts) {
     var entries = opts.counties;
     var byKey = {};
@@ -8873,6 +8986,16 @@ function initChiExplorer() {
       },
       render: function (result) {
         return byKey[result.dxCounty].render(result);
+      },
+      // per-county pill + footer link (docs/CARD_RENDER_API.md), dispatched
+      // like render — an entry that declares neither renders extras-free
+      cardIdentifier: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.cardIdentifier ? entry.cardIdentifier(result) : null;
+      },
+      primaryLink: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.primaryLink ? entry.primaryLink(result) : null;
       },
       pointOfInterest: function (result) {
         var entry = byKey[result.dxCounty];
@@ -9009,38 +9132,45 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district ? String(result.district) : "Unknown" },
-            { label: "Body", value: "Cook County Board of Commissioners" }
-          ];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({ title: "Cook County Board of Commissioners" }));
           var office = result.office;
           if (office) {
             var name = commissionerName(office);
-            if (name) fields.push({ label: "Commissioner", value: name });
+            if (name) {
+              var person = { name: name, badge: "Commissioner" };
+              var email = findPropCI(office, ["email1"]);
+              if (email) person.email = String(email);
+              var website = safeHttpUrl(findPropCI(office, ["url1"])); // scheme-check before it becomes an href
+              if (website) person.links = [{ label: "Website", url: website }];
+              wrap.appendChild(renderPersonRows([person]));
+            }
             var addressLines = commissionerAddressLines(office);
-            if (addressLines.length) fields.push({ label: "Office Address", html: addressLines.map(sanitize).join("<br>"), pin: "#1F6FB2" });
             var phone = findPropCI(office, ["phone1"]);
-            if (phone) fields.push({ label: "Phone", value: String(phone) });
-            var email = findPropCI(office, ["email1"]);
-            if (email) fields.push({ label: "Email", html: '<a href="mailto:' + sanitize(String(email)) + '">' + sanitize(String(email)) + '</a>' });
-            var website = safeHttpUrl(findPropCI(office, ["url1"])); // scheme-check before it becomes an href
-            if (website) fields.push({ label: "Website", html: '<a href="' + sanitize(website) + '" target="_blank" rel="noopener">' + sanitize(website) + '</a>' });
+            if (addressLines.length || phone) {
+              wrap.appendChild(renderOfficeGroup({
+                offices: [{ label: "District Office", lines: addressLines, phone: phone ? String(phone) : null }]
+              }));
+            }
           }
           // the same commissioners govern the Forest Preserve District of
           // Cook County ex officio, and the FPD taxing district is
-          // coterminous with the county — this row IS the app's
+          // coterminous with the county — this note + link IS the app's
           // forest-preserve representation answer (no separate FPD layer;
           // docs/DATA_LAYER_GUIDEBOOK.md records the drop)
-          fields.push({
-            label: "Forest Preserve District",
-            html: 'The commissioners also serve, ex officio, as the Forest Preserve District of Cook County board — ' +
-              '<a href="https://fpdcc.com/about/board-commissioners/" target="_blank" rel="noopener">FPD board (official)</a>'
-          });
-          fields.push({
-            label: "Board info",
-            html: '<a href="https://maps.cookcountyil.gov/findmydistrict/" target="_blank" rel="noopener">Cook County Find My District (official)</a>'
-          });
-          return renderFieldList(fields);
+          wrap.appendChild(renderBodyIntro({
+            note: "The commissioners also serve, ex officio, as the board of the Forest Preserve District of Cook County."
+          }));
+          wrap.appendChild(renderLinkRow({
+            links: [{ label: "FPD board (official)", url: "https://fpdcc.com/about/board-commissioners/" }]
+          }));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Find My District (official)", url: "https://maps.cookcountyil.gov/findmydistrict/" };
         },
         pointOfInterest: function (result) {
           var office = result.office;
@@ -9089,38 +9219,32 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district ? String(result.district) : "Unknown" },
-            { label: "Body", value: "Will County Board" }
-          ];
           var members = result.entry && result.entry.members;
+          var people;
           if (members && members.length) {
-            members.forEach(function (m) {
-              // one rich row per member; every external string sanitized before
-              // it becomes innerHTML (name, role, city, phone, email, committees)
-              var head = "<strong>" + sanitize(m.name) + "</strong>" +
-                (m.role ? " — " + sanitize(m.role) : "") + (m.city ? " (" + sanitize(m.city) + ")" : "");
-              var contact = [];
-              if (m.phone) contact.push(sanitize(m.phone));
-              if (m.email) contact.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-              var lines = [head];
-              if (contact.length) lines.push(contact.join(" · "));
-              if (m.committees && m.committees.length) {
-                lines.push("Committees: " + m.committees.map(sanitize).join(", "));
-              }
-              fields.push({ label: "Board Member", html: lines.join("<br>") });
-            });
+            people = members.map(function (m) { return boardMemberPerson(m); });
+            // Handoff 1: the first member's committees may default open on
+            // desktop; the rest start collapsed
+            if (people[0].details) people[0].detailsOpen = true;
           } else {
+            // roster unavailable: the member names still ride the county's
+            // own boundary GIS — name-only rows, never blank
+            people = [];
             var r1 = findPropCI(result.props, ["representative1"]);
             var r2 = findPropCI(result.props, ["representative2"]);
-            if (r1) fields.push({ label: "Board Member", value: String(r1) });
-            if (r2) fields.push({ label: "Board Member", value: String(r2) });
+            if (r1) people.push({ name: String(r1) });
+            if (r2) people.push({ name: String(r2) });
           }
-          fields.push({
-            label: "Official directory",
-            html: '<a href="https://www.willcountyboard.com/board-members.html" target="_blank" rel="noopener">Will County Board members (official)</a>'
-          });
-          return renderFieldList(fields);
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({ title: "Will County Board", note: boardCountNote(people.length, null) }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.willcountyboard.com/board-members.html" };
         },
         hoverOfficial: {
           load: loadWillCountyBoardMembers,
@@ -9155,35 +9279,30 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district ? String(result.district) : "Unknown" },
-            { label: "Body", value: "DuPage County Board" }
-          ];
-          // One row per board member of this district (name + email + profile),
-          // from the weekly roster; every external string sanitized before it
-          // is HTML.
-          function personRow(label, m) {
-            var lines = ["<strong>" + sanitize(m.name) + "</strong>" + (m.role ? " — " + sanitize(m.role) : "")];
-            var link = [];
-            if (m.phone) link.push(sanitize(m.phone));
-            if (m.email) link.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-            var prof = safeHttpUrl(m.url);
-            if (prof) link.push('<a href="' + sanitize(prof) + '" target="_blank" rel="noopener">profile</a>');
-            if (link.length) lines.push(link.join(" · "));
-            fields.push({ label: label, html: lines.join("<br>") });
-          }
-          var members = result.entry && result.entry.members;
-          if (members && members.length) {
-            members.forEach(function (m) { personRow("Board Member", m); });
+          var members = (result.entry && result.entry.members) || [];
+          var chair = result.chair && result.chair.name ? result.chair : null;
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "DuPage County Board",
+            note: boardCountNote(members.length, chair ? "chair" : null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) { return boardMemberPerson(m); })));
           }
           // The Board Chair is elected countywide, so she represents every
-          // DuPage resident — surface her on every district's card.
-          if (result.chair && result.chair.name) personRow("Board Chair (countywide)", result.chair);
-          fields.push({
-            label: "Official directory",
-            html: '<a href="https://www.dupagecounty.gov/government/county_board/county_board_members/" target="_blank" rel="noopener">DuPage County Board members (official)</a>'
-          });
-          return renderFieldList(fields);
+          // DuPage resident — the separated countywide section on every
+          // district's card (Handoff 1).
+          if (chair) {
+            wrap.appendChild(renderSectionLabel("Countywide"));
+            wrap.appendChild(renderPersonRows([boardMemberPerson(chair, { badge: "Board Chair" })], { tinted: true }));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.dupagecounty.gov/government/county_board/county_board_members/" };
         },
         hoverOfficial: {
           load: loadDupageCountyBoardMembers,
@@ -9220,31 +9339,27 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district != null && result.district !== "" ? String(result.district) : "Unknown" },
-            { label: "Body", value: "Lake County Board" }
-          ];
           // the sitting member, phone, official email, and district page all
           // ride on the county's own maintained boundary feature (verified
           // against the county's published directory, 2026-07) — a live
           // officeholder join with no scraper, like Cook's
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({ title: "Lake County Board" }));
           if (result.member && String(result.member).trim()) {
-            var lines = ["<strong>" + sanitize(String(result.member).trim()) + "</strong>"];
-            var contact = [];
-            if (result.phone && String(result.phone).trim()) contact.push(sanitize(String(result.phone).trim()));
-            if (result.email && String(result.email).trim()) {
-              contact.push('<a href="mailto:' + sanitize(String(result.email).trim()) + '">' + sanitize(String(result.email).trim()) + "</a>");
-            }
+            var person = { name: String(result.member).trim() };
+            if (result.phone && String(result.phone).trim()) person.phone = String(result.phone).trim();
+            if (result.email && String(result.email).trim()) person.email = String(result.email).trim();
             var page = safeHttpUrl(result.url);
-            if (page) contact.push('<a href="' + sanitize(page) + '" target="_blank" rel="noopener">district page</a>');
-            if (contact.length) lines.push(contact.join(" · "));
-            fields.push({ label: "Board Member", html: lines.join("<br>") });
+            if (page) person.links = [{ label: "District page", url: page }];
+            wrap.appendChild(renderPersonRows([person]));
           }
-          fields.push({
-            label: "Official directory",
-            html: '<a href="https://www.lakecountyil.gov/2336/Board-Members" target="_blank" rel="noopener">Lake County Board members (official)</a>'
-          });
-          return renderFieldList(fields);
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== "" ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.lakecountyil.gov/2336/Board-Members" };
         },
         // hover popup: the member's name rides on the boundary feature itself,
         // so the "roster" load is just the cached boundary fetch
@@ -9287,40 +9402,37 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district != null ? String(result.district) : "Unknown" },
-            { label: "Body", value: "Kane County Board" }
-          ];
-          // one rich row per person; every external string sanitized before
-          // it becomes innerHTML (name, party, phone, email, url)
-          function personRow(label, m) {
-            var lines = ["<strong>" + sanitize(m.name) + "</strong>" +
-              (m.party ? " " + sanitize(m.party) : "") +
-              (m.role && label.indexOf("Chair") === -1 ? " — " + sanitize(m.role) : "")];
-            var contact = [];
-            if (m.phone) contact.push(sanitize(m.phone));
-            if (m.email) contact.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-            var prof = safeHttpUrl(m.url);
-            if (prof) contact.push('<a href="' + sanitize(prof) + '" target="_blank" rel="noopener">profile</a>');
-            if (contact.length) lines.push(contact.join(" · "));
-            fields.push({ label: label, html: lines.join("<br>") });
-          }
           var members = result.entry && result.entry.members;
+          var people;
           if (members && members.length) {
-            members.forEach(function (m) { personRow("Board Member", m); });
+            people = members.map(function (m) { return boardMemberPerson(m); });
           } else if (result.member && String(result.member).trim()) {
             // roster unavailable: the sitting member's name still rides the
             // county's own boundary GIS — name-only fallback, never blank
-            fields.push({ label: "Board Member", value: String(result.member).trim() });
+            people = [{ name: String(result.member).trim() }];
+          } else {
+            people = [];
           }
+          var chair = result.chair && result.chair.name ? result.chair : null;
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Kane County Board",
+            note: boardCountNote(people.length, chair ? "chair" : null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
           // the Board Chair is elected countywide, so she represents every
-          // Kane resident — surface her on every district's card
-          if (result.chair && result.chair.name) personRow("Board Chair (countywide)", result.chair);
-          fields.push({
-            label: "Official directory",
-            html: '<a href="https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx" target="_blank" rel="noopener">Kane County Board members (official)</a>'
-          });
-          return renderFieldList(fields);
+          // Kane resident — the separated countywide section on every card
+          if (chair) {
+            wrap.appendChild(renderSectionLabel("Countywide"));
+            wrap.appendChild(renderPersonRows([boardMemberPerson(chair, { badge: "Board Chair" })], { tinted: true }));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx" };
         },
         hoverOfficial: {
           load: loadKaneCountyBoard,
@@ -9356,30 +9468,29 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district != null && result.district !== "" ? String(result.district) : "Unknown" },
-            { label: "Body", value: "McHenry County Board" }
-          ];
-          // one rich row per person; every external string sanitized before
-          // it becomes innerHTML (name, role, phone, email)
-          function personRow(label, m) {
-            var lines = ["<strong>" + sanitize(m.name) + "</strong>" + (m.role ? " — " + sanitize(m.role) : "")];
-            var contact = [];
-            if (m.phone) contact.push(sanitize(m.phone));
-            if (m.email) contact.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-            if (contact.length) lines.push(contact.join(" · "));
-            fields.push({ label: label, html: lines.join("<br>") });
-          }
-          var members = result.entry && result.entry.members;
-          if (members && members.length) {
-            members.forEach(function (m) { personRow("Board Member", m); });
+          var members = (result.entry && result.entry.members) || [];
+          var chair = result.chair && result.chair.name ? result.chair : null;
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "McHenry County Board",
+            note: boardCountNote(members.length, chair ? "chairman" : null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) { return boardMemberPerson(m); })));
           }
           // the Chairman is elected countywide, so he represents every
-          // McHenry resident — surface him on every district's card
-          if (result.chair && result.chair.name) personRow("Board Chairman (countywide)", result.chair);
-          fields.push({ label: "Official directory",
-            html: '<a href="https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members" target="_blank" rel="noopener">McHenry County Board members (official)</a>' });
-          return renderFieldList(fields);
+          // McHenry resident — the separated countywide section on every card
+          if (chair) {
+            wrap.appendChild(renderSectionLabel("Countywide"));
+            wrap.appendChild(renderPersonRows([boardMemberPerson(chair, { badge: "Board Chairman" })], { tinted: true }));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== "" ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members" };
         },
         hoverOfficial: {
           load: loadMchenryBoardMembers,
@@ -9419,28 +9530,22 @@ function initChiExplorer() {
           });
         },
         render: function (result) {
-          var fields = [
-            { label: "District", value: result.district != null && result.district !== "" ? String(result.district) : "Unknown" },
-            { label: "Body", value: "Kendall County Board" }
-          ];
-          var members = result.entry && result.entry.members;
-          if (members && members.length) {
-            members.forEach(function (m) {
-              // one rich row per member; every external string sanitized
-              // before it becomes innerHTML (name, role, phone, email)
-              var head = "<strong>" + sanitize(m.name) + "</strong>" +
-                (m.role ? " — " + sanitize(m.role) : "");
-              var contact = [];
-              if (m.phone) contact.push(sanitize(m.phone));
-              if (m.email) contact.push('<a href="mailto:' + sanitize(m.email) + '">' + sanitize(m.email) + "</a>");
-              var lines = [head];
-              if (contact.length) lines.push(contact.join(" · "));
-              fields.push({ label: "Board Member", html: lines.join("<br>") });
-            });
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Kendall County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) { return boardMemberPerson(m); })));
           }
-          fields.push({ label: "Official directory",
-            html: '<a href="https://www.kendallcountyil.gov/county-board/board-members" target="_blank" rel="noopener">Kendall County Board members (official)</a>' });
-          return renderFieldList(fields);
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== "" ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.kendallcountyil.gov/county-board/board-members" };
         },
         hoverOfficial: {
           load: loadKendallBoardMembers,
@@ -10789,6 +10894,14 @@ function initChiExplorer() {
     stylePinButton(btn, mod.id);
     btn.addEventListener("click", function () { setPinnedParent(mod.id); });
     rt.pinBtn = btn;
+    if (!rt.cardFooter && rt.cardBody.querySelector(".card-flush")) {
+      // a migrated (flush) card whose module declares no primaryLink still
+      // needs the footer — the flush body has no padding for a loose button
+      var footer = document.createElement("div");
+      footer.className = "card-footer";
+      rt.block.insertBefore(footer, rt.cardBody.nextSibling);
+      rt.cardFooter = footer;
+    }
     if (rt.cardFooter) {
       // migrated cards: the pin sits left in the shell-owned footer, before
       // the right-aligned primary link (docs/CARD_RENDER_API.md)
