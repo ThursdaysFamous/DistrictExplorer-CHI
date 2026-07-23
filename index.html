@@ -3682,12 +3682,12 @@ function initChiExplorer() {
     "school-district-elementary", // IL elementary school district (371 statewide)
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
-    "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) subcircuits, both PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
-    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
+    "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
+    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members carried on the county GIS) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
-    "fire-district",     // Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only), county-dispatched; partial coverage inside each county
+    "fire-district",     // Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
-    "park-district",     // Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only), county-dispatched; partial coverage inside each county
+    "park-district",     // Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "school-board",      // Elected School Board district (10, citywide)
     "cps-hs-network",    // CPS High School Network (admin grouping)
     "cps-network",       // CPS K-8 Network (admin grouping)
@@ -3710,7 +3710,7 @@ function initChiExplorer() {
     // Smallest county-scoped layer, so it renders on top of Township and County
     // (smallest-on-top); turning it on drops both to outline-only, framing the
     // precinct fills from underneath.
-    "county-precinct",   // Consolidated voting-precinct layer — Will current 2022 map (310) + DuPage current 2024 consolidated map (600), county-dispatched; subOf township
+    "county-precinct",   // Consolidated voting-precinct layer — Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431), county-dispatched; subOf township
     "cps-elementary",    // Elementary School attendance zone — smallest polygon layer
     "school-site",       // individual school-campus footprints — smallest polygons, above the zones
     "police-station",    // point marker — no polygon area, always topmost
@@ -5697,6 +5697,87 @@ function initChiExplorer() {
   });
   // (Card/query/hover live as the "dupage" entry of the consolidated
   // `county-precinct` layer — grep registerCountyLayer.)
+
+  /* =========================================================================
+   * LAKE COUNTY — third collar county, and the first to land entirely as
+   * dispatch entries in the consolidated county layers: no new toggles, just
+   * a "lake" row in each concept's table (docs/COUNTY_LAYER_CONSOLIDATION.md
+   * working as designed). Coverage mirrors Will/DuPage: exact containment in
+   * a shared same-origin TIGER-sourced county outline
+   * (data/app/lake-county-outline.json, FIPS 17097, geometryPrecision=5).
+   * Every Lake layer loads from the county's own actively-maintained ArcGIS
+   * org (services3.arcgis.com/HESxeTbDliKKvec2 — all layers edited 2026-07),
+   * guarded by the shared no-usable-geometry check. Uniquely in the collar
+   * rollout so far, Lake's GIS carries per-district office/officeholder
+   * contact ON the boundary features themselves: the board features name the
+   * sitting member (+ phone, official email, district page — verified against
+   * the county's published directory, 2026-07), and the fire/park features
+   * carry each district's own office address/phone/email/site. No scraper
+   * needed; the county's GIS is the roster source.
+   * ======================================================================= */
+  var loadLakeCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lake-county-outline.json", {}, 2);
+  });
+  function lakeCountyCoverage(point) {
+    return loadLakeCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  var LAKE_GIS = "https://services3.arcgis.com/HESxeTbDliKKvec2/arcgis/rest/services/";
+  function loadLakeFeatureServer(service, layerIndex, where, outFields, label) {
+    var url = LAKE_GIS + service + "/FeatureServer/" + layerIndex +
+      "/query?where=" + encodeURIComponent(where) + "&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Lake County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadLakeCountyBoard = makeCached(function () {
+    return loadLakeFeatureServer("LakeCounty_PoliticalBoundaries", 0, "1=1",
+      "CB_DIST,NAME,PHONE,EMAIL,URL", "Board");
+  });
+  var loadLakeJudicial = makeCached(function () {
+    return loadLakeFeatureServer("LakeCounty_PoliticalBoundaries", 1, "1=1",
+      "JUDICIAL_SUB", "judicial subcircuits");
+  });
+  var loadLakePrecincts = makeCached(function () {
+    return loadLakeFeatureServer("LakeCounty_PoliticalBoundaries", 7, "1=1",
+      "TWP_PCT,PRECINCT", "precincts");
+  });
+  // The fire/park services each carry one all-null filler feature; the
+  // ORG_NAME IS NOT NULL clause keeps it out of the overlay AND the query, so
+  // a point there honestly reports "No result" instead of an "Unknown" card.
+  var loadLakeFire = makeCached(function () {
+    return loadLakeFeatureServer("LakeCounty_TaxDistricts", 4, "ORG_NAME IS NOT NULL",
+      "ORG_NAME,ADDR,CITY,ZIP,PHONE,EMAIL,URL", "fire districts");
+  });
+  var loadLakeParks = makeCached(function () {
+    return loadLakeFeatureServer("LakeCounty_TaxDistricts", 11, "ORG_NAME IS NOT NULL",
+      "ORG_NAME,ADDR,CITY,ZIP,PHONE,EMAIL,URL", "park districts");
+  });
+
+  // Shared card rows for Lake's tax-district entries (fire/park): the county
+  // GIS publishes each district's own office address/phone/email/site — the
+  // card-order convention says surface them. Blanks arrive as single spaces
+  // in this data, so trim before deciding a row exists; every external string
+  // is sanitized (and URLs scheme-checked) before it becomes HTML.
+  function lakeOrgContactRows(result) {
+    function val(v) { return v == null ? "" : String(v).trim(); }
+    var rows = [];
+    var addr = [val(result.addr), [val(result.city), val(result.zip)].filter(Boolean).join(" ")]
+      .filter(Boolean);
+    if (addr.length) rows.push({ label: "Office Address", html: addr.map(sanitize).join("<br>") });
+    if (val(result.phone)) rows.push({ label: "Phone", value: val(result.phone) });
+    if (val(result.email)) {
+      rows.push({ label: "Email", html: '<a href="mailto:' + sanitize(val(result.email)) + '">' + sanitize(val(result.email)) + "</a>" });
+    }
+    var site = safeHttpUrl(val(result.url));
+    if (site) rows.push({ label: "Website", html: '<a href="' + sanitize(site) + '" target="_blank" rel="noopener">' + sanitize(site) + "</a>" });
+    return rows;
+  }
 
   /* ---------- "Live data source is down" descriptor (fork code) --------------
    * Every Socrata layer below fetches from the City of Chicago Data Portal at
@@ -7788,12 +7869,13 @@ function initChiExplorer() {
   /* ---------- County Board District — the consolidated county-legislature
    * layer: Cook's Board of Commissioners (17 single-member districts, live
    * officeholder join from the county GIS), the Will County Board (11
-   * districts, weekly-scraped roster), and the DuPage County Board (6
-   * districts electing 3 members each, weekly-scraped roster + countywide
-   * Chair) as dispatch entries of ONE toggle. Each card carries a Body row
-   * naming its county's board, so the generic label never obscures which
-   * body a district belongs to. Card content is otherwise exactly what the
-   * three pre-consolidation layers rendered. ---------- */
+   * districts, weekly-scraped roster), the DuPage County Board (6 districts
+   * electing 3 members each, weekly-scraped roster + countywide Chair), and
+   * the Lake County Board (19 single-member districts, member + contact
+   * carried on the county's own boundary GIS — no scraper) as dispatch
+   * entries of ONE toggle. Each card carries a Body row naming its county's
+   * board, so the generic label never obscures which body a district belongs
+   * to. ---------- */
   registerCountyLayer({
     id: "county-board",
     group: "political",
@@ -8005,6 +8087,66 @@ function initChiExplorer() {
             return members && members.length ? members.map(function (m) { return m.name; }).join(", ") : null;
           }
         }
+      },
+      {
+        key: "lake",
+        coverage: lakeCountyCoverage,
+        loadGeometry: loadLakeCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["cb_dist"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadLakeCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              district: findPropCI(props, ["cb_dist"]),
+              member: findPropCI(props, ["name"]),
+              phone: findPropCI(props, ["phone"]),
+              email: findPropCI(props, ["email"]),
+              url: findPropCI(props, ["url"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "District", value: result.district != null && result.district !== "" ? String(result.district) : "Unknown" },
+            { label: "Body", value: "Lake County Board" }
+          ];
+          // the sitting member, phone, official email, and district page all
+          // ride on the county's own maintained boundary feature (verified
+          // against the county's published directory, 2026-07) — a live
+          // officeholder join with no scraper, like Cook's
+          if (result.member && String(result.member).trim()) {
+            var lines = ["<strong>" + sanitize(String(result.member).trim()) + "</strong>"];
+            var contact = [];
+            if (result.phone && String(result.phone).trim()) contact.push(sanitize(String(result.phone).trim()));
+            if (result.email && String(result.email).trim()) {
+              contact.push('<a href="mailto:' + sanitize(String(result.email).trim()) + '">' + sanitize(String(result.email).trim()) + "</a>");
+            }
+            var page = safeHttpUrl(result.url);
+            if (page) contact.push('<a href="' + sanitize(page) + '" target="_blank" rel="noopener">district page</a>');
+            if (contact.length) lines.push(contact.join(" · "));
+            fields.push({ label: "Board Member", html: lines.join("<br>") });
+          }
+          fields.push({
+            label: "Official directory",
+            html: '<a href="https://www.lakecountyil.gov/2336/Board-Members" target="_blank" rel="noopener">Lake County Board members (official)</a>'
+          });
+          return renderFieldList(fields);
+        },
+        // hover popup: the member's name rides on the boundary feature itself,
+        // so the "roster" load is just the cached boundary fetch
+        hoverOfficial: {
+          load: loadLakeCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["name"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
       }
     ]
   });
@@ -8041,6 +8183,17 @@ function initChiExplorer() {
           { label: "Court", value: "18th Judicial Circuit (DuPage County)" },
           { label: "Judges",
             html: '<a href="https://www.dupagecourts.gov/" target="_blank" rel="noopener">18th Judicial Circuit Court (official)</a>' }
+        ]
+      }),
+      polygonCountyEntry({
+        key: "lake",
+        coverage: lakeCountyCoverage,
+        loader: loadLakeJudicial,
+        fields: [
+          { name: "subcircuit", label: "Subcircuit", keys: ["judicial_sub"], primary: true },
+          { label: "Court", value: "19th Judicial Circuit (Lake County)" },
+          { label: "Judges",
+            html: '<a href="https://www.19thcircuitcourt.state.il.us/" target="_blank" rel="noopener">19th Judicial Circuit Court (official)</a>' }
         ]
       })
     ]
@@ -8082,7 +8235,42 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["fire"], primary: true },
           { label: "County", value: "DuPage County" }
         ]
-      })
+      }),
+      // Lake carries each district's own office contact on the GIS feature —
+      // bespoke entry so those rows render as real links (see lakeOrgContactRows)
+      {
+        key: "lake",
+        coverage: lakeCountyCoverage,
+        loadGeometry: loadLakeFire,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["org_name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadLakeFire().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["org_name"]),
+              addr: findPropCI(props, ["addr"]),
+              city: findPropCI(props, ["city"]),
+              zip: findPropCI(props, ["zip"]),
+              phone: findPropCI(props, ["phone"]),
+              email: findPropCI(props, ["email"]),
+              url: findPropCI(props, ["url"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "Fire District", value: result.name ? String(result.name) : "Unknown" },
+            { label: "County", value: "Lake County" }
+          ];
+          return renderFieldList(fields.concat(lakeOrgContactRows(result)));
+        }
+      }
     ]
   });
 
@@ -8118,7 +8306,42 @@ function initChiExplorer() {
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "DuPage County" }
         ]
-      })
+      }),
+      // Lake carries each district's own office contact on the GIS feature —
+      // bespoke entry so those rows render as real links (see lakeOrgContactRows)
+      {
+        key: "lake",
+        coverage: lakeCountyCoverage,
+        loadGeometry: loadLakeParks,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["org_name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadLakeParks().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["org_name"]),
+              addr: findPropCI(props, ["addr"]),
+              city: findPropCI(props, ["city"]),
+              zip: findPropCI(props, ["zip"]),
+              phone: findPropCI(props, ["phone"]),
+              email: findPropCI(props, ["email"]),
+              url: findPropCI(props, ["url"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "Park District", value: result.name ? String(result.name) : "Unknown" },
+            { label: "County", value: "Lake County" }
+          ];
+          return renderFieldList(fields.concat(lakeOrgContactRows(result)));
+        }
+      }
     ]
   });
 
@@ -8225,6 +8448,47 @@ function initChiExplorer() {
           }
           fields.push({ label: "Registration & polling place",
             html: '<a href="https://www.dupagecounty.gov/elections/" target="_blank" rel="noopener">DuPage County Clerk — Elections (official)</a>' });
+          return renderFieldList(fields);
+        }
+      },
+      {
+        key: "lake",
+        coverage: lakeCountyCoverage,
+        loadGeometry: loadLakePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["twp_pct"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLakePrecincts(),
+            loadLakeCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) boardDistrict = findPropCI(bf.properties || {}, ["cb_dist"]);
+            }
+            var name = findPropCI(props, ["twp_pct"]);
+            // TWP_PCT is township-qualified ("Moraine 227"); the township is
+            // the county's own compound label minus its trailing precinct
+            // number — a split of published data, not a guess
+            var township = name != null ? String(name).replace(/\s+\d+$/, "") : null;
+            return { seq: seq, name: name, township: township, boardDistrict: boardDistrict };
+          });
+        },
+        render: function (result) {
+          var fields = [{ label: "Precinct", value: result.name ? String(result.name) : "Unknown" }];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
+          fields.push({ label: "Registration & polling place",
+            html: '<a href="https://www.lakecountyil.gov/163/Elections" target="_blank" rel="noopener">Lake County Clerk — Elections (official)</a>' });
           return renderFieldList(fields);
         }
       }

@@ -107,6 +107,7 @@ GEOMETRY_FILES = {
     "il-senate-districts.json": (60, 60),  # 59 IL Senate districts + ZZ; pre-built from TIGERweb layer 1
     "il-house-districts.json": (119, 119),  # 118 IL House districts + ZZ; pre-built from TIGERweb layer 2
     "dupage-county-outline.json": (1, 1),
+    "lake-county-outline.json": (1, 1),
 }
 
 # file -> minimum key count (officeholder rosters).

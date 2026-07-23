@@ -109,9 +109,16 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
    somewhere fixed: Body row (board), Court row (judicial), County row (fire/park), the
    clerk link (precinct). The retired "DuPage …"-prefixed labels are gone with the
    toggle-collision that motivated them.
-3. **Future counties (Lake, Kane, McHenry, Kendall)**: ship as dispatch entries into the
-   consolidated layers from day one; a county-specific layer is only ever created for a
-   concept no consolidated layer covers yet (as `dupage-county-special-police` remains
+3. **Future counties ship as dispatch entries from day one** — proven by **Lake
+   (DONE, 2026-07)**: the first county to land with **zero new layers and zero
+   scrapers** — five `lake` entries (board 19 / judicial 12 / fire 22 / park 23 /
+   precinct 431) plus one TIGER outline for `lakeCountyCoverage`. Lake's own
+   boundary GIS carries the board members' names/phone/official email/district
+   page (verified against the county's published directory) and each fire/park
+   district's office contact, so the honesty rules are satisfied by the county's
+   own data with no roster pipeline at all. Kane, McHenry, and Kendall follow the
+   same recipe; a county-specific layer is only ever created for a concept no
+   consolidated layer covers yet (as `dupage-county-special-police` remains
    today).
 
 ## Verification

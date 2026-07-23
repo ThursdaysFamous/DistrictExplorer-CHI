@@ -188,14 +188,14 @@
       "label": "Judicial Subcircuit",
       "group": "political",
       "area_rank": 11,
-      "rank_note": "Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) subcircuits, both PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties"
+      "rank_note": "Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties"
     },
     {
       "id": "county-board",
       "label": "County Board District",
       "group": "political",
       "area_rank": 12,
-      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
+      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members carried on the county GIS) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
     },
     {
       "id": "ccbr",
@@ -209,7 +209,7 @@
       "label": "Fire Protection District",
       "group": "safety",
       "area_rank": 14,
-      "rank_note": "Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "dupage-county-special-police",
@@ -223,7 +223,7 @@
       "label": "Park District",
       "group": "geography",
       "area_rank": 16,
-      "rank_note": "Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "school-board",
@@ -326,7 +326,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 29,
-      "rank_note": "Consolidated voting-precinct layer — Will current 2022 map (310) + DuPage current 2024 consolidated map (600), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer — Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
@@ -384,7 +384,7 @@
     }
   ],
   "min_register_layer": 15,
-  "layer_count_note": "17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 — TIGERweb) + 5 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, county-precinct — Cook/Will/DuPage entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 3 amenity nearest-point layers (post-office, library, early-voting) = 36 — live-verified 2026-07",
+  "layer_count_note": "17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 — TIGERweb) + 5 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, county-precinct — Cook/Will/DuPage/Lake entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 3 amenity nearest-point layers (post-office, library, early-voting) = 36 — live-verified 2026-07",
   "anchor_point": {
     "lat": 41.8825,
     "lng": -87.6285,
@@ -453,6 +453,11 @@
         "file": "dupage-county-outline.json",
         "min_features": 1,
         "max_features": 1
+      },
+      {
+        "file": "lake-county-outline.json",
+        "min_features": 1,
+        "max_features": 1
       }
     ],
     "rosters": [
@@ -507,7 +512,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v16",
+    "cache_name": "district-explorer-shell-v17",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
