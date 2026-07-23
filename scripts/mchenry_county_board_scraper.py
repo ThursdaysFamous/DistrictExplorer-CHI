@@ -222,8 +222,20 @@ class WaybackFetcher:
             r = self.session.post("https://web.archive.org/save",
                                   headers=dict(HEADERS, **auth),
                                   data={"url": url}, timeout=60)
-            job = r.json().get("job_id")
+            if r.status_code != 200:
+                print("SPN2 save POST (%s): HTTP %d — %s"
+                      % (url, r.status_code, r.text[:200].replace("\n", " ")), file=sys.stderr)
+                return None
+            try:
+                payload = r.json()
+            except ValueError:
+                print("SPN2 save POST (%s): non-JSON response — %s"
+                      % (url, r.text[:200].replace("\n", " ")), file=sys.stderr)
+                return None
+            job = payload.get("job_id")
             if not job:
+                print("SPN2 save POST (%s): no job_id — %s"
+                      % (url, str(payload)[:200]), file=sys.stderr)
                 return None
             for _ in range(30):  # up to ~2.5 minutes per capture
                 time.sleep(5)
@@ -232,9 +244,11 @@ class WaybackFetcher:
                 if s.get("status") == "success":
                     return s.get("timestamp")
                 if s.get("status") == "error":
+                    print("SPN2 job (%s) failed: %s" % (url, str(s)[:200]), file=sys.stderr)
                     return None
-        except (requests.RequestException, ValueError):
-            pass
+            print("SPN2 job (%s): still pending after polling window" % url, file=sys.stderr)
+        except requests.RequestException as e:
+            print("SPN2 save (%s): %s" % (url, e), file=sys.stderr)
         return None
 
     def _save(self, url):
