@@ -3688,6 +3688,7 @@ function initChiExplorer() {
     "fire-district",     // Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
     "park-district",     // Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
+    "library-district",  // Consolidated library-district layer — Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs), county-dispatched; partial coverage inside each county
     "school-board",      // Elected School Board district (10, citywide)
     "cps-hs-network",    // CPS High School Network (admin grouping)
     "cps-network",       // CPS K-8 Network (admin grouping)
@@ -6354,48 +6355,85 @@ function initChiExplorer() {
   }
   /* ==== ENGINE:END nearest-point-factory ==== */
 
+  /* ---------- USGS National Map structures — the metro-wide point source ----
+   * One national service (public domain, CORS-open), queried per layer with
+   * the METRO_BBOX envelope, powers every station/amenity layer that must
+   * work beyond the city line: post offices (L38), fire stations (L51), and
+   * police stations (L53). f=geojson serves lowercase property names
+   * (name/address/city/state/zipcode). The fire/police layers moved here from
+   * the city datasets (CFD 28km-gtjn / CPD stations) so the collar counties
+   * get the same nearest-3 answer as Chicago — completeness was verified
+   * before the swap (2026-07): 91/92 CFD firehouses and 22/22 CPD district
+   * stations are present (E129 at 8120 S Ashland is USGS's one in-city gap),
+   * with CPD entries carrying their district in the name ("Chicago Police
+   * Department District 2 Wentworth"). Tradeoff, recorded: USGS carries no
+   * phone numbers, which the old CPD station rows showed — the
+   * police-district card still surfaces each district station's phone from
+   * the CPD source (loadPoliceStations, which stays for that join). */
+  var USGS_STRUCTURES = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer";
+  function makeUsgsStructuresLoader(layerIndex, label) {
+    return makeCached(function () {
+      var url = USGS_STRUCTURES + "/" + layerIndex + "/query?geometry=" +
+        [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
+        "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+        "&where=1%3D1&outFields=NAME,ADDRESS,CITY,STATE,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from USGS structures layer " + layerIndex + " (" + label + ")");
+        return gj;
+      });
+    });
+  }
+  var loadUsgsPoliceStations = makeUsgsStructuresLoader(53, "police stations");
+  var loadUsgsFireStations = makeUsgsStructuresLoader(51, "fire stations");
+
   registerNearestPointLayer({
     id: "police-station",
     group: "safety",
     label: "Police Station",
-    coverage: chicagoCoverage,
+    // no coverage test: the USGS pull spans the whole metro bbox, so the
+    // layer answers everywhere — municipal PDs, sheriff facilities, and CPD
+    // district stations alike (the CPD entries name their district).
     // distinct from Fire Station's red circleMarker — blue, matching the flag-stripe hue
     color: "#0B5394",
     fill: "#41B6E6",
-    loader: loadPoliceStations,
-    intro: "Nearest stations, straight-line distance:",
+    loader: loadUsgsPoliceStations,
+    intro: "Nearest police stations (USGS National Map structures data), straight-line distance:",
     line: function (props) {
       var name = findPropCI(props, ["name"]);
-      var district = findPropCI(props, ["district"]);
       var address = findPropCI(props, ["address"]);
-      var phone = findPropCI(props, ["phone"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
       return (name ? String(name) : "Police station") +
-        (district ? " (District " + String(district) + ")" : "") +
         (address ? " — " + String(address) : "") +
-        (phone ? " — " + String(phone) : "");
+        (city ? ", " + String(city) : "") +
+        (zip ? " " + String(zip) : "");
     }
   });
 
-  /* ---------- Fire Stations (nearest 3, not point-in-polygon) ---------- */
-  var loadFireStations = makeCachedLoader("28km-gtjn");
-
+  /* ---------- Fire Stations (nearest 3, not point-in-polygon) ----------
+   * USGS structures L51 (see the block above): CFD houses carry their
+   * district + station number in the name; suburban entries name their fire
+   * department or fire protection district. */
   registerNearestPointLayer({
     id: "fire-station",
     group: "safety",
     label: "Fire Station",
-    coverage: chicagoCoverage,
+    // no coverage test — metro-wide, like post-office
     color: "#7A0B1E",
     fill: "#C8102E",
-    loader: loadFireStations,
-    intro: "Nearest stations, straight-line distance:",
+    loader: loadUsgsFireStations,
+    intro: "Nearest fire stations (USGS National Map structures data), straight-line distance:",
     line: function (props) {
-      var engine = findPropCI(props, ["engine", "name", "firehouse", "company", "house"]);
-      var address = findPropCI(props, ["address", "address_1", "location_address", "adress"]);
-      return (engine ? "Engine " + String(engine) + " — " : "") +
-        (address ? String(address) : "Fire station");
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      return (name ? String(name) : "Fire station") +
+        (address ? " — " + String(address) : "") +
+        (city ? ", " + String(city) : "") +
+        (zip ? " " + String(zip) : "");
     }
   });
-  declareDataSource("fire-station", { label: CHICAGO_PORTAL });
 
   /* =========================================================================
    * AMENITY POINT LAYERS — Post Office / Library / Early Voting
@@ -6406,22 +6444,9 @@ function initChiExplorer() {
    * ======================================================================= */
 
   /* ---------- Post Offices (nearest 3) ----------
-   * USGS National Map structures layer 38 — the successor to the retired
-   * HIFLD Open post-office layer. Country-wide, so the METRO_BBOX envelope
-   * is mandatory; f=geojson serves lowercase property names
-   * (name/address/city/state/zipcode). CORS-open; public domain
-   * ("USGS The National Map"). */
-  var USGS_POST_OFFICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38";
-  var loadPostOffices = makeCached(function () {
-    var url = USGS_POST_OFFICE_LAYER + "/query?geometry=" +
-      [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
-      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
-      "&where=1%3D1&outFields=NAME,ADDRESS,CITY,STATE,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
-    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
-      if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from USGS structures layer 38");
-      return gj;
-    });
-  });
+   * USGS structures L38 — the successor to the retired HIFLD Open
+   * post-office layer, loaded through the shared metro-bbox helper above. */
+  var loadPostOffices = makeUsgsStructuresLoader(38, "post offices");
 
   registerNearestPointLayer({
     id: "post-office",
@@ -8337,6 +8362,149 @@ function initChiExplorer() {
         render: function (result) {
           var fields = [
             { label: "Park District", value: result.name ? String(result.name) : "Unknown" },
+            { label: "County", value: "Lake County" }
+          ];
+          return renderFieldList(fields.concat(lakeOrgContactRows(result)));
+        }
+      }
+    ]
+  });
+
+  /* ---------- Library District — a NEW concept born consolidated: which
+   * separate library taxing body serves this point, dispatched by county
+   * across all four sourced counties (no per-county predecessors to absorb).
+   * - Cook: the Clerk's tax-agency tilings on the county GIS — layer 20
+   *   (independent Public Library Districts, elected boards, 59) checked
+   *   first, then layer 19 (municipal Library Funds — a city/village
+   *   library's levy, 54). Together they cover Chicago too: a Loop click
+   *   resolves "City of Chicago Library Fund" (verified 2026-07), so the
+   *   card labels which KIND of body it found. Points in neither (unserved
+   *   unincorporated pockets) honestly report "No result".
+   * - Will: LibraryDistrict service (27), names + trustee slots in GIS attrs
+   *   (sparse — the county publishes trustees for some districts only; the
+   *   field is literally spelled "Turstee" upstream).
+   * - DuPage: Library_Districts_ (32), name-only like its fire/park.
+   * - Lake: TaxDistricts L8 (15 + a null filler excluded by the where
+   *   clause), each district's own office contact in GIS attrs.
+   * Partial coverage inside each county is expected and honest — library
+   * districts don't tile a county. ---------- */
+  var loadCookLibraryDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(20); });
+  var loadCookLibraryFunds = makeCached(function () { return loadCookCountyLayerGeoJSON(19); });
+  var loadWillLibraries = makeCached(function () {
+    return loadWillFeatureServer("Library_District", 1,
+      "DISTRICTNAME,DistName2,Turstee,Turstee2,Turstee3,Turstee4,Turstee5,Turstee6,Turstee7", "library districts");
+  });
+  var loadDupageLibraries = makeCached(function () {
+    var url = DUPAGE_GIS + "Library_Districts_/FeatureServer/6" +
+      "/query?where=1%3D1&outFields=LIBRARY&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("DuPage Library Districts returned no usable geometry");
+        return geojson;
+      });
+  });
+  var loadLakeLibraries = makeCached(function () {
+    return loadLakeFeatureServer("LakeCounty_TaxDistricts", 8, "ORG_NAME IS NOT NULL",
+      "ORG_NAME,ADDR,CITY,ZIP,PHONE,EMAIL,URL", "library districts");
+  });
+  registerCountyLayer({
+    id: "library-district",
+    group: "geography",
+    label: "Library District",
+    style: { color: "#00695C", weight: 1.5, fillColor: "#4DB6AC", fillOpacity: 0.05, dashArray: "3 3" },
+    counties: [
+      {
+        key: "cook",
+        coverage: cookCountyCoverage,
+        loadGeometry: loadCookLibraryDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["max_agency_desc", "agency_description"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        // Library Tax District first (an independent elected body), then the
+        // municipal Library Fund tiling — the two never legitimately overlap,
+        // and the fund fallback is best-effort: its failure never breaks a
+        // district hit, and a fund-only point surfaces the fund's own error.
+        query: function (point, seq) {
+          return loadCookLibraryDistricts().then(function (districts) {
+            var feature = findFeatureContaining(districts, point);
+            if (feature) {
+              return { seq: seq, kind: "district",
+                       name: findPropCI(feature.properties || {}, ["max_agency_desc"]) };
+            }
+            return loadCookLibraryFunds().then(function (funds) {
+              var ff = findFeatureContaining(funds, point);
+              if (!ff) return null;
+              return { seq: seq, kind: "fund",
+                       name: findPropCI(ff.properties || {}, ["agency_description"]) };
+            });
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: result.kind === "fund" ? "Library Fund" : "Library District",
+              value: result.name ? String(result.name).trim() : "Unknown" },
+            { label: "County", value: "Cook County" },
+            { label: "Type", value: result.kind === "fund"
+                ? "Municipal library fund — a city/village library financed by its municipality's levy"
+                : "Independent public library district with its own elected board" }
+          ];
+          return renderFieldList(fields);
+        }
+      },
+      polygonCountyEntry({
+        key: "will",
+        coverage: willCountyCoverage,
+        loader: loadWillLibraries,
+        fields: [
+          { name: "name", label: "Library District", keys: ["distname2", "districtname"], primary: true },
+          { label: "County", value: "Will County" },
+          { name: "t1", label: "Trustee", keys: ["turstee"] },
+          { name: "t2", label: "Trustee", keys: ["turstee2"] },
+          { name: "t3", label: "Trustee", keys: ["turstee3"] },
+          { name: "t4", label: "Trustee", keys: ["turstee4"] },
+          { name: "t5", label: "Trustee", keys: ["turstee5"] },
+          { name: "t6", label: "Trustee", keys: ["turstee6"] },
+          { name: "t7", label: "Trustee", keys: ["turstee7"] }
+        ]
+      }),
+      polygonCountyEntry({
+        key: "dupage",
+        coverage: dupageCountyCoverage,
+        loader: loadDupageLibraries,
+        fields: [
+          { name: "name", label: "Library District", keys: ["library"], primary: true },
+          { label: "County", value: "DuPage County" }
+        ]
+      }),
+      {
+        key: "lake",
+        coverage: lakeCountyCoverage,
+        loadGeometry: loadLakeLibraries,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["org_name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadLakeLibraries().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["org_name"]),
+              addr: findPropCI(props, ["addr"]),
+              city: findPropCI(props, ["city"]),
+              zip: findPropCI(props, ["zip"]),
+              phone: findPropCI(props, ["phone"]),
+              email: findPropCI(props, ["email"]),
+              url: findPropCI(props, ["url"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "Library District", value: result.name ? String(result.name) : "Unknown" },
             { label: "County", value: "Lake County" }
           ];
           return renderFieldList(fields.concat(lakeOrgContactRows(result)));
