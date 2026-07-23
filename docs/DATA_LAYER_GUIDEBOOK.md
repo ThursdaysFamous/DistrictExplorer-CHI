@@ -165,15 +165,14 @@ Chicago's drop boxes folded into `early-voting` (hosted at the same sites); and 
 battalions are a verified-negative drop (see the fire-boundary note). New GAP cells go
 here as rows until shipped or recorded.
 
-**Recorded rendering debt (not a concept GAP — tracked here so the fleet state is in
-one place):** engine-v1.0.10 (July 2026) shipped the card-system redesign fleet-wide
-and all three deployed sites hold 50/50 engine parity, but only Chicago has migrated
-its fork-local cards onto the card-helpers vocabulary (CHI #172/#173, zero
-`renderFieldList` call sites). NYC's 27-layer and SF's 16-layer fork-local cards
-still render legacy `dt`/`dd` rows inside the new chrome — the accepted transitional
-look per `docs/CARD_RENDER_API.md`. Each fork's migration follows procedure 2b with
-CHI as the reference; the engine's legacy branches retire only when the fleet-wide
-`renderFieldList` grep hits zero.
+**Rendering debt — resolved (July 2026):** the card-system redesign is fully adopted
+fleet-wide. Chicago migrated in CHI #172/#173; NYC (#68) and SF (#34) migrated their
+fork-local cards the same week, so the fleet-wide `renderFieldList` grep is at
+**zero call sites** — the only remaining references are the engine's own sibling-
+compat legacy branches, now dead code. The retirement engine release (delete
+`render-helper`, the `.result-row` CSS, and the legacy branches;
+`docs/CARD_RENDER_API.md`) is unblocked and awaits an operator's release cut. New
+cards follow procedure 2b.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
