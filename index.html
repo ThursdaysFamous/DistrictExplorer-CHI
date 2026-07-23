@@ -3711,7 +3711,7 @@ function initChiExplorer() {
     // Smallest county-scoped layer, so it renders on top of Township and County
     // (smallest-on-top); turning it on drops both to outline-only, framing the
     // precinct fills from underneath.
-    "county-precinct",   // Consolidated voting-precinct layer — Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID), county-dispatched; subOf township
+    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID), county-dispatched; subOf township
     "cps-elementary",    // Elementary School attendance zone — smallest polygon layer
     "school-site",       // individual school-campus footprints — smallest polygons, above the zones
     "police-station",    // point marker — no polygon area, always topmost
@@ -8004,6 +8004,44 @@ function initChiExplorer() {
 
   var loadCommissionerDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(9); });
   var loadCommissionerOffices = makeCached(function () { return loadCookCountyLayerRows(26, "office='Commissioner'"); });
+
+  // Suburban Cook voting precincts — the Cook County Clerk's CURRENT
+  // precinct fabric (1,430; Chicago's precincts are the Chicago Board of
+  // Elections' Ward Precincts, a separate layer). Layer 0 of the county's
+  // precinctHistorical MapServer IS the current map (the retired 2001-2021
+  // vintages sit in their own layers), the same geometry the Clerk
+  // publishes on the county data portal as "Suburban Cook Election
+  // Precincts - Current" (Socrata k7sw-w3b8) — so a future redraw lands
+  // here as a layer-0 refresh, no dataset-id swap needed. The compound
+  // identity ("BARRINGTON 11") and its township ride on the features.
+  var COOK_SUBURBAN_PRECINCTS =
+    "https://gis.cookcountyil.gov/traditional/rest/services/precinctHistorical/MapServer/0";
+  var loadCookSuburbanPrecincts = makeCached(function () {
+    var url = COOK_SUBURBAN_PRECINCTS + "/query?where=" + encodeURIComponent("1=1") +
+      "&outFields=name,Township_Name,Precinct_Number&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Cook County suburban precincts returned no usable geometry");
+        return geojson;
+      });
+  });
+  // Coverage for the suburban-precinct entry: in Cook AND NOT in Chicago —
+  // the Clerk runs elections only outside the city, so on Chicago points
+  // the county-precinct toggle keeps hiding exactly as it did before this
+  // entry existed (city voters have the Ward Precinct layer). The Chicago
+  // test fails toward "not Chicago" so an unrelated city-tiling outage
+  // can't take down suburban service; the enclave suburbs Chicago
+  // surrounds (Norridge, Harwood Heights) verify as NOT-Chicago against
+  // both of chicagoCoverage's sources, so their precincts show.
+  function suburbanCookCoverage(point) {
+    return cookCountyCoverage(point).then(function (inCook) {
+      if (!inCook) return false;
+      return Promise.resolve()
+        .then(function () { return chicagoCoverage(point); })
+        .then(function (inChicago) { return !inChicago; },
+              function () { return true; });
+    });
+  }
   var COMMISSIONER_DISTRICT_FIELDS = ["district_int", "district_txt", "district"];
 
   // Assemble a commissioner's display name from the electedOfficials table's
@@ -9155,7 +9193,12 @@ function initChiExplorer() {
    * Kane (292, board district carried on the features), McHenry (223), and
    * Kendall (78, township names derived from the county's own layers +
    * the county's polling-place assignment joined by GlobalID) followed as
-   * further entries. The sub-precinct committeeperson isn't published in
+   * further entries — and suburban Cook (1,430, the Clerk's current fabric
+   * from the county GIS precinctHistorical layer 0) completed the metro:
+   * its entry covers Cook-outside-Chicago only, because city precincts are
+   * the Chicago BOE's Ward Precincts (their own layer), and its board row
+   * is the Commissioner District via the same cached commissioner
+   * boundary. The sub-precinct committeeperson isn't published in
    * any county's dataset, so each card links its county clerk's
    * registration/polling-place lookup — which also names the card's
    * county. ---------- */
@@ -9169,6 +9212,51 @@ function initChiExplorer() {
     // as the township, a shade deeper so the two read as related.
     style: { color: "#8A6D3B", weight: 1, fillColor: "#C0A060", fillOpacity: 0.14, dashArray: null },
     counties: [
+      {
+        key: "cook",
+        // suburban Cook only — see suburbanCookCoverage: the entry hides on
+        // Chicago points, where precincts belong to the Ward Precinct layer
+        coverage: suburbanCookCoverage,
+        loadGeometry: loadCookSuburbanPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadCookSuburbanPrecincts(),
+            loadCommissionerDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) boardDistrict = extractDistrictNumber(bf.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              township: findPropCI(props, ["township_name"]),
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [{ label: "Precinct", value: result.name ? String(result.name) : "Unknown" }];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            // Cook's county legislature calls its seats Commissioner
+            // Districts — same row, the county's own terminology
+            fields.push({ label: "Commissioner District", value: String(result.boardDistrict) });
+          }
+          fields.push({ label: "Registration & polling place",
+            html: '<a href="https://www.cookcountyclerkil.gov/elections" target="_blank" rel="noopener">Cook County Clerk — Elections (official)</a>' });
+          return renderFieldList(fields);
+        }
+      },
       {
         key: "will",
         coverage: willCountyCoverage,

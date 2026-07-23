@@ -71,7 +71,7 @@ Fleet totals: **Chicago 37 · NYC 27 · SF 16** layers.
 | State upper chamber | SHIPPED `il-senate` | SHIPPED `state-senate` | SHIPPED `ca-senate` |
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` (50) | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
-| Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
+| Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
 | County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact and Kane's member names ride on those counties' own boundary GIS — no scrapers; McHenry's and Kendall's GIS are district-number-only, so their cards link the counties' member directories) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
@@ -237,9 +237,12 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   Kendall's 23rd Circuit received NO subcircuits under PA 102-0693 (absent from
   the enacted set) — structurally n/a, not a gap.
 - Statewide voting precincts — hardest class: 102 clerks, non-uniform, frequently
-  redrawn; collar-first plan recorded (Will + DuPage + Lake + Kane + McHenry +
-  Kendall shipped inside `county-precinct` — every collar county; suburban
-  Cook `k7sw-w3b8` is the remaining metro case).
+  redrawn. **The metro is complete (2026-07)**: suburban Cook (1,430, the
+  Clerk's `precinctHistorical` L0 current fabric — the Socrata `k7sw-w3b8`
+  geometry — coverage-gated to Cook-outside-Chicago since city precincts are
+  the BOE's `ward-precinct` layer) + all six collar counties ship inside
+  `county-precinct`; Chicago's own precincts were day-one (`ward-precinct`).
+  Beyond the metro remains the recorded statewide frontier (95 more clerks).
 - Collar-county boards — **complete (2026-07): all seven counties shipped.**
   Cook + Will + DuPage + Lake + Kane + McHenry + Kendall (Kendall 2026-07:
   five dispatch entries from the county's own ArcGIS Enterprise
@@ -314,7 +317,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `zip-code` | ZIP Code | geography | Polygon | live TIGERweb ZCTA | — | — |
 | `cps-high` | CPS High School Zone | schools | SchoolZone | Socrata `xg7c-d8rm` (year-versioned) | zoned-school POI | chicagoCoverage |
 | `cps-middle` | CPS Middle School Zone | schools | SchoolZone | Socrata `fyff-53xy` (year-versioned) | zoned-school POI | chicagoCoverage |
-| `county-precinct` | Voting Precinct | geography | CountyDispatch | Will County ArcGIS `Precincts_2022` · DuPage County ArcGIS `Precincts_2024` (current 600-precinct map) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L7, 431) · Kane County ArcGIS (`KaneCo_IL_ElectionsPrecincts` L1, 292) · McHenry County ArcGIS (`Precincts` L0, 223) · Kendall County ArcGIS Enterprise (`Voting_Precincts_and_Polling_Places` L1 `status='A'`, 78 — township names derived at load from the county's own townships layer, the assigned polling place joined by GlobalID from L0) | County Board district via spatial join (Kane: carried on the features); Kendall also shows the county's own polling-place assignment; each card links its county clerk | OR of will/dupage/lake/kane/mchenry/kendall county coverages (subOf `township`) |
+| `county-precinct` | Voting Precinct | geography | CountyDispatch | Cook County GIS (`precinctHistorical` L0, the Clerk's current suburban fabric, 1,430 — same geometry as Socrata `k7sw-w3b8`) · Will County ArcGIS `Precincts_2022` · DuPage County ArcGIS `Precincts_2024` (current 600-precinct map) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L7, 431) · Kane County ArcGIS (`KaneCo_IL_ElectionsPrecincts` L1, 292) · McHenry County ArcGIS (`Precincts` L0, 223) · Kendall County ArcGIS Enterprise (`Voting_Precincts_and_Polling_Places` L1 `status='A'`, 78 — township names derived at load from the county's own townships layer, the assigned polling place joined by GlobalID from L0) | County Board district via spatial join (Cook: Commissioner District; Kane: carried on the features); Kendall also shows the county's own polling-place assignment; each card links its county clerk | suburban-Cook (in Cook AND NOT Chicago — city precincts are the BOE's `ward-precinct` layer) OR will/dupage/lake/kane/mchenry/kendall county coverages (subOf `township`) |
 | `cps-elementary` | CPS Elementary School Zone | schools | SchoolZone | Socrata `x72b-38qv` (year-versioned) | zoned-school POI | chicagoCoverage |
 | `school-site` | School Location (nearest N) | schools | Bespoke nearest | CPD-org ArcGIS `Schools` | — | chicagoCoverage |
 | `police-station` | Police Station | safety | NearestPt | USGS National Map structures L53 (metro bbox) | — | — (metro-wide) |

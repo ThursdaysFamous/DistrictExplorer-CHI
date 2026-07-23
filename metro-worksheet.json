@@ -333,7 +333,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 30,
-      "rank_note": "Consolidated voting-precinct layer — Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
