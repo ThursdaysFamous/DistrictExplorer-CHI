@@ -188,7 +188,7 @@
       "label": "Judicial Subcircuit",
       "group": "political",
       "area_rank": 11,
-      "rank_note": "Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties"
+      "rank_note": "Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties"
     },
     {
       "id": "county-board",

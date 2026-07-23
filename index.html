@@ -3682,7 +3682,7 @@ function initChiExplorer() {
     "school-district-elementary", // IL elementary school district (371 statewide)
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
-    "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
+    "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) subcircuits, all PA 102-0693, dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
     "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members carried on the county GIS) + Kane (24, members carried on the county GIS) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs), county-dispatched; partial coverage inside each county
@@ -8344,18 +8344,79 @@ function initChiExplorer() {
     ]
   });
 
-  /* ---------- Judicial Subcircuit — consolidated: Will's 12th-Circuit
-   * subcircuits (5) + DuPage's 18th-Circuit subcircuits (7), both drawn by PA
-   * 102-0693. Identity only in both counties — judges aren't in either
-   * dataset — so each card links its circuit's official court, and the Court
-   * row names the circuit AND county so the generic toggle label never
-   * obscures which court a subcircuit belongs to. ---------- */
+  /* ---------- Judicial Subcircuit — consolidated: Cook's 20 subcircuits
+   * (the post-PA 102-0693 map, live from the county GIS layer 5 — the same
+   * 20 the enacted ilsenateredistricting.com shapefile carries, two sources
+   * agreeing) + Will's 12th-Circuit subcircuits (5) + DuPage's 18th-Circuit
+   * subcircuits (7) + Lake's 19th-Circuit subcircuits (12), all drawn by PA
+   * 102-0693. Cook's card also names the Circuit Court MUNICIPAL district
+   * (layer 27 — the 6 court-operations districts with their courthouses;
+   * best-effort join, its failure never drops the subcircuit card).
+   * Identity only in every county — judges are elected FROM a subcircuit but
+   * sit circuit-wide and retention is circuit-wide, and no keyed
+   * judge-to-subcircuit roster exists — so each card links its circuit's
+   * official court, and the Court row names the circuit AND county so the
+   * generic toggle label never obscures which court a subcircuit belongs to.
+   * (Kane's 16th-Circuit entry waits on a public source — its county
+   * services are permission-locked; the enacted-shapefile route is recorded
+   * in the guidebook backlog.) ---------- */
+  var loadCookJudicialSubcircuits = makeCached(function () { return loadCookCountyLayerGeoJSON(5); });
+  var loadCookMunicipalDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(27); });
   registerCountyLayer({
     id: "judicial-subcircuit",
     group: "political",
     label: "Judicial Subcircuit",
     style: { color: "#6B4FA0", weight: 2, fillColor: "#8A6FBF", fillOpacity: 0.05, dashArray: "6 3" },
     counties: [
+      {
+        key: "cook",
+        coverage: cookCountyCoverage,
+        loadGeometry: loadCookJudicialSubcircuits,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadCookJudicialSubcircuits(),
+            loadCookMunicipalDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], mdGeo = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var md = null, courthouse = null;
+            if (mdGeo) {
+              var mf = findFeatureContaining(mdGeo, point);
+              if (mf) {
+                md = findPropCI(mf.properties || {}, ["distnum"]);
+                courthouse = findPropCI(mf.properties || {}, ["crthse"]);
+              }
+            }
+            return {
+              seq: seq,
+              subcircuit: findPropCI(feature.properties || {}, ["district"]),
+              municipalDistrict: md,
+              courthouse: courthouse
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [
+            { label: "Subcircuit", value: result.subcircuit != null && result.subcircuit !== "" ? String(result.subcircuit) : "Unknown" },
+            { label: "Court", value: "Circuit Court of Cook County" }
+          ];
+          if (result.municipalDistrict != null && result.municipalDistrict !== "") {
+            fields.push({
+              label: "Municipal District",
+              value: String(result.municipalDistrict) +
+                (result.courthouse ? " (" + String(result.courthouse) + ")" : "")
+            });
+          }
+          fields.push({ label: "Judges",
+            html: '<a href="https://www.cookcountycourtil.gov/" target="_blank" rel="noopener">Circuit Court of Cook County (official)</a>' });
+          return renderFieldList(fields);
+        }
+      },
       polygonCountyEntry({
         key: "will",
         coverage: willCountyCoverage,

@@ -26,7 +26,7 @@ Pick a point. The app runs a point-in-district lookup across every layer you hav
 | | IL Supreme Court District | District under PA 102-0011 (District 1 = Cook County) |
 | | Cook County Board of Review District | District under PA 102-0012 (property-tax appeals) |
 | | Early Voting Site (nearest 3) | Official early-voting sites for the current cycle — site, ward, address, distance (hand-curated per election from chicagoelections.gov; each site also hosts a secured ballot drop box) |
-| | Judicial Subcircuit | 12th-Circuit (Will), 18th-Circuit (DuPage), or 19th-Circuit (Lake) judicial subcircuit, picked by county; each card links its circuit's court |
+| | Judicial Subcircuit | Your judicial subcircuit, picked by county — Cook (20, with the Circuit Court's Municipal District + courthouse), Will (12th Cir.), DuPage (18th), or Lake (19th); each card links its circuit's court |
 | **Public Safety** | Police District | CPD district number and name, commander, CAPS unit phone/email, station address + phone, district map link |
 | | Police Beat | Beat number (a sub-selection of Police District — turning it on drops the district to an outline and fills it with its beats) |
 | | CCPSA District Council | The three elected District Councilors for that police district (name + role) and links to each Councilor's profile + the council page |

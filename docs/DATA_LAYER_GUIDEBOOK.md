@@ -75,7 +75,7 @@ Fleet totals: **Chicago 37 · NYC 27 · SF 16** layers.
 | County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact and Kane's member names ride on those counties' own boundary GIS — no scrapers) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
-| Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12, PA 102-0693; Kane's 16th-Circuit entry waits on a public source — its only subcircuit services are permission-locked proxies, see Backlog) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
+| Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12, all PA 102-0693; Kane's 16th-Circuit entry (4 subcircuits, verified in the enacted shapefile) waits on the shapefile route — its county services are permission-locked, see Backlog) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
 | District Attorney (districted) | n/a (Cook State's Attorney is one countywide office) | SHIPPED `district-attorney` (5 borough DAs) | NO HONEST ANALOG (one citywide DA)⁷ |
 | Borough president / by-county executive | n/a | SHIPPED `borough-president` | n/a |
 | Community district / board (appointed, labeled so) | n/a | SHIPPED `community-district` | n/a |
@@ -229,9 +229,13 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   authoritative machine-readable source (ilga.gov 403s; illinoiscourts.gov JS-rendered);
   hand-encoding violates the never-guess rule.
 - Judicial subcircuits beyond Will — PA 102-0693 shapefiles exist (Cook + collar).
-  Kane (16th Circuit) is the live case: its county GIS publishes subcircuits only
-  behind permission-locked ArcGIS proxies (verified 2026-07), so the `kane` entry
-  in `judicial-subcircuit` waits on the shapefile route rather than guessing.
+  Kane (16th Circuit, 4) and McHenry (22nd Circuit, 4) are the live cases: their
+  counts are verified in the enacted ilsenateredistricting.com shapefile ZIP
+  (which also matches the shipped Cook/Will/DuPage/Lake maps exactly), but Kane's
+  county services are permission-locked and McHenry publishes none — both wait on
+  the shapefile route (build_embedded_boundaries.py pattern). Kendall's 23rd
+  Circuit received NO subcircuits under PA 102-0693 (absent from the enacted
+  set) — structurally n/a, not a gap. Cook shipped live 2026-07 (county GIS L5).
 - Statewide voting precincts — hardest class: 102 clerks, non-uniform, frequently
   redrawn; collar-first plan recorded (Will + DuPage + Lake shipped inside
   `county-precinct`; suburban Cook `k7sw-w3b8` next, then Kane/McHenry/Kendall).
@@ -273,7 +277,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `school-district-elementary` | Elementary School District | schools | Polygon | live TIGERweb School L2 | — | outsideChicagoSchoolCoverage |
 | `township` | Township / County Subdivision | geography | Polygon | live TIGERweb CouSub | — | — (subOf `county`) |
 | `municipality` | Municipality | geography | Polygon | live TIGERweb Places | — | — |
-| `judicial-subcircuit` | Judicial Subcircuit | political | CountyDispatch | Will County ArcGIS · DuPage County ArcGIS (`Judicial_Subcircuits`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L1) | link-only (each card links its circuit's court; Court row names circuit + county) | OR of will/dupage/lake county coverages |
+| `judicial-subcircuit` | Judicial Subcircuit | political | CountyDispatch | Cook County GIS L5 (20 subcircuits) + L27 (municipal districts) · Will County ArcGIS · DuPage County ArcGIS (`Judicial_Subcircuits`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L1) | link-only (each card links its circuit's court; Cook adds the Municipal District + courthouse row) | OR of cook/will/dupage/lake county coverages |
 | `county-board` | County Board District | political | CountyDispatch | Cook County GIS L9 · Will County ArcGIS · DuPage County ArcGIS (`County_Board_Dist_new`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L0) · Kane County ArcGIS (`KaneCo_IL_County_Board` L1) | Cook: live office join (same server); Will: `will-county-board-members.json` (weekly CI); DuPage: `dupage-county-board-members.json` (weekly CI; + countywide Chair); Lake: member + phone/email/district page on the boundary GIS itself (verified vs the county directory 2026-07); Kane: member names on the boundary GIS (verified incl. the 2026 D2/D9 appointments) | OR of cook/will/dupage/lake/kane county coverages |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |
 | `fire-district` | Fire Protection District | safety | CountyDispatch | Cook County GIS L17 (Clerk fire tax-agency tiling) · Will County ArcGIS · DuPage County ArcGIS (`Fire_Protection_Districts_`) · Lake County ArcGIS (`LakeCounty_TaxDistricts` L4) · Kane County ArcGIS (`KaneCo_IL_Districts_Fire` L1, IDOR-coded districts only) | Cook: name-only; Will: trustees in GIS attrs; DuPage: name-only; Lake: district office contact in GIS attrs; Kane: chief + office contact in GIS attrs | OR of cook/will/dupage/lake/kane county coverages |
