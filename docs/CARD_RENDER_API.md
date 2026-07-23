@@ -14,11 +14,11 @@ subcircuit, fire/park/library districts, county-precinct — links moved to
 entry-level `primaryLink`); `school-zone-factory` grew the data-only
 `profileLink(id)`/`moreLink` opts (Chicago's CPS zones use them) and
 `cps-network-factory` renders chief + office natively; `renderLinkRow`
-gained a `note` line. **Chicago now has zero `renderFieldList` call sites.**
-The four surviving `renderFieldList` references are deliberate sibling-
-compat legacy branches (polygon-factory, polygonCountyEntry, school-zone
-×2) that fire only for specs still carrying caller-HTML opts — NYC/SF hit
-them until they migrate. `school-site` keeps its bespoke filter card by
+gained a `note` line. **The fleet is at zero `renderFieldList` call sites** — Chicago in
+#172/#173, NYC in its #68, SF in its #34. The four surviving references
+(polygon-factory, polygonCountyEntry, school-zone ×2) are the sibling-
+compat legacy branches, now dead code: no spec anywhere still carries
+caller-HTML opts. `school-site` keeps its bespoke filter card by
 design. The retirement release (delete `render-helper` + the `.result-row`
 CSS + the legacy branches) stays gated on a fleet-wide zero grep.
 

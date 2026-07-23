@@ -334,10 +334,11 @@ directions, so reconciling means merging features, not overwriting:
    `docs/engine-changelog/v1.0.10.md`: seed new-block fence pairs before
    the bump (NYC #66 / SF #30), adopt the pill-aware smoke card reader
    where smoke asserts factory-card text (SF #31), and migrate role-label
-   roster assertions to person-row presence (SF #32). **Deliberate
-   residual, not drift:** NYC's and SF's fork-local cards still render via
-   `renderFieldList` inside the new chrome — the recorded transitional
-   state. Each fork migrates its own call sites at its own pace (CHI PRs
-   #172/#173 are the reference), and the retirement release — deleting
-   `render-helper`, the `.result-row` CSS, and the factories' legacy
-   caller-HTML branches — stays gated on a fleet-wide zero-call-site grep.
+   roster assertions to person-row presence (SF #32). **Residual cleared
+   (July 2026):** NYC (#68) and SF (#34) migrated their fork-local cards
+   onto the helper vocabulary the same week (CHI PRs #172/#173 were the
+   reference), taking the fleet-wide `renderFieldList` grep to zero call
+   sites. The retirement release — deleting `render-helper`, the
+   `.result-row` CSS, and the factories' legacy caller-HTML branches — is
+   now unblocked; it ships as a normal `engine-v*` cut when an operator
+   chooses (no urgency: the legacy branches are dead code, not drift).
