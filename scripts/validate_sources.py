@@ -157,10 +157,13 @@ PROVENANCE = [
     {"layer": "Kendall County Board members (roster)",
      "app_file": "kendall-county-board-members.json",
      "source_url": "https://www.kendallcountyil.gov/county-board/board-members",
-     "note": "Scraped weekly from the county's own member directory + per-member "
-             "pages (kendall_county_board_scraper.py). The site is Akamai-fronted "
-             "and 403s non-browser clients, so a reachability WARN here is "
-             "expected, not drift — the scraper's Playwright engine handles it."},
+     "note": "Hand-verified 2026-07-23 against the county's own member directory "
+             "+ per-member pages (incl. the Chairman, a District 2 member); the "
+             "weekly scraper (kendall_county_board_scraper.py) attempts a "
+             "refresh, but the county currently blocks ALL automated fetch — "
+             "direct, real-browser, and the Internet Archive's crawler (SPN2 "
+             "error:no-request) — so the workflow tracks the block on a standing "
+             "issue and a reachability WARN here is expected, not drift."},
     {"layer": "McHenry County Board members (roster)",
      "app_file": "mchenry-county-board-members.json",
      "source_url": "https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members",
