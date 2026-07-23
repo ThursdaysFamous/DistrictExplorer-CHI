@@ -147,11 +147,13 @@ PROVENANCE = [
     {"layer": "McHenry County Board members (roster)",
      "app_file": "mchenry-county-board-members.json",
      "source_url": "https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members",
-     "note": "Scraped weekly from the county's own member directory + per-member "
-             "pages (mchenry_county_board_scraper.py), incl. the countywide-elected "
-             "Chairman. The site 403s non-browser clients, so a reachability WARN "
-             "here is expected, not drift — the scraper's engine ladder (requests -> "
-             "Playwright -> Internet Archive) handles it."},
+     "note": "Hand-verified 2026-07-23 against the county's own member directory "
+             "(incl. the countywide-elected Chairman); the weekly scraper "
+             "(mchenry_county_board_scraper.py) attempts a refresh, but the county "
+             "currently blocks ALL automated fetch — direct, real-browser, and the "
+             "Internet Archive's crawler (SPN2 error:no-request) — so the workflow "
+             "tracks the block on a standing issue and a reachability WARN here is "
+             "expected, not drift."},
     {"layer": "Illinois county clerks (roster)",
      "app_file": "il-county-clerks.json",
      "source_url": "https://www.elections.il.gov/ElectionOperations/ElectionAuthorities.aspx",

@@ -33,10 +33,17 @@ based, so it never "clears" for a runner no matter how real the browser is.
 `--engine auto` (default) is therefore a three-rung ladder: `requests`
 first, `playwright` second (covers JS-challenge fronts and residential-ish
 egress), and `wayback` last — ask the Internet Archive's Save Page Now to
-capture a fresh copy with the Archive's own crawler (which the county has
-historically allowed — the site's existing snapshots) and read the archived
+capture a fresh copy with the Archive's own crawler and read the archived
 original, falling back to the newest existing snapshot when a save fails,
 refused entirely if the newest snapshot is older than WAYBACK_MAX_AGE_DAYS.
+VERIFIED 2026-07-23: the county currently blocks the Archive's crawler too
+(authenticated SPN2 job -> status_ext error:no-request), so every rung
+fails; the weekly workflow converts that total failure into a standing
+tracking issue (green run), the shipped roster keeps its last
+hand-verified state, and automation resumes untouched the moment any rung
+unblocks. Manual refresh: re-verify against the county's directory and
+rebuild via build_mchenry_county_board_roster.py on a hand-assembled raw
+file (see the seeded initial roster's commit for the shape).
 No evasion anywhere on the ladder: the content is always the county's own
 page, fetched either directly or through a public archive, and records
 fetched via the archive carry `archived_at` for provenance.
@@ -222,8 +229,20 @@ class WaybackFetcher:
             r = self.session.post("https://web.archive.org/save",
                                   headers=dict(HEADERS, **auth),
                                   data={"url": url}, timeout=60)
-            job = r.json().get("job_id")
+            if r.status_code != 200:
+                print("SPN2 save POST (%s): HTTP %d — %s"
+                      % (url, r.status_code, r.text[:200].replace("\n", " ")), file=sys.stderr)
+                return None
+            try:
+                payload = r.json()
+            except ValueError:
+                print("SPN2 save POST (%s): non-JSON response — %s"
+                      % (url, r.text[:200].replace("\n", " ")), file=sys.stderr)
+                return None
+            job = payload.get("job_id")
             if not job:
+                print("SPN2 save POST (%s): no job_id — %s"
+                      % (url, str(payload)[:200]), file=sys.stderr)
                 return None
             for _ in range(30):  # up to ~2.5 minutes per capture
                 time.sleep(5)
@@ -232,9 +251,11 @@ class WaybackFetcher:
                 if s.get("status") == "success":
                     return s.get("timestamp")
                 if s.get("status") == "error":
+                    print("SPN2 job (%s) failed: %s" % (url, str(s)[:200]), file=sys.stderr)
                     return None
-        except (requests.RequestException, ValueError):
-            pass
+            print("SPN2 job (%s): still pending after polling window" % url, file=sys.stderr)
+        except requests.RequestException as e:
+            print("SPN2 save (%s): %s" % (url, e), file=sys.stderr)
         return None
 
     def _save(self, url):

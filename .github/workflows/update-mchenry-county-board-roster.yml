@@ -15,6 +15,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   update-roster:
@@ -38,6 +39,14 @@ jobs:
         run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape McHenry County Board member roster
+        id: scrape
+        # A total fetch failure is an EXPECTED state for this source (the county
+        # blocks direct clients, real browsers, and the Internet Archive's
+        # crawler alike — verified 2026-07-23 via SPN2 error:no-request), so it
+        # feeds a standing tracking issue instead of a red run — the
+        # validate-sources pattern. The roster file keeps its last
+        # hand-verified state; any rung succeeding resumes automation.
+        continue-on-error: true
         env:
           # Optional archive.org API keys (repo secrets): the wayback rung
           # uses authenticated Save Page Now when present — the reliable path
@@ -48,17 +57,34 @@ jobs:
           ARCHIVE_SPN_SECRET_KEY: ${{ secrets.ARCHIVE_SPN_SECRET_KEY }}
         run: python3 scripts/mchenry_county_board_scraper.py /tmp/mchenry_county_board_raw.json
 
+      - name: Report blocked source on the standing issue
+        if: steps.scrape.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="McHenry County Board roster: automated refresh blocked by the county's edge"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' || true)
+          if [ -z "$num" ]; then
+            gh issue create --title "$title" --body "The weekly roster scrape failed on every engine (direct, headless Chromium, and Internet Archive Save Page Now — the county blocks the Archive's crawler too, SPN2 error:no-request). The shipped data/app/mchenry-county-board-members.json keeps its last hand-verified state and stays correct until the county changes members. Manual step when this issue is old or an election/appointment happened: re-verify the members against the county's own directory and refresh the file via scripts/build_mchenry_county_board_roster.py (see the scraper docstring). This issue is updated by each failed weekly run; close it if the block lifts and a run goes green. Latest failed run: $run_url"
+          else
+            gh issue comment "$num" --body "Still blocked as of $(date -u +%F) — $run_url"
+          fi
+
       - name: Rebuild roster data file
+        if: steps.scrape.outcome == 'success'
         run: python3 scripts/build_mchenry_county_board_roster.py /tmp/mchenry_county_board_raw.json
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
+        if: steps.scrape.outcome == 'success'
         run: python3 scripts/validate_index.py index.html
 
       - name: Check for changes
         id: diff
+        if: steps.scrape.outcome == 'success'
         run: |
           if git diff --quiet -- data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -67,7 +93,7 @@ jobs:
           fi
 
       - name: Open or update pull request
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.scrape.outcome == 'success' && steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

@@ -199,6 +199,15 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
    the same month: its board card now joins a weekly-scraped roster (18
    members + the countywide-elected Chairman — the DuPage chair shape) via
    mchenry_county_board_scraper.py. No deferred-scraper debt remains.
+   **Terminal case (verified 2026-07-23 on Kendall/McHenry):** a source may
+   block ALL automated fetch — direct clients, genuine browsers, and even
+   the Internet Archive's crawler (authenticated SPN2 answered
+   error:no-request). Then the pipeline still ships: the roster file holds
+   hand-verified transcription (every record carrying its source_url), the
+   weekly workflow attempts the ladder and converts total failure into a
+   standing tracking issue (green run — the validate-sources pattern), the
+   45-day snapshot age guard guarantees stale data is never served as
+   fresh, and automation resumes untouched the moment any rung unblocks.
 
 ## Verification
 
