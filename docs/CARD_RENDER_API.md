@@ -21,6 +21,15 @@ compat legacy branches, now dead code: no spec anywhere still carries
 caller-HTML opts. `school-site` keeps its bespoke filter card by
 design. The retirement release (delete `render-helper` + the `.result-row`
 CSS + the legacy branches) stays gated on a fleet-wide zero grep.
+**Handoff 3** (`docs/design_handoff_fixes_and_schools/`, ids 5a–5d/6a/8a–8b)
+extended the surface again: `<details>` expanders default **closed**
+everywhere (§5d — `detailsOpen`/`open` remain as explicit opt-ins no caller
+currently passes), the id pill and card shadow are tinted with the layer
+color (§5a, CSS-only), `cardTitleCase`/`cardGradeRange` joined the helpers
+(§6a), `renderNearestRows` grew `tag`/`accentColor` (§8a), and
+`school-zone-factory` grew `titleCaseData` + the grade-range identifier
+pill (§6a). Chicago's `school-site` bespoke card was rebuilt on chips +
+`renderNearestRows` (§8a/8b).
 
 This is the engineering contract for implementing the card redesign specified in
 `docs/design_handoff_county_board_card/` (Handoff 1, County Board card, design
@@ -103,16 +112,16 @@ renderPersonRows([{
   links: [{ label: "Profile", url: "https://…" }],  // optional external links (rule 2)
   details: { label: "Committees",        // optional; presence makes the row an expander
              items: ["Public Works & Transportation", "Landfill (Chair)"] },
-  detailsOpen: true                      // optional; desktop-only default-open
+  detailsOpen: true                      // optional; force-open (see below — avoid)
 }], { tinted: true })                    // opts.tinted: the #f8fafc section bg
                                          // (countywide rows); omit for plain rows
 ```
 
 `details.items` are plain strings joined with " · " by the helper — role
 annotations like "(Chair)" are part of the string, formatted by the caller.
-`detailsOpen` is honored only when the results panel is desktop-width at render
-time (cards re-render on every selection; a resize between selections is
-accepted as stale until the next render).
+Per Handoff 3 §5d, expanders default **closed** on every card, desktop and
+mobile; `detailsOpen` remains as an explicit opt-in that no current caller
+passes (the original desktop-width auto-open was removed).
 
 ### `renderSectionLabel(text)`
 
@@ -126,7 +135,7 @@ Handoff 2 §4a: the "Offices" `<details>` group of kicker-labeled office blocks.
 ```js
 renderOfficeGroup({
   label: "Offices",                      // summary text
-  open: true,                            // desktop-only default-open (as above)
+  open: true,                            // explicit force-open; default closed (§5d, as above)
   offices: [{
     label: "District Office",            // uppercase kicker
     lines: ["116 N. Chicago Street, Suite 201, Joliet, IL 60432"],  // address lines
@@ -140,12 +149,17 @@ Callers keep using `officeAddressForGeocode` for the POI pin — unchanged.
 
 ### `renderNearestRows(items)`
 
-Handoff 2 §4d: nearest-N rows with distance pills.
+Handoff 2 §4d + Handoff 3 §8a: nearest-N rows with distance pills.
 
 ```js
 renderNearestRows([{
   name: "Naperville PD — Main Station",  // 14px/700
   note: "1350 Aurora Ave, Naperville",   // optional address line
+  tag: { text: "High · 9–12",            // optional colored 600-weight lead on the
+         color: "#0F6F6F" },             //   note line (§8a school type + grade range)
+  dotColor: "#0F6F6F",                   // optional identity dot ahead of the name
+  accentColor: "#0F6F6F",                // optional: tints the distance pill (color +
+                                         //   10% background wash)
   distanceLabel: "1.8 mi"                // caller-formatted (factory owns rounding/units)
 }])
 ```
@@ -161,6 +175,23 @@ renderLinkRow({
   links: [{ label: "Official website ↗", url: "https://…" }]
 })
 ```
+
+### `cardTitleCase(str)` / `cardGradeRange(str)` (Handoff 3 §6a)
+
+Display formatters for raw feed strings — pure string→string, no DOM.
+
+- `cardTitleCase("700 S STATE ST")` → `"700 S State St"`. Normalizes
+  ALL-CAPS feed text; single letters (grid directionals), digit-carrying
+  tokens, and a small keep-caps set (`ES/MS/HS/PS/IS`, `NE/NW/SE/SW`,
+  `IL/NY/CA/US`) pass through untouched. Never expands abbreviations —
+  that would be guessing (honesty rules).
+- `cardGradeRange("PK, K, 1, …, 8")` → `"PK–8"`. Collapses a **contiguous**
+  comma-separated grade list to a range; a gapped or unrecognized list
+  renders unchanged — never imply coverage the data doesn't state.
+- `school-zone-factory` applies both via its `titleCaseData: true` opt
+  (set by feeds that arrive ALL-CAPS, e.g. Chicago's `registerCpsZone`):
+  name/address are title-cased and the collapsed grade range becomes the
+  header identifier pill instead of a body note.
 
 ## `registerLayer` contract additions (all optional, presence-based)
 
@@ -213,7 +244,7 @@ in behavior to today.
 | 4a representative | person row + `renderOfficeGroup` | `chamber-factory` (congress, il-senate, il-house) | police-district (commander + station), police-beat |
 | 4b name-only | *(contract fields only: `compact`, `cardIdentifier`, `cardMeta`)* | `polygon-factory`, `school-zone-factory`, `cps-network-factory` | ward-precinct, county-precinct (+ polling-place row via person/link rows), school-site |
 | 4c link-only | `renderLinkRow` | — | fire/park/library districts, judicial-subcircuit, mwrd, tif, dupage-special-police |
-| 4d nearest-N | `renderNearestRows` | `nearest-point-factory` | early-voting (bespoke) |
+| 4d nearest-N | `renderNearestRows` | `nearest-point-factory` | early-voting (bespoke); school-site (8a/8b chips card: tag/dot/accent slots) |
 | 4e states | *(shell-owned)* | all layers automatically | — |
 
 ## Sequencing (per `docs/ENGINE_SYNC.md`)
