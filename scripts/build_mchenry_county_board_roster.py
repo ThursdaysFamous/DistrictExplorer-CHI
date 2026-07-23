@@ -38,8 +38,12 @@ DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
 def member_obj(rec):
+    # url is the member's own profile page on the county directory (the card
+    # renders it as the Profile link). The scraper's term and the pages'
+    # street addresses are deliberately NOT carried: term-end isn't card
+    # material, and the addresses are residences, not offices.
     member = {"name": rec["name"]}
-    for k in ("role", "phone", "email"):
+    for k in ("role", "phone", "email", "url"):
         if rec.get(k):
             member[k] = rec[k]
     return member
