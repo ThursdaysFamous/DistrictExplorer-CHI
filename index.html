@@ -1666,7 +1666,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
        tie predating the redesign); the redesign blue is only the fallback */
     border-left: 3px solid var(--layer-accent, var(--card-accent));
     border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    /* Handoff 3 §5a: the soft shadow also carries the layer's color */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+      0 3px 14px -4px color-mix(in srgb, var(--layer-accent, var(--card-accent)) 45%, transparent);
   }
   /* 4e state accents live on the card's left edge; :has() reads the body's
      state class because the accent element (the block) is the body's parent. */
@@ -1692,8 +1694,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     flex: none;
     font-size: 13px;
     font-weight: 600;
-    color: var(--card-link);
-    background: var(--card-pill-bg);
+    /* Handoff 3 §5a: the pill is tinted with the layer's own color */
+    color: var(--layer-accent, var(--card-link));
+    background: color-mix(in srgb, currentColor 9%, transparent);
     padding: 3px 10px;
     border-radius: 999px;
     white-space: nowrap;
@@ -1801,6 +1804,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .card-nearest-name { font-size: 14px; font-weight: 700; color: var(--card-ink); }
   .card-nearest-dot { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: 0; }
   .card-nearest-note { font-size: 12.5px; color: var(--card-body-ink); }
+  .card-nearest-tag { font-weight: 600; }
+  .card-nearest-note .card-sep { color: var(--card-sep); }
   .card-distance {
     flex: none;
     font-size: 12px;
@@ -1856,18 +1861,31 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
   /* ==== ENGINE:END styles-card-v2 ==== */
   /* ---- School Location layer: type filter + color-coded nearest list ---- */
-  .school-filter { display: flex; flex-wrap: wrap; gap: 5px 14px; margin: 0 0 10px; }
-  .school-filter-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; user-select: none; }
-  .school-filter-item input { margin: 0; cursor: pointer; }
-  .school-filter-swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; flex: none; }
-  .school-filter-note { margin: 8px 0 0; font-size: 11px; color: var(--slate-soft); line-height: 1.4; }
-  .school-list-intro { margin: 0 0 4px; }
-  /* 4d rows inside the (padded) school card body — drop their own gutter */
-  .school-nearest .card-nearest { padding-left: 0; padding-right: 0; }
-  .school-list { margin: 0; padding-left: 20px; }
-  .school-list li { margin: 2px 0; }
-  .school-list-dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: 1px; }
-  .school-list-empty { list-style: none; margin-left: -20px; color: var(--slate); }
+  /* School Location card (Handoff 3 §8a/8b): type chips + typed rows.
+     On-state chip colors are set inline from the type palette; this is the
+     off/base state — dashed grey outline, struck label, count kept. */
+  .school-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 18px; border-bottom: 1px solid var(--card-row-border); }
+  .school-chip {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600;
+    color: var(--card-hint); background: #fff;
+    border: 1px dashed #d1d5db; border-radius: 99px;
+    padding: 4px 11px; cursor: pointer;
+  }
+  .school-chip.is-on { border-style: solid; }
+  .school-chip:not(.is-on) .school-chip-label { text-decoration: line-through; }
+  .school-chip-dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; flex: none; }
+  .school-chip-count { font-weight: 500; opacity: 0.85; }
+  .school-suffix { font-weight: 600; color: var(--card-muted); font-size: 13px; }
+  .school-footrow { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-top: 1px solid var(--card-border); }
+  .school-footnote { font-size: 11.5px; color: var(--card-hint); line-height: 1.45; flex: 1; }
+  .school-show-all {
+    font-size: 12px; font-weight: 600;
+    color: var(--card-link); background: #fff;
+    border: 1px solid var(--card-btn-border); border-radius: 99px;
+    padding: 4px 11px; cursor: pointer; white-space: nowrap;
+  }
+  .school-list-empty { padding: 12px 18px; margin: 0; color: var(--slate); }
 
   /* ==== ENGINE:BEGIN styles-footer ==== */
   /* ---- Footer: a dark bookend echoing the masthead ---- */
@@ -5164,6 +5182,35 @@ function initChiExplorer() {
     hint.appendChild(cardEl("span", "card-details-hint-word", "details"));
     return hint;
   }
+  function cardTitleCase(str) {
+    // Handoff 3 §6a: normalize ALL-CAPS feed strings for display ("WATERS"
+    // -> "Waters", "700 S STATE ST" -> "700 S State St"). Single letters
+    // (grid directionals), tokens carrying digits, and a small keep-caps
+    // set (school types like "HS"/"PS", compound directionals, the fleet's
+    // state codes) pass through untouched — expanding abbreviations would
+    // be a guess, and guessing is worse (honesty rules).
+    if (str == null) return str;
+    var KEEP = { ES: 1, MS: 1, HS: 1, PS: 1, IS: 1, NE: 1, NW: 1, SE: 1, SW: 1, IL: 1, NY: 1, CA: 1, US: 1 };
+    return String(str).split(/\s+/).map(function (word) {
+      if (word.length < 2 || /\d/.test(word) || KEEP[word] === 1) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+  }
+  function cardGradeRange(str) {
+    // Handoff 3 §6a: collapse a contiguous comma-separated grade list to a
+    // range ("PK, K, 1, 2, ..., 8" -> "PK–8"). A gapped or unrecognized
+    // list renders unchanged — never imply coverage the data doesn't state.
+    if (str == null) return str;
+    var ladder = ["PE", "PK", "K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    var parts = String(str).split(",").map(function (p) { return p.trim().toUpperCase(); }).filter(Boolean);
+    if (parts.length < 2) return String(str).trim();
+    var start = ladder.indexOf(parts[0]);
+    if (start === -1) return String(str).trim();
+    for (var i = 1; i < parts.length; i++) {
+      if (ladder[start + i] !== parts[i]) return String(str).trim();
+    }
+    return parts[0] + "–" + parts[parts.length - 1];
+  }
   function renderBodyIntro(spec) {
     // { title?, note? } — the body-name + count line under the header.
     var el = cardEl("div", "card-intro");
@@ -5240,8 +5287,11 @@ function initChiExplorer() {
     return det;
   }
   function renderNearestRows(items) {
-    // [{ name, note?, distanceLabel? }] — nearest-N rows with distance pills;
-    // the caller owns distance formatting (Handoff 2 §4d).
+    // [{ name, note?, tag?: {text, color}, accentColor?, dotColor?,
+    //    distanceLabel? }] — nearest-N rows with distance pills (Handoff 2
+    // §4d + Handoff 3 §8a). tag renders as a colored 600-weight lead on the
+    // note line ("High · 9–12"); accentColor tints the distance pill with
+    // the same type color; the caller owns distance formatting.
     var frag = document.createDocumentFragment();
     items.forEach(function (item) {
       var row = cardEl("div", "card-nearest card-row-b");
@@ -5255,9 +5305,28 @@ function initChiExplorer() {
         nameEl.insertBefore(dot, nameEl.firstChild);
       }
       main.appendChild(nameEl);
-      if (item.note) main.appendChild(cardEl("div", "card-nearest-note", item.note));
+      if (item.tag || item.note) {
+        var noteEl = cardEl("div", "card-nearest-note");
+        if (item.tag && item.tag.text) {
+          var tagEl = cardEl("span", "card-nearest-tag", item.tag.text);
+          if (item.tag.color) tagEl.style.color = String(item.tag.color);
+          noteEl.appendChild(tagEl);
+        }
+        if (item.note) {
+          if (item.tag && item.tag.text) noteEl.appendChild(cardEl("span", "card-sep", " · "));
+          noteEl.appendChild(document.createTextNode(item.note));
+        }
+        main.appendChild(noteEl);
+      }
       row.appendChild(main);
-      if (item.distanceLabel) row.appendChild(cardEl("span", "card-distance", item.distanceLabel));
+      if (item.distanceLabel) {
+        var pill = cardEl("span", "card-distance", item.distanceLabel);
+        if (item.accentColor) {
+          pill.style.color = String(item.accentColor);
+          pill.style.background = "color-mix(in srgb, " + String(item.accentColor) + " 10%, transparent)";
+        }
+        row.appendChild(pill);
+      }
       frag.appendChild(row);
     });
     return frag;
@@ -7665,16 +7734,26 @@ function initChiExplorer() {
           if (profileHtml) fields.push({ label: "Profile", html: profileHtml });
           return renderFieldList(fields);
         }
+        // Handoff 3 §6a: title-cased name/address (opts.titleCaseData for
+        // ALL-CAPS feeds), grades collapsed to a range and moved to the
+        // header pill (cardIdentifier below) — the note carries the address
+        // (and district where a fork's schema supplies one).
+        var fmt = opts.titleCaseData ? cardTitleCase : String;
         var noteBits = [];
-        if (result.address) noteBits.push(String(result.address));
-        if (result.grades) noteBits.push("Grades " + String(result.grades));
+        if (result.address) noteBits.push(fmt(String(result.address)));
         if (result.district) noteBits.push("District " + String(result.district));
         var wrap = cardEl("div", "card-flush");
         wrap.appendChild(renderLinkRow({
-          title: result.name ? String(result.name) : "Unknown",
+          title: result.name ? fmt(String(result.name)) : "Unknown",
           note: noteBits.length ? noteBits.join(" · ") : null
         }));
         return wrap;
+      },
+      cardIdentifier: function (result) {
+        // the collapsed grade range as the identifier pill ("K–8"); no
+        // grades in the feed -> no pill, never an empty one
+        if (result.none || !result.grades) return null;
+        return cardGradeRange(String(result.grades));
       },
       primaryLink: function (result) {
         if (result.none) return opts.moreLink || null;
@@ -7698,6 +7777,7 @@ function initChiExplorer() {
     opts.gradeKeys = ["boundarygr", "grade_range", "gradelevel"];
     opts.addressKeys = ["school_add", "address", "location_address"];
     opts.profileLink = schoolProfileLink;
+    opts.titleCaseData = true; // the CPS feed is ALL-CAPS (Handoff 3 §6a)
     registerSchoolZone(opts);
   }
 
@@ -7845,9 +7925,24 @@ function initChiExplorer() {
     Middle:  { label: "Middle",  full: "Middle",     color: "#A15C00" }, // = CPS Middle School Zone
     High:    { label: "High",    full: "High",       color: "#0F6F6F" }  // = CPS High School Zone
   };
-  // filter selection persists across point selections (a display preference for
-  // the layer, not per-result state); all types shown by default.
-  var schoolTypeFilter = { Private: true, Elem: true, Middle: true, High: true };
+  // filter selection persists across point selections AND page loads
+  // (sessionStorage — Handoff 3 §8b "persist chip state per session");
+  // a storage failure (private mode) degrades to in-memory only.
+  var SCHOOL_FILTER_KEY = "chi-school-type-filter";
+  function loadSchoolTypeFilter() {
+    try {
+      var saved = JSON.parse(sessionStorage.getItem(SCHOOL_FILTER_KEY));
+      if (saved && typeof saved === "object") {
+        return { Private: saved.Private !== false, Elem: saved.Elem !== false,
+                 Middle: saved.Middle !== false, High: saved.High !== false };
+      }
+    } catch (e) { /* fall through to defaults */ }
+    return { Private: true, Elem: true, Middle: true, High: true };
+  }
+  function saveSchoolTypeFilter() {
+    try { sessionStorage.setItem(SCHOOL_FILTER_KEY, JSON.stringify(schoolTypeFilter)); } catch (e) { /* display pref only */ }
+  }
+  var schoolTypeFilter = loadSchoolTypeFilter();
 
   // one grade token -> numeric level (PK = -1, K = 0, 1..12); null if unparseable.
   // handles bare numbers, "K"/"PK", and ordinal spellings ("10th", "1st").
@@ -7945,76 +8040,147 @@ function initChiExplorer() {
     },
     render: function (result) {
       var wrap = document.createElement("div");
+      wrap.className = "card-flush";
 
-      // ---- type filter — drives both the list below and the map footprints ----
       var counts = { Private: 0, Elem: 0, Middle: 0, High: 0 };
       result.schools.forEach(function (s) { counts[s.category]++; });
-      var filterWrap = document.createElement("div");
-      filterWrap.className = "school-filter";
+
+      // ---- type chips (Handoff 3 §8a/8b) — pure toggles driving the list,
+      // the map footprints, the header suffix, and the footer notice ----
+      var chipsWrap = document.createElement("div");
+      chipsWrap.className = "school-chips";
+      var chipEls = {};
       SCHOOL_CATS.forEach(function (cat) {
         var meta = SCHOOL_CAT_META[cat];
-        var label = document.createElement("label");
-        label.className = "school-filter-item";
-        var cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = !!schoolTypeFilter[cat];
-        cb.addEventListener("change", function () {
-          schoolTypeFilter[cat] = cb.checked;
+        var chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "school-chip";
+        chip.setAttribute("aria-pressed", "false");
+        var dot = document.createElement("span");
+        dot.className = "school-chip-dot";
+        var txt = document.createElement("span");
+        txt.className = "school-chip-label";
+        txt.textContent = meta.full;
+        var count = document.createElement("span");
+        count.className = "school-chip-count";
+        count.textContent = String(counts[cat]);
+        chip.appendChild(dot);
+        chip.appendChild(txt);
+        chip.appendChild(count);
+        chip.addEventListener("click", function () {
+          schoolTypeFilter[cat] = !schoolTypeFilter[cat];
+          saveSchoolTypeFilter();
           renderList();
           var mod = getLayerById("school-site");
           if (mod) restyleOverlayFeatures(mod); // repaint/hide footprints to match
         });
-        var swatch = document.createElement("span");
-        swatch.className = "school-filter-swatch";
-        swatch.style.background = meta.color;
-        var txt = document.createElement("span");
-        txt.textContent = meta.label + " (" + counts[cat] + ")";
-        label.appendChild(cb);
-        label.appendChild(swatch);
-        label.appendChild(txt);
-        filterWrap.appendChild(label);
+        chipEls[cat] = { chip: chip, dot: dot };
+        chipsWrap.appendChild(chip);
       });
-      wrap.appendChild(filterWrap);
-
-      var intro = document.createElement("p");
-      intro.className = "school-list-intro";
-      intro.textContent = "Nearest schools, straight-line distance:";
-      wrap.appendChild(intro);
+      wrap.appendChild(chipsWrap);
 
       var rowsWrap = document.createElement("div");
-      rowsWrap.className = "school-nearest card-flush";
+      rowsWrap.className = "school-nearest";
       wrap.appendChild(rowsWrap);
 
-      var note = document.createElement("p");
-      note.className = "school-filter-note";
-      note.textContent = "Type is inferred from the grade range. “Private” = schools with no CPS-published grade band (parochial/independent).";
-      wrap.appendChild(note);
+      // footer strip: the inference footnote by default; the hiding notice +
+      // "Show all" reset while any type is toggled off
+      var footRow = document.createElement("div");
+      footRow.className = "school-footrow";
+      var footNote = document.createElement("div");
+      footNote.className = "school-footnote";
+      footRow.appendChild(footNote);
+      var showAll = document.createElement("button");
+      showAll.type = "button";
+      showAll.className = "school-show-all";
+      showAll.textContent = "Show all";
+      showAll.hidden = true;
+      showAll.addEventListener("click", function () {
+        SCHOOL_CATS.forEach(function (cat) { schoolTypeFilter[cat] = true; });
+        saveSchoolTypeFilter();
+        renderList();
+        var mod = getLayerById("school-site");
+        if (mod) restyleOverlayFeatures(mod);
+      });
+      footRow.appendChild(showAll);
+      wrap.appendChild(footRow);
+
+      // header suffix — display-only: the block label reads "School Location
+      // (all, incl. private · nearest 3)" or "(2 of 4 types · nearest 3)";
+      // mod.label (worksheet/guidebook canonical string) is untouched.
+      function updateHeaderSuffix(onCount) {
+        var labelEl = document.querySelector('label[for="toggle-school-site"]');
+        if (!labelEl) return;
+        var suffixText = (onCount === SCHOOL_CATS.length
+          ? "(all, incl. private · nearest " + SCHOOL_SITE_COUNT + ")"
+          : "(" + onCount + " of " + SCHOOL_CATS.length + " types · nearest " + SCHOOL_SITE_COUNT + ")");
+        labelEl.textContent = "School Location ";
+        var suffix = document.createElement("span");
+        suffix.className = "school-suffix";
+        suffix.textContent = suffixText;
+        labelEl.appendChild(suffix);
+      }
 
       function renderList() {
-        // 4d nearest rows (card-helpers vocabulary) with the school-type
-        // color dot carried onto each row; the filter checkboxes above
-        // re-render this list live, exactly as before.
+        // 8a rows: type dot + title-cased name, type + grade range in the
+        // type color, address; distance pill tinted the same type color.
+        // 8b: chips restyle, header suffix flips, footer swaps to the
+        // hiding notice + Show all.
         rowsWrap.innerHTML = "";
+        var onCats = SCHOOL_CATS.filter(function (cat) { return schoolTypeFilter[cat]; });
+        SCHOOL_CATS.forEach(function (cat) {
+          var on = !!schoolTypeFilter[cat];
+          var meta = SCHOOL_CAT_META[cat];
+          var els = chipEls[cat];
+          els.chip.className = "school-chip" + (on ? " is-on" : "");
+          els.chip.setAttribute("aria-pressed", on ? "true" : "false");
+          if (on) {
+            els.chip.style.color = "color-mix(in srgb, " + meta.color + " 55%, #1f2937)";
+            els.chip.style.background = "color-mix(in srgb, " + meta.color + " 12%, transparent)";
+            els.chip.style.borderColor = "color-mix(in srgb, " + meta.color + " 35%, transparent)";
+            els.dot.style.background = meta.color;
+          } else {
+            els.chip.style.color = "";
+            els.chip.style.background = "";
+            els.chip.style.borderColor = "";
+            els.dot.style.background = "";
+          }
+        });
+        updateHeaderSuffix(onCats.length);
         var shown = result.schools.filter(function (s) { return schoolTypeFilter[s.category]; }).slice(0, SCHOOL_SITE_COUNT);
         if (!shown.length) {
           var empty = document.createElement("p");
           empty.className = "school-list-empty";
           empty.textContent = "No schools of the selected type(s) nearby.";
           rowsWrap.appendChild(empty);
-          return;
+        } else {
+          // s.website is empty in the current dataset; if it ever populates,
+          // surface it via a links slot on the row vocabulary first.
+          rowsWrap.appendChild(renderNearestRows(shown.map(function (s) {
+            var meta = SCHOOL_CAT_META[s.category];
+            var range = s.grades ? cardGradeRange(String(s.grades)) : null;
+            return {
+              name: s.name ? cardTitleCase(String(s.name)) : "School",
+              tag: { text: meta.full + (range ? " · " + range : ""), color: meta.color },
+              note: s.address ? cardTitleCase(String(s.address)) : null,
+              dotColor: meta.color,
+              accentColor: meta.color,
+              distanceLabel: s.distanceMi.toFixed(2) + " mi"
+            };
+          })));
         }
-        // s.website is empty in the current dataset; if it ever populates,
-        // surface it here via a links slot on the row vocabulary first.
-        rowsWrap.appendChild(renderNearestRows(shown.map(function (s) {
-          var noteBits = [SCHOOL_CAT_META[s.category].full + (s.grades ? " (" + String(s.grades) + ")" : "")];
-          if (s.address) noteBits.push(String(s.address));
-          return {
-            name: s.name ? String(s.name) : "School",
-            note: noteBits.join(" · "),
-            distanceLabel: s.distanceMi.toFixed(1) + " mi",
-            dotColor: SCHOOL_CAT_META[s.category].color
-          };
-        })));
+        var hiddenCount = SCHOOL_CATS.reduce(function (sum, cat) {
+          return schoolTypeFilter[cat] ? sum : sum + counts[cat];
+        }, 0);
+        if (hiddenCount > 0) {
+          var offNames = SCHOOL_CATS.filter(function (cat) { return !schoolTypeFilter[cat]; })
+            .map(function (cat) { return SCHOOL_CAT_META[cat].full; });
+          footNote.textContent = "Hiding " + hiddenCount + " school" + (hiddenCount === 1 ? "" : "s") + " (" + offNames.join(", ") + ").";
+          showAll.hidden = false;
+        } else {
+          footNote.textContent = "Straight-line distance. \u201cPrivate\u201d = no CPS-published grade band (parochial/independent); type inferred from grade range.";
+          showAll.hidden = true;
+        }
       }
       renderList();
       return wrap;
