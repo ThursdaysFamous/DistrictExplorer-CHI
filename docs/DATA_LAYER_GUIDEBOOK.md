@@ -116,7 +116,7 @@ entries with per-office source URLs, and label appointed clerks as appointed. (�
 | Police district / precinct | SHIPPED `police-district` (22) | SHIPPED `police-precinct` (78) | SHIPPED `police-district` (10) |
 | Police subdivision (beat / sector) | SHIPPED `police-beat` | SHIPPED `police-sector` | NO HONEST ANALOG — SFPD publishes no patrol-beat boundary (the only "beats" dataset is Parking Control's) |
 | Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | NO HONEST ANALOG — the SF Police Commission (Charter §4.109) and Department of Police Accountability are appointed (Mayor + Board of Supervisors), citywide, no districts; NYC's labeled-link-row precedent is the upgrade path if oversight links are ever wanted on the card |
-| Fire-service boundary | SHIPPED `fire-district` (consolidated CountyDispatch: Will + DuPage + Lake suburban Fire *Protection* Districts; DuPage name-only, Lake carries each district's office contact) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published |
+| Fire-service boundary | SHIPPED `fire-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake suburban Fire *Protection* Districts; Cook from the Clerk's tax-agency tiling and DuPage name-only, Lake carries each district's office contact) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published |
 | Township police-service tax district | SHIPPED `dupage-county-special-police` (unincorporated-area township tax districts that fund supplemental DuPage County Sheriff patrol; card links the elected Sheriff, coverage-gated) | NO HONEST ANALOG — NYC has no townships | NO HONEST ANALOG — SF has no townships |
 | Police / fire station points | SHIPPED `police-station` · `fire-station` (both metro-wide from USGS National Map structures L53/L51 as of 2026-07 — replaced the city-gated CPD/CFD point sets after a completeness check: 22/22 CPD stations, 91/92 CFD houses; the CPD source still feeds the police-district card's station rows) | SHIPPED (city sources) | SHIPPED (city sources) |
 
@@ -146,7 +146,7 @@ which the never-guess rule excludes as a source.
 | ZIP code | SHIPPED `zip-code` (ZCTA) | SHIPPED `zip-code` (MODZCTA) | SHIPPED `zip-code` (ZCTA) |
 | County | SHIPPED `county` (statewide IL) | SHIPPED `borough` (= county) | n/a — city and county are coterminous (recorded) |
 | Township / municipality | SHIPPED `township` · `municipality` (statewide IL) | n/a | n/a |
-| Park district | SHIPPED `park-district` (consolidated CountyDispatch: Will + DuPage + Lake; DuPage name-only, Lake carries office contact) | n/a | n/a |
+| Park district | SHIPPED `park-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake; Cook's Clerk tiling includes the Chicago Park District — a Loop click resolves the city's own park taxing body; DuPage name-only, Lake carries office contact) | n/a | n/a |
 | Library taxing district | SHIPPED `library-district` (CountyDispatch, born consolidated: Cook's two Clerk tax-agency tilings — 59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund at a Loop click — + Will 27 w/ trustees + DuPage 32 name-only + Lake 15 w/ office contact) | n/a — NYC's three library systems (NYPL/BPL/QPL) are nonprofit corporations, not taxing districts | n/a — SFPL is a city department |
 | Post office points | SHIPPED `post-office` (USGS National Map L38 — same national source in every fork) | SHIPPED | SHIPPED |
 | Library points | SHIPPED `library` (CPL) | SHIPPED `library` (NYPL/BPL/QPL) | SHIPPED `library` (SFPL) |
@@ -245,12 +245,12 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   DuPage + Lake shipped inside the consolidated `park-district` layer (Will:
   commissioners in GIS attrs; DuPage: name-only — its GIS carries no
   commissioner/contact fields; Lake: district office contact in GIS attrs).
-- Cook County GIS layers never wired — park/fire/TIF/MWRD/forest-preserve tax
-  districts on `gis.cookcountyil.gov` (`politicalBoundary` server), "not evaluated" in
-  the original build. (The library tilings — L20 districts + L19 municipal funds —
-  shipped 2026-07 as `library-district`'s Cook entry; the park L23 and fire L17
-  tilings are natural future Cook entries for the consolidated `park-district` /
-  `fire-district` layers.)
+- Cook County GIS layers never wired — TIF/MWRD/forest-preserve tax districts on
+  `gis.cookcountyil.gov` (`politicalBoundary` server), "not evaluated" in the
+  original build. (The library tilings — L20 districts + L19 municipal funds —
+  shipped 2026-07 as `library-district`'s Cook entry; the fire L17 and park L23
+  tilings followed as Cook entries in `fire-district` / `park-district`, the park
+  tiling putting the Chicago Park District on a Loop click.)
 
 ---
 
@@ -273,9 +273,9 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `judicial-subcircuit` | Judicial Subcircuit | political | CountyDispatch | Will County ArcGIS · DuPage County ArcGIS (`Judicial_Subcircuits`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L1) | link-only (each card links its circuit's court; Court row names circuit + county) | OR of will/dupage/lake county coverages |
 | `county-board` | County Board District | political | CountyDispatch | Cook County GIS L9 · Will County ArcGIS · DuPage County ArcGIS (`County_Board_Dist_new`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L0) | Cook: live office join (same server); Will: `will-county-board-members.json` (weekly CI); DuPage: `dupage-county-board-members.json` (weekly CI; + countywide Chair); Lake: member + phone/email/district page on the boundary GIS itself (verified vs the county directory 2026-07) | OR of cook/will/dupage/lake county coverages |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |
-| `fire-district` | Fire Protection District | safety | CountyDispatch | Will County ArcGIS · DuPage County ArcGIS (`Fire_Protection_Districts_`) · Lake County ArcGIS (`LakeCounty_TaxDistricts` L4) | Will: trustees in GIS attrs; DuPage: name-only; Lake: district office address/phone/email/site in GIS attrs | OR of will/dupage/lake county coverages |
+| `fire-district` | Fire Protection District | safety | CountyDispatch | Cook County GIS L17 (Clerk fire tax-agency tiling) · Will County ArcGIS · DuPage County ArcGIS (`Fire_Protection_Districts_`) · Lake County ArcGIS (`LakeCounty_TaxDistricts` L4) | Cook: name-only; Will: trustees in GIS attrs; DuPage: name-only; Lake: district office address/phone/email/site in GIS attrs | OR of cook/will/dupage/lake county coverages |
 | `dupage-county-special-police` | DuPage Special Police District | safety | Polygon | DuPage County ArcGIS (`Special_Police_Districts_`, "Real Estate Tax Code polygons") | link-only (elected DuPage County Sheriff; unincorporated-area police-tax district) | dupageCountyCoverage |
-| `park-district` | Park District | geography | CountyDispatch | Will County ArcGIS · DuPage County ArcGIS (`Park_Districts_`) · Lake County ArcGIS (`LakeCounty_TaxDistricts` L11) | Will: commissioners in GIS attrs; DuPage: name-only; Lake: district office address/phone/email/site in GIS attrs | OR of will/dupage/lake county coverages |
+| `park-district` | Park District | geography | CountyDispatch | Cook County GIS L23 (Clerk park tax-agency tiling, incl. the Chicago Park District) · Will County ArcGIS · DuPage County ArcGIS (`Park_Districts_`) · Lake County ArcGIS (`LakeCounty_TaxDistricts` L11) | Cook: name-only; Will: commissioners in GIS attrs; DuPage: name-only; Lake: district office address/phone/email/site in GIS attrs | OR of cook/will/dupage/lake county coverages |
 | `library-district` | Library District | geography | CountyDispatch | Cook County GIS L20 (Library Tax District) + L19 (Library Fund) · Will County ArcGIS (`Library_District`) · DuPage County ArcGIS (`Library_Districts_`) · Lake County ArcGIS (`LakeCounty_TaxDistricts` L8) | Cook: agency name + a Type row distinguishing district vs municipal fund; Will: trustees in GIS attrs (sparse); DuPage: name-only; Lake: district office contact in GIS attrs | OR of cook/will/dupage/lake county coverages |
 | `school-board` | Elected School Board District | political | Bespoke | pre-built (ERSB SB15 shapefile) | `school-board-members.json` (hand-curated) | chicagoCoverage |
 | `cps-hs-network` | CPS Network (High School) | schools | CpsNetwork | Socrata `aupu-jt2g` | chief in dataset props | chicagoCoverage |

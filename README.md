@@ -32,7 +32,7 @@ Pick a point. The app runs a point-in-district lookup across every layer you hav
 | | CCPSA District Council | The three elected District Councilors for that police district (name + role) and links to each Councilor's profile + the council page |
 | | Police Station (nearest 3) | Nearest stations anywhere in the metro (USGS National Map structures) — CPD district stations, suburban PDs, and sheriff facilities alike, with addresses |
 | | Fire Station (nearest 3) | Nearest fire stations anywhere in the metro (USGS National Map structures) — CFD houses carry their district + station number; suburban entries name their department or fire protection district |
-| | Fire Protection District | Suburban fire *protection* (taxing) district, picked by county — trustees in Will, name-only in DuPage, district office contact (address/phone/email/site) in Lake |
+| | Fire Protection District | Suburban fire *protection* (taxing) district, picked by county (Cook / Will / DuPage / Lake) — trustees in Will, district office contact in Lake, name-only in Cook and DuPage |
 | | DuPage Special Police District | Township police-tax district funding supplemental DuPage County Sheriff patrol of unincorporated areas, with the Sheriff linked |
 | **Schools** | Elementary / Middle / High School Zone | CPS attendance-boundary school, grades, address, profile link, map pin |
 | | CPS Network (K-8 / High School) | Network, chief, phone, office address |
@@ -43,7 +43,7 @@ Pick a point. The app runs a point-in-district lookup across every layer you hav
 | | County | County name + seal, anywhere in Illinois |
 | | Township / County Subdivision | Township (a sub-selection of County) |
 | | Municipality | Incorporated place name, anywhere in Illinois |
-| | Park District | Park district, picked by county — commissioners in Will, name-only in DuPage, district office contact in Lake |
+| | Park District | Park district, picked by county (Cook / Will / DuPage / Lake) — a Chicago click resolves the Chicago Park District; commissioners in Will, district office contact in Lake, name-only in Cook and DuPage |
 | | Library District | Which separate library taxing body serves the point, picked by county — Cook distinguishes independent Public Library Districts from municipal Library Funds (a Chicago click resolves the City of Chicago Library Fund); trustees in Will, name-only in DuPage, office contact in Lake |
 | | Voting Precinct | County voting precinct (a sub-selection of Township), picked by county (Will / DuPage / Lake), with the containing County Board district and the county clerk's election lookup |
 | | Post Office (nearest 3) | Post office name, address, distance (USGS National Map structures) |
@@ -84,7 +84,7 @@ Stable core + pluggable layer modules, all inside `index.html`. The full contrac
 | CPD ArcGIS (`services2.arcgis.com/t3tlzCPfmaQzSWAk`) | Police district boundaries, police beat boundaries, police station roster, school locations |
 | [chicagopolice.org](https://www.chicagopolice.org) per-district pages (scraped weekly by CI) | Police district commander, CAPS unit phone/email, station address (`data/app/cpd-district-info.json`) |
 | [ccpsa.chicago.gov](https://ccpsa.chicago.gov) per-council pages (scraped weekly by CI) | CCPSA District Council elected Councilors — name + role per police district (`data/app/ccpsa-district-councils.json`); boundaries reuse the CPD police-district geometry |
-| Cook County GIS (`gis.cookcountyil.gov/traditional/rest/services/politicalBoundary`) | Cook County Commissioner district boundaries + live officeholder table (the County Board layer's Cook entry); library tax-district + library-fund tilings (the Library District layer's Cook entry) |
+| Cook County GIS (`gis.cookcountyil.gov/traditional/rest/services/politicalBoundary`) | Cook County Commissioner district boundaries + live officeholder table (the County Board layer's Cook entry); the Clerk's library, fire-protection, and park tax-agency tilings (the Library / Fire Protection / Park District layers' Cook entries) |
 | [U.S. Census TIGERweb](https://tigerweb.geo.census.gov) | Live statewide layers (County, Township, Municipality, the three School District layers, ZIP/ZCTA) plus the pre-built U.S. House / IL Senate / IL House boundaries (`data/app/*-districts.json`) |
 | Will County ArcGIS | Judicial subcircuits, Board districts, fire protection districts, park districts, library districts, voting precincts |
 | DuPage County ArcGIS (`services.arcgis.com/neJvtQ4PXvnQ86MJ`) | Judicial subcircuits, Board districts, fire protection districts, special police districts, park districts, library districts, voting precincts |

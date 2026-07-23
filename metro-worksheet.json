@@ -209,7 +209,7 @@
       "label": "Fire Protection District",
       "group": "safety",
       "area_rank": 14,
-      "rank_note": "Consolidated fire-protection-district layer — Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "dupage-county-special-police",
@@ -223,7 +223,7 @@
       "label": "Park District",
       "group": "geography",
       "area_rank": 16,
-      "rank_note": "Consolidated park-district layer — Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated park-district layer — Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "library-district",

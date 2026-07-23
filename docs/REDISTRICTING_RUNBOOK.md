@@ -76,7 +76,7 @@ against the architecture: permalinks are lat/lng-based, so no permalink migratio
 | CPS attendance boundaries | Annual | CPS | dataset id every year |
 | ZIP codes | USPS-driven, not census | USPS | occasional |
 | Will / DuPage / Lake judicial subcircuits (12th / 18th / 19th Cir.) | Statutory, rare | IL General Assembly | geometry |
-| Will / DuPage / Lake fire / park / library / precinct (+ DuPage special-police; + Cook library tilings) | Administrative / per-election | districts + county clerks | geometry (precincts redraw with county maps; DuPage's current map is the 2024 consolidation) |
+| Will / DuPage / Lake fire / park / library / precinct (+ DuPage special-police; + Cook fire/park/library tilings) | Administrative / per-election | districts + county clerks | geometry (precincts redraw with county maps; DuPage's current map is the 2024 consolidation) |
 | County / township / municipality (statewide) | Annexation-driven, rolling | local referenda; TIGERweb vintages | TIGERweb vintage rolls |
 | Statewide school districts (3 TIGERweb layers) | Consolidation-driven | ISBE / referenda | TIGERweb vintage rolls |
 
