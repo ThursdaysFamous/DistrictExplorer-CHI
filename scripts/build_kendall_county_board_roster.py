@@ -48,6 +48,12 @@ def resolve_roster(records):
         for k in ("role", "phone", "email"):
             if rec.get(k):
                 member[k] = rec[k]
+        # the member's own page on the county directory (the scraper's
+        # source_url) — the card renders it as the Profile link. Term
+        # expiration is parsed but deliberately not carried: not card
+        # material (same call as the McHenry builder).
+        if rec.get("source_url"):
+            member["url"] = rec["source_url"]
         roster.setdefault(str(district), {"members": [], "sourceUrl": SOURCE_URL})
         roster[str(district)]["members"].append(member)
     return roster
