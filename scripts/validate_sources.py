@@ -209,6 +209,9 @@ ENDPOINTS = [
      "url": "https://services1.arcgis.com/6iYC5AXXYapRVNzl/arcgis/rest/services/McHenry_County_Board_Districts/FeatureServer/0?f=json"},
     {"layer": "Kendall County Board districts (2, the current line — the county's ArcGIS Enterprise)",
      "url": "https://maps.co.kendall.il.us/server/rest/services/Hosted/County_Board_2010/FeatureServer/0?f=json"},
+    {"layer": "Suburban Cook voting precincts (1,430 — the Clerk's current fabric, precinctHistorical L0; "
+              "same geometry as Socrata k7sw-w3b8 'Suburban Cook Election Precincts - Current')",
+     "url": "https://gis.cookcountyil.gov/traditional/rest/services/precinctHistorical/MapServer/0?f=json"},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

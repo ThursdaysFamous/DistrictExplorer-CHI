@@ -120,7 +120,15 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
    (40, the Clerk's fire tax-agency tiling) and `park-district` (99, incl. the
    Chicago Park District — a Loop click now resolves the city's own park taxing
    body) in 2026-07: two loaders + two `polygonCountyEntry` rows, no other surface
-   changed.
+   changed. Cook then joined `county-precinct` the same way (2026-07, completing
+   the concept's metro coverage): 1,430 suburban precincts from the Clerk's
+   `precinctHistorical` L0 — and proved an entry's coverage may be NARROWER than
+   its county: `suburbanCookCoverage` = in Cook AND NOT in Chicago, because city
+   precincts belong to the separate BOE `ward-precinct` layer, so the toggle
+   keeps hiding on Chicago points exactly as before the entry existed (the
+   Chicago test fails toward "not Chicago" so a city-tiling outage can't take
+   down suburban service; the Norridge/Harwood Heights enclaves verify as
+   not-Chicago and get their precincts).
 3. **Future counties ship as dispatch entries from day one** — proven by **Lake
    (DONE, 2026-07)**: the first county to land with **zero new layers and zero
    scrapers** — five `lake` entries (board 19 / judicial 12 / fire 22 / park 23 /
