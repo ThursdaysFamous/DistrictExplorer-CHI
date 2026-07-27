@@ -90,6 +90,15 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
   legislature. Concepts consolidate; bodies don't merge.
 - **`ward-precinct`** — same *concept* as the county precincts but a different parent
   (`subOf ward`, not township) and a different electoral system; it stays a city layer.
+- **Municipal governments** (mayor / village president + city council / village board) —
+  the sourcing dimension is the county (seven clerk/COG directories, one per county), but
+  the **dispatch dimension is the municipality**: 284 municipalities tile the metro from a
+  single statewide source (TIGERweb Places), and 47 of them span county lines, so a
+  county-keyed dispatch table would resolve the wrong body at 47 borders. It ships instead
+  as a roster join on the existing statewide `municipality` layer, keyed by place GEOID —
+  the `county` + `il-county-clerks.json` shape, not this dispatcher. Rule 4 still governs
+  the sourcing unchanged; the per-county ladder and the merge/precedence rule for the
+  cross-county municipalities live in `docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`.
 - **Single-county concepts** (`dupage-county-special-police`; joined 2026-07 by
   `tif-district` and `mwrd`, the Cook Clerk tax-agency layers) — consolidation
   starts when a **second** county ships the concept; until then a dedicated
@@ -215,6 +224,24 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
    standing tracking issue (green run — the validate-sources pattern), the
    45-day snapshot age guard guarantees stale data is never served as
    fresh, and automation resumes untouched the moment any rung unblocks.
+
+5. **Municipal governments are part of a county's expansion, not a separate project.**
+   A county brings its municipalities with it, so rule 4 applies to the municipal
+   governing bodies the same way it applies to the county board — decided and built in
+   the expansion change, never deferred. The municipal instantiation of rule 4's decision
+   tree is a five-rung source ladder (clerk elected-officials API → clerk
+   directory/yearbook document → council-of-governments directory → county GIS
+   municipal-boundary contact attributes → link-only floor), specified with every
+   verified metro source in `docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`. Two rules that fall
+   out of the municipal shape specifically: the roster is keyed by **place GEOID** (not
+   county, not name) because 47 metro municipalities span county lines and must dedupe to
+   the **deepest** source rather than the home county's; and every scraped member record
+   captures its **ward/district identifier when the source carries one**, so the
+   ward-boundary tier stays a geometry-only follow-up instead of a re-scrape. Depth
+   varies honestly by county — full governing body where the clerk publishes one
+   (Cook, Will), mayor-level where the yearbook stops there (Kane, Kendall, McHenry,
+   DuPage), office contact + link where no county source names anyone at all (Lake,
+   a double-verified negative and a textbook rule-4 branch-3 floor).
 
 ## Verification
 

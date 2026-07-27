@@ -145,6 +145,20 @@ The five rules every module must honor are unchanged and non-negotiable: seq-tag
    covers JS challenges and IP-reputation blocks alike); only
    when no verifiable source exists does the card link the official body, with the gap
    recorded in the guidebook.
+7b. **Suburban municipal governments — a decided concept, not fresh research**
+   (2026-07, `docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`). Any metro whose coverage extends past
+   the central city inherits hundreds of municipal governing bodies (Chicago's 7-county
+   metro: 284). Do not re-derive the approach: it is a roster joined onto the statewide
+   municipality/place layer by **place GEOID**, not a new layer and not a
+   county-dispatched one, with the whole-unit officers (mayor/president, clerk, at-large
+   members) on that card and any ward-elected seats deferred to a `subOf` ward tier — the
+   `county` / `county-board` division of labor. Work the **five-rung source ladder** in
+   that playbook (county clerk elected-officials API → clerk directory/yearbook → COG
+   directory → county GIS boundary contact attrs → link-only floor) and expect depth to
+   vary honestly by county. Two rules earned in Chicago that generalize: key by GEOID and
+   dedupe multi-county municipalities to the **deepest** source, not the home county; and
+   capture each member's ward/district identifier at scrape time even when nothing
+   consumes it yet, so the ward tier never forces a re-scrape.
 8. **Re-derive every gate constant** (§9) and the `sw.js` lists (all three — §1).
 9. **Cross-group parity audit** before calling assembly done: for each field one group's cards render (office address, inline pin, map pin, phone, oversight links), check every other group's cards that *could* carry it. NYC shipped its political cards name-only while the safety and school cards already carried addresses and pins — no gate catches this class of gap; only a deliberate side-by-side pass does. The audit has a **second axis: surfaces, not just groups.** The hover explorer renders every polygon layer too, and it fails *soft* by design (a missed property is a blank row, not an error card) — so also do a **hover sweep**: toggle every polygon layer on, hover each smoke-test ground-truth point, and confirm every row shows a real identity matching its card's headline, not the em-dash fallback. NYC shipped every hover row label-only (fixed in PR #9) because no automated gate exercises the popup.
 10. **Swap deploy, register the fork in the fleet, and prove the localization.** The deploy swap (CNAME, manifest, icons, README, CLAUDE.md, footer attribution) is the visible half. The invisible half is §3.1 — the **day-one fork-registration checklist**, every fleet touchpoint that must name the new fork the day it goes live; each item on it was missed by at least one real port. Then run the §3.2 **localization sweep** — SF shipped a Chicago-biased geocoder and Chicago SEO metadata through five build threads because no gate greps for leftover reference-city content. Replace this playbook with the `docs/` pointer stub to the Chicago master and record the final roster in `docs/DATA_LAYER_GUIDEBOOK.md`. The `deploy-pages.yml` rsync exclude list is generic — but confirm nothing city-new (e.g. a large source GeoJSON) slips into the artifact.

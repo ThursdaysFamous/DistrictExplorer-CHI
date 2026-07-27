@@ -179,7 +179,7 @@ coverage only.
 |---|---|---|---|
 | County boundaries | **FREE** | TIGERweb `State_County/MapServer/1` | link to county |
 | Townships / MCDs | **FREE** | TIGERweb `Places_CouSub_ConCity_SubMCD/MapServer/1` (1,426 townships) | **no uniform roster** → link to Township Officials of IL |
-| Municipalities / places | **FREE** | same service, layer 4 (Incorporated Places), 5 (CDPs) | link to municipality |
+| Municipalities / places | **FREE** | same service, layer 4 (Incorporated Places), 5 (CDPs) | link statewide; **in the 7-county metro, per-county clerk sources ARE keyed** → see below |
 | School districts (non-CPS) | **FREE** | TIGERweb `School/MapServer` 0/1/2 (Unified / Secondary / Elementary) | ISBE directory → link |
 | Judicial circuits (25) | **DERIVE** | county→circuit table from 705 ILCS 35, dissolved over the FREE county layer | link to illinoiscourts.gov |
 | Judicial subcircuits | PER-SOURCE | PA 102-0693 shapefiles (ilsenateredistricting.com); Cook + single-county collar circuits | link to illinoiscourts.gov |
@@ -343,6 +343,11 @@ identity and accept the mismatch. This is a product call, not a technical blocke
   Lake, …), subcircuits (PA 102-0693 shapefiles on the static `il-supreme-court` pattern, grep
   `registerPolygonLayer`), park districts. Each newly-sourced county un-hides its layer for that
   county — relevance-hiding makes incremental, partial rollout legible instead of a bug.
+  **Municipal governing bodies join this tranche (specified 2026-07,** `docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`**)**:
+  not a new layer but an officeholder roster joined onto the Phase-1 `municipality` card by place
+  GEOID, sourced per county and degrading honestly to today's name-only card wherever no source
+  reaches — the same partial-rollout legibility, applied to a statewide layer's card instead of its
+  visibility.
 
 ---
 
@@ -357,6 +362,14 @@ identity and accept the mismatch. This is a product call, not a technical blocke
   precedent); reserve live rosters for genuinely keyed sources (Cook Commissioner today; ISBE / ILGA
   where clean). This aligns with `MECHANIZATION_PLAYBOOK.md`'s *"Deliberately NOT mechanized"* honesty
   rules — they stay prose + the smoke test's failure-isolation assertion.
+  **Metro carve-out (2026-07):** the "no keyed roster" claim holds *statewide* but not inside the
+  7-county metro, where each county clerk (or its COG) publishes a directory that IS keyable to a
+  place GEOID — full governing bodies for Cook and Will, mayor-level for Kane/Kendall/McHenry/DuPage,
+  and a verified nothing-published for Lake (contact + link only). The county-board rollout made the
+  same move: no statewide source, collar-first anyway. Sources, merge precedence for the 47
+  cross-county municipalities, and the reusable five-rung source ladder are specified in
+  `docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`; the statewide long tail (the other 95 counties'
+  municipalities, and all 1,426 townships) stays link-only until a keyed source appears.
 - **Engine-parity friction.** The relevance-hiding capability must be strictly additive so
   `check_engine_parity.py` stays green and the pinned-hash pipeline holds; a non-additive change breaks
   NYC's deploy. A layer with no `coverage` must behave byte-identically to today.
