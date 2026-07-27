@@ -5970,18 +5970,152 @@ function initChiExplorer() {
     }
   });
 
-  registerPolygonLayer({
+  /* ---------- Municipal governing bodies, keyed by the 7-digit Census place
+   * GEOID ("17" + PLACEFP) — the same GEOID loadIlPlaces already carries on
+   * every place feature, so the join needs no name normalization and the
+   * metro municipalities that span county lines resolve to ONE entry.
+   * Sourced per county (Cook: the County Clerk's Directory of Elected
+   * Officials API — cook_municipal_officials_scraper.py +
+   * build_municipal_officials_roster.py, refreshed weekly by CI) and merged
+   * into one roster; docs/MUNICIPAL_COUNCILS_PLAYBOOK.md holds the source
+   * ladder for the remaining counties. Municipalities with no entry keep the
+   * identity-only card — statewide coverage is deliberately partial, and an
+   * absent entry names nobody rather than guessing. ---------- */
+  var loadMunicipalOfficials = makeCached(function () {
+    return fetchJSONWithRetry("data/app/municipal-officials.json", {}, 2);
+  });
+
+  function municipalGovFor(feature, roster) {
+    if (!roster) return null;
+    var geoid = findPropCI(feature.properties || {}, ["geoid"]);
+    return geoid != null ? roster[String(geoid)] || null : null;
+  }
+
+  // Name the body the way its own seats do — trustees sit on a Board of
+  // Trustees, alderpersons on a City Council. Falls back to a neutral label
+  // rather than asserting a form the roster doesn't evidence.
+  function municipalBodyLabel(gov) {
+    var roles = {};
+    ((gov && gov.board) || []).forEach(function (m) {
+      if (m && m.role) roles[String(m.role)] = true;
+    });
+    if (roles["Trustee"]) return "Board of Trustees";
+    if (roles["Alderperson"] || roles["Council Member"]) return "City Council";
+    if (roles["Commissioner"]) return "Board of Commissioners";
+    return "Governing Board";
+  }
+
+  // "Village of Alsip" -> "Village Hall"; the office label follows the
+  // municipality's own legal form, not a guess.
+  function municipalHallLabel(gov) {
+    var name = String((gov && gov.name) || "");
+    if (/^Town\s+of\b/i.test(name)) return "Town Hall";
+    if (/^City\s+of\b/i.test(name)) return "City Hall";
+    if (/^Village\s+of\b/i.test(name)) return "Village Hall";
+    return "Municipal Hall";
+  }
+
+  // Lead the row with the seat's district where one exists (the card order
+  // convention puts the identifier before the person), keeping the office
+  // title as the muted note. Contact is deliberately absent: this source's
+  // phone/email are municipality-wide, so they render once on the hall row
+  // instead of implying a direct line to each member.
+  function municipalPerson(member) {
+    var person = { name: String(member.name) };
+    if (member.district) {
+      person.badge = String(member.district);
+      if (member.role) person.note = String(member.role);
+    } else if (member.role) {
+      person.badge = String(member.role);
+    }
+    if (member.appointed) {
+      person.note = (person.note ? person.note + " · " : "") + "Appointed";
+    }
+    return person;
+  }
+
+  registerLayer({
     id: "municipality",
     group: "geography",
     label: "Municipality",
-    loader: loadIlPlaces,
-    // tight magenta dots; an empty card here honestly means "unincorporated"
-    style: { color: "#B0316E", weight: 1.5, fillColor: "#D06A9C", fillOpacity: 0.05, dashArray: "2 3" },
-    fields: [
-      { name: "name", label: "Municipality", keys: ["name"], primary: true },
-      { name: "geoid", label: "GEOID", keys: ["geoid"] }
-    ],
-    compact: true, compactMetaField: "geoid" // 4b name-only card
+    overlay: {
+      load: loadIlPlaces,
+      // tight magenta dots; an empty card here honestly means "unincorporated"
+      style: { color: "#B0316E", weight: 1.5, fillColor: "#D06A9C", fillOpacity: 0.05, dashArray: "2 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      return Promise.all([
+        loadIlPlaces(),
+        loadMunicipalOfficials().catch(function () { return {}; })
+      ]).then(function (results) {
+        var geojson = results[0], roster = results[1];
+        var feature = findFeatureContaining(geojson, point);
+        if (!feature) return null;
+        var props = feature.properties || {};
+        return {
+          seq: seq,
+          name: findPropCI(props, ["name"]),
+          geoid: findPropCI(props, ["geoid"]),
+          gov: municipalGovFor(feature, roster)
+        };
+      });
+    },
+    render: function (result) {
+      // Card convention: identifier → representative → location → contact → link.
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown municipality",
+        note: result.geoid != null ? "FIPS " + String(result.geoid) : null
+      }));
+      var gov = result.gov;
+      if (!gov) return wrap; // identity-only: no sourced roster for this place
+      if (gov.head && gov.head.name) {
+        wrap.appendChild(renderPersonRows([municipalPerson(gov.head)]));
+      }
+      var board = (gov.board || []).filter(function (m) { return m && m.name; });
+      if (board.length) {
+        wrap.appendChild(renderSectionLabel(municipalBodyLabel(gov)));
+        wrap.appendChild(renderPersonRows(board.map(municipalPerson)));
+      }
+      var officers = (gov.officers || []).filter(function (m) { return m && m.name; });
+      if (officers.length) {
+        wrap.appendChild(renderSectionLabel("Other Elected Officials"));
+        wrap.appendChild(renderPersonRows(officers.map(municipalPerson)));
+      }
+      var office = gov.office || {};
+      if (office.address || office.phone || office.email) {
+        wrap.appendChild(renderLinkRow({
+          title: municipalHallLabel(gov),
+          note: office.address ? String(office.address) : null,
+          phone: office.phone ? String(office.phone) : null,
+          email: office.email ? String(office.email) : null
+        }));
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var gov = result.gov;
+      if (gov && gov.url) return { label: "Official website", url: String(gov.url) };
+      return null;
+    },
+    pointOfInterest: function (result) {
+      var gov = result.gov;
+      if (!gov || !gov.office || !gov.office.address) return null;
+      return { label: municipalHallLabel(gov), address: String(gov.office.address) };
+    },
+    // hover popup: name the head of government from the prefetched roster
+    // (same GEOID join as the query, run synchronously against the cache).
+    hoverOfficial: {
+      load: loadMunicipalOfficials,
+      name: function (feature, roster) {
+        var gov = municipalGovFor(feature, roster);
+        return gov && gov.head && gov.head.name ? String(gov.head.name) : null;
+      }
+    }
   });
 
   registerPolygonLayer({

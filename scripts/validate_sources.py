@@ -180,6 +180,18 @@ PROVENANCE = [
      "note": "Scraped weekly from ISBE's election-authority directory "
              "(il_county_clerk_scraper.py); Peoria deliberately absent (its "
              "authority is the appointed county election commission)."},
+    {"layer": "Suburban municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
+     "note": "Scraped weekly from the Cook County Clerk's Directory of Elected "
+             "Officials JSON API (cook_municipal_officials_scraper.py), keyed by "
+             "Census place GEOID. The site is Cloudflare-fronted, so a "
+             "reachability WARN here can be a bot filter rather than drift — "
+             "confirm with a browser User-Agent before treating it as a source "
+             "change. Cook is the only county shipped so far; the remaining six "
+             "and their verified sources are in docs/MUNICIPAL_COUNCILS_PLAYBOOK.md. "
+             "The county's Socrata copies of this directory (vw2r-zys4, "
+             "jsup-zs8y) are frozen at 2014 and deliberately unused."},
     {"layer": "Board of Review commissioners (roster)",
      "app_file": "ccbr-roster.json",
      "source_url": "https://www.cookcountyboardofreview.com/",

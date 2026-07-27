@@ -1,6 +1,8 @@
 # Municipal Councils — sourcing & deployment for suburban municipal governing bodies
 
-Status: **decided + sources verified (2026-07-27); pipelines and card join NOT yet built.**
+Status: **Cook SHIPPED (2026-07-27) — scraper, builder, weekly workflow, and the
+Municipality card join are live; the other six counties are sourced and specified but
+unbuilt.**
 Every source below was live-fetched twice (independent research + adversarial re-verification)
 on 2026-07-27; officeholder entries were sighted in each positive source, and every negative
 finding was independently confirmed.
@@ -116,11 +118,28 @@ always human-reviewed via PR on a fixed bot branch).
   `kendall_municipal_officials_scraper.py` (Playwright day one; pypdf) ·
   `lake_municipal_officials_scraper.py` (ArcGIS query; contact fields only).
 - **One builder** `build_municipal_officials_roster.py` → `data/app/municipal-officials.json`:
-  `{ "<geoid>": { name, county, members?: [{name, role, district?, phone?, email?, url?}],
-  office?: {address, phone?, email?}, url?, sourceUrl } }`. `members` is **omitted
-  entirely** where the source names nobody (Lake) — never an invented or empty-guess list.
-  `district` is captured whenever the source carries it (Cook MUNIW, Will) even though no
-  consumer exists until Tier B — that is what keeps the ward layer a geometry-only follow-up.
+  `{ "<geoid>": { name, county, head?: {name, role}, board?: [{name, role, district?}],
+  officers?: [{name, role}], office?: {address?, phone?, email?}, url?, sourceUrl } }`.
+  Every people key is **omitted entirely** where the source names nobody (Lake) — never
+  an invented or empty-guess list. `district` is captured whenever the source carries it
+  (Cook MUNIW, Will) even though no consumer exists until Tier B — that is what keeps the
+  ward layer a geometry-only follow-up.
+
+  Three shape decisions the Cook build settled, which the remaining counties inherit:
+  - **Contact is municipality-level, not per-person.** Verified in the Cook source: all
+    128 municipalities carry one shared hall phone/email/address across every official,
+    and the per-person `PersonPhone`/`PersonEmail` columns are empty for all 1,134
+    records. It therefore lives once under `office` and renders on the hall row —
+    attaching a shared village-hall address to a trustee's row would imply a direct line
+    that does not exist.
+  - **head / board / officers, not a flat `members` list.** The card renders three
+    distinct sections (head of government, the governing body, other elected officers
+    like clerk and treasurer), and the split is what lets a mayor-level county ship a
+    `head` with no `board` and stay honest rather than padding a list.
+  - **Library Trustees are excluded** — they sit on library district boards (the app's
+    separate `library-district` layer), not the municipal governing body. In the Cook
+    source they are 255 of the 1,134 records and are distinguishable structurally as
+    well as by office name (their address carries AddressTypeId 4, not 3).
   Count guards (`sys.exit(1)` under any floor): per-county muni floors cook ≥120 · will ≥35
   · dupage ≥33 · kane ≥27 · mchenry ≥26 · kendall ≥13 · lake ≥48; member floors cook ≥900
   records incl. ≥500 trustees, will ≥150; merged total ≥270 of 284. Stable key order for
@@ -157,7 +176,20 @@ website).
 **no board section** (absent data renders nothing); Lake renders office/contact/link only.
 The explicit block raises the raw `registerLayer(` count by one — the validator floor is a
 floor; no id-list change (`municipality` is already in `EXPECT_LAYER_IDS` and
-`LAYER_AREA_RANK`).
+`LAYER_AREA_RANK`), and the layer count stays 39.
+
+Two implementation notes from the shipped Cook build:
+- **The layer leaves the 4b compact presentation.** `mod.compact` is decided once at
+  card-construction time and *skips `render()` entirely on success*
+  (`runLayerQueryAt`), so a card cannot be compact for an unsourced municipality and
+  full for a sourced one. `municipality` therefore renders the standard card — name +
+  FIPS via `renderBodyIntro`, exactly as `county` does. This is the same trade `county`
+  already made, and it is what makes room for the officials rows.
+- **The body and hall labels follow the municipality's own legal form**, derived from
+  the source's name string: trustees sit on a "Board of Trustees" and alderpersons on a
+  "City Council"; "Village of Alsip" yields "Village Hall", "City of Berwyn" yields
+  "City Hall". Both fall back to neutral labels rather than asserting a form the roster
+  does not evidence.
 
 ## Tier B — suburban municipal wards (recorded backlog, not in scope)
 
@@ -209,12 +241,20 @@ conversion for total blocks.
 
 - **Pipeline PRs:** builder floors + `validate_index.py` (+ `generate_metro_files.py
   --check` after the worksheet edit).
-- **App-join PR:** Playwright smoke test; manual ground truth — a Berwyn point shows its
-  mayor + 8 alderpersons + clerk/treasurer (Cook DOEO), a Joliet point its full council
-  (Will Directory), a Naperville point its council (Will Directory via precedence), a
-  Wheaton point mayor + link only (DMMC), a Waukegan point office/contact/link only
-  (Lake), an unincorporated point the honest empty card, and a downstate point the
-  unchanged name-only card.
+- **App-join PR:** Playwright smoke test, plus a point sweep of the card. **Verified for
+  Cook (2026-07-27):** Berwyn → Mayor Robert J. Lovero, a "City Council" section of 8
+  alderpersons each badged with their ward, Clerk + Treasurer, and City Hall with
+  address, formatted phone and Email link; Alsip → President John D. Ryan, a "Board of
+  Trustees" of 6, Clerk, Village Hall; Chicago Loop → identity only (excluded by
+  concept); Naperville → identity only (county not yet sourced); an unincorporated point
+  → the honest empty card. Remaining to verify as their counties land: a Joliet point's
+  full council (Will Directory), a Wheaton point mayor + link only (DMMC), a Waukegan
+  point office/contact/link only (Lake).
+  Note for anyone re-running this in the Claude Code sandbox: Chromium cannot reach live
+  APIs through the agent proxy, so the municipality layer errors there by default (its
+  geometry is live TIGERweb). Fetch the places payload with `curl` and serve it back via
+  `page.route` to exercise the real query/render path — the same trick
+  `smoke_test.mjs` uses for Leaflet.
 - **Monthly freshness:** the seven PROVENANCE entries keep `validate_sources.py` watching
   for moved PDFs/pages (the DMMC URL *will* move annually by design — the scraper
   discovers it, the manifest pins the discovery page, not the PDF).

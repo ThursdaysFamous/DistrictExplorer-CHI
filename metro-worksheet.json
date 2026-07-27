@@ -576,11 +576,16 @@
       {
         "file": "dupage-county-board-members.json",
         "min_keys": 6
+      },
+      {
+        "file": "municipal-officials.json",
+        "min_keys": 120,
+        "note": "Municipal governing bodies keyed by Census place GEOID; Cook shipped (128 municipalities), remaining counties per docs/MUNICIPAL_COUNCILS_PLAYBOOK.md"
       }
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v21",
+    "cache_name": "district-explorer-shell-v22",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -658,6 +663,11 @@
       "file": "update-dupage-county-board-roster.yml",
       "purpose": "DuPage County Board roster (dupagecounty.gov directory scrape)",
       "schedule": "Sun 13:00 UTC"
+    },
+    {
+      "file": "update-municipal-officials.yml",
+      "purpose": "Suburban municipal governing bodies (Cook County Clerk DOEO API)",
+      "schedule": "Wed 14:00 UTC"
     },
     {
       "file": "validate-sources.yml",
