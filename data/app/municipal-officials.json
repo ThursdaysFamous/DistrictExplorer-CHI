@@ -95,6 +95,95 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vah.com"
   },
+  "1703012": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Daniel Barreiro",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Juany Garza",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Theodoros “Ted” Mesiacos",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Jonathan Núñez",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 5",
+        "name": "Carl Franco",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 6",
+        "name": "Michael B. Saville",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 7",
+        "name": "Javier Bañuelos",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 8",
+        "name": "Patty Smith",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 9",
+        "name": "Edward J. Bugg",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 10",
+        "name": "Shweta Baid",
+        "role": "Alderperson"
+      },
+      {
+        "district": "At Large",
+        "name": "Keith Larson",
+        "role": "Alderperson"
+      },
+      {
+        "district": "At Large",
+        "name": "Will White",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "John Laesch",
+      "role": "Mayor"
+    },
+    "name": "City of Aurora",
+    "office": {
+      "address": "44 E. Downer Pl., Aurora 60507",
+      "email": "mayorsoffice@aurora.il.us",
+      "phone": "630-256-4636"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Jennifer Stallings",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Stacey PetersonAlderperson Ward",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://aurora-il.org"
+  },
   "1703844": {
     "board": [
       {
@@ -271,6 +360,59 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofbedfordpark.com"
+  },
+  "1704585": {
+    "board": [
+      {
+        "name": "Brian Diachenko",
+        "role": "Trustee"
+      },
+      {
+        "name": "Erik Gardner",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jessica Smith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joe Tiei",
+        "role": "Trustee"
+      },
+      {
+        "name": "Roger Stacey",
+        "role": "Trustee"
+      },
+      {
+        "name": "Todd Kraus",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Marcy Meyer",
+      "role": "President"
+    },
+    "name": "Village of Beecher",
+    "office": {
+      "address": "625 Dixie Highway, P.O. Box 1154, Beecher 60401",
+      "email": "clerk@villageofbeecher.org",
+      "phone": "708-946-2261"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Janett McCawley",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Donna Lippelt",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofbeecher.org"
   },
   "1704975": {
     "board": [
@@ -494,6 +636,142 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://blueisland.org"
+  },
+  "1707133": {
+    "board": [
+      {
+        "name": "Bhavini K. Patel",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jean M. Kelly",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jose Quintero",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael J. Carpanzano",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael T. Lawler",
+        "role": "Trustee"
+      },
+      {
+        "name": "Troy J. Doris",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Mary S. Alexander-Basta",
+      "role": "Mayor"
+    },
+    "name": "Village of Bolingbrook",
+    "office": {
+      "address": "375 W. Briarcliff Rd., Bolingbrook 60440",
+      "email": "bbrook@bolingbrook.com",
+      "phone": "630-226-8400"
+    },
+    "officers": [
+      {
+        "name": "Martha “Marti” M. Barton",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://bolingbrook.com"
+  },
+  "1707640": {
+    "board": [
+      {
+        "name": "Erik C. Brock",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Jeffrey A. Unland",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Vacant",
+        "role": "Commissioner"
+      },
+      {
+        "name": "William B. Sebrell",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "David Wright",
+      "role": "Mayor"
+    },
+    "name": "Village of Braceville",
+    "office": {
+      "address": "300 S. Mitchell St., P.O. Box 187, Braceville 60407",
+      "email": "villageofbraceville@gmail.com",
+      "phone": "815-237-8655"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Shanon Berrong",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Jennifer Williams",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/"
+  },
+  "1707770": {
+    "board": [
+      {
+        "name": "Finances - Elizabeth Dixon",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Public Improvements - Dale Walsh",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Public Property - Warren Wietting",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Safety - James “Moose” Mikel",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Todd Lyons",
+      "role": "Mayor"
+    },
+    "name": "City of Braidwood",
+    "office": {
+      "address": "141 W. Main St., Braidwood 60408",
+      "email": "sweaver@braidwood.us",
+      "phone": "815-458-2333"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Sarah Weaver",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kyle Kasperek",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://braidwood.us"
   },
   "1708225": {
     "board": [
@@ -948,6 +1226,58 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://calumetparkvillage.org"
   },
+  "1712476": {
+    "board": [
+      {
+        "name": "Chantal Host",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Scaggs",
+        "role": "Trustee"
+      },
+      {
+        "name": "Patricia Perinar",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sam Greco",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott McMillin",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Slocum",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Missey Moorman Schumacher",
+      "role": "President"
+    },
+    "name": "Village of Channahon",
+    "office": {
+      "address": "24555 S. Navajo Dr., Channahon 60410",
+      "email": "info@channahon.org",
+      "phone": "815-467-6644"
+    },
+    "officers": [
+      {
+        "name": "Kristin Hall",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Heather Wagonblott",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://channahon.org"
+  },
   "1714026": {
     "board": [
       {
@@ -1058,6 +1388,58 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://chicagoridge.org"
   },
+  "1715170": {
+    "board": [
+      {
+        "name": "Daniel J. Greggain",
+        "role": "Trustee"
+      },
+      {
+        "name": "David M. Togliatti",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lauterbur",
+        "role": "Trustee"
+      },
+      {
+        "name": "Pamela Noffsinger",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ross Bradley",
+        "role": "Trustee"
+      },
+      {
+        "name": "William (Bill) Mincey",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "David A. Spesia",
+      "role": "President"
+    },
+    "name": "Village of Coal City",
+    "office": {
+      "address": "515 S. Broadway St., Coal City 60416",
+      "email": "kmelvin@coalcity-il.govTreasurer",
+      "phone": "815-634-8608"
+    },
+    "officers": [
+      {
+        "name": "Kayla Melvin - Appt.",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kristi Wickiser",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://coalcity-il.gov"
+  },
   "1716691": {
     "board": [
       {
@@ -1166,6 +1548,73 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://countryside-il.org"
+  },
+  "1717458": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Angelo Sante Deserio",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Scott Dyke",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Claudia Gazal",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Darrell Jefferson",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Mark A. Cipiti",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Tina Oberlin",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Joseph Kubal",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Nathaniel “Nate” Albert",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Raymond R. Soliman",
+      "role": "Mayor"
+    },
+    "name": "City of Crest Hill",
+    "office": {
+      "address": "20600 City Center Blvd., Crest Hill 60403",
+      "email": "webadmin@cityofcresthill.com",
+      "phone": "815-741-5100"
+    },
+    "officers": [
+      {
+        "name": "Christine Vershay-Hall",
+        "role": "Clerk"
+      },
+      {
+        "name": "Jamie Malloy",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://cityofcresthill.com"
   },
   "1717497": {
     "board": [
@@ -1358,6 +1807,51 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://desplaines.gov"
+  },
+  "1719837": {
+    "board": [
+      {
+        "name": "Addis “Dean” Johnson",
+        "role": "Commissioner"
+      },
+      {
+        "name": "David Warner, Jr.",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Denise Brown",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Jeff Kasher",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Teresa (Terry) A. Kernc",
+      "role": "Mayor"
+    },
+    "name": "Village of Diamond",
+    "office": {
+      "address": "1750 E. Division St., Diamond 60416",
+      "email": "clerk@villageofdiamond.org",
+      "phone": "815-634-8149"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Laura Warren",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Wendy Herbert",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofdiamond.org"
   },
   "1720149": {
     "board": [
@@ -1636,6 +2130,54 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://elmwoodpark.org"
+  },
+  "1723945": {
+    "board": [
+      {
+        "name": "Darryl P. Lab",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dorothy Eppenstein",
+        "role": "Trustee"
+      },
+      {
+        "name": "Douglas Mytnik",
+        "role": "Trustee"
+      },
+      {
+        "name": "Junellen Eastman Johnson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Varman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tricia L. Maas",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Doug Jenco",
+      "role": "President"
+    },
+    "name": "Village of Elwood",
+    "office": {
+      "address": "401 E. Mississippi Ave., Elwood 60421",
+      "email": "fred.hayes@villageofelwood.comTrusteesDarryl",
+      "phone": "815-423-5011"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Fred Hayes",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofelwood.com"
   },
   "1724582": {
     "board": [
@@ -1916,6 +2458,58 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://forestview-il.org"
   },
+  "1727624": {
+    "board": [
+      {
+        "name": "Adam Borrelli",
+        "role": "Trustee"
+      },
+      {
+        "name": "Daniel Rossi",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eugene Savaria",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jessica Petrow",
+        "role": "Trustee"
+      },
+      {
+        "name": "Maura A. Rigoni",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael J. Leddin",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Keith Ogle",
+      "role": "President"
+    },
+    "name": "Village of Frankfort",
+    "office": {
+      "address": "432 W. Nebraska St., Frankfort 60423",
+      "email": "kschubert@frankfortil.org",
+      "phone": "815-469-2177"
+    },
+    "officers": [
+      {
+        "name": "Katie Schubert",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Jeff Slovak",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://frankfortil.org"
+  },
   "1727702": {
     "board": [
       {
@@ -2091,6 +2685,58 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofglenwood.com"
+  },
+  "1730120": {
+    "board": [
+      {
+        "name": "Doreen L. Attwood",
+        "role": "Trustee"
+      },
+      {
+        "name": "Earl Burd",
+        "role": "Trustee"
+      },
+      {
+        "name": "Elaine Belawske",
+        "role": "Trustee"
+      },
+      {
+        "name": "James R. Peters",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kim Hall",
+        "role": "Trustee"
+      },
+      {
+        "name": "Pam Nacey",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Cheryl Schott",
+      "role": "President"
+    },
+    "name": "Village of Godley",
+    "office": {
+      "address": "150 S. Kankakee St., Godley 60407",
+      "email": "vofgodley@yahoo.com",
+      "phone": "815-458-2222"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Tamara R. Branum",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Roxanne Alton",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/"
   },
   "1730328": {
     "board": [
@@ -2589,6 +3235,58 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://hoffmanestates.org"
   },
+  "1735835": {
+    "board": [
+      {
+        "name": "Bart Holzhauser",
+        "role": "Trustee"
+      },
+      {
+        "name": "Curtis Mason",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael LePore",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nicholas S. Muller",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert Schaller",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rose Reynders",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Christina Neitzke-Troike",
+      "role": "President"
+    },
+    "name": "Village of Homer Glen",
+    "office": {
+      "address": "14240 W. 151st St., Homer Glen 60491",
+      "email": "clerkbielski@homerglenil.org",
+      "phone": "708-301-0632"
+    },
+    "officers": [
+      {
+        "name": "Candice Bielski",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "John Sawyers",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://homerglenil.org"
+  },
   "1735866": {
     "board": [
       {
@@ -2812,6 +3510,75 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://inverness-il.gov"
+  },
+  "1738570": {
+    "board": [
+      {
+        "district": "District 1",
+        "name": "Larry E. Hug",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 2",
+        "name": "Pat Mudron",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 3",
+        "name": "Sharon “Sherri” Reardon",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 4",
+        "name": "Cesar Cardenas",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 5",
+        "name": "Suzanna Ibarra",
+        "role": "Council Member"
+      },
+      {
+        "district": "At Large",
+        "name": "Jan Quillman",
+        "role": "Council Member"
+      },
+      {
+        "district": "At Large",
+        "name": "Joe Clement",
+        "role": "Council Member"
+      },
+      {
+        "district": "At Large",
+        "name": "Juan Moreno",
+        "role": "Council Member"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Terry D’Arcy",
+      "role": "Mayor"
+    },
+    "name": "City of Joliet",
+    "office": {
+      "address": "19150 W. Jefferson St., Joliet 60432",
+      "email": "cityclerk@joliet.govTreasurer",
+      "phone": "815-724-4000"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Lauren O’Hara",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kevin SingCouncilmembers District",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://joliet.gov"
   },
   "1738830": {
     "board": [
@@ -3284,6 +4051,58 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofmccook.org"
   },
+  "1746357": {
+    "board": [
+      {
+        "name": "Clint Boone",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Bahena",
+        "role": "Trustee"
+      },
+      {
+        "name": "Justin Young",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lucinda M. Neighbors",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert A. Dilling",
+        "role": "Trustee"
+      },
+      {
+        "name": "Thomas R. Doyle",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Mike Adrieansen",
+      "role": "Mayor"
+    },
+    "name": "Village of Manhattan",
+    "office": {
+      "address": "260 Market Place, Manhattan 60442",
+      "email": "rbouck@villageofmanhattan.org",
+      "phone": "815-418-2100"
+    },
+    "officers": [
+      {
+        "name": "Rebecca Bouck",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Justin VanVooren TrusteesRobert A. Dilling",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofmanhattan.org"
+  },
   "1747007": {
     "board": [
       {
@@ -3566,6 +4385,153 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofmidlothian.net"
   },
+  "1749607": {
+    "board": [
+      {
+        "name": "Barry A. Thompson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dennis P. Martin",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gabriela Martinez",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joshawa Stell",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ray Mason",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robin White",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Frederic Offerman",
+      "role": "President"
+    },
+    "name": "Village of Minooka",
+    "office": {
+      "address": "121 E. McEvilly Rd., Minooka 60447",
+      "email": "info@minooka.com",
+      "phone": "815-467-2151"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Orsola Filus",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Austin Haacke",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://minooka.com"
+  },
+  "1749854": {
+    "board": [
+      {
+        "name": "Daniel C. Gilbert",
+        "role": "Trustee"
+      },
+      {
+        "name": "Debbie Engler",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joshua Bailey",
+        "role": "Trustee"
+      },
+      {
+        "name": "Melissa Fedora",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nick Clancy",
+        "role": "Trustee"
+      },
+      {
+        "name": "Terry G. Germany",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "George J. Metanias",
+      "role": "President"
+    },
+    "name": "Village of Mokena",
+    "office": {
+      "address": "11004 Carpenter St., Mokena 60448",
+      "email": "administration@mokena.org",
+      "phone": "708-479-3900"
+    },
+    "officers": [
+      {
+        "name": "Melissa Martini",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://mokena.org"
+  },
+  "1749945": {
+    "board": [
+      {
+        "name": "Charles Rakis",
+        "role": "Trustee"
+      },
+      {
+        "name": "Doug Horne",
+        "role": "Trustee"
+      },
+      {
+        "name": "Heidi Gonzalez",
+        "role": "Trustee"
+      },
+      {
+        "name": "John R. Henson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael E. Wilson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Youdris",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Therese M. Bogs",
+      "role": "Mayor"
+    },
+    "name": "Village of Monee",
+    "office": {
+      "address": "25711 S. Egyptian Trl., Monee 60449",
+      "email": "mpowell@villageofmonee.org",
+      "phone": "708-534-8301"
+    },
+    "officers": [
+      {
+        "name": "Michelle Powell-Johnson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofmonee.org"
+  },
   "1750647": {
     "board": [
       {
@@ -3654,6 +4620,120 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://mountprospect.org"
+  },
+  "1751622": {
+    "board": [
+      {
+        "name": "Allison Longenbaugh",
+        "role": "Council Member"
+      },
+      {
+        "name": "Ashfaq Syed",
+        "role": "Council Member"
+      },
+      {
+        "name": "Benjamin (Benny) White",
+        "role": "Council Member"
+      },
+      {
+        "name": "Ian Holzhauer",
+        "role": "Council Member"
+      },
+      {
+        "name": "Josh McBroom",
+        "role": "Council Member"
+      },
+      {
+        "name": "Mary Gibson",
+        "role": "Council Member"
+      },
+      {
+        "name": "Nathan “Nate” Wilson",
+        "role": "Council Member"
+      },
+      {
+        "name": "Patrick Kelly",
+        "role": "Council Member"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Scott A. Wehrli",
+      "role": "Mayor"
+    },
+    "name": "City of Naperville",
+    "office": {
+      "address": "400 S. Eagle St., Naperville 60540",
+      "email": "portnerd@naperville.il.us",
+      "phone": "630-420-6111"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Dawn C. Portner",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Raymond Munch",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://naperville.il.us"
+  },
+  "1752584": {
+    "board": [
+      {
+        "name": "Amy Gugliuzza",
+        "role": "Trustee"
+      },
+      {
+        "name": "Bryan Reiser",
+        "role": "Trustee"
+      },
+      {
+        "name": "James Leahy Wilson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Katie Christopherson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Keith C. Madsen",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lindsay Scalise",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Timothy A. Baldermann",
+      "role": "Mayor"
+    },
+    "name": "Village of New Lenox",
+    "office": {
+      "address": "1 Veterans Pkwy., New Lenox 60451",
+      "email": "electedofficials@newlenox.net",
+      "phone": "815-462-6400"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Laura Zilinskas",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kim Auchstetter",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://newlenox.net"
   },
   "1753000": {
     "board": [
@@ -4286,6 +5366,59 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://orlandpark.org"
   },
+  "1756887": {
+    "board": [
+      {
+        "name": "Andrew Torres",
+        "role": "Trustee"
+      },
+      {
+        "name": "James Cooper",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Hughes",
+        "role": "Trustee"
+      },
+      {
+        "name": "Karen E. Novy",
+        "role": "Trustee"
+      },
+      {
+        "name": "Karin McCarthy-Lange",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rachelle Koenig",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Ryan Kauffman",
+      "role": "President"
+    },
+    "name": "Village of Oswego",
+    "office": {
+      "address": "100 Parkers Mill, Oswego 60543",
+      "email": "info@oswegoil.org",
+      "phone": "630-554-3618"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Tina Touchette",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Andrea LambergTrustees Jennifer Hughes",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://oswegoil.org"
+  },
   "1757225": {
     "board": [
       {
@@ -4623,6 +5756,59 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://parkridge.us"
   },
+  "1759052": {
+    "board": [
+      {
+        "name": "Gary Hudson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jacqueline Richards",
+        "role": "Trustee"
+      },
+      {
+        "name": "Julie Sluis",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nicholas Lee Strba",
+        "role": "Trustee"
+      },
+      {
+        "name": "Patrick J. Bowden",
+        "role": "Trustee"
+      },
+      {
+        "name": "Todd Sandberg",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Chris Vieaux",
+      "role": "President"
+    },
+    "name": "Village of Peotone",
+    "office": {
+      "address": "208 E. Main St., P.O. Box 430, Peotone 60468",
+      "email": "admin@villageofpeotone.com",
+      "phone": "708-258-3279"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Stacey Hartwell",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "VacantTrustees Gary Hudson",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofpeotone.com"
+  },
   "1759572": {
     "board": [
       {
@@ -4665,6 +5851,59 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofphoenix.com"
+  },
+  "1760287": {
+    "board": [
+      {
+        "name": "Brian “Wojo” Wojowski",
+        "role": "Trustee"
+      },
+      {
+        "name": "Margie Bonuchi",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard Kiefer",
+        "role": "Trustee"
+      },
+      {
+        "name": "Siv Panicker",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tom Ruane",
+        "role": "Trustee"
+      },
+      {
+        "name": "Vanessa Sula",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "John F. Argoudelis",
+      "role": "President"
+    },
+    "name": "Village of Plainfield",
+    "office": {
+      "address": "24401 W. Lockport St., Plainfield 60544",
+      "email": "mgibas@goplainfield.com",
+      "phone": "815-436-7093"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Michelle Gibas",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Traci Pleckham",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://plainfieldil.gov"
   },
   "1761314": {
     "board": [
@@ -5037,6 +6276,59 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://robbins-il.com"
   },
+  "1764902": {
+    "board": [
+      {
+        "name": "Eugene Lorenc",
+        "role": "Trustee"
+      },
+      {
+        "name": "Frederick S. Stadler",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gary Califello",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Pirc",
+        "role": "Trustee"
+      },
+      {
+        "name": "Matt Cooling",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert Scheidt",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Samuel Wyke",
+      "role": "President"
+    },
+    "name": "Village of Rockdale",
+    "office": {
+      "address": "79 Moen Ave., Rockdale 60436",
+      "email": "pirc@rockdaleillinois.org",
+      "phone": "815-725-8937"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Frank Sennyes",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Steven Lucas",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://rockdaleillinois.org"
+  },
   "1765338": {
     "board": [
       {
@@ -5088,6 +6380,53 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://cityrm.org"
+  },
+  "1765442": {
+    "board": [
+      {
+        "name": "Brian A. Clancy, Sr.",
+        "role": "Trustee"
+      },
+      {
+        "name": "David G. Richards",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jose “Joe” Chavez, Jr.",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kenneth C. Griffin",
+        "role": "Trustee"
+      },
+      {
+        "name": "Linda S. Palmiter",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lourdes Aguirre",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "John D. Noak",
+      "role": "President"
+    },
+    "name": "Village of Romeoville",
+    "office": {
+      "address": "1050 W. Romeo Rd., Romeoville 60446",
+      "email": "oblomberg@romeoville.org",
+      "phone": "815-886-7200"
+    },
+    "officers": [
+      {
+        "name": "Bernice E. Holloway",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://romeoville.org"
   },
   "1765806": {
     "board": [
@@ -5320,6 +6659,57 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofschillerpark.com"
+  },
+  "1769758": {
+    "board": [
+      {
+        "name": "Anthony “Tony” Luciano",
+        "role": "Trustee"
+      },
+      {
+        "name": "Molly Babyak",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard (Rick) Chapman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Selfridge",
+        "role": "Trustee"
+      },
+      {
+        "name": "Stevan A. Brockman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Thomas D. Amos",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Clarence “CC” DeBold",
+      "role": "President"
+    },
+    "name": "Village of Shorewood",
+    "office": {
+      "email": "ljakaitis@shorewoodil.gov",
+      "phone": "815-725-2150"
+    },
+    "officers": [
+      {
+        "name": "Lona Jakaitis",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Anne Burkholder",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://shorewoodil.gov"
   },
   "1770122": {
     "board": [
@@ -5730,6 +7120,52 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://summit-il.org"
   },
+  "1774275": {
+    "board": [
+      {
+        "name": "Eric Wilhelmi",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jill Anderson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Justin Hensley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Karey Taylor",
+        "role": "Trustee"
+      },
+      {
+        "name": "Phil Anderson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Travis Brent",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Eli Geiss",
+      "role": "President"
+    },
+    "name": "Village of Symerton",
+    "office": {
+      "address": "18385 W. Commercial St., Wilmington 60481",
+      "email": "villageofsymerton@yahoo.com",
+      "phone": "815-476-6266"
+    },
+    "officers": [
+      {
+        "name": "George J. Salaba",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/"
+  },
   "1775185": {
     "board": [
       {
@@ -6135,6 +7571,49 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofwinnetka.org"
+  },
+  "1783245": {
+    "board": [
+      {
+        "name": "Curtis Nekovar",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Anteliz",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joseph Kagann",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kaleshia “Kay” Page",
+        "role": "Trustee"
+      },
+      {
+        "name": "Magin “Mike” J. Martinez",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Gina Cunningham-Picek",
+      "role": "Mayor"
+    },
+    "name": "Village of Woodridge",
+    "office": {
+      "address": "5 Plaza Dr., Woodridge 60517",
+      "email": "jheneghan@woodridgeil.gov",
+      "phone": "630-852-7000"
+    },
+    "officers": [
+      {
+        "name": "Joseph Heneghan",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://woodridgeil.gov"
   },
   "1783518": {
     "board": [

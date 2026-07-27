@@ -68,15 +68,24 @@ OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
                    "taxpayer advocate", "collector", "supervisor"}
 
 # Per-county floors: deliberate under-tolerances against the verified 2026-07
-# live values (Cook 128 municipalities / 1,035 governing records / 128 heads).
-# A real coverage loss fails the build and leaves the last good file in place;
-# ordinary turnover does not.
+# live values (Cook 128 municipalities / 1,035 governing records / 128 heads;
+# Will 34 / 303 / 34). A real coverage loss fails the build and leaves the last
+# good file in place; ordinary turnover does not.
 COUNTY_FLOORS = {
     "Cook": {"municipalities": 120, "members": 900, "heads": 120},
+    "Will": {"municipalities": 30, "members": 260, "heads": 30},
 }
-# Merged floor across all counties supplied. With Cook alone that is 120; it
-# rises as counties land (the metro total is 284 municipalities).
-MIN_TOTAL_MUNICIPALITIES = 120
+# Merged floor across all counties supplied. Cook + Will resolve to 156 unique
+# municipalities (6 of Will's 34 are shared with Cook); it rises as counties
+# land (the metro total is 284 municipalities).
+MIN_TOTAL_MUNICIPALITIES = 150
+
+# Tie-break for a municipality claimed by two counties, applied only AFTER
+# depth (see pick_entry). Both directories describe the same government, so
+# this is a freshness call, not a correctness one: Cook's is a live API
+# reflecting each election as it is certified, Will's is an annually
+# republished directory.
+COUNTY_PRECEDENCE = ["Cook", "Will", "DuPage", "Kane", "Kendall", "McHenry", "Lake"]
 
 
 def norm_place(name):
@@ -283,6 +292,37 @@ def build_county(payload, by_county, statewide, warnings):
     return entries
 
 
+def entry_depth(entry):
+    """How much of the governing body a source actually names.
+
+    2 = full body (a head plus the board), 1 = head only, 0 = contact only.
+    This is what decides a cross-county municipality, NOT which county the
+    place is mostly in: a village that straddles Cook and Will should show the
+    board wherever one is published.
+    """
+    if entry.get("board"):
+        return 2
+    if entry.get("head"):
+        return 1
+    return 0
+
+
+def describe_depth(entry):
+    return {2: "full governing body", 1: "head of government only",
+            0: "contact only"}[entry_depth(entry)]
+
+
+def pick_entry(a, b):
+    """-> (kept, dropped) for one municipality claimed by two counties."""
+    if entry_depth(a) != entry_depth(b):
+        return (a, b) if entry_depth(a) > entry_depth(b) else (b, a)
+    rank = {c: i for i, c in enumerate(COUNTY_PRECEDENCE)}
+    fallback = len(COUNTY_PRECEDENCE)
+    if rank.get(a["county"], fallback) <= rank.get(b["county"], fallback):
+        return a, b
+    return b, a
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     parser.add_argument("inputs", nargs="+", help="per-county scraper output JSON files")
@@ -300,10 +340,17 @@ def main():
         entries = build_county(payload, by_county, statewide, warnings)
         for geoid, entry in entries.items():
             if geoid in roster:
-                print("FATAL: %s claimed by both %s and %s County — the deepest source "
-                      "must be chosen explicitly (see MUNICIPAL_COUNCILS_PLAYBOOK.md)"
-                      % (geoid, roster[geoid]["county"], entry["county"]), file=sys.stderr)
-                sys.exit(1)
+                keep, drop = pick_entry(roster[geoid], entry)
+                print("NOTE: %s (%s) is listed by both %s and %s County — keeping the "
+                      "%s entry (%s)" % (geoid, keep["name"], roster[geoid]["county"],
+                                         entry["county"], keep["county"],
+                                         describe_depth(keep)), file=sys.stderr)
+                if drop.get("board") and not keep.get("board"):
+                    print("FATAL: dropped entry for %s had a board and the kept one "
+                          "does not — precedence is wrong" % geoid, file=sys.stderr)
+                    sys.exit(1)
+                roster[geoid] = keep
+                continue
             roster[geoid] = entry
 
     if len(roster) < MIN_TOTAL_MUNICIPALITIES:

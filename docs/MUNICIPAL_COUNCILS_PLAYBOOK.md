@@ -1,8 +1,8 @@
 # Municipal Councils — sourcing & deployment for suburban municipal governing bodies
 
-Status: **Cook SHIPPED (2026-07-27) — scraper, builder, weekly workflow, and the
-Municipality card join are live; the other six counties are sourced and specified but
-unbuilt.**
+Status: **Cook + Will SHIPPED (2026-07-27) — scrapers, builder, weekly workflow, and
+the Municipality card join are live (156 municipalities, 958 board members, 184
+ward/district seats); the other five counties are sourced and specified but unbuilt.**
 Every source below was live-fetched twice (independent research + adversarial re-verification)
 on 2026-07-27; officeholder entries were sighted in each positive source, and every negative
 finding was independently confirmed.
@@ -136,6 +136,14 @@ always human-reviewed via PR on a fixed bot branch).
     distinct sections (head of government, the governing body, other elected officers
     like clerk and treasurer), and the split is what lets a mayor-level county ship a
     `head` with no `board` and stay honest rather than padding a list.
+  - **Cross-county municipalities resolve by DEPTH, then county order.** Six
+    municipalities are listed by both the Cook and Will clerks (Lemont, Orland Park,
+    Park Forest, Steger, Tinley Park, University Park). `entry_depth()` ranks a source
+    by what it actually names — full body (2) > head only (1) > contact only (0) — and
+    only when depths tie does `COUNTY_PRECEDENCE` break it, Cook first because its API
+    reflects each election as certified while Will republishes annually. The builder
+    refuses to write if the dropped entry had a board and the kept one did not, so a
+    precedence mistake fails loudly instead of silently thinning a card.
   - **Library Trustees are excluded** — they sit on library district boards (the app's
     separate `library-district` layer), not the municipal governing body. In the Cook
     source they are 255 of the 1,134 records and are distinguishable structurally as
@@ -237,12 +245,54 @@ Fetch posture mirrors the county-board ladder: cheapest engine that works, escal
 requests → Playwright → wayback, with the 45-day snapshot age guard and standing-issue
 conversion for total blocks.
 
+## What the Will parse cost (read this before building the PDF counties)
+
+Will was ~10x the work of Cook, and all of it was the source format rather than the
+pipeline. The flipbook's `/basic` rendition is **PDF text with the line breaks
+removed**, which produces failure modes worth naming in advance because the four
+remaining PDF counties will hit the same class:
+
+- **Labels glue to their neighbours** — "Stacey PetersonAlderperson Ward 1",
+  "AlderpersonWard 1", "Term ExpiresMichael W. Glotz". Word-boundary anchors (`\b`)
+  silently fail on these, and the section header then matches a *later* occurrence,
+  which quietly halves a council. Match section headers as plain substrings,
+  longest-first.
+- **A repeated section header is absorbed into the following name** —
+  "Councilmembers At Large Joe Clement" parsed as one 4-word name. Blank every header
+  occurrence out of the section before scanning members.
+- **"At Large" labels a group, not a seat** — it must stay in force until the next
+  Ward/District seat, or only the first at-large member gets it.
+- **Names carry parenthetical nicknames** ("Teresa (Terry) A. Kernc"), curly-quoted
+  ones ("Sharon “Sherri” Reardon"), and comma suffixes ("Joseph E. Roudez, III").
+  A party-code group `(IND)` is distinguishable from a nickname only by being ALL-CAPS.
+- **A lazy trailing-word quantifier needs an anchor.** Board members end in a
+  term-expiry year, which forces the name to expand; clerk/treasurer lines have no
+  such anchor, so the same pattern shipped "Laura" for "Laura Warren". Officer names
+  need a greedy variant that refuses to cross into the next label.
+- **Addresses can be undelimitable.** A preceding precinct list runs straight into the
+  street number. Where the join carries a separator the split is clean ("…3P625 Dixie
+  Highway", "…35P 44 E. Downer Pl."); where the last precinct token is a bare number
+  there is nothing between them ("…18P & 19150 W. Jefferson St." is precinct 19 + 150
+  W. Jefferson) and the street number cannot be recovered. Those return None — one
+  municipality (Shorewood, whose address also begins with a word, "One Towne Center
+  Blvd.") ships with no address line rather than a guessed one.
+
+The lesson for the PDF counties: parse the real PDF with a layout-preserving reader
+(`pypdf` with layout mode, or `pdfplumber`) rather than a line-flattened rendition,
+and only fall back to flattened text where no PDF is reachable. Every one of the
+failures above is an artifact of losing line breaks, not of the data.
+
 ## Verification
 
 - **Pipeline PRs:** builder floors + `validate_index.py` (+ `generate_metro_files.py
   --check` after the worksheet edit).
 - **App-join PR:** Playwright smoke test, plus a point sweep of the card. **Verified for
-  Cook (2026-07-27):** Berwyn → Mayor Robert J. Lovero, a "City Council" section of 8
+  Will (2026-07-27):** Joliet → Mayor Terry D'Arcy, 5 district councilmembers + 3
+  at-large; Aurora's 12-member council matches the city's own published roster
+  name-for-name (10 wards + White and Larson at-large — the independent check that the
+  parse is right); Diamond → its commission-form board; Shorewood → hall row with no
+  address line (the undelimitable case); Tinley Park → the Cook entry, proving
+  precedence. **Verified for Cook (2026-07-27):** Berwyn → Mayor Robert J. Lovero, a "City Council" section of 8
   alderpersons each badged with their ward, Clerk + Treasurer, and City Hall with
   address, formatted phone and Email link; Alsip → President John D. Ryan, a "Board of
   Trustees" of 6, Clerk, Village Hall; Chicago Loop → identity only (excluded by

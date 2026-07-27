@@ -132,7 +132,7 @@ ROSTER_FILES = {
     "ccbr-roster.json": 3,
     "il-county-clerks.json": 101,
     "dupage-county-board-members.json": 6,
-    "municipal-officials.json": 120,  # Municipal governing bodies keyed by Census place GEOID; Cook shipped (128 municipalities), remaining counties per docs/MUNICIPAL_COUNCILS_PLAYBOOK.md
+    "municipal-officials.json": 150,  # Municipal governing bodies keyed by Census place GEOID; Cook + Will shipped (156 municipalities), remaining counties per docs/MUNICIPAL_COUNCILS_PLAYBOOK.md
 }
 # ==== GENERATED:END validator-config ====
 
