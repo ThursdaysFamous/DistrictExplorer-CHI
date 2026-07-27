@@ -292,6 +292,36 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   unconsumed. Future counties join the consolidated `county-board` layer
   as dispatch entries, not new layers
   (`docs/COUNTY_LAYER_CONSOLIDATION.md`).
+- Municipal governments (mayor / village president + city council / village board) —
+  **researched and specified 2026-07, pipelines not yet built**
+  (`docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`; governance
+  `docs/COUNTY_LAYER_CONSOLIDATION.md` rules 4–5). 284 municipalities across the seven
+  metro counties (47 spanning county lines). Decided shape: a roster join on the existing
+  statewide `municipality` card keyed by place GEOID — the `county` +
+  `il-county-clerks.json` shape — not a new layer and not a county-dispatched one.
+  Sources verified live (twice) per county: Cook the Clerk's Directory of Elected
+  Officials **JSON API** (full governing body, 1,134 records, incl. 135 ward
+  alderpersons); Will the Clerk's Directory flipbook (full governing body, 37 munis);
+  Kane / Kendall / McHenry clerk yearbooks and DuPage's DMMC directory (mayor-level —
+  no trustees); Lake **no officeholder names published anywhere county-side** (firm
+  double-verified negative) → office contact + official-site link only, the rule-4
+  honesty floor. Blocker: seven scrapers + merge builder + weekly workflow unbuilt, and
+  it introduces the repo's first PDF dependency (`pypdf`). Statewide aggregators are a
+  verified dead end (IML paid print; Comptroller's "CEO" is often the appointed manager;
+  Google Civic reps endpoint sunset) — per-county clerk sources are the only honest
+  architecture.
+- Suburban municipal wards (which alderperson represents this point) — **endpoints
+  verified 2026-07, deliberately deferred** behind the roster above
+  (`docs/MUNICIPAL_COUNCILS_PLAYBOOK.md` "Tier B"). Cook GIS
+  `politicalBoundary/MapServer/22` (169 wards across 21 suburbs incl. Skokie's new 2025
+  trustee districts; joins the same Clerk API's alderperson roster — one publisher),
+  Will GIS `Ward_Districts` (Joliet/Lockport/Crest Hill/Wilmington), plus Evanston and
+  Aurora self-published services. No county-level ward layers exist in
+  Lake/DuPage/Kane/McHenry/Kendall (Waukegan is PDF-only), so this is a per-source
+  dispatch concept `subOf municipality` — the `ward` → `ward-precinct` nesting shape —
+  covering the large majority of ward-elected suburbs, not a metro-wide tiling. Because
+  the roster captures each member's ward from day one, this is a geometry-and-dispatch
+  change with no re-scrape.
 - Park districts statewide (~350) — no statewide GIS; per-county sources. Will +
   DuPage + Lake + Kane + Kendall shipped inside the consolidated
   `park-district` layer (Will: commissioners in GIS attrs; DuPage: name-only —
