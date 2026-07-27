@@ -1,0 +1,282 @@
+#!/usr/bin/env python3
+"""
+Build data/app/municipal-ward-coverage.json — the cheap, same-origin coverage
+test for the suburban entries of the consolidated `ward` layer.
+
+Why a prebuilt file instead of testing the ward geometry itself: the engine
+evaluates every layer's `coverage(point)` on EVERY point selection, whether or
+not the layer is toggled on (updateAllLayerRelevance). Deriving suburban ward
+coverage from the live ward services would therefore pull four ArcGIS payloads
+on the first click anywhere in Illinois — including for the Chicago users who
+are most of the traffic. This file is one small cache-first fetch instead, the
+same shape as the `*-county-outline.json` files the county-dispatched layers
+use for exactly this reason.
+
+Each feature is one ward-electing municipality's TIGER place polygon, tagged
+with the dispatch entry that serves its wards, so an entry's coverage test is
+"containment in my own features" and the dispatcher's OR still short-circuits
+in table order.
+
+Municipalities are discovered from the live ward services (so a source that
+gains or drops a municipality is followed rather than missed), then resolved
+to a Census place GEOID through the committed place-by-county reference and
+fetched from TIGERweb — the same boundary the `municipality` layer draws, so
+coverage can never disagree with the municipality the card names.
+
+Operator step, rarely re-run (ward maps are redrawn ~once a decade):
+    python3 scripts/build_municipal_ward_coverage.py
+"""
+
+import json
+import os
+import re
+import sys
+import urllib.parse
+import urllib.request
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "municipal-ward-coverage.json")
+PLACES_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_place_by_county2020.txt")
+
+TIGER_PLACES = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+                "Places_CouSub_ConCity_SubMCD/MapServer/4/query")
+COOK_WARDS = ("https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/"
+              "MapServer/22/query")
+
+USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+TIMEOUT = 120
+
+# Entries whose municipality list is fixed by the service itself (one service,
+# known municipalities). Cook's is discovered live because its layer carries
+# 20+ municipalities and gains more as suburbs redistrict.
+STATIC_ENTRY_MUNICIPALITIES = {
+    "evanston": ["Evanston"],
+    "will": ["Lockport", "Wilmington", "Crest Hill", "Joliet"],
+    "aurora": ["Aurora"],
+}
+# Chicago's wards are the city's own Socrata layer with its own coverage test
+# (chicagoCoverage); it is never part of this file.
+EXCLUDE = {"CHICAGO"}
+
+# Deliberate under-tolerance: 26 municipalities resolved at build time
+# (21 suburban Cook + Evanston + 4 Will + Aurora, less any overlap).
+MIN_MUNICIPALITIES = 22
+
+
+# Ramer-Douglas-Peucker tolerance in degrees (~0.0004 deg ≈ 45 m at this
+# latitude). This file decides whether the ward TOGGLE APPLIES at a point, not
+# what is drawn, so a boundary generalized to tens of metres is ample — and it
+# is what keeps a file fetched on the first click off Illinois' largest
+# payload list. The unsimplified TIGER polygons are 671 KB; the county-outline
+# coverage files this mirrors are 35-64 KB. Implemented here rather than via
+# mapshaper so the build needs no toolchain (cf. build_embedded_boundaries.py,
+# which does shell out to mapshaper for the boundaries it SHIPS as geometry).
+SIMPLIFY_TOLERANCE = 0.0004
+
+
+def _rdp(points, tolerance):
+    if len(points) < 3:
+        return points[:]
+    keep = [False] * len(points)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(points) - 1)]
+    while stack:
+        first, last = stack.pop()
+        if last <= first + 1:
+            continue
+        ax, ay = points[first]
+        bx, by = points[last]
+        dx, dy = bx - ax, by - ay
+        norm_sq = dx * dx + dy * dy
+        worst, worst_i = -1.0, None
+        for i in range(first + 1, last):
+            px, py = points[i]
+            if norm_sq == 0:
+                dist_sq = (px - ax) ** 2 + (py - ay) ** 2
+            else:
+                t = ((px - ax) * dx + (py - ay) * dy) / norm_sq
+                t = 0.0 if t < 0 else (1.0 if t > 1 else t)
+                cx, cy = ax + t * dx, ay + t * dy
+                dist_sq = (px - cx) ** 2 + (py - cy) ** 2
+            if dist_sq > worst:
+                worst, worst_i = dist_sq, i
+        if worst_i is not None and worst > tolerance * tolerance:
+            keep[worst_i] = True
+            stack.append((first, worst_i))
+            stack.append((worst_i, last))
+    return [p for p, k in zip(points, keep) if k]
+
+
+def simplify_ring(ring, tolerance):
+    """Simplify a closed ring, keeping it closed and a valid polygon (>=4 pts)."""
+    if len(ring) < 5:
+        return ring
+    closed = ring[0] == ring[-1]
+    pts = [tuple(p) for p in (ring[:-1] if closed else ring)]
+    out = _rdp(pts + [pts[0]], tolerance)
+    if out[0] != out[-1]:
+        out.append(out[0])
+    if len(out) < 4:
+        return ring
+    return [list(p) for p in out]
+
+
+def simplify_geometry(geometry, tolerance):
+    kind = (geometry or {}).get("type")
+    coords = (geometry or {}).get("coordinates")
+    if kind == "Polygon":
+        rings = [simplify_ring(r, tolerance) for r in coords]
+        return {"type": "Polygon", "coordinates": rings}
+    if kind == "MultiPolygon":
+        polys = [[simplify_ring(r, tolerance) for r in poly] for poly in coords]
+        return {"type": "MultiPolygon", "coordinates": polys}
+    return geometry
+
+
+def get_json(url, params):
+    full = url + "?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(full, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        return json.load(resp)
+
+
+def norm(name):
+    """Normalize a ward service's municipality name ("Calumet City").
+
+    These arrive bare, so nothing is stripped except an optional "City of"
+    style prefix. Stripping a trailing type word here would reduce "Calumet
+    City" to "Calumet" and miss the join — the type suffix belongs to the
+    Census side of the comparison only (see norm_census).
+    """
+    text = re.sub(r"^(village|city|town)\s+of\s+", "", (name or "").strip(), flags=re.I)
+    return re.sub(r"[^A-Z]", "", text.upper())
+
+
+def norm_census(placename):
+    """Normalize a Census PLACENAME ("Calumet City city", "Oak Lawn village").
+
+    Exactly one trailing type token is removed, so "Calumet City city" becomes
+    "Calumet City" rather than "Calumet".
+    """
+    text = re.sub(r"\s+(village|city|town|CDP)$", "", (placename or "").strip(), flags=re.I)
+    return re.sub(r"[^A-Z]", "", text.upper())
+
+
+def load_place_geoids():
+    """{normalized place name: GEOID} for every Illinois incorporated place."""
+    if not os.path.exists(PLACES_FILE):
+        print("FATAL: Census place reference missing at %s" % PLACES_FILE, file=sys.stderr)
+        sys.exit(1)
+    geoids = {}
+    with open(PLACES_FILE, encoding="utf-8-sig") as f:
+        rows = [line.rstrip("\n").split("|") for line in f if line.strip()]
+    header = rows[0]
+    for row in rows[1:]:
+        if len(row) != len(header):
+            continue
+        rec = dict(zip(header, row))
+        if rec.get("TYPE") == "INCORPORATED PLACE":
+            geoids.setdefault(norm_census(rec["PLACENAME"]), "17" + rec["PLACEFP"])
+    return geoids
+
+
+def discover_cook_municipalities():
+    payload = get_json(COOK_WARDS, {
+        "where": "1=1", "outFields": "MUNICIPALITY",
+        "returnGeometry": "false", "returnDistinctValues": "true", "f": "json",
+    })
+    names = set()
+    for feature in payload.get("features", []):
+        name = (feature.get("attributes", {}).get("MUNICIPALITY") or "").strip()
+        if name and norm(name) not in EXCLUDE:
+            names.add(name)
+    if not names:
+        print("FATAL: Cook ward layer returned no municipalities — source changed",
+              file=sys.stderr)
+        sys.exit(1)
+    return sorted(names)
+
+
+def main():
+    place_geoids = load_place_geoids()
+
+    entry_names = dict(STATIC_ENTRY_MUNICIPALITIES)
+    entry_names["cook-suburban"] = discover_cook_municipalities()
+
+    # One feature per municipality; if two entries both claim one, the first in
+    # this order owns its coverage (matching the dispatch table's order).
+    wanted = []
+    seen = set()
+    for entry in ("cook-suburban", "evanston", "will", "aurora"):
+        for name in entry_names.get(entry, []):
+            key = norm(name)
+            if key in seen:
+                continue
+            geoid = place_geoids.get(key)
+            if not geoid:
+                print("FATAL: no Census place GEOID for '%s' (%s entry)" % (name, entry),
+                      file=sys.stderr)
+                sys.exit(1)
+            seen.add(key)
+            wanted.append({"entry": entry, "name": name, "geoid": geoid})
+
+    if len(wanted) < MIN_MUNICIPALITIES:
+        print("FATAL: resolved %d ward-electing municipalities, floor is %d"
+              % (len(wanted), MIN_MUNICIPALITIES), file=sys.stderr)
+        sys.exit(1)
+
+    by_geoid = {w["geoid"]: w for w in wanted}
+    geoid_list = ",".join("'%s'" % g for g in sorted(by_geoid))
+    # Precision 4 (~11 m) is ample for a containment test and keeps the file
+    # small — this decides visibility, not what is drawn.
+    payload = get_json(TIGER_PLACES, {
+        "where": "GEOID IN (%s)" % geoid_list,
+        "outFields": "GEOID,NAME,BASENAME",
+        "outSR": "4326", "f": "geojson", "geometryPrecision": "5",
+    })
+    features = payload.get("features") or []
+    if len(features) < MIN_MUNICIPALITIES:
+        print("FATAL: TIGERweb returned %d of %d place polygons"
+              % (len(features), len(by_geoid)), file=sys.stderr)
+        sys.exit(1)
+
+    out = []
+    for feature in features:
+        props = feature.get("properties") or {}
+        geoid = str(props.get("GEOID") or props.get("geoid") or "")
+        meta = by_geoid.get(geoid)
+        if not meta:
+            continue
+        out.append({
+            "type": "Feature",
+            "geometry": simplify_geometry(feature.get("geometry"), SIMPLIFY_TOLERANCE),
+            "properties": {
+                "geoid": geoid,
+                "name": props.get("BASENAME") or props.get("NAME"),
+                "entry": meta["entry"],
+            },
+        })
+
+    if len(out) < MIN_MUNICIPALITIES:
+        print("FATAL: matched %d place polygons to entries, floor is %d"
+              % (len(out), MIN_MUNICIPALITIES), file=sys.stderr)
+        sys.exit(1)
+
+    out.sort(key=lambda f: f["properties"]["geoid"])
+    with open(OUT_PATH, "w") as f:
+        json.dump({"type": "FeatureCollection", "features": out}, f,
+                  ensure_ascii=False, separators=(",", ":"))
+        f.write("\n")
+
+    counts = {}
+    for feature in out:
+        counts[feature["properties"]["entry"]] = counts.get(feature["properties"]["entry"], 0) + 1
+    print("wrote %s: %d municipalities (%s), %.0f KB"
+          % (OUT_PATH, len(out),
+             ", ".join("%s %d" % kv for kv in sorted(counts.items())),
+             os.path.getsize(OUT_PATH) / 1024.0), file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

@@ -95,7 +95,7 @@ concept, different election geometry, zero new layers. Worked example:
 | Place | Head of government | Governing body | Surface |
 |---|---|---|---|
 | Chicago | Mayor — recorded gap (guidebook backlog) | 50 alderpersons by ward | body: `ward` layer; head: `municipality` card once the gap ships |
-| Berwyn (Cook) | Mayor on `municipality` card | 8 ward-badged alderperson rows; *your* ward = Tier B (§2.4) | identity card now; `subOf municipality` polygons later |
+| Berwyn (Cook) | Mayor on `municipality` card | full ward-badged council on the card; *your* alderperson from the consolidated `ward` layer (SHIPPED 2026-07, §2.4) | Pattern A card + Pattern B polygon, both live |
 | Alsip (Cook) | Village President on card | 6 at-large trustees on card | identity card only — correctly no polygon |
 
 ## 1.3 Sourcing dimension ≠ dispatch dimension
@@ -103,9 +103,13 @@ concept, different election geometry, zero new layers. Worked example:
 - **Dispatch by county** — disjoint county footprints, one concept toggle
   (`registerCountyLayer`): `county-board`, `judicial-subcircuit`, `fire-district`,
   `park-district`, `library-district`, `county-precinct`.
-- **Dispatch by municipality (place GEOID)** — one statewide tiling, county-*sourced*
-  rosters joined per place: `municipality` officials; the future suburban-ward tier
-  (`subOf municipality`, per publishing source).
+- **Dispatch by municipality** — two shipped shapes: the `municipality` card's roster
+  join (one statewide tiling, county-*sourced* rosters keyed by place GEOID), and the
+  consolidated `ward` layer's dispatch table keyed by municipality (the dispatcher's
+  first non-county key — `opts.entries`; Chicago + suburban Cook + Evanston + Will
+  cities + Aurora), whose suburban seat-holders join `municipal-officials.json` by
+  municipality + seat number so the ward card can never name someone different from
+  the Municipality card's list.
 - **Dispatch by election authority** — Illinois voting is run by ~108 authorities: 101
   county clerks (scraped weekly from ISBE for the `county` card), a few municipal boards
   of election commissioners (Chicago's is one), Peoria's appointed commission.
@@ -210,6 +214,16 @@ entries, not layers.**
   uses `suburbanCookCoverage` (in Cook AND NOT Chicago) because city precincts belong to
   the BOE's `ward-precinct` layer — the carve-out test fails toward "not Chicago" so a
   city-tiling outage can't take down suburban service.
+- **The key doesn't have to be a county** — the dispatch only ever required disjoint
+  footprints. `ward` is the precedent (2026-07): municipal wards consolidated onto it as
+  municipality-keyed entries via `opts.entries` (the general spelling alongside
+  `opts.counties`). Two wrinkles worth copying: order the table so the cheapest
+  already-cached coverage test sits first and short-circuits the OR (Chicago first —
+  most traffic never fetches the suburban coverage file), and make a multi-source
+  entry's coverage test a small **prebuilt outline file**
+  (`data/app/municipal-ward-coverage.json`, `build_municipal_ward_coverage.py`) rather
+  than the live services — the engine evaluates `coverage` for every declaring layer on
+  every point selection.
 
 ## 2.2 What consolidates, what doesn't
 
@@ -265,10 +279,12 @@ onto the statewide `municipality` card by **7-digit place GEOID** (join preceden
 statewide behavior degrades honestly with no coverage declaration.
 
 **The two-body split** (the `county`/`county-board` shape): whole-municipality officers
-ride this card; ward-elected seats need ward polygons to answer *yours* — until Tier B
-lands, a ward-elected city lists its full council with each member's ward as a badge.
-**The roster carries a per-member `district` field from day one** (Cook MUNIW and the Will
-directory supply it), so Tier B is a geometry-and-dispatch follow-up with no re-scrape.
+ride this card, with a ward-elected city's full council listed ward-badged; *your* seat
+is answered by the consolidated `ward` layer wherever ward polygons are published
+(SHIPPED 2026-07 — see Tier B below). **The roster carries a per-member `district` field
+from day one** (Cook MUNIW and the Will directory supply it) — that is what made the
+ward tier a geometry-and-dispatch change with no re-scrape, and the rule holds for every
+future county source.
 
 **The five-rung source ladder** (work in order, take the first hit, record the outcome in
 the guidebook either way):
@@ -329,14 +345,18 @@ suffixes (an ALL-CAPS `(IND)` is a party code, not a nickname); officer names ne
 greedy-but-bounded pattern (the term-expiry anchor that saves board names is absent);
 an undelimitable address returns None — ship no address line rather than a guessed one.
 
-**Tier B — suburban municipal wards (recorded backlog, geometry-only follow-up).**
-Verified endpoints: Cook GIS `politicalBoundary/MapServer/22` "Municipal Ward" (169
-polygons, 21 suburbs incl. Skokie's 2025 trustee districts; joins the DOEO MUNIW roster —
-same publisher); Will GIS `Ward_Districts` (Joliet/Lockport/Crest Hill/Wilmington);
-Evanston + Aurora self-publish. Verified negatives: no county-level ward layers in
-Lake/DuPage/Kane/McHenry/Kendall (Waukegan is PDF-only). Ships as a per-source dispatch
-concept `subOf municipality` (the ward→ward-precinct nesting precedent), suburban-Cook
-first.
+**Tier B — suburban municipal wards (SHIPPED 2026-07).** Shipped as **entries of the
+existing `ward` layer**, keyed by municipality (§2.1) — one toggle, one concept, whether
+Chicago calls it a ward or Joliet a council district. Sources: Cook GIS
+`politicalBoundary/MapServer/22` "Municipal Ward" (21 suburbs incl. Skokie's 2025
+trustee districts; joins the DOEO MUNIW roster — same publisher); Will GIS
+`Ward_Districts` (Joliet/Lockport/Crest Hill/Wilmington); Evanston + Aurora
+self-publish. Seat-holders join `municipal-officials.json` by municipality + seat
+number; per-seat contact renders ONLY where a source carries it per-member (Evanston) —
+the roster's shared hall line on an individual's row would be a false implication.
+Verified negatives, standing for future counties: no county-level ward layers in
+Lake/DuPage/Kane/McHenry/Kendall (Waukegan is PDF-only) — a new county's ward-electing
+suburbs join as further `ward` entries when a polygon source appears.
 
 ## 2.5 The county-N+1 checklist (one change-set)
 
@@ -353,7 +373,10 @@ first.
    election commission the county contains.
 6. `tif-district` (post-conversion): entry where the county publishes a tiling.
 7. Municipal officials: the county's ladder rung (§2.4), keyed by place GEOID; township
-   sections captured in the same scrape where the source prints them.
+   sections captured in the same scrape where the source prints them. Where the county
+   or its cities publish suburban ward polygons, they join the consolidated `ward` layer
+   as municipality-keyed entries (rebuild `municipal-ward-coverage.json` via
+   `build_municipal_ward_coverage.py`).
 8. County officers: the clerk row is automatic (ISBE, statewide); further officers per
    rule 4.
 9. Statewide layers (`county`, `township`, `municipality`, `school-district-*`, chambers,
@@ -880,7 +903,7 @@ different concept/card · UNIQUE = recorded Chicago/Cook-only.
 | `county-board` | your county-board district + member | County | district (metro); commission counties at-large | ENTRY where districted · county-card rows where at-large |
 | `ccbr` | your Board of Review district | County | district — elected only in Cook | UNIQUE · elsewhere appointed → link row at most |
 | `school-board` | your ERSB district + member | School district | district — IL's only districted school board | UNIQUE as polygon · elsewhere Pattern A (§1.5) |
-| `ward` | your alderperson | Municipal | ward | GATED — reference instance; suburban tier = `subOf municipality` (Part 2.4 Tier B) |
+| `ward` | your alderperson / council member | Municipal | ward or council district | ENTRY — the consolidated municipal-ward concept, dispatch keyed by municipality (Chicago + suburban Cook + Evanston + Will cities + Aurora shipped 2026-07); new ward-publishing sources join as entries |
 | `ward-precinct` | your Chicago precinct | Election administration | n/a | GATED — authority-dispatched concept (§1.3) |
 | `early-voting` | nearest early-voting/drop-box sites | Election administration | n/a | GATED — per-authority files (§1.3) |
 

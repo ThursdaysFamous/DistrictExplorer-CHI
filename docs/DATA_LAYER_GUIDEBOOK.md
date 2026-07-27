@@ -70,7 +70,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | U.S. House district | SHIPPED `congress` | SHIPPED `congress` | SHIPPED `congress` |
 | State upper chamber | SHIPPED `il-senate` | SHIPPED `state-senate` | SHIPPED `ca-senate` |
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
-| City council district | SHIPPED `ward` (50) | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
+| City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
 | County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
@@ -329,18 +329,15 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   aggregators are a verified dead end (IML paid print; Comptroller's "CEO" is often the
   appointed manager; Google Civic reps endpoint sunset) — per-county clerk sources are
   the only honest architecture.
-- Suburban municipal wards (which alderperson represents this point) — **endpoints
-  verified 2026-07, deliberately deferred** behind the roster above
-  (`docs/MUNICIPAL_COUNCILS_PLAYBOOK.md` "Tier B"). Cook GIS
-  `politicalBoundary/MapServer/22` (169 wards across 21 suburbs incl. Skokie's new 2025
-  trustee districts; joins the same Clerk API's alderperson roster — one publisher),
-  Will GIS `Ward_Districts` (Joliet/Lockport/Crest Hill/Wilmington), plus Evanston and
-  Aurora self-published services. No county-level ward layers exist in
-  Lake/DuPage/Kane/McHenry/Kendall (Waukegan is PDF-only), so this is a per-source
-  dispatch concept `subOf municipality` — the `ward` → `ward-precinct` nesting shape —
-  covering the large majority of ward-elected suburbs, not a metro-wide tiling. Because
-  the roster captures each member's ward from day one, this is a geometry-and-dispatch
-  change with no re-scrape.
+- Suburban municipal wards — **SHIPPED 2026-07** into the consolidated `ward` layer
+  (see the concept row above), which is where the remaining gaps are now recorded:
+  **Berwyn** elects 8 alderpersons by ward but appears in no published ward-boundary
+  source (it is absent from Cook's ward layer), so its seats show on the Municipality
+  card with no ward geometry behind them; **Waukegan** publishes a ward map as PDF
+  only; and no county-level ward layer exists in Lake/DuPage/Kane/McHenry/Kendall.
+  One source disagreement to resolve: Cook's ward layer carries Skokie's 2025 trustee
+  districts while the Clerk's roster still lists Skokie's trustees as at-large, so a
+  Skokie point resolves a district with no seat-holder joined to it.
 - Park districts statewide (~350) — no statewide GIS; per-county sources. Will +
   DuPage + Lake + Kane + Kendall shipped inside the consolidated
   `park-district` layer (Will: commissioners in GIS attrs; DuPage: name-only —
@@ -417,7 +414,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `cps-hs-network` | CPS Network (High School) | schools | CpsNetwork | Socrata `aupu-jt2g` | chief in dataset props | chicagoCoverage |
 | `cps-network` | CPS Network (K-8) | schools | CpsNetwork | Socrata `pnta-kuqa` | chief in dataset props | chicagoCoverage |
 | `ward-precinct` | Ward Precinct | political | Bespoke | Socrata `i8fv-xe4b` | — | chicagoCoverage (subOf `ward`) |
-| `ward` | City Ward | political | Bespoke | Socrata `p293-wvbd` | live Socrata `htai-wnw4` join | chicagoCoverage |
+| `ward` | City Ward | political | CountyDispatch | Socrata `p293-wvbd` | live Socrata `htai-wnw4` join | chicagoCoverage |
 | `police-beat` | Police Beat | safety | Bespoke | CPD ArcGIS | — | chicagoCoverage (subOf `police-district`) |
 | `police-district` | Police District | safety | Bespoke | CPD ArcGIS | `cpd-district-info.json` (weekly CI, Playwright) | chicagoCoverage |
 | `ccpsa-district-council` | CCPSA District Council | safety | Bespoke | shares `police-district` geometry | `ccpsa-district-councils.json` (weekly CI) | chicagoCoverage |

@@ -113,6 +113,7 @@ GEOMETRY_FILES = {
     "kendall-county-outline.json": (1, 1),
     "kane-judicial-subcircuits.json": (4, 4),  # 16th-Circuit subcircuits, pre-built from the PA 102-0693 enacted shapefile
     "mchenry-judicial-subcircuits.json": (4, 4),  # 22nd-Circuit subcircuits, pre-built from the PA 102-0693 enacted shapefile
+    "municipal-ward-coverage.json": (22, 60),  # Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for the ward layer's suburban entries (build_municipal_ward_coverage.py)
 }
 
 # file -> minimum key count (officeholder rosters).

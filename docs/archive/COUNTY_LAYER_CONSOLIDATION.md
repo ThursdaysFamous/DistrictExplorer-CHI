@@ -7,8 +7,7 @@ consolidated (37 layers).**
 Owner: CHI (fork-level — no engine change). Cross-refs: `docs/STATEWIDE_EXPANSION_PLAYBOOK.md`
 (the relevance-hiding capability this builds on, §3; the collar-first rollout, §7),
 `docs/DATA_LAYER_GUIDEBOOK.md` (the inventory this reshapes), `docs/ENGINE_SYNC.md` (why
-fork-level matters), `docs/ILLINOIS_LAYER_STANDARDIZATION.md` (the governance taxonomy that
-generalizes these rules into the county-expansion checklists).
+fork-level matters).
 
 ## The problem
 
@@ -91,6 +90,21 @@ layer** — no new toggle, no worksheet/guidebook/count churn beyond the entry's
   legislature. Concepts consolidate; bodies don't merge.
 - **`ward-precinct`** — same *concept* as the county precincts but a different parent
   (`subOf ward`, not township) and a different electoral system; it stays a city layer.
+- **Municipal WARDS do consolidate — onto `ward`, keyed by municipality (2026-07).**
+  Ward-elected suburbs answer the same question Chicago's wards do, so they became
+  entries of the existing `ward` layer rather than a parallel toggle: Chicago (the
+  City's Socrata wards + alderman roster), suburban Cook (21 municipalities in one
+  county GIS layer), Evanston, Will (4 cities), and Aurora. This is the first use of
+  `registerCountyLayer` with a NON-county key, and it needed no change to the dispatch
+  itself — the mechanism only ever required **disjoint footprints**, not counties — so
+  `opts.entries` was added as the general spelling alongside `opts.counties`. Two
+  wrinkles worth copying: Chicago sits FIRST in the table so its already-cached
+  coverage test short-circuits the OR before the suburban coverage file is fetched
+  (most traffic never pays for the suburban entries), and the suburban coverage test
+  reads a small prebuilt outline file rather than the live ward services, because the
+  engine evaluates `coverage` for every declaring layer on EVERY point selection —
+  deriving it from the sources would pull four ArcGIS payloads on the first click
+  anywhere in Illinois.
 - **Municipal governments** (mayor / village president + city council / village board) —
   the sourcing dimension is the county (seven clerk/COG directories, one per county), but
   the **dispatch dimension is the municipality**: 284 municipalities tile the metro from a
