@@ -199,10 +199,31 @@ Two implementation notes from the shipped Cook build:
   "City Hall". Both fall back to neutral labels rather than asserting a form the roster
   does not evidence.
 
-## Tier B — suburban municipal wards (recorded backlog, not in scope)
+## Tier B — suburban municipal wards (SHIPPED 2026-07)
 
-Some suburbs elect by ward; resolving *which alderperson* needs ward polygons. Verified
-endpoints, for the follow-up:
+Some suburbs elect by ward; resolving *which alderperson* needs ward polygons. These
+shipped as **entries of the existing `ward` layer**, keyed by municipality — the same
+toggle and the same place in the Political group a Chicago ward answers from, which is
+the point: the concept is one council seat whether Chicago calls it a ward or Joliet a
+council district. `registerCountyLayer` needed no change beyond accepting `entries` as
+a synonym for `counties`; the dispatch only ever required disjoint footprints.
+
+Seat-holders join `municipal-officials.json` by municipality name + seat number, so a
+ward card can never name someone different from the Municipality card's list. Where a
+source publishes its own per-seat attributes they compose on top — Evanston's service
+carries each alderperson's email, phone and ward page, which the roster has no
+per-member equivalent for. Per-seat contact is shown ONLY from such a source: the
+roster's phone/email are the shared hall line and would be a false implication on an
+individual's row.
+
+Coverage is a prebuilt same-origin outline file (`data/app/municipal-ward-coverage.json`,
+`build_municipal_ward_coverage.py`) rather than the live services, because the engine
+evaluates `coverage` for every declaring layer on every point selection — deriving it
+from the sources would pull four ArcGIS payloads on the first click anywhere in
+Illinois. Chicago sits first in the dispatch table so its already-cached coverage test
+short-circuits the OR and most traffic never fetches that file at all.
+
+The sources:
 
 - **Cook GIS `politicalBoundary/MapServer/22` "Municipal Ward"** — 169 polygons, all 22
   ward-electing munis incl. 21 suburbs (Berwyn, Des Plaines, Park Ridge, Palatine, Skokie
@@ -219,8 +240,12 @@ endpoints, for the follow-up:
 - Verified negatives: no county-level municipal-ward layers in Lake/DuPage/Kane/McHenry/
   Kendall; Waukegan publishes a PDF map only.
 
-Ship as a per-source dispatch concept (`subOf municipality`, the ward → ward-precinct
-nesting precedent) after the roster layer lands; suburban-Cook first (richest join).
+Recorded gaps: **Berwyn** elects 8 alderpersons by ward but is absent from Cook's ward
+layer and from every other published source, so its seats show on the Municipality card
+with no ward behind them. **Skokie** is the inverse — Cook's layer carries its 2025
+trustee districts while the Clerk's roster still lists its trustees as at-large, so a
+Skokie point resolves a district with no seat-holder joined. Both are recorded in the
+guidebook backlog rather than papered over.
 
 ## The future-county source ladder (the repeatable recipe)
 

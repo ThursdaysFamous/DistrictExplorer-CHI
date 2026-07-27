@@ -188,8 +188,8 @@ PROVENANCE = [
              "Census place GEOID. The site is Cloudflare-fronted, so a "
              "reachability WARN here can be a bot filter rather than drift — "
              "confirm with a browser User-Agent before treating it as a source "
-             "change. Cook is the only county shipped so far; the remaining six "
-             "and their verified sources are in docs/MUNICIPAL_COUNCILS_PLAYBOOK.md. "
+             "change. Cook and Will are shipped; the remaining five and their "
+             "verified sources are in docs/MUNICIPAL_COUNCILS_PLAYBOOK.md. "
              "The county's Socrata copies of this directory (vw2r-zys4, "
              "jsup-zs8y) are frozen at 2014 and deliberately unused."},
     {"layer": "Will County municipal governing bodies (roster)",
@@ -233,6 +233,16 @@ PROVENANCE = [
 # check is reachability — a rename or retirement shows up here before users hit
 # a broken card. WARN-only: the app already isolates a down source per-card.
 ENDPOINTS = [
+    # Suburban municipal ward boundaries — the non-Chicago entries of the
+    # consolidated `ward` layer. No consolidated source exists, hence four.
+    {"layer": "Suburban Cook municipal wards (21 municipalities, ward layer)",
+     "url": "https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/MapServer/22?f=json"},
+    {"layer": "Evanston wards (ward layer; carries per-ward alderperson contact)",
+     "url": "https://maps.cityofevanston.org/arcgis/rest/services/OpenData/ArcGISOpenData2Administrative/MapServer/0?f=json"},
+    {"layer": "Will County municipal wards (Lockport/Wilmington/Crest Hill/Joliet, ward layer)",
+     "url": "https://services.arcgis.com/fGsbyIOAuxHnF97m/arcgis/rest/services/Ward_Districts/FeatureServer?f=json"},
+    {"layer": "Aurora wards (ward layer)",
+     "url": "https://gis.aurora.il.us/arcgis/rest/services/Administrative_Boundaries/2022Wards/FeatureServer/0?f=json"},
     {"layer": "CPD Police District boundaries",
      "url": "https://services2.arcgis.com/t3tlzCPfmaQzSWAk/arcgis/rest/services/Police_District_Boundary_View/FeatureServer/0?f=json"},
     {"layer": "CPD Police District stations",
