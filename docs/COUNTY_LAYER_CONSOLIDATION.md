@@ -7,7 +7,8 @@ consolidated (37 layers).**
 Owner: CHI (fork-level — no engine change). Cross-refs: `docs/STATEWIDE_EXPANSION_PLAYBOOK.md`
 (the relevance-hiding capability this builds on, §3; the collar-first rollout, §7),
 `docs/DATA_LAYER_GUIDEBOOK.md` (the inventory this reshapes), `docs/ENGINE_SYNC.md` (why
-fork-level matters).
+fork-level matters), `docs/ILLINOIS_LAYER_STANDARDIZATION.md` (the governance taxonomy that
+generalizes these rules into the county-expansion checklists).
 
 ## The problem
 

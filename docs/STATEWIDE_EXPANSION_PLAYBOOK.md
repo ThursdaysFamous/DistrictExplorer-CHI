@@ -3,7 +3,9 @@
 Status: **strategy + decision record; a staged build, not a blocked one.** Owner: CHI (reference
 implementation). Cross-refs: `docs/MECHANIZATION_PLAYBOOK.md` (the metro-#3 gate — and why the
 in-place approach sidesteps it), `docs/METRO_EXPANSION_PLAYBOOK.md` (the per-fork recipe this
-borrows from), `docs/ENGINE_SYNC.md` (the artifact pipeline the one engine change rides).
+borrows from), `docs/ENGINE_SYNC.md` (the artifact pipeline the one engine change rides),
+`docs/ILLINOIS_LAYER_STANDARDIZATION.md` (the governance taxonomy + county-expansion
+invariant every tranche of this expansion is audited against).
 
 This document maps what it would take to extend the app from Chicago to **statewide Illinois** — the
 natural next ask for a single-city civic tool. The need is concrete: outside the city, finding which

@@ -368,6 +368,25 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   Special Service Area (L13), Street Light (L14), Drainage (L1). Kendall's
   `TIF_Districts` service is the recorded second-county entry that would
   consolidate `tif-district`.
+- **Governance-standardization pass (2026-07, `docs/ILLINOIS_LAYER_STANDARDIZATION.md`)** —
+  the pre-county-expansion audit of all 39 layers by governance level / function /
+  election geometry, fixing the expansion invariant (a new county adds dispatch entries
+  and roster rows, never toggles). Its recorded candidates, each detailed there:
+  Chicago's citywide officers (Mayor / City Clerk / City Treasurer) on the `municipality`
+  card — the one suburban-parity asymmetry (a Berwyn click names its mayor, a Chicago
+  click names nobody); election-authority dispatch for the precinct / early-voting
+  concepts (a collar-clerk early-voting tranche is the natural first increment);
+  at-large / commission-county boards render as `county`-card roster rows, never a
+  polygon; `school-district-*` card enrichment (every non-Chicago board is elected
+  whole-district → Pattern A rows; ISBE directory candidate); township officers captured
+  by the municipal clerk-yearbook scrapers when those five counties are built (verify
+  depth at build time); countywide elected officers beyond the clerk (per-county, rule
+  4); a law-enforcement row on `municipality` + Sheriff among county officers (never a
+  boundary no agency publishes); the `mwrd` → `sanitary-district` concept conversion
+  trigger (second-county tiling; the body is unique, the class isn't); an Appellate
+  District row on `il-supreme-court` (same five districts) and the elected ROE regional
+  superintendent (DERIVE-class, verify the Cook/Chicago carve-outs); statewide source
+  candidates for the `school-site` / `library` point layers.
 
 ---
 
