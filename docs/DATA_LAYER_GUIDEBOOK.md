@@ -2,7 +2,7 @@
 
 **This is the master copy, in the Chicago repo (the reference implementation), covering
 every metro fork.** Sibling forks do not carry a copy — not even a stub
-(`docs/METRO_EXPANSION_PLAYBOOK.md` §3.1 item 11 is the authoritative list of what is
+(`docs/EXPANSION_GUIDE.md` §4.4.1 item 11 is the authoritative list of what is
 stubbed vs. not carried). It answers, for every civic-district concept the
 fleet has ever considered: which metros ship it, which metros *can't* honestly ship it and
 why (recorded drop rationale), which metros simply haven't yet (parity debt), and what's
@@ -55,7 +55,7 @@ Pattern legend (which engine factory a layer uses): **Polygon** `registerPolygon
 `registerNearestPointLayer` (nearest-3 haversine; hover identity built in as of engine
 v1.0.6) · **CountyDispatch** `registerCountyLayer` (CHI fork-level dispatcher: one
 concept layer holding a per-county entry table — see
-`docs/COUNTY_LAYER_CONSOLIDATION.md`; adding a county is a table entry, not a layer).
+`docs/EXPANSION_GUIDE.md` Part 2; adding a county is a table entry, not a layer).
 
 Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 
@@ -106,8 +106,8 @@ every county; other states usually have a Secretary-of-State analog) via the
 weekly scraper→builder→review-PR pattern; where the authoritative source is
 challenge-fronted or names aren't published, fall back to NYC's operator-verified
 entries with per-office source URLs, and label appointed clerks as appointed. (¹–³:
-`docs/METRO_EXPANSION_PLAYBOOK.md` Part II "NO honest NYC analog" table /
-`docs/archive/METRO_EXPANSION_NYC.md` §7; ⁴–⁷: `docs/METRO_EXPANSION_SF_WORKSHEET.md`
+`docs/archive/METRO_EXPANSION_PLAYBOOK.md` Part II "NO honest NYC analog" table /
+`docs/archive/METRO_EXPANSION_NYC.md` §7; ⁴–⁷: `docs/archive/METRO_EXPANSION_SF_WORKSHEET.md`
 §0 + the SF repo's worksheet drop appendix.)
 
 ### Public safety
@@ -242,7 +242,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   fleet, shipped as `bart-director` in July 2026: geometry from BART's own ArcGIS org,
   roster hand-verified against bart.gov/about/bod.)_
 
-**New York City** (from `docs/METRO_EXPANSION_PLAYBOOK.md` Part II "Future layers")
+**New York City** (from `docs/archive/METRO_EXPANSION_PLAYBOOK.md` Part II "Future layers")
 - Surrogate's Court judges — borough geometry ready; roster unverified.
 - FDNY Divisions — Socrata `68m2-uzcb` is map-type (export-route geometry only).
 - NYPD sector NCO names — no structured source exists (honesty rules say wait).
@@ -253,7 +253,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   citywide polygon adds zero point-discrimination (the at-large rule: link, don't map).
 - District Leader / State Committee — party-internal; recorded as "recommend never".
 
-**Chicago / Illinois** (from `docs/STATEWIDE_EXPANSION_PLAYBOOK.md` §4/§7 +
+**Chicago / Illinois** (from `docs/archive/STATEWIDE_EXPANSION_PLAYBOOK.md` §4/§7 +
 `docs/BUILD_PLAYBOOK_1.md` §2b)
 - Statewide judicial circuits (25) — blocked: the county→circuit table has no
   authoritative machine-readable source (ilga.gov 403s; illinoiscourts.gov JS-rendered);
@@ -365,6 +365,25 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   Special Service Area (L13), Street Light (L14), Drainage (L1). Kendall's
   `TIF_Districts` service is the recorded second-county entry that would
   consolidate `tif-district`.
+- **Governance-standardization pass (2026-07, now `docs/EXPANSION_GUIDE.md` Part 1 + Appendix A)** —
+  the pre-county-expansion audit of all 39 layers by governance level / function /
+  election geometry, fixing the expansion invariant (a new county adds dispatch entries
+  and roster rows, never toggles). Its recorded candidates, each detailed there:
+  Chicago's citywide officers (Mayor / City Clerk / City Treasurer) on the `municipality`
+  card — the one suburban-parity asymmetry (a Berwyn click names its mayor, a Chicago
+  click names nobody); election-authority dispatch for the precinct / early-voting
+  concepts (a collar-clerk early-voting tranche is the natural first increment);
+  at-large / commission-county boards render as `county`-card roster rows, never a
+  polygon; `school-district-*` card enrichment (every non-Chicago board is elected
+  whole-district → Pattern A rows; ISBE directory candidate); township officers captured
+  by the municipal clerk-yearbook scrapers when those five counties are built (verify
+  depth at build time); countywide elected officers beyond the clerk (per-county, rule
+  4); a law-enforcement row on `municipality` + Sheriff among county officers (never a
+  boundary no agency publishes); the `mwrd` → `sanitary-district` concept conversion
+  trigger (second-county tiling; the body is unique, the class isn't); an Appellate
+  District row on `il-supreme-court` (same five districts) and the elected ROE regional
+  superintendent (DERIVE-class, verify the Cook/Chicago carve-outs); statewide source
+  candidates for the `school-site` / `library` point layers.
 
 ---
 
@@ -470,16 +489,16 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 ## Adding or changing a layer — the procedure
 
 1. Consult the matrix first: if a sibling already ships the concept, reuse its recorded
-   pattern and source-hunting notes (`docs/METRO_EXPANSION_PLAYBOOK.md` §2/§6); if a
+   pattern and source-hunting notes (`docs/EXPANSION_GUIDE.md` §§4.3, 4.6–4.7); if a
    sibling recorded a drop, check whether the rationale applies to your metro before
    re-researching.
-2. Build per the playbook (worksheet entry → regenerate → registration → source manifest
+2. Build per the guide (`docs/EXPANSION_GUIDE.md` Part 5: worksheet entry → regenerate → registration → source manifest
    → docs), and **in the same change** update: the coverage-map JSON above, the fork's
    inventory table, the concept matrix row (add the row if the concept is new
    fleet-wide), and — if the layer resolves a Parity debt or Backlog entry — move that
    entry accordingly.
 1a. **Officeholder sourcing is part of the expansion, not a follow-up** (2026-07 rule,
-   `docs/COUNTY_LAYER_CONSOLIDATION.md` rule 4): the change that ships a new
+   `docs/EXPANSION_GUIDE.md` Part 2 rule 4): the change that ships a new
    county's/metro's boundary also determines and BUILDS its officeholder story —
    GIS attrs verified against the published directory where the boundary service
    carries them; otherwise a scraper + builder + weekly PR-opening workflow in the

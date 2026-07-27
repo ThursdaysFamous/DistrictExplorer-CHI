@@ -71,7 +71,7 @@ Most layers fetch live data from public APIs at runtime, so they need an interne
 
 ## Architecture
 
-Stable core + pluggable layer modules, all inside `index.html`. The full contract and build history live in [`docs/BUILD_PLAYBOOK_1.md`](docs/BUILD_PLAYBOOK_1.md); the metro-port recipe is [`docs/METRO_EXPANSION_PLAYBOOK.md`](docs/METRO_EXPANSION_PLAYBOOK.md).
+Stable core + pluggable layer modules, all inside `index.html`. The full contract and build history live in [`docs/BUILD_PLAYBOOK_1.md`](docs/BUILD_PLAYBOOK_1.md); the primary deployment guide for all future expansion (new counties, statewide growth, new metro forks, new concepts) is [`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md).
 
 - **Core**: Leaflet map, click-to-select + Photon/Nominatim geocoder (debounced, Chicago-bounded), global `{selectedPoint, sequence}` state where a monotonic sequence counter discards stale async results, shared `sanitize` / `pointInGeometry` / `fetchJSONWithRetry` utilities, layer registry + result-card framework with per-layer failure isolation, selected-boundary highlight, URL-hash permalinks.
 - **Modules**: each layer registers `{id, group, label, overlay:{load, style}, query(point, seq), render(result)}`. Overlays lazy-load on first toggle and are cached; `query` runs a local point-in-polygon test against the cached boundaries (or nearest-N haversine for station/school/amenity layers). Layers can declare a `coverage(point)` test — outside their coverage they hide instead of erroring.
@@ -135,7 +135,7 @@ scripts/fleet_status.py             weekly fleet-status aggregator (runs here, r
 scripts/smoke_test.mjs              Playwright boot/behaviour smoke test (runs on every PR)
 .github/workflows/                  weekly roster refreshes (PR for human review), per-PR smoke test,
                                     monthly validate-sources, weekly fleet-status, engine release machinery, Pages deploy
-docs/                               playbooks, the fleet layer guidebook, redistricting runbook, archives
+docs/                               the expansion guide, fleet layer guidebook, redistricting runbook, archives
 WATCH.md                            the redistricting watch calendar (when to look; the runbook is what to do)
 ```
 
