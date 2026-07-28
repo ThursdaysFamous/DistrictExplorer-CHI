@@ -857,12 +857,39 @@ threads, Chicago SEO metadata, stale `validate_sources.py` manifests, orphaned s
 Live civic APIs are flaky and CI-hostile, so the test strategy rests on ≥3 **API-free
 anchor layers** shipped as same-origin static files: the smoke test classifies ground
 truth against them; `validate_index.py` pins their feature counts; `sw.js` serves them
-cache-first (vs network-first rosters — never a stale officeholder); and one of them —
-whichever **tiles the metro exactly** with topology-preserved shared edges — feeds
-`drawOutOfScopeMask(...)` at BOOT (the engine dissolves its outline into even-odd holes;
-independently-simplified adjacent rings would break the cancellation). The wash marks
+cache-first (vs network-first rosters — never a stale officeholder). The wash marks
 *where deep coverage ends*, never "no data here" — regional layers still resolve under
-it, and it fails silent. Produce anchors with `scripts/build_embedded_boundaries.py`
+it, and it fails silent.
+
+**Draw the wash from a purpose-built metro outline, not from whichever anchor happens to
+tile something** (revised 2026-07-28; Chicago previously passed its school-board anchor).
+Two reasons, and the second is the one that bites:
+
+1. **The boundary must track coverage as it grows.** Chicago's wash was the *city* limits
+   because that is what the anchor tiled, so as the collar counties filled in it kept
+   greying out territory the app had come to serve — a Will or DuPage point resolves
+   17–21 of 39 layers against Chicago's 32 and suburban Cook's 25. Coverage thins across
+   a metro; it rarely stops at one layer's edge. Pick the boundary from what the app
+   *answers*, and re-check it after any county expansion. Removing the wash entirely is
+   the opposite error: the tiers are real, and a wash-free map claims a parity the data
+   does not support.
+2. **Per-county outline files will not dissolve.** The engine cancels an interior border
+   only where the two neighbours share EXACT coordinates. Chicago's six
+   `*-county-outline.json` files were simplified independently, so they share as few as
+   **2** vertices along a real border and would leave hairline seams or fail the closure
+   guard. Build one polygon from a **single** query against one source (a TIGERweb
+   multi-county fetch returns 2,034 shared vertices on Cook/DuPage) and dissolve it at
+   build time — `scripts/build_metro_outline.py` is the reference, mirroring the engine's
+   own algorithm so the shipped file is what the browser would have computed.
+
+Simplify hard and validate the *simplified* rings: metro outlines are mostly survey-grid
+straight lines, so Douglas-Peucker at 25 m took Chicago's from 2,665 vertices to **62**
+(2.5 KB), and the builder refuses to write unless one anchor per county still falls
+inside and known outside cities fall outside — ring closure alone does not prove a county
+wasn't dropped. The payoff is also a boot cost: the old anchor was an 83 KB fetch in PSI's
+669 ms initial-navigation chain for a decorative wash.
+
+Produce anchors with `scripts/build_embedded_boundaries.py`
 (pinned mapshaper, Visvalingam keep-shapes) and its validation: **≥99.5% agreement on
 2,000 seeded points AND zero double-classification**, counts/properties unchanged —
 register every anchor in its `LAYERS` dict so regeneration never regresses to manual.

@@ -6320,6 +6320,15 @@ function initChiExplorer() {
   var loadWillCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/will-county-outline.json", {}, 2);
   });
+
+  // The seven counties the app serves, dissolved to one ring — the coverage
+  // geometry the out-of-scope wash draws from (see the BOOT call). Built by
+  // scripts/build_metro_outline.py from a single TIGERweb query, because the
+  // per-county outline files above were simplified independently and their
+  // shared borders would not cancel in the in-browser dissolve.
+  var loadMetroOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/metro-outline.json", {}, 2);
+  });
   function willCountyCoverage(point) {
     return loadWillCountyOutline().then(function (geojson) {
       return !!findFeatureContaining(geojson, point);
@@ -12072,15 +12081,24 @@ function initChiExplorer() {
 
   buildGroupsUI();
   applyStateFromHash(); // restore a shared #point=…&layers=… link, if present
-  // Out-of-scope wash: the 20 ERSB school-board districts tile the City of
-  // Chicago exactly (offline anchor, topology-preserved shared edges), so
-  // their outer rings are the coverage holes. Passing the layer's own cached
-  // loader means one fetch serves both the wash and the school-board card.
-  // At idle, not on the boot critical path: PSI measured this 83 KB (20 KB gzip)
-  // school-board geometry fetch in the 669 ms initial-navigation chain, and the
-  // wash it draws is purely decorative (its own catch already skips it on any
-  // error). Deferring keeps first paint free of it (R2-3).
-  whenIdle(function () { drawOutOfScopeMask(loadSchoolBoardDistricts); });
+  // Out-of-scope wash: the METRO edge, not the city line. It used to be drawn
+  // from the ERSB school-board tiling, i.e. Chicago's limits, which washed all
+  // of suburban Cook and the six collar counties — a claim the data stopped
+  // supporting. A collar point resolves 17-21 of the 39 layers (county board,
+  // precincts, judicial subcircuits, fire/park/library districts, municipal
+  // officials with named officeholders, the legislative trio, township, ZIP,
+  // school districts) against Chicago's 32 and suburban Cook's 25. Coverage
+  // thins across the metro, it does not stop at the city line — so the wash now
+  // marks where it genuinely ends, beyond which only the statewide layers
+  // answer. The city/suburb difference is carried by the cards, which already
+  // hide an out-of-coverage layer outright.
+  //
+  // metro-outline.json is ONE pre-dissolved polygon (62 vertices, 2.5 KB,
+  // scripts/build_metro_outline.py), so this also drops the 83 KB school-board
+  // fetch PSI measured in the 669 ms initial-navigation chain for a decorative
+  // wash (OPTIMIZATION_PLAYBOOK's recommended fix). Still at idle, and the
+  // wash still skips silently on any error — it is a hint, not data.
+  whenIdle(function () { drawOutOfScopeMask(loadMetroOutline); });
 
   var verifiedEl = document.getElementById("verified-date");
   verifiedEl.textContent = "July 18, 2026";
