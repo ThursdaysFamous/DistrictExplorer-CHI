@@ -165,25 +165,64 @@ jobs:
           if [ "$SKOKIE_OUTCOME" = "failure" ]; then raise_issue "Skokie trustee-district"; fi
           if [ "$JOLIET_OUTCOME" = "failure" ]; then raise_issue "Joliet council-contact"; fi
 
+      # Build on what came back. Cook and Will are required — they are the only
+      # two full-governing-body sources, so building without either would ship
+      # mayors where councils belong, and the builder refuses. Every OTHER
+      # source is preservable: it hands the builder --preserved <id> and the
+      # shipped roster, and that source's entries carry forward untouched.
+      #
+      # This replaces an all-ten gate that could never pass. McHenry and Kendall
+      # block every fetch rung including the Archive's crawler, and DuPage and
+      # Joliet 403 GitHub's runner IPs while answering a developer machine — so
+      # one permanently blocked source used to withhold every other county's
+      # turnover as well, freezing the whole roster indefinitely.
       - name: Rebuild roster data file
         id: build
-        if: |
-          steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success' &&
-          steps.scrape_dupage.outcome == 'success' && steps.scrape_kane.outcome == 'success' &&
-          steps.scrape_mchenry.outcome == 'success' && steps.scrape_kendall.outcome == 'success' &&
-          steps.scrape_lake.outcome == 'success' && steps.scrape_will_cities.outcome == 'success' &&
-          steps.scrape_skokie.outcome == 'success' && steps.scrape_joliet.outcome == 'success'
+        if: steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success'
         run: |
-          python3 scripts/build_municipal_officials_roster.py \
-            /tmp/cook_municipal_officials.json \
-            /tmp/will_municipal_officials.json \
-            /tmp/dupage_municipal_officials.json \
-            /tmp/kane_municipal_officials.json \
-            /tmp/mchenry_municipal_officials.json \
-            /tmp/kendall_municipal_officials.json \
-            /tmp/lake_municipal_officials.json \
-            --enrich /tmp/will_city_councils.json /tmp/skokie_trustee_districts.json \
-            /tmp/joliet_council_contact.json
+          inputs=(/tmp/cook_municipal_officials.json /tmp/will_municipal_officials.json)
+          enrich=()
+          preserved=()
+          add() { # add <step-outcome> <preserve-id> <kind> <path>
+            if [ "$1" = "success" ]; then
+              if [ "$3" = "enrich" ]; then enrich+=("$4"); else inputs+=("$4"); fi
+            else
+              preserved+=("$2")
+            fi
+          }
+          add "${{ steps.scrape_dupage.outcome }}"      dupage      county /tmp/dupage_municipal_officials.json
+          add "${{ steps.scrape_kane.outcome }}"        kane        county /tmp/kane_municipal_officials.json
+          add "${{ steps.scrape_mchenry.outcome }}"     mchenry     county /tmp/mchenry_municipal_officials.json
+          add "${{ steps.scrape_kendall.outcome }}"     kendall     county /tmp/kendall_municipal_officials.json
+          add "${{ steps.scrape_lake.outcome }}"        lake        county /tmp/lake_municipal_officials.json
+          add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
+          add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
+          add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
+
+          # The shipped roster is the preserve source, so read it BEFORE the
+          # builder overwrites it in place.
+          cp data/app/municipal-officials.json /tmp/shipped-municipal-officials.json
+
+          argv=("${inputs[@]}")
+          if [ ${#enrich[@]} -gt 0 ]; then argv+=(--enrich "${enrich[@]}"); fi
+          argv+=(--preserve /tmp/shipped-municipal-officials.json)
+          if [ ${#preserved[@]} -gt 0 ]; then argv+=(--preserved "${preserved[@]}"); fi
+
+          # stderr to a file rather than a process substitution, so the log is
+          # complete before it is read no matter how the build exits.
+          status=0
+          python3 scripts/build_municipal_officials_roster.py "${argv[@]}" \
+            2>/tmp/build-log.txt || status=$?
+          cat /tmp/build-log.txt >&2
+          [ "$status" -eq 0 ] || exit "$status"
+
+          # Surfaced in the PR body so a preserved source — data still shipped
+          # but no longer verified this week — is never invisible to review.
+          {
+            echo "preserved<<PRESERVED_EOF"
+            grep '^PRESERVED' /tmp/build-log.txt || echo "PRESERVED: none — every source refreshed"
+            echo "PRESERVED_EOF"
+          } >> "$GITHUB_OUTPUT"
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
@@ -219,10 +258,21 @@ jobs:
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
           # the force-push above already updated it.
+          body="Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from the seven metro counties' official sources (Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall clerk yearbooks, and Lake's county GIS hall contact).
+
+          Please review the diff before merging — this changes data about real officeholders.
+
+          A source that blocked this run does not withdraw its data: its entries carry forward from the previously shipped roster, and are listed below. A preserved source is data still shipped but **not re-verified this week** — its standing issue tracks the block.
+
+          \`\`\`
+          ${{ steps.build.outputs.preserved }}
+          \`\`\`"
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
             gh pr create \
               --title "Update municipal officials roster from the county clerk directories" \
-              --body "Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from all seven metro counties' official sources (Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall clerk yearbooks, and Lake's county GIS hall contact). Please review the diff before merging — this changes data about real officeholders." \
+              --body "$body" \
               --base main \
               --head "$branch"
+          else
+            gh pr edit "$branch" --body "$body"
           fi

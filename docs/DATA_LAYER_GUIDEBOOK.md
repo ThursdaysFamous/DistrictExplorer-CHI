@@ -362,6 +362,18 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   there, needing no name match), whereas `appointed` describes a named individual and the
   two rosters format names differently enough — 12 of 50 differ by middle initial,
   nickname or suffix — that pinning it to the City's name would be a heuristic.
+- **Municipal roster build — per-source preservation (2026-07-28).** The first
+  live run of `update-municipal-officials.yml` had six of ten scrapers succeed and four
+  403 GitHub's runner IPs: McHenry and Kendall (every rung, incl. the Archive — McHenry's
+  newest snapshot was 509 days old against a 45-day guard, Kendall had none), plus DuPage
+  and Joliet, which both answer a developer machine but not the datacenter ranges. The
+  all-ten build gate meant one permanently blocked source froze the roster for *every*
+  county, so the gate is now Cook + Will (the two full-governing-body sources, which the
+  builder refuses to build without) and every other source is preservable — it carries
+  forward its shipped entries, re-entering through the ordinary precedence/`merge_contact`
+  paths, and the run and PR body both name what was preserved. Standing issues #199–#202
+  track the four blocks. **DuPage is the tractable one:** it needs only an engine ladder
+  to clear a datacenter-IP filter, unlike McHenry/Kendall, which are rule-4 terminal.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake

@@ -93,6 +93,43 @@ COUNTY_FLOORS = {
 # lists.
 MIN_TOTAL_MUNICIPALITIES = 250
 
+# ---------------------------------------------------------------------------
+# Preserving a blocked source's last-good entries.
+#
+# Several sources refuse GitHub's runner IPs outright — McHenry and Kendall
+# block every rung including the Archive's crawler, and DuPage/Joliet 403 the
+# datacenter ranges while answering a developer machine. Gating the build on
+# all ten therefore froze the whole roster indefinitely: one permanently
+# blocked county withheld every OTHER county's turnover too, which is the
+# opposite of the isolation the workflow set out to provide.
+#
+# So a missing source no longer withdraws its data — it carries forward what is
+# already shipped, and the run says exactly which sources were served that way.
+# A preserved county's entries are re-inserted through the same cross-county
+# precedence as a fresh build; a preserved city payload is re-applied through
+# merge_contact, so it can still only FILL fields the county left empty and can
+# never resurrect a seat-holder the county has since replaced.
+#
+# Cook and Will are not preservable: they are the only two full-governing-body
+# sources, so building without either would silently ship a roster of mayors
+# where councils used to be. If one of them is down, the run must fail.
+REQUIRED_COUNTIES = ("Cook", "Will")
+PRESERVABLE = {
+    "dupage": {"kind": "county", "county": "DuPage"},
+    "kane": {"kind": "county", "county": "Kane"},
+    "mchenry": {"kind": "county", "county": "McHenry"},
+    "kendall": {"kind": "county", "county": "Kendall"},
+    "lake": {"kind": "county", "county": "Lake"},
+    # City payloads name the municipalities they cover, because the payload
+    # that would have named them is precisely what is missing. Each list is
+    # guarded by its scraper's own floor, so a drift here fails there first.
+    "will-cities": {"kind": "enrich",
+                    "places": ["City of Crest Hill", "City of Lockport",
+                               "City of Wilmington"]},
+    "skokie": {"kind": "enrich", "places": ["Village of Skokie"]},
+    "joliet": {"kind": "enrich", "places": ["City of Joliet"]},
+}
+
 # Tie-break for a municipality claimed by two counties, applied only AFTER
 # depth (see pick_entry). Both directories describe the same government, so
 # this is a freshness call, not a correctness one: Cook's is a live API
@@ -497,30 +534,95 @@ def main():
                         help="city-site payloads: add per-seat contact to the "
                              "county roster, and supply municipalities the county "
                              "source omits entirely")
+    parser.add_argument("--preserve", metavar="ROSTER_JSON",
+                        help="the currently shipped roster, read to carry "
+                             "forward the sources named by --preserved")
+    parser.add_argument("--preserved", nargs="*", default=[], metavar="SOURCE",
+                        help="sources whose scrape failed this run (%s); their "
+                             "shipped entries are carried forward instead of "
+                             "being dropped" % ", ".join(sorted(PRESERVABLE)))
     args = parser.parse_args()
+
+    unknown = [s for s in args.preserved if s not in PRESERVABLE]
+    if unknown:
+        print("FATAL: --preserved names unknown source(s) %s; known: %s"
+              % (", ".join(unknown), ", ".join(sorted(PRESERVABLE))), file=sys.stderr)
+        sys.exit(1)
+    if args.preserved and not args.preserve:
+        print("FATAL: --preserved needs --preserve <shipped roster> to read from",
+              file=sys.stderr)
+        sys.exit(1)
+
+    shipped = {}
+    if args.preserve:
+        with open(args.preserve) as f:
+            shipped = json.load(f)
 
     by_county, statewide = load_places(args.places)
 
     roster = {}
     warnings = []
+    supplied_counties = set()
+
+    def absorb(geoid, entry):
+        """Merge one entry into the roster under cross-county precedence."""
+        if geoid not in roster:
+            roster[geoid] = entry
+            return
+        keep, drop = pick_entry(roster[geoid], entry)
+        print("NOTE: %s (%s) is listed by both %s and %s County — keeping the "
+              "%s entry (%s)" % (geoid, keep["name"], roster[geoid]["county"],
+                                 entry["county"], keep["county"],
+                                 describe_depth(keep)), file=sys.stderr)
+        if drop.get("board") and not keep.get("board"):
+            print("FATAL: dropped entry for %s had a board and the kept one "
+                  "does not — precedence is wrong" % geoid, file=sys.stderr)
+            sys.exit(1)
+        roster[geoid] = keep
+
     for path in args.inputs:
         with open(path) as f:
             payload = json.load(f)
+        supplied_counties.add(payload.get("county"))
         entries = build_county(payload, by_county, statewide, warnings)
         for geoid, entry in entries.items():
-            if geoid in roster:
-                keep, drop = pick_entry(roster[geoid], entry)
-                print("NOTE: %s (%s) is listed by both %s and %s County — keeping the "
-                      "%s entry (%s)" % (geoid, keep["name"], roster[geoid]["county"],
-                                         entry["county"], keep["county"],
-                                         describe_depth(keep)), file=sys.stderr)
-                if drop.get("board") and not keep.get("board"):
-                    print("FATAL: dropped entry for %s had a board and the kept one "
-                          "does not — precedence is wrong" % geoid, file=sys.stderr)
-                    sys.exit(1)
-                roster[geoid] = keep
+            absorb(geoid, entry)
+
+    # A full-body county is never preserved (see PRESERVABLE) — losing one would
+    # turn councils into mayors across a third of the metro without any single
+    # count floor noticing, since the municipalities all remain.
+    for county in REQUIRED_COUNTIES:
+        if county not in supplied_counties:
+            print("FATAL: %s County is required and was not supplied — it is one "
+                  "of the two full-governing-body sources, so building without it "
+                  "would ship heads of government where councils belong"
+                  % county, file=sys.stderr)
+            sys.exit(1)
+
+    # Carry forward a blocked county BEFORE the city payloads run, so the
+    # enrichment step still refines it exactly as it would a fresh scrape.
+    preserved_counts = {}
+    for source in args.preserved:
+        spec = PRESERVABLE[source]
+        if spec["kind"] != "county":
+            continue
+        if spec["county"] in supplied_counties:
+            print("FATAL: --preserved names %s but its county (%s) WAS supplied — "
+                  "refusing to overwrite a fresh scrape with shipped data"
+                  % (source, spec["county"]), file=sys.stderr)
+            sys.exit(1)
+        kept = 0
+        for geoid, entry in shipped.items():
+            if entry.get("county") != spec["county"]:
                 continue
-            roster[geoid] = entry
+            absorb(geoid, json.loads(json.dumps(entry)))
+            kept += 1
+        if not kept:
+            print("FATAL: --preserved %s carried forward 0 entries — the shipped "
+                  "roster has none tagged %s, so this would silently drop the "
+                  "county" % (source, spec["county"]), file=sys.stderr)
+            sys.exit(1)
+        preserved_counts[source] = kept
 
     # City-site payloads run last: they refine what the counties established.
     for path in args.enrich:
@@ -536,6 +638,40 @@ def main():
                 roster[geoid] = entry
             else:
                 merge_contact(roster[geoid], entry, warnings)
+
+    # A blocked city payload is re-applied from what is shipped, through the
+    # SAME merge_contact the live payload would have used. That matters: the
+    # county's fresh entry stays the roster of record, so a seat-holder the
+    # county has since replaced is not resurrected — only fields the county
+    # left empty are filled, and an unmatched name is reported as a warning.
+    for source in args.preserved:
+        spec = PRESERVABLE[source]
+        if spec["kind"] != "enrich":
+            continue
+        wanted = {norm_place(p) for p in spec["places"]}
+        found = set()
+        for geoid, entry in shipped.items():
+            key = norm_place(entry.get("name"))
+            if key not in wanted:
+                continue
+            found.add(key)
+            if geoid not in roster:
+                # The county source omits this municipality entirely and the
+                # city payload was the only thing supplying it.
+                print("NOTE: %s (%s) is absent from its county's directory and "
+                      "its city payload is blocked — carried forward as shipped"
+                      % (geoid, entry.get("name")), file=sys.stderr)
+                roster[geoid] = json.loads(json.dumps(entry))
+                continue
+            merge_contact(roster[geoid], json.loads(json.dumps(entry)), warnings)
+        missing = wanted - found
+        if missing:
+            print("FATAL: --preserved %s expected %d municipalities in the "
+                  "shipped roster and %d are absent — the place list in "
+                  "PRESERVABLE has drifted from what the scraper covers"
+                  % (source, len(wanted), len(missing)), file=sys.stderr)
+            sys.exit(1)
+        preserved_counts[source] = len(found)
 
     # The Skokie class: a municipality whose seats the ward layer maps, but
     # whose roster carries no districted seat, renders a district polygon with
@@ -575,6 +711,14 @@ def main():
     n_seats = sum(1 for e in roster.values() for m in (e.get("board") or []) if m.get("district"))
     print("wrote %s: %d municipalities, %d board members (%d ward/district seats)"
           % (out_path, len(roster), n_board, n_seats), file=sys.stderr)
+    if preserved_counts:
+        # Printed so the run log and the PR body both name every source that did
+        # NOT refresh — a preserved county is data that is shipped but no longer
+        # verified this week, and that has to stay visible.
+        print("PRESERVED (blocked this run, carried forward from the shipped "
+              "roster): %s" % ", ".join("%s %d" % (s, n) for s, n
+                                        in sorted(preserved_counts.items())),
+              file=sys.stderr)
 
 
 if __name__ == "__main__":
