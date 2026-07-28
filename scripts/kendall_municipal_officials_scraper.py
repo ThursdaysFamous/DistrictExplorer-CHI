@@ -84,10 +84,13 @@ NAME_ALIASES = {"Village of Minnoka": "Village of Minooka"}
 
 SECTION_RE = re.compile(r"^(CITY|VILLAGE) OFFICIALS$")
 ENTRY_RE = re.compile(r"^(?:The\s+)?(?:United City|City|Village|Town) of [A-Z]")
-# "Mayor: John Laesch – Elected 4/1/2025" — the en dash suffix is a term note.
+# "Mayor: John Laesch – Elected 4/1/2025" — the yearbook prints when the
+# officer was last elected, which is captured rather than discarded: it is the
+# only term information this county publishes.
 OFFICER_RE = re.compile(
     r"\b(?P<office>Mayor|Village President|President|Clerk|Treasurer)\s*:\s*"
-    r"(?P<name>[^–\-—]+?)(?:\s*[–\-—]\s*Elected.*)?$"
+    r"(?P<name>[^–\-—]+?)"
+    r"(?:\s*[–\-—]\s*Elected\s*(?P<elected>\d{1,2}/\d{1,2}/\d{2,4})?.*)?$"
 )
 ADDRESS_RE = re.compile(
     r"^(?P<street>.+?),\s*(?P<city>[A-Za-z.'’\- ]+?)\s+(?P<state>IL)\s+(?P<zip>\d{5})"
@@ -216,12 +219,14 @@ def parse(lines, scraped_at):
     def flush(entry):
         if not entry:
             return
-        for office, name, in entry["officers"]:
+        for office, name, elected in entry["officers"]:
             records.append({
                 "jurisdiction": entry["name"],
                 "office": office,
                 "district": None,
                 "name": name,
+                # The year the yearbook says this officer was last elected.
+                "last_elected": elected,
                 "office_address": entry["street"],
                 "office_city": entry["city"],
                 "office_state": entry["state"],
@@ -275,7 +280,16 @@ def parse(lines, scraped_at):
         if officer:
             name = clean(officer.group("name"))
             if name:
-                current["officers"].append((clean(officer.group("office")), name))
+                elected = officer.groupdict().get("elected")
+                year = None
+                if elected:
+                    parts = elected.split("/")
+                    if len(parts) == 3:
+                        year = parts[2]
+                        if len(year) == 2:
+                            year = "20" + year
+                current["officers"].append(
+                    (clean(officer.group("office")), name, year))
 
     flush(current)
     return records

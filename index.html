@@ -6032,9 +6032,23 @@ function initChiExplorer() {
     // "which of these do I vote on next?". A year already past is NOT a next
     // election: the source carries a few stale seats, and rendering one would
     // state something false, so it is dropped rather than shown.
+    // Each county publishes a different term fact, so each is labelled as its
+    // source labels it — Cook the next election, Will the term's expiry,
+    // Kendall the date last elected. A person carries at most one, because a
+    // municipality resolves to exactly one county source.
     var nextElection = parseInt(member.nextElection, 10);
-    if (nextElection && nextElection >= new Date().getFullYear()) {
+    var termExpires = parseInt(member.termExpires, 10);
+    var lastElected = parseInt(member.lastElected, 10);
+    var thisYear = new Date().getFullYear();
+    if (nextElection && nextElection >= thisYear) {
       person.note = (person.note ? person.note + " · " : "") + "Next election " + nextElection;
+    } else if (termExpires && termExpires >= thisYear) {
+      // A term that expired in the past is not a term — the directory carries
+      // a few stale seats, and printing one would state something false.
+      person.note = (person.note ? person.note + " · " : "") + "Term expires " + termExpires;
+    } else if (lastElected) {
+      // Always in the past by definition, so no future check applies.
+      person.note = (person.note ? person.note + " · " : "") + "Elected " + lastElected;
     }
     // Per-person contact appears only where the county source publishes it per
     // member (McHenry prints a direct line or office e-mail for a few
