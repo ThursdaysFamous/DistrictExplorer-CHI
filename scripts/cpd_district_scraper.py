@@ -133,7 +133,15 @@ class PlaywrightFetcher:
 
     engine = "playwright"
 
-    def __init__(self, timeout=45000, challenge_wait_s=20):
+    # 60s, not the original 20: the 2026-07-28 run failed every rung with
+    # "challenge did not clear within 20s" while the interstitial was a genuine
+    # managed challenge ("Just a moment…", challenge-platform, __cf_chl) rather
+    # than a block — i.e. something a browser CAN clear, given long enough.
+    # Cloudflare hands a datacenter IP a harder challenge than a residential
+    # one, and 20s no longer covers it. The cost is bounded: the context is
+    # reused across all 22 district pages, so only the first fetch (and any
+    # re-challenge) pays this wait, not every page.
+    def __init__(self, timeout=45000, challenge_wait_s=60):
         from playwright.sync_api import sync_playwright
 
         self.timeout = timeout

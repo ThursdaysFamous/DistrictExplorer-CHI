@@ -20,12 +20,26 @@ filters out.
 Emails are Cloudflare-obfuscated (`data-cfemail`) and decoded with the
 standard XOR scheme (first byte is the key).
 
+FETCH POSTURE (measured 2026-07-28, after the weekly run began failing on
+2026-07-25): the site is Cloudflare-fronted and now 403s GitHub's runner
+network while still answering a developer machine 200 for a byte-identical
+request — the DuPage class of block, keyed on the client's network rather than
+its fingerprint. So `requests` works in development and cannot be relied on in
+CI, and the ladder is requests -> playwright.
+
+The browser rung does NOT replay the postback. The county dropdown carries an
+ASP.NET AutoPostBack, so selecting the option IS the submit and the browser
+produces __VIEWSTATE/__EVENTVALIDATION itself. That makes the fallback both the
+answer to the edge block and structurally sturdier than the primary rung —
+nothing in it can drift out of sync with the form's tokens.
+
 This is the build-time half of the usual two-stage roster pattern; the raw
 output is resolved into data/app/il-county-clerks.json by
 scripts/build_county_clerk_roster.py.
 
 Usage:
     python3 il_county_clerk_scraper.py --out il_county_clerks.json
+    python3 il_county_clerk_scraper.py --engine playwright   # forced rung
 
 Notes on data honesty (per project conventions):
 - Fields that can't be parsed are stored as null, never guessed.
@@ -74,11 +88,14 @@ def cell_email(td):
     return cell_text(td)
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
-    parser.add_argument("--out", default="il_county_clerks.json")
-    args = parser.parse_args()
+RESULTS_TABLE_ID = "ContentPlaceHolder1_gvAllJurisdictions"
+COUNTY_SELECT_ID = "ContentPlaceHolder1_ddlCounty"
+ALL_AUTHORITIES = "-1"
 
+
+def rung_requests():
+    """Replay the ASP.NET postback directly: GET the form, carry its three
+    tokens into a POST that selects "All Election Authorities"."""
     session = requests.Session()
     form = session.get(URL, headers=HEADERS, timeout=REQUEST_TIMEOUT)
     form.raise_for_status()
@@ -87,9 +104,7 @@ def main():
     def token(name):
         el = soup.find(id=name)
         if el is None or not el.get("value"):
-            print("FATAL: ASP.NET form token %s missing — page structure changed" % name,
-                  file=sys.stderr)
-            sys.exit(1)
+            raise RuntimeError("ASP.NET form token %s missing — page structure changed" % name)
         return el["value"]
 
     resp = session.post(URL, headers=HEADERS, timeout=REQUEST_TIMEOUT, data={
@@ -97,11 +112,63 @@ def main():
         "__VIEWSTATEGENERATOR": token("__VIEWSTATEGENERATOR"),
         "__EVENTVALIDATION": token("__EVENTVALIDATION"),
         "__EVENTTARGET": "ctl00$ContentPlaceHolder1$ddlCounty",
-        "ctl00$ContentPlaceHolder1$ddlCounty": "-1",  # All Election Authorities
+        "ctl00$ContentPlaceHolder1$ddlCounty": ALL_AUTHORITIES,
     })
     resp.raise_for_status()
+    return resp.text
 
-    table = BeautifulSoup(resp.text, "html.parser").find(id="ContentPlaceHolder1_gvAllJurisdictions")
+
+def rung_playwright():
+    """Drive the real page instead of replaying its postback.
+
+    The county dropdown carries an ASP.NET AutoPostBack, so selecting the
+    option IS the submit — the browser produces the tokens itself. That makes
+    this rung both the answer to the edge block and structurally sturdier than
+    rung_requests: nothing here can drift out of sync with __VIEWSTATE.
+    """
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        try:
+            context = browser.new_context(user_agent=HEADERS["User-Agent"])
+            page = context.new_page()
+            page.goto(URL, wait_until="domcontentloaded", timeout=90000)
+            page.select_option("#" + COUNTY_SELECT_ID, ALL_AUTHORITIES)
+            # The postback replaces the table; waiting for it is the real
+            # completion signal, so this neither races the round-trip nor
+            # pads it with a fixed sleep.
+            page.wait_for_selector("#" + RESULTS_TABLE_ID, timeout=90000)
+            return page.content()
+        finally:
+            browser.close()
+
+
+def fetch_results(engine):
+    rungs = {"requests": [rung_requests], "playwright": [rung_playwright]}.get(
+        engine, [rung_requests, rung_playwright])
+    last = None
+    for rung in rungs:
+        try:
+            return rung()
+        except Exception as exc:  # noqa: BLE001 - every rung failure escalates
+            last = exc
+            print("%s failed (%s)" % (rung.__name__, exc), file=sys.stderr)
+    print("FATAL: every fetch rung failed for %s — last error: %s" % (URL, last),
+          file=sys.stderr)
+    sys.exit(1)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
+    parser.add_argument("--out", default="il_county_clerks.json")
+    parser.add_argument("--engine", choices=("auto", "requests", "playwright"),
+                        default="auto",
+                        help="fetch rung; auto tries requests then playwright")
+    args = parser.parse_args()
+
+    html = fetch_results(args.engine)
+    table = BeautifulSoup(html, "html.parser").find(id=RESULTS_TABLE_ID)
     if table is None:
         print("FATAL: all-jurisdictions table not found — page structure changed", file=sys.stderr)
         sys.exit(1)
