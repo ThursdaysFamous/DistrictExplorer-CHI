@@ -11583,6 +11583,51 @@ function initChiExplorer() {
    * BOOT
    * ======================================================================= */
 
+  // Sidebar order — the governance-informed rank each group's blocks render
+  // in (docs/EXPANSION_GUIDE.md Part 5 "Sidebar placement standard"):
+  // identity hierarchy, then representation, then service/taxing overlays,
+  // then amenity points, broad -> specific within each family. Registration
+  // order stopped being the display order when this list shipped — it had
+  // accreted by build thread, not by design (Early Voting led the Political
+  // group; a DuPage unincorporated tax district led Public Safety). Sub-layers
+  // render nested inside their parent regardless of rank, but are listed
+  // right after it anyway so validate_index can assert this list matches the
+  // registered id set 1:1, exactly as it does for LAYER_AREA_RANK.
+  var LAYER_SIDEBAR_RANK = [
+    // political — DEMAND order, most-searched concept first (operator call
+    // 2026-07-28), unlike the governance-ordered groups below. Basis: 12-mo
+    // Wikipedia-pageview proxy, re-rankable when real Search Console query
+    // data exists — evidence + numbers in docs/EXPANSION_GUIDE.md Part 5.
+    "congress", "il-house", "il-senate", "ward", "ward-precinct",
+    "early-voting", "county-board", "ccbr", "school-board",
+    "il-supreme-court", "judicial-subcircuit",
+    // safety — service boundaries before amenity points; the elected
+    // oversight council sits beside the district it oversees
+    "police-district", "police-beat", "ccpsa-district-council",
+    "fire-district", "dupage-county-special-police",
+    "police-station", "fire-station",
+    // schools — districts, admin networks, attendance zones (youngest
+    // grades first), school sites
+    "school-district-unified", "school-district-secondary",
+    "school-district-elementary", "cps-network", "cps-hs-network",
+    "cps-elementary", "cps-middle", "cps-high", "school-site",
+    // geography — identity hierarchy, then taxing overlays, then points
+    "county", "township", "county-precinct", "municipality",
+    "community-area", "zip-code", "park-district", "library-district",
+    "mwrd", "tif-district", "post-office", "library"
+  ];
+  (function applySidebarRank() {
+    var pos = {};
+    for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
+    // an unranked id sinks to the end rather than throwing — the validator,
+    // not the runtime, is where a rank/registry drift fails loudly
+    layers.sort(function (a, b) {
+      var pa = pos[a.id] != null ? pos[a.id] : 999;
+      var pb = pos[b.id] != null ? pos[b.id] : 999;
+      return pa - pb;
+    });
+  })();
+
   buildGroupsUI();
   applyStateFromHash(); // restore a shared #point=…&layers=… link, if present
   // Out-of-scope wash: the 20 ERSB school-board districts tile the City of

@@ -43,7 +43,7 @@ pipelines, gates, engine releases — documented once in **Part 6**.
 5. **Engine parity.** Code inside `ENGINE:BEGIN/END` fences is byte-identical across forks
    and changes only via the release pipeline (`docs/ENGINE_SYNC.md`). Never inline a
    city value in a fence — add a `METRO:BEGIN config` variable.
-6. **Gates green before merge** (Part 6.4) — and roster changes always land as
+6. **Gates green before merge** (Part 6.5) — and roster changes always land as
    human-reviewed PRs, never direct commits to `main`.
 
 ### 0.3 Working style
@@ -382,14 +382,14 @@ suburbs join as further `ward` entries when a polygon source appears.
 9. Statewide layers (`county`, `township`, `municipality`, `school-district-*`, chambers,
    `zip-code`): **nothing to do.**
 10. Bookkeeping + gates: Part 6.1 worksheet entries and regeneration, Part 6.3 pipeline
-    artifacts per new roster, Part 6.4 gates, guidebook coverage-map/inventory/matrix
+    artifacts per new roster, Part 6.5 gates, guidebook coverage-map/inventory/matrix
     rows, smoke ground truth if the county adds an anchor.
 
 **Layer-count check: unchanged** — if a step wants a new toggle, run §1.6.
 
 ## 2.6 Verification
 
-The standard gates (Part 6.4) plus: the Playwright smoke test's coverage-hide, permalink
+The standard gates (Part 6.5) plus: the Playwright smoke test's coverage-hide, permalink
 stability, and alias-shim assertions (an old-id `layers=` link must light the consolidated
 toggle); a live dispatch harness against the real county endpoints asserting (a) each test
 point matches exactly one county's geometry and (b) known ground-truth districts resolve
@@ -539,7 +539,7 @@ under `data/`. Workflows carry over structurally (constants, dataset names, cron
 except the fleet machinery listed in §4.4 item 11. `docs/ENGINE_SYNC.md` +
 `scripts/check_engine_parity.py` ship **verbatim** — they are engine.
 
-**Test/gate constants are re-derived, never copied** (§4.9 + Part 6.4): smoke `POINT` /
+**Test/gate constants are re-derived, never copied** (§4.9 + Part 6.5): smoke `POINT` /
 `OFFLINE` / `EXPECT_LAYERS` / `EXPECT_DISTRICT` + second point + kill target;
 `validate_index.py` `MIN_REGISTER_LAYER` / `GEOMETRY_FILES` / `ROSTER_FILES`; the
 `validate_sources.py` manifest; every count guard; `sw.js` `CACHE_NAME` + lists.
@@ -792,14 +792,71 @@ The canvas renderer stays a fleet-shared open item — inherit it, don't preempt
    drop, check whether the rationale applies before re-researching.
 3. **Genuinely new concept:** it launches consolidated (a dispatch table from day one if
    multi-source), registers through a factory where one fits, declares honest coverage,
-   and ships its officeholder story in the same change (rule 4).
-4. **Card**: fleet content order via the card-helpers vocabulary
-   (`docs/CARD_RENDER_API.md`); identifier in the header pill, official link in the
-   footer; name-only layers as `compact` cards; hover identity per the parity rule.
+   and ships its officeholder story in the same change (rule 4; the route map is §6.4).
+4. **Card — the information-surfacing standard.** The card leads with the layer name
+   (the card header), then the district identifier, then — **wherever a verifiable
+   source exists** — the representative(s)/officeholder(s), the office location,
+   contact info, and a link to more detail, in that order. The order maps onto the
+   card-helpers vocabulary (`docs/CARD_RENDER_API.md`) as: **identifier pill
+   (`cardIdentifier`) → person rows (badges/notes/committee expanders) → office group →
+   contact line → footer link (`primaryLink`)**; name-only layers render as `compact`
+   cards. Helpers are data-only by contract: never pass HTML; email renders as a mailto
+   link and is never printed; phone rows carry a `tel:` href built by the helper; absent
+   fields render nothing. Deviate from the order only where the concept demands it
+   (nearest-N lists, no-officer geography/identity concepts, honesty-rule link-only
+   judicial bodies) — and when identity, location, or contact data exists in a layer's
+   source but isn't on the card yet, **record the gap in the guidebook backlog rather
+   than shipping it silently**. Hover identity follows the parity rule (§4.3): the
+   popup reads the same fields the card does.
 5. **Bookkeeping in the same change**: worksheet layer entry (+ rank, hover keys as
-   needed) → regenerate; `LAYER_AREA_RANK` placement; sw list if a `data/app/` file is
-   added; `validate_sources.py` manifest row; guidebook coverage map + inventory + matrix
-   (drops recorded with rationale — silence is the only wrong answer); Appendix A row.
+   needed) → regenerate; `LAYER_AREA_RANK` placement; a `LAYER_SIDEBAR_RANK` position
+   (below); sw list if a `data/app/` file is added; `validate_sources.py` manifest row;
+   guidebook coverage map + inventory + matrix (drops recorded with rationale — silence
+   is the only wrong answer); Appendix A row.
+
+**Sidebar placement standard (recorded 2026-07-28).** A layer's position in its sidebar
+group is set by the fork's explicit `LAYER_SIDEBAR_RANK` (grep it in `index.html` —
+applied by a boot-time sort; `validate_index.py` asserts the list matches the registered
+id set 1:1, exactly as it does for `LAYER_AREA_RANK`) — never by registration order,
+which had accreted by build thread rather than design (Early Voting led the Political
+group; a DuPage unincorporated tax district led Public Safety). The order within each
+group: **identity hierarchy → representation → service/taxing overlays → amenity
+points, broad → specific within each family.** Toggled-on layers still float to the top
+of their group, so the rank governs the resting order, not the active one. A new layer
+takes its rank in the same change that registers it.
+
+**Exception — Political is DEMAND-ordered, most-searched concept first** (operator
+call, 2026-07-28). No Search Console / query data is connected, so the ranking rests on
+the best available public proxy — 12-month Wikipedia pageviews (Jul 2025 – Jun 2026,
+en.wiki, user traffic) for each concept's closest article: congressional districts of
+Illinois **254k** ≫ IL House **62k** > IL Senate **49k** ≈ Chicago City Council **48k**
+(ward) > early voting **23k** > Cook County Board **19k** ≫ Board of Review **4.2k** ≈
+Chicago Board of Education **3.4k** ≈ IL Supreme Court **3.4k** ≫ judicial subcircuits
+(~0, no article). Hence: congress → il-house → il-senate → ward → early-voting →
+county-board → ccbr → school-board → il-supreme-court → judicial-subcircuit. Known
+proxy weaknesses, recorded so the next pass can do better: pageviews measure national
+concept interest, not Chicago-resident lookup intent (which likely boosts `ward` — the
+city runs a dedicated alderman-lookup tool for a reason), and early-voting/CCBR demand
+is seasonal (election windows, appeal windows) rather than steady. **Re-rank from real
+query data when Search Console (or GoatCounter arrival) exports exist; the bottom tier
+(ccbr / school-board / il-supreme-court) is statistically tied and ordered by
+recurrence of its seasonal spikes.**
+
+**Nesting determination (recorded 2026-07-28).** The `subOf` tree — County → Township →
+Voting Precinct, Ward → Ward Precinct, Police District → Beat — encodes genuine legal
+containment-plus-numbering hierarchies and is complete. Evaluated and deliberately kept
+flat: **CCPSA District Council** under Police District (shares geometry 1:1, but it is
+an elected representation body — the app never gates an elected office behind a service
+toggle); **CPS zones/networks** under the unified school district (a toggle
+prerequisite on the city's most-used school layers, with no fleet precedent);
+**special districts** under `county` (independent taxing bodies, not county sub-units —
+the county is their sourcing dimension, not their parent); **`tif-district`** under
+`municipality` (legally defensible — TIFs are municipal ordinance districts — but low
+benefit, and TIF converts to a dispatched concept at its second county, §1.5).
+Cross-group nesting is impossible by design: a sub renders inside its parent's block in
+the parent's group section. The bar for a future nest is genuine containment-with-
+numbering (precincts are numbered within townships, beats within districts), never
+mere geometric overlap.
 
 ---
 
@@ -852,7 +909,25 @@ unreachable; search the owning org's catalog for a successor item. Both surface 
 tracking issues (`validate_sources.py` + `validate-sources.yml`), never auto-edits —
 dataset swaps are schema-sensitive.
 
-## 6.4 The gates
+## 6.4 Routes to data — the determined map
+
+Every datum a card surfaces has a determined route family. Work each column top-down —
+take the first route that honestly works, record the outcome, and never invent what no
+route provides. Fetch posture for anything scraped is always the §6.3 engine ladder;
+the verification bar for any source is §4.7 (VERIFIED means *you* fetched it and saw
+records); freshness watching is §6.3's chores.
+
+| Data | Routes, in preference order | Governing rule | Shipped precedents |
+|---|---|---|---|
+| **District boundary — statewide concept** | TIGERweb `STATE='NN'` live → pre-built statewide file (`build_legislative_boundaries.py`, cache-first) | FREE class (§3.3); 2,000-point simplification gate on pre-built (§4.5) | chambers + congress; county/township/municipality/school-district/ZCTA |
+| **District boundary — county/city concept** | county or city GIS service (dispatch entry) → pre-built static from the enacted shapefile or a one-time download (throttled/CKAN/permission-locked class) → county Clerk tax-agency tiling | one district per point (§2.1); municipal rows per the complete-tiling rule (§1.5); every id in the `validate_sources.py` manifest | county boards; Kane/McHenry subcircuits pre-built; Cook fire/park/library/TIF tilings |
+| **Officeholders (any elected body)** | boundary-GIS attributes verified against the published directory → official directory scrape (weekly review-PR) → maintained open aggregator for *structured* fields only → hand-verified transcription (terminal case: 45-day age guard + standing issue) → link-only floor | rule 4 (§2.3): decided and built with the boundary; never guessed; per-field honesty; count floors | Lake/Kane GIS attrs; ILGA/CPD/county-board scrapers; Open States + congress-legislators; Kendall/McHenry rosters; `il-supreme-court` link-only |
+| **Municipal governing bodies** | the five-rung ladder: clerk elected-officials API → clerk yearbook/directory → COG directory → county-GIS contact attributes → link-only | §2.4: GEOID-keyed, deepest-source precedence, statewide aggregators are a recorded dead end | Cook DOEO; Will directory; DMMC; Lake GIS |
+| **Office location + contact** | the roster's own source, never backfilled from a weaker one; unit-level contact renders once on the hall/office row; per-seat contact only where the source is per-member | §0.2 per-field honesty; §2.4 schema rules | congress district offices (congress-legislators join); Evanston per-seat contact |
+| **Election administration** | authority-keyed sources (ISBE's election-authority directory is the roster of authorities) → county polling-place joins where published → hand-curated per-election site files | §1.3 dispatch-by-authority; human-review PRs | county-clerk roster; Kendall's GlobalID polling join; `early-voting` |
+| **Amenity points (nearest-N)** | national USGS structures layers (bbox-widened) → city/portal point datasets (`makeSocrataPointLoader` class) | nearest-N honesty: N small, "as the crow flies" on the card | police/fire stations + post offices (USGS); CPL `library`, `school-site` |
+
+## 6.5 The gates
 
 - `python3 scripts/validate_index.py index.html` — merge gate: parse check,
   `registerLayer(` floor, layer-id/rank/worksheet cross-checks, no inline datasets,
@@ -871,7 +946,7 @@ dataset swaps are schema-sensitive.
 - `scripts/fleet_status.py` (weekly, Chicago only) — deploy/engine-pin/roster state per
   fork + guidebook coverage-map diff; WARNs on a standing issue.
 
-## 6.5 Post-expansion operations
+## 6.6 Post-expansion operations
 
 Every expansion leaves standing obligations: the weekly roster workflows it added
 (staggered cron slots; the live schedule is CLAUDE.md's generated metro-facts block);
