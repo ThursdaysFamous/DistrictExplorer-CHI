@@ -92,6 +92,15 @@ jobs:
         continue-on-error: true
         run: python3 scripts/lake_municipal_officials_scraper.py --out /tmp/lake_municipal_officials.json
 
+      # The bounded per-city exception (docs/EXPANSION_GUIDE.md Part 2.4): the
+      # Will ward cities' own sites carry per-seat contact the Clerk's directory
+      # doesn't, and supply Lockport and Wilmington, which that directory omits
+      # entirely. Contact-only for cities the county already covers.
+      - name: Scrape the Will ward cities' own council pages
+        id: scrape_will_cities
+        continue-on-error: true
+        run: python3 scripts/will_city_councils_scraper.py --out /tmp/will_city_councils.json
+
       # A source that blocks or breaks is an expected state, not a red build:
       # the shipped roster keeps its last good values and one standing issue
       # tracks the block (the validate-sources pattern).
@@ -100,7 +109,7 @@ jobs:
           steps.scrape_cook.outcome == 'failure' || steps.scrape_will.outcome == 'failure' ||
           steps.scrape_dupage.outcome == 'failure' || steps.scrape_kane.outcome == 'failure' ||
           steps.scrape_mchenry.outcome == 'failure' || steps.scrape_kendall.outcome == 'failure' ||
-          steps.scrape_lake.outcome == 'failure'
+          steps.scrape_lake.outcome == 'failure' || steps.scrape_will_cities.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           COOK_OUTCOME: ${{ steps.scrape_cook.outcome }}
@@ -110,6 +119,7 @@ jobs:
           MCHENRY_OUTCOME: ${{ steps.scrape_mchenry.outcome }}
           KENDALL_OUTCOME: ${{ steps.scrape_kendall.outcome }}
           LAKE_OUTCOME: ${{ steps.scrape_lake.outcome }}
+          WILL_CITIES_OUTCOME: ${{ steps.scrape_will_cities.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -131,6 +141,7 @@ jobs:
           if [ "$MCHENRY_OUTCOME" = "failure" ]; then raise_issue "McHenry"; fi
           if [ "$KENDALL_OUTCOME" = "failure" ]; then raise_issue "Kendall"; fi
           if [ "$LAKE_OUTCOME" = "failure" ]; then raise_issue "Lake"; fi
+          if [ "$WILL_CITIES_OUTCOME" = "failure" ]; then raise_issue "Will ward-city"; fi
 
       - name: Rebuild roster data file
         id: build
@@ -138,7 +149,7 @@ jobs:
           steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success' &&
           steps.scrape_dupage.outcome == 'success' && steps.scrape_kane.outcome == 'success' &&
           steps.scrape_mchenry.outcome == 'success' && steps.scrape_kendall.outcome == 'success' &&
-          steps.scrape_lake.outcome == 'success'
+          steps.scrape_lake.outcome == 'success' && steps.scrape_will_cities.outcome == 'success'
         run: |
           python3 scripts/build_municipal_officials_roster.py \
             /tmp/cook_municipal_officials.json \
@@ -147,7 +158,8 @@ jobs:
             /tmp/kane_municipal_officials.json \
             /tmp/mchenry_municipal_officials.json \
             /tmp/kendall_municipal_officials.json \
-            /tmp/lake_municipal_officials.json
+            /tmp/lake_municipal_officials.json \
+            --enrich /tmp/will_city_councils.json
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present

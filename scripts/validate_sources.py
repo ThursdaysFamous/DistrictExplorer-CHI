@@ -201,6 +201,22 @@ PROVENANCE = [
              "discovers it from this page. The page serves 202/empty to "
              "non-browser user agents, so a reachability WARN can be its bot "
              "filter rather than drift."},
+    {"layer": "Will ward-city council contact (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.wilmington-il.com/city-officials",
+     "note": "The bounded per-city exception to the source ladder "
+             "(will_city_councils_scraper.py): the Will County Clerk's directory "
+             "publishes no per-SEAT council contact, and omits Lockport and "
+             "Wilmington entirely — their entry headers are missing from the "
+             "flipbook's text layer, so no parser can recover them. The three "
+             "cities' own sites supply per-seat phone/e-mail plus those two "
+             "rosters. Pinned to Wilmington's page as the representative one; "
+             "Crest Hill (cityofcresthill.com staff directory) and Lockport "
+             "(cityoflockport.net/153) are the others. Joliet is deliberately "
+             "unbuilt: joliet.gov 403s non-browser clients, jolietcity.org is "
+             "client-rendered, and the only Archive snapshot is from 2022. The "
+             "county clerk remains the roster of record — for a municipality the "
+             "county covers, this source contributes contact only."},
     {"layer": "DuPage municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://dmmc-cog.org/membership-list/",

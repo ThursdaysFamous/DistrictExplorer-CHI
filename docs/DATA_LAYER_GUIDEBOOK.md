@@ -348,6 +348,42 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   that is the upgrade. Appointed administrators/managers printed beside the elected
   officers in four sources are deliberately excluded (the card's section is titled
   "Other Elected Officials"); surfacing them needs a separately-labeled section first.
+- **Districted seats now render once, on the layer that answers them (2026-07-28).** Where
+  the City Ward layer publishes a municipality's seat geometry, the Municipality card no
+  longer repeats the council: it names the head, says "elected by ward/district — turn on
+  the City Ward layer", and lists only the seats that layer CANNOT answer. Two deliberate
+  limits, both information-preserving: **at-large colleagues stay listed** (Joliet elects
+  five by district and three citywide — nothing else answers the three), and a
+  **municipality the ward layer doesn't cover keeps its full list** (Berwyn, Waukegan),
+  since suppressing seats with nowhere to send the reader would lose them. The card reads
+  the same prebuilt `municipal-ward-coverage.json` the ward layer's own coverage test
+  uses, so the two cannot disagree.
+- **Will ward-city per-seat contact + the two omitted cities — SHIPPED 2026-07-28.**
+  The bounded per-city exception (`docs/EXPANSION_GUIDE.md` Part 2.4): Crest Hill's staff
+  directory supplies per-alderperson phones and Wilmington's officials page per-alderperson
+  e-mail, neither of which any Will County source publishes; the same pass supplies
+  **Lockport and Wilmington's rosters outright**, closing the gap below. The clerk remains
+  the roster of record — for a municipality the county covers this adds contact only.
+  Per-seat contact now renders on the `ward` layer's seat card as well as here.
+  **Joliet is the recorded non-build** (403 to non-browser clients on joliet.gov,
+  client-rendered jolietcity.org, only a 2022 Archive snapshot): its members come from the
+  clerk, only its per-seat contact is missing.
+- **`municipal-ward-coverage.json` resolved the wrong Wilmington — FIXED 2026-07-28.**
+  Illinois has two Wilmingtons, and the coverage builder's first-wins name lookup picked
+  Greene County's village (GEOID 1782088) for the Will entry, putting the coverage polygon
+  180 miles downstate: the City Ward layer **hid in the real Wilmington** and switched
+  itself on in a village with no ward services. Resolution is now county-qualified, with a
+  hard failure on any name the entry's county can't disambiguate — the same rule the roster
+  builder already used. Worth re-checking in any fork: a name collision fails silently.
+- **Will's Lockport and Wilmington were missing from the municipal roster — CLOSED above.**
+  Both are City Ward layer entries with published ward geometry, but neither appears in
+  `municipal-officials.json`: the Clerk's flipbook directory omits their entry HEADERS from
+  its text layer entirely (Wilmington's alderpersons appear orphaned mid-page after
+  Naperville's entry; Lockport's block is absent), so the scraper's entry split cannot see
+  them. This is a source-side text-layer defect, not a parse bug — no amount of parsing
+  recovers text the flipbook does not contain. Consequence: a Lockport or Wilmington point
+  resolves a ward polygon with no seat-holder joined, the same class as the recorded Skokie
+  disagreement. Fixing it needs a different source for those two cities.
 - Suburban municipal wards — **SHIPPED 2026-07** into the consolidated `ward` layer
   (see the concept row above), which is where the remaining gaps are now recorded:
   **Berwyn** elects 8 alderpersons by ward but appears in no published ward-boundary
