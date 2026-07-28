@@ -45,8 +45,25 @@ The PDF's URL is date-stamped per edition
 (.../2026/05/Membership-Directory-25-26-5.12.2026.pdf) and DOES change, so it
 is always discovered from the membership-list page rather than hardcoded.
 
+FETCH POSTURE (measured 2026-07-28, after the first live CI run failed): the
+site sits behind Cloudflare, which serves a developer machine 200 and a GitHub
+Actions runner 403 for byte-identical requests. That is an edge policy keyed on
+the client's network, not a change at the source — so plain `requests` works in
+development and cannot be relied on in CI, and **Playwright is the day-one
+rung** wherever the runner's ranges are challenged. The ladder is
+requests -> playwright -> wayback.
+
+Each rung returns the whole directory (URL + bytes) rather than one fetch,
+because the two requests are inseparable: the page must be read to discover the
+edition's URL, and on a challenged edge only the session that cleared the
+challenge can then fetch the PDF. The Archive rung is a real last resort but is
+expected to REFUSE today — DMMC's newest snapshot was 194 days old against the
+fleet's 45-day guard, and it predates the current edition, so serving it would
+present last year's directory as current.
+
 Usage:
     python3 dupage_municipal_officials_scraper.py --out dupage_municipal_officials.json
+    python3 dupage_municipal_officials_scraper.py --engine playwright   # forced rung
 
 Notes on data honesty (per project conventions):
 - Fields that can't be parsed are stored as null, never guessed.
@@ -73,6 +90,21 @@ HEADERS = {
 }
 REQUEST_TIMEOUT = 120
 
+WAYBACK_API = "https://archive.org/wayback/available?url=%s"
+# Same guard as the other blocked-source scrapers: an archived copy may stand in
+# for a live fetch only while it is recent enough to still describe today's
+# officeholders. DMMC's newest snapshot was 194 days old when this ladder was
+# written, so in practice this rung refuses — that is the intended behaviour,
+# not a bug. It is kept because Archive coverage can improve and because a rung
+# that fails loudly is better than a missing one that fails silently.
+WAYBACK_MAX_AGE_DAYS = 45
+
+# Cloudflare answers a blocked client with either a 403 or a 200 carrying an
+# interstitial; the second is the dangerous one, because it parses as a page.
+BLOCK_MARKERS = ("Just a moment", "Attention Required", "cf-browser-verification",
+                 "Enable JavaScript and cookies", "Checking your browser",
+                 "Access denied", "You don't have permission to access")
+
 # "ADDISON (V)  www.addisonadvantage.org" — (V)illage or (C)ity.
 HEADER_RE = re.compile(
     r"^(?P<name>[A-Z][A-Z .'’\-]*?)\s*\((?P<kind>V|C)\)\s*(?P<web>.*)$"
@@ -89,10 +121,110 @@ MIN_MUNICIPALITIES = 32
 MIN_HEADS = 32
 
 
-def fetch(url, binary=False):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+def blocked(html):
+    return any(marker in html for marker in BLOCK_MARKERS)
+
+
+# Each rung returns (pdf_url, pdf_bytes) — the WHOLE directory, not one fetch.
+# The two requests are inseparable here: the page must be read to discover the
+# edition's URL, and on a challenged edge only the session that cleared the
+# challenge can then fetch the PDF. Splitting them per-URL (the Kendall shape)
+# would let the page come from one rung and the PDF from another, which risks
+# pairing an edition's URL with a different edition's bytes.
+def rung_requests():
+    page = requests.get(MEMBERSHIP_URL, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    page.raise_for_status()
+    if blocked(page.text):
+        raise RuntimeError("edge returned an interstitial to the requests rung")
+    pdf_url = discover_pdf_url(page.text)
+    body = requests.get(pdf_url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    body.raise_for_status()
+    if not body.content.startswith(b"%PDF"):
+        raise RuntimeError("directory URL did not return a PDF")
+    return pdf_url, body.content
+
+
+def rung_playwright():
+    """The load-bearing rung for this source.
+
+    dmmc-cog.org sits behind Cloudflare, which 403s plain clients from
+    datacenter ranges — verified 2026-07: a developer machine gets 200 and a
+    GitHub Actions runner gets 403 with byte-identical headers, so this is an
+    edge policy on the client, not a change at the source. A real browser
+    clears the challenge, the same rung cpd_district_scraper.py already relies
+    on. Both fetches share ONE context so the PDF request carries the clearance
+    the page load earned.
+    """
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        try:
+            context = browser.new_context(user_agent=HEADERS["User-Agent"])
+            page = context.new_page()
+            page.goto(MEMBERSHIP_URL, wait_until="domcontentloaded", timeout=90000)
+            # Waiting for a PDF link rather than sleeping a fixed interval: it
+            # is the actual completion signal (the interstitial carries none),
+            # so it neither races a slow challenge nor pads a fast one.
+            page.wait_for_selector("a[href$='.pdf']", timeout=90000)
+            html = page.content()
+            if blocked(html):
+                raise RuntimeError("edge kept the interstitial up for the browser rung")
+            pdf_url = discover_pdf_url(html)
+            body = context.request.get(pdf_url, timeout=90000)
+            if not body.ok:
+                raise RuntimeError("browser rung got HTTP %d for the directory" % body.status)
+            content = body.body()
+        finally:
+            browser.close()
+    if not content.startswith(b"%PDF"):
+        raise RuntimeError("browser rung did not receive a PDF")
+    return pdf_url, content
+
+
+def wayback_snapshot(url):
+    """The newest archived copy of `url`, or a raised error if it is too old."""
+    from datetime import datetime as dt
+
+    resp = requests.get(WAYBACK_API % url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
     resp.raise_for_status()
-    return resp.content if binary else resp.text
+    snapshot = ((resp.json() or {}).get("archived_snapshots") or {}).get("closest")
+    if not snapshot or not snapshot.get("available"):
+        raise RuntimeError("no Archive snapshot available for %s" % url)
+    taken = dt.strptime(snapshot.get("timestamp") or "", "%Y%m%d%H%M%S").replace(
+        tzinfo=timezone.utc)
+    age_days = (datetime.now(timezone.utc) - taken).days
+    if age_days > WAYBACK_MAX_AGE_DAYS:
+        raise RuntimeError("newest snapshot of %s is %d days old (max %d) — refusing to "
+                           "serve stale data as current" % (url, age_days, WAYBACK_MAX_AGE_DAYS))
+    archived = requests.get(snapshot["url"], headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    archived.raise_for_status()
+    return archived
+
+
+def rung_wayback():
+    page = wayback_snapshot(MEMBERSHIP_URL)
+    pdf_url = discover_pdf_url(page.text)
+    body = wayback_snapshot(pdf_url)
+    if not body.content.startswith(b"%PDF"):
+        raise RuntimeError("archived copy is not a PDF")
+    return pdf_url, body.content
+
+
+def obtain_directory(engine):
+    rungs = {"requests": [rung_requests], "playwright": [rung_playwright],
+             "wayback": [rung_wayback]}.get(
+                 engine, [rung_requests, rung_playwright, rung_wayback])
+    last = None
+    for rung in rungs:
+        try:
+            return rung()
+        except Exception as exc:  # noqa: BLE001 - every rung failure escalates
+            last = exc
+            print("%s failed (%s)" % (rung.__name__, exc), file=sys.stderr)
+    print("FATAL: every fetch rung failed for %s — last error: %s"
+          % (MEMBERSHIP_URL, last), file=sys.stderr)
+    sys.exit(1)
 
 
 def discover_pdf_url(page_html):
@@ -214,6 +346,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     parser.add_argument("--out", default="dupage_municipal_officials.json")
     parser.add_argument("--pdf", help="parse a local PDF instead of fetching (testing)")
+    parser.add_argument("--engine", choices=("auto", "requests", "playwright", "wayback"),
+                        default="auto",
+                        help="fetch rung; auto walks requests -> playwright -> wayback")
     args = parser.parse_args()
 
     scraped_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -223,11 +358,7 @@ def main():
         with open(args.pdf, "rb") as f:
             body = f.read()
     else:
-        pdf_url = discover_pdf_url(fetch(MEMBERSHIP_URL))
-        body = fetch(pdf_url, binary=True)
-        if not body.startswith(b"%PDF"):
-            print("FATAL: %s did not return a PDF — source moved" % pdf_url, file=sys.stderr)
-            sys.exit(1)
+        pdf_url, body = obtain_directory(args.engine)
 
     records = []
     for page_text in directory_pages(body):
