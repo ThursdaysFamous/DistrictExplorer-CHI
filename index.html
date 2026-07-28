@@ -8640,12 +8640,18 @@ function initChiExplorer() {
           var person = { name: String(name) };
           var role = result.member && result.member.role ? String(result.member.role) : null;
           person.badge = role || "Council Member";
-          // Contact only where the SOURCE publishes it per seat: the municipal
-          // roster's phone/email are the shared village-hall line, which the
-          // Municipality card already shows and which would be a false
-          // implication on an individual's row here.
-          if (result.gisPhone) person.phone = String(result.gisPhone);
-          if (result.gisEmail) person.email = String(result.gisEmail);
+          // Contact only where the SOURCE publishes it per seat. The GIS
+          // attributes are one such source (Evanston); the roster's PERSON
+          // fields are another — the builder sets those only from sources that
+          // publish per member, and drops any value equal to the municipality's
+          // main line, so neither can imply a direct line that doesn't exist.
+          // The roster's municipality-level contact stays on the Municipality
+          // card's hall row and never reaches an individual's row here.
+          var member = result.member || {};
+          var seatPhone = result.gisPhone || member.phone;
+          var seatEmail = result.gisEmail || member.email;
+          if (seatPhone) person.phone = String(seatPhone);
+          if (seatEmail) person.email = String(seatEmail);
           wrap.appendChild(renderPersonRows([person]));
         }
         return wrap;

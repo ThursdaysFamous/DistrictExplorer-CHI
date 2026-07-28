@@ -358,7 +358,24 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   since suppressing seats with nowhere to send the reader would lose them. The card reads
   the same prebuilt `municipal-ward-coverage.json` the ward layer's own coverage test
   uses, so the two cannot disagree.
-- **Will's Lockport and Wilmington are missing from the municipal roster — recorded gap.**
+- **Will ward-city per-seat contact + the two omitted cities — SHIPPED 2026-07-28.**
+  The bounded per-city exception (`docs/EXPANSION_GUIDE.md` Part 2.4): Crest Hill's staff
+  directory supplies per-alderperson phones and Wilmington's officials page per-alderperson
+  e-mail, neither of which any Will County source publishes; the same pass supplies
+  **Lockport and Wilmington's rosters outright**, closing the gap below. The clerk remains
+  the roster of record — for a municipality the county covers this adds contact only.
+  Per-seat contact now renders on the `ward` layer's seat card as well as here.
+  **Joliet is the recorded non-build** (403 to non-browser clients on joliet.gov,
+  client-rendered jolietcity.org, only a 2022 Archive snapshot): its members come from the
+  clerk, only its per-seat contact is missing.
+- **`municipal-ward-coverage.json` resolved the wrong Wilmington — FIXED 2026-07-28.**
+  Illinois has two Wilmingtons, and the coverage builder's first-wins name lookup picked
+  Greene County's village (GEOID 1782088) for the Will entry, putting the coverage polygon
+  180 miles downstate: the City Ward layer **hid in the real Wilmington** and switched
+  itself on in a village with no ward services. Resolution is now county-qualified, with a
+  hard failure on any name the entry's county can't disambiguate — the same rule the roster
+  builder already used. Worth re-checking in any fork: a name collision fails silently.
+- **Will's Lockport and Wilmington were missing from the municipal roster — CLOSED above.**
   Both are City Ward layer entries with published ward geometry, but neither appears in
   `municipal-officials.json`: the Clerk's flipbook directory omits their entry HEADERS from
   its text layer entirely (Wilmington's alderpersons appear orphaned mid-page after

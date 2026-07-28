@@ -399,6 +399,35 @@ suffixes (an ALL-CAPS `(IND)` is a party code, not a nickname); officer names ne
 greedy-but-bounded pattern (the term-expiry anchor that saves board names is absent);
 an undelimitable address returns None — ship no address line rather than a guessed one.
 
+**The bounded per-city exception (Will, 2026-07-28).** Rung 5 says never scrape
+heterogeneous municipal sites as a source of record. The one shape that earns an
+exception: **the cities whose seats the `ward` layer answers**, because the Municipality
+card now sends readers to a per-seat card and that card should be able to name a way to
+reach the seat's holder. Will's clerk directory publishes no per-seat contact (only the
+municipality's and, sometimes, the clerk's), and its ward GIS carries geometry only, so
+the three reachable ward cities' own sites supply it — Crest Hill per-alderperson phones,
+Wilmington per-alderperson e-mail. Two rules keep it safe: **the county clerk stays the
+roster of record** (a city site contributes CONTACT to a municipality the county already
+covers — never adding, renaming, or re-roling a seat-holder; an unmatched name is logged,
+not merged), and **a per-person value equal to the municipality's main line is dropped**,
+since that is not a direct line. Name matching is surname + given-name overlap or
+truncation, falling back to a *unique* surname within that one council and logging when
+it does; two possible matches refuse rather than guess.
+
+**When the county source silently omits a municipality.** Will's directory drops Lockport
+and Wilmington entirely — the flipbook's text layer is missing their entry HEADERS, so the
+entry split cannot see them, and no parser recovers text that isn't there. Both are ward
+cities, so each resolved a ward polygon with no seat-holder behind it. The same city-site
+pass supplies those two rosters outright. **Check for this class after any document-sourced
+county build:** compare the scraped municipality list against the county's Census place
+list, since a missing entry is invisible in the output — it simply isn't there.
+
+**Joliet is the recorded non-build:** joliet.gov returns 403 to non-browser clients,
+jolietcity.org renders its council client-side, and the only Archive snapshot is four
+years stale. Writing a parser against a page whose structure cannot be inspected is how
+silent breakage ships; its members already come from the clerk, only per-seat contact is
+missing.
+
 **Tier B — suburban municipal wards (SHIPPED 2026-07).** Shipped as **entries of the
 existing `ward` layer**, keyed by municipality (§2.1) — one toggle, one concept, whether
 Chicago calls it a ward or Joliet a council district. Sources: Cook GIS

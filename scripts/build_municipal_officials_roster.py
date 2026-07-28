@@ -237,7 +237,7 @@ def normalize_website(url):
     return url
 
 
-def build_county(payload, by_county, statewide, warnings):
+def build_county(payload, by_county, statewide, warnings, apply_floors=True):
     county = payload.get("county") or "?"
     grouped = defaultdict(list)
     for rec in payload.get("officials") or []:
@@ -320,7 +320,7 @@ def build_county(payload, by_county, statewide, warnings):
         entry["sourceUrl"] = payload.get("directory_url") or records[0].get("source_url")
         entries[geoid] = entry
 
-    floors = COUNTY_FLOORS.get(county)
+    floors = COUNTY_FLOORS.get(county) if apply_floors else None
     if floors:
         n_munis = len(entries)
         n_members = sum(len(e.get("board") or []) + len(e.get("officers") or [])
@@ -334,6 +334,91 @@ def build_county(payload, by_county, statewide, warnings):
                       % (county, actual, label, floor), file=sys.stderr)
                 sys.exit(1)
     return entries
+
+
+def name_tokens(name):
+    """Comparable name parts: lowercase alpha words, nicknames included."""
+    return [t for t in re.split(r"[^A-Za-z]+", str(name or "").lower()) if t]
+
+
+def same_person(a, b):
+    """Match a city site's name against the clerk's, allowing nicknames.
+
+    Surnames must agree and at least one given/nick name must overlap, so
+    "Nathaniel "Nate" Albert" meets "Nate Albert" and "Angelo Sante Deserio"
+    meets "Angelo Deserio", while two different Smiths never merge.
+    """
+    ta, tb = name_tokens(a), name_tokens(b)
+    if not ta or not tb or ta[-1] != tb[-1]:
+        return False
+    given_a, given_b = ta[:-1], tb[:-1]
+    if not given_a or not given_b:
+        return False
+    for x in given_a:
+        for y in given_b:
+            # Equal, or a truncation of the other ("Chris"/"Christine",
+            # "Tom"/"Thomas"). Nicknames the clerk prints in quotes already
+            # appear as their own token, so "Nate" meets
+            # "Nathaniel \u201cNate\u201d Albert" by equality. Nicknames that
+            # are NOT truncations ("Joe"/"Joseph" — Joseph is "jos…") fall to
+            # the surname tier in merge_contact rather than a nickname table,
+            # which would be guesswork dressed as data.
+            if x == y:
+                return True
+            if len(x) >= 3 and len(y) >= 3 and (x.startswith(y) or y.startswith(x)):
+                return True
+    return False
+
+
+def people_of(entry):
+    return ([entry["head"]] if entry.get("head") else []) + \
+        (entry.get("board") or []) + (entry.get("officers") or [])
+
+
+def merge_contact(existing, addition, warnings):
+    """Fill missing per-person contact from a city site onto the clerk's roster.
+
+    Contact only, by design: the county clerk's directory stays the roster of
+    record, so this never adds a seat-holder, renames one, or changes a role —
+    an unmatched name is reported instead, because a mismatch means one of the
+    two sources is out of date and that is a human's call.
+    """
+    hall = existing.get("office") or {}
+    for person in people_of(addition):
+        matches = [c for c in people_of(existing)
+                   if same_person(c.get("name"), person.get("name"))]
+        if not matches:
+            # Second tier: an unambiguous surname inside one small council is a
+            # safe join even when given names differ by nickname. Logged so the
+            # looser rule is always visible in the build output.
+            surname = (name_tokens(person.get("name")) or [None])[-1]
+            by_surname = [c for c in people_of(existing)
+                          if (name_tokens(c.get("name")) or [None])[-1] == surname]
+            if surname and len(by_surname) == 1:
+                matches = by_surname
+                warnings.append("%s: matched '%s' to '%s' on surname alone"
+                                % (existing.get("name"), person.get("name"),
+                                   by_surname[0].get("name")))
+        if len(matches) > 1:
+            # Two seat-holders could be this person: attributing a phone to the
+            # wrong one is worse than shipping none.
+            warnings.append("%s: '%s' matches %d people in the county directory — "
+                            "ambiguous, contact not applied"
+                            % (existing.get("name"), person.get("name"), len(matches)))
+            continue
+        match = matches[0] if matches else None
+        if match is None:
+            warnings.append("%s: '%s' is on the city site but not in the county "
+                            "directory — not added (clerk is the roster of record)"
+                            % (existing.get("name"), person.get("name")))
+            continue
+        phone = person.get("phone")
+        # A "direct" number that is just the main line is not a direct line.
+        if phone and phone != hall.get("phone") and not match.get("phone"):
+            match["phone"] = phone
+        email = person.get("email")
+        if email and email != hall.get("email") and not match.get("email"):
+            match["email"] = email
 
 
 def entry_depth(entry):
@@ -372,6 +457,10 @@ def main():
     parser.add_argument("inputs", nargs="+", help="per-county scraper output JSON files")
     parser.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
     parser.add_argument("--places", default=PLACES_FILE)
+    parser.add_argument("--enrich", nargs="*", default=[],
+                        help="city-site payloads: add per-seat contact to the "
+                             "county roster, and supply municipalities the county "
+                             "source omits entirely")
     args = parser.parse_args()
 
     by_county, statewide = load_places(args.places)
@@ -396,6 +485,21 @@ def main():
                 roster[geoid] = keep
                 continue
             roster[geoid] = entry
+
+    # City-site payloads run last: they refine what the counties established.
+    for path in args.enrich:
+        with open(path) as f:
+            payload = json.load(f)
+        entries = build_county(payload, by_county, statewide, warnings,
+                               apply_floors=False)
+        for geoid, entry in entries.items():
+            if geoid not in roster:
+                print("NOTE: %s (%s) is absent from its county's directory — "
+                      "supplied by the city's own site" % (geoid, entry["name"]),
+                      file=sys.stderr)
+                roster[geoid] = entry
+            else:
+                merge_contact(roster[geoid], entry, warnings)
 
     if len(roster) < MIN_TOTAL_MUNICIPALITIES:
         print("FATAL: resolved %d municipalities, floor is %d — refusing to write"

@@ -163,12 +163,28 @@ def norm_census(placename):
     return re.sub(r"[^A-Z]", "", text.upper())
 
 
+# Which county each entry's municipalities sit in, so a name that exists twice
+# in Illinois resolves to the right one. Aurora spans four counties; Kane holds
+# its Census place record.
+ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
+                     "will": "197", "aurora": "089"}
+
+
 def load_place_geoids():
-    """{normalized place name: GEOID} for every Illinois incorporated place."""
+    """-> ({county_fips: {name: geoid}}, {name: set(geoid)}) for IL places.
+
+    Both indexes are needed because Illinois has TWO Wilmingtons and two
+    Windsors. A first-wins lookup silently picked Greene County's Wilmington
+    village for the Will County entry — the coverage polygon landed 180 miles
+    downstate, so the ward layer hid in the real Wilmington and switched itself
+    on in a village that has no ward services. County-qualified lookup first,
+    statewide only when it is unambiguous, and a hard failure otherwise.
+    """
     if not os.path.exists(PLACES_FILE):
         print("FATAL: Census place reference missing at %s" % PLACES_FILE, file=sys.stderr)
         sys.exit(1)
-    geoids = {}
+    by_county = {}
+    statewide = {}
     with open(PLACES_FILE, encoding="utf-8-sig") as f:
         rows = [line.rstrip("\n").split("|") for line in f if line.strip()]
     header = rows[0]
@@ -176,9 +192,29 @@ def load_place_geoids():
         if len(row) != len(header):
             continue
         rec = dict(zip(header, row))
-        if rec.get("TYPE") == "INCORPORATED PLACE":
-            geoids.setdefault(norm_census(rec["PLACENAME"]), "17" + rec["PLACEFP"])
-    return geoids
+        if rec.get("TYPE") != "INCORPORATED PLACE":
+            continue
+        key = norm_census(rec["PLACENAME"])
+        geoid = "17" + rec["PLACEFP"]
+        by_county.setdefault(rec["COUNTYFP"], {})[key] = geoid
+        statewide.setdefault(key, set()).add(geoid)
+    return by_county, statewide
+
+
+def resolve_place_geoid(name, entry, by_county, statewide):
+    key = norm(name)
+    fips = ENTRY_COUNTY_FIPS.get(entry)
+    if fips and key in by_county.get(fips, {}):
+        return by_county[fips][key]
+    matches = statewide.get(key) or set()
+    if len(matches) == 1:
+        return next(iter(matches))
+    if not matches:
+        return None
+    print("FATAL: '%s' (%s entry) matches %d Illinois places (%s) and the entry's "
+          "county does not disambiguate it — refusing to guess"
+          % (name, entry, len(matches), ", ".join(sorted(matches))), file=sys.stderr)
+    sys.exit(1)
 
 
 def discover_cook_municipalities():
@@ -199,7 +235,7 @@ def discover_cook_municipalities():
 
 
 def main():
-    place_geoids = load_place_geoids()
+    by_county, statewide = load_place_geoids()
 
     entry_names = dict(STATIC_ENTRY_MUNICIPALITIES)
     entry_names["cook-suburban"] = discover_cook_municipalities()
@@ -213,7 +249,7 @@ def main():
             key = norm(name)
             if key in seen:
                 continue
-            geoid = place_geoids.get(key)
+            geoid = resolve_place_geoid(name, entry, by_county, statewide)
             if not geoid:
                 print("FATAL: no Census place GEOID for '%s' (%s entry)" % (name, entry),
                       file=sys.stderr)
