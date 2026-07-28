@@ -1729,6 +1729,310 @@
     "url": "https://channahon.org"
   },
   "1714000": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Daniel La Spata",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Brian Hopkins",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Pat Dowell",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Lamont Robinson",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 5",
+        "name": "Desmon C. Yancy",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 6",
+        "name": "William E. Hall",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 7",
+        "name": "Gregory I. Mitchell",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 8",
+        "name": "Michelle A. Harris",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 9",
+        "name": "Anthony A. Beale",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 10",
+        "name": "Peter Chico",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 11",
+        "name": "Nicole Lee",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 12",
+        "name": "Julia M. Ramirez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 13",
+        "name": "Marty Quinn",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 14",
+        "name": "Jeylu B. Gutierrez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 15",
+        "name": "Raymond A. Lopez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 16",
+        "name": "Stephanie D. Coleman",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 17",
+        "name": "David H. Moore",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 18",
+        "name": "Derrick G. Curtis",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 19",
+        "name": "Matt O'Shea",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 20",
+        "name": "Jeanette B. Taylor",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 21",
+        "name": "Ronnie L. Mosley",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 22",
+        "name": "Michael D. Rodriguez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 23",
+        "name": "Silvana Tabares",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 24",
+        "name": "Monique L. Scott",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 25",
+        "name": "Byron Sigcho Lopez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 26",
+        "name": "Jessica Fuentes",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "appointed": true,
+        "district": "Ward 27",
+        "name": "Walter Burnett III",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 28",
+        "name": "Jason C. Ervin",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 29",
+        "name": "Chris Taliaferro",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 30",
+        "name": "Ruth Cruz",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 31",
+        "name": "Felix Cardona",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 32",
+        "name": "Scott Waguespack",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 33",
+        "name": "Rossana Rodriguez Sanchez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 34",
+        "name": "William \"Bill\" Conway",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "appointed": true,
+        "district": "Ward 35",
+        "name": "Anthony Quezada",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 36",
+        "name": "Gilbert Villegas",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 37",
+        "name": "Emma Mitts",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 38",
+        "name": "Nicholas Sposato",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 39",
+        "name": "Samantha Nugent",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 40",
+        "name": "Andre Vasquez",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 41",
+        "name": "Anthony V. Napolitano",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 42",
+        "name": "Brendan Reilly",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 43",
+        "name": "Timmy Knudsen",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 44",
+        "name": "Bennett R. Lawson",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 45",
+        "name": "James M. Gardiner",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 46",
+        "name": "Angela Clay",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 47",
+        "name": "Matthew J. Martin",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 48",
+        "name": "Leni Manaa-Hoppenworth",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 49",
+        "name": "Maria E. Hadden",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 50",
+        "name": "Debra Silverstein",
+        "nextElection": "2027",
+        "role": "Alderperson"
+      }
+    ],
     "councilOnWardLayer": true,
     "county": "Cook",
     "head": {
