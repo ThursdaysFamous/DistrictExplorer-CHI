@@ -37,6 +37,36 @@ color (§5a, CSS-only), `cardTitleCase`/`cardGradeRange` joined the helpers
 pill (§6a). Chicago's `school-site` bespoke card was rebuilt on chips +
 `renderNearestRows` (§8a/8b).
 
+**Handoff 4** (`docs/design_handoff_hover_popup/`, ids 9a/10a + 10c's
+standalone block) carried the system onto the map's hover snapshot, so hover
+and click now speak the same visual language — a hovered stack reads as a
+preview of the cards a click would open. The dark plate is retired.
+`hoverSnapshotHTML` (an HTML-string builder, the last one on this surface)
+became `hoverSnapshotNode`, which builds DOM through `cardEl` like every other
+card path; nothing on the layer contract changed — `hoverName`,
+`hoverOfficial`, `pointOfInterest` and the `hoveredPoi` token keep their
+behavior. Three things are worth knowing before porting it:
+
+- **Layer color is no longer printable verbatim.** On the old near-black plate
+  any palette color was legible; on the card surface the pale blues and
+  near-whites are not. `hoverPillStyle()` derives a printable pair from the
+  same color the dot shows — darkening the text toward black until it clears
+  AA (4.5:1) on white while the tint keeps the original hue — and
+  `hoverDotIsInvisible()` swaps a near-white dot for a ringed one. Both key off
+  WCAG relative luminance, so no second palette exists to drift.
+- **A hovered pin is the popup's subject, not a row.** It takes a promoted
+  header block (eyebrow = layer label, name = the segment of `line()` before
+  the first " — ", address = the remainder). Its pill is read from its own
+  layer's row rather than carried on the token, so the pin and the row beneath
+  it cannot disagree; a nearest-N pin, which has no such row, supplies
+  `distanceLabel` instead.
+- **No own row means no stack** (10c). A station/library/post-office dot's
+  layer has no polygon footprint to anchor the header to, so the header block
+  *is* the popup and the surrounding districts are left to the click cards.
+
+Districts shown for a pin are the pin's, not the cursor's — `updateHover`
+already anchored the stack at `poi.latlng`, so this needed no change.
+
 This is the engineering contract for implementing the card redesign specified in
 `docs/design_handoff_county_board_card/` (Handoff 1, County Board card, design
 ids 3a–3d) and `docs/design_handoff_card_system/` (Handoff 2, all card types,
