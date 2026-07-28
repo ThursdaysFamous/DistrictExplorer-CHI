@@ -33,10 +33,16 @@ jobs:
           python-version: "3.x"
 
       - name: Install scraper dependencies
-        # Version-pinned via scripts/requirements.txt (constraints), but only the
-        # two packages this job needs — elections.il.gov is a plain ASP.NET form
-        # with no JS challenge, so no Playwright (that's CPD-only).
-        run: pip install -c scripts/requirements.txt requests beautifulsoup4
+        # Version-pinned via scripts/requirements.txt (constraints). Playwright
+        # joined the list on 2026-07-28: elections.il.gov was a plain ASP.NET
+        # form with no challenge until Cloudflare started 403ing this runner's
+        # network (it still answers a developer machine 200), so the scraper
+        # now falls back to a browser rung.
+        run: pip install -c scripts/requirements.txt requests beautifulsoup4 playwright
+
+      - name: Install Chromium for the browser rung
+        # Only the fallback needs it; the requests rung runs first and is free.
+        run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape the ISBE election-authority directory
         run: python3 scripts/il_county_clerk_scraper.py --out /tmp/il_county_clerks.json

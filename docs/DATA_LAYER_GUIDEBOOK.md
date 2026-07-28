@@ -397,6 +397,22 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   if it is really a challenge underneath; a *hard WAF deny* (Akamai) is beaten by
   nothing, and the honest move is preservation plus a standing issue. Measure which one
   you have — the response headers and body size say so — before writing a rung.
+- **Two scrapers hardened after Cloudflare tightened (2026-07-28).** Both surfaced on the
+  fleet-status dashboard, both are the *challenge* class (browser-clearable), and in both
+  cases the count guards refused to write, so no shipped data was ever lost.
+  **CPD** (`chicagopolice.org`) began 403ing every client, with its browser rung reporting
+  "challenge did not clear within 20s"; the interstitial is a genuine managed challenge
+  ("Just a moment…", `challenge-platform`, `__cf_chl`), not a block, so the challenge
+  budget went 20s → 60s. The cost is bounded because the browser context is reused across
+  all 22 district pages, so only the first fetch pays it. An Archive rung was evaluated
+  and rejected: only the finder page has a 200 capture, the district pages are 301/403
+  (the crawler was blocked too), so it could supply links but not commanders.
+  **County clerk** (`elections.il.gov`) had no ladder at all and started 403ing the runner
+  while still answering a developer machine 200 — the DuPage class — so it gained
+  requests → playwright. Its browser rung drives the page rather than replaying the
+  postback: the county dropdown is an ASP.NET AutoPostBack, so selecting the option *is*
+  the submit and the browser generates the viewstate tokens itself, which makes the
+  fallback sturdier than the primary rung as well as edge-proof.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake
