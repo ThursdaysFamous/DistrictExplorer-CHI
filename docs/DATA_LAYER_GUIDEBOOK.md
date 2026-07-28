@@ -368,6 +368,35 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   **Joliet is the recorded non-build** (403 to non-browser clients on joliet.gov,
   client-rendered jolietcity.org, only a 2022 Archive snapshot): its members come from the
   clerk, only its per-seat contact is missing.
+- **Name-collision sweep — RUN 2026-07-28, 3 findings, all fixed.** Prompted by the
+  wrong-Wilmington bug below: an audit of every name-keyed lookup in the pipeline and the
+  app, checked against real data rather than by inspection.
+  - *Fixed, latent:* `municipalRosterByName` (the `ward` layer's seat join — its features
+    carry a municipality NAME, not a GEOID) scanned the statewide roster and returned the
+    FIRST name match. No duplicate exists in today's 282-entry roster, so nothing was
+    wrong on screen, but a statewide roster or a downstate county would have made it
+    answer with another municipality's council. It now returns nothing on an ambiguous
+    name, so the card falls back to the boundary's own official field.
+  - *Fixed, LIVE BUG:* `municipalSeatHolder` returned the FIRST board member matching a
+    ward number — but Crest Hill, Lockport and Wilmington each elect TWO alderpersons per
+    ward, so half of those residents' representation was hidden, and hidden *more* once
+    the Municipality card stopped listing districted councils and made this card the only
+    place those seats appear. Now returns every holder (`municipalSeatHolders`); a ward's
+    GIS contact attaches only where the ward has ONE holder, since it identifies one
+    person.
+  - *Fixed, latent:* `build_municipal_ward_coverage.py` deduped its municipality list by
+    NAME, which would silently drop a second municipality sharing a name; it now dedupes
+    on the resolved GEOID.
+  - *Checked and sound, recorded so the next sweep can skip them:* the 101-key county
+    clerk roster (Illinois county names are collision-free, verified); every other
+    `data/app` roster is district-number keyed; nothing joins by TOWNSHIP name (those
+    collide heavily across Illinois); the Cook tax tilings key on agency number; Lake's
+    Chair/Vice-Chair tag is district-scoped with a surname guard; and
+    `build_municipal_officials_roster.py` already fails hard on an ambiguous place name.
+  - **Statewide fact worth keeping:** exactly two Illinois incorporated-place names are
+    not unique — **Wilmington** (Will 1782101 / Greene 1782088) and **Windsor** (Shelby /
+    Mercer). Only Wilmington touches the metro. Any new name→place lookup must be
+    county-qualified or fail loudly.
 - **`municipal-ward-coverage.json` resolved the wrong Wilmington — FIXED 2026-07-28.**
   Illinois has two Wilmingtons, and the coverage builder's first-wins name lookup picked
   Greene County's village (GEOID 1782088) for the Will entry, putting the coverage polygon

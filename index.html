@@ -8565,30 +8565,47 @@ function initChiExplorer() {
     });
   });
 
+  // Name lookup into a GEOID-keyed roster, for the ward layer's seat join —
+  // its features carry a municipality name, not a GEOID. Two Illinois place
+  // names are not unique (Wilmington, Windsor), and a first-match-wins scan
+  // would silently answer with whichever entry happened to come first: the
+  // same failure that put Greene County's Wilmington in the ward-coverage file.
+  // An ambiguous name resolves to nothing, so the seat card falls back to the
+  // boundary's own official field or renders seat-only — never another
+  // municipality's council member.
   function municipalRosterByName(roster, name) {
     var key = normMunicipalName(name);
     if (!key || !roster) return null;
+    var found = null;
     for (var geoid in roster) {
       if (!roster.hasOwnProperty(geoid)) continue;
-      if (normMunicipalName(roster[geoid].name) === key) return roster[geoid];
+      if (normMunicipalName(roster[geoid].name) !== key) continue;
+      if (found) return null; // ambiguous — refuse rather than guess
+      found = roster[geoid];
     }
-    return null;
+    return found;
   }
 
   // The seat's holder from the municipality's board, matched on the number in
   // the district string — the roster writes "Ward 5"/"District 3" while the GIS
   // carries a bare number, and at-large members (district "At Large") have no
   // number so they never match a mapped seat.
-  function municipalSeatHolder(entry, ward) {
-    if (!entry || !ward) return null;
+  // EVERY seat-holder for a ward, not the first. Chicago and Evanston elect one
+  // per ward, but Crest Hill, Lockport and Wilmington each elect TWO — and
+  // since the Municipality card stopped listing districted councils, this card
+  // is the only place those seats appear, so returning one would hide half of a
+  // resident's representation.
+  function municipalSeatHolders(entry, ward) {
+    if (!entry || !ward) return [];
     var board = entry.board || [];
+    var out = [];
     for (var i = 0; i < board.length; i++) {
       var district = board[i].district;
       if (!district) continue;
       var num = String(district).match(/\d+/);
-      if (num && num[0].replace(/^0+(?=\d)/, "") === String(ward)) return board[i];
+      if (num && num[0].replace(/^0+(?=\d)/, "") === String(ward)) out.push(board[i]);
     }
-    return null;
+    return out;
   }
 
   // One dispatch entry per ward source; every suburban source shares this
@@ -8619,7 +8636,7 @@ function initChiExplorer() {
             seatLabel: p.dxSeatLabel || "Ward",
             municipality: p.dxMunicipality,
             bodyLabel: entry ? municipalBodyLabel(entry) : null,
-            member: municipalSeatHolder(entry, p.dxWard),
+            members: municipalSeatHolders(entry, p.dxWard),
             gisOfficial: p.dxOfficial || null,
             gisEmail: p.dxEmail || null,
             gisPhone: p.dxPhone || null,
@@ -8635,24 +8652,33 @@ function initChiExplorer() {
           title: String(result.municipality || "") +
             (result.bodyLabel ? " " + result.bodyLabel : " Council")
         }));
-        var name = result.gisOfficial || (result.member ? result.member.name : null);
-        if (name) {
-          var person = { name: String(name) };
-          var role = result.member && result.member.role ? String(result.member.role) : null;
-          person.badge = role || "Council Member";
-          // Contact only where the SOURCE publishes it per seat. The GIS
-          // attributes are one such source (Evanston); the roster's PERSON
-          // fields are another — the builder sets those only from sources that
-          // publish per member, and drops any value equal to the municipality's
-          // main line, so neither can imply a direct line that doesn't exist.
-          // The roster's municipality-level contact stays on the Municipality
-          // card's hall row and never reaches an individual's row here.
-          var member = result.member || {};
-          var seatPhone = result.gisPhone || member.phone;
-          var seatEmail = result.gisEmail || member.email;
-          if (seatPhone) person.phone = String(seatPhone);
-          if (seatEmail) person.email = String(seatEmail);
-          wrap.appendChild(renderPersonRows([person]));
+        // Contact only where the SOURCE publishes it per seat. The GIS
+        // attributes are one such source (Evanston); the roster's PERSON fields
+        // are another — the builder sets those only from sources that publish
+        // per member, and drops any value equal to the municipality's main
+        // line, so neither can imply a direct line that doesn't exist. The
+        // roster's municipality-level contact stays on the Municipality card's
+        // hall row and never reaches an individual's row here.
+        var members = result.members || [];
+        if (members.length) {
+          // A ward's GIS contact identifies ONE holder, so it is only safe to
+          // attach where the ward has one; multi-member wards (Crest Hill,
+          // Lockport, Wilmington) carry per-person contact or none.
+          var single = members.length === 1;
+          wrap.appendChild(renderPersonRows(members.map(function (m) {
+            var person = { name: String(m.name) };
+            person.badge = m.role ? String(m.role) : "Council Member";
+            var seatPhone = (single ? result.gisPhone : null) || m.phone;
+            var seatEmail = (single ? result.gisEmail : null) || m.email;
+            if (seatPhone) person.phone = String(seatPhone);
+            if (seatEmail) person.email = String(seatEmail);
+            return person;
+          })));
+        } else if (result.gisOfficial) {
+          var fromGis = { name: String(result.gisOfficial), badge: "Council Member" };
+          if (result.gisPhone) fromGis.phone = String(result.gisPhone);
+          if (result.gisEmail) fromGis.email = String(result.gisEmail);
+          wrap.appendChild(renderPersonRows([fromGis]));
         }
         return wrap;
       },

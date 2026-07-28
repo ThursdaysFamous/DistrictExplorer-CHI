@@ -242,19 +242,21 @@ def main():
 
     # One feature per municipality; if two entries both claim one, the first in
     # this order owns its coverage (matching the dispatch table's order).
+    # Dedupe on the resolved GEOID, never the name: two Illinois municipalities
+    # can share a name, and a name key would drop the second as a "duplicate"
+    # of an entirely different place.
     wanted = []
     seen = set()
     for entry in ("cook-suburban", "evanston", "will", "aurora"):
         for name in entry_names.get(entry, []):
-            key = norm(name)
-            if key in seen:
-                continue
             geoid = resolve_place_geoid(name, entry, by_county, statewide)
             if not geoid:
                 print("FATAL: no Census place GEOID for '%s' (%s entry)" % (name, entry),
                       file=sys.stderr)
                 sys.exit(1)
-            seen.add(key)
+            if geoid in seen:
+                continue
+            seen.add(geoid)
             wanted.append({"entry": entry, "name": name, "geoid": geoid})
 
     if len(wanted) < MIN_MUNICIPALITIES:
