@@ -16,11 +16,12 @@ the app's separate `ward` layer, and the county's Socrata copies of this
 directory (vw2r-zys4 / jsup-zs8y) have been frozen since 2014, so they are
 deliberately NOT used.
 
-Four endpoints, three of them bulk:
+Five endpoints, all of them bulk:
   /api/Jurisdiction/GetByJurisdictionType?id=MUNIS      -> the 128 municipalities
   /api/ElectedOfficial/GetByJurisdictionType?id=MUNIS   -> municipality-wide officers
   /api/ElectedOfficial/GetByJurisdictionType?id=MUNIW   -> ward/district seats
   /api/ElectedOfficial/GetByJurisdictionType?id=CHIWD   -> City of Chicago citywide
+  /api/ElectedOfficial/GetByJurisdictionType?id=CHICA   -> Chicago's 50 ward seats
 MUNIW's `Jurisdiction` carries the seat's district inline ("City of Berwyn,
 Ward 1"), which is parsed out here so the ward-boundary layer can join later
 without a re-scrape.
@@ -30,11 +31,19 @@ guidebook recorded: a Berwyn click named its mayor while a Chicago click named
 nobody. The directory covers all of Cook — only its address SEARCH is
 suburban-only — and publishes Chicago's three citywide elected officers (Mayor,
 City Clerk, City Treasurer) with the same contact and term fields as every
-suburb. Chicago's 50 ward seats are a SEPARATE type in this API (CHICA), and
-they stay the `ward` layer's answer rather than being duplicated onto this
-card — so those records carry `ward_seats_elsewhere`, which the builder turns
-into the card's "elected by ward" pointer. This is the API's own structure,
-not an inference.
+suburb.
+
+Chicago's 50 ward seats are a SEPARATE type (CHICA), scraped here for ONE
+reason: the term fields. The `ward` layer names the alderperson from the City's
+own live roster (htai-wnw4), which carries contact but publishes no term data
+at all, so the Clerk is the only verified source for when a Chicago ward seat
+is next on the ballot. These records still carry `ward_seats_elsewhere` — the
+builder turns that into the Municipality card's "elected by ward" pointer, so
+the 50 names appear on the Ward card and never swamp the Municipality card.
+Their `Jurisdiction` is "Chicago, 1st Ward" (ordinal-first, and without the
+legal form CHIWD spells out), so it is normalized to "City of Chicago" +
+"Ward 1" to group with the citywide records and match every other seat's
+district wording. This is the API's own structure, not an inference.
 
 Library Trustees are excluded: they sit on library district boards (the app's
 separate `library-district` layer), not the municipal governing body. They are
@@ -75,6 +84,11 @@ JURISDICTIONS_URL = BASE + "/Jurisdiction/GetByJurisdictionType?id=MUNIS&languag
 OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=MUNIS&language=en"
 WARD_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=MUNIW&language=en"
 CHICAGO_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=CHIWD&language=en"
+CHICAGO_WARD_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=CHICA&language=en"
+# CHICA names the jurisdiction per seat ("Chicago, 1st Ward"); the citywide
+# type spells out the legal form ("City of Chicago"). Group them under the
+# latter so both land in one roster entry, on the GEOID the app joins.
+CHICAGO_JURISDICTION = "City of Chicago"
 DIRECTORY_URL = "https://www.cookcountyclerkil.gov/elections/directory-elected-officials"
 
 HEADERS = {
@@ -103,6 +117,11 @@ MIN_WARD_OFFICIALS = 140
 # Chicago publishes exactly three citywide elected officers (Mayor, Clerk,
 # Treasurer). A shrink here means the type stopped carrying them.
 MIN_CHICAGO_OFFICIALS = 3
+# Chicago has 50 wards, and the whole council is elected on one cycle, so this
+# type is either complete or broken. The county-wide `members` floor can't
+# catch a loss here — 50 seats out of ~1,085 stays above it — so this is the
+# guard that does.
+MIN_CHICAGO_WARD_OFFICIALS = 45
 
 
 def fetch_json_requests(url):
@@ -215,19 +234,34 @@ def primary_address(rec):
 
 
 def split_ward_jurisdiction(jurisdiction):
-    """"City of Berwyn, Ward 1" -> ("City of Berwyn", "Ward 1")."""
-    match = re.match(r"^(.*?),\s*((?:Ward|District)\s+.+)$", jurisdiction or "")
+    """Split a seat's jurisdiction into (municipality, district).
+
+    Two wordings in this API, both normalized to the "Ward 1" form the rest of
+    the pipeline and the app's ward join expect:
+      "City of Berwyn, Ward 1"  -> ("City of Berwyn", "Ward 1")   [MUNIW]
+      "Chicago, 1st Ward"       -> ("Chicago", "Ward 1")          [CHICA]
+    """
+    text = jurisdiction or ""
+    ordinal = re.match(r"^(.*?),\s*(\d+)(?:st|nd|rd|th)\s+(Ward|District)\s*$", text, re.I)
+    if ordinal:
+        return clean(ordinal.group(1)), "%s %s" % (ordinal.group(3).title(), ordinal.group(2))
+    match = re.match(r"^(.*?),\s*((?:Ward|District)\s+.+)$", text)
     if not match:
-        return clean(jurisdiction), None
+        return clean(text), None
     return clean(match.group(1)), clean(match.group(2))
 
 
 def official_record(rec, scraped_at, source_url, ward_seat=False,
-                    ward_seats_elsewhere=False):
+                    ward_seats_elsewhere=False, jurisdiction_override=None):
     if ward_seat:
         jurisdiction, district = split_ward_jurisdiction(rec.get("Jurisdiction"))
     else:
         jurisdiction, district = clean(rec.get("Jurisdiction")), None
+    # Only where a type names the same municipality differently than the rest
+    # of the directory (CHICA's "Chicago" vs "City of Chicago") — never to
+    # rename a jurisdiction into one the source didn't publish.
+    if jurisdiction_override:
+        jurisdiction = jurisdiction_override
     addr = primary_address(rec)
     return {
         "jurisdiction": jurisdiction,
@@ -270,6 +304,8 @@ def main():
     ward_officials = envelope_data(fetch_json(WARD_OFFICIALS_URL, args.engine), WARD_OFFICIALS_URL)
     chicago_officials = envelope_data(fetch_json(CHICAGO_OFFICIALS_URL, args.engine),
                                       CHICAGO_OFFICIALS_URL)
+    chicago_ward_officials = envelope_data(fetch_json(CHICAGO_WARD_OFFICIALS_URL, args.engine),
+                                           CHICAGO_WARD_OFFICIALS_URL)
 
     if len(jurisdictions) < MIN_JURISDICTIONS:
         print("FATAL: only %d municipalities returned (expected >= %d) — partial response"
@@ -286,6 +322,10 @@ def main():
     if len(chicago_officials) < MIN_CHICAGO_OFFICIALS:
         print("FATAL: only %d City of Chicago officials returned (expected >= %d)"
               % (len(chicago_officials), MIN_CHICAGO_OFFICIALS), file=sys.stderr)
+        sys.exit(1)
+    if len(chicago_ward_officials) < MIN_CHICAGO_WARD_OFFICIALS:
+        print("FATAL: only %d Chicago ward seats returned (expected >= %d)"
+              % (len(chicago_ward_officials), MIN_CHICAGO_WARD_OFFICIALS), file=sys.stderr)
         sys.exit(1)
 
     municipalities = [{
@@ -310,6 +350,15 @@ def main():
             continue
         records.append(official_record(rec, scraped_at, CHICAGO_OFFICIALS_URL,
                                        ward_seats_elsewhere=True))
+    # After the citywide records, deliberately: the builder takes a
+    # municipality's office block and website from its FIRST record, and City
+    # Hall belongs on the Municipality card, not a ward office.
+    for rec in chicago_ward_officials:
+        if clean(rec.get("Office")) in EXCLUDED_OFFICES:
+            continue
+        records.append(official_record(rec, scraped_at, CHICAGO_WARD_OFFICIALS_URL,
+                                       ward_seat=True, ward_seats_elsewhere=True,
+                                       jurisdiction_override=CHICAGO_JURISDICTION))
 
     payload = {
         "county": "Cook",
@@ -323,10 +372,14 @@ def main():
 
     heads = sum(1 for r in records if r["office"] in HEAD_OFFICES)
     seats = sum(1 for r in records if r["district"])
-    citywide = sum(1 for r in records if r["ward_seats_elsewhere"])
+    chicago = sum(1 for r in records if r["ward_seats_elsewhere"])
+    chicago_wards = sum(1 for r in records
+                        if r["ward_seats_elsewhere"] and r["district"])
     print("scraped %d municipalities, %d governing-body officials "
-          "(%d heads of government, %d ward seats, %d Chicago citywide) -> %s"
-          % (len(municipalities), len(records), heads, seats, citywide, args.out),
+          "(%d heads of government, %d ward/district seats, "
+          "%d Chicago records of which %d ward seats) -> %s"
+          % (len(municipalities), len(records), heads, seats,
+             chicago, chicago_wards, args.out),
           file=sys.stderr)
 
 

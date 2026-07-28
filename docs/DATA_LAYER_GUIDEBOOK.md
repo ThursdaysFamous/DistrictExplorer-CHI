@@ -344,6 +344,24 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   are largely nonpartisan and several Will "parties" are local slate names (BTS = Better
   Together For Steger), so surfacing it as a party badge would misrepresent what it is —
   deliberately deferred, not overlooked.
+- **Term data on the City Ward card — SHIPPED (2026-07-28), all five entries.** The
+  Municipality card stopped listing districted councils, so a ward-elected resident's seat
+  appears only here; showing the term fact on one card and not the other would have split
+  the same data across two answers. `municipalTermNote()` is now shared by both, so they
+  cannot word or gate it differently. The four suburban entries (Cook-suburban, Evanston,
+  Will, Aurora) already had the fields and needed only the render. **Chicago needed a new
+  source:** the City's own alderperson roster (`htai-wnw4`) publishes contact but no term
+  fields at all, so the Clerk's `CHICA` jurisdiction type — all 50 ward seats, verified
+  complete — was added to `cook_municipal_officials_scraper.py`, normalized from its
+  ordinal wording ("Chicago, 1st Ward" → "City of Chicago" + "Ward 1") to group with the
+  citywide records and match every other seat's district string. Two deliberate limits:
+  the seats land on Chicago's roster `board`, which the Municipality card still suppresses
+  as districted, so that card is byte-identical and the 50 names never swamp it; and the
+  Clerk's person-level **`appointed` flag is NOT carried onto the Chicago ward card** —
+  the term fact is the SEAT's (all 50 wards run on one cycle, so it holds whoever sits
+  there, needing no name match), whereas `appointed` describes a named individual and the
+  two rosters format names differently enough — 12 of 50 differ by middle initial,
+  nickname or suffix — that pinning it to the City's name would be a heuristic.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake

@@ -188,8 +188,12 @@ PROVENANCE = [
              "Census place GEOID. The site is Cloudflare-fronted, so a "
              "reachability WARN here can be a bot filter rather than drift — "
              "confirm with a browser User-Agent before treating it as a source "
-             "change. Cook and Will are shipped; the remaining five and their "
-             "verified sources are in docs/MUNICIPAL_COUNCILS_PLAYBOOK.md. "
+             "change. All seven metro counties are shipped (see "
+             "docs/EXPANSION_GUIDE.md Part 2 rule 5). Five jurisdiction types "
+             "are read: MUNIS (municipalities + citywide officers), MUNIW "
+             "(suburban ward/district seats), CHIWD (Chicago citywide) and "
+             "CHICA (Chicago's 50 ward seats, the only verified source of their "
+             "term data — the City's own roster htai-wnw4 publishes none). "
              "The county's Socrata copies of this directory (vw2r-zys4, "
              "jsup-zs8y) are frozen at 2014 and deliberately unused."},
     {"layer": "Will County municipal governing bodies (roster)",
