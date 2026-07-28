@@ -5953,6 +5953,36 @@ function initChiExplorer() {
   // Name the body the way its own seats do — trustees sit on a Board of
   // Trustees, alderpersons on a City Council. Falls back to a neutral label
   // rather than asserting a form the roster doesn't evidence.
+  // "Ward 3" / "District 2" are districted seats; "At Large" is not — Joliet
+  // elects five council members by district AND three citywide, and the
+  // at-large three have no ward to look them up in.
+  function municipalSeatIsDistricted(member) {
+    var district = member && member.district ? String(member.district) : "";
+    if (!district) return false;
+    return !/^at[\s-]*large$/i.test(district.trim());
+  }
+
+  // Say "district" where the municipality does (Joliet elects council
+  // districts, Crest Hill wards) rather than imposing one word on both.
+  function municipalSeatWord(districtedSeats) {
+    for (var i = 0; i < districtedSeats.length; i++) {
+      if (/^district\b/i.test(String(districtedSeats[i].district || ""))) return "district";
+    }
+    return "ward";
+  }
+
+  // Does the City Ward layer publish seat geometry for this municipality?
+  // Read from the same prebuilt file that layer's coverage test uses, so the
+  // two can't disagree — a municipality whose wards aren't mapped (Berwyn,
+  // Waukegan) is absent here and keeps its full council listing.
+  function municipalHasWardGeometry(geoid, coverage) {
+    if (geoid == null || !coverage) return false;
+    var key = String(geoid);
+    return (coverage.features || []).some(function (f) {
+      return String((f.properties || {}).geoid) === key;
+    });
+  }
+
   function municipalBodyLabel(gov) {
     var roles = {};
     ((gov && gov.board) || []).forEach(function (m) {
@@ -6031,17 +6061,23 @@ function initChiExplorer() {
     query: function (point, seq) {
       return Promise.all([
         loadIlPlaces(),
-        loadMunicipalOfficials().catch(function () { return {}; })
+        loadMunicipalOfficials().catch(function () { return {}; }),
+        // Which municipalities the City Ward layer can actually answer for.
+        // Failing to load it degrades to listing the whole council — the safe
+        // direction, since suppressing seats we can't redirect would lose them.
+        loadMunicipalWardCoverage().catch(function () { return null; })
       ]).then(function (results) {
-        var geojson = results[0], roster = results[1];
+        var geojson = results[0], roster = results[1], wardCoverage = results[2];
         var feature = findFeatureContaining(geojson, point);
         if (!feature) return null;
         var props = feature.properties || {};
+        var geoid = findPropCI(props, ["geoid"]);
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
-          geoid: findPropCI(props, ["geoid"]),
-          gov: municipalGovFor(feature, roster)
+          geoid: geoid,
+          gov: municipalGovFor(feature, roster),
+          wardLayerCovers: municipalHasWardGeometry(geoid, wardCoverage)
         };
       });
     },
@@ -6058,17 +6094,30 @@ function initChiExplorer() {
         wrap.appendChild(renderPersonRows([municipalPerson(gov.head)]));
       }
       var board = (gov.board || []).filter(function (m) { return m && m.name; });
-      if (board.length) {
-        wrap.appendChild(renderSectionLabel(municipalBodyLabel(gov)));
-        wrap.appendChild(renderPersonRows(board.map(municipalPerson)));
-      } else if (gov.councilOnWardLayer) {
-        // Chicago: the council is real and every seat is districted, but it is
-        // the City Ward layer's answer (50 seats would also swamp this card).
-        // Say so — an empty section here would read as "no council exists".
+      var districted = board.filter(municipalSeatIsDistricted);
+      var otherSeats = board.filter(function (m) { return !municipalSeatIsDistricted(m); });
+      // A districted seat belongs to whoever's ward you're standing in, so
+      // where the City Ward layer can answer that, this card points there
+      // instead of repeating the whole council (Chicago's 50 would swamp it,
+      // and every listing duplicates the layer that answers *your* seat).
+      // Two deliberate limits: at-large colleagues are NOT districted and stay
+      // listed here (nothing else answers them), and a municipality the ward
+      // layer doesn't cover keeps its full list — suppressing seats with
+      // nowhere to send the reader would just lose them.
+      var seatsOnWardLayer = (result.wardLayerCovers || gov.councilOnWardLayer) &&
+        (districted.length > 0 || board.length === 0);
+      if (seatsOnWardLayer) {
         wrap.appendChild(renderSectionLabel(municipalBodyLabel(gov)));
         wrap.appendChild(renderLinkRow({
-          title: "Elected by ward — turn on the City Ward layer to see yours."
+          title: "Elected by " + municipalSeatWord(districted) +
+            " — turn on the City Ward layer to see yours."
         }));
+        if (otherSeats.length) {
+          wrap.appendChild(renderPersonRows(otherSeats.map(municipalPerson)));
+        }
+      } else if (board.length) {
+        wrap.appendChild(renderSectionLabel(municipalBodyLabel(gov)));
+        wrap.appendChild(renderPersonRows(board.map(municipalPerson)));
       }
       var officers = (gov.officers || []).filter(function (m) { return m && m.name; });
       if (officers.length) {

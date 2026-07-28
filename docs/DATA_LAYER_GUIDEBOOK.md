@@ -348,6 +348,25 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   that is the upgrade. Appointed administrators/managers printed beside the elected
   officers in four sources are deliberately excluded (the card's section is titled
   "Other Elected Officials"); surfacing them needs a separately-labeled section first.
+- **Districted seats now render once, on the layer that answers them (2026-07-28).** Where
+  the City Ward layer publishes a municipality's seat geometry, the Municipality card no
+  longer repeats the council: it names the head, says "elected by ward/district — turn on
+  the City Ward layer", and lists only the seats that layer CANNOT answer. Two deliberate
+  limits, both information-preserving: **at-large colleagues stay listed** (Joliet elects
+  five by district and three citywide — nothing else answers the three), and a
+  **municipality the ward layer doesn't cover keeps its full list** (Berwyn, Waukegan),
+  since suppressing seats with nowhere to send the reader would lose them. The card reads
+  the same prebuilt `municipal-ward-coverage.json` the ward layer's own coverage test
+  uses, so the two cannot disagree.
+- **Will's Lockport and Wilmington are missing from the municipal roster — recorded gap.**
+  Both are City Ward layer entries with published ward geometry, but neither appears in
+  `municipal-officials.json`: the Clerk's flipbook directory omits their entry HEADERS from
+  its text layer entirely (Wilmington's alderpersons appear orphaned mid-page after
+  Naperville's entry; Lockport's block is absent), so the scraper's entry split cannot see
+  them. This is a source-side text-layer defect, not a parse bug — no amount of parsing
+  recovers text the flipbook does not contain. Consequence: a Lockport or Wilmington point
+  resolves a ward polygon with no seat-holder joined, the same class as the recorded Skokie
+  disagreement. Fixing it needs a different source for those two cities.
 - Suburban municipal wards — **SHIPPED 2026-07** into the consolidated `ward` layer
   (see the concept row above), which is where the remaining gaps are now recorded:
   **Berwyn** elects 8 alderpersons by ward but appears in no published ward-boundary
