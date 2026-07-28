@@ -18,10 +18,11 @@ name: Update municipal officials roster
 #              Lake publishes no officeholder names anywhere county-side)
 #
 # Each county scrapes independently and a failure is isolated: one county's
-# outage never withdraws another county's roster. A build needs every county,
-# though — dropping one would delete live officeholders from the app — so the
-# build is gated on all of them succeeding, and any failure raises that
-# county's standing issue instead of reddening the run.
+# outage never withdraws another county's roster. A blocked source carries
+# forward its shipped entries (--preserved) while every other source refreshes;
+# only Cook and Will are required, because they are the two full-governing-body
+# sources and building without either would ship mayors where councils belong.
+# A failure raises that county's standing issue instead of reddening the run.
 
 on:
   schedule:
@@ -37,7 +38,14 @@ jobs:
   update-roster:
     runs-on: ubuntu-latest
     steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the workflow still runs — it just goes back to opening unchecked PRs.
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
 
       - uses: actions/setup-python@v5
         with:
@@ -119,8 +127,10 @@ jobs:
         run: python3 scripts/skokie_trustee_districts_scraper.py --out /tmp/skokie_trustee_districts.json
 
       # Joliet's own site carries per-seat phone + e-mail the Clerk's directory
-      # doesn't. Its edge fingerprints the HTTP client, so Playwright is the
-      # rung that carries it (docs/EXPANSION_GUIDE.md Part 2.4).
+      # doesn't. Its Akamai edge serves a hard WAF deny, which no rung clears —
+      # this step is EXPECTED to fail and its entry preserves. Kept so the city
+      # resumes automatically if the edge relaxes (docs/EXPANSION_GUIDE.md
+      # Part 2.4, blocked-source taxonomy).
       - name: Scrape Joliet's council contact
         id: scrape_joliet
         continue-on-error: true
@@ -252,7 +262,7 @@ jobs:
       - name: Open or update pull request
         if: steps.build.outcome == 'success' && steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
         run: |
           # Fixed branch (not per-run): an unmerged roster PR is refreshed in
           # place by the force-push below instead of spawning a duplicate PR
