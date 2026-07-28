@@ -31,7 +31,16 @@ jobs:
   bump:
     runs-on: ubuntu-latest
     steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every bot PR with
+      # zero checks. Both halves matter: the create fires `pull_request`, and
+      # the force-push onto the fixed bot/* branch fires `synchronize`. Falls
+      # back to github.token when the secret is absent, so the workflow still
+      # runs — it just goes back to opening unchecked PRs.
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
 
       - name: Update engine.lock.json from the dispatch payload
         env:
@@ -104,7 +113,7 @@ jobs:
       - name: Open or update pull request
         if: steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
           ENGINE_VERSION: ${{ github.event.client_payload.engine_version }}
         run: |
           branch="bot/engine-bump"
