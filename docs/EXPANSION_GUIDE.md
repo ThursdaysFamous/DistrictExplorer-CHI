@@ -432,6 +432,15 @@ pass supplies those two rosters outright. **Check for this class after any docum
 county build:** compare the scraped municipality list against the county's Census place
 list, since a missing entry is invisible in the output — it simply isn't there.
 
+**When the county and the county's GIS disagree, the municipality is the tiebreaker.**
+Cook GIS mapped four Skokie trustee districts while the Clerk's directory listed all six
+trustees as municipality-wide — a district polygon with nobody attached. Neither source
+was lying: Skokie moved to four districts plus two at-large in April 2025, the GIS
+followed, and the Clerk's feed simply doesn't carry the assignment. The village's own
+site is the authority on its own districting, and it is the only thing that settles which
+side is stale. A municipality with ward geometry and no districted seat in the roster is
+that smell; the builder now warns on it against `municipal-ward-coverage.json`.
+
 **Joliet is the recorded non-build:** joliet.gov returns 403 to non-browser clients,
 jolietcity.org renders its council client-side, and the only Archive snapshot is four
 years stale. Writing a parser against a page whose structure cannot be inspected is how
