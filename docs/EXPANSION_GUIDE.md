@@ -414,6 +414,16 @@ since that is not a direct line. Name matching is surname + given-name overlap o
 truncation, falling back to a *unique* surname within that one council and logging when
 it does; two possible matches refuse rather than guess.
 
+**Never join on a name that isn't unique in your state.** Illinois has two Wilmingtons and
+two Windsors, and a first-match-wins lookup picks whichever the file lists first — that put
+Greene County's Wilmington in the ward-coverage file and hid the ward layer in the real one.
+Every name→entity lookup is county-qualified, or refuses an ambiguous name; none of them
+silently take the first hit. The same rule covers a *key* that isn't unique: a ward number
+identifies two people in cities that elect two alderpersons per ward, so the seat lookup
+returns all holders, not the first. Both classes fail silently and neither has a gate —
+audit them by running the lookup over real data (`docs/DATA_LAYER_GUIDEBOOK.md`, the
+2026-07-28 name-collision sweep, records what was checked).
+
 **When the county source silently omits a municipality.** Will's directory drops Lockport
 and Wilmington entirely — the flipbook's text layer is missing their entry HEADERS, so the
 entry split cannot see them, and no parser recovers text that isn't there. Both are ward
