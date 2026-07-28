@@ -6010,6 +6010,44 @@ function initChiExplorer() {
     return "Municipal Hall";
   }
 
+  // When this seat is next on the ballot, where the source publishes it.
+  // Municipal terms are staggered — 103 of suburban Cook's 104 village boards
+  // mix two cycles — so this differs person to person and is the answer to
+  // "which of these do I vote on next?".
+  //
+  // Each county publishes a different term fact, so each is labelled as its
+  // source labels it — Cook the next election, Will the term's expiry, Kendall
+  // the date last elected. A person carries at most one, because a
+  // municipality resolves to exactly one county source.
+  //
+  // A year already past is NOT a next election: the sources carry a few stale
+  // seats, and rendering one would state something false, so it is dropped
+  // rather than shown. A last-elected year is in the past by definition, so no
+  // such check applies to it.
+  //
+  // Shared by the Municipality card and the City Ward seat card so the two can
+  // never word, or gate, the same fact differently.
+  function municipalTermNote(member) {
+    if (!member) return null;
+    var thisYear = new Date().getFullYear();
+    var nextElection = parseInt(member.nextElection, 10);
+    if (nextElection && nextElection >= thisYear) return "Next election " + nextElection;
+    var termExpires = parseInt(member.termExpires, 10);
+    if (termExpires && termExpires >= thisYear) return "Term expires " + termExpires;
+    var lastElected = parseInt(member.lastElected, 10);
+    if (lastElected) return "Elected " + lastElected;
+    return null;
+  }
+
+  // Join the present parts of a person's muted note, skipping the absent ones.
+  function municipalNote() {
+    var parts = [];
+    for (var i = 0; i < arguments.length; i++) {
+      if (arguments[i]) parts.push(String(arguments[i]));
+    }
+    return parts.length ? parts.join(" · ") : null;
+  }
+
   // Lead the row with the seat's district where one exists (the card order
   // convention puts the identifier before the person), keeping the office
   // title as the muted note. Contact is deliberately absent: this source's
@@ -6017,39 +6055,16 @@ function initChiExplorer() {
   // instead of implying a direct line to each member.
   function municipalPerson(member) {
     var person = { name: String(member.name) };
+    var role = null;
     if (member.district) {
       person.badge = String(member.district);
-      if (member.role) person.note = String(member.role);
+      if (member.role) role = String(member.role);
     } else if (member.role) {
       person.badge = String(member.role);
     }
-    if (member.appointed) {
-      person.note = (person.note ? person.note + " · " : "") + "Appointed";
-    }
-    // When this seat is next on the ballot, where the county publishes it.
-    // Municipal terms are staggered — 103 of suburban Cook's 104 village boards
-    // mix two cycles — so this differs person to person and is the answer to
-    // "which of these do I vote on next?". A year already past is NOT a next
-    // election: the source carries a few stale seats, and rendering one would
-    // state something false, so it is dropped rather than shown.
-    // Each county publishes a different term fact, so each is labelled as its
-    // source labels it — Cook the next election, Will the term's expiry,
-    // Kendall the date last elected. A person carries at most one, because a
-    // municipality resolves to exactly one county source.
-    var nextElection = parseInt(member.nextElection, 10);
-    var termExpires = parseInt(member.termExpires, 10);
-    var lastElected = parseInt(member.lastElected, 10);
-    var thisYear = new Date().getFullYear();
-    if (nextElection && nextElection >= thisYear) {
-      person.note = (person.note ? person.note + " · " : "") + "Next election " + nextElection;
-    } else if (termExpires && termExpires >= thisYear) {
-      // A term that expired in the past is not a term — the directory carries
-      // a few stale seats, and printing one would state something false.
-      person.note = (person.note ? person.note + " · " : "") + "Term expires " + termExpires;
-    } else if (lastElected) {
-      // Always in the past by definition, so no future check applies.
-      person.note = (person.note ? person.note + " · " : "") + "Elected " + lastElected;
-    }
+    var note = municipalNote(role, member.appointed ? "Appointed" : null,
+                             municipalTermNote(member));
+    if (note) person.note = note;
     // Per-person contact appears only where the county source publishes it per
     // member (McHenry prints a direct line or office e-mail for a few
     // officials). The village-hall contact stays on the hall row — copying it
@@ -8682,6 +8697,12 @@ function initChiExplorer() {
           wrap.appendChild(renderPersonRows(members.map(function (m) {
             var person = { name: String(m.name) };
             person.badge = m.role ? String(m.role) : "Council Member";
+            // Same term fact, same wording and same staleness gate as the
+            // Municipality card — this card just carries the one seat rather
+            // than the whole body.
+            var note = municipalNote(m.appointed ? "Appointed" : null,
+                                     municipalTermNote(m));
+            if (note) person.note = note;
             var seatPhone = (single ? result.gisPhone : null) || m.phone;
             var seatEmail = (single ? result.gisEmail : null) || m.email;
             if (seatPhone) person.phone = String(seatPhone);
@@ -8743,8 +8764,13 @@ function initChiExplorer() {
       // registration) and degrades gracefully instead of showing the generic
       // "data source didn't respond" message.
       var aldermen = loadAldermen().catch(function () { return []; });
-      return Promise.all([loadWards(), aldermen]).then(function (results) {
-        var geojson = results[0], roster = results[1];
+      // Term data is a THIRD source: the City's roster carries contact but no
+      // term fields at all, so the County Clerk's directory is the only
+      // verified answer to "when is this seat next on the ballot?". Swallowed
+      // like the roster above — without it the card just loses that one line.
+      var municipal = loadMunicipalOfficials().catch(function () { return {}; });
+      return Promise.all([loadWards(), aldermen, municipal]).then(function (results) {
+        var geojson = results[0], roster = results[1], municipalRoster = results[2];
         var feature = findFeatureContaining(geojson, point);
         if (!feature) return null;
         var props = feature.properties || {};
@@ -8768,7 +8794,19 @@ function initChiExplorer() {
         var websiteRaw = aldermanRow ? findPropCI(aldermanRow, ["website", "web_site", "url"]) : null;
         var website = websiteRaw && typeof websiteRaw === "object" ? websiteRaw.url : websiteRaw;
 
-        return { seq: seq, ward: ward, alderman: alderman, email: email, phone: phone, address: address, website: website };
+        // The Clerk publishes this per SEAT, and it is the seat's fact, not the
+        // holder's — all 50 wards run on one cycle, so "next election" is true
+        // of Ward 43 whoever sits in it. That is why it needs no name match
+        // between the two rosters, which format names differently enough (12 of
+        // 50 differ by middle initial, nickname or suffix) that one would be a
+        // heuristic. For the same reason the Clerk's person-level `appointed`
+        // flag is deliberately NOT carried here: it describes a named
+        // individual, so pinning it to the City roster's name would be a guess.
+        var seat = municipalSeatHolders(
+          municipalRosterByName(municipalRoster, "City of Chicago"), ward)[0] || null;
+
+        return { seq: seq, ward: ward, alderman: alderman, email: email, phone: phone,
+                 address: address, website: website, termNote: municipalTermNote(seat) };
       });
     },
     render: function (result) {
@@ -8777,6 +8815,7 @@ function initChiExplorer() {
       wrap.appendChild(renderBodyIntro({ title: "Chicago City Council" }));
       if (result.alderman) {
         var person = { name: String(result.alderman), badge: "Alderman" };
+        if (result.termNote) person.note = String(result.termNote);
         if (result.phone) person.phone = String(result.phone);
         if (result.email) person.email = String(result.email);
         wrap.appendChild(renderPersonRows([person]));

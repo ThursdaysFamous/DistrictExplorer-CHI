@@ -393,6 +393,25 @@ past is not rendered (both feeds carry a few stale seats), and where a source pu
 more than one fact, keep only the one the card will show — Cook's last-elected date would
 have added ~1,000 unread fields beside its next-election date.
 
+**A fact that appears on two cards gets ONE render helper.** Municipal term data surfaces
+on both the Municipality card and the City Ward seat card, and the concept is split by
+design — the Municipality card suppresses districted councils, so a ward-elected
+resident's own seat exists only on the Ward card. Two copies of the labelling and the
+past-year gate would let the same fact drift into two wordings, which reads to a user as
+two different claims. Extract the helper the moment the second card wants the fact
+(`municipalTermNote()`), rather than pasting the branch.
+
+**Match a fact to the SEAT or to the PERSON, and let that decide whether you need a name
+join.** Chicago's term data comes from a different source than its alderperson names (the
+City's roster carries contact but no term fields, so the Clerk's `CHICA` type supplies
+them). Next-election is the seat's — all 50 wards run on one cycle, so it is true of Ward
+43 whoever sits in it, and it needs no name match at all. The Clerk's `appointed` flag is
+the person's, and the two rosters format names differently enough (12 of 50 differ by
+middle initial, nickname or suffix) that pinning it to the other roster's name would be a
+heuristic — so it is deliberately not carried. When two sources describe one seat, sort
+each field this way before joining; it usually removes the need for fuzzy name matching
+rather than motivating it.
+
 **Name the jurisdiction the way the source labels its form of government.** Cook prints
 "Village of Alsip"; Kane groups under CITIES/VILLAGES and DMMC tags each entry (V)/(C).
 Carrying that into the jurisdiction string is what lets the card title the hall row "City
