@@ -1887,7 +1887,7 @@
     "name": "Village of Coal City",
     "office": {
       "address": "515 S. Broadway St., Coal City 60416",
-      "email": "kmelvin@coalcity-il.govTreasurer",
+      "email": "kmelvin@coalcity-il.gov",
       "phone": "815-634-8608"
     },
     "officers": [
@@ -2837,7 +2837,7 @@
     "name": "Village of Elwood",
     "office": {
       "address": "401 E. Mississippi Ave., Elwood 60421",
-      "email": "fred.hayes@villageofelwood.comTrusteesDarryl",
+      "email": "fred.hayes@villageofelwood.com",
       "phone": "815-423-5011"
     },
     "officers": [
@@ -4737,54 +4737,72 @@
     "board": [
       {
         "district": "District 1",
+        "email": "lhug@joliet.gov",
         "name": "Larry E. Hug",
+        "phone": "815-325-0875",
         "role": "Council Member"
       },
       {
         "district": "District 2",
+        "email": "pmudron@joliet.gov",
         "name": "Pat Mudron",
+        "phone": "815-724-3749",
         "role": "Council Member"
       },
       {
         "district": "District 3",
+        "email": "sreardon@joliet.gov",
         "name": "Sharon “Sherri” Reardon",
+        "phone": "815-724-3720",
         "role": "Council Member"
       },
       {
         "district": "District 4",
+        "email": "ccardenas@joliet.gov",
         "name": "Cesar Cardenas",
+        "phone": "331-285-2068",
         "role": "Council Member"
       },
       {
         "district": "District 5",
+        "email": "sibarra@joliet.gov",
         "name": "Suzanna Ibarra",
+        "phone": "815-724-3742",
         "role": "Council Member"
       },
       {
         "district": "At Large",
+        "email": "jquillman@joliet.gov",
         "name": "Jan Quillman",
+        "phone": "815-724-3744",
         "role": "Council Member"
       },
       {
         "district": "At Large",
+        "email": "jclement@joliet.gov",
         "name": "Joe Clement",
+        "phone": "815-724-3747",
         "role": "Council Member"
       },
       {
         "district": "At Large",
+        "email": "jmoreno@joliet.gov",
         "name": "Juan Moreno",
+        "phone": "815-724-3129",
         "role": "Council Member"
       }
     ],
     "county": "Will",
     "head": {
+      "email": "tdarcy@joliet.gov",
       "name": "Terry D’Arcy",
+      "phone": "815-724-3700",
       "role": "Mayor"
     },
     "name": "City of Joliet",
     "office": {
       "address": "19150 W. Jefferson St., Joliet 60432",
-      "email": "cityclerk@joliet.govTreasurer",
+      "email": "cityclerk@joliet.gov",
       "phone": "815-724-4000"
     },
     "officers": [

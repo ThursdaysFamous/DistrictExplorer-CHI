@@ -200,7 +200,7 @@ def parse_header(entry):
     email = None
     mail = re.search(r"Email:\s*([^\s]+@[^\s]+)", entry)
     if mail:
-        email = clean(mail.group(1))  # "Contact Us link on website" is not an email
+        email = trim_glued_email(clean(mail.group(1)))  # "Contact Us link on website" is not an email
 
     phone = None
     tel = re.search(r"\((\d{3})\)\s*(\d{3})-(\d{4})", entry)
@@ -285,6 +285,21 @@ OFFICER_NAME_RE = (r"[A-Z]" + _CH + r"*"
 # name; without it the treasurer shipped carrying the next section's first
 # board member.
 _GLUED_LABEL_RE = re.compile(r"(?<=[a-z])(?=(?:" + _LABELS + r")\b)")
+
+
+# The same glue on an ADDRESS instead of a name: the flattened directory runs
+# the next label straight onto the domain ("cityclerk@joliet.govTreasurer",
+# "fred.hayes@villageofelwood.comTrusteesDarryl"), which shipped as a dead
+# mailto. Cut at the TLD when what follows starts a new capitalized label.
+_GLUED_EMAIL_RE = re.compile(
+    r"^([\w.\-+]+@[\w\-]+(?:\.[\w\-]+)*?\.(?:gov|com|org|net|us|edu))(?=[A-Z]|$)")
+
+
+def trim_glued_email(address):
+    if not address:
+        return address
+    match = _GLUED_EMAIL_RE.match(address)
+    return match.group(1) if match else address
 
 
 def trim_glued_label(name):

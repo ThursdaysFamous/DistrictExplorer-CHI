@@ -441,11 +441,23 @@ site is the authority on its own districting, and it is the only thing that sett
 side is stale. A municipality with ward geometry and no districted seat in the roster is
 that smell; the builder now warns on it against `municipal-ward-coverage.json`.
 
-**Joliet is the recorded non-build:** joliet.gov returns 403 to non-browser clients,
-jolietcity.org renders its council client-side, and the only Archive snapshot is four
-years stale. Writing a parser against a page whose structure cannot be inspected is how
-silent breakage ships; its members already come from the clerk, only per-seat contact is
-missing.
+**Re-test a recorded "unbuildable" before believing it.** Joliet was skipped as
+unbuildable — joliet.gov 403'd every client tried, jolietcity.org looked client-rendered,
+and the only Archive snapshot was four years stale. Re-tested a day later, both premises
+were wrong in instructive ways: the 403 was the same **client fingerprint** as the Akamai
+counties (a complete browser header set gets 200, so Playwright carries it), and
+jolietcity.org is not the city's site at all but a parked domain serving a redirect stub.
+The city publishes a council index plus a page per member, each with a direct phone and
+e-mail. A non-build record is a snapshot of what was tried, not a property of the source;
+re-testing one costs minutes.
+
+**Budget for per-page layout drift within a single site.** Joliet's nine bio pages use
+four shapes: the mayor has no seat line where members do, one member's seat rides inline
+after the name ("…Quillman, At-large"), one member's e-mail is split across two lines
+mid-token, and one member's URL lacks the "-bio" suffix every other page has — that last
+one silently dropped him until the link pattern was widened. Anchor on the stable element
+(here the e-mail address) and walk outward, rather than trusting fixed offsets, and make
+the count floor the real roster size so a dropped member fails the run.
 
 **Tier B — suburban municipal wards (SHIPPED 2026-07).** Shipped as **entries of the
 existing `ward` layer**, keyed by municipality (§2.1) — one toggle, one concept, whether

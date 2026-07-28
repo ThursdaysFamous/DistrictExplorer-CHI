@@ -110,6 +110,14 @@ jobs:
         continue-on-error: true
         run: python3 scripts/skokie_trustee_districts_scraper.py --out /tmp/skokie_trustee_districts.json
 
+      # Joliet's own site carries per-seat phone + e-mail the Clerk's directory
+      # doesn't. Its edge fingerprints the HTTP client, so Playwright is the
+      # rung that carries it (docs/EXPANSION_GUIDE.md Part 2.4).
+      - name: Scrape Joliet's council contact
+        id: scrape_joliet
+        continue-on-error: true
+        run: python3 scripts/joliet_council_contact_scraper.py --out /tmp/joliet_council_contact.json
+
       # A source that blocks or breaks is an expected state, not a red build:
       # the shipped roster keeps its last good values and one standing issue
       # tracks the block (the validate-sources pattern).
@@ -119,7 +127,7 @@ jobs:
           steps.scrape_dupage.outcome == 'failure' || steps.scrape_kane.outcome == 'failure' ||
           steps.scrape_mchenry.outcome == 'failure' || steps.scrape_kendall.outcome == 'failure' ||
           steps.scrape_lake.outcome == 'failure' || steps.scrape_will_cities.outcome == 'failure' ||
-          steps.scrape_skokie.outcome == 'failure'
+          steps.scrape_skokie.outcome == 'failure' || steps.scrape_joliet.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           COOK_OUTCOME: ${{ steps.scrape_cook.outcome }}
@@ -131,6 +139,7 @@ jobs:
           LAKE_OUTCOME: ${{ steps.scrape_lake.outcome }}
           WILL_CITIES_OUTCOME: ${{ steps.scrape_will_cities.outcome }}
           SKOKIE_OUTCOME: ${{ steps.scrape_skokie.outcome }}
+          JOLIET_OUTCOME: ${{ steps.scrape_joliet.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -154,6 +163,7 @@ jobs:
           if [ "$LAKE_OUTCOME" = "failure" ]; then raise_issue "Lake"; fi
           if [ "$WILL_CITIES_OUTCOME" = "failure" ]; then raise_issue "Will ward-city"; fi
           if [ "$SKOKIE_OUTCOME" = "failure" ]; then raise_issue "Skokie trustee-district"; fi
+          if [ "$JOLIET_OUTCOME" = "failure" ]; then raise_issue "Joliet council-contact"; fi
 
       - name: Rebuild roster data file
         id: build
@@ -162,7 +172,7 @@ jobs:
           steps.scrape_dupage.outcome == 'success' && steps.scrape_kane.outcome == 'success' &&
           steps.scrape_mchenry.outcome == 'success' && steps.scrape_kendall.outcome == 'success' &&
           steps.scrape_lake.outcome == 'success' && steps.scrape_will_cities.outcome == 'success' &&
-          steps.scrape_skokie.outcome == 'success'
+          steps.scrape_skokie.outcome == 'success' && steps.scrape_joliet.outcome == 'success'
         run: |
           python3 scripts/build_municipal_officials_roster.py \
             /tmp/cook_municipal_officials.json \
@@ -172,7 +182,8 @@ jobs:
             /tmp/mchenry_municipal_officials.json \
             /tmp/kendall_municipal_officials.json \
             /tmp/lake_municipal_officials.json \
-            --enrich /tmp/will_city_councils.json /tmp/skokie_trustee_districts.json
+            --enrich /tmp/will_city_councils.json /tmp/skokie_trustee_districts.json \
+            /tmp/joliet_council_contact.json
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present

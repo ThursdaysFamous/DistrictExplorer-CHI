@@ -217,6 +217,19 @@ PROVENANCE = [
              "client-rendered, and the only Archive snapshot is from 2022. The "
              "county clerk remains the roster of record — for a municipality the "
              "county covers, this source contributes contact only."},
+    {"layer": "Joliet council contact (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.joliet.gov/government/city-council-3189",
+     "note": "Per-seat phone + e-mail for the metro's third-largest city, which "
+             "the Will Clerk's directory does not publish "
+             "(joliet_council_contact_scraper.py). joliet.gov fingerprints the "
+             "HTTP CLIENT — curl gets 200 where python-requests gets 403 — so "
+             "Playwright is the rung that carries it and a reachability WARN "
+             "here is EXPECTED, not drift. The Internet Archive is deliberately "
+             "not a fallback: its newest snapshot is from 2022, two elections "
+             "stale. The Clerk stays the roster of record; this adds contact "
+             "only. Note jolietcity.org is NOT the city — it is a parked "
+             "domain."},
     {"layer": "Skokie trustee districts (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://www.skokie.org/486/Board-of-Trustees",
