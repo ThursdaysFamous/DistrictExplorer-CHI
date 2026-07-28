@@ -8727,6 +8727,27 @@ function initChiExplorer() {
         if (!p.dxWard) return p.dxMunicipality ? String(p.dxMunicipality) : null;
         return String(p.dxMunicipality) + " " + String(p.dxSeatLabel) + " " + String(p.dxWard);
       },
+      // Name the seat's holder in the hover popup, the way Chicago's entry
+      // does — without this the suburban rows showed a ward number and nobody,
+      // even though the roster that answers the card was already cached.
+      // Precedence mirrors the card's exactly (roster seat-holders first, the
+      // GIS attribute second) so the two surfaces cannot disagree. The loader
+      // is shared and cached, so all four suburban entries cost one fetch.
+      hoverOfficial: {
+        load: loadMunicipalOfficials,
+        name: function (feature, roster) {
+          var p = feature.properties || {};
+          var seats = municipalSeatHolders(
+            municipalRosterByName(roster, p.dxMunicipality), p.dxWard);
+          // EVERY holder, not the first: Crest Hill, Lockport and Wilmington
+          // elect two per ward, and naming one would hide half of a resident's
+          // representation — the same reason municipalSeatHolders returns a list.
+          if (seats.length) {
+            return seats.map(function (m) { return String(m.name); }).join(" · ");
+          }
+          return p.dxOfficial ? String(p.dxOfficial) : null;
+        }
+      },
       query: function (point, seq) {
         return Promise.all([
           loadGeometry(),
