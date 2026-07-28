@@ -413,6 +413,19 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   postback: the county dropdown is an ASP.NET AutoPostBack, so selecting the option *is*
   the submit and the browser generates the viewstate tokens itself, which makes the
   fallback sturdier than the primary rung as well as edge-proof.
+- **Out-of-scope wash moved from the city line to the metro edge (2026-07-28).** The wash
+  had been drawn from the ERSB school-board tiling — Chicago's limits — so it greyed out
+  suburban Cook and all six collar counties. Measured against the registered layers, that
+  had stopped being true: Chicago resolves **32** of 39, suburban Cook **25**, DuPage and
+  Will **21**, Kane 20, Lake 19, McHenry and Kendall **17**. Coverage tiers across the
+  metro rather than stopping at the city line, so the wash now marks the 7-county edge,
+  beyond which only the statewide layers answer; the city/suburb difference is carried by
+  the cards, which already hide an out-of-coverage layer outright. Removing the wash
+  entirely was rejected — the tiers are real and a wash-free map would claim parity the
+  data doesn't support. Geometry is `data/app/metro-outline.json` (one dissolved polygon,
+  62 vertices, 2.5 KB, `scripts/build_metro_outline.py`); the existing per-county outline
+  files could not be reused because they were simplified independently and their shared
+  borders would not cancel in the in-browser dissolve.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake

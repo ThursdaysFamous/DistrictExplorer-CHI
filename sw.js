@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v24";
+const CACHE_NAME = "district-explorer-shell-v25";
 
 const SHELL_URLS = [
   "./",
@@ -76,6 +76,7 @@ const GEOMETRY_URLS = [
   "./data/app/kane-judicial-subcircuits.json",
   "./data/app/mchenry-judicial-subcircuits.json",
   "./data/app/municipal-ward-coverage.json",
+  "./data/app/metro-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
