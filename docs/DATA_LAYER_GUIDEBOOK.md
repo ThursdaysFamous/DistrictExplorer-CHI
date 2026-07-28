@@ -365,9 +365,14 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   **Lockport and Wilmington's rosters outright**, closing the gap below. The clerk remains
   the roster of record — for a municipality the county covers this adds contact only.
   Per-seat contact now renders on the `ward` layer's seat card as well as here.
-  **Joliet is the recorded non-build** (403 to non-browser clients on joliet.gov,
-  client-rendered jolietcity.org, only a 2022 Archive snapshot): its members come from the
-  clerk, only its per-seat contact is missing.
+  **Joliet — BUILT 2026-07-28**, and the recorded non-build was wrong on both counts.
+  joliet.gov fingerprints the HTTP client, not the path: a complete browser header set
+  gets a plain 200, so Playwright carries it exactly as it does McHenry and Kendall. And
+  jolietcity.org is not the city's site at all — it is a parked domain serving a 114-byte
+  lander, which is why it read as "client-rendered". The city publishes a council index
+  plus a page per member; all nine (mayor + eight council members) now carry a direct
+  phone and e-mail. **A recorded "unbuildable" is a snapshot of what was tried, not a
+  property of the source** — this one cost one re-test.
 - **Name-collision sweep — RUN 2026-07-28, 3 findings, all fixed.** Prompted by the
   wrong-Wilmington bug below: an audit of every name-keyed lookup in the pipeline and the
   app, checked against real data rather than by inspection.
@@ -404,6 +409,13 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   itself on in a village with no ward services. Resolution is now county-qualified, with a
   hard failure on any name the entry's county can't disambiguate — the same rule the roster
   builder already used. Worth re-checking in any fork: a name collision fails silently.
+- **Three malformed office e-mails — FIXED 2026-07-28.** The Will directory's flattened
+  text ran the next label onto the domain, so Coal City, Elwood and Joliet shipped dead
+  mailto addresses (`cityclerk@joliet.govTreasurer`,
+  `fred.hayes@villageofelwood.comTrusteesDarryl`). Same glue class as the Oswego treasurer
+  name, on the e-mail field instead: addresses are now cut at the TLD when a capitalized
+  label follows. Worth re-checking after any flattened-text parse — a broken address looks
+  like data until someone clicks it.
 - **Will's Lockport and Wilmington were missing from the municipal roster — CLOSED above.**
   Both are City Ward layer entries with published ward geometry, but neither appears in
   `municipal-officials.json`: the Clerk's flipbook directory omits their entry HEADERS from
