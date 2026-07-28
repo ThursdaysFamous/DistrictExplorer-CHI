@@ -67,6 +67,20 @@ behavior. Three things are worth knowing before porting it:
 Districts shown for a pin are the pin's, not the cursor's — `updateHover`
 already anchored the stack at `poi.latlng`, so this needed no change.
 
+**v1.0.15** fenced the popup to the map viewport. `fenceHoverPopup()` clamps it
+horizontally, flips it below the cursor when there isn't room above, and slides
+the tail back so it still points at the spot being read; `autoPan` stays off,
+because panning would move the thing being inspected out from under the reader
+and the popup would chase itself. It measures the rendered box and corrects by
+the delta rather than deriving a position — Leaflet's placement already accounts
+for the tail strip, zoom animation and content size. Two invariants to preserve
+when touching it: the flipped state changes **only** the tail, never
+`.leaflet-popup`'s margins (so one measure-correct pass is enough), and
+`showHover` resets the offset each frame so corrections don't compound. The same
+release fixed a v1.0.14 bug — the popup now declares `maxWidth: 324`, without
+which Leaflet's default 300 wrote an inline width that beat the stylesheet and
+rendered every hover card 24px narrower than the design.
+
 This is the engineering contract for implementing the card redesign specified in
 `docs/design_handoff_county_board_card/` (Handoff 1, County Board card, design
 ids 3a–3d) and `docs/design_handoff_card_system/` (Handoff 2, all card types,
