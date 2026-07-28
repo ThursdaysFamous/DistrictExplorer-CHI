@@ -2153,6 +2153,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-right: 1px solid rgba(0, 0, 0, 0.08);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
+  /* Flipped below the cursor when there isn't room above (see fenceHoverPopup).
+     The tail moves to the top edge and points up — the two borders that were
+     the outer sides pointing down become the other two. Only the tail moves:
+     `.leaflet-popup`'s own margins are deliberately NOT swapped, so the card's
+     geometry is identical in both modes and fenceHoverPopup can measure once
+     and correct once. The unused 20px below is bare margin — nothing renders
+     there. */
+  .hover-popup.hover-below .leaflet-popup-tip-container { top: -19px; }
+  .hover-popup.hover-below .leaflet-popup-tip {
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
 
   /* One row per containing layer, broad→granular. The layer name is the grey
      LABEL and the officeholder is the primary line — the reverse of the old
@@ -11694,7 +11708,65 @@ function initChiExplorer() {
     if (hoverPopup) hoverPopup.close(); // idempotent; removes it from the map if open
   }
 
-  function showHover(latlng, html) {
+  // Leaflet's reserved tail strip (.leaflet-popup margin-bottom), the breathing
+  // room kept from the map edge, and how far the tail stays clear of the card's
+  // rounded corners.
+  var HOVER_TIP = 20;
+  var HOVER_EDGE = 8;
+  var HOVER_TAIL_INSET = 16;
+  var HOVER_TAIL_HALF = 20; // half of Leaflet's 40px tail container (its centering margin)
+  var HOVER_WIDTH = 324;    // the card width; must match .hover-popup .leaflet-popup-content
+  var HOVER_OFFSET_X = 0;
+  var HOVER_OFFSET_Y = -4;
+
+  // Keep the popup inside the map viewport. autoPan stays off by design —
+  // panning the map during a hover would move the very thing being inspected,
+  // and the popup follows the cursor, so it would chase itself — so instead of
+  // moving the MAP this moves the POPUP: clamp it horizontally, flip it below
+  // the cursor when there isn't room above, and slide the tail back so it still
+  // points at the spot being read.
+  //
+  // Measured rather than computed from the anchor: Leaflet's own placement
+  // already accounts for the tail strip, zoom animation and content size, so
+  // reading the rendered box and correcting by the delta stays right even if
+  // any of those change. Both reads happen before the single write, so this
+  // costs one layout pass per frame, not one per adjustment.
+  function fenceHoverPopup(latlng) {
+    var el = hoverPopup.getElement();
+    if (!el) return;
+    var frame = map.getContainer().getBoundingClientRect();
+    var box = el.getBoundingClientRect();
+    if (!box.width || !box.height) return; // not laid out yet — next frame catches it
+    var anchorY = frame.top + map.latLngToContainerPoint(latlng).y;
+
+    var dx = 0;
+    if (box.left < frame.left + HOVER_EDGE) dx = (frame.left + HOVER_EDGE) - box.left;
+    else if (box.right > frame.right - HOVER_EDGE) dx = (frame.right - HOVER_EDGE) - box.right;
+
+    // Flip below only when the popup genuinely doesn't fit above AND there is
+    // more room below — near the vertical middle of a short map, staying above
+    // and clamping reads better than flipping back and forth as the cursor moves.
+    var needed = box.height + HOVER_TIP + HOVER_EDGE;
+    var below = (anchorY - frame.top) < needed && (frame.bottom - anchorY) > (anchorY - frame.top);
+    var dy = 0;
+    if (below) dy = (anchorY + HOVER_TIP) - box.top;
+    else if (box.top < frame.top + HOVER_EDGE) dy = (frame.top + HOVER_EDGE) - box.top;
+
+    el.classList.toggle("hover-below", below);
+    hoverPopup.options.offset = L.point(HOVER_OFFSET_X + dx, HOVER_OFFSET_Y + dy);
+    hoverPopup.update();
+
+    // The tail is centered on the popup, so a horizontal clamp drags it off the
+    // cursor; shift it back by the same amount, stopping short of the corners.
+    var tail = el.querySelector(".leaflet-popup-tip-container");
+    if (tail) {
+      var reach = Math.max(0, box.width / 2 - HOVER_TAIL_INSET);
+      var shift = Math.max(-reach, Math.min(reach, dx));
+      tail.style.marginLeft = (-HOVER_TAIL_HALF - shift) + "px";
+    }
+  }
+
+  function showHover(latlng, content) {
     if (!hoverPopup) {
       hoverPopup = L.popup({
         closeButton: false,
@@ -11702,11 +11774,19 @@ function initChiExplorer() {
         closeOnClick: false,
         autoPan: false,          // never nudge the map as the popup nears an edge
         className: "hover-popup",
-        offset: [0, -4]
+        // Leaflet's default maxWidth is 300 and it writes an inline width onto
+        // the content element, which beats the stylesheet — so the card's
+        // 324px would silently render at 300 without this.
+        maxWidth: HOVER_WIDTH,
+        offset: [HOVER_OFFSET_X, HOVER_OFFSET_Y]
       });
     }
-    hoverPopup.setLatLng(latlng).setContent(html);
+    // Reset to the unfenced placement first so each frame measures the natural
+    // box, not the previous frame's correction.
+    hoverPopup.options.offset = L.point(HOVER_OFFSET_X, HOVER_OFFSET_Y);
+    hoverPopup.setLatLng(latlng).setContent(content);
     if (!hoverPopup.isOpen()) hoverPopup.openOn(map);
+    fenceHoverPopup(latlng);
   }
 
   function updateHover() {
