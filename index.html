@@ -5990,6 +5990,12 @@ function initChiExplorer() {
     if (member.appointed) {
       person.note = (person.note ? person.note + " · " : "") + "Appointed";
     }
+    // Per-person contact appears only where the county source publishes it per
+    // member (McHenry prints a direct line or office e-mail for a few
+    // officials). The village-hall contact stays on the hall row — copying it
+    // onto every person would imply direct lines that don't exist.
+    if (member.phone) person.phone = String(member.phone);
+    if (member.email) person.email = String(member.email);
     return person;
   }
 

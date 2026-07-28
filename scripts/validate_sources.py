@@ -201,6 +201,52 @@ PROVENANCE = [
              "discovers it from this page. The page serves 202/empty to "
              "non-browser user agents, so a reachability WARN can be its bot "
              "filter rather than drift."},
+    {"layer": "DuPage municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://dmmc-cog.org/membership-list/",
+     "note": "DuPage County government publishes NO municipal-officials "
+             "directory (verified negative), so the DuPage Mayors and Managers "
+             "Conference directory is the source of record "
+             "(dupage_municipal_officials_scraper.py). Pinned to the membership "
+             "page, not the PDF: the PDF's URL carries its edition date and "
+             "changes, and the scraper discovers it here. Head of government "
+             "only — the directory prints no trustees."},
+    {"layer": "Kane County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://clerk.kanecountyil.gov/Elections/Documents/GovernmentGuide.pdf",
+     "note": "The Clerk's annual Government Guide, 'Cities and Village "
+             "Officials' section (kane_municipal_officials_scraper.py). Stable "
+             "URL, linked from clerk.kanecountyil.gov/elections. Head of "
+             "government + municipal clerk only — the guide prints no trustees."},
+    {"layer": "McHenry County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+     "note": "The Clerk's County Yearbook 'Cities & Villages' page "
+             "(mchenry_municipal_officials_scraper.py). Akamai-fronted and it "
+             "fingerprints the HTTP CLIENT, not just headers: measured 2026-07, "
+             "curl gets 200 where python-requests gets 403 with a byte-identical "
+             "browser header set, so Playwright is the day-one rung and a "
+             "reachability WARN here is EXPECTED, not drift. Head of government "
+             "+ elected clerk/treasurer only; appointed administrators are "
+             "excluded deliberately."},
+    {"layer": "Kendall County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.kendallcountyil.gov/home/showdocument?id=184",
+     "note": "The Clerk's Yearbook & Government Guide PDF, CITY/VILLAGE "
+             "OFFICIALS sections (kendall_municipal_officials_scraper.py). Same "
+             "Akamai client-fingerprint posture as McHenry — a reachability WARN "
+             "is EXPECTED. The yearbook misspells Minooka as 'Minnoka'; the "
+             "scraper carries an explicit alias so the place still joins."},
+    {"layer": "Lake County municipal hall contact (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": ("https://services3.arcgis.com/HESxeTbDliKKvec2/arcgis/rest/"
+                    "services/Municipalities/FeatureServer/0"),
+     "note": "Lake publishes NO municipal officeholder names anywhere "
+             "county-side (double-verified negative: county/Clerk pages, GIS, "
+             "and the Municipal League). This service supplies hall address, "
+             "phone, e-mail, and website only, so Lake ships contact-only cards "
+             "— the rule-4 honesty floor (lake_municipal_officials_scraper.py). "
+             "If a Lake roster ever appears, this is the entry to upgrade."},
     {"layer": "Board of Review commissioners (roster)",
      "app_file": "ccbr-roster.json",
      "source_url": "https://www.cookcountyboardofreview.com/",

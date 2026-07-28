@@ -270,9 +270,11 @@ never served as fresh, and automation resumes the moment any rung unblocks.
 ## 2.4 Rule 5 — municipal governments ship with their county
 
 A county brings its municipalities; rule 4 applies to them in the same expansion change.
-Status: **Cook + Will SHIPPED** (156 municipalities, 958 board members, 184 ward/district
-seats, weekly CI on `municipal-officials.json`); five counties sourced and specified,
-unbuilt. The concept: for a point in an incorporated place, name who governs it — head of
+Status: **all seven metro counties SHIPPED** (2026-07-28) — 279 municipalities on one
+weekly-CI `municipal-officials.json`: **156 full governing bodies** (Cook + Will), **82
+head-of-government** entries (DuPage, Kane, McHenry, Kendall), and **41 contact-only**
+(Lake, which publishes no names anywhere county-side), plus 958 board members and 184
+ward/district seats. The concept: for a point in an incorporated place, name who governs it — head of
 government, governing body, other elected officers, hall contact, official site — joined
 onto the statewide `municipality` card by **7-digit place GEOID** (join precedent:
 `il-county-clerks.json` on `county`). Unsourced places keep the identity-only card, so
@@ -298,16 +300,39 @@ the guidebook either way):
 5. Link-only — the rule-4 floor. Never scrape 50 heterogeneous municipal sites as a
    default (a per-muni upgrade is a deliberate decision, not a source of record).
 
-**Verified per-county sources for the five unbuilt counties** (all live-fetched twice,
-2026-07-27; re-verify before building — postures drift):
+**Per-county sources, as built** (each scraper names its own source; postures measured
+2026-07-28 during the build):
 
 | County | Source | Depth | Fetch class |
 |---|---|---|---|
-| **DuPage** | DMMC Membership Directory PDF — discover the dated URL from `dmmc-cog.org/membership-list/` | mayor/president + manager + hall contact; **no trustees** (county publishes nothing municipal — verified negative) | clean fetch; 2-page text PDF, annual |
-| **Kane** | Clerk Government Guide PDF — `clerk.kanecountyil.gov/Elections/Documents/GovernmentGuide.pdf` (stable URL) | mayor/president + municipal clerk + contact; **no trustees** | clean fetch; 84-page text PDF, annual |
-| **McHenry** | Clerk County Yearbook "Cities & Villages" page — `mchenrycountyil.gov/county-government/county-yearbook/cities-villages` | president/mayor + clerk + manager + contact; **no trustees** | Akamai-fronted: 403s curl even with browser UA; browser-context works; archive.org HAS snapshots again — full engine ladder |
-| **Kendall** | Clerk Yearbook & Government Guide PDF — `kendallcountyil.gov/home/showdocument?id=184` | mayor/president + clerk + treasurer + contact; **no trustees** | Akamai 403s curl; Playwright rung day one; pypdf |
-| **Lake** | **No names published county-side (firm double-verified negative).** Lake GIS Municipalities FeatureServer — `services3.arcgis.com/HESxeTbDliKKvec2/arcgis/rest/services/Municipalities/FeatureServer/0` | hall address/phone/fax/email/website; **no names** → rule-4 branch 3 | open ArcGIS query |
+| **DuPage** | DMMC Membership Directory PDF — discover the dated URL from `dmmc-cog.org/membership-list/` (it rotated between research and build: `…/2025/08/…8.4.2025-1.pdf` → `…/2026/05/…5.12.2026.pdf`) | head of government only; **no trustees** (county publishes nothing municipal — verified negative) | clean fetch; 4-column text PDF, annual |
+| **Kane** | Clerk Government Guide PDF — `clerk.kanecountyil.gov/Elections/Documents/GovernmentGuide.pdf` (stable URL) | head + municipal clerk; **no trustees** | clean fetch; 84-page text PDF, annual |
+| **McHenry** | Clerk County Yearbook "Cities & Villages" page — `mchenrycountyil.gov/county-government/county-yearbook/cities-villages` | head + elected clerk/treasurer (+ per-person contact for a few); **no trustees** | Akamai **client-fingerprinted** — see below |
+| **Kendall** | Clerk Yearbook & Government Guide PDF — `kendallcountyil.gov/home/showdocument?id=184` | head + clerk + treasurer; **no trustees** | same Akamai posture as McHenry; pypdf |
+| **Lake** | **No names published county-side (firm double-verified negative).** Lake GIS Municipalities FeatureServer — `services3.arcgis.com/HESxeTbDliKKvec2/arcgis/rest/services/Municipalities/FeatureServer/0` | hall address/phone/email/website; **no names** → rule-4 branch 3 | open ArcGIS query |
+
+**The Akamai counties fingerprint the HTTP CLIENT, not just its headers** (measured on
+both, 2026-07-28, with a byte-identical full browser header set): **curl gets 200 where
+python-requests gets 403**. So a complete header set is necessary but not sufficient, and
+"add a browser User-Agent" is not the fix — **Playwright is the day-one rung** for these
+two, which is why the workflow installs Chromium. Their scrapers still try `requests`
+first (cheap, fails fast) and fall back to the Internet Archive, which genuinely does hold
+snapshots of the McHenry yearbook path again (2025-03-06 onward). Note for the next
+county: measure the rung with the *client the scraper will actually use* — a successful
+curl proves nothing about `requests`.
+
+**Two source defects worth expecting elsewhere.** DMMC prints phone numbers with **no
+area code** and states no default, so DuPage ships `phone: null` rather than a dead
+`tel:` link — per-field honesty beats a completed guess. Kendall's yearbook misspells
+Minooka as "Minnoka"; the scraper carries an explicit, reviewable alias so the place
+still joins its Census GEOID. Correcting a place NAME to make a geographic join is not
+the same as inventing officeholder data — no person's name is ever altered.
+
+**Appointed staff are excluded, never misfiled.** Four of these sources print village
+administrators, city managers, and deputy clerks beside the elected officers. The card's
+officers section is titled "Other Elected Officials", so an appointee shipped there would
+be mislabeled; only elected offices (head, clerk, treasurer) ship. A future card that
+wants them needs a separately-labeled section first.
 
 (Shipped-county sources, for reference: Cook = the Clerk's Directory of Elected Officials
 JSON API, `cookcountyclerkil.gov/api/ElectedOfficial/GetByJurisdictionType?id=MUNIS` +
@@ -331,9 +356,21 @@ entirely** where the source names nobody; contact is municipality-level (verifie
 per-person phone/email columns are empty for all 1,134 records) and renders once on the
 hall row; head/board/officers stay separate sections so a mayor-level county ships a
 `head` with no `board` honestly; **Library Trustees are excluded** (they sit on
-`library-district` boards, not the municipal body). Count floors: per-county muni floors
-(cook ≥120 · will ≥35 · dupage ≥33 · kane ≥27 · mchenry ≥26 · kendall ≥13 · lake ≥48),
-member floors (cook ≥900 incl. ≥500 trustees, will ≥150), merged total ≥270 of 284.
+`library-district` boards, not the municipal body). One shape addition from the
+five-county build: **per-person `phone`/`email` ride the person** where — and only where —
+the source publishes them per member (McHenry prints a direct line or office e-mail for a
+few officials); a "personal" number equal to the village-hall line is dropped, because
+carrying it would imply a direct line the source doesn't publish. Count floors as built:
+per-county muni floors (cook ≥120 · will ≥30 · dupage ≥32 · kane ≥26 · mchenry ≥26 ·
+kendall ≥12 · lake ≥48), member floors (cook ≥900, will ≥260, and for the mayor-level
+counties a floor ABOVE the head count so a run that silently lost every clerk still
+fails), Lake's member/head floors 0 by design, merged total ≥250 (built: 279).
+
+**Name the jurisdiction the way the source labels its form of government.** Cook prints
+"Village of Alsip"; Kane groups under CITIES/VILLAGES and DMMC tags each entry (V)/(C).
+Carrying that into the jurisdiction string is what lets the card title the hall row "City
+Hall" vs "Village Hall" — the builder strips the prefix again before joining on GEOID, so
+it costs nothing and a county that ships bare names silently degrades to "Municipal Hall".
 
 **PDF-parse lessons (the Will build was ~10× Cook, all source-format; the PDF counties
 will hit the same class):** parse the real PDF with a layout-preserving reader (`pypdf`

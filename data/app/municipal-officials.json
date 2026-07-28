@@ -1,4 +1,38 @@
 {
+  "1700243": {
+    "county": "DuPage",
+    "head": {
+      "name": "Tom Hundley",
+      "role": "Mayor"
+    },
+    "name": "Village of Addison",
+    "office": {
+      "address": "1 Friendship Plaza, Addison IL 60101"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.addisonadvantage.org"
+  },
+  "1700685": {
+    "county": "Kane",
+    "head": {
+      "name": "Debby Sosine",
+      "role": "President"
+    },
+    "name": "Village of Algonquin",
+    "office": {
+      "address": "2200 Harnish Dr., Algonquin IL 60102",
+      "email": "debbysosine@algonquin.org",
+      "phone": "847-658-2700"
+    },
+    "officers": [
+      {
+        "name": "Fred Martin",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.algonquin.org"
+  },
   "1701010": {
     "board": [
       {
@@ -45,6 +79,16 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofalsip.org"
+  },
+  "1701595": {
+    "county": "Lake",
+    "name": "Village of Antioch",
+    "office": {
+      "address": "874 Main St, Antioch IL 60002",
+      "phone": "847-395-1000"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.antioch.il.gov/"
   },
   "1702154": {
     "board": [
@@ -177,12 +221,22 @@
       },
       {
         "appointed": true,
-        "name": "Stacey PetersonAlderperson Ward",
+        "name": "Stacey Peterson",
         "role": "Treasurer"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://aurora-il.org"
+  },
+  "1703610": {
+    "county": "Lake",
+    "name": "Village of Bannockburn",
+    "office": {
+      "address": "2275 Telegraph Rd, Bannockburn IL 60015",
+      "phone": "847-945-6080"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://bannockburn.org/"
   },
   "1703844": {
     "board": [
@@ -319,6 +373,37 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://bartlettil.gov"
+  },
+  "1704078": {
+    "county": "Kane",
+    "head": {
+      "name": "Jeffery D. Schielke",
+      "role": "Mayor"
+    },
+    "name": "City of Batavia",
+    "office": {
+      "address": "100 N. Island Ave., Batavia IL 60510",
+      "email": "jschielk@bataviail.gov",
+      "phone": "630-454-2000"
+    },
+    "officers": [
+      {
+        "name": "Kate Garrett",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.cityofbatavia.net"
+  },
+  "1704303": {
+    "county": "Lake",
+    "name": "Village of Beach Park",
+    "office": {
+      "address": "11270 W Wadsworth Rd, Beach Park IL 60099",
+      "phone": "847-746-1770"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.villageofbeachpark.com/"
   },
   "1704572": {
     "board": [
@@ -461,6 +546,19 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vil.bellwood.il.us"
   },
+  "1705248": {
+    "county": "DuPage",
+    "head": {
+      "name": "Frank DeSimone",
+      "role": "President"
+    },
+    "name": "Village of Bensenville",
+    "office": {
+      "address": "12 S. Center Street, Bensenville IL 60106"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.bensenville.il.us"
+  },
   "1705404": {
     "board": [
       {
@@ -574,6 +672,40 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://berwyn-il.gov"
+  },
+  "1705976": {
+    "county": "Kane",
+    "head": {
+      "name": "Matt Fitzpatrick",
+      "role": "President"
+    },
+    "name": "Village of Big Rock",
+    "office": {
+      "address": "P.O. Box 128, Big Rock IL 60511",
+      "email": "admin@villageofbigrock.us",
+      "phone": "630-556-4365"
+    },
+    "officers": [
+      {
+        "name": "Lindsey Zambrano",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageofbigrock.us"
+  },
+  "1706587": {
+    "county": "DuPage",
+    "head": {
+      "name": "Franco Coladipietro",
+      "role": "President"
+    },
+    "name": "Village of Bloomingdale",
+    "office": {
+      "address": "201 S. Bloomingdale Road, Bloomingdale IL 60108"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.villageofbloomingdale.org"
   },
   "1706704": {
     "board": [
@@ -961,6 +1093,27 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vbg.org"
   },
+  "1709531": {
+    "county": "McHenry",
+    "head": {
+      "name": "Emily P. Berendt",
+      "role": "Village President"
+    },
+    "name": "Village of Bull Valley",
+    "office": {
+      "address": "1904 Cherry Valley Rd., Bull Valley IL 60098",
+      "email": "villageofbullvalley@gmail.com",
+      "phone": "815-459-4833"
+    },
+    "officers": [
+      {
+        "name": "Emma Mikan",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://thevillageofbullvalley.com"
+  },
   "1709642": {
     "board": [
       {
@@ -1022,6 +1175,27 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://burbankil.gov"
+  },
+  "1709759": {
+    "county": "Kane",
+    "head": {
+      "name": "Mary Kay Wlezen",
+      "role": "President"
+    },
+    "name": "Village of Burlington",
+    "office": {
+      "address": "175 Water St., (P.O. Box 205), Burlington IL 60109",
+      "email": "mkwlezen@vil.burlington.il.us",
+      "phone": "847-683-2237"
+    },
+    "officers": [
+      {
+        "name": "Christine Jones",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.vil.burlington.il.us"
   },
   "1709798": {
     "board": [
@@ -1226,6 +1400,76 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://calumetparkvillage.org"
   },
+  "1710906": {
+    "county": "Kane",
+    "head": {
+      "name": "Barbara Wojnicki",
+      "role": "President"
+    },
+    "name": "Village of Campton Hills",
+    "office": {
+      "address": "40W270 La Fox Rd., Suite B, Campton Hills IL 60175",
+      "email": "bwojnicki@camptonhills.illinois.gov",
+      "phone": "630-584-5700"
+    },
+    "officers": [
+      {
+        "name": "Tracy Johnson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.camptonhills.illinois.gov"
+  },
+  "1711332": {
+    "county": "DuPage",
+    "head": {
+      "name": "Frank Saverino Sr.",
+      "role": "Mayor"
+    },
+    "name": "Village of Carol Stream",
+    "office": {
+      "address": "500 N. Gary Avenue, Carol Stream IL 60188"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.carolstream.org"
+  },
+  "1711358": {
+    "county": "Kane",
+    "head": {
+      "name": "John Skillman",
+      "role": "President"
+    },
+    "name": "Village of Carpentersville",
+    "office": {
+      "address": "1200 L.W. Besinger Dr., Carpentersville IL 60110",
+      "email": "jmskillman@cville.org",
+      "phone": "847-426-3439"
+    },
+    "officers": [
+      {
+        "name": "Caryn Minor",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.cville.org"
+  },
+  "1711592": {
+    "county": "McHenry",
+    "head": {
+      "name": "Mark R. Kownick",
+      "role": "Mayor"
+    },
+    "name": "Village of Cary",
+    "office": {
+      "address": "755 Georgetown Drive, Cary IL 60013",
+      "email": "villagehall@caryillinois.com",
+      "phone": "847-639-0003"
+    },
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.caryillinois.com"
+  },
   "1712476": {
     "board": [
       {
@@ -1387,6 +1631,19 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://chicagoridge.org"
+  },
+  "1714572": {
+    "county": "DuPage",
+    "head": {
+      "name": "Eric Tech",
+      "role": "President"
+    },
+    "name": "Village of Clarendon Hills",
+    "office": {
+      "address": "One N. Prospect Avenue, Clarendon Hills IL 60514"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.clarendonhills.us"
   },
   "1715170": {
     "board": [
@@ -1662,6 +1919,40 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://crestwood.illinois.gov"
+  },
+  "1717887": {
+    "county": "McHenry",
+    "head": {
+      "name": "Haig L. Haleblian",
+      "role": "Mayor"
+    },
+    "name": "City of Crystal Lake",
+    "office": {
+      "address": "100 W. Woodstock St., Crystal Lake IL 60014",
+      "email": "comments@crystallake.org",
+      "phone": "815-459-2020"
+    },
+    "officers": [
+      {
+        "name": "Nick Hammonds",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.crystallake.org"
+  },
+  "1718628": {
+    "county": "DuPage",
+    "head": {
+      "name": "Joseph Marchese",
+      "role": "Mayor"
+    },
+    "name": "City of Darien",
+    "office": {
+      "address": "1702 Plainfield Road, Darien IL 60561"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.darienil.gov"
   },
   "1718992": {
     "board": [
@@ -1947,6 +2238,40 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vodolton.org"
   },
+  "1720591": {
+    "county": "DuPage",
+    "head": {
+      "name": "Robert Barnett",
+      "role": "Mayor"
+    },
+    "name": "Village of Downers Grove",
+    "office": {
+      "address": "850 Curtiss Street, Downers Grove IL 60515"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.downers.us"
+  },
+  "1721696": {
+    "county": "Kane",
+    "head": {
+      "name": "Dan Pearson",
+      "role": "President"
+    },
+    "name": "Village of East Dundee",
+    "office": {
+      "address": "120 Barrington Ave., East Dundee IL 60118",
+      "email": "dpearson@eastdundee.net",
+      "phone": "847-426-2822"
+    },
+    "officers": [
+      {
+        "name": "Katherine Diehl",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.eastdundee.net"
+  },
   "1721904": {
     "board": [
       {
@@ -1993,6 +2318,27 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://easthazelcrest.com"
+  },
+  "1722931": {
+    "county": "Kane",
+    "head": {
+      "name": "Jeffrey D. Walter",
+      "role": "President"
+    },
+    "name": "Village of Elburn",
+    "office": {
+      "address": "301 E. North St., Elburn IL 60119",
+      "email": "jwalter@elburn.il.us",
+      "phone": "630-365-5060"
+    },
+    "officers": [
+      {
+        "name": "Diane McQuilkin",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.elburn.il.us"
   },
   "1723074": {
     "board": [
@@ -2083,6 +2429,19 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://elkgrove.org"
+  },
+  "1723620": {
+    "county": "DuPage",
+    "head": {
+      "name": "Scott Levin",
+      "role": "Mayor"
+    },
+    "name": "City of Elmhurst",
+    "office": {
+      "address": "209 N. York Street, Elmhurst IL 60126"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.elmhurst.org"
   },
   "1723724": {
     "board": [
@@ -2458,6 +2817,41 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://forestview-il.org"
   },
+  "1727442": {
+    "county": "McHenry",
+    "head": {
+      "name": "Donny Schmit",
+      "role": "Mayor"
+    },
+    "name": "Village of Fox Lake",
+    "office": {
+      "address": "66 Thillen Dr., Fox Lake IL 60020",
+      "phone": "847-587-2151"
+    },
+    "officers": [
+      {
+        "name": "Michelle Runnion",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.foxlake.org"
+  },
+  "1727533": {
+    "county": "McHenry",
+    "head": {
+      "name": "Marc W. McLaughlin",
+      "role": "President"
+    },
+    "name": "Village of Fox River Grove",
+    "office": {
+      "address": "305 Illinois St., Fox River Grove IL 60021",
+      "email": "village@foxrivergrove.org",
+      "phone": "847-639-3170"
+    },
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.foxrivergrove.org"
+  },
   "1727624": {
     "board": [
       {
@@ -2557,6 +2951,48 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageoffranklinpark.com"
   },
+  "1728872": {
+    "county": "Kane",
+    "head": {
+      "name": "Kevin R. Burns",
+      "role": "Mayor"
+    },
+    "name": "City of Geneva",
+    "office": {
+      "address": "22 S. First St., Geneva IL 60134",
+      "email": "kburns@geneva.il.us",
+      "phone": "630-232-7494"
+    },
+    "officers": [
+      {
+        "name": "Roger Godskesen",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.geneva.il.us"
+  },
+  "1729171": {
+    "county": "Kane",
+    "head": {
+      "name": "Guy Zambetti",
+      "role": "President"
+    },
+    "name": "Village of Gilberts",
+    "office": {
+      "address": "87 Galligan Rd., Gilberts IL 60136",
+      "email": "gzambetti@villageofgilberts.com",
+      "phone": "847-428-2861"
+    },
+    "officers": [
+      {
+        "name": "Lynda Lange",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageofgilberts.com"
+  },
   "1729652": {
     "board": [
       {
@@ -2597,6 +3033,32 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofglencoe.org"
+  },
+  "1729730": {
+    "county": "DuPage",
+    "head": {
+      "name": "Rebecca Giannelli",
+      "role": "President"
+    },
+    "name": "Village of Glendale Heights",
+    "office": {
+      "address": "300 Civic Center Plaza, Glendale Heights IL 60139"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.glendaleheights.org"
+  },
+  "1729756": {
+    "county": "DuPage",
+    "head": {
+      "name": "James Burket",
+      "role": "President"
+    },
+    "name": "Village of Glen Ellyn",
+    "office": {
+      "address": "535 Duane Street, Glen Ellyn IL 60137"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.glenellyn.org"
   },
   "1729938": {
     "board": [
@@ -2785,6 +3247,87 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofgolf.us"
   },
+  "1731121": {
+    "county": "Lake",
+    "name": "Village of Grayslake",
+    "office": {
+      "address": "10 S Seymour, Grayslake IL 60030",
+      "phone": "847-223-8515"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.villageofgrayslake.com/"
+  },
+  "1731446": {
+    "county": "Lake",
+    "name": "Village of Green Oaks",
+    "office": {
+      "address": "2020 O'Plaine Rd, Green Oaks IL 60048",
+      "email": "vilgrnoaks@aol.com",
+      "phone": "847-362-5363"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.greenoaks.org/"
+  },
+  "1731667": {
+    "county": "McHenry",
+    "head": {
+      "name": "John D. Ferris",
+      "role": "President"
+    },
+    "name": "Village of Greenwood",
+    "office": {
+      "address": "4314 Greenwood Rd., Woodstock IL 60098",
+      "phone": "815-735-9944"
+    },
+    "officers": [
+      {
+        "name": "Heather Ferris",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages"
+  },
+  "1732018": {
+    "county": "Lake",
+    "name": "Village of Gurnee",
+    "office": {
+      "address": "325 N O'Plaine Rd, Gurnee IL 60031",
+      "phone": "847-599-7500"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.gurnee.il.us/"
+  },
+  "1732200": {
+    "county": "Lake",
+    "name": "Village of Hainesville",
+    "office": {
+      "address": "100 N Hainesville Rd, Hainesville IL 60030",
+      "phone": "847-223-2032"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.hainesville.org/"
+  },
+  "1732525": {
+    "county": "Kane",
+    "head": {
+      "name": "Michael J. Reid Jr.",
+      "role": "President"
+    },
+    "name": "Village of Hampshire",
+    "office": {
+      "address": "234 S. State St., (P.O. Box 457), Hampshire IL 60140",
+      "email": "mreid@hampshireil.org",
+      "phone": "847-683-2181"
+    },
+    "officers": [
+      {
+        "name": "Karen Stuehler",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.hampshireil.org"
+  },
   "1732746": {
     "board": [
       {
@@ -2831,6 +3374,26 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://hpil.org"
+  },
+  "1733331": {
+    "county": "McHenry",
+    "head": {
+      "name": "Michael P. Kelly",
+      "role": "Mayor"
+    },
+    "name": "City of Harvard",
+    "office": {
+      "address": "201 W. Diggins St., P.O. Box 310, Harvard IL 60033",
+      "phone": "815-943-6468"
+    },
+    "officers": [
+      {
+        "name": "Scott S. Logan",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.cityofharvard.org"
   },
   "1733383": {
     "board": [
@@ -2938,6 +3501,16 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://harwoodheights.org"
   },
+  "1733630": {
+    "county": "Lake",
+    "name": "Village of Hawthorn Woods",
+    "office": {
+      "address": "2 Lagoon Dr, Hawthorn Woods IL 60047",
+      "phone": "847-438-5500"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.vhw.org/"
+  },
   "1733695": {
     "board": [
       {
@@ -2985,6 +3558,27 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofhazelcrest.org"
+  },
+  "1733851": {
+    "county": "McHenry",
+    "head": {
+      "name": "Steven M. Morris",
+      "role": "President"
+    },
+    "name": "Village of Hebron",
+    "office": {
+      "address": "12007 Prairie Ave., P.O. Box 372, Hebron IL 60034",
+      "email": "clerk@villageofhebron.org",
+      "phone": "815-648-2353"
+    },
+    "officers": [
+      {
+        "name": "Roxanne Johnson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.villageofhebron.org"
   },
   "1734514": {
     "board": [
@@ -3052,6 +3646,26 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://hickoryhillsil.org"
+  },
+  "1734722": {
+    "county": "Lake",
+    "name": "City of Highland Park",
+    "office": {
+      "address": "1707 St Johns Ave, Highland Park IL 60035",
+      "phone": "847-432-0800"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.cityhpil.com/"
+  },
+  "1734865": {
+    "county": "Lake",
+    "name": "City of Highwood",
+    "office": {
+      "address": "17 Highwood Ave, Highwood IL 60040",
+      "phone": "847-432-1924"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.cityofhighwood.com"
   },
   "1735086": {
     "board": [
@@ -3235,6 +3849,27 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://hoffmanestates.org"
   },
+  "1735515": {
+    "county": "McHenry",
+    "head": {
+      "name": "Jeffrey Daniel Giles",
+      "role": "President"
+    },
+    "name": "Village of Holiday Hills",
+    "office": {
+      "address": "1304 Sunset Dr., Holiday Hills IL 60051",
+      "email": "hhclerk@villageofholidayhills.com",
+      "phone": "815-344-4720"
+    },
+    "officers": [
+      {
+        "name": "Lesley Tennessen",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://villageofholidayhills.com"
+  },
   "1735835": {
     "board": [
       {
@@ -3412,6 +4047,36 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://village.homewood.il.us"
   },
+  "1736750": {
+    "county": "Kane",
+    "head": {
+      "name": "Timothy Hoeft",
+      "role": "President"
+    },
+    "name": "Village of Huntley",
+    "office": {
+      "address": "10987 Main St., Huntley IL 60142",
+      "email": "tjhoeft@huntley.il.us",
+      "phone": "847-515-5200"
+    },
+    "officers": [
+      {
+        "name": "Sarah Palaszewski",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.huntley.il.us"
+  },
+  "1737218": {
+    "county": "Lake",
+    "name": "Village of Indian Creek",
+    "office": {
+      "address": "31 Circle Dr, Indian Creek IL 60061",
+      "phone": "847-816-4649"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/"
+  },
   "1737257": {
     "board": [
       {
@@ -3511,6 +4176,54 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://inverness-il.gov"
   },
+  "1737894": {
+    "county": "McHenry",
+    "head": {
+      "name": "Richard McLaughlin",
+      "role": "Mayor"
+    },
+    "name": "Village of Island Lake",
+    "office": {
+      "address": "3720 Greenleaf Ave., Island Lake IL 60042",
+      "phone": "847-526-8764"
+    },
+    "officers": [
+      {
+        "name": "Georgine Cooper",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.villageofislandlake.com"
+  },
+  "1737907": {
+    "county": "DuPage",
+    "head": {
+      "name": "Jeff Pruyn",
+      "role": "President"
+    },
+    "name": "Village of Itasca",
+    "office": {
+      "address": "550 W. Irving Park Road, Itasca IL 60143"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.itasca.com"
+  },
+  "1738479": {
+    "county": "McHenry",
+    "head": {
+      "name": "Edwin P. Hettermann",
+      "role": "President"
+    },
+    "name": "Village of Johnsburg",
+    "office": {
+      "address": "1515 Channel Beach Ave., Johnsburg IL 60051",
+      "email": "villagehall@johnsburg.org",
+      "phone": "815-385-6023"
+    },
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.johnsburg.org"
+  },
   "1738570": {
     "board": [
       {
@@ -3573,7 +4286,7 @@
       },
       {
         "appointed": true,
-        "name": "Kevin SingCouncilmembers District",
+        "name": "Kevin Sing",
         "role": "Treasurer"
       }
     ],
@@ -3627,6 +4340,27 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofjustice.org"
   },
+  "1738895": {
+    "county": "Kane",
+    "head": {
+      "name": "Eric Brannstrom",
+      "role": "President"
+    },
+    "name": "Village of Kaneville",
+    "office": {
+      "address": "2S101 Harter Rd. (P.O. Box 83), Kaneville IL 60144",
+      "email": "info@villageofkaneville.com",
+      "phone": "630-557-0037"
+    },
+    "officers": [
+      {
+        "name": "Taryn McCuan",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageofkaneville.com"
+  },
   "1739519": {
     "board": [
       {
@@ -3673,6 +4407,16 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vok.org"
+  },
+  "1739883": {
+    "county": "Lake",
+    "name": "Village of Kildeer",
+    "office": {
+      "address": "21911 Quentin Rd, Kildeer IL 60047",
+      "phone": "847-438-6000"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://villageofkildeer.com/"
   },
   "1740767": {
     "board": [
@@ -3767,6 +4511,118 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://lagrangepark.org"
+  },
+  "1740884": {
+    "county": "Lake",
+    "name": "Village of Lake Barrington",
+    "office": {
+      "address": "23860 N Old Barrington Rd, Barrington IL 60010",
+      "phone": "847-381-6010"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.lakebarrington.org/"
+  },
+  "1740910": {
+    "county": "Lake",
+    "name": "Village of Lake Bluff",
+    "office": {
+      "address": "40 E Center Ave, Lake Bluff IL 60044",
+      "email": "vlb@lakebluff.org",
+      "phone": "847-234-0774"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.lakebluff.org/"
+  },
+  "1741105": {
+    "county": "Lake",
+    "name": "City of Lake Forest",
+    "office": {
+      "address": "220 E Deerpath Rd, Lake Forest IL 60045",
+      "phone": "847-234-2600"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.cityoflakeforest.com/"
+  },
+  "1741183": {
+    "county": "McHenry",
+    "head": {
+      "name": "Raymond J. Bogdanowski",
+      "role": "President"
+    },
+    "name": "Village of Lake In The Hills",
+    "office": {
+      "address": "600 Harvest Gate, Lake in the Hills IL 60156",
+      "phone": "847-960-7400"
+    },
+    "officers": [
+      {
+        "name": "Shannon DuBeau",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.lith.org"
+  },
+  "1741326": {
+    "county": "McHenry",
+    "head": {
+      "name": "Colin S. McIntyre",
+      "role": "President"
+    },
+    "name": "Village of Lakemoor",
+    "office": {
+      "address": "28581 Illinois Route 120, Lakemoor IL 60051",
+      "phone": "815-385-1117"
+    },
+    "officers": [
+      {
+        "name": "Donna Rogers",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.lakemoor.net"
+  },
+  "1741586": {
+    "county": "Lake",
+    "name": "Village of Lake Villa",
+    "office": {
+      "address": "65 Cedar Ave, PO Box 519, Lake Villa IL 60046",
+      "phone": "847-356-6100"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.lake-villa.org/"
+  },
+  "1741651": {
+    "county": "McHenry",
+    "head": {
+      "name": "David Stavropoulos",
+      "role": "President"
+    },
+    "name": "Village of Lakewood",
+    "office": {
+      "address": "2500 Lake Ave., Village of Lakewood IL 60014",
+      "email": "info@village.lakewood.il.us",
+      "phone": "815-459-3025"
+    },
+    "officers": [
+      {
+        "name": "Jeanette LoBosco",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.village.lakewood.il.us"
+  },
+  "1741742": {
+    "county": "Lake",
+    "name": "Village of Lake Zurich",
+    "office": {
+      "address": "70 E Main St, Lake Zurich IL 60047",
+      "phone": "847-438-5141"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://lakezurich.org/"
   },
   "1742028": {
     "board": [
@@ -3863,6 +4719,47 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://lemont.il.us"
   },
+  "1743250": {
+    "county": "Lake",
+    "name": "Village of Libertyville",
+    "office": {
+      "address": "118 W Cook Ave, Libertyville IL 60048",
+      "phone": "847-362-2430"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://libertyville.com/"
+  },
+  "1743406": {
+    "county": "Kane",
+    "head": {
+      "name": "Kelly Diehl",
+      "role": "President"
+    },
+    "name": "Village of Lily Lake",
+    "office": {
+      "address": "43W955 Twilight Ln., St. Charles IL 60175",
+      "email": "clerk@villageoflilylake.org",
+      "phone": "630-365-9677"
+    },
+    "officers": [
+      {
+        "name": "Shannon Battersby",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageoflilylake.org"
+  },
+  "1743666": {
+    "county": "Lake",
+    "name": "Village of Lincolnshire",
+    "office": {
+      "address": "1 Olde Half Day Rd, Lincolnshire IL 60069",
+      "phone": "847-883-8600"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.lincolnshireil.gov/"
+  },
   "1743744": {
     "board": [
       {
@@ -3909,6 +4806,76 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://lincolnwoodil.org"
+  },
+  "1743770": {
+    "county": "Lake",
+    "name": "Village of Lindenhurst",
+    "office": {
+      "address": "2301 E Sand Lake Rd, Lindenhurst IL 60046",
+      "phone": "847-356-8252"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.lindenhurstil.org/"
+  },
+  "1743900": {
+    "county": "Kendall",
+    "head": {
+      "name": "Paul Pope",
+      "role": "Mayor"
+    },
+    "name": "Village of Lisbon",
+    "office": {
+      "address": "104 N. Canal Street, Newark IL 60541",
+      "email": "v-Lisbon@att.net",
+      "phone": "815-736-6053"
+    },
+    "officers": [
+      {
+        "name": "Debra Andersen",
+        "role": "Clerk"
+      },
+      {
+        "name": "Martha Stephensen",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information"
+  },
+  "1743939": {
+    "county": "DuPage",
+    "head": {
+      "name": "Mary Jo Mullen",
+      "role": "Mayor"
+    },
+    "name": "Village of Lisle",
+    "office": {
+      "address": "925 Burlington Avenue, Lisle IL 60532"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.villageoflisle.org"
+  },
+  "1744407": {
+    "county": "DuPage",
+    "head": {
+      "name": "Anthony Puccio",
+      "role": "President"
+    },
+    "name": "Village of Lombard",
+    "office": {
+      "address": "255 E. Wilson Avenue, Lombard IL 60148"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.villageoflombard.org"
+  },
+  "1744524": {
+    "county": "Lake",
+    "name": "Village of Long Grove",
+    "office": {
+      "address": "3110 Old McHenry Rd, Long Grove IL 60047",
+      "phone": "847-634-9440"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.longgroveil.gov/"
   },
   "1745421": {
     "board": [
@@ -4051,6 +5018,47 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofmccook.org"
   },
+  "1745616": {
+    "county": "McHenry",
+    "head": {
+      "name": "Terry D. Counley",
+      "role": "President"
+    },
+    "name": "Village of Mccullom Lake",
+    "office": {
+      "address": "4811 W. Orchard Dr., McHenry IL 60050",
+      "email": "mccullomlake@comcast.net",
+      "phone": "815-385-2211"
+    },
+    "officers": [
+      {
+        "name": "Sherri Messina",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.voml.org"
+  },
+  "1745694": {
+    "county": "McHenry",
+    "head": {
+      "name": "Wayne S. Jett, Jr.",
+      "role": "Mayor"
+    },
+    "name": "City of Mchenry",
+    "office": {
+      "address": "333 S. Green St., McHenry IL 60050",
+      "phone": "815-363-2100"
+    },
+    "officers": [
+      {
+        "name": "Trisha A. Ramel",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://cityofmchenry.org"
+  },
   "1746357": {
     "board": [
       {
@@ -4102,6 +5110,48 @@
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://villageofmanhattan.org"
+  },
+  "1746604": {
+    "county": "Kane",
+    "head": {
+      "name": "Chris Rebone",
+      "role": "President"
+    },
+    "name": "Village of Maple Park",
+    "office": {
+      "address": "302 Willow St. (P.O. Box 220), Maple Park IL 60151",
+      "email": "crebone@villageofmaplepark.com",
+      "phone": "815-827-3309"
+    },
+    "officers": [
+      {
+        "name": "Claudia Tremaine",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageofmaplepark.org"
+  },
+  "1746786": {
+    "county": "McHenry",
+    "head": {
+      "name": "Michael A. Proffitt",
+      "phone": "815-527-1015",
+      "role": "Mayor"
+    },
+    "name": "City of Marengo",
+    "office": {
+      "address": "132 E. Prairie St., Marengo IL 60152",
+      "phone": "815-568-7112"
+    },
+    "officers": [
+      {
+        "name": "Stephanie L. Matysiewski",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.cityofmarengo.com"
   },
   "1747007": {
     "board": [
@@ -4338,6 +5388,16 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://merrionettepark.org"
   },
+  "1748671": {
+    "county": "Lake",
+    "name": "Village of Mettawa",
+    "office": {
+      "address": "26225 N Riverwoods Blvd, BOX M, Mettawa IL 60045",
+      "phone": "847-573-1460"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.mettawa.org/"
+  },
   "1748892": {
     "board": [
       {
@@ -4384,6 +5444,54 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofmidlothian.net"
+  },
+  "1749100": {
+    "county": "Kendall",
+    "head": {
+      "name": "Jackie Kowalski",
+      "role": "President"
+    },
+    "name": "Village of Millbrook",
+    "office": {
+      "address": "PO Box 51, Millbrook IL 60536",
+      "phone": "630-632-5532"
+    },
+    "officers": [
+      {
+        "name": "Fay Schell",
+        "role": "Clerk"
+      },
+      {
+        "name": "Sam Ruzick",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.thevillageofmillbrook.com"
+  },
+  "1749308": {
+    "county": "Kendall",
+    "head": {
+      "name": "Doug Holley",
+      "role": "President"
+    },
+    "name": "Village of Millington",
+    "office": {
+      "address": "PO Box 552, Millington IL 60537",
+      "phone": "815-695-5358"
+    },
+    "officers": [
+      {
+        "name": "Lenee Kissel",
+        "role": "Clerk"
+      },
+      {
+        "name": "Sandy White",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.millingtonil.com"
   },
   "1749607": {
     "board": [
@@ -4532,6 +5640,27 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://villageofmonee.org"
   },
+  "1750218": {
+    "county": "Kane",
+    "head": {
+      "name": "Matthew Brolley",
+      "role": "President"
+    },
+    "name": "Village of Montgomery",
+    "office": {
+      "address": "200 N. River St., Montgomery IL 60538",
+      "email": "mbrolley@montgomeryil.org",
+      "phone": "630-896-8080"
+    },
+    "officers": [
+      {
+        "name": "Debbie Buchanan",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.montgomeryil.org"
+  },
   "1750647": {
     "board": [
       {
@@ -4621,6 +5750,17 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://mountprospect.org"
   },
+  "1751349": {
+    "county": "Lake",
+    "name": "Village of Mundelein",
+    "office": {
+      "address": "300 Plaza Cir, Mundelein IL 60060",
+      "email": "info@mundelein-il.gov",
+      "phone": "847-949-3200"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.mundelein.org/"
+  },
   "1751622": {
     "board": [
       {
@@ -4681,6 +5821,30 @@
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://naperville.il.us"
+  },
+  "1752103": {
+    "county": "Kendall",
+    "head": {
+      "name": "James Davis",
+      "role": "President"
+    },
+    "name": "Village of Newark",
+    "office": {
+      "address": "101 W. Lions Street, PO Box 270, Newark IL 60541",
+      "phone": "815-695-5671"
+    },
+    "officers": [
+      {
+        "name": "Matt Johnson",
+        "role": "Clerk"
+      },
+      {
+        "name": "Ashley Hartman",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.Newark-il.us"
   },
   "1752584": {
     "board": [
@@ -4823,6 +5987,38 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofnorridge.com"
   },
+  "1753442": {
+    "county": "Kane",
+    "head": {
+      "name": "Mark Gaffino",
+      "role": "President"
+    },
+    "name": "Village of North Aurora",
+    "office": {
+      "address": "25 E. State St., North Aurora IL 60542",
+      "email": "mgaffino@northaurora.org",
+      "phone": "630-897-8228"
+    },
+    "officers": [
+      {
+        "name": "Holly O’Brien",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.northaurora.org"
+  },
+  "1753455": {
+    "county": "Lake",
+    "name": "Village of North Barrington",
+    "office": {
+      "address": "111 Old Barrington Rd, North Barrington IL 60010",
+      "email": "northbarrington@comcast.net",
+      "phone": "847-381-6000"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.northbarrington.org/"
+  },
   "1753481": {
     "board": [
       {
@@ -4869,6 +6065,16 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://northbrook.il.us"
+  },
+  "1753559": {
+    "county": "Lake",
+    "name": "City of North Chicago",
+    "office": {
+      "address": "1850 S Lewis Ave, North Chicago IL 60064",
+      "phone": "847-596-8600"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.northchicago.org/"
   },
   "1753663": {
     "board": [
@@ -5068,6 +6274,19 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://oak-brook.org"
   },
+  "1754560": {
+    "county": "DuPage",
+    "head": {
+      "name": "Paul Esposito",
+      "role": "Mayor"
+    },
+    "name": "City of Oakbrook Terrace",
+    "office": {
+      "address": "17W275 Butterfield Road, Oakbrook Terrace IL 60181"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.oakbrookterrace.net"
+  },
   "1754638": {
     "board": [
       {
@@ -5230,6 +6449,37 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://oak-park.us"
+  },
+  "1755041": {
+    "county": "McHenry",
+    "head": {
+      "name": "Chad M. Rider",
+      "role": "President"
+    },
+    "name": "Village of Oakwood Hills",
+    "office": {
+      "address": "3020 N. Park Dr., Oakwood Hills IL 60013",
+      "email": "closasso@oakwoodhills.org",
+      "phone": "815-444-9435"
+    },
+    "officers": [
+      {
+        "name": "Cheryl LoSasso",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.oakwoodhills.org"
+  },
+  "1755639": {
+    "county": "Lake",
+    "name": "Village of Old Mill Creek",
+    "office": {
+      "address": "40870 Hunt Club Rd, Old Mill Creek IL 60083",
+      "phone": "847-838-0275"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://oldmillcreekil.govoffice3.com/"
   },
   "1755938": {
     "board": [
@@ -5412,7 +6662,7 @@
       },
       {
         "appointed": true,
-        "name": "Andrea LambergTrustees Jennifer Hughes",
+        "name": "Andrea Lamberg",
         "role": "Treasurer"
       }
     ],
@@ -5657,6 +6907,16 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://palospark.org"
   },
+  "1757654": {
+    "county": "Lake",
+    "name": "City of Park City",
+    "office": {
+      "address": "3355 Belvidere Rd, Park City IL 60085",
+      "phone": "847-623-5030"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.parkcityil.org/"
+  },
   "1757732": {
     "board": [
       {
@@ -5802,7 +7062,7 @@
       },
       {
         "appointed": true,
-        "name": "VacantTrustees Gary Hudson",
+        "name": "Vacant",
         "role": "Treasurer"
       }
     ],
@@ -5851,6 +7111,27 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofphoenix.com"
+  },
+  "1759988": {
+    "county": "Kane",
+    "head": {
+      "name": "Amber Kubiak",
+      "role": "President"
+    },
+    "name": "Village of Pingree Grove",
+    "office": {
+      "address": "555 Reinking Rd., Pingree Grove IL 60140",
+      "email": "info@pingreegrove.org",
+      "phone": "847-464-5533"
+    },
+    "officers": [
+      {
+        "name": "Laura Ortega",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageofpingreegrove.org"
   },
   "1760287": {
     "board": [
@@ -5905,6 +7186,72 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://plainfieldil.gov"
   },
+  "1760352": {
+    "county": "Kendall",
+    "head": {
+      "name": "Mike Rennels",
+      "role": "Mayor"
+    },
+    "name": "City of Plano",
+    "office": {
+      "address": "17 E. Main Street, Plano IL 60545",
+      "phone": "630-552-8275"
+    },
+    "officers": [
+      {
+        "name": "Carin Martin",
+        "role": "Clerk"
+      },
+      {
+        "name": "Zoila Gomez",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.cityofplanoil.com"
+  },
+  "1760391": {
+    "county": "Kendall",
+    "head": {
+      "name": "June McCord",
+      "role": "President"
+    },
+    "name": "Village of Plattville",
+    "office": {
+      "address": "PO Box 1173, Yorkville IL 60560",
+      "email": "info@kendalldems.net",
+      "phone": "815-545-3862"
+    },
+    "officers": [
+      {
+        "name": "Beth Fals 56",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.revenue.state.il.us/localgovernment/propertytax/rett.htm"
+  },
+  "1761216": {
+    "county": "McHenry",
+    "head": {
+      "name": "Keith D. Vogeler",
+      "role": "President"
+    },
+    "name": "Village of Port Barrington",
+    "office": {
+      "address": "69 S. Circle Ave., Port Barrington IL 60010",
+      "email": "villagehall@portbarrington.net",
+      "phone": "847-639-7595"
+    },
+    "officers": [
+      {
+        "name": "Nancy Bachal",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.portbarrington.net"
+  },
   "1761314": {
     "board": [
       {
@@ -5951,6 +7298,26 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofposen.org"
+  },
+  "1761678": {
+    "county": "McHenry",
+    "head": {
+      "name": "David F. Underwood",
+      "role": "President"
+    },
+    "name": "Village of Prairie Grove",
+    "office": {
+      "address": "3125 Barreville Rd., Prairie Grove IL 60012",
+      "phone": "815-455-1411"
+    },
+    "officers": [
+      {
+        "name": "Sheryll Kominoski",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.prairiegrove.org"
   },
   "1762016": {
     "board": [
@@ -6004,6 +7371,28 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://prospect-heights.il.us"
   },
+  "1763641": {
+    "county": "McHenry",
+    "head": {
+      "email": "villagepresident@richmond-il.com",
+      "name": "Toni Wardanian",
+      "role": "President"
+    },
+    "name": "Village of Richmond",
+    "office": {
+      "address": "5600 Hunter Dr., Richmond IL 60071",
+      "phone": "815-678-4040"
+    },
+    "officers": [
+      {
+        "email": "villageclerk@richmond-il.com",
+        "name": "Karla L. Thomas",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.richmond-il.com"
+  },
   "1763706": {
     "board": [
       {
@@ -6050,6 +7439,26 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://richtonpark.org"
+  },
+  "1764135": {
+    "county": "McHenry",
+    "head": {
+      "name": "Richard E. Mack",
+      "role": "President"
+    },
+    "name": "Village of Ringwood",
+    "office": {
+      "address": "6000 Barnard Mill Rd., Ringwood IL 60072",
+      "email": "elaine.fung@ringwood-il.us",
+      "phone": "815-653-5511"
+    },
+    "officers": [
+      {
+        "name": "Elaine Fung",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages"
   },
   "1764278": {
     "board": [
@@ -6228,6 +7637,17 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://riverside.il.us"
+  },
+  "1764538": {
+    "county": "Lake",
+    "name": "Village of Riverwoods",
+    "office": {
+      "address": "300 Portwine Rd, Riverwoods IL 60015",
+      "email": "info@riverwoods-il.net",
+      "phone": "847-945-3990"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://villageofriverwoods.com/"
   },
   "1764616": {
     "board": [
@@ -6522,6 +7942,92 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://rosemont.com"
   },
+  "1766027": {
+    "county": "Lake",
+    "name": "Village of Round Lake",
+    "office": {
+      "address": "442 N Cedar Lake Rd, Round Lake IL 60073",
+      "phone": "847-546-5400"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.eroundlake.com/"
+  },
+  "1766040": {
+    "county": "Lake",
+    "name": "Village of Round Lake Beach",
+    "office": {
+      "address": "1937 N Municipal Way, Round Lake Beach IL 60073",
+      "phone": "847-546-2351"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.villageofroundlakebeach.com/"
+  },
+  "1766053": {
+    "county": "Lake",
+    "name": "Village of Round Lake Heights",
+    "office": {
+      "address": "619 Pontiac Ct, Round Lake Heights IL 60073",
+      "email": "RLH@villageofroundlakeheights.org",
+      "phone": "847-546-1206"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://villageofroundlakeheights.org/"
+  },
+  "1766066": {
+    "county": "Lake",
+    "name": "Village of Round Lake Park",
+    "office": {
+      "address": "203 E Lake Shore Dr, Round Lake Park IL 60073",
+      "phone": "847-546-2790"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.rlpil.us/"
+  },
+  "1766703": {
+    "county": "Kane",
+    "head": {
+      "name": "Clint Hull",
+      "role": "Mayor"
+    },
+    "name": "City of St. Charles",
+    "office": {
+      "address": "2 E. Main St., St. Charles IL 60174",
+      "email": "chull@stcharlesil.gov",
+      "phone": "630-377-4400"
+    },
+    "officers": [
+      {
+        "name": "Nancy Garrison",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.stcharlesil.gov"
+  },
+  "1767548": {
+    "county": "Kendall",
+    "head": {
+      "name": "Todd Latham",
+      "role": "Mayor"
+    },
+    "name": "City of Sandwich",
+    "office": {
+      "address": "144 E. Railroad Street, Sandwich IL 60548",
+      "phone": "815-786-9321"
+    },
+    "officers": [
+      {
+        "name": "Denise Ii",
+        "role": "Clerk"
+      },
+      {
+        "name": "Sandra Koehler",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.sandwich.il.us"
+  },
   "1767769": {
     "board": [
       {
@@ -6758,6 +8264,27 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://skokie.org"
   },
+  "1770161": {
+    "county": "Kane",
+    "head": {
+      "name": "Courtney Boe",
+      "role": "President"
+    },
+    "name": "Village of Sleepy Hollow",
+    "office": {
+      "address": "One Thorobred Ln., Sleepy Hollow IL 60118",
+      "email": "sleepyhollow@sleepyhollowil.org",
+      "phone": "847-426-6700"
+    },
+    "officers": [
+      {
+        "name": "Jennifer Ree",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.sleepyhollowil.org"
+  },
   "1770564": {
     "board": [
       {
@@ -6846,6 +8373,27 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://southchicagoheights.com"
   },
+  "1770720": {
+    "county": "Kane",
+    "head": {
+      "name": "Steve Ward",
+      "role": "President"
+    },
+    "name": "Village of South Elgin",
+    "office": {
+      "address": "10 N. Water St., South Elgin IL 60177",
+      "email": "sward@southelgin.com",
+      "phone": "847-742-5780"
+    },
+    "officers": [
+      {
+        "name": "Pam Blair",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.southelgin.com"
+  },
   "1770850": {
     "board": [
       {
@@ -6892,6 +8440,27 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://southholland.org"
+  },
+  "1772052": {
+    "county": "McHenry",
+    "head": {
+      "name": "Robert J. McMahon",
+      "role": "President"
+    },
+    "name": "Village of Spring Grove",
+    "office": {
+      "address": "7401 Meyer Rd., Spring Grove IL 60081",
+      "email": "info@springgrovevillage.com",
+      "phone": "815-675-2121"
+    },
+    "officers": [
+      {
+        "name": "Kelly Popelka",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.springgrovevillage.com"
   },
   "1772520": {
     "board": [
@@ -7073,6 +8642,27 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://streamwood.org"
   },
+  "1773391": {
+    "county": "Kane",
+    "head": {
+      "name": "Sue Stillwell",
+      "role": "President"
+    },
+    "name": "Village of Sugar Grove",
+    "office": {
+      "address": "160 S. Municipal Dr., Sugar Grove IL 60554",
+      "email": "sstillwell@sugargroveil.org",
+      "phone": "630-391-7200"
+    },
+    "officers": [
+      {
+        "name": "Tracey Conti",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.sugargroveil.gov"
+  },
   "1773638": {
     "board": [
       {
@@ -7165,6 +8755,16 @@
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/"
+  },
+  "1775081": {
+    "county": "Lake",
+    "name": "Village of Third Lake",
+    "office": {
+      "address": "87 N Lake Ave, Lake Villa IL 60046",
+      "phone": "847-223-8422"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.thirdlakevillage.com/"
   },
   "1775185": {
     "board": [
@@ -7260,6 +8860,59 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://tinleypark.org"
   },
+  "1775874": {
+    "county": "Lake",
+    "name": "Village of Tower Lakes",
+    "office": {
+      "address": "400 N IL Route 59, Tower Lakes IL 60010",
+      "email": "village@towerlakes-il.gov",
+      "phone": "847-526-0488"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.towerlakes-il.gov/"
+  },
+  "1776160": {
+    "county": "McHenry",
+    "head": {
+      "name": "Robert Baker",
+      "role": "President"
+    },
+    "name": "Village of Trout Valley",
+    "office": {
+      "address": "P.O. Box 621, Cary IL 60013",
+      "email": "tvclerk@yahoo.com",
+      "phone": "224-268-6994"
+    },
+    "officers": [
+      {
+        "name": "Tonia Gonzalez",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.troutvalleyil.com"
+  },
+  "1776706": {
+    "county": "McHenry",
+    "head": {
+      "name": "Anthony C. Fredrickson",
+      "role": "President"
+    },
+    "name": "Village of Union",
+    "office": {
+      "address": "17703 O'Cock Rd., P.O. Box 102, Union IL 60180",
+      "email": "unionclerk@sbcglobal.net",
+      "phone": "815-923-4153"
+    },
+    "officers": [
+      {
+        "name": "Brianna Ray",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.marengo-union.com"
+  },
   "1776935": {
     "board": [
       {
@@ -7306,6 +8959,117 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://university-park-il.com"
+  },
+  "1777694": {
+    "county": "Lake",
+    "name": "Village of Vernon Hills",
+    "office": {
+      "address": "290 Evergreen Dr, Vernon Hills IL 60061",
+      "phone": "847-367-3700"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.vernonhills.org/"
+  },
+  "1777993": {
+    "county": "DuPage",
+    "head": {
+      "name": "Kevin Patrick",
+      "role": "President"
+    },
+    "name": "Village of Villa Park",
+    "office": {
+      "address": "20 S. Ardmore Avenue, Villa Park IL 60181"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.invillapark.com"
+  },
+  "1778175": {
+    "county": "Kane",
+    "head": {
+      "name": "Jamie LeBlanc",
+      "role": "President"
+    },
+    "name": "Village of Virgil",
+    "office": {
+      "address": "5N939 Meredith Rd., Virgil IL 60151",
+      "email": "clerk@villageofvirgil.net",
+      "phone": "630-365-6677"
+    },
+    "officers": [
+      {
+        "name": "Daniela LeBlanc",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.villageofvirgil.net"
+  },
+  "1778227": {
+    "county": "Lake",
+    "name": "Village of Volo",
+    "office": {
+      "address": "500 S Fish Lake Rd, Volo IL 60050",
+      "phone": "847-740-6982"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.villageofvolo.com/"
+  },
+  "1778370": {
+    "county": "Lake",
+    "name": "Village of Wadsworth",
+    "office": {
+      "address": "14155 W Wadsworth Rd, Wadsworth IL 60083",
+      "email": "info@villageofwadsworth.org",
+      "phone": "847-336-7771"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://www.villageofwadsworth.org/"
+  },
+  "1778929": {
+    "county": "DuPage",
+    "head": {
+      "name": "Andrew Johnson",
+      "role": "Mayor"
+    },
+    "name": "City of Warrenville",
+    "office": {
+      "address": "3S258 Manning Avenue, Warrenville IL 60555"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.warrenville.il.us"
+  },
+  "1779267": {
+    "county": "Lake",
+    "name": "Village of Wauconda",
+    "office": {
+      "address": "101 N Main St, Wauconda IL 60084",
+      "phone": "847-526-9600"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://wauconda-il.gov/"
+  },
+  "1779293": {
+    "county": "Lake",
+    "name": "City of Waukegan",
+    "office": {
+      "address": "100 N Martin Luther King Jr., Waukegan IL 60085",
+      "phone": "847-599-2500"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "https://il-waukegan2.civicplus.com/"
+  },
+  "1779397": {
+    "county": "DuPage",
+    "head": {
+      "name": "Eileen Phipps",
+      "role": "President"
+    },
+    "name": "Village of Wayne",
+    "office": {
+      "address": "P.O. Box 532, Wayne IL 60184"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.villageofwayne.org"
   },
   "1780047": {
     "board": [
@@ -7354,6 +9118,40 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://westchester-il.org"
   },
+  "1780060": {
+    "county": "DuPage",
+    "head": {
+      "name": "Daniel Bovey",
+      "role": "Mayor"
+    },
+    "name": "City of West Chicago",
+    "office": {
+      "address": "475 Main Street, West Chicago IL 60185"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.westchicago.org"
+  },
+  "1780125": {
+    "county": "Kane",
+    "head": {
+      "name": "Christopher Nelson",
+      "role": "President"
+    },
+    "name": "Village of West Dundee",
+    "office": {
+      "address": "102 S. Second St., West Dundee IL 60118",
+      "email": "villagehall@wdundee.org",
+      "phone": "847-551-3800"
+    },
+    "officers": [
+      {
+        "name": "Mary Jo Pape",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
+    "url": "https://www.wdundee.org"
+  },
   "1780242": {
     "board": [
       {
@@ -7401,6 +9199,32 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://wsprings.com"
   },
+  "1780645": {
+    "county": "DuPage",
+    "head": {
+      "name": "Steve Nero",
+      "role": "Mayor"
+    },
+    "name": "Village of Westmont",
+    "office": {
+      "address": "31 W. Quincy Street, Westmont IL 60559"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.westmont.il.gov"
+  },
+  "1781048": {
+    "county": "DuPage",
+    "head": {
+      "name": "Phil Suess",
+      "role": "Mayor"
+    },
+    "name": "City of Wheaton",
+    "office": {
+      "address": "303 W. Wesley Street, Wheaton IL 60187"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.wheaton.il.us"
+  },
   "1781087": {
     "board": [
       {
@@ -7447,6 +9271,19 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://wheelingil.gov"
+  },
+  "1781919": {
+    "county": "DuPage",
+    "head": {
+      "name": "Frank Trilla",
+      "role": "Mayor"
+    },
+    "name": "Village of Willowbrook",
+    "office": {
+      "address": "835 Midway Drive, Willowbrook IL 60527"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.willowbrook.il.us"
   },
   "1782049": {
     "board": [
@@ -7531,6 +9368,19 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://wilmette.gov"
   },
+  "1782400": {
+    "county": "DuPage",
+    "head": {
+      "name": "Carl Sorgatz",
+      "role": "President"
+    },
+    "name": "Village of Winfield",
+    "office": {
+      "address": "27W465 Jewell Road, Winfield IL 60190"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.villageofwinfield.com"
+  },
   "1782530": {
     "board": [
       {
@@ -7571,6 +9421,50 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofwinnetka.org"
+  },
+  "1782686": {
+    "county": "Lake",
+    "name": "Village of Winthrop Harbor",
+    "office": {
+      "address": "830 Sheridan Rd, Winthrop Harbor IL 60096",
+      "phone": "847-872-3846"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.winthropharbor.com/"
+  },
+  "1782855": {
+    "county": "McHenry",
+    "head": {
+      "name": "Daniel P. Dycus",
+      "role": "President"
+    },
+    "name": "Village of Wonder Lake",
+    "office": {
+      "address": "4444 Thompson Rd., Wonder Lake IL 60097",
+      "email": "ddycus@wlvillage.org",
+      "phone": "815-728-0839"
+    },
+    "officers": [
+      {
+        "name": "Jo-Ellen McIntosh",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.villageofwonderlake.org"
+  },
+  "1782985": {
+    "county": "DuPage",
+    "head": {
+      "name": "Nunzio Pulice",
+      "role": "Mayor"
+    },
+    "name": "City of Wood Dale",
+    "office": {
+      "address": "404 N. Wood Dale Road, Wood Dale IL 60191"
+    },
+    "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
+    "url": "https://www.wooddale.com"
   },
   "1783245": {
     "board": [
@@ -7614,6 +9508,20 @@
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://woodridgeil.gov"
+  },
+  "1783349": {
+    "county": "McHenry",
+    "head": {
+      "name": "Michael A. Turner",
+      "role": "Mayor"
+    },
+    "name": "City of Woodstock",
+    "office": {
+      "address": "121 W. Calhoun St., Woodstock IL 60098",
+      "phone": "815-338-4300"
+    },
+    "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+    "url": "https://www.woodstockil.gov"
   },
   "1783518": {
     "board": [
@@ -7661,5 +9569,35 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofworth.com"
+  },
+  "1784038": {
+    "county": "Kendall",
+    "head": {
+      "name": "John Purcell",
+      "role": "Mayor"
+    },
+    "name": "United City of Yorkville",
+    "office": {
+      "address": "651 Prairie Pointe Drive, Yorkville IL 60560",
+      "phone": "630-553-4350"
+    },
+    "officers": [
+      {
+        "name": "Jori Behland",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
+    "url": "https://www.Yorkville.il.us"
+  },
+  "1784220": {
+    "county": "Lake",
+    "name": "City of Zion",
+    "office": {
+      "address": "2828 Sheridan Rd, Zion IL 60099",
+      "phone": "847-746-4000"
+    },
+    "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
+    "url": "http://www.cityofzion.com/"
   }
 }

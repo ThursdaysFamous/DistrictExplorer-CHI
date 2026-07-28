@@ -146,7 +146,7 @@ which the never-guess rule excludes as a source.
 | Neighborhood / community area | SHIPPED `community-area` (77) | SHIPPED `neighborhood` (NTA, ~262) | SHIPPED `neighborhood` (41) |
 | ZIP code | SHIPPED `zip-code` (ZCTA) | SHIPPED `zip-code` (MODZCTA) | SHIPPED `zip-code` (ZCTA) |
 | County | SHIPPED `county` (statewide IL) | SHIPPED `borough` (= county) | n/a — city and county are coterminous (recorded) |
-| Township / municipality | SHIPPED `township` · `municipality` (statewide IL) | n/a | n/a |
+| Township / municipality | SHIPPED `township` · `municipality` (statewide IL; the municipality card names the municipal government — head of government, board, other elected officers, hall contact — for 279 of the metro's 284 municipalities, county-sourced and joined by place GEOID) | n/a | n/a |
 | Park district | SHIPPED `park-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + Kendall; Cook's Clerk tiling includes the Chicago Park District — a Loop click resolves the city's own park taxing body; DuPage/Kendall name-only, Lake carries office contact, Kane names each district's board president + contact; McHenry is the one sourced county with no entry — recorded gap, it publishes facilities not district boundaries) | n/a | n/a |
 | Library taxing district | SHIPPED `library-district` (CountyDispatch, born consolidated: Cook's two Clerk tax-agency tilings — 59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund at a Loop click — + Will 27 w/ trustees + DuPage 32 name-only + Lake 15 w/ office contact + Kane 16 w/ board president + contact + McHenry 13 name-only + Kendall 9 name-only incl. the municipal Joliet/Yorkville city-library funds its tax tiling records, the Cook-style shape) | n/a — NYC's three library systems (NYPL/BPL/QPL) are nonprofit corporations, not taxing districts | n/a — SFPL is a city department |
 | Tax increment financing (TIF) district | SHIPPED `tif-district` (Cook, 418 — the Clerk's un-yeared current agency tiling, clerkTaxDistricts L18; dedicated Cook layer per the single-county rule until a second county ships — Kendall's `TIF_Districts` service is the recorded next entry) | n/a — New York State discontinued NYC-style TIF; no city program | n/a — SF uses IFDs/CFDs, no published district tiling evaluated |
@@ -312,23 +312,33 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   as dispatch entries, not new layers
   (`docs/COUNTY_LAYER_CONSOLIDATION.md`).
 - Municipal governments (mayor / village president + city council / village board) —
-  **Cook + Will SHIPPED 2026-07; five counties sourced but unbuilt**
-  (`docs/MUNICIPAL_COUNCILS_PLAYBOOK.md`; governance
-  `docs/COUNTY_LAYER_CONSOLIDATION.md` rules 4–5). 284 municipalities across the seven
-  metro counties (47 spanning county lines), joined onto the existing statewide
-  `municipality` card by place GEOID — the `county` + `il-county-clerks.json` shape,
-  not a new layer and not a county-dispatched one. Remaining sources, all verified live
-  twice: Kane / Kendall / McHenry clerk yearbooks and DuPage's DMMC directory
-  (mayor-level — no trustees); Lake **no officeholder names published anywhere
-  county-side** (firm double-verified negative) → office contact + official-site link
-  only, the rule-4 honesty floor. Blocker for the five: scrapers unbuilt, four of their
-  sources are PDFs (introduces the repo's first PDF dependency, `pypdf`), and two
-  counties (McHenry, Kendall) are Akamai-fronted and need the engine ladder. The Will
-  build recorded the PDF-text failure modes to expect (playbook, "What the Will parse
-  cost"). Statewide
-  aggregators are a verified dead end (IML paid print; Comptroller's "CEO" is often the
-  appointed manager; Google Civic reps endpoint sunset) — per-county clerk sources are
-  the only honest architecture.
+  **ALL SEVEN METRO COUNTIES SHIPPED 2026-07-28** (`docs/EXPANSION_GUIDE.md` Part 2.4;
+  governance rules 4–5 in Part 2.3). 279 of the metro's 284 municipalities resolve on one
+  weekly-CI roster joined onto the statewide `municipality` card by place GEOID — the
+  `county` + `il-county-clerks.json` shape, not a new layer and not a county-dispatched
+  one; 47 cross-county municipalities dedupe to their deepest source. Depth is honest per
+  county, because that is what each county publishes: **full governing body** Cook (Clerk
+  DOEO API) + Will (Clerk directory) = 156; **head of government** DuPage (DMMC
+  directory) + Kane / McHenry / Kendall (clerk yearbooks) = 82, their cards linking the
+  municipality's own site for the board; **contact only** Lake = 41 — see the recorded
+  gap below. Statewide aggregators are a verified dead end (IML paid print; Comptroller's
+  "CEO" is often the appointed manager; Google Civic reps endpoint sunset) — per-county
+  clerk sources are the only honest architecture.
+- **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
+  body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
+  pages cover only county offices, county GIS carries no officials data, and the Lake
+  County Municipal League publishes no member directory (double-verified 2026-07-27).
+  Lake's 41 cards therefore ship hall address, phone, e-mail, and the official-site link
+  and name nobody — rule-4 branch 3, the honesty floor. Upgrading needs either a Lake
+  source that starts publishing, or a deliberate decision to scrape 50+ heterogeneous
+  municipal sites, which the source ladder rejects as a source of record.
+- **Mayor-level counties leave no published data unconsumed, with one exception to
+  watch:** DuPage's DMMC directory prints phone numbers with **no area code** and no
+  stated default, so those entries ship `phone: null` rather than a dead `tel:` link. If
+  DMMC ever adds area codes — or DuPage County itself starts publishing a directory —
+  that is the upgrade. Appointed administrators/managers printed beside the elected
+  officers in four sources are deliberately excluded (the card's section is titled
+  "Other Elected Officials"); surfacing them needs a separately-labeled section first.
 - Suburban municipal wards — **SHIPPED 2026-07** into the consolidated `ward` layer
   (see the concept row above), which is where the remaining gaps are now recorded:
   **Berwyn** elects 8 alderpersons by ward but appears in no published ward-boundary
@@ -402,7 +412,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `school-district-unified` | Unified School District | schools | Polygon | live TIGERweb School L0 | — | — |
 | `school-district-elementary` | Elementary School District | schools | Polygon | live TIGERweb School L2 | — | outsideChicagoSchoolCoverage |
 | `township` | Township / County Subdivision | geography | Polygon | live TIGERweb CouSub | — | — (subOf `county`) |
-| `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | `municipal-officials.json` (weekly CI; suburban Cook + Will so far — head of government + board + other elected officers + hall contact, joined by place GEOID) | — |
+| `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | `municipal-officials.json` (weekly CI; all seven metro counties, 279 municipalities — head of government + board + other elected officers + hall contact, joined by place GEOID; depth per county: full body Cook/Will, head-only DuPage/Kane/McHenry/Kendall, contact-only Lake) | — |
 | `judicial-subcircuit` | Judicial Subcircuit | political | CountyDispatch | Cook County GIS L5 (20 subcircuits) + L27 (municipal districts) · Will County ArcGIS · DuPage County ArcGIS (`Judicial_Subcircuits`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L1) · pre-built `kane-judicial-subcircuits.json` + `mchenry-judicial-subcircuits.json` (PA 102-0693 enacted shapefile) — no Kendall entry: its 23rd Circuit received no subcircuits under the act | link-only (each card links its circuit's court; Cook adds the Municipal District + courthouse row) | OR of cook/will/dupage/lake/kane/mchenry county coverages |
 | `county-board` | County Board District | political | CountyDispatch | Cook County GIS L9 · Will County ArcGIS · DuPage County ArcGIS (`County_Board_Dist_new`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L0) · Kane County ArcGIS (`KaneCo_IL_County_Board` L1) · McHenry County ArcGIS (`McHenry_County_Board_Districts` L0) · Kendall County ArcGIS Enterprise (`County_Board_2010` — the CURRENT 2-district map: the post-2020-census reapportionment kept the line, Dec 2021 hearing) | Cook: live office join (same server); Will: `will-county-board-members.json` (weekly CI); DuPage: `dupage-county-board-members.json` (weekly CI; + countywide Chair); Lake: member + phone/email/office address/district page + newsletter on the boundary GIS itself (live, county-edited; re-verified vs the county directory 2026-07-23) + `lake-county-board-roles.json` (weekly CI — the Chair/Vice-Chair tags the GIS lacks, applied only on a name match so a missed reorganization degrades to role-less rows); Kane: member names on the boundary GIS (verified incl. the 2026 D2/D9 appointments) + `kane-county-board-members.json` (weekly CI from the county's SharePoint Board Members list API — party, official office phones, emails, profile links, and the countywide-elected Board Chair; GIS names stay as hover + fallback, cross-checked 24/24 against the roster); Kendall: `kendall-county-board-members.json` (10 members incl. the Chairman — a District 2 member, not a separate countywide seat — phones + emails + per-member profile links; 2026-07 enrichment check re-verified all 10 names 1:1 against the directory's 2026-03 Archive snapshot); McHenry: `mchenry-county-board-members.json` (18 members + the countywide-elected Chairman, phones + emails + per-member profile links; the DuPage countywide-chair shape; 2026-07 enrichment check re-verified all 19 names 1:1 against the directory's 2026-05 Archive snapshot — the county publishes no party or committee data, the one missing phone (D3) is confirmed unpublished at the source, and members' street addresses are residences, deliberately not collected). Both hand-verified 2026-07-23 against the counties' own directories: the counties block ALL automated fetch (direct, real-browser, and the Archive's crawler — SPN2 error:no-request), so the weekly engine-ladder scrapers run green and track the block on standing issues, resuming automation the moment any rung unblocks | OR of cook/will/dupage/lake/kane/mchenry/kendall county coverages |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |
