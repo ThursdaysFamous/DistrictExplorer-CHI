@@ -321,6 +321,27 @@ snapshots of the McHenry yearbook path again (2025-03-06 onward). Note for the n
 county: measure the rung with the *client the scraper will actually use* — a successful
 curl proves nothing about `requests`.
 
+**Three kinds of block, and only two of them have a rung** (taxonomy from the first live
+CI run, 2026-07-28 — the run that took six of ten scrapers and blocked four). Read the
+response *headers and body size* before writing anything, because they tell you which
+one you have and therefore whether a rung can exist at all:
+
+| Block | Signature | Beaten by |
+|---|---|---|
+| **Challenge** | Cloudflare; 403 or a 200 interstitial ("Just a moment", `cf-browser-verification`) | a browser rung — there is something to solve |
+| **Network deny** | same request, 200 from a developer machine and 403 from a CI runner | a browser rung **only if** a challenge sits underneath (DuPage: it did) |
+| **Hard WAF deny** | Akamai; small static body (~408 bytes) with `x-reference-error` | *nothing* — Joliet's browser rung fails identically to `requests` |
+
+A hard deny is rule-4 terminal: record it, keep whatever rungs exist so the source
+resumes automatically if the edge relaxes, and let preservation carry the data. Do NOT
+reach for the Archive reflexively — evaluate it, then say what you found. Joliet's
+captures are *good* (the archived index still yields all nine bio links, the bio pages
+still carry their e-mails) and it was still declined, because the newest index capture
+was 69 days old against the 45-day guard: a conventional rung would refuse every run,
+and widening the guard for one source spends a fleet-wide honesty rule on data that
+preservation already covers — a last-good entry scraped from the real site beats a dated
+copy of it. **The guard is the point, not an obstacle to route around.**
+
 **Two source defects worth expecting elsewhere.** DMMC prints phone numbers with **no
 area code** and states no default, so DuPage ships `phone: null` rather than a dead
 `tel:` link — per-field honesty beats a completed guess. Kendall's yearbook misspells

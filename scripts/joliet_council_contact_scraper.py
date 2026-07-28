@@ -38,6 +38,25 @@ Two filters, both honesty-driven:
 - The template placeholder "(999) 999-9999" appears on some pages and is never
   a phone number.
 
+FETCH POSTURE — TERMINAL (measured 2026-07-28, after the first live CI run):
+joliet.gov is fronted by Akamai, which answers with a hard WAF deny (a 408-byte
+static page carrying an x-reference-error), NOT a solvable challenge. There is
+nothing for a browser to clear, which is why the Playwright rung below fails in
+CI exactly as plain requests does. This is the McHenry/Kendall class, not the
+DuPage class: DuPage's Cloudflare edge challenges a datacenter client and a real
+browser gets through, whereas this one simply refuses.
+
+The Internet Archive was evaluated as a third rung and deliberately NOT added.
+The captures are good — the archived index still yields all nine bio links and
+the bio pages still carry their e-mail addresses — but the newest index capture
+was 69 days old against the fleet's 45-day guard, so a rung built to convention
+would refuse every time, and widening the guard for one source would trade a
+fleet-wide honesty rule for data that is already covered: a blocked run
+preserves Joliet's last-good entry (build_municipal_officials_roster.py's
+--preserved), which came from a live scrape of the real site rather than a dated
+copy of it. Standing issue tracks the block. If the edge ever relaxes, the two
+rungs below pick the city back up with no further change.
+
 Usage:
     python3 joliet_council_contact_scraper.py --out joliet_council_contact.json
 
@@ -108,12 +127,17 @@ _BROWSER = {"playwright": None, "browser": None, "context": None}
 
 
 def fetch_playwright(url):
-    """Escalation rung — and the one that carries this city in CI.
+    """Escalation rung. It does NOT currently carry this city — see the module
+    docstring's FETCH POSTURE.
 
-    Measured 2026-07-28 with a byte-identical full browser header set: curl
-    gets 200 where python-requests gets 403, so the edge is fingerprinting the
-    HTTP client itself, exactly as McHenry's and Kendall's do. One browser
-    context is reused across the nine page loads rather than launched per page.
+    This rung was added when curl got 200 where python-requests got 403 with a
+    byte-identical header set, which reads as client fingerprinting. The first
+    live CI run (2026-07-28) showed that was only half the picture: the edge
+    also denies by network, and it denies this browser rung too. The rung is
+    kept because it is correct and costs one failed attempt — if Joliet's edge
+    ever relaxes, this is what picks the city back up with no further change.
+    One browser context is reused across the nine page loads rather than
+    launched per page.
     """
     from playwright.sync_api import sync_playwright
 

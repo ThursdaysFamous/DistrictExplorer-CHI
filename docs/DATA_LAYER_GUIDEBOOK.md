@@ -381,7 +381,22 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   than one fetch, because only the session that cleared the challenge can fetch the PDF
   the page names. Its Archive rung is real but expected to refuse: the newest snapshot
   was 194 days old against the 45-day guard and predates the current edition.
-  McHenry/Kendall remain rule-4 terminal; Joliet is the remaining unladdered block.
+  **Joliet is rule-4 terminal, not laddered (decided 2026-07-28).** Its edge is Akamai
+  serving a hard WAF deny — a 408-byte static page with an `x-reference-error`, not a
+  solvable challenge — so the Playwright rung it already had fails exactly as plain
+  requests does; this is the McHenry/Kendall class, not DuPage's. An Archive rung was
+  evaluated and deliberately declined: the captures are good (the archived index still
+  yields all nine bio links and the bio pages still carry their e-mails) but the newest
+  index capture was 69 days old against the 45-day guard, so a conventional rung would
+  refuse every run, and widening the guard for one source would spend a fleet-wide
+  honesty rule on data preservation already covers — Joliet's last-good entry came from
+  a live scrape of the real site, which beats a dated copy of it. McHenry/Kendall remain
+  terminal for the same reason (they block the Archive's crawler outright).
+  **Blocked-source taxonomy, worth keeping:** a *challenge* (Cloudflare) is beaten by a
+  browser rung; a *network deny* keyed on the client's ASN is beaten by a browser only
+  if it is really a challenge underneath; a *hard WAF deny* (Akamai) is beaten by
+  nothing, and the honest move is preservation plus a standing issue. Measure which one
+  you have — the response headers and body size say so — before writing a rung.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake
