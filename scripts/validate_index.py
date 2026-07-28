@@ -63,6 +63,7 @@ CAPABILITIES = [
     "register-layer-floor",     # 2: raw registerLayer( count floor
     "expect-layer-ids",         # 2: every expected layer id registered
     "layer-area-rank-lint",     # 2b: rank array covers the id set exactly
+    "layer-sidebar-rank-lint",  # 2c: sidebar rank covers the id set exactly
     "no-inline-datasets",       # 3: no JSON.parse blobs; data files referenced
     "data-file-shapes",         # 4: every data/app file exists with sane counts
     "sw-exactly-one-list",      # 5: each data file cached in exactly one sw list
@@ -315,6 +316,26 @@ def main():
     if extra:
         fail("LAYER_AREA_RANK has id(s) not in the registered set: %s" % ", ".join(extra))
 
+    # 2c. LAYER_SIDEBAR_RANK covers every registered id exactly once, and
+    # nothing else — same contract as 2b for the sidebar display order
+    # (docs/EXPANSION_GUIDE.md Part 5 "Sidebar placement standard"): the boot
+    # sort deliberately sinks an unranked id to the end instead of throwing,
+    # so this check is the only place a rank/registry drift fails loudly.
+    m = re.search(r"var LAYER_SIDEBAR_RANK = \[(.*?)\];", html, re.DOTALL)
+    if not m:
+        fail("LAYER_SIDEBAR_RANK array not found in index.html")
+    srank = re.findall(r'"([a-z0-9-]+)"', m.group(1))
+    dupes = sorted(set(x for x in srank if srank.count(x) > 1))
+    if dupes:
+        fail("LAYER_SIDEBAR_RANK lists these ids more than once: %s" % ", ".join(dupes))
+    got = set(srank)
+    missing = sorted(expected - got)
+    extra = sorted(got - expected)
+    if missing:
+        fail("LAYER_SIDEBAR_RANK is missing registered layer id(s): %s" % ", ".join(missing))
+    if extra:
+        fail("LAYER_SIDEBAR_RANK has id(s) not in the registered set: %s" % ", ".join(extra))
+
     # 3. nothing embedded inline anymore, and every data file is referenced
     blobs = re.findall(r"var (\w+) = JSON\.parse\('", html)
     if blobs:
@@ -363,7 +384,7 @@ def main():
 
     print(
         "validate_index: OK — inline script parses, %d registerLayer( calls, "
-        "LAYER_AREA_RANK covers all %d ids, no inline datasets, %d well-formed "
+        "LAYER_AREA_RANK + LAYER_SIDEBAR_RANK cover all %d ids, no inline datasets, %d well-formed "
         "METRO_EXPLORERS entries, all data/app files present and cached in "
         "exactly one sw.js list" % (n, len(EXPECT_LAYER_IDS), n_metros)
     )

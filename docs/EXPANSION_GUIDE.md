@@ -809,9 +809,37 @@ The canvas renderer stays a fleet-shared open item — inherit it, don't preempt
    than shipping it silently**. Hover identity follows the parity rule (§4.3): the
    popup reads the same fields the card does.
 5. **Bookkeeping in the same change**: worksheet layer entry (+ rank, hover keys as
-   needed) → regenerate; `LAYER_AREA_RANK` placement; sw list if a `data/app/` file is
-   added; `validate_sources.py` manifest row; guidebook coverage map + inventory + matrix
-   (drops recorded with rationale — silence is the only wrong answer); Appendix A row.
+   needed) → regenerate; `LAYER_AREA_RANK` placement; a `LAYER_SIDEBAR_RANK` position
+   (below); sw list if a `data/app/` file is added; `validate_sources.py` manifest row;
+   guidebook coverage map + inventory + matrix (drops recorded with rationale — silence
+   is the only wrong answer); Appendix A row.
+
+**Sidebar placement standard (recorded 2026-07-28).** A layer's position in its sidebar
+group is set by the fork's explicit `LAYER_SIDEBAR_RANK` (grep it in `index.html` —
+applied by a boot-time sort; `validate_index.py` asserts the list matches the registered
+id set 1:1, exactly as it does for `LAYER_AREA_RANK`) — never by registration order,
+which had accreted by build thread rather than design (Early Voting led the Political
+group; a DuPage unincorporated tax district led Public Safety). The order within each
+group: **identity hierarchy → representation → service/taxing overlays → amenity
+points, broad → specific within each family.** Toggled-on layers still float to the top
+of their group, so the rank governs the resting order, not the active one. A new layer
+takes its rank in the same change that registers it.
+
+**Nesting determination (recorded 2026-07-28).** The `subOf` tree — County → Township →
+Voting Precinct, Ward → Ward Precinct, Police District → Beat — encodes genuine legal
+containment-plus-numbering hierarchies and is complete. Evaluated and deliberately kept
+flat: **CCPSA District Council** under Police District (shares geometry 1:1, but it is
+an elected representation body — the app never gates an elected office behind a service
+toggle); **CPS zones/networks** under the unified school district (a toggle
+prerequisite on the city's most-used school layers, with no fleet precedent);
+**special districts** under `county` (independent taxing bodies, not county sub-units —
+the county is their sourcing dimension, not their parent); **`tif-district`** under
+`municipality` (legally defensible — TIFs are municipal ordinance districts — but low
+benefit, and TIF converts to a dispatched concept at its second county, §1.5).
+Cross-group nesting is impossible by design: a sub renders inside its parent's block in
+the parent's group section. The bar for a future nest is genuine containment-with-
+numbering (precincts are numbered within townships, beats within districts), never
+mere geometric overlap.
 
 ---
 
