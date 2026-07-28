@@ -161,68 +161,81 @@
       {
         "district": "Ward 1",
         "name": "Daniel Barreiro",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 2",
         "name": "Juany Garza",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 3",
         "name": "Theodoros “Ted” Mesiacos",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 4",
         "name": "Jonathan Núñez",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 5",
         "name": "Carl Franco",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 6",
         "name": "Michael B. Saville",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 7",
         "name": "Javier Bañuelos",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 8",
         "name": "Patty Smith",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 9",
         "name": "Edward J. Bugg",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 10",
         "name": "Shweta Baid",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "At Large",
         "name": "Keith Larson",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "At Large",
         "name": "Will White",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "John Laesch",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "City of Aurora",
     "office": {
@@ -497,33 +510,40 @@
     "board": [
       {
         "name": "Brian Diachenko",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Erik Gardner",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Jessica Smith",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Joe Tiei",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Roger Stacey",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Todd Kraus",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Marcy Meyer",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Beecher",
     "office": {
@@ -857,33 +877,40 @@
     "board": [
       {
         "name": "Bhavini K. Patel",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jean M. Kelly",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Jose Quintero",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Michael J. Carpanzano",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Michael T. Lawler",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Troy J. Doris",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Mary S. Alexander-Basta",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "Village of Bolingbrook",
     "office": {
@@ -894,7 +921,8 @@
     "officers": [
       {
         "name": "Martha “Marti” M. Barton",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -904,25 +932,30 @@
     "board": [
       {
         "name": "Erik C. Brock",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       },
       {
         "name": "Jeffrey A. Unland",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       },
       {
         "name": "Vacant",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       },
       {
         "name": "William B. Sebrell",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "David Wright",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2027"
     },
     "name": "Village of Braceville",
     "office": {
@@ -948,25 +981,30 @@
     "board": [
       {
         "name": "Finances - Elizabeth Dixon",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       },
       {
         "name": "Public Improvements - Dale Walsh",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       },
       {
         "name": "Public Property - Warren Wietting",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       },
       {
         "name": "Safety - James “Moose” Mikel",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Todd Lyons",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "City of Braidwood",
     "office": {
@@ -1634,33 +1672,40 @@
     "board": [
       {
         "name": "Chantal Host",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Mark Scaggs",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Patricia Perinar",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Sam Greco",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Scott McMillin",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Scott Slocum",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Missey Moorman Schumacher",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2027"
     },
     "name": "Village of Channahon",
     "office": {
@@ -1671,7 +1716,8 @@
     "officers": [
       {
         "name": "Kristin Hall",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2027"
       },
       {
         "appointed": true,
@@ -1856,33 +1902,40 @@
     "board": [
       {
         "name": "Daniel J. Greggain",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "David M. Togliatti",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Lauterbur",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Pamela Noffsinger",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Ross Bradley",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "William (Bill) Mincey",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "David A. Spesia",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2027"
     },
     "name": "Village of Coal City",
     "office": {
@@ -2035,55 +2088,64 @@
       {
         "district": "Ward 1",
         "name": "Angelo Sante Deserio",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 1",
         "name": "Scott Dyke",
         "phone": "815-922-3017",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 2",
         "name": "Claudia Gazal",
         "phone": "630-915-7449",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 2",
         "name": "Darrell Jefferson",
         "phone": "708-328-0127",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 3",
         "name": "Mark A. Cipiti",
         "phone": "779-227-1605",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       },
       {
         "district": "Ward 3",
         "name": "Tina Oberlin",
         "phone": "815-953-4257",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 4",
         "name": "Joseph Kubal",
         "phone": "630-441-8052",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2027"
       },
       {
         "district": "Ward 4",
         "name": "Nathaniel “Nate” Albert",
-        "role": "Alderperson"
+        "role": "Alderperson",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Raymond R. Soliman",
       "phone": "815-726-5846",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "City of Crest Hill",
     "office": {
@@ -2094,12 +2156,14 @@
     "officers": [
       {
         "name": "Christine Vershay-Hall",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       },
       {
         "name": "Jamie Malloy",
         "phone": "815-523-5476",
-        "role": "Treasurer"
+        "role": "Treasurer",
+        "termExpires": "2029"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -2367,25 +2431,30 @@
     "board": [
       {
         "name": "Addis “Dean” Johnson",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2029"
       },
       {
         "name": "David Warner, Jr.",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2029"
       },
       {
         "name": "Denise Brown",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2029"
       },
       {
         "name": "Jeff Kasher",
-        "role": "Commissioner"
+        "role": "Commissioner",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Teresa (Terry) A. Kernc",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "Village of Diamond",
     "office": {
@@ -2806,33 +2875,40 @@
     "board": [
       {
         "name": "Darryl P. Lab",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Dorothy Eppenstein",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Douglas Mytnik",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Junellen Eastman Johnson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Michael Varman",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Tricia L. Maas",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Doug Jenco",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Elwood",
     "office": {
@@ -3214,33 +3290,40 @@
     "board": [
       {
         "name": "Adam Borrelli",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Daniel Rossi",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Eugene Savaria",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jessica Petrow",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Maura A. Rigoni",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Michael J. Leddin",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Keith Ogle",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Frankfort",
     "office": {
@@ -3251,7 +3334,8 @@
     "officers": [
       {
         "name": "Katie Schubert",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       },
       {
         "appointed": true,
@@ -3540,33 +3624,40 @@
     "board": [
       {
         "name": "Doreen L. Attwood",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Earl Burd",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Elaine Belawske",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "James R. Peters",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Kim Hall",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Pam Nacey",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Cheryl Schott",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2027"
     },
     "name": "Village of Godley",
     "office": {
@@ -4345,33 +4436,40 @@
     "board": [
       {
         "name": "Bart Holzhauser",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Curtis Mason",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Michael LePore",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Nicholas S. Muller",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Robert Schaller",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Rose Reynders",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Christina Neitzke-Troike",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2027"
     },
     "name": "Village of Homer Glen",
     "office": {
@@ -4382,7 +4480,8 @@
     "officers": [
       {
         "name": "Candice Bielski",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2027"
       },
       {
         "appointed": true,
@@ -4740,56 +4839,64 @@
         "email": "lhug@joliet.gov",
         "name": "Larry E. Hug",
         "phone": "815-325-0875",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "district": "District 2",
         "email": "pmudron@joliet.gov",
         "name": "Pat Mudron",
         "phone": "815-724-3749",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "district": "District 3",
         "email": "sreardon@joliet.gov",
         "name": "Sharon “Sherri” Reardon",
         "phone": "815-724-3720",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "district": "District 4",
         "email": "ccardenas@joliet.gov",
         "name": "Cesar Cardenas",
         "phone": "331-285-2068",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "district": "District 5",
         "email": "sibarra@joliet.gov",
         "name": "Suzanna Ibarra",
         "phone": "815-724-3742",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "district": "At Large",
         "email": "jquillman@joliet.gov",
         "name": "Jan Quillman",
         "phone": "815-724-3744",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       },
       {
         "district": "At Large",
         "email": "jclement@joliet.gov",
         "name": "Joe Clement",
         "phone": "815-724-3747",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       },
       {
         "district": "At Large",
         "email": "jmoreno@joliet.gov",
         "name": "Juan Moreno",
         "phone": "815-724-3129",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
@@ -4797,7 +4904,8 @@
       "email": "tdarcy@joliet.gov",
       "name": "Terry D’Arcy",
       "phone": "815-724-3700",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2027"
     },
     "name": "City of Joliet",
     "office": {
@@ -5403,6 +5511,7 @@
   "1743900": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2025",
       "name": "Paul Pope",
       "role": "Mayor"
     },
@@ -5736,33 +5845,40 @@
     "board": [
       {
         "name": "Clint Boone",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jennifer Bahena",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Justin Young",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Lucinda M. Neighbors",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Robert A. Dilling",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Thomas R. Doyle",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Mike Adrieansen",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "Village of Manhattan",
     "office": {
@@ -5773,12 +5889,14 @@
     "officers": [
       {
         "name": "Rebecca Bouck",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       },
       {
         "appointed": true,
         "name": "Justin VanVooren TrusteesRobert A. Dilling",
-        "role": "Treasurer"
+        "role": "Treasurer",
+        "termExpires": "2027"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -6168,6 +6286,7 @@
   "1749100": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2023",
       "name": "Jackie Kowalski",
       "role": "President"
     },
@@ -6192,6 +6311,7 @@
   "1749308": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2023",
       "name": "Doug Holley",
       "role": "President"
     },
@@ -6217,33 +6337,40 @@
     "board": [
       {
         "name": "Barry A. Thompson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Dennis P. Martin",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Gabriela Martinez",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Joshawa Stell",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Ray Mason",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Robin White",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Frederic Offerman",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Minooka",
     "office": {
@@ -6270,33 +6397,40 @@
     "board": [
       {
         "name": "Daniel C. Gilbert",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Debbie Engler",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Joshua Bailey",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Melissa Fedora",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Nick Clancy",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Terry G. Germany",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "George J. Metanias",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Mokena",
     "office": {
@@ -6307,7 +6441,8 @@
     "officers": [
       {
         "name": "Melissa Martini",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -6317,33 +6452,40 @@
     "board": [
       {
         "name": "Charles Rakis",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Doug Horne",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Heidi Gonzalez",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "John R. Henson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Michael E. Wilson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Scott Youdris",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Therese M. Bogs",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "Village of Monee",
     "office": {
@@ -6354,7 +6496,8 @@
     "officers": [
       {
         "name": "Michelle Powell-Johnson",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -6500,41 +6643,50 @@
     "board": [
       {
         "name": "Allison Longenbaugh",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "name": "Ashfaq Syed",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       },
       {
         "name": "Benjamin (Benny) White",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       },
       {
         "name": "Ian Holzhauer",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       },
       {
         "name": "Josh McBroom",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "name": "Mary Gibson",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2029"
       },
       {
         "name": "Nathan “Nate” Wilson",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       },
       {
         "name": "Patrick Kelly",
-        "role": "Council Member"
+        "role": "Council Member",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Scott A. Wehrli",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2027"
     },
     "name": "City of Naperville",
     "office": {
@@ -6560,6 +6712,7 @@
   "1752103": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2025",
       "name": "James Davis",
       "role": "President"
     },
@@ -6570,6 +6723,7 @@
     },
     "officers": [
       {
+        "lastElected": "2023",
         "name": "Matt Johnson",
         "role": "Clerk"
       },
@@ -6585,33 +6739,40 @@
     "board": [
       {
         "name": "Amy Gugliuzza",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Bryan Reiser",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "James Leahy Wilson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Katie Christopherson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Keith C. Madsen",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Lindsay Scalise",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Timothy A. Baldermann",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2027"
     },
     "name": "Village of New Lenox",
     "office": {
@@ -7460,33 +7621,40 @@
     "board": [
       {
         "name": "Andrew Torres",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "James Cooper",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jennifer Hughes",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Karen E. Novy",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Karin McCarthy-Lange",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Rachelle Koenig",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Ryan Kauffman",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2027"
     },
     "name": "Village of Oswego",
     "office": {
@@ -7914,33 +8082,40 @@
     "board": [
       {
         "name": "Gary Hudson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Jacqueline Richards",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Julie Sluis",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Nicholas Lee Strba",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Patrick J. Bowden",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Todd Sandberg",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Chris Vieaux",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Peotone",
     "office": {
@@ -8038,33 +8213,40 @@
     "board": [
       {
         "name": "Brian “Wojo” Wojowski",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Margie Bonuchi",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Richard Kiefer",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Siv Panicker",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Tom Ruane",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Vanessa Sula",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       }
     ],
     "county": "Will",
     "head": {
       "name": "John F. Argoudelis",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Plainfield",
     "office": {
@@ -8090,6 +8272,7 @@
   "1760352": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2025",
       "name": "Mike Rennels",
       "role": "Mayor"
     },
@@ -8114,6 +8297,7 @@
   "1760391": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2023",
       "name": "June McCord",
       "role": "President"
     },
@@ -8663,33 +8847,40 @@
     "board": [
       {
         "name": "Eugene Lorenc",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Frederick S. Stadler",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Gary Califello",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Mark Pirc",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Matt Cooling",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Robert Scheidt",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Samuel Wyke",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Rockdale",
     "office": {
@@ -8776,33 +8967,40 @@
     "board": [
       {
         "name": "Brian A. Clancy, Sr.",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "David G. Richards",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jose “Joe” Chavez, Jr.",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Kenneth C. Griffin",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Linda S. Palmiter",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Lourdes Aguirre",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "John D. Noak",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Romeoville",
     "office": {
@@ -8813,7 +9011,8 @@
     "officers": [
       {
         "name": "Bernice E. Holloway",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -8994,6 +9193,7 @@
   "1767548": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2025",
       "name": "Todd Latham",
       "role": "Mayor"
     },
@@ -9180,33 +9380,40 @@
     "board": [
       {
         "name": "Anthony “Tony” Luciano",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Molly Babyak",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Richard (Rick) Chapman",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Scott Selfridge",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Stevan A. Brockman",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Thomas D. Amos",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Clarence “CC” DeBold",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2029"
     },
     "name": "Village of Shorewood",
     "office": {
@@ -9216,7 +9423,8 @@
     "officers": [
       {
         "name": "Lona Jakaitis",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       },
       {
         "appointed": true,
@@ -9803,33 +10011,40 @@
     "board": [
       {
         "name": "Eric Wilhelmi",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jill Anderson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Justin Hensley",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Karey Taylor",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Phil Anderson",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Travis Brent",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Eli Geiss",
-      "role": "President"
+      "role": "President",
+      "termExpires": "2027"
     },
     "name": "Village of Symerton",
     "office": {
@@ -9840,7 +10055,8 @@
     "officers": [
       {
         "name": "George J. Salaba",
-        "role": "Treasurer"
+        "role": "Treasurer",
+        "termExpires": "2027"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/"
@@ -10695,29 +10911,35 @@
     "board": [
       {
         "name": "Curtis Nekovar",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Jennifer Anteliz",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Joseph Kagann",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Kaleshia “Kay” Page",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Magin “Mike” J. Martinez",
-        "role": "Trustee"
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
     "county": "Will",
     "head": {
       "name": "Gina Cunningham-Picek",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "Village of Woodridge",
     "office": {
@@ -10728,7 +10950,8 @@
     "officers": [
       {
         "name": "Joseph Heneghan",
-        "role": "Clerk"
+        "role": "Clerk",
+        "termExpires": "2029"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
@@ -10806,6 +11029,7 @@
   "1784038": {
     "county": "Kendall",
     "head": {
+      "lastElected": "2023",
       "name": "John Purcell",
       "role": "Mayor"
     },

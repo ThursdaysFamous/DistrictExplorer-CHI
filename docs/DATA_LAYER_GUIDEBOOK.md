@@ -328,11 +328,22 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   `ward` layer's answer and the card says so). Cook person rows also carry
   **`nextElection`**, the year a seat is next on the ballot — staggered, so it varies
   within one board.
-- **Term data still unconsumed outside Cook — next increment.** The Will scraper already
-  captures each member's `term_expires` year and party, and Kendall's yearbook prints an
-  "Elected <date>" per officer; neither reaches the card yet. Cook's `nextElection` is the
-  shipped pattern to follow — label each as its own source labels it ("Next election" vs
-  "Term expires") rather than normalizing one into the other.
+- **Term data — SHIPPED for all three publishing counties (2026-07-28).** Each is labelled
+  as its own source labels it, because they are three different facts and collapsing them
+  into one label would state something none of them says: Cook publishes the NEXT election
+  date (`nextElection`, 1,038 people → "Next election 2029"), Will the year a term EXPIRES
+  (`termExpires`, 215 → "Term expires 2027"), Kendall the date an officer was last ELECTED
+  (`lastElected`, 9 → "Elected 2025"). A person carries at most one, since a municipality
+  resolves to exactly one county source. The card hides a next-election or term-expiry
+  year already in the past — a few seats in both feeds are stale, and printing one would
+  state something false — while a last-elected year is past by definition and always
+  shows. Cook publishes a last-elected date too, but the next election is the more useful
+  fact and the card shows that, so the roster keeps last-elected ONLY where it is a
+  source's only term fact; storing both would add ~1,000 fields nothing reads.
+  **Still unconsumed: Will's `party`** (176 of 302 records). Municipal offices in Illinois
+  are largely nonpartisan and several Will "parties" are local slate names (BTS = Better
+  Together For Steger), so surfacing it as a party badge would misrepresent what it is —
+  deliberately deferred, not overlooked.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake

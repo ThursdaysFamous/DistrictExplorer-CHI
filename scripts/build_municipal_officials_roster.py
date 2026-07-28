@@ -174,8 +174,12 @@ def classify(office):
 
 
 def election_year(value):
-    """"2029-04-01T00:00:00-05:00" -> "2029"; anything unparseable -> None."""
-    match = re.match(r"^(\d{4})-\d{2}-\d{2}", str(value or ""))
+    """A four-digit year from either shape the sources use.
+
+    Cook publishes ISO datetimes ("2029-04-01T00:00:00-05:00"), Will and
+    Kendall bare years ("2027"). Anything else is None rather than a guess.
+    """
+    match = re.match(r"^(\d{4})(?:-\d{2}-\d{2})?", str(value or "").strip())
     return match.group(1) if match else None
 
 
@@ -279,9 +283,25 @@ def build_county(payload, by_county, statewide, warnings, apply_floors=True):
             # 104 village boards mix two cycles — so this belongs on the person,
             # not the card. Stored as the year; the card hides a year already
             # past rather than calling it "next".
-            year = election_year(rec.get("next_election"))
-            if year:
-                person["nextElection"] = year
+            # Term information, labelled as its own source labels it rather
+            # than normalised into one field: Cook publishes the NEXT election
+            # date, Will the year a term EXPIRES, Kendall the date an officer
+            # was last ELECTED. Collapsing three different facts into one label
+            # would state something none of them says.
+            next_election = election_year(rec.get("next_election"))
+            if next_election:
+                person["nextElection"] = next_election
+            term_expires = election_year(rec.get("term_expires"))
+            if term_expires:
+                person["termExpires"] = term_expires
+            # Cook publishes BOTH a last-elected and a next-election date; the
+            # next election is the more useful of the two and the card shows it,
+            # so the last-elected date is kept only where it is the only term
+            # fact a source gives (Kendall). Storing both would put ~1,000
+            # fields in the file that nothing reads.
+            last_elected = election_year(rec.get("last_elected"))
+            if last_elected and not next_election:
+                person["lastElected"] = last_elected
             if kind == "head":
                 if head is not None:
                     print("FATAL: %s resolved two heads of government (%s, %s)"

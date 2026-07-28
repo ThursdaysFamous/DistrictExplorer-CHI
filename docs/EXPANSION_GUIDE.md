@@ -383,6 +383,16 @@ city has no council". **Check this for every fork:** the reference city is the o
 municipality a metro build is most likely to skip, because its council already has a
 layer.
 
+**Term data: label it as the source labels it.** Three counties publish three different
+term facts and none of them is interchangeable — Cook the next election date, Will the
+year a term expires, Kendall the date last elected. They ride the person as
+`nextElection` / `termExpires` / `lastElected` and render as "Next election 2029" /
+"Term expires 2027" / "Elected 2025". Normalising them into one field would state
+something no source says. Two rules that fall out: a *future*-tense fact already in the
+past is not rendered (both feeds carry a few stale seats), and where a source publishes
+more than one fact, keep only the one the card will show — Cook's last-elected date would
+have added ~1,000 unread fields beside its next-election date.
+
 **Name the jurisdiction the way the source labels its form of government.** Cook prints
 "Village of Alsip"; Kane groups under CITIES/VILLAGES and DMMC tags each entry (V)/(C).
 Carrying that into the jurisdiction string is what lets the card title the hall row "City
