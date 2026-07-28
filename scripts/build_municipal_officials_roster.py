@@ -74,11 +74,24 @@ OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
 COUNTY_FLOORS = {
     "Cook": {"municipalities": 120, "members": 900, "heads": 120},
     "Will": {"municipalities": 30, "members": 260, "heads": 30},
+    # The five mayor-level counties (2026-07 live values in parentheses). Their
+    # sources publish no trustees, so `members` counts the head plus the elected
+    # clerk/treasurer rows only — a floor equal to the head count would pass on
+    # a run that silently lost every officer.
+    "DuPage": {"municipalities": 32, "members": 32, "heads": 32},        # 36 / 36 / 36
+    "Kane": {"municipalities": 26, "members": 50, "heads": 26},          # 29 / 58 / 29
+    "McHenry": {"municipalities": 26, "members": 48, "heads": 24},       # 30 / 55 / 30
+    "Kendall": {"municipalities": 12, "members": 28, "heads": 12},       # 14 / 34 / 14
+    # Lake publishes NO officeholder names (rule-4 honesty floor), so its
+    # member/head floors are 0 BY DESIGN — the municipality count is the real
+    # guard. See lake_municipal_officials_scraper.py.
+    "Lake": {"municipalities": 48, "members": 0, "heads": 0},            # 55 / 0 / 0
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
-# municipalities (6 of Will's 34 are shared with Cook); it rises as counties
-# land (the metro total is 284 municipalities).
-MIN_TOTAL_MUNICIPALITIES = 150
+# municipalities (6 of Will's 34 are shared with Cook); all seven counties
+# resolve to ~270 of the metro's 284, the rest being places no county source
+# lists.
+MIN_TOTAL_MUNICIPALITIES = 250
 
 # Tie-break for a municipality claimed by two counties, applied only AFTER
 # depth (see pick_entry). Both directories describe the same government, so
@@ -97,7 +110,10 @@ def norm_place(name):
     "City of Calumet City" to "Calumet" and miss the join.
     """
     text = (name or "").strip()
-    prefixed = re.sub(r"^(village|city|town)\s+of\s+", "", text, flags=re.I)
+    # "United City of Yorkville" is Yorkville's legal name and the form its
+    # county clerk prints; Census lists it as "Yorkville city". The optional
+    # qualifier keeps that join working without a per-place alias.
+    prefixed = re.sub(r"^(?:united\s+)?(village|city|town)\s+of\s+", "", text, flags=re.I)
     if prefixed != text:
         text = prefixed
     else:
@@ -155,6 +171,12 @@ def classify(office):
     if o in OFFICER_OFFICES:
         return "officer"
     return None
+
+
+def election_year(value):
+    """"2029-04-01T00:00:00-05:00" -> "2029"; anything unparseable -> None."""
+    match = re.match(r"^(\d{4})-\d{2}-\d{2}", str(value or ""))
+    return match.group(1) if match else None
 
 
 def district_sort_key(member):
@@ -243,6 +265,23 @@ def build_county(payload, by_county, statewide, warnings):
                 person["district"] = rec["district"]
             if rec.get("appointed"):
                 person["appointed"] = True
+            # Per-PERSON contact, carried only where the source publishes it per
+            # member (McHenry prints a direct line or office e-mail for a few
+            # officials). The municipality-level hall contact below is never
+            # copied onto a person — that would imply a direct line that the
+            # source does not publish.
+            if rec.get("person_phone"):
+                person["phone"] = format_phone(rec["person_phone"])
+            if rec.get("person_email"):
+                person["email"] = rec["person_email"]
+            # When this seat is next on the ballot, where the source publishes
+            # it (Cook: 100% of records). Terms are STAGGERED — 103 of Cook's
+            # 104 village boards mix two cycles — so this belongs on the person,
+            # not the card. Stored as the year; the card hides a year already
+            # past rather than calling it "next".
+            year = election_year(rec.get("next_election"))
+            if year:
+                person["nextElection"] = year
             if kind == "head":
                 if head is not None:
                     print("FATAL: %s resolved two heads of government (%s, %s)"
@@ -261,6 +300,11 @@ def build_county(payload, by_county, statewide, warnings):
         officers.sort(key=lambda m: (m.get("role") or "", m.get("name") or ""))
 
         entry = {"name": jurisdiction, "county": county}
+        # Chicago's 50 ward seats are published under a different jurisdiction
+        # type and answered by the `ward` layer, so this card points there
+        # instead of implying the city has no council.
+        if any(rec.get("ward_seats_elsewhere") for rec in records):
+            entry["councilOnWardLayer"] = True
         if head:
             entry["head"] = head
         if board:

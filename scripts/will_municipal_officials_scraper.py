@@ -278,6 +278,20 @@ OFFICER_NAME_RE = (r"[A-Z]" + _CH + r"*"
                    r"(?:\s+(?!(?:" + _LABELS + r")\b)" + _CH + r"+){0,4}"
                    r"(?:,\s*(?:Jr|Sr|II|III|IV|V)\.?)?")
 
+# The label guard above only inspects word STARTS, but the flattened text also
+# glues a label onto the END of a name with no space ("Andrea LambergTrustees
+# Jennifer Hughes" — the Treasurer's surname running straight into the Trustees
+# section header). Cutting at a lowercase->Label boundary recovers the real
+# name; without it the treasurer shipped carrying the next section's first
+# board member.
+_GLUED_LABEL_RE = re.compile(r"(?<=[a-z])(?=(?:" + _LABELS + r")\b)")
+
+
+def trim_glued_label(name):
+    if not name:
+        return name
+    return _GLUED_LABEL_RE.split(name, maxsplit=1)[0].strip()
+
 PERSON = re.compile(
     r"(?:(?P<kind>Ward|District)\s+(?P<num>\d+)\s*-\s*)?"
     r"(?:(?P<atlarge>At\s+Large)\s+)?"
@@ -332,7 +346,7 @@ def parse_officer(entry, label):
                   r"(?P<name>" + OFFICER_NAME_RE + r")", entry)
     if not m:
         return None
-    name = clean(m.group("name"))
+    name = trim_glued_label(clean(m.group("name")))
     if not name:
         return None
     # The directory prints this where an office has no named holder.

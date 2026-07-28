@@ -6,18 +6,22 @@ name: Update municipal officials roster
 # rather than committing directly to main — officeholder data should get a
 # human look before it ships.
 #
-# Cook (the County Clerk's Directory of Elected Officials API) and Will (the
-# County Clerk's Will County Directory) are the shipped counties. The
-# remaining five land here as additional scrape steps as they are built, each
-# appending its own intermediate file to the builder invocation;
-# docs/MUNICIPAL_COUNCILS_PLAYBOOK.md holds the source ladder and the
-# merge/precedence rule.
+# All seven metro counties are sourced (docs/EXPANSION_GUIDE.md Part 2.4),
+# each at the depth its county actually publishes:
+#   Cook     — Clerk's Directory of Elected Officials JSON API (full body)
+#   Will     — Clerk's Will County Directory flipbook          (full body)
+#   DuPage   — DMMC Membership Directory PDF                   (head only)
+#   Kane     — Clerk's Government Guide PDF                    (head + clerk)
+#   McHenry  — Clerk's County Yearbook page                    (head + clerk)
+#   Kendall  — Clerk's Yearbook & Government Guide PDF         (head + clerk)
+#   Lake     — county GIS Municipalities service        (hall contact only —
+#              Lake publishes no officeholder names anywhere county-side)
 #
-# Each county scrapes independently and a failure is isolated: the build runs
-# on whatever succeeded, so one county's outage never withdraws another
-# county's roster. A build needs every shipped county, though — dropping one
-# would delete live officeholders from the app — so it is gated on all of
-# them succeeding, and any failure raises that county's standing issue.
+# Each county scrapes independently and a failure is isolated: one county's
+# outage never withdraws another county's roster. A build needs every county,
+# though — dropping one would delete live officeholders from the app — so the
+# build is gated on all of them succeeding, and any failure raises that
+# county's standing issue instead of reddening the run.
 
 on:
   schedule:
@@ -40,12 +44,18 @@ jobs:
           python-version: "3.x"
 
       - name: Install scraper dependencies
-        # Version-pinned via scripts/requirements.txt (constraints). Cook is a
-        # plain JSON API and Will is parsed from the flipbook's own HTML text
-        # rendition, so requests covers both; the Cook scraper's playwright
-        # rung is opt-in and unused unless Cloudflare starts challenging plain
-        # clients.
-        run: pip install -c scripts/requirements.txt requests
+        # Version-pinned via scripts/requirements.txt (constraints). pypdf reads
+        # the three counties whose source is a published PDF; beautifulsoup4
+        # parses McHenry's yearbook page.
+        run: pip install -c scripts/requirements.txt requests beautifulsoup4 pypdf playwright
+
+      - name: Install Chromium for the Akamai-fronted counties
+        # McHenry and Kendall sit behind an edge that fingerprints the HTTP
+        # client itself: with a byte-identical browser header set curl gets 200
+        # where python-requests gets 403, so a real browser is the rung that
+        # carries them. Their scrapers still try requests first (cheap, fails
+        # fast) and fall back to the Internet Archive after this.
+        run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape the Cook County Clerk directory of elected officials
         id: scrape_cook
@@ -57,15 +67,49 @@ jobs:
         continue-on-error: true
         run: python3 scripts/will_municipal_officials_scraper.py --out /tmp/will_municipal_officials.json
 
+      - name: Scrape the DuPage Mayors and Managers Conference directory
+        id: scrape_dupage
+        continue-on-error: true
+        run: python3 scripts/dupage_municipal_officials_scraper.py --out /tmp/dupage_municipal_officials.json
+
+      - name: Scrape the Kane County Clerk government guide
+        id: scrape_kane
+        continue-on-error: true
+        run: python3 scripts/kane_municipal_officials_scraper.py --out /tmp/kane_municipal_officials.json
+
+      - name: Scrape the McHenry County Clerk yearbook
+        id: scrape_mchenry
+        continue-on-error: true
+        run: python3 scripts/mchenry_municipal_officials_scraper.py --out /tmp/mchenry_municipal_officials.json
+
+      - name: Scrape the Kendall County Clerk yearbook
+        id: scrape_kendall
+        continue-on-error: true
+        run: python3 scripts/kendall_municipal_officials_scraper.py --out /tmp/kendall_municipal_officials.json
+
+      - name: Scrape the Lake County GIS municipalities service
+        id: scrape_lake
+        continue-on-error: true
+        run: python3 scripts/lake_municipal_officials_scraper.py --out /tmp/lake_municipal_officials.json
+
       # A source that blocks or breaks is an expected state, not a red build:
       # the shipped roster keeps its last good values and one standing issue
       # tracks the block (the validate-sources pattern).
       - name: Track a blocked or broken source
-        if: steps.scrape_cook.outcome == 'failure' || steps.scrape_will.outcome == 'failure'
+        if: |
+          steps.scrape_cook.outcome == 'failure' || steps.scrape_will.outcome == 'failure' ||
+          steps.scrape_dupage.outcome == 'failure' || steps.scrape_kane.outcome == 'failure' ||
+          steps.scrape_mchenry.outcome == 'failure' || steps.scrape_kendall.outcome == 'failure' ||
+          steps.scrape_lake.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           COOK_OUTCOME: ${{ steps.scrape_cook.outcome }}
           WILL_OUTCOME: ${{ steps.scrape_will.outcome }}
+          DUPAGE_OUTCOME: ${{ steps.scrape_dupage.outcome }}
+          KANE_OUTCOME: ${{ steps.scrape_kane.outcome }}
+          MCHENRY_OUTCOME: ${{ steps.scrape_mchenry.outcome }}
+          KENDALL_OUTCOME: ${{ steps.scrape_kendall.outcome }}
+          LAKE_OUTCOME: ${{ steps.scrape_lake.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -78,32 +122,43 @@ jobs:
             fi
           }
           # Full if-blocks, not `[ … ] && …`: under `set -e` a false test as the
-          # last command of an AND-list fails the step, which would turn "Cook
-          # is fine, Will is blocked" into a red run instead of a filed issue.
-          if [ "$COOK_OUTCOME" = "failure" ]; then
-            raise_issue "Cook"
-          fi
-          if [ "$WILL_OUTCOME" = "failure" ]; then
-            raise_issue "Will"
-          fi
+          # last command of an AND-list fails the step, which would turn "one
+          # county is blocked" into a red run instead of a filed issue.
+          if [ "$COOK_OUTCOME" = "failure" ]; then raise_issue "Cook"; fi
+          if [ "$WILL_OUTCOME" = "failure" ]; then raise_issue "Will"; fi
+          if [ "$DUPAGE_OUTCOME" = "failure" ]; then raise_issue "DuPage"; fi
+          if [ "$KANE_OUTCOME" = "failure" ]; then raise_issue "Kane"; fi
+          if [ "$MCHENRY_OUTCOME" = "failure" ]; then raise_issue "McHenry"; fi
+          if [ "$KENDALL_OUTCOME" = "failure" ]; then raise_issue "Kendall"; fi
+          if [ "$LAKE_OUTCOME" = "failure" ]; then raise_issue "Lake"; fi
 
       - name: Rebuild roster data file
-        if: steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success'
+        id: build
+        if: |
+          steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success' &&
+          steps.scrape_dupage.outcome == 'success' && steps.scrape_kane.outcome == 'success' &&
+          steps.scrape_mchenry.outcome == 'success' && steps.scrape_kendall.outcome == 'success' &&
+          steps.scrape_lake.outcome == 'success'
         run: |
           python3 scripts/build_municipal_officials_roster.py \
             /tmp/cook_municipal_officials.json \
-            /tmp/will_municipal_officials.json
+            /tmp/will_municipal_officials.json \
+            /tmp/dupage_municipal_officials.json \
+            /tmp/kane_municipal_officials.json \
+            /tmp/mchenry_municipal_officials.json \
+            /tmp/kendall_municipal_officials.json \
+            /tmp/lake_municipal_officials.json
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
-        if: steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success'
+        if: steps.build.outcome == 'success'
         run: python3 scripts/validate_index.py index.html
 
       - name: Check for changes
         id: diff
-        if: steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success'
+        if: steps.build.outcome == 'success'
         run: |
           if git diff --quiet -- data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -112,7 +167,7 @@ jobs:
           fi
 
       - name: Open or update pull request
-        if: steps.scrape_cook.outcome == 'success' && steps.scrape_will.outcome == 'success' && steps.diff.outputs.changed == 'true'
+        if: steps.build.outcome == 'success' && steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -131,9 +186,7 @@ jobs:
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
             gh pr create \
               --title "Update municipal officials roster from the county clerk directories" \
-              --body "Automated weekly refresh of the Municipality card's governing-body roster, generated by \`scripts/cook_municipal_officials_scraper.py\` and \`scripts/will_municipal_officials_scraper.py\` + \`scripts/build_municipal_officials_roster.py\` from the Cook and Will county clerk directories. Please review the diff before merging — this changes data about real officeholders." \
+              --body "Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from all seven metro counties' official sources (Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall clerk yearbooks, and Lake's county GIS hall contact). Please review the diff before merging — this changes data about real officeholders." \
               --base main \
               --head "$branch"
-          else
-            echo "PR already open for $branch; force-push refreshed it."
           fi

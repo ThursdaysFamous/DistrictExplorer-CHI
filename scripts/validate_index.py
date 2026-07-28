@@ -134,7 +134,7 @@ ROSTER_FILES = {
     "ccbr-roster.json": 3,
     "il-county-clerks.json": 101,
     "dupage-county-board-members.json": 6,
-    "municipal-officials.json": 150,  # Municipal governing bodies keyed by Census place GEOID; Cook + Will shipped (156 municipalities), remaining counties per docs/MUNICIPAL_COUNCILS_PLAYBOOK.md
+    "municipal-officials.json": 250,  # Municipal governing bodies keyed by Census place GEOID; all seven metro counties shipped (279 municipalities: 156 full governing bodies, 82 head-of-government, 41 contact-only where the county publishes no names) per docs/EXPANSION_GUIDE.md Part 2.4
 }
 # ==== GENERATED:END validator-config ====
 

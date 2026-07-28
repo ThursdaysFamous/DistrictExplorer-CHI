@@ -585,8 +585,8 @@
       },
       {
         "file": "municipal-officials.json",
-        "min_keys": 150,
-        "note": "Municipal governing bodies keyed by Census place GEOID; Cook + Will shipped (156 municipalities), remaining counties per docs/MUNICIPAL_COUNCILS_PLAYBOOK.md"
+        "min_keys": 250,
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties shipped (279 municipalities: 156 full governing bodies, 82 head-of-government, 41 contact-only where the county publishes no names) per docs/EXPANSION_GUIDE.md Part 2.4"
       }
     ]
   },
@@ -672,7 +672,7 @@
     },
     {
       "file": "update-municipal-officials.yml",
-      "purpose": "Suburban municipal governing bodies (Cook Clerk DOEO API + Will Clerk directory)",
+      "purpose": "Suburban municipal governing bodies (all seven counties: Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall clerk yearbooks, Lake county GIS contact)",
       "schedule": "Wed 14:00 UTC"
     },
     {
