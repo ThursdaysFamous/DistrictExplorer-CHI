@@ -11594,11 +11594,13 @@ function initChiExplorer() {
   // right after it anyway so validate_index can assert this list matches the
   // registered id set 1:1, exactly as it does for LAYER_AREA_RANK.
   var LAYER_SIDEBAR_RANK = [
-    // political — federal, state legislature, state judiciary, county,
-    // school board, municipal ward, election administration
-    "congress", "il-senate", "il-house", "il-supreme-court",
-    "judicial-subcircuit", "county-board", "ccbr", "school-board",
-    "ward", "ward-precinct", "early-voting",
+    // political — DEMAND order, most-searched concept first (operator call
+    // 2026-07-28), unlike the governance-ordered groups below. Basis: 12-mo
+    // Wikipedia-pageview proxy, re-rankable when real Search Console query
+    // data exists — evidence + numbers in docs/EXPANSION_GUIDE.md Part 5.
+    "congress", "il-house", "il-senate", "ward", "ward-precinct",
+    "early-voting", "county-board", "ccbr", "school-board",
+    "il-supreme-court", "judicial-subcircuit",
     // safety — service boundaries before amenity points; the elected
     // oversight council sits beside the district it oversees
     "police-district", "police-beat", "ccpsa-district-council",

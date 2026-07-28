@@ -825,6 +825,23 @@ points, broad → specific within each family.** Toggled-on layers still float t
 of their group, so the rank governs the resting order, not the active one. A new layer
 takes its rank in the same change that registers it.
 
+**Exception — Political is DEMAND-ordered, most-searched concept first** (operator
+call, 2026-07-28). No Search Console / query data is connected, so the ranking rests on
+the best available public proxy — 12-month Wikipedia pageviews (Jul 2025 – Jun 2026,
+en.wiki, user traffic) for each concept's closest article: congressional districts of
+Illinois **254k** ≫ IL House **62k** > IL Senate **49k** ≈ Chicago City Council **48k**
+(ward) > early voting **23k** > Cook County Board **19k** ≫ Board of Review **4.2k** ≈
+Chicago Board of Education **3.4k** ≈ IL Supreme Court **3.4k** ≫ judicial subcircuits
+(~0, no article). Hence: congress → il-house → il-senate → ward → early-voting →
+county-board → ccbr → school-board → il-supreme-court → judicial-subcircuit. Known
+proxy weaknesses, recorded so the next pass can do better: pageviews measure national
+concept interest, not Chicago-resident lookup intent (which likely boosts `ward` — the
+city runs a dedicated alderman-lookup tool for a reason), and early-voting/CCBR demand
+is seasonal (election windows, appeal windows) rather than steady. **Re-rank from real
+query data when Search Console (or GoatCounter arrival) exports exist; the bottom tier
+(ccbr / school-board / il-supreme-court) is statistically tied and ordered by
+recurrence of its seasonal spikes.**
+
 **Nesting determination (recorded 2026-07-28).** The `subOf` tree — County → Township →
 Voting Precinct, Ward → Ward Precinct, Police District → Beat — encodes genuine legal
 containment-plus-numbering hierarchies and is complete. Evaluated and deliberately kept
