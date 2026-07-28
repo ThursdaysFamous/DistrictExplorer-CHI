@@ -376,12 +376,20 @@ def people_of(entry):
 
 
 def merge_contact(existing, addition, warnings):
-    """Fill missing per-person contact from a city site onto the clerk's roster.
+    """Fill per-person fields the county left empty, from a municipality's own site.
 
-    Contact only, by design: the county clerk's directory stays the roster of
-    record, so this never adds a seat-holder, renames one, or changes a role —
-    an unmatched name is reported instead, because a mismatch means one of the
-    two sources is out of date and that is a human's call.
+    The county clerk's directory stays the roster of record: this never adds a
+    seat-holder, renames one, or changes a role, and never overwrites a value
+    the county already published — an unmatched name is reported instead,
+    because a mismatch means one of the two sources is out of date and that is
+    a human's call.
+
+    Contact is the usual payload. DISTRICT is the exception that earns its
+    keep: Skokie's four district trustees and two at-large trustees are all
+    published municipality-wide by the Clerk, with no district on any of them,
+    while Cook GIS carries the four district polygons — so the seats existed on
+    the map with nobody attached. The village publishes the assignment itself,
+    which is the authority on its own districting.
     """
     hall = existing.get("office") or {}
     for person in people_of(addition):
@@ -412,6 +420,14 @@ def merge_contact(existing, addition, warnings):
                             "directory — not added (clerk is the roster of record)"
                             % (existing.get("name"), person.get("name")))
             continue
+        # A district the county never published (Skokie). Filled, never
+        # overwritten, and logged so the looser field is visible in the build.
+        if person.get("district") and not match.get("district"):
+            match["district"] = person["district"]
+            warnings.append("%s: district '%s' for %s came from the municipality's "
+                            "own site (the county published none)"
+                            % (existing.get("name"), person["district"],
+                               match.get("name")))
         phone = person.get("phone")
         # A "direct" number that is just the main line is not a direct line.
         if phone and phone != hall.get("phone") and not match.get("phone"):
@@ -500,6 +516,27 @@ def main():
                 roster[geoid] = entry
             else:
                 merge_contact(roster[geoid], entry, warnings)
+
+    # The Skokie class: a municipality whose seats the ward layer maps, but
+    # whose roster carries no districted seat, renders a district polygon with
+    # nobody attached. Warn rather than fail — a municipality may legitimately
+    # have ward geometry drawn before it takes effect — but never let it pass
+    # unseen again.
+    coverage_path = os.path.join(args.out_dir, "municipal-ward-coverage.json")
+    if os.path.exists(coverage_path):
+        with open(coverage_path) as f:
+            covered = json.load(f)
+        for feature in (covered.get("features") or []):
+            geoid = str((feature.get("properties") or {}).get("geoid") or "")
+            entry = roster.get(geoid)
+            if not entry or not entry.get("board"):
+                continue
+            if not any(m.get("district") and
+                       not re.match(r"^at[\s-]*large$", str(m["district"]), re.I)
+                       for m in entry["board"]):
+                warnings.append("%s has ward geometry but no districted seat in the "
+                                "roster — its ward card will name nobody"
+                                % entry.get("name"))
 
     if len(roster) < MIN_TOTAL_MUNICIPALITIES:
         print("FATAL: resolved %d municipalities, floor is %d — refusing to write"

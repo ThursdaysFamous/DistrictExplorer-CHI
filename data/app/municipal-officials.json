@@ -9212,31 +9212,41 @@
   "1770122": {
     "board": [
       {
+        "district": "District 2",
+        "email": "trustee.pure-slovin@skokie.org",
         "name": "Alison Pure Slovin",
         "nextElection": "2027",
         "role": "Trustee"
       },
       {
+        "email": "trustee.schechter@skokie.org",
         "name": "Gail Schechter",
         "nextElection": "2029",
         "role": "Trustee"
       },
       {
+        "district": "District 4",
+        "email": "trustee.iverson@skokie.org",
         "name": "Jim Iverson",
         "nextElection": "2027",
         "role": "Trustee"
       },
       {
+        "email": "trustee.robinson@skokie.org",
         "name": "Keith A. Robinson",
         "nextElection": "2029",
         "role": "Trustee"
       },
       {
+        "district": "District 1",
+        "email": "trusteekimani.levy@skokie.org",
         "name": "Kimani Levy",
         "nextElection": "2027",
         "role": "Trustee"
       },
       {
+        "district": "District 3",
+        "email": "trusteelissa.levy@skokie.org",
         "name": "Lissa Levy",
         "nextElection": "2027",
         "role": "Trustee"

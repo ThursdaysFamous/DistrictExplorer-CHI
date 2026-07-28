@@ -217,6 +217,20 @@ PROVENANCE = [
              "client-rendered, and the only Archive snapshot is from 2022. The "
              "county clerk remains the roster of record — for a municipality the "
              "county covers, this source contributes contact only."},
+    {"layer": "Skokie trustee districts (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.skokie.org/486/Board-of-Trustees",
+     "note": "Skokie is the one municipality whose ward geometry the app maps "
+             "while its county publishes no district for any seat: Cook GIS "
+             "carries four Skokie district polygons, the Clerk's directory "
+             "lists all six trustees as municipality-wide "
+             "(skokie_trustee_districts_scraper.py). The village's own board "
+             "page carries the assignment — four district trustees + two "
+             "at-large since the April 2025 consolidated election, per its "
+             "2025 Electoral Changes page — plus a per-trustee e-mail. The "
+             "Clerk stays the roster of record; this fills the district and "
+             "e-mail only. If Skokie's board structure changes, the scraper "
+             "fails loudly rather than reshaping the card."},
     {"layer": "DuPage municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://dmmc-cog.org/membership-list/",

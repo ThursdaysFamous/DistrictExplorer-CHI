@@ -419,9 +419,25 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   source (it is absent from Cook's ward layer), so its seats show on the Municipality
   card with no ward geometry behind them; **Waukegan** publishes a ward map as PDF
   only; and no county-level ward layer exists in Lake/DuPage/Kane/McHenry/Kendall.
-  One source disagreement to resolve: Cook's ward layer carries Skokie's 2025 trustee
-  districts while the Clerk's roster still lists Skokie's trustees as at-large, so a
-  Skokie point resolves a district with no seat-holder joined to it.
+  The Skokie source disagreement is **RESOLVED (2026-07-28)** — see below.
+- **Skokie's trustee districts — RESOLVED 2026-07-28.** Cook GIS carried four Skokie
+  district polygons while the Clerk's directory listed all six trustees as
+  municipality-wide, so a Skokie point resolved a district with nobody attached. The
+  village settles it: its own "2025 Electoral Changes" page states that from the April
+  2025 consolidated election "four geographic election districts now exist, with voters
+  in each district electing one trustee. In addition, two trustees are elected
+  at-large." So the GIS was right and the Clerk's roster was the incomplete side — the
+  correct six people, without their district assignments.
+  `skokie_trustee_districts_scraper.py` reads the assignments (and a per-trustee e-mail)
+  from the village's Board of Trustees page; the Clerk stays the roster of record and the
+  builder fills only the fields the county left empty. Skokie's card now shows the
+  ward-layer pointer plus its two at-large trustees, and a Skokie district point names
+  its trustee. **A guard now prevents recurrence:** the builder cross-checks
+  `municipal-ward-coverage.json` against the roster and warns for any municipality with
+  ward geometry but no districted seat — the check that found Skokie was the only one.
+  Two trustees share the surname Levy, which is why the scraper's e-mail matcher
+  disambiguates on given name and refuses an ambiguous match (it initially handed Lissa
+  Kimani's address — the sweep's own lesson, re-learned).
 - Park districts statewide (~350) — no statewide GIS; per-county sources. Will +
   DuPage + Lake + Kane + Kendall shipped inside the consolidated
   `park-district` layer (Will: commissioners in GIS attrs; DuPage: name-only —
