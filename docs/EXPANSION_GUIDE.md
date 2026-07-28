@@ -412,6 +412,40 @@ heuristic — so it is deliberately not carried. When two sources describe one s
 each field this way before joining; it usually removes the need for fuzzy name matching
 rather than motivating it.
 
+**A multi-source roster build must never gate on a source that can block
+permanently.** The municipal-officials workflow originally required all ten
+scrapers to succeed, reasoning that dropping a county would delete live
+officeholders. The first live run (2026-07-28) showed the cost: four sources
+403'd GitHub's runner IPs — McHenry and Kendall block every rung including the
+Archive's crawler, DuPage and Joliet answer a developer machine but not the
+datacenter ranges — so the build skipped and the roster froze *for every
+county*, including six that had scraped perfectly. An all-or-nothing gate over
+N sources fails whenever ANY one is permanently blocked, and rule-4's terminal
+case guarantees some will be.
+
+The fix is per-source preservation, not a looser gate: a blocked source carries
+forward its currently shipped entries (`--preserve` + `--preserved <id>`) while
+every other source refreshes. Three properties make that safe to automate —
+copy them:
+1. **Some sources are not preservable.** Cook and Will are the only
+   full-governing-body sources here, so building without either would silently
+   ship mayors where councils belong — no count floor would notice, because the
+   municipalities all remain. The builder refuses rather than degrade.
+2. **Preserved data re-enters through the ordinary merge paths**, so it cannot
+   take a shortcut the fresh path doesn't have: a preserved county goes through
+   the same cross-county precedence, and a preserved city payload through the
+   same `merge_contact` that can only fill fields the county left empty — so it
+   can never resurrect a seat-holder the county has since replaced.
+3. **Preservation is stated, never silent.** The build prints which sources were
+   carried forward and how many entries each contributed, and the PR body
+   repeats it: preserved data is shipped but *not re-verified this run*, which a
+   reviewer has to be able to see.
+
+Diagnostic note for any workflow using `continue-on-error`: the jobs API reports
+a swallowed failure as `conclusion: success`, so a run can look entirely green
+while half its steps failed. Read `steps.<id>.outcome` (the result *before*
+`continue-on-error`), or the step logs — not the API's conclusion.
+
 **Name the jurisdiction the way the source labels its form of government.** Cook prints
 "Village of Alsip"; Kane groups under CITIES/VILLAGES and DMMC tags each entry (V)/(C).
 Carrying that into the jurisdiction string is what lets the card title the hall row "City
