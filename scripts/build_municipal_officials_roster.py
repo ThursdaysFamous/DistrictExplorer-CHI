@@ -173,6 +173,12 @@ def classify(office):
     return None
 
 
+def election_year(value):
+    """"2029-04-01T00:00:00-05:00" -> "2029"; anything unparseable -> None."""
+    match = re.match(r"^(\d{4})-\d{2}-\d{2}", str(value or ""))
+    return match.group(1) if match else None
+
+
 def district_sort_key(member):
     """Ward 1 < Ward 2 < Ward 10; unnumbered seats sort last, then by name."""
     district = member.get("district") or ""
@@ -268,6 +274,14 @@ def build_county(payload, by_county, statewide, warnings):
                 person["phone"] = format_phone(rec["person_phone"])
             if rec.get("person_email"):
                 person["email"] = rec["person_email"]
+            # When this seat is next on the ballot, where the source publishes
+            # it (Cook: 100% of records). Terms are STAGGERED — 103 of Cook's
+            # 104 village boards mix two cycles — so this belongs on the person,
+            # not the card. Stored as the year; the card hides a year already
+            # past rather than calling it "next".
+            year = election_year(rec.get("next_election"))
+            if year:
+                person["nextElection"] = year
             if kind == "head":
                 if head is not None:
                     print("FATAL: %s resolved two heads of government (%s, %s)"
@@ -286,6 +300,11 @@ def build_county(payload, by_county, statewide, warnings):
         officers.sort(key=lambda m: (m.get("role") or "", m.get("name") or ""))
 
         entry = {"name": jurisdiction, "county": county}
+        # Chicago's 50 ward seats are published under a different jurisdiction
+        # type and answered by the `ward` layer, so this card points there
+        # instead of implying the city has no council.
+        if any(rec.get("ward_seats_elsewhere") for rec in records):
+            entry["councilOnWardLayer"] = True
         if head:
             entry["head"] = head
         if board:

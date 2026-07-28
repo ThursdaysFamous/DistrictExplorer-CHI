@@ -94,7 +94,7 @@ concept, different election geometry, zero new layers. Worked example:
 
 | Place | Head of government | Governing body | Surface |
 |---|---|---|---|
-| Chicago | Mayor — recorded gap (guidebook backlog) | 50 alderpersons by ward | body: `ward` layer; head: `municipality` card once the gap ships |
+| Chicago | Mayor + City Clerk + City Treasurer on the `municipality` card (SHIPPED 2026-07-28) | 50 alderpersons by ward | body: `ward` layer; head + citywide officers: `municipality` card, whose council section points at the ward layer rather than listing 50 seats |
 | Berwyn (Cook) | Mayor on `municipality` card | full ward-badged council on the card; *your* alderperson from the consolidated `ward` layer (SHIPPED 2026-07, §2.4) | Pattern A card + Pattern B polygon, both live |
 | Alsip (Cook) | Village President on card | 6 at-large trustees on card | identity card only — correctly no polygon |
 
@@ -356,15 +356,32 @@ entirely** where the source names nobody; contact is municipality-level (verifie
 per-person phone/email columns are empty for all 1,134 records) and renders once on the
 hall row; head/board/officers stay separate sections so a mayor-level county ships a
 `head` with no `board` honestly; **Library Trustees are excluded** (they sit on
-`library-district` boards, not the municipal body). One shape addition from the
+`library-district` boards, not the municipal body). Two shape additions from the
 five-county build: **per-person `phone`/`email` ride the person** where — and only where —
 the source publishes them per member (McHenry prints a direct line or office e-mail for a
 few officials); a "personal" number equal to the village-hall line is dropped, because
-carrying it would imply a direct line the source doesn't publish. Count floors as built:
+carrying it would imply a direct line the source doesn't publish. And **`nextElection`
+(a year) rides the person** where the county publishes it (Cook: 100% of records):
+municipal terms are STAGGERED — 103 of suburban Cook's 104 village boards mix two cycles —
+so "when is this seat next on the ballot" varies seat by seat and is exactly what a
+resident wants; the card drops a year already past rather than calling a stale seat's
+election "next". Count floors as built:
 per-county muni floors (cook ≥120 · will ≥30 · dupage ≥32 · kane ≥26 · mchenry ≥26 ·
 kendall ≥12 · lake ≥48), member floors (cook ≥900, will ≥260, and for the mayor-level
 counties a floor ABOVE the head count so a run that silently lost every clerk still
 fails), Lake's member/head floors 0 by design, merged total ≥250 (built: 279).
+
+**The central city is a municipality too.** Chicago's own card named nobody until
+2026-07-28 while every suburb named its mayor — the recorded suburban-parity asymmetry.
+The fix needed no new source: the Cook Clerk's directory covers all of Cook (only its
+address *search* is suburban-only) and publishes the city's three citywide elected
+officers under its own jurisdiction type (`CHIWD`), while the 50 ward seats sit under a
+separate type (`CHICA`) and stay the `ward` layer's answer. The card renders the head +
+citywide officers and, in place of a 50-row council, a section that says the seats are
+elected by ward and points at that layer — an empty section there would read as "this
+city has no council". **Check this for every fork:** the reference city is the one
+municipality a metro build is most likely to skip, because its council already has a
+layer.
 
 **Name the jurisdiction the way the source labels its form of government.** Cook prints
 "Village of Alsip"; Kane groups under CITIES/VILLAGES and DMMC tags each entry (V)/(C).
@@ -1045,7 +1062,7 @@ different concept/card · UNIQUE = recorded Chicago/Cook-only.
 |---|---|---|---|---|
 | `county` | your county + clerk | County | clerk county-wide | DONE · officer-roster enrichment per rule 4; at-large boards land here |
 | `township` | your township / county subdivision | Township | officers township-wide | DONE (identity) · officer candidate via clerk yearbooks; Chicago structural empty |
-| `municipality` | your municipality + its government | Municipal | head municipal-wide; board at-large or by ward | DONE (identity) · ROSTER per county (Part 2.4) · Chicago head/officers gap recorded |
+| `municipality` | your municipality + its government | Municipal | head municipal-wide; board at-large or by ward | DONE (identity) · ROSTER per county (Part 2.4) · Chicago head + citywide officers SHIPPED |
 | `county-precinct` | your voting precinct (+ polling place) | Election administration | n/a | ENTRY per authority · Kendall polling-place join is the model |
 | `park-district` | which park district serves you | Special district | elected commissioners | ENTRY · McHenry recorded gap |
 | `library-district` | which library body taxes you | Special district | district trustees elected; municipal funds appointed | ENTRY · complete-tiling rule |

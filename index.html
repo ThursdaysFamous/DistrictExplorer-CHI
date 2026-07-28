@@ -5961,6 +5961,12 @@ function initChiExplorer() {
     if (roles["Trustee"]) return "Board of Trustees";
     if (roles["Alderperson"] || roles["Council Member"]) return "City Council";
     if (roles["Commissioner"]) return "Board of Commissioners";
+    // No seats on this card to read a role from (Chicago, whose ward seats are
+    // the `ward` layer's answer) — fall back to the municipality's own legal
+    // form, which the roster carries as "City of …" / "Village of …".
+    var name = String((gov && gov.name) || "");
+    if (/^City\s+of\b/i.test(name)) return "City Council";
+    if (/^Village\s+of\b/i.test(name)) return "Board of Trustees";
     return "Governing Board";
   }
 
@@ -5989,6 +5995,16 @@ function initChiExplorer() {
     }
     if (member.appointed) {
       person.note = (person.note ? person.note + " · " : "") + "Appointed";
+    }
+    // When this seat is next on the ballot, where the county publishes it.
+    // Municipal terms are staggered — 103 of suburban Cook's 104 village boards
+    // mix two cycles — so this differs person to person and is the answer to
+    // "which of these do I vote on next?". A year already past is NOT a next
+    // election: the source carries a few stale seats, and rendering one would
+    // state something false, so it is dropped rather than shown.
+    var nextElection = parseInt(member.nextElection, 10);
+    if (nextElection && nextElection >= new Date().getFullYear()) {
+      person.note = (person.note ? person.note + " · " : "") + "Next election " + nextElection;
     }
     // Per-person contact appears only where the county source publishes it per
     // member (McHenry prints a direct line or office e-mail for a few
@@ -6045,6 +6061,14 @@ function initChiExplorer() {
       if (board.length) {
         wrap.appendChild(renderSectionLabel(municipalBodyLabel(gov)));
         wrap.appendChild(renderPersonRows(board.map(municipalPerson)));
+      } else if (gov.councilOnWardLayer) {
+        // Chicago: the council is real and every seat is districted, but it is
+        // the City Ward layer's answer (50 seats would also swamp this card).
+        // Say so — an empty section here would read as "no council exists".
+        wrap.appendChild(renderSectionLabel(municipalBodyLabel(gov)));
+        wrap.appendChild(renderLinkRow({
+          title: "Elected by ward — turn on the City Ward layer to see yours."
+        }));
       }
       var officers = (gov.officers || []).filter(function (m) { return m && m.name; });
       if (officers.length) {

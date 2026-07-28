@@ -37,32 +37,39 @@
     "board": [
       {
         "name": "Christine McLawhorn",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Christopher W. Murphy",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "David A. Perretta",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jennifer M. Cahill",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Richard S. Dalzell",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "William C. Love",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "John D. Ryan",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Alsip",
@@ -74,6 +81,7 @@
     "officers": [
       {
         "name": "Renee N. Harding",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -94,40 +102,49 @@
     "board": [
       {
         "name": "Bill Manganaro",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Carina Santa Maria",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Greg Zyck",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "James J. Bertucci",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robin Patricia LaBedz",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Scott Shirley",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Thomas F. Schwingbeck",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Wendy Dunnington",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "James J. Tinaglia",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Arlington Heights",
@@ -242,32 +259,39 @@
     "board": [
       {
         "name": "Brian Prigge",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jason Lohmeyer",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jennifer Wondrasek",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kate Duncan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lauren Klauer",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Todd Sholeen",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Mike Moran",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Barrington",
@@ -279,6 +303,7 @@
     "officers": [
       {
         "name": "Jim Dillon",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -289,33 +314,40 @@
     "board": [
       {
         "name": "David Riff",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jessica Hoffmann",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John Carpenter Clarke",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Laura S. Ekstrom",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Marsha McClary",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Thomas W. Strauss",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Brian D. Cecola",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Barrington Hills",
@@ -331,32 +363,39 @@
     "board": [
       {
         "name": "Adam Hopkins",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John M. Battermann",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Joseph W. LaPorte",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Raymond H. Deyne",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Renee Suwanski",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Stephanie Z. Gandsey",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Daniel H. Gunsteen",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Bartlett",
@@ -368,6 +407,7 @@
     "officers": [
       {
         "name": "Lorna G. Giless",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -409,32 +449,39 @@
     "board": [
       {
         "name": "Anthony W. Kensik",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Juanita Rodriguez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Nancy Wesolowski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sandra A. Maloy",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Terry J. Stocks",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tom Pallardy",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David R. Brady",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Bedford Park",
@@ -503,32 +550,39 @@
     "board": [
       {
         "name": "Annie N. Delgado",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gloria J. Holman",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jophelia Boston",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "M.C. Robinson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael J. Ciavattone",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ronald Nightengale",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Andre F. Harvey",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Bellwood",
@@ -540,6 +594,7 @@
     "officers": [
       {
         "name": "Jacqueline Hargrett",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -563,32 +618,39 @@
     "board": [
       {
         "name": "Diane C. Salemi",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jason Mathews",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jeronimo \"Jerry\" Perez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Roger Thomas",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sherry Graf-Stone",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Teresa McKelvy",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Robert E. Lee Jr.",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Berkeley",
@@ -600,6 +662,7 @@
     "officers": [
       {
         "name": "Belia Nowak",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -611,47 +674,56 @@
       {
         "district": "Ward 1",
         "name": "Micah Caldwell",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Joshua Bowman",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Richard E. Leja",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Robert W. Fejt",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Robert J. Pabon",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Theodore \"Teddy\" J. Polashek",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Sara Barnett Bruckmann",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 8",
         "name": "Joseph Carmichael",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Robert J. Lovero",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Berwyn",
@@ -663,10 +735,12 @@
     "officers": [
       {
         "name": "Leticia \"Letty\" Garcia",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Lizbeth \"Libby\" Linares-Herrera",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -712,42 +786,50 @@
       {
         "district": "Ward 1",
         "name": "Dexter Johnson",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Luiz Montoya",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Theodore \"Teddy\" Ruthenberg",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Bill Fahrenwald",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Gabriel McGee",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Candace Carr",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Joshua Roll",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Fred Bilotto",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Blue Island",
@@ -759,10 +841,12 @@
     "officers": [
       {
         "name": "Raeann Cantelo-Zylman",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Nancy Rita",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -909,32 +993,39 @@
     "board": [
       {
         "name": "Gary D. Lewis",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kalid \"Kal\" Baste",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Laura Cardenas",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael J. Pticek",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Norma Pinion",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Patricia Ann Higginson",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Steven M. Landek",
+      "nextElection": "2027",
       "role": "President"
     },
     "name": "Village of Bridgeview",
@@ -946,6 +1037,7 @@
     "officers": [
       {
         "name": "John C. Altar",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -956,32 +1048,39 @@
     "board": [
       {
         "name": "Andrea Senior",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jarry Shelby",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Judy Abraham",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Judy Miller",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lakecia A. Whimper",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Patricia Chao-Malave",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Katrina Thompson",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Broadview",
@@ -993,6 +1092,7 @@
     "officers": [
       {
         "name": "Kevin McGrier",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1003,32 +1103,39 @@
     "board": [
       {
         "name": "Jennifer Strauss Hendricks",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Julie Keiko Narimatsu",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kathryn \"Katie\" S. Kaluzny",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kit P. Ketchmark",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kyle Travis Whitehead",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Nicole M. Gilhooley",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Michael J. Garvey",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Brookfield",
@@ -1040,6 +1147,7 @@
     "officers": [
       {
         "name": "Michael G. Melendez",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1050,32 +1158,39 @@
     "board": [
       {
         "name": "David Weidenfeld",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Denice Bocek",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Frank Cesario",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Joanne R. Johnson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kevin Richards",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lester A. Ottenheimer",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Eric N. Smith",
+      "nextElection": "2027",
       "role": "President"
     },
     "name": "Village of Buffalo Grove",
@@ -1087,6 +1202,7 @@
     "officers": [
       {
         "name": "Janet M. Sirabian",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -1119,42 +1235,50 @@
       {
         "district": "Ward 1",
         "name": "Barb Gagle",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Robert Contreras",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Sheri Gustafson",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Claude W. Haerr",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "John Pacella",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Mitchell Piznarski",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Thomas M. Phillips",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David E. Gilgenberg II",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Burbank",
@@ -1166,10 +1290,12 @@
     "officers": [
       {
         "name": "Jason Pyle",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Dave L. Viverito",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -1201,32 +1327,39 @@
     "board": [
       {
         "name": "Brenda Greer",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Carmella Richardson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Graciela Garcia",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jefferey S. Hodges",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John J. Cap",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Travis A. Claybrooks",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Robert E. Polk",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Burnham",
@@ -1238,6 +1371,7 @@
     "officers": [
       {
         "name": "Lus E. Chavez",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1248,32 +1382,39 @@
     "board": [
       {
         "name": "Albert \"Al\" J. Paveza",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Anita Mital",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Antonio \"Tony\" Schiappa",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Guy Franzese",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Joseph \"Joe\" T. Snyder",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Russell \"Russ\" Smith",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Gary Grasso",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Burr Ridge",
@@ -1285,6 +1426,7 @@
     "officers": [
       {
         "name": "Susan Schaus",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1296,42 +1438,50 @@
       {
         "district": "Ward 1",
         "name": "Shalisa D. Harvey",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Monet S. Wilson",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "DeAndre Tillman",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Ramonde D. Williams",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "DeJuan Gardner",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Miacole Nelson",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Melissa Phillips",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Thaddeus Jones",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Calumet City",
@@ -1343,10 +1493,12 @@
     "officers": [
       {
         "name": "Nyota T. Figgs",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Gerald \"Gerry\" Tarka",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -1357,32 +1509,39 @@
     "board": [
       {
         "name": "Carl Hampton",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Cynthia Potts",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Dorothy L. Price",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Earl Duffin",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Norman Edwards",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Ronald Brown",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Ronald Denson",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Calumet Park",
@@ -1394,6 +1553,7 @@
     "officers": [
       {
         "name": "Omara Fonseca",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1522,47 +1682,84 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://channahon.org"
   },
+  "1714000": {
+    "councilOnWardLayer": true,
+    "county": "Cook",
+    "head": {
+      "name": "Brandon Johnson",
+      "nextElection": "2027",
+      "role": "Mayor"
+    },
+    "name": "City of Chicago",
+    "office": {
+      "address": "121 N. LaSalle St., 4th Floor, Chicago IL 60602",
+      "email": "letterforthemayor@cityofchicago.org",
+      "phone": "312-744-5000"
+    },
+    "officers": [
+      {
+        "name": "Anna M. Valencia",
+        "nextElection": "2027",
+        "role": "Clerk"
+      },
+      {
+        "name": "Melissa Conyears-Ervin",
+        "nextElection": "2027",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
+    "url": "https://chicago.gov"
+  },
   "1714026": {
     "board": [
       {
         "district": "Ward 1",
         "name": "Renee Smith",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Sonia Perez",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Wanda Rodgers",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Christopher Baikauskas",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "George Brassea",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Vincent J. Zaranti",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Kelli M. Merrick",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David A. Gonzalez",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Chicago Heights",
@@ -1574,10 +1771,12 @@
     "officers": [
       {
         "name": "Rachel Vega",
+        "nextElection": "2027",
         "role": "Clerk"
       },
       {
         "name": "Cassandra Everett",
+        "nextElection": "2027",
         "role": "Treasurer"
       }
     ],
@@ -1588,33 +1787,40 @@
     "board": [
       {
         "name": "Andrew L. Siegel",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Edmund \"Ed\" Kowalski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Elaine C. Davenport",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Lisa H. Lenz",
+        "nextElection": "2025",
         "role": "Trustee"
       },
       {
         "name": "Roger W. Meslar",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "William R. McFarland",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "John \"Jack\" Lind",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Chicago Ridge",
@@ -1626,6 +1832,7 @@
     "officers": [
       {
         "name": "Barbara M. Harrison",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1702,32 +1909,38 @@
       {
         "district": "Ward 1",
         "name": "Deidra N. Strothers",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Vincent E. Lockett Jr.",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Tyrone K. Hutson",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Ricardo D. Spivey",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Anthony J. Davis",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "James W. Ford",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Country Club Hills",
@@ -1739,10 +1952,12 @@
     "officers": [
       {
         "name": "Patricia D. Hutson",
+        "nextElection": "2027",
         "role": "Clerk"
       },
       {
         "name": "Steven R. Burris",
+        "nextElection": "2027",
         "role": "Treasurer"
       }
     ],
@@ -1754,37 +1969,44 @@
       {
         "district": "Ward 1",
         "name": "John Finn",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 1",
         "name": "Tom Frohlich",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "John Von Drasek",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Thomas Mikolyzk",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Mark G. Benson",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Scott Musillami",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Sean R. McDermott",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Countryside",
@@ -1796,10 +2018,12 @@
     "officers": [
       {
         "name": "Elizabeth \"Liz\" A. Kmet",
+        "nextElection": "2027",
         "role": "Clerk"
       },
       {
         "name": "Courtney Bolt",
+        "nextElection": "2027",
         "role": "Treasurer"
       }
     ],
@@ -1877,32 +2101,39 @@
     "board": [
       {
         "name": "Anthony J. Benigno",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Brian Skala",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Denise M. Pietrucha",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Frank Caldario",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kevin Wasag",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Linda M. Madlener",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Kenneth \"Ken\" Klein",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Crestwood",
@@ -1914,6 +2145,7 @@
     "officers": [
       {
         "name": "Catherine \"Cathy\" Johnson",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -1958,32 +2190,39 @@
     "board": [
       {
         "name": "Elaine Jacoby",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jennifer Goldstone",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jesse Greenberg",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Larry Berg",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Mary Meirose Oppenheim",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robert L. Benton",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Daniel C. Shapiro",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Deerfield",
@@ -1999,32 +2238,39 @@
     "board": [
       {
         "name": "David Lemme",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "James Oakley",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jimi Psarakis",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael Mann",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael Reiser",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Paul Kreatsoulas",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Gregory Rusteberg",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Deer Park",
@@ -2041,47 +2287,56 @@
       {
         "district": "Ward 1",
         "name": "Margaret Chlebek",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Martin J. Moylan",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Sean Oskerka",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Dick Sayad",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Thomas A. Merlin",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Mark E. Walsten",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Patricia L. Smith",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 8",
         "name": "Michael \"Mike\" Charewicz",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Andrew Goczkowski",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Des Plaines",
@@ -2093,6 +2348,7 @@
     "officers": [
       {
         "name": "Dominik Bronakowski",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2148,32 +2404,39 @@
     "board": [
       {
         "name": "Angela Franks-Muse",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Dwayne Tyson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ira Rolark",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Judnita Smith",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Teatroy Webster",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Toni Mitchell",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Fitzgerald K. Roberts",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Dixmoor",
@@ -2185,6 +2448,7 @@
     "officers": [
       {
         "name": "Juanita M. Darden-Thompson",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2195,32 +2459,39 @@
     "board": [
       {
         "name": "Andrew V. Holmes",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Brittney Norwood",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Edward \"Ed\" Steave",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kiana L. Belcher",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Stanley \"Stan\" Brown",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tammie Brown",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jason House",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Dolton",
@@ -2232,6 +2503,7 @@
     "officers": [
       {
         "name": "Alison Key",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2276,32 +2548,39 @@
     "board": [
       {
         "name": "Jesus Ortiz",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John M. Kearns",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kevin D. Johnson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Maureen \"Moe\" Forte",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ronald S. Wideman",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Zoe A. Ewan",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Thomas A. Brown",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of East Hazel Crest",
@@ -2313,6 +2592,7 @@
     "officers": [
       {
         "name": "Monica Elsey",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2344,40 +2624,49 @@
     "board": [
       {
         "name": "Anthony Ortiz",
+        "nextElection": "2027",
         "role": "Council Member"
       },
       {
         "name": "Corey D. Dixon",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "name": "Diana Alfaro",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "name": "Dustin R. Good",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "name": "F. John Steffen",
+        "nextElection": "2027",
         "role": "Council Member"
       },
       {
         "name": "Rosamaria Martinez",
+        "nextElection": "2027",
         "role": "Council Member"
       },
       {
         "name": "Steve F. Thoren",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "name": "Tish S. Powell",
+        "nextElection": "2027",
         "role": "Council Member"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David J. Kaptain",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Elgin",
@@ -2393,32 +2682,39 @@
     "board": [
       {
         "name": "Jeffrey C. Franke",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Joseph \"Joe\" D. Bush",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kathryn \"Kathy\" A. Jarosch",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Keith Lasken",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Stephen F. Schmidt",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tammy K. Miller",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Craig B. Johnson",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Elk Grove Village",
@@ -2447,32 +2743,39 @@
     "board": [
       {
         "name": "Alan T. Kaminski",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Angelo J. Lollino",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Bina Conte",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Elsa M. Estrada-Volpe",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jeffrey L. Sargent",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jonathan L. Zivojnovic",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Angelo \"Skip\" Saviano",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Elmwood Park",
@@ -2484,6 +2787,7 @@
     "officers": [
       {
         "name": "Gina M. Pesko",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2543,52 +2847,62 @@
       {
         "district": "Ward 1",
         "name": "Clare Kelly",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 2",
         "name": "Kristian \"Krissie\" Harris",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 3",
         "name": "Shawn Iles",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 4",
         "name": "Jonathan Nieuwsma",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 5",
         "name": "Bobby Burns",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 6",
         "name": "Thomas M. Suffredin",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 7",
         "name": "Parielle Davis",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 8",
         "name": "Matt Rodgers",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 9",
         "name": "Juan Geracaris",
+        "nextElection": "2029",
         "role": "Council Member"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Daniel Biss",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Evanston",
@@ -2600,6 +2914,7 @@
     "officers": [
       {
         "name": "Stephanie Mendoza",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2610,32 +2925,39 @@
     "board": [
       {
         "name": "Carol Kyle",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jeanine M. Olson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jim McQuillan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Mark Marzullo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Mark T. Phelan",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Norm Anderson",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Kelly M. Burke",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Evergreen Park",
@@ -2647,6 +2969,7 @@
     "officers": [
       {
         "name": "Kelly Duffy",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2657,32 +2980,39 @@
     "board": [
       {
         "name": "Carolyn D. Rodgers",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gary E. Daggett",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "George W. Lofton III",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "James C. Mitros",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kevin Anthony Dorsey",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Rosalind Mustafa",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Michelle Nelson",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Flossmoor",
@@ -2694,6 +3024,7 @@
     "officers": [
       {
         "name": "Gina LoGalbo",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2704,28 +3035,34 @@
     "board": [
       {
         "name": "Germaine Hooks",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "James E. Morgan",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Johnny Griffin",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Stacey Perry",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tyreese L. Andrews",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Freddie L. Wilson",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Ford Heights",
@@ -2737,6 +3074,7 @@
     "officers": [
       {
         "name": "Nyree D. Ford",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2747,24 +3085,29 @@
     "board": [
       {
         "name": "Jessica L. Voogd",
+        "nextElection": "2027",
         "role": "Commissioner"
       },
       {
         "name": "Maria Maxham",
+        "nextElection": "2027",
         "role": "Commissioner"
       },
       {
         "name": "Michelle Melin-Rogovin",
+        "nextElection": "2027",
         "role": "Commissioner"
       },
       {
         "name": "Ryan C. Nero",
+        "nextElection": "2027",
         "role": "Commissioner"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Rory E. Hoskins",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "Village of Forest Park",
@@ -2780,32 +3123,39 @@
     "board": [
       {
         "name": "James Nitka",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jim Sudkamp",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Maria A. Ramirez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Midalia Nevarez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mike Grossi",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Richard M. Hubacek",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David Liska",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Forest View",
@@ -2908,32 +3258,39 @@
     "board": [
       {
         "name": "Andy Ybarra",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gilbert H. Hagerstrom",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Irene Avitia",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John C. Johnson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Karen D. Special",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "William Ruhl",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Barrett F. Pedersen",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Franklin Park",
@@ -2945,6 +3302,7 @@
     "officers": [
       {
         "name": "April J. Arellano",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -2997,32 +3355,39 @@
     "board": [
       {
         "name": "Dudley Onderdonk",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gary Ruben",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Georgia Mihalopoulos",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Hilary Scott",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael Rosenblat",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Thomas Halwax",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Howard James Roin",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Glencoe",
@@ -3064,32 +3429,39 @@
     "board": [
       {
         "name": "Adam Sidoti",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gina M. DeBoni",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jim Bland",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Katie E. Jones",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Mary Cooper",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Timothy J. Doron",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Michael Jenny",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Glenview",
@@ -3105,32 +3477,39 @@
     "board": [
       {
         "name": "Camille Rolle",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Edward Hadnott",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Felicia D. Brown",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Larry Williams",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Linnetta E. Taylor",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michelle Mosley",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Toleda Hart",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Glenwood",
@@ -3142,6 +3521,7 @@
     "officers": [
       {
         "name": "Jesse Durden",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3204,32 +3584,39 @@
     "board": [
       {
         "name": "Ed Shine",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kenneth D. Ross",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mark Miller",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ross Landman",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Susan Burden",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tony Kalogerakos",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Robert T. Farr",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Golf",
@@ -3241,6 +3628,7 @@
     "officers": [
       {
         "name": "Mary Osman",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3332,32 +3720,39 @@
     "board": [
       {
         "name": "Herb Porter",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jenni Broccolino",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jon Kunkel",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Liza Gutierrez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Troy Albuck",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Yasmeen Bankole",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Rodney S. Craig",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hanover Park",
@@ -3369,6 +3764,7 @@
     "officers": [
       {
         "name": "Kristy Merrill",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3400,31 +3796,37 @@
       {
         "district": "Ward 1",
         "name": "Rosa M. Arambula",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Colby M. Chapman",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Telanee P. Smith",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Tracy L. Key",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Dominique Randle El",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Tyrone Rogers",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
@@ -3432,6 +3834,7 @@
     "head": {
       "appointed": true,
       "name": "Shirley Drewenski",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Harvey",
@@ -3444,10 +3847,12 @@
       {
         "appointed": true,
         "name": "Janet Rogers",
+        "nextElection": "2027",
         "role": "Clerk"
       },
       {
         "name": "Aisha Pickett",
+        "nextElection": "2027",
         "role": "Treasurer"
       }
     ],
@@ -3458,32 +3863,39 @@
     "board": [
       {
         "name": "Anna Brzozowski-Wegrecki",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Annette Brzezniak-Volpe",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gene Brutto",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Giuseppe \"Joe\" Zerillo",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Lawrence R. Steiner",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Zbigniew Lewandowski",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Arlene C. Jezierny",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Harwood Heights",
@@ -3495,6 +3907,7 @@
     "officers": [
       {
         "name": "Marcia L. Pollowy",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3515,33 +3928,40 @@
     "board": [
       {
         "name": "Carmilla Malone",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jonathan L. Cooper",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Marquita D. Marshall Motley",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Merle Kimbrough-Huckabee",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Mic C. Reed",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sandra Slayton",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Sandra Alexander",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hazel Crest",
@@ -3553,6 +3973,7 @@
     "officers": [
       {
         "name": "Jadie C. Peters",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3585,47 +4006,56 @@
       {
         "district": "Ward 1",
         "name": "Brian A. Waight",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 1",
         "name": "Michael S. McHugh",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Deborah Ferrero",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Patrick M. Purtill",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Brian A. Fonte",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Henry J. Kman",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Scott Zimmerman",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Steven Makropoulos",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Mike Howley",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Hickory Hills",
@@ -3637,10 +4067,12 @@
     "officers": [
       {
         "name": "Joseph M. Stachnik",
+        "nextElection": "2027",
         "role": "Clerk"
       },
       {
         "name": "Alan T. Vodicka",
+        "nextElection": "2027",
         "role": "Treasurer"
       }
     ],
@@ -3671,32 +4103,39 @@
     "board": [
       {
         "name": "Claudell Johnson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "David V. Delgado",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Frank J. Lomeli Sr.",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Herman L. Walter Jr.",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John N. Kramer",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Marvin A. Watson",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Joseph T. Tamburino",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hillside",
@@ -3708,6 +4147,7 @@
     "officers": [
       {
         "name": "Linda L. Gould",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3718,32 +4158,39 @@
     "board": [
       {
         "name": "Alexis Braden",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Luke Stifflear",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Matthew Posthuma",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michelle Fisher",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Neale H. Byrnes",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Scott Banke",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Greg Hart",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hinsdale",
@@ -3759,32 +4206,39 @@
     "board": [
       {
         "name": "Dominic T. Misasi",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jorea C. Touranjeau",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lida Mills",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robert V. Millsap",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Timothy E. Kovel",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Vicky A. Moxley",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Ernest Millsap",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hodgkins",
@@ -3796,6 +4250,7 @@
     "officers": [
       {
         "name": "Stephanie Gardner",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -3806,32 +4261,39 @@
     "board": [
       {
         "name": "Anna Newell",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gary G. Stanton",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gary J. Pilafas",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Karen J. Arnet",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Karen V. Mills",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Patrick Kinnane",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "William D. McLeod",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hoffman Estates",
@@ -3843,6 +4305,7 @@
     "officers": [
       {
         "name": "Patty Richter",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -3927,58 +4390,69 @@
       {
         "district": "Ward 1",
         "name": "Arturo M. Rivas",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 1",
         "name": "Donna J. Grochowski",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Brian F. Barnhouse",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Melissa Casey Weber",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "John P. Forney",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Robert J. Reynolds",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Gary A. Dolan",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Lucille T. Kurysz",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "appointed": true,
         "district": "Ward 5",
         "name": "Glen Zak",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Tom Cecil Brookman",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Frank E. Finnegan",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Hometown",
@@ -3990,10 +4464,12 @@
     "officers": [
       {
         "name": "Christina M. Walker",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Salvatore A. Roti",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -4004,32 +4480,39 @@
     "board": [
       {
         "name": "Jay Heiferman",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Julie Willis",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lauren Roman",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Patrick H. Siemsen",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Phillip C. Mason",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Vivian Harris-Jones",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Richard \"Rich\" A. Hofeld",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Homewood",
@@ -4041,6 +4524,7 @@
     "officers": [
       {
         "name": "Nakina Flores",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4081,32 +4565,39 @@
     "board": [
       {
         "name": "Anthony Iannacco",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Charles Eck",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Cristina R. Saldana",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Danielle Svestka",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Eileen Murphy Donnersberger",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "James Gazis",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Amy Jo Wittenberg",
+      "nextElection": "2027",
       "role": "President"
     },
     "name": "Village of Indian Head Park",
@@ -4118,11 +4609,13 @@
     "officers": [
       {
         "name": "Andrez Beltran",
+        "nextElection": "2025",
         "role": "Clerk"
       },
       {
         "appointed": true,
         "name": "Gavin Morgan",
+        "nextElection": "2025",
         "role": "Treasurer"
       }
     ],
@@ -4133,32 +4626,39 @@
     "board": [
       {
         "name": "Chuck Fritz",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Hugh Masterson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Laurie C. White",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Richard C. Gallagher",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Russell P. Fitton III",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Timothy W. Tiedje",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "John \"Jack\" A. Tatooles",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Inverness",
@@ -4170,6 +4670,7 @@
     "officers": [
       {
         "name": "Gerald D. Chapman",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4297,32 +4798,39 @@
     "board": [
       {
         "name": "Frances \"Fran\" R. Mills",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gabriel Lopez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jeffrey \"Jeff\" Allen",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John Obrochta",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Melanie A. Kuban",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Stanislaw \"Stan\" Ogorek",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Krzysztof \"Kris\" Wasowicz",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Justice",
@@ -4334,6 +4842,7 @@
     "officers": [
       {
         "name": "David \"Dave\" Kroll",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4365,32 +4874,39 @@
     "board": [
       {
         "name": "Amelia C. Hannus",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Christopher Ottsen",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John Gottschall",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Joseph F. Vitu",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Matthew Lojkovic",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tim Ransford",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Cecily Kaz",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Kenilworth",
@@ -4402,6 +4918,7 @@
     "officers": [
       {
         "name": "Michael Gagnon",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4422,32 +4939,39 @@
     "board": [
       {
         "name": "Beth Augustine",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Glenn R. Thompson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Louis J. Gale",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Peggy Peterson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Shawana McGee",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tim O'Brien",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Mark Kuchler",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of La Grange",
@@ -4459,6 +4983,7 @@
     "officers": [
       {
         "name": "Paul W. Saladino",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4469,32 +4994,39 @@
     "board": [
       {
         "name": "Jamie Zaura",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Joseph F. Caputo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Karen M. Koncel",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael Sheehan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Nick Diaferio",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robert \"Bob\" T. Lautner",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Dr. James \"Jim\" L. Discipio",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of La Grange Park",
@@ -4506,6 +5038,7 @@
     "officers": [
       {
         "name": "Meghan Kooi",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4628,33 +5161,40 @@
     "board": [
       {
         "name": "Amy Nommensen",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ernst P. Lamothe",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jerry L. Zeldenrust",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Lionel \"Leo\" Valencia",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Micaela G. Smith",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Saad Abbasy",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Brian P. Hardy",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Lansing",
@@ -4666,6 +5206,7 @@
     "officers": [
       {
         "name": "Maureen C. Grady-Perovich",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4676,32 +5217,39 @@
     "board": [
       {
         "name": "Janelle Kittridge",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kenneth McClafferty",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kevin Shaughnessy",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Rick Sniegowski",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Ron Stapleton",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Samuel J. Forzley",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "John Egofske",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Lemont",
@@ -4713,6 +5261,7 @@
     "officers": [
       {
         "name": "Charlene Smollen",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4764,32 +5313,39 @@
     "board": [
       {
         "name": "Atour Toma Sargon",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Chris Martel",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Craig L. Klatzco",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Grace Diaz Herrera",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jean M. Ikezoe-Halevi",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Neal Gussis",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jesal B. Patel",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Lincolnwood",
@@ -4801,6 +5357,7 @@
     "officers": [
       {
         "name": "Sokol Delisi",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4881,32 +5438,39 @@
     "board": [
       {
         "name": "Bryan D. Hurt",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Cheryl \"Sherri\" Dunlap",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Cynthia Eaves",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "David Lilly",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kirk D. Marshall",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Randall K. Blakey",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jada D. Curry",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Lynwood",
@@ -4918,6 +5482,7 @@
     "officers": [
       {
         "name": "Karen Wingfield-Bond",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4928,32 +5493,39 @@
     "board": [
       {
         "name": "Dan Hilker",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ivica \"Otis\" Lazich",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "James Veselsky",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael Bennett",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Paul Marchiori",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Teresa Echeverria",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Christopher Getty",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Lyons",
@@ -4965,6 +5537,7 @@
     "officers": [
       {
         "name": "Irma Quintero",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -4975,32 +5548,39 @@
     "board": [
       {
         "name": "Erica Padilla",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John \"Jerry\" J. Bubash",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kevin G. Russell",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Robert \"Bob\" M. Mandekich",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Thomas \"Tom\" M. Perrin",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Victoria \"Vicky\" L. Cernetig",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Terrance \"Terry\" Carr",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of McCook",
@@ -5012,6 +5592,7 @@
     "officers": [
       {
         "name": "Kenneth E. Lyons",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5158,27 +5739,32 @@
       {
         "district": "Ward 1",
         "name": "Brenna Hampton-Houser",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Wanda Jean McDowell",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Joseph G. Bertrand",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "William P. Barron",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Roger A. Agpawa",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Markham",
@@ -5190,10 +5776,12 @@
     "officers": [
       {
         "name": "Leslie D. Trimuel",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Belinda Richardson",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -5204,32 +5792,39 @@
     "board": [
       {
         "name": "Adam Shorter III",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Andre C. Satchell",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Carolyn G. Palmer",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Paula F. Farr",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Robbie Craig",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Stacy R. Leak",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Sheila Y. Chalmers-Currin",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Matteson",
@@ -5241,6 +5836,7 @@
     "officers": [
       {
         "name": "Yumeka Brown",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5251,32 +5847,39 @@
     "board": [
       {
         "name": "Antonio Sanchez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Asia Ousley",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Isiah Brandon",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Miguel Jones",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Rahmaan \"Ray\" Williams",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Steve Smiley",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Nathaniel George Booker",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Maywood",
@@ -5288,6 +5891,7 @@
     "officers": [
       {
         "name": "Tori Garron",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5298,32 +5902,39 @@
     "board": [
       {
         "name": "Anthony \"Tony\" Williams",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Anthony N. Abruzzo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Arturo J. Mota",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jaime Anguiano",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Louis T. Nicotera",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Mary Ramirez-Taconi",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Ronald M. Serpico",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Melrose Park",
@@ -5335,6 +5946,7 @@
     "officers": [
       {
         "name": "Mary Ann Paolantonio",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5345,32 +5957,39 @@
     "board": [
       {
         "name": "Daniel R. McDermott",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kelly A. Eggert",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kelly C. Sawyer",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Nancy L. Kavales",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Pamela R. Torres",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Ronald Heveran",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jose A. Nevarez",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Merrionette Park",
@@ -5382,6 +6001,7 @@
     "officers": [
       {
         "name": "Kelly A. White",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5402,32 +6022,39 @@
     "board": [
       {
         "name": "Anthony \"Tony\" Burbatt",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Dianna L. Harris-Jedd",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Donald \"Don\" Killelea",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jack Hille",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kathleen Johnson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sandra L. Crowley",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Gary L'Heureux",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Midlothian",
@@ -5439,6 +6066,7 @@
     "officers": [
       {
         "name": "Allen M. Moskal",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5665,33 +6293,40 @@
     "board": [
       {
         "name": "Ashur E. Shiba",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Constance \"Connie\" J. Travis",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John C. Thill",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Keith White",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Rita E. Minx",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Saba M. Khan",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Janine Witko",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Morton Grove",
@@ -5703,6 +6338,7 @@
     "officers": [
       {
         "name": "Eileen Scanlon Harford",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -5713,32 +6349,39 @@
     "board": [
       {
         "name": "Bill Grossi",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Colleen Saccotelli",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Elizabeth \"Beth\" DiPrima",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John J. Matuszak",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Therese \"Terri\" Gens",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Vince Dante",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Paul William Hoefert",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Mount Prospect",
@@ -5903,32 +6546,39 @@
     "board": [
       {
         "name": "Ajay R. Mody",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Craig Niedermaier",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Dean Strzelecki",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Marryann Warda",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Morgan Dubiel",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Susan J. DeBartolo",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "George D. Alpogianis",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Niles",
@@ -5944,32 +6594,39 @@
     "board": [
       {
         "name": "Andy Ronstadt",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Bill Larson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Debbie Budnik",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Donald Gelsomino",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Frank Avino",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jack Bielak",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Daniel Tannhauser",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Norridge",
@@ -5981,6 +6638,7 @@
     "officers": [
       {
         "name": "Gabriela \"Gabby\" Krasinski",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6023,32 +6681,39 @@
     "board": [
       {
         "name": "Heather E. Ross",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Johannah \"JoJo\" K. Hebl",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Joy Ebhomielen",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Matt Cassidy",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michelle Kohler",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robert \"Bob\" Israel",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Kathryn L. Ciesla",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Northbrook",
@@ -6060,6 +6725,7 @@
     "officers": [
       {
         "name": "Derek Gau",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6080,32 +6746,39 @@
     "board": [
       {
         "name": "Andrew Juedes",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Charles Orth",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Edwin Elfmann",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Matthew Galin",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tom Whittaker",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "William \"Todd\" R. Fowler III",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Tracey Mendrek",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Northfield",
@@ -6122,47 +6795,56 @@
       {
         "district": "Ward 1",
         "name": "Paul T. Straube",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 1",
         "name": "Penny Feldmann",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Alejandro Sosa",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Jaime S. Contreras",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Juan Urbina",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Norman L. Johnson",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Francine Patti",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Richard E. Grochowski",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jeffrey T. Sherwin",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Northlake",
@@ -6174,6 +6856,7 @@
     "officers": [
       {
         "name": "Nancy Pauletto",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6184,32 +6867,39 @@
     "board": [
       {
         "name": "Antonio \"Tony\" Santucci",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Deborah A. Czajka",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jason Bianco",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Nicholas Tricoci",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Robert Canas",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Theresa \"Terri\" Sarro",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Joseph Mengoni",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of North Riverside",
@@ -6221,6 +6911,7 @@
     "officers": [
       {
         "name": "Sandra Lid",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6231,32 +6922,39 @@
     "board": [
       {
         "name": "Arra Suresh Reddy",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Edward N. Tiesenga",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "James P. Nagle",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Melissa Anne Martin",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael Manzo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Naveen Jain",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Laurence Herman",
+      "nextElection": "2027",
       "role": "President"
     },
     "name": "Village of Oak Brook",
@@ -6268,6 +6966,7 @@
     "officers": [
       {
         "name": "Netasha Scarpiniti",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -6292,42 +6991,50 @@
       {
         "district": "Ward 1",
         "name": "Kenneth Keeler",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Joseph McCarthy",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Chuck Wolf",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Curt Kunz",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Jim Emmett",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "James Stuewe",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Denise Danihel",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "James A. Hortsman",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Oak Forest",
@@ -6339,15 +7046,18 @@
     "officers": [
       {
         "name": "Nicole T. Tormey",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "appointed": true,
         "name": "Grace Bardusk",
+        "nextElection": "2027",
         "role": "Taxpayer Advocate"
       },
       {
         "name": "Joann M. Kelly",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -6359,37 +7069,44 @@
       {
         "district": "District 1",
         "name": "Timothy G. Desmond",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "district": "District 2",
         "name": "Alex G. Olejniczak",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "district": "District 3",
         "name": "Paul A. Mallo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "district": "District 4",
         "name": "James \"Jamie\" Pembroke",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "district": "District 5",
         "name": "William \"Bud\" Stalker",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "district": "District 6",
         "name": "Ralph Soch",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Terrence \"Terry\" R. Vorderer",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Oak Lawn",
@@ -6401,6 +7118,7 @@
     "officers": [
       {
         "name": "Claire N. Henning",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6411,28 +7129,34 @@
     "board": [
       {
         "name": "Brian D. Straw",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Chibuike Enyia",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Cory J. Wesley",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "James Taglia",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jenna Leving Jacobson",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Vicki Scaman",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Oak Park",
@@ -6444,6 +7168,7 @@
     "officers": [
       {
         "name": "Christina Waters",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6485,32 +7210,39 @@
     "board": [
       {
         "name": "Chyla E. Pennington",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jennifer Beasley",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kelvin M. Oliver",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kenneth F. Smith",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Sandra J. Finley",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Victor E. Blackwell",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Sterling M. Burke",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Olympia Fields",
@@ -6526,32 +7258,39 @@
     "board": [
       {
         "name": "Candice M. Morrison",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Craig F. Schmidt",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Curt Petrey",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kyle R. Hastings II",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Marcia A. Kissane",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tracy L. Roti",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Kyle R. Hastings",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Orland Hills",
@@ -6563,6 +7302,7 @@
     "officers": [
       {
         "name": "Jennifer L. Iannantone",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6573,32 +7313,39 @@
     "board": [
       {
         "name": "Cynthia Nelson Katsenes",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Dina M. Lawrence",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Joanna M. Liotine Leafblad",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John Lawler",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael R. Milani",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "William R. Healy",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jim Dodge",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Orland Park",
@@ -6610,6 +7357,7 @@
     "officers": [
       {
         "name": "Mary Ryan Norwell",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -6674,37 +7422,44 @@
       {
         "district": "Ward 1",
         "name": "Greg Langer",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 2",
         "name": "Scott Lamerand",
+        "nextElection": "2027",
         "role": "Council Member"
       },
       {
         "district": "Ward 3",
         "name": "Doug Myslinski",
+        "nextElection": "2027",
         "role": "Council Member"
       },
       {
         "district": "Ward 4",
         "name": "Joseph Falkenberg",
+        "nextElection": "2029",
         "role": "Council Member"
       },
       {
         "district": "Ward 5",
         "name": "Kollin Kozlowski",
+        "nextElection": "2027",
         "role": "Council Member"
       },
       {
         "district": "Ward 6",
         "name": "Brad Helms",
+        "nextElection": "2029",
         "role": "Council Member"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jim Schwantz",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Palatine",
@@ -6717,6 +7472,7 @@
       {
         "appointed": true,
         "name": "Maureen Pasqualucci",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -6728,47 +7484,56 @@
       {
         "district": "Ward 1",
         "name": "Dan Brennan",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 1",
         "name": "Jeffrey M. Key",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "John \"Jack\" Clifford",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Robert Basso",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Brent Lewandowski",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Heather Mulligan Begley",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Michael T. McGrogan",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Patrick V. Scully",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Robert S. Straz",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Palos Heights",
@@ -6780,10 +7545,12 @@
     "officers": [
       {
         "name": "Shannon Harvey",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Jim Daemicke",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -6795,58 +7562,69 @@
       {
         "district": "Ward 1",
         "name": "Martin Kleefisch",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 1",
         "name": "Michael A. Price",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Mark H. Brachman",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Pauline A. Stratton",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Jennifer Rose Frankowicz",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Michael A. Lebarre",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Peter A. Donahue",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Phillip S. Abed",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "appointed": true,
         "district": "Ward 5",
         "name": "Artur Krasowski",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Donna M. O'Connell",
+        "nextElection": "2029",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Gerald R. Bennett",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Palos Hills",
@@ -6858,10 +7636,12 @@
     "officers": [
       {
         "name": "Dawn M. Nowak-Hayes",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Kenneth J. Nolan",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
@@ -6872,24 +7652,29 @@
     "board": [
       {
         "name": "Dan Polk",
+        "nextElection": "2027",
         "role": "Commissioner"
       },
       {
         "name": "G. Darryl Reed",
+        "nextElection": "2027",
         "role": "Commissioner"
       },
       {
         "name": "Michael Wade",
+        "nextElection": "2027",
         "role": "Commissioner"
       },
       {
         "name": "Rebecca Petan",
+        "nextElection": "2027",
         "role": "Commissioner"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Nicole Milovich-Walters",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "Village of Palos Park",
@@ -6901,6 +7686,7 @@
     "officers": [
       {
         "name": "Marie Arrigoni",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -6921,32 +7707,39 @@
     "board": [
       {
         "name": "Erin I. Slone",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John V. Moore",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Maya Hardy",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Randall J. White",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Theresa M. Settles",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tiffani L. Graham",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Joseph Woods",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "Village of Park Forest",
@@ -6963,42 +7756,50 @@
       {
         "district": "Ward 1",
         "name": "John J. Moran",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Alfred Sanchez",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Maureen Kelly Gannon Lawrence",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Kelly A. Muno",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Joseph Steinfels",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Lauren Rapisand",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Yvonne Mwende Lefler",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Marty C. Maloney",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Park Ridge",
@@ -7010,6 +7811,7 @@
     "officers": [
       {
         "name": "Michael M. Lupo",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7073,28 +7875,34 @@
     "board": [
       {
         "name": "Erik McCullar",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ernestine Proctor-Harris",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Hardy Riley",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Judy Taylor",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Martina Mahaffey",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Terry R. Wells",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Phoenix",
@@ -7106,6 +7914,7 @@
     "officers": [
       {
         "name": "Patricia A. Harris",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7256,32 +8065,39 @@
     "board": [
       {
         "name": "Aaron H. Wisniewski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Donald \"DJ\" E. Schnering",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Elsa Velazquez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jeffrey S. Casillas",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Philip J. Novak",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Yesenia Lopez",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Frank Podbielniak",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Posen",
@@ -7293,6 +8109,7 @@
     "officers": [
       {
         "name": "Melanie L. Myers",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7324,32 +8141,38 @@
       {
         "district": "Ward 1",
         "name": "Michelle Cameron",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Theresa Anderson",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Wendy Morgan-Adams",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Danielle Dash",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Matthew Dolick",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Patrick Ludvigsen",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Prospect Heights",
@@ -7361,10 +8184,12 @@
     "officers": [
       {
         "name": "Joanna Prisiajniouk",
+        "nextElection": "2027",
         "role": "Clerk"
       },
       {
         "name": "Richard Tibbits",
+        "nextElection": "2027",
         "role": "Treasurer"
       }
     ],
@@ -7397,32 +8222,39 @@
     "board": [
       {
         "name": "Alan D. Banks",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Brian A. Coleman",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Cynthia A. Butler",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Julian Alexander",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Monica Yvette Holden",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Valerie Babka",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Richard P. Reinbold",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Richton Park",
@@ -7434,6 +8266,7 @@
     "officers": [
       {
         "name": "Mike Jordan",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7464,28 +8297,34 @@
     "board": [
       {
         "name": "Bradley A. Smith",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Brenda Williams",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Cassandra Riley-Pinkney",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Erik A. LeVere",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gregory Lewis",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Lawrence L. Jackson",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Riverdale",
@@ -7497,6 +8336,7 @@
     "officers": [
       {
         "name": "Karen Holcomb",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7507,32 +8347,39 @@
     "board": [
       {
         "name": "Erika Bachner",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Kathleen \"Katie\" Brennan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lisa Gillis",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Megan Keskitalo",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Respicio F. Vazquez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robert O'Connell",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Catherine M. Adduci",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of River Forest",
@@ -7544,6 +8391,7 @@
     "officers": [
       {
         "name": "Rosamaria \"Rosa\" Castellano",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7554,32 +8402,39 @@
     "board": [
       {
         "name": "Benjamin E. Ramirez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Christopher J. Lilly",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Frank J. Obaya",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Lora Marie Lantgen",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Lynn M. Bjorvik",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Robert \"Bob\" C. Thomas",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David B. Guerin",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of River Grove",
@@ -7591,6 +8446,7 @@
     "officers": [
       {
         "name": "Marjorie A. Manchen",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7601,32 +8457,39 @@
     "board": [
       {
         "name": "Aberdeen Marsh-Ozga",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Alexander Gallegos",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Cristin Evans",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Elizabeth Kos",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jill Mateo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Joseph Fitzgerald",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Doug Pollock",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Riverside",
@@ -7653,32 +8516,39 @@
     "board": [
       {
         "name": "Chanel E. Kelly",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "David R. Dyson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Ernest \"Flip\" Maxey Jr.",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jeanneen A. Holmes",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael D. Collier Sr.",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Thomas Harper Jr.",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Darren E. Bryant",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Robbins",
@@ -7690,6 +8560,7 @@
     "officers": [
       {
         "name": "Sharon Snoddy Dyson",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7754,42 +8625,50 @@
       {
         "district": "Ward 1",
         "name": "Karen McHale",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 2",
         "name": "Nickey \"Nick\" Budmats",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 3",
         "name": "Kevin T. O'Brien",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 4",
         "name": "Jenifer Vinezeano",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 5",
         "name": "Stefanie Boucher",
+        "nextElection": "2027",
         "role": "Alderperson"
       },
       {
         "district": "Ward 6",
         "name": "Mandy Reyez",
+        "nextElection": "2029",
         "role": "Alderperson"
       },
       {
         "district": "Ward 7",
         "name": "Mike Koehler",
+        "nextElection": "2027",
         "role": "Alderperson"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Lara Sanoica",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "City of Rolling Meadows",
@@ -7852,32 +8731,39 @@
     "board": [
       {
         "name": "Cheryl J. Lenisa",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Dena Forsythe",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lee Trejo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Thomas W. Piorkowski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tom Della Penna",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Wayne D. Domke",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "David Pileski",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Roselle",
@@ -7889,6 +8775,7 @@
     "officers": [
       {
         "name": "Jennifer M. Theodore",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -7899,32 +8786,39 @@
     "board": [
       {
         "name": "Harry J. Pappas",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "John \"Jack\" Dorgan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Karen A. Fazio",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Ralph DiMatteo",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Steven \"Roger\" Minale",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Steven Price",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Bradley A. Stephens",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Rosemont",
@@ -7936,6 +8830,7 @@
     "officers": [
       {
         "name": "Kathryn Lawler",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8032,28 +8927,34 @@
     "board": [
       {
         "name": "Aretha Burns",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Diane Sapp",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michelle Sterling",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Raven Johnson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tyesha Jones",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Marva Campbell-Pruitt",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Sauk Village",
@@ -8065,6 +8966,7 @@
     "officers": [
       {
         "name": "Debra Williams",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8075,33 +8977,40 @@
     "board": [
       {
         "name": "Brian Bieschke",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Esha Patel",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jack Sullivan",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "James A. Clar",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mark Madej",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Michael LaRosa",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Tom Dailly",
+      "nextElection": "2027",
       "role": "President"
     },
     "name": "Village of Schaumburg",
@@ -8113,6 +9022,7 @@
     "officers": [
       {
         "name": "Jane Lentino",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -8123,32 +9033,39 @@
     "board": [
       {
         "name": "Joan Golembiewski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Marie Lukowski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Robert Lima",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Russell Klug",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Terri L. Sheridan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Thomas Deegan",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Chad Meyers",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Schiller Park",
@@ -8160,6 +9077,7 @@
     "officers": [
       {
         "name": "Rosa Jos",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8221,32 +9139,39 @@
     "board": [
       {
         "name": "Alison Pure Slovin",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gail Schechter",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jim Iverson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Keith A. Robinson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kimani Levy",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lissa Levy",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Ann Tennes",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of Skokie",
@@ -8258,6 +9183,7 @@
     "officers": [
       {
         "name": "Minal Desai",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8289,32 +9215,39 @@
     "board": [
       {
         "name": "Daniel Zierk",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Edgar B. Alvarado",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Hina Patel",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Joseph Abbate",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Shahzad Kazi",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Stephen L. Guranovich",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Paula L. McCombie",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of South Barrington",
@@ -8326,6 +9259,7 @@
     "officers": [
       {
         "name": "Marilyn J. Stagno",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8336,32 +9270,39 @@
     "board": [
       {
         "name": "Araceli \"Sally\" Marrufo",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Daryl Crudup",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Eric R. Stanton",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John M. Ross",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Rose Ann Diederich",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tracy Thurmond-Bosco",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Terry L. Matthews",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "Village of South Chicago Heights",
@@ -8398,32 +9339,39 @@
     "board": [
       {
         "name": "Andrew Johnson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Cynthia L. Doorn-Nylen",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "John R. Russell",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Larry W. De Young",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Prince Reed",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Vickie L. Perkins",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Don A. De Graff",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of South Holland",
@@ -8435,6 +9383,7 @@
     "officers": [
       {
         "name": "Sallie D. Penman",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8466,28 +9415,34 @@
     "board": [
       {
         "name": "Cindy Trotier",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gerald Stewart",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Starlena \"Star\" Kaminski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Steve Thurmond",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tim Perchinski",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "William J. Joyce",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Steger",
@@ -8499,6 +9454,7 @@
     "officers": [
       {
         "name": "Joseph M. Zagone",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8509,28 +9465,34 @@
     "board": [
       {
         "name": "James Hrejsa",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jeffery White",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Leandra Torres",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sam Savopoulos",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tim Kapolnek",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Jeff Walik",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Stickney",
@@ -8542,6 +9504,7 @@
     "officers": [
       {
         "name": "Mitchell Milenkovic",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8552,32 +9515,39 @@
     "board": [
       {
         "name": "Loretta J. Teets",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Marco A. Gutierrez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Marco T. Paz",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Nazario Garcia",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Simplisio Roman",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Sylvia Terrazas",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Beniamino Mazzulla",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Stone Park",
@@ -8589,6 +9559,7 @@
     "officers": [
       {
         "name": "Laura Ann Cassidy-Hatchet",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8599,32 +9570,39 @@
     "board": [
       {
         "name": "James P. Cecille",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jovandi Bermudez",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mary Thon",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael H. Baumer",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Nazneen G. Hashmi",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Rezwanul Haque",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Billie D. Roth",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Streamwood",
@@ -8636,6 +9614,7 @@
     "officers": [
       {
         "name": "Aris Garcia",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8667,32 +9646,39 @@
     "board": [
       {
         "name": "Aurora O. Rodriguez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Lorena Manriquez",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Marvel Parker",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mayra \"Camacho\" Ortiz",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Setki \"Sam\" Dardovski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sonia Ponce",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Sergio Rodriguez",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Summit",
@@ -8704,6 +9690,7 @@
     "officers": [
       {
         "name": "Colleen M. Lambert",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8770,32 +9757,39 @@
     "board": [
       {
         "name": "Debra \"Debbie\" Pisarzewski",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ernest \"Bo\" Kaye",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gina Glaser",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Martin Pratscher",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Phillip Middlebrooks",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Rosemary Cunningham",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Maxine B. Reynolds",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Thornton",
@@ -8807,6 +9801,7 @@
     "officers": [
       {
         "name": "Nikki Kitakis",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8817,32 +9812,39 @@
     "board": [
       {
         "name": "Colleen Sullivan",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Dennis P. Mahoney",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kenneth Edward Shaw",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael Mueller",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "William Brennan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "William P. Brady",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Michael W. Glotz",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Tinley Park",
@@ -8854,6 +9856,7 @@
     "officers": [
       {
         "name": "Nancy M. O'Connor",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -8917,32 +9920,39 @@
     "board": [
       {
         "name": "Donna Fulcher",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gina L. Williams",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jewell Thompson",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Karen L. Lewis",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Sonia Jenkins-Bell",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Theaplise \"Theo\" Brooks",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Joseph E. Roudez III",
+      "nextElection": "2027",
       "role": "Mayor"
     },
     "name": "Village of University Park",
@@ -8954,6 +9964,7 @@
     "officers": [
       {
         "name": "Dorothy \"Dee\" Jones",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -9075,32 +10086,39 @@
     "board": [
       {
         "name": "Brian M. Cross",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Evelyn Ann Slavic",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Gia Marie Benline",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Peter Marzano",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Terrance J. Jones",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Victoria Vann",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Greg Hribal",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Westchester",
@@ -9112,6 +10130,7 @@
     "officers": [
       {
         "name": "Sophia Collins",
+        "nextElection": "2027",
         "role": "Clerk"
       }
     ],
@@ -9156,32 +10175,39 @@
     "board": [
       {
         "name": "Alan Fink",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Amy Avakian",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Karen Martin",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Nicole Chen",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Philip K. Nawrocki",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Scott Lewis",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Heidi Rudolph",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Western Springs",
@@ -9193,6 +10219,7 @@
     "officers": [
       {
         "name": "Edward Tymick",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -9229,32 +10256,39 @@
     "board": [
       {
         "name": "David J. Vogel",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Jim Ruffatto",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Joe Vito",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Mary C. Krueger",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mary M. Papantos",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Ray Lang",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Patrick A. Horcher",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Wheeling",
@@ -9266,6 +10300,7 @@
     "officers": [
       {
         "name": "Kathryn M. Brady",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
@@ -9289,33 +10324,40 @@
     "board": [
       {
         "name": "Fred Posch",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Michael C. Kennedy",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Rick Mika",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "appointed": true,
         "name": "Robert Sprinkle",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Terry Carr",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Tom Arra",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Melissa Nichole Neddermeyer",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Willow Springs",
@@ -9331,32 +10373,39 @@
     "board": [
       {
         "name": "Gerald \"Gerry\" Smith",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Gina Kennedy",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Justin Sheperd",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Mark Steen",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Michael Lieber",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Stephen M. Leonard",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Senta Plunkett",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Wilmette",
@@ -9385,32 +10434,39 @@
     "board": [
       {
         "name": "Bridget Orsic",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kim Handler",
+        "nextElection": "2030",
         "role": "Trustee"
       },
       {
         "name": "Kirk Albinson",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Rob Apatoff",
+        "nextElection": "2030",
         "role": "Trustee"
       },
       {
         "name": "Scott Myers",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tina Dalman",
+        "nextElection": "2030",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Robert Dearborn",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Winnetka",
@@ -9527,32 +10583,39 @@
     "board": [
       {
         "name": "Brad Urban",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Kevin Ryan",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Laura Packwood",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Pete Kats",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
         "name": "Rich Dziedzic",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Tedd Muersch",
+        "nextElection": "2029",
         "role": "Trustee"
       }
     ],
     "county": "Cook",
     "head": {
       "name": "Mary Werner",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Worth",
@@ -9564,6 +10627,7 @@
     "officers": [
       {
         "name": "Bonnie M. Price",
+        "nextElection": "2029",
         "role": "Clerk"
       }
     ],
