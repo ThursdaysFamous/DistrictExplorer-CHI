@@ -49,12 +49,20 @@ jobs:
         # parses McHenry's yearbook page.
         run: pip install -c scripts/requirements.txt requests beautifulsoup4 pypdf playwright
 
-      - name: Install Chromium for the Akamai-fronted counties
+      - name: Install Chromium for the edge-blocked sources
+        # Two different blocks, both needing a real browser.
+        #
         # McHenry and Kendall sit behind an edge that fingerprints the HTTP
         # client itself: with a byte-identical browser header set curl gets 200
-        # where python-requests gets 403, so a real browser is the rung that
-        # carries them. Their scrapers still try requests first (cheap, fails
-        # fast) and fall back to the Internet Archive after this.
+        # where python-requests gets 403.
+        #
+        # DuPage (Cloudflare) keys on the client's NETWORK instead — a
+        # developer machine gets 200 and this runner gets 403 for the same
+        # request — which is why it passed in development and failed on its
+        # first live run here. A real browser clears the challenge.
+        #
+        # All three still try requests first (cheap, fails fast) and fall back
+        # to the Internet Archive after this.
         run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape the Cook County Clerk directory of elected officials

@@ -372,8 +372,16 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   builder refuses to build without) and every other source is preservable — it carries
   forward its shipped entries, re-entering through the ordinary precedence/`merge_contact`
   paths, and the run and PR body both name what was preserved. Standing issues #199–#202
-  track the four blocks. **DuPage is the tractable one:** it needs only an engine ladder
-  to clear a datacenter-IP filter, unlike McHenry/Kendall, which are rule-4 terminal.
+  track the four blocks. **DuPage was the tractable one and is now laddered
+  (2026-07-28):** its Cloudflare edge keys on the client's *network* rather than its
+  fingerprint — a developer machine gets 200 where the runner gets 403 for a
+  byte-identical request, which is exactly why it passed in development and failed on
+  its first live run — so the scraper gained `requests → playwright → wayback`, with the
+  browser rung load-bearing. Each rung returns the whole directory (URL + bytes) rather
+  than one fetch, because only the session that cleared the challenge can fetch the PDF
+  the page names. Its Archive rung is real but expected to refuse: the newest snapshot
+  was 194 days old against the 45-day guard and predates the current edition.
+  McHenry/Kendall remain rule-4 terminal; Joliet is the remaining unladdered block.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake
