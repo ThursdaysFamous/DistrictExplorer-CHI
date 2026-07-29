@@ -233,10 +233,10 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   | concept | LaSalle (109,658) | Kankakee (107,502) |
   |---|---|---|
   | `county-board` | **SHIPPED** — 29 districts, [ArcGIS Online FeatureServer](https://services3.arcgis.com/H84yQSxNIj9pXjJ7/arcgis/rest/services/CountyBoardDistricts/FeatureServer), member in GIS attrs | **SHIPPED** — 28 districts, self-hosted `k3gis.net` `BASE/Elected_Officials/1`, member in GIS attrs |
-  | `county-precinct` | ready — `PollingPlaceLocator/1` (119) + polling points (119), **119/119 exact join** on `USER_Precinct` | ready — `BASE/Elected_Officials/0` (59), name only, no polling join found |
-  | `fire-district` | **none published** | ready — `BASE/Taxing_Districts2/10` (17) |
-  | `park-district` | **none published** | ready — `…/5` (4) |
-  | `library-district` | **none published** | ready — `…/3` (8) |
+  | `county-precinct` | **SHIPPED** — `PollingPlaceLocator/1` (119) + polling points, **119/119 exact join** on `USER_Precinct` | **SHIPPED** — `BASE/Elected_Officials/0` (59), name only, no polling join published |
+  | `fire-district` | **none published** | **SHIPPED** — `BASE/Taxing_Districts2/10` (17), identity-only |
+  | `park-district` | **none published** | **SHIPPED** — `…/5` (4), identity-only |
+  | `library-district` | **none published** | **SHIPPED** — `…/3` (8), identity-only |
   | `judicial-subcircuit` | **structurally n/a** — 13th Circuit | **structurally n/a** — 21st Circuit |
   | municipal officials | ready, **full governing bodies** — the clerk's [Municipality Officials PDF](https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF) carries president/mayor, clerk, treasurer and every trustee/alderperson **with ward numbers**, address and phone | **rule-4 floor** — no county-published roster found |
 
@@ -268,10 +268,21 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   `telephone`/`website`/`email` on every row and populate **none** of them (0/21, 0/8,
   0/4, 0/17), so those entries will be identity-only when built.
 
-  **Not yet built (sources determined, no blocker):** both precinct entries, Kankakee's
-  fire/park/library entries, and the LaSalle municipal-officials pipeline — the last is
-  the highest-value remaining item in the fleet, since it is Cook/Will-depth governing
-  bodies from a single county document.
+  **Kankakee's special districts are partial tilings, correctly.** The county has no
+  countywide fire, park or library coverage — Kankakee city runs a municipal fire
+  department and sits in no library district — so those cards honestly report "this point
+  isn't inside any district in this layer" there while resolving at Momence and Herscher.
+  Verified in a browser against the services' real captured payloads.
+
+  **Not yet built — one item, and it is the highest-value one in the fleet:** the LaSalle
+  municipal-officials pipeline. Its clerk PDF carries Cook/Will-depth governing bodies —
+  president/mayor, clerk, treasurer and every trustee/alderperson **with ward numbers** —
+  from a single county document. It needs the repo's first PDF parser (a new
+  `requirements.txt` pin), and the extracted text has interleaved-column artifacts that a
+  naive `extract_text()` mangles, so it wants word-position clustering rather than line
+  splitting. Kankakee's municipal officials stay at the rule-4 floor: no county-published
+  roster exists, its GIS `Municipalities` layer declares contact columns and populates
+  none of them (0/21), and the clerk site publishes no directory.
 - **Office-pin geocoding: unit fragments and the metro bound — FIXED (2026-07-29).**
   Cards kept losing their office pin on addresses carrying "Room 230" / "Suite 104", and
   the question raised was whether to swap geocoders. Measured first, against the app's

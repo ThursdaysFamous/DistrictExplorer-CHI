@@ -222,7 +222,7 @@
       "label": "Fire Protection District",
       "group": "safety",
       "area_rank": 15,
-      "rank_note": "Consolidated fire-protection-district layer \u2014 Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only \u2014 the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only \u2014 the municipal Joliet row excluded), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated fire-protection-district layer \u2014 Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only \u2014 the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only \u2014 the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "dupage-county-special-police",
@@ -236,14 +236,14 @@
       "label": "Park District",
       "group": "geography",
       "area_rank": 17,
-      "rank_note": "Consolidated park-district layer \u2014 Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs) + Kane (11, board president + office contact in GIS attrs) + Kendall (5 genuine districts on the county's tax-code tiling, name-only; McHenry remains the one sourced county with no entry \u2014 it publishes park facilities, not district boundaries), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated park-district layer \u2014 Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs) + Kane (11, board president + office contact in GIS attrs) + Kendall (5 genuine districts on the county's tax-code tiling, name-only; McHenry remains the one sourced county with no entry \u2014 it publishes park facilities, not district boundaries) + Kankakee (4, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "library-district",
       "label": "Library District",
       "group": "geography",
       "area_rank": 18,
-      "rank_note": "Consolidated library-district layer \u2014 Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs) + Kane (16, board president + office contact in GIS attrs) + McHenry (13, name-only after the county's own Z_None-filler + municipal-row exclusions) + Kendall (9 library taxing bodies on the county's complete tax-code tiling \u2014 municipal city-library funds included, the Cook-style shape), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated library-district layer \u2014 Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs) + Kane (16, board president + office contact in GIS attrs) + McHenry (13, name-only after the county's own Z_None-filler + municipal-row exclusions) + Kendall (9 library taxing bodies on the county's complete tax-code tiling \u2014 municipal city-library funds included, the Cook-style shape) + Kankakee (8, identity-only, same measured reason as its fire tiling), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "school-board",
@@ -346,7 +346,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 31,
-      "rank_note": "Consolidated voting-precinct layer \u2014 suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only \u2014 city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer \u2014 suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only \u2014 city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name \u2014 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
