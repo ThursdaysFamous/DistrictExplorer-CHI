@@ -4030,7 +4030,7 @@ function initChiExplorer() {
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
-    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
+    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + LaSalle (29 single-member districts) and Kankakee (28) — the first counties outside the metro on this layer, both rule-4 branch 1 with the member carried on the county's own boundary GIS (LaSalle: name/e-mail/mailing address, phones recorded without an area code so not rendered; Kankakee: name/party/phone/e-mail, all 28/28) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
@@ -7181,6 +7181,92 @@ function initChiExplorer() {
       return precincts;
     });
   });
+
+  /* =========================================================================
+   * LaSalle County (2020 pop. 109,658) and Kankakee County (107,502) — the
+   * first counties added OUTSIDE the seven-county metro that bring more than
+   * a single concept. Both are contiguous with the existing footprint: the
+   * border ring computed from TIGER geometry is exactly Boone, DeKalb,
+   * Grundy, Kankakee and LaSalle, and these two are the only members that are
+   * also large (docs/DATA_LAYER_GUIDEBOOK.md, statewide-expansion research).
+   *
+   * Both counties' boards are rule-4 branch 1 — the officeholder rides the
+   * county's OWN boundary GIS, so there is no scraper, no weekly workflow and
+   * no roster file for either. That is the same shape as Lake and Kane, and
+   * it is why these two shipped as a dispatch-entry-only change:
+   *
+   *   LaSalle   29 single-member districts, ArcGIS Online FeatureServer,
+   *             attributes First/Last/Address/City/Zip/Email_Addr plus three
+   *             phone columns. The phone columns are recorded WITHOUT an area
+   *             code ("672-2115") and the county states no default, so they
+   *             are deliberately not rendered — the same call the DuPage
+   *             municipal phones got. Email and mailing address are complete
+   *             (29/29) and do ship.
+   *   Kankakee  28 single-member districts on the county's own self-hosted
+   *             ArcGIS server, attributes membername/party/phone/email, all
+   *             28/28 populated and phones fully qualified.
+   *
+   * Judicial subcircuits are structurally n/a for BOTH: PA 102-0693's enacted
+   * map covers nine circuits and neither LaSalle's 13th nor Kankakee's 21st is
+   * among them (the app now ships all nine). Same recorded-n/a as Kendall's
+   * 23rd.
+   * ======================================================================= */
+  var loadLasalleCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lasalle-county-outline.json", {}, 2);
+  });
+  function lasalleCountyCoverage(point) {
+    return loadLasalleCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadKankakeeCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/kankakee-county-outline.json", {}, 2);
+  });
+  function kankakeeCountyCoverage(point) {
+    return loadKankakeeCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  var loadLasalleCountyBoard = makeCached(function () {
+    var url = "https://services3.arcgis.com/H84yQSxNIj9pXjJ7/arcgis/rest/services/" +
+      "CountyBoardDistricts/FeatureServer/0/query?where=1%3D1&outFields=" +
+      "District,First,Last,Address,City,Zip,Email_Addr&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("LaSalle County Board returned no usable geometry");
+        return geojson;
+      });
+  });
+  var loadKankakeeCountyBoard = makeCached(function () {
+    var url = "https://k3gis.net/arcgis/rest/services/BASE/Elected_Officials/MapServer/1" +
+      "/query?where=1%3D1&outFields=district,membername,party,phone,email&outSR=4326" +
+      "&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Kankakee County Board returned no usable geometry");
+        return geojson;
+      });
+  });
+
+  /* Both boards carry the member on the district feature, so one helper builds
+   * the card's person row for either. `fields` names the county's columns; a
+   * column the county leaves blank is simply absent from the row rather than
+   * rendered empty. */
+  function gisBoardPerson(props, fields) {
+    var name = fields.name(props);
+    if (!name) return null;
+    var person = { name: name };
+    var party = fields.party ? findPropCI(props, fields.party) : null;
+    if (party != null && String(party).trim()) person.badge = String(party).trim();
+    var phone = fields.phone ? findPropCI(props, fields.phone) : null;
+    if (phone != null && String(phone).trim()) person.phone = String(phone).trim();
+    var email = fields.email ? findPropCI(props, fields.email) : null;
+    if (email != null && String(email).trim()) person.email = String(email).trim();
+    var address = fields.address ? fields.address(props) : null;
+    if (address) person.address = address;
+    return person;
+  }
 
   /* ---------- "Live data source is down" descriptor (fork code) --------------
    * Every Socrata layer below fetches from the City of Chicago Data Portal at
@@ -10572,6 +10658,140 @@ function initChiExplorer() {
             var e = d != null ? roster[String(d)] : null;
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // LaSalle (29 single-member districts) — rule-4 branch 1: the member
+      // rides the county's own boundary GIS, so there is no roster file and
+      // nothing to keep fresh on a cron. The county records each member's
+      // mailing address and e-mail in full (29/29); its three phone columns
+      // are recorded without an area code ("672-2115") and the county states
+      // no default, so they are NOT rendered — inventing 815 would be a guess
+      // about how to reach an officeholder, which is exactly what the honesty
+      // rules forbid. Recorded in the guidebook as an upstream gap.
+      {
+        key: "lasalle",
+        coverage: lasalleCountyCoverage,
+        loadGeometry: loadLasalleCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(parseInt(v, 10) || v);
+        },
+        query: function (point, seq) {
+          return loadLasalleCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: d != null && d !== "" ? String(parseInt(d, 10) || d) : null,
+              person: gisBoardPerson(props, {
+                name: function (p) {
+                  var first = findPropCI(p, ["first"]), last = findPropCI(p, ["last"]);
+                  var n = [first, last].filter(function (x) {
+                    return x != null && String(x).trim();
+                  }).map(function (x) { return String(x).trim(); }).join(" ");
+                  return n || null;
+                },
+                email: ["email_addr"],
+                address: function (p) {
+                  var street = findPropCI(p, ["address"]);
+                  var city = findPropCI(p, ["city"]);
+                  var zip = findPropCI(p, ["zip"]);
+                  if (street == null || !String(street).trim()) return null;
+                  var tail = [city, zip].filter(function (x) {
+                    return x != null && String(x).trim();
+                  }).map(function (x) { return String(x).trim(); }).join(" ");
+                  return String(street).replace(/\s+/g, " ").trim() + (tail ? ", " + tail : "");
+                }
+              })
+            };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "LaSalle County Board",
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://lasallecountyil.gov/294/Officials" };
+        },
+        hoverOfficial: {
+          load: loadLasalleCountyBoard,
+          name: function (feature) {
+            var p = feature.properties || {};
+            var n = [findPropCI(p, ["first"]), findPropCI(p, ["last"])].filter(function (x) {
+              return x != null && String(x).trim();
+            }).map(function (x) { return String(x).trim(); }).join(" ");
+            return n || null;
+          }
+        }
+      },
+      // Kankakee (28 single-member districts) — rule-4 branch 1 as well, and
+      // the richer of the two: the county's self-hosted server carries
+      // membername/party/phone/email populated 28/28, with fully qualified
+      // phone numbers. `chair` is present on the feature but set on only 2 of
+      // 28 rows, which does not match a single countywide chair, so it is left
+      // unread rather than guessed at (see the guidebook).
+      {
+        key: "kankakee",
+        coverage: kankakeeCountyCoverage,
+        loadGeometry: loadKankakeeCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadKankakeeCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: d != null && d !== "" ? String(d) : null,
+              person: gisBoardPerson(props, {
+                name: function (p) {
+                  var v = findPropCI(p, ["membername"]);
+                  return v != null && String(v).trim() ? String(v).trim() : null;
+                },
+                party: ["party"],
+                phone: ["phone"],
+                email: ["email"]
+              })
+            };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Kankakee County Board",
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.kankakeecountyil.gov/276/County-Board" };
+        },
+        hoverOfficial: {
+          load: loadKankakeeCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["membername"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
           }
         }
       }
