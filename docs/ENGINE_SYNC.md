@@ -137,6 +137,21 @@ as reviewed PRs, then ship in the next release.
   runs inside every deploy's assemble job, right after `apply_engine.py`,
   asserting the spliced blocks equal the downloaded bundle. The cross-fork
   compare mode (`--against <path-or-URL>`) remains for ad-hoc checks.
+- **Cutting a release is three steps, and the middle of it races the deploy.**
+  Bump `engine.lock.json` on main → `create-engine-tag.yml` → `release-engine.yml`
+  at the new tag ref (a tag created with `GITHUB_TOKEN` does not fire
+  `on:push:tags`, hence the separate dispatch). The bump merge fires
+  `deploy-pages.yml` immediately, so for the minutes until the release
+  publishes, **main legitimately pins a release that does not exist** and the
+  deploy's `gh release download` fails with a bare `release not found`. That is
+  not a broken pin — it is the window, and it cost a manual re-run on both
+  `engine-v1.0.17` and `v1.0.18` before being fixed. Two guards now close it,
+  either of which is sufficient alone: the deploy **waits** up to 15 minutes for
+  the release it pins (already-published costs one API call and no delay), and
+  `release-engine.yml` **re-dispatches** the deploy after publishing when main
+  pins that release — so a deploy that timed out, or failed before the fix,
+  heals without anyone touching it. Do not "fix" a red deploy in that window by
+  reverting the pin; publish the release.
 - `.github/workflows/engine-parity.yml` — the old scheduled cross-fork
   watcher, superseded by construction. Siblings carry no copy (NYC deleted
   its under work order 1.6 after its first clean assembled deploy; SF's

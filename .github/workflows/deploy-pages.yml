@@ -59,15 +59,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Any failure here — including a missing release — FAILS the deploy:
-      # the site never ships without hash-verified engine assembly. (The
-      # bootstrap-window skip guard that used to live here was deleted after
-      # engine-v1.0.0 published, per its TODO.)
+      # Any failure here — including a release that never appears — FAILS the
+      # deploy: the site never ships without hash-verified engine assembly.
+      # (The bootstrap-window skip guard that used to live here was deleted
+      # after engine-v1.0.0 published, per its TODO.)
+      #
+      # THE PUBLISH RACE. An engine bump lands on main as a normal merge, which
+      # fires this workflow immediately — but the release that merge pins is
+      # created afterwards, by create-engine-tag.yml then release-engine.yml.
+      # For the minutes in between, main legitimately pins a release that does
+      # not exist yet, and a single `gh release download` fails with a bare
+      # "release not found". That is what it did for both engine-v1.0.17 and
+      # v1.0.18, each needing a manual re-run once the release landed.
+      #
+      # So wait for it rather than failing on the first miss. Polling the
+      # releases/tags endpoint (not `gh release view`) keeps the existing
+      # draft rule: it returns PUBLISHED releases only, so a draft left by a
+      # failed release run can never satisfy this wait. A release that is
+      # already there costs one API call and no delay — the wait is only ever
+      # paid inside the window it exists for. If it never arrives, the job
+      # fails loudly and says exactly which two dispatches are outstanding;
+      # release-engine.yml also dispatches this workflow once it publishes, so
+      # a timed-out deploy still heals itself without anyone re-running it.
       - name: Fetch pinned engine release
         env:
           GH_TOKEN: ${{ github.token }}
+          DEADLINE_S: "900" # 15 min — a human running the two dispatches by hand
         run: |
-          gh release download "$(jq -r .engine_version engine.lock.json)" \
+          tag="$(jq -r .engine_version engine.lock.json)"
+          waited=0
+          until gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --silent 2>/dev/null; do
+            if [ "$waited" -ge "$DEADLINE_S" ]; then
+              echo "::error::engine release $tag is still not published after $((DEADLINE_S / 60))m. main pins it, so the site cannot ship without it. Run 'Create engine tag' (tag=$tag, sha=$GITHUB_SHA) then 'Publish engine release' at that tag ref; this deploy will be re-dispatched automatically once the release publishes."
+              exit 1
+            fi
+            if [ "$waited" = 0 ]; then
+              echo "::notice::$tag not published yet — waiting up to $((DEADLINE_S / 60))m for the release this commit pins (see THE PUBLISH RACE in this workflow)."
+            fi
+            sleep 20
+            waited=$((waited + 20))
+          done
+          [ "$waited" -gt 0 ] && echo "$tag appeared after ${waited}s"
+          gh release download "$tag" \
             --repo "$GITHUB_REPOSITORY" \
             --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' --clobber
 
