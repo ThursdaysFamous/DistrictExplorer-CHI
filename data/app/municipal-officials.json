@@ -1668,6 +1668,44 @@
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.caryillinois.com"
   },
+  "1711982": {
+    "board": [
+      {
+        "name": "Martin Kotecki",
+        "phone": "815-343-4965",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Michael Margis",
+        "phone": "815-488-1784",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Paul Williams",
+        "phone": "815-481-3337",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Todd Hannen",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Kevin Lafollette",
+      "phone": "815-488-4408",
+      "role": "Mayor"
+    },
+    "name": "Village of Cedar Point",
+    "officers": [
+      {
+        "name": "Janet Gould",
+        "phone": "815-446-5681",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1712476": {
     "board": [
       {
@@ -2549,6 +2587,54 @@
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.crystallake.org"
   },
+  "1718485": {
+    "board": [
+      {
+        "name": "Brian Bradbury",
+        "phone": "815-854-9057",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cary Edgeton",
+        "phone": "815-992-0419",
+        "role": "Trustee"
+      },
+      {
+        "name": "Matthew Scott",
+        "phone": "309-231-4738",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael J. Isham",
+        "phone": "309-826-0134",
+        "role": "Trustee"
+      },
+      {
+        "name": "Misti Robbins",
+        "phone": "815-848-0549",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sherri Watkins",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Centeno, Joseph L.",
+      "phone": "815-822-5457",
+      "role": "President"
+    },
+    "name": "Village of Dana",
+    "officers": [
+      {
+        "name": "Centeno, Rebecca",
+        "phone": "815-822-3010",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1718628": {
     "county": "DuPage",
     "head": {
@@ -2903,6 +2989,71 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.downers.us"
+  },
+  "1721540": {
+    "board": [
+      {
+        "district": "1",
+        "name": "April Law",
+        "phone": "765-418-5945",
+        "role": "Alderperson"
+      },
+      {
+        "district": "1",
+        "name": "Michael Goodbred",
+        "phone": "815-246-4805",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "Robin L Austin",
+        "phone": "815-585-1889",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "Steven J. Osborne",
+        "phone": "815-246-7059",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "John Boltz",
+        "phone": "630-514-7251",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "Matthew Johnson",
+        "phone": "315-778-6639",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "John Boltz",
+      "phone": "630-514-7251",
+      "role": "Mayor"
+    },
+    "name": "City of Earlville",
+    "officers": [
+      {
+        "name": "Jane Bauer",
+        "phone": "815-246-4192",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Jessica Olson",
+        "role": "Deputy Clerk"
+      },
+      {
+        "name": "Bruce Bauer",
+        "phone": "815-246-4192",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1721696": {
     "county": "Kane",
@@ -4037,6 +4188,60 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofgolf.us"
+  },
+  "1730757": {
+    "board": [
+      {
+        "name": "Anne M Hinterlong",
+        "phone": "815-249-6462",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cynthia R. Koetz",
+        "phone": "815-249-6462",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dennis B. Rockey",
+        "phone": "815-249-6462",
+        "role": "Trustee"
+      },
+      {
+        "name": "John W Hettel",
+        "phone": "815-249-6462",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kimberly A. Olney",
+        "phone": "815-249-6462",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steven M Fulkerson",
+        "phone": "815-249-6462",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Jared C Simmons",
+      "phone": "815-249-6462",
+      "role": "President"
+    },
+    "name": "Village of Grand Ridge",
+    "officers": [
+      {
+        "name": "Amanda Jaegle",
+        "phone": "815-249-6462",
+        "role": "Clerk"
+      },
+      {
+        "name": "Kelly Harsted",
+        "phone": "815-249-6462",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1731121": {
     "county": "Lake",
@@ -5308,6 +5513,55 @@
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.villageofkaneville.com"
   },
+  "1738921": {
+    "board": [
+      {
+        "name": "Ashley Hirkala",
+        "phone": "815-992-3312",
+        "role": "Trustee"
+      },
+      {
+        "name": "Christine A Spierling",
+        "phone": "815-992-3312",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dave Lahman",
+        "phone": "815-992-3312",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kristine Phillips",
+        "phone": "815-992-3312",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sandra Miller",
+        "phone": "815-992-3312",
+        "role": "Trustee"
+      },
+      {
+        "name": "Vaughn Donahue",
+        "phone": "815-992-3312",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Chad Gray",
+      "phone": "815-992-3312",
+      "role": "President"
+    },
+    "name": "Village of Kangley",
+    "officers": [
+      {
+        "name": "Sherri Savage",
+        "phone": "815-992-3312",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1739519": {
     "board": [
       {
@@ -5651,6 +5905,128 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageoflansing.org"
   },
+  "1742184": {
+    "board": [
+      {
+        "district": "1",
+        "name": "James “Diz” Demes",
+        "phone": "815-224-3754",
+        "role": "Alderperson"
+      },
+      {
+        "district": "1",
+        "name": "Robert T. Thompson",
+        "phone": "815-993-7272",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "Jerry Reynolds",
+        "phone": "815-252-3888",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "Tom Ptak",
+        "phone": "815-228-3491",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "John “Doc” Lavieri",
+        "phone": "815-223-4014",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "Joseph L. Jeppson",
+        "phone": "815-664-8001",
+        "role": "Alderperson"
+      },
+      {
+        "district": "4",
+        "name": "Jordan Crane",
+        "phone": "815-343-1451",
+        "role": "Alderperson"
+      },
+      {
+        "district": "4",
+        "name": "T. Boo Herndon",
+        "phone": "815-202-5722",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Jeff Grove",
+      "phone": "815-488-4300",
+      "role": "Mayor"
+    },
+    "name": "City of La Salle",
+    "officers": [
+      {
+        "name": "Liz Bishop",
+        "phone": "815-224-6119",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Brent Bader",
+        "phone": "815-830-2600",
+        "role": "Deputy Clerk"
+      },
+      {
+        "name": "Virginia Kochanowski",
+        "phone": "815-223-4586",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
+  "1742756": {
+    "board": [
+      {
+        "name": "Brian Niles",
+        "phone": "815-739-0328",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Christopher Bickel",
+        "phone": "815-274-6348",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Jennifer M Williams",
+        "phone": "815-970-3495",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Matthew Clifford",
+        "phone": "815-474-3597",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Ronald Leber",
+        "phone": "815-495-9097",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Taunya Eckman",
+      "phone": "815-570-1208",
+      "role": "Mayor"
+    },
+    "name": "Village of Leland",
+    "officers": [
+      {
+        "name": "Susan Kelly",
+        "phone": "630-267-2810",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1742795": {
     "board": [
       {
@@ -5705,6 +6081,50 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://lemont.il.us"
+  },
+  "1742912": {
+    "board": [
+      {
+        "name": "Beatriz Tinoco",
+        "phone": "815-822-7824",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jim Burns",
+        "phone": "815-856-3291",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Carmean",
+        "phone": "815-252-9736",
+        "role": "Trustee"
+      },
+      {
+        "name": "Monty Bernardoni",
+        "phone": "815-343-8961",
+        "role": "Trustee"
+      },
+      {
+        "name": "Samantha Burns",
+        "phone": "815-993-1808",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Mike Zimmerman",
+      "phone": "815-674-3936",
+      "role": "President"
+    },
+    "name": "Village of Leonore",
+    "officers": [
+      {
+        "name": "Brandi Stimpert",
+        "phone": "815-866-8357",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1743250": {
     "county": "Lake",
@@ -5938,6 +6358,60 @@
     },
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "https://www.longgroveil.gov/"
+  },
+  "1744823": {
+    "board": [
+      {
+        "name": "Andy Forrest",
+        "phone": "815-780-0846",
+        "role": "Trustee"
+      },
+      {
+        "name": "Chris Dose",
+        "phone": "815-830-1151",
+        "role": "Trustee"
+      },
+      {
+        "name": "David Mertes",
+        "phone": "815-579-4648",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jonathan Rothchild",
+        "phone": "815-368-3437",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Cooper",
+        "phone": "815-488-2667",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nicky Popplewell Jr.",
+        "phone": "309-340-3398",
+        "role": "Trustee"
+      },
+      {
+        "name": "Raymond Brierly",
+        "phone": "815-488-7297",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Jack Immel",
+      "phone": "815-488-9746",
+      "role": "President"
+    },
+    "name": "Village of Lostant",
+    "officers": [
+      {
+        "name": "Wendy Forrest",
+        "phone": "815-780-3005",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1745421": {
     "board": [
@@ -6302,6 +6776,45 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://cityofmarkham.net"
   },
+  "1747150": {
+    "board": [
+      {
+        "name": "Bobby Kaminski",
+        "phone": "815-795-7811",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Jim \"Buck\" Buckingham",
+        "phone": "815-795-7677",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Melissa Small",
+        "phone": "815-416-8964",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Michael Scheib",
+        "phone": "815-640-8465",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "James Hollenbeck",
+      "phone": "815-795-7500",
+      "role": "Mayor"
+    },
+    "name": "City of Marseilles",
+    "officers": [
+      {
+        "name": "Lesley Hart",
+        "phone": "815-252-7414",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1747540": {
     "board": [
       {
@@ -6467,6 +6980,77 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://melrosepark.org"
   },
+  "1748333": {
+    "board": [
+      {
+        "district": "1",
+        "name": "James Fitzpatrick",
+        "phone": "815-343-0735",
+        "role": "Alderperson"
+      },
+      {
+        "district": "1",
+        "name": "John Hessenberger",
+        "phone": "815-539-9934",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "John Holland",
+        "phone": "630-229-7004",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "Leo Hochstatter",
+        "phone": "630-841-1315",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "Jay Miller",
+        "phone": "757-412-9374",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "Kyle Kim",
+        "phone": "815-303-2883",
+        "role": "Alderperson"
+      },
+      {
+        "district": "4",
+        "name": "Mark Peasley",
+        "role": "Alderperson"
+      },
+      {
+        "district": "4",
+        "name": "Vicki Johnson",
+        "phone": "815-866-5558",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "David Boelk",
+      "phone": "815-343-1447",
+      "role": "Mayor"
+    },
+    "name": "City of Mendota",
+    "officers": [
+      {
+        "name": "Emily McConville",
+        "phone": "815-539-7459",
+        "role": "Clerk"
+      },
+      {
+        "name": "Robert Letterly",
+        "phone": "815-993-7649",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1748554": {
     "board": [
       {
@@ -6613,29 +7197,53 @@
     "url": "https://www.thevillageofmillbrook.com"
   },
   "1749308": {
-    "county": "Kendall",
+    "board": [
+      {
+        "name": "Beverly K Casey",
+        "phone": "630-346-3931",
+        "role": "Trustee"
+      },
+      {
+        "name": "Bradley R. Pekoc",
+        "phone": "815-695-5124",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brian Kehoe",
+        "phone": "630-770-8358",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jerri L Morar",
+        "phone": "815-695-5857",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Smith",
+        "phone": "779-999-6030",
+        "role": "Trustee"
+      },
+      {
+        "name": "Patrick A Aloisio",
+        "phone": "815-302-6467",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
     "head": {
-      "lastElected": "2023",
-      "name": "Doug Holley",
+      "name": "Douglas Holley",
+      "phone": "815-695-5439",
       "role": "President"
     },
     "name": "Village of Millington",
-    "office": {
-      "address": "PO Box 552, Millington IL 60537",
-      "phone": "815-695-5358"
-    },
     "officers": [
       {
         "name": "Lenee Kissel",
+        "phone": "815-695-5383",
         "role": "Clerk"
-      },
-      {
-        "name": "Sandy White",
-        "role": "Treasurer"
       }
     ],
-    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
-    "url": "https://www.millingtonil.com"
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1749607": {
     "board": [
@@ -7012,6 +7620,45 @@
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://naperville.il.us"
+  },
+  "1751648": {
+    "board": [
+      {
+        "name": "Becky Rudnicky",
+        "phone": "815-488-5987",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dwayne Davis",
+        "phone": "630-675-7286",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gary Mooney",
+        "phone": "815-250-4363",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michele (Missy) Crawford",
+        "phone": "815-433-1329",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Ross Sarti",
+      "phone": "815-433-4393",
+      "role": "President"
+    },
+    "name": "Village of Naplate",
+    "officers": [
+      {
+        "name": "Gerry Krammerer",
+        "phone": "815-434-4989",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1752103": {
     "county": "Kendall",
@@ -7475,6 +8122,55 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://northriverside-il.org"
   },
+  "1754222": {
+    "board": [
+      {
+        "name": "Debra Krizel",
+        "phone": "815-252-9576",
+        "role": "Trustee"
+      },
+      {
+        "name": "James J Schrader",
+        "phone": "815-252-7407",
+        "role": "Trustee"
+      },
+      {
+        "name": "John G. Schweickert",
+        "phone": "815-228-7542",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kylie Mattioda",
+        "phone": "815-910-6327",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nathan D. Holland",
+        "phone": "815-343-5781",
+        "role": "Trustee"
+      },
+      {
+        "name": "Peter E Pawlak",
+        "phone": "815-830-4562",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "David Stewart",
+      "phone": "815-343-7676",
+      "role": "President"
+    },
+    "name": "Village of North Utica",
+    "officers": [
+      {
+        "name": "Laurie A Gbur",
+        "phone": "815-667-4111",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1754534": {
     "board": [
       {
@@ -7753,6 +8449,47 @@
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.oakwoodhills.org"
   },
+  "1755353": {
+    "board": [
+      {
+        "name": "Antonio \"Tony\" Stefanelli",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Gregory \"Mac\" McDermott",
+        "phone": "815-883-3149",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Hilary Moyle",
+        "phone": "630-299-9049",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Richard Bladridge",
+        "phone": "815-883-8699",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Terry M. Eutis",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Jason Curran",
+      "role": "Mayor"
+    },
+    "name": "City of Oglesby",
+    "officers": [
+      {
+        "name": "Becky Clinard",
+        "phone": "815-883-3389",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1755639": {
     "county": "Lake",
     "name": "Village of Old Mill Creek",
@@ -7980,6 +8717,44 @@
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://oswegoil.org"
+  },
+  "1756926": {
+    "board": [
+      {
+        "name": "Brent F. Barron",
+        "phone": "815-434-4810",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Marla K. Pearson",
+        "phone": "815-795-6551",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Thomas Ganiere",
+        "phone": "815-252-7866",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Wayne A. Eichelkraut Jr.",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Robert Hasty",
+      "phone": "815-228-7253",
+      "role": "Mayor"
+    },
+    "name": "City of Ottawa",
+    "officers": [
+      {
+        "name": "Shelly Roalson",
+        "phone": "815-433-0161",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1757225": {
     "board": [
@@ -8442,6 +9217,78 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://villageofpeotone.com"
   },
+  "1759234": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Jeffery Ballard",
+        "phone": "815-867-7146",
+        "role": "Alderperson"
+      },
+      {
+        "district": "1",
+        "name": "Robert “Bob” Tieman",
+        "phone": "815-228-6713",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "Jason Edgcomb",
+        "phone": "815-252-4320",
+        "role": "Alderperson"
+      },
+      {
+        "district": "2",
+        "name": "WM \"Tom\" Payton",
+        "phone": "815-223-7013",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "Mike Saplenza",
+        "phone": "815-228-0955",
+        "role": "Alderperson"
+      },
+      {
+        "district": "3",
+        "name": "Rick O'Sadnick",
+        "phone": "202-258-4777",
+        "role": "Alderperson"
+      },
+      {
+        "district": "4",
+        "name": "Andrew \"Andy\" Moreno",
+        "phone": "815-993-4447",
+        "role": "Alderperson"
+      },
+      {
+        "district": "4",
+        "name": "Jim Lukosus",
+        "phone": "815-223-1307",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Ken Kolowski",
+      "phone": "815-303-6707",
+      "role": "Mayor"
+    },
+    "name": "City of Peru",
+    "officers": [
+      {
+        "name": "James “Jamey” Mertel",
+        "phone": "815-228-9769",
+        "role": "Clerk"
+      },
+      {
+        "name": "John “Jackson” Powell",
+        "phone": "815-830-8161",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1759572": {
     "board": [
       {
@@ -8775,6 +9622,44 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://prospect-heights.il.us"
+  },
+  "1762757": {
+    "board": [
+      {
+        "name": "John Rohder",
+        "role": "Trustee"
+      },
+      {
+        "name": "John W Blair",
+        "phone": "815-257-4670",
+        "role": "Trustee"
+      },
+      {
+        "name": "Larry McCann",
+        "phone": "815-674-5617",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Talty",
+        "phone": "815-586-4799",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Paige Talty",
+      "phone": "815-257-7280",
+      "role": "President"
+    },
+    "name": "Village of Ransom",
+    "officers": [
+      {
+        "name": "Garrett William son",
+        "phone": "815-780-0761",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1763641": {
     "county": "McHenry",
@@ -9473,6 +10358,50 @@
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "https://www.rlpil.us/"
   },
+  "1766443": {
+    "board": [
+      {
+        "name": "Al (Alan) Stunkel",
+        "phone": "815-579-1932",
+        "role": "Trustee"
+      },
+      {
+        "name": "Christina Jenkins",
+        "phone": "815-993-8916",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cody Montgomery",
+        "phone": "815-326-3539",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donna Dennis",
+        "phone": "309-232-1356",
+        "role": "Trustee"
+      },
+      {
+        "name": "Troy Petrimoulx",
+        "phone": "815-712-9521",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Samantha Montgomery",
+      "phone": "309-219-4428",
+      "role": "President"
+    },
+    "name": "Village of Rutland",
+    "officers": [
+      {
+        "name": "Candace Gross-Heider",
+        "phone": "309-531-0319",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1766703": {
     "county": "Kane",
     "head": {
@@ -9680,6 +10609,91 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofschillerpark.com"
   },
+  "1768640": {
+    "board": [
+      {
+        "name": "David Higgins",
+        "phone": "815-587-2304",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Kent Weber",
+        "phone": "815-252-2749",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Mark S. Victor",
+        "phone": "815-830-2476",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Scott Peddicord",
+        "phone": "815-514-6160",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Jeff Olson",
+      "role": "Mayor"
+    },
+    "name": "Village of Seneca",
+    "officers": [
+      {
+        "name": "Jessica Harvey",
+        "phone": "815-357-8771",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
+  "1769277": {
+    "board": [
+      {
+        "name": "Dale Green",
+        "role": "Trustee"
+      },
+      {
+        "name": "David Heubel",
+        "phone": "779-435-3703",
+        "role": "Trustee"
+      },
+      {
+        "name": "Heather Weber",
+        "role": "Trustee"
+      },
+      {
+        "name": "Judy Hinterlong",
+        "phone": "630-888-1072",
+        "role": "Trustee"
+      },
+      {
+        "name": "Marlene Woodward",
+        "phone": "815-496-2269",
+        "role": "Trustee"
+      },
+      {
+        "name": "Wendy Greenrod",
+        "phone": "815-496-2780",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Tom Wehner",
+      "phone": "815-405-0246",
+      "role": "President"
+    },
+    "name": "Village of Sheridan",
+    "officers": [
+      {
+        "name": "Cathy Grimwood",
+        "phone": "815-496-2251",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1769758": {
     "board": [
       {
@@ -9824,6 +10838,48 @@
     ],
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.sleepyhollowil.org"
+  },
+  "1770460": {
+    "board": [
+      {
+        "name": "Bradley Eade",
+        "phone": "815-826-0865",
+        "role": "Trustee"
+      },
+      {
+        "name": "James \"Doc\" Dockendorf",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jason Diebold",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jonathan “Jake” Whiteaker",
+        "phone": "815-761-9860",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard McMillen",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Aaron Grandgeorge",
+      "phone": "815-719-0098",
+      "role": "President"
+    },
+    "name": "Village of Somonauk",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Rebecca Morphey",
+        "phone": "815-498-3500",
+        "role": "Administrator"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1770564": {
     "board": [
@@ -10235,6 +11291,50 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://streamwood.org"
   },
+  "1773170": {
+    "board": [
+      {
+        "name": "Daniel Danko",
+        "phone": "815-257-5654",
+        "role": "Councilperson"
+      },
+      {
+        "name": "David \"Moose\" Conner",
+        "phone": "815-673-3704",
+        "role": "Councilperson"
+      },
+      {
+        "name": "David Reed",
+        "phone": "815-673-1652",
+        "role": "Councilperson"
+      },
+      {
+        "name": "Scott Scheuer",
+        "phone": "815-822-6101",
+        "role": "Councilperson"
+      },
+      {
+        "name": "Timothy R. Geary",
+        "phone": "815-672-0457",
+        "role": "Councilperson"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Tara Bedei",
+      "phone": "815-674-4349",
+      "role": "Mayor"
+    },
+    "name": "City of Streator",
+    "officers": [
+      {
+        "name": "Patricia Henderson",
+        "phone": "815-673-8333",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1773391": {
     "county": "Kane",
     "head": {
@@ -10485,6 +11585,52 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://tinleypark.org"
   },
+  "1775718": {
+    "board": [
+      {
+        "name": "David Wiesbrock",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Zimmer",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Supan Jr.",
+        "phone": "815-883-3452",
+        "role": "Trustee"
+      },
+      {
+        "name": "Raymond (Ray) Martinex",
+        "role": "Trustee"
+      },
+      {
+        "name": "Stephen Ebener",
+        "phone": "815-993-1616",
+        "role": "Trustee"
+      },
+      {
+        "name": "Thomas (Tom) Goskusky",
+        "phone": "815-442-8451",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Eric Skinner",
+      "phone": "815-433-0233",
+      "role": "President"
+    },
+    "name": "Village of Tonica",
+    "officers": [
+      {
+        "name": "Heather Sherman",
+        "phone": "815-442-3104",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
   "1775874": {
     "county": "Lake",
     "name": "Village of Tower Lakes",
@@ -10516,6 +11662,54 @@
     ],
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.troutvalleyil.com"
+  },
+  "1776225": {
+    "board": [
+      {
+        "name": "Ben Ross",
+        "phone": "815-303-2207",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cheryl Kastle",
+        "phone": "630-770-9992",
+        "role": "Trustee"
+      },
+      {
+        "name": "Galen Eich",
+        "phone": "815-910-6915",
+        "role": "Trustee"
+      },
+      {
+        "name": "Holly Mathieu",
+        "phone": "815-488-6700",
+        "role": "Trustee"
+      },
+      {
+        "name": "Marlene Melau",
+        "phone": "815-910-0415",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mitchell Melau",
+        "role": "Trustee"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Michael Wujek",
+      "phone": "815-712-7762",
+      "role": "President"
+    },
+    "name": "Village of Troy Grove",
+    "officers": [
+      {
+        "name": "Cassandra Stovall-Milus",
+        "phone": "815-909-8566",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1776706": {
     "county": "McHenry",
@@ -10703,6 +11897,65 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.villageofwayne.org"
+  },
+  "1779813": {
+    "board": [
+      {
+        "name": "Brock Flanigan",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "John Simmons",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Julia Kitchens",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Kym Healy",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Nathen Anderson",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Randy Lohr",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Russell Skaggs Sr.",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      },
+      {
+        "name": "William Simmons",
+        "phone": "815-853-4227",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "LaSalle",
+    "head": {
+      "name": "Mary Jane Bade",
+      "phone": "815-853-4227",
+      "role": "Mayor"
+    },
+    "name": "City of Wenona",
+    "officers": [
+      {
+        "name": "Deb Longbons",
+        "phone": "815-853-4227",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
   "1780047": {
     "board": [

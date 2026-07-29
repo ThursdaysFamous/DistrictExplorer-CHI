@@ -48,6 +48,7 @@ PLACES_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_place_by_county
 # Census county FIPS for the seven metro counties, for county-preferred lookup.
 COUNTY_FIPS = {
     "Cook": "031",
+    "LaSalle": "099",
     "DuPage": "043",
     "Kane": "089",
     "Kendall": "093",
@@ -63,9 +64,14 @@ COUNTY_FIPS = {
 # drop.
 HEAD_OFFICES = {"mayor", "president", "village president"}
 BOARD_OFFICES = {"trustee", "alderperson", "alderman", "council member",
-                 "commissioner", "councilman", "councilwoman"}
+                 "commissioner", "councilman", "councilwoman", "councilperson"}
 OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
-                   "taxpayer advocate", "collector", "supervisor"}
+                   "taxpayer advocate", "collector", "supervisor",
+                   # appointed staff LaSalle prints beside the elected officers;
+                   # the record carries appointed=True so a card never implies
+                   # these were elected
+                   "deputy clerk", "administrator", "village administrator",
+                   "city administrator"}
 
 # Per-county floors: deliberate under-tolerances against the verified 2026-07
 # live values (Cook 128 municipalities / 1,035 governing records / 128 heads;
@@ -74,6 +80,9 @@ OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
 COUNTY_FLOORS = {
     "Cook": {"municipalities": 120, "members": 900, "heads": 120},
     "Will": {"municipalities": 30, "members": 260, "heads": 30},
+    # LaSalle, the third full-governing-body source and the first county outside
+    # the metro (2026-07 live: 26 municipalities / 206 officials / 26 heads).
+    "LaSalle": {"municipalities": 22, "members": 170, "heads": 22},
     # The five mayor-level counties (2026-07 live values in parentheses). Their
     # sources publish no trustees, so `members` counts the head plus the elected
     # clerk/treasurer rows only — a floor equal to the head count would pass on
@@ -115,6 +124,13 @@ MIN_TOTAL_MUNICIPALITIES = 250
 # where councils used to be. If one of them is down, the run must fail.
 REQUIRED_COUNTIES = ("Cook", "Will")
 PRESERVABLE = {
+    # LaSalle is a full-governing-body source like Cook and Will, but unlike them
+    # it is NOT in REQUIRED_COUNTIES: Cook and Will are required because losing
+    # either would silently replace councils that are already shipped with
+    # mayors. LaSalle carries its own 26 municipalities and nothing else depends
+    # on it, so a fetch failure should carry its last-good entries forward, not
+    # fail every other county's turnover.
+    "lasalle": {"kind": "county", "county": "LaSalle"},
     "dupage": {"kind": "county", "county": "DuPage"},
     "kane": {"kind": "county", "county": "Kane"},
     "mchenry": {"kind": "county", "county": "McHenry"},
@@ -135,7 +151,7 @@ PRESERVABLE = {
 # this is a freshness call, not a correctness one: Cook's is a live API
 # reflecting each election as it is certified, Will's is an annually
 # republished directory.
-COUNTY_PRECEDENCE = ["Cook", "Will", "DuPage", "Kane", "Kendall", "McHenry", "Lake"]
+COUNTY_PRECEDENCE = ["Cook", "Will", "LaSalle", "DuPage", "Kane", "Kendall", "McHenry", "Lake"]
 
 
 def norm_place(name):
