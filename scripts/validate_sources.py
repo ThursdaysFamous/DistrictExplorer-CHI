@@ -137,6 +137,25 @@ PROVENANCE = [
      "note": "Same PA 102-0693 enacted-subcircuits shapefile ZIP as Kane "
              "(archived in data/source/raw/). Redrawn ~once a decade; the "
              "county publishes no subcircuit service at all."},
+    {"layer": "Winnebago 17th-Circuit judicial subcircuits",
+     "app_file": "winnebago-judicial-subcircuits.json",
+     "source_url": "https://www.ilsenateredistricting.com/",
+     "note": "PA 102-0693 enacted-subcircuits shapefile ZIP (archived in "
+             "data/source/raw/) — the SAME archive Kane and McHenry were built "
+             "from, which carries nine circuits where the app long shipped six. "
+             "17th Circuit = Winnebago + Boone, the first counties outside the "
+             "seven-county metro. Redrawn ~once a decade."},
+    {"layer": "Madison 3rd-Circuit judicial subcircuits",
+     "app_file": "madison-judicial-subcircuits.json",
+     "source_url": "https://www.ilsenateredistricting.com/",
+     "note": "Same PA 102-0693 archive. 3rd Circuit = Madison + Bond "
+             "(Metro East). Redrawn ~once a decade."},
+    {"layer": "Sangamon 7th-Circuit judicial subcircuits",
+     "app_file": "sangamon-judicial-subcircuits.json",
+     "source_url": "https://www.ilsenateredistricting.com/",
+     "note": "Same PA 102-0693 archive. 7th Circuit = Sangamon + Greene, "
+             "Jersey, Macoupin, Morgan and Scott — the widest of the three, so "
+             "this one file answers for six counties. Redrawn ~once a decade."},
     {"layer": "Kane County Board members (roster)",
      "app_file": "kane-county-board-members.json",
      "source_url": "https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx",

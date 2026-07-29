@@ -102,6 +102,37 @@ LAYERS = {
         "precision": "0.000001",
         "key_prop": "DISTRICT",
     },
+    # The first three counties OUTSIDE the seven-county metro, and the cheapest
+    # expansion available: the same PA 102-0693 archive already in
+    # data/source/raw/ carries NINE circuits and the app shipped six, so these
+    # three needed no new source at all (docs/DATA_LAYER_GUIDEBOOK.md, statewide
+    # expansion research). Same ID/DISTRICT/DISTRICTN schema as kane-judicial.
+    #
+    # Each circuit spans more than its headline county — 17th = Winnebago+Boone,
+    # 3rd = Madison+Bond, 7th = Sangamon+Greene/Jersey/Macoupin/Morgan/Scott —
+    # so the layer answers for all ten, and the entry is keyed by the circuit's
+    # largest county purely for naming.
+    "winnebago-judicial": {
+        "source": "data/winnebago-judicial-subcircuits.geojson",
+        "out": "winnebago-judicial-subcircuits.json",
+        "simplify": "12%",
+        "precision": "0.000001",
+        "key_prop": "DISTRICT",
+    },
+    "madison-judicial": {
+        "source": "data/madison-judicial-subcircuits.geojson",
+        "out": "madison-judicial-subcircuits.json",
+        "simplify": "12%",
+        "precision": "0.000001",
+        "key_prop": "DISTRICT",
+    },
+    "sangamon-judicial": {
+        "source": "data/sangamon-judicial-subcircuits.geojson",
+        "out": "sangamon-judicial-subcircuits.json",
+        "simplify": "12%",
+        "precision": "0.000001",
+        "key_prop": "DISTRICT",
+    },
 }
 
 
