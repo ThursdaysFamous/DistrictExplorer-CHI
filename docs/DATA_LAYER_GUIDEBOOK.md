@@ -225,6 +225,53 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > families).
 
 **Open — Illinois**
+- **LaSalle + Kankakee — RESEARCH PASS 2 done, `county-board` SHIPPED (2026-07-29).**
+  The two counties the pass-1 border-ring computation identified as both large and
+  contiguous. Sources were determined for every concept the county-N+1 checklist asks
+  about (`docs/EXPANSION_GUIDE.md` §2.5) before anything shipped, per rule 4:
+
+  | concept | LaSalle (109,658) | Kankakee (107,502) |
+  |---|---|---|
+  | `county-board` | **SHIPPED** — 29 districts, [ArcGIS Online FeatureServer](https://services3.arcgis.com/H84yQSxNIj9pXjJ7/arcgis/rest/services/CountyBoardDistricts/FeatureServer), member in GIS attrs | **SHIPPED** — 28 districts, self-hosted `k3gis.net` `BASE/Elected_Officials/1`, member in GIS attrs |
+  | `county-precinct` | ready — `PollingPlaceLocator/1` (119) + polling points (119), **119/119 exact join** on `USER_Precinct` | ready — `BASE/Elected_Officials/0` (59), name only, no polling join found |
+  | `fire-district` | **none published** | ready — `BASE/Taxing_Districts2/10` (17) |
+  | `park-district` | **none published** | ready — `…/5` (4) |
+  | `library-district` | **none published** | ready — `…/3` (8) |
+  | `judicial-subcircuit` | **structurally n/a** — 13th Circuit | **structurally n/a** — 21st Circuit |
+  | municipal officials | ready, **full governing bodies** — the clerk's [Municipality Officials PDF](https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF) carries president/mayor, clerk, treasurer and every trustee/alderperson **with ward numbers**, address and phone | **rule-4 floor** — no county-published roster found |
+
+  **Both boards are rule-4 branch 1** (the Lake/Kane shape): the officeholder rides the
+  county's own boundary GIS, so this shipped with **no scraper, no weekly workflow and no
+  roster file** — measured populated 29/29 (name, e-mail, mailing address) and 28/28
+  (name, party, phone, e-mail) respectively.
+
+  **Recorded upstream gaps.** LaSalle's three phone columns are recorded *without an area
+  code* ("672-2115") and the county states no default, so they are deliberately not
+  rendered — the same call DuPage's municipal phones got; inventing 815 would be guessing
+  how to reach an officeholder. Kankakee's board features carry a `chair` column set on
+  only 2 of 28 rows, which does not describe a single countywide chair, so it is left
+  unread rather than interpreted.
+
+  **Judicial subcircuits are n/a for both, on evidence:** the PA 102-0693 enacted map
+  covers nine circuits (Cook, 3rd, 7th, 12th, 16th, 17th, 18th, 19th, 22nd) and the app
+  now ships **all nine** — neither LaSalle's 13th nor Kankakee's 21st is among them. Same
+  recorded-n/a as Kendall's 23rd.
+
+  **Discovery method that worked, for pass 3.** Pass 1's note stands (hostname guessing
+  finds nothing; ArcGIS search needs field-qualified syntax) and this pass adds the step
+  that actually pays: find the county's GIS *org account* with `owner:"<org>"` and
+  enumerate everything it owns — `LaSalleCoGIS` and `k3gis_1` each surfaced their whole
+  catalogue that way. Then follow a web map's `operationalLayers` to the services behind
+  it: LaSalle's polling-place app is what exposed `gis.lasallecounty.org`, a second,
+  self-hosted server carrying the precinct tiling that the ArcGIS Online org does not
+  have. **A schema is not data** — Kankakee's taxing-district layers declare
+  `telephone`/`website`/`email` on every row and populate **none** of them (0/21, 0/8,
+  0/4, 0/17), so those entries will be identity-only when built.
+
+  **Not yet built (sources determined, no blocker):** both precinct entries, Kankakee's
+  fire/park/library entries, and the LaSalle municipal-officials pipeline — the last is
+  the highest-value remaining item in the fleet, since it is Cook/Will-depth governing
+  bodies from a single county document.
 - **Office-pin geocoding: unit fragments and the metro bound — FIXED (2026-07-29).**
   Cards kept losing their office pin on addresses carrying "Room 230" / "Suite 104", and
   the question raised was whether to swap geocoders. Measured first, against the app's
