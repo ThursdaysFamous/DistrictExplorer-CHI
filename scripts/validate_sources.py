@@ -226,14 +226,21 @@ PROVENANCE = [
      "source_url": "https://www.joliet.gov/government/city-council-3189",
      "note": "Per-seat phone + e-mail for the metro's third-largest city, which "
              "the Will Clerk's directory does not publish "
-             "(joliet_council_contact_scraper.py). joliet.gov fingerprints the "
-             "HTTP CLIENT — curl gets 200 where python-requests gets 403 — so "
-             "Playwright is the rung that carries it and a reachability WARN "
-             "here is EXPECTED, not drift. The Internet Archive is deliberately "
-             "not a fallback: its newest snapshot is from 2022, two elections "
-             "stale. The Clerk stays the roster of record; this adds contact "
-             "only. Note jolietcity.org is NOT the city — it is a parked "
-             "domain."},
+             "(joliet_council_contact_scraper.py). TERMINAL BLOCK (re-measured "
+             "2026-07-28, correcting an earlier read): joliet.gov is Akamai "
+             "serving a HARD WAF DENY — a 408-byte static page with an "
+             "x-reference-error, not a solvable challenge — so the Playwright "
+             "rung fails exactly as requests does and no rung carries this city. "
+             "A reachability WARN here is EXPECTED and permanent. The Internet "
+             "Archive was re-evaluated and declined on its merits, not its age: "
+             "the captures are good (the archived index still yields all nine "
+             "bio links, the bio pages still carry their e-mails) but the newest "
+             "index capture is 69 days old against the fleet's 45-day guard, so "
+             "a conventional rung would refuse every run — and preservation "
+             "already carries Joliet's last-good entry from a live scrape, which "
+             "beats a dated copy. The Clerk stays the roster of record; this "
+             "adds contact only. Note jolietcity.org is NOT the city — it is a "
+             "parked domain."},
     {"layer": "Skokie trustee districts (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://www.skokie.org/486/Board-of-Trustees",
@@ -542,6 +549,122 @@ def check_endpoints(findings, offline):
                          "renamed or retired" % (res, e["url"]))
 
 
+# The `ward` layer is the one CountyDispatch whose entries are keyed by SOURCE
+# rather than by county, so its disjointness is not guaranteed by geography the
+# way county-keyed layers' is. registerCountyLayer dispatches by containment and
+# takes the FIRST entry that matches, so an overlap would not error — it would
+# quietly answer from whichever entry happens to be ordered first, and the two
+# sources disagree about ward numbering. Verified disjoint 2026-07-28 (206
+# features, every ordered pair); this watches for a publisher extending one of
+# them into another's territory, which is the realistic way it breaks.
+WARD_SOURCES = [
+    # Chicago is the pair that matters most: its 50 wards are ALSO in the Cook
+    # county layer, and index.html drops them there by normalized name. If that
+    # filter ever breaks, this is the check that says so.
+    {"key": "chicago",
+     "url": "https://data.cityofchicago.org/resource/p293-wvbd.geojson",
+     "socrata": True},
+    {"key": "cook-suburban",
+     "url": "https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/"
+            "MapServer/22/query",
+     # Chicago's 50 wards sit in this county layer too and the chicago entry
+     # serves them from the City's own dataset; index.html filters them out by
+     # normalized name, so the check must filter identically or report a
+     # self-inflicted overlap.
+     "drop_municipality": "CHICAGO"},
+    {"key": "evanston",
+     "url": "https://maps.cityofevanston.org/arcgis/rest/services/OpenData/"
+            "ArcGISOpenData2Administrative/MapServer/0/query"},
+    {"key": "aurora",
+     "url": "https://gis.aurora.il.us/arcgis/rest/services/Administrative_Boundaries/"
+            "2022Wards/FeatureServer/0/query"},
+    {"key": "will",
+     "url": "https://services.arcgis.com/fGsbyIOAuxHnF97m/arcgis/rest/services/"
+            "Ward_Districts/FeatureServer/%d/query",
+     "sublayers": [0, 1, 2, 3]},
+]
+
+
+def _ward_rings(feature):
+    geom = feature.get("geometry") or {}
+    if geom.get("type") == "Polygon":
+        return list(geom.get("coordinates") or [])
+    if geom.get("type") == "MultiPolygon":
+        return [r for poly in (geom.get("coordinates") or []) for r in poly]
+    return []
+
+
+def _ward_point_in(feature, pt):
+    x, y = pt
+    inside = False
+    for ring in _ward_rings(feature):
+        for i in range(len(ring) - 1):
+            x1, y1 = ring[i][0], ring[i][1]
+            x2, y2 = ring[i + 1][0], ring[i + 1][1]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+                inside = not inside
+    return inside
+
+
+def _ward_probe_point(feature):
+    """Average of the largest ring — not guaranteed interior for a concave ward,
+    but it only has to be a stable point that lands in the RIGHT municipality,
+    and an overlap this misses is one the next feature catches."""
+    rings = _ward_rings(feature)
+    if not rings:
+        return None
+    ring = max(rings, key=len)
+    return (sum(c[0] for c in ring) / len(ring), sum(c[1] for c in ring) / len(ring))
+
+
+def check_ward_dispatch_disjoint(findings, offline):
+    if offline:
+        return
+    layer = "City Ward (dispatch disjointness)"
+    loaded = {}
+    for src in WARD_SOURCES:
+        feats = []
+        for sub in src.get("sublayers", [None]):
+            url = src["url"] % sub if sub is not None else src["url"]
+            params = ({"$limit": "1000"} if src.get("socrata") else
+                      {"where": "1=1", "outFields": "*", "outSR": "4326",
+                       "f": "geojson", "resultRecordCount": "2000"})
+            ok, res = http_get(url, params=params)
+            if not ok:
+                findings.add(WARN, layer,
+                             "%s source unreachable (%s) — disjointness unverified this "
+                             "run" % (src["key"], res))
+                return
+            feats.extend((res or {}).get("features") or [])
+        drop = src.get("drop_municipality")
+        if drop:
+            feats = [f for f in feats
+                     if (f.get("properties", {}).get("MUNICIPALITY") or "").strip().upper() != drop]
+        loaded[src["key"]] = feats
+
+    overlaps = []
+    keys = sorted(loaded)
+    for a in keys:
+        for b in keys:
+            if a == b:
+                continue
+            for f in loaded[a]:
+                pt = _ward_probe_point(f)
+                if pt and any(_ward_point_in(g, pt) for g in loaded[b]):
+                    overlaps.append((a, b))
+                    break
+    if overlaps:
+        findings.add(FAIL, layer,
+                     "ward dispatch entries overlap (%s) — registerCountyLayer takes the "
+                     "FIRST containing entry, so one source is silently answering for "
+                     "territory the other also claims"
+                     % ", ".join("%s into %s" % p for p in overlaps))
+    else:
+        findings.add(OK, layer,
+                     "%d ward features across %d sources, every ordered pair disjoint"
+                     % (sum(len(v) for v in loaded.values()), len(loaded)))
+
+
 def render(findings):
     order = {FAIL: 0, WARN: 1, OK: 2}
     rows = sorted(findings.rows, key=lambda r: (order[r[0]], r[1]))
@@ -591,6 +714,7 @@ def main():
     check_socrata(findings, args.offline)
     check_provenance(findings, args.offline)
     check_endpoints(findings, args.offline)
+    check_ward_dispatch_disjoint(findings, args.offline)
 
     report = render(findings)
     sys.stdout.write(report)
