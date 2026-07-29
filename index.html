@@ -4032,10 +4032,10 @@ function initChiExplorer() {
     "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
     "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + LaSalle (29 single-member districts) and Kankakee (28) — the first counties outside the metro on this layer, both rule-4 branch 1 with the member carried on the county's own boundary GIS (LaSalle: name/e-mail/mailing address, phones recorded without an area code so not rendered; Kankakee: name/party/phone/e-mail, all 28/28) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
-    "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded), county-dispatched; partial coverage inside each county
+    "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
-    "park-district",     // Consolidated park-district layer — Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs) + Kane (11, board president + office contact in GIS attrs) + Kendall (5 genuine districts on the county's tax-code tiling, name-only; McHenry remains the one sourced county with no entry — it publishes park facilities, not district boundaries), county-dispatched; partial coverage inside each county
-    "library-district",  // Consolidated library-district layer — Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs) + Kane (16, board president + office contact in GIS attrs) + McHenry (13, name-only after the county's own Z_None-filler + municipal-row exclusions) + Kendall (9 library taxing bodies on the county's complete tax-code tiling — municipal city-library funds included, the Cook-style shape), county-dispatched; partial coverage inside each county
+    "park-district",     // Consolidated park-district layer — Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs) + Kane (11, board president + office contact in GIS attrs) + Kendall (5 genuine districts on the county's tax-code tiling, name-only; McHenry remains the one sourced county with no entry — it publishes park facilities, not district boundaries) + Kankakee (4, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county
+    "library-district",  // Consolidated library-district layer — Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs) + Kane (16, board president + office contact in GIS attrs) + McHenry (13, name-only after the county's own Z_None-filler + municipal-row exclusions) + Kendall (9 library taxing bodies on the county's complete tax-code tiling — municipal city-library funds included, the Cook-style shape) + Kankakee (8, identity-only, same measured reason as its fire tiling), county-dispatched; partial coverage inside each county
     "school-board",      // Elected School Board district (10, citywide)
     "cps-hs-network",    // CPS High School Network (admin grouping)
     "cps-network",       // CPS K-8 Network (admin grouping)
@@ -4058,7 +4058,7 @@ function initChiExplorer() {
     // Smallest county-scoped layer, so it renders on top of Township and County
     // (smallest-on-top); turning it on drops both to outline-only, framing the
     // precinct fills from underneath.
-    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID), county-dispatched; subOf township
+    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join), county-dispatched; subOf township
     "tif-district",      // Cook TIF districts — the Clerk's current tax-increment-financing agency tiling (418, county GIS clerkTaxDistricts L18: the un-yeared layer the Clerk refreshes in place, retired year editions archived in the year-versioned service); card shows name + Clerk agency number + the Clerk's TIF-reports link; partial coverage (most points are in no TIF), Cook-gated. Dedicated Cook layer per the consolidation rule until a second county ships TIFs (Kendall's server carries a TIF_Districts service — recorded as the next entry)
     "cps-elementary",    // Elementary School attendance zone — smallest polygon layer
     "school-site",       // individual school-campus footprints — smallest polygons, above the zones
@@ -7247,6 +7247,85 @@ function initChiExplorer() {
         if (!hasUsableGeometry(geojson)) throw new Error("Kankakee County Board returned no usable geometry");
         return geojson;
       });
+  });
+
+  /* LaSalle publishes precincts and polling places as two layers of one map
+   * service, joined on the precinct NAME (`USER_Precinct` on the point,
+   * `PRECINCT` on the polygon) — a 119/119 exact match measured when this was
+   * built, better than the GUID join Kendall needed. Stamp the polling place
+   * onto each precinct feature at load time (the Kendall township precedent),
+   * so the card's query stays a plain containment test and a polling-layer
+   * failure costs the pin, never the precinct. */
+  var LASALLE_GIS = "https://gis.lasallecounty.org/arcgis/rest/services/PollingPlaceLocator/MapServer/";
+  function loadLasalleLayer(layerIndex, outFields, label) {
+    var url = LASALLE_GIS + layerIndex + "/query?where=1%3D1&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("LaSalle County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadLasallePrecincts = makeCached(function () {
+    return Promise.all([
+      loadLasalleLayer(1, "PRECINCT", "precincts"),
+      loadLasalleLayer(0, "USER_Precinct,USER_Building_Name,USER_Street,USER_City", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byName = {};
+        polling.features.forEach(function (f) {
+          var p = f.properties || {};
+          var key = findPropCI(p, ["user_precinct"]);
+          if (key == null || String(key).trim() === "") return;
+          byName[String(key).trim().toUpperCase()] = {
+            place: findPropCI(p, ["user_building_name"]),
+            street: findPropCI(p, ["user_street"]),
+            city: findPropCI(p, ["user_city"])
+          };
+        });
+        precincts.features.forEach(function (f) {
+          var name = findPropCI(f.properties || {}, ["precinct"]);
+          var hit = name != null ? byName[String(name).trim().toUpperCase()] : null;
+          if (!hit) return;
+          if (hit.place) f.properties.dxPollingPlace = String(hit.place);
+          var addr = [hit.street, hit.city].filter(function (x) {
+            return x != null && String(x).trim();
+          }).map(function (x) { return String(x).trim(); }).join(", ");
+          if (addr) f.properties.dxPollingAddress = addr;
+        });
+      }
+      return precincts;
+    });
+  });
+
+  /* Kankakee's own server carries the precinct tiling beside the board, and its
+   * fire/park/library tilings in Taxing_Districts2. Those three declare a full
+   * contact schema (telephone/website/email) and populate NONE of it — measured
+   * 0/17, 0/4, 0/8 — so they ship identity-only, exactly like Cook's and
+   * DuPage's fire tilings. `unit_name` is the only populated column. */
+  var K3_GIS = "https://k3gis.net/arcgis/rest/services/BASE/";
+  function loadK3Layer(service, layerIndex, outFields, label) {
+    var url = K3_GIS + service + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
+      outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Kankakee County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadKankakeePrecincts = makeCached(function () {
+    return loadK3Layer("Elected_Officials", 0, "name", "precincts");
+  });
+  var loadKankakeeFire = makeCached(function () {
+    return loadK3Layer("Taxing_Districts2", 10, "unit_name", "fire protection districts");
+  });
+  var loadKankakeeParks = makeCached(function () {
+    return loadK3Layer("Taxing_Districts2", 5, "unit_name", "park districts");
+  });
+  var loadKankakeeLibraries = makeCached(function () {
+    return loadK3Layer("Taxing_Districts2", 3, "unit_name", "library districts");
   });
 
   /* Both boards carry the member on the district feature, so one helper builds
@@ -11110,6 +11189,19 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["fire"], primary: true },
           { label: "County", value: "Kendall County" }
         ]
+      }),
+      // Kankakee's fire tiling (17). Identity-only: the county's taxing-district
+      // layers declare telephone/website/email on every row and populate none of
+      // them (measured 0/17), so `unit_name` is all there is — the same shape as
+      // Cook's and DuPage's fire tilings.
+      polygonCountyEntry({
+        key: "kankakee",
+        coverage: kankakeeCountyCoverage,
+        loader: loadKankakeeFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["unit_name"], primary: true },
+          { label: "County", value: "Kankakee County" }
+        ]
       })
     ]
   });
@@ -11218,6 +11310,16 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "Kendall County" }
+        ]
+      }),
+      // Kankakee's park tiling (4) — identity-only, same measured reason as fire.
+      polygonCountyEntry({
+        key: "kankakee",
+        coverage: kankakeeCountyCoverage,
+        loader: loadKankakeeParks,
+        fields: [
+          { name: "name", label: "Park District", keys: ["unit_name"], primary: true },
+          { label: "County", value: "Kankakee County" }
         ]
       })
     ]
@@ -11390,6 +11492,16 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "Kendall County" }
+        ]
+      }),
+      // Kankakee's library tiling (8) — identity-only, same measured reason as fire.
+      polygonCountyEntry({
+        key: "kankakee",
+        coverage: kankakeeCountyCoverage,
+        loader: loadKankakeeLibraries,
+        fields: [
+          { name: "name", label: "Library District", keys: ["unit_name"], primary: true },
+          { label: "County", value: "Kankakee County" }
         ]
       })
     ]
@@ -11781,6 +11893,113 @@ function initChiExplorer() {
         primaryLink: function () {
           // registration & polling place lookup
           return { label: "Kendall County Clerk — Precincts & Locations (official)", url: "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information/precincts-locations" };
+        }
+      },
+      // LaSalle (119). The county names precincts by township ("ADAMS 1"), so
+      // the name IS the compound identity and no township join is needed. The
+      // loader stamps the polling place from the county's own polling layer,
+      // joined on that same name — 119/119 exact when this was built.
+      {
+        key: "lasalle",
+        coverage: lasalleCountyCoverage,
+        loadGeometry: loadLasallePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinct"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLasallePrecincts(),
+            loadLasalleCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(parseInt(d, 10) || d);
+              }
+            }
+            var name = findPropCI(props, ["precinct"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) {
+            fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "LaSalle County Clerk — Elections (official)", url: "https://lasallecountyil.gov/244/County-Clerk" };
+        }
+      },
+      // Kankakee (59). The county's precinct layer carries the name only — no
+      // polling-place assignment and no join key to one — so the card answers
+      // the precinct and its board district and sends the reader to the clerk
+      // for the polling place, rather than inventing an assignment.
+      {
+        key: "kankakee",
+        coverage: kankakeeCountyCoverage,
+        loadGeometry: loadKankakeePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadKankakeePrecincts(),
+            loadKankakeeCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) {
+            fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Kankakee County Clerk — Elections (official)", url: "https://www.kankakeecountyclerk.gov/" };
         }
       }
     ],
