@@ -23,6 +23,7 @@
       "description": "[lat, lng]"
     },
     "permalink_gate": { "$ref": "#/definitions/bbox", "description": "Greater metro area, wider than metro_bbox." },
+    "poi_geocode_bbox": { "$ref": "#/definitions/bbox", "description": "OPTIONAL. Envelope the POI (office-address) geocoder is bounded to; defaults to metro_bbox when absent, which is the old behaviour and the right answer for a fork whose layers are all city-scoped. Set it only when a layer can name an address OUTSIDE metro_bbox — the bound tracks the reach of the fork's WIDEST layer, and one tighter than the data silently drops those pins however clean the address is. Chicago's county-clerk card answers statewide, so Chicago sets Illinois." },
     "socrata_host": { "type": "string", "format": "uri" },
     "socrata_app_token": {
       "type": "string",

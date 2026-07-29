@@ -108,6 +108,24 @@ def render_metro_config(w):
     a("  var METRO_CENTER = [%s, %s];" % tuple(js_num(v) for v in w["metro_center"]))
     a("  // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).")
     a("  var PERMALINK_GATE = %s;" % bbox_js(w["permalink_gate"], ["minLat", "maxLat", "minLng", "maxLng"]))
+    # Emitted ONLY when the worksheet declares it. A fork whose layers are all
+    # city-scoped keeps a byte-identical metro-config region, which is what
+    # makes this safe to ship through the engine release: the bump workflow
+    # applies the release and copies the shared scripts but never regenerates,
+    # so a generator that emitted a new line unconditionally would fail every
+    # sibling's drift gate. (Both halves of that were learned the hard way —
+    # v1.0.16 made the key required and broke worksheet validation; a
+    # default-and-always-emit fix then broke the drift gate instead. The rule
+    # is stronger than "default to the old value": a fork that has not opted in
+    # must see NO change at all.) See docs/ENGINE_SYNC.md.
+    if "poi_geocode_bbox" in w:
+        a("  // Envelope the POI (office-address) geocoder is bounded to. It tracks the")
+        a("  // reach of the fork's WIDEST layer, not the metro: a card that can name an")
+        a("  // address outside METRO_BBOX needs that address to be geocodable, and a")
+        a("  // bound tighter than the data silently drops those pins no matter how")
+        a("  // clean the address is. Chicago's county-clerk card answers statewide, so")
+        a("  // this is Illinois.")
+        a("  var POI_GEOCODE_BBOX = %s;" % bbox_js(w["poi_geocode_bbox"], ["minLng", "minLat", "maxLng", "maxLat"]))
     a("  var SOCRATA_HOST = %s;" % js_str(w["socrata_host"]))
     a("  // Socrata app token: some metros' portals throttle anonymous requests. It is")
     a("  // a throttling identifier, not a secret — public exposure is Socrata's")

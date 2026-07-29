@@ -3872,10 +3872,33 @@ function initNycExplorer() {
       });
   }
 
+  /* ---------- unit-fragment retry ----------
+   * People paste the address off a letterhead — "233 S Wacker Dr Suite 8400,
+   * Chicago" — and the search box handed that to the geocoder verbatim, so a
+   * fragment the POI path has stripped since cleanPoiAddress() existed still
+   * sank the search box. Measured on 12 paired Chicago queries (same address
+   * with and without the unit): 7/12 resolved as typed, 9/12 after cleaning —
+   * and 9/12 is also what the hand-stripped address scores, so cleaning closes
+   * the entire gap the fragment opens. (The 3 that still miss lack the house
+   * number in OSM and fail on the plain address too — not a unit problem.)
+   *
+   * Retry rather than clean up front: the raw query keeps first crack, so a
+   * search that works today cannot regress, and a genuine place name that
+   * merely looks like a unit ("The Room 43") is only ever cleaned once the
+   * as-typed query has already come back empty. Costs one extra request on a
+   * miss, exactly like the sibling-metro fallback it runs ahead of. */
   function runGeocodeSearch(q) {
     return geocodeAddress(q).then(function (results) {
-      renderGeocodeResults(results);
-      if (!results || results.length === 0) return maybeRenderSiblingMatches(q);
+      if (results && results.length) return renderGeocodeResults(results);
+      var cleaned = cleanPoiAddress(q);
+      if (cleaned === q) {
+        renderGeocodeResults(results);
+        return maybeRenderSiblingMatches(q);
+      }
+      return geocodeAddress(cleaned).then(function (retry) {
+        renderGeocodeResults(retry);
+        if (!retry || retry.length === 0) return maybeRenderSiblingMatches(q);
+      });
     });
   }
 
@@ -4324,14 +4347,41 @@ function initNycExplorer() {
   //       address) is never mistaken for a unit and stripped;
   //   (2) the token set excludes "fl"/"no" — they collide with the FL state
   //       code ("Miami, FL 33131") and ordinals; "floor" as a full word is safe.
+  //
+  // Three further shapes were measured against the whole shipped roster corpus
+  // (388 addresses; 37 carry a unit fragment) and each defeated the numeric-only
+  // rules above, leaving 8 of those 37 unresolvable:
+  //   letter units — "115 West Court Street ROOM J Paris"; "…Avenue BUILDING B
+  //     Geneva"; "40W270 La Fox Rd., Suite B" (the number branch needs [0-9]);
+  //   PO boxes    — "1 Superman Square, Room 2A PO BOX 429 Metropolis" (not a
+  //     unit, but just as geocode-hostile, and it survives unit removal);
+  //   dash debris — "69 W. Washington St. - 6th Floor" cleaned to
+  //     "69 W. Washington St. -", whose trailing hyphen the collapse pass kept.
+  // The same `(\S)` guard governs all three, so a PO-box-only address (no
+  // street) is still left alone: it geocodes to nothing and the card honestly
+  // drops its pin, rather than dropping one on a city centroid.
   function cleanPoiAddress(address) {
     var s = String(address);
     // "<n>th Floor" — the ordinal precedes the token
     s = s.replace(/(\S)[,\s]+\d+(?:st|nd|rd|th)?\s+floors?\b\.?/gi, "$1 ");
     // "<Unit> <number>" — the token precedes the unit number
     s = s.replace(/(\S)[,\s]+(?:suite|ste|room|rm|unit|apt|apartment|building|bldg|floor|#)\.?\s*#?\s*[0-9][-0-9a-z]*/gi, "$1 ");
+    // "<Unit> <letter>" — "Room J", "Suite B", "Building B". Bounded to a single
+    // letter (plus optional digits, "Room A5") so it can only ever eat the unit
+    // designator, never the following word — the city name usually sits right
+    // after it, unpunctuated.
+    s = s.replace(/(\S)[,\s]+(?:suite|ste|room|rm|unit|apt|apartment|building|bldg)\.?\s*#?\s*[a-z]\d*(?![\w-])/gi, "$1 ");
+    // "PO Box <n>" in all its punctuations, once street content precedes it —
+    // including the parenthesized form the Kane municipal roster uses
+    // ("175 Water St., (P.O. Box 205), Burlington") and a trailing period
+    // ("P.O. Box 226. LEWISTOWN"), both of which survived the bare-token rule.
+    s = s.replace(/(\S)[,\s]+\(?\s*p\.?\s*o\.?\s*box\.?\s*#?\s*\d+\s*\.?\s*\)?/gi, "$1 ");
     // collapse the comma/space debris a removal leaves behind
     s = s.replace(/\s+/g, " ").replace(/\s+,/g, ",").replace(/,(?:\s*,)+/g, ",").replace(/^[\s,]+|[\s,]+$/g, "");
+    // a separator dash that lost the fragment it introduced ("St. - 6th Floor").
+    // Anchored to a comma or end-of-string so hyphenated names ("Winston-Salem")
+    // and hyphenated house numbers ("88-11 Sutphin Blvd") are untouched.
+    s = s.replace(/\s+[-–—]+\s*(?=,|$)/g, "").replace(/^[\s,]+|[\s,]+$/g, "");
     return s || String(address); // never geocode an empty string
   }
 
