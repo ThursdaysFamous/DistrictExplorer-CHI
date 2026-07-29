@@ -17,6 +17,12 @@
     "minLng": -88.8,
     "maxLng": -86.9
   },
+  "poi_geocode_bbox": {
+    "minLng": -91.6,
+    "minLat": 36.9,
+    "maxLng": -87.0,
+    "maxLat": 42.6
+  },
   "socrata_host": "https://data.cityofchicago.org",
   "socrata_app_token": "",
   "repo_issues": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new",
@@ -708,7 +714,7 @@
   "geocoder": {
     "address": "Photon (Chicago-bounded type-ahead)",
     "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
-    "poi": "Nominatim (office-address pin lookup, serial >=1s queue)"
+    "poi": "Nominatim (office-address pin lookup, Illinois-bounded, serial >=1s queue)"
   },
   "palette": {
     "accent": "#41B6E6",

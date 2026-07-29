@@ -133,7 +133,19 @@ try {
       ["851 Grand Concourse, Room 118, Bronx, NY 10451", "851 Grand Concourse, Bronx, NY 10451"],         // comma-part Room (must still work)
       ["#10 PUBLIC SQUARE BELLEVILLE, IL 62220", "#10 PUBLIC SQUARE BELLEVILLE, IL 62220"],               // leading # is a primary number — keep it
       ["200 S Biscayne Blvd, Miami, FL 33131", "200 S Biscayne Blvd, Miami, FL 33131"],                   // FL state code — never strip
-      ["507 VERMONT STREET QUINCY, IL 62301", "507 VERMONT STREET QUINCY, IL 62301"]                      // no unit — untouched
+      ["507 VERMONT STREET QUINCY, IL 62301", "507 VERMONT STREET QUINCY, IL 62301"],                     // no unit — untouched
+      // The three shapes the numeric-only rules missed, measured across the
+      // whole shipped roster corpus (8 of 37 unit-bearing addresses).
+      ["115 WEST COURT STREET ROOM J PARIS, IL 61944", "115 WEST COURT STREET PARIS, IL 61944"],          // letter-only unit
+      ["719 SOUTH BATAVIA AVENUE BUILDING B GENEVA, IL 60134", "719 SOUTH BATAVIA AVENUE GENEVA, IL 60134"], // letter-only Building
+      ["1 SUPERMAN SQUARE, ROOM 2A PO BOX 429 METROPOLIS, IL 62960", "1 SUPERMAN SQUARE METROPOLIS, IL 62960"], // unit + PO box
+      ["2S101 Harter Rd. (P.O. Box 83), Kaneville IL 60144", "2S101 Harter Rd., Kaneville IL 60144"],     // parenthesized PO box
+      ["69 W. Washington St. - 6th Floor", "69 W. Washington St."],                                       // dash left by the removed floor
+      // …and the guards those rules must not trip: a box-only address keeps its
+      // box (it geocodes to nothing and the card honestly drops its pin, rather
+      // than pinning a city centroid), and hyphens inside names survive.
+      ["P.O. Box 429, Metropolis IL 62960", "P.O. Box 429, Metropolis IL 62960"],                         // no street — leave it alone
+      ["100 Main St, Winston-Salem, NC 27101", "100 Main St, Winston-Salem, NC 27101"]                    // hyphenated city — never trimmed
     ];
     const poiResults = await page.evaluate(
       (cases) => cases.map(([input]) => window.ChiExplorer.cleanPoiAddress(input)),
@@ -144,7 +156,65 @@ try {
       .filter((r) => r.got !== r.want);
     check("cleanPoiAddress strips embedded units, keeps primary #/state",
       poiBad.length === 0,
-      poiBad.length ? JSON.stringify(poiBad[0]) : "7/7 cases");
+      poiBad.length ? JSON.stringify(poiBad[0]) : `${poiCases.length}/${poiCases.length} cases`);
+
+    await context.close();
+  }
+
+  // 1b. The search box retries a zero-result query with the unit fragment
+  //     stripped. Stubbed geocoder, so this is deterministic and needs no
+  //     external network: the stub answers ONLY the cleaned form, which is what
+  //     the real geocoder does for these queries. Guards two properties at once
+  //     — the retry happens, and it does NOT fire when there is nothing to
+  //     clean (the raw query must always get first crack, so a search that
+  //     works today can never regress into a second round-trip).
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const seen = [];
+    const CLEANED = "233 S Wacker Dr, Chicago";
+    const page = await booted(context, BASE, async (p) => {
+      await p.route("**/photon.komoot.io/**", (route) => {
+        const u = new URL(route.request().url());
+        // the home-metro search carries bbox; the sibling-metro fallback is the
+        // same host WITHOUT it — never conflate the two when counting requests
+        seen.push({ q: u.searchParams.get("q"), bounded: u.searchParams.has("bbox") });
+        const hit = u.searchParams.get("q") === CLEANED;
+        route.fulfill({
+          status: 200, contentType: "application/json",
+          body: JSON.stringify({
+            type: "FeatureCollection",
+            features: hit ? [{
+              type: "Feature",
+              geometry: { type: "Point", coordinates: [-87.6359, 41.8789] },
+              properties: { housenumber: "233", street: "South Wacker Drive", city: "Chicago", state: "Illinois", postcode: "60606" },
+            }] : [],
+          }),
+        });
+      });
+    });
+
+    async function search(q) {
+      await page.fill("#geocode-input", q);
+      await page.press("#geocode-input", "Enter");
+    }
+
+    await search("233 S Wacker Dr Suite 8400, Chicago");
+    await page
+      .waitForFunction(() => document.querySelectorAll("#geocode-results li").length > 0,
+        null, { timeout: QUERY_TIMEOUT })
+      .catch(() => {});
+    const rows = await page.$$eval("#geocode-results li", (ls) => ls.length);
+    const bounded = seen.filter((c) => c.bounded);
+    check("search box retries a unit-fragment miss with the cleaned address",
+      bounded.length === 2 && bounded[0].q.includes("Suite 8400") && bounded[1].q === CLEANED && rows > 0,
+      `calls=${JSON.stringify(bounded.map((c) => c.q))} rows=${rows}`);
+
+    seen.length = 0;
+    await search("nowhere at all xyzzy");
+    await page.waitForTimeout(2000);
+    check("a query with nothing to clean is not retried",
+      seen.filter((c) => c.bounded).length === 1,
+      `bounded=${seen.filter((c) => c.bounded).length} total=${seen.length}`);
 
     await context.close();
   }

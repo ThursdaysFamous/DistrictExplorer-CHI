@@ -7,6 +7,7 @@
   "additionalProperties": false,
   "required": [
     "this_metro", "metro_name", "metro_bbox", "metro_center", "permalink_gate",
+    "poi_geocode_bbox",
     "socrata_host", "socrata_app_token", "repo_issues", "feedback_subject",
     "metro_explorers",
     "hover_number_keys", "hover_name_keys", "layers", "min_register_layer",
@@ -23,6 +24,7 @@
       "description": "[lat, lng]"
     },
     "permalink_gate": { "$ref": "#/definitions/bbox", "description": "Greater metro area, wider than metro_bbox." },
+    "poi_geocode_bbox": { "$ref": "#/definitions/bbox", "description": "Envelope the POI (office-address) geocoder is bounded to. Must cover EVERY area the fork's cards can name an address in — the reach of its widest layer, not the metro. Chicago's county-clerk card answers statewide, so this is Illinois." },
     "socrata_host": { "type": "string", "format": "uri" },
     "socrata_app_token": {
       "type": "string",

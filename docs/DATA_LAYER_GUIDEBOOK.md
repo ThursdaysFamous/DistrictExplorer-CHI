@@ -225,6 +225,39 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > families).
 
 **Open — Illinois**
+- **Office-pin geocoding: unit fragments and the metro bound — FIXED (2026-07-29).**
+  Cards kept losing their office pin on addresses carrying "Room 230" / "Suite 104", and
+  the question raised was whether to swap geocoders. Measured first, against the app's
+  own corpus (409 addresses in `data/app/`, 37 carrying a unit fragment), issuing the
+  request exactly as `poiGeocodeRequest` builds it:
+
+  | | unit-bearing (37) | control (20) |
+  |---|---|---|
+  | as shipped | 5 (14%) | 16 (80%) |
+  | after | **35 (95%)** | **17 (85%)** |
+
+  Three causes, only one of which was the reported one. (1) `cleanPoiAddress` handled
+  numeric units only, so letter units ("ROOM J", "BUILDING B", "Suite B"), PO boxes —
+  including the parenthesized form Kane's roster uses — and the dash left behind by a
+  removed floor all survived, 8 of the 37. (2) The search box never called the cleaner at
+  all: `runGeocodeSearch` passed the typed string through verbatim, so a pasted
+  letterhead address failed even though the POI path had handled that shape for months.
+  On 12 paired Chicago queries the cleaner moved the box from 7/12 to 9/12 — which is
+  also what the hand-stripped address scores, so it closes the entire gap the fragment
+  opens. (3) The dominant cause was not formatting at all: `poiGeocodeRequest` bounded
+  every lookup to `METRO_BBOX` while the county-clerk card answers **statewide**, so all
+  ~95 downstate clerks failed on perfectly clean addresses. That is now
+  `POI_GEOCODE_BBOX` (worksheet-driven, Illinois for this fork) — the rule is that the
+  bound tracks the fork's **widest layer**, not its metro.
+
+  Recorded because it settles the swap question: 35/37 matches what the US Census
+  geocoder scores on the same corpus *with no cleaning at all*, so the remaining headroom
+  no longer justifies a second provider. Census stays a documented fallback rather than a
+  replacement — it loses 5 addresses Nominatim gets (it needs a complete address, where
+  Nominatim's viewbox rescues a bare "4314 S. Cottage Grove Ave.") and, decisively for a
+  static site, sends **no CORS header**, so it is reachable only via JSONP — remote script
+  execution in an app whose posture is that every external string is sanitized. Chaining
+  the two would reach 55/57 if that ever becomes worth the trust widening.
 - **Statewide expansion: the next 10 counties — RESEARCH PASS 1 (2026-07-28).** The
   ultimate goal is all 102 counties. Today's seven cover **8,577,735 of 12,812,508
   Illinoisans — 66.9%** (2020 PL, via TIGERweb `tigerWMS_Census2020` layer 82, which
