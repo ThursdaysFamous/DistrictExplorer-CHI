@@ -44,6 +44,7 @@ on:
 
 permissions:
   contents: write # create the release on this repo
+  actions: write # re-dispatch the Pages deploy that raced this publish
 
 jobs:
   release:
@@ -133,6 +134,34 @@ jobs:
               --notes-file "$notes" \
               --verify-tag
           fi
+
+      # The other half of the publish-race fix (see THE PUBLISH RACE in
+      # deploy-pages.yml). The bump merge fires a deploy before this release
+      # exists; that deploy waits, but only for a bounded window. Dispatching
+      # one here means the site ships as soon as its input exists no matter how
+      # long the tag/publish steps took — no manual re-run, which is what both
+      # v1.0.17 and v1.0.18 needed. Cheap and idempotent when the racing deploy
+      # already succeeded: main deploys whatever main pins, and the `pages`
+      # concurrency group serializes the two so they cannot interleave.
+      #
+      # Deliberately NOT gated on "did we just create the release" — a re-run
+      # for fan-out only should still heal a deploy that failed earlier. It is
+      # gated on main actually pinning this release, so re-running an OLD
+      # release's workflow cannot publish a deploy main did not ask for.
+      - name: Re-dispatch the Pages deploy if main pins this release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # raw media type, so this reads the file itself instead of decoding
+          # the base64 the contents endpoint otherwise wraps it in
+          pinned="$(gh api "repos/$GITHUB_REPOSITORY/contents/engine.lock.json?ref=main" \
+            -H 'Accept: application/vnd.github.raw' | jq -r .engine_version)"
+          if [ "$pinned" != "$GITHUB_REF_NAME" ]; then
+            echo "main pins $pinned, not $GITHUB_REF_NAME — no deploy dispatched"
+            exit 0
+          fi
+          gh workflow run deploy-pages.yml --ref main
+          echo "dispatched deploy-pages.yml on main (pins $pinned)"
 
       - name: Fan out repository_dispatch to sibling forks
         env:
