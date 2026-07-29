@@ -518,6 +518,24 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Seven-county metro coverage outline, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash."
+      },
+      {
+        "file": "winnebago-judicial-subcircuits.json",
+        "min_features": 2,
+        "max_features": 2,
+        "note": "17th Circuit (Winnebago + Boone) subcircuits, PA 102-0693 enacted map."
+      },
+      {
+        "file": "madison-judicial-subcircuits.json",
+        "min_features": 4,
+        "max_features": 4,
+        "note": "3rd Circuit (Madison + Bond) subcircuits, PA 102-0693 enacted map."
+      },
+      {
+        "file": "sangamon-judicial-subcircuits.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "7th Circuit (Sangamon + Greene/Jersey/Macoupin/Morgan/Scott) subcircuits, PA 102-0693 enacted map."
       }
     ],
     "rosters": [
@@ -597,7 +615,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v25",
+    "cache_name": "district-explorer-shell-v26",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

@@ -249,6 +249,19 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   anchors and the single-ring assumption in the guide's §4.5 note both need revisiting at
   that point.
 
+  **SHIPPED 2026-07-28 — the three unshipped judicial subcircuits.** Winnebago (17th),
+  Madison (3rd) and Sangamon (7th) are live as `judicial-subcircuit` dispatch entries,
+  the first counties outside the seven-county metro. The layer now answers for **ten**
+  counties beyond the metro's seven, since each circuit spans more than its headline
+  county. Coverage for these three is the **subcircuit geometry itself** rather than a
+  county outline — the one deviation from the metro entries' pattern, taken because a
+  county-outline test would have needed ten new files to describe where three layers
+  answer, and the subcircuits tile their circuit exactly so containment in them IS the
+  coverage. Verified against real points in both the headline and secondary counties
+  (Rockford + Belvidere/Boone, Edwardsville + Greenville/Bond, Springfield +
+  Jacksonville/Morgan), with Peoria correctly matching none and no point landing in two
+  circuits. Original finding below.
+
   **Free win, already in the repo: three unshipped judicial subcircuits.**
   `data/source/raw/Enacted_Judicial_Sub_Circiuts.zip` (the PA 102-0693 enacted map, the
   same archive Kane and McHenry were built from) contains **nine** circuits; the app

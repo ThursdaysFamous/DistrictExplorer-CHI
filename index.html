@@ -6813,6 +6813,41 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/kane-judicial-subcircuits.json", {}, 2);
   });
 
+  /* ---------- The first three counties outside the seven-county metro ----------
+   * Winnebago (17th Circuit), Madison (3rd) and Sangamon (7th) join the shipped
+   * `judicial-subcircuit` concept as dispatch entries — the county-expansion
+   * invariant (docs/EXPANSION_GUIDE.md Part 2): a new county adds entries, never
+   * a new layer. They needed no new source: the PA 102-0693 archive already in
+   * data/source/raw/ carries NINE circuits and the app shipped six.
+   *
+   * Coverage is the SUBCIRCUIT GEOMETRY ITSELF, not a county outline — the one
+   * deviation from the metro counties' pattern, and deliberate. Each of these
+   * circuits spans more than its headline county (17th = Winnebago + Boone,
+   * 3rd = Madison + Bond, 7th = Sangamon + Greene/Jersey/Macoupin/Morgan/Scott),
+   * so a county-outline test would need TEN new files to describe where three
+   * layers answer. The subcircuits tile their circuit exactly, so containment in
+   * them IS the coverage — one small same-origin file per circuit instead of
+   * two, and exact rather than approximated. The metro counties keep their
+   * outline tests because those files already exist for their other layers.
+   * ---------- */
+  function circuitGeometryCoverage(loader) {
+    return function (point) {
+      return loader().then(function (geojson) {
+        return !!findFeatureContaining(geojson, point);
+      });
+    };
+  }
+
+  var loadWinnebagoJudicial = makeCached(function () {
+    return fetchJSONWithRetry("data/app/winnebago-judicial-subcircuits.json", {}, 2);
+  });
+  var loadMadisonJudicial = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-judicial-subcircuits.json", {}, 2);
+  });
+  var loadSangamonJudicial = makeCached(function () {
+    return fetchJSONWithRetry("data/app/sangamon-judicial-subcircuits.json", {}, 2);
+  });
+
   // Shared card rows for Kane's tax-district entries (fire/park/library): the
   // county GIS names a responsible officer (chief or board president) plus the
   // district office's contact — surfaced per the card-order convention
@@ -10619,6 +10654,49 @@ function initChiExplorer() {
         fields: [
           { name: "subcircuit", label: "Subcircuit", keys: ["district"], primary: true },
           { label: "Court", value: "22nd Judicial Circuit (McHenry County)" }
+        ],
+        primaryLink: function () {
+          return { label: "Illinois Courts — Circuit Courts (official)", url: "https://www.illinoiscourts.gov/courts/circuit-court" };
+        }
+      }),
+      // The three circuits outside the metro. Court labels name every county the
+      // circuit covers, because unlike the metro entries these are not
+      // one-county circuits and a resident of Bond or Morgan should see their
+      // own county on the card, not just the one the entry is keyed by.
+      polygonCountyEntry({
+        key: "winnebago",
+        coverage: circuitGeometryCoverage(loadWinnebagoJudicial),
+        loader: loadWinnebagoJudicial,
+        pill: true,
+        fields: [
+          { name: "subcircuit", label: "Subcircuit", keys: ["district"], primary: true },
+          { label: "Court", value: "17th Judicial Circuit (Winnebago & Boone Counties)" }
+        ],
+        primaryLink: function () {
+          return { label: "17th Judicial Circuit Court (official)", url: "https://www.illinois17th.com/" };
+        }
+      }),
+      polygonCountyEntry({
+        key: "madison",
+        coverage: circuitGeometryCoverage(loadMadisonJudicial),
+        loader: loadMadisonJudicial,
+        pill: true,
+        fields: [
+          { name: "subcircuit", label: "Subcircuit", keys: ["district"], primary: true },
+          { label: "Court", value: "3rd Judicial Circuit (Madison & Bond Counties)" }
+        ],
+        primaryLink: function () {
+          return { label: "Illinois Courts — Circuit Courts (official)", url: "https://www.illinoiscourts.gov/courts/circuit-court" };
+        }
+      }),
+      polygonCountyEntry({
+        key: "sangamon",
+        coverage: circuitGeometryCoverage(loadSangamonJudicial),
+        loader: loadSangamonJudicial,
+        pill: true,
+        fields: [
+          { name: "subcircuit", label: "Subcircuit", keys: ["district"], primary: true },
+          { label: "Court", value: "7th Judicial Circuit (Sangamon, Greene, Jersey, Macoupin, Morgan & Scott Counties)" }
         ],
         primaryLink: function () {
           return { label: "Illinois Courts — Circuit Courts (official)", url: "https://www.illinoiscourts.gov/courts/circuit-court" };
