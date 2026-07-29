@@ -212,17 +212,77 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > | DuPage municipal phones | DMMC prints no area codes and states no default | no — needs DMMC |
 > | McHenry / Kendall / Joliet | hard WAF denies, data preserved, standing issues | no — rule-4 terminal |
 > | Will's `party` field | deliberate non-ship (nonpartisan offices, local slate names) | no — decision, not gap |
+> | **Statewide expansion (next 10 counties)** | nothing — research pass 1 done, pass 2 scoped | **yes — the live candidate** |
 >
-> **The Illinois *concept* frontier is closed.** Of the 40 concepts in the matrix above,
-> Chicago ships 35; the other five are correctly `n/a`/NO HONEST ANALOG (NYC-specific
-> constructs, a countywide State's Attorney, and appointed transit boards). There are no
-> unfilled cells and no researched-but-unbuilt Illinois candidates recorded. Growing
-> Illinois further means *proposing new concepts* under `docs/EXPANSION_GUIDE.md` Part 5
-> — community college districts, Regional Offices of Education, sanitary/drainage
-> districts and township road districts are the unresearched families — not working this
-> list.
+> **The Illinois *concept* frontier is closed — the *geographic* one is not.** Of the 40
+> concepts in the matrix above, Chicago ships 35; the other five are correctly
+> `n/a`/NO HONEST ANALOG (NYC-specific constructs, a countywide State's Attorney, and
+> appointed transit boards). There are no unfilled cells. So growing Illinois means
+> either *more counties for the concepts already built* — see the statewide-expansion
+> entry below, which is the live candidate list — or *proposing new concepts* under
+> `docs/EXPANSION_GUIDE.md` Part 5 (community college districts, Regional Offices of
+> Education, sanitary/drainage districts and township road districts are the unresearched
+> families).
 
 **Open — Illinois**
+- **Statewide expansion: the next 10 counties — RESEARCH PASS 1 (2026-07-28).** The
+  ultimate goal is all 102 counties. Today's seven cover **8,577,735 of 12,812,508
+  Illinoisans — 66.9%** (2020 PL, via TIGERweb `tigerWMS_Census2020` layer 82, which
+  carries `POP100` keylessly; the Census API needs a key). The next ten by population
+  take that to **82.2%**:
+
+  | # | County | 2020 pop | | # | County | 2020 pop |
+  |---|---|---|---|---|---|---|
+  | 1 | Winnebago | 285,350 | | 6 | Peoria | 181,830 |
+  | 2 | Madison | 265,859 | | 7 | McLean | 170,954 |
+  | 3 | St. Clair | 257,400 | | 8 | Rock Island | 144,672 |
+  | 4 | Champaign | 205,865 | | 9 | Tazewell | 131,343 |
+  | 5 | Sangamon | 196,343 | | 10 | LaSalle | 109,658 **adjacent** |
+
+  **Contiguity is not on offer.** Computed from TIGER geometry (≥20 shared vertices with
+  the current footprint), the border ring is exactly **Boone, DeKalb, Grundy, Kankakee,
+  LaSalle** — so only LaSalle (#10) and Kankakee (#11, 107,502) are both large and
+  contiguous. Every other candidate is a detached island, which the **scope mask** must
+  absorb: `metro-outline.json` is currently one dissolved ring, and a detached county
+  makes it a MultiPolygon. `build_metro_outline.py` dissolves by edge-cancellation and
+  chains each closed ring independently, so it already handles that — but its `--check`
+  anchors and the single-ring assumption in the guide's §4.5 note both need revisiting at
+  that point.
+
+  **Free win, already in the repo: three unshipped judicial subcircuits.**
+  `data/source/raw/Enacted_Judicial_Sub_Circiuts.zip` (the PA 102-0693 enacted map, the
+  same archive Kane and McHenry were built from) contains **nine** circuits; the app
+  ships **six**. Parsing the raw `.shp` polygons and testing county centroids against
+  them identifies the three that are sitting unused:
+
+  | Circuit | Subcircuits | Counties |
+  |---|---|---|
+  | **17th** | 2 | **Winnebago**, Boone |
+  | **3rd** | 4 | **Madison**, Bond |
+  | **7th** | 7 | **Sangamon**, Greene, Jersey, Macoupin, Morgan, Scott |
+
+  That is candidates **#1, #2 and #5** each getting `judicial-subcircuit` with no new
+  source, no new layer, and the conversion path Kane/McHenry already proved — the
+  cheapest real expansion available. It is a `registerCountyLayer` dispatch entry per
+  county (Part 2's invariant), plus the `data/*.geojson` → `build_embedded_boundaries.py`
+  step and a `polygonCountyEntry`.
+
+  **NOT researched — the bulk of the work.** This pass established the ranking and
+  settled one concept. For all ten counties the other five dispatchable concepts
+  (**county-board** districts + member roster, **county-precinct**, **fire-district**,
+  **park-district**, **library-district**) and the **municipal-officials** clerk
+  directory are unresearched — roughly 60 source investigations, and rule 4 requires each
+  county's officeholder sourcing to be settled in the same change that ships its
+  boundary.
+
+  **Discovery-method notes, so pass 2 does not repeat pass 1's dead ends:** guessing
+  hostnames (`gis.<county>.org/arcgis/rest/services`, `maps.…`) found nothing across five
+  counties — modern county GIS is ArcGIS Online-hosted, not self-hosted. Both
+  `arcgis.com/sharing/rest/search` and `hub.arcgis.com/api/v3/datasets` return **0** for
+  multi-word natural-language queries; only field-qualified forms (`title:Winnebago`,
+  `tags:…`) return anything, so per-county discovery needs that syntax or manual portal
+  identification. Suggested order for pass 2: Winnebago, Madison, Sangamon first, since
+  those three would already be partly built.
 - **Aurora per-seat contact — RECORDED GAP (2026-07-28), no reachable source.** Aurora is
   the metro's second-largest city and its 12 council members (10 wards + 2 at-large) all
   render with correct districts, but with **no phone or e-mail**. Aurora spans four
