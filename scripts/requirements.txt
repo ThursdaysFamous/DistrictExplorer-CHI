@@ -20,6 +20,17 @@ playwright==1.61.0
 # extraction glues the right-hand column onto the left.
 pypdf==6.14.2
 
+# Word-POSITION extraction for LaSalle's municipality-officials directory.
+# pypdf (above) flattens a page to text, which is enough for the documents whose
+# columns survive line order. LaSalle's does not: its six columns interleave with
+# a left-hand hall-address block that has its own line rhythm, so a flattened
+# line mixes an official's title with a fragment of the village's address, and
+# the y-gap distribution has no empty band a row-splitter could use. That parser
+# works from each word's x/y instead, which pdfplumber exposes directly
+# (extract_words) and pypdf does not. See
+# scripts/lasalle_municipal_officials_scraper.py for the geometry it relies on.
+pdfplumber==0.11.10
+
 # Conversion 2 (docs/MECHANIZATION_PLAYBOOK.md): worksheet validation in
 # scripts/generate_metro_files.py. The generator is otherwise stdlib-only;
 # validate_index.py deliberately stays stdlib and does NOT import this.

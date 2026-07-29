@@ -53,9 +53,10 @@ jobs:
 
       - name: Install scraper dependencies
         # Version-pinned via scripts/requirements.txt (constraints). pypdf reads
-        # the three counties whose source is a published PDF; beautifulsoup4
-        # parses McHenry's yearbook page.
-        run: pip install -c scripts/requirements.txt requests beautifulsoup4 pypdf playwright
+        # the three counties whose source is a published PDF; pdfplumber reads
+        # LaSalle's, which needs word POSITIONS rather than flattened lines (see
+        # its scraper); beautifulsoup4 parses McHenry's yearbook page.
+        run: pip install -c scripts/requirements.txt requests beautifulsoup4 pypdf pdfplumber playwright
 
       - name: Install Chromium for the edge-blocked sources
         # Two different blocks, both needing a real browser.
@@ -107,6 +108,17 @@ jobs:
         id: scrape_lake
         continue-on-error: true
         run: python3 scripts/lake_municipal_officials_scraper.py --out /tmp/lake_municipal_officials.json
+
+      # LaSalle: the third FULL-governing-body source, and the first county
+      # outside the metro. Its clerk publishes one PDF carrying every
+      # municipality's whole board with ward numbers, so this county needs no
+      # per-city exception. Preservable, not required: unlike Cook and Will,
+      # nothing already shipped degrades if it is missing (see PRESERVABLE in
+      # the builder).
+      - name: Scrape the LaSalle County Clerk municipality officials PDF
+        id: scrape_lasalle
+        continue-on-error: true
+        run: python3 scripts/lasalle_municipal_officials_scraper.py --out /tmp/lasalle_municipal_officials.json
 
       # The bounded per-city exception (docs/EXPANSION_GUIDE.md Part 2.4): the
       # Will ward cities' own sites carry per-seat contact the Clerk's directory
@@ -213,6 +225,7 @@ jobs:
           add "${{ steps.scrape_mchenry.outcome }}"     mchenry     county /tmp/mchenry_municipal_officials.json
           add "${{ steps.scrape_kendall.outcome }}"     kendall     county /tmp/kendall_municipal_officials.json
           add "${{ steps.scrape_lake.outcome }}"        lake        county /tmp/lake_municipal_officials.json
+          add "${{ steps.scrape_lasalle.outcome }}"     lasalle     county /tmp/lasalle_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json

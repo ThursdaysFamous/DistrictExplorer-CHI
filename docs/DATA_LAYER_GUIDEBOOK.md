@@ -274,15 +274,48 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   isn't inside any district in this layer" there while resolving at Momence and Herscher.
   Verified in a browser against the services' real captured payloads.
 
-  **Not yet built — one item, and it is the highest-value one in the fleet:** the LaSalle
-  municipal-officials pipeline. Its clerk PDF carries Cook/Will-depth governing bodies —
-  president/mayor, clerk, treasurer and every trustee/alderperson **with ward numbers** —
-  from a single county document. It needs the repo's first PDF parser (a new
-  `requirements.txt` pin), and the extracted text has interleaved-column artifacts that a
-  naive `extract_text()` mangles, so it wants word-position clustering rather than line
-  splitting. Kankakee's municipal officials stay at the rule-4 floor: no county-published
-  roster exists, its GIS `Municipalities` layer declares contact columns and populates
-  none of them (0/21), and the clerk site publishes no directory.
+  **LaSalle municipal officials — SHIPPED (2026-07-29), and LaSalle is the fleet's third
+  full-governing-body county.** The clerk's Municipality Officials PDF yields **26
+  municipalities / 206 officials** — head of government, clerk, treasurer and every
+  trustee/alderperson, ward-numbered, with a phone on 187 of them. The shipped roster went
+  **279 → 307 municipalities** and **185** of those are now full governing bodies. Millington,
+  which Kendall also lists, moved to LaSalle on depth, exactly as `COUNTY_PRECEDENCE`
+  intends.
+
+  *The parser is the interesting part, and the obvious approaches are both wrong.* This is
+  not the repo's first PDF source — `pypdf` already reads DuPage's, Kane's and Kendall's —
+  but it is the first that needs word POSITIONS, so it adds a `pdfplumber` pin. A
+  flattened `extract_text()` interleaves the six columns with the left-hand hall-address
+  block, gluing an official's title onto a fragment of the village's address. Fixing that
+  with a row grid then splits each record from its own phone, which renders ~2 pt above the
+  name. And single-linkage clustering over all words **merges adjacent records**: the
+  document's y-gap histogram runs continuously from 0 to 15 pt with *no empty band*,
+  because the hall-address block and the phone column each keep their own line rhythm
+  against the officials' 12.6 pt one. What works is anchoring records on the title+name
+  columns only — those sit ~1 pt apart and keep a clean rhythm — then attaching the nearest
+  unclaimed address/city/phone within 3.5 pt. The interleaved columns are never anchors, so
+  nothing can chain through them.
+
+  Three further traps, each measured: the municipality header does **not** reliably share a
+  row with the official it heads (after a page break it lands one row *below* its own
+  village president), so attribution pairs the header sequence with the head-of-government
+  sequence in document order — 26 and 26, and the scraper refuses to emit if that equality
+  breaks rather than mis-filing a block's first official. The cities print each ward twice
+  ("Alderperson ward 1" and "City Alderperson ward 1" are the ward's *two* aldermen, not
+  two offices). And some cells carry two overlapping text layers, which extraction
+  interleaves character by character — recoverable for a header (`TTIITTLLEE` → `TITLE`)
+  but *not* for a phone, where the digits could de-interleave two ways, so those are
+  dropped: a missing phone is a gap, a wrong phone sends someone to a stranger.
+
+  Cross-checked against a city's own published roster (the Aurora check pattern): Mendota's
+  page lists mayor, clerk and all eight aldermen with wards, and the parse matches **all
+  eleven** records including every ward assignment. One noted discrepancy — the county
+  lists a Treasurer the city's elected-officials page omits, which in Illinois usually
+  means the office is appointed there; the county's label is what ships.
+
+  **Kankakee's municipal officials stay at the rule-4 floor:** no county-published roster
+  exists, its GIS `Municipalities` layer declares contact columns and populates none of
+  them (0/21), and the clerk site publishes no directory.
 - **Office-pin geocoding: unit fragments and the metro bound — FIXED (2026-07-29).**
   Cards kept losing their office pin on addresses carrying "Room 230" / "Suite 104", and
   the question raised was whether to swap geocoders. Measured first, against the app's
