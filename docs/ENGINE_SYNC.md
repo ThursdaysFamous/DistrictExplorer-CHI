@@ -111,6 +111,25 @@ as reviewed PRs, then ship in the next release.
   fences, failing hard with nothing written on any mismatch. Both ship as
   release assets — the release is the shared scripts' distribution channel,
   and bump PRs refresh them automatically.
+
+  > **A shared-script change must be inert in a fork that hasn't opted in.**
+  > `generate_metro_files.py` and `metro-worksheet.schema.json` ride the same
+  > channel, and the consumer `engine-bump.yml` **applies the release and copies
+  > the scripts but never runs the generator** — it only validates afterwards.
+  > So a generator change that emits *any* new GENERATED-region content fails
+  > every sibling's drift gate, and a schema change that adds a `required` key
+  > fails their worksheet validation. Neither is caught on this side: Chicago's
+  > worksheet has whatever the change needs, so its own gates stay green, and
+  > the release job's self-checks exercise the *bundle*, which never reads a
+  > worksheet. Both failure modes were shipped for real in the same week
+  > (`engine-v1.0.16` made a key required; `v1.0.17`'s default-and-always-emit
+  > fix then tripped the drift gate instead; `v1.0.18` made emission
+  > conditional). The working rule is stronger than "default to the old value":
+  > **a fork that has not opted in must see a byte-identical file.** Gate a new
+  > emitted line behind `if "<key>" in w:` and keep the key optional. The
+  > eventual structural fix is for `engine-bump.yml` to regenerate after
+  > applying — that lives in the sibling repos, so it is a coordinated change,
+  > not a Chicago one.
 - `scripts/check_engine_parity.py` — extract, lint, and compare ENGINE
   blocks. Lint mode (`… index.html`) runs in every fork's
   `validate_index.py`-adjacent workflow. **Demoted from drift detector to
