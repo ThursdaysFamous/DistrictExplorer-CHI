@@ -198,6 +198,48 @@ public/charter/private) and whether the feed carries a grade range.
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
 matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnote.
 
+> **Read this first — what is actually open.** Most of what follows is a *completion
+> log*, not a queue: an entry titled "… — SHIPPED/FIXED/RESOLVED (date)" is a record of
+> work already done, kept for its rationale. Grepping this section for open work returns
+> mostly noise, which is why "what's next?" is hard to answer from it. As of
+> **2026-07-28** the genuinely open items are exactly these, and every one is blocked on
+> a publisher rather than on build effort:
+>
+> | Open item | Blocker | Actionable? |
+> |---|---|---|
+> | Lake County municipal officeholders | no Lake body publishes names anywhere county-side | no — needs a new publisher |
+> | Aurora per-seat contact | own site hard-403s; GIS has no officeholder fields; Will has names only; Archive is 2015–17 | no — see below |
+> | DuPage municipal phones | DMMC prints no area codes and states no default | no — needs DMMC |
+> | McHenry / Kendall / Joliet | hard WAF denies, data preserved, standing issues | no — rule-4 terminal |
+> | Will's `party` field | deliberate non-ship (nonpartisan offices, local slate names) | no — decision, not gap |
+>
+> **The Illinois *concept* frontier is closed.** Of the 40 concepts in the matrix above,
+> Chicago ships 35; the other five are correctly `n/a`/NO HONEST ANALOG (NYC-specific
+> constructs, a countywide State's Attorney, and appointed transit boards). There are no
+> unfilled cells and no researched-but-unbuilt Illinois candidates recorded. Growing
+> Illinois further means *proposing new concepts* under `docs/EXPANSION_GUIDE.md` Part 5
+> — community college districts, Regional Offices of Education, sanitary/drainage
+> districts and township road districts are the unresearched families — not working this
+> list.
+
+**Open — Illinois**
+- **Aurora per-seat contact — RECORDED GAP (2026-07-28), no reachable source.** Aurora is
+  the metro's second-largest city and its 12 council members (10 wards + 2 at-large) all
+  render with correct districts, but with **no phone or e-mail**. Aurora spans four
+  counties and resolves from **Will** under the builder's depth precedence — Will
+  publishes full governing bodies where Kane, which holds most of Aurora, publishes heads
+  only — and Will's flipbook carries names without member contact. All four routes to
+  fill it were measured and are closed: `aurora-il.org` returns **403 to every client**
+  (Microsoft-IIS, 306-byte body — a hard deny, not a challenge); Aurora's own ward
+  FeatureServer is open but carries only `WARD`/`URL`/acreage, no officeholder fields;
+  the Will directory has names only; and the Internet Archive's newest useful captures of
+  the city site are **2015–2017**. The card is therefore already at the honesty floor —
+  name, ward, and the per-ward page link the GIS supplies (`dxUrl` → "Ward website").
+  Upgrading needs Aurora to unblock, or a hand-verified curated file on the
+  McHenry/Kendall precedent.
+
+**Completion log (kept for rationale — not a queue)**
+
 **Fleet-wide**
 - **Card-order conformance audit — RUN 2026-07-20** (sweep of all 79 cards against
   procedure step 2a and against each layer's source). Result: 73 of 79 conform or
