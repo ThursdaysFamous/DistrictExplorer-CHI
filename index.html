@@ -2479,8 +2479,8 @@ function initChiExplorer() {
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
   // bound tighter than the data silently drops those pins no matter how
-  // clean the address is. Chicago's county-clerk card answers statewide, so
-  // this is Illinois.
+  // clean the address is.
+  // Chicago's county-clerk card answers statewide, so this is Illinois.
   var POI_GEOCODE_BBOX = { minLng: -91.6, minLat: 36.9, maxLng: -87.0, maxLat: 42.6 };
   var SOCRATA_HOST = "https://data.cityofchicago.org";
   // Socrata app token: some metros' portals throttle anonymous requests. It is

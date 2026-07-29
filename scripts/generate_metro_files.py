@@ -112,9 +112,20 @@ def render_metro_config(w):
     a("  // reach of the fork's WIDEST layer, not the metro: a card that can name an")
     a("  // address outside METRO_BBOX needs that address to be geocodable, and a")
     a("  // bound tighter than the data silently drops those pins no matter how")
-    a("  // clean the address is. Chicago's county-clerk card answers statewide, so")
-    a("  // this is Illinois.")
-    a("  var POI_GEOCODE_BBOX = %s;" % bbox_js(w["poi_geocode_bbox"], ["minLng", "minLat", "maxLng", "maxLat"]))
+    a("  // clean the address is.")
+    # Optional on purpose: a fork whose layers are all city-scoped wants exactly
+    # metro_bbox, which is what it had before this key existed. Defaulting here
+    # rather than requiring the key keeps every existing worksheet valid — making
+    # it required broke the sibling bump PRs for engine-v1.0.16, which is how we
+    # learned that a new REQUIRED worksheet key is a breaking change for forks.
+    if "poi_geocode_bbox" in w:
+        a("  // Chicago's county-clerk card answers statewide, so this is Illinois.")
+        poi_bbox = w["poi_geocode_bbox"]
+    else:
+        a("  // This fork declares no wider envelope, so it is METRO_BBOX — set")
+        a("  // poi_geocode_bbox in the worksheet if a layer ever reaches past it.")
+        poi_bbox = w["metro_bbox"]
+    a("  var POI_GEOCODE_BBOX = %s;" % bbox_js(poi_bbox, ["minLng", "minLat", "maxLng", "maxLat"]))
     a("  var SOCRATA_HOST = %s;" % js_str(w["socrata_host"]))
     a("  // Socrata app token: some metros' portals throttle anonymous requests. It is")
     a("  // a throttling identifier, not a secret — public exposure is Socrata's")
