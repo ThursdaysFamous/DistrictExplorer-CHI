@@ -35,6 +35,11 @@ Checks (all must pass; exits non-zero on the first failure):
   7. sw.js exactly-one-list invariant: every data/app/*.json on disk is
      cached in exactly one of the service worker's GEOMETRY_URLS / ROSTER_URLS,
      so no data file is ever un-cached or double-listed.
+  8. Every county with a per-county dispatch entry is inside the scope mask's
+     county list, DERIVED from index.html rather than from a hand-kept list.
+     The wash claims "beyond here only the statewide layers answer"; this is
+     what stops that claim going stale, as it did for LaSalle, Kankakee, Boone
+     and Grundy across two research passes with no gate noticing.
 
 Usage:
     python3 scripts/validate_index.py [path/to/index.html]
@@ -68,6 +73,7 @@ CAPABILITIES = [
     "data-file-shapes",         # 4: every data/app file exists with sane counts
     "sw-exactly-one-list",      # 5: each data file cached in exactly one sw list
     "negative-point-ground-truth",  # 4b: worksheet negative point misses every anchor geometry (born in NYC; back-ported per the ENGINE_SYNC DoD)
+    "county-coverage-ring",     # 8: dispatched counties are all inside the scope mask
 ]
 
 # The constants below are GENERATED from metro-worksheet.json (Conversion 2 —
@@ -403,11 +409,15 @@ def main():
 
     check_sw_lists(repo_root, app_dir)
 
+    # 5. every county the app dispatches a layer on is inside the coverage ring
+    n_counties = check_county_coverage_list(html, repo_root)
+
     print(
         "validate_index: OK — inline script parses, %d registerLayer( calls, "
         "LAYER_AREA_RANK + LAYER_SIDEBAR_RANK cover all %d ids, no inline datasets, %d well-formed "
         "METRO_EXPLORERS entries, all data/app files present and cached in "
-        "exactly one sw.js list" % (n, len(EXPECT_LAYER_IDS), n_metros)
+        "exactly one sw.js list, %d dispatched counties all inside the coverage ring"
+        % (n, len(EXPECT_LAYER_IDS), n_metros, n_counties)
     )
 
 
@@ -485,6 +495,99 @@ def check_sw_lists(repo_root, app_dir):
     uncached = sorted(on_disk - set(listed))
     if uncached:
         fail("data/app file(s) not cached in any sw.js list: %s" % ", ".join(uncached))
+
+
+# Layers that dispatch by MUNICIPALITY rather than by county. Their entry keys
+# are place names, so they are exempt from the county check below. Listed, not
+# inferred: a new municipality-keyed concept should have to say so here rather
+# than quietly opting itself out of the guard.
+MUNICIPALITY_KEYED_LAYERS = {"ward"}
+
+
+def _literals_from(path, names):
+    """Read module-level literals without importing the module.
+
+    build_metro_outline.py imports `requests`, which is not installed in the
+    smoke-test workflow where this gate runs — and executing a builder to read
+    two constants would be the wrong trade anyway. ast parses, never runs.
+    """
+    import ast
+    with open(path, encoding="utf-8") as f:
+        tree = ast.parse(f.read(), path)
+    found = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id in names:
+                try:
+                    found[target.id] = ast.literal_eval(node.value)
+                except ValueError:
+                    pass
+    missing = sorted(set(names) - set(found))
+    if missing:
+        fail("%s no longer defines %s — the county-list check cannot run"
+             % (os.path.basename(path), ", ".join(missing)))
+    return found
+
+
+def check_county_coverage_list(html, repo_root):
+    """Every county the app dispatches a layer on must be inside the scope mask.
+
+    THE BUG THIS EXISTS FOR: the mask's county list was previously guarded only
+    by the outline builder's OUTSIDE anchors, which catch a county only if
+    somebody had already thought to name it. LaSalle, Kankakee, Boone and Grundy
+    therefore shipped layers and stayed greyed out for two research passes —
+    the wash telling residents "beyond here only the statewide layers answer"
+    while five of their layers answered. Nothing failed, because nothing was
+    comparing the list against what the app actually registers.
+
+    So this derives the answer instead of trusting a list: it reads the county
+    keys out of index.html's own dispatch tables and requires each one to be in
+    METRO_COUNTY_FIPS. An unrecognised key fails too — a new county that nobody
+    added to DISPATCH_COUNTY_FIPS is exactly the case that used to slip through.
+    """
+    outline_py = os.path.join(repo_root, "scripts", "build_metro_outline.py")
+    if not os.path.exists(outline_py):
+        fail("scripts/build_metro_outline.py not found — the county-list check "
+             "cannot run; it is the source of the coverage ring")
+    consts = _literals_from(outline_py, ("DISPATCH_COUNTY_FIPS", "METRO_COUNTY_FIPS"))
+    slug_fips = consts["DISPATCH_COUNTY_FIPS"]
+    in_ring = set(consts["METRO_COUNTY_FIPS"])
+
+    # Split the script at every top-level register*() call so each dispatch
+    # table is read within its own call and cannot absorb a neighbour's keys.
+    chunks = re.split(r"\n  (register[A-Za-z]*)\(\{", html)
+    unknown, outside = [], []
+    seen_counties = set()
+    for i in range(1, len(chunks) - 1, 2):
+        if chunks[i] != "registerCountyLayer":
+            continue
+        body = chunks[i + 1]
+        layer_id = re.search(r'id:\s*"([a-z-]+)"', body)
+        if not layer_id or layer_id.group(1) in MUNICIPALITY_KEYED_LAYERS:
+            continue
+        for key in re.findall(r'key:\s*"([a-z-]+)"', body):
+            if key not in slug_fips:
+                unknown.append("%s: %s" % (layer_id.group(1), key))
+                continue
+            seen_counties.add(key)
+            if slug_fips[key] not in in_ring:
+                outside.append("%s (%s)" % (key, layer_id.group(1)))
+
+    if unknown:
+        fail("dispatch entr%s for a county with no DISPATCH_COUNTY_FIPS entry: %s. "
+             "Add the county (slug -> Census FIPS) to scripts/build_metro_outline.py, "
+             "or list its layer in MUNICIPALITY_KEYED_LAYERS if it dispatches by "
+             "place rather than county."
+             % ("ies" if len(unknown) > 1 else "y", ", ".join(sorted(set(unknown)))))
+    if outside:
+        fail("county/counties serve layers but are NOT in METRO_COUNTY_FIPS, so the "
+             "out-of-scope wash greys them out while their cards answer: %s. Add "
+             "them to scripts/build_metro_outline.py and rebuild "
+             "data/app/metro-outline.json."
+             % ", ".join(sorted(set(outside))))
+    return len(seen_counties)
 
 
 if __name__ == "__main__":

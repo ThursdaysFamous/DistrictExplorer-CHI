@@ -32,8 +32,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import requests  # noqa: E402
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
-    HEADERS, REQUEST_TIMEOUT, SIMPLIFY_TOLERANCE_M, STATE_FIPS, TIGERWEB,
-    point_in_rings, rings_of, simplify,
+    DISPATCH_COUNTY_FIPS, HEADERS, REQUEST_TIMEOUT, SIMPLIFY_TOLERANCE_M,
+    STATE_FIPS, TIGERWEB, point_in_rings, rings_of, simplify,
 )
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -251,6 +251,19 @@ COUNTIES = {
         ],
     },
 }
+
+
+# The two tables must agree about what a county's FIPS is. build_metro_outline's
+# DISPATCH_COUNTY_FIPS is authoritative (validate_index.py checks the app
+# against it); this catches a typo here before it produces a correct-LOOKING
+# outline for the wrong county — the class of error the DeKalb-Georgia near-miss
+# would have been.
+_CONFLICTS = sorted(
+    "%s: this table says %s, DISPATCH_COUNTY_FIPS says %s"
+    % (slug, spec["fips"], DISPATCH_COUNTY_FIPS[slug])
+    for slug, spec in COUNTIES.items()
+    if slug in DISPATCH_COUNTY_FIPS and spec["fips"] != DISPATCH_COUNTY_FIPS[slug])
+assert not _CONFLICTS, "county FIPS disagree — " + "; ".join(_CONFLICTS)
 
 
 def fetch_county(fips):

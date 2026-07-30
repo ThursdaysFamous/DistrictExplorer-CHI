@@ -99,6 +99,35 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
 
+# Every county slug the app can dispatch a layer on -> its Census FIPS. This is
+# the lookup that makes the county list above CHECKABLE rather than merely
+# curated: scripts/validate_index.py reads both, scans index.html for the
+# per-county dispatch entries it actually registers, and fails the merge gate if
+# a county gained layers without being added to METRO_COUNTY_FIPS.
+#
+# That check exists because the alternative did not work. Until 2026-07-30 the
+# only guard was the OUTSIDE anchor list, which catches a county only if someone
+# had already thought to name it — so LaSalle, Kankakee, Boone and Grundy shipped
+# layers and stayed greyed out for two research passes with nothing failing.
+# Anchors verify the geometry; this verifies the LIST, which is a different job.
+#
+# METRO_COUNTY_FIPS may be a strict superset of these values: it also carries
+# counties served only through a circuit-keyed layer (the judicial-subcircuit
+# secondary counties), which have no dispatch entry of their own.
+DISPATCH_COUNTY_FIPS = {
+    "cook": "031", "dupage": "043", "will": "197", "lake": "097",
+    "kane": "089", "mchenry": "111", "kendall": "093",
+    "lasalle": "099", "kankakee": "091", "boone": "007", "grundy": "063",
+    "winnebago": "201", "livingston": "105", "mclean": "113", "logan": "107",
+    "sangamon": "167", "macoupin": "117", "madison": "119", "st-clair": "163",
+}
+
+_UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
+assert not _UNLISTED, (
+    "DISPATCH_COUNTY_FIPS names county FIPS %s that METRO_COUNTY_FIPS omits — a "
+    "county cannot be served and outside the coverage ring at the same time"
+    % _UNLISTED)
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "metro-outline.json")
 WORKSHEET = os.path.join(REPO_ROOT, "metro-worksheet.json")
