@@ -2,7 +2,7 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -90.45,
+    "minLng": -90.75,
     "minLat": 38.1,
     "maxLng": -87.0,
     "maxLat": 42.6
@@ -14,7 +14,7 @@
   "permalink_gate": {
     "minLat": 38.05,
     "maxLat": 42.75,
-    "minLng": -90.55,
+    "minLng": -90.85,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {

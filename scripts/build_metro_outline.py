@@ -3,10 +3,11 @@
 Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
 Builds data/app/metro-outline.json — the dissolved outline of the counties the
-app actually serves (Cook, DuPage, Will, Lake, Kane, McHenry, Kendall, then
-LaSalle, Kankakee, Boone, Grundy, then Winnebago) — from Census TIGERweb. It is
-deliberately ONE connected region: a county joins only once it touches the ones
-already served.
+app actually serves — from Census TIGERweb. "Serves" means at least one
+county-specific layer answers there, which as of 2026-07-30 is 24 counties: the
+19 with their own dispatch entries, plus the five secondary counties of shipped
+judicial circuits. It is deliberately ONE connected region: a county joins only
+once it touches the ones already served.
 
 THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
 Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers
@@ -68,20 +69,34 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # passes 2-3, then Winnebago, the Livingston -> McLean -> Logan -> Sangamon ->
 # Macoupin bridge, and the Metro East (Madison, St. Clair) it was built to reach.
 #
-# All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
-# that way is a deliberate constraint, not a coincidence: a detached county would
+# THE LAST FIVE ARE NOT COUNTIES WITH THEIR OWN LAYERS — they are the SECONDARY
+# counties of shipped judicial circuits: Bond sits in Madison's 3rd, and Jersey,
+# Greene, Morgan and Scott in Sangamon's 7th. A resident there gets a real
+# county-specific card (their judicial subcircuit), so the wash saying "beyond
+# here only the statewide layers answer" was false for them in the other
+# direction from the 2026-07-30 fix: not a served county greyed out by a stale
+# list, but a served county nobody had thought to list, because coverage arrived
+# through a layer keyed to a CIRCUIT rather than to a county.
+#
+# That is what this list means now, stated plainly: it is every county where at
+# least one county-specific layer answers — not every county with its own
+# dispatch entry. All five are contiguous with the served area, so the ring
+# stays single.
+#
+# ONE RING IS A DELIBERATE CONSTRAINT, not a coincidence: a detached county would
 # make the served area a set of islands, and the operator's call is that coverage
-# grows as a connected region. Madison and St. Clair are researched and ready but
-# sit 200 miles south; the Livingston -> McLean -> Logan -> Sangamon -> Macoupin
-# bridge did its job: built one contiguous county at a time, it carried the
-# served area from the Wisconsin line to the Metro East as ONE ring, and Madison
-# and St. Clair joined it without ever being an island.
+# grows as a connected region. The Livingston -> McLean -> Logan -> Sangamon ->
+# Macoupin bridge exists for exactly that reason — built one contiguous county at
+# a time, it carried the served area from the Wisconsin line to the Metro East
+# without Madison and St. Clair ever being an island.
 #
 # group_rings() below nests rings correctly and emits a MultiPolygon if this ever
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
-                     "119", "163")
+                     "119", "163",
+                     # judicial-subcircuit secondary counties (see below)
+                     "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,6 +134,12 @@ INSIDE = {
     "Carlinville (Macoupin)": (39.2798, -89.8818),
     "Edwardsville (Madison)": (38.8114, -89.9532),
     "Belleville (St. Clair)": (38.5136, -89.9842),
+    # judicial-subcircuit secondary counties
+    "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
+    "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
+    "Carrollton (Greene, 7th Circuit)": (39.3023, -90.4071),
+    "Jacksonville (Morgan, 7th Circuit)": (39.7344, -90.2288),
+    "Winchester (Scott, 7th Circuit)": (39.6297, -90.4563),
 }
 OUTSIDE = {
     # Waterloo (Monroe) and Carlyle (Clinton) sit just past the new southern and
@@ -127,6 +148,11 @@ OUTSIDE = {
     # if a future county list quietly swallowed a neighbour.
     "Waterloo (Monroe)": (38.3359, -90.1498),
     "Carlyle (Clinton)": (38.6103, -89.3726),
+    # Fayette and Pike border the newly added subcircuit counties but are in no
+    # shipped circuit, so they must stay outside — the guard that keeps "a
+    # circuit's secondary counties" from quietly becoming "everything nearby".
+    "Vandalia (Fayette)": (38.9606, -89.0937),
+    "Pittsfield (Pike)": (39.6078, -90.8051),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
     # LaSalle) and is the one border-ring county with no locatable GIS — so it

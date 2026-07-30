@@ -235,6 +235,45 @@ in the researched-but-unbuilt backlog.
       "summary": "St. Clair precinct cards name the precinct and its board district but not where to vote.",
       "blocker": "The county publishes 103 polling places, but keys them by a COMBINED human label rather than a precinct id — \"Belleville9,10, 12 & 16\", with non-breaking spaces and inconsistent zero-padding against the precinct layer's \"Belleville 9\". Joining them means parsing prose into a set of precincts, which would silently mis-assign a polling place whenever the phrasing changes.",
       "wanted": "A precinct-keyed polling assignment — a column on the precinct layer, or a polling table with one row per precinct id, as Madison, Kendall, LaSalle and Grundy all publish."
+    },
+    {
+      "id": "winnebago-board-contact",
+      "concept": "County board contact",
+      "area": "Winnebago County",
+      "counties": [
+        "winnebago"
+      ],
+      "kind": "data-quality",
+      "layer": "county-board",
+      "summary": "Winnebago board members show a name and party but no phone or address.",
+      "blocker": "The WinGIS board layer declares ADDRESS, CITYZIP, PHONEHOME and PHONEBUSIN and populates all four on 0 of 20 rows, so they are not requested. The county's own board page DOES print a phone and address per district — that is a scraper nobody has written, not a missing source.",
+      "wanted": "Nothing from outside: this one closes with work, not data. A scraper over wincoil.gov/government/county-board joined on district number would fill it, the way Sangamon's 29 member pages already are."
+    },
+    {
+      "id": "madison-ward-officials",
+      "concept": "Municipal ward officials",
+      "area": "Madison County",
+      "counties": [
+        "madison"
+      ],
+      "kind": "no-source",
+      "layer": "ward",
+      "summary": "Madison County's 31 municipal wards are published but not shipped, because no alderperson is named on them.",
+      "blocker": "MadCo_Wards declares OFFICIAL, ADDRESS, CITY, STATE, ZIPCODE, PHONE, EMAIL and URL on every row and populates every one of them on 0 of 31. A ward layer with a number and nobody in it would add a toggle that answers 'Ward 4' and stops.",
+      "wanted": "Any Madison County or municipal list pairing a ward number with its alderperson — Edwardsville, Alton, Granite City and Collinsville all elect by ward. The polygons are already in hand; only the names are missing."
+    },
+    {
+      "id": "winnebago-village-heads",
+      "concept": "Municipal officials",
+      "area": "Loves Park and Machesney Park",
+      "counties": [
+        "winnebago"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "Loves Park and Machesney Park show their full councils but no mayor or village president.",
+      "blocker": "WinGIS publishes an officeholder layer per municipality, but for these two it carries the council seats only — there is no mayor/president layer to read. Every other Winnebago municipality has one.",
+      "wanted": "A Loves Park mayor and a Machesney Park village president, from either city's own site or a WinGIS layer if the county adds one. The councils are already complete; only the head of government is missing."
     }
   ],
   "nyc": [
@@ -1079,6 +1118,20 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   postback: the county dropdown is an ASP.NET AutoPostBack, so selecting the option *is*
   the submit and the browser generates the viewstate tokens itself, which makes the
   fallback sturdier than the primary rung as well as edge-proof.
+- **The wash now means "at least one county-specific layer answers here", and
+  that widened it by five counties (2026-07-30).** Bond, Jersey, Greene, Morgan
+  and Scott have no dispatch entries of their own, but they are the SECONDARY
+  counties of shipped judicial circuits — Bond in Madison's 3rd, the other four
+  in Sangamon's 7th — so a resident there gets a real county-specific card and
+  was still being told "beyond here only the statewide layers answer". That is
+  the same defect as the stale-county-list bug below, arriving from the opposite
+  direction: not a served county dropped from the list, but a served county
+  nobody thought to list, because its coverage came through a layer keyed to a
+  CIRCUIT rather than to a county. The list's meaning is now stated in the
+  builder: every county where a county-specific layer answers, not every county
+  with an entry. Fayette and Pike — which border the new five but sit in no
+  shipped circuit — are OUTSIDE anchors, so "a circuit's secondary counties"
+  cannot quietly become "everything nearby". 24 counties, still one ring.
 - **Out-of-scope wash moved from the city line to the metro edge (2026-07-28).** The wash
   had been drawn from the ERSB school-board tiling — Chicago's limits — so it greyed out
   suburban Cook and all six collar counties. Measured against the registered layers, that
