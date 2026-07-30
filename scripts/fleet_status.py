@@ -18,6 +18,13 @@ manifest (metros.json) and, for every fork, aggregates:
     coverage map in docs/DATA_LAYER_GUIDEBOOK.md. A layer shipped without a
     guidebook row (or a guidebook row no fork backs) is a **GUIDEBOOK WARN** —
     the layer-parity analog of the engine parity check;
+  - data-gaps drift: the fork's shipped data/app/coverage-gaps.json compared to
+    what the guidebook's gaps block would emit for that metro. This is the one
+    check nothing else can do: the guidebook lives in CHI only, so a sibling's
+    file is generated here and lands there through a bump PR — which means a
+    sibling has NO local drift gate (its build_coverage_gaps.py --check does not
+    exist), and its Data gaps panel could quietly disagree with the document of
+    record. A mismatch is a **GAPS WARN**;
   - open bot PRs (roster + engine-bump branches awaiting human review).
 
 Emits a markdown report and a status word (ok|warn). It never edits anything —
@@ -48,6 +55,19 @@ GUIDEBOOK_PATH = os.path.join("docs", "DATA_LAYER_GUIDEBOOK.md")
 GUIDEBOOK_RE = re.compile(
     r"<!-- ==== GUIDEBOOK:BEGIN coverage-map ==== -->\s*```json\s*(.*?)\s*```",
     re.DOTALL)
+GAPS_RE = re.compile(
+    r"<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->\s*```json\s*(.*?)\s*```",
+    re.DOTALL)
+GAPS_PATH = "data/app/coverage-gaps.json"
+
+# The expected payload is produced by the BUILDER's own render(), imported rather
+# than reimplemented: a second copy of that serialization would be exactly the
+# kind of drift this check exists to catch.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from build_coverage_gaps import render as render_gaps  # noqa: E402
+except ImportError:  # pragma: no cover — reported as a WARN by the caller
+    render_gaps = None
 
 
 def api_get(path, raw=False):
@@ -114,6 +134,78 @@ def guidebook_diff(gb_map, metro_id, layer_ids):
     else:
         line = "- Guidebook coverage: in sync (%d layers)" % len(layer_ids)
     return (line, warns)
+
+
+def load_guidebook_gaps(repo_root):
+    """The per-metro gap arrays from the guidebook's gaps block, or None if the
+    guidebook / block is missing or unparseable."""
+    try:
+        with open(os.path.join(repo_root, GUIDEBOOK_PATH), encoding="utf-8") as f:
+            m = GAPS_RE.search(f.read())
+        return json.loads(m.group(1)) if m else None
+    except (OSError, ValueError):
+        return None
+
+
+def gaps_diff(gaps_map, metro_id, shipped_text):
+    """(report_line, warn_list) for one fork's shipped gaps file vs the guidebook.
+
+    Four states, and only two of them are warnings:
+      - guidebook has no array AND the fork ships nothing  -> consistent, silent
+      - guidebook has an array, fork's file matches it      -> in sync
+      - the two disagree, either way round                  -> GAPS WARN
+    """
+    listed = gaps_map.get(metro_id)
+    shipped = shipped_text is not None
+
+    if listed is None and not shipped:
+        return ("- Data gaps: none recorded (no guidebook array, no shipped file)", [])
+    if listed is None:
+        w = ("%s: GAPS — ships %s but the guidebook records no gaps array for this "
+             "metro" % (metro_id, GAPS_PATH))
+        return ("- Data gaps: **GAPS WARN** — file shipped with no guidebook array", [w])
+    if not shipped:
+        w = ("%s: GAPS — guidebook records %d gap(s) but the fork ships no %s"
+             % (metro_id, len(listed), GAPS_PATH))
+        return ("- Data gaps: **GAPS WARN** — %d recorded, none shipped" % len(listed), [w])
+    if render_gaps is None:
+        return ("- Data gaps: builder import failed — drift unchecked",
+                ["%s: GAPS — could not import build_coverage_gaps.render" % metro_id])
+
+    try:
+        expected = render_gaps(listed)
+    except (KeyError, TypeError) as e:
+        return ("- Data gaps: **GAPS WARN** — guidebook array is malformed",
+                ["%s: GAPS — guidebook gaps array will not render: %s" % (metro_id, e)])
+
+    if shipped_text.strip() == expected.strip():
+        return ("- Data gaps: in sync (%d gap%s)"
+                % (len(listed), "" if len(listed) == 1 else "s"), [])
+
+    # Name WHICH ids differ — "the bytes differ" is not actionable at 7am.
+    try:
+        have = set(json.loads(shipped_text))
+    except ValueError:
+        have = None
+    want = {e["id"] for e in listed if isinstance(e, dict) and e.get("id")}
+    if have is None:
+        detail = "shipped file is not valid JSON"
+    else:
+        only_shipped = sorted(have - want)
+        only_guide = sorted(want - have)
+        bits = []
+        if only_guide:
+            bits.append("missing from the fork: %s" % ", ".join(only_guide))
+        if only_shipped:
+            bits.append("shipped but not recorded: %s" % ", ".join(only_shipped))
+        # same ids on both sides means a FIELD changed — the common case after
+        # someone edits a blocker or a wanted line and forgets to regenerate
+        detail = "; ".join(bits) or "same %d ids, but content differs" % len(want)
+    w = "%s: GAPS — shipped %s is out of date (%s). Regenerate with %s" % (
+        metro_id, GAPS_PATH, detail,
+        "scripts/build_coverage_gaps.py" if metro_id == "chicago"
+        else "scripts/build_coverage_gaps.py --metro %s --out <fork>/%s" % (metro_id, GAPS_PATH))
+    return ("- Data gaps: **GAPS WARN** — %s" % detail, [w])
 
 
 def latest_engine_release(chi_repo):
@@ -184,6 +276,12 @@ def main():
         warns.append("guidebook: %s missing or its coverage-map block is unparseable" % GUIDEBOOK_PATH)
         lines.append("**GUIDEBOOK WARN:** `%s` missing or unparseable — layer-parity checks skipped." % GUIDEBOOK_PATH)
         lines.append("")
+    gaps_map = load_guidebook_gaps(repo_root)
+    if gaps_map is None:
+        warns.append("guidebook: gaps block missing or unparseable — data-gaps drift unchecked")
+        lines.append("**GAPS WARN:** the guidebook's gaps block is missing or unparseable — "
+                     "data-gaps drift unchecked in every fork.")
+        lines.append("")
 
     for m in metros:
         repo = m["repo"]
@@ -238,6 +336,16 @@ def main():
                     gb_map, m["id"], [l.get("id") for l in ws.get("layers", [])])
                 lines.append(gb_line)
                 warns.extend(gb_warns)
+
+        # Data-gaps drift. Deliberately NOT nested under the worksheet check
+        # above: the gaps file is compared to the guidebook directly and does not
+        # need the fork's worksheet, so an unreadable worksheet must not silently
+        # take this check down with it.
+        if gaps_map is not None:
+            gaps_line, gaps_warns = gaps_diff(
+                gaps_map, m["id"], fetch_file(repo, GAPS_PATH))
+            lines.append(gaps_line)
+            warns.extend(gaps_warns)
 
         if not wfs:
             lines.append("- Scrapers: worksheet not found — no workflow inventory (Conversion 2 pending?)")

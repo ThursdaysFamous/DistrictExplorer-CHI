@@ -18,7 +18,12 @@ in the researched-but-unbuilt backlog.
    fork's live `metro-worksheet.json` layer roster against the coverage map below and
    puts a **GUIDEBOOK WARN** on the standing "Fleet status" issue on any mismatch. A
    layer that ships without a guidebook row is drift, exactly like an engine fence
-   mismatch.
+   mismatch. The same run diffs each fork's shipped `data/app/coverage-gaps.json`
+   against the gaps block below and raises a **GAPS WARN** on any disagreement —
+   naming which ids differ and the exact regenerate command. That check matters most
+   for the SIBLINGS: this guidebook lives in the Chicago repo only, so their files are
+   generated here and land there through a bump PR, which leaves them with no local
+   drift gate of their own.
 3. **A gap a reader could help close goes in the `GUIDEBOOK:BEGIN gaps` block, and the
    app then says so out loud.** That block drives the in-app **Data gaps** panel via
    `scripts/build_coverage_gaps.py` (`--check` runs in CI, so guidebook and panel cannot
