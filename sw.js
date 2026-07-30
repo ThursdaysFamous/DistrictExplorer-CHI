@@ -114,6 +114,7 @@ const ROSTER_URLS = [
   "./data/app/ccbr-roster.json",
   "./data/app/il-county-clerks.json",
   "./data/app/dupage-county-board-members.json",
+  "./data/app/winnebago-county-board-members.json",
   "./data/app/sangamon-county-board-members.json",
   "./data/app/livingston-county-board-members.json",
   "./data/app/coverage-gaps.json",

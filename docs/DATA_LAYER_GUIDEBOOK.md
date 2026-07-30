@@ -237,19 +237,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "A precinct-keyed polling assignment — a column on the precinct layer, or a polling table with one row per precinct id, as Madison, Kendall, LaSalle and Grundy all publish."
     },
     {
-      "id": "winnebago-board-contact",
-      "concept": "County board contact",
-      "area": "Winnebago County",
-      "counties": [
-        "winnebago"
-      ],
-      "kind": "data-quality",
-      "layer": "county-board",
-      "summary": "Winnebago board members show a name and party but no phone or address.",
-      "blocker": "The WinGIS board layer declares ADDRESS, CITYZIP, PHONEHOME and PHONEBUSIN and populates all four on 0 of 20 rows, so they are not requested. The county's own board page DOES print a phone and address per district — that is a scraper nobody has written, not a missing source.",
-      "wanted": "Nothing from outside: this one closes with work, not data. A scraper over wincoil.gov/government/county-board joined on district number would fill it, the way Sangamon's 29 member pages already are."
-    },
-    {
       "id": "madison-ward-officials",
       "concept": "Municipal ward officials",
       "area": "Madison County",
@@ -274,6 +261,19 @@ in the researched-but-unbuilt backlog.
       "summary": "Loves Park and Machesney Park show their full councils but no mayor or village president.",
       "blocker": "WinGIS publishes an officeholder layer per municipality, but for these two it carries the council seats only — there is no mayor/president layer to read. Every other Winnebago municipality has one.",
       "wanted": "A Loves Park mayor and a Machesney Park village president, from either city's own site or a WinGIS layer if the county adds one. The councils are already complete; only the head of government is missing."
+    },
+    {
+      "id": "rockford-city-precincts",
+      "concept": "Voting precincts",
+      "area": "City of Rockford",
+      "counties": [
+        "winnebago"
+      ],
+      "kind": "no-source",
+      "layer": "county-precinct",
+      "summary": "Precincts resolve everywhere in Winnebago County except inside Rockford itself.",
+      "blocker": "Rockford runs its own Board of Election Commissioners, so the county's 94-precinct tiling stops at the city line — measured, not documented: 130 of 131 uncovered grid samples fall inside the TIGER Rockford polygon. The clerk publishes a city-precinct committeeperson PDF, so the precincts exist; no boundary layer for them does.",
+      "wanted": "Rockford Board of Election Commissioners precinct polygons, or a city precinct layer on WinGIS. This is the Chicago/suburban-Cook split repeating in a smaller city, and the app already models that shape."
     }
   ],
   "nyc": [
@@ -573,7 +573,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   | concept | Winnebago (285,350) | Madison (265,859) | St. Clair (257,400) |
   |---|---|---|---|
   | `county-board` | **SHIPPED** — 20 districts, WinGIS `ElectedOfficials/26`, member + party 20/20 | **SHIPPED** — 26 districts, `CountyClerk/CBDWS/0`, **the fleet's richest**: official 26/26, party, term, e-mail 26/26, URL 26/26, phone 25/26, address 18/26 | **SHIPPED** — 28 districts, `SCC_voting_districts/2`, member name 28/28 (no contact) |
-  | `county-precinct` | backlog — 94, `WardsAndDistricts/7`, no polling join published | **SHIPPED** — 191, `pollingid` GlobalID join measured **191/191**, the cleanest in the fleet | **SHIPPED** — 150, identity + board district only; the 103 polling places are keyed by a combined label ("Belleville9,10, 12 & 16") so the join is a recorded gap, not a guess |
+  | `county-precinct` | **SHIPPED** — 94, `WardsAndDistricts/7`, county-clerk jurisdiction only (Rockford runs its own election commission); no polling join published | **SHIPPED** — 191, `pollingid` GlobalID join measured **191/191**, the cleanest in the fleet | **SHIPPED** — 150, identity + board district only; the 103 polling places are keyed by a combined label ("Belleville9,10, 12 & 16") so the join is a recorded gap, not a guess |
   | `fire-district` | **none** as a county tiling (one department's own operational map only) | **SHIPPED** — 42, the fleet's **first contact-bearing fire entry**: dept head 39/42, address 41/42, phone 41/42, URL 30/42 (e-mail 3/42, not requested) | none published |
   | `park-district` | none | **SHIPPED** — 6, identity-only | none published |
   | `library-district` | none | **SHIPPED** — 18, identity-only | none published |
@@ -598,6 +598,33 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   at `/server`, Madison at `/servera` and `/serverh`. And **layer ids are not 0-based** —
   Madison's are 40/41, Woodford's 2/8/3; a query against `/0` returns an *error envelope*
   that parses as an empty result, so "0 features" must never be read as "no data".
+
+  **Winnebago precincts + board contact (SHIPPED 2026-07-30), and a measured
+  city/county split.** The 94-precinct tiling covers the county OUTSIDE the City
+  of Rockford, which runs its own Board of Election Commissioners — the
+  Chicago/suburban-Cook shape repeating in a smaller city. Nothing on the service
+  says so; it was found by gridding the county outline and noticing 12% of it had
+  no precinct, then testing that hole against the TIGER place polygon: 130 of 131
+  uncovered samples inside Rockford, 936 of 937 covered ones outside it. Shipping
+  county-wide would have answered "no precinct" across Illinois's third-largest
+  city with the layer on, so the entry declares `winnebagoOutsideRockfordCoverage`
+  and reuses the Rockford outline already shipped for the ward layer.
+
+  The `winnebago-board-contact` gap is CLOSED. It was recorded as one that
+  "closes with work, not data", and that was right: the board page prints a phone
+  and an official @board.wincoil.gov address per district, base64-obfuscated
+  behind Joomla's spam wrapper (reading the rendered text would have collected
+  the sentence "This email address is being protected from spambots" for twenty
+  people). 20/20 e-mails, 19/20 phones, refreshed weekly.
+
+  **The builder cross-checks rather than trusting either source.** The GIS and
+  the board page are maintained separately, and a phone attached to the wrong
+  person is worse than no phone — so every scraped row is matched to the GIS name
+  the card will actually render, tolerating only a shortened forename
+  ("Chris"/"Christopher"), and a district whose sources disagree ships no contact
+  at all. Currently 20/20 match. The street address the page also prints is NOT
+  collected: those are residences, the same call McHenry, Livingston and Sangamon
+  made.
 
   **Winnebago municipal officials — the fleet's only GIS-published governing
   bodies (SHIPPED 2026-07-30).** WinGIS publishes one officeholder LAYER per

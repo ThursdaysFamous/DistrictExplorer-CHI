@@ -151,6 +151,7 @@ ROSTER_FILES = {
     "ccbr-roster.json": 3,
     "il-county-clerks.json": 101,
     "dupage-county-board-members.json": 6,
+    "winnebago-county-board-members.json": 18,  # Winnebago County Board CONTACT keyed by district (20) — the phone and official @board.wincoil.gov e-mail the county's GIS declares and populates on 0 of 20 rows. Enrichment only: the member and party come from the GIS, so losing this file costs contact rows, never the officeholder. Each row is name-matched to the GIS at build time.
     "sangamon-county-board-members.json": 27,  # Sangamon County Board members keyed by district (29 single-member districts) — scraped weekly from the 29 per-district member pages the county's own board GIS links to.
     "livingston-county-board-members.json": 3,  # Livingston County Board members keyed by district (3 multi-member districts, six seats each) — scraped weekly from the county directory. Carries a `vacancies` count per district because the directory lists an explicit "Vacancy" seat that must be counted, never named.
     "coverage-gaps.json": 8,  # Known data gaps keyed by gap id, driving the app's Data gaps panel — emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later.
