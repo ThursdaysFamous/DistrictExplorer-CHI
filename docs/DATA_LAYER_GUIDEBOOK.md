@@ -309,9 +309,9 @@ in the researched-but-unbuilt backlog.
       "counties": [],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Stephenson County's board districts are published only as PDF maps, so no Stephenson point can be placed in one.",
-      "blocker": "The county's District Maps page links two scanned PDFs — a Freeport Township sheet and a rural sheet — and nothing else. Stephenson runs no GIS server, has no ArcGIS Online presence beyond third-party research layers, and publishes no precinct-to-district composition that a township or precinct dissolve could be built from.",
-      "wanted": "Stephenson board-district geometry in any vector form, or a published list of which precincts or townships make up each district."
+      "summary": "Stephenson County's board-district composition IS published and has been read — what is missing is the geometry for one township. Districts F, G, H and I are whole townships and could be built today; B, C, D and E subdivide Freeport Township, which is 53% of the county.",
+      "blocker": "The county's two adopted district maps (COUNTY BOARD RURAL DISTRICTS and FREEPORT TOWNSHIP COUNTY BOARD DISTRICTS, both dated 2022-01-06) are vector PDFs with real text layers, not the scans the earlier entry assumed, and the composition reads straight off them: F = Winslow, West Point, Waddams, Kent, Jefferson; G = Oneco, Buckeye, Dakota, Lancaster, Silver Creek; H = Rock Grove, Rock Run, Ridott; I = Erin, Harlem, Loran, Florence; B = Freeport precincts 01/02/03/06; C = 04/05/07/10; D = 08/09/13/14; E = 11/12/15/16. The rural half is confirmed three ways — read by eye, by the PDF's own fill colours, and by arithmetic: each district's township populations sum EXACTLY to the district total printed on the same map (5398, 5356, 5037, 5195). The blocker is that the county re-precincted after the census. Census 2020 publishes FREEPORT 1-18; the county now runs Freeport 01-16, and those 16 are what districts B-E are drawn from — a different division of the same township, so the census voting districts cannot draw the B/C/D/E lines. (Waddams 2->1 and West Point 3->2 changed too, but both townships sit wholly in District F, so they move no district line.) Stephenson publishes no precinct geometry: no GIS server, no ArcGIS Online presence beyond third-party research layers, its assessment office points at WinGIS which serves only a Stephenson address locator and no boundary layers, and the Illinois SBE's GIS viewer (gis.elections.il.gov) is down. Shipping only F-I would answer “no district” across Freeport, the county's population centre, so nothing ships.",
+      "wanted": "Freeport Township's CURRENT 16 precinct boundaries in any vector form (shapefile, GeoJSON, KML or an ArcGIS service) — that single file completes the county, because the other 17 townships are already drawable from Census geometry and the composition is fully known. County-wide precinct geometry would also do it."
     }
   ],
   "nyc": [
@@ -667,7 +667,9 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
     precincts **plus Dixon 18, 19 and 20**, which the county's list does not — the two
     vintages disagree about how Dixon township is cut, and Dixon township is exactly the
     D3/D4 line. Palmyra is split too. A township dissolve would misplace the county seat.
-  - **Stephenson** — two scanned PDF district maps and nothing else.
+  - **Stephenson — composition FOUND, geometry still missing (see 5c).** The maps are
+    vector, not scans, and the composition reads off them; one township's precinct
+    boundaries are what block the build.
 
   Next out are Carroll, Jo Daviess and Whiteside, none of which touch the ring today.
   Whiteside is worth noting for later: its AGOL org publishes `PrecinctWardMap`,
@@ -723,9 +725,57 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   **The lesson worth carrying: when a county publishes officeholders but no district
   geometry, read its resolutions before recording a no-source gap.** Lee and Stephenson
-  are the immediate re-tests — Lee's composition is already published in prose, so what
-  it needs is precinct geometry rather than a resolution, but Stephenson has not had its
-  resolution archive read.
+  were the immediate re-tests; Stephenson's is 5c below.
+
+- **RESEARCH PASS 5c (2026-07-30) — Stephenson: composition FOUND and verified, one
+  township's geometry short of shippable. NOTHING SHIPS.** The Ogle lesson was applied
+  and it half-worked. Stephenson does not publish a resolution archive the way Ogle does
+  — its board minutes are SCANS, 162 of the 220 documents from 2021-2022 carrying no
+  text layer at all, and a full-text sweep of those 220 found one irrelevant hit. But the
+  earlier entry's premise was wrong in the other direction: the county's two adopted
+  district maps are **vector PDFs with real text layers**, not scans, and the composition
+  reads straight off them.
+
+  | district | composition | printed pop | township sum |
+  |---|---|---|---|
+  | F | Winslow, West Point, Waddams, Kent, Jefferson | 5398 | **5398** |
+  | G | Oneco, Buckeye, Dakota, Lancaster, Silver Creek | 5356 | **5356** |
+  | H | Rock Grove, Rock Run, Ridott | 5037 | **5037** |
+  | I | Erin, Harlem, Loran, Florence | 5195 | **5195** |
+  | B | Freeport precincts 01, 02, 03, 06 | 5875 | — |
+  | C | Freeport precincts 04, 05, 07, 10 | 5834 | — |
+  | D | Freeport precincts 08, 09, 13, 14 | 6003 | — |
+  | E | Freeport precincts 11, 12, 15, 16 | 5966 | — |
+
+  The rural half is confirmed **three independent ways**: read by eye, read by machine
+  from the PDF's own fill colours (the legend defines colour → district), and by
+  arithmetic — each district's township populations sum EXACTLY to the total printed on
+  the same map. Four exact sums is not a coincidence. The Freeport half was machine-read
+  the same way, four precincts per district, no ambiguity.
+
+  **What blocks it is one township.** The county re-precincted after the census: Census
+  2020 publishes FREEPORT 1-18, the county now runs Freeport 01-16, and B/C/D/E are drawn
+  from the 16 — a different division of the same township, so census voting districts
+  cannot draw those lines. (Waddams 2→1 and West Point 3→2 changed too and are harmless:
+  both sit wholly inside District F, the Forreston-3 situation again.) Freeport Township
+  is **53% of the county**, so shipping F-I alone would answer "no district" for most
+  Stephenson residents — worse than not shipping, so nothing ships.
+
+  Sources checked and empty for precinct geometry: no county GIS server; no ArcGIS Online
+  presence beyond third-party research layers; the assessment office points at **WinGIS**,
+  which turns out to serve Stephenson only an address locator (`StephCoCompostie`) and no
+  boundary layers; and the Illinois SBE's GIS viewer (gis.elections.il.gov) is down —
+  503 over HTTP, no HTTPS at all.
+
+  **One file closes this county**: Freeport Township's current 16 precinct boundaries in
+  any vector form. Everything else is already in hand. That is now what the gap asks for,
+  instead of the much vaguer "board-district geometry in any vector form".
+
+  A note for whoever picks this up: the Freeport map is a VECTOR PDF whose precinct
+  polygons are real paths, so georeferencing it (an affine fit of its township outline to
+  the TIGER polygon) would produce the missing geometry without a new source. That was
+  deliberately not done here — "we georeferenced a PDF" is a materially weaker provenance
+  than anything else in this app, and it is an operator's call, not a builder's.
 
 - **RESEARCH PASS 4 (2026-07-30) — Winnebago SHIPPED; the Metro East is researched and
   waiting on a bridge.** Pass 1's border ring is exhausted, so this pass went after the
