@@ -2,8 +2,8 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -89.75,
-    "minLat": 39.85,
+    "minLng": -90.05,
+    "minLat": 39.45,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,9 +12,9 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 39.8,
+    "minLat": 39.4,
     "maxLat": 42.75,
-    "minLng": -89.95,
+    "minLng": -90.15,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -556,6 +556,12 @@
         "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "sangamon-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Sangamon County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
         "file": "logan-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -668,6 +674,11 @@
         "min_keys": 6
       },
       {
+        "file": "sangamon-county-board-members.json",
+        "min_keys": 27,
+        "note": "Sangamon County Board members keyed by district (29 single-member districts) — scraped weekly from the 29 per-district member pages the county's own board GIS links to."
+      },
+      {
         "file": "livingston-county-board-members.json",
         "min_keys": 3,
         "note": "Livingston County Board members keyed by district (3 multi-member districts, six seats each) — scraped weekly from the county directory. Carries a `vacancies` count per district because the directory lists an explicit \"Vacancy\" seat that must be counted, never named."
@@ -763,6 +774,11 @@
       "file": "update-dupage-county-board-roster.yml",
       "purpose": "DuPage County Board roster (dupagecounty.gov directory scrape)",
       "schedule": "Sun 13:00 UTC"
+    },
+    {
+      "file": "update-sangamon-county-board-roster.yml",
+      "purpose": "Sangamon County Board roster (29 per-district member pages on sangamonil.gov)",
+      "schedule": "Tue 15:00 UTC"
     },
     {
       "file": "update-livingston-county-board-roster.yml",

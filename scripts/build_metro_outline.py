@@ -65,7 +65,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
 # Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
-# passes 2-3, then Winnebago, Livingston, McLean and Logan from pass 4.
+# passes 2-3, then Winnebago, Livingston, McLean, Logan and Sangamon from pass 4.
 #
 # All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
 # that way is a deliberate constraint, not a coincidence: a detached county would
@@ -78,7 +78,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # group_rings() below nests rings correctly and emits a MultiPolygon if this ever
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
-                     "099", "091", "007", "063", "201", "105", "113", "107")
+                     "099", "091", "007", "063", "201", "105", "113", "107", "167")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -112,9 +112,14 @@ INSIDE = {
     "Pontiac (Livingston)": (40.8809, -88.6298),
     "Bloomington (McLean)": (40.4798, -88.9939),
     "Lincoln (Logan)": (40.1481, -89.3637),
+    "Springfield (Sangamon)": (39.7990, -89.6440),
 }
 OUTSIDE = {
-    "Springfield (Sangamon)": (39.7817, -89.6501),
+    # Carlinville is the seat of Macoupin, the last bridge county before Madison
+    # and St. Clair. Keeping it here until it ships is the guard working as
+    # intended: the day Macoupin gains a dispatch entry, this line fails the
+    # build and forces the county list to be updated with it.
+    "Carlinville (Macoupin)": (39.2798, -89.8818),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
     # LaSalle) and is the one border-ring county with no locatable GIS — so it

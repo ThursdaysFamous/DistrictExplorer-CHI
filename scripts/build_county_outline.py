@@ -183,6 +183,23 @@ COUNTIES = {
             (39.5487, -89.2942, "Taylorville — Christian County"),
         ],
     },
+    "sangamon": {
+        "fips": "167",
+        "name": "Sangamon County",
+        "inside": [
+            (39.7990, -89.6440, "Springfield (county seat, state capital)"),
+            (39.6762, -89.7045, "Chatham"),
+            (39.7495, -89.5318, "Rochester"),
+            (39.5917, -89.5804, "Pawnee"),
+        ],
+        "outside": [
+            (40.1481, -89.3637, "Lincoln — Logan County"),
+            (40.0117, -89.8482, "Petersburg — Menard County"),
+            (39.5487, -89.2942, "Taylorville — Christian County"),
+            (39.7344, -90.2288, "Jacksonville — Morgan County"),
+            (39.5009, -89.7679, "Virden — Macoupin County"),
+        ],
+    },
     "madison": {
         "fips": "119",
         "name": "Madison County",

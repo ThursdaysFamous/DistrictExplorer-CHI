@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -89.75, minLat: 39.85, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -90.05, minLat: 39.45, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 39.8, maxLat: 42.75, minLng: -89.95, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 39.4, maxLat: 42.75, minLng: -90.15, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7677,6 +7677,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadSangamonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/sangamon-county-outline.json", {}, 2);
+  });
+  function sangamonCountyCoverage(point) {
+    return loadSangamonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7778,6 +7786,25 @@ function initChiExplorer() {
         if (!hasUsableGeometry(geojson)) throw new Error("Logan County Board returned no usable geometry");
         return geojson;
       });
+  });
+
+  /* Sangamon's board GIS carries the district and a per-district MEMBER URL but
+   * no name — so the join key is published by the county on both sides, and the
+   * weekly scraper simply walks the 29 URLs the GIS already names. That is why
+   * this is a roster join rather than a rule-4 branch 1 like McLean: the data is
+   * the county's, one hop away, not inferred. */
+  var loadSangamonCountyBoard = makeCached(function () {
+    var url = "https://services.arcgis.com/XqG0RpqsNfIBGGb2/arcgis/rest/services/" +
+      "CountyBoardDistricts2020_WithURLs/FeatureServer/0/query?where=1%3D1" +
+      "&outFields=DISTRICT&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Sangamon County Board returned no usable geometry");
+        return geojson;
+      });
+  });
+  var loadSangamonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/sangamon-county-board-members.json", {}, 2);
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -11611,7 +11638,66 @@ function initChiExplorer() {
         primaryLink: function () {
           return { label: "Official body", url: "https://logancountyil.gov/county-board" };
         }
-      })
+      }),
+      // Sangamon (29 single-member districts, the state capital's county). The
+      // GIS publishes the district and a per-district MEMBER URL but no name, so
+      // the weekly scraper walks exactly those 29 URLs — the join key comes from
+      // the county on both sides rather than being inferred from a URL pattern.
+      {
+        key: "sangamon",
+        coverage: sangamonCountyCoverage,
+        loadGeometry: loadSangamonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadSangamonCountyBoard(),
+            loadSangamonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Sangamon County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://sangamonil.gov/departments/a-c/county-board/districts"
+          };
+        },
+        hoverOfficial: {
+          load: loadSangamonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      }
     ]
   });
 
