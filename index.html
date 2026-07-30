@@ -6666,11 +6666,13 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/will-county-outline.json", {}, 2);
   });
 
-  // The seven counties the app serves, dissolved to one ring — the coverage
-  // geometry the out-of-scope wash draws from (see the BOOT call). Built by
+  // The counties the app serves, dissolved to one ring — the coverage geometry
+  // the out-of-scope wash draws from (see the BOOT call). Built by
   // scripts/build_metro_outline.py from a single TIGERweb query, because the
   // per-county outline files above were simplified independently and their
-  // shared borders would not cancel in the in-browser dissolve.
+  // shared borders would not cancel in the in-browser dissolve. The builder's
+  // county list has to be extended whenever a county gains a dispatch entry —
+  // it went stale once already and the wash greyed out four served counties.
   var loadMetroOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/metro-outline.json", {}, 2);
   });
@@ -13158,7 +13160,7 @@ function initChiExplorer() {
   // answer. The city/suburb difference is carried by the cards, which already
   // hide an out-of-coverage layer outright.
   //
-  // metro-outline.json is ONE pre-dissolved polygon (62 vertices, 2.5 KB,
+  // metro-outline.json is ONE pre-dissolved polygon (94 vertices, 3.8 KB,
   // scripts/build_metro_outline.py), so this also drops the 83 KB school-board
   // fetch PSI measured in the 669 ms initial-navigation chain for a decorative
   // wash (OPTIMIZATION_PLAYBOOK's recommended fix). Still at idle, and the

@@ -950,6 +950,20 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   62 vertices, 2.5 KB, `scripts/build_metro_outline.py`); the existing per-county outline
   files could not be reused because they were simplified independently and their shared
   borders would not cancel in the in-browser dissolve.
+
+  **The county list then went stale, and the wash lied for two passes (fixed 2026-07-30).**
+  Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers without
+  revisiting `METRO_COUNTY_FIPS`, so the wash kept greying out all four — it told a
+  Kankakee user "beyond here only the statewide layers answer" while five Kankakee layers
+  were answering, and told an Ottawa user the same while LaSalle's county board and its
+  119-precinct tiling resolved. Nothing failed, because the builder's anchors only assert
+  the counties already in the list; a served county that is missing from it is invisible to
+  every gate. Now eleven counties, still **one ring** (94 vertices, 3.8 KB) because all four
+  additions came from the pass-1 border ring and are mutually contiguous. Two guards added
+  against a third recurrence: the four new counties are INSIDE anchors, and the checklist
+  step (`docs/EXPANSION_GUIDE.md` §2.5 step 1) now says the coverage outline and this list
+  move together. The OUTSIDE list is the other half — a county named there cannot be
+  quietly served, because shipping it fails the build.
 - **Lake County municipal officeholders — RECORDED GAP (not a parity debt).** No Lake
   body publishes a municipal roster anywhere county-side: county/Clerk elected-officials
   pages cover only county offices, county GIS carries no officials data, and the Lake

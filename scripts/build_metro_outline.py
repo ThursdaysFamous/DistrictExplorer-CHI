@@ -2,9 +2,19 @@
 """
 Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
-Builds data/app/metro-outline.json — ONE dissolved polygon of the seven
-counties the app actually serves (Cook, DuPage, Will, Lake, Kane, McHenry,
-Kendall) — from Census TIGERweb.
+Builds data/app/metro-outline.json — ONE dissolved polygon of the counties the
+app actually serves (Cook, DuPage, Will, Lake, Kane, McHenry, Kendall, then
+LaSalle, Kankakee, Boone, Grundy) — from Census TIGERweb.
+
+THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
+Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers
+without revisiting this list, and the wash went on greying out all four — it
+told a Kankakee user "beyond here only the statewide layers answer" while five
+Kankakee layers were answering. Nothing failed, because the anchors only assert
+the counties already listed. So: **when a county gains a dispatch entry, add it
+here and give it an INSIDE anchor in the same change** (§2.5 step 1). The
+OUTSIDE list is the other half of that guard — a county named there can never
+be quietly served, because shipping it would fail this build.
 
 Why this exists: the out-of-scope wash (index.html, ENGINE `scope-mask`) marks
 where the app's full coverage ends. It used to be driven by the Chicago school
@@ -49,8 +59,16 @@ import requests
 
 TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
-# Cook, DuPage, Will, Lake, Kane, McHenry, Kendall — the seven the app serves.
-METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093")
+# The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
+# Kane, McHenry, Kendall) plus LaSalle, Kankakee, Boone and Grundy from research
+# passes 2-3. All eleven are mutually contiguous — the pass-1 border-ring
+# computation is exactly what the last four were picked from — so the dissolve
+# still yields ONE ring. The first DETACHED county will make this a MultiPolygon;
+# the dissolve chains each closed ring independently and already handles that,
+# but check_rings() below and the app's single-feature assumption want a look
+# when it happens.
+METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
+                     "099", "091", "007", "063")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -75,13 +93,22 @@ INSIDE = {
     "Aurora (Kane)": (41.7606, -88.3201),
     "Woodstock (McHenry)": (42.3147, -88.4487),
     "Yorkville (Kendall)": (41.6411, -88.4473),
+    "Ottawa (LaSalle)": (41.3456, -88.8426),
+    "Kankakee (Kankakee)": (41.1200, -87.8612),
+    "Belvidere (Boone)": (42.2639, -88.8443),
+    "Morris (Grundy)": (41.3564, -88.4237),
 }
 OUTSIDE = {
     "Rockford (Winnebago)": (42.2711, -89.0940),
     "Springfield (Sangamon)": (39.7817, -89.6501),
     "Milwaukee (WI)": (43.0389, -87.9065),
+    # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
+    # LaSalle) and is the one border-ring county with no locatable GIS — so it
+    # is the anchor most likely to be wrong if a future county list is fudged.
     "DeKalb (DeKalb)": (41.9295, -88.7504),
-    "Kankakee (Kankakee)": (41.1200, -87.8612),
+    # A point just past the new south-west edge, so the added counties are shown
+    # to have moved the boundary rather than merely widened an untested interior.
+    "Pontiac (Livingston)": (40.8808, -88.6298),
 }
 
 

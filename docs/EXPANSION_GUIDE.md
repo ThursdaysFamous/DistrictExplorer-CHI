@@ -558,7 +558,13 @@ suburbs join as further `ward` entries when a polygon source appears.
 
 ## 2.5 The county-N+1 checklist (one change-set)
 
-1. Coverage outline (TIGER county boundary → pre-built outline file).
+1. Coverage outline (TIGER county boundary → pre-built outline file) **and the scope
+   mask in the same step**: add the county's FIPS to `METRO_COUNTY_FIPS` in
+   `scripts/build_metro_outline.py`, give it an INSIDE anchor, drop it from OUTSIDE if
+   listed, and rebuild. Skipping this does not fail any gate — the builder only asserts
+   the counties already in its list — so the wash silently keeps greying out a county the
+   app now serves. That is exactly what happened to LaSalle, Kankakee, Boone and Grundy
+   for two research passes.
 2. `county-board`: districted → dispatch entry + officeholder story; **at-large →
    county-card roster rows** (§1.5). Decide and record which.
 3. `judicial-subcircuit`: entry if the circuit has PA 102-0693 subcircuits; structurally
