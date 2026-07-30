@@ -148,6 +148,18 @@ PROVENANCE = [
              "omitted Leaf River entirely. Next reapportionment due after the "
              "2030 census; the pinned URL is the county's resolutions index, "
              "since the monthly PDF filename changes."},
+    {"layer": "Stephenson County Board districts (8, lettered B-I; B-E georeferenced)",
+     "app_file": "stephenson-county-board-districts.json",
+     "source_url": "https://stephensoncountyil.gov/government/county_board/district_maps_2012.php",
+     "note": "The county's adopted 2022-01-06 district maps. F-I are whole "
+             "townships (exact, and each district's township populations sum to "
+             "the total the map prints). B-E subdivide Freeport Township and are "
+             "GEOREFERENCED from the Freeport map's vector precinct polygons "
+             "(build_stephenson_board_districts.py; PDFs archived in "
+             "data/source/raw/) — the only boundary in the app whose accuracy is "
+             "a measured number rather than an exact match, ~20 m, stated on the "
+             "card. DELETE that script if Stephenson ever publishes precinct "
+             "geometry. Redrawn ~once a decade."},
     {"layer": "Winnebago 17th-Circuit judicial subcircuits",
      "app_file": "winnebago-judicial-subcircuits.json",
      "source_url": "https://www.ilsenateredistricting.com/",

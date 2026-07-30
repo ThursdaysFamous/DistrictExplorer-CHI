@@ -7742,6 +7742,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadStephensonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stephenson-county-outline.json", {}, 2);
+  });
+  function stephensonCountyCoverage(point) {
+    return loadStephensonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -8193,6 +8201,31 @@ function initChiExplorer() {
   });
   var loadOgleBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/ogle-county-board-members.json", {}, 2);
+  });
+
+  /* Stephenson carries the fleet's ONLY georeferenced boundary, and the card
+   * says so rather than leaving it in a build script.
+   *
+   * Its eight districts are lettered B-I (there is no District A). F-I are whole
+   * townships and are exact. B, C, D and E subdivide FREEPORT township along the
+   * county's CURRENT precinct lines, and nothing publishes those: the census has
+   * Freeport 1-18 from 2020, the county re-precincted to 01-16 afterwards, and
+   * the county runs no GIS. What it does publish is the adopted map — as a
+   * VECTOR PDF — so scripts/build_stephenson_board_districts.py reads the 16
+   * precinct polygons out of it and fits an affine transform against TIGER.
+   *
+   * Measured, and re-measured on every rebuild: the fit lands the map's
+   * hydrography — a feature class the fit never saw — within 50 m for 98.9% of
+   * its vertices, median 15.7 m. So a Freeport district line here is good to
+   * roughly 15-20 m, a fraction of a city block, where every other boundary in
+   * this app is published data. That is a real difference in kind, so the four
+   * derived districts carry a Boundary note on the card; the four township ones
+   * do not, because they are exact. */
+  var loadStephensonCountyBoard = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stephenson-county-board-districts.json", {}, 2);
+  });
+  var loadStephensonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stephenson-county-board-members.json", {}, 2);
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -12356,6 +12389,83 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadOgleBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Stephenson (8 districts LETTERED B-I, two members each) — see the loader
+      // block. The card names the boundary's provenance for the four Freeport
+      // districts, which are measured off the county's published map rather than
+      // published as data; the four township districts say nothing because they
+      // are exact.
+      {
+        key: "stephenson",
+        coverage: stephensonCountyCoverage,
+        loadGeometry: loadStephensonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStephensonCountyBoard(),
+            loadStephensonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              derived: findPropCI(props, ["derivedfrom"]) === "georeferenced county map",
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var vacancies = (result.entry && result.entry.vacancies) || 0;
+          var wrap = cardEl("div", "card-flush");
+          var note = boardCountNote(members.length, null);
+          if (vacancies) {
+            note = (note ? note + " · " : "") + vacancies +
+              " vacant seat" + (vacancies === 1 ? "" : "s");
+          }
+          wrap.appendChild(renderBodyIntro({ title: "Stephenson County Board", note: note }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          if (result.derived) {
+            wrap.appendChild(renderFieldStack([{
+              label: "Boundary",
+              value: "Traced from Stephenson County's published district map (adopted " +
+                "2022), because the county publishes no precinct data for Freeport " +
+                "Township. Accurate to about 20 metres — treat the district line itself " +
+                "as approximate."
+            }]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://stephensoncountyil.gov/government/county_board/index.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadStephensonBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);
