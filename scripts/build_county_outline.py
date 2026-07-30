@@ -109,6 +109,60 @@ COUNTIES = {
             (41.0100, -88.2900, "Livingston County"),
         ],
     },
+    # Research pass 4 — the first counties that are NOT contiguous with the metro.
+    # Every anchor below was geocoded and its returned county/state read back, not
+    # recalled; the "Madison County" and "St. Clair County" names each exist in
+    # several states, and DeKalb already showed how far a same-name trap can get.
+    "winnebago": {
+        "fips": "201",
+        "name": "Winnebago County",
+        "inside": [
+            (42.2714, -89.0940, "Rockford (county seat)"),
+            (42.3200, -89.0582, "Loves Park"),
+            (42.4931, -89.0368, "South Beloit"),
+            (42.3139, -89.3594, "Pecatonica"),
+        ],
+        "outside": [
+            (42.2580, -88.8417, "Belvidere — Boone County"),
+            (42.1270, -89.2557, "Byron — Ogle County"),
+            (42.2967, -89.6212, "Freeport — Stephenson County"),
+            (42.5083, -89.0318, "Beloit — Rock County, Wisconsin"),
+        ],
+    },
+    "madison": {
+        "fips": "119",
+        "name": "Madison County",
+        "inside": [
+            (38.8114, -89.9532, "Edwardsville (county seat)"),
+            (38.8909, -90.1843, "Alton"),
+            (38.7014, -90.1487, "Granite City"),
+            (38.7396, -89.6715, "Highland"),
+        ],
+        "outside": [
+            (38.5136, -89.9842, "Belleville — St. Clair County"),
+            (38.8923, -89.4131, "Greenville — Bond County"),
+            (39.2798, -89.8818, "Carlinville — Macoupin County"),
+            (39.1200, -90.3284, "Jerseyville — Jersey County"),
+            (38.6254, -90.1900, "St. Louis, Missouri (across the river)"),
+        ],
+    },
+    "st-clair": {
+        "fips": "163",
+        "name": "St. Clair County",
+        "inside": [
+            (38.5136, -89.9842, "Belleville (county seat)"),
+            (38.6269, -90.1597, "East St. Louis"),
+            (38.5923, -89.9112, "O'Fallon"),
+            (38.4903, -89.7932, "Mascoutah"),
+        ],
+        "outside": [
+            (38.8114, -89.9532, "Edwardsville — Madison County"),
+            (38.3359, -90.1498, "Waterloo — Monroe County"),
+            (38.6103, -89.3726, "Carlyle — Clinton County"),
+            (38.3435, -89.3810, "Nashville — Washington County"),
+            (38.6254, -90.1900, "St. Louis, Missouri (across the river)"),
+        ],
+    },
 }
 
 

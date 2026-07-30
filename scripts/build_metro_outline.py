@@ -2,9 +2,11 @@
 """
 Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
-Builds data/app/metro-outline.json — ONE dissolved polygon of the counties the
+Builds data/app/metro-outline.json — the dissolved outline of the counties the
 app actually serves (Cook, DuPage, Will, Lake, Kane, McHenry, Kendall, then
-LaSalle, Kankakee, Boone, Grundy) — from Census TIGERweb.
+LaSalle, Kankakee, Boone, Grundy, then Winnebago) — from Census TIGERweb. It is
+deliberately ONE connected region: a county joins only once it touches the ones
+already served.
 
 THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
 Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers
@@ -42,7 +44,9 @@ vertices), which is what makes the dissolve sound.
 The dissolve mirrors the app's `coverageOutlineRings` exactly: a segment walked
 by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
-edges left to cancel.
+edges left to cancel. Disjoint regions would fall out of the same walk — each
+closed ring is chained independently — but see METRO_COUNTY_FIPS: the served area
+is kept connected on purpose, so that path stays unexercised.
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json
@@ -60,15 +64,20 @@ import requests
 TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
-# Kane, McHenry, Kendall) plus LaSalle, Kankakee, Boone and Grundy from research
-# passes 2-3. All eleven are mutually contiguous — the pass-1 border-ring
-# computation is exactly what the last four were picked from — so the dissolve
-# still yields ONE ring. The first DETACHED county will make this a MultiPolygon;
-# the dissolve chains each closed ring independently and already handles that,
-# but check_rings() below and the app's single-feature assumption want a look
-# when it happens.
+# Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
+# passes 2-3, then Winnebago from pass 4.
+#
+# All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
+# that way is a deliberate constraint, not a coincidence: a detached county would
+# make the served area a set of islands, and the operator's call is that coverage
+# grows as a connected region. Madison and St. Clair are researched and ready but
+# sit 200 miles south, so they wait on the Livingston -> McLean -> Logan ->
+# Sangamon -> Macoupin bridge rather than shipping as an island.
+#
+# group_rings() below nests rings correctly and emits a MultiPolygon if this ever
+# does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
-                     "099", "091", "007", "063")
+                     "099", "091", "007", "063", "201")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -97,17 +106,19 @@ INSIDE = {
     "Kankakee (Kankakee)": (41.1200, -87.8612),
     "Belvidere (Boone)": (42.2639, -88.8443),
     "Morris (Grundy)": (41.3564, -88.4237),
+    "Rockford (Winnebago)": (42.2714, -89.0940),
 }
 OUTSIDE = {
-    "Rockford (Winnebago)": (42.2711, -89.0940),
     "Springfield (Sangamon)": (39.7817, -89.6501),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
     # LaSalle) and is the one border-ring county with no locatable GIS — so it
     # is the anchor most likely to be wrong if a future county list is fudged.
     "DeKalb (DeKalb)": (41.9295, -88.7504),
-    # A point just past the new south-west edge, so the added counties are shown
-    # to have moved the boundary rather than merely widened an untested interior.
+    # Pontiac is the seat of Livingston, the next county in the bridge toward the
+    # Metro East. Keeping it here until it actually ships is the guard working as
+    # intended: the day Livingston gains a dispatch entry, this line fails the
+    # build and forces the list to be updated with it.
     "Pontiac (Livingston)": (40.8808, -88.6298),
 }
 
@@ -257,16 +268,41 @@ def validate(rings):
     return problems
 
 
-def build_geojson(rings):
-    # Largest ring first so the outer boundary leads; the app fills even-odd, so
-    # enclosed rings read as holes either way.
+def group_rings(rings):
+    """Nest each ring under the ring that encloses it — outers, then their holes.
+
+    Needed from pass 4 on, when the served area stopped being one region. A
+    two-ring Polygon means "ring 2 is a HOLE in ring 1", so emitting the detached
+    Madison/St. Clair region that way would have claimed a hole in the Chicago
+    metro. The wash renders identically either way (it flattens every ring into a
+    cut-out), which is precisely why this had to be reasoned about rather than
+    eyeballed: the bug would be invisible on the map and wrong to anything that
+    ever runs a containment test — including the app's own pointInGeometry, which
+    would answer False for every point in Madison County.
+    """
     ordered = sorted(rings, key=len, reverse=True)
+    polys = []  # [outer, hole, hole, ...]
+    for ring in ordered:
+        lng, lat = ring[0][0], ring[0][1]
+        for poly in polys:
+            if point_in_rings(lat, lng, [poly[0]]):
+                poly.append(ring)  # enclosed -> a hole in that outer
+                break
+        else:
+            polys.append([ring])
+    return polys
+
+
+def build_geojson(rings):
+    polys = group_rings(rings)
+    geometry = ({"type": "Polygon", "coordinates": polys[0]} if len(polys) == 1
+                else {"type": "MultiPolygon", "coordinates": polys})
     return {
         "type": "FeatureCollection",
         "features": [{
             "type": "Feature",
-            "properties": {"name": "Chicago metro coverage (7 counties)"},
-            "geometry": {"type": "Polygon", "coordinates": ordered},
+            "properties": {"name": "%d-county coverage area" % len(METRO_COUNTY_FIPS)},
+            "geometry": geometry,
         }],
     }
 
@@ -281,7 +317,9 @@ def main():
     if args.check:
         with open(args.out) as f:
             shipped = json.load(f)
-        rings = shipped["features"][0]["geometry"]["coordinates"]
+        # rings_of() flattens Polygon and MultiPolygon alike, so the anchor test
+        # reads the file the same way whether or not the served area is one region.
+        rings = rings_of(shipped["features"][0])
         problems = validate(rings)
         for p in problems:
             print("FAIL: %s" % p, file=sys.stderr)

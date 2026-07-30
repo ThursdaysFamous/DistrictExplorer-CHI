@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -88.6, minLat: 41.0, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -89.5, minLat: 40.85, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 40.8, maxLat: 42.7, minLng: -88.8, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 40.7, maxLat: 42.75, minLng: -89.7, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7645,6 +7645,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadWinnebagoCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/winnebago-county-outline.json", {}, 2);
+  });
+  function winnebagoCountyCoverage(point) {
+    return loadWinnebagoCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7655,6 +7663,25 @@ function initChiExplorer() {
         return geojson;
       });
   }
+
+  /* Winnebago's GIS is WinGIS (wingis.org), a Region 1 Planning Council
+   * consortium rather than a county department — and its ArcGIS instance is
+   * mounted at /public, not the conventional /arcgis, which is why guessing
+   * hostnames found nothing. It was reached the way LaSalle's and Grundy's were:
+   * follow the county's own site to a web map, then read the map's
+   * operationalLayers. The ElectedOfficials service is unusual in the fleet — it
+   * publishes officeholders AS layers, one per body, including per-municipality
+   * village boards and Rockford's aldermanic wards. Only the county board is
+   * consumed here; the rest is recorded in the guidebook for a later pass. */
+  var WINNEBAGO_GIS = "https://maps.wingis.org/public/rest/services/";
+  var loadWinnebagoCountyBoard = makeCached(function () {
+    // ADDRESS/PHONEBUSIN/PHONEHOME/CITYZIP are declared on the layer and set on
+    // 0 of 20 rows — a schema is not data, so they are not requested. The
+    // county's own board page does carry per-district phone and address; that is
+    // a scraper, recorded as a backlog item rather than guessed at from here.
+    return loadCountyMapServerLayer(WINNEBAGO_GIS + "ElectedOfficials", 26,
+      "District,REP,REPPARTY,TERMYEAR", "Winnebago County Board");
+  });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
   var loadBoonePrecincts = makeCached(function () {
@@ -7712,6 +7739,27 @@ function initChiExplorer() {
    * the card's person row for either. `fields` names the county's columns; a
    * column the county leaves blank is simply absent from the row rather than
    * rendered empty. */
+  /* Winnebago records its districts as "D1".."D20" rather than a bare number.
+   * Strip the prefix for display so the card reads "District 4" like every other
+   * county's, but only when the rest really is a number — an unexpected value is
+   * passed through untouched rather than mangled into something wrong. */
+  function winnebagoBoardDistrict(feature) {
+    var v = findPropCI(feature.properties || {}, ["district"]);
+    if (v == null || String(v).trim() === "") return null;
+    var s = String(v).trim();
+    var m = /^D(\d+)$/i.exec(s);
+    return m ? m[1] : s;
+  }
+
+  /* A term-end year is only rendered when it looks like one. The column is a
+   * free-text string upstream, and "Term runs through <junk>." is worse than
+   * saying nothing. */
+  function cleanTermYear(value) {
+    if (value == null) return null;
+    var s = String(value).trim();
+    return /^(19|20)\d{2}$/.test(s) ? s : null;
+  }
+
   function gisBoardPerson(props, fields) {
     var name = fields.name(props);
     if (!name) return null;
@@ -11250,6 +11298,68 @@ function initChiExplorer() {
           load: loadKankakeeCountyBoard,
           name: function (feature) {
             var v = findPropCI(feature.properties || {}, ["membername"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
+      },
+      // Winnebago (20 single-member districts) — rule-4 branch 1 again: the
+      // member rides the county's own boundary GIS, so no scraper and no weekly
+      // workflow. Measured 20/20 on name, party and term year; the address and
+      // phone columns the layer declares are empty on every row and are left
+      // unread. Spot-checked against the county's own board page (D1 Aaron
+      // Booker, D2 Jim Webster, D4 Brad Lindmark all agree; D15 is "Chris Scrol"
+      // in the GIS and "Christopher Scrol" on the page — the GIS short form is
+      // what ships, since that is the source being rendered).
+      {
+        key: "winnebago",
+        coverage: winnebagoCountyCoverage,
+        loadGeometry: loadWinnebagoCountyBoard,
+        hoverName: winnebagoBoardDistrict,
+        query: function (point, seq) {
+          return loadWinnebagoCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              district: winnebagoBoardDistrict(feature),
+              term: cleanTermYear(findPropCI(props, ["termyear"])),
+              person: gisBoardPerson(props, {
+                name: function (p) {
+                  var v = findPropCI(p, ["rep"]);
+                  return v != null && String(v).trim() ? String(v).trim() : null;
+                },
+                party: ["repparty"]
+              })
+            };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Winnebago County Board",
+            // NOT boardCountNote(): its second argument is a countywide-CHAIR
+            // label, and passing the term there rendered "1 district member ·
+            // 1 countywide Term runs through 2026." — inventing an officeholder
+            // this entry never loaded. Winnebago does publish a board chairman
+            // (ElectedOfficials layer 25); until that is actually fetched and
+            // shown, the card must not imply it.
+            note: result.term ? "Term runs through " + result.term + "." : null
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://wincoil.gov/government/county-board" };
+        },
+        hoverOfficial: {
+          load: loadWinnebagoCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["rep"]);
             return (v == null || String(v).trim() === "") ? null : String(v).trim();
           }
         }

@@ -2,8 +2,8 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -88.6,
-    "minLat": 41.0,
+    "minLng": -89.5,
+    "minLat": 40.85,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,9 +12,9 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 40.8,
-    "maxLat": 42.7,
-    "minLng": -88.8,
+    "minLat": 40.7,
+    "maxLat": 42.75,
+    "minLng": -89.7,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -523,7 +523,7 @@
         "file": "metro-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Seven-county metro coverage outline, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash."
+        "note": "Coverage outline of every served county, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash. Kept to ONE connected region — a county joins only once it touches the served area."
       },
       {
         "file": "lasalle-county-outline.json",
@@ -548,6 +548,12 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Kankakee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "winnebago-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
         "file": "winnebago-judicial-subcircuits.json",

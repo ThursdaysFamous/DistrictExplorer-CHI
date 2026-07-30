@@ -81,6 +81,7 @@ const GEOMETRY_URLS = [
   "./data/app/boone-county-outline.json",
   "./data/app/grundy-county-outline.json",
   "./data/app/kankakee-county-outline.json",
+  "./data/app/winnebago-county-outline.json",
   "./data/app/winnebago-judicial-subcircuits.json",
   "./data/app/madison-judicial-subcircuits.json",
   "./data/app/sangamon-judicial-subcircuits.json",
