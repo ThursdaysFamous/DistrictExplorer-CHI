@@ -225,6 +225,36 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > families).
 
 **Open — Illinois**
+- **Boone + Grundy — RESEARCH PASS 3, `county-precinct` SHIPPED (2026-07-29); DeKalb NOT
+  FOUND.** With LaSalle and Kankakee shipped, the border ring is down to Boone, DeKalb and
+  Grundy. Two of the three are now partly built; the third could not be located.
+
+  | concept | Boone (53,606) | Grundy (52,533) | DeKalb (100,420) |
+  |---|---|---|---|
+  | `county-precinct` | **SHIPPED** — 37, polling place carried ON the precinct feature | **SHIPPED** — 40, polling joined on `POLLINGID` (38/40; two share an id the polling layer omits) | — |
+  | `county-board` | 3 districts, but published as **three separate single-feature layers** with no officeholder attribute — needs a merge loader *and* an officeholder source before rule 4 is met | **none published** | — |
+  | `ward` (Belvidere) | **ready, high value** — `Clerk_and_Recorder/Belvidere_Wards`, 5 wards each carrying `ald_1`/`phone_1`/`ald_2`/`phone_2` | n/a | — |
+  | `fire-district` | 5 polygons keyed by NUMBER only, no district name — a "Fire District 1" card is honest but near-useless, so not built | none published | — |
+  | park / library | none published (the BCCD Park_Map is conservation-district *facilities*, not a district tiling) | none published | — |
+  | `judicial-subcircuit` | **already answered** — Boone is the secondary county of the 17th Circuit, covered by the Winnebago entry | n/a — 13th Circuit has no subcircuits | n/a — 23rd, recorded at Kendall |
+
+  **DeKalb County IL was not found, and that is the finding.** Its ArcGIS Online presence is
+  dominated by DeKalb County **Georgia** (`DeKalbGISAdmin`, `djburge_DeKalbGIS`,
+  `amore_DeKalbGIS` → `dcgis.dekalbcountyga.gov`, "Super Commissioner Districts", Druid
+  Hills, Soapstone Ridge) — a same-name trap that would have shipped Georgia geometry into
+  an Illinois app had the owner accounts been taken at face value. Field-qualified searches
+  for the Illinois county returned only historical plat maps and university coursework, and
+  the three plausible self-hosted hostnames (`gis.`/`maps.dekalbcounty.org`,
+  `gis.dekalbcountyil.gov`) do not resolve or reset. **Pass 4 should start from the
+  county's own site**, not from a portal search: that is how Boone's
+  `maps.boonecountyil.org` and Grundy's `maps.grundyco.org` were both found — via a web
+  map's `operationalLayers`, which is the only discovery route that has worked twice.
+
+  **Two defects found by probing, not by reading.** Grundy's precinct cards first rendered
+  with no polling place: `POLLINGID` exists on *both* layers but the service omits it unless
+  it is named in `outFields`, and my first request left it off — the join key was there all
+  along. And Boone stamps unincorporated precincts `Munic="County"`, its own shorthand, which
+  rendered as a municipality *called* "County" until it was suppressed.
 - **LaSalle + Kankakee — RESEARCH PASS 2 done, `county-board` SHIPPED (2026-07-29).**
   The two counties the pass-1 border-ring computation identified as both large and
   contiguous. Sources were determined for every concept the county-N+1 checklist asks

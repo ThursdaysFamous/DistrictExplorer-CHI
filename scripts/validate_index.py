@@ -117,6 +117,8 @@ GEOMETRY_FILES = {
     "municipal-ward-coverage.json": (22, 60),  # Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for the ward layer's suburban entries (build_municipal_ward_coverage.py)
     "metro-outline.json": (1, 1),  # Seven-county metro coverage outline, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash.
     "lasalle-county-outline.json": (1, 1),  # LaSalle County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "boone-county-outline.json": (1, 1),  # Boone County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "grundy-county-outline.json": (1, 1),  # Grundy County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "kankakee-county-outline.json": (1, 1),  # Kankakee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "winnebago-judicial-subcircuits.json": (2, 2),  # 17th Circuit (Winnebago + Boone) subcircuits, PA 102-0693 enacted map.
     "madison-judicial-subcircuits.json": (4, 4),  # 3rd Circuit (Madison + Bond) subcircuits, PA 102-0693 enacted map.

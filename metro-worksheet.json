@@ -346,7 +346,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 31,
-      "rank_note": "Consolidated voting-precinct layer \u2014 suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only \u2014 city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name \u2014 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer \u2014 suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only \u2014 city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name \u2014 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature \u2014 no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
@@ -532,6 +532,18 @@
         "note": "LaSalle County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "boone-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Boone County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "grundy-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Grundy County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
         "file": "kankakee-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -633,7 +645,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v27",
+    "cache_name": "district-explorer-shell-v28",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
