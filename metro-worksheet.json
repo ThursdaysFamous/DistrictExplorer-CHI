@@ -2,8 +2,8 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -90.25,
-    "minLat": 38.9,
+    "minLng": -90.45,
+    "minLat": 38.1,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,9 +12,9 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 38.85,
+    "minLat": 38.05,
     "maxLat": 42.75,
-    "minLng": -90.35,
+    "minLng": -90.55,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -554,6 +554,18 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "madison-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Madison County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "st-clair-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "St. Clair County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
         "file": "macoupin-county-outline.json",

@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -90.25, minLat: 38.9, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -90.45, minLat: 38.1, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 38.85, maxLat: 42.75, minLng: -90.35, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 38.05, maxLat: 42.75, minLng: -90.55, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7693,6 +7693,22 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadMadisonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-county-outline.json", {}, 2);
+  });
+  function madisonCountyCoverage(point) {
+    return loadMadisonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadStClairCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/st-clair-county-outline.json", {}, 2);
+  });
+  function stClairCountyCoverage(point) {
+    return loadStClairCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7830,6 +7846,129 @@ function initChiExplorer() {
         if (!hasUsableGeometry(geojson)) throw new Error("Macoupin County precincts returned no usable geometry");
         return geojson;
       });
+  });
+
+  /* ---------- THE METRO EAST (Madison + St. Clair) ------------------------
+   * The two counties the Livingston -> Macoupin bridge was built to reach.
+   * Madison runs three ArcGIS instances on one host — /servera (county layers),
+   * /serverh (hosted election layers) and /portal — none of them at the
+   * conventional /arcgis, which is why hostname guessing found nothing and
+   * following a web map's operationalLayers found everything. */
+  var MADISON_GIS = "https://gisportal.co.madison.il.us/servera/rest/services/";
+  var MADISON_ELECTION = "https://gisportal.co.madison.il.us/serverh/rest/services/Hosted/" +
+    "ElectionGeography_public_e52134a5089e48deb03585c901d6c563/FeatureServer/";
+
+  /* Madison's board layer is the richest county-board source in the fleet: the
+   * official, party, term, phone, e-mail and a per-district page all ride the
+   * district feature (26/26 on name, party, e-mail and URL; 25/26 phone). It is
+   * the one county where the card's whole convention order — identifier,
+   * representative, location, contact, link — comes from a single request. */
+  var loadMadisonCountyBoard = makeCached(function () {
+    return loadCountyMapServerLayer(MADISON_GIS + "CountyClerk/CBDWS", 0,
+      "DISTRICT,OFFICIAL,PARTY,PHONE,EMAIL,URL,ADDRESS,CITY,STATE,ZIPCODE",
+      "Madison County Board");
+  });
+  /* 42 fire districts WITH CONTACT — the first contact-bearing fire entry in the
+   * fleet (Kankakee's and Logan's are identity-only). Department head 39/42,
+   * address 41/42, phone 41/42, website 30/42; e-mail is populated on 3 of 42
+   * and so is not requested, since a row that appears on one card in fourteen
+   * reads as an error rather than a fact. */
+  var loadMadisonFireDistricts = makeCached(function () {
+    return loadCountyMapServerLayer(MADISON_GIS + "MadCo/FireDistrictsWS", 0,
+      "NAME,DEPTHEAD,ADDRESS,CITY,ZIPCODE,PHONE,URL", "Madison County fire districts");
+  });
+  var MADISON_AGOL = "https://services.arcgis.com/Z0kKj2K728ngqqrp/arcgis/rest/services/";
+  function loadMadisonAgolLayer(service, layerIndex, outFields, label) {
+    var url = MADISON_AGOL + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  // Layer ids on these are 40, not 0 — querying /0 returns an ERROR ENVELOPE that
+  // parses as an empty result, so "0 features" would have read as "no data".
+  var loadMadisonParkDistricts = makeCached(function () {
+    return loadMadisonAgolLayer("MadCo_ParkDistricts", 40, "PARK", "Madison County park districts");
+  });
+  var loadMadisonLibraryDistricts = makeCached(function () {
+    return loadMadisonAgolLayer("MadCo_LibraryDistricts", 40, "LIBRARY", "Madison County library districts");
+  });
+  /* Precincts + polling places on the county's hosted election service, joined
+   * on `pollingid` -> the polling feature's GlobalID: the Kendall model, and a
+   * measured 191/191 exact match — the cleanest polling join in the fleet.
+   * Stamped at load time so the card's query stays a plain containment test and
+   * a polling-layer failure costs the polling rows, never the precinct. */
+  var loadMadisonPrecincts = makeCached(function () {
+    function layer(index, outFields, label) {
+      var url = MADISON_ELECTION + index + "/query?where=1%3D1&outFields=" + outFields +
+        "&outSR=4326&f=geojson&geometryPrecision=5";
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Madison County " + label + " returned no usable geometry");
+          return geojson;
+        });
+    }
+    return Promise.all([
+      layer(1, "precinctid,name,pollingid", "precincts"),
+      layer(0, "name,fulladdr,municipality,pstlzip5,globalid", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var g = findPropCI(f.properties || {}, ["globalid"]);
+          if (g != null && String(g).trim()) byId[String(g).trim().toUpperCase()] = f.properties || {};
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["pollingid"]);
+          var place = key != null ? byId[String(key).trim().toUpperCase()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var street = findPropCI(place, ["fulladdr"]);
+          var city = findPropCI(place, ["municipality"]);
+          var zip = findPropCI(place, ["pstlzip5"]);
+          var tail = [city, zip].filter(function (x) { return x != null && String(x).trim(); })
+            .map(function (x) { return String(x).trim(); }).join(" ");
+          if (street != null && String(street).trim()) {
+            props.dxPollingAddress = String(street).trim() + (tail ? ", " + tail : "");
+          }
+        });
+      }
+      return precincts;
+    });
+  });
+
+  /* St. Clair's public map server sits at /server, and its voting-districts
+   * service carries the board districts, the precincts and the polling places
+   * as sibling layers.
+   *
+   * ITS PRECINCT LAYER HAS A `bdnum` COLUMN THAT IS NOT THE BOARD DISTRICT.
+   * It looks exactly like one — small integers over roughly the right range —
+   * but tested against the board polygons it agrees on only 23 of 150
+   * precincts, no better than chance. Rendering it would have put a wrong
+   * County Board district on 127 precinct cards. The board row therefore comes
+   * from the same best-effort spatial join every other county's precinct entry
+   * uses, and `bdnum` is left unread. */
+  var STCLAIR_GIS = "https://arcgispublicmap.co.st-clair.il.us/server/rest/services/" +
+    "SCC_voting_districts/MapServer/";
+  function loadStClairLayer(index, outFields, label) {
+    var url = STCLAIR_GIS + index + "/query?where=1%3D1&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("St. Clair County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadStClairCountyBoard = makeCached(function () {
+    return loadStClairLayer(2, "district,name", "board districts");
+  });
+  var loadStClairPrecincts = makeCached(function () {
+    return loadStClairLayer(18, "prec_name2", "precincts");
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -11722,6 +11861,136 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // Madison (26 single-member districts) — rule-4 branch 1 and the richest
+      // board source in the fleet: official, party, phone, e-mail, per-district
+      // page and mailing address all ride the district feature, so the card's
+      // whole convention order comes from one request with no scraper, no roster
+      // file and no weekly workflow. Cross-checked against the county's own
+      // board-members page before shipping (D1 Fred Michael, D2 Ron Simpson,
+      // D3 Frank Dickerson, D4 Bobby Ross all agree).
+      {
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loadGeometry: loadMadisonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadMadisonCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            var url = findPropCI(props, ["url"]);
+            var person = gisBoardPerson(props, {
+              name: function (p) {
+                var v = findPropCI(p, ["official"]);
+                return v != null && String(v).trim() ? String(v).trim() : null;
+              },
+              party: ["party"],
+              phone: ["phone"],
+              email: ["email"],
+              address: function (p) {
+                var street = findPropCI(p, ["address"]);
+                if (street == null || !String(street).trim()) return null;
+                var tail = [findPropCI(p, ["city"]), findPropCI(p, ["state"]), findPropCI(p, ["zipcode"])]
+                  .filter(function (x) { return x != null && String(x).trim(); })
+                  .map(function (x) { return String(x).trim(); }).join(" ");
+                return String(street).replace(/\s+/g, " ").trim() + (tail ? ", " + tail : "");
+              }
+            });
+            if (person) {
+              person.badge = partyBadge(person.badge);
+              var safe = url ? safeHttpUrl(url) : null;
+              if (safe) person.links = [{ label: "Profile", url: safe }];
+            }
+            return { seq: seq, district: d != null && d !== "" ? String(d) : null, person: person };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Madison County Board",
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://madisoncountyil.gov/government/county_board/board_members.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadMadisonCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["official"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
+      },
+      // St. Clair (28 single-member districts) — rule-4 branch 1 at its
+      // thinnest: the member name rides the boundary GIS 28/28 and nothing else
+      // does, so the card is identifier + representative + link. Cross-checked
+      // against the county's own board page before shipping (D1 Robert Allen
+      // Jr., D4 Harry Hollingsworth, D6 Marty Crawford, D10 Scott Greenwald and
+      // D11 Ken Sharkey all agree).
+      {
+        key: "st-clair",
+        coverage: stClairCountyCoverage,
+        loadGeometry: loadStClairCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadStClairCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: d != null && d !== "" ? String(d) : null,
+              person: gisBoardPerson(props, {
+                name: function (p) {
+                  var v = findPropCI(p, ["name"]);
+                  return v != null && String(v).trim() ? String(v).trim() : null;
+                }
+              })
+            };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "St. Clair County Board",
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.co.st-clair.il.us/departments/county-board" };
+        },
+        hoverOfficial: {
+          load: loadStClairCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["name"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
       }
     ]
   });
@@ -12051,6 +12320,33 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
         ]
+      }),
+      // Madison's fire tiling (42) — the FIRST CONTACT-BEARING fire entry in the
+      // fleet. Every other county's is identity-only because the source is; this
+      // one publishes the department head, station address, phone and website,
+      // so the card follows the full convention order instead of stopping at a
+      // name. E-mail is populated on 3 of 42 and deliberately not requested — a
+      // row that appears on one card in fourteen reads as an error, not a fact.
+      polygonCountyEntry({
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loader: loadMadisonFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["name"], primary: true },
+          { name: "head", label: "Fire Chief", keys: ["depthead"] },
+          { name: "address", label: "Station", keys: ["address"] },
+          { name: "city", label: "City", keys: ["city"] },
+          { name: "phone", label: "Phone", keys: ["phone"] },
+          { label: "County", value: "Madison County" },
+          // captured for the footer link below, never rendered as a row:
+          // polygonCountyEntry emits a row for every keyed field unless `when`
+          // says otherwise, and a bare URL row would duplicate the link.
+          { name: "url", label: "Website", keys: ["url"], when: function () { return false; } }
+        ],
+        primaryLink: function (result) {
+          var url = result && result.url ? safeHttpUrl(result.url) : null;
+          return url ? { label: "Official site", url: url } : null;
+        }
       })
     ]
   });
@@ -12169,6 +12465,18 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
+        ]
+      }),
+      // Madison's park tiling (6) — identity-only; the AGOL layer carries the
+      // district name and nothing else. A partial tiling, correctly: most of the
+      // county is in no park district at all.
+      polygonCountyEntry({
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loader: loadMadisonParkDistricts,
+        fields: [
+          { name: "name", label: "Park District", keys: ["park"], primary: true },
+          { label: "County", value: "Madison County" }
         ]
       })
     ]
@@ -12351,6 +12659,16 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
+        ]
+      }),
+      // Madison's library tiling (18) — identity-only, same shape as its parks.
+      polygonCountyEntry({
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loader: loadMadisonLibraryDistricts,
+        fields: [
+          { name: "name", label: "Library District", keys: ["library"], primary: true },
+          { label: "County", value: "Madison County" }
         ]
       })
     ]
@@ -12985,6 +13303,115 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Macoupin County Clerk — Elections (official)", url: "https://www.macoupinvotes.gov/" };
+        }
+      },
+      // Madison (191) — the cleanest polling join in the fleet: `pollingid` on
+      // the precinct resolves to the polling feature's GlobalID 191/191, stamped
+      // at load time (the Kendall model). Board district comes from the
+      // best-effort spatial join every other entry uses.
+      {
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loadGeometry: loadMadisonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMadisonPrecincts(),
+            loadMadisonCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) fields.push({ label: "Polling place", value: String(result.pollingPlace) });
+          if (result.pollingAddress) fields.push({ label: "Address", value: String(result.pollingAddress) });
+          fields.push({ label: "County", value: "Madison County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Madison County Clerk — Elections (official)",
+            url: "https://madisoncountyil.gov/departments/county_clerk/elections/index.php"
+          };
+        }
+      },
+      // St. Clair (150). Identity + board district only: the county publishes
+      // 103 polling places, but keyed by a COMBINED human label
+      // ("Belleville9,10, 12 & 16") rather than by precinct id, so joining them
+      // means parsing prose into a set — recorded as a gap rather than guessed
+      // at. `bdnum` on the precinct is NOT the board district (23/150 agreement,
+      // no better than chance), so the board row is the spatial join.
+      {
+        key: "st-clair",
+        coverage: stClairCountyCoverage,
+        loadGeometry: loadStClairPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["prec_name2"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStClairPrecincts(),
+            loadStClairCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(feature.properties || {}, ["prec_name2"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          fields.push({ label: "County", value: "St. Clair County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "St. Clair County Clerk — Elections (official)",
+            url: "https://www.co.st-clair.il.us/departments/county-clerk/elections"
+          };
         }
       }
     ],

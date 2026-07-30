@@ -65,22 +65,23 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
 # Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
-# passes 2-3, then Winnebago and the Livingston -> McLean -> Logan -> Sangamon ->
-# Macoupin bridge from pass 4.
+# passes 2-3, then Winnebago, the Livingston -> McLean -> Logan -> Sangamon ->
+# Macoupin bridge, and the Metro East (Madison, St. Clair) it was built to reach.
 #
 # All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
 # that way is a deliberate constraint, not a coincidence: a detached county would
 # make the served area a set of islands, and the operator's call is that coverage
 # grows as a connected region. Madison and St. Clair are researched and ready but
 # sit 200 miles south; the Livingston -> McLean -> Logan -> Sangamon -> Macoupin
-# bridge is now COMPLETE, built one contiguous county at a time so the ring
-# stayed single at every step; Madison and St. Clair are next and are already
-# adjacent to the served area.
+# bridge did its job: built one contiguous county at a time, it carried the
+# served area from the Wisconsin line to the Metro East as ONE ring, and Madison
+# and St. Clair joined it without ever being an island.
 #
 # group_rings() below nests rings correctly and emits a MultiPolygon if this ever
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
-                     "099", "091", "007", "063", "201", "105", "113", "107", "167", "117")
+                     "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
+                     "119", "163")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -116,13 +117,16 @@ INSIDE = {
     "Lincoln (Logan)": (40.1481, -89.3637),
     "Springfield (Sangamon)": (39.7990, -89.6440),
     "Carlinville (Macoupin)": (39.2798, -89.8818),
+    "Edwardsville (Madison)": (38.8114, -89.9532),
+    "Belleville (St. Clair)": (38.5136, -89.9842),
 }
 OUTSIDE = {
-    # Edwardsville is the seat of Madison. With Macoupin shipped the bridge is
-    # complete and Madison is now CONTIGUOUS with the served area — it is
-    # researched and ready, and this line is what will fail the build the day its
-    # dispatch entry lands, forcing the county list to be updated with it.
-    "Edwardsville (Madison)": (38.8114, -89.9532),
+    # Waterloo (Monroe) and Carlyle (Clinton) sit just past the new southern and
+    # eastern edges, so the Metro East is shown to have MOVED the boundary rather
+    # than merely widened an untested interior — and either would fail the build
+    # if a future county list quietly swallowed a neighbour.
+    "Waterloo (Monroe)": (38.3359, -90.1498),
+    "Carlyle (Clinton)": (38.6103, -89.3726),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
     # LaSalle) and is the one border-ring county with no locatable GIS — so it

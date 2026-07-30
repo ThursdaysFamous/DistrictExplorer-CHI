@@ -121,6 +121,8 @@ GEOMETRY_FILES = {
     "grundy-county-outline.json": (1, 1),  # Grundy County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "kankakee-county-outline.json": (1, 1),  # Kankakee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "winnebago-county-outline.json": (1, 1),  # Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "madison-county-outline.json": (1, 1),  # Madison County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "st-clair-county-outline.json": (1, 1),  # St. Clair County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "macoupin-county-outline.json": (1, 1),  # Macoupin County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "sangamon-county-outline.json": (1, 1),  # Sangamon County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "logan-county-outline.json": (1, 1),  # Logan County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
