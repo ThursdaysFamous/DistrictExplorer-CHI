@@ -7726,6 +7726,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadDekalbCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dekalb-county-outline.json", {}, 2);
+  });
+  function dekalbCountyCoverage(point) {
+    return loadDekalbCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -8010,6 +8018,146 @@ function initChiExplorer() {
   });
   var loadStClairPrecincts = makeCached(function () {
     return loadStClairLayer(18, "prec_name2", "precincts");
+  });
+
+  /* ---------- DeKalb — the notch the ring had been wrapped around ---------
+   * Boone, McHenry, Kane, Kendall and LaSalle were all served while the county
+   * between them was greyed out, recorded as a gap that read "DeKalb County has
+   * no located GIS". That was wrong. The county runs a 72-service ArcGIS Online
+   * org; it was never found because searching for "DeKalb" returns DeKalb
+   * County GEORGIA and three guessed hostnames did not resolve. It turned up
+   * the way LaSalle's, Winnebago's and Madison's did — follow the county's own
+   * site to a web map, then read the map's operational layers.
+   *
+   * LAYER IDS ARE NOT 0-BASED HERE. Precincts is layer 1, and the property-tax
+   * services number theirs 4, 7 and 9. Querying /0 on any of them returns an
+   * error envelope that parses as an empty result, so a wrong guess looks like
+   * "the county publishes nothing" rather than a failure — every id below was
+   * read off the service, not assumed.
+   *
+   * FIVE of the fleet's consolidated concepts light up from one org: board
+   * districts, precincts, fire, park and library. That is the county-expansion
+   * invariant working as designed — dispatch entries and roster rows, no new
+   * layers (docs/EXPANSION_GUIDE.md Part 2). */
+  var DEKALB_GIS = "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/";
+
+  /* THIS SERVICE'S f=geojson OUTPUT IS LOSSY, so these layers are fetched as
+   * Esri JSON and assembled here. A multi-PART polygon comes back from the
+   * GeoJSON writer as a single Polygon with every part's ring concatenated into
+   * one ring list — DeKalb Park is 48 separate parts flattened into a 49-ring
+   * "Polygon". GeoJSON says ring 0 is the outside and the rest are holes, and
+   * the app's even-odd containment test says a point crossing two rings is
+   * outside, so every part that happens to sit INSIDE another part becomes a
+   * false hole. Measured against the same features read as Esri JSON: 1.6 km²
+   * of the park tiling (0.44%) and 1.2 km² of the fire tiling (0.08%) answer
+   * "no district" when they are in one, with two single holes over 1 km² each —
+   * a quarter-square-mile of DeKalb reporting no park district.
+   *
+   * Esri JSON does not lose this, because Esri encodes part structure in ring
+   * WINDING rather than in nesting: clockwise is an outer ring, counter-
+   * clockwise is a hole in the outer that contains it. So rings are split by
+   * winding and each hole is attached to the smallest outer ring containing it,
+   * which is the standard disambiguation when outers nest. The result is a real
+   * MultiPolygon, and pointInGeometry's per-part even-odd is then correct.
+   *
+   * Ring ORIENTATION is left as Esri emits it. RFC 7946 wants exterior rings
+   * counter-clockwise, but nothing here reads winding — the app's containment
+   * test and Leaflet both work on nesting alone — and rewinding would be work
+   * done for no reader. */
+  function esriRingsToGeoJSON(features, fieldNames) {
+    var out = [];
+    for (var i = 0; i < features.length; i++) {
+      var rings = (features[i].geometry || {}).rings;
+      if (!rings || !rings.length) continue;
+      var outers = [], holes = [], j;
+      for (j = 0; j < rings.length; j++) {
+        (signedRingArea(rings[j]) < 0 ? outers : holes).push(rings[j]);
+      }
+      // A feature with no clockwise ring at all would mean the winding
+      // convention doesn't hold on this service; treat every ring as its own
+      // part rather than silently dropping the feature.
+      if (!outers.length) { outers = rings; holes = []; }
+      var parts = [];
+      for (j = 0; j < outers.length; j++) parts.push([outers[j]]);
+      for (j = 0; j < holes.length; j++) {
+        var best = -1, bestArea = Infinity;
+        for (var k = 0; k < outers.length; k++) {
+          if (!pointInRing(holes[j][0], outers[k])) continue;
+          var area = Math.abs(signedRingArea(outers[k]));
+          if (area < bestArea) { bestArea = area; best = k; }
+        }
+        // an unattached hole (numeric edge case) is dropped, never promoted to
+        // a part — promoting it would ADD area the county never mapped
+        if (best >= 0) parts[best].push(holes[j]);
+      }
+      var props = {}, attrs = features[i].attributes || {};
+      for (var f = 0; f < fieldNames.length; f++) props[fieldNames[f]] = attrs[fieldNames[f]];
+      out.push({
+        type: "Feature",
+        properties: props,
+        geometry: parts.length === 1
+          ? { type: "Polygon", coordinates: parts[0] }
+          : { type: "MultiPolygon", coordinates: parts }
+      });
+    }
+    return { type: "FeatureCollection", features: out };
+  }
+  function signedRingArea(ring) {
+    var sum = 0;
+    for (var i = 0; i < ring.length - 1; i++) {
+      sum += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1];
+    }
+    return sum / 2;
+  }
+  function loadDekalbLayer(service, layerIndex, outFields, label) {
+    var url = DEKALB_GIS + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields +
+      "&outSR=4326&f=json&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (payload) {
+        var features = payload && payload.features;
+        if (!features || !features.length) {
+          // an Esri error envelope parses fine and has no features — without
+          // this it would read as "the county publishes nothing here"
+          throw new Error("DeKalb County " + label + " returned no features");
+        }
+        var geojson = esriRingsToGeoJSON(features, outFields.split(","));
+        if (!hasUsableGeometry(geojson)) throw new Error("DeKalb County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  /* The board layer ALSO declares Member1/Member2 with their own phone and
+   * e-mail columns, so this looks like a rule-4 branch 1 county. Measured, it
+   * is not: both phone columns are set on 0 of 12 districts and Member2_EMail
+   * on 10 of 12, while the county's own members page carries party, term, 22
+   * phones and 24 e-mails. A schema is not data — the officeholders come from
+   * the weekly roster below and only District_Number is requested here. */
+  var loadDekalbCountyBoard = makeCached(function () {
+    return loadDekalbLayer("District_AreaEffective2022", 0, "District_Number", "Board");
+  });
+  var loadDekalbBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dekalb-county-board-members.json", {}, 2);
+  });
+  /* 69 precincts named as the county names them — two-letter township codes
+   * ("SG 01", "DK 15"). The county publishes those codes on its board-member
+   * pages and its committeeperson lists and publishes no legend expanding them,
+   * so they are rendered verbatim rather than guessed into township names; the
+   * separate township layer already answers which township a point is in.
+   * Recorded as a gap. */
+  var loadDekalbPrecincts = makeCached(function () {
+    return loadDekalbLayer("Precincts", 1, "name", "precincts");
+  });
+  /* The PT_* services are the clerk's property-tax district tiling, which is
+   * why their names read as tax districts ("Malta Fire"). Identity only — no
+   * officeholder or contact column exists on any of them. */
+  var loadDekalbFire = makeCached(function () {
+    return loadDekalbLayer("PT_Fire_Districts", 4, "Fire_District", "fire districts");
+  });
+  var loadDekalbParkDistricts = makeCached(function () {
+    return loadDekalbLayer("PT_Park_Districts", 9, "District", "park districts");
+  });
+  var loadDekalbLibraryDistricts = makeCached(function () {
+    return loadDekalbLayer("PT_Library_Districts", 7, "LibraryDistrict", "library districts");
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -12053,6 +12201,73 @@ function initChiExplorer() {
             return (v == null || String(v).trim() === "") ? null : String(v).trim();
           }
         }
+      },
+      // DeKalb (12 districts electing TWO members each) — a roster join, not a
+      // rule-4 branch 1, even though the boundary service declares Member1/
+      // Member2 with phone and e-mail columns. Those phone columns are empty on
+      // every district; the county's own members page is where the contact
+      // actually lives, so the GIS supplies geometry and the weekly roster
+      // supplies people. The chair is one of the 24 district members (the board
+      // elects its own), so it rides that member's row as a role rather than a
+      // countywide section — there is no 25th at-large seat to imply.
+      {
+        key: "dekalb",
+        coverage: dekalbCountyCoverage,
+        loadGeometry: loadDekalbCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district_number"]);
+          return (v == null || v === "") ? null : String(Number(v));
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDekalbCountyBoard(),
+            loadDekalbBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            // District_Number is a STRING and zero-padded ("01".."12"); the
+            // roster is keyed by the plain number the county prints on its
+            // pages, so normalise before the join or every district under 10
+            // silently misses.
+            var raw = findPropCI(feature.properties || {}, ["district_number"]);
+            var district = (raw == null || raw === "") ? null : String(Number(raw));
+            var entry = district ? results[1][district] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "DeKalb County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + result.district : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://dekalbcounty.org/government/county-board/county-board-members/"
+          };
+        },
+        hoverOfficial: {
+          load: loadDekalbBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var raw = findPropCI(feature.properties || {}, ["district_number"]);
+            var e = (raw == null || raw === "") ? null : roster[String(Number(raw))];
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
       }
     ]
   });
@@ -12409,6 +12624,18 @@ function initChiExplorer() {
           var url = result && result.url ? safeHttpUrl(result.url) : null;
           return url ? { label: "Official site", url: url } : null;
         }
+      }),
+      // DeKalb's fire tiling (18) — identity-only. The source is the clerk's
+      // property-tax district layer, so the names read as tax districts ("Malta
+      // Fire"); no chief, station or contact column exists on it.
+      polygonCountyEntry({
+        key: "dekalb",
+        coverage: dekalbCountyCoverage,
+        loader: loadDekalbFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["fire_district"], primary: true },
+          { label: "County", value: "DeKalb County" }
+        ]
       })
     ]
   });
@@ -12539,6 +12766,18 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "Madison County" }
+        ]
+      }),
+      // DeKalb's park tiling (6) — identity-only, from the same clerk tax-district
+      // family as its fire entry. A thin, honest tiling: most of the county is in
+      // no park district at all.
+      polygonCountyEntry({
+        key: "dekalb",
+        coverage: dekalbCountyCoverage,
+        loader: loadDekalbParkDistricts,
+        fields: [
+          { name: "name", label: "Park District", keys: ["district"], primary: true },
+          { label: "County", value: "DeKalb County" }
         ]
       })
     ]
@@ -12731,6 +12970,17 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "Madison County" }
+        ]
+      }),
+      // DeKalb's library tiling (13) — identity-only, same clerk tax-district
+      // family as its fire and park entries.
+      polygonCountyEntry({
+        key: "dekalb",
+        coverage: dekalbCountyCoverage,
+        loader: loadDekalbLibraryDistricts,
+        fields: [
+          { name: "name", label: "Library District", keys: ["librarydistrict"], primary: true },
+          { label: "County", value: "DeKalb County" }
         ]
       })
     ]
@@ -13525,6 +13775,61 @@ function initChiExplorer() {
           return {
             label: "Winnebago County Clerk — Elections (official)",
             url: "https://wincoil.gov/departments/clerks-office/election-information"
+          };
+        }
+      },
+      // DeKalb (69). Identity + board district from the usual spatial join.
+      // The precinct NAME is the county's own two-letter township code — "SG
+      // 01", "DK 15" — which is exactly how the county prints it on its
+      // board-district and committeeperson listings. It publishes no legend
+      // expanding those codes, so they are rendered verbatim rather than
+      // guessed into township names; the township layer directly above this one
+      // in the nest already answers which township a point is in. Recorded as a
+      // gap so a published legend can close it.
+      {
+        key: "dekalb",
+        coverage: dekalbCountyCoverage,
+        loadGeometry: loadDekalbPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDekalbPrecincts(),
+            loadDekalbCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district_number"]);
+                if (d != null && d !== "") boardDistrict = String(Number(d));
+              }
+            }
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          fields.push({ label: "County", value: "DeKalb County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "DeKalb County Clerk — Elections (official)",
+            url: "https://dekalbcountyclerkil.gov/election-information/"
           };
         }
       }

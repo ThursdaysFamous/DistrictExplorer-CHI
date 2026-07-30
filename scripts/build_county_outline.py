@@ -250,6 +250,31 @@ COUNTIES = {
             (38.6254, -90.1900, "St. Louis, Missouri (across the river)"),
         ],
     },
+    # DeKalb closes the notch the ring had been wrapped around since pass 2:
+    # Boone to the north, McHenry at the north-east corner, Kane to the east,
+    # Kendall to the south-east and LaSalle to the south were all already served.
+    # Only the western edge (Ogle, Lee) is a genuine frontier, so those two get
+    # the OUTSIDE anchors that matter.
+    "dekalb": {
+        "fips": "037",
+        "name": "DeKalb County",
+        "inside": [
+            (41.9889, -88.6868, "Sycamore (county seat)"),
+            (41.8903, -88.7714, "DeKalb"),
+            (41.6459, -88.6217, "Sandwich"),
+            (42.0972, -88.6929, "Genoa"),
+            (41.7717, -88.7737, "Waterman"),
+        ],
+        "outside": [
+            (41.9239, -89.0687, "Rochelle — Ogle County"),
+            (41.8425, -89.4814, "Dixon — Lee County"),
+            (42.2580, -88.8417, "Belvidere — Boone County"),
+            (41.8922, -88.4723, "Elburn — Kane County"),
+            (41.6629, -88.5367, "Plano — Kendall County"),
+            (41.5895, -88.9220, "Earlville — LaSalle County"),
+            (42.2501, -88.6081, "Marengo — McHenry County"),
+        ],
+    },
 }
 
 

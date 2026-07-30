@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""
+Stage 1 of the DeKalb County Board roster pipeline: scrape the county's
+board-members directory into raw JSON for build_dekalb_county_board_roster.py.
+
+WHY A SCRAPER WHEN THE BOUNDARY GIS ALREADY CARRIES OFFICEHOLDERS.
+DeKalb's District_AreaEffective2022 feature layer declares Member1/Member2 with
+their own phone and e-mail columns, which looks like a rule-4 branch 1 county —
+name rides the boundary, no pipeline needed. Measured, it isn't: the two phone
+columns are populated on 0 of 12 districts and Member2_EMail on 10 of 12, while
+the county's own members page carries party, term, 22 phones and 24 e-mails.
+A schema is not data. The GIS supplies the geometry; this supplies the people.
+
+PAGE SHAPE. One <li class="team-pic-container"> per member, carrying the name in
+an <h1>, the district and party together as "<b>District:</b> 5/D", the term
+under "Consecutive Service:", an optional "Phone:" line and a mailto link — plus
+a "Map of County Board District N" link that repeats the district. That repeat is
+parsed and cross-checked against the declared district, because a member block
+that disagrees with itself is the signal that the markup drifted.
+
+THE BUG THIS PARSER IS SHAPED AROUND. Two members publish no phone. A first
+attempt scanned a fixed line window after the name and, on those two, ran past
+the end of the block and picked up the NEXT member's phone number — attributing
+a real person's phone to someone else, silently, on a card that looks fine. Each
+block is therefore bounded by the next block's start before any field is read.
+
+THE CHAIR comes from a second page, the county's own "Past & Present
+Chairpersons" table, whose first data row is the sitting chair. The role is
+applied only if that name matches exactly one scraped member; a chair who has
+left the board resolves to no match and the role is dropped rather than guessed
+onto someone. If that page fails, the members scrape still succeeds without it.
+
+FETCHING. dekalbcounty.org sits behind Sucuri, which INTERMITTENTLY answers with
+a ~220-byte captcha-redirect stub carrying HTTP 200 — not an error status, just
+the wrong document. Measured cold, roughly two requests in three come back as the
+stub and the third serves the page. So a fetch that only checked status_code
+would have shipped a "the markup changed" failure most weeks. Every fetch is
+retried until the response stops looking like an interstitial, using the same
+_looks_blocked marker test as the McHenry and Kendall scrapers.
+
+Committee assignments and the per-district map PDFs are on the page and
+deliberately not collected — neither is card material, matching the McHenry and
+Livingston rosters. No street addresses appear on this page at all.
+
+Usage:
+    python3 dekalb_county_board_scraper.py [output.json]
+"""
+
+import html
+import json
+import re
+import sys
+import time
+
+import requests
+
+SOURCE_URL = "https://dekalbcounty.org/government/county-board/county-board-members/"
+CHAIR_URL = "https://dekalbcounty.org/government/county-board/past-county-board-chairpersons/"
+# dekalbcounty.org answers a bare client with a Sucuri captcha redirect; a
+# browser UA clears it (no challenge solving involved).
+HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+}
+REQUEST_TIMEOUT = 60
+FETCH_ATTEMPTS = 6
+
+# Sucuri's stub is a bare <html> with a meta-refresh to /.well-known/sgcaptcha/.
+# The generic markers follow the McHenry/Kendall list so one convention covers
+# every bot-managed county source in the fleet.
+BLOCK_MARKERS = (
+    "sgcaptcha",
+    "just a moment",
+    "attention required",
+    "checking your browser",
+    "access denied",
+    "cf-chl",
+)
+
+BLOCK_SPLIT = re.compile(r'(?=<li class="team-pic-container)')
+NAME_RE = re.compile(r"<h1>(.*?)</h1>", re.S)
+DISTRICT_RE = re.compile(r"<b>\s*District:\s*</b>\s*(\d{1,2})\s*/\s*([A-Za-z])", re.I)
+PHONE_RE = re.compile(r"Phone:\s*([0-9][0-9\-().\s]{6,})")
+EMAIL_RE = re.compile(r'mailto:([^"?\s]+)')
+TERM_RE = re.compile(r"<b>\s*Consecutive Service:\s*</b>\s*(?:<br\s*/?>\s*)*"
+                     r"([0-9/]{6,10}\s*-\s*[0-9/]{6,10})", re.I)
+MAP_RE = re.compile(r"Map of County Board District\s*(\d{1,2})", re.I)
+TAG_RE = re.compile(r"<[^>]+>")
+SCRIPT_RE = re.compile(r"<(script|style)[^>]*>.*?</\1>", re.S | re.I)
+
+CHAIR_ROW_RE = re.compile(
+    r"<tr[^>]*>\s*<td[^>]*>(?P<elected>[^<]*)</td>\s*<td[^>]*>(?P<years>[^<]*)</td>"
+    r"\s*<td[^>]*>(?P<party>[^<]*)</td>\s*<td[^>]*>(?P<name>[^<]*)</td>", re.I | re.S)
+
+PARTY = {"r": "R", "d": "D", "i": "I"}
+
+
+def text_of(fragment):
+    return re.sub(r"\s+", " ", html.unescape(TAG_RE.sub(" ", fragment))).strip()
+
+
+def parse_members(page):
+    page = SCRIPT_RE.sub(" ", page)
+    records = []
+    for block in BLOCK_SPLIT.split(page)[1:]:
+        name_m = NAME_RE.search(block)
+        dist_m = DISTRICT_RE.search(block)
+        if not (name_m and dist_m):
+            continue
+        name = text_of(name_m.group(1))
+        if not name:
+            continue
+        rec = {"district": dist_m.group(1).lstrip("0") or "0", "name": name}
+        party = PARTY.get(dist_m.group(2).lower())
+        if party:
+            rec["party"] = party
+        phone = PHONE_RE.search(block)
+        if phone:
+            rec["phone"] = re.sub(r"\s+", " ", phone.group(1)).strip(" .-")
+        email = EMAIL_RE.search(block)
+        if email:
+            rec["email"] = html.unescape(email.group(1)).strip()
+        term = TERM_RE.search(block)
+        if term:
+            rec["term"] = re.sub(r"\s+", " ", term.group(1)).strip()
+        # self-check: the block's own map link names its district a second time
+        map_d = MAP_RE.search(block)
+        if map_d:
+            rec["map_district"] = map_d.group(1).lstrip("0") or "0"
+        records.append(rec)
+    return records
+
+
+def parse_chair(page):
+    """First data row of the chairperson table = the sitting chair."""
+    body = re.search(r"<tbody[^>]*>(.*?)</tbody>", page, re.S | re.I)
+    if not body:
+        return None
+    row = CHAIR_ROW_RE.search(body.group(1))
+    if not row:
+        return None
+    name = text_of(row.group("name"))
+    if not name:
+        return None
+    return {"name": name,
+            "party": PARTY.get(text_of(row.group("party")).lower()),
+            "elected": text_of(row.group("elected")),
+            "fiscal_years": text_of(row.group("years"))}
+
+
+def _looks_blocked(page):
+    low = (page or "").lower()
+    return any(marker in low for marker in BLOCK_MARKERS)
+
+
+def fetch(url, attempts=FETCH_ATTEMPTS):
+    """Retry past Sucuri's intermittent captcha stub (which returns HTTP 200)."""
+    session = requests.Session()
+    last = None
+    try:
+        for attempt in range(attempts):
+            try:
+                resp = session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+                # Sucuri serves the stub as 202, not an error status, so status
+                # alone can't tell a challenge from the page — the marker test
+                # is what decides, and any 2xx/3xx is a candidate for it.
+                if resp.ok and not _looks_blocked(resp.text):
+                    return resp.text
+                last = ("bot-management interstitial (HTTP %d)" % resp.status_code
+                        if resp.ok else "HTTP %d" % resp.status_code)
+            except requests.RequestException as exc:
+                last = str(exc)
+            time.sleep(1.5 * (attempt + 1))
+    finally:
+        session.close()
+    raise RuntimeError("Failed to fetch %s after %d attempts: %s" % (url, attempts, last))
+
+
+def main():
+    out_path = sys.argv[1] if len(sys.argv) > 1 else "dekalb_county_board_raw.json"
+    records = parse_members(fetch(SOURCE_URL))
+    if not records:
+        print("dekalb-scraper: FAIL — parsed 0 member blocks; the directory "
+              "markup changed", file=sys.stderr)
+        sys.exit(1)
+
+    mismatched = [r for r in records
+                  if r.get("map_district") and r["map_district"] != r["district"]]
+    if mismatched:
+        print("dekalb-scraper: FAIL — %d member block(s) disagree with their own "
+              "district map link (%s); the page structure changed and blocks are "
+              "no longer being read whole"
+              % (len(mismatched),
+                 ", ".join("%s: %s vs %s" % (r["name"], r["district"], r["map_district"])
+                           for r in mismatched[:4])),
+              file=sys.stderr)
+        sys.exit(1)
+
+    # The chair is enrichment: its absence must not fail a good members scrape.
+    chair = None
+    try:
+        chair = parse_chair(fetch(CHAIR_URL))
+    except Exception as exc:  # noqa: BLE001 — any transport/parse failure is non-fatal
+        print("dekalb-scraper: note — chairperson page unavailable (%s); shipping "
+              "the roster without a chair role" % exc, file=sys.stderr)
+
+    payload = {"source_url": SOURCE_URL, "chair_source_url": CHAIR_URL,
+               "chair": chair, "records": records}
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    print("dekalb-scraper: wrote %s — %d members, %d districts, %d phones, "
+          "%d e-mails, chair %s"
+          % (out_path, len(records), len({r["district"] for r in records}),
+             sum(1 for r in records if r.get("phone")),
+             sum(1 for r in records if r.get("email")),
+             (chair or {}).get("name") or "unresolved"))
+
+
+if __name__ == "__main__":
+    main()

@@ -66,17 +66,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any county- or COG-level directory naming mayors/village presidents and boards — ideally with a stable URL that is republished after each election."
     },
     {
-      "id": "dekalb-county-gis",
-      "concept": "All county layers",
-      "area": "DeKalb County",
-      "counties": [],
-      "kind": "no-source",
-      "layer": null,
-      "summary": "DeKalb County, Illinois has no located GIS — so none of its county layers can be built.",
-      "blocker": "ArcGIS Online results for “DeKalb” are dominated by DeKalb County GEORGIA. Field-qualified searches for the Illinois county return only historical plat maps, and three plausible self-hosted hostnames do not resolve.",
-      "wanted": "A working URL for DeKalb County IL's GIS server or ArcGIS org — a county web map that draws precincts or board districts is enough; its operational layers reveal the server."
-    },
-    {
       "id": "lake-municipal-names",
       "concept": "Municipal officials",
       "area": "Lake County",
@@ -288,6 +277,52 @@ in the researched-but-unbuilt backlog.
       "summary": "No county board card names an office you can visit — the card goes from the member straight to their contact details.",
       "blocker": "The card convention is identifier, representative, office LOCATION, contact, link. No Illinois county in the app publishes a board member's office address. LaSalle and Madison publish an address per member, but those are RESIDENCES — 29 distinct addresses for 29 LaSalle members including rural route numbers and a PO box, 18 distinct for Madison's 18 — so they were removed rather than presented as somewhere to go. McHenry, Livingston, Sangamon and Winnebago never collected theirs for the same reason.",
       "wanted": "A per-district OFFICE address, or confirmation that a county's board members hold office hours somewhere specific. County boards mostly meet at one building and members have no individual office, so the honest fix may be a per-county board-office address on the card rather than a per-member one."
+    },
+    {
+      "id": "dekalb-precinct-codes",
+      "concept": "Voting precincts",
+      "area": "DeKalb County",
+      "counties": [
+        "dekalb"
+      ],
+      "kind": "data-quality",
+      "layer": "county-precinct",
+      "summary": "DeKalb precinct cards read “Precinct SG 01” — the county's own two-letter township code, not a name anyone would recognise.",
+      "blocker": "The code is exactly what the county publishes: its board-district listings and its committeeperson lists both print “AF 01”, “DK 15”, “SG 01”, and no page or dataset expands the prefixes. Nineteen townships share a two-letter namespace where several start with the same letters (Sandwich, Shabbona, Somonauk, South Grove, Sycamore), so the expansion cannot be inferred without guessing. The township layer directly above precinct in the nest does answer which township a point is in.",
+      "wanted": "Any DeKalb County list that pairs a precinct code with its township or full precinct name — a clerk's precinct table, a polling-place list carrying both, or a legend on the precinct map."
+    },
+    {
+      "id": "ogle-county-board-districts",
+      "concept": "County board districts",
+      "area": "Ogle County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Ogle County's 24 board members are published in full — district, party, phone and e-mail — but nothing draws the eight district boundaries, so no Ogle point can be placed in one.",
+      "blocker": "Ogle publishes no district geometry: its GIS is a Beacon/Schneider parcel viewer with no REST service, its ArcGIS Online org holds forest-preserve and cemetery layers only, and the county's own voting-precinct publication is a 51-page PDF map atlas. It also publishes no district COMPOSITION — the 2025-2027 clerk's yearbook lists the members and the precinct committeepeople but never says which of the 24 townships or 51 precincts make up each district, so the township-dissolve route that built Livingston's boundaries has nothing to dissolve against.",
+      "wanted": "Either Ogle board-district geometry (a shapefile, GeoJSON or ArcGIS service) or a published list of which precincts or townships make up each of the eight districts — a reapportionment resolution would do. The roster half is already in hand."
+    },
+    {
+      "id": "lee-county-board-districts",
+      "concept": "County board districts",
+      "area": "Lee County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Lee County publishes exactly which precincts make up each of its four board districts, but nothing draws those precincts, so the districts still cannot be built.",
+      "blocker": "Lee's ArcGIS Enterprise portal (gis.leecountyil.gov/portal) exposes zero public items and its REST instance is not reachable, so there is no county precinct geometry. The Census 2020 voting districts are a near-match — all 46 precincts the county names exist there — but the census layer also carries Dixon 18, 19 and 20, which the county's district list does not, so the two vintages disagree about how Dixon township is cut. Dixon township IS the line between Districts 3 and 4 (D3 is Dixon 1-9, D4 is Dixon 10-17 plus Palmyra 2), so that disagreement lands squarely on the boundary that matters, and Palmyra township is split too. A township dissolve would misplace the county seat.",
+      "wanted": "Lee County precinct geometry at the county's CURRENT precinct vintage, or a current precinct-to-district list that accounts for every precinct the county now has. The four-district composition itself is already published."
+    },
+    {
+      "id": "stephenson-county-board-districts",
+      "concept": "County board districts",
+      "area": "Stephenson County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Stephenson County's board districts are published only as PDF maps, so no Stephenson point can be placed in one.",
+      "blocker": "The county's District Maps page links two scanned PDFs — a Freeport Township sheet and a rural sheet — and nothing else. Stephenson runs no GIS server, has no ArcGIS Online presence beyond third-party research layers, and publishes no precinct-to-district composition that a township or precinct dissolve could be built from.",
+      "wanted": "Stephenson board-district geometry in any vector form, or a published list of which precincts or townships make up each district."
     }
   ],
   "nyc": [
@@ -376,8 +411,14 @@ Every entry states its blocker as something MEASURED, and `wanted` says what a s
 would have to contain to be useful — so a reader is never invited to re-send a source that
 was already checked and found wanting. `counties` are outline slugs, which is what makes a
 gap location-aware: with a point selected the panel shows the gaps that apply THERE first.
-An empty `counties` means the gap has no mappable footprint (DeKalb has no GIS to draw)
-and it appears only in the everywhere list.
+An empty `counties` means the gap has no mappable footprint — Ogle, Lee and Stephenson each
+have a real, published board roster or district composition but nothing that draws the
+boundary, so there is no outline to attach the gap to — and it appears only in the
+everywhere list. (The original example here was DeKalb, on the strength of a
+`dekalb-county-gis` entry claiming the county had no GIS at all. It has a 72-service
+ArcGIS Online org; the entry was wrong, not merely stale, and it is retired. A gap that
+says a source does not exist ages badly in one direction only — worth re-testing the
+"no-source" entries periodically rather than trusting them.)
 
 Accepted submissions are credited by name in `docs/SOURCE_CREDITS.md`; see the intake
 template at `.github/ISSUE_TEMPLATE/source-submission.yml`.
@@ -419,7 +460,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
-| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
+| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
 | Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12 + Kane 16th-Circuit 4 (pre-built from the enacted shapefile — the county's services are permission-locked) + McHenry 22nd-Circuit 4 (pre-built — the county publishes no subcircuit service), all PA 102-0693; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
@@ -572,6 +613,83 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > families).
 
 **Open — Illinois**
+- **RESEARCH PASS 5 (2026-07-30) — the northern tier: DeKalb SHIPPED, and the ring's
+  last interior notch is closed.** Four counties sit on the northern frontier —
+  DeKalb (037), Ogle (141), Lee (103) and Stephenson (177). DeKalb was the one that
+  mattered most: it touches SIX already-served counties (Boone, McHenry, Kane, Kendall,
+  LaSalle, Winnebago) and was greyed out between all of them, so the wash had a bite
+  taken out of it. Adding it made the metro outline *smaller* (25.7 KB → 25.4 KB) because
+  the notch it filled cost more vertices than the county's own edge does.
+
+  **DeKalb was recorded as having no GIS at all. That was wrong.** The `dekalb-county-gis`
+  gap said "ArcGIS Online results for DeKalb are dominated by DeKalb County GEORGIA…
+  three plausible self-hosted hostnames do not resolve", and both halves were true — but
+  the conclusion wasn't. The county runs a 72-service ArcGIS Online org
+  (`services7.arcgis.com/hEXJrPwm89CLXBYe`), found the way LaSalle's, Winnebago's and
+  Madison's were: follow the county's own site to a web map, read its operational layers.
+  Hostname guessing has now failed in five counties and the web-map route has worked in
+  five; **stop guessing hostnames**.
+
+  | concept | DeKalb (100,420) | source | shipped |
+  |---|---|---|---|
+  | `county-board` | 12 districts × 2 members | `District_AreaEffective2022/0` + weekly roster | **yes** |
+  | `county-precinct` | 69 | `Precincts/1` | **yes** |
+  | `fire-district` | 18 | `PT_Fire_Districts/4` | **yes** |
+  | `library-district` | 13 | `PT_Library_Districts/7` | **yes** |
+  | `park-district` | 6 | `PT_Park_Districts/9` | **yes** |
+
+  Five consolidated concepts from one org, and **not one new layer** — the county-expansion
+  invariant (`docs/EXPANSION_GUIDE.md` Part 2) working exactly as written.
+
+  **The board looked like rule-4 branch 1 and isn't.** `District_AreaEffective2022`
+  declares `Member1`/`Member2` with their own phone and e-mail columns, which is the
+  signature of a county whose officeholders ride the boundary. Measured: both phone
+  columns are populated on **0 of 12** districts and `Member2_EMail` on 10 of 12, while
+  the county's own members page carries party, term, **22 phones and 24 e-mails**. A
+  schema is not data. So DeKalb is a roster join — GIS for geometry, weekly scrape for
+  people — and the Board Chair (published on a separate chairperson table, first row =
+  sitting chair) rides the matching member's row rather than a countywide section,
+  because DeKalb's board elects its chair from among its own 24 members.
+
+  **Two bugs this county surfaced, both of the silent kind:**
+  1. *The scraper's first parser attributed one member's phone to another.* Two members
+     publish no phone; a fixed line-window scan ran past the end of their blocks and
+     picked up the next member's number. Blocks are now bounded by the next block's start
+     before any field is read, and each block's "Map of County Board District N" link is
+     cross-checked against its declared district.
+  2. *This ArcGIS org's `f=geojson` output is lossy.* A multi-PART polygon comes back as a
+     single `Polygon` with every part's rings concatenated — DeKalb Park is 48 parts
+     flattened into a 49-ring "Polygon". Under GeoJSON semantics ring 0 is the outside and
+     the rest are holes, so any part sitting inside another part becomes a false hole.
+     Measured against the same features read as Esri JSON: **1.6 km² of the park tiling
+     (0.44%) and 1.2 km² of the fire tiling (0.08%)** answered "no district" while being
+     in one, with two single holes over 1 km² each. Esri JSON keeps the part structure in
+     ring WINDING, so the DeKalb loaders fetch `f=json` and reassemble
+     (`esriRingsToGeoJSON`). **Worth re-testing on the other AGOL-hosted counties**
+     (Logan, Sangamon, Madison's `/serverh`) — the quirk is the writer's, not DeKalb's.
+
+  **The other three northern counties are blocked on geometry, not on rosters** — each is
+  a recorded gap with a measured blocker:
+  - **Ogle** — the roster is *complete*: 8 districts × 3 members, 24/24 with district,
+    party, phone and e-mail from the county's staff directory (the 2025-2027 yearbook is
+    already stale against it — it still shows District 8 vacant). Nothing draws the eight
+    districts: Beacon/Schneider parcel viewer, an AGOL org holding forest-preserve and
+    cemetery layers, and a 51-page PDF map atlas of precincts. No published composition
+    either, so Livingston's township-dissolve route has nothing to dissolve against.
+  - **Lee** — publishes its district composition precisely (D1/D2 are whole townships,
+    D3 = Dixon 1-9, D4 = Dixon 10-17 + Palmyra 2) but no precinct geometry; its ArcGIS
+    Enterprise portal exposes zero public items. Census 2020 VTDs contain all 46 named
+    precincts **plus Dixon 18, 19 and 20**, which the county's list does not — the two
+    vintages disagree about how Dixon township is cut, and Dixon township is exactly the
+    D3/D4 line. Palmyra is split too. A township dissolve would misplace the county seat.
+  - **Stephenson** — two scanned PDF district maps and nothing else.
+
+  Next out are Carroll, Jo Daviess and Whiteside, none of which touch the ring today.
+  Whiteside is worth noting for later: its AGOL org publishes `PrecinctWardMap`,
+  `ElectionGeography_public` and a `MyElectedRepresentatives` table — the Esri Elections
+  solution, the same family DeKalb and McLean use — so it would be a cheap county to build
+  **once Ogle or Lee connects it**.
+
 - **RESEARCH PASS 4 (2026-07-30) — Winnebago SHIPPED; the Metro East is researched and
   waiting on a bridge.** Pass 1's border ring is exhausted, so this pass went after the
   large detached candidates. Winnebago (#1, 285,350) turned out **not** to be detached —
