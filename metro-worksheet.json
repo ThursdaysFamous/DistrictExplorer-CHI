@@ -638,6 +638,11 @@
         "min_keys": 6
       },
       {
+        "file": "coverage-gaps.json",
+        "min_keys": 8,
+        "note": "Known data gaps keyed by gap id, driving the app's Data gaps panel \u2014 emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later."
+      },
+      {
         "file": "municipal-officials.json",
         "min_keys": 275,
         "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle shipped (307 municipalities: 185 full governing bodies, 81 head-of-government, 41 contact-only where the county publishes no names) per docs/EXPANSION_GUIDE.md Part 2.4"
@@ -645,7 +650,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v28",
+    "cache_name": "district-explorer-shell-v29",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

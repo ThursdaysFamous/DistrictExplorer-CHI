@@ -29,6 +29,13 @@ jobs:
           pip install -c scripts/requirements.txt jsonschema
           python3 scripts/generate_metro_files.py --check
 
+      # The Data gaps panel is driven by data/app/coverage-gaps.json, emitted
+      # from the guidebook's gaps block. This is the drift gate: editing the
+      # guidebook without regenerating (or the reverse) fails here rather than
+      # shipping a panel that disagrees with the document of record. Stdlib only.
+      - name: Coverage gaps match the guidebook
+        run: python3 scripts/build_coverage_gaps.py --check
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

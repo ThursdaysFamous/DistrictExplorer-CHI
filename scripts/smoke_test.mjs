@@ -161,6 +161,61 @@ try {
     await context.close();
   }
 
+  // 1a. The Data gaps panel: the honest inventory of what the app cannot answer,
+  //     and the source-submission path. Asserted here because the panel is the
+  //     one surface whose whole job is to be accurate about absence — a silently
+  //     empty or unfiltered list is worse than no panel at all. Same-origin data,
+  //     so this needs no network.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, BASE);
+    const shipped = JSON.parse(readFileSync("data/app/coverage-gaps.json", "utf8"));
+    const expected = Object.keys(shipped).length;
+
+    async function openGaps() {
+      await page.evaluate(() => { const m = document.getElementById("gaps-modal"); if (m) m.hidden = true; });
+      await page.click("#gaps-btn");
+      await page.waitForFunction(() => {
+        const b = document.getElementById("gaps-body");
+        return b && !/Loading/.test(b.textContent) && b.textContent.trim().length > 0;
+      }, null, { timeout: QUERY_TIMEOUT }).catch(() => {});
+      return page.evaluate(() => {
+        const b = document.getElementById("gaps-body");
+        const first = b.querySelector(".gaps-section-label");
+        let hereCount = 0;
+        for (let el = first && first.nextElementSibling; el && el.classList.contains("gap-item"); el = el.nextElementSibling) hereCount++;
+        return {
+          items: b.querySelectorAll(".gap-item").length,
+          sections: Array.from(b.querySelectorAll(".gaps-section-label")).map((e) => e.textContent),
+          hereCount,
+          hrefs: Array.from(b.querySelectorAll(".gap-suggest")).map((a) => a.getAttribute("href")),
+        };
+      });
+    }
+
+    const cold = await openGaps();
+    check("data gaps panel renders every recorded gap",
+      cold.items === expected && cold.sections.length === 1,
+      `${cold.items}/${expected} items, ${cold.sections.length} section(s)`);
+    check("every gap offers a prefilled source submission",
+      cold.hrefs.length === expected &&
+      cold.hrefs.every((h) => /template=source-submission\.yml/.test(h) && /[?&]gap_id=/.test(h)),
+      `${cold.hrefs.length} links`);
+
+    // With a point selected the panel must lead with the gaps that apply THERE.
+    // Kankakee is the strongest probe: exactly two of its gaps name that county.
+    const kankakeeGaps = Object.values(shipped)
+      .filter((g) => (g.counties || []).indexOf("kankakee") !== -1).length;
+    await page.evaluate(() => window.ChiExplorer.setSelectedPoint(41.1254, -87.8487));
+    const warm = await openGaps();
+    check("data gaps panel is location-aware (Kankakee point leads with its own gaps)",
+      warm.sections.length === 2 && /clicked/i.test(warm.sections[0]) &&
+      warm.hereCount === kankakeeGaps && warm.items === expected,
+      `sections=${JSON.stringify(warm.sections)} here=${warm.hereCount}/${kankakeeGaps} total=${warm.items}`);
+
+    await context.close();
+  }
+
   // 1b. The search box retries a zero-result query with the unit fragment
   //     stripped. Stubbed geocoder, so this is deterministic and needs no
   //     external network: the stub answers ONLY the cleaned form, which is what

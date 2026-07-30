@@ -19,7 +19,14 @@ in the researched-but-unbuilt backlog.
    puts a **GUIDEBOOK WARN** on the standing "Fleet status" issue on any mismatch. A
    layer that ships without a guidebook row is drift, exactly like an engine fence
    mismatch.
-3. **A deliberate "we will not ship this here" is recorded, never implied.** Every
+3. **A gap a reader could help close goes in the `GUIDEBOOK:BEGIN gaps` block, and the
+   app then says so out loud.** That block drives the in-app **Data gaps** panel via
+   `scripts/build_coverage_gaps.py` (`--check` runs in CI, so guidebook and panel cannot
+   drift). Record the blocker as something *measured* and say in `wanted` what a
+   submission would need to contain — the panel shows both, so a reader is never invited
+   to re-send a source that was already checked and rejected. Accepted submissions are
+   credited in `docs/SOURCE_CREDITS.md`.
+4. **A deliberate "we will not ship this here" is recorded, never implied.** Every
    NO HONEST ANALOG cell cites its rationale; a concept a fork lacks *without* a recorded
    rationale sits in the Parity debts table until someone either ships it or records the
    drop. (This rule exists because SF's BART-districts candidate silently evaporated
@@ -35,6 +42,179 @@ in the researched-but-unbuilt backlog.
 }
 ```
 <!-- ==== GUIDEBOOK:END coverage-map ==== -->
+
+<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->
+```json
+{
+  "chicago": [
+    {
+      "id": "kankakee-municipal-officials",
+      "concept": "Municipal officials",
+      "area": "Kankakee County",
+      "counties": [
+        "kankakee"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "No officeholder names for Kankakee County's 21 municipalities — the card shows identity and a link only.",
+      "blocker": "No county-published roster exists. The clerk site publishes no directory, and the county GIS Municipalities layer declares telephone/website/email columns but populates none of them (measured 0/21).",
+      "wanted": "Any county- or COG-level directory naming mayors/village presidents and boards — ideally with a stable URL that is republished after each election."
+    },
+    {
+      "id": "dekalb-county-gis",
+      "concept": "All county layers",
+      "area": "DeKalb County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": null,
+      "summary": "DeKalb County, Illinois has no located GIS — so none of its county layers can be built.",
+      "blocker": "ArcGIS Online results for “DeKalb” are dominated by DeKalb County GEORGIA. Field-qualified searches for the Illinois county return only historical plat maps, and three plausible self-hosted hostnames do not resolve.",
+      "wanted": "A working URL for DeKalb County IL's GIS server or ArcGIS org — a county web map that draws precincts or board districts is enough; its operational layers reveal the server."
+    },
+    {
+      "id": "lake-municipal-names",
+      "concept": "Municipal officials",
+      "area": "Lake County",
+      "counties": [
+        "lake"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "Lake County's 41 municipalities ship with hall contact but no officeholder names.",
+      "blocker": "No Lake County body publishes municipal officeholder names anywhere county-side. The county GIS supplies hall address/phone/website, which is what the card shows.",
+      "wanted": "A Lake County clerk or council-of-governments directory naming heads of government — the DuPage DMMC directory is the shape that would work."
+    },
+    {
+      "id": "boone-county-board",
+      "concept": "County board districts",
+      "area": "Boone County",
+      "counties": [
+        "boone"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Boone County's 3 board districts are not shipped.",
+      "blocker": "The county publishes them as three separate single-feature layers with no officeholder attribute, so the layer needs both a merge loader and an officeholder source before it can name anyone.",
+      "wanted": "A Boone County board member directory keyed by district (names, and contact if published)."
+    },
+    {
+      "id": "grundy-county-board",
+      "concept": "County board districts",
+      "area": "Grundy County",
+      "counties": [
+        "grundy"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Grundy County's board districts are not shipped.",
+      "blocker": "The county's GIS publishes no board-district geometry at all — only precincts and polling places.",
+      "wanted": "Board-district boundaries in any GIS or shapefile form, plus a member directory keyed by district."
+    },
+    {
+      "id": "blocked-crawlers",
+      "concept": "Roster refresh",
+      "area": "McHenry, Kendall and Joliet",
+      "counties": [
+        "mchenry",
+        "kendall"
+      ],
+      "kind": "blocked",
+      "layer": "county-board",
+      "summary": "Three sources refuse every automated fetch, so their rosters are hand-verified rather than refreshed weekly.",
+      "blocker": "Hard WAF denies — direct request, real browser, and the Internet Archive's crawler are all refused. The weekly workflow still attempts the ladder and tracks the block on a standing issue; a 45-day snapshot-age guard keeps stale data from being served as fresh.",
+      "wanted": "A machine-readable feed for the same data (JSON/CSV/RSS), or any mirror the sources permit crawling."
+    },
+    {
+      "id": "dupage-municipal-phones",
+      "concept": "Municipal officials",
+      "area": "DuPage County",
+      "counties": [
+        "dupage"
+      ],
+      "kind": "data-quality",
+      "layer": "municipality",
+      "summary": "DuPage municipal entries carry no phone numbers.",
+      "blocker": "The DMMC directory prints numbers without an area code and states no default, so rendering them would mean guessing which area code to dial.",
+      "wanted": "A DuPage directory that prints full ten-digit numbers, or an authoritative statement of the default area code per municipality."
+    },
+    {
+      "id": "aurora-council-contact",
+      "concept": "Municipal officials",
+      "area": "Aurora",
+      "counties": [
+        "kane",
+        "will",
+        "dupage",
+        "kendall"
+      ],
+      "kind": "data-quality",
+      "layer": "municipality",
+      "summary": "Aurora's 12 council members render with correct wards but no phone or e-mail.",
+      "blocker": "aurora-il.org returns 403 to every client (a hard deny, not a challenge); Aurora's own ward FeatureServer carries no officeholder fields; the county directory that supplies Aurora has names only; and the Internet Archive's newest useful captures are 2015–2017.",
+      "wanted": "Any reachable Aurora source with per-seat contact — a council roster page, a published PDF, or an open dataset."
+    },
+    {
+      "id": "lasalle-board-phones",
+      "concept": "County board districts",
+      "area": "LaSalle County",
+      "counties": [
+        "lasalle"
+      ],
+      "kind": "data-quality",
+      "layer": "county-board",
+      "summary": "LaSalle board members show e-mail and mailing address but no phone.",
+      "blocker": "The county GIS records phone numbers without an area code (“672-2115”) and states no default, so they are deliberately not rendered rather than guessed at.",
+      "wanted": "LaSalle board contact with full ten-digit numbers, or the county's stated default area code."
+    },
+    {
+      "id": "kankakee-special-districts",
+      "concept": "Fire, park and library districts",
+      "area": "Kankakee County",
+      "counties": [
+        "kankakee"
+      ],
+      "kind": "data-quality",
+      "layer": "fire-district",
+      "summary": "Kankakee's fire, park and library districts show a name only — no address, phone or website.",
+      "blocker": "The county's taxing-district layers declare telephone/website/email on every row and populate none of them (measured 0/17, 0/4, 0/8).",
+      "wanted": "A Kankakee directory of fire protection, park and library districts with contact details."
+    },
+    {
+      "id": "boone-fire-names",
+      "concept": "Fire protection districts",
+      "area": "Boone County",
+      "counties": [
+        "boone"
+      ],
+      "kind": "no-source",
+      "layer": "fire-district",
+      "summary": "Boone County's fire districts are not shipped.",
+      "blocker": "The county's fire tiling keys its 5 districts by NUMBER with no district name, and a card reading “Fire District 1” would tell a reader nothing they can act on.",
+      "wanted": "A mapping from Boone's fire-district numbers to district names, or a named fire-district boundary layer."
+    }
+  ]
+}
+```
+<!-- ==== GUIDEBOOK:END gaps ==== -->
+
+This block is the machine truth behind the app's **Data gaps** panel, emitted to
+`data/app/coverage-gaps.json` by `scripts/build_coverage_gaps.py` (`--check` is the CI
+drift gate). It carries only gaps a READER COULD HELP CLOSE — a missing or blocked source
+(`no-source` / `blocked`) or a shipped layer with a known hole (`data-quality`).
+Deliberately NOT in here: layers that correctly do not apply somewhere (a subcircuit in a
+circuit that has none is not a gap), and live source outages, which are transient runtime
+state the affected card already reports itself.
+
+Every entry states its blocker as something MEASURED, and `wanted` says what a submission
+would have to contain to be useful — so a reader is never invited to re-send a source that
+was already checked and found wanting. `counties` are outline slugs, which is what makes a
+gap location-aware: with a point selected the panel shows the gaps that apply THERE first.
+An empty `counties` means the gap has no mappable footprint (DeKalb has no GIS to draw)
+and it appears only in the everywhere list.
+
+Accepted submissions are credited by name in `docs/SOURCE_CREDITS.md`; see the intake
+template at `.github/ISSUE_TEMPLATE/source-submission.yml`.
+
 
 The block above is the machine truth `fleet_status.py` checks — one array per metro
 (keys = `metros.json` ids), each listing that fork's registered layer ids exactly as its
