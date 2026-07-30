@@ -26,9 +26,17 @@ Validation is deliberately strict about the things a reader would be misled by:
   - `counties` must name outline files that actually ship, since that is what
     makes the gap location-aware.
 
+The guidebook lives in the CHICAGO repo only — it is a fleet document, and a
+second copy in a sibling would be the drift trap docs/ENGINE_SYNC.md warns about.
+So a sibling fork does NOT carry this script; its data/app/coverage-gaps.json is
+generated from here with --metro/--out and lands in the fork through its engine
+bump PR.
+
 Usage:
     python3 scripts/build_coverage_gaps.py
     python3 scripts/build_coverage_gaps.py --check
+    # emit a sibling fork's file from Chicago's guidebook:
+    python3 scripts/build_coverage_gaps.py --metro nyc --out ../nyc/data/app/coverage-gaps.json
 """
 
 import argparse
@@ -98,9 +106,9 @@ def validate(entries, layer_ids, outlines):
         if e.get("kind") not in KINDS:
             problems.append("%s: kind %r not one of %s" % (where, e.get("kind"), list(KINDS)))
         layer = e.get("layer")
-        if layer is not None and layer not in layer_ids:
+        if layer_ids is not None and layer is not None and layer not in layer_ids:
             problems.append("%s: layer %r is not a registered layer id" % (where, layer))
-        for slug in e.get("counties") or []:
+        for slug in (e.get("counties") or []) if outlines is not None else []:
             if slug not in outlines:
                 problems.append("%s: county %r has no data/app/%s-county-outline.json"
                                 % (where, slug, slug))
@@ -131,13 +139,16 @@ def render(entries):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="verify the shipped file, write nothing")
+    ap.add_argument("--metro", help="emit another fork's key instead of this worksheet's")
+    ap.add_argument("--out", help="write somewhere other than this repo's data/app/")
     args = ap.parse_args()
+    out_path = args.out or OUT_PATH
 
     # The guidebook is a fleet-wide document with one array per metro (the
     # coverage-map block's shape), so the fork reads ITS OWN key rather than a
     # hardcoded one — that is what lets the same script run in every fork.
     w = worksheet()
-    metro = w["this_metro"]
+    metro = args.metro or w["this_metro"]
     gaps = load_gaps()
     entries = gaps.get(metro)
     if entries is None:
@@ -145,7 +156,13 @@ def main():
              "empty, so the absence is deliberate rather than an oversight."
              % (metro, list(gaps)))
 
-    problems = validate(entries, known_layer_ids(w), shipped_outline_slugs())
+    # Layer ids and outline slugs are per-fork, so those two checks only apply to
+    # this repo's own metro. Emitting a sibling's file still validates everything
+    # that is fork-independent (ids, kinds, required fields).
+    own = metro == w["this_metro"]
+    problems = validate(entries,
+                        known_layer_ids(w) if own else None,
+                        shipped_outline_slugs() if own else None)
     if problems:
         for p in problems:
             print("  %s" % p, file=sys.stderr)
@@ -158,9 +175,9 @@ def main():
     summary = ", ".join("%s %d" % (k, by_kind[k]) for k in sorted(by_kind))
 
     if args.check:
-        if not os.path.exists(OUT_PATH):
+        if not os.path.exists(out_path):
             fail("data/app/coverage-gaps.json is missing — run this script")
-        with open(OUT_PATH, encoding="utf-8") as f:
+        with open(out_path, encoding="utf-8") as f:
             shipped = f.read()
         if shipped != payload:
             fail("data/app/coverage-gaps.json differs from the guidebook's gaps block "
@@ -170,10 +187,10 @@ def main():
               % (metro, len(entries), summary))
         return
 
-    with open(OUT_PATH, "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         f.write(payload)
-    print("build-coverage-gaps: wrote data/app/coverage-gaps.json — %s: %d gaps (%s), %d bytes"
-          % (metro, len(entries), summary, len(payload)))
+    print("build-coverage-gaps: wrote %s — %s: %d gaps (%s), %d bytes"
+          % (os.path.relpath(out_path, REPO_ROOT), metro, len(entries), summary, len(payload)))
 
 
 if __name__ == "__main__":
