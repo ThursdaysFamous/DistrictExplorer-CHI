@@ -82,6 +82,8 @@ const GEOMETRY_URLS = [
   "./data/app/grundy-county-outline.json",
   "./data/app/kankakee-county-outline.json",
   "./data/app/winnebago-county-outline.json",
+  "./data/app/livingston-county-outline.json",
+  "./data/app/livingston-county-board-districts.json",
   "./data/app/winnebago-judicial-subcircuits.json",
   "./data/app/madison-judicial-subcircuits.json",
   "./data/app/sangamon-judicial-subcircuits.json",
@@ -106,6 +108,7 @@ const ROSTER_URLS = [
   "./data/app/ccbr-roster.json",
   "./data/app/il-county-clerks.json",
   "./data/app/dupage-county-board-members.json",
+  "./data/app/livingston-county-board-members.json",
   "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
 ];

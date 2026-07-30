@@ -129,6 +129,26 @@ COUNTIES = {
             (42.5083, -89.0318, "Beloit — Rock County, Wisconsin"),
         ],
     },
+    # The first bridge county toward the Metro East. It publishes no GIS at all,
+    # so its board districts are built from TIGER townships
+    # (build_livingston_board_districts.py); this outline is still a plain TIGER
+    # county boundary like every other, and gates the dispatch entry.
+    "livingston": {
+        "fips": "105",
+        "name": "Livingston County",
+        "inside": [
+            (40.8809, -88.6298, "Pontiac (county seat)"),
+            (41.0945, -88.4251, "Dwight"),
+            (40.7473, -88.5148, "Fairbury"),
+            (40.8781, -88.8612, "Flanagan"),
+        ],
+        "outside": [
+            (41.1206, -88.8351, "Streator — LaSalle County"),
+            (41.3574, -88.4215, "Morris — Grundy County"),
+            (41.1254, -87.8487, "Kankakee — Kankakee County"),
+            (40.4842, -88.9937, "Bloomington — McLean County"),
+        ],
+    },
     "madison": {
         "fips": "119",
         "name": "Madison County",

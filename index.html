@@ -7653,6 +7653,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadLivingstonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/livingston-county-outline.json", {}, 2);
+  });
+  function livingstonCountyCoverage(point) {
+    return loadLivingstonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7680,7 +7688,24 @@ function initChiExplorer() {
     // county's own board page does carry per-district phone and address; that is
     // a scraper, recorded as a backlog item rather than guessed at from here.
     return loadCountyMapServerLayer(WINNEBAGO_GIS + "ElectedOfficials", 26,
-      "District,REP,REPPARTY,TERMYEAR", "Winnebago County Board");
+      "District,REP,REPPARTY", "Winnebago County Board");
+  });
+
+  /* Livingston is the fleet's first county where BOTH halves of the card are
+   * DERIVED rather than fetched. It publishes no GIS anywhere — no ArcGIS
+   * Online items, no self-hosted server, only a vendor assessor site — but it
+   * states in prose that its three board districts are made of whole townships,
+   * and the app already ships and trusts TIGER township geometry. So the
+   * boundary is composed from published township edges per a published rule
+   * (scripts/build_livingston_board_districts.py, which fails hard rather than
+   * guessing if a township is unassigned, double-assigned or unresolvable), and
+   * the roster is scraped weekly from the county's directory. Both are
+   * same-origin files here — nothing about this county is a live API. */
+  var loadLivingstonCountyBoard = makeCached(function () {
+    return fetchJSONWithRetry("data/app/livingston-county-board-districts.json", {}, 2);
+  });
+  var loadLivingstonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/livingston-county-board-members.json", {}, 2);
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -7749,15 +7774,6 @@ function initChiExplorer() {
     var s = String(v).trim();
     var m = /^D(\d+)$/i.exec(s);
     return m ? m[1] : s;
-  }
-
-  /* A term-end year is only rendered when it looks like one. The column is a
-   * free-text string upstream, and "Term runs through <junk>." is worse than
-   * saying nothing. */
-  function cleanTermYear(value) {
-    if (value == null) return null;
-    var s = String(value).trim();
-    return /^(19|20)\d{2}$/.test(s) ? s : null;
   }
 
   function gisBoardPerson(props, fields) {
@@ -11323,7 +11339,6 @@ function initChiExplorer() {
             return {
               seq: seq,
               district: winnebagoBoardDistrict(feature),
-              term: cleanTermYear(findPropCI(props, ["termyear"])),
               person: gisBoardPerson(props, {
                 name: function (p) {
                   var v = findPropCI(p, ["rep"]);
@@ -11339,13 +11354,16 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Winnebago County Board",
-            // NOT boardCountNote(): its second argument is a countywide-CHAIR
-            // label, and passing the term there rendered "1 district member ·
-            // 1 countywide Term runs through 2026." — inventing an officeholder
-            // this entry never loaded. Winnebago does publish a board chairman
-            // (ElectedOfficials layer 25); until that is actually fetched and
-            // shown, the card must not imply it.
-            note: result.term ? "Term runs through " + result.term + "." : null
+            // boardCountNote's SECOND argument is a countywide-CHAIR label, not
+            // free text — passing a term string there rendered "1 district
+            // member · 1 countywide Term runs through 2026.", inventing an
+            // officeholder this entry never loaded. Winnebago does publish a
+            // board chairman (ElectedOfficials layer 25); until that is
+            // actually fetched, the card must not imply it. The term year the
+            // layer carries is not shown either, matching the recorded
+            // fleet call that term-end is not card material
+            // (build_mchenry_county_board_roster.py).
+            note: boardCountNote(people.length, null)
           }));
           if (people.length) wrap.appendChild(renderPersonRows(people));
           return wrap;
@@ -11361,6 +11379,75 @@ function initChiExplorer() {
           name: function (feature) {
             var v = findPropCI(feature.properties || {}, ["rep"]);
             return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
+      },
+      // Livingston (3 districts, six seats each) — the derived county. Both the
+      // boundary and the roster are same-origin build products, because the
+      // county publishes no GIS: districts are TIGER townships dissolved per the
+      // county's own published composition, members are scraped weekly from its
+      // directory. The directory lists an explicit "Vacancy" seat, which the
+      // pipeline counts but never names — `vacancies` on the roster entry is
+      // what lets the card say five of six seats are filled instead of showing
+      // five and implying that is the whole delegation.
+      {
+        key: "livingston",
+        coverage: livingstonCountyCoverage,
+        loadGeometry: loadLivingstonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLivingstonCountyBoard(),
+            loadLivingstonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var vacancies = (result.entry && result.entry.vacancies) || 0;
+          var wrap = cardEl("div", "card-flush");
+          var note = boardCountNote(members.length, null);
+          if (vacancies) {
+            note = (note ? note + " · " : "") + vacancies +
+              " vacant seat" + (vacancies === 1 ? "" : "s");
+          }
+          wrap.appendChild(renderBodyIntro({
+            title: "Livingston County Board",
+            note: note
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://www.livingstoncountyil.gov/government/county_board_members.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadLivingstonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
       }

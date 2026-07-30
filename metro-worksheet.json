@@ -556,6 +556,18 @@
         "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "livingston-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Livingston County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "livingston-county-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Livingston County Board districts, DERIVED: TIGER townships dissolved per the county's own published composition (scripts/build_livingston_board_districts.py; --check is the drift gate). The county publishes no GIS, so this file IS the boundary source, not a cache of one."
+      },
+      {
         "file": "winnebago-judicial-subcircuits.json",
         "min_features": 2,
         "max_features": 2,
@@ -642,6 +654,11 @@
       {
         "file": "dupage-county-board-members.json",
         "min_keys": 6
+      },
+      {
+        "file": "livingston-county-board-members.json",
+        "min_keys": 3,
+        "note": "Livingston County Board members keyed by district (3 multi-member districts, six seats each) — scraped weekly from the county directory. Carries a `vacancies` count per district because the directory lists an explicit \"Vacancy\" seat that must be counted, never named."
       },
       {
         "file": "coverage-gaps.json",
@@ -734,6 +751,11 @@
       "file": "update-dupage-county-board-roster.yml",
       "purpose": "DuPage County Board roster (dupagecounty.gov directory scrape)",
       "schedule": "Sun 13:00 UTC"
+    },
+    {
+      "file": "update-livingston-county-board-roster.yml",
+      "purpose": "Livingston County Board roster (livingstoncountyil.gov directory scrape)",
+      "schedule": "Tue 14:00 UTC"
     },
     {
       "file": "update-municipal-officials.yml",

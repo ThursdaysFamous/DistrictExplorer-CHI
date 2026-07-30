@@ -65,19 +65,20 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
 # Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
-# passes 2-3, then Winnebago from pass 4.
+# passes 2-3, then Winnebago and Livingston from pass 4.
 #
 # All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
 # that way is a deliberate constraint, not a coincidence: a detached county would
 # make the served area a set of islands, and the operator's call is that coverage
 # grows as a connected region. Madison and St. Clair are researched and ready but
-# sit 200 miles south, so they wait on the Livingston -> McLean -> Logan ->
-# Sangamon -> Macoupin bridge rather than shipping as an island.
+# sit 200 miles south; the Livingston -> McLean -> Logan -> Sangamon -> Macoupin
+# bridge is being built toward them one contiguous county at a time, so the ring
+# stays single at every step.
 #
 # group_rings() below nests rings correctly and emits a MultiPolygon if this ever
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
-                     "099", "091", "007", "063", "201")
+                     "099", "091", "007", "063", "201", "105")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -107,6 +108,7 @@ INSIDE = {
     "Belvidere (Boone)": (42.2639, -88.8443),
     "Morris (Grundy)": (41.3564, -88.4237),
     "Rockford (Winnebago)": (42.2714, -89.0940),
+    "Pontiac (Livingston)": (40.8809, -88.6298),
 }
 OUTSIDE = {
     "Springfield (Sangamon)": (39.7817, -89.6501),
@@ -115,11 +117,11 @@ OUTSIDE = {
     # LaSalle) and is the one border-ring county with no locatable GIS — so it
     # is the anchor most likely to be wrong if a future county list is fudged.
     "DeKalb (DeKalb)": (41.9295, -88.7504),
-    # Pontiac is the seat of Livingston, the next county in the bridge toward the
+    # Bloomington is the seat of McLean, the next county in the bridge toward the
     # Metro East. Keeping it here until it actually ships is the guard working as
-    # intended: the day Livingston gains a dispatch entry, this line fails the
-    # build and forces the list to be updated with it.
-    "Pontiac (Livingston)": (40.8808, -88.6298),
+    # intended: the day McLean gains a dispatch entry, this line fails the build
+    # and forces the county list to be updated with it.
+    "Bloomington (McLean)": (40.4842, -88.9937),
 }
 
 

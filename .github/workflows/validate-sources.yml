@@ -37,6 +37,18 @@ jobs:
         # scripts/requirements.txt.
         run: pip install -c scripts/requirements.txt requests
 
+      # Livingston's board districts are DERIVED — TIGER townships dissolved per
+      # the county's published composition — so their failure mode is this
+      # workflow's, not the roster crons': a township rename or a reapportionment
+      # makes the shipped file disagree with the Census without anything
+      # erroring. Checked here rather than in the per-PR merge gate because it
+      # needs TIGERweb, and a network call on every pull request is a flake
+      # waiting to happen. continue-on-error for the same reason as below: a
+      # human should look, not a red build.
+      - name: Livingston derived board districts still match TIGER
+        continue-on-error: true
+        run: python3 scripts/build_livingston_board_districts.py --check
+
       - name: Validate layer sources
         id: validate
         # continue-on-error: a FAIL exit (1) must not red the job — per the
