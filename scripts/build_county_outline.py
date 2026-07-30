@@ -109,6 +109,147 @@ COUNTIES = {
             (41.0100, -88.2900, "Livingston County"),
         ],
     },
+    # Research pass 4 — the first counties that are NOT contiguous with the metro.
+    # Every anchor below was geocoded and its returned county/state read back, not
+    # recalled; the "Madison County" and "St. Clair County" names each exist in
+    # several states, and DeKalb already showed how far a same-name trap can get.
+    "winnebago": {
+        "fips": "201",
+        "name": "Winnebago County",
+        "inside": [
+            (42.2714, -89.0940, "Rockford (county seat)"),
+            (42.3200, -89.0582, "Loves Park"),
+            (42.4931, -89.0368, "South Beloit"),
+            (42.3139, -89.3594, "Pecatonica"),
+        ],
+        "outside": [
+            (42.2580, -88.8417, "Belvidere — Boone County"),
+            (42.1270, -89.2557, "Byron — Ogle County"),
+            (42.2967, -89.6212, "Freeport — Stephenson County"),
+            (42.5083, -89.0318, "Beloit — Rock County, Wisconsin"),
+        ],
+    },
+    # The first bridge county toward the Metro East. It publishes no GIS at all,
+    # so its board districts are built from TIGER townships
+    # (build_livingston_board_districts.py); this outline is still a plain TIGER
+    # county boundary like every other, and gates the dispatch entry.
+    "livingston": {
+        "fips": "105",
+        "name": "Livingston County",
+        "inside": [
+            (40.8809, -88.6298, "Pontiac (county seat)"),
+            (41.0945, -88.4251, "Dwight"),
+            (40.7473, -88.5148, "Fairbury"),
+            (40.8781, -88.8612, "Flanagan"),
+        ],
+        "outside": [
+            (41.1206, -88.8351, "Streator — LaSalle County"),
+            (41.3574, -88.4215, "Morris — Grundy County"),
+            (41.1254, -87.8487, "Kankakee — Kankakee County"),
+            (40.4842, -88.9937, "Bloomington — McLean County"),
+        ],
+    },
+    "mclean": {
+        "fips": "113",
+        "name": "McLean County",
+        "inside": [
+            (40.4798, -88.9939, "Bloomington (county seat)"),
+            (40.5093, -88.9844, "Normal"),
+            (40.6414, -88.7834, "Lexington"),
+            (40.3520, -88.7642, "Le Roy"),
+        ],
+        "outside": [
+            (40.8809, -88.6298, "Pontiac — Livingston County"),
+            (40.1526, -88.9607, "Clinton — DeWitt County"),
+            (40.1481, -89.3637, "Lincoln — Logan County"),
+            (40.4653, -88.3759, "Gibson City — Ford County"),
+            (40.7213, -89.2727, "Eureka — Woodford County"),
+        ],
+    },
+    "logan": {
+        "fips": "107",
+        "name": "Logan County",
+        "inside": [
+            (40.1481, -89.3637, "Lincoln (county seat)"),
+            (40.0109, -89.2823, "Mount Pulaski"),
+            (40.2597, -89.2332, "Atlanta"),
+            (40.0207, -89.4822, "Elkhart"),
+        ],
+        "outside": [
+            (40.4798, -88.9939, "Bloomington — McLean County"),
+            (40.0117, -89.8482, "Petersburg — Menard County"),
+            (40.3725, -89.5473, "Delavan — Tazewell County"),
+            (40.1526, -88.9607, "Clinton — DeWitt County"),
+            (39.5487, -89.2942, "Taylorville — Christian County"),
+        ],
+    },
+    "sangamon": {
+        "fips": "167",
+        "name": "Sangamon County",
+        "inside": [
+            (39.7990, -89.6440, "Springfield (county seat, state capital)"),
+            (39.6762, -89.7045, "Chatham"),
+            (39.7495, -89.5318, "Rochester"),
+            (39.5917, -89.5804, "Pawnee"),
+        ],
+        "outside": [
+            (40.1481, -89.3637, "Lincoln — Logan County"),
+            (40.0117, -89.8482, "Petersburg — Menard County"),
+            (39.5487, -89.2942, "Taylorville — Christian County"),
+            (39.7344, -90.2288, "Jacksonville — Morgan County"),
+            (39.5009, -89.7679, "Virden — Macoupin County"),
+        ],
+    },
+    "macoupin": {
+        "fips": "117",
+        "name": "Macoupin County",
+        "inside": [
+            (39.2798, -89.8818, "Carlinville (county seat)"),
+            (39.1267, -89.8163, "Gillespie"),
+            (39.0122, -89.7885, "Staunton"),
+            (39.4459, -89.7782, "Girard"),
+        ],
+        "outside": [
+            (39.7990, -89.6440, "Springfield — Sangamon County"),
+            (39.1769, -89.6556, "Litchfield — Montgomery County"),
+            (39.1200, -90.3284, "Jerseyville — Jersey County"),
+            (38.8114, -89.9532, "Edwardsville — Madison County"),
+        ],
+    },
+    "madison": {
+        "fips": "119",
+        "name": "Madison County",
+        "inside": [
+            (38.8114, -89.9532, "Edwardsville (county seat)"),
+            (38.8909, -90.1843, "Alton"),
+            (38.7014, -90.1487, "Granite City"),
+            (38.7396, -89.6715, "Highland"),
+        ],
+        "outside": [
+            (38.5136, -89.9842, "Belleville — St. Clair County"),
+            (38.8923, -89.4131, "Greenville — Bond County"),
+            (39.2798, -89.8818, "Carlinville — Macoupin County"),
+            (39.1200, -90.3284, "Jerseyville — Jersey County"),
+            (38.6254, -90.1900, "St. Louis, Missouri (across the river)"),
+        ],
+    },
+    "st-clair": {
+        "fips": "163",
+        "name": "St. Clair County",
+        "inside": [
+            (38.5136, -89.9842, "Belleville (county seat)"),
+            (38.6269, -90.1597, "East St. Louis"),
+            (38.5923, -89.9112, "O'Fallon"),
+            (38.4903, -89.7932, "Mascoutah"),
+        ],
+        "outside": [
+            (38.8114, -89.9532, "Edwardsville — Madison County"),
+            (38.3359, -90.1498, "Waterloo — Monroe County"),
+            (38.6103, -89.3726, "Carlyle — Clinton County"),
+            (38.3435, -89.3810, "Nashville — Washington County"),
+            (38.6254, -90.1900, "St. Louis, Missouri (across the river)"),
+        ],
+    },
 }
 
 

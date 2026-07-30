@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -88.6, minLat: 41.0, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -90.75, minLat: 38.1, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 40.8, maxLat: 42.7, minLng: -88.8, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 38.05, maxLat: 42.75, minLng: -90.85, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -6666,11 +6666,13 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/will-county-outline.json", {}, 2);
   });
 
-  // The seven counties the app serves, dissolved to one ring — the coverage
-  // geometry the out-of-scope wash draws from (see the BOOT call). Built by
+  // The counties the app serves, dissolved to one ring — the coverage geometry
+  // the out-of-scope wash draws from (see the BOOT call). Built by
   // scripts/build_metro_outline.py from a single TIGERweb query, because the
   // per-county outline files above were simplified independently and their
-  // shared borders would not cancel in the in-browser dissolve.
+  // shared borders would not cancel in the in-browser dissolve. The builder's
+  // county list has to be extended whenever a county gains a dispatch entry —
+  // it went stale once already and the wash greyed out four served counties.
   var loadMetroOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/metro-outline.json", {}, 2);
   });
@@ -7643,6 +7645,70 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadWinnebagoCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/winnebago-county-outline.json", {}, 2);
+  });
+  function winnebagoCountyCoverage(point) {
+    return loadWinnebagoCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadLivingstonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/livingston-county-outline.json", {}, 2);
+  });
+  function livingstonCountyCoverage(point) {
+    return loadLivingstonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMcleanCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mclean-county-outline.json", {}, 2);
+  });
+  function mcleanCountyCoverage(point) {
+    return loadMcleanCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadLoganCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/logan-county-outline.json", {}, 2);
+  });
+  function loganCountyCoverage(point) {
+    return loadLoganCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadSangamonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/sangamon-county-outline.json", {}, 2);
+  });
+  function sangamonCountyCoverage(point) {
+    return loadSangamonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMacoupinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/macoupin-county-outline.json", {}, 2);
+  });
+  function macoupinCountyCoverage(point) {
+    return loadMacoupinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMadisonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-county-outline.json", {}, 2);
+  });
+  function madisonCountyCoverage(point) {
+    return loadMadisonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadStClairCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/st-clair-county-outline.json", {}, 2);
+  });
+  function stClairCountyCoverage(point) {
+    return loadStClairCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7653,6 +7719,257 @@ function initChiExplorer() {
         return geojson;
       });
   }
+
+  /* Winnebago's GIS is WinGIS (wingis.org), a Region 1 Planning Council
+   * consortium rather than a county department — and its ArcGIS instance is
+   * mounted at /public, not the conventional /arcgis, which is why guessing
+   * hostnames found nothing. It was reached the way LaSalle's and Grundy's were:
+   * follow the county's own site to a web map, then read the map's
+   * operationalLayers. The ElectedOfficials service is unusual in the fleet — it
+   * publishes officeholders AS layers, one per body, including per-municipality
+   * village boards and Rockford's aldermanic wards. Only the county board is
+   * consumed here; the rest is recorded in the guidebook for a later pass. */
+  var WINNEBAGO_GIS = "https://maps.wingis.org/public/rest/services/";
+  var loadWinnebagoCountyBoard = makeCached(function () {
+    // ADDRESS/PHONEBUSIN/PHONEHOME/CITYZIP are declared on the layer and set on
+    // 0 of 20 rows — a schema is not data, so they are not requested. The
+    // county's own board page does carry per-district phone and address; that is
+    // a scraper, recorded as a backlog item rather than guessed at from here.
+    return loadCountyMapServerLayer(WINNEBAGO_GIS + "ElectedOfficials", 26,
+      "District,REP,REPPARTY", "Winnebago County Board");
+  });
+
+  /* Livingston is the fleet's first county where BOTH halves of the card are
+   * DERIVED rather than fetched. It publishes no GIS anywhere — no ArcGIS
+   * Online items, no self-hosted server, only a vendor assessor site — but it
+   * states in prose that its three board districts are made of whole townships,
+   * and the app already ships and trusts TIGER township geometry. So the
+   * boundary is composed from published township edges per a published rule
+   * (scripts/build_livingston_board_districts.py, which fails hard rather than
+   * guessing if a township is unassigned, double-assigned or unresolvable), and
+   * the roster is scraped weekly from the county's directory. Both are
+   * same-origin files here — nothing about this county is a live API. */
+  var loadLivingstonCountyBoard = makeCached(function () {
+    return fetchJSONWithRetry("data/app/livingston-county-board-districts.json", {}, 2);
+  });
+  var loadLivingstonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/livingston-county-board-members.json", {}, 2);
+  });
+
+  /* McLean is the fleet's first MULTI-MEMBER county board carried entirely on
+   * the boundary GIS: each of the 10 districts elects two members, and the
+   * county's clerk service records both on the district feature (REPNAME /
+   * REPNAME2, each with its own party and profile-page link, 10/10 on every
+   * column). Cross-checked against the county's own directory before shipping —
+   * EID=353 reads "Adam Reeves (R) 2028, District 1 Representative". */
+  var loadMcleanCountyBoard = makeCached(function () {
+    return loadCountyMapServerLayer(
+      "https://gis.mcleancountyil.gov/arcgis/rest/services/Clerks/MyElectedRepresentatives", 1,
+      "DISTRICTID,REPNAME,PARTY,DISTRICTURL,REPNAME2,PARTY2,DISTRICTURL2",
+      "McLean County Board");
+  });
+  /* The two seats are separate COLUMNS, not rows, so they are unpacked in one
+   * place used by both the card and the hover popup — the pairing of a name with
+   * its own party and profile link is the part that would be easy to get subtly
+   * wrong twice. A seat with no name (a vacancy between appointments) drops out
+   * rather than rendering an empty person. */
+  function mcleanBoardMembers(props) {
+    var seats = [
+      { name: ["repname"], party: ["party"], url: ["districturl"] },
+      { name: ["repname2"], party: ["party2"], url: ["districturl2"] }
+    ];
+    var out = [];
+    for (var i = 0; i < seats.length; i++) {
+      var raw = findPropCI(props, seats[i].name);
+      var name = raw == null ? "" : String(raw).trim();
+      if (!name) continue;
+      out.push({
+        name: name,
+        party: partyBadge(findPropCI(props, seats[i].party)),
+        url: findPropCI(props, seats[i].url)
+      });
+    }
+    return out;
+  }
+
+  /* Logan's board districts are published by the Tri-County Regional Planning
+   * Commission's ArcGIS org rather than by the county itself — the regional-GIS
+   * shape, like WinGIS in Winnebago. The layer carries the district number and a
+   * population count and NO officeholder, and the county's only published roster
+   * is a statutory salary publication that lists twelve board members with no
+   * district against any of them. So this is rule-4 branch 3, the honesty floor:
+   * the district resolves and the card links the official body, with no name
+   * invented to fill the gap. Recorded as a gap so it can be closed by
+   * submission rather than forgotten. */
+  var loadLoganCountyBoard = makeCached(function () {
+    var url = "https://services.arcgis.com/pPTAs43AFhhk0pXQ/arcgis/rest/services/" +
+      "Logan_County_Districts_and_Zoning/FeatureServer/39/query?where=1%3D1&outFields=District" +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Logan County Board returned no usable geometry");
+        return geojson;
+      });
+  });
+
+  /* Sangamon's board GIS carries the district and a per-district MEMBER URL but
+   * no name — so the join key is published by the county on both sides, and the
+   * weekly scraper simply walks the 29 URLs the GIS already names. That is why
+   * this is a roster join rather than a rule-4 branch 1 like McLean: the data is
+   * the county's, one hop away, not inferred. */
+  var loadSangamonCountyBoard = makeCached(function () {
+    var url = "https://services.arcgis.com/XqG0RpqsNfIBGGb2/arcgis/rest/services/" +
+      "CountyBoardDistricts2020_WithURLs/FeatureServer/0/query?where=1%3D1" +
+      "&outFields=DISTRICT&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Sangamon County Board returned no usable geometry");
+        return geojson;
+      });
+  });
+  var loadSangamonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/sangamon-county-board-members.json", {}, 2);
+  });
+
+  /* Macoupin is the only served county whose data comes from a SOCRATA portal
+   * of its own (data.macoupincountyil.gov) rather than a GIS server — the
+   * clerk publishes precinct polygons there, and the .geojson endpoint the
+   * Chicago layers already use works unchanged. Its board districts are NOT
+   * shipped: the county composes them from precincts, and the only published
+   * precinct-to-district mapping is a scanned image in a document still titled
+   * "proposed", which is not something to draw real district lines from.
+   * Recorded as a gap instead. */
+  var loadMacoupinPrecincts = makeCached(function () {
+    var url = "https://data.macoupincountyil.gov/resource/ab79-cnsh.geojson?$limit=500";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Macoupin County precincts returned no usable geometry");
+        return geojson;
+      });
+  });
+
+  /* ---------- THE METRO EAST (Madison + St. Clair) ------------------------
+   * The two counties the Livingston -> Macoupin bridge was built to reach.
+   * Madison runs three ArcGIS instances on one host — /servera (county layers),
+   * /serverh (hosted election layers) and /portal — none of them at the
+   * conventional /arcgis, which is why hostname guessing found nothing and
+   * following a web map's operationalLayers found everything. */
+  var MADISON_GIS = "https://gisportal.co.madison.il.us/servera/rest/services/";
+  var MADISON_ELECTION = "https://gisportal.co.madison.il.us/serverh/rest/services/Hosted/" +
+    "ElectionGeography_public_e52134a5089e48deb03585c901d6c563/FeatureServer/";
+
+  /* Madison's board layer is the richest county-board source in the fleet: the
+   * official, party, term, phone, e-mail and a per-district page all ride the
+   * district feature (26/26 on name, party, e-mail and URL; 25/26 phone). It is
+   * the one county where the card's whole convention order — identifier,
+   * representative, location, contact, link — comes from a single request. */
+  var loadMadisonCountyBoard = makeCached(function () {
+    return loadCountyMapServerLayer(MADISON_GIS + "CountyClerk/CBDWS", 0,
+      "DISTRICT,OFFICIAL,PARTY,PHONE,EMAIL,URL,ADDRESS,CITY,STATE,ZIPCODE",
+      "Madison County Board");
+  });
+  /* 42 fire districts WITH CONTACT — the first contact-bearing fire entry in the
+   * fleet (Kankakee's and Logan's are identity-only). Department head 39/42,
+   * address 41/42, phone 41/42, website 30/42; e-mail is populated on 3 of 42
+   * and so is not requested, since a row that appears on one card in fourteen
+   * reads as an error rather than a fact. */
+  var loadMadisonFireDistricts = makeCached(function () {
+    return loadCountyMapServerLayer(MADISON_GIS + "MadCo/FireDistrictsWS", 0,
+      "NAME,DEPTHEAD,ADDRESS,CITY,ZIPCODE,PHONE,URL", "Madison County fire districts");
+  });
+  var MADISON_AGOL = "https://services.arcgis.com/Z0kKj2K728ngqqrp/arcgis/rest/services/";
+  function loadMadisonAgolLayer(service, layerIndex, outFields, label) {
+    var url = MADISON_AGOL + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  // Layer ids on these are 40, not 0 — querying /0 returns an ERROR ENVELOPE that
+  // parses as an empty result, so "0 features" would have read as "no data".
+  var loadMadisonParkDistricts = makeCached(function () {
+    return loadMadisonAgolLayer("MadCo_ParkDistricts", 40, "PARK", "Madison County park districts");
+  });
+  var loadMadisonLibraryDistricts = makeCached(function () {
+    return loadMadisonAgolLayer("MadCo_LibraryDistricts", 40, "LIBRARY", "Madison County library districts");
+  });
+  /* Precincts + polling places on the county's hosted election service, joined
+   * on `pollingid` -> the polling feature's GlobalID: the Kendall model, and a
+   * measured 191/191 exact match — the cleanest polling join in the fleet.
+   * Stamped at load time so the card's query stays a plain containment test and
+   * a polling-layer failure costs the polling rows, never the precinct. */
+  var loadMadisonPrecincts = makeCached(function () {
+    function layer(index, outFields, label) {
+      var url = MADISON_ELECTION + index + "/query?where=1%3D1&outFields=" + outFields +
+        "&outSR=4326&f=geojson&geometryPrecision=5";
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Madison County " + label + " returned no usable geometry");
+          return geojson;
+        });
+    }
+    return Promise.all([
+      layer(1, "precinctid,name,pollingid", "precincts"),
+      layer(0, "name,fulladdr,municipality,pstlzip5,globalid", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var g = findPropCI(f.properties || {}, ["globalid"]);
+          if (g != null && String(g).trim()) byId[String(g).trim().toUpperCase()] = f.properties || {};
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["pollingid"]);
+          var place = key != null ? byId[String(key).trim().toUpperCase()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var street = findPropCI(place, ["fulladdr"]);
+          var city = findPropCI(place, ["municipality"]);
+          var zip = findPropCI(place, ["pstlzip5"]);
+          var tail = [city, zip].filter(function (x) { return x != null && String(x).trim(); })
+            .map(function (x) { return String(x).trim(); }).join(" ");
+          if (street != null && String(street).trim()) {
+            props.dxPollingAddress = String(street).trim() + (tail ? ", " + tail : "");
+          }
+        });
+      }
+      return precincts;
+    });
+  });
+
+  /* St. Clair's public map server sits at /server, and its voting-districts
+   * service carries the board districts, the precincts and the polling places
+   * as sibling layers.
+   *
+   * ITS PRECINCT LAYER HAS A `bdnum` COLUMN THAT IS NOT THE BOARD DISTRICT.
+   * It looks exactly like one — small integers over roughly the right range —
+   * but tested against the board polygons it agrees on only 23 of 150
+   * precincts, no better than chance. Rendering it would have put a wrong
+   * County Board district on 127 precinct cards. The board row therefore comes
+   * from the same best-effort spatial join every other county's precinct entry
+   * uses, and `bdnum` is left unread. */
+  var STCLAIR_GIS = "https://arcgispublicmap.co.st-clair.il.us/server/rest/services/" +
+    "SCC_voting_districts/MapServer/";
+  function loadStClairLayer(index, outFields, label) {
+    var url = STCLAIR_GIS + index + "/query?where=1%3D1&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("St. Clair County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadStClairCountyBoard = makeCached(function () {
+    return loadStClairLayer(2, "district,name", "board districts");
+  });
+  var loadStClairPrecincts = makeCached(function () {
+    return loadStClairLayer(18, "prec_name2", "precincts");
+  });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
   var loadBoonePrecincts = makeCached(function () {
@@ -7710,6 +8027,35 @@ function initChiExplorer() {
    * the card's person row for either. `fields` names the county's columns; a
    * column the county leaves blank is simply absent from the row rather than
    * rendered empty. */
+  /* Winnebago records its districts as "D1".."D20" rather than a bare number.
+   * Strip the prefix for display so the card reads "District 4" like every other
+   * county's, but only when the rest really is a number — an unexpected value is
+   * passed through untouched rather than mangled into something wrong. */
+  function winnebagoBoardDistrict(feature) {
+    var v = findPropCI(feature.properties || {}, ["district"]);
+    if (v == null || String(v).trim() === "") return null;
+    var s = String(v).trim();
+    var m = /^D(\d+)$/i.exec(s);
+    return m ? m[1] : s;
+  }
+
+  /* County GIS layers spell party inconsistently — Winnebago and Madison
+   * publish "R"/"D", McLean publishes "Republican"/"Democrat". They land on the
+   * same consolidated card, so a resident crossing a county line would see the
+   * badge change shape for no reason. Normalised to the single letter the badge
+   * slot is sized for; anything unrecognised passes through untouched rather
+   * than being dropped or guessed at. */
+  function partyBadge(value) {
+    if (value == null) return null;
+    var s = String(value).trim();
+    if (!s) return null;
+    var key = s.toLowerCase().replace(/\.$/, "");
+    if (key === "r" || key === "rep" || key === "republican") return "R";
+    if (key === "d" || key === "dem" || key === "democrat" || key === "democratic") return "D";
+    if (key === "i" || key === "ind" || key === "independent") return "I";
+    return s;
+  }
+
   function gisBoardPerson(props, fields) {
     var name = fields.name(props);
     if (!name) return null;
@@ -9312,6 +9658,25 @@ function initChiExplorer() {
     });
   });
 
+  /* Rockford's 14 aldermanic wards — Illinois's third-largest city, and the
+   * first ward source outside the metro. It rides WinGIS's ElectedOfficials
+   * service, the same regional-consortium GIS the Winnebago county-board entry
+   * uses, and carries the alderperson and their published city e-mail on the
+   * ward polygon itself (14/14 on both) — the Evanston shape. */
+  var ROCKFORD_WARD_SERVICE =
+    "https://maps.wingis.org/public/rest/services/ElectedOfficials/MapServer/20";
+  var loadRockfordWards = makeCached(function () {
+    return loadArcGISGeoJSON(ROCKFORD_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var p = f.properties || {};
+        return wardFeature(f, "Rockford", "Ward", findPropCI(p, ["ward"]), {
+          dxOfficial: findPropCI(p, ["alderman"]),
+          dxEmail: findPropCI(p, ["email"])
+        });
+      }) };
+    });
+  });
+
   var loadWillWards = makeCached(function () {
     return Promise.all(WILL_WARD_LAYERS.map(function (spec) {
       return loadArcGISGeoJSON(WILL_WARD_SERVICE + "/" + spec.id).then(function (geojson) {
@@ -9616,7 +9981,8 @@ function initChiExplorer() {
       municipalWardEntry("cook-suburban", loadCookSuburbanWards),
       municipalWardEntry("evanston", loadEvanstonWards),
       municipalWardEntry("will", loadWillWards),
-      municipalWardEntry("aurora", loadAuroraWards)
+      municipalWardEntry("aurora", loadAuroraWards),
+      municipalWardEntry("rockford", loadRockfordWards)
     ]
   });
   declareDataSource("ward", {
@@ -11251,6 +11617,400 @@ function initChiExplorer() {
             return (v == null || String(v).trim() === "") ? null : String(v).trim();
           }
         }
+      },
+      // Winnebago (20 single-member districts) — rule-4 branch 1 again: the
+      // member rides the county's own boundary GIS, so no scraper and no weekly
+      // workflow. Measured 20/20 on name, party and term year; the address and
+      // phone columns the layer declares are empty on every row and are left
+      // unread. Spot-checked against the county's own board page (D1 Aaron
+      // Booker, D2 Jim Webster, D4 Brad Lindmark all agree; D15 is "Chris Scrol"
+      // in the GIS and "Christopher Scrol" on the page — the GIS short form is
+      // what ships, since that is the source being rendered).
+      {
+        key: "winnebago",
+        coverage: winnebagoCountyCoverage,
+        loadGeometry: loadWinnebagoCountyBoard,
+        hoverName: winnebagoBoardDistrict,
+        query: function (point, seq) {
+          return loadWinnebagoCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              district: winnebagoBoardDistrict(feature),
+              person: gisBoardPerson(props, {
+                name: function (p) {
+                  var v = findPropCI(p, ["rep"]);
+                  return v != null && String(v).trim() ? String(v).trim() : null;
+                },
+                party: ["repparty"]
+              })
+            };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Winnebago County Board",
+            // boardCountNote's SECOND argument is a countywide-CHAIR label, not
+            // free text — passing a term string there rendered "1 district
+            // member · 1 countywide Term runs through 2026.", inventing an
+            // officeholder this entry never loaded. Winnebago does publish a
+            // board chairman (ElectedOfficials layer 25); until that is
+            // actually fetched, the card must not imply it. The term year the
+            // layer carries is not shown either, matching the recorded
+            // fleet call that term-end is not card material
+            // (build_mchenry_county_board_roster.py).
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://wincoil.gov/government/county-board" };
+        },
+        hoverOfficial: {
+          load: loadWinnebagoCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["rep"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
+      },
+      // Livingston (3 districts, six seats each) — the derived county. Both the
+      // boundary and the roster are same-origin build products, because the
+      // county publishes no GIS: districts are TIGER townships dissolved per the
+      // county's own published composition, members are scraped weekly from its
+      // directory. The directory lists an explicit "Vacancy" seat, which the
+      // pipeline counts but never names — `vacancies` on the roster entry is
+      // what lets the card say five of six seats are filled instead of showing
+      // five and implying that is the whole delegation.
+      {
+        key: "livingston",
+        coverage: livingstonCountyCoverage,
+        loadGeometry: loadLivingstonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLivingstonCountyBoard(),
+            loadLivingstonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var vacancies = (result.entry && result.entry.vacancies) || 0;
+          var wrap = cardEl("div", "card-flush");
+          var note = boardCountNote(members.length, null);
+          if (vacancies) {
+            note = (note ? note + " · " : "") + vacancies +
+              " vacant seat" + (vacancies === 1 ? "" : "s");
+          }
+          wrap.appendChild(renderBodyIntro({
+            title: "Livingston County Board",
+            note: note
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://www.livingstoncountyil.gov/government/county_board_members.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadLivingstonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // McLean (10 districts electing TWO members each) — rule-4 branch 1, and
+      // the first multi-member board the fleet gets entirely from the boundary
+      // GIS: both seats, both parties and both profile links ride the district
+      // feature, 10/10 on every column, so no scraper and no roster file.
+      {
+        key: "mclean",
+        coverage: mcleanCountyCoverage,
+        loadGeometry: loadMcleanCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["districtid"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadMcleanCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["districtid"]);
+            return {
+              seq: seq,
+              district: d != null && d !== "" ? String(d) : null,
+              members: mcleanBoardMembers(props)
+            };
+          });
+        },
+        render: function (result) {
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "McLean County Board",
+            note: boardCountNote(result.members.length, null)
+          }));
+          if (result.members.length) {
+            wrap.appendChild(renderPersonRows(result.members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.mcleancountyil.gov/155/County-Board" };
+        },
+        hoverOfficial: {
+          load: loadMcleanCountyBoard,
+          name: function (feature) {
+            var names = mcleanBoardMembers(feature.properties || {})
+              .map(function (m) { return m.name; });
+            return names.length ? names.join(", ") : null;
+          }
+        }
+      },
+      // Logan (6 districts) — rule-4 branch 3, the honesty floor. The regional
+      // GIS publishes the district and nothing else, and the county's only
+      // roster is a salary publication with no district against any name, so the
+      // card resolves the district and links the board rather than inventing a
+      // member. Same identity-only adapter the fire/park/library entries use.
+      polygonCountyEntry({
+        key: "logan",
+        coverage: loganCountyCoverage,
+        loader: loadLoganCountyBoard,
+        pill: true,
+        fields: [
+          { name: "district", label: "District", keys: ["district"], primary: true },
+          { label: "County", value: "Logan County" },
+          { label: "Note", value: "Logan County does not publish which board member represents which district. The board is linked below." }
+        ],
+        primaryLink: function () {
+          return { label: "Official body", url: "https://logancountyil.gov/county-board" };
+        }
+      }),
+      // Sangamon (29 single-member districts, the state capital's county). The
+      // GIS publishes the district and a per-district MEMBER URL but no name, so
+      // the weekly scraper walks exactly those 29 URLs — the join key comes from
+      // the county on both sides rather than being inferred from a URL pattern.
+      {
+        key: "sangamon",
+        coverage: sangamonCountyCoverage,
+        loadGeometry: loadSangamonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadSangamonCountyBoard(),
+            loadSangamonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Sangamon County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://sangamonil.gov/departments/a-c/county-board/districts"
+          };
+        },
+        hoverOfficial: {
+          load: loadSangamonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Madison (26 single-member districts) — rule-4 branch 1 and the richest
+      // board source in the fleet: official, party, phone, e-mail, per-district
+      // page and mailing address all ride the district feature, so the card's
+      // whole convention order comes from one request with no scraper, no roster
+      // file and no weekly workflow. Cross-checked against the county's own
+      // board-members page before shipping (D1 Fred Michael, D2 Ron Simpson,
+      // D3 Frank Dickerson, D4 Bobby Ross all agree).
+      {
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loadGeometry: loadMadisonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadMadisonCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            var url = findPropCI(props, ["url"]);
+            var person = gisBoardPerson(props, {
+              name: function (p) {
+                var v = findPropCI(p, ["official"]);
+                return v != null && String(v).trim() ? String(v).trim() : null;
+              },
+              party: ["party"],
+              phone: ["phone"],
+              email: ["email"],
+              address: function (p) {
+                var street = findPropCI(p, ["address"]);
+                if (street == null || !String(street).trim()) return null;
+                var tail = [findPropCI(p, ["city"]), findPropCI(p, ["state"]), findPropCI(p, ["zipcode"])]
+                  .filter(function (x) { return x != null && String(x).trim(); })
+                  .map(function (x) { return String(x).trim(); }).join(" ");
+                return String(street).replace(/\s+/g, " ").trim() + (tail ? ", " + tail : "");
+              }
+            });
+            if (person) {
+              person.badge = partyBadge(person.badge);
+              var safe = url ? safeHttpUrl(url) : null;
+              if (safe) person.links = [{ label: "Profile", url: safe }];
+            }
+            return { seq: seq, district: d != null && d !== "" ? String(d) : null, person: person };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Madison County Board",
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://madisoncountyil.gov/government/county_board/board_members.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadMadisonCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["official"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
+      },
+      // St. Clair (28 single-member districts) — rule-4 branch 1 at its
+      // thinnest: the member name rides the boundary GIS 28/28 and nothing else
+      // does, so the card is identifier + representative + link. Cross-checked
+      // against the county's own board page before shipping (D1 Robert Allen
+      // Jr., D4 Harry Hollingsworth, D6 Marty Crawford, D10 Scott Greenwald and
+      // D11 Ken Sharkey all agree).
+      {
+        key: "st-clair",
+        coverage: stClairCountyCoverage,
+        loadGeometry: loadStClairCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadStClairCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: d != null && d !== "" ? String(d) : null,
+              person: gisBoardPerson(props, {
+                name: function (p) {
+                  var v = findPropCI(p, ["name"]);
+                  return v != null && String(v).trim() ? String(v).trim() : null;
+                }
+              })
+            };
+          });
+        },
+        render: function (result) {
+          var people = result.person ? [result.person] : [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "St. Clair County Board",
+            note: boardCountNote(people.length, null)
+          }));
+          if (people.length) wrap.appendChild(renderPersonRows(people));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.co.st-clair.il.us/departments/county-board" };
+        },
+        hoverOfficial: {
+          load: loadStClairCountyBoard,
+          name: function (feature) {
+            var v = findPropCI(feature.properties || {}, ["name"]);
+            return (v == null || String(v).trim() === "") ? null : String(v).trim();
+          }
+        }
       }
     ]
   });
@@ -11580,6 +12340,33 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
         ]
+      }),
+      // Madison's fire tiling (42) — the FIRST CONTACT-BEARING fire entry in the
+      // fleet. Every other county's is identity-only because the source is; this
+      // one publishes the department head, station address, phone and website,
+      // so the card follows the full convention order instead of stopping at a
+      // name. E-mail is populated on 3 of 42 and deliberately not requested — a
+      // row that appears on one card in fourteen reads as an error, not a fact.
+      polygonCountyEntry({
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loader: loadMadisonFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["name"], primary: true },
+          { name: "head", label: "Fire Chief", keys: ["depthead"] },
+          { name: "address", label: "Station", keys: ["address"] },
+          { name: "city", label: "City", keys: ["city"] },
+          { name: "phone", label: "Phone", keys: ["phone"] },
+          { label: "County", value: "Madison County" },
+          // captured for the footer link below, never rendered as a row:
+          // polygonCountyEntry emits a row for every keyed field unless `when`
+          // says otherwise, and a bare URL row would duplicate the link.
+          { name: "url", label: "Website", keys: ["url"], when: function () { return false; } }
+        ],
+        primaryLink: function (result) {
+          var url = result && result.url ? safeHttpUrl(result.url) : null;
+          return url ? { label: "Official site", url: url } : null;
+        }
       })
     ]
   });
@@ -11698,6 +12485,18 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
+        ]
+      }),
+      // Madison's park tiling (6) — identity-only; the AGOL layer carries the
+      // district name and nothing else. A partial tiling, correctly: most of the
+      // county is in no park district at all.
+      polygonCountyEntry({
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loader: loadMadisonParkDistricts,
+        fields: [
+          { name: "name", label: "Park District", keys: ["park"], primary: true },
+          { label: "County", value: "Madison County" }
         ]
       })
     ]
@@ -11880,6 +12679,16 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
+        ]
+      }),
+      // Madison's library tiling (18) — identity-only, same shape as its parks.
+      polygonCountyEntry({
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loader: loadMadisonLibraryDistricts,
+        fields: [
+          { name: "name", label: "Library District", keys: ["library"], primary: true },
+          { label: "County", value: "Madison County" }
         ]
       })
     ]
@@ -12479,6 +13288,150 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Grundy County Clerk — Elections (official)", url: "https://www.grundyco.org/countyclerk" };
+        }
+      },
+      // Macoupin — the last link in the bridge to the Metro East, and the only
+      // served county whose data comes from its own SOCRATA portal rather than a
+      // GIS server. Identity-only: the clerk's precinct dataset carries a name
+      // and a description blob and nothing else, and no polling-place join is
+      // published against it. The board-district row every other entry shows is
+      // absent here on purpose — see the loader.
+      {
+        key: "macoupin",
+        coverage: macoupinCountyCoverage,
+        loadGeometry: loadMacoupinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMacoupinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Macoupin County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Macoupin County Clerk — Elections (official)", url: "https://www.macoupinvotes.gov/" };
+        }
+      },
+      // Madison (191) — the cleanest polling join in the fleet: `pollingid` on
+      // the precinct resolves to the polling feature's GlobalID 191/191, stamped
+      // at load time (the Kendall model). Board district comes from the
+      // best-effort spatial join every other entry uses.
+      {
+        key: "madison",
+        coverage: madisonCountyCoverage,
+        loadGeometry: loadMadisonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMadisonPrecincts(),
+            loadMadisonCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) fields.push({ label: "Polling place", value: String(result.pollingPlace) });
+          if (result.pollingAddress) fields.push({ label: "Address", value: String(result.pollingAddress) });
+          fields.push({ label: "County", value: "Madison County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Madison County Clerk — Elections (official)",
+            url: "https://madisoncountyil.gov/departments/county_clerk/elections/index.php"
+          };
+        }
+      },
+      // St. Clair (150). Identity + board district only: the county publishes
+      // 103 polling places, but keyed by a COMBINED human label
+      // ("Belleville9,10, 12 & 16") rather than by precinct id, so joining them
+      // means parsing prose into a set — recorded as a gap rather than guessed
+      // at. `bdnum` on the precinct is NOT the board district (23/150 agreement,
+      // no better than chance), so the board row is the spatial join.
+      {
+        key: "st-clair",
+        coverage: stClairCountyCoverage,
+        loadGeometry: loadStClairPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["prec_name2"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStClairPrecincts(),
+            loadStClairCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(feature.properties || {}, ["prec_name2"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          fields.push({ label: "County", value: "St. Clair County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "St. Clair County Clerk — Elections (official)",
+            url: "https://www.co.st-clair.il.us/departments/county-clerk/elections"
+          };
         }
       }
     ],
@@ -13158,7 +14111,7 @@ function initChiExplorer() {
   // answer. The city/suburb difference is carried by the cards, which already
   // hide an out-of-coverage layer outright.
   //
-  // metro-outline.json is ONE pre-dissolved polygon (62 vertices, 2.5 KB,
+  // metro-outline.json is ONE pre-dissolved polygon (94 vertices, 3.8 KB,
   // scripts/build_metro_outline.py), so this also drops the 83 KB school-board
   // fetch PSI measured in the 669 ms initial-navigation chain for a decorative
   // wash (OPTIMIZATION_PLAYBOOK's recommended fix). Still at idle, and the

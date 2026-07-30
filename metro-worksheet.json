@@ -2,8 +2,8 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -88.6,
-    "minLat": 41.0,
+    "minLng": -90.75,
+    "minLat": 38.1,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,9 +12,9 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 40.8,
-    "maxLat": 42.7,
-    "minLng": -88.8,
+    "minLat": 38.05,
+    "maxLat": 42.75,
+    "minLng": -90.85,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -517,13 +517,13 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 22,
         "max_features": 60,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry \u2014 the cheap same-origin coverage test for the ward layer's suburban entries (build_municipal_ward_coverage.py)"
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry \u2014 the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro)"
       },
       {
         "file": "metro-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Seven-county metro coverage outline, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash."
+        "note": "Coverage outline of every served county, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash. Kept to ONE connected region — a county joins only once it touches the served area."
       },
       {
         "file": "lasalle-county-outline.json",
@@ -548,6 +548,60 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Kankakee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "winnebago-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "madison-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Madison County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "st-clair-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "St. Clair County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "macoupin-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Macoupin County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "sangamon-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Sangamon County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "logan-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Logan County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "mclean-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "McLean County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "livingston-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Livingston County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "livingston-county-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Livingston County Board districts, DERIVED: TIGER townships dissolved per the county's own published composition (scripts/build_livingston_board_districts.py; --check is the drift gate). The county publishes no GIS, so this file IS the boundary source, not a cache of one."
       },
       {
         "file": "winnebago-judicial-subcircuits.json",
@@ -638,6 +692,16 @@
         "min_keys": 6
       },
       {
+        "file": "sangamon-county-board-members.json",
+        "min_keys": 27,
+        "note": "Sangamon County Board members keyed by district (29 single-member districts) — scraped weekly from the 29 per-district member pages the county's own board GIS links to."
+      },
+      {
+        "file": "livingston-county-board-members.json",
+        "min_keys": 3,
+        "note": "Livingston County Board members keyed by district (3 multi-member districts, six seats each) — scraped weekly from the county directory. Carries a `vacancies` count per district because the directory lists an explicit \"Vacancy\" seat that must be counted, never named."
+      },
+      {
         "file": "coverage-gaps.json",
         "min_keys": 8,
         "note": "Known data gaps keyed by gap id, driving the app's Data gaps panel \u2014 emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later."
@@ -645,7 +709,7 @@
       {
         "file": "municipal-officials.json",
         "min_keys": 275,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle shipped (307 municipalities: 185 full governing bodies, 81 head-of-government, 41 contact-only where the county publishes no names) per docs/EXPANSION_GUIDE.md Part 2.4"
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle and Winnebago shipped (318 municipalities) per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py)."
       }
     ]
   },
@@ -730,8 +794,18 @@
       "schedule": "Sun 13:00 UTC"
     },
     {
+      "file": "update-sangamon-county-board-roster.yml",
+      "purpose": "Sangamon County Board roster (29 per-district member pages on sangamonil.gov)",
+      "schedule": "Tue 15:00 UTC"
+    },
+    {
+      "file": "update-livingston-county-board-roster.yml",
+      "purpose": "Livingston County Board roster (livingstoncountyil.gov directory scrape)",
+      "schedule": "Tue 14:00 UTC"
+    },
+    {
       "file": "update-municipal-officials.yml",
-      "purpose": "Suburban municipal governing bodies (all seven counties: Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall clerk yearbooks, Lake county GIS contact)",
+      "purpose": "Municipal governing bodies (Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall clerk yearbooks, Lake county GIS contact, LaSalle clerk PDF, Winnebago WinGIS officeholder layers)",
       "schedule": "Wed 14:00 UTC"
     },
     {

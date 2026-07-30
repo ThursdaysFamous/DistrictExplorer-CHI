@@ -54,6 +54,7 @@ COUNTY_FIPS = {
     "Kendall": "093",
     "Lake": "097",
     "McHenry": "111",
+    "Winnebago": "201",
     "Will": "197",
 }
 
@@ -83,6 +84,12 @@ COUNTY_FLOORS = {
     # LaSalle, the third full-governing-body source and the first county outside
     # the metro (2026-07 live: 26 municipalities / 206 officials / 26 heads).
     "LaSalle": {"municipalities": 22, "members": 170, "heads": 22},
+    # Winnebago, the fourth full-governing-body source (2026-07 live: 11
+    # municipalities / 84 officials / 9 heads). HEADS IS BELOW MUNICIPALITIES ON
+    # PURPOSE: WinGIS publishes no mayor/president layer for Loves Park or
+    # Machesney Park, only their council seats, so a floor of 11 heads would fail
+    # on correct data. See winnebago_municipal_officials_scraper.py.
+    "Winnebago": {"municipalities": 10, "members": 75, "heads": 8},
     # The five mayor-level counties (2026-07 live values in parentheses). Their
     # sources publish no trustees, so `members` counts the head plus the elected
     # clerk/treasurer rows only — a floor equal to the head count would pass on
@@ -131,6 +138,7 @@ PRESERVABLE = {
     # on it, so a fetch failure should carry its last-good entries forward, not
     # fail every other county's turnover.
     "lasalle": {"kind": "county", "county": "LaSalle"},
+    "winnebago": {"kind": "county", "county": "Winnebago"},
     "dupage": {"kind": "county", "county": "DuPage"},
     "kane": {"kind": "county", "county": "Kane"},
     "mchenry": {"kind": "county", "county": "McHenry"},
@@ -151,7 +159,8 @@ PRESERVABLE = {
 # this is a freshness call, not a correctness one: Cook's is a live API
 # reflecting each election as it is certified, Will's is an annually
 # republished directory.
-COUNTY_PRECEDENCE = ["Cook", "Will", "LaSalle", "DuPage", "Kane", "Kendall", "McHenry", "Lake"]
+COUNTY_PRECEDENCE = ["Cook", "Will", "LaSalle", "Winnebago", "DuPage", "Kane",
+                     "Kendall", "McHenry", "Lake"]
 
 
 def norm_place(name):

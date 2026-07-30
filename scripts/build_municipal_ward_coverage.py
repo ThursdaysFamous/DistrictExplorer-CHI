@@ -54,6 +54,9 @@ STATIC_ENTRY_MUNICIPALITIES = {
     "evanston": ["Evanston"],
     "will": ["Lockport", "Wilmington", "Crest Hill", "Joliet"],
     "aurora": ["Aurora"],
+    # Rockford's 14 aldermanic wards ride WinGIS's ElectedOfficials service —
+    # the same regional-consortium GIS the Winnebago county-board entry uses.
+    "rockford": ["Rockford"],
 }
 # Chicago's wards are the city's own Socrata layer with its own coverage test
 # (chicagoCoverage); it is never part of this file.
@@ -166,8 +169,10 @@ def norm_census(placename):
 # Which county each entry's municipalities sit in, so a name that exists twice
 # in Illinois resolves to the right one. Aurora spans four counties; Kane holds
 # its Census place record.
+# Rockford straddles the Winnebago/Ogle line, so it appears under both counties
+# in the place-by-county reference; Winnebago is where the city sits.
 ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
-                     "will": "197", "aurora": "089"}
+                     "will": "197", "aurora": "089", "rockford": "201"}
 
 
 def load_place_geoids():
@@ -247,7 +252,18 @@ def main():
     # of an entirely different place.
     wanted = []
     seen = set()
-    for entry in ("cook-suburban", "evanston", "will", "aurora"):
+    # Order matches index.html's dispatch table. Derived from the tables above
+    # rather than hardcoded — the previous literal tuple silently dropped a newly
+    # added entry (rockford) with no error: the municipality simply never
+    # appeared in the file and its layer never showed.
+    ENTRY_ORDER = ["cook-suburban", "evanston", "will", "aurora"]
+    order = ENTRY_ORDER + [e for e in STATIC_ENTRY_MUNICIPALITIES if e not in ENTRY_ORDER]
+    missing = [e for e in entry_names if e not in order]
+    if missing:
+        print("FATAL: entry/entries %s have municipalities but no place in the "
+              "dispatch order" % ", ".join(sorted(missing)), file=sys.stderr)
+        sys.exit(1)
+    for entry in order:
         for name in entry_names.get(entry, []):
             geoid = resolve_place_geoid(name, entry, by_county, statewide)
             if not geoid:
