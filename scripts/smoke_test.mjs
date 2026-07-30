@@ -113,6 +113,61 @@ try {
     await context.close();
   }
 
+  // 1a. The Data gaps panel: the honest inventory of what this app cannot answer,
+  //     and the source-submission path (engine block `coverage-gaps`, shipped in
+  //     engine-v1.0.19). Asserted because the panel is the one surface whose whole
+  //     job is to be accurate about absence — a silently empty or truncated list is
+  //     worse than no panel at all. Same-origin data, so this needs no network.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, BASE);
+    const shipped = JSON.parse(readFileSync("data/app/coverage-gaps.json", "utf8"));
+    const expected = Object.keys(shipped).length;
+    // The submission link is built from REPO_ISSUES, which is METRO config — so a
+    // copy-paste of Chicago's value would quietly send this fork's readers to the
+    // wrong issue tracker. Assert the host, not just the template.
+    const repoIssues = JSON.parse(readFileSync("metro-worksheet.json", "utf8")).repo_issues;
+
+    async function openGaps() {
+      await page.evaluate(() => { const m = document.getElementById("gaps-modal"); if (m) m.hidden = true; });
+      await page.click("#gaps-btn");
+      await page.waitForFunction(() => {
+        const b = document.getElementById("gaps-body");
+        return b && !/Loading/.test(b.textContent) && b.textContent.trim().length > 0;
+      }, null, { timeout: QUERY_TIMEOUT }).catch(() => {});
+      return page.evaluate(() => {
+        const b = document.getElementById("gaps-body");
+        return {
+          items: b.querySelectorAll(".gap-item").length,
+          sections: Array.from(b.querySelectorAll(".gaps-section-label")).map((e) => e.textContent),
+          hrefs: Array.from(b.querySelectorAll(".gap-suggest")).map((a) => a.getAttribute("href")),
+        };
+      });
+    }
+
+    const cold = await openGaps();
+    check("data gaps panel renders every recorded gap",
+      cold.items === expected && cold.sections.length === 1,
+      `${cold.items}/${expected} items, ${cold.sections.length} section(s)`);
+    check("every gap offers a prefilled submission to THIS fork's repo",
+      cold.hrefs.length === expected &&
+      cold.hrefs.every((h) => h.startsWith(repoIssues) &&
+        /template=source-submission\.yml/.test(h) && /[?&]gap_id=/.test(h)),
+      `${cold.hrefs.length} links -> ${repoIssues}`);
+
+    // This fork ships no county outlines, so no gap can be location-matched.
+    // Selecting a point must therefore leave the list WHOLE and single-sectioned —
+    // that is the correct degradation, and the thing a naive filter would break.
+    await page.evaluate((p) => window.NycExplorer.setSelectedPoint(p[0], p[1]),
+      POINT.split(",").map(Number));
+    const warm = await openGaps();
+    check("selecting a point leaves the gap list whole (no outlines to match on)",
+      warm.items === expected && warm.sections.length === 1,
+      `${warm.items}/${expected} items, sections=${JSON.stringify(warm.sections)}`);
+
+    await context.close();
+  }
+
   // 2. The three offline anchors classify New York City Hall against known
   //    ground truth, fetched from data/app/*.json (no third-party API).
   {
