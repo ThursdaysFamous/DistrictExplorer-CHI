@@ -120,6 +120,15 @@ jobs:
         continue-on-error: true
         run: python3 scripts/lasalle_municipal_officials_scraper.py --out /tmp/lasalle_municipal_officials.json
 
+      # Winnebago: the FOURTH full-governing-body source, and the only county in
+      # the fleet that publishes municipal governing bodies AS GIS LAYERS — one
+      # per municipality on WinGIS's ElectedOfficials service. Preservable for
+      # the same reason as LaSalle: nothing already shipped degrades without it.
+      - name: Read the WinGIS municipal officeholder layers
+        id: scrape_winnebago
+        continue-on-error: true
+        run: python3 scripts/winnebago_municipal_officials_scraper.py /tmp/winnebago_municipal_officials.json
+
       # The bounded per-city exception (docs/EXPANSION_GUIDE.md Part 2.4): the
       # Will ward cities' own sites carry per-seat contact the Clerk's directory
       # doesn't, and supply Lockport and Wilmington, which that directory omits
@@ -226,6 +235,7 @@ jobs:
           add "${{ steps.scrape_kendall.outcome }}"     kendall     county /tmp/kendall_municipal_officials.json
           add "${{ steps.scrape_lake.outcome }}"        lake        county /tmp/lake_municipal_officials.json
           add "${{ steps.scrape_lasalle.outcome }}"     lasalle     county /tmp/lasalle_municipal_officials.json
+          add "${{ steps.scrape_winnebago.outcome }}"   winnebago   county /tmp/winnebago_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json

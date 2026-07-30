@@ -539,8 +539,8 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   | `park-district` | none | **SHIPPED** — 6, identity-only | none published |
   | `library-district` | none | **SHIPPED** — 18, identity-only | none published |
   | `judicial-subcircuit` | 17th — **already shipped** (pass 1) | 3rd — **already shipped**; the county republishes the same 4, unused | **structurally n/a** — 20th Circuit is not among PA 102-0693's nine |
-  | `ward` | ready, **high value** — Rockford 14 wards w/ alderperson + e-mail; Loves Park 5; Machesney Park 6 | 31 wards, `official`/contact declared and **0/31 populated** | Belleville + O'Fallon, identity-only |
-  | municipal officials | ready, **full governing bodies for 12 municipalities published AS GIS LAYERS** — village president + 6 trustees, city mayor + alderpersons/commissioners | — | — |
+  | `ward` | **SHIPPED** — Rockford's 14 wards w/ alderperson + e-mail, the first ward source outside the metro; Loves Park's 5 and Machesney Park's 6 ride the municipal roster instead | 31 wards, `official`/contact declared and **0/31 populated** | Belleville + O'Fallon, identity-only |
+  | municipal officials | **SHIPPED** — 11 municipalities, 84 officials, the fleet's FOURTH full-governing-body county and the only one publishing bodies AS GIS LAYERS | — | — |
 
   **All three board rosters were cross-checked against the counties' own pages before
   anything shipped**, since a GIS attribute can go stale silently: St. Clair matched on
@@ -559,6 +559,33 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   at `/server`, Madison at `/servera` and `/serverh`. And **layer ids are not 0-based** —
   Madison's are 40/41, Woodford's 2/8/3; a query against `/0` returns an *error envelope*
   that parses as an empty result, so "0 features" must never be read as "no data".
+
+  **Winnebago municipal officials — the fleet's only GIS-published governing
+  bodies (SHIPPED 2026-07-30).** WinGIS publishes one officeholder LAYER per
+  municipality rather than a directory page or a PDF: 11 municipalities, 84
+  officials, in three shapes the county never normalised — WIDE (one feature,
+  one column per seat: President/Mayor + Trustee1..N), PER-WARD (Loves Park
+  elects two aldermen per ward with a phone each; Machesney Park one trustee per
+  district), and Rockford split across two layers (mayor on one, 14 alderpersons
+  with city e-mails on the other). Rockford's wards also became the ward layer's
+  first entry outside the metro.
+
+  Three things the build had to get right, each of which failed quietly first:
+  **(1)** the roster builder reads `person_phone`/`person_email`, not
+  `phone`/`email` — emitting the plain names looks correct and is silently
+  dropped, which is deliberate so a municipality's main line can never print as
+  a trustee's direct line; **(2)** `build_municipal_ward_coverage.py` iterated a
+  hardcoded entry tuple, so a newly added entry (rockford) produced no coverage
+  feature and no error — the order is now derived from the entry table and an
+  entry missing from it is fatal; **(3)** a transient WinGIS failure on layer 19
+  shipped a Rockford with no mayor and still cleared the aggregate floor, so a
+  failed layer is now fatal in the scraper and the county carries forward from
+  the shipped roster instead.
+
+  **Two municipalities have no head of government published**, and that is the
+  source, not a parse failure: WinGIS carries council seats only for Loves Park
+  and Machesney Park. They ship council-only rather than having a mayor inferred
+  from the fact that cities have one.
 
   **A trap the bridge nearly walked into, caught by testing rather than reading.**
   St. Clair's precinct layer carries a `bdnum` column that looks exactly like a

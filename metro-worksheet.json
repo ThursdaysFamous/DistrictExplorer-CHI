@@ -517,7 +517,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 22,
         "max_features": 60,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry \u2014 the cheap same-origin coverage test for the ward layer's suburban entries (build_municipal_ward_coverage.py)"
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry \u2014 the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro)"
       },
       {
         "file": "metro-outline.json",
@@ -709,7 +709,7 @@
       {
         "file": "municipal-officials.json",
         "min_keys": 275,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle shipped (307 municipalities: 185 full governing bodies, 81 head-of-government, 41 contact-only where the county publishes no names) per docs/EXPANSION_GUIDE.md Part 2.4"
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle and Winnebago shipped (318 municipalities) per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py)."
       }
     ]
   },
@@ -805,7 +805,7 @@
     },
     {
       "file": "update-municipal-officials.yml",
-      "purpose": "Suburban municipal governing bodies (all seven counties: Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall clerk yearbooks, Lake county GIS contact)",
+      "purpose": "Municipal governing bodies (Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall clerk yearbooks, Lake county GIS contact, LaSalle clerk PDF, Winnebago WinGIS officeholder layers)",
       "schedule": "Wed 14:00 UTC"
     },
     {

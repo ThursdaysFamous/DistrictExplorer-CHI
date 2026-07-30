@@ -9658,6 +9658,25 @@ function initChiExplorer() {
     });
   });
 
+  /* Rockford's 14 aldermanic wards — Illinois's third-largest city, and the
+   * first ward source outside the metro. It rides WinGIS's ElectedOfficials
+   * service, the same regional-consortium GIS the Winnebago county-board entry
+   * uses, and carries the alderperson and their published city e-mail on the
+   * ward polygon itself (14/14 on both) — the Evanston shape. */
+  var ROCKFORD_WARD_SERVICE =
+    "https://maps.wingis.org/public/rest/services/ElectedOfficials/MapServer/20";
+  var loadRockfordWards = makeCached(function () {
+    return loadArcGISGeoJSON(ROCKFORD_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var p = f.properties || {};
+        return wardFeature(f, "Rockford", "Ward", findPropCI(p, ["ward"]), {
+          dxOfficial: findPropCI(p, ["alderman"]),
+          dxEmail: findPropCI(p, ["email"])
+        });
+      }) };
+    });
+  });
+
   var loadWillWards = makeCached(function () {
     return Promise.all(WILL_WARD_LAYERS.map(function (spec) {
       return loadArcGISGeoJSON(WILL_WARD_SERVICE + "/" + spec.id).then(function (geojson) {
@@ -9962,7 +9981,8 @@ function initChiExplorer() {
       municipalWardEntry("cook-suburban", loadCookSuburbanWards),
       municipalWardEntry("evanston", loadEvanstonWards),
       municipalWardEntry("will", loadWillWards),
-      municipalWardEntry("aurora", loadAuroraWards)
+      municipalWardEntry("aurora", loadAuroraWards),
+      municipalWardEntry("rockford", loadRockfordWards)
     ]
   });
   declareDataSource("ward", {
