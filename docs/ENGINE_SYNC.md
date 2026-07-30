@@ -174,6 +174,17 @@ stays there until the CHI release ships. The fork PR description must link
 that tracking issue. Discretionary back-porting is dead; the WARN is the
 debt collector.
 
+> **A new ENGINE block breaks the REFERENCE fork's own deploy, immediately.**
+> The mirror image of the sibling trap below, and it is not caught by any PR
+> gate: `check_engine_parity.py` lints Chicago's fences against Chicago's file
+> and is happy, while `deploy-pages.yml`'s assemble step is the first thing that
+> compares them to the *pinned* manifest — where it fails with
+> `apply-engine: FAIL — fence-count mismatch: index.html has ENGINE block(s) the
+> manifest does not know`. So a new block is **not shippable in one PR**: the
+> block lands green, the deploy then fails, and the release that ships the block
+> is what repairs it. Cut that release in the same sitting (learned shipping
+> `engine-v1.0.19`, the Data gaps panel).
+
 **Releases that ship NEW blocks need sibling fence seeding first**
 (learned shipping engine-v1.0.10, backlog item 11): `apply_engine.py`
 fills existing fences only — it cannot decide where a brand-new block
