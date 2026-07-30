@@ -4058,7 +4058,7 @@ function initChiExplorer() {
     // Smallest county-scoped layer, so it renders on top of Township and County
     // (smallest-on-top); turning it on drops both to outline-only, framing the
     // precinct fills from underneath.
-    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join), county-dispatched; subOf township
+    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone), county-dispatched; subOf township
     "tif-district",      // Cook TIF districts — the Clerk's current tax-increment-financing agency tiling (418, county GIS clerkTaxDistricts L18: the un-yeared layer the Clerk refreshes in place, retired year editions archived in the year-versioned service); card shows name + Clerk agency number + the Clerk's TIF-reports link; partial coverage (most points are in no TIF), Cook-gated. Dedicated Cook layer per the consolidation rule until a second county ships TIFs (Kendall's server carries a TIF_Districts service — recorded as the next entry)
     "cps-elementary",    // Elementary School attendance zone — smallest polygon layer
     "school-site",       // individual school-campus footprints — smallest polygons, above the zones
@@ -7326,6 +7326,108 @@ function initChiExplorer() {
   });
   var loadKankakeeLibraries = makeCached(function () {
     return loadK3Layer("Taxing_Districts2", 3, "unit_name", "library districts");
+  });
+
+  /* =========================================================================
+   * Boone County (2020 pop. 53,606) and Grundy County (52,533) — two more of
+   * the five border-ring counties. Both publish a precinct tiling WITH its
+   * polling places, which is the concept they bring; each does it differently
+   * and neither needs a join helper the app didn't already have.
+   *
+   *   Boone   Clerk_and_Recorder/Voting_Polling_Places layer 1 (37 precincts)
+   *           carries Location/Address/City ON the precinct feature, so the
+   *           polling place needs no join at all — the county did it upstream.
+   *           Precincts are named township-compound ("Belvidere 7") via
+   *           TWP_PRECIN.
+   *   Grundy  CountyClerk/PollingPlaces_SPIE_Public layer 1 (40 precincts)
+   *           keyed to layer 0's 18 polling places by POLLINGID, and those
+   *           points carry name, address, city, phone and hours.
+   *
+   * Neither county's board is shipped here, for opposite reasons recorded in
+   * docs/DATA_LAYER_GUIDEBOOK.md: Boone publishes its 3 board districts as
+   * three separate single-feature layers with no officeholder attribute, so it
+   * needs an officeholder source before rule 4 is satisfied; Grundy publishes
+   * no board-district geometry at all. Boone's judicial subcircuits already
+   * ship — it is the secondary county of the 17th Circuit, answered by the
+   * Winnebago entry.
+   * ======================================================================= */
+  var loadBooneCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/boone-county-outline.json", {}, 2);
+  });
+  function booneCountyCoverage(point) {
+    return loadBooneCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadGrundyCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/grundy-county-outline.json", {}, 2);
+  });
+  function grundyCountyCoverage(point) {
+    return loadGrundyCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
+    var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
+      outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+
+  var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
+  var loadBoonePrecincts = makeCached(function () {
+    return loadCountyMapServerLayer(BOONE_GIS + "Clerk_and_Recorder/Voting_Polling_Places", 1,
+      "TWP_PRECIN,Township,Munic,Precinct,Location,Address,City", "Boone County precincts");
+  });
+
+  var GRUNDY_GIS = "https://maps.grundyco.org/arcgis/rest/services/";
+  /* Grundy's polling places live in a sibling layer keyed by POLLINGID. Stamp
+   * them onto the precinct features at load time (the Kendall/LaSalle
+   * precedent) so the card's query stays a plain containment test and a
+   * polling-layer failure costs the polling row, never the precinct. */
+  var loadGrundyPrecincts = makeCached(function () {
+    var base = GRUNDY_GIS + "CountyClerk/PollingPlaces_SPIE_Public";
+    return Promise.all([
+      loadCountyMapServerLayer(base, 1, "PRECINCTID,NAME,POLLINGID", "Grundy County precincts"),
+      // POLLINGID is the join key on BOTH layers — it is what groups precincts
+      // that share a polling place (Felix 3 and Felix 4 are both POLLINGID 8).
+      // It must be named explicitly in outFields or the service omits it, which
+      // silently produced precinct cards with no polling place.
+      loadCountyMapServerLayer(base, 0, "POLLINGID,NAME,FULLADD,CITY,PHONE", "Grundy County polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        polling.features.forEach(function (f) {
+          var p = f.properties || {};
+          var id = findPropCI(p, ["pollingid"]);
+          if (id == null) return;
+          byId[String(id)] = {
+            place: findPropCI(p, ["name"]),
+            street: findPropCI(p, ["fulladd"]),
+            city: findPropCI(p, ["city"]),
+            phone: findPropCI(p, ["phone"])
+          };
+        });
+        precincts.features.forEach(function (f) {
+          var key = findPropCI(f.properties || {}, ["pollingid"]);
+          var hit = key != null ? byId[String(key)] : null;
+          if (!hit) return;
+          if (hit.place) f.properties.dxPollingPlace = String(hit.place).trim();
+          var addr = [hit.street, hit.city].filter(function (x) {
+            return x != null && String(x).trim();
+          }).map(function (x) { return String(x).trim(); }).join(", ");
+          if (addr) f.properties.dxPollingAddress = addr;
+          if (hit.phone && String(hit.phone).trim()) f.properties.dxPollingPhone = String(hit.phone).trim();
+        });
+      }
+      return precincts;
+    });
   });
 
   /* Both boards carry the member on the district feature, so one helper builds
@@ -12000,6 +12102,107 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Kankakee County Clerk — Elections (official)", url: "https://www.kankakeecountyclerk.gov/" };
+        }
+      },
+      // Boone (37). The county names precincts township-compound ("Belvidere 7")
+      // and — unusually — carries the polling place ON the precinct feature, so
+      // there is nothing to join: Location/Address/City come straight off the
+      // polygon the point lands in.
+      {
+        key: "boone",
+        coverage: booneCountyCoverage,
+        loadGeometry: loadBoonePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["twp_precin"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadBoonePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var compound = findPropCI(props, ["twp_precin"]);
+            var street = findPropCI(props, ["address"]);
+            var city = findPropCI(props, ["city"]);
+            var addr = [street, city].filter(function (x) {
+              return x != null && String(x).trim();
+            }).map(function (x) { return String(x).trim(); }).join(", ");
+            return {
+              seq: seq,
+              name: compound != null && String(compound).trim() ? String(compound).trim() : null,
+              township: findPropCI(props, ["township"]),
+              municipality: findPropCI(props, ["munic"]),
+              pollingPlace: findPropCI(props, ["location"]),
+              pollingAddress: addr || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          // Boone stamps unincorporated precincts Munic="County" — its own
+          // shorthand, not a place. Rendering it would read as a municipality
+          // called "County", so it is dropped and the row simply doesn't appear
+          // (the Municipality layer answers that question properly anyway).
+          var munic = result.municipality == null ? "" : String(result.municipality).trim();
+          if (munic && munic.toLowerCase() !== "county") {
+            fields.push({ label: "Municipality", value: munic });
+          }
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Boone County Clerk — Elections (official)", url: "https://www.boonecountyil.gov/departments/county-clerk-recorder/elections/" };
+        }
+      },
+      // Grundy (40). Polling places are a sibling layer joined on POLLINGID and
+      // stamped onto each precinct at load time; they carry a phone, which no
+      // other county's polling source in this layer does.
+      {
+        key: "grundy",
+        coverage: grundyCountyCoverage,
+        loadGeometry: loadGrundyPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadGrundyPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null,
+              pollingPhone: props.dxPollingPhone || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          if (result.pollingPhone) {
+            fields.push({ label: "Polling place phone", value: String(result.pollingPhone) });
+          }
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Grundy County Clerk — Elections (official)", url: "https://www.grundyco.org/countyclerk" };
         }
       }
     ],

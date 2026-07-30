@@ -60,6 +60,36 @@ COUNTIES = {
             (40.7480, -88.6320, "Pontiac — Livingston County"),
         ],
     },
+    # Boone and Grundy: both border-ring counties (the ring is Boone, DeKalb,
+    # Grundy, Kankakee, LaSalle). Anchor coordinates geocoded, not recalled.
+    "boone": {
+        "fips": "007",
+        "name": "Boone County",
+        "inside": [
+            (42.2580, -88.8417, "Belvidere (county seat)"),
+            (42.3684, -88.8220, "Poplar Grove"),
+            (42.3994, -88.7406, "Capron"),
+        ],
+        "outside": [
+            (42.2714, -89.0940, "Rockford — Winnebago County"),
+            (42.2501, -88.6081, "Marengo — McHenry County"),
+            (42.0972, -88.6929, "Genoa — DeKalb County"),
+        ],
+    },
+    "grundy": {
+        "fips": "063",
+        "name": "Grundy County",
+        "inside": [
+            (41.3574, -88.4215, "Morris (county seat)"),
+            (41.2878, -88.2855, "Coal City"),
+            (41.4553, -88.2617, "Minooka"),
+        ],
+        "outside": [
+            (41.0945, -88.4251, "Dwight — Livingston County"),
+            (41.3107, -88.6091, "Seneca — LaSalle County"),
+            (41.1254, -87.8487, "Kankakee — Kankakee County"),
+        ],
+    },
     "kankakee": {
         "fips": "091",
         "name": "Kankakee County",

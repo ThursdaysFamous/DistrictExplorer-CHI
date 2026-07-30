@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v27";
+const CACHE_NAME = "district-explorer-shell-v28";
 
 const SHELL_URLS = [
   "./",
@@ -78,6 +78,8 @@ const GEOMETRY_URLS = [
   "./data/app/municipal-ward-coverage.json",
   "./data/app/metro-outline.json",
   "./data/app/lasalle-county-outline.json",
+  "./data/app/boone-county-outline.json",
+  "./data/app/grundy-county-outline.json",
   "./data/app/kankakee-county-outline.json",
   "./data/app/winnebago-judicial-subcircuits.json",
   "./data/app/madison-judicial-subcircuits.json",
