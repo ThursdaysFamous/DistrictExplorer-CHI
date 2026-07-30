@@ -71,9 +71,13 @@ def load_gaps():
         fail("gaps block is not valid JSON: %s" % e)
 
 
-def known_layer_ids():
+def worksheet():
     with open(WORKSHEET, encoding="utf-8") as f:
-        return {l["id"] for l in json.load(f)["layers"]}
+        return json.load(f)
+
+
+def known_layer_ids(w):
+    return {l["id"] for l in w["layers"]}
 
 
 def shipped_outline_slugs():
@@ -129,12 +133,19 @@ def main():
     ap.add_argument("--check", action="store_true", help="verify the shipped file, write nothing")
     args = ap.parse_args()
 
+    # The guidebook is a fleet-wide document with one array per metro (the
+    # coverage-map block's shape), so the fork reads ITS OWN key rather than a
+    # hardcoded one — that is what lets the same script run in every fork.
+    w = worksheet()
+    metro = w["this_metro"]
     gaps = load_gaps()
-    entries = gaps.get("chicago")
+    entries = gaps.get(metro)
     if entries is None:
-        fail("gaps block has no 'chicago' array (keys: %s)" % list(gaps))
+        fail("gaps block has no %r array (keys: %s). Add one for this fork, even if "
+             "empty, so the absence is deliberate rather than an oversight."
+             % (metro, list(gaps)))
 
-    problems = validate(entries, known_layer_ids(), shipped_outline_slugs())
+    problems = validate(entries, known_layer_ids(w), shipped_outline_slugs())
     if problems:
         for p in problems:
             print("  %s" % p, file=sys.stderr)
@@ -155,14 +166,14 @@ def main():
             fail("data/app/coverage-gaps.json differs from the guidebook's gaps block "
                  "(%d vs %d bytes). Edit the guidebook, then regenerate."
                  % (len(shipped), len(payload)))
-        print("build-coverage-gaps: OK — shipped file matches the guidebook (%d gaps: %s)"
-              % (len(entries), summary))
+        print("build-coverage-gaps: OK — shipped file matches the guidebook (%s: %d gaps, %s)"
+              % (metro, len(entries), summary))
         return
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(payload)
-    print("build-coverage-gaps: wrote data/app/coverage-gaps.json — %d gaps (%s), %d bytes"
-          % (len(entries), summary, len(payload)))
+    print("build-coverage-gaps: wrote data/app/coverage-gaps.json — %s: %d gaps (%s), %d bytes"
+          % (metro, len(entries), summary, len(payload)))
 
 
 if __name__ == "__main__":

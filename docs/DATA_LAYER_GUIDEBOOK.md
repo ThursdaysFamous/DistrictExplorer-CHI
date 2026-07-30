@@ -192,6 +192,76 @@ in the researched-but-unbuilt backlog.
       "blocker": "The county's fire tiling keys its 5 districts by NUMBER with no district name, and a card reading “Fire District 1” would tell a reader nothing they can act on.",
       "wanted": "A mapping from Boone's fire-district numbers to district names, or a named fire-district boundary layer."
     }
+  ],
+  "nyc": [
+    {
+      "id": "nyc-school-zone-details",
+      "concept": "School zones",
+      "area": "New York City",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "es-zone",
+      "summary": "School-zone cards name the zoned school but carry no school address or grade range.",
+      "blocker": "Verified live during the 2026-07 card audit: the DOE zone datasets carry neither field, so the app's addressKeys/gradeKeys are deliberately unwired rather than pointed at columns that do not exist.",
+      "wanted": "A DOE dataset joining zone to school address and grade span by DBN, refreshed each school year."
+    },
+    {
+      "id": "nyc-amenity-phones",
+      "concept": "Fire stations and libraries",
+      "area": "New York City",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "fire-station",
+      "summary": "Fire-station and library cards carry no phone number.",
+      "blocker": "Checked in the 2026-07 card audit: the upstream station and library datasets genuinely have no phone column — this is an absence in the source, not an unwired field.",
+      "wanted": "An FDNY firehouse or NYPL/BPL/QPL branch dataset that includes public phone numbers."
+    },
+    {
+      "id": "nyc-congress-district-offices",
+      "concept": "U.S. House district",
+      "area": "New York City",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "congress",
+      "summary": "Congressional cards show the Washington D.C. office only, not the local district office.",
+      "blocker": "The roster builder's source publishes the D.C. office; district-office addresses are not in it. Recorded as a builder-scope enrichment candidate rather than a missing source.",
+      "wanted": "A machine-readable list of House members' DISTRICT office addresses and phones, keyed by member or district."
+    }
+  ],
+  "sf": [
+    {
+      "id": "sf-supervisor-contact",
+      "concept": "Supervisor district",
+      "area": "San Francisco",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "supervisor-district",
+      "summary": "Supervisor districts name the supervisor but the boundary source carries no contact fields.",
+      "blocker": "Verified in the 2026-07 card audit: the upstream DataSF dataset (hcgx-vtsb) has no contact columns, so contact would have to come from a separate roster.",
+      "wanted": "A DataSF or Board of Supervisors dataset with per-district office phone and e-mail."
+    },
+    {
+      "id": "sf-amenity-phones",
+      "concept": "Fire stations and libraries",
+      "area": "San Francisco",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "fire-station",
+      "summary": "Fire-station and library cards carry no phone number.",
+      "blocker": "Checked in the 2026-07 card audit: the upstream SFFD station and SFPL branch datasets have no phone column.",
+      "wanted": "An SFFD station or SFPL branch dataset that includes public phone numbers."
+    },
+    {
+      "id": "sf-congress-district-offices",
+      "concept": "U.S. House district",
+      "area": "San Francisco",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "congress",
+      "summary": "Congressional cards show the Washington D.C. office only, not the local district office.",
+      "blocker": "The roster builder's source publishes the D.C. office; district-office addresses are not in it.",
+      "wanted": "A machine-readable list of House members' DISTRICT office addresses and phones, keyed by member or district."
+    }
   ]
 }
 ```
