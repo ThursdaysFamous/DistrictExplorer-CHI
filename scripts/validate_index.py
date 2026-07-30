@@ -142,6 +142,7 @@ ROSTER_FILES = {
     "ccbr-roster.json": 3,
     "il-county-clerks.json": 101,
     "dupage-county-board-members.json": 6,
+    "coverage-gaps.json": 8,  # Known data gaps keyed by gap id, driving the app's Data gaps panel — emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later.
     "municipal-officials.json": 275,  # Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle shipped (307 municipalities: 185 full governing bodies, 81 head-of-government, 41 contact-only where the county publishes no names) per docs/EXPANSION_GUIDE.md Part 2.4
 }
 # ==== GENERATED:END validator-config ====

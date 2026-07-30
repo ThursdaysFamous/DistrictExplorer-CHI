@@ -1,0 +1,115 @@
+name: Suggest a data source
+description: Point us at a source that could close one of the known data gaps.
+title: "source: "
+labels: ["source-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks — this is the most useful kind of contribution this project gets.
+
+        Most gaps in this app are **not** missing because nobody wrote the code. They are
+        missing because no publisher publishes the data, or because the publisher blocks
+        automated fetching. So the thing we need is a *source*, not a patch.
+
+        **Accepted sources are credited by name in
+        [`docs/SOURCE_CREDITS.md`](../blob/main/docs/SOURCE_CREDITS.md)** — and, where a
+        gap's card gains a row because of your source, in the changelog entry that ships
+        it. There is no cash bounty; the credit is the reward, and it is a real one.
+
+        Before filing, please read the gap's **"what would help"** line in the app's Data
+        gaps panel. Several of these have already had the obvious candidate checked and
+        found wanting — the panel says which — and re-sending it costs you time and tells
+        us nothing new.
+  - type: input
+    id: gap_id
+    attributes:
+      label: Which gap does this address?
+      description: >-
+        The gap id from the Data gaps panel (the "Suggest a source" button fills this in
+        for you). If it is a gap we have not recorded, write "new" and describe it below.
+      placeholder: kankakee-municipal-officials
+    validations:
+      required: true
+  - type: input
+    id: source_url
+    attributes:
+      label: Source URL
+      description: A direct link to the data — a page, document, dataset, or API endpoint.
+    validations:
+      required: true
+  - type: checkboxes
+    id: contents
+    attributes:
+      label: What does the source actually contain?
+      description: >-
+        Check only what you have SEEN in it. This is the single most useful field: a
+        source with boundaries but no names closes a different gap than one with names
+        but no boundaries.
+      options:
+        - label: Officeholder names
+        - label: Contact details (phone, e-mail, or office address)
+        - label: District or ward numbers for each officeholder
+        - label: Boundary geometry (a map service, shapefile, or GeoJSON)
+        - label: Term or next-election dates
+  - type: dropdown
+    id: publisher
+    attributes:
+      label: Who publishes it?
+      options:
+        - The government body itself (county, municipality, state agency)
+        - A council of governments or association of municipalities
+        - A library, university, or civic-tech group
+        - A commercial data vendor
+        - Other / not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: refresh
+    attributes:
+      label: How is it kept current?
+      description: >-
+        A source that is never updated can still be useful, but we would ship it as
+        hand-verified rather than on a weekly refresh — so it matters which it is.
+      options:
+        - Updated live or continuously
+        - Republished after each election
+        - Republished on a schedule (annually, quarterly)
+        - One-off — not updated
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: verified
+    attributes:
+      label: How did you verify it?
+      description: >-
+        Did you open it and read a record? Cross-check one officeholder against another
+        source? Say what you actually confirmed — we will re-verify, but knowing what you
+        checked tells us where to look first.
+      placeholder: >-
+        Opened the PDF and confirmed it lists all 21 village presidents with phone
+        numbers; spot-checked Bourbonnais against the village's own site and it matched.
+    validations:
+      required: true
+  - type: textarea
+    id: access
+    attributes:
+      label: Access and terms, if you know them
+      description: >-
+        Does it need a login or API key? Is there a stated licence, or terms that forbid
+        automated fetching? We would rather find out here than after wiring it up. Leave
+        blank if you do not know.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Context, caveats, or a better idea than the one we recorded.
+  - type: markdown
+    attributes:
+      value: |
+        **A note on what we can accept.** This project never guesses officeholder data —
+        where no verifiable source exists, a card links the official body rather than
+        inventing a name. That means a source has to be attributable to a publisher we can
+        cite. A spreadsheet of names with no provenance, however accurate, is not
+        something we can ship.

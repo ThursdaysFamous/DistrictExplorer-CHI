@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v28";
+const CACHE_NAME = "district-explorer-shell-v29";
 
 const SHELL_URLS = [
   "./",
@@ -105,6 +105,7 @@ const ROSTER_URLS = [
   "./data/app/ccbr-roster.json",
   "./data/app/il-county-clerks.json",
   "./data/app/dupage-county-board-members.json",
+  "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
