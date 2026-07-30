@@ -167,9 +167,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "data-quality",
       "layer": "county-board",
-      "summary": "LaSalle board members show e-mail and mailing address but no phone.",
-      "blocker": "The county GIS records phone numbers without an area code (“672-2115”) and states no default, so they are deliberately not rendered rather than guessed at.",
-      "wanted": "LaSalle board contact with full ten-digit numbers, or the county's stated default area code."
+      "summary": "LaSalle board members show an e-mail but no phone.",
+      "blocker": "The county's board GIS records three phone columns WITHOUT an area code (\"672-2115\") and the county states no default, so prefixing 815 would be guessing how to reach an officeholder. With the mailing addresses removed as residences, e-mail is now the only contact this card carries.",
+      "wanted": "The same phone numbers with their area codes, or a county statement of the default prefix. The numbers are already published; only the first three digits are missing."
     },
     {
       "id": "kankakee-special-districts",
@@ -274,6 +274,20 @@ in the researched-but-unbuilt backlog.
       "summary": "Precincts resolve everywhere in Winnebago County except inside Rockford itself.",
       "blocker": "Rockford runs its own Board of Election Commissioners, so the county's 94-precinct tiling stops at the city line — measured, not documented: 130 of 131 uncovered grid samples fall inside the TIGER Rockford polygon. The clerk publishes a city-precinct committeeperson PDF, so the precincts exist; no boundary layer for them does.",
       "wanted": "Rockford Board of Election Commissioners precinct polygons, or a city precinct layer on WinGIS. This is the Chicago/suburban-Cook split repeating in a smaller city, and the app already models that shape."
+    },
+    {
+      "id": "county-board-office-addresses",
+      "concept": "County board office location",
+      "area": "LaSalle, Madison and every other county board",
+      "counties": [
+        "lasalle",
+        "madison"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "No county board card names an office you can visit — the card goes from the member straight to their contact details.",
+      "blocker": "The card convention is identifier, representative, office LOCATION, contact, link. No Illinois county in the app publishes a board member's office address. LaSalle and Madison publish an address per member, but those are RESIDENCES — 29 distinct addresses for 29 LaSalle members including rural route numbers and a PO box, 18 distinct for Madison's 18 — so they were removed rather than presented as somewhere to go. McHenry, Livingston, Sangamon and Winnebago never collected theirs for the same reason.",
+      "wanted": "A per-district OFFICE address, or confirmation that a county's board members hold office hours somewhere specific. County boards mostly meet at one building and members have no individual office, so the honest fix may be a per-county board-office address on the card rather than a per-member one."
     }
   ],
   "nyc": [
@@ -1172,6 +1186,26 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   62 vertices, 2.5 KB, `scripts/build_metro_outline.py`); the existing per-county outline
   files could not be reused because they were simplified independently and their shared
   borders would not cancel in the in-browser dissolve.
+
+  **Board members' street addresses removed from LaSalle and Madison
+  (2026-07-30), settling a fleet inconsistency.** Six counties' board cards took
+  two different positions on the same question: LaSalle and Madison rendered the
+  address their county GIS publishes per member, while McHenry, Livingston,
+  Sangamon and Winnebago deliberately never collected theirs. Measured rather
+  than assumed before acting — 29 DISTINCT addresses for LaSalle's 29 members
+  (including rural route numbers and a PO box) and 18 distinct for the 18 Madison
+  members that have one. Those are residences, not offices, so they are no longer
+  requested from either service or rendered on either card.
+
+  That leaves a real hole in the card convention (identifier → representative →
+  office LOCATION → contact → link): **no county board card in the app names an
+  office you can visit**, because no Illinois county in it publishes one.
+  Recorded as `county-board-office-addresses` with the likely honest fix noted —
+  county boards mostly meet in one building and members have no individual
+  office, so a per-COUNTY board-office address is probably the right answer
+  rather than a per-member one. LaSalle's existing phone gap was reworded in the
+  same change: its summary said members show "e-mail and mailing address", which
+  this made false.
 
   **The list is now DERIVED-CHECKED, not anchor-checked (2026-07-30).** The fix
   below added INSIDE anchors, which stops a listed county being dropped — but it

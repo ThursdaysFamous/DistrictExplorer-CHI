@@ -7509,7 +7509,7 @@ function initChiExplorer() {
   var loadLasalleCountyBoard = makeCached(function () {
     var url = "https://services3.arcgis.com/H84yQSxNIj9pXjJ7/arcgis/rest/services/" +
       "CountyBoardDistricts/FeatureServer/0/query?where=1%3D1&outFields=" +
-      "District,First,Last,Address,City,Zip,Email_Addr&outSR=4326&f=geojson&geometryPrecision=5";
+      "District,First,Last,Email_Addr&outSR=4326&f=geojson&geometryPrecision=5";
     return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
       .then(function (geojson) {
         if (!hasUsableGeometry(geojson)) throw new Error("LaSalle County Board returned no usable geometry");
@@ -7906,7 +7906,7 @@ function initChiExplorer() {
    * representative, location, contact, link — comes from a single request. */
   var loadMadisonCountyBoard = makeCached(function () {
     return loadCountyMapServerLayer(MADISON_GIS + "CountyClerk/CBDWS", 0,
-      "DISTRICT,OFFICIAL,PARTY,PHONE,EMAIL,URL,ADDRESS,CITY,STATE,ZIPCODE",
+      "DISTRICT,OFFICIAL,PARTY,PHONE,EMAIL,URL",
       "Madison County Board");
   });
   /* 42 fire districts WITH CONTACT — the first contact-bearing fire entry in the
@@ -11558,17 +11558,12 @@ function initChiExplorer() {
                   }).map(function (x) { return String(x).trim(); }).join(" ");
                   return n || null;
                 },
-                email: ["email_addr"],
-                address: function (p) {
-                  var street = findPropCI(p, ["address"]);
-                  var city = findPropCI(p, ["city"]);
-                  var zip = findPropCI(p, ["zip"]);
-                  if (street == null || !String(street).trim()) return null;
-                  var tail = [city, zip].filter(function (x) {
-                    return x != null && String(x).trim();
-                  }).map(function (x) { return String(x).trim(); }).join(" ");
-                  return String(street).replace(/\s+/g, " ").trim() + (tail ? ", " + tail : "");
-                }
+                email: ["email_addr"]
+                // The layer's Address/City/Zip are RESIDENCES — 29 distinct
+                // addresses for 29 members, including rural route numbers and a
+                // PO box — not the county office. Not requested and not
+                // rendered, matching McHenry, Livingston, Sangamon and
+                // Winnebago; the absent office address is a recorded gap.
               })
             };
           });
@@ -11962,15 +11957,11 @@ function initChiExplorer() {
               },
               party: ["party"],
               phone: ["phone"],
-              email: ["email"],
-              address: function (p) {
-                var street = findPropCI(p, ["address"]);
-                if (street == null || !String(street).trim()) return null;
-                var tail = [findPropCI(p, ["city"]), findPropCI(p, ["state"]), findPropCI(p, ["zipcode"])]
-                  .filter(function (x) { return x != null && String(x).trim(); })
-                  .map(function (x) { return String(x).trim(); }).join(" ");
-                return String(street).replace(/\s+/g, " ").trim() + (tail ? ", " + tail : "");
-              }
+              email: ["email"]
+              // ADDRESS/CITY/STATE/ZIPCODE are RESIDENCES — 18 distinct
+              // addresses for the 18 members that have one — not the county
+              // office. Not requested and not rendered; see the LaSalle entry
+              // and the recorded gap.
             });
             if (person) {
               person.badge = partyBadge(person.badge);
