@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -89.5, minLat: 40.85, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -89.5, minLat: 40.2, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 40.7, maxLat: 42.75, minLng: -89.7, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 40.1, maxLat: 42.75, minLng: -89.7, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7661,6 +7661,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadMcleanCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mclean-county-outline.json", {}, 2);
+  });
+  function mcleanCountyCoverage(point) {
+    return loadMcleanCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7707,6 +7715,42 @@ function initChiExplorer() {
   var loadLivingstonBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/livingston-county-board-members.json", {}, 2);
   });
+
+  /* McLean is the fleet's first MULTI-MEMBER county board carried entirely on
+   * the boundary GIS: each of the 10 districts elects two members, and the
+   * county's clerk service records both on the district feature (REPNAME /
+   * REPNAME2, each with its own party and profile-page link, 10/10 on every
+   * column). Cross-checked against the county's own directory before shipping —
+   * EID=353 reads "Adam Reeves (R) 2028, District 1 Representative". */
+  var loadMcleanCountyBoard = makeCached(function () {
+    return loadCountyMapServerLayer(
+      "https://gis.mcleancountyil.gov/arcgis/rest/services/Clerks/MyElectedRepresentatives", 1,
+      "DISTRICTID,REPNAME,PARTY,DISTRICTURL,REPNAME2,PARTY2,DISTRICTURL2",
+      "McLean County Board");
+  });
+  /* The two seats are separate COLUMNS, not rows, so they are unpacked in one
+   * place used by both the card and the hover popup — the pairing of a name with
+   * its own party and profile link is the part that would be easy to get subtly
+   * wrong twice. A seat with no name (a vacancy between appointments) drops out
+   * rather than rendering an empty person. */
+  function mcleanBoardMembers(props) {
+    var seats = [
+      { name: ["repname"], party: ["party"], url: ["districturl"] },
+      { name: ["repname2"], party: ["party2"], url: ["districturl2"] }
+    ];
+    var out = [];
+    for (var i = 0; i < seats.length; i++) {
+      var raw = findPropCI(props, seats[i].name);
+      var name = raw == null ? "" : String(raw).trim();
+      if (!name) continue;
+      out.push({
+        name: name,
+        party: partyBadge(findPropCI(props, seats[i].party)),
+        url: findPropCI(props, seats[i].url)
+      });
+    }
+    return out;
+  }
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
   var loadBoonePrecincts = makeCached(function () {
@@ -7774,6 +7818,23 @@ function initChiExplorer() {
     var s = String(v).trim();
     var m = /^D(\d+)$/i.exec(s);
     return m ? m[1] : s;
+  }
+
+  /* County GIS layers spell party inconsistently — Winnebago and Madison
+   * publish "R"/"D", McLean publishes "Republican"/"Democrat". They land on the
+   * same consolidated card, so a resident crossing a county line would see the
+   * badge change shape for no reason. Normalised to the single letter the badge
+   * slot is sized for; anything unrecognised passes through untouched rather
+   * than being dropped or guessed at. */
+  function partyBadge(value) {
+    if (value == null) return null;
+    var s = String(value).trim();
+    if (!s) return null;
+    var key = s.toLowerCase().replace(/\.$/, "");
+    if (key === "r" || key === "rep" || key === "republican") return "R";
+    if (key === "d" || key === "dem" || key === "democrat" || key === "democratic") return "D";
+    if (key === "i" || key === "ind" || key === "independent") return "I";
+    return s;
   }
 
   function gisBoardPerson(props, fields) {
@@ -11448,6 +11509,59 @@ function initChiExplorer() {
             var e = d != null ? roster[String(d)] : null;
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // McLean (10 districts electing TWO members each) — rule-4 branch 1, and
+      // the first multi-member board the fleet gets entirely from the boundary
+      // GIS: both seats, both parties and both profile links ride the district
+      // feature, 10/10 on every column, so no scraper and no roster file.
+      {
+        key: "mclean",
+        coverage: mcleanCountyCoverage,
+        loadGeometry: loadMcleanCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["districtid"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return loadMcleanCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["districtid"]);
+            return {
+              seq: seq,
+              district: d != null && d !== "" ? String(d) : null,
+              members: mcleanBoardMembers(props)
+            };
+          });
+        },
+        render: function (result) {
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "McLean County Board",
+            note: boardCountNote(result.members.length, null)
+          }));
+          if (result.members.length) {
+            wrap.appendChild(renderPersonRows(result.members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://www.mcleancountyil.gov/155/County-Board" };
+        },
+        hoverOfficial: {
+          load: loadMcleanCountyBoard,
+          name: function (feature) {
+            var names = mcleanBoardMembers(feature.properties || {})
+              .map(function (m) { return m.name; });
+            return names.length ? names.join(", ") : null;
           }
         }
       }

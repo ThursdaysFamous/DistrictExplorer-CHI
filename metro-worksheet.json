@@ -3,7 +3,7 @@
   "metro_name": "Chicago",
   "metro_bbox": {
     "minLng": -89.5,
-    "minLat": 40.85,
+    "minLat": 40.2,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,7 +12,7 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 40.7,
+    "minLat": 40.1,
     "maxLat": 42.75,
     "minLng": -89.7,
     "maxLng": -86.9
@@ -554,6 +554,12 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "mclean-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "McLean County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
         "file": "livingston-county-outline.json",

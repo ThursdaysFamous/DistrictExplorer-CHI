@@ -149,6 +149,23 @@ COUNTIES = {
             (40.4842, -88.9937, "Bloomington — McLean County"),
         ],
     },
+    "mclean": {
+        "fips": "113",
+        "name": "McLean County",
+        "inside": [
+            (40.4798, -88.9939, "Bloomington (county seat)"),
+            (40.5093, -88.9844, "Normal"),
+            (40.6414, -88.7834, "Lexington"),
+            (40.3520, -88.7642, "Le Roy"),
+        ],
+        "outside": [
+            (40.8809, -88.6298, "Pontiac — Livingston County"),
+            (40.1526, -88.9607, "Clinton — DeWitt County"),
+            (40.1481, -89.3637, "Lincoln — Logan County"),
+            (40.4653, -88.3759, "Gibson City — Ford County"),
+            (40.7213, -89.2727, "Eureka — Woodford County"),
+        ],
+    },
     "madison": {
         "fips": "119",
         "name": "Madison County",
