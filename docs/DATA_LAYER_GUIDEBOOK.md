@@ -1173,6 +1173,18 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   files could not be reused because they were simplified independently and their shared
   borders would not cancel in the in-browser dissolve.
 
+  **The list is now DERIVED-CHECKED, not anchor-checked (2026-07-30).** The fix
+  below added INSIDE anchors, which stops a listed county being dropped — but it
+  could not stop a NEW county shipping unlisted, because anchors only assert
+  counties someone already thought to name. `validate_index.py` check 8 closes
+  that: it reads the per-county dispatch keys straight out of index.html, maps
+  them through `DISPATCH_COUNTY_FIPS`, and fails the merge gate if any is absent
+  from `METRO_COUNTY_FIPS` — or if a key has no FIPS entry at all, which is the
+  case that used to slip through silently. Layers keyed by municipality rather
+  than county (`ward`) are exempt by an explicit list, so opting out is a
+  decision someone writes down. Verified by probe: dropping Madison from the ring
+  fails with six named layers, and a fictitious "peoria" entry fails as unknown.
+
   **The county list then went stale, and the wash lied for two passes (fixed 2026-07-30).**
   Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers without
   revisiting `METRO_COUNTY_FIPS`, so the wash kept greying out all four — it told a
