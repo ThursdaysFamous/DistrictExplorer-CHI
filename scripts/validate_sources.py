@@ -404,6 +404,21 @@ ENDPOINTS = [
      "url": "https://gis.cookcountyil.gov/traditional/rest/services/clerkTaxDistricts/MapServer/18?f=json"},
     {"layer": "MWRD of Greater Chicago boundary (1 district — the Clerk's tax-agency polygon)",
      "url": "https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/MapServer/21?f=json"},
+    # DeKalb's five entries all come off ONE ArcGIS Online org, so a single
+    # org-level outage would fail all five at once — which is exactly the signal
+    # wanted. Layer ids are NOT 0-based on this org (Precincts is 1, the
+    # property-tax services are 4/7/9); a wrong id returns an error envelope that
+    # parses as an empty result, so each is pinned explicitly here too.
+    {"layer": "DeKalb County Board districts (12 electing 2 members each; officeholders come from the weekly roster)",
+     "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/District_AreaEffective2022/FeatureServer/0?f=json"},
+    {"layer": "DeKalb voting precincts (69, named by the county's own township codes)",
+     "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/Precincts/FeatureServer/1?f=json"},
+    {"layer": "DeKalb fire protection districts (18, the Clerk's property-tax tiling)",
+     "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/PT_Fire_Districts/FeatureServer/4?f=json"},
+    {"layer": "DeKalb library districts (13, the Clerk's property-tax tiling)",
+     "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/PT_Library_Districts/FeatureServer/7?f=json"},
+    {"layer": "DeKalb park districts (6, the Clerk's property-tax tiling)",
+     "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/PT_Park_Districts/FeatureServer/9?f=json"},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

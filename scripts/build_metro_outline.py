@@ -94,7 +94,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
-                     "119", "163",
+                     "119", "163", "037",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -120,6 +120,7 @@ DISPATCH_COUNTY_FIPS = {
     "lasalle": "099", "kankakee": "091", "boone": "007", "grundy": "063",
     "winnebago": "201", "livingston": "105", "mclean": "113", "logan": "107",
     "sangamon": "167", "macoupin": "117", "madison": "119", "st-clair": "163",
+    "dekalb": "037",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -163,6 +164,7 @@ INSIDE = {
     "Carlinville (Macoupin)": (39.2798, -89.8818),
     "Edwardsville (Madison)": (38.8114, -89.9532),
     "Belleville (St. Clair)": (38.5136, -89.9842),
+    "Sycamore (DeKalb)": (41.9889, -88.6868),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -183,16 +185,18 @@ OUTSIDE = {
     "Vandalia (Fayette)": (38.9606, -89.0937),
     "Pittsfield (Pike)": (39.6078, -90.8051),
     "Milwaukee (WI)": (43.0389, -87.9065),
-    # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
-    # LaSalle) and is the one border-ring county with no locatable GIS — so it
-    # is the anchor most likely to be wrong if a future county list is fudged.
-    "DeKalb (DeKalb)": (41.9295, -88.7504),
-    # Springfield is the seat of Sangamon, the next county in the bridge toward
-    # the Metro East. Keeping it here until it actually ships is the guard working
-    # as intended: the day Sangamon gains a dispatch entry, this line fails the
-    # build and forces the county list to be updated with it.
-    # (It is already listed above as a plain OUTSIDE anchor; this is that same
-    # role, now load-bearing.)
+    # DeKalb used to sit here, described as "enclosed on three sides by served
+    # counties and the one border-ring county with no locatable GIS". The second
+    # half was wrong — the county runs a full ArcGIS Online org, it was simply
+    # never found — and the day it gained dispatch entries this line failed the
+    # build and forced the county list to be updated with it. That is the guard
+    # doing its job, so the role is handed to the next counties out.
+    #
+    # Rochelle and Dixon sit immediately west of DeKalb, across the new frontier.
+    # Neither county publishes board-district geometry (recorded gaps), so this
+    # is where the ring stops until one of them does.
+    "Rochelle (Ogle)": (41.9239, -89.0687),
+    "Dixon (Lee)": (41.8425, -89.4814),
 }
 
 
