@@ -38,7 +38,7 @@
 // SF ships no on-water / county-seal marker icons (the consolidated city-county
 // has no out-of-city collar tiling), so none are precached.
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-sf-v3";
+const CACHE_NAME = "district-explorer-shell-sf-v4";
 
 const SHELL_URLS = [
   "./",
@@ -65,6 +65,7 @@ const GEOMETRY_URLS = [
 // and must never be served stale — network-first, with the cached copy only
 // as an offline fallback. Same freshness rule as the shell.
 const ROSTER_URLS = [
+  "./data/app/coverage-gaps.json",
   "./data/app/congress-roster.json",
   "./data/app/ca-senate-members.json",
   "./data/app/ca-assembly-members.json",

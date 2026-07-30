@@ -268,6 +268,11 @@
     ],
     "rosters": [
       {
+        "file": "coverage-gaps.json",
+        "min_keys": 3,
+        "note": "Known data gaps keyed by gap id, driving the Data gaps panel \u2014 emitted from the fleet guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py, which reads this fork's this_metro key (--check is the drift gate). Network-first like the rosters: a closed gap should stop being advertised on the next visit."
+      },
+      {
         "file": "congress-roster.json",
         "min_keys": 45,
         "note": "CA U.S. House reps (52 seats; vacancies allowed) - unitedstates/congress-legislators"
@@ -300,7 +305,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-sf-v3",
+    "cache_name": "district-explorer-shell-sf-v4",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

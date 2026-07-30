@@ -103,6 +103,7 @@ GEOMETRY_FILES = {
 
 # file -> minimum key count (officeholder rosters).
 ROSTER_FILES = {
+    "coverage-gaps.json": 3,  # Known data gaps keyed by gap id, driving the Data gaps panel — emitted from the fleet guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py, which reads this fork's this_metro key (--check is the drift gate). Network-first like the rosters: a closed gap should stop being advertised on the next visit.
     "congress-roster.json": 45,  # CA U.S. House reps (52 seats; vacancies allowed) - unitedstates/congress-legislators
     "ca-senate-members.json": 38,  # CA State Senate (40) - OpenStates
     "ca-assembly-members.json": 76,  # CA State Assembly (80) - OpenStates
