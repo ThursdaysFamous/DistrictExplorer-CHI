@@ -275,6 +275,31 @@ COUNTIES = {
             (42.2501, -88.6081, "Marengo — McHenry County"),
         ],
     },
+    # Ogle joins on its eastern edge (Boone, Winnebago) and its south-east
+    # (DeKalb, LaSalle). Lee, Stephenson, Carroll and Whiteside are the frontier
+    # now, so those four carry the OUTSIDE anchors that matter.
+    "ogle": {
+        "fips": "141",
+        "name": "Ogle County",
+        "inside": [
+            (42.0148, -89.3323, "Oregon (county seat)"),
+            (41.9239, -89.0687, "Rochelle"),
+            (42.1270, -89.2557, "Byron"),
+            (41.9861, -89.5793, "Polo"),
+            (42.0503, -89.4312, "Mount Morris"),
+            (42.1262, -89.5791, "Forreston"),
+        ],
+        "outside": [
+            (41.8425, -89.4814, "Dixon — Lee County"),
+            (42.2967, -89.6212, "Freeport — Stephenson County"),
+            (42.0949, -89.9777, "Mount Carroll — Carroll County"),
+            (41.7883, -89.6954, "Sterling — Whiteside County"),
+            (42.2714, -89.0940, "Rockford — Winnebago County"),
+            (42.2580, -88.8417, "Belvidere — Boone County"),
+            (41.9889, -88.6868, "Sycamore — DeKalb County"),
+            (41.5473, -89.1176, "Mendota — LaSalle County"),
+        ],
+    },
 }
 
 

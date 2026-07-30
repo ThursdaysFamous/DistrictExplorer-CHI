@@ -292,17 +292,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any DeKalb County list that pairs a precinct code with its township or full precinct name — a clerk's precinct table, a polling-place list carrying both, or a legend on the precinct map."
     },
     {
-      "id": "ogle-county-board-districts",
-      "concept": "County board districts",
-      "area": "Ogle County",
-      "counties": [],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Ogle County's 24 board members are published in full — district, party, phone and e-mail — but nothing draws the eight district boundaries, so no Ogle point can be placed in one.",
-      "blocker": "Ogle publishes no district geometry: its GIS is a Beacon/Schneider parcel viewer with no REST service, its ArcGIS Online org holds forest-preserve and cemetery layers only, and the county's own voting-precinct publication is a 51-page PDF map atlas. It also publishes no district COMPOSITION — the 2025-2027 clerk's yearbook lists the members and the precinct committeepeople but never says which of the 24 townships or 51 precincts make up each district, so the township-dissolve route that built Livingston's boundaries has nothing to dissolve against.",
-      "wanted": "Either Ogle board-district geometry (a shapefile, GeoJSON or ArcGIS service) or a published list of which precincts or townships make up each of the eight districts — a reapportionment resolution would do. The roster half is already in hand."
-    },
-    {
       "id": "lee-county-board-districts",
       "concept": "County board districts",
       "area": "Lee County",
@@ -460,7 +449,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
-| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
+| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
 | Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12 + Kane 16th-Circuit 4 (pre-built from the enacted shapefile — the county's services are permission-locked) + McHenry 22nd-Circuit 4 (pre-built — the county publishes no subcircuit service), all PA 102-0693; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
@@ -670,12 +659,8 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   **The other three northern counties are blocked on geometry, not on rosters** — each is
   a recorded gap with a measured blocker:
-  - **Ogle** — the roster is *complete*: 8 districts × 3 members, 24/24 with district,
-    party, phone and e-mail from the county's staff directory (the 2025-2027 yearbook is
-    already stale against it — it still shows District 8 vacant). Nothing draws the eight
-    districts: Beacon/Schneider parcel viewer, an AGOL org holding forest-preserve and
-    cemetery layers, and a 51-page PDF map atlas of precincts. No published composition
-    either, so Livingston's township-dissolve route has nothing to dissolve against.
+  - **Ogle — SHIPPED, see pass 5b below.** The composition existed after all; it was in
+    the resolution that adopted the map, not on any page describing it.
   - **Lee** — publishes its district composition precisely (D1/D2 are whole townships,
     D3 = Dixon 1-9, D4 = Dixon 10-17 + Palmyra 2) but no precinct geometry; its ArcGIS
     Enterprise portal exposes zero public items. Census 2020 VTDs contain all 46 named
@@ -688,7 +673,59 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   Whiteside is worth noting for later: its AGOL org publishes `PrecinctWardMap`,
   `ElectionGeography_public` and a `MyElectedRepresentatives` table — the Esri Elections
   solution, the same family DeKalb and McLean use — so it would be a cheap county to build
-  **once Ogle or Lee connects it**.
+  **once Ogle or Lee connects it**. (Ogle did — see 5b. Whiteside is now one county out,
+  behind Carroll or Lee.)
+
+- **RESEARCH PASS 5b (2026-07-30) — Ogle SHIPPED. THE COMPOSITION WAS IN THE
+  RESOLUTION, NOT ON ANY PAGE ABOUT THE DISTRICTS.** Pass 5 recorded Ogle as
+  no-source after checking the GIS, the AGOL org, the precinct PDF atlas, the
+  county board pages and the clerk's yearbook. All of that was accurate and the
+  conclusion was still wrong. Illinois counties adopt a reapportionment by
+  **resolution** (55 ILCS 5/2-3001), and a resolution is a numbered document in a
+  monthly PDF — not a page in the section that describes the thing it created. Ogle
+  archives every resolution and ordinance it has passed since 2007; all 460 were
+  scanned, and the composition was in two of them.
+
+  **`RESOLUTION R-2021-1106` (adopted 2021-11-16)** names all 52 precincts of the 8
+  districts, 24 members, effective December 2022 to December 2031. It supersedes
+  **R-2021-0607** (June 2021), whose District 5 read "Marion Township precincts 1, 2,
+  and 3, and Rockvale Township precincts 1 and 2" and named **Leaf River nowhere at
+  all** — a township in no district. The November text adds it. That is a useful
+  calibration on trusting a single published document: the county's own first
+  adopted plan had a township-sized hole in it, and the builder's
+  every-precinct-claimed-exactly-once guard is what reproduces the catch.
+
+  The build (`scripts/build_ogle_board_districts.py`) dissolves **Census 2020 voting
+  districts** — the precincts the resolution is written in — and the match is exact:
+  52 precincts named, 52 VTDs published, one for one, nothing left over on either
+  side. This is the same "compose published boundaries per a published rule" move as
+  Livingston, one level down from townships to precincts.
+
+  Two things make it checkable rather than merely plausible:
+  - **23 of the 24 townships are corroborated against a second census layer.** Only
+    FLAGG (the city of Rochelle) is split, between districts 3 and 4 — so every other
+    district edge is also a township edge, and the builder asserts that each whole
+    township is exactly reconstructed by its own precincts in the county-subdivision
+    layer. Two independently generalized census layers have to agree about where the
+    county's internal lines run, and they do at every sampled point.
+  - **The one divergence is recorded and shown to be harmless.** The county has since
+    retired FORRESTON 3 and now runs 51 precincts (its 2025-2027 yearbook lists
+    Forreston 1 and 2 only, in the polling places and both parties' committeeperson
+    lists). Forreston 1, 2 and 3 are all in District 7, so the union — and therefore
+    the district line — is unchanged. The split-township assertion is what keeps that
+    true going forward: a re-precincting that divided a second township would fail the
+    build rather than ship a line the county never drew.
+
+  The roster half was already in hand from pass 5 and needed only a scraper: 24/24 with
+  party, phone and e-mail, plus the Board Chair and Vice Chair, from the county's staff
+  directory. That page beats the county's own yearbook, which still prints District 8's
+  second 2028-term seat as vacant.
+
+  **The lesson worth carrying: when a county publishes officeholders but no district
+  geometry, read its resolutions before recording a no-source gap.** Lee and Stephenson
+  are the immediate re-tests — Lee's composition is already published in prose, so what
+  it needs is precinct geometry rather than a resolution, but Stephenson has not had its
+  resolution archive read.
 
 - **RESEARCH PASS 4 (2026-07-30) — Winnebago SHIPPED; the Metro East is researched and
   waiting on a bridge.** Pass 1's border ring is exhausted, so this pass went after the

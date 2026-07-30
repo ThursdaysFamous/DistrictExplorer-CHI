@@ -137,6 +137,17 @@ PROVENANCE = [
      "note": "Same PA 102-0693 enacted-subcircuits shapefile ZIP as Kane "
              "(archived in data/source/raw/). Redrawn ~once a decade; the "
              "county publishes no subcircuit service at all."},
+    {"layer": "Ogle County Board districts (8, dissolved from Census 2020 precincts)",
+     "app_file": "ogle-county-board-districts.json",
+     "source_url": "https://www.oglecountyil.gov/county/resolutions_and_ordinances/index.php",
+     "note": "Resolution R-2021-1106, ADOPTION OF THE OGLE COUNTY REAPPORTIONMENT "
+             "MAP (adopted 2021-11-16), names the 52 precincts making up the 8 "
+             "districts; build_ogle_board_districts.py dissolves the Census 2020 "
+             "voting districts accordingly. The county publishes no district "
+             "geometry. Supersedes R-2021-0607 (June 2021), whose District 5 "
+             "omitted Leaf River entirely. Next reapportionment due after the "
+             "2030 census; the pinned URL is the county's resolutions index, "
+             "since the monthly PDF filename changes."},
     {"layer": "Winnebago 17th-Circuit judicial subcircuits",
      "app_file": "winnebago-judicial-subcircuits.json",
      "source_url": "https://www.ilsenateredistricting.com/",
@@ -419,6 +430,12 @@ ENDPOINTS = [
      "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/PT_Library_Districts/FeatureServer/7?f=json"},
     {"layer": "DeKalb park districts (6, the Clerk's property-tax tiling)",
      "url": "https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/PT_Park_Districts/FeatureServer/9?f=json"},
+    # Ogle has no live endpoint of its own — both halves of its card are derived
+    # files (see PROVENANCE). This is the census layer its district geometry is
+    # dissolved from, so an outage or a schema change there is what would break a
+    # rebuild.
+    {"layer": "Census TIGERweb 2020 voting districts (Ogle board-district dissolve)",
+     "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/58?f=json"},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

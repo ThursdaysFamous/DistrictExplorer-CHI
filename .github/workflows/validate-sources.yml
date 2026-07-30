@@ -49,6 +49,17 @@ jobs:
         continue-on-error: true
         run: python3 scripts/build_livingston_board_districts.py --check
 
+      # Ogle's are derived the same way but from PRECINCTS (Census 2020 voting
+      # districts) per resolution R-2021-1106, so this check also re-runs the
+      # whole-township corroboration: 23 of the county's 24 townships must still
+      # be exactly reconstructed by their precincts in both census layers. Only
+      # Flagg is split (districts 3/4), and that assertion is part of the check —
+      # a re-precincting that split a second township would fail here rather than
+      # ship a line the county never drew.
+      - name: Ogle derived board districts still match the adopted composition
+        continue-on-error: true
+        run: python3 scripts/build_ogle_board_districts.py --check
+
       - name: Validate layer sources
         id: validate
         # continue-on-error: a FAIL exit (1) must not red the job — per the
