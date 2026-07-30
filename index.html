@@ -3618,8 +3618,15 @@ function initNycExplorer() {
         var rest = rows.filter(function (r) { return !r.here; }).map(function (r) { return r.gap; });
         if (here.length) body.appendChild(section("Where you clicked", here));
         if (rest.length) {
+          // "Nothing missing where you clicked" is only TRUE when some gap could
+          // have matched the point in the first place. A fork that tags no gap
+          // with a county (or one whose gaps are all footprint-less) can never
+          // match, so that phrasing would claim the point is clean when really
+          // the gaps simply are not mappable — for a fork with no outlines at
+          // all, every one of its gaps applies and the line would be a lie.
+          var mappable = rows.some(function (r) { return (r.gap.counties || []).length > 0; });
           body.appendChild(section(here.length ? "Elsewhere in the coverage area" :
-            (point ? "Nothing missing where you clicked — elsewhere:" : "Known gaps"), rest));
+            (point && mappable ? "Nothing missing where you clicked — elsewhere:" : "Known gaps"), rest));
         }
       }).catch(function () {
         body.textContent = "";
