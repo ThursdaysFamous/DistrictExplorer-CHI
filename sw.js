@@ -82,6 +82,7 @@ const GEOMETRY_URLS = [
   "./data/app/grundy-county-outline.json",
   "./data/app/kankakee-county-outline.json",
   "./data/app/winnebago-county-outline.json",
+  "./data/app/macoupin-county-outline.json",
   "./data/app/sangamon-county-outline.json",
   "./data/app/logan-county-outline.json",
   "./data/app/mclean-county-outline.json",

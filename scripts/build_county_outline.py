@@ -200,6 +200,22 @@ COUNTIES = {
             (39.5009, -89.7679, "Virden — Macoupin County"),
         ],
     },
+    "macoupin": {
+        "fips": "117",
+        "name": "Macoupin County",
+        "inside": [
+            (39.2798, -89.8818, "Carlinville (county seat)"),
+            (39.1267, -89.8163, "Gillespie"),
+            (39.0122, -89.7885, "Staunton"),
+            (39.4459, -89.7782, "Girard"),
+        ],
+        "outside": [
+            (39.7990, -89.6440, "Springfield — Sangamon County"),
+            (39.1769, -89.6556, "Litchfield — Montgomery County"),
+            (39.1200, -90.3284, "Jerseyville — Jersey County"),
+            (38.8114, -89.9532, "Edwardsville — Madison County"),
+        ],
+    },
     "madison": {
         "fips": "119",
         "name": "Madison County",

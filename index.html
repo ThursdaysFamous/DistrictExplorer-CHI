@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -90.05, minLat: 39.45, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -90.25, minLat: 38.9, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 39.4, maxLat: 42.75, minLng: -90.15, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 38.85, maxLat: 42.75, minLng: -90.35, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7685,6 +7685,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadMacoupinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/macoupin-county-outline.json", {}, 2);
+  });
+  function macoupinCountyCoverage(point) {
+    return loadMacoupinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7805,6 +7813,23 @@ function initChiExplorer() {
   });
   var loadSangamonBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/sangamon-county-board-members.json", {}, 2);
+  });
+
+  /* Macoupin is the only served county whose data comes from a SOCRATA portal
+   * of its own (data.macoupincountyil.gov) rather than a GIS server — the
+   * clerk publishes precinct polygons there, and the .geojson endpoint the
+   * Chicago layers already use works unchanged. Its board districts are NOT
+   * shipped: the county composes them from precincts, and the only published
+   * precinct-to-district mapping is a scanned image in a document still titled
+   * "proposed", which is not something to draw real district lines from.
+   * Recorded as a gap instead. */
+  var loadMacoupinPrecincts = makeCached(function () {
+    var url = "https://data.macoupincountyil.gov/resource/ab79-cnsh.geojson?$limit=500";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Macoupin County precincts returned no usable geometry");
+        return geojson;
+      });
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -12925,6 +12950,41 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Grundy County Clerk — Elections (official)", url: "https://www.grundyco.org/countyclerk" };
+        }
+      },
+      // Macoupin — the last link in the bridge to the Metro East, and the only
+      // served county whose data comes from its own SOCRATA portal rather than a
+      // GIS server. Identity-only: the clerk's precinct dataset carries a name
+      // and a description blob and nothing else, and no polling-place join is
+      // published against it. The board-district row every other entry shows is
+      // absent here on purpose — see the loader.
+      {
+        key: "macoupin",
+        coverage: macoupinCountyCoverage,
+        loadGeometry: loadMacoupinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMacoupinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Macoupin County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Macoupin County Clerk — Elections (official)", url: "https://www.macoupinvotes.gov/" };
         }
       }
     ],

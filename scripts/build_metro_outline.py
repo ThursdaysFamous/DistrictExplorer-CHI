@@ -65,20 +65,22 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
 # Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
-# passes 2-3, then Winnebago, Livingston, McLean, Logan and Sangamon from pass 4.
+# passes 2-3, then Winnebago and the Livingston -> McLean -> Logan -> Sangamon ->
+# Macoupin bridge from pass 4.
 #
 # All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
 # that way is a deliberate constraint, not a coincidence: a detached county would
 # make the served area a set of islands, and the operator's call is that coverage
 # grows as a connected region. Madison and St. Clair are researched and ready but
 # sit 200 miles south; the Livingston -> McLean -> Logan -> Sangamon -> Macoupin
-# bridge is being built toward them one contiguous county at a time, so the ring
-# stays single at every step.
+# bridge is now COMPLETE, built one contiguous county at a time so the ring
+# stayed single at every step; Madison and St. Clair are next and are already
+# adjacent to the served area.
 #
 # group_rings() below nests rings correctly and emits a MultiPolygon if this ever
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
-                     "099", "091", "007", "063", "201", "105", "113", "107", "167")
+                     "099", "091", "007", "063", "201", "105", "113", "107", "167", "117")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -113,13 +115,14 @@ INSIDE = {
     "Bloomington (McLean)": (40.4798, -88.9939),
     "Lincoln (Logan)": (40.1481, -89.3637),
     "Springfield (Sangamon)": (39.7990, -89.6440),
+    "Carlinville (Macoupin)": (39.2798, -89.8818),
 }
 OUTSIDE = {
-    # Carlinville is the seat of Macoupin, the last bridge county before Madison
-    # and St. Clair. Keeping it here until it ships is the guard working as
-    # intended: the day Macoupin gains a dispatch entry, this line fails the
-    # build and forces the county list to be updated with it.
-    "Carlinville (Macoupin)": (39.2798, -89.8818),
+    # Edwardsville is the seat of Madison. With Macoupin shipped the bridge is
+    # complete and Madison is now CONTIGUOUS with the served area — it is
+    # researched and ready, and this line is what will fail the build the day its
+    # dispatch entry lands, forcing the county list to be updated with it.
+    "Edwardsville (Madison)": (38.8114, -89.9532),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb is enclosed on three sides by served counties (Boone, Kane/Kendall,
     # LaSalle) and is the one border-ring county with no locatable GIS — so it

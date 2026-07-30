@@ -209,6 +209,19 @@ in the researched-but-unbuilt backlog.
       "summary": "Logan County's 6 board districts resolve, but no member is named on the card.",
       "blocker": "The regional GIS (Tri-County RPC) publishes the district number and a population count and no officeholder. The county's only published roster is its statutory salary publication, which lists twelve board members with no district against any of them, so it cannot be joined to a district.",
       "wanted": "Any Logan County list that pairs a board member with their DISTRICT number — a directory page, a board roster PDF, or an election canvass. A list of members alone is not enough; the district is the join key."
+    },
+    {
+      "id": "macoupin-county-board-districts",
+      "concept": "County board districts",
+      "area": "Macoupin County",
+      "counties": [
+        "macoupin"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Macoupin's 9 two-member board districts do not resolve — only its precincts do.",
+      "blocker": "The county composes board districts from PRECINCTS, and its precinct polygons are published (Socrata ab79-cnsh), but the precinct-to-district mapping is only in a scanned image PDF still titled \"proposed\" (2021). Drawing real district lines from a proposal, via OCR, is not something this app will do. The member roster itself IS published and complete (Socrata rxtc-9j2k, 9 districts x 2 members).",
+      "wanted": "A machine-readable precinct-to-board-district assignment for the adopted 2022-2032 map — a spreadsheet, a Socrata column on the precinct dataset, or district polygons. The roster is already in hand; only the geography is missing."
     }
   ],
   "nyc": [

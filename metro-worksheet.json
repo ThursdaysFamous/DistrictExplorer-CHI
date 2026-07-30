@@ -2,8 +2,8 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -90.05,
-    "minLat": 39.45,
+    "minLng": -90.25,
+    "minLat": 38.9,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,9 +12,9 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 39.4,
+    "minLat": 38.85,
     "maxLat": 42.75,
-    "minLng": -90.15,
+    "minLng": -90.35,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -554,6 +554,12 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "macoupin-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Macoupin County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
         "file": "sangamon-county-outline.json",
