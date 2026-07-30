@@ -166,6 +166,23 @@ COUNTIES = {
             (40.7213, -89.2727, "Eureka — Woodford County"),
         ],
     },
+    "logan": {
+        "fips": "107",
+        "name": "Logan County",
+        "inside": [
+            (40.1481, -89.3637, "Lincoln (county seat)"),
+            (40.0109, -89.2823, "Mount Pulaski"),
+            (40.2597, -89.2332, "Atlanta"),
+            (40.0207, -89.4822, "Elkhart"),
+        ],
+        "outside": [
+            (40.4798, -88.9939, "Bloomington — McLean County"),
+            (40.0117, -89.8482, "Petersburg — Menard County"),
+            (40.3725, -89.5473, "Delavan — Tazewell County"),
+            (40.1526, -88.9607, "Clinton — DeWitt County"),
+            (39.5487, -89.2942, "Taylorville — Christian County"),
+        ],
+    },
     "madison": {
         "fips": "119",
         "name": "Madison County",

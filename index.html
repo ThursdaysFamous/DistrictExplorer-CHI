@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -89.5, minLat: 40.2, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -89.75, minLat: 39.85, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 40.1, maxLat: 42.75, minLng: -89.7, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 39.8, maxLat: 42.75, minLng: -89.95, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7669,6 +7669,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadLoganCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/logan-county-outline.json", {}, 2);
+  });
+  function loganCountyCoverage(point) {
+    return loadLoganCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -7751,6 +7759,26 @@ function initChiExplorer() {
     }
     return out;
   }
+
+  /* Logan's board districts are published by the Tri-County Regional Planning
+   * Commission's ArcGIS org rather than by the county itself — the regional-GIS
+   * shape, like WinGIS in Winnebago. The layer carries the district number and a
+   * population count and NO officeholder, and the county's only published roster
+   * is a statutory salary publication that lists twelve board members with no
+   * district against any of them. So this is rule-4 branch 3, the honesty floor:
+   * the district resolves and the card links the official body, with no name
+   * invented to fill the gap. Recorded as a gap so it can be closed by
+   * submission rather than forgotten. */
+  var loadLoganCountyBoard = makeCached(function () {
+    var url = "https://services.arcgis.com/pPTAs43AFhhk0pXQ/arcgis/rest/services/" +
+      "Logan_County_Districts_and_Zoning/FeatureServer/39/query?where=1%3D1&outFields=District" +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Logan County Board returned no usable geometry");
+        return geojson;
+      });
+  });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
   var loadBoonePrecincts = makeCached(function () {
@@ -11564,7 +11592,26 @@ function initChiExplorer() {
             return names.length ? names.join(", ") : null;
           }
         }
-      }
+      },
+      // Logan (6 districts) — rule-4 branch 3, the honesty floor. The regional
+      // GIS publishes the district and nothing else, and the county's only
+      // roster is a salary publication with no district against any name, so the
+      // card resolves the district and links the board rather than inventing a
+      // member. Same identity-only adapter the fire/park/library entries use.
+      polygonCountyEntry({
+        key: "logan",
+        coverage: loganCountyCoverage,
+        loader: loadLoganCountyBoard,
+        pill: true,
+        fields: [
+          { name: "district", label: "District", keys: ["district"], primary: true },
+          { label: "County", value: "Logan County" },
+          { label: "Note", value: "Logan County does not publish which board member represents which district. The board is linked below." }
+        ],
+        primaryLink: function () {
+          return { label: "Official body", url: "https://logancountyil.gov/county-board" };
+        }
+      })
     ]
   });
 

@@ -196,6 +196,19 @@ in the researched-but-unbuilt backlog.
       "summary": "Boone County's fire districts are not shipped.",
       "blocker": "The county's fire tiling keys its 5 districts by NUMBER with no district name, and a card reading “Fire District 1” would tell a reader nothing they can act on.",
       "wanted": "A mapping from Boone's fire-district numbers to district names, or a named fire-district boundary layer."
+    },
+    {
+      "id": "logan-county-board-members",
+      "concept": "County board members",
+      "area": "Logan County",
+      "counties": [
+        "logan"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Logan County's 6 board districts resolve, but no member is named on the card.",
+      "blocker": "The regional GIS (Tri-County RPC) publishes the district number and a population count and no officeholder. The county's only published roster is its statutory salary publication, which lists twelve board members with no district against any of them, so it cannot be joined to a district.",
+      "wanted": "Any Logan County list that pairs a board member with their DISTRICT number — a directory page, a board roster PDF, or an election canvass. A list of members alone is not enough; the district is the join key."
     }
   ],
   "nyc": [

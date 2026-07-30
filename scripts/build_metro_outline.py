@@ -65,7 +65,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
 # Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
-# passes 2-3, then Winnebago, Livingston and McLean from pass 4.
+# passes 2-3, then Winnebago, Livingston, McLean and Logan from pass 4.
 #
 # All twelve are mutually contiguous, so this dissolves to ONE ring. Keeping it
 # that way is a deliberate constraint, not a coincidence: a detached county would
@@ -78,7 +78,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # group_rings() below nests rings correctly and emits a MultiPolygon if this ever
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
-                     "099", "091", "007", "063", "201", "105", "113")
+                     "099", "091", "007", "063", "201", "105", "113", "107")
 STATE_FIPS = "17"
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -111,6 +111,7 @@ INSIDE = {
     "Rockford (Winnebago)": (42.2714, -89.0940),
     "Pontiac (Livingston)": (40.8809, -88.6298),
     "Bloomington (McLean)": (40.4798, -88.9939),
+    "Lincoln (Logan)": (40.1481, -89.3637),
 }
 OUTSIDE = {
     "Springfield (Sangamon)": (39.7817, -89.6501),
@@ -119,11 +120,12 @@ OUTSIDE = {
     # LaSalle) and is the one border-ring county with no locatable GIS — so it
     # is the anchor most likely to be wrong if a future county list is fudged.
     "DeKalb (DeKalb)": (41.9295, -88.7504),
-    # Lincoln is the seat of Logan, the next county in the bridge toward the
-    # Metro East. Keeping it here until it actually ships is the guard working as
-    # intended: the day Logan gains a dispatch entry, this line fails the build
-    # and forces the county list to be updated with it.
-    "Lincoln (Logan)": (40.1481, -89.3637),
+    # Springfield is the seat of Sangamon, the next county in the bridge toward
+    # the Metro East. Keeping it here until it actually ships is the guard working
+    # as intended: the day Sangamon gains a dispatch entry, this line fails the
+    # build and forces the county list to be updated with it.
+    # (It is already listed above as a plain OUTSIDE anchor; this is that same
+    # role, now load-bearing.)
 }
 
 

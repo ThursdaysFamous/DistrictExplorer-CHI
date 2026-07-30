@@ -121,6 +121,7 @@ GEOMETRY_FILES = {
     "grundy-county-outline.json": (1, 1),  # Grundy County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "kankakee-county-outline.json": (1, 1),  # Kankakee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "winnebago-county-outline.json": (1, 1),  # Winnebago County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "logan-county-outline.json": (1, 1),  # Logan County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "mclean-county-outline.json": (1, 1),  # McLean County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "livingston-county-outline.json": (1, 1),  # Livingston County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "livingston-county-board-districts.json": (3, 3),  # Livingston County Board districts, DERIVED: TIGER townships dissolved per the county's own published composition (scripts/build_livingston_board_districts.py; --check is the drift gate). The county publishes no GIS, so this file IS the boundary source, not a cache of one.
