@@ -7653,6 +7653,23 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  /* Winnebago minus the City of Rockford — the county clerk's precinct
+   * jurisdiction. Rockford runs its own Board of Election Commissioners, so the
+   * county's precinct tiling stops at the city line (measured; see the precinct
+   * loader). Reuses the Rockford outline already shipped for the ward layer's
+   * coverage rather than adding a second copy of the same city polygon; a
+   * throwing city test fails OPEN to "outside Rockford", matching
+   * suburbanCookCoverage, so a coverage outage widens the layer rather than
+   * silently hiding it across the county. */
+  function winnebagoOutsideRockfordCoverage(point) {
+    return winnebagoCountyCoverage(point).then(function (inCounty) {
+      if (!inCounty) return false;
+      return Promise.resolve()
+        .then(function () { return municipalWardCoverage("rockford")(point); })
+        .then(function (inRockford) { return !inRockford; },
+              function () { return true; });
+    });
+  }
   var loadLivingstonCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/livingston-county-outline.json", {}, 2);
   });
@@ -7730,6 +7747,23 @@ function initChiExplorer() {
    * village boards and Rockford's aldermanic wards. Only the county board is
    * consumed here; the rest is recorded in the guidebook for a later pass. */
   var WINNEBAGO_GIS = "https://maps.wingis.org/public/rest/services/";
+  /* 94 precincts named "<Township> <n>", covering the county OUTSIDE the City
+   * of Rockford — which runs its own Board of Election Commissioners, exactly
+   * as Chicago does inside Cook. This is not documented on the service; it was
+   * measured: a grid over the county outline found 12% of it with no precinct,
+   * and testing that hole against the TIGER place polygon put 130 of 131
+   * uncovered samples inside Rockford and 936 of 937 covered ones outside it.
+   * Shipping this county-wide would have answered "no precinct" across
+   * Illinois's third-largest city with the layer switched on, so the entry
+   * declares the narrowed coverage below — the suburbanCookCoverage shape.
+   *
+   * WinGIS publishes no polling-place layer and the clerk's election page
+   * offers only committeeperson PDFs, so this is identity + township + the
+   * board district from the usual spatial join. */
+  var loadWinnebagoPrecincts = makeCached(function () {
+    return loadCountyMapServerLayer(WINNEBAGO_GIS + "WardsAndDistricts", 7,
+      "PCTNAME,TWSP", "Winnebago County precincts");
+  });
   var loadWinnebagoCountyBoard = makeCached(function () {
     // ADDRESS/PHONEBUSIN/PHONEHOME/CITYZIP are declared on the layer and set on
     // 0 of 20 rows — a schema is not data, so they are not requested. The
@@ -7737,6 +7771,13 @@ function initChiExplorer() {
     // a scraper, recorded as a backlog item rather than guessed at from here.
     return loadCountyMapServerLayer(WINNEBAGO_GIS + "ElectedOfficials", 26,
       "District,REP,REPPARTY", "Winnebago County Board");
+  });
+  /* The contact the GIS declares and never fills, scraped weekly from the
+   * county's own board page and cross-checked name-for-name against the GIS at
+   * build time. Enrichment only: without it the card is exactly what shipped
+   * before — a name and a party — which is why its failure is swallowed. */
+  var loadWinnebagoBoardContact = makeCached(function () {
+    return fetchJSONWithRetry("data/app/winnebago-county-board-members.json", {}, 2);
   });
 
   /* Livingston is the fleet's first county where BOTH halves of the card are
@@ -11632,21 +11673,31 @@ function initChiExplorer() {
         loadGeometry: loadWinnebagoCountyBoard,
         hoverName: winnebagoBoardDistrict,
         query: function (point, seq) {
-          return loadWinnebagoCountyBoard().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
+          return Promise.all([
+            loadWinnebagoCountyBoard(),
+            loadWinnebagoBoardContact().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var props = feature.properties || {};
-            return {
-              seq: seq,
-              district: winnebagoBoardDistrict(feature),
-              person: gisBoardPerson(props, {
-                name: function (p) {
-                  var v = findPropCI(p, ["rep"]);
-                  return v != null && String(v).trim() ? String(v).trim() : null;
-                },
-                party: ["repparty"]
-              })
-            };
+            var district = winnebagoBoardDistrict(feature);
+            var person = gisBoardPerson(props, {
+              name: function (p) {
+                var v = findPropCI(p, ["rep"]);
+                return v != null && String(v).trim() ? String(v).trim() : null;
+              },
+              party: ["repparty"]
+            });
+            // Contact rides the roster, which the builder already matched to
+            // THIS member by name — a district whose two sources disagreed has
+            // no roster row at all, so a mismatch costs the contact rather than
+            // attaching someone else's phone to the name on the card.
+            var contact = district != null ? results[1][String(district)] : null;
+            if (person && contact) {
+              if (contact.phone) person.phone = contact.phone;
+              if (contact.email) person.email = contact.email;
+            }
+            return { seq: seq, district: district, person: person };
           });
         },
         render: function (result) {
@@ -13431,6 +13482,58 @@ function initChiExplorer() {
           return {
             label: "St. Clair County Clerk — Elections (official)",
             url: "https://www.co.st-clair.il.us/departments/county-clerk/elections"
+          };
+        }
+      },
+      // Winnebago (94). Identity + township + board district; WinGIS publishes
+      // no polling-place layer and the clerk's election page offers only
+      // committeeperson PDFs, so there is nothing to join a polling place from.
+      {
+        key: "winnebago",
+        // county clerk's jurisdiction only — Rockford runs its own election
+        // commission and is not in this tiling (measured; see the loader)
+        coverage: winnebagoOutsideRockfordCoverage,
+        loadGeometry: loadWinnebagoPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["pctname"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWinnebagoPrecincts(),
+            loadWinnebagoCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) boardDistrict = winnebagoBoardDistrict(bf);
+            }
+            var name = findPropCI(props, ["pctname"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              township: findPropCI(props, ["twsp"]),
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          fields.push({ label: "County", value: "Winnebago County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Winnebago County Clerk — Elections (official)",
+            url: "https://wincoil.gov/departments/clerks-office/election-information"
           };
         }
       }

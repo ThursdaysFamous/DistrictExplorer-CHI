@@ -692,6 +692,11 @@
         "min_keys": 6
       },
       {
+        "file": "winnebago-county-board-members.json",
+        "min_keys": 18,
+        "note": "Winnebago County Board CONTACT keyed by district (20) — the phone and official @board.wincoil.gov e-mail the county's GIS declares and populates on 0 of 20 rows. Enrichment only: the member and party come from the GIS, so losing this file costs contact rows, never the officeholder. Each row is name-matched to the GIS at build time."
+      },
+      {
         "file": "sangamon-county-board-members.json",
         "min_keys": 27,
         "note": "Sangamon County Board members keyed by district (29 single-member districts) — scraped weekly from the 29 per-district member pages the county's own board GIS links to."
@@ -792,6 +797,11 @@
       "file": "update-dupage-county-board-roster.yml",
       "purpose": "DuPage County Board roster (dupagecounty.gov directory scrape)",
       "schedule": "Sun 13:00 UTC"
+    },
+    {
+      "file": "update-winnebago-county-board-roster.yml",
+      "purpose": "Winnebago County Board contact (wincoil.gov board page; base64 e-mails, name-matched to the county GIS)",
+      "schedule": "Wed 15:00 UTC"
     },
     {
       "file": "update-sangamon-county-board-roster.yml",
