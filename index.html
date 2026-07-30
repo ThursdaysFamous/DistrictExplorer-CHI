@@ -1991,6 +1991,66 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .footer-links a:hover { color: #fff; text-decoration: underline; }
 
   /* ---- feedback modal: serverless "report a bug / comment" dialog ---- */
+  /* The Data gaps panel reuses the feedback modal's shell (.feedback-modal /
+   * -backdrop / -panel) rather than introducing a second modal idiom; only the
+   * width and the list inside it are new. */
+  .feedback-panel.gaps-panel { max-width: 620px; max-height: 82vh; overflow-y: auto; }
+  .gaps-empty { font-size: 13px; color: var(--slate); font-style: italic; }
+  .gaps-section-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+    margin: 16px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .gaps-section-label:first-of-type { margin-top: 10px; }
+  .gap-item {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-strong);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+  /* Kind is carried by the left edge, so the three classes are distinguishable
+   * without relying on the badge text alone. */
+  .gap-item.kind-no-source { border-left-color: #B4532A; }
+  .gap-item.kind-blocked { border-left-color: #8A6D3B; }
+  .gap-item.kind-data-quality { border-left-color: #4A6D8C; }
+  .gap-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+  .gap-concept { font-weight: 700; font-size: 14px; }
+  .gap-area { font-size: 13px; color: var(--slate); }
+  .gap-badge {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--line);
+    color: var(--slate);
+    white-space: nowrap;
+  }
+  .gap-summary { font-size: 13px; margin: 0 0 6px; }
+  .gap-detail { font-size: 12px; color: var(--slate); margin: 0 0 6px; }
+  .gap-detail b { color: var(--ink); font-weight: 600; }
+  .gap-actions { margin-top: 8px; }
+  .gap-suggest {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--line-strong);
+    background: var(--panel);
+    color: var(--ink);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .gap-suggest:hover { background: var(--line); }
+  .gaps-credit { font-size: 12px; color: var(--slate); margin: 14px 0 0; }
   .feedback-modal[hidden] { display: none; }
   .feedback-modal {
     position: fixed;
@@ -2454,6 +2514,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <!-- ==== ENGINE:END metro-links-html ==== -->
     <div class="footer-links">
       <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
+      <!-- ==== ENGINE:BEGIN gaps-html ==== -->
+      <button type="button" id="gaps-btn" class="footer-link-btn">🧩 What data is missing?</button>
+      <!-- ==== ENGINE:END gaps-html ==== -->
       <a href="https://github.com/ThursdaysFamous/DistrictExplorer-NYC" target="_blank" rel="noopener">View source on GitHub</a>
       <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
@@ -2475,6 +2538,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </div>
 </div>
+
+<!-- ==== ENGINE:BEGIN gaps-modal-html ==== -->
+<div class="feedback-modal" id="gaps-modal" hidden role="dialog" aria-modal="true" aria-labelledby="gaps-title">
+  <div class="feedback-backdrop" id="gaps-backdrop"></div>
+  <div class="feedback-panel gaps-panel" role="document">
+    <button type="button" class="feedback-close" id="gaps-close" aria-label="Close">×</button>
+    <h2 id="gaps-title">What data is missing</h2>
+    <p>Most of what this app can't tell you is missing because nobody publishes it, or because the publisher blocks automated fetching — not because the code isn't written. Here is the honest list, and what would fix each one.</p>
+    <div id="gaps-body"></div>
+    <p class="gaps-credit">Found a source? Every accepted one is credited by name in <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>. There's no cash bounty — the credit is the reward.</p>
+  </div>
+</div>
+<!-- ==== ENGINE:END gaps-modal-html ==== -->
 
 <!-- Leaflet loaded DEFERRED: non-render-blocking, so it downloads in parallel
      with HTML parsing instead of blocking first paint (~1.3 s on mobile, PSI's
@@ -3379,6 +3455,199 @@ function initNycExplorer() {
     drawerBtn.textContent = expanded ? "Layers ▸" : "Layers ▾";
     map.invalidateSize(); // the map container just changed width
   });
+
+  /* ==== ENGINE:BEGIN coverage-gaps ==== */
+  /* =========================================================================
+   * DATA GAPS — the honest inventory of what this app cannot tell you, and an
+   * invitation to fix it.
+   *
+   * Why this exists as a first-class surface: the app's whole posture is that
+   * it never guesses officeholder data, so where no source exists a card
+   * quietly links the official body instead. That is honest per-card, but it
+   * left the SHAPE of the missing data invisible — a reader could not tell
+   * "this county publishes nothing" from "we didn't get round to it", and the
+   * distinction is the difference between a shrug and something they can help
+   * with. Nearly every gap here is a publisher problem, which means a reader
+   * who knows the local landscape is better placed to close it than we are.
+   *
+   * Data comes from data/app/coverage-gaps.json, emitted from the guidebook's
+   * gaps block by scripts/build_coverage_gaps.py — so the panel and the
+   * document of record cannot disagree (a drift gate enforces it). The file
+   * carries ONLY gaps a reader could act on: a missing or blocked source, or a
+   * shipped layer with a known hole. Layers that correctly don't apply
+   * somewhere are not gaps, and live outages are transient state the affected
+   * card already reports itself.
+   *
+   * Location awareness is the point of putting this in the app rather than in
+   * a README: with a point selected, the gaps that apply THERE come first. A
+   * gap names county outline slugs, and those outline files already ship for
+   * the coverage tests, so this costs no new geometry.
+   * ======================================================================= */
+  (function wireCoverageGaps() {
+    var modal = document.getElementById("gaps-modal");
+    var openBtn = document.getElementById("gaps-btn");
+    var closeBtn = document.getElementById("gaps-close");
+    var backdrop = document.getElementById("gaps-backdrop");
+    var body = document.getElementById("gaps-body");
+    if (!modal || !openBtn || !body) return;   // fork without the panel markup
+    var lastFocus = null;
+    var loadGaps = makeCached(function () {
+      return fetchJSONWithRetry("data/app/coverage-gaps.json", {}, 2);
+    });
+    // One cached loader per outline slug. The <slug>-county-outline.json naming
+    // convention IS the contract here, so a gap can reference any county whose
+    // outline ships without this needing a per-county branch.
+    var outlineCache = {};
+    function loadOutline(slug) {
+      if (!outlineCache[slug]) {
+        outlineCache[slug] = fetchJSONWithRetry("data/app/" + slug + "-county-outline.json", {}, 2);
+      }
+      return outlineCache[slug];
+    }
+
+    var KIND_LABEL = {
+      "no-source": "no source",
+      "blocked": "source blocks us",
+      "data-quality": "partial data"
+    };
+
+    /* Which of a gap's counties contain the selected point. Resolves to false
+     * for a gap with no counties (nothing to test) and treats an outline that
+     * fails to load as "not here" — a gap still appears in the everywhere list,
+     * so a failed probe can never hide it entirely. */
+    function appliesHere(gap, point) {
+      var slugs = gap.counties || [];
+      if (!point || !slugs.length) return Promise.resolve(false);
+      return Promise.all(slugs.map(function (slug) {
+        return loadOutline(slug).then(function (geojson) {
+          return !!findFeatureContaining(geojson, point);
+        }, function () { return false; });
+      })).then(function (hits) {
+        return hits.some(Boolean);
+      });
+    }
+
+    function suggestUrl(gap) {
+      // GitHub issue FORMS prefill from query params named after field ids, so
+      // gap_id lands in the template's first field and the reporter never has
+      // to copy an identifier by hand.
+      return REPO_ISSUES + "?template=source-submission.yml" +
+        "&labels=source-submission" +
+        "&title=" + encodeURIComponent("source: " + gap.concept + " — " + gap.area) +
+        "&gap_id=" + encodeURIComponent(gap.id);
+    }
+
+    function gapNode(gap) {
+      var item = cardEl("div", "gap-item kind-" + gap.kind);
+      var head = cardEl("div", "gap-head");
+      var concept = cardEl("span", "gap-concept");
+      concept.textContent = gap.concept;
+      var area = cardEl("span", "gap-area");
+      area.textContent = gap.area;
+      var badge = cardEl("span", "gap-badge");
+      badge.textContent = KIND_LABEL[gap.kind] || gap.kind;
+      head.appendChild(concept);
+      head.appendChild(area);
+      head.appendChild(badge);
+      item.appendChild(head);
+
+      var summary = cardEl("p", "gap-summary");
+      summary.textContent = gap.summary;
+      item.appendChild(summary);
+
+      // Blocker and wanted are the two lines that stop a reader wasting effort:
+      // what was already checked, and what would actually help.
+      [["Why", gap.blocker], ["What would help", gap.wanted]].forEach(function (pair) {
+        if (!pair[1]) return;
+        var p = cardEl("p", "gap-detail");
+        var b = document.createElement("b");
+        b.textContent = pair[0] + ": ";
+        p.appendChild(b);
+        p.appendChild(document.createTextNode(pair[1]));
+        item.appendChild(p);
+      });
+
+      var actions = cardEl("div", "gap-actions");
+      var link = document.createElement("a");
+      link.className = "gap-suggest";
+      link.href = suggestUrl(gap);
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "Suggest a source →";
+      actions.appendChild(link);
+      item.appendChild(actions);
+      return item;
+    }
+
+    function section(label, gaps) {
+      var frag = document.createDocumentFragment();
+      var h = cardEl("div", "gaps-section-label");
+      h.textContent = label;
+      frag.appendChild(h);
+      gaps.forEach(function (g) { frag.appendChild(gapNode(g)); });
+      return frag;
+    }
+
+    function render() {
+      body.textContent = "";
+      var loading = cardEl("p", "gaps-empty");
+      loading.textContent = "Loading…";
+      body.appendChild(loading);
+      var point = state.selectedPoint;
+      loadGaps().then(function (data) {
+        // keyed by gap id (see build_coverage_gaps.py); display order is kind
+        // then area, so the unfixable-without-a-publisher ones lead
+        var order = { "no-source": 0, "blocked": 1, "data-quality": 2 };
+        var gaps = Object.keys(data || {}).map(function (k) { return data[k]; })
+          .sort(function (a, b) {
+            var d = (order[a.kind] || 9) - (order[b.kind] || 9);
+            return d !== 0 ? d : String(a.area).localeCompare(String(b.area));
+          });
+        return Promise.all(gaps.map(function (g) {
+          return appliesHere(g, point).then(function (here) { return { gap: g, here: here }; });
+        }));
+      }).then(function (rows) {
+        body.textContent = "";
+        if (!rows.length) {
+          var none = cardEl("p", "gaps-empty");
+          none.textContent = "No gaps are recorded right now.";
+          body.appendChild(none);
+          return;
+        }
+        var here = rows.filter(function (r) { return r.here; }).map(function (r) { return r.gap; });
+        var rest = rows.filter(function (r) { return !r.here; }).map(function (r) { return r.gap; });
+        if (here.length) body.appendChild(section("Where you clicked", here));
+        if (rest.length) {
+          body.appendChild(section(here.length ? "Elsewhere in the coverage area" :
+            (point ? "Nothing missing where you clicked — elsewhere:" : "Known gaps"), rest));
+        }
+      }).catch(function () {
+        body.textContent = "";
+        var err = cardEl("p", "gaps-empty");
+        err.textContent = "Couldn't load the gap list just now. It's also in the project's " +
+          "DATA_LAYER_GUIDEBOOK.md on GitHub.";
+        body.appendChild(err);
+      });
+    }
+
+    function open() {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      render();
+      if (closeBtn) closeBtn.focus();
+    }
+    function close() {
+      modal.hidden = true;
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    openBtn.addEventListener("click", open);
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    if (backdrop) backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !modal.hidden) close();
+    });
+  })();
+  /* ==== ENGINE:END coverage-gaps ==== */
 
   /* ==== ENGINE:BEGIN feedback ==== */
   /* =========================================================================

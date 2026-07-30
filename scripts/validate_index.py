@@ -104,6 +104,7 @@ GEOMETRY_FILES = {
 ROSTER_FILES = {
     "nypd-precinct-info.json": 70,  # keys every precinct (even a null CO), so the floor is the precinct count, not the commander count
     "congress-roster.json": 26,
+    "coverage-gaps.json": 3,  # Known data gaps keyed by gap id, driving the Data gaps panel — emitted from the fleet guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py, which reads this fork's this_metro key (--check is the drift gate). Network-first like the rosters: a closed gap should stop being advertised on the next visit.
     "council-members.json": 48,
     "ny-senate-members.json": 60,
     "ny-assembly-members.json": 145,

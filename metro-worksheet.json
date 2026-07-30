@@ -108,6 +108,8 @@
       { "file": "nypd-precinct-info.json", "min_keys": 70,
         "note": "keys every precinct (even a null CO), so the floor is the precinct count, not the commander count" },
       { "file": "congress-roster.json", "min_keys": 26 },
+      { "file": "coverage-gaps.json", "min_keys": 3,
+        "note": "Known data gaps keyed by gap id, driving the Data gaps panel \u2014 emitted from the fleet guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py, which reads this fork's this_metro key (--check is the drift gate). Network-first like the rosters: a closed gap should stop being advertised on the next visit." },
       { "file": "council-members.json", "min_keys": 48 },
       { "file": "ny-senate-members.json", "min_keys": 60 },
       { "file": "ny-assembly-members.json", "min_keys": 145 },
@@ -118,7 +120,7 @@
     ]
   },
   "sw": {
-    "cache_name": "nyc-district-explorer-shell-v8",
+    "cache_name": "nyc-district-explorer-shell-v9",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
