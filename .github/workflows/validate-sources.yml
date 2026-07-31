@@ -60,6 +60,16 @@ jobs:
         continue-on-error: true
         run: python3 scripts/build_ogle_board_districts.py --check
 
+      # Carroll's are the simplest derived set in the fleet — three districts
+      # made of whole townships — but they carry the same failure mode: a
+      # township rename or a merge makes the shipped file disagree with the
+      # Census without anything erroring. The build also asserts that all 12
+      # TIGER townships are claimed exactly once, which is what would catch a
+      # reapportionment.
+      - name: Carroll derived board districts still match TIGER
+        continue-on-error: true
+        run: python3 scripts/build_carroll_board_districts.py --check
+
       - name: Validate layer sources
         id: validate
         # continue-on-error: a FAIL exit (1) must not red the job — per the

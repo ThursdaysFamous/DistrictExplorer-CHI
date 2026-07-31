@@ -322,6 +322,28 @@ COUNTIES = {
             (42.0945, -90.1568, "Savanna — Carroll County"),
         ],
     },
+    # Carroll reaches the Mississippi, so its western neighbour is Iowa rather
+    # than another Illinois county — the state line is the anchor that matters
+    # there, and Jo Daviess, Stephenson, Ogle and Whiteside ring the rest.
+    "carroll": {
+        "fips": "015",
+        "name": "Carroll County",
+        "inside": [
+            (42.0949, -89.9777, "Mount Carroll (county seat)"),
+            (42.0945, -90.1568, "Savanna"),
+            (42.1021, -89.8330, "Lanark"),
+            (41.9589, -90.0993, "Thomson"),
+            (41.9634, -89.7746, "Milledgeville"),
+            (42.1547, -89.7398, "Shannon"),
+        ],
+        "outside": [
+            (42.4157, -90.4295, "Galena — Jo Daviess County"),
+            (42.2967, -89.6212, "Freeport — Stephenson County"),
+            (42.0503, -89.4312, "Mount Morris — Ogle County"),
+            (41.7883, -89.6954, "Sterling — Whiteside County"),
+            (42.2587, -90.4231, "Bellevue, Iowa (across the Mississippi)"),
+        ],
+    },
 }
 
 

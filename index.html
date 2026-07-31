@@ -7750,6 +7750,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadCarrollCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/carroll-county-outline.json", {}, 2);
+  });
+  function carrollCountyCoverage(point) {
+    return loadCarrollCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -8226,6 +8234,24 @@ function initChiExplorer() {
   });
   var loadStephensonBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/stephenson-county-board-members.json", {}, 2);
+  });
+
+  /* Carroll is the fleet's THIRD county with both halves derived, after
+   * Livingston and Ogle — and the simplest of the three. Its three districts run
+   * exactly along township lines, so the composition reads straight off the
+   * county's published map and the boundary is a plain TIGER township dissolve
+   * (scripts/build_carroll_board_districts.py). Nothing here is approximate: the
+   * map is a raster export with no polygons to extract, but none were needed.
+   *
+   * The one reconciliation is recorded in that script: the map labels Carroll's
+   * two CONSOLIDATED townships by their historic halves (Cherry Grove + Shannon,
+   * Rock Creek + Lima) where TIGER carries the merged names. Both merged
+   * townships sit wholly in District 3, so no district line depends on it. */
+  var loadCarrollCountyBoard = makeCached(function () {
+    return fetchJSONWithRetry("data/app/carroll-county-board-districts.json", {}, 2);
+  });
+  var loadCarrollBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/carroll-county-board-members.json", {}, 2);
   });
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
@@ -12466,6 +12492,66 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadStephensonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Carroll (3 districts electing three members each) — both halves derived,
+      // see the loader block. The county's directory writes Roman numerals; the
+      // scraper converts them to the Arabic keys the map and this boundary use.
+      {
+        key: "carroll",
+        coverage: carrollCountyCoverage,
+        loadGeometry: loadCarrollCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadCarrollCountyBoard(),
+            loadCarrollBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            return {
+              seq: seq, district: district,
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Carroll County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://www.carrollcountyil.gov/county_board/board_members.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadCarrollBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

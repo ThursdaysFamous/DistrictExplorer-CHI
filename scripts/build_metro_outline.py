@@ -94,7 +94,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
-                     "119", "163", "037", "141", "177",
+                     "119", "163", "037", "141", "177", "015",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -120,7 +120,7 @@ DISPATCH_COUNTY_FIPS = {
     "lasalle": "099", "kankakee": "091", "boone": "007", "grundy": "063",
     "winnebago": "201", "livingston": "105", "mclean": "113", "logan": "107",
     "sangamon": "167", "macoupin": "117", "madison": "119", "st-clair": "163",
-    "dekalb": "037", "ogle": "141", "stephenson": "177",
+    "dekalb": "037", "ogle": "141", "stephenson": "177", "carroll": "015",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -167,6 +167,7 @@ INSIDE = {
     "Sycamore (DeKalb)": (41.9889, -88.6868),
     "Oregon (Ogle)": (42.0148, -89.3323),
     "Freeport (Stephenson)": (42.2967, -89.6212),
+    "Mount Carroll (Carroll)": (42.0949, -89.9777),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -198,7 +199,6 @@ OUTSIDE = {
     # frontier is now Lee to the south, Carroll and Whiteside to the west, and
     # Jo Daviess in the state's north-west corner.
     "Dixon (Lee)": (41.8425, -89.4814),
-    "Mount Carroll (Carroll)": (42.0949, -89.9777),
     "Sterling (Whiteside)": (41.7883, -89.6954),
     "Galena (Jo Daviess)": (42.4157, -90.4295),
 }
