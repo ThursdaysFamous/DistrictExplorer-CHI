@@ -97,6 +97,7 @@ const GEOMETRY_URLS = [
   "./data/app/carroll-county-outline.json",
   "./data/app/lee-county-outline.json",
   "./data/app/whiteside-county-outline.json",
+  "./data/app/rock-island-county-outline.json",
   "./data/app/carroll-county-board-districts.json",
   "./data/app/livingston-county-board-districts.json",
   "./data/app/winnebago-judicial-subcircuits.json",
@@ -131,6 +132,7 @@ const ROSTER_URLS = [
   "./data/app/stephenson-county-board-members.json",
   "./data/app/carroll-county-board-members.json",
   "./data/app/lee-county-board-members.json",
+  "./data/app/rock-island-county-board-members.json",
   "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
 ];

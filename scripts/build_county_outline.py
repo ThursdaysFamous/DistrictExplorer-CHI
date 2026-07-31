@@ -372,6 +372,29 @@ COUNTIES = {
             (41.6073, -89.6880, "Deer Grove — Whiteside County"),
         ],
     },
+    # Rock Island is the first served county on the Mississippi and the first
+    # whose neighbours include another STATE — the Iowa Quad Cities sit across
+    # the river, outside every layer the app answers. Its outside anchors are
+    # therefore Illinois-only by construction (the derivation picks places in
+    # neighbouring Illinois counties); the river edge is tested by the inside
+    # anchors that hug it, Andalusia and Rock Island itself.
+    "rock-island": {
+        "fips": "161",
+        "name": "Rock Island County",
+        "inside": [
+            (41.4852, -90.5742, "Rock Island (county seat)"),
+            (41.4975, -90.4925, "Moline"),
+            (41.5152, -90.4075, "East Moline"),
+            (41.4430, -90.7209, "Andalusia"),
+            (41.6127, -90.3308, "Port Byron"),
+            (41.3310, -90.6724, "Reynolds"),
+        ],
+        "outside": [
+            (41.7902, -90.2160, "Albany — Whiteside County"),
+            (41.5048, -90.3159, "Cleveland — Henry County"),
+            (41.3054, -90.4931, "Sherrard — Mercer County"),
+        ],
+    },
     "whiteside": {
         "fips": "195",
         "name": "Whiteside County",

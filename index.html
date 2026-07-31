@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -90.75, minLat: 38.1, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -91.15, minLat: 38.1, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 38.05, maxLat: 42.75, minLng: -90.85, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 38.05, maxLat: 42.75, minLng: -91.25, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -7834,6 +7834,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadRockIslandCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/rock-island-county-outline.json", {}, 2);
+  });
+  function rockIslandCountyCoverage(point) {
+    return loadRockIslandCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -8405,6 +8413,45 @@ function initChiExplorer() {
     return loadWhitesideLayer(0, "facilityid,name,fulladdr,municipality,pstlzip5,phone",
       "Whiteside County polling places");
   });
+
+  /* Rock Island — the first served county on the Mississippi, and the one that
+   * pushed the app's western edge past -91°: its permalink gate had to widen or
+   * a shared point in Rock Island would have been silently rejected (the metro
+   * outline build caught that, which is what that guard is for).
+   *
+   * Both layers live on one hosted service reached the usual way — the county
+   * site's parcel viewer to its web map to operationalLayers. Nineteen
+   * SINGLE-member districts, the most of any county on this layer. The board
+   * layer declares a NAME column and populates it on 0 of 19, so the members
+   * come from a weekly scrape of the county's own board page: a schema is not
+   * data. */
+  var ROCK_ISLAND_GIS = "https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/";
+  function loadRockIslandLayer(layerIndex, outFields, label) {
+    var url = ROCK_ISLAND_GIS + "Other_Layers/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadRockIslandCountyBoard = makeCached(function () {
+    return loadRockIslandLayer(4, "DISTRICT", "Rock Island County board districts");
+  });
+  var loadRockIslandPrecincts = makeCached(function () {
+    return loadRockIslandLayer(3, "NAME", "Rock Island County precincts");
+  });
+  var loadRockIslandBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/rock-island-county-board-members.json", {}, 2);
+  });
+  // The layer stores districts zero-padded ("01".."19"); the roster is keyed on
+  // the plain number, so the pad is stripped once here rather than in each call.
+  function rockIslandDistrictNumber(feature) {
+    var v = findPropCI(feature.properties || {}, ["district"]);
+    if (v == null || String(v).trim() === "") return null;
+    var n = parseInt(String(v), 10);
+    return isFinite(n) ? String(n) : String(v).trim();
+  }
 
   // "County Board District 3" -> "3". Lee's layer carries only NAME, so the
   // number is read off it rather than from a district field it does not have.
@@ -12858,6 +12905,65 @@ function initChiExplorer() {
             return members.length ? members.join(", ") : null;
           }
         }
+      },
+      // Rock Island — 19 single-member districts, the most of any county here.
+      // Boundary live from the county GIS; members from a weekly scrape, with
+      // the Chairman and Vice-Chairman tagged on their own district rows (the
+      // county elects both from among the 19, so neither is a countywide seat).
+      {
+        key: "rock-island",
+        coverage: rockIslandCountyCoverage,
+        loadGeometry: loadRockIslandCountyBoard,
+        hoverName: function (feature) {
+          return rockIslandDistrictNumber(feature);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadRockIslandCountyBoard(),
+            loadRockIslandBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = rockIslandDistrictNumber(feature);
+            return {
+              seq: seq, district: district,
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Rock Island County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + result.district : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Rock Island County Board (official)",
+            url: "https://www.rockislandcountyil.gov/263/County-Board"
+          };
+        },
+        hoverOfficial: {
+          load: loadRockIslandBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = rockIslandDistrictNumber(feature);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
       }
     ]
   });
@@ -14554,6 +14660,52 @@ function initChiExplorer() {
           return {
             label: "Whiteside County Clerk (official)",
             url: "https://www.whitesidecountyil.gov/235/County-Clerk"
+          };
+        }
+      },
+      // Rock Island — 120 precincts, identity + the board district from the
+      // usual spatial join. The layer publishes no polling-place reference.
+      {
+        key: "rock-island",
+        coverage: rockIslandCountyCoverage,
+        loadGeometry: loadRockIslandPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadRockIslandPrecincts(),
+            loadRockIslandCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) boardDistrict = rockIslandDistrictNumber(bf);
+            }
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          fields.push({ label: "County", value: "Rock Island County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Rock Island County Clerk — Elections (official)",
+            url: "https://www.rockislandcountyil.gov/247/Elections"
           };
         }
       }

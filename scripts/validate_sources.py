@@ -365,6 +365,17 @@ PROVENANCE = [
              "line-based read pairs members with the wrong addresses. The Board Chair is "
              "identified by his row carrying the shared leecochair@countyoflee.org "
              "address rather than a personal one."},
+    {"layer": "Rock Island County Board roster",
+     "app_file": "rock-island-county-board-members.json",
+     "source_url": "https://www.rockislandcountyil.gov/263/County-Board",
+     "note": "The county's board page — a CivicPlus staff-directory widget with "
+             "h-card microformat classes (p-name, p-job-title), so this is a "
+             "class parse rather than a text-shape guess. 19 single-member "
+             "districts. The Chairman appears TWICE on the page (a prose block "
+             "above the widget, and again as his district's member); he is "
+             "deduped onto his district row and tagged there, because the county "
+             "elects its chair from among the 19. The scraper refuses any "
+             "single-member district that ends up holding two names."},
     {"layer": "LaSalle County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://lasallecountyil.gov/294/Officials",
@@ -553,6 +564,13 @@ ENDPOINTS = [
     # dataLastEditDate is 2019-01-08, and only 11 of its 27 names appear on the
     # county's current board page — where this layer matches 27/27. Two services,
     # seven years apart, no naming cue; the edit date is the only tell.
+    # Rock Island — the first served county on the Mississippi. Both layers sit
+    # on one hosted service, reached the usual way (county site -> parcel viewer
+    # -> web map -> operationalLayers). The board layer declares a NAME column
+    # and populates it on 0 of 19 districts, which is why a roster scrape exists.
+    {"layer": "Rock Island County Board districts (19) + precincts (120)",
+     "url": ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
+             "Other_Layers/FeatureServer?f=json")},
     {"layer": "Whiteside County electoral districts + precincts + polling places",
      "url": ("https://services.arcgis.com/l0M0OC6J9QAHCiGx/arcgis/rest/services/"
              "ElectionGeography_public/FeatureServer?f=json")},

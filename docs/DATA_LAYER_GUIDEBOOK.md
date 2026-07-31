@@ -305,6 +305,28 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any DeKalb County list that pairs a precinct code with its township or full precinct name — a clerk's precinct table, a polling-place list carrying both, or a legend on the precinct map."
     },
     {
+      "id": "bureau-county-board-districts",
+      "concept": "County board districts",
+      "area": "Bureau County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Bureau publishes its 18 board members and their parties but draws its 18 districts nowhere the public can reach.",
+      "blocker": "The county runs no GIS of any kind — no ArcGIS Online org, no Enterprise portal, no REST root behind any page. Its site's only mapping links are a Google MyMaps document and a third-party property-tax lookup, and the one county-wide PDF that sounded promising (\"2024 Bureau County Handbook\") is an HR employee handbook. No district map, composition list or reapportionment resolution is published, so there is nothing to draw and nothing to dissolve. The board page itself lists only 16 of the 18 seats.",
+      "wanted": "Bureau County board-district geometry, or a composition naming the townships or precincts in each of the 18 districts. The roster is already published and would join a boundary the day one exists."
+    },
+    {
+      "id": "henry-county-board-districts",
+      "concept": "County board districts",
+      "area": "Henry County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Henry's two board districts exist on one raster map that is labelled an alternative, so the line cannot be built honestly.",
+      "blocker": "The county runs no GIS. Its only board-district document is a RASTER PDF (0 extractable characters, one image object) titled \"Alternate Two Board\" — a working map from the redistricting process whose colour legend is SCHOOL districts, with the board line drawn over the top. The county does seat exactly 2 districts, which corroborates the structure but not that this particular drawing is the adopted one, and Ogle already showed what building from a superseded plan costs: its June 2021 map omitted Leaf River entirely. The district line does appear to follow township boundaries, so the Carroll dissolve recipe would apply the moment the composition is confirmed.",
+      "wanted": "Henry County's adopted reapportionment resolution, or any list naming the townships in Districts 1 and 2. The board roster — names, e-mails and phones by district — is already published on the county's board page."
+    },
+    {
       "id": "lee-municipal-officials",
       "concept": "Municipal officials",
       "area": "Lee County",
@@ -503,7 +525,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
-| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
+| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 + Rock Island 19 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
 | Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12 + Kane 16th-Circuit 4 (pre-built from the enacted shapefile — the county's services are permission-locked) + McHenry 22nd-Circuit 4 (pre-built — the county publishes no subcircuit service), all PA 102-0693; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
@@ -873,6 +895,49 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   This script should be **deleted, not maintained**, the day Stephenson publishes
   precinct geometry.
+
+- **RESEARCH PASS 5h (2026-07-31) — Rock Island SHIPPED; Bureau and Henry are
+  recorded gaps with rosters and no boundary.** The three counties the previous pass
+  left as the frontier, researched together.
+
+  | concept | Rock Island (145,415) | Bureau (33,244) | Henry (49,317) |
+  |---|---|---|---|
+  | `county-board` | **SHIPPED** — 19 SINGLE-member districts, the most of any county here; GIS + weekly roster (party, term, Chair/Vice-Chair) | **gap** — 18 districts drawn nowhere public | **gap** — 2 districts, raster map only |
+  | `county-precinct` | **SHIPPED** — 120 | none published | per-township PDFs only |
+  | roster available? | yes (county page) | yes, 16 of 18 seats | yes, with e-mail + phone |
+
+  **Rock Island pushed the app past its own western edge.** It is the first served
+  county on the Mississippi, reaching -91.07, and `build_metro_outline.py` refused to
+  write: *"permalink_gate.minLng is -90.8500 but the served area reaches -91.0721 —
+  widen it, or a point there is silently rejected."* That is the whole value of that
+  guard. A shared or embedded permalink in Moline would have been dropped on load with
+  no error, and nothing else in the pipeline would have noticed. `metro_bbox` (the
+  address-geocoder bound) and `permalink_gate` both moved west.
+
+  **Bureau is the first county in the served ring with no GIS at all.** Not a portal
+  that hides its items (Lee), not a vendor viewer without a REST root (Jo Daviess) —
+  nothing. Its site's only mapping links are a Google MyMaps document and a
+  third-party tax lookup, and the promising-sounding "2024 Bureau County Handbook" is
+  an HR employee handbook. It publishes 18 board members with parties and draws its 18
+  districts nowhere.
+
+  **Henry is the "Alternate" case, and it is a deliberate refusal.** Its only
+  board-district document is a raster PDF (0 extractable characters, one image object)
+  titled **"Alternate Two Board"**, whose colour legend is SCHOOL districts with the
+  board line drawn over the top. The county does seat exactly 2 districts, which
+  corroborates the structure — and the line does appear to follow township boundaries,
+  so Carroll's dissolve recipe would apply immediately. It is still not built, because
+  *"Alternate"* means this was one option among several and nothing published says it
+  was the adopted one. **Ogle already priced this mistake**: its June 2021 map omitted
+  Leaf River entirely and was superseded in November. A map that is probably right is
+  not a source.
+
+  Worth noting against the pass-5g lesson: re-testing a recorded gap is cheap and
+  sometimes overturns it (Lee), but it does not follow that every gap is soft. Bureau
+  and Henry were researched to the same depth as Lee and came back genuinely empty.
+  The difference is that Lee's blocker asserted something checkable and false ("the
+  REST instance is not reachable"), while these two assert an absence that survives
+  the check.
 
 - **RESEARCH PASS 5g (2026-07-31) — Lee and Whiteside SHIPPED. The Lee blocker was
   wrong, and the way it was wrong is the same way DeKalb's was.** Both counties became

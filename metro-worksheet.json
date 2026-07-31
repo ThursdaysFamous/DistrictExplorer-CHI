@@ -2,7 +2,7 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -90.75,
+    "minLng": -91.15,
     "minLat": 38.1,
     "maxLng": -87.0,
     "maxLat": 42.6
@@ -14,7 +14,7 @@
   "permalink_gate": {
     "minLat": 38.05,
     "maxLat": 42.75,
-    "minLng": -90.85,
+    "minLng": -91.25,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -646,6 +646,12 @@
         "note": "Whiteside County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "rock-island-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Rock Island County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries. The first served county on the Mississippi; building it forced permalink_gate.minLng west of -91."
+      },
+      {
         "file": "carroll-county-board-districts.json",
         "min_features": 3,
         "max_features": 3,
@@ -786,6 +792,11 @@
         "note": "Lee County Board members keyed by district (4 districts electing five members each, 20 seats) — scraped weekly from the Clerk's Member Contact List, which the CMS serves as a PDF. Read by WORD POSITION (pdfplumber): pypdf flattens it into a name block and a separately-ordered e-mail block, so pairing by sequence would mis-assign addresses. The Board Chair is derived from the row carrying the county's shared leecochair@ address rather than a personal one."
       },
       {
+        "file": "rock-island-county-board-members.json",
+        "min_keys": 18,
+        "note": "Rock Island County Board members keyed by district (19 SINGLE-member districts, the most of any county on this layer) — scraped weekly from the county's board page, whose CivicPlus staff-directory widget carries h-card microformat classes. The county GIS declares a NAME column and populates it on 0 of 19, which is why this file exists. Chairman and Vice-Chairman are tagged on their own district rows; both are elected from among the 19."
+      },
+      {
         "file": "coverage-gaps.json",
         "min_keys": 8,
         "note": "Known data gaps keyed by gap id, driving the app's Data gaps panel — emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later."
@@ -921,6 +932,11 @@
       "file": "update-lee-county-board-roster.yml",
       "purpose": "Lee County Board roster (leecountyil.com Member Contact List PDF)",
       "schedule": "Tue 16:00 UTC"
+    },
+    {
+      "file": "update-rock-island-county-board-roster.yml",
+      "purpose": "Rock Island County Board roster (rockislandcountyil.gov board page)",
+      "schedule": "Wed 16:00 UTC"
     },
     {
       "file": "validate-sources.yml",
