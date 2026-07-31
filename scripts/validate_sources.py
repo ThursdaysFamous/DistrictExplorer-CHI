@@ -241,8 +241,9 @@ PROVENANCE = [
              "Census place GEOID. The site is Cloudflare-fronted, so a "
              "reachability WARN here can be a bot filter rather than drift — "
              "confirm with a browser User-Agent before treating it as a source "
-             "change. All seven metro counties are shipped (see "
-             "docs/EXPANSION_GUIDE.md Part 2 rule 5). Five jurisdiction types "
+             "change. Cook is one of twelve counties shipped in this file, each "
+             "with its own entry below (see docs/EXPANSION_GUIDE.md Part 2 "
+             "rule 5). Five jurisdiction types "
              "are read: MUNIS (municipalities + citywide officers), MUNIW "
              "(suburban ward/district seats), CHIWD (Chicago citywide) and "
              "CHICA (Chicago's 50 ward seats, the only verified source of their "
@@ -354,6 +355,69 @@ PROVENANCE = [
              "phone, e-mail, and website only, so Lake ships contact-only cards "
              "— the rule-4 honesty floor (lake_municipal_officials_scraper.py). "
              "If a Lake roster ever appears, this is the entry to upgrade."},
+    {"layer": "LaSalle County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://lasallecountyil.gov/294/Officials",
+     "note": "The Clerk's Municipality Officials PDF, linked from this page "
+             "(lasalle_municipal_officials_scraper.py). Full governing body — "
+             "every trustee and ward number — from one county document. Its "
+             "directory is a six-column table whose columns interleave, so it "
+             "is the one source in this file read from word POSITIONS "
+             "(pdfplumber) rather than from extracted lines."},
+    {"layer": "Winnebago County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://maps.wingis.org/public/rest/services/ElectedOfficials/MapServer",
+     "note": "The only source in the fleet that publishes municipal governing "
+             "bodies AS GIS LAYERS — one layer per municipality on WinGIS's "
+             "ElectedOfficials service (winnebago_municipal_officials_scraper.py). "
+             "A layer disappearing is the drift to watch for here, not a URL "
+             "change. WinGIS publishes no mayor/president layer for Loves Park "
+             "or Machesney Park, which is why the builder's Winnebago head "
+             "floor sits below its municipality floor."},
+    {"layer": "Ogle County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://www.oglecountyil.gov/departments/county_clerk/index.php",
+     "note": "The Clerk's yearbook, 'OGLE COUNTY CITIES & VILLAGES' section "
+             "(ogle_municipal_officials_scraper.py) — full governing body plus "
+             "hall address, phone and website for all 13 municipalities. Pinned "
+             "to the Clerk page rather than the PDF because the yearbook "
+             "filename carries its edition ('2025- 2027 Yearbook.pdf'). Adeline "
+             "is the one entry that labels a PHYSICAL and a MAILING address at "
+             "different places; the scraper keeps them apart deliberately."},
+    {"layer": "Stephenson County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": ("https://stephensoncountyil.gov/government/"
+                    "boards_commissions_committees/city_and_villages.php"),
+     "note": "The county's Cities & Villages directory "
+             "(stephenson_municipal_officials_scraper.py) — full governing body "
+             "for 10 of the county's 11 municipalities, and the only source in "
+             "this file that marks each office '(Elected)' or '(Appointed)' "
+             "explicitly. FREEPORT IS NOT ON THIS PAGE: the county seat comes "
+             "from the city's own site, below. The address column is board "
+             "members' RESIDENCES and is deliberately not collected."},
+    {"layer": "Freeport city council (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://cityoffreeport.org/wp-json/wp/v2/lsvr_person_cat?slug=elected-officials",
+     "note": "Freeport is the one Stephenson municipality its county page omits "
+             "— and it is the county seat, holding more than half the county's "
+             "municipal population (freeport_council_scraper.py). Membership is "
+             "a WordPress REST query on the city's own 'elected-officials' "
+             "category, and each person page carries a schema.org Person block. "
+             "The city ALSO publishes a Wards2022_Public FeatureServer with an "
+             "Alderperson field: it is stale (data last edited 2024-05-21, "
+             "still naming a pre-2025-election holder) and must not be used for "
+             "officeholders — only its geometry would be sound."},
+    {"layer": "Carroll County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": ("https://www.carrollcountyil.gov/county_departments/"
+                    "clerk___recorder/index.php"),
+     "note": "The Clerk's yearbook, 'Cities and Village Officers' section "
+             "(carroll_municipal_officials_scraper.py) — head of government + "
+             "clerk for all seven municipalities; the county prints no "
+             "trustees. Pinned to the Clerk page because the yearbook filename "
+             "carries its edition and the scraper discovers it here; note the "
+             "link is RELATIVE and only resolves against the Revize CDN root, "
+             "which the scraper tries first."},
     {"layer": "Board of Review commissioners (roster)",
      "app_file": "ccbr-roster.json",
      "source_url": "https://www.cookcountyboardofreview.com/",

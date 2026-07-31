@@ -12,6 +12,55 @@
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.addisonadvantage.org"
   },
+  "1700295": {
+    "board": [
+      {
+        "name": "Charles Mitchell",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dorene Mulder",
+        "role": "Trustee"
+      },
+      {
+        "name": "Luke Sheely",
+        "role": "Trustee"
+      },
+      {
+        "name": "Roger Branscomb",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tony Mulder",
+        "role": "Trustee"
+      },
+      {
+        "name": "William Borgmann",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Mike Dickinson",
+      "role": "President"
+    },
+    "name": "Village of Adeline",
+    "office": {
+      "address": "8763 N. Main St",
+      "phone": "815-535-3572"
+    },
+    "officers": [
+      {
+        "name": "Karen Dickinson",
+        "role": "Clerk"
+      },
+      {
+        "name": "Kim Dickinson",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf"
+  },
   "1700685": {
     "county": "Kane",
     "head": {
@@ -1471,6 +1520,67 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://burr-ridge.gov"
   },
+  "1710240": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Heriberto Santiago",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Ron Boyer",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Doug Wilken",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Jessica Nehring",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 3",
+        "name": "J. Todd Isaacs",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Christy Hanlin",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Mittzi M Fulrath",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "John Rickard",
+      "role": "Mayor"
+    },
+    "name": "City of Byron",
+    "office": {
+      "address": "232 W. Second St., Byron IL 61010",
+      "phone": "815-234-2762"
+    },
+    "officers": [
+      {
+        "name": "Caryn Huber",
+        "role": "Clerk"
+      },
+      {
+        "name": "Caryn Huber",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.cityofbyron.com"
+  },
   "1710487": {
     "board": [
       {
@@ -1706,6 +1816,80 @@
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
+  "1712008": {
+    "board": [
+      {
+        "name": "Amy Dumpman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cathy Williams",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dana Ryan",
+        "role": "Trustee"
+      },
+      {
+        "name": "Darren Wellman",
+        "role": "Trustee"
+      },
+      {
+        "name": "James Drew",
+        "role": "Trustee"
+      },
+      {
+        "name": "Toni Galster",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Jeremy Monigold",
+      "role": "Village President"
+    },
+    "name": "Village of Cedarville",
+    "office": {
+      "phone": "815-563-4302"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "BreeAnn Tyrrell",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Tom Lloyd",
+        "role": "Superintendent of Public Works"
+      },
+      {
+        "appointed": true,
+        "name": "Kathy Koch",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
+  },
+  "1712294": {
+    "county": "Carroll",
+    "head": {
+      "name": "Matthew Balsiger",
+      "role": "President"
+    },
+    "name": "Village of Chadwick",
+    "office": {
+      "address": "P.O. Box 385, Chadwick IL 61014",
+      "phone": "815-684-5188"
+    },
+    "officers": [
+      {
+        "name": "Dannielle Heidenreich",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
+  },
   "1712476": {
     "board": [
       {
@@ -1798,7 +1982,7 @@
       "name": "David Schroeder",
       "role": "President"
     },
-    "name": "Cherry Valley",
+    "name": "Village of Cherry Valley",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1714000": {
@@ -2546,6 +2730,56 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://cityofcresthill.com"
   },
+  "1717471": {
+    "board": [
+      {
+        "name": "Curt Ward",
+        "role": "Trustee"
+      },
+      {
+        "name": "Greg Hopkins",
+        "role": "Trustee"
+      },
+      {
+        "name": "Justin Hibshman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Hibshman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Kerns",
+        "role": "Trustee"
+      },
+      {
+        "name": "Reid Elliott",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Thomas O. Byro",
+      "role": "President"
+    },
+    "name": "Village of Creston",
+    "office": {
+      "address": "110 N. Main St, Creston IL 60113",
+      "phone": "815-384-4140"
+    },
+    "officers": [
+      {
+        "name": "Jennifer Payton",
+        "role": "Clerk"
+      },
+      {
+        "name": "Penelope Payton",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.villageofcreston.org"
+  },
   "1717497": {
     "board": [
       {
@@ -2622,6 +2856,52 @@
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.crystallake.org"
   },
+  "1718342": {
+    "board": [
+      {
+        "name": "Alisha Lizer",
+        "role": "Trustee"
+      },
+      {
+        "name": "Diane Clay",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eric Lizer",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jeremy Knox",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jonathon Riley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kenneth Vrazsity",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "name": "Village of Dakota",
+    "office": {
+      "phone": "815-449-2218"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Jessie Wenger",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Melody Sweet",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
+  },
   "1718485": {
     "board": [
       {
@@ -2682,6 +2962,109 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.darienil.gov"
+  },
+  "1718706": {
+    "board": [
+      {
+        "name": "Chrystle (Candy) Feinstein",
+        "role": "Trustee"
+      },
+      {
+        "name": "Judy Lafurge",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Wise",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard Rote",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scot Miller",
+        "role": "Trustee"
+      },
+      {
+        "name": "Stacey Gaither",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Stephen Olson",
+      "role": "President"
+    },
+    "name": "Village of Davis",
+    "office": {
+      "phone": "815-865-5792"
+    },
+    "officers": [
+      {
+        "name": "Kimberly Satness",
+        "role": "Clerk"
+      },
+      {
+        "name": "Debra Moore",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
+  },
+  "1718719": {
+    "board": [
+      {
+        "name": "Chris Samples",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Christenson",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Talbot",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nathan Maahs",
+        "role": "Trustee"
+      },
+      {
+        "name": "Patrick Yarolem",
+        "role": "Trustee"
+      },
+      {
+        "name": "William Luchsinger",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Rick L. Wurm",
+      "role": "President"
+    },
+    "name": "Village of Davis Junction",
+    "office": {
+      "address": "106 N. Elm St, Davis Junction IL 61020",
+      "phone": "815-645-8000"
+    },
+    "officers": [
+      {
+        "name": "Lisa Lewis",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Erica Floyd",
+        "role": "Deputy Clerk"
+      },
+      {
+        "name": "Brenda Ognibene",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.davisjunction.com"
   },
   "1718992": {
     "board": [
@@ -3057,7 +3440,7 @@
       "name": "Sheila Hoffman",
       "role": "Mayor"
     },
-    "name": "Durand",
+    "name": "Village of Durand",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1721540": {
@@ -3776,6 +4159,56 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://forestview-il.org"
   },
+  "1727065": {
+    "board": [
+      {
+        "name": "Autumn Lapacek",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brittany Busker",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gary Buss",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kenneth Toms",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Schweertman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Vickye Norris",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Kenneth Vinnedge",
+      "role": "President"
+    },
+    "name": "Village of Forreston",
+    "office": {
+      "address": "301 N. Walnut Ave., Forreston IL 61030",
+      "phone": "815-938-2400"
+    },
+    "officers": [
+      {
+        "name": "Tanya Shenberger",
+        "role": "Clerk"
+      },
+      {
+        "name": "Fred Schneiderman",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.villageofforreston.org"
+  },
   "1727442": {
     "county": "McHenry",
     "head": {
@@ -3926,6 +4359,87 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageoffranklinpark.com"
   },
+  "1727884": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "email": "1stward@cityoffreeport.org",
+        "name": "Tom Klemm",
+        "phone": "815-978-0484",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 2",
+        "email": "2ndward@cityoffreeport.org",
+        "name": "Linda Johnson",
+        "phone": "815-990-4379",
+        "role": "Alderwoman"
+      },
+      {
+        "district": "Ward 3",
+        "email": "3rdward@cityoffreeport.org",
+        "name": "Rachel Simmons",
+        "role": "Alderwoman"
+      },
+      {
+        "district": "Ward 4",
+        "email": "dparker@cityoffreeport.org",
+        "name": "Donald Parker",
+        "phone": "815-275-1372",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 5",
+        "email": "5thward@cityoffreeport.org",
+        "name": "Cecelia Stacy",
+        "phone": "815-908-9814",
+        "role": "Alderwoman"
+      },
+      {
+        "district": "Ward 6",
+        "email": "gshadle@cityoffreeport.org",
+        "name": "Gregory Shadle",
+        "phone": "815-232-6208",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 7",
+        "email": "7thward@cityoffreeport.org",
+        "name": "Larry Sanders",
+        "phone": "815-908-9268",
+        "role": "Alderman"
+      },
+      {
+        "district": "At Large",
+        "email": "atlarge@cityoffreeport.org",
+        "name": "Joy Sellers",
+        "phone": "815-238-5358",
+        "role": "Alderwoman"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "email": "jmiller@cityoffreeport.org",
+      "name": "Jodi Miller",
+      "phone": "815-235-8200",
+      "role": "Mayor"
+    },
+    "name": "City of Freeport",
+    "office": {
+      "address": "314 W. Stephenson, Freeport IL 61032",
+      "phone": "815-846-1170"
+    },
+    "officers": [
+      {
+        "email": "danderson@cityoffreeport.org",
+        "name": "Dovie L. Anderson",
+        "phone": "815-235-8203",
+        "role": "City Clerk"
+      }
+    ],
+    "sourceUrl": "https://cityoffreeport.org/people2/",
+    "url": "https://cityoffreeport.org/"
+  },
   "1728872": {
     "county": "Kane",
     "head": {
@@ -3946,6 +4460,56 @@
     ],
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.geneva.il.us"
+  },
+  "1729093": {
+    "board": [
+      {
+        "name": "Becky J McCoy",
+        "role": "Trustee"
+      },
+      {
+        "name": "Daryl Harrenstein",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donna Smith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jeff Greenfield",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Rust",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shaun M Gallagher",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Mark Jewell",
+      "role": "President"
+    },
+    "name": "Village of German Valley",
+    "office": {
+      "phone": "815-362-2979"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "April Fyock",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Christine Zipse",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
   },
   "1729171": {
     "county": "Kane",
@@ -4776,6 +5340,53 @@
     },
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "http://www.cityofhighwood.com"
+  },
+  "1734982": {
+    "board": [
+      {
+        "name": "A. Dan Potter",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eileen Braski",
+        "role": "Trustee"
+      },
+      {
+        "name": "Pamela Pittman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Patricia Garcia",
+        "role": "Trustee"
+      },
+      {
+        "name": "Timothy Ball",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Richard Rhoads",
+      "role": "President"
+    },
+    "name": "Village of Hillcrest",
+    "office": {
+      "address": "204 Hillcrest Ave., Rochelle IL 61068",
+      "email": "clerk@hillcrestil.us",
+      "phone": "815-562-7770"
+    },
+    "officers": [
+      {
+        "name": "Dawn Bearrows",
+        "role": "Clerk"
+      },
+      {
+        "name": "Penelope Payton",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.hillcrestil.us"
   },
   "1735086": {
     "board": [
@@ -5919,6 +6530,25 @@
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "https://lakezurich.org/"
   },
+  "1741859": {
+    "county": "Carroll",
+    "head": {
+      "name": "Jerene Rogan",
+      "role": "Mayor"
+    },
+    "name": "City of Lanark",
+    "office": {
+      "address": "111-A S. Broad St, Lanark IL 61046",
+      "phone": "815-493-2431"
+    },
+    "officers": [
+      {
+        "name": "Marilyn Heller",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
+  },
   "1742028": {
     "board": [
       {
@@ -6053,6 +6683,56 @@
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
+  "1742457": {
+    "board": [
+      {
+        "name": "Aaron Shelton",
+        "role": "Trustee"
+      },
+      {
+        "name": "Bradley Plock",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brie Simkulet",
+        "role": "Trustee"
+      },
+      {
+        "name": "John W.P. Goodrich II",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nicolle Shelton",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shirley Poggioli",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Michael Musso",
+      "role": "President"
+    },
+    "name": "Village of Leaf River",
+    "office": {
+      "address": "605 Main St., Leaf River IL 61047",
+      "phone": "815-738-2340"
+    },
+    "officers": [
+      {
+        "name": "Heather Lamping",
+        "role": "Clerk"
+      },
+      {
+        "name": "Aleta Gross",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.villageofleafriver.com"
+  },
   "1742756": {
     "board": [
       {
@@ -6151,6 +6831,55 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://lemont.il.us"
+  },
+  "1742834": {
+    "board": [
+      {
+        "name": "Brandon Smith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Catherine Stevens",
+        "role": "Trustee"
+      },
+      {
+        "name": "Chelsea White",
+        "role": "Trustee"
+      },
+      {
+        "name": "Edward Reifsteck",
+        "role": "Trustee"
+      },
+      {
+        "name": "Leslie L Nielsen",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steve Buss",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Steve L Buss",
+      "role": "President"
+    },
+    "name": "Village of Lena",
+    "office": {
+      "phone": "815-369-4016"
+    },
+    "officers": [
+      {
+        "name": "Claudia Simpson",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Helene Trebian",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
   },
   "1742912": {
     "board": [
@@ -6547,7 +7276,7 @@
       }
     ],
     "county": "Winnebago",
-    "name": "Loves Park",
+    "name": "City of Loves Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1745421": {
@@ -6796,7 +7525,7 @@
       }
     ],
     "county": "Winnebago",
-    "name": "Machesney Park",
+    "name": "Village of Machesney Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1746357": {
@@ -7376,6 +8105,25 @@
     "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
     "url": "https://www.thevillageofmillbrook.com"
   },
+  "1749191": {
+    "county": "Carroll",
+    "head": {
+      "name": "Scott Howard",
+      "role": "President"
+    },
+    "name": "Village of Milledgeville",
+    "office": {
+      "address": "P.O. Box 639, Milledgeville IL 61051",
+      "phone": "815-225-7231"
+    },
+    "officers": [
+      {
+        "name": "Kim Harting",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
+  },
   "1749308": {
     "board": [
       {
@@ -7595,6 +8343,40 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://villageofmonee.org"
   },
+  "1750062": {
+    "board": [
+      {
+        "name": "Kerri Hall",
+        "role": "Trustee"
+      },
+      {
+        "name": "Wilbur A Brass",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Steven Gronlund",
+      "role": "President"
+    },
+    "name": "Village of Monroe Center",
+    "office": {
+      "address": "300 Pacific Street, Monroe Center IL 61052",
+      "email": "mcvillageclerk@gmail.com",
+      "phone": "815-393-3773"
+    },
+    "officers": [
+      {
+        "name": "Sarah Craig",
+        "role": "Clerk"
+      },
+      {
+        "name": "Vacant",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf"
+  },
   "1750218": {
     "county": "Kane",
     "head": {
@@ -7671,6 +8453,63 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://mortongroveil.org"
+  },
+  "1750881": {
+    "county": "Carroll",
+    "head": {
+      "name": "Carl Bates",
+      "role": "Mayor"
+    },
+    "name": "City of Mt. Carroll",
+    "office": {
+      "address": "302 N. Main, Mt. Carroll IL 61053",
+      "phone": "815-244-4424"
+    },
+    "officers": [
+      {
+        "name": "Lisa Dauphin",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
+  },
+  "1750998": {
+    "board": [
+      {
+        "name": "Ed Higley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jim Hopkins",
+        "role": "Trustee"
+      },
+      {
+        "name": "Morgan McConnell",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Phil Labash",
+      "role": "President"
+    },
+    "name": "Village of Mt. Morris",
+    "office": {
+      "address": "105 W. Lincoln, Mt Morris IL 61054",
+      "phone": "815-734-6425"
+    },
+    "officers": [
+      {
+        "name": "Brooke Duffy",
+        "role": "Clerk"
+      },
+      {
+        "name": "Vacant",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.mtmorrisil.net"
   },
   "1751089": {
     "board": [
@@ -7958,7 +8797,7 @@
       "name": "Timothy H. Owens",
       "role": "President"
     },
-    "name": "New Milford",
+    "name": "Village of New Milford",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1753000": {
@@ -8763,6 +9602,94 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://olympia-fields.com"
   },
+  "1756341": {
+    "board": [
+      {
+        "name": "Jackie Dominick",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Kurt D Shilling",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Paul Schindler",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Theresa Shuman",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Tom F Scudder",
+      "role": "President"
+    },
+    "name": "Village of Orangeville",
+    "office": {
+      "phone": "815-789-4416"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Denise Scudder",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Michael Schindler",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
+  },
+  "1756484": {
+    "board": [
+      {
+        "name": "Josiah Flanagan",
+        "role": "Council Member"
+      },
+      {
+        "name": "Melanie Cozzi",
+        "role": "Council Member"
+      },
+      {
+        "name": "Terry Schuster",
+        "role": "Council Member"
+      },
+      {
+        "name": "Timothy Krug",
+        "role": "Council Member"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Ken Williams",
+      "role": "Mayor"
+    },
+    "name": "City of Oregon",
+    "office": {
+      "address": "115 N 3rd St, Oregon IL 61061",
+      "phone": "815-732-6321"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Darin DeHaan",
+        "role": "City Manager"
+      },
+      {
+        "name": "Cheryl Hilton",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.cityoforegon.org"
+  },
   "1756627": {
     "board": [
       {
@@ -9372,6 +10299,52 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://parkridge.us"
   },
+  "1758369": {
+    "board": [
+      {
+        "name": "Bob Asche",
+        "role": "Trustee"
+      },
+      {
+        "name": "David S Dixon",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kirk Knoup",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Tichler",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tim Martens",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Mat Diehl",
+      "role": "President"
+    },
+    "name": "Village of Pearl City",
+    "office": {
+      "phone": "815-443-2141"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Cheryl Liebenstein",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Jamie Melville",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
+  },
   "1758408": {
     "board": [
       {
@@ -9404,7 +10377,7 @@
       "name": "Collin Hardy",
       "role": "President"
     },
-    "name": "Pecatonica",
+    "name": "Village of Pecatonica",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1759052": {
@@ -9717,6 +10690,63 @@
     "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
     "url": "https://www.revenue.state.il.us/localgovernment/propertytax/rett.htm"
   },
+  "1760937": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Joseph Kochsmeier",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Thomas Bardell",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 2",
+        "name": "James G. Busser",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Larry Weaver",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Randy Schoon",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Robert Taylor",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Mark Scholl",
+      "role": "Mayor"
+    },
+    "name": "City of Polo",
+    "office": {
+      "address": "118 N. Franklin Ave, Polo IL 61064",
+      "email": "mayor@poloil.gov",
+      "phone": "815-946-3514"
+    },
+    "officers": [
+      {
+        "name": "Sydney Bartelt",
+        "role": "Clerk"
+      },
+      {
+        "name": "Tamela Merdian",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.poloil.gov"
+  },
   "1761216": {
     "county": "McHenry",
     "head": {
@@ -9987,6 +11017,44 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://richtonpark.org"
+  },
+  "1764044": {
+    "board": [
+      {
+        "name": "Jerry Davis",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jon Jilderda",
+        "role": "Trustee"
+      },
+      {
+        "name": "Raymond Scotti",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Kim Kopp",
+      "role": "President"
+    },
+    "name": "Village of Ridott",
+    "office": {
+      "phone": "815-275-1044"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Melissa Remmers-Scotti",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kirk Chezem",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
   },
   "1764135": {
     "county": "McHenry",
@@ -10282,6 +11350,76 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://robbins-il.com"
   },
+  "1764746": {
+    "county": "Ogle",
+    "head": {
+      "name": "John Bearrows",
+      "role": "Mayor"
+    },
+    "name": "City of Rochelle",
+    "office": {
+      "address": "420 N. 6th St, Rochelle IL 61068",
+      "phone": "815-562-6161"
+    },
+    "officers": [
+      {
+        "name": "RoseMary Huéramo",
+        "role": "Clerk"
+      },
+      {
+        "name": "Christina Cardott",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.cityofrochelle.net"
+  },
+  "1764837": {
+    "board": [
+      {
+        "name": "Christie K Moss",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jeffrey Stubbe",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Zimmerman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mary Alice Otterstein",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nicole Alber",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Charles A Halbleib",
+      "role": "President"
+    },
+    "name": "Village of Rock City",
+    "office": {
+      "phone": "815-865-5316"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Melody Sweet",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Holly Alber",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
+  },
   "1764902": {
     "board": [
       {
@@ -10435,7 +11573,7 @@
       "name": "Thomas McNamara",
       "role": "Mayor"
     },
-    "name": "Rockford",
+    "name": "City of Rockford",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1765156": {
@@ -10470,7 +11608,7 @@
       "name": "John Peterson",
       "role": "Mayor"
     },
-    "name": "Rockton",
+    "name": "Village of Rockton",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1765338": {
@@ -10620,7 +11758,7 @@
       "name": "Carol Gustafson",
       "role": "President"
     },
-    "name": "Roscoe",
+    "name": "Village of Roscoe",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1765806": {
@@ -10914,6 +12052,25 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://saukvillage.org"
   },
+  "1767821": {
+    "county": "Carroll",
+    "head": {
+      "name": "Val Gunnerson",
+      "role": "Mayor"
+    },
+    "name": "City of Savanna",
+    "office": {
+      "address": "333 Chicago Ave, Savanna IL 61074",
+      "phone": "815-273-2251"
+    },
+    "officers": [
+      {
+        "name": "Betsy Kinder",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
+  },
   "1768003": {
     "board": [
       {
@@ -11062,6 +12219,25 @@
       }
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
+  "1768991": {
+    "county": "Carroll",
+    "head": {
+      "name": "Ryan Shaner",
+      "role": "President"
+    },
+    "name": "Village of Shannon",
+    "office": {
+      "address": "P.O. Box 514, Shannon IL 61078",
+      "phone": "815-864-2194"
+    },
+    "officers": [
+      {
+        "name": "Denise Bormann",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
   },
   "1769277": {
     "board": [
@@ -11376,7 +12552,7 @@
       "name": "Tom Fitzgerald",
       "role": "Mayor"
     },
-    "name": "South Beloit",
+    "name": "City of South Beloit",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1770629": {
@@ -11623,6 +12799,101 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofstickney.com"
+  },
+  "1772702": {
+    "board": [
+      {
+        "name": "Counties under 1 million Museum Districts",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dea Connell",
+        "role": "Trustee"
+      },
+      {
+        "name": "Final adjournment on or before September 7th",
+        "role": "Trustee"
+      },
+      {
+        "name": "Forest Preserve Districts Cities & Villages",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Russell",
+        "role": "Trustee"
+      },
+      {
+        "name": "Karen Marsh",
+        "role": "Trustee"
+      },
+      {
+        "name": "Library Districts Townships",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nance’ J Lorenz",
+        "role": "Trustee"
+      },
+      {
+        "name": "Other Special Districts",
+        "role": "Trustee"
+      },
+      {
+        "name": "Park Districts Fire Protection Districts",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rebecca ‘Becky” Waltrip",
+        "role": "Trustee"
+      },
+      {
+        "name": "Road Districts School Districts",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tamara ‘Tammy’ Long",
+        "role": "Trustee"
+      },
+      {
+        "name": "The County Clerk will compute rates on the assessed valuation of",
+        "role": "Trustee"
+      },
+      {
+        "name": "The deadline for filing levies from the following districts is the last",
+        "role": "Trustee"
+      },
+      {
+        "name": "www.census.gov",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Ogle",
+    "head": {
+      "name": "Martin Typer",
+      "role": "President"
+    },
+    "name": "Village of Stillman Valley",
+    "office": {
+      "address": "120 N. Walnut St, Stillman Valley IL 61084",
+      "phone": "815-645-2200"
+    },
+    "officers": [
+      {
+        "name": "Yvonne Dewey",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Cynthia Quick",
+        "role": "Deputy Clerk"
+      },
+      {
+        "name": "Randall Fruin",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
+    "url": "https://www.stillmanvalley.us"
   },
   "1772923": {
     "board": [
@@ -11917,6 +13188,21 @@
     },
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "http://www.thirdlakevillage.com/"
+  },
+  "1775172": {
+    "county": "Carroll",
+    "name": "Village of Thomson",
+    "office": {
+      "address": "P.O. Box 458, Thomson IL 61285",
+      "phone": "815-259-3700"
+    },
+    "officers": [
+      {
+        "name": "Jennie Foltz",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
   },
   "1775185": {
     "board": [
@@ -12843,7 +14129,7 @@
       "name": "Frank Eubank",
       "role": "President"
     },
-    "name": "Winnebago",
+    "name": "Village of Winnebago",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
   "1782530": {
@@ -12893,6 +14179,52 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofwinnetka.org"
+  },
+  "1782543": {
+    "board": [
+      {
+        "name": "Lyle Temperly Jr",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nicole Jacobs",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ralph Douglas",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert K Chumbler",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ron Pina",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Stephenson",
+    "head": {
+      "name": "Leroy Wernet",
+      "role": "President"
+    },
+    "name": "Village of Winslow",
+    "office": {
+      "phone": "815-367-2655"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Amy Campbell",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Jennifer Milliken",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
   },
   "1782686": {
     "county": "Lake",

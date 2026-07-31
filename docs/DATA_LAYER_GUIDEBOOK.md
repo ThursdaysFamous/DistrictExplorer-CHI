@@ -252,6 +252,19 @@ in the researched-but-unbuilt backlog.
       "wanted": "A Loves Park mayor and a Machesney Park village president, from either city's own site or a WinGIS layer if the county adds one. The councils are already complete; only the head of government is missing."
     },
     {
+      "id": "dakota-village-president",
+      "concept": "Municipal officials",
+      "area": "Village of Dakota",
+      "counties": [
+        "stephenson"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "Dakota shows its full board, clerk and treasurer but no village president.",
+      "blocker": "The county's Cities & Villages directory lists no president for Dakota. One Dakota row carries a resident's name with a BLANK office cell, which is very likely the missing seat — but the county publishes no title against it, and filling one in would be a guess. Every other village on the page names its president.",
+      "wanted": "A Dakota village president from the county directory once it names one, or from any village-published list. The rest of the board is already complete."
+    },
+    {
       "id": "rockford-city-precincts",
       "concept": "Voting precincts",
       "area": "City of Rockford",
@@ -832,6 +845,63 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   This script should be **deleted, not maintained**, the day Stephenson publishes
   precinct geometry.
+
+- **RESEARCH PASS 5f (2026-07-31) — municipal officials for the three new northern
+  counties. Ogle and Stephenson are the fleet's FIFTH and SIXTH full-governing-body
+  counties; Carroll joins at mayor level; and Freeport is the first county seat a
+  county source omits entirely.** The three counties had just shipped their board
+  districts, and the highest-value follow-on was the concept that touches every town in
+  them rather than one district line.
+
+  | county | source | depth | live |
+  |---|---|---|---|
+  | Ogle | Clerk's yearbook, "OGLE COUNTY CITIES & VILLAGES" | **full body** + hall address/phone/website | 13 munis / 114 officials / 13 heads |
+  | Stephenson | county Cities & Villages directory page | **full body**, each office marked (Elected)/(Appointed) | 10 munis / 82 officials / 9 heads |
+  | Carroll | Clerk's yearbook, "Cities and Village Officers" | head + clerk (the county prints no trustees) | 7 munis / 13 officials / 6 heads |
+  | Freeport | the CITY's WordPress person directory | **full body** + per-seat e-mail/phone | 10 officials / 8 council seats |
+
+  **The county seat was missing from its own county's directory.** Stephenson's page is a
+  VILLAGE directory: it carries all ten villages and not Freeport, which is ~23,600 people
+  — more than half the county's municipal population. Left alone, the largest city in the
+  county would have been the only one whose card named nobody. It enters as an `--enrich`
+  payload, the path Lockport and Wilmington already take, which inserts a municipality the
+  county source omits wholesale rather than merely filling contact.
+
+  **A tidy-looking GIS layer was the wrong source, and only measurement showed it.**
+  Freeport publishes a `Wards2022_Public` FeatureServer whose features carry an
+  `Alderperson` field — apparently rule-4 branch 1, officeholder riding the boundary. Its
+  `dataLastEditDate` is **2024-05-21**, so it still named the 2nd Ward's pre-2025-election
+  holder. The city's WordPress directory had the current one. *A live service is not a
+  current service; check the edit date before trusting an officeholder column.* The
+  geometry would still be sound if ward polygons are ever wanted.
+
+  **Three parser bugs this pass surfaced, all in the silent class:**
+  1. *`norm_place()` ate the second word of "Rock City".* It stripped both the "City of"
+     PREFIX and a trailing `village|city|town` SUFFIX, so a source publishing BARE names
+     — Stephenson's page, Winnebago's GIS layers — reduced "Rock City" to "Rock", which
+     matches no Census place. The two sides label the government form on opposite ends,
+     so they now have separate normalizers: `norm_census_place()` strips the suffix,
+     `norm_place()` the prefix. Measured first: **no** source in the file emits a
+     Census-style suffix, so the split is safe.
+  2. *Ogle's Adeline shipped an address that appears on no document.* Adeline is the one
+     block labelling a PHYSICAL and a MAILING address, and they are different places
+     (8763 vs 9069 N. Main St, and the mailing city is Leaf River, not Adeline). The old
+     scan took the street from one and the city/ZIP from the other. Header lines are now
+     grouped by label and never blended. Same fix run caught Rochelle's ZIP+4 failing a
+     `\d{5}$` anchor, which had silently dropped that city's whole locality.
+  3. *Non-people and non-offices were about to ship as officeholders.* Stephenson lists
+     Davis's zoning board and German Valley's "Village Police (Hired)" beside the real
+     officers, one with the name "Unassigned"; Carroll's Thomson president reads
+     "Vacant". Both are dropped and REPORTED, never silently. The one combined title
+     ("Trustee/Zoning Chairperson") is reduced to the seat he actually holds rather than
+     dropped with the committee.
+
+  **A side effect worth keeping:** the builder now takes a bare-named municipality's
+  legal form from the Census reference file's own designation ("Rock City village" →
+  "Village of Rock City"), so those cards say "Village Hall" instead of the generic
+  "Municipal Hall". It applies only where the source publishes no form — a source that
+  states one keeps its own wording, since "United City of Yorkville" is the city's legal
+  name and Census's plain "City of Yorkville" would be a downgrade.
 
 - **RESEARCH PASS 5e (2026-07-31) — Carroll SHIPPED; Jo Daviess is blocked below the
   precinct.** Both counties became adjacent once Ogle and Stephenson landed, so both
@@ -1724,7 +1794,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `school-district-unified` | Unified School District | schools | Polygon | live TIGERweb School L0 | — | — |
 | `school-district-elementary` | Elementary School District | schools | Polygon | live TIGERweb School L2 | — | outsideChicagoSchoolCoverage |
 | `township` | Township / County Subdivision | geography | Polygon | live TIGERweb CouSub | — | — (subOf `county`) |
-| `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | `municipal-officials.json` (weekly CI; all seven metro counties + Chicago's citywide officers, 280 municipalities — head of government + board + other elected officers + hall contact, joined by place GEOID; depth per county: full body Cook/Will, head-only DuPage/Kane/McHenry/Kendall, contact-only Lake) | — |
+| `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | `municipal-officials.json` (weekly CI; twelve counties + Chicago's citywide officers, 349 municipalities — head of government + board + other elected officers + hall contact, joined by place GEOID; depth per county: full body Cook/Will/LaSalle/Winnebago/Ogle/Stephenson, head+clerk DuPage/Kane/McHenry/Kendall/Carroll, contact-only Lake. Four city-level payloads fill what a county cannot: Will's ward cities and Joliet for per-seat contact, Skokie for trustee districts, and Freeport — the whole city, since Stephenson's county source is a village directory that omits its own county seat) | — |
 | `judicial-subcircuit` | Judicial Subcircuit | political | CountyDispatch | Cook County GIS L5 (20 subcircuits) + L27 (municipal districts) · Will County ArcGIS · DuPage County ArcGIS (`Judicial_Subcircuits`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L1) · pre-built `kane-judicial-subcircuits.json` + `mchenry-judicial-subcircuits.json` (PA 102-0693 enacted shapefile) — no Kendall entry: its 23rd Circuit received no subcircuits under the act | link-only (each card links its circuit's court; Cook adds the Municipal District + courthouse row) | OR of cook/will/dupage/lake/kane/mchenry county coverages |
 | `county-board` | County Board District | political | CountyDispatch | Cook County GIS L9 · Will County ArcGIS · DuPage County ArcGIS (`County_Board_Dist_new`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L0) · Kane County ArcGIS (`KaneCo_IL_County_Board` L1) · McHenry County ArcGIS (`McHenry_County_Board_Districts` L0) · Kendall County ArcGIS Enterprise (`County_Board_2010` — the CURRENT 2-district map: the post-2020-census reapportionment kept the line, Dec 2021 hearing) · LaSalle County ArcGIS (`CountyBoardDistricts`) · Kankakee self-hosted `k3gis.net` (`BASE/Elected_Officials/1`) · Winnebago WinGIS (`ElectedOfficials/26`, mounted at `/public` not `/arcgis`) · Livingston **derived** (`livingston-county-board-districts.json` — TIGER townships dissolved per the county's published composition; it publishes no GIS) · McLean (`Clerks/MyElectedRepresentatives/1`) · Logan via Tri-County RPC (`Logan_County_Districts_and_Zoning/39`) · Sangamon AGOL (`CountyBoardDistricts2020_WithURLs`) · Madison (`CountyClerk/CBDWS/0`, on `/servera`) · St. Clair (`SCC_voting_districts/2`, on `/server`) | Cook: live office join (same server); Will: `will-county-board-members.json` (weekly CI); DuPage: `dupage-county-board-members.json` (weekly CI; + countywide Chair); Lake: member + phone/email/office address/district page + newsletter on the boundary GIS itself (live, county-edited; re-verified vs the county directory 2026-07-23) + `lake-county-board-roles.json` (weekly CI — the Chair/Vice-Chair tags the GIS lacks, applied only on a name match so a missed reorganization degrades to role-less rows); Kane: member names on the boundary GIS (verified incl. the 2026 D2/D9 appointments) + `kane-county-board-members.json` (weekly CI from the county's SharePoint Board Members list API — party, official office phones, emails, profile links, and the countywide-elected Board Chair; GIS names stay as hover + fallback, cross-checked 24/24 against the roster); Kendall: `kendall-county-board-members.json` (10 members incl. the Chairman — a District 2 member, not a separate countywide seat — phones + emails + per-member profile links; 2026-07 enrichment check re-verified all 10 names 1:1 against the directory's 2026-03 Archive snapshot); McHenry: `mchenry-county-board-members.json` (18 members + the countywide-elected Chairman, phones + emails + per-member profile links; the DuPage countywide-chair shape; 2026-07 enrichment check re-verified all 19 names 1:1 against the directory's 2026-05 Archive snapshot — the county publishes no party or committee data, the one missing phone (D3) is confirmed unpublished at the source, and members' street addresses are residences, deliberately not collected). Both hand-verified 2026-07-23 against the counties' own directories: the counties block ALL automated fetch (direct, real-browser, and the Archive's crawler — SPN2 error:no-request), so the weekly engine-ladder scrapers run green and track the block on standing issues, resuming automation the moment any rung unblocks. LaSalle, Kankakee and Winnebago are all **rule-4 branch 1** — the member rides the county's own boundary GIS, so no scraper, no roster file and no weekly workflow: LaSalle 29/29 (name, e-mail, mailing address; its area-code-less phones deliberately unrendered), Kankakee 28/28 (name, party, phone, e-mail), Winnebago 20/20 (name, party, term year — its address/phone columns are declared and empty on every row, and the richer per-district contact on the county's board page is a backlog scraper, not a guess) . Pass 4's bridge counties: **McLean** 10 districts electing TWO members each, both seats + parties + profile links on the boundary GIS 10/10 (branch 1); **Sangamon** 29, GIS carries the district and a per-district MEMBER URL but no name, so a weekly scraper walks exactly those 29 URLs (29/29 names + parties, 27 e-mails, 22 phones); **Livingston** 3 multi-member districts, boundary AND roster both derived — townships per the county's published composition, members scraped weekly, with an explicit `vacancies` count because the directory lists a "Vacancy" seat that must be counted and never named; **Logan** 6, rule-4 branch **3** — the GIS carries no officeholder and the county's only roster is a salary publication with no district against any name, so the card says so and links the board (recorded gap); **Madison** 26, the fleet's RICHEST board source — official/party/term/phone/e-mail/per-district page all on one feature (26/26 name, party, e-mail, URL; 25/26 phone); **St. Clair** 28, branch 1 at its thinnest — name 28/28 and nothing else. Winnebago, McLean, Madison and St. Clair were each spot-checked against their county's own board page before shipping | OR of cook/will/dupage/lake/kane/mchenry/kendall/lasalle/kankakee/winnebago/livingston/mclean/logan/sangamon/madison/st-clair county coverages |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |

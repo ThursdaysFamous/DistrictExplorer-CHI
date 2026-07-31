@@ -775,13 +775,13 @@
       },
       {
         "file": "municipal-officials.json",
-        "min_keys": 275,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle and Winnebago shipped (318 municipalities) per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py)."
+        "min_keys": 300,
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson and Carroll shipped (349 municipalities) per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py)."
       }
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v33",
+    "cache_name": "district-explorer-shell-v34",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -877,7 +877,7 @@
     },
     {
       "file": "update-municipal-officials.yml",
-      "purpose": "Municipal governing bodies (Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall clerk yearbooks, Lake county GIS contact, LaSalle clerk PDF, Winnebago WinGIS officeholder layers)",
+      "purpose": "Municipal governing bodies (Cook Clerk DOEO API, Will Clerk directory, DMMC directory, Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, Stephenson county villages page, Lake county GIS contact, LaSalle clerk PDF, Winnebago WinGIS officeholder layers, Freeport city site)",
       "schedule": "Wed 14:00 UTC"
     },
     {
