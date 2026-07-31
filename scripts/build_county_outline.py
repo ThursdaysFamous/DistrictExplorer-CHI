@@ -300,6 +300,50 @@ COUNTIES = {
             (41.5473, -89.1176, "Mendota — LaSalle County"),
         ],
     },
+    # Stephenson sits on the Wisconsin line; its southern and eastern neighbours
+    # (Ogle, Winnebago) are served, so Carroll, Jo Daviess and the state line
+    # carry the OUTSIDE anchors that matter.
+    "stephenson": {
+        "fips": "177",
+        "name": "Stephenson County",
+        "inside": [
+            (42.2967, -89.6212, "Freeport (county seat)"),
+            (42.3805, -89.8221, "Lena"),
+            (42.4680, -89.6449, "Orangeville"),
+            (42.2653, -89.8260, "Pearl City"),
+            (42.4927, -89.7918, "Winslow"),
+            (42.4225, -89.4137, "Davis"),
+        ],
+        "outside": [
+            (42.2714, -89.0940, "Rockford — Winnebago County"),
+            (42.1270, -89.2557, "Byron — Ogle County"),
+            (42.0949, -89.9777, "Mount Carroll — Carroll County"),
+            (42.4157, -90.4295, "Galena — Jo Daviess County"),
+            (42.0945, -90.1568, "Savanna — Carroll County"),
+        ],
+    },
+    # Carroll reaches the Mississippi, so its western neighbour is Iowa rather
+    # than another Illinois county — the state line is the anchor that matters
+    # there, and Jo Daviess, Stephenson, Ogle and Whiteside ring the rest.
+    "carroll": {
+        "fips": "015",
+        "name": "Carroll County",
+        "inside": [
+            (42.0949, -89.9777, "Mount Carroll (county seat)"),
+            (42.0945, -90.1568, "Savanna"),
+            (42.1021, -89.8330, "Lanark"),
+            (41.9589, -90.0993, "Thomson"),
+            (41.9634, -89.7746, "Milledgeville"),
+            (42.1547, -89.7398, "Shannon"),
+        ],
+        "outside": [
+            (42.4157, -90.4295, "Galena — Jo Daviess County"),
+            (42.2967, -89.6212, "Freeport — Stephenson County"),
+            (42.0503, -89.4312, "Mount Morris — Ogle County"),
+            (41.7883, -89.6954, "Sterling — Whiteside County"),
+            (42.2587, -90.4231, "Bellevue, Iowa (across the Mississippi)"),
+        ],
+    },
 }
 
 

@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v31";
+const CACHE_NAME = "district-explorer-shell-v33";
 
 const SHELL_URLS = [
   "./",
@@ -92,6 +92,10 @@ const GEOMETRY_URLS = [
   "./data/app/dekalb-county-outline.json",
   "./data/app/ogle-county-outline.json",
   "./data/app/ogle-county-board-districts.json",
+  "./data/app/stephenson-county-outline.json",
+  "./data/app/stephenson-county-board-districts.json",
+  "./data/app/carroll-county-outline.json",
+  "./data/app/carroll-county-board-districts.json",
   "./data/app/livingston-county-board-districts.json",
   "./data/app/winnebago-judicial-subcircuits.json",
   "./data/app/madison-judicial-subcircuits.json",
@@ -122,6 +126,8 @@ const ROSTER_URLS = [
   "./data/app/livingston-county-board-members.json",
   "./data/app/dekalb-county-board-members.json",
   "./data/app/ogle-county-board-members.json",
+  "./data/app/stephenson-county-board-members.json",
+  "./data/app/carroll-county-board-members.json",
   "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
 ];

@@ -148,6 +148,29 @@ PROVENANCE = [
              "omitted Leaf River entirely. Next reapportionment due after the "
              "2030 census; the pinned URL is the county's resolutions index, "
              "since the monthly PDF filename changes."},
+    {"layer": "Carroll County Board districts (3, whole townships)",
+     "app_file": "carroll-county-board-districts.json",
+     "source_url": "https://www.carrollcountyil.gov/County.Board.District.Update.2021.pdf",
+     "note": "The county's published 2021 district map, whose lines run exactly "
+             "along township boundaries, so the districts are a plain TIGER "
+             "township dissolve (build_carroll_board_districts.py). The map is a "
+             "RASTER export with no polygons to extract — none were needed. The "
+             "map labels Carroll's two consolidated townships by their historic "
+             "halves (Cherry Grove/Shannon, Rock Creek/Lima) where TIGER carries "
+             "the merged names; both sit wholly in District 3. Redrawn ~once a "
+             "decade."},
+    {"layer": "Stephenson County Board districts (8, lettered B-I; B-E georeferenced)",
+     "app_file": "stephenson-county-board-districts.json",
+     "source_url": "https://stephensoncountyil.gov/government/county_board/district_maps_2012.php",
+     "note": "The county's adopted 2022-01-06 district maps. F-I are whole "
+             "townships (exact, and each district's township populations sum to "
+             "the total the map prints). B-E subdivide Freeport Township and are "
+             "GEOREFERENCED from the Freeport map's vector precinct polygons "
+             "(build_stephenson_board_districts.py; PDFs archived in "
+             "data/source/raw/) — the only boundary in the app whose accuracy is "
+             "a measured number rather than an exact match, ~20 m, stated on the "
+             "card. DELETE that script if Stephenson ever publishes precinct "
+             "geometry. Redrawn ~once a decade."},
     {"layer": "Winnebago 17th-Circuit judicial subcircuits",
      "app_file": "winnebago-judicial-subcircuits.json",
      "source_url": "https://www.ilsenateredistricting.com/",

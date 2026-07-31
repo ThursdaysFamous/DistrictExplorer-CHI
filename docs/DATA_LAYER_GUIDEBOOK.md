@@ -303,15 +303,28 @@ in the researched-but-unbuilt backlog.
       "wanted": "Lee County precinct geometry at the county's CURRENT precinct vintage, or a current precinct-to-district list that accounts for every precinct the county now has. The four-district composition itself is already published."
     },
     {
-      "id": "stephenson-county-board-districts",
+      "id": "stephenson-freeport-precincts",
       "concept": "County board districts",
-      "area": "Stephenson County",
+      "area": "Freeport Township, Stephenson County",
+      "counties": [
+        "stephenson"
+      ],
+      "kind": "data-quality",
+      "layer": "county-board",
+      "summary": "Stephenson's four Freeport Township districts are traced from the county's published map, not published data — their lines are accurate to about 20 metres, and the card says so.",
+      "blocker": "Stephenson publishes no precinct geometry. Census 2020 carries FREEPORT 1-18; the county re-precincted afterwards and now runs Freeport 01-16, which is what districts B-E are drawn from, so the census cannot draw those lines. The county runs no GIS server, has no ArcGIS Online presence beyond third-party research layers, its assessment office points at WinGIS (which serves the county an address locator and no boundary layers), and the Illinois SBE's GIS viewer is down. The four districts therefore come from the vector PDF of the county's adopted map, georeferenced against TIGER; the fit lands the map's own hydrography — data the fit never saw — within 50 m for 98.9% of its vertices, median 15.7 m. The county's four RURAL districts (F-I) are whole townships and are exact.",
+      "wanted": "Freeport Township's current 16 precinct boundaries in any vector form (shapefile, GeoJSON, KML or an ArcGIS service). That one file would replace the traced geometry with published data and let the georeferencing script be deleted."
+    },
+    {
+      "id": "jo-daviess-county-board-districts",
+      "concept": "County board districts",
+      "area": "Jo Daviess County",
       "counties": [],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Stephenson County's board districts are published only as PDF maps, so no Stephenson point can be placed in one.",
-      "blocker": "The county's District Maps page links two scanned PDFs — a Freeport Township sheet and a rural sheet — and nothing else. Stephenson runs no GIS server, has no ArcGIS Online presence beyond third-party research layers, and publishes no precinct-to-district composition that a township or precinct dissolve could be built from.",
-      "wanted": "Stephenson board-district geometry in any vector form, or a published list of which precincts or townships make up each district."
+      "summary": "Jo Daviess County's 17 board districts cut ACROSS precincts along roads, and nothing publishes those lines.",
+      "blocker": "The county publishes the composition of all 17 districts — as the titles of 17 per-district PDFs — but 14 of the 17 are made of PARTS of precincts, not whole ones. Its own GIS memo of 2021-12-02 says why: “If one of those boundaries needed to be split I used roads.” Only districts 1, 3 and 16 are whole precincts, so even precinct geometry would not finish the county. Nothing draws the sub-precinct lines: the GIS is a vendor gwmpub viewer with no REST endpoint, and every published map — countywide and per-district — is a RASTER export (32-81 embedded images, only frame-and-legend vector paths), so the vector-PDF route that built Stephenson's Freeport districts does not apply here.",
+      "wanted": "Jo Daviess board-district geometry in any vector form — or the WRITTEN LEGAL DESCRIPTIONS the county's own redistricting memo says were prepared for each district, which are not on its redistricting page."
     }
   ],
   "nyc": [
@@ -449,7 +462,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
-| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
+| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
 | Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12 + Kane 16th-Circuit 4 (pre-built from the enacted shapefile — the county's services are permission-locked) + McHenry 22nd-Circuit 4 (pre-built — the county publishes no subcircuit service), all PA 102-0693; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
@@ -667,9 +680,13 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
     precincts **plus Dixon 18, 19 and 20**, which the county's list does not — the two
     vintages disagree about how Dixon township is cut, and Dixon township is exactly the
     D3/D4 line. Palmyra is split too. A township dissolve would misplace the county seat.
-  - **Stephenson** — two scanned PDF district maps and nothing else.
+  - **Stephenson — composition FOUND, geometry still missing (see 5c).** The maps are
+    vector, not scans, and the composition reads off them; one township's precinct
+    boundaries are what block the build.
 
   Next out are Carroll, Jo Daviess and Whiteside, none of which touch the ring today.
+  (Carroll and Jo Daviess both do now — see 5e. Carroll shipped; Jo Daviess is a
+  recorded gap.)
   Whiteside is worth noting for later: its AGOL org publishes `PrecinctWardMap`,
   `ElectionGeography_public` and a `MyElectedRepresentatives` table — the Esri Elections
   solution, the same family DeKalb and McLean use — so it would be a cheap county to build
@@ -723,9 +740,147 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   **The lesson worth carrying: when a county publishes officeholders but no district
   geometry, read its resolutions before recording a no-source gap.** Lee and Stephenson
-  are the immediate re-tests — Lee's composition is already published in prose, so what
-  it needs is precinct geometry rather than a resolution, but Stephenson has not had its
-  resolution archive read.
+  were the immediate re-tests; Stephenson's is 5c below.
+
+- **RESEARCH PASS 5c (2026-07-30) — Stephenson: composition FOUND and verified, one
+  township's geometry short of shippable. NOTHING SHIPS.** The Ogle lesson was applied
+  and it half-worked. Stephenson does not publish a resolution archive the way Ogle does
+  — its board minutes are SCANS, 162 of the 220 documents from 2021-2022 carrying no
+  text layer at all, and a full-text sweep of those 220 found one irrelevant hit. But the
+  earlier entry's premise was wrong in the other direction: the county's two adopted
+  district maps are **vector PDFs with real text layers**, not scans, and the composition
+  reads straight off them.
+
+  | district | composition | printed pop | township sum |
+  |---|---|---|---|
+  | F | Winslow, West Point, Waddams, Kent, Jefferson | 5398 | **5398** |
+  | G | Oneco, Buckeye, Dakota, Lancaster, Silver Creek | 5356 | **5356** |
+  | H | Rock Grove, Rock Run, Ridott | 5037 | **5037** |
+  | I | Erin, Harlem, Loran, Florence | 5195 | **5195** |
+  | B | Freeport precincts 01, 02, 03, 06 | 5875 | — |
+  | C | Freeport precincts 04, 05, 07, 10 | 5834 | — |
+  | D | Freeport precincts 08, 09, 13, 14 | 6003 | — |
+  | E | Freeport precincts 11, 12, 15, 16 | 5966 | — |
+
+  The rural half is confirmed **three independent ways**: read by eye, read by machine
+  from the PDF's own fill colours (the legend defines colour → district), and by
+  arithmetic — each district's township populations sum EXACTLY to the total printed on
+  the same map. Four exact sums is not a coincidence. The Freeport half was machine-read
+  the same way, four precincts per district, no ambiguity.
+
+  **What blocks it is one township.** The county re-precincted after the census: Census
+  2020 publishes FREEPORT 1-18, the county now runs Freeport 01-16, and B/C/D/E are drawn
+  from the 16 — a different division of the same township, so census voting districts
+  cannot draw those lines. (Waddams 2→1 and West Point 3→2 changed too and are harmless:
+  both sit wholly inside District F, the Forreston-3 situation again.) Freeport Township
+  is **53% of the county**, so shipping F-I alone would answer "no district" for most
+  Stephenson residents — worse than not shipping, so nothing ships.
+
+  Sources checked and empty for precinct geometry: no county GIS server; no ArcGIS Online
+  presence beyond third-party research layers; the assessment office points at **WinGIS**,
+  which turns out to serve Stephenson only an address locator (`StephCoCompostie`) and no
+  boundary layers; and the Illinois SBE's GIS viewer (gis.elections.il.gov) is down —
+  503 over HTTP, no HTTPS at all.
+
+  **One file would close this county**: Freeport Township's current 16 precinct
+  boundaries in any vector form. Everything else is already in hand.
+
+  **STATUS: the operator took the georeferencing option, and Stephenson SHIPPED.** See
+  5d below. The gap stays open, narrowed to that one file, because traced geometry is
+  not published geometry.
+
+- **RESEARCH PASS 5d (2026-07-30) — Stephenson SHIPPED with the fleet's first and only
+  GEOREFERENCED boundary, and the first card that tells the reader its boundary is
+  approximate.** The Freeport map is a vector PDF: its 16 precinct polygons are real
+  paths, its legend maps fill colour to district, and the polygons share exact vertices
+  (710 of 2,507 edges cancel in a dissolve). So the missing geometry was recoverable
+  without a new source, and on the operator's call it was recovered.
+
+  **How it is fitted.** The 16 polygons dissolve to a union outline; that outline is
+  matched to the TIGER county-subdivision polygon for Freeport — the same geographic
+  area — by trimmed ICP solving a 6-parameter affine. Trimming matters: the precinct map
+  carries interior enclaves the TIGER outline does not, and an untrimmed fit drags on
+  them (RMS 639 m before trimming, 10.9 m after).
+
+  **How it is checked — this is the part that makes it publishable.** The fit is measured
+  two ways, both re-run on every rebuild with floors that fail the build:
+  - *Control*: PDF union outline vs TIGER Freeport subdivision — median **1.6 m**,
+    RMS **10.9 m** over the 80% of vertices with a counterpart.
+  - *INDEPENDENT*: the map's own HYDROGRAPHY layer, which the fit never touched, against
+    TIGER hydrography — **98.9% of vertices within 50 m, median 15.7 m**. A transform
+    fitted on one feature class landing a different one within ~16 m is the evidence;
+    the control number alone would only prove the fit converged.
+
+  So a Freeport district line is good to roughly 15-20 m, a fraction of a city block.
+  **The card says so** — the four derived districts carry a Boundary note reading
+  "Traced from Stephenson County's published district map (adopted 2022) … accurate to
+  about 20 metres — treat the district line itself as approximate." The four rural
+  districts carry no such note because they are exact township edges. That asymmetry is
+  the point: the app has one boundary that is a measurement rather than a fact, and it
+  is labelled where a reader will see it, not only in a build script.
+
+  Two smaller things this county forced:
+  - **A hand-rolled ring walk swallowed a district.** Chaining the dissolved boundary
+    edges with a naive "walk until a dead end" produced a district B polygon that
+    contained district D's own map label. build_metro_outline's `dissolve()` closes each
+    ring back to its start instead; the anchor check caught it, and the shared
+    implementation is now used.
+  - **A roster e-mail belonging to someone else.** District C's member is linked to his
+    predecessor's address (tmckenna@). The scraper drops any mailto whose local part does
+    not contain the member's surname — publishing it would have put a real, wrong
+    person's inbox on a card. It fires on exactly one seat today.
+
+  This script should be **deleted, not maintained**, the day Stephenson publishes
+  precinct geometry.
+
+- **RESEARCH PASS 5e (2026-07-31) — Carroll SHIPPED; Jo Daviess is blocked below the
+  precinct.** Both counties became adjacent once Ogle and Stephenson landed, so both
+  were researched together.
+
+  **Carroll — the easiest county in three passes.** Its three districts run EXACTLY
+  along township lines, so the composition reads straight off the county's published
+  map and the boundary is a plain TIGER township dissolve — the Livingston recipe
+  unchanged, no georeferencing needed even though the map itself is a raster export.
+
+  | district | townships | printed 2020 pop |
+  |---|---|---|
+  | 1 | Washington, Woodland, Freedom, Salem, Savanna | 5190 |
+  | 2 | Mount Carroll, York, Fairhaven | 5459 |
+  | 3 | Cherry Grove-Shannon, Rock Creek-Lima, Wysox, Elkhorn Grove | 5053 |
+
+  The one reconciliation is **forced, not chosen**: the map labels Carroll's two
+  CONSOLIDATED townships by their historic halves (Cherry Grove + Shannon, Rock Creek
+  + Lima) where TIGER carries the merged names, and both merged townships sit wholly
+  in District 3, so no district line depends on the distinction. Unlike Stephenson
+  there is no per-township population printed, so the check that carries the weight is
+  completeness: all 12 TIGER townships claimed exactly once.
+
+  Two things Carroll forced out:
+  - **Two labels collapsing onto one township broke the dissolve.** Passing the same
+    feature twice makes every edge cancel, which surfaces as `FATAL: open chain` — a
+    message about tiling, not about duplicates. The members are deduped before the
+    dissolve now.
+  - **The county has "District" typo'd as "Distirct" on one row**, and the first
+    scraper silently dropped that member. On a three-member district a card showing
+    two names looks entirely normal. The pattern now tolerates the transposition, the
+    scraper logs it, and the roster's member floor is the FULL board of 9 rather than
+    one under — on a board this small, a floor with slack would have let it through.
+    (The county also writes ROMAN numerals where its map uses Arabic; the scraper
+    converts, or the join would silently find nothing.)
+
+  **Jo Daviess — blocked below the precinct, and the first county where that is the
+  reason.** It publishes the composition of all 17 districts, as the titles of 17
+  per-district PDFs. But **14 of the 17 are made of PARTS of precincts**, and the
+  county's own GIS memo of 2021-12-02 says why: *"If one of those boundaries needed to
+  be split I used roads."* Only districts 1, 3 and 16 are whole precincts, so even
+  precinct geometry would not finish the county — the lines are sub-precinct.
+
+  And the Stephenson route does not transfer: its GIS is a vendor `gwmpub` viewer with
+  no REST endpoint, and **every published map is a RASTER export** (32-81 embedded
+  images, only frame-and-legend vector paths). There are no polygons to extract, so
+  there is nothing to georeference. The artifact that would unlock it is named in the
+  county's own memo — *"A written legal description for each district has also been
+  prepared"* — and is not on its redistricting page. That is what the gap asks for.
 
 - **RESEARCH PASS 4 (2026-07-30) — Winnebago SHIPPED; the Metro East is researched and
   waiting on a bridge.** Pass 1's border ring is exhausted, so this pass went after the

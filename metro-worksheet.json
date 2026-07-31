@@ -616,6 +616,30 @@
         "note": "Ogle's 8 board districts, dissolved from Census 2020 voting districts per the composition its reapportionment resolution R-2021-1106 adopts (scripts/build_ogle_board_districts.py; --check runs monthly in validate-sources.yml, alongside Livingston's, because it needs TIGERweb and a network call on every PR is a flake waiting to happen). The county publishes no district geometry."
       },
       {
+        "file": "stephenson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Stephenson County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "stephenson-county-board-districts.json",
+        "min_features": 8,
+        "max_features": 8,
+        "note": "Stephenson's 8 board districts, lettered B-I. F-I are whole townships and exact; B-E subdivide Freeport Township and are GEOREFERENCED off the county's adopted vector-PDF map (scripts/build_stephenson_board_districts.py, a rare operator step needing pymupdf+numpy; source PDFs archived in data/source/raw/). The only boundary in the app whose accuracy is a measured number — ~20 m — which the card states."
+      },
+      {
+        "file": "carroll-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Carroll County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "carroll-county-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Carroll's 3 board districts, dissolved from TIGER townships per the county's published 2021 district map, whose lines run exactly along township boundaries (scripts/build_carroll_board_districts.py; --check runs monthly in validate-sources.yml). The county publishes no vector district data — its map is a raster export — but none was needed."
+      },
+      {
         "file": "livingston-county-board-districts.json",
         "min_features": 3,
         "max_features": 3,
@@ -735,6 +759,16 @@
         "note": "Ogle County Board members keyed by district (8 districts electing three members each) — scraped weekly from the county's staff directory, which carries party, phone and e-mail 24/24 plus the Board Chair and Vice Chair. Joined to the derived district geometry above."
       },
       {
+        "file": "stephenson-county-board-members.json",
+        "min_keys": 8,
+        "note": "Stephenson County Board members keyed by district LETTER (B-I, two seats each; there is no District A) — scraped weekly from the county board page, which carries phone, e-mail and the Chairman/Vice Chairman. The scraper drops a mailto whose local part does not match the member's surname: one seat currently links its predecessor's address."
+      },
+      {
+        "file": "carroll-county-board-members.json",
+        "min_keys": 3,
+        "note": "Carroll County Board members keyed by district (3 districts electing three members each) — scraped weekly from the county's board directory, which writes ROMAN numerals the scraper converts to the Arabic keys the map uses. Its member floor is the full board of 9, not one under: the county has \"District\" typo'd on one row and the first scraper silently dropped that member."
+      },
+      {
         "file": "coverage-gaps.json",
         "min_keys": 8,
         "note": "Known data gaps keyed by gap id, driving the app's Data gaps panel \u2014 emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later."
@@ -747,7 +781,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v31",
+    "cache_name": "district-explorer-shell-v33",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -855,6 +889,16 @@
       "file": "update-ogle-county-board-roster.yml",
       "purpose": "Ogle County Board roster (oglecountyil.gov staff directory)",
       "schedule": "Sat 14:00 UTC"
+    },
+    {
+      "file": "update-stephenson-county-board-roster.yml",
+      "purpose": "Stephenson County Board roster (stephensoncountyil.gov board page)",
+      "schedule": "Sun 14:00 UTC"
+    },
+    {
+      "file": "update-carroll-county-board-roster.yml",
+      "purpose": "Carroll County Board roster (carrollcountyil.gov board directory)",
+      "schedule": "Mon 14:00 UTC"
     },
     {
       "file": "validate-sources.yml",
