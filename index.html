@@ -6423,6 +6423,21 @@ function initChiExplorer() {
     return "Municipal Hall";
   }
 
+  // The officers section holds clerks and treasurers, which are elected in most
+  // municipalities and APPOINTED in plenty of small ones — and several counties
+  // print village administrators, city managers and superintendents beside them,
+  // which are never elected. Those records ship with appointed=true and each row
+  // carries its own badge, but a fixed "Other Elected Officials" header still
+  // stated something false about them: today that is 40 municipalities, 25 of
+  // whose officers are appointed to the last one. The header follows what the
+  // section actually holds.
+  function municipalOfficersLabel(officers) {
+    var appointed = 0;
+    (officers || []).forEach(function (m) { if (m && m.appointed) appointed++; });
+    if (!appointed) return "Other Elected Officials";
+    return appointed === (officers || []).length ? "Appointed Officials" : "Other Officials";
+  }
+
   // When this seat is next on the ballot, where the source publishes it.
   // Municipal terms are staggered — 103 of suburban Cook's 104 village boards
   // mix two cycles — so this differs person to person and is the answer to
@@ -6563,7 +6578,7 @@ function initChiExplorer() {
       }
       var officers = (gov.officers || []).filter(function (m) { return m && m.name; });
       if (officers.length) {
-        wrap.appendChild(renderSectionLabel("Other Elected Officials"));
+        wrap.appendChild(renderSectionLabel(municipalOfficersLabel(officers)));
         wrap.appendChild(renderPersonRows(officers.map(municipalPerson)));
       }
       var office = gov.office || {};

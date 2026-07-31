@@ -408,11 +408,15 @@ ship with **no** flag rather than an assumed "elected". Where a source marks not
 office title is the only guide, and the known-appointed title set in the builder is the
 whole of it.
 
-> **Open item (pre-existing, tracked here):** the section header still reads "Other
-> Elected Officials" while 12 appointed *offices* render beneath it. The per-row badge
-> keeps the record honest, but the header is imprecise — the separately-labeled section
-> the original rule asked for was never built. The fix is a conditional label on the
-> officers section, not a data change.
+**The section header follows what the section holds** (fixed 2026-07-31; it was a fixed
+"Other Elected Officials" for as long as appointees have shipped, which stated something
+false on 40 municipalities — 25 of whose officers are appointed to the last one). The
+label is `municipalOfficersLabel()`: none appointed → *Other Elected Officials*, all
+appointed → *Appointed Officials*, mixed → *Other Officials*. **The generalizable rule:
+when a data change starts putting new kinds of record into an existing section, the
+section's fixed heading becomes an unreviewed claim about them.** A per-row badge is
+necessary but not sufficient — a reader takes the heading as the category. Check the
+headings whenever a source widens what a section can contain.
 
 (Shipped-county sources, for reference: Cook = the Clerk's Directory of Elected Officials
 JSON API, `cookcountyclerkil.gov/api/ElectedOfficial/GetByJurisdictionType?id=MUNIS` +
