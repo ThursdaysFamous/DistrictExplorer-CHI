@@ -8026,7 +8026,7 @@ function initChiExplorer() {
       "Madison County Board");
   });
   /* 42 fire districts WITH CONTACT — the first contact-bearing fire entry in the
-   * fleet (Kankakee's and Logan's are identity-only). Department head 39/42,
+   * fleet (Kankakee's is identity-only; Logan ships no fire entry). Department head 39/42,
    * address 41/42, phone 41/42, website 30/42; e-mail is populated on 3 of 42
    * and so is not requested, since a row that appears on one card in fourteen
    * reads as an error rather than a fact. */
@@ -10229,15 +10229,19 @@ function initChiExplorer() {
     });
   });
 
-  /* Rock Island's two ward-electing cities publish their own layers on the
+  /* Two of Rock Island County's FOUR ward-electing cities publish layers on the
    * county's hosted org: Moline (7 wards, edited 2022-08) and Silvis (4, edited
    * 2022-01). Both postdate the 2020 census, which is what makes them safe to
    * ship — Whiteside's ward layer covers six more municipalities and was last
    * edited 2019-11-05, before the redraw it would need to reflect, so it is a
-   * recorded gap instead. Silvis writes "1st WARD"; the number is taken from the
+   * recorded gap instead. The other two ward cities live on their own city orgs:
+   * East Moline (7 wards w/ per-seat contact, build-ready) and Rock Island City
+   * (7 wards, boundary vintage unverified — recorded gap); see the guidebook's
+   * pass-6 ledger. Silvis writes "1st WARD"; the number is taken from the
    * string rather than the label so both cities key the same way. Neither city's
-   * seat-holders are in the roster yet (Rock Island publishes no municipal
-   * officials), so these cards answer "which ward am I in" and name nobody —
+   * seat-holders are in the roster yet — but the county DOES publish municipal
+   * officials (clerk's Elected Officials Listing PDF + the Bi-State POD, both
+   * verified 2026-07-31), so the contact scrape is build-ready, not blocked —
    * the same state Will's ward cities shipped in before their contact scrape. */
   var ROCK_ISLAND_WARD_LAYERS = [
     { service: "MolineWards2020", id: 0, municipality: "Moline" },
