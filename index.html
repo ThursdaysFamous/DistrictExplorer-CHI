@@ -6349,8 +6349,8 @@ function initChiExplorer() {
    * Sourced per county (Cook: the County Clerk's Directory of Elected
    * Officials API — cook_municipal_officials_scraper.py +
    * build_municipal_officials_roster.py, refreshed weekly by CI) and merged
-   * into one roster; docs/MUNICIPAL_COUNCILS_PLAYBOOK.md holds the source
-   * ladder for the remaining counties. Municipalities with no entry keep the
+   * into one roster; docs/EXPANSION_GUIDE.md Part 2.4 holds the source
+   * ladder and each county's measured depth. Municipalities with no entry keep the
    * identity-only card — statewide coverage is deliberately partial, and an
    * absent entry names nobody rather than guessing. ---------- */
   var loadMunicipalOfficials = makeCached(function () {
@@ -6421,6 +6421,21 @@ function initChiExplorer() {
     if (/^City\s+of\b/i.test(name)) return "City Hall";
     if (/^Village\s+of\b/i.test(name)) return "Village Hall";
     return "Municipal Hall";
+  }
+
+  // The officers section holds clerks and treasurers, which are elected in most
+  // municipalities and APPOINTED in plenty of small ones — and several counties
+  // print village administrators, city managers and superintendents beside them,
+  // which are never elected. Those records ship with appointed=true and each row
+  // carries its own badge, but a fixed "Other Elected Officials" header still
+  // stated something false about them: today that is 40 municipalities, 25 of
+  // whose officers are appointed to the last one. The header follows what the
+  // section actually holds.
+  function municipalOfficersLabel(officers) {
+    var appointed = 0;
+    (officers || []).forEach(function (m) { if (m && m.appointed) appointed++; });
+    if (!appointed) return "Other Elected Officials";
+    return appointed === (officers || []).length ? "Appointed Officials" : "Other Officials";
   }
 
   // When this seat is next on the ballot, where the source publishes it.
@@ -6563,7 +6578,7 @@ function initChiExplorer() {
       }
       var officers = (gov.officers || []).filter(function (m) { return m && m.name; });
       if (officers.length) {
-        wrap.appendChild(renderSectionLabel("Other Elected Officials"));
+        wrap.appendChild(renderSectionLabel(municipalOfficersLabel(officers)));
         wrap.appendChild(renderPersonRows(officers.map(municipalPerson)));
       }
       var office = gov.office || {};
@@ -9830,7 +9845,7 @@ function initChiExplorer() {
    * consolidated layer. Ward-elected suburbs answer the same question Chicago's
    * wards do ("which council seat am I in, and who holds it"), so they belong
    * on the same toggle rather than a parallel one; the dispatcher does the rest
-   * (docs/MUNICIPAL_COUNCILS_PLAYBOOK.md "Tier B").
+   * (docs/EXPANSION_GUIDE.md Part 2.4, "Tier B").
    *
    * Four sources, because no consolidated one exists: Cook County GIS carries
    * 21 of its ward-electing suburbs in one layer, Will County GIS carries four
