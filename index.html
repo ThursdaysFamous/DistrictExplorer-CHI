@@ -6349,8 +6349,8 @@ function initChiExplorer() {
    * Sourced per county (Cook: the County Clerk's Directory of Elected
    * Officials API — cook_municipal_officials_scraper.py +
    * build_municipal_officials_roster.py, refreshed weekly by CI) and merged
-   * into one roster; docs/MUNICIPAL_COUNCILS_PLAYBOOK.md holds the source
-   * ladder for the remaining counties. Municipalities with no entry keep the
+   * into one roster; docs/EXPANSION_GUIDE.md Part 2.4 holds the source
+   * ladder and each county's measured depth. Municipalities with no entry keep the
    * identity-only card — statewide coverage is deliberately partial, and an
    * absent entry names nobody rather than guessing. ---------- */
   var loadMunicipalOfficials = makeCached(function () {
@@ -9830,7 +9830,7 @@ function initChiExplorer() {
    * consolidated layer. Ward-elected suburbs answer the same question Chicago's
    * wards do ("which council seat am I in, and who holds it"), so they belong
    * on the same toggle rather than a parallel one; the dispatcher does the rest
-   * (docs/MUNICIPAL_COUNCILS_PLAYBOOK.md "Tier B").
+   * (docs/EXPANSION_GUIDE.md Part 2.4, "Tier B").
    *
    * Four sources, because no consolidated one exists: Cook County GIS carries
    * 21 of its ward-electing suburbs in one layer, Will County GIS carries four

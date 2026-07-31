@@ -252,6 +252,17 @@ For every concept a new county brings in, the same change that ships the boundar
    SharePoint scrape adds party/phone/email + the countywide Chair; Lake: GIS live fields
    + a weekly scrape adds Chair/Vice-Chair tags, applied only on a name match so a missed
    reorganization degrades to role-less rows).
+
+   **Two measurements decide branch 1, and a service passing one can still fail the
+   other.** *Is the column populated?* — DeKalb declares `Member1`/`Member2` phone and
+   e-mail and populates the phones on 0 of 12 districts, so a schema is not data. *Is the
+   column CURRENT?* — Freeport's ward service populates `Alderperson` on every feature and
+   its `editingInfo.dataLastEditDate` is 2024-05-21, so it was still naming a holder the
+   April 2025 election had replaced. **A live service is not a current service.** Read
+   `editingInfo` off the layer's `?f=json` before treating an officeholder column as
+   branch 1; if the last data edit predates the most recent election for that seat, the
+   column is a snapshot, not a roster, and the county/city directory wins. Boundary
+   geometry from the same layer can still be sound — staleness is per-field.
 2. **Official directory, no GIS fields** (Will, DuPage, Kendall class): scraper + builder
    + weekly PR-opening workflow ships **in the same expansion change**. Bot-managed sites
    are not an excuse — the engine ladder (requests → Playwright → Internet Archive SPN;
@@ -270,11 +281,15 @@ never served as fresh, and automation resumes the moment any rung unblocks.
 ## 2.4 Rule 5 — municipal governments ship with their county
 
 A county brings its municipalities; rule 4 applies to them in the same expansion change.
-Status: **all seven metro counties SHIPPED** (2026-07-28) — 279 municipalities on one
-weekly-CI `municipal-officials.json`: **156 full governing bodies** (Cook + Will), **82
-head-of-government** entries (DuPage, Kane, McHenry, Kendall), and **41 contact-only**
-(Lake, which publishes no names anywhere county-side), plus 958 board members and 184
-ward/district seats. The concept: for a point in an incorporated place, name who governs it — head of
+Status: **twelve counties SHIPPED** (2026-07-31) — 349 municipalities on one weekly-CI
+`municipal-officials.json`, 1,379 board members and 335 ward/district seats. Depth is per
+county, and the mix is the point: **six full-governing-body** sources (Cook 129, Will 30,
+LaSalle 26, Winnebago 11, Ogle 13, Stephenson 11), **five head-level** (McHenry 27,
+Kane 24, DuPage 23, Kendall 7, Carroll 7), and **one contact-only** (Lake 41, which publishes
+no names anywhere county-side). Four city-level payloads fill what a county cannot:
+Will's ward cities and Joliet (per-seat contact), Skokie (trustee districts), and Freeport
+(the whole city — see *county source omits a municipality*, below).
+The concept: for a point in an incorporated place, name who governs it — head of
 government, governing body, other elected officers, hall contact, official site — joined
 onto the statewide `municipality` card by **7-digit place GEOID** (join precedent:
 `il-county-clerks.json` on `county`). Unsourced places keep the identity-only card, so
@@ -310,6 +325,28 @@ the guidebook either way):
 | **McHenry** | Clerk County Yearbook "Cities & Villages" page — `mchenrycountyil.gov/county-government/county-yearbook/cities-villages` | head + elected clerk/treasurer (+ per-person contact for a few); **no trustees** | Akamai **client-fingerprinted** — see below |
 | **Kendall** | Clerk Yearbook & Government Guide PDF — `kendallcountyil.gov/home/showdocument?id=184` | head + clerk + treasurer; **no trustees** | same Akamai posture as McHenry; pypdf |
 | **Lake** | **No names published county-side (firm double-verified negative).** Lake GIS Municipalities FeatureServer — `services3.arcgis.com/HESxeTbDliKKvec2/arcgis/rest/services/Municipalities/FeatureServer/0` | hall address/phone/email/website; **no names** → rule-4 branch 3 | open ArcGIS query |
+
+**The counties added since** (2026-07-29 → 07-31), which broke the "clerk yearbooks are
+mayor-level" expectation the table above set — **read the yearbook before assuming its
+depth**, because three of these five carry whole boards:
+
+| County | Source | Depth | Fetch class |
+|---|---|---|---|
+| **LaSalle** | Clerk Municipality Officials PDF, linked from `lasallecountyil.gov/294/Officials` | **full body** incl. ward numbers | clean; the one source needing word POSITIONS (`pdfplumber`) — six interleaving columns |
+| **Winnebago** | WinGIS `ElectedOfficials` MapServer, **one layer per municipality** | **full body** | open ArcGIS; note `/public`, not `/arcgis` |
+| **Ogle** | Clerk yearbook "OGLE COUNTY CITIES & VILLAGES", discovered from the clerk page | **full body** + hall address/phone/website | clean; `pypdf` line extraction |
+| **Stephenson** | county Cities & Villages directory page | **full body**, each office marked `(Elected)`/`(Appointed)` | clean static Revize HTML |
+| **Carroll** | Clerk yearbook "Cities and Village Officers", discovered from the clerk page | head + clerk | clean; `pypdf`, but see the CDN note below |
+
+**A year-versioned document URL is a scraper with an expiry date.** Carroll's yearbook is
+`2025-2026 YEARBOOK.pdf` and Ogle's `2025- 2027 Yearbook.pdf`; both are renamed on
+republication, so both are discovered from the clerk page rather than hardcoded — the
+DMMC precedent, now the default for any clerk document. Carroll adds a wrinkle worth
+expecting on Revize sites: **the discovered link is RELATIVE and resolving it against the
+page 404s**, because the site redirects PDFs to its CDN, which serves them from the site
+ROOT rather than from the page's directory. Try `<cdn-root>/<filename>` first and the
+page-relative form second, and require actual `%PDF` bytes before accepting either — the
+404 arrives as a 200-shaped HTML page.
 
 **The Akamai counties fingerprint the HTTP CLIENT, not just its headers** (measured on
 both, 2026-07-28, with a byte-identical full browser header set): **curl gets 200 where
@@ -349,11 +386,33 @@ Minooka as "Minnoka"; the scraper carries an explicit, reviewable alias so the p
 still joins its Census GEOID. Correcting a place NAME to make a geographic join is not
 the same as inventing officeholder data — no person's name is ever altered.
 
-**Appointed staff are excluded, never misfiled.** Four of these sources print village
-administrators, city managers, and deputy clerks beside the elected officers. The card's
-officers section is titled "Other Elected Officials", so an appointee shipped there would
-be mislabeled; only elected offices (head, clerk, treasurer) ship. A future card that
-wants them needs a separately-labeled section first.
+**Appointed officials ship FLAGGED, not excluded — and there are two different kinds.**
+The original rule here was exclusion, on the reasoning that the card's officers section is
+titled "Other Elected Officials" and an appointee under it would be mislabeled. The
+five-county build reversed it: several sources print village administrators, city
+managers, deputy clerks and superintendents beside the elected officers, and dropping them
+loses real officeholders a resident may need to reach. They ship with `appointed: true`
+and the card renders an explicit **Appointed** badge on the row. 78 such records ship
+today across Cook, Will, LaSalle, Ogle and Stephenson.
+
+The two kinds are not interchangeable and both need the flag:
+- **An appointed OFFICE** — city manager, administrator, deputy clerk, superintendent.
+  Never elected by anyone.
+- **An elected office held by an APPOINTEE** — Cook ships 7 trustees, 4 alderpersons and
+  a mayor appointed to fill vacancies; Stephenson's page marks 3 trustees `(Appointed)`.
+  The seat is elective; this person did not win it.
+
+**Only mark appointed where the source says so.** Stephenson marks 66 of its 86 rows
+explicitly, which is the strongest signal any source in this file publishes; the other 20
+ship with **no** flag rather than an assumed "elected". Where a source marks nothing, the
+office title is the only guide, and the known-appointed title set in the builder is the
+whole of it.
+
+> **Open item (pre-existing, tracked here):** the section header still reads "Other
+> Elected Officials" while 12 appointed *offices* render beneath it. The per-row badge
+> keeps the record honest, but the header is imprecise — the separately-labeled section
+> the original rule asked for was never built. The fix is a conditional label on the
+> officers section, not a data change.
 
 (Shipped-county sources, for reference: Cook = the Clerk's Directory of Elected Officials
 JSON API, `cookcountyclerkil.gov/api/ElectedOfficial/GetByJurisdictionType?id=MUNIS` +
@@ -386,11 +445,26 @@ carrying it would imply a direct line the source doesn't publish. And **`nextEle
 municipal terms are STAGGERED — 103 of suburban Cook's 104 village boards mix two cycles —
 so "when is this seat next on the ballot" varies seat by seat and is exactly what a
 resident wants; the card drops a year already past rather than calling a stale seat's
-election "next". Count floors as built:
-per-county muni floors (cook ≥120 · will ≥30 · dupage ≥32 · kane ≥26 · mchenry ≥26 ·
-kendall ≥12 · lake ≥48), member floors (cook ≥900, will ≥260, and for the mayor-level
-counties a floor ABOVE the head count so a run that silently lost every clerk still
-fails), Lake's member/head floors 0 by design, merged total ≥250 (built: 279).
+election "next".
+
+**Count floors: three per county (municipalities / members / heads), each a deliberate
+under-tolerance against measured live values** — ordinary turnover passes, a coverage loss
+fails and leaves the last good file in place. Built: cook ≥120 · will ≥30 · lasalle ≥22 ·
+winnebago ≥10 · ogle ≥11 · stephenson ≥9 · dupage ≥32 · kane ≥26 · mchenry ≥26 ·
+kendall ≥12 · carroll ≥6 · lake ≥48, with a merged total ≥250 (built: 349). Three rules
+the floors themselves encode:
+- For a **head-level** county the member floor must sit ABOVE the head count, or a run
+  that silently lost every clerk still passes.
+- **A head floor may legitimately sit below the municipality count**, and writing it flush
+  would fail on correct data: Winnebago publishes no mayor layer for Loves Park or
+  Machesney Park, Stephenson's page lists no president for Dakota, Carroll's Thomson
+  presidency is vacant. Say which municipality and why, beside the number.
+- **A small county gets a tight floor.** Carroll's whole county is seven municipalities;
+  slack that is prudent against Cook's 129 is, at that size, room for a real loss to slip
+  through. (The same reasoning set the Carroll BOARD roster's floor at the full nine
+  members rather than one under — see the "Distirct" typo in the guidebook.)
+- Lake's member/head floors are **0 by design** — it publishes no names, so the
+  municipality count is the only real guard there.
 
 **The central city is a municipality too.** Chicago's own card named nobody until
 2026-07-28 while every suburb named its mayor — the recorded suburban-parity asymmetry.
@@ -471,7 +545,39 @@ while half its steps failed. Read `steps.<id>.outcome` (the result *before*
 "Village of Alsip"; Kane groups under CITIES/VILLAGES and DMMC tags each entry (V)/(C).
 Carrying that into the jurisdiction string is what lets the card title the hall row "City
 Hall" vs "Village Hall" — the builder strips the prefix again before joining on GEOID, so
-it costs nothing and a county that ships bare names silently degrades to "Municipal Hall".
+it costs nothing.
+
+**A source that publishes BARE names is no longer a degradation.** That used to fall
+through to a generic "Municipal Hall"; since 2026-07-31 the builder takes the legal form
+from the **Census reference file's own designation** (`"Rock City village"` →
+`"Village of Rock City"`) whenever the source states none. Two sources needed it —
+Stephenson's page and Winnebago's GIS layers — and it is not an inference about the place,
+it is the Census's own word for it. It applies **only** where the source is silent: a
+source that states a form keeps its own wording, because "United City of Yorkville" is
+Yorkville's legal name and Census's plain "City of Yorkville" would be a downgrade.
+
+**Three name shapes, and conflating two of them ate a municipality.** The source side and
+the Census side label the form on **opposite ends**, and a third class publishes no form
+at all:
+
+| shape | example | who writes it |
+|---|---|---|
+| prefixed | `City of Calumet City` | almost every clerk directory |
+| suffixed | `Calumet City city` | the Census place-by-county file, always |
+| bare | `Rock City` | Stephenson's page, Winnebago's GIS |
+
+One normalizer stripping *both* ends looks defensive and is wrong in both directions: it
+reduced the clerk's "City of Calumet City" to `CALUMET`, and on a bare name it ate the
+second word of "Rock City" and left `ROCK`, which matches no Census place — a hard build
+failure for the lucky case, and a silent mismatch for any name whose form-word sits
+somewhere other than the end. They are now two functions, `norm_census_place()` (suffix)
+and `norm_place()` (prefix), and the split was measured before it was made: **no source in
+the file emits a Census-style suffix**, so nothing needed the other strip. Abbreviations
+are expanded in the shared tail — Carroll's clerk writes "Mt. Carroll" where Census writes
+"Mount Carroll" — because that is one word abbreviated, not a different name. *Any
+name→GEOID join in a new county should be run over the county's full place list before
+shipping; a name that fails to match is loud, but a name that matches the WRONG place is
+not.*
 
 **PDF-parse lessons (the Will build was ~10× Cook, all source-format; the PDF counties
 will hit the same class):** parse the real PDF with a layout-preserving reader (`pypdf`
@@ -512,9 +618,66 @@ audit them by running the lookup over real data (`docs/DATA_LAYER_GUIDEBOOK.md`,
 and Wilmington entirely — the flipbook's text layer is missing their entry HEADERS, so the
 entry split cannot see them, and no parser recovers text that isn't there. Both are ward
 cities, so each resolved a ward polygon with no seat-holder behind it. The same city-site
-pass supplies those two rosters outright. **Check for this class after any document-sourced
-county build:** compare the scraped municipality list against the county's Census place
-list, since a missing entry is invisible in the output — it simply isn't there.
+pass supplies those two rosters outright. **Check for this class after EVERY county build,
+document-sourced or not:** compare the scraped municipality list against the county's
+Census place list, since a missing entry is invisible in the output — it simply isn't
+there.
+
+**The omission can be the COUNTY SEAT, and it can be deliberate.** Will's was a PDF defect;
+Stephenson's is editorial. Its page is a *village* directory — all ten villages and not
+Freeport, which at ~23,600 people is more than half the county's municipal population.
+Nothing in the output looks wrong; the largest city in the county simply has no card. Two
+things follow. **Never infer coverage from a page's apparent completeness** — ten of eleven
+is a very convincing nine-tenths. And **a source's title is a claim about its scope**: a
+page called "City and Villages" that names one city and lists none of it is telling you
+where to look next. Freeport enters through the same `--enrich` path as Lockport and
+Wilmington, which inserts a municipality the county omits wholesale rather than merely
+filling contact. Where a large municipality's own site publishes its body, that is a
+bounded rung-5 exception in the Will-ward-cities sense, not a slide toward scraping every
+municipality.
+
+**A city running a CMS may publish its roster as an API you can query instead of a page
+you must parse.** Freeport is WordPress: its governing body is an `lsvr_person` post type
+in an `elected-officials` category, so MEMBERSHIP is a REST query
+(`/wp-json/wp/v2/lsvr_person?lsvr_person_cat=<id>`, the id resolved from the category
+SLUG, never hardcoded) and a seat that changes hands leaves the category the moment the
+city updates it. Each person page then carries a schema.org `Person` JSON-LD block with
+name, jobTitle, email and telephone — a machine-readable contract the city publishes
+deliberately, and far steadier than the rendered markup around it. **Check `/wp-json/wp/v2/types`
+and the page source for `application/ld+json` before writing an HTML parser**; it costs one
+request and it turned the metro's fussiest source class into ten clean records.
+
+**Do not blend two labelled addresses.** Ogle's Adeline is the one block that labels a
+PHYSICAL and a MAILING address, and they are different places — 8763 vs 9069 N. Main St,
+and the mailing city is Leaf River, not Adeline. The scan took the street from the first
+address-looking line and the city/ZIP from the first line carrying one, producing an
+address that appears on no document the county publishes. Twelve of the county's thirteen
+blocks *do* spread one address across several lines, so combining across lines is right —
+the rule is to combine only WITHIN a labelled group. Prefer the physical address (the hall
+is where the office is); if it carries no city, leave the city empty rather than borrowing
+the mailing address's. The same pass found Rochelle's `61068-0601` failing a `\d{5}$`
+anchor, which had been silently dropping that city's entire locality: **anchor ZIPs with
+the +4 optional.**
+
+**An officer list contains things that are not officers, and names that are not people.**
+Three classes, all of which would have shipped:
+- **A separate body printed alongside** — Davis's zoning board of appeals, German Valley's
+  hired village police. Appointed members of a different body; on a "who represents you"
+  card they are people holding no municipal office.
+- **A placeholder in the name column** — "Vacant" (Carroll's Thomson president),
+  "Unassigned" (German Valley). A card must never print one as a person's name. Thomson
+  ships with no head, which is the accurate answer.
+- **A combined title** — "Trustee/Zoning Chairperson" is a sitting TRUSTEE who also chairs
+  zoning. Filtering on the substring "Zoning" would have dropped a real board member, so
+  the title is reduced to the municipal seat it names and only a title that reduces to
+  nothing is dropped.
+
+Drop them, but **report every drop** — the count belongs in the run summary, so a source
+that starts printing a new body is visible rather than quietly filtered. The same applies
+to a row the source itself leaves incomplete: Dakota has a resident's name against a blank
+office cell and is also the one village listing no president, which makes the inference
+obvious and still wrong to make. It ships nowhere, the run warns, and the guidebook
+carries the gap.
 
 **When the county and the county's GIS disagree, the municipality is the tiebreaker.**
 Cook GIS mapped four Skokie trustee districts while the Clerk's directory listed all six
