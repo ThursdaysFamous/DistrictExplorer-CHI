@@ -305,15 +305,43 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any DeKalb County list that pairs a precinct code with its township or full precinct name — a clerk's precinct table, a polling-place list carrying both, or a legend on the precinct map."
     },
     {
-      "id": "lee-county-board-districts",
-      "concept": "County board districts",
+      "id": "lee-municipal-officials",
+      "concept": "Municipal officials",
       "area": "Lee County",
-      "counties": [],
+      "counties": [
+        "lee"
+      ],
       "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Lee County publishes exactly which precincts make up each of its four board districts, but nothing draws those precincts, so the districts still cannot be built.",
-      "blocker": "Lee's ArcGIS Enterprise portal (gis.leecountyil.gov/portal) exposes zero public items and its REST instance is not reachable, so there is no county precinct geometry. The Census 2020 voting districts are a near-match — all 46 precincts the county names exist there — but the census layer also carries Dixon 18, 19 and 20, which the county's district list does not, so the two vintages disagree about how Dixon township is cut. Dixon township IS the line between Districts 3 and 4 (D3 is Dixon 1-9, D4 is Dixon 10-17 plus Palmyra 2), so that disagreement lands squarely on the boundary that matters, and Palmyra township is split too. A township dissolve would misplace the county seat.",
-      "wanted": "Lee County precinct geometry at the county's CURRENT precinct vintage, or a current precinct-to-district list that accounts for every precinct the county now has. The four-district composition itself is already published."
+      "layer": "municipality",
+      "summary": "Lee's 13 municipalities keep the identity-only card — the county publishes no municipal officeholders anywhere.",
+      "blocker": "All four sourced rungs are exhausted. The Clerk runs no elected-officials database; neither the Clerk nor the Election Information page links a yearbook or municipal directory (the site's only /directory.aspx is county STAFF); Blackhawk Hills Regional Council, the area's COG, publishes no member directory; and the county GIS's Municipalities layer is name-only — CORP_NAME on all 13 and no contact column at all, unlike Lake's, which at least carries hall address and phone.",
+      "wanted": "Any Lee County list pairing a municipality with its mayor/president — a clerk's yearbook, a COG membership directory, or contact attributes on the county's Municipalities layer. Scraping 13 heterogeneous village sites is explicitly not the answer (source ladder rung 5)."
+    },
+    {
+      "id": "whiteside-municipal-officials",
+      "concept": "Municipal officials",
+      "area": "Whiteside County",
+      "counties": [
+        "whiteside"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "Whiteside's 11 municipalities keep the identity-only card, even though the county publishes an unusually rich elections GIS.",
+      "blocker": "The county's ArcGIS org carries precincts, polling places, electoral districts and a MyElectedRepresentatives service — but every one of them stops at the county board and the state/federal offices. No municipal layer exists. The Clerk publishes no yearbook or municipal directory, and Blackhawk Hills Regional Council publishes no member list. A county can have the best election GIS in the served area and still name no village president.",
+      "wanted": "A Whiteside municipal-officials layer on the county's own ArcGIS org (it would fit the Esri Elections pattern the county already runs), or a clerk-published directory."
+    },
+    {
+      "id": "whiteside-precinct-polling",
+      "concept": "Voting precincts",
+      "area": "Whiteside County",
+      "counties": [
+        "whiteside"
+      ],
+      "kind": "data-quality",
+      "layer": "county-precinct",
+      "summary": "Five of Whiteside's 60 precincts name a polling place the county has not published, so their cards show the precinct and no address.",
+      "blocker": "The precinct layer's pollingid joins the Voting Locations layer's facilityid, and the join resolves 55 of 60. Facility ids 22, 26 and 32 are referenced by precincts (Sterling 9, 14 and 18 share 22; Prophetstown 1 uses 26; Coloma 9 uses 32) and are simply absent from the published locations — the sequence skips them. Showing a nearby polling place instead would be a guess about where someone votes.",
+      "wanted": "The three missing facilities on the county's Voting Locations layer. Everything else about the join is already correct."
     },
     {
       "id": "stephenson-freeport-precincts",
@@ -475,7 +503,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
-| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
+| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
 | Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12 + Kane 16th-Circuit 4 (pre-built from the enacted shapefile — the county's services are permission-locked) + McHenry 22nd-Circuit 4 (pre-built — the county publishes no subcircuit service), all PA 102-0693; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
@@ -485,7 +513,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | Elected school board (districted) | SHIPPED `school-board` (ERSB) | NO HONEST ANALOG³ | NO HONEST ANALOG (at-large board)⁴ |
 | Parent-elected education council | n/a | SHIPPED `cec` | n/a |
 | Elected regional transit board | NO HONEST ANALOG⁸ | NO HONEST ANALOG⁸ | SHIPPED `bart-director` (9 districts, BART's own ArcGIS + hand-verified roster) |
-| Municipal governing body (surfaced on the municipality-identity card) | SHIPPED on `municipality` — **349 municipalities across twelve counties**, with head of government + 1,379 board members incl. 335 ward/district seats + clerks/treasurers + hall contact, joined by Census place GEOID (weekly CI). Depth varies honestly by county: **full governing body** Cook 129 / Will 30 / LaSalle 26 / Ogle 13 / Stephenson 11 / Winnebago 11, **head-level** McHenry 27 / Kane 24 / DuPage 23 / Kendall 7 / Carroll 7, **contact-only** Lake 41 (publishes no names county-side). Four city payloads fill what a county cannot — Will's ward cities + Joliet (per-seat contact), Skokie (trustee districts), Freeport (the whole city; Stephenson's source is a village directory that omits its own county seat). A municipality listed by two counties resolves by source depth, then county order. Chicago's citywide officers ride this card while its 50 ward seats stay `ward`'s answer. An unsourced municipality keeps the identity-only card (`docs/EXPANSION_GUIDE.md` §2.4) | n/a (NYC's municipalities are the five boroughs — `borough-president`) | n/a (consolidated city-county) |
+| Municipal governing body (surfaced on the municipality-identity card) | SHIPPED on `municipality` — **349 municipalities across twelve counties**, with head of government + 1,379 board members incl. 335 ward/district seats + clerks/treasurers + hall contact, joined by Census place GEOID (weekly CI). Depth varies honestly by county: **full governing body** Cook 129 / Will 30 / LaSalle 26 / Ogle 13 / Stephenson 11 / Winnebago 11, **head-level** McHenry 27 / Kane 24 / DuPage 23 / Kendall 7 / Carroll 7, **contact-only** Lake 41 (publishes no names county-side). Four city payloads fill what a county cannot — Will's ward cities + Joliet (per-seat contact), Skokie (trustee districts), Freeport (the whole city; Stephenson's source is a village directory that omits its own county seat). A municipality listed by two counties resolves by source depth, then county order. Chicago's citywide officers ride this card while its 50 ward seats stay `ward`'s answer. An unsourced municipality keeps the identity-only card — Lee's 13 and Whiteside's 11 are the newest, both at the rule-4 floor after all four sourced rungs were worked (`docs/EXPANSION_GUIDE.md` §2.4) | n/a (NYC's municipalities are the five boroughs — `borough-president`) | n/a (consolidated city-county) |
 | County clerk (surfaced on the county-identity card) | SHIPPED on `county` — all 101 clerk-authority counties via ISBE's election-authority directory (weekly CI; Peoria deliberately absent, its authority is an appointed election commission) | SHIPPED on `borough` — appointed (Appellate Division), labeled so; operator-verified `clerk` entries in `borough-officials.json` (nycourts.gov is Cloudflare-fronted, so no scraper; names only where the office's own page publishes one) | n/a⁹ |
 | Early-voting / vote-center sites | SHIPPED `early-voting` (hand-curated per election; every site doubles as a secured ballot drop box) | SHIPPED `early-voting` (live NYS GIS) | SHIPPED `early-voting` (hand-curated; includes the 37 ballot drop boxes) |
 
@@ -845,6 +873,66 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   This script should be **deleted, not maintained**, the day Stephenson publishes
   precinct geometry.
+
+- **RESEARCH PASS 5g (2026-07-31) — Lee and Whiteside SHIPPED. The Lee blocker was
+  wrong, and the way it was wrong is the same way DeKalb's was.** Both counties became
+  reachable once Ogle, Stephenson and Carroll landed, and both went in together.
+
+  | concept | Lee (34,096) | Whiteside (54,979) |
+  |---|---|---|
+  | `county-board` | **SHIPPED** — 4 districts × 5 members, county GIS + a weekly roster scrape (party, seat's next election, e-mail 20/20) | **SHIPPED** — 3 districts × 9 members = 27, the largest board in the served area; branch 1, members ride the boundary |
+  | `county-precinct` | **SHIPPED** — 46, identity + board district | **SHIPPED** — 60, identity + board district + polling place (join 55/60, gap recorded) |
+  | `fire-district` | **SHIPPED** — 22, NG911 service areas | none published |
+  | municipal officials | **rule-4 floor** — recorded gap | **rule-4 floor** — recorded gap |
+
+  **"Its REST instance is not reachable" was an assumption about a URL.** Pass 5 recorded
+  Lee as no-source after finding that its ArcGIS Enterprise portal returns zero items to a
+  search. That half is literally true and still is. But the portal's **featured group**
+  holds eleven items, one of them "Voting Districts & Election Precincts", and that app's
+  web map names the real REST root: **`gis.leecountyil.gov/leecogis`** — not `/server`,
+  not `/arcgis`, which is what had been tried. Sixth county where the web-map route found
+  what hostname guessing missed, and the second time (after DeKalb) that a *recorded gap*
+  was the thing standing in the way rather than the county.
+
+  The correction is bigger than a URL. The gap said Lee's districts could only be
+  reconstructed by dissolving precincts, and that Census 2020's Dixon 18-20 disagreed with
+  the county's precinct list on exactly the D3/D4 line — a careful, correct piece of
+  analysis about a problem that **does not exist**: the county DRAWS its four districts,
+  so there is nothing to dissolve. *An unbuildable recorded with a detailed blocker reads
+  as more authoritative than one recorded with a vague one, and is no more likely to be
+  true.*
+
+  **Whiteside publishes its board TWICE, seven years apart, with no cue which is which.**
+  Its org carries both `ElectionGeography_public/2` (Electoral Districts) and a
+  `MyElectedRepresentatives` service, and both hold county-board members — with
+  *different names*. Measured: MyElectedRepresentatives' `dataLastEditDate` is
+  **2019-01-08** and only 11 of its 27 names appear on the county's current board page;
+  ElectionGeography's is **2026-07-10** and matches **27/27**. Nothing in either service's
+  name or description says which is current. This is the Freeport `Wards2022_Public`
+  lesson repeating inside a single org, and it is now the reason the edit-date check is
+  written into `docs/EXPANSION_GUIDE.md` §2.3 rather than left as a habit.
+
+  Two smaller things worth keeping:
+  - **Whiteside's Electoral Districts layer holds every office in one table**, keyed by
+    `electedoffice` — county board, congressional, legislative and the countywide row
+    offices all overlapping the same ground. The board rows are filtered out **in the
+    loader**, not at query time: an unfiltered containment test answers with whichever
+    polygon comes first, and the map overlay would have drawn 21 shapes instead of 3.
+  - **Lee's roster PDF needs positional parsing for a reason worth naming.** `pypdf`
+    flattens it into 20 name rows followed by 20 e-mail addresses *in a different order*.
+    Pairing by sequence mis-assigns addresses to people; pairing by initial-and-surname
+    would be an inference, and it would fail on the one row that matters most — the Board
+    Chair's address is `leecochair@countyoflee.org`, which no name rule produces. Read by
+    row, it is simply what the document says, and the chair it identifies cross-checks
+    against the board page's prose ("Bob Olson, Board Chair").
+
+  **Neither county publishes municipal officers**, and all four sourced rungs were worked
+  before that was recorded: no clerk elected-officials database, no yearbook or municipal
+  directory on either clerk's site (their only `/directory.aspx` is county staff), no
+  member list from Blackhawk Hills Regional Council, and — the near miss — Lee's GIS does
+  carry a `Municipalities` layer, but it is `CORP_NAME` and nothing else, where Lake's
+  equivalent carries hall address and phone. Twenty-four municipalities keep the
+  identity-only card; two gaps record what would lift them.
 
 - **RESEARCH PASS 5f (2026-07-31) — municipal officials for the three new northern
   counties. Ogle and Stephenson are the fleet's FIFTH and SIXTH full-governing-body

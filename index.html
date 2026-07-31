@@ -7818,6 +7818,22 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadLeeCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lee-county-outline.json", {}, 2);
+  });
+  function leeCountyCoverage(point) {
+    return loadLeeCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadWhitesideCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/whiteside-county-outline.json", {}, 2);
+  });
+  function whitesideCountyCoverage(point) {
+    return loadWhitesideCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -8313,6 +8329,114 @@ function initChiExplorer() {
   var loadCarrollBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/carroll-county-board-members.json", {}, 2);
   });
+
+  /* Lee's GIS was recorded as unreachable and its portal as holding zero public
+   * items. The second half is literally true — a search returns nothing — and
+   * the first was an assumption about the URL. The portal's FEATURED GROUP holds
+   * eleven items, one of which ("Voting Districts & Election Precincts") names
+   * the real REST root: /leecogis, not /server or /arcgis. Sixth county where
+   * the web-map route found what hostname guessing missed.
+   *
+   * That also retires the recorded blocker on the board districts. The gap said
+   * the districts could only be reconstructed by dissolving precincts, and that
+   * Census 2020's Dixon 18-20 disagreed with the county's precinct list on
+   * exactly the D3/D4 line. None of that matters: the county DRAWS the four
+   * districts, so there is nothing to dissolve. */
+  var LEE_GIS = "https://gis.leecountyil.gov/leecogis/rest/services/";
+  var loadLeeCountyBoard = makeCached(function () {
+    return loadCountyMapServerLayer(LEE_GIS + "Election/County_Board_Districts", 3,
+      "NAME", "Lee County board districts");
+  });
+  var loadLeePrecincts = makeCached(function () {
+    return loadCountyMapServerLayer(LEE_GIS + "Election/Election_Precincts", 1,
+      "PrecinctName", "Lee County precincts");
+  });
+  /* NG911 service areas, so the identity field is DsplayName (sic) rather than a
+   * district name — populated on all 22, unlike most of the layer's schema. */
+  var loadLeeFireDistricts = makeCached(function () {
+    return loadCountyMapServerLayer(LEE_GIS + "Fire_Districts", 0,
+      "DsplayName,AGENCY_COD", "Lee County fire districts");
+  });
+  var loadLeeBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lee-county-board-members.json", {}, 2);
+  });
+
+  /* Whiteside runs the Esri Elections solution, the family DeKalb and McLean
+   * use: one ElectionGeography service carrying precincts, polling locations and
+   * an "Electoral Districts" layer that holds EVERY office's district in one
+   * table, keyed by `electedoffice` — county board, congressional, legislative
+   * and the countywide row offices all together. Only the county-board rows are
+   * consumed here; the rest duplicate layers the app already answers statewide.
+   *
+   * Its board is rule-4 branch 1 — the members ride the boundary — but with a
+   * shape no other county uses: all NINE members of a district are packed into
+   * `repname1` as one comma-separated string. Split at read time; the roster
+   * needs no scraper, no file and no weekly workflow. */
+  var WHITESIDE_GIS = "https://services.arcgis.com/l0M0OC6J9QAHCiGx/arcgis/rest/services/";
+  function loadWhitesideLayer(layerIndex, outFields, label) {
+    var url = WHITESIDE_GIS + "ElectionGeography_public/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadWhitesideCountyBoard = makeCached(function () {
+    return loadWhitesideLayer(2, "electedoffice,name,repname1,districturl1",
+      "Whiteside County electoral districts").then(function (geojson) {
+        // Filtered HERE, once, not at query time. The layer holds every office's
+        // district in one table — the congressional, legislative and countywide
+        // row-office polygons all cover the same ground as the board's — so an
+        // unfiltered containment test would answer with whichever polygon came
+        // first, and the overlay would draw twenty-one shapes instead of three.
+        var features = (geojson.features || []).filter(whitesideIsBoardFeature);
+        if (!features.length) {
+          throw new Error("Whiteside electoral districts carry no County Board rows — " +
+            "the electedoffice values changed");
+        }
+        return { type: "FeatureCollection", features: features };
+      });
+  });
+  var loadWhitesidePrecincts = makeCached(function () {
+    return loadWhitesideLayer(1, "name,precinctid,pollingid", "Whiteside County precincts");
+  });
+  var loadWhitesidePollingPlaces = makeCached(function () {
+    return loadWhitesideLayer(0, "facilityid,name,fulladdr,municipality,pstlzip5,phone",
+      "Whiteside County polling places");
+  });
+
+  // "County Board District 3" -> "3". Lee's layer carries only NAME, so the
+  // number is read off it rather than from a district field it does not have.
+  function leeDistrictNumber(feature) {
+    var name = findPropCI(feature.properties || {}, ["name"]);
+    var m = /(\d+)\s*$/.exec(String(name == null ? "" : name));
+    return m ? m[1] : null;
+  }
+  // The Electoral Districts layer holds every office in one table, so a point
+  // lands inside a county-board polygon AND inside the congressional, senate and
+  // countywide-office polygons that cover the same ground. Only the board rows
+  // belong on this card.
+  function whitesideIsBoardFeature(feature) {
+    var office = findPropCI(feature.properties || {}, ["electedoffice"]);
+    return String(office || "").toLowerCase().indexOf("county board") === 0;
+  }
+  function whitesideDistrictNumber(feature) {
+    if (!whitesideIsBoardFeature(feature)) return null;
+    var name = findPropCI(feature.properties || {}, ["name"]);
+    var m = /(\d+)\s*$/.exec(String(name == null ? "" : name));
+    return m ? m[1] : null;
+  }
+  // Nine names in one field: "James C. Duffy, Kurt E. Glazier, …". Split on
+  // commas because no member's name contains one; a name that ever did would
+  // arrive here as two entries rather than be silently dropped, which is the
+  // failure mode to prefer on a card that lists people.
+  function whitesideBoardMembers(props) {
+    var raw = findPropCI(props, ["repname1"]);
+    if (!raw) return [];
+    return String(raw).split(",").map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.length > 0; });
+  }
 
   var BOONE_GIS = "https://maps.boonecountyil.org/arcgis/rest/services/";
   var loadBoonePrecincts = makeCached(function () {
@@ -12620,6 +12744,120 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // Lee (4 districts electing five members each). The county draws the
+      // districts; the members come from the Clerk's Member Contact List PDF,
+      // which is the only place the party, the seat's next election and the
+      // per-member e-mail are published.
+      {
+        key: "lee",
+        coverage: leeCountyCoverage,
+        loadGeometry: loadLeeCountyBoard,
+        hoverName: function (feature) {
+          return leeDistrictNumber(feature);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLeeCountyBoard(),
+            loadLeeBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = leeDistrictNumber(feature);
+            return {
+              seq: seq, district: district,
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Lee County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + result.district : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Lee County Board (official)",
+            url: "https://www.leecountyil.com/291/County-Board"
+          };
+        },
+        hoverOfficial: {
+          load: loadLeeBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = leeDistrictNumber(feature);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Whiteside (3 districts electing NINE members each — 27, the largest
+      // board in the served area). Rule-4 branch 1: no roster file and no weekly
+      // workflow, because the members ride the boundary. The one wrinkle is the
+      // shape — all nine names arrive as one comma-separated string.
+      {
+        key: "whiteside",
+        coverage: whitesideCountyCoverage,
+        loadGeometry: loadWhitesideCountyBoard,
+        hoverName: function (feature) {
+          return whitesideDistrictNumber(feature);
+        },
+        query: function (point, seq) {
+          return loadWhitesideCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              district: whitesideDistrictNumber(feature),
+              members: whitesideBoardMembers(props),
+              url: findPropCI(props, ["districturl1"])
+            };
+          });
+        },
+        render: function (result) {
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Whiteside County Board",
+            note: boardCountNote(result.members.length, null)
+          }));
+          if (result.members.length) {
+            wrap.appendChild(renderPersonRows(result.members.map(function (name) {
+              return boardMemberPerson({ name: name });
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + result.district : null;
+        },
+        primaryLink: function (result) {
+          return {
+            label: "Whiteside County Board (official)",
+            url: safeHttpUrl(result && result.url) ||
+              "https://www.whitesidecountyil.gov/186/County-Board"
+          };
+        },
+        hoverOfficial: {
+          load: loadWhitesideCountyBoard,
+          name: function (feature) {
+            var members = whitesideBoardMembers(feature.properties || {});
+            return members.length ? members.join(", ") : null;
+          }
+        }
       }
     ]
   });
@@ -12987,6 +13225,21 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Fire District", keys: ["fire_district"], primary: true },
           { label: "County", value: "DeKalb County" }
+        ]
+      }),
+      // Lee's 22 districts come from its NG911 service-area layer, so the name
+      // field is DsplayName (the upstream spelling) — the only identity column
+      // populated on all 22. Several are cross-county responders the county maps
+      // because they cover Lee ground ("BUREAU CO/OHIO FIRE"), which is why the
+      // names carry a county prefix rather than being normalised into something
+      // tidier the source never said.
+      polygonCountyEntry({
+        key: "lee",
+        coverage: leeCountyCoverage,
+        loader: loadLeeFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["dsplayname"], primary: true },
+          { label: "County", value: "Lee County" }
         ]
       })
     ]
@@ -14182,6 +14435,125 @@ function initChiExplorer() {
           return {
             label: "DeKalb County Clerk — Elections (official)",
             url: "https://dekalbcountyclerkil.gov/election-information/"
+          };
+        }
+      },
+      // Lee — 46 precincts, identity + the board district from the usual spatial
+      // join. No polling layer is published, so no polling row.
+      {
+        key: "lee",
+        coverage: leeCountyCoverage,
+        loadGeometry: loadLeePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinctname"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLeePrecincts(),
+            loadLeeCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) boardDistrict = leeDistrictNumber(bf);
+            }
+            var name = findPropCI(feature.properties || {}, ["precinctname"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          fields.push({ label: "County", value: "Lee County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Lee County Clerk & Recorder (official)",
+            url: "https://www.leecountyil.com/204/County-Clerk-Recorder"
+          };
+        }
+      },
+      // Whiteside — 60 precincts, each carrying a pollingid that joins the
+      // county's own polling-place layer. The join resolves 55 of 60: three
+      // facility ids the precincts reference (22, 26, 32) are absent from the
+      // published locations, so five precincts show identity only rather than a
+      // guessed address. Recorded as a gap, not papered over.
+      {
+        key: "whiteside",
+        coverage: whitesideCountyCoverage,
+        loadGeometry: loadWhitesidePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWhitesidePrecincts(),
+            loadWhitesidePollingPlaces().catch(function () { return null; }),
+            loadWhitesideCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var pollingId = findPropCI(props, ["pollingid"]);
+            var polling = null;
+            if (results[1] && pollingId != null && String(pollingId) !== "") {
+              var wanted = String(pollingId);
+              (results[1].features || []).some(function (f) {
+                var fid = findPropCI(f.properties || {}, ["facilityid"]);
+                if (fid == null || String(fid) !== wanted) return false;
+                polling = f.properties || {};
+                return true;
+              });
+            }
+            var boardDistrict = null;
+            if (results[2]) {
+              var bf = findFeatureContaining(results[2], point);
+              if (bf) boardDistrict = whitesideDistrictNumber(bf);
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              polling: polling
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          var p = result.polling;
+          if (p) {
+            var place = findPropCI(p, ["name"]);
+            if (place) fields.push({ label: "Polling place", value: String(place) });
+            var addr = findPropCI(p, ["fulladdr"]);
+            var city = findPropCI(p, ["municipality"]);
+            var zip = findPropCI(p, ["pstlzip5"]);
+            var line = [addr, [city, zip].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+            if (line) fields.push({ label: "Address", value: line });
+          }
+          fields.push({ label: "County", value: "Whiteside County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Whiteside County Clerk (official)",
+            url: "https://www.whitesidecountyil.gov/235/County-Clerk"
           };
         }
       }

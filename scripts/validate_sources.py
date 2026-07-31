@@ -355,6 +355,16 @@ PROVENANCE = [
              "phone, e-mail, and website only, so Lake ships contact-only cards "
              "— the rule-4 honesty floor (lake_municipal_officials_scraper.py). "
              "If a Lake roster ever appears, this is the entry to upgrade."},
+    {"layer": "Lee County Board roster",
+     "app_file": "lee-county-board-members.json",
+     "source_url": "https://www.leecountyil.com/419/Member-Contact-List",
+     "note": "The Clerk's Member Contact List — a PDF served at a page-looking URL, and "
+             "the only place Lee publishes its membership (the County Board page names "
+             "the Chair and Vice-Chair only). Read by WORD POSITION (pdfplumber): pypdf "
+             "flattens it into a name block and a separately-ordered e-mail block, so a "
+             "line-based read pairs members with the wrong addresses. The Board Chair is "
+             "identified by his row carrying the shared leecochair@countyoflee.org "
+             "address rather than a personal one."},
     {"layer": "LaSalle County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://lasallecountyil.gov/294/Officials",
@@ -523,6 +533,29 @@ ENDPOINTS = [
     # rebuild.
     {"layer": "Census TIGERweb 2020 voting districts (Ogle board-district dissolve)",
      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/58?f=json"},
+    # Lee's REST root is /leecogis — NOT /server or /arcgis, which is what an
+    # earlier pass tried before recording the county as unreachable. It was found
+    # the way LaSalle's, Winnebago's, Madison's and DeKalb's were: the portal's
+    # FEATURED GROUP (a plain search returns zero items) holds a "Voting Districts
+    # & Election Precincts" app whose web map names the root. The county DRAWS its
+    # four board districts, so the recorded precinct-dissolve blocker was moot.
+    {"layer": "Lee County Board districts (4, county GIS)",
+     "url": "https://gis.leecountyil.gov/leecogis/rest/services/Election/County_Board_Districts/MapServer/3?f=json"},
+    {"layer": "Lee County precincts (46) + fire districts (22)",
+     "url": "https://gis.leecountyil.gov/leecogis/rest/services/Election/Election_Precincts/MapServer/1?f=json"},
+    # Whiteside runs the Esri Elections solution. Its Electoral Districts layer
+    # holds EVERY office in one table keyed by electedoffice; only the three
+    # County Board rows are consumed, filtered in the loader so the overlay draws
+    # three shapes rather than twenty-one.
+    #
+    # DO NOT USE the same org's MyElectedRepresentatives service for
+    # officeholders: it carries the same board with DIFFERENT names, its
+    # dataLastEditDate is 2019-01-08, and only 11 of its 27 names appear on the
+    # county's current board page — where this layer matches 27/27. Two services,
+    # seven years apart, no naming cue; the edit date is the only tell.
+    {"layer": "Whiteside County electoral districts + precincts + polling places",
+     "url": ("https://services.arcgis.com/l0M0OC6J9QAHCiGx/arcgis/rest/services/"
+             "ElectionGeography_public/FeatureServer?f=json")},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

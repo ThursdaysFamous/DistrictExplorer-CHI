@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v34";
+const CACHE_NAME = "district-explorer-shell-v35";
 
 const SHELL_URLS = [
   "./",
@@ -95,6 +95,8 @@ const GEOMETRY_URLS = [
   "./data/app/stephenson-county-outline.json",
   "./data/app/stephenson-county-board-districts.json",
   "./data/app/carroll-county-outline.json",
+  "./data/app/lee-county-outline.json",
+  "./data/app/whiteside-county-outline.json",
   "./data/app/carroll-county-board-districts.json",
   "./data/app/livingston-county-board-districts.json",
   "./data/app/winnebago-judicial-subcircuits.json",
@@ -128,6 +130,7 @@ const ROSTER_URLS = [
   "./data/app/ogle-county-board-members.json",
   "./data/app/stephenson-county-board-members.json",
   "./data/app/carroll-county-board-members.json",
+  "./data/app/lee-county-board-members.json",
   "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
 ];
