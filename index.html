@@ -3038,7 +3038,14 @@ function initChiExplorer() {
    * MAP
    * ======================================================================= */
 
-  var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(METRO_CENTER, 11);
+  // minZoom 7, not 9: the served area is no longer a metro. It now runs from the
+  // Wisconsin line to the Metro East — 4.29° of latitude — and at zoom 9 that
+  // needs 2,049 px of vertical map, so the coverage ring could not be seen whole
+  // on any screen. Zoom 7 fits it on a phone, and fits all of Illinois (where the
+  // statewide layers answer) on a desktop pane. maxZoom 19 matches what the CARTO
+  // tile layer below already declares; the map was capped a level under its own
+  // basemap.
+  var map = L.map("map", { minZoom: 7, maxZoom: 19, zoomControl: false }).setView(METRO_CENTER, 11);
   L.control.zoom({ position: "bottomright" }).addTo(map);
   /* ==== ENGINE:BEGIN map-pan-filter ==== */
   // Pause the selection-highlight drop-shadow during pan/zoom (see the
@@ -3375,12 +3382,18 @@ function initChiExplorer() {
 
   /* ==== ENGINE:BEGIN permalink ==== */
   /* =========================================================================
-   * SHAREABLE URL — #point=lat,lng&layers=id1,id2 mirrors the current
+   * SHAREABLE URL — #point=lat,lng&layers=id1,id2&zoom=N mirrors the current
    * selection so any view can be copied out of the URL bar (or via the
    * point chip's Copy-link button) and restored on load. replaceState, not
    * location.hash assignment, so clicking around never pollutes the back
    * button. Parsed once at boot by applyStateFromHash().
    * ======================================================================= */
+
+  // The zoom this fork boots at, read from the map rather than configured, so
+  // the engine needs no per-metro constant and every fork gets its own default.
+  // Safe to capture here: nothing between map creation and this line changes the
+  // zoom, and applyStateFromHash() runs at the end of boot.
+  var bootZoom = map.getZoom();
 
   function syncUrlHash() {
     var parts = [];
@@ -3390,6 +3403,12 @@ function initChiExplorer() {
     var on = layers.filter(function (l) { return state.layersOn[l.id]; })
       .map(function (l) { return l.id; });
     if (on.length) parts.push("layers=" + on.join(","));
+    // Zoom rides the permalink because it is part of what was shared: an embed of
+    // a whole county answers a different question from an embed of one block, and
+    // a refresh should not throw the reader back to the default view. Emitted
+    // ONLY when the user has moved off the boot zoom, so an untouched map still
+    // produces a clean, hash-free URL.
+    if (map.getZoom() !== bootZoom) parts.push("zoom=" + map.getZoom());
     var hash = parts.length ? "#" + parts.join("&") : "";
     try {
       history.replaceState(null, "", hash || location.pathname + location.search);
@@ -3398,6 +3417,11 @@ function initChiExplorer() {
       // there is fine, everything else keeps working
     }
   }
+
+  // Point and layer changes call syncUrlHash themselves; zoom has no such hook,
+  // because a zoom changes no app state — only the view. zoomend fires once per
+  // gesture (not per animation frame), so this is a handful of replaceState calls.
+  map.on("zoomend", syncUrlHash);
 
   function applyStateFromHash() {
     var raw = location.hash.replace(/^#/, "");
@@ -3413,6 +3437,16 @@ function initChiExplorer() {
         if (box && !box.checked) box.click(); // a real click, so the change handler runs
       });
     }
+    // Parsed BEFORE the point, because the point's pan has to know about it.
+    // An unparseable or out-of-range zoom is ignored rather than clamped: a link
+    // from a fork with different limits should fall back to this fork's default
+    // view, not to its nearest edge.
+    var zoom = null;
+    if (params.zoom !== undefined) {
+      var wanted = parseInt(params.zoom, 10);
+      if (isFinite(wanted) && wanted >= map.getMinZoom() && wanted <= map.getMaxZoom()) zoom = wanted;
+    }
+    var framed = false;
     if (params.point) {
       var pieces = params.point.split(",");
       var lat = parseFloat(pieces[0]), lng = parseFloat(pieces[1]);
@@ -3420,9 +3454,20 @@ function initChiExplorer() {
       if (isFinite(lat) && isFinite(lng) &&
           lat > PERMALINK_GATE.minLat && lat < PERMALINK_GATE.maxLat &&
           lng > PERMALINK_GATE.minLng && lng < PERMALINK_GATE.maxLng) {
-        setSelectedPoint(lat, lng);
+        // skipPan when the link carries its own zoom, then frame it here.
+        // setSelectedPoint's pan is ANIMATED and animates to at least zoom 15;
+        // an animation in flight settles AFTER anything applied synchronously
+        // afterwards, so a shared zoom set post-hoc is silently overwritten by
+        // the pan that was already running. Measured, not theorised — that is
+        // exactly what #point=…&zoom=9 did before this branch existed.
+        setSelectedPoint(lat, lng, zoom === null ? null : { skipPan: true });
+        if (zoom !== null) {
+          map.setView([lat, lng], zoom, { animate: false });
+          framed = true;
+        }
       }
     }
+    if (zoom !== null && !framed) map.setView(map.getCenter(), zoom, { animate: false });
   }
 
   /* ==== ENGINE:END permalink ==== */
