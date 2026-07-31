@@ -710,6 +710,66 @@ one silently dropped him until the link pattern was widened. Anchor on the stabl
 (here the e-mail address) and walk outward, rather than trusting fixed offsets, and make
 the count floor the real roster size so a dropped member fails the run.
 
+**A count floor cannot see a swap, and two of them shipped (2026-07-31).** Ogle's
+yearbook parser passed its floor of 90 officials with 114 — while ten of those "officials"
+were sentences off the following page ("Other Special Districts", "www.census.gov") and
+the county's largest city was missing its entire council. The two errors ran in opposite
+directions, so no total moved enough to notice. Both were the same class of mistake: a
+parser right about the record SHAPE and wrong about where the shape STOPS. Two habits
+come out of it, and both are cheap:
+
+- **Bound a section by the next structural marker, not by the next heading you happened
+  to notice.** The end sentinel named the POLLING PLACES heading; GENERAL INFORMATION sat
+  between, its content was indented, and an open group accumulator ate it. The bound is
+  now "the next ALL-CAPS heading of any kind" — and it was *measured* before it was
+  adopted (four matching lines in the whole book, the first is the right one, none inside
+  a municipality block). A sentinel you have verified beats a sentinel you have guessed,
+  and a structural rule beats both.
+- **Read the built file back, grouped, before you ship it.** One `collections.Counter`
+  over board sizes per municipality showed a village with sixteen trustees and a city of
+  9,600 with none. Every count guard in the pipeline was green. Add this read to any pass
+  that touches a roster: per-key sizes sorted, eyes on the extremes.
+
+**A group-heading vocabulary is a list of words, and the list is never finished.**
+Rochelle's six seats are printed under "Councilmen". The parser knew Trustees, Council
+Members, Commissioners and Aldermen. One missing word cost a whole council silently,
+because an unrecognised heading is not an error — it is just a line that matches nothing.
+Where a parser keys on a closed vocabulary, either warn on an unmatched candidate line or
+assert that every municipality yielded a board; a floor over the total will not do it.
+
+**Two source rows can contradict each other, and "which is right" is sometimes
+answerable from law rather than from data.** DeKalb's yearbook prints Hinckley's Sarah
+Quirk as Village President AND as a Trustee. Illinois elects a village president to that
+office separately, and no one holds both seats at once, so exactly one row is stale —
+that is a fact about the offices, not a guess about the person. The head row wins (the
+more specific claim), the board row is dropped with a log line, and because the village
+is then one trustee short of its six, the shortfall is RECORDED as a gap rather than
+absorbed. The general rule: when a source is internally inconsistent, prefer the reading
+that a structural fact settles, drop the other loudly, and record what the drop costs.
+
+**Ask a served county what it still publishes — the answer is often "a lot".** DeKalb had
+been a dispatch county for five concepts and its clerk was publishing, untouched, the
+richest municipal document in the fleet: all 14 municipalities' full governing bodies
+with each seat's NEXT ELECTION date. Expansion attention naturally goes to the next
+county; the cheaper win is frequently the one already inside the ring.
+
+**Discover an annually restamped document from the page that links it, and anchor headings
+to whole lines.** DeKalb's yearbook lives on the CLERK's domain under
+`/wp-content/uploads/<year>/<month>/`, and is linked from the COUNTY's reference page.
+Hardcoding the stamped path goes stale in a year, so the scraper reads the link (the
+Carroll/Will pattern). And its two section headings appear TWICE in the book — once as
+the section, once in the index followed by dot leaders — so a substring search bounded the
+section to a few characters of dots. Match headings `^...$`.
+
+**Roster ahead of geometry is as common as the reverse, and it is the cheaper half to
+finish.** Five cities in this pass — La Salle, Peru, Earlville, Byron, Polo — already have
+every alderman in `municipal-officials.json` from their county clerk, keyed by ward, and
+publish no ward polygon anywhere (La Salle's ward map is a PNG). The moment any of them
+publishes geometry, the card names its seats with no roster work at all: DeKalb's four
+cities and Mendota went from nothing to named seats in one change because the roster was
+already there. When adding a county's municipal roster, capture the ward numbers even if
+no geometry exists yet — that is the half that makes the other half free.
+
 **Tier B — suburban municipal wards (SHIPPED 2026-07).** Shipped as **entries of the
 existing `ward` layer**, keyed by municipality (§2.1) — one toggle, one concept, whether
 Chicago calls it a ward or Joliet a council district. Sources: Cook GIS

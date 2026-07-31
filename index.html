@@ -10261,6 +10261,64 @@ function initChiExplorer() {
     });
   });
 
+  /* DeKalb's four ward-electing municipalities, each its own layer on the
+   * county's hosted org (the same one the county board, precincts and the three
+   * special districts come from): DeKalb 7 wards, Sycamore 4, Genoa 4, Sandwich
+   * 4. All four were last edited 2023-11 — after the post-2020-census redraw
+   * they would need to reflect, which is the measurement that decides whether a
+   * ward layer ships (cf. Whiteside's 2019 layer, a recorded gap).
+   *
+   * DeKalb's layer returns EIGHT polygons for seven wards: Ward 7 is published
+   * as two parts. Nothing special is needed for that — both parts carry the same
+   * ward number, so either one answers the same seat — but it is why the feature
+   * count and the ward count differ here and nowhere else.
+   *
+   * The municipality comes from the spec rather than the features' own Town
+   * field: the field is present on all four layers but the roster join keys on
+   * it, so a blank value on some future edit would silently unname a council. */
+  var DEKALB_WARD_LAYERS = [
+    { service: "DeKalb_Wards", municipality: "DeKalb" },
+    { service: "Sycamore_Wards", municipality: "Sycamore" },
+    { service: "Genoa_Wards", municipality: "Genoa" },
+    { service: "Sandwich_Wards", municipality: "Sandwich" }
+  ];
+  var loadDekalbWards = makeCached(function () {
+    return Promise.all(DEKALB_WARD_LAYERS.map(function (spec) {
+      return loadArcGISGeoJSON(DEKALB_GIS + spec.service + "/FeatureServer/0")
+        .then(function (geojson) {
+          return (geojson.features || []).map(function (f) {
+            var p = f.properties || {};
+            // Every layer writes "Ward 3", not 3.
+            var num = /(\d+)/.exec(String(findPropCI(p, ["ward"]) || ""));
+            return wardFeature(f, spec.municipality, "Ward", num ? num[1] : null);
+          });
+        }, function () { return null; }); // one city down: the others still draw
+    })).then(function (parts) {
+      var loaded = parts.filter(Boolean);
+      if (!loaded.length) throw new Error("DeKalb ward services returned no usable geometry");
+      return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
+    });
+  });
+
+  /* Mendota is the only one of LaSalle County's four ward-electing cities that
+   * publishes its wards as data — La Salle, Peru and Earlville publish none, on
+   * their own sites or anyone else's, and the county's GIS carries corporate
+   * boundaries but no wards (a recorded gap). The layer is the city's own, on
+   * its own ArcGIS org, last edited 2022-12. Its two aldermen per ward are
+   * already in the roster from the LaSalle clerk's directory, so this card names
+   * them the day it ships. */
+  var MENDOTA_WARD_SERVICE = "https://services6.arcgis.com/z8UuifZkerkF2dpG/" +
+    "arcgis/rest/services/Mendota_Wards/FeatureServer/0";
+  var loadMendotaWards = makeCached(function () {
+    return loadArcGISGeoJSON(MENDOTA_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var p = f.properties || {};
+        var num = /(\d+)/.exec(String(findPropCI(p, ["ward_name", "ward"]) || ""));
+        return wardFeature(f, "Mendota", "Ward", num ? num[1] : null);
+      }) };
+    });
+  });
+
   var loadWillWards = makeCached(function () {
     return Promise.all(WILL_WARD_LAYERS.map(function (spec) {
       return loadArcGISGeoJSON(WILL_WARD_SERVICE + "/" + spec.id).then(function (geojson) {
@@ -10567,7 +10625,9 @@ function initChiExplorer() {
       municipalWardEntry("will", loadWillWards),
       municipalWardEntry("aurora", loadAuroraWards),
       municipalWardEntry("rockford", loadRockfordWards),
-      municipalWardEntry("rock-island", loadRockIslandWards)
+      municipalWardEntry("rock-island", loadRockIslandWards),
+      municipalWardEntry("dekalb", loadDekalbWards),
+      municipalWardEntry("mendota", loadMendotaWards)
     ]
   });
   declareDataSource("ward", {

@@ -62,14 +62,23 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # and is deliberately absent: it was last edited 2019-11-05, before the
     # post-2020-census redraw it would need to reflect (recorded as a gap).
     "rock-island": ["Moline", "Silvis"],
+    # DeKalb County's own org publishes one ward layer per ward-electing
+    # municipality: DeKalb (7), Sycamore (4), Genoa (4), Sandwich (4), all
+    # edited 2023-11.
+    "dekalb": ["DeKalb", "Sycamore", "Genoa", "Sandwich"],
+    # Mendota is the only one of LaSalle County's four ward-electing cities that
+    # publishes ward geometry anywhere; La Salle, Peru and Earlville are a
+    # recorded gap. The layer is the city's own, edited 2022-12.
+    "mendota": ["Mendota"],
 }
 # Chicago's wards are the city's own Socrata layer with its own coverage test
 # (chicagoCoverage); it is never part of this file.
 EXCLUDE = {"CHICAGO"}
 
-# Deliberate under-tolerance: 26 municipalities resolved at build time
-# (21 suburban Cook + Evanston + 4 Will + Aurora, less any overlap).
-MIN_MUNICIPALITIES = 22
+# Deliberate under-tolerance against what the eight entries resolve to at build
+# time: 21 suburban Cook + Evanston + 4 Will + Aurora + Rockford + Moline +
+# Silvis + 4 DeKalb + Mendota, less any overlap.
+MIN_MUNICIPALITIES = 28
 
 
 # Ramer-Douglas-Peucker tolerance in degrees (~0.0004 deg ≈ 45 m at this

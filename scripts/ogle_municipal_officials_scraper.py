@@ -27,9 +27,17 @@ WHAT IS DELIBERATELY NOT COLLECTED:
     with appointed=True so a card can never imply they were elected, matching
     the LaSalle payload.
 
-The section runs to the "OGLE COUNTY POLLING PLACES" heading; the TOWNSHIP
-officials that precede it are a different body and are not municipal officers,
-so parsing starts at the CITIES & VILLAGES heading rather than at page 1.
+WHERE THE SECTION ENDS, and why that took two goes. Parsing starts at the
+CITIES & VILLAGES heading — the TOWNSHIP officials before it are a different
+body, not municipal officers. It used to END at "OGLE COUNTY POLLING PLACES",
+which is one heading too late: "GENERAL INFORMATION" sits between them, and its
+levy-deadline block is INDENTED, so the last municipality's still-open
+"Trustees" group swallowed it. Stillman Valley shipped ten trustees who are
+phrases — "Other Special Districts", "Library Districts Townships",
+"www.census.gov". The bound is now the next ALL-CAPS heading of any kind, which
+is measured, not assumed: across the whole 2025-2027 book only four lines match
+that shape after the start, the first is GENERAL INFORMATION, and no line inside
+any municipality block matches it at all.
 
 Usage:
     python3 ogle_municipal_officials_scraper.py --out ogle_municipal_officials.json
@@ -60,7 +68,10 @@ HEADERS = {
 REQUEST_TIMEOUT = 120
 
 START_RE = re.compile(r"OGLE COUNTY CITIES\s*&\s*VILLAGES", re.I)
-END_RE = re.compile(r"OGLE COUNTY POLLING PLACES", re.I)
+# The section ends at the book's next ALL-CAPS heading — see the module
+# docstring for why a named sentinel was the wrong bound. Anchored to a whole
+# line so a capitalised fragment inside an address can never end the section.
+SECTION_HEADING_RE = re.compile(r"^[A-Z][A-Z0-9 &.'’/-]{5,}$")
 MUNI_RE = re.compile(r"^(City|Village|Town) of ([A-Z][A-Za-z .'/-]+?)\s*$")
 # Adeline writes "Phone: President - 815-535-3572  Clerk - 815-440-2736", so the
 # gap between the word and the first digits is wider than a tight bound allows.
@@ -84,8 +95,12 @@ WARD_SEAT_RE = re.compile(r"^(Alderman|Alderperson|Alderwoman|Councilman|Council
 OFFICE_RE = re.compile(r"^(Mayor|President|Pres\.?|Clerk|Deputy Clerk|Treasurer|Collector|"
                        r"City Manager|Village Administrator|City Administrator|Administrator|"
                        r"Superintendent(?: of Public Works)?)\s+(.+?)\s*$", re.I)
-# A bare group heading whose members follow one per indented line.
-GROUP_RE = re.compile(r"^(Trustees|Council Members|Commissioners|Aldermen)\s*$", re.I)
+# A bare group heading whose members follow one per indented line. "Councilmen"
+# is Rochelle's word for its six at-large council seats, and its absence here
+# was why the county's largest city shipped with a mayor, a clerk, a treasurer
+# and no council at all.
+GROUP_RE = re.compile(r"^(Trustees|Council Members|Councilmen|Councilwomen|"
+                      r"Commissioners|Aldermen)\s*$", re.I)
 
 APPOINTED = {"deputy clerk", "city manager", "village administrator",
              "city administrator", "administrator", "superintendent",
@@ -119,7 +134,16 @@ def fetch_pdf(url):
     return resp.content
 
 
-def section_lines(pdf_bytes):
+# The headings this section has actually ended at. The bound is structural (the
+# next ALL-CAPS heading) so a NEW heading still terminates correctly — but a
+# stray capitalised line INSIDE the section would also terminate it, and losing
+# the last one or two municipalities could slip under the count floors. So an
+# unfamiliar terminator is reported: the run still writes, and the weekly PR
+# carries the warning for a human.
+KNOWN_END_HEADINGS = {"GENERAL INFORMATION", "OGLE COUNTY POLLING PLACES"}
+
+
+def section_lines(pdf_bytes, warnings=None):
     if pypdf is None:
         raise RuntimeError("pypdf is required (pip install -c scripts/requirements.txt pypdf)")
     reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
@@ -128,9 +152,20 @@ def section_lines(pdf_bytes):
     if not start:
         raise RuntimeError("could not find the CITIES & VILLAGES heading — the "
                            "yearbook's layout changed")
-    end = END_RE.search(text, start.end())
-    body = text[start.end(): end.start() if end else len(text)]
-    return [l.rstrip() for l in body.split("\n")]
+    lines = [l.rstrip() for l in text[start.end():].split("\n")]
+    for i, line in enumerate(lines):
+        heading = line.strip()
+        if SECTION_HEADING_RE.match(heading):
+            print("  section ends at %r (line %d)" % (heading, i), file=sys.stderr)
+            if warnings is not None and re.sub(r"\s+", " ", heading) not in KNOWN_END_HEADINGS:
+                warnings.append("section ended at an unfamiliar heading %r — check "
+                                "that no municipality was cut off" % heading)
+            return lines[:i]
+    # Every edition so far ends the section with a heading. If one stops doing
+    # so, the run should say why the shape changed rather than parse the rest of
+    # the book as though it were still municipal officers.
+    raise RuntimeError("no ALL-CAPS heading follows the CITIES & VILLAGES "
+                       "section — the yearbook's layout changed")
 
 
 def parse(lines, warnings):
@@ -273,7 +308,7 @@ def main():
     pdf_bytes = open(args.pdf, "rb").read() if args.pdf else fetch_pdf(YEARBOOK_URL)
     warnings = []
     try:
-        municipalities, officials = parse(section_lines(pdf_bytes), warnings)
+        municipalities, officials = parse(section_lines(pdf_bytes, warnings), warnings)
     except Exception as e:  # noqa: BLE001
         print("FATAL: %s" % e, file=sys.stderr)
         sys.exit(1)

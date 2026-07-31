@@ -2518,6 +2518,60 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://coalcity-il.gov"
   },
+  "1716470": {
+    "board": [
+      {
+        "name": "Brad Stone",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Charmaine Fioretto",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Doug Corson",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mike Siewierski",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Randi Olson",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Victoria Haier",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Mark Pietrowski, Jr",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "Town of Cortland",
+    "office": {
+      "address": "59 S. Somonauk Rd., Cortland IL 60112",
+      "phone": "815-756-9041"
+    },
+    "officers": [
+      {
+        "name": "Cheryl Aldis",
+        "nextElection": "2029",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.cortlandil.org"
+  },
   "1716691": {
     "board": [
       {
@@ -3161,6 +3215,72 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofdeerpark.com"
+  },
+  "1719161": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Carolyn Morris Zasada",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Barb Larson",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Tracy Smith",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Justin Carlson",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "5",
+        "name": "Andre Powell",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "6",
+        "name": "Mike Verbic",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "7",
+        "name": "John Walker",
+        "nextElection": "2027",
+        "role": "Alderman"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Cohen Barnes",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of DeKalb",
+    "office": {
+      "address": "164 E. Lincoln Hwy., DeKalb IL 60115",
+      "phone": "815-748-2000"
+    },
+    "officers": [
+      {
+        "name": "Bradley Hoey",
+        "nextElection": "2029",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.cityofdekalb.com"
   },
   "1719642": {
     "board": [
@@ -4461,6 +4581,78 @@
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.geneva.il.us"
   },
+  "1728898": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Christopher Pulley",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Pam Wesner",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Melissa Freund",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Walter Stage",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Courtney Winter",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Kendra Braheny",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Dean Gudeman",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Gary Roca",
+        "nextElection": "2027",
+        "role": "Alderman"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Jonathan Brust",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Genoa",
+    "office": {
+      "address": "333 E. First St., Genoa IL 60135",
+      "phone": "815-784-2327"
+    },
+    "officers": [
+      {
+        "name": "Becca Stevenson",
+        "nextElection": "2029",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.genoa-il.com"
+  },
   "1729093": {
     "board": [
       {
@@ -5443,6 +5635,55 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://hillside-il.org"
   },
+  "1735268": {
+    "board": [
+      {
+        "name": "Alyssa Prickett",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brian Siwicki",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Klambauer",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Russell Kula",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steve Gayhart",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Sarah Quirk",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Hinckley",
+    "office": {
+      "address": "720 James St., Hinckley IL 60520",
+      "phone": "815-286-3836"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Elizabeth Losiniecki",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://hinckleyil.com"
+  },
   "1735307": {
     "board": [
       {
@@ -6308,6 +6549,114 @@
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "https://villageofkildeer.com/"
   },
+  "1740065": {
+    "board": [
+      {
+        "name": "Dale Coughran",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Howard Lyle",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joe Hengels",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert Ruehl, Jr.",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steve Van Buren",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Todd Holman",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Brad Edwards",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Kingston",
+    "office": {
+      "address": "101 E. Railroad St., Kingston IL 60145",
+      "phone": "815-784-5572"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Sandie Maahs",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.villageofkingston.org"
+  },
+  "1740156": {
+    "board": [
+      {
+        "name": "Brian Benes",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dan Chambers",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Erik Marshall",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jessica Fruit",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Michener",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah Ziegler",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Ryan Block",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Kirkland",
+    "office": {
+      "address": "511 W. Main St., Kirkland IL 60146",
+      "phone": "815-522-6179"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Leslie Scidmore",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://villageofkirkland.com"
+  },
   "1740767": {
     "board": [
       {
@@ -6732,6 +7081,60 @@
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
     "url": "https://www.villageofleafriver.com"
+  },
+  "1742587": {
+    "board": [
+      {
+        "name": "Dawn Kimpflin",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Garet Galbreath",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Justin Post",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Margaret Foshe",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mitchell Hamm",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Stacey McElligott-Schnupp",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Steven Carlock",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Lee",
+    "office": {
+      "address": "P.O. Box 65, Lee IL 60530",
+      "phone": "815-824-2323"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Dawn Woodbury",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.villageoflee.com"
   },
   "1742756": {
     "board": [
@@ -7528,6 +7931,60 @@
     "name": "Village of Machesney Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
+  "1746279": {
+    "board": [
+      {
+        "name": "Brenda Jergens",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Christie Manis",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donald Haeffner",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Malerie Schumaker",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tammy Arneson",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tom Folowell",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Robert Iversen",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Malta",
+    "office": {
+      "address": "120 S. Third St., Malta IL 60150",
+      "phone": "815-825-2330"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Mary Johanson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.villageofmaltail.com"
+  },
   "1746357": {
     "board": [
       {
@@ -7590,25 +8047,58 @@
     "url": "https://villageofmanhattan.org"
   },
   "1746604": {
-    "county": "Kane",
+    "board": [
+      {
+        "name": "Andy Bingley",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cliff Speare",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "David “Chris” Simon",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "JT Peloso",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Ward",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tonia Groezinger",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
     "head": {
-      "name": "Chris Rebone",
+      "name": "Christian Rebone",
+      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Maple Park",
     "office": {
-      "address": "302 Willow St. (P.O. Box 220), Maple Park IL 60151",
-      "email": "crebone@villageofmaplepark.com",
+      "address": "302 Willow St., Maple Park IL 60151",
       "phone": "815-827-3309"
     },
     "officers": [
       {
-        "name": "Claudia Tremaine",
+        "appointed": true,
+        "name": "Caryn Minor",
         "role": "Clerk"
       }
     ],
-    "sourceUrl": "https://clerk.kanecountyil.gov/elections",
-    "url": "https://www.villageofmaplepark.org"
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://villageofmaplepark.org"
   },
   "1746786": {
     "county": "McHenry",
@@ -11351,6 +11841,32 @@
     "url": "https://robbins-il.com"
   },
   "1764746": {
+    "board": [
+      {
+        "name": "Benjamin Valdivieso",
+        "role": "Council Member"
+      },
+      {
+        "name": "Dan McDermott",
+        "role": "Council Member"
+      },
+      {
+        "name": "Kathryn Shaw-Dickey",
+        "role": "Council Member"
+      },
+      {
+        "name": "Rosaelia Arteaga",
+        "role": "Council Member"
+      },
+      {
+        "name": "Tom McDermott",
+        "role": "Council Member"
+      },
+      {
+        "name": "William “Bil” Hayes",
+        "role": "Council Member"
+      }
+    ],
     "county": "Ogle",
     "head": {
       "name": "John Bearrows",
@@ -11978,29 +12494,81 @@
     "url": "https://www.stcharlesil.gov"
   },
   "1767548": {
-    "county": "Kendall",
+    "board": [
+      {
+        "district": "1",
+        "name": "Matt Chunn",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Richard Robinson",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Adam Arnett",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Genelle Inman",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Jay Ketchum",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Karsta Erickson",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Donald Danko",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Fred Kreinbrink",
+        "nextElection": "2027",
+        "role": "Alderman"
+      }
+    ],
+    "county": "DeKalb",
     "head": {
-      "lastElected": "2025",
       "name": "Todd Latham",
+      "nextElection": "2029",
       "role": "Mayor"
     },
     "name": "City of Sandwich",
     "office": {
-      "address": "144 E. Railroad Street, Sandwich IL 60548",
+      "address": "144 E. Railroad St., Sandwich IL 60548",
       "phone": "815-786-9321"
     },
     "officers": [
       {
         "name": "Denise Ii",
+        "nextElection": "2029",
         "role": "Clerk"
       },
       {
         "name": "Sandra Koehler",
+        "nextElection": "2029",
         "role": "Treasurer"
       }
     ],
-    "sourceUrl": "https://www.kendallcountyil.gov/offices/county-clerk-recorder/election-voter-information",
-    "url": "https://www.sandwich.il.us"
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "http://sandwich.il.us"
   },
   "1767769": {
     "board": [
@@ -12220,6 +12788,60 @@
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
+  "1768822": {
+    "board": [
+      {
+        "name": "Denny Sands",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jeff Jefko",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joshua Snyder",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kallan Walsh",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Stanley",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard Lockowitz",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Frank Ottengheime",
+      "nextElection": "2027",
+      "role": "President"
+    },
+    "name": "Village of Shabbona",
+    "office": {
+      "address": "206 S. Blackhawk St., Shabbona IL 60550",
+      "phone": "815-824-2127"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Jennifer Morrison",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "http://shabbona-il.com"
+  },
   "1768991": {
     "county": "Carroll",
     "head": {
@@ -12435,43 +13057,50 @@
     "board": [
       {
         "name": "Bradley Eade",
-        "phone": "815-826-0865",
-        "role": "Trustee"
-      },
-      {
-        "name": "James \"Doc\" Dockendorf",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Jason Diebold",
+        "nextElection": "2027",
         "role": "Trustee"
       },
       {
-        "name": "Jonathan “Jake” Whiteaker",
-        "phone": "815-761-9860",
+        "name": "Jim Dockendorf",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Johnathan Whitaker",
+        "nextElection": "2029",
         "role": "Trustee"
       },
       {
         "name": "Richard McMillen",
+        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
-    "county": "LaSalle",
+    "county": "DeKalb",
     "head": {
       "name": "Aaron Grandgeorge",
-      "phone": "815-719-0098",
+      "nextElection": "2027",
       "role": "President"
     },
     "name": "Village of Somonauk",
+    "office": {
+      "address": "131 S. Depot St., Somonauk IL 60552",
+      "phone": "815-498-3500"
+    },
     "officers": [
       {
         "appointed": true,
         "name": "Rebecca Morphey",
-        "phone": "815-498-3500",
-        "role": "Administrator"
+        "role": "Clerk"
       }
     ],
-    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://www.vil.somonauk.il.us"
   },
   "1770564": {
     "board": [
@@ -12803,19 +13432,7 @@
   "1772702": {
     "board": [
       {
-        "name": "Counties under 1 million Museum Districts",
-        "role": "Trustee"
-      },
-      {
         "name": "Dea Connell",
-        "role": "Trustee"
-      },
-      {
-        "name": "Final adjournment on or before September 7th",
-        "role": "Trustee"
-      },
-      {
-        "name": "Forest Preserve Districts Cities & Villages",
         "role": "Trustee"
       },
       {
@@ -12827,19 +13444,7 @@
         "role": "Trustee"
       },
       {
-        "name": "Library Districts Townships",
-        "role": "Trustee"
-      },
-      {
         "name": "Nance’ J Lorenz",
-        "role": "Trustee"
-      },
-      {
-        "name": "Other Special Districts",
-        "role": "Trustee"
-      },
-      {
-        "name": "Park Districts Fire Protection Districts",
         "role": "Trustee"
       },
       {
@@ -12847,23 +13452,7 @@
         "role": "Trustee"
       },
       {
-        "name": "Road Districts School Districts",
-        "role": "Trustee"
-      },
-      {
         "name": "Tamara ‘Tammy’ Long",
-        "role": "Trustee"
-      },
-      {
-        "name": "The County Clerk will compute rates on the assessed valuation of",
-        "role": "Trustee"
-      },
-      {
-        "name": "The deadline for filing levies from the following districts is the last",
-        "role": "Trustee"
-      },
-      {
-        "name": "www.census.gov",
         "role": "Trustee"
       }
     ],
@@ -13124,6 +13713,78 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://summit-il.org"
+  },
+  "1774223": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Alan Bauer",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Alicia Cosky",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Chuck Stowe",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Mike Rodriguez",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Marvin Barnes",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Nancy M. Copple",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "David Stouffer",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Virginia Sherrod",
+        "nextElection": "2029",
+        "role": "Alderman"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Steve Braser",
+      "nextElection": "2025",
+      "role": "Mayor"
+    },
+    "name": "City of Sycamore",
+    "office": {
+      "address": "308 W. State St., Sycamore IL 60178",
+      "phone": "815-895-4515"
+    },
+    "officers": [
+      {
+        "name": "Mary Kalk",
+        "nextElection": "2029",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://cityofsycamore.com"
   },
   "1774275": {
     "board": [
@@ -13593,6 +14254,60 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.warrenville.il.us"
+  },
+  "1779163": {
+    "board": [
+      {
+        "name": "Adam Pearson",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Alison Genslinger",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Arnie Johanningsmeier",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Corey Wade",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah Radtke",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Taylor Edward-Joy",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "DeKalb",
+    "head": {
+      "name": "Anton Feitlich",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Waterman",
+    "office": {
+      "address": "215 W. Adams St., Waterman IL 60556",
+      "phone": "815-264-3652"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Abigail Penton",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
+    "url": "https://villageofwaterman.com"
   },
   "1779267": {
     "county": "Lake",

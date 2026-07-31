@@ -15,6 +15,7 @@ name: Update municipal officials roster
 #   Winnebago  — WinGIS per-municipality officeholder layers     (full body)
 #   Ogle       — Clerk's County Yearbook PDF                     (full body)
 #   Stephenson — county Cities & Villages directory page         (full body)
+#   DeKalb     — Clerk's Reference Yearbook PDF                  (full body)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
 #   Kane       — Clerk's Government Guide PDF                    (head + clerk)
 #   McHenry    — Clerk's County Yearbook page                    (head + clerk)
@@ -160,6 +161,15 @@ jobs:
         continue-on-error: true
         run: python3 scripts/carroll_municipal_officials_scraper.py --out /tmp/carroll_municipal_officials.json
 
+      # DeKalb: the SEVENTH full-governing-body source, and the only one that
+      # dates every seat's next election. Its yearbook link is discovered from
+      # the county's reference page rather than hardcoded — the PDF lives on the
+      # clerk's own domain under a month-stamped path that changes annually.
+      - name: Scrape the DeKalb County Clerk reference yearbook
+        id: scrape_dekalb
+        continue-on-error: true
+        run: python3 scripts/dekalb_municipal_officials_scraper.py --out /tmp/dekalb_municipal_officials.json
+
       # Freeport is the ONLY municipality in Stephenson County that its county
       # page omits — and it is the county seat, holding more than half the
       # county's municipal population. The city publishes its own governing body
@@ -210,7 +220,8 @@ jobs:
           steps.scrape_lake.outcome == 'failure' || steps.scrape_will_cities.outcome == 'failure' ||
           steps.scrape_skokie.outcome == 'failure' || steps.scrape_joliet.outcome == 'failure' ||
           steps.scrape_ogle.outcome == 'failure' || steps.scrape_stephenson.outcome == 'failure' ||
-          steps.scrape_carroll.outcome == 'failure' || steps.scrape_freeport.outcome == 'failure'
+          steps.scrape_carroll.outcome == 'failure' || steps.scrape_freeport.outcome == 'failure' ||
+          steps.scrape_dekalb.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           COOK_OUTCOME: ${{ steps.scrape_cook.outcome }}
@@ -227,6 +238,7 @@ jobs:
           STEPHENSON_OUTCOME: ${{ steps.scrape_stephenson.outcome }}
           CARROLL_OUTCOME: ${{ steps.scrape_carroll.outcome }}
           FREEPORT_OUTCOME: ${{ steps.scrape_freeport.outcome }}
+          DEKALB_OUTCOME: ${{ steps.scrape_dekalb.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -255,6 +267,7 @@ jobs:
           if [ "$STEPHENSON_OUTCOME" = "failure" ]; then raise_issue "Stephenson"; fi
           if [ "$CARROLL_OUTCOME" = "failure" ]; then raise_issue "Carroll"; fi
           if [ "$FREEPORT_OUTCOME" = "failure" ]; then raise_issue "Freeport council"; fi
+          if [ "$DEKALB_OUTCOME" = "failure" ]; then raise_issue "DeKalb"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -291,6 +304,7 @@ jobs:
           add "${{ steps.scrape_ogle.outcome }}"        ogle        county /tmp/ogle_municipal_officials.json
           add "${{ steps.scrape_stephenson.outcome }}"  stephenson  county /tmp/stephenson_municipal_officials.json
           add "${{ steps.scrape_carroll.outcome }}"     carroll     county /tmp/carroll_municipal_officials.json
+          add "${{ steps.scrape_dekalb.outcome }}"      dekalb      county /tmp/dekalb_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
