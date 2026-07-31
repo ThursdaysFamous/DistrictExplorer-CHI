@@ -45,7 +45,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 PLACES_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_place_by_county2020.txt")
 
-# Census county FIPS for the seven metro counties, for county-preferred lookup.
+# Census county FIPS for every sourced county, for county-preferred lookup.
 COUNTY_FIPS = {
     "Cook": "031",
     "LaSalle": "099",
@@ -56,6 +56,9 @@ COUNTY_FIPS = {
     "McHenry": "111",
     "Winnebago": "201",
     "Will": "197",
+    "Ogle": "141",
+    "Stephenson": "177",
+    "Carroll": "015",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -64,15 +67,17 @@ COUNTY_FIPS = {
 # prints a warning — new office types get a human's attention, never a silent
 # drop.
 HEAD_OFFICES = {"mayor", "president", "village president"}
-BOARD_OFFICES = {"trustee", "alderperson", "alderman", "council member",
-                 "commissioner", "councilman", "councilwoman", "councilperson"}
+BOARD_OFFICES = {"trustee", "alderperson", "alderman", "alderwoman",
+                 "council member", "commissioner", "councilman", "councilwoman",
+                 "councilperson"}
 OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
                    "taxpayer advocate", "collector", "supervisor",
                    # appointed staff LaSalle prints beside the elected officers;
                    # the record carries appointed=True so a card never implies
                    # these were elected
                    "deputy clerk", "administrator", "village administrator",
-                   "city administrator"}
+                   "city administrator", "city manager", "village manager",
+                   "superintendent", "superintendent of public works"}
 
 # Per-county floors: deliberate under-tolerances against the verified 2026-07
 # live values (Cook 128 municipalities / 1,035 governing records / 128 heads;
@@ -102,6 +107,20 @@ COUNTY_FLOORS = {
     # member/head floors are 0 BY DESIGN — the municipality count is the real
     # guard. See lake_municipal_officials_scraper.py.
     "Lake": {"municipalities": 48, "members": 0, "heads": 0},            # 55 / 0 / 0
+    # The northern frontier (2026-07 live values in parentheses). Ogle and
+    # Stephenson are full-governing-body sources; Carroll is mayor-level, so its
+    # `members` counts the head plus the clerk only.
+    "Ogle": {"municipalities": 11, "members": 90, "heads": 11},          # 13 / 114 / 13
+    # HEADS IS BELOW MUNICIPALITIES ON PURPOSE for Stephenson: the county's page
+    # lists no president for Dakota (one Dakota row carries a name and a blank
+    # office cell), so a floor of 10 heads would fail on correct data. Freeport
+    # is not counted here at all — the county page omits it and the city's own
+    # payload supplies it through --enrich.
+    "Stephenson": {"municipalities": 9, "members": 70, "heads": 7},      # 10 / 82 / 9
+    # Carroll's whole county is seven municipalities, so the floors sit only
+    # one or two under the full set. Thomson's president is vacant, which is why
+    # heads is two under the municipality count rather than one.
+    "Carroll": {"municipalities": 6, "members": 11, "heads": 5},         # 7 / 13 / 6
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); all seven counties
@@ -144,9 +163,13 @@ PRESERVABLE = {
     "mchenry": {"kind": "county", "county": "McHenry"},
     "kendall": {"kind": "county", "county": "Kendall"},
     "lake": {"kind": "county", "county": "Lake"},
+    "ogle": {"kind": "county", "county": "Ogle"},
+    "stephenson": {"kind": "county", "county": "Stephenson"},
+    "carroll": {"kind": "county", "county": "Carroll"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
+    "freeport": {"kind": "enrich", "places": ["City of Freeport"]},
     "will-cities": {"kind": "enrich",
                     "places": ["City of Crest Hill", "City of Lockport",
                                "City of Wilmington"]},
@@ -159,37 +182,62 @@ PRESERVABLE = {
 # this is a freshness call, not a correctness one: Cook's is a live API
 # reflecting each election as it is certified, Will's is an annually
 # republished directory.
-COUNTY_PRECEDENCE = ["Cook", "Will", "LaSalle", "Winnebago", "DuPage", "Kane",
-                     "Kendall", "McHenry", "Lake"]
+COUNTY_PRECEDENCE = ["Cook", "Will", "LaSalle", "Winnebago", "Ogle", "Stephenson",
+                     "DuPage", "Kane", "Kendall", "McHenry", "Carroll", "Lake"]
+
+
+def _fold(text):
+    """Shared tail of both normalizers: expand "Mt.", then letters only.
+
+    Carroll's clerk writes its county seat "Mt. Carroll"; Census writes
+    "Mount Carroll". Expanded rather than aliased because it is an abbreviation
+    of one word, not a different name, and every Illinois place spelled "Mt." on
+    some source is "Mount" in the Census file.
+    """
+    text = re.sub(r"^Mt\.?(?=\s|$)", "Mount", (text or "").strip(), flags=re.I)
+    return re.sub(r"[^A-Z]", "", text.upper())
+
+
+def norm_census_place(name):
+    """Normalize a name from the Census reference file, which SUFFIXES the form.
+
+    "Calumet City city" -> CALUMETCITY, "Rock City village" -> ROCKCITY.
+    """
+    return _fold(re.sub(r"\s+(village|city|town|CDP)$", "", (name or "").strip(),
+                        flags=re.I))
 
 
 def norm_place(name):
-    """Normalize a municipality name to letters only for joining.
+    """Normalize a name from a county/city SOURCE, which PREFIXES the form.
 
-    The two sides label the government form on opposite ends — the clerk
-    writes "City of Calumet City", Census writes "Calumet City city" — so the
-    strip is either/or, never both. Stripping both would reduce the clerk's
-    "City of Calumet City" to "Calumet" and miss the join.
+    The two sides label the government form on opposite ends — the clerk writes
+    "City of Calumet City", Census writes "Calumet City city" — so each side
+    gets its own strip. Doing both here is what this function used to do, and it
+    was wrong in both directions: it reduced the clerk's "City of Calumet City"
+    to "Calumet", and for a source that publishes BARE names (Stephenson's
+    county page, Winnebago's GIS layers) it ate the second word of "Rock City"
+    and left "Rock", which matches no Census place at all.
     """
     text = (name or "").strip()
     # "United City of Yorkville" is Yorkville's legal name and the form its
     # county clerk prints; Census lists it as "Yorkville city". The optional
     # qualifier keeps that join working without a per-place alias.
-    prefixed = re.sub(r"^(?:united\s+)?(village|city|town)\s+of\s+", "", text, flags=re.I)
-    if prefixed != text:
-        text = prefixed
-    else:
-        text = re.sub(r"\s+(village|city|town|CDP)$", "", text, flags=re.I)
-    return re.sub(r"[^A-Z]", "", text.upper())
+    return _fold(re.sub(r"^(?:united\s+)?(village|city|town)\s+of\s+", "", text,
+                        flags=re.I))
 
 
 def load_places(path):
-    """-> {county_fips: {normname: geoid}}, {normname: set(geoid)} statewide."""
+    """-> ({county_fips: {norm: geoid}}, {norm: set(geoid)}, {geoid: legal name}).
+
+    The third map is the Census's own "<Name> <village|city|town>" wording,
+    re-ordered into the "Village of <Name>" form the app's card labels read.
+    """
     if not os.path.exists(path):
         print("FATAL: Census place reference missing at %s" % path, file=sys.stderr)
         sys.exit(1)
     by_county = defaultdict(dict)
     statewide = defaultdict(set)
+    legal = {}
     with open(path, encoding="utf-8-sig") as f:
         rows = [line.rstrip("\n").split("|") for line in f if line.strip()]
     header = rows[0]
@@ -199,14 +247,18 @@ def load_places(path):
         rec = dict(zip(header, row))
         if rec.get("TYPE") != "INCORPORATED PLACE":
             continue
-        key = norm_place(rec["PLACENAME"])
+        key = norm_census_place(rec["PLACENAME"])
         geoid = "17" + rec["PLACEFP"]
         by_county[rec["COUNTYFP"]][key] = geoid
         statewide[key].add(geoid)
+        form = re.search(r"\s+(village|city|town)$", rec["PLACENAME"], flags=re.I)
+        if form:
+            legal[geoid] = "%s of %s" % (form.group(1).capitalize(),
+                                         rec["PLACENAME"][:form.start()].strip())
     if not statewide:
         print("FATAL: no incorporated places parsed from %s" % path, file=sys.stderr)
         sys.exit(1)
-    return by_county, statewide
+    return by_county, statewide, legal
 
 
 def resolve_geoid(name, county, by_county, statewide):
@@ -303,7 +355,7 @@ def normalize_website(url):
     return url
 
 
-def build_county(payload, by_county, statewide, warnings, apply_floors=True):
+def build_county(payload, by_county, statewide, legal, warnings, apply_floors=True):
     county = payload.get("county") or "?"
     grouped = defaultdict(list)
     for rec in payload.get("officials") or []:
@@ -381,7 +433,19 @@ def build_county(payload, by_county, statewide, warnings, apply_floors=True):
         board.sort(key=district_sort_key)
         officers.sort(key=lambda m: (m.get("role") or "", m.get("name") or ""))
 
-        entry = {"name": jurisdiction, "county": county}
+        # The card's hall and body labels read the legal form off this name
+        # ("Village of Alsip" -> "Village Hall"), so a source that publishes
+        # BARE names — Stephenson's county page, Winnebago's GIS layers — would
+        # otherwise land on the generic "Municipal Hall". The form comes from
+        # the Census reference file's own designation ("Rock City village"),
+        # not from an inference about the place. A source that already states
+        # the form keeps its own wording: "United City of Yorkville" is the
+        # city's legal name and the Census's plain "City of Yorkville" would be
+        # a downgrade, not a fix.
+        entry = {"name": legal.get(geoid, jurisdiction)
+                 if not re.match(r"^(?:united\s+)?(village|city|town)\s+of\s+",
+                                 jurisdiction, flags=re.I) else jurisdiction,
+                 "county": county}
         # Chicago's 50 ward seats are published under a different jurisdiction
         # type and answered by the `ward` layer, so this card points there
         # instead of implying the city has no council.
@@ -583,7 +647,7 @@ def main():
         with open(args.preserve) as f:
             shipped = json.load(f)
 
-    by_county, statewide = load_places(args.places)
+    by_county, statewide, legal = load_places(args.places)
 
     roster = {}
     warnings = []
@@ -609,7 +673,7 @@ def main():
         with open(path) as f:
             payload = json.load(f)
         supplied_counties.add(payload.get("county"))
-        entries = build_county(payload, by_county, statewide, warnings)
+        entries = build_county(payload, by_county, statewide, legal, warnings)
         for geoid, entry in entries.items():
             absorb(geoid, entry)
 
@@ -653,7 +717,7 @@ def main():
     for path in args.enrich:
         with open(path) as f:
             payload = json.load(f)
-        entries = build_county(payload, by_county, statewide, warnings,
+        entries = build_county(payload, by_county, statewide, legal, warnings,
                                apply_floors=False)
         for geoid, entry in entries.items():
             if geoid not in roster:

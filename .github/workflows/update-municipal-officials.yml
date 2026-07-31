@@ -6,16 +6,27 @@ name: Update municipal officials roster
 # rather than committing directly to main — officeholder data should get a
 # human look before it ships.
 #
-# All seven metro counties are sourced (docs/EXPANSION_GUIDE.md Part 2.4),
-# each at the depth its county actually publishes:
-#   Cook     — Clerk's Directory of Elected Officials JSON API (full body)
-#   Will     — Clerk's Will County Directory flipbook          (full body)
-#   DuPage   — DMMC Membership Directory PDF                   (head only)
-#   Kane     — Clerk's Government Guide PDF                    (head + clerk)
-#   McHenry  — Clerk's County Yearbook page                    (head + clerk)
-#   Kendall  — Clerk's Yearbook & Government Guide PDF         (head + clerk)
-#   Lake     — county GIS Municipalities service        (hall contact only —
-#              Lake publishes no officeholder names anywhere county-side)
+# All seven metro counties are sourced (docs/EXPANSION_GUIDE.md Part 2.4), plus
+# every county the app has since taken on, each at the depth its county actually
+# publishes:
+#   Cook       — Clerk's Directory of Elected Officials JSON API (full body)
+#   Will       — Clerk's Will County Directory flipbook          (full body)
+#   LaSalle    — Clerk's municipal officials PDF                 (full body)
+#   Winnebago  — WinGIS per-municipality officeholder layers     (full body)
+#   Ogle       — Clerk's County Yearbook PDF                     (full body)
+#   Stephenson — county Cities & Villages directory page         (full body)
+#   DuPage     — DMMC Membership Directory PDF                   (head only)
+#   Kane       — Clerk's Government Guide PDF                    (head + clerk)
+#   McHenry    — Clerk's County Yearbook page                    (head + clerk)
+#   Kendall    — Clerk's Yearbook & Government Guide PDF         (head + clerk)
+#   Carroll    — Clerk's County Yearbook PDF                     (head + clerk)
+#   Lake       — county GIS Municipalities service        (hall contact only —
+#                Lake publishes no officeholder names anywhere county-side)
+#
+# Four city-level payloads fill what a county source cannot: the Will ward
+# cities' and Joliet's own sites (per-seat contact), Skokie's (trustee district
+# assignments), and Freeport's (the whole city — Stephenson's county page is a
+# village directory and omits its own county seat).
 #
 # Each county scrapes independently and a failure is isolated: one county's
 # outage never withdraws another county's roster. A blocked source carries
@@ -129,6 +140,37 @@ jobs:
         continue-on-error: true
         run: python3 scripts/winnebago_municipal_officials_scraper.py /tmp/winnebago_municipal_officials.json
 
+      # The northern frontier, added alongside those counties' board districts.
+      # Ogle and Stephenson are the fifth and sixth FULL-governing-body sources;
+      # Carroll is mayor-level, like the collar counties. All three are
+      # preservable rather than required, for the same reason as LaSalle:
+      # nothing already shipped degrades if one is missing.
+      - name: Scrape the Ogle County Clerk yearbook
+        id: scrape_ogle
+        continue-on-error: true
+        run: python3 scripts/ogle_municipal_officials_scraper.py --out /tmp/ogle_municipal_officials.json
+
+      - name: Scrape the Stephenson County cities and villages directory
+        id: scrape_stephenson
+        continue-on-error: true
+        run: python3 scripts/stephenson_municipal_officials_scraper.py --out /tmp/stephenson_municipal_officials.json
+
+      - name: Scrape the Carroll County Clerk yearbook
+        id: scrape_carroll
+        continue-on-error: true
+        run: python3 scripts/carroll_municipal_officials_scraper.py --out /tmp/carroll_municipal_officials.json
+
+      # Freeport is the ONLY municipality in Stephenson County that its county
+      # page omits — and it is the county seat, holding more than half the
+      # county's municipal population. The city publishes its own governing body
+      # as a WordPress person directory with schema.org markup, so it enters the
+      # same way Lockport and Wilmington do: an enrichment payload that supplies
+      # a municipality the county source does not carry at all.
+      - name: Scrape Freeport's own elected-officials directory
+        id: scrape_freeport
+        continue-on-error: true
+        run: python3 scripts/freeport_council_scraper.py --out /tmp/freeport_council.json
+
       # The bounded per-city exception (docs/EXPANSION_GUIDE.md Part 2.4): the
       # Will ward cities' own sites carry per-seat contact the Clerk's directory
       # doesn't, and supply Lockport and Wilmington, which that directory omits
@@ -166,7 +208,9 @@ jobs:
           steps.scrape_dupage.outcome == 'failure' || steps.scrape_kane.outcome == 'failure' ||
           steps.scrape_mchenry.outcome == 'failure' || steps.scrape_kendall.outcome == 'failure' ||
           steps.scrape_lake.outcome == 'failure' || steps.scrape_will_cities.outcome == 'failure' ||
-          steps.scrape_skokie.outcome == 'failure' || steps.scrape_joliet.outcome == 'failure'
+          steps.scrape_skokie.outcome == 'failure' || steps.scrape_joliet.outcome == 'failure' ||
+          steps.scrape_ogle.outcome == 'failure' || steps.scrape_stephenson.outcome == 'failure' ||
+          steps.scrape_carroll.outcome == 'failure' || steps.scrape_freeport.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           COOK_OUTCOME: ${{ steps.scrape_cook.outcome }}
@@ -179,6 +223,10 @@ jobs:
           WILL_CITIES_OUTCOME: ${{ steps.scrape_will_cities.outcome }}
           SKOKIE_OUTCOME: ${{ steps.scrape_skokie.outcome }}
           JOLIET_OUTCOME: ${{ steps.scrape_joliet.outcome }}
+          OGLE_OUTCOME: ${{ steps.scrape_ogle.outcome }}
+          STEPHENSON_OUTCOME: ${{ steps.scrape_stephenson.outcome }}
+          CARROLL_OUTCOME: ${{ steps.scrape_carroll.outcome }}
+          FREEPORT_OUTCOME: ${{ steps.scrape_freeport.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -203,6 +251,10 @@ jobs:
           if [ "$WILL_CITIES_OUTCOME" = "failure" ]; then raise_issue "Will ward-city"; fi
           if [ "$SKOKIE_OUTCOME" = "failure" ]; then raise_issue "Skokie trustee-district"; fi
           if [ "$JOLIET_OUTCOME" = "failure" ]; then raise_issue "Joliet council-contact"; fi
+          if [ "$OGLE_OUTCOME" = "failure" ]; then raise_issue "Ogle"; fi
+          if [ "$STEPHENSON_OUTCOME" = "failure" ]; then raise_issue "Stephenson"; fi
+          if [ "$CARROLL_OUTCOME" = "failure" ]; then raise_issue "Carroll"; fi
+          if [ "$FREEPORT_OUTCOME" = "failure" ]; then raise_issue "Freeport council"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -236,9 +288,13 @@ jobs:
           add "${{ steps.scrape_lake.outcome }}"        lake        county /tmp/lake_municipal_officials.json
           add "${{ steps.scrape_lasalle.outcome }}"     lasalle     county /tmp/lasalle_municipal_officials.json
           add "${{ steps.scrape_winnebago.outcome }}"   winnebago   county /tmp/winnebago_municipal_officials.json
+          add "${{ steps.scrape_ogle.outcome }}"        ogle        county /tmp/ogle_municipal_officials.json
+          add "${{ steps.scrape_stephenson.outcome }}"  stephenson  county /tmp/stephenson_municipal_officials.json
+          add "${{ steps.scrape_carroll.outcome }}"     carroll     county /tmp/carroll_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
+          add "${{ steps.scrape_freeport.outcome }}"    freeport    enrich /tmp/freeport_council.json
 
           # The shipped roster is the preserve source, so read it BEFORE the
           # builder overwrites it in place.
@@ -299,7 +355,7 @@ jobs:
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
           # the force-push above already updated it.
-          body="Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from the seven metro counties' official sources (Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall clerk yearbooks, and Lake's county GIS hall contact).
+          body="Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication (the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, and Lake's county GIS hall contact), plus the four city-level payloads.
 
           Please review the diff before merging — this changes data about real officeholders.
 
