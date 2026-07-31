@@ -57,6 +57,11 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # Rockford's 14 aldermanic wards ride WinGIS's ElectedOfficials service —
     # the same regional-consortium GIS the Winnebago county-board entry uses.
     "rockford": ["Rockford"],
+    # Moline (7) and Silvis (4) publish their own ward layers on Rock Island
+    # County's hosted org. Whiteside's ward layer covers six MORE municipalities
+    # and is deliberately absent: it was last edited 2019-11-05, before the
+    # post-2020-census redraw it would need to reflect (recorded as a gap).
+    "rock-island": ["Moline", "Silvis"],
 }
 # Chicago's wards are the city's own Socrata layer with its own coverage test
 # (chicagoCoverage); it is never part of this file.

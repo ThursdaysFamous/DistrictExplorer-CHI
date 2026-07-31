@@ -8444,6 +8444,44 @@ function initChiExplorer() {
   var loadRockIslandBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/rock-island-county-board-members.json", {}, 2);
   });
+  /* The county's TaxDistricts service is a Cook-style tax-agency tiling: one
+   * layer per levying body. Three of its ten are fleet concepts — fire (17),
+   * library (10) and a single park district — and the rest are school, township
+   * or special-purpose bodies the app answers statewide or not at all. All
+   * edited 2022-01-14, which is after the reapportionment cycle these follow. */
+  function loadRockIslandTaxLayer(layerIndex, outFields, label) {
+    var url = ROCK_ISLAND_GIS + "TaxDistricts/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadRockIslandFireDistricts = makeCached(function () {
+    return loadRockIslandTaxLayer(2, "FirePD", "Rock Island County fire districts");
+  });
+  /* One of the ten library polygons carries a BLANK name — the county's
+   * un-districted remainder, not a library. Dropped here rather than rendered:
+   * polygonCountyEntry would print "Unknown" for it, which reads as "there is a
+   * district and we don't know it" when the truth is there is none, and the
+   * card's honest answer for that ground is no result at all. */
+  var loadRockIslandLibraryDistricts = makeCached(function () {
+    return loadRockIslandTaxLayer(5, "library_di", "Rock Island County library districts")
+      .then(function (geojson) {
+        var features = (geojson.features || []).filter(function (f) {
+          var v = findPropCI(f.properties || {}, ["library_di"]);
+          return v != null && String(v).trim() !== "";
+        });
+        if (!features.length) {
+          throw new Error("Rock Island library districts carry no names — the layer changed");
+        }
+        return { type: "FeatureCollection", features: features };
+      });
+  });
+  var loadRockIslandParkDistricts = makeCached(function () {
+    return loadRockIslandTaxLayer(8, "park_distr", "Rock Island County park districts");
+  });
   // The layer stores districts zero-padded ("01".."19"); the roster is keyed on
   // the plain number, so the pad is stripped once here rather than in each call.
   function rockIslandDistrictNumber(feature) {
@@ -10191,6 +10229,38 @@ function initChiExplorer() {
     });
   });
 
+  /* Rock Island's two ward-electing cities publish their own layers on the
+   * county's hosted org: Moline (7 wards, edited 2022-08) and Silvis (4, edited
+   * 2022-01). Both postdate the 2020 census, which is what makes them safe to
+   * ship — Whiteside's ward layer covers six more municipalities and was last
+   * edited 2019-11-05, before the redraw it would need to reflect, so it is a
+   * recorded gap instead. Silvis writes "1st WARD"; the number is taken from the
+   * string rather than the label so both cities key the same way. Neither city's
+   * seat-holders are in the roster yet (Rock Island publishes no municipal
+   * officials), so these cards answer "which ward am I in" and name nobody —
+   * the same state Will's ward cities shipped in before their contact scrape. */
+  var ROCK_ISLAND_WARD_LAYERS = [
+    { service: "MolineWards2020", id: 0, municipality: "Moline" },
+    { service: "SilvisWards", id: 0, municipality: "Silvis" }
+  ];
+  var loadRockIslandWards = makeCached(function () {
+    return Promise.all(ROCK_ISLAND_WARD_LAYERS.map(function (spec) {
+      return loadArcGISGeoJSON(ROCK_ISLAND_GIS + spec.service + "/FeatureServer/" + spec.id)
+        .then(function (geojson) {
+          return (geojson.features || []).map(function (f) {
+            var p = f.properties || {};
+            var raw = findPropCI(p, ["ward"]);
+            var num = /(\d+)/.exec(String(raw == null ? "" : raw));
+            return wardFeature(f, spec.municipality, "Ward", num ? num[1] : null);
+          });
+        }, function () { return null; }); // one city down: the other still draws
+    })).then(function (parts) {
+      var loaded = parts.filter(Boolean);
+      if (!loaded.length) throw new Error("Rock Island ward services returned no usable geometry");
+      return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
+    });
+  });
+
   var loadWillWards = makeCached(function () {
     return Promise.all(WILL_WARD_LAYERS.map(function (spec) {
       return loadArcGISGeoJSON(WILL_WARD_SERVICE + "/" + spec.id).then(function (geojson) {
@@ -10496,7 +10566,8 @@ function initChiExplorer() {
       municipalWardEntry("evanston", loadEvanstonWards),
       municipalWardEntry("will", loadWillWards),
       municipalWardEntry("aurora", loadAuroraWards),
-      municipalWardEntry("rockford", loadRockfordWards)
+      municipalWardEntry("rockford", loadRockfordWards),
+      municipalWardEntry("rock-island", loadRockIslandWards)
     ]
   });
   declareDataSource("ward", {
@@ -13347,6 +13418,16 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["dsplayname"], primary: true },
           { label: "County", value: "Lee County" }
         ]
+      }),
+      // Rock Island's 17, from the county's tax-agency tiling (the Cook shape).
+      polygonCountyEntry({
+        key: "rock-island",
+        coverage: rockIslandCountyCoverage,
+        loader: loadRockIslandFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["firepd"], primary: true },
+          { label: "County", value: "Rock Island County" }
+        ]
       })
     ]
   });
@@ -13489,6 +13570,19 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["district"], primary: true },
           { label: "County", value: "DeKalb County" }
+        ]
+      }),
+      // Rock Island levies exactly ONE park district (Cordova, in the county's
+      // north-east corner). A one-feature tiling is honest rather than thin:
+      // everywhere else in the county genuinely sits in no park district, and
+      // the card says so by finding nothing.
+      polygonCountyEntry({
+        key: "rock-island",
+        coverage: rockIslandCountyCoverage,
+        loader: loadRockIslandParkDistricts,
+        fields: [
+          { name: "name", label: "Park District", keys: ["park_distr"], primary: true },
+          { label: "County", value: "Rock Island County" }
         ]
       })
     ]
@@ -13692,6 +13786,17 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["librarydistrict"], primary: true },
           { label: "County", value: "DeKalb County" }
+        ]
+      }),
+      // Rock Island's 9 named library districts (the tenth polygon is the
+      // county's un-districted remainder and is dropped in the loader).
+      polygonCountyEntry({
+        key: "rock-island",
+        coverage: rockIslandCountyCoverage,
+        loader: loadRockIslandLibraryDistricts,
+        fields: [
+          { name: "name", label: "Library District", keys: ["library_di"], primary: true },
+          { label: "County", value: "Rock Island County" }
         ]
       })
     ]
