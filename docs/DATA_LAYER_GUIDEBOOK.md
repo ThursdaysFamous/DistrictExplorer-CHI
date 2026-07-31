@@ -386,8 +386,19 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Jo Daviess County's 17 board districts cut ACROSS precincts along roads, and nothing publishes those lines.",
-      "blocker": "The county publishes the composition of all 17 districts — as the titles of 17 per-district PDFs — but 14 of the 17 are made of PARTS of precincts, not whole ones. Its own GIS memo of 2021-12-02 says why: “If one of those boundaries needed to be split I used roads.” Only districts 1, 3 and 16 are whole precincts, so even precinct geometry would not finish the county. Nothing draws the sub-precinct lines: the GIS is a vendor gwmpub viewer with no REST endpoint, and every published map — countywide and per-district — is a RASTER export (32-81 embedded images, only frame-and-legend vector paths), so the vector-PDF route that built Stephenson's Freeport districts does not apply here.",
-      "wanted": "Jo Daviess board-district geometry in any vector form — or the WRITTEN LEGAL DESCRIPTIONS the county's own redistricting memo says were prepared for each district, which are not on its redistricting page."
+      "blocker": "The county publishes the composition of all 17 districts — now in PROSE on its County Board page, member by member, not just as the titles of 17 per-district PDFs — but 14 of the 17 are made of PARTS of precincts, and District 10 is a fraction of a single one (\"Part of West Galena I precinct\"). Its own GIS memo of 2021-12-02 says why: “If one of those boundaries needed to be split I used roads.” Only districts 1, 3 and 16 are whole precincts, so even precinct geometry would not finish the county. Re-tested 2026-07-31 and every half of this still holds: the GIS at gismaps.jodaviess.org is a vendor gwmpub.aspx (Portalsdk12) viewer with no REST endpoint, and the countywide district map is a RASTER export (32 embedded images, 261 characters of text — the title and legend), so the vector-PDF route that built Stephenson's Freeport districts does not apply. NOTE FOR THE NEXT PASS: the county has moved to jodaviesscountyil.gov; the old jodaviess.org answers every path with its home page, which makes a 200 look like a hit.",
+      "wanted": "The county's GIS department SELLS this data — it runs a paid subscription mapping site and a \"Digital Data Order Form\", so the district shapefiles demonstrably exist and are simply not public. The unlock is therefore a licensing/records question rather than a technical one: a public release, a records request, or the written legal descriptions the 2021-12-02 memo says were prepared. The roster half is already published (all 17 members with party and term)."
+    },
+    {
+      "id": "mercer-county-board-districts",
+      "concept": "County board districts",
+      "area": "Mercer County",
+      "counties": [],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Mercer publishes its ten board members and their districts but draws the five districts nowhere.",
+      "blocker": "The county runs no GIS — parcels go to a third-party tax vendor (govtechtaxpro), and the only mapping results for the county are commercial aggregators, not anything it publishes. Its own board page says \"Mercer County Board Districts, Map and Contact List are found in the Document Section\", and they are NOT there: the public document index carries 90 PDFs across eight folders (Assessments, Audits & Budgets, Board of Review, Contracts, Forms, Ordinances, Taxes, Zoning) and none is a district map, composition list or reapportionment ordinance. The elections page's 109 PDFs are canvasses and candidate packets.",
+      "wanted": "Mercer County board-district geometry, or a composition naming the townships or precincts in each of the five districts — the document its own board page already claims to publish. The roster is published and rich (5 districts electing two members each, with party, home town, term expiry and the Chairman flagged)."
     }
   ],
   "nyc": [
@@ -895,6 +906,47 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   This script should be **deleted, not maintained**, the day Stephenson publishes
   precinct geometry.
+
+- **RESEARCH PASS 5i (2026-07-31) — Mercer and Jo Daviess: NEITHER SHIPS, and the
+  Jo Daviess blocker survives its re-test.** Both were researched to the same depth as
+  the counties that did ship; both came back genuinely empty.
+
+  **Jo Daviess — the recorded gap was right, and is now sharper.** Every clause was
+  re-tested and every one held: the composition is published (better than recorded —
+  in prose on the board page, member by member, rather than only as PDF titles), 14 of
+  17 districts are still made of PARTS of precincts (District 10 is a fraction of a
+  single one), the GIS at `gismaps.jodaviess.org` is still a vendor `gwmpub.aspx`
+  viewer with no REST endpoint, and the countywide district map is still a raster —
+  measured this time: **32 embedded images and 261 characters of text**, which is the
+  title and the legend.
+
+  What changed is the *wanted*. The county's GIS department **sells** this data: it
+  runs a paid subscription mapping site and publishes a "Digital Data Order Form". The
+  district shapefiles demonstrably exist and are simply not public, so the unlock is a
+  licensing or records question, not a technical one. That is a materially more
+  actionable gap than "the legal descriptions are not on the redistricting page".
+
+  **One wasted-effort note worth keeping: the county moved domains.** It is now
+  `jodaviesscountyil.gov`; the old `jodaviess.org` answers *every* path with its home
+  page, so `/redistricting` returns HTTP 200 and 81 KB of news items. A 200 that looks
+  like a hit is worse than a 404 — check the body, not the status. The redistricting
+  page, the 17 district PDFs and the GIS page are all on the new domain, and a web
+  search found it in one query after direct probing had stalled.
+
+  **Mercer — a new gap, and an unusually clean one to state.** It elects ten members
+  from five two-member districts and publishes them well (party, home town, term
+  expiry, Chairman flagged). It draws the districts nowhere. There is no county GIS at
+  all — parcels go to a third-party tax vendor, and every "Mercer County GIS" result is
+  a commercial aggregator rather than the county. The board page itself says *"Mercer
+  County Board Districts, Map and Contact List are found in the Document Section"* —
+  and they are not: the public index carries 90 PDFs across eight folders and none is a
+  district map, composition list or reapportionment ordinance.
+
+  **The frontier is now entirely gaps.** Every county adjacent to the served ring —
+  Bureau, Henry, Mercer, Jo Daviess — has been researched and each is blocked on a
+  named artifact rather than on effort. Expansion by adjacency has run out; the next
+  county needs someone to publish something, and the four `wanted` fields say exactly
+  what.
 
 - **RESEARCH PASS 5h (2026-07-31) — Rock Island SHIPPED; Bureau and Henry are
   recorded gaps with rosters and no boundary.** The three counties the previous pass
