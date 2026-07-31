@@ -439,6 +439,19 @@ PROVENANCE = [
              "carries its edition and the scraper discovers it here; note the "
              "link is RELATIVE and only resolves against the Revize CDN root, "
              "which the scraper tries first."},
+    {"layer": "DeKalb County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": "https://dekalbcounty.org/about/reference-yearbook/",
+     "note": "The Clerk's Reference Yearbook, 'Municipalities of DeKalb County' "
+             "section (dekalb_municipal_officials_scraper.py) — full governing "
+             "body plus hall address, phone and website for all 14 "
+             "municipalities, and the only source in this file that dates every "
+             "seat's NEXT ELECTION. Pinned to the COUNTY's reference page, not "
+             "the clerk's domain: the PDF lives at "
+             "dekalbcountyclerkil.gov/wp-content/uploads/<year>/<month>/ under a "
+             "path that restamps annually, and the scraper discovers it from "
+             "this page. Both section headings are matched whole-line — the "
+             "book's own index carries each of them followed by dot leaders."},
     {"layer": "Board of Review commissioners (roster)",
      "app_file": "ccbr-roster.json",
      "source_url": "https://www.cookcountyboardofreview.com/",
@@ -590,6 +603,19 @@ ENDPOINTS = [
     {"layer": "Whiteside County electoral districts + precincts + polling places",
      "url": ("https://services.arcgis.com/l0M0OC6J9QAHCiGx/arcgis/rest/services/"
              "ElectionGeography_public/FeatureServer?f=json")},
+    # DeKalb's four ward-electing municipalities are four separate services on
+    # the county's org (DeKalb_Wards, Sycamore_Wards, Genoa_Wards,
+    # Sandwich_Wards), all edited 2023-11. DeKalb_Wards is pinned as the
+    # representative one — they are published and retired together.
+    {"layer": "DeKalb + Sycamore + Genoa + Sandwich municipal wards",
+     "url": ("https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/"
+             "DeKalb_Wards/FeatureServer?f=json")},
+    # Mendota's own org. The only ward geometry any of LaSalle County's four
+    # ward-electing cities publishes; La Salle, Peru and Earlville are a
+    # recorded gap, and the county's GIS carries corporate boundaries only.
+    {"layer": "Mendota municipal wards",
+     "url": ("https://services6.arcgis.com/z8UuifZkerkF2dpG/arcgis/rest/services/"
+             "Mendota_Wards/FeatureServer?f=json")},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
@@ -787,6 +813,24 @@ WARD_SOURCES = [
      "url": "https://services.arcgis.com/fGsbyIOAuxHnF97m/arcgis/rest/services/"
             "Ward_Districts/FeatureServer/%d/query",
      "sublayers": [0, 1, 2, 3]},
+    # The four entries added after this check was written. `urls` covers the
+    # shape `sublayers` cannot: an entry whose municipalities are separate
+    # SERVICES rather than sublayers of one.
+    {"key": "rockford",
+     "url": "https://maps.wingis.org/public/rest/services/ElectedOfficials/"
+            "MapServer/20/query"},
+    {"key": "rock-island",
+     "urls": ["https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
+              "MolineWards2020/FeatureServer/0/query",
+              "https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
+              "SilvisWards/FeatureServer/0/query"]},
+    {"key": "dekalb",
+     "urls": ["https://services7.arcgis.com/hEXJrPwm89CLXBYe/arcgis/rest/services/"
+              "%s_Wards/FeatureServer/0/query" % name
+              for name in ("DeKalb", "Sycamore", "Genoa", "Sandwich")]},
+    {"key": "mendota",
+     "url": "https://services6.arcgis.com/z8UuifZkerkF2dpG/arcgis/rest/services/"
+            "Mendota_Wards/FeatureServer/0/query"},
 ]
 
 
@@ -829,8 +873,9 @@ def check_ward_dispatch_disjoint(findings, offline):
     loaded = {}
     for src in WARD_SOURCES:
         feats = []
-        for sub in src.get("sublayers", [None]):
-            url = src["url"] % sub if sub is not None else src["url"]
+        urls = src.get("urls") or [src["url"] % sub if sub is not None else src["url"]
+                                   for sub in src.get("sublayers", [None])]
+        for url in urls:
             params = ({"$limit": "1000"} if src.get("socrata") else
                       {"where": "1=1", "outFields": "*", "outSR": "4326",
                        "f": "geojson", "resultRecordCount": "2000"})

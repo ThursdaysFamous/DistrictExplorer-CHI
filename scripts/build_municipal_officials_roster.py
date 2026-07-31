@@ -59,6 +59,7 @@ COUNTY_FIPS = {
     "Ogle": "141",
     "Stephenson": "177",
     "Carroll": "015",
+    "DeKalb": "037",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -110,7 +111,13 @@ COUNTY_FLOORS = {
     # The northern frontier (2026-07 live values in parentheses). Ogle and
     # Stephenson are full-governing-body sources; Carroll is mayor-level, so its
     # `members` counts the head plus the clerk only.
-    "Ogle": {"municipalities": 11, "members": 90, "heads": 11},          # 13 / 114 / 13
+    "Ogle": {"municipalities": 11, "members": 90, "heads": 11},          # 13 / 110 / 13
+    # DeKalb, the sixth full-governing-body source, and the only one whose
+    # document gives every seat's NEXT ELECTION date (2026-07 live: 14 / 118 /
+    # 14). Two rows the scraper drops by rule are already excluded from that
+    # count — a seat published as "Vacant" and a trustee row duplicating the
+    # village president.
+    "DeKalb": {"municipalities": 12, "members": 100, "heads": 12},       # 14 / 118 / 14
     # HEADS IS BELOW MUNICIPALITIES ON PURPOSE for Stephenson: the county's page
     # lists no president for Dakota (one Dakota row carries a name and a blank
     # office cell), so a floor of 10 heads would fail on correct data. Freeport
@@ -166,6 +173,7 @@ PRESERVABLE = {
     "ogle": {"kind": "county", "county": "Ogle"},
     "stephenson": {"kind": "county", "county": "Stephenson"},
     "carroll": {"kind": "county", "county": "Carroll"},
+    "dekalb": {"kind": "county", "county": "DeKalb"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -182,8 +190,15 @@ PRESERVABLE = {
 # this is a freshness call, not a correctness one: Cook's is a live API
 # reflecting each election as it is certified, Will's is an annually
 # republished directory.
-COUNTY_PRECEDENCE = ["Cook", "Will", "LaSalle", "Winnebago", "Ogle", "Stephenson",
-                     "DuPage", "Kane", "Kendall", "McHenry", "Carroll", "Lake"]
+# DeKalb sits ahead of LaSalle for the one municipality both name: Somonauk.
+# Depth cannot separate them — each publishes the village's full board, and
+# each names the same five sitting trustees — so this is the tie-break doing its
+# job. DeKalb wins it because the village hall is in DeKalb County (LaSalle
+# lists Somonauk because the village extends across the line) and because
+# DeKalb's book additionally dates every seat's next election.
+COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
+                     "Stephenson", "DuPage", "Kane", "Kendall", "McHenry",
+                     "Carroll", "Lake"]
 
 
 def _fold(text):

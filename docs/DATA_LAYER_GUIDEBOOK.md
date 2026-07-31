@@ -412,6 +412,72 @@ in the researched-but-unbuilt backlog.
       "summary": "Mercer publishes its ten board members and their districts but draws the five districts nowhere.",
       "blocker": "The county runs no GIS — parcels go to a third-party tax vendor (govtechtaxpro), and the only mapping results for the county are commercial aggregators, not anything it publishes. Its own board page says \"Mercer County Board Districts, Map and Contact List are found in the Document Section\", and they are NOT there: the public document index carries 90 PDFs across eight folders (Assessments, Audits & Budgets, Board of Review, Contracts, Forms, Ordinances, Taxes, Zoning) and none is a district map, composition list or reapportionment ordinance. The elections page's 109 PDFs are canvasses and candidate packets.",
       "wanted": "Mercer County board-district geometry, or a composition naming the townships or precincts in each of the five districts — the document its own board page already claims to publish. The roster is published and rich (5 districts electing two members each, with party, home town, term expiry and the Chairman flagged)."
+    },
+    {
+      "id": "ogle-lasalle-special-districts",
+      "concept": "Fire, park and library districts",
+      "area": "Ogle and LaSalle Counties",
+      "counties": [
+        "ogle",
+        "lasalle"
+      ],
+      "kind": "no-source",
+      "layer": "fire-district",
+      "summary": "Neither Ogle nor LaSalle contributes fire, park or library districts, though both levy taxes for them.",
+      "blocker": "Neither county publishes the geometry anywhere. Ogle's whole ArcGIS Online org was enumerated — 91 services, all cemeteries, bike routes, COVID points and survey forms; its parcel viewer is a Beacon/Schneider product with no REST endpoint. LaSalle runs its own ArcGIS Server and every service on it was listed: zoning, flood, wetlands, parcels, tax maps, corporate boundaries, board districts and the polling-place locator, and no taxing-district layer at all. Both counties DO publish the districts' names and rates — Ogle's yearbook carries a tax-valuation table for park and fire districts — but a name is not a boundary.",
+      "wanted": "Fire protection, park and library district boundaries from either county in any GIS or shapefile form. The property-tax tiling both counties already maintain to extend those levies is exactly the layer DeKalb, Kankakee and Rock Island publish."
+    },
+    {
+      "id": "ogle-precincts",
+      "concept": "Voting precincts",
+      "area": "Ogle County",
+      "counties": [
+        "ogle"
+      ],
+      "kind": "no-source",
+      "layer": "county-precinct",
+      "summary": "Ogle's voting precincts are not shipped, even though the app already dissolves 2020 versions of them into the county's board districts.",
+      "blocker": "The county publishes no precinct geometry — only a 51-page PDF map atlas and a points-only Polling_Locations service. The Census 2020 voting districts ARE available and build_ogle_board_districts.py uses them, but they are the fifty-two precincts of 2020 and the county now runs fifty-one: it has since retired Forreston 3. That cannot move a board-district line (Forreston 1, 2 and 3 are all in District 7, so their union is unchanged), but it would put a precinct on a card that no longer exists, and nothing published says where its territory went.",
+      "wanted": "Ogle's CURRENT precinct boundaries in any GIS or shapefile form, or a county statement of how Forreston 3 was absorbed. The polling places are already published and would join on the precinct name."
+    },
+    {
+      "id": "ogle-municipal-wards",
+      "concept": "City council district",
+      "area": "Byron and Polo",
+      "counties": [
+        "ogle"
+      ],
+      "kind": "no-source",
+      "layer": "ward",
+      "summary": "Byron and Polo elect by ward and their aldermen are already on the Municipality card, but neither city's wards are mapped.",
+      "blocker": "Neither city publishes ward geometry. The ArcGIS Online catalogue returns nothing for either, the county's own org holds no ward layer, and neither cityofbyron.com nor poloil.gov links a GIS or a ward map of any kind — not even a raster. The seats themselves are not the problem: the Ogle clerk's yearbook already gives Byron's seven aldermen across four wards and Polo's six across three, and they ship today on the Municipality card.",
+      "wanted": "Byron's four and Polo's three ward boundaries in any GIS or shapefile form. The rosters are already in data/app/municipal-officials.json and would name the seat the day the geometry arrives."
+    },
+    {
+      "id": "lasalle-municipal-wards",
+      "concept": "City council district",
+      "area": "La Salle, Peru and Earlville",
+      "counties": [
+        "lasalle"
+      ],
+      "kind": "no-source",
+      "layer": "ward",
+      "summary": "Three of LaSalle County's four ward-electing cities are unmapped; only Mendota's wards ship.",
+      "blocker": "La Salle publishes a ward map, but as a RASTER — a single PNG on its city-profile page, with no polygons to read. Peru and Earlville publish nothing: no GIS link on either city site, and nothing in the ArcGIS Online catalogue. The county's own ArcGIS Server carries corporate boundaries but no wards. Mendota is the exception that shows the shape this wants — its own ArcGIS org, four ward polygons, edited 2022-12 — and it shipped.",
+      "wanted": "Ward boundaries for La Salle (4), Peru (4) and Earlville (3) in any vector form. All three cities' aldermen are already in data/app/municipal-officials.json from the county clerk's directory, two per ward, so each card would name its seats immediately."
+    },
+    {
+      "id": "dekalb-hinckley-board",
+      "concept": "Municipal officials",
+      "area": "Hinckley",
+      "counties": [
+        "dekalb"
+      ],
+      "kind": "data-quality",
+      "layer": "municipality",
+      "summary": "Hinckley's card shows five trustees where an Illinois village board seats six.",
+      "blocker": "The county yearbook prints Sarah Quirk twice for Hinckley — once as Village President and again as a Trustee. An Illinois village president is elected to that office separately and cannot hold a trustee seat at the same time, so one of the two rows is stale and the scraper keeps only the head-of-government row (the more specific claim). Which trustee actually holds the sixth seat is not published anywhere the county or the village puts online.",
+      "wanted": "A corrected Hinckley entry in the DeKalb County yearbook, or a village board roster on hinckleyil.com. Every other DeKalb municipality's board is complete."
     }
   ],
   "nyc": [
@@ -547,7 +613,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | U.S. House district | SHIPPED `congress` | SHIPPED `congress` | SHIPPED `congress` |
 | State upper chamber | SHIPPED `il-senate` | SHIPPED `state-senate` | SHIPPED `ca-senate` |
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
-| City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS) + Rock Island's Moline 7 and Silvis 4 (county-hosted city layers, both edited 2022 — Whiteside's six-municipality layer is a recorded gap at a 2019 vintage). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
+| City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS) + Rock Island's Moline 7 and Silvis 4 (county-hosted city layers, both edited 2022 — Whiteside's six-municipality layer is a recorded gap at a 2019 vintage) + DeKalb's DeKalb 7 / Sycamore 4 / Genoa 4 / Sandwich 4 (four county-hosted city layers, all edited 2023) + Mendota 4 (the city's own org, edited 2022 — the only one of LaSalle's four ward cities that publishes geometry; La Salle's ward map is a raster PNG, Peru's and Earlville's do not exist, and Ogle's Byron and Polo are the same gap). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
 | County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 + Rock Island 19 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
@@ -919,6 +985,95 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   This script should be **deleted, not maintained**, the day Stephenson publishes
   precinct geometry.
+
+- **RESEARCH PASS 5k (2026-07-31) — DeKalb, Ogle and LaSalle: the same question asked
+  of three counties that were already served, and three different answers.** All three
+  were shipped counties; this pass asked what each still publishes that the app has not
+  consumed, and — for the first time in this series — found two live data DEFECTS rather
+  than only absent sources.
+
+  | concept | DeKalb (100,420) | Ogle (50,832) | LaSalle (109,658) |
+  |---|---|---|---|
+  | `county-board` | already shipped (12x2) | already shipped (8, derived) | already shipped (29) |
+  | `county-precinct` | already shipped (69) | **none published** — gap | already shipped (119) |
+  | `fire` / `park` / `library` | already shipped (18/6/13) | **none published** — gap | **none published** — gap |
+  | municipal officials | **+14 municipalities, 118 officials** | already shipped — **2 defects fixed** | already shipped (26) |
+  | `ward` | **+19 wards across 4 cities** | none published — gap | **+4** (Mendota only) |
+  | `judicial-subcircuit` | n/a (23rd Circuit) | n/a (15th) | n/a (13th) |
+
+  **Two defects were already shipping, and neither would have been found by a count
+  guard.** Both were in the Ogle yearbook parser, and both are the same class of error —
+  a parser that is *right about shape* and *wrong about where the shape stops*:
+  - Stillman Valley shipped **ten trustees who are phrases**: "Other Special Districts",
+    "Library Districts Townships", "www.census.gov". The section-end sentinel named the
+    POLLING PLACES heading, which is one heading too late — GENERAL INFORMATION sits
+    between them, its levy-deadline list is indented, and the last municipality's still
+    open "Trustees" group swallowed it. The bound is now the next ALL-CAPS heading of any
+    kind, which was measured before it was adopted: four lines in the whole book match
+    that shape after the start, the first is GENERAL INFORMATION, and no line inside any
+    municipality block matches at all.
+  - **Rochelle, the county's largest city, shipped with no council** — a mayor, a clerk,
+    a treasurer and nothing else. Its six seats are printed under the heading
+    "Councilmen", and the parser's group vocabulary knew Trustees, Council Members,
+    Commissioners and Aldermen. One word.
+
+  The lesson generalises past this parser: **a floor counts what you got, not what you
+  should have got.** 114 officials passed a floor of 90 while ten of them were sentences
+  and six real ones were missing, because the two errors ran in opposite directions. What
+  caught both was reading the shipped file back — per-municipality board sizes, sorted —
+  and noticing that a village had sixteen trustees and a city of 9,600 had none. That
+  read is cheap and belongs in every roster pass.
+
+  **DeKalb was the county with the most left on the table, and its clerk publishes the
+  richest municipal document in the fleet.** The Reference Yearbook's "Municipalities of
+  DeKalb County" section carries all 14 municipalities' full governing bodies *plus the
+  date each seat is next on the ballot* — nothing else sourced does that. Three of the 14
+  were already in the roster at a shallower depth from a neighbouring county (Maple Park
+  from Kane, Sandwich from Kendall, Somonauk from LaSalle); depth precedence took the
+  first two automatically, and Somonauk needed a tie-break entry because both counties
+  publish its full board and name the same five trustees. DeKalb wins it on two grounds
+  stated in the builder: the village hall is in DeKalb County, and DeKalb's book dates
+  every seat.
+
+  Two rows the DeKalb scraper drops by rule, both logged:
+  - a seat published as **"Vacant"** (Somonauk) is not a person;
+  - a name published **both as head of government and as a board member** (Hinckley's
+    Sarah Quirk) keeps only the head row. An Illinois village president is elected to
+    that office separately and cannot also hold a trustee seat, so one row is stale. That
+    is a rule about what the source can be saying at once, not a guess about which name
+    is right — and because it leaves Hinckley one trustee short of a six-member board, it
+    is recorded as a gap rather than quietly absorbed.
+
+  **The ward frontier moved by two entries and stopped at a raster.** DeKalb County's own
+  org publishes one ward layer per ward-electing municipality — DeKalb 7 (as 8 polygons;
+  Ward 7 is two parts), Sycamore 4, Genoa 4, Sandwich 4 — all edited 2023-11, after the
+  redraw, which is the measurement that decides whether a ward layer ships. Mendota
+  publishes its own four, edited 2022-12. Every one of those five cities' aldermen was
+  *already* in the roster, so all twenty-three cards named their seats the day the
+  geometry landed — verified point by point before shipping. The three that did not make
+  it are instructive: **La Salle publishes a ward map as a single PNG**, Peru and Earlville
+  publish nothing, and Byron and Polo publish nothing — so five cities whose seat-holders
+  the app already knows still cannot answer "which ward am I in". That asymmetry (roster
+  ahead of geometry) is the mirror image of Rock Island's in pass 5j, where the geometry
+  shipped and nobody could be named.
+
+  **Ogle and LaSalle are now the two counties measured hardest for special districts and
+  found to publish none.** Not "not found" — enumerated: Ogle's entire ArcGIS Online org
+  is 91 services of cemeteries, bike routes, COVID points and survey forms, and its
+  parcel viewer is a Beacon/Schneider product with no REST endpoint; LaSalle's own ArcGIS
+  Server was listed folder by folder and carries zoning, flood, wetlands, parcels, tax
+  maps, corporate boundaries, board districts and the polling-place locator, and no
+  taxing-district layer at all. Both counties levy for fire, park and library districts
+  and print their names and rates in tax tables. A name is not a boundary.
+
+  **Ogle's precincts are the one gap where the data exists and still cannot ship.**
+  `build_ogle_board_districts.py` already dissolves the Census 2020 voting districts into
+  the county's eight board districts, so the 2020 precinct geometry is in hand. But the
+  county has since retired Forreston 3 and runs 51 where the census has 52. That cannot
+  move a board-district line — Forreston 1, 2 and 3 are all in District 7, so their union
+  is unchanged, which is exactly why the dissolve is still sound — but shipping the VTDs
+  as *precincts* would put a precinct on a card that no longer exists, and nothing
+  published says where its territory went. Same data, different claim, different answer.
 
 - **RESEARCH PASS 5j (2026-07-31) — enriching the three newest counties. Rock Island
   went from 2 concepts to 6; Lee and Whiteside had nothing safe left to add.** The
@@ -2057,7 +2212,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `school-district-unified` | Unified School District | schools | Polygon | live TIGERweb School L0 | — | — |
 | `school-district-elementary` | Elementary School District | schools | Polygon | live TIGERweb School L2 | — | outsideChicagoSchoolCoverage |
 | `township` | Township / County Subdivision | geography | Polygon | live TIGERweb CouSub | — | — (subOf `county`) |
-| `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | `municipal-officials.json` (weekly CI; twelve counties + Chicago's citywide officers, 349 municipalities — head of government + board + other elected officers + hall contact, joined by place GEOID; depth per county: full body Cook/Will/LaSalle/Winnebago/Ogle/Stephenson, head+clerk DuPage/Kane/McHenry/Kendall/Carroll, contact-only Lake. Four city-level payloads fill what a county cannot: Will's ward cities and Joliet for per-seat contact, Skokie for trustee districts, and Freeport — the whole city, since Stephenson's county source is a village directory that omits its own county seat) | — |
+| `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | `municipal-officials.json` (weekly CI; thirteen counties + Chicago's citywide officers, 360 municipalities — head of government + board + other elected officers + hall contact, joined by place GEOID; depth per county: full body Cook/Will/DeKalb/LaSalle/Winnebago/Ogle/Stephenson, head+clerk DuPage/Kane/McHenry/Kendall/Carroll, contact-only Lake. Four city-level payloads fill what a county cannot: Will's ward cities and Joliet for per-seat contact, Skokie for trustee districts, and Freeport — the whole city, since Stephenson's county source is a village directory that omits its own county seat) | — |
 | `judicial-subcircuit` | Judicial Subcircuit | political | CountyDispatch | Cook County GIS L5 (20 subcircuits) + L27 (municipal districts) · Will County ArcGIS · DuPage County ArcGIS (`Judicial_Subcircuits`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L1) · pre-built `kane-judicial-subcircuits.json` + `mchenry-judicial-subcircuits.json` (PA 102-0693 enacted shapefile) — no Kendall entry: its 23rd Circuit received no subcircuits under the act | link-only (each card links its circuit's court; Cook adds the Municipal District + courthouse row) | OR of cook/will/dupage/lake/kane/mchenry county coverages |
 | `county-board` | County Board District | political | CountyDispatch | Cook County GIS L9 · Will County ArcGIS · DuPage County ArcGIS (`County_Board_Dist_new`) · Lake County ArcGIS (`LakeCounty_PoliticalBoundaries` L0) · Kane County ArcGIS (`KaneCo_IL_County_Board` L1) · McHenry County ArcGIS (`McHenry_County_Board_Districts` L0) · Kendall County ArcGIS Enterprise (`County_Board_2010` — the CURRENT 2-district map: the post-2020-census reapportionment kept the line, Dec 2021 hearing) · LaSalle County ArcGIS (`CountyBoardDistricts`) · Kankakee self-hosted `k3gis.net` (`BASE/Elected_Officials/1`) · Winnebago WinGIS (`ElectedOfficials/26`, mounted at `/public` not `/arcgis`) · Livingston **derived** (`livingston-county-board-districts.json` — TIGER townships dissolved per the county's published composition; it publishes no GIS) · McLean (`Clerks/MyElectedRepresentatives/1`) · Logan via Tri-County RPC (`Logan_County_Districts_and_Zoning/39`) · Sangamon AGOL (`CountyBoardDistricts2020_WithURLs`) · Madison (`CountyClerk/CBDWS/0`, on `/servera`) · St. Clair (`SCC_voting_districts/2`, on `/server`) | Cook: live office join (same server); Will: `will-county-board-members.json` (weekly CI); DuPage: `dupage-county-board-members.json` (weekly CI; + countywide Chair); Lake: member + phone/email/office address/district page + newsletter on the boundary GIS itself (live, county-edited; re-verified vs the county directory 2026-07-23) + `lake-county-board-roles.json` (weekly CI — the Chair/Vice-Chair tags the GIS lacks, applied only on a name match so a missed reorganization degrades to role-less rows); Kane: member names on the boundary GIS (verified incl. the 2026 D2/D9 appointments) + `kane-county-board-members.json` (weekly CI from the county's SharePoint Board Members list API — party, official office phones, emails, profile links, and the countywide-elected Board Chair; GIS names stay as hover + fallback, cross-checked 24/24 against the roster); Kendall: `kendall-county-board-members.json` (10 members incl. the Chairman — a District 2 member, not a separate countywide seat — phones + emails + per-member profile links; 2026-07 enrichment check re-verified all 10 names 1:1 against the directory's 2026-03 Archive snapshot); McHenry: `mchenry-county-board-members.json` (18 members + the countywide-elected Chairman, phones + emails + per-member profile links; the DuPage countywide-chair shape; 2026-07 enrichment check re-verified all 19 names 1:1 against the directory's 2026-05 Archive snapshot — the county publishes no party or committee data, the one missing phone (D3) is confirmed unpublished at the source, and members' street addresses are residences, deliberately not collected). Both hand-verified 2026-07-23 against the counties' own directories: the counties block ALL automated fetch (direct, real-browser, and the Archive's crawler — SPN2 error:no-request), so the weekly engine-ladder scrapers run green and track the block on standing issues, resuming automation the moment any rung unblocks. LaSalle, Kankakee and Winnebago are all **rule-4 branch 1** — the member rides the county's own boundary GIS, so no scraper, no roster file and no weekly workflow: LaSalle 29/29 (name, e-mail, mailing address; its area-code-less phones deliberately unrendered), Kankakee 28/28 (name, party, phone, e-mail), Winnebago 20/20 (name, party, term year — its address/phone columns are declared and empty on every row, and the richer per-district contact on the county's board page is a backlog scraper, not a guess) . Pass 4's bridge counties: **McLean** 10 districts electing TWO members each, both seats + parties + profile links on the boundary GIS 10/10 (branch 1); **Sangamon** 29, GIS carries the district and a per-district MEMBER URL but no name, so a weekly scraper walks exactly those 29 URLs (29/29 names + parties, 27 e-mails, 22 phones); **Livingston** 3 multi-member districts, boundary AND roster both derived — townships per the county's published composition, members scraped weekly, with an explicit `vacancies` count because the directory lists a "Vacancy" seat that must be counted and never named; **Logan** 6, rule-4 branch **3** — the GIS carries no officeholder and the county's only roster is a salary publication with no district against any name, so the card says so and links the board (recorded gap); **Madison** 26, the fleet's RICHEST board source — official/party/term/phone/e-mail/per-district page all on one feature (26/26 name, party, e-mail, URL; 25/26 phone); **St. Clair** 28, branch 1 at its thinnest — name 28/28 and nothing else. Winnebago, McLean, Madison and St. Clair were each spot-checked against their county's own board page before shipping | OR of cook/will/dupage/lake/kane/mchenry/kendall/lasalle/kankakee/winnebago/livingston/mclean/logan/sangamon/madison/st-clair county coverages |
 | `ccbr` | Cook County Board of Review District | political | Bespoke | pre-built (PA 102-0012 shapefile) | `ccbr-roster.json` (weekly CI from cookcountyboardofreview.com) | cookCountyCoverage |
@@ -2069,7 +2224,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `cps-hs-network` | CPS Network (High School) | schools | CpsNetwork | Socrata `aupu-jt2g` | chief in dataset props | chicagoCoverage |
 | `cps-network` | CPS Network (K-8) | schools | CpsNetwork | Socrata `pnta-kuqa` | chief in dataset props | chicagoCoverage |
 | `ward-precinct` | Ward Precinct | political | Bespoke | Socrata `i8fv-xe4b` | — | chicagoCoverage (subOf `ward`) |
-| `ward` | City Ward | political | CountyDispatch | Socrata `p293-wvbd` | live Socrata `htai-wnw4` join | chicagoCoverage |
+| `ward` | City Ward | political | CountyDispatch | Chicago Socrata `p293-wvbd` (50) · suburban Cook GIS `politicalBoundary` L22 (21 municipalities) · Evanston city ArcGIS · Will County ArcGIS `Ward_Districts` (Lockport/Wilmington/Crest Hill/Joliet) · Aurora city ArcGIS · WinGIS `ElectedOfficials` L20 (Rockford, 14) · Rock Island County org (`MolineWards2020`, `SilvisWards`) · DeKalb County org (`DeKalb_Wards` 7 across 8 polygons, `Sycamore_Wards` 4, `Genoa_Wards` 4, `Sandwich_Wards` 4) · Mendota city org (`Mendota_Wards`, 4) | Chicago: live Socrata `htai-wnw4` join; every suburban entry: the seat's holder(s) from `municipal-officials.json` matched on the ward number, falling back to an officeholder attribute on the boundary where one exists (Evanston, Rockford) | chicagoCoverage OR `municipal-ward-coverage.json` tagged by entry (35 municipalities across 8 non-Chicago entries) |
 | `police-beat` | Police Beat | safety | Bespoke | CPD ArcGIS | — | chicagoCoverage (subOf `police-district`) |
 | `police-district` | Police District | safety | Bespoke | CPD ArcGIS | `cpd-district-info.json` (weekly CI, Playwright) | chicagoCoverage |
 | `ccpsa-district-council` | CCPSA District Council | safety | Bespoke | shares `police-district` geometry | `ccpsa-district-councils.json` (weekly CI) | chicagoCoverage |
