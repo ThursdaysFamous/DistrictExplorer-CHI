@@ -568,6 +568,22 @@ ENDPOINTS = [
     # on one hosted service, reached the usual way (county site -> parcel viewer
     # -> web map -> operationalLayers). The board layer declares a NAME column
     # and populates it on 0 of 19 districts, which is why a roster scrape exists.
+    # Rock Island's TaxDistricts service — a Cook-shaped tax-agency tiling, one
+    # layer per levying body. Three of its ten are fleet concepts: fire (2, 17
+    # districts), library (5, 10 polygons of which 9 are named — the tenth is the
+    # un-districted remainder and the loader drops it) and park (8, a single
+    # Cordova district). Incorporated cities correctly sit in NO fire or library
+    # district: they run their own departments on a city levy.
+    {"layer": "Rock Island County fire + library + park districts (tax-agency tiling)",
+     "url": ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
+             "TaxDistricts/FeatureServer?f=json")},
+    # Moline (7 wards) and Silvis (4) publish their own layers on the county's
+    # hosted org, both edited in 2022 — after the redraw. Whiteside's ward layer
+    # covers six MORE municipalities and is deliberately unused: last edited
+    # 2019-11-05, before the 2020 census (recorded as a gap).
+    {"layer": "Moline + Silvis municipal wards",
+     "url": ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
+             "MolineWards2020/FeatureServer?f=json")},
     {"layer": "Rock Island County Board districts (19) + precincts (120)",
      "url": ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
              "Other_Layers/FeatureServer?f=json")},

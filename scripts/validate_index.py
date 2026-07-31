@@ -120,7 +120,7 @@ GEOMETRY_FILES = {
     "kendall-county-outline.json": (1, 1),
     "kane-judicial-subcircuits.json": (4, 4),  # 16th-Circuit subcircuits, pre-built from the PA 102-0693 enacted shapefile
     "mchenry-judicial-subcircuits.json": (4, 4),  # 22nd-Circuit subcircuits, pre-built from the PA 102-0693 enacted shapefile
-    "municipal-ward-coverage.json": (22, 60),  # Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro)
+    "municipal-ward-coverage.json": (22, 60),  # Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi). 30 municipalities across six entries.
     "metro-outline.json": (1, 1),  # Coverage outline of every served county, dissolved from TIGERweb by scripts/build_metro_outline.py; drives the out-of-scope wash. Kept to ONE connected region — a county joins only once it touches the served area.
     "lasalle-county-outline.json": (1, 1),  # LaSalle County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "boone-county-outline.json": (1, 1),  # Boone County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.

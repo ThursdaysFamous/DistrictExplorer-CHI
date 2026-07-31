@@ -517,7 +517,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 22,
         "max_features": 60,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro)"
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi). 30 municipalities across six entries."
       },
       {
         "file": "metro-outline.json",
@@ -809,7 +809,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v35",
+    "cache_name": "district-explorer-shell-v37",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

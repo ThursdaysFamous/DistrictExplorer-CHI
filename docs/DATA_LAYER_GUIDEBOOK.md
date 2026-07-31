@@ -390,6 +390,19 @@ in the researched-but-unbuilt backlog.
       "wanted": "The county's GIS department SELLS this data — it runs a paid subscription mapping site and a \"Digital Data Order Form\", so the district shapefiles demonstrably exist and are simply not public. The unlock is therefore a licensing/records question rather than a technical one: a public release, a records request, or the written legal descriptions the 2021-12-02 memo says were prepared. The roster half is already published (all 17 members with party and term)."
     },
     {
+      "id": "whiteside-municipal-wards",
+      "concept": "City council district",
+      "area": "Sterling, Rock Falls, Morrison, Prophetstown, Erie and Fulton",
+      "counties": [
+        "whiteside"
+      ],
+      "kind": "data-quality",
+      "layer": "ward",
+      "summary": "Whiteside publishes ward polygons for six of its municipalities, but the layer predates the redraw it would need to reflect.",
+      "blocker": "PrecinctWardMap layer 0 carries 22 wards across Sterling (4), Rock Falls (4), Morrison (4), Fulton (5), Prophetstown (3) and Erie (2), named and complete. Its dataLastEditDate is 2019-11-05 — BEFORE the 2020 census, and municipal wards are redrawn on that cycle. Shipping it would answer \"which ward am I in\" with a pre-redistricting line and no way for a reader to tell. Rock Island's Moline and Silvis layers were shipped instead precisely because theirs were edited in 2022, after the redraw.",
+      "wanted": "A post-2020-census refresh of Whiteside's ward layer, or confirmation from the county that these six municipalities did not redistrict. The geometry is already published and would ship the day its vintage is current."
+    },
+    {
       "id": "mercer-county-board-districts",
       "concept": "County board districts",
       "area": "Mercer County",
@@ -534,7 +547,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | U.S. House district | SHIPPED `congress` | SHIPPED `congress` | SHIPPED `congress` |
 | State upper chamber | SHIPPED `il-senate` | SHIPPED `state-senate` | SHIPPED `ca-senate` |
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
-| City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
+| City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS) + Rock Island's Moline 7 and Silvis 4 (county-hosted city layers, both edited 2022 — Whiteside's six-municipality layer is a recorded gap at a 2019 vintage). Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct; every metro county covered) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
 | County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 + Rock Island 19 districts; absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
@@ -581,7 +594,7 @@ entries with per-office source URLs, and label appointed clerks as appointed. (�
 | Police district / precinct | SHIPPED `police-district` (22) | SHIPPED `police-precinct` (78) | SHIPPED `police-district` (10) |
 | Police subdivision (beat / sector) | SHIPPED `police-beat` | SHIPPED `police-sector` | NO HONEST ANALOG — SFPD publishes no patrol-beat boundary (the only "beats" dataset is Parking Control's) |
 | Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | NO HONEST ANALOG — the SF Police Commission (Charter §4.109) and Department of Police Accountability are appointed (Mayor + Board of Supervisors), citywide, no districts; NYC's labeled-link-row precedent is the upgrade path if oversight links are ever wanted on the card |
-| Fire-service boundary | SHIPPED `fire-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + McHenry + Kendall suburban Fire *Protection* Districts; Cook from the Clerk's tax-agency tiling and DuPage/McHenry/Kendall name-only, Lake carries office contact, Kane names each district's chief + contact) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published |
+| Fire-service boundary | SHIPPED `fire-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + McHenry + Kendall suburban Fire *Protection* Districts; Cook from the Clerk's tax-agency tiling and DuPage/McHenry/Kendall name-only, Lake carries office contact, Kane names each district's chief + contact) · Rock Island 17 (the county's tax-agency tiling, FirePD 17/17) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published |
 | Township police-service tax district | SHIPPED `dupage-county-special-police` (unincorporated-area township tax districts that fund supplemental DuPage County Sheriff patrol; card links the elected Sheriff, coverage-gated) | NO HONEST ANALOG — NYC has no townships | NO HONEST ANALOG — SF has no townships |
 | Police / fire station points | SHIPPED `police-station` · `fire-station` (both metro-wide from USGS National Map structures L53/L51 as of 2026-07 — replaced the city-gated CPD/CFD point sets after a completeness check: 22/22 CPD stations, 91/92 CFD houses; the CPD source still feeds the police-district card's station rows) | SHIPPED (city sources) | SHIPPED (city sources) |
 
@@ -611,8 +624,8 @@ which the never-guess rule excludes as a source.
 | ZIP code | SHIPPED `zip-code` (ZCTA) | SHIPPED `zip-code` (MODZCTA) | SHIPPED `zip-code` (ZCTA) |
 | County | SHIPPED `county` (statewide IL) | SHIPPED `borough` (= county) | n/a — city and county are coterminous (recorded) |
 | Township / municipality | SHIPPED `township` · `municipality` (statewide IL; the municipality card names the municipal government — head of government, board, other elected officers, hall contact — for 280 of the metro's 284 municipalities incl. Chicago's citywide officers, county-sourced and joined by place GEOID) | n/a | n/a |
-| Park district | SHIPPED `park-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + Kendall; Cook's Clerk tiling includes the Chicago Park District — a Loop click resolves the city's own park taxing body; DuPage/Kendall name-only, Lake carries office contact, Kane names each district's board president + contact; McHenry is the one sourced county with no entry — recorded gap, it publishes facilities not district boundaries) | n/a | n/a |
-| Library taxing district | SHIPPED `library-district` (CountyDispatch, born consolidated: Cook's two Clerk tax-agency tilings — 59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund at a Loop click — + Will 27 w/ trustees + DuPage 32 name-only + Lake 15 w/ office contact + Kane 16 w/ board president + contact + McHenry 13 name-only + Kendall 9 name-only incl. the municipal Joliet/Yorkville city-library funds its tax tiling records, the Cook-style shape) | n/a — NYC's three library systems (NYPL/BPL/QPL) are nonprofit corporations, not taxing districts | n/a — SFPL is a city department |
+| Park district | SHIPPED `park-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + Kendall; Cook's Clerk tiling includes the Chicago Park District — a Loop click resolves the city's own park taxing body; DuPage/Kendall name-only, Lake carries office contact, Kane names each district's board president + contact; McHenry is the one sourced county with no entry — recorded gap, it publishes facilities not district boundaries) · Rock Island 1 (Cordova — the county levies only one) | n/a | n/a |
+| Library taxing district | SHIPPED `library-district` (CountyDispatch, born consolidated: Cook's two Clerk tax-agency tilings — 59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund at a Loop click — + Will 27 w/ trustees + DuPage 32 name-only + Lake 15 w/ office contact + Kane 16 w/ board president + contact + McHenry 13 name-only + Kendall 9 name-only incl. the municipal Joliet/Yorkville city-library funds its tax tiling records, the Cook-style shape) · Rock Island 9 named districts (the tenth polygon is the un-districted remainder, dropped in the loader) | n/a — NYC's three library systems (NYPL/BPL/QPL) are nonprofit corporations, not taxing districts | n/a — SFPL is a city department |
 | Tax increment financing (TIF) district | SHIPPED `tif-district` (Cook, 418 — the Clerk's un-yeared current agency tiling, clerkTaxDistricts L18; dedicated Cook layer per the single-county rule until a second county ships — Kendall's `TIF_Districts` service is the recorded next entry) | n/a — New York State discontinued NYC-style TIF; no city program | n/a — SF uses IFDs/CFDs, no published district tiling evaluated |
 | Water reclamation / sewerage special district | SHIPPED `mwrd` (Cook, 1 — the Metropolitan Water Reclamation District of Greater Chicago, the Clerk's tax-agency boundary; nine commissioners elected at large, card links the official board; in/out is the real discrimination — Cook's fringe townships sit outside) | n/a — NYC DEP is a city department, not a separate elected district | n/a — SFPUC is a city department |
 | Post office points | SHIPPED `post-office` (USGS National Map L38 — same national source in every fork) | SHIPPED | SHIPPED |
@@ -906,6 +919,51 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 
   This script should be **deleted, not maintained**, the day Stephenson publishes
   precinct geometry.
+
+- **RESEARCH PASS 5j (2026-07-31) — enriching the three newest counties. Rock Island
+  went from 2 concepts to 6; Lee and Whiteside had nothing safe left to add.** The
+  question this pass answers is not "which county is next" but "what does a county we
+  already serve still publish that we have not consumed".
+
+  | concept | Lee | Whiteside | Rock Island |
+  |---|---|---|---|
+  | `county-board` / `county-precinct` | already shipped | already shipped | already shipped |
+  | `fire-district` | already shipped (22) | none published | **+17** |
+  | `library-district` | none published | none published | **+9** |
+  | `park-district` | none published | none published | **+1** (Cordova) |
+  | `ward` | n/a | published but STALE — gap | **+11** (Moline 7, Silvis 4) |
+  | `judicial-subcircuit` | structurally n/a | structurally n/a | structurally n/a |
+
+  **The subcircuit answer is a clean structural negative, not a gap.** PA 102-0693
+  created subcircuits in exactly nine circuits, and the enacted archive carries exactly
+  those nine (3rd, 7th, 12th, 16th, 17th, 18th, 19th, 22nd, Cook). Lee and Whiteside sit
+  in the **15th**, Rock Island in the **14th** — neither received any. That is the same
+  answer Kendall's 23rd already has: the layer honestly hides there, and no artifact
+  would change it.
+
+  **Rock Island's TaxDistricts service is a Cook-shaped tax-agency tiling** — one layer
+  per levying body, ten in all, of which three are fleet concepts. Worth noting how the
+  cards read: Moline, Silvis and Rock Island city all resolve to **no** fire, library or
+  park district, and that is correct rather than a join failure. Incorporated cities run
+  their own departments on a city levy; only unincorporated ground and small towns sit
+  in a district. Cordova, at the county's north-east corner, resolves all three.
+
+  **The one-feature park district is honest, not thin.** Rock Island levies exactly one
+  (Cordova). A tiling of one is the accurate shape of that county's park provision, and
+  everywhere else the card correctly finds nothing.
+
+  **Two ward layers shipped and six municipalities' worth did not — on vintage alone.**
+  Moline (7 wards, edited 2022-08) and Silvis (4, edited 2022-01) both postdate the 2020
+  census, so they reflect the redraw a resident is currently voting under. Whiteside's
+  `PrecinctWardMap` carries 22 wards across Sterling, Rock Falls, Morrison, Fulton,
+  Prophetstown and Erie — more municipalities than Rock Island's two — and was last
+  edited **2019-11-05**, before the census that would have redrawn them. It is recorded
+  as a data-quality gap rather than shipped. *Municipal wards are redistricting
+  geometry; an edit date that predates the decennial census is a snapshot, exactly as it
+  was for Freeport's alderperson column and Whiteside's own MyElectedRepresentatives.*
+  The same service's precinct layer (2015, with a polling-place NAME on every row) was
+  likewise NOT used to fill the five precincts whose polling join fails — an
+  eleven-year-old address is worse than an honest blank.
 
 - **RESEARCH PASS 5i (2026-07-31) — Mercer and Jo Daviess: NEITHER SHIPS, and the
   Jo Daviess blocker survives its re-test.** Both were researched to the same depth as
