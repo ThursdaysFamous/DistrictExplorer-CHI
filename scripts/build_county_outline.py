@@ -344,6 +344,54 @@ COUNTIES = {
             (42.2587, -90.4231, "Bellevue, Iowa (across the Mississippi)"),
         ],
     },
+    # Lee and Whiteside close the north-western frontier. Every anchor below is
+    # DERIVED, not recalled: each `inside` point is the centroid of that place's
+    # largest TIGER ring, tested against the county's own TIGER outline, and each
+    # `outside` point is the place in the named neighbour whose centroid sits
+    # nearest the shared border while testing outside this county. Anchors
+    # written from memory put two Stephenson villages in the wrong townships;
+    # they are computed now.
+    "lee": {
+        "fips": "103",
+        "name": "Lee County",
+        "inside": [
+            (41.8493, -89.4876, "Dixon (county seat)"),
+            (41.7280, -89.3784, "Amboy"),
+            (41.8652, -89.2225, "Ashton"),
+            (41.6870, -88.9814, "Paw Paw"),
+            (41.6444, -89.2312, "Sublette"),
+            (41.7966, -89.6021, "Nelson"),
+        ],
+        # Rochelle is NOT an inside anchor: it straddles the Ogle line and its
+        # centroid falls in Ogle, which is why it appears below instead.
+        "outside": [
+            (41.9154, -89.0599, "Rochelle — Ogle County"),
+            (41.7661, -88.8748, "Shabbona — DeKalb County"),
+            (41.5858, -88.9176, "Earlville — LaSalle County"),
+            (41.5558, -89.4632, "Ohio — Bureau County"),
+            (41.6073, -89.6880, "Deer Grove — Whiteside County"),
+        ],
+    },
+    "whiteside": {
+        "fips": "195",
+        "name": "Whiteside County",
+        "inside": [
+            (41.8090, -89.9686, "Morrison (county seat)"),
+            (41.8024, -89.6993, "Sterling"),
+            (41.7743, -89.6882, "Rock Falls"),
+            (41.8632, -90.1557, "Fulton"),
+            (41.6751, -89.9343, "Prophetstown"),
+            (41.6598, -90.0783, "Erie"),
+        ],
+        "outside": [
+            (41.9633, -89.7719, "Milledgeville — Carroll County"),
+            (41.9857, -89.5812, "Polo — Ogle County"),
+            (41.7966, -89.6021, "Nelson — Lee County"),
+            (41.5558, -89.5920, "Walnut — Bureau County"),
+            (41.5217, -89.9129, "Hooppole — Henry County"),
+            (41.6101, -90.1763, "Hillsdale — Rock Island County"),
+        ],
+    },
 }
 
 

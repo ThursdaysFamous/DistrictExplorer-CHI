@@ -32,7 +32,7 @@
       "id": "chicago",
       "label": "Chicago",
       "url": "https://chidistricts.com/",
-      "emoji": "\ud83c\udf2d",
+      "emoji": "🌭",
       "bbox": {
         "minLng": -88.6,
         "minLat": 41.0,
@@ -44,7 +44,7 @@
       "id": "nyc",
       "label": "New York City",
       "url": "https://nyc.chidistricts.com/",
-      "emoji": "\ud83d\uddfd",
+      "emoji": "🗽",
       "bbox": {
         "minLng": -74.3,
         "minLat": 40.45,
@@ -56,7 +56,7 @@
       "id": "sf",
       "label": "San Francisco",
       "url": "https://sf.chidistricts.com/",
-      "emoji": "\ud83c\udf09",
+      "emoji": "🌉",
       "bbox": {
         "minLng": -122.6,
         "minLat": 37.6,
@@ -124,7 +124,7 @@
       "label": "IL Supreme Court District",
       "group": "political",
       "area_rank": 1,
-      "rank_note": "judicial district \u2014 largest"
+      "rank_note": "judicial district — largest"
     },
     {
       "id": "congress",
@@ -159,7 +159,7 @@
       "label": "Water Reclamation District (MWRD)",
       "group": "geography",
       "area_rank": 6,
-      "rank_note": "Metropolitan Water Reclamation District of Greater Chicago \u2014 ONE ~882 sq mi district (the Clerk's tax-agency boundary, county GIS politicalBoundary L21); nine commissioners elected at large, card links the official board; partial coverage (Cook's fringe townships sit outside the district), Cook-gated"
+      "rank_note": "Metropolitan Water Reclamation District of Greater Chicago — ONE ~882 sq mi district (the Clerk's tax-agency boundary, county GIS politicalBoundary L21); nine commissioners elected at large, card links the official board; partial coverage (Cook's fringe townships sit outside the district), Cook-gated"
     },
     {
       "id": "school-district-secondary",
@@ -201,14 +201,14 @@
       "label": "Judicial Subcircuit",
       "group": "political",
       "area_rank": 12,
-      "rank_note": "Consolidated judicial-subcircuit layer \u2014 Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act \u2014 structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties"
+      "rank_note": "Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties"
     },
     {
       "id": "county-board",
       "label": "County Board District",
       "group": "political",
       "area_rank": 13,
-      "rank_note": "Consolidated county-legislature layer \u2014 Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board \u2014 the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + LaSalle (29 single-member districts) and Kankakee (28) \u2014 the first counties outside the metro on this layer, both rule-4 branch 1 with the member carried on the county's own boundary GIS (LaSalle: name/e-mail/mailing address, phones recorded without an area code so not rendered; Kankakee: name/party/phone/e-mail, all 28/28) \u2014 as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
+      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + LaSalle (29 single-member districts) and Kankakee (28) — the first counties outside the metro on this layer, both rule-4 branch 1 with the member carried on the county's own boundary GIS (LaSalle: name/e-mail/mailing address, phones recorded without an area code so not rendered; Kankakee: name/party/phone/e-mail, all 28/28) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
     },
     {
       "id": "ccbr",
@@ -222,28 +222,28 @@
       "label": "Fire Protection District",
       "group": "safety",
       "area_rank": 15,
-      "rank_note": "Consolidated fire-protection-district layer \u2014 Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only \u2014 the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only \u2014 the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "dupage-county-special-police",
       "label": "DuPage Special Police District",
       "group": "safety",
       "area_rank": 16,
-      "rank_note": "DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol \u2014 Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific \u2014 no Will analog."
+      "rank_note": "DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog."
     },
     {
       "id": "park-district",
       "label": "Park District",
       "group": "geography",
       "area_rank": 17,
-      "rank_note": "Consolidated park-district layer \u2014 Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs) + Kane (11, board president + office contact in GIS attrs) + Kendall (5 genuine districts on the county's tax-code tiling, name-only; McHenry remains the one sourced county with no entry \u2014 it publishes park facilities, not district boundaries) + Kankakee (4, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated park-district layer — Cook (99, the Clerk's park tax-agency tiling incl. the Chicago Park District, name-only) + Will (22, commissioners in GIS attrs) + DuPage (39, name-only) + Lake (23, district office contact in GIS attrs) + Kane (11, board president + office contact in GIS attrs) + Kendall (5 genuine districts on the county's tax-code tiling, name-only; McHenry remains the one sourced county with no entry — it publishes park facilities, not district boundaries) + Kankakee (4, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "library-district",
       "label": "Library District",
       "group": "geography",
       "area_rank": 18,
-      "rank_note": "Consolidated library-district layer \u2014 Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs) + Kane (16, board president + office contact in GIS attrs) + McHenry (13, name-only after the county's own Z_None-filler + municipal-row exclusions) + Kendall (9 library taxing bodies on the county's complete tax-code tiling \u2014 municipal city-library funds included, the Cook-style shape) + Kankakee (8, identity-only, same measured reason as its fire tiling), county-dispatched; partial coverage inside each county"
+      "rank_note": "Consolidated library-district layer — Cook (59 Public Library Districts + 54 municipal Library Funds, incl. the City of Chicago Library Fund) + Will (27, trustees in GIS attrs) + DuPage (32, name-only) + Lake (15, district office contact in GIS attrs) + Kane (16, board president + office contact in GIS attrs) + McHenry (13, name-only after the county's own Z_None-filler + municipal-row exclusions) + Kendall (9 library taxing bodies on the county's complete tax-code tiling — municipal city-library funds included, the Cook-style shape) + Kankakee (8, identity-only, same measured reason as its fire tiling), county-dispatched; partial coverage inside each county"
     },
     {
       "id": "school-board",
@@ -325,7 +325,7 @@
       "label": "ZIP Code",
       "group": "geography",
       "area_rank": 28,
-      "rank_note": "ZIP Code (statewide Census ZCTA; ZCTA \u2248 USPS ZIP)"
+      "rank_note": "ZIP Code (statewide Census ZCTA; ZCTA ≈ USPS ZIP)"
     },
     {
       "id": "cps-high",
@@ -346,7 +346,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 31,
-      "rank_note": "Consolidated voting-precinct layer \u2014 suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only \u2014 city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name \u2014 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature \u2014 no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
@@ -358,64 +358,64 @@
       "label": "TIF District",
       "group": "geography",
       "area_rank": 32,
-      "rank_note": "Cook TIF districts \u2014 the Clerk's current tax-increment-financing agency tiling (418, county GIS clerkTaxDistricts L18: the un-yeared layer the Clerk refreshes in place, retired year editions archived in the year-versioned service); card shows name + Clerk agency number + the Clerk's TIF-reports link; partial coverage (most points are in no TIF), Cook-gated. Dedicated Cook layer per the consolidation rule until a second county ships TIFs (Kendall's server carries a TIF_Districts service \u2014 recorded as the next entry)"
+      "rank_note": "Cook TIF districts — the Clerk's current tax-increment-financing agency tiling (418, county GIS clerkTaxDistricts L18: the un-yeared layer the Clerk refreshes in place, retired year editions archived in the year-versioned service); card shows name + Clerk agency number + the Clerk's TIF-reports link; partial coverage (most points are in no TIF), Cook-gated. Dedicated Cook layer per the consolidation rule until a second county ships TIFs (Kendall's server carries a TIF_Districts service — recorded as the next entry)"
     },
     {
       "id": "cps-elementary",
       "label": "CPS Elementary School Zone",
       "group": "schools",
       "area_rank": 33,
-      "rank_note": "Elementary School attendance zone \u2014 smallest polygon layer"
+      "rank_note": "Elementary School attendance zone — smallest polygon layer"
     },
     {
       "id": "school-site",
       "label": "School Location (all, incl. private, nearest N)",
       "group": "schools",
       "area_rank": 34,
-      "rank_note": "individual school-campus footprints \u2014 smallest polygons, above the zones"
+      "rank_note": "individual school-campus footprints — smallest polygons, above the zones"
     },
     {
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
       "area_rank": 35,
-      "rank_note": "point marker \u2014 no polygon area, always topmost"
+      "rank_note": "point marker — no polygon area, always topmost"
     },
     {
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
       "area_rank": 36,
-      "rank_note": "point marker \u2014 no polygon area, always topmost"
+      "rank_note": "point marker — no polygon area, always topmost"
     },
     {
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
       "area_rank": 37,
-      "rank_note": "point marker \u2014 no polygon area, always topmost"
+      "rank_note": "point marker — no polygon area, always topmost"
     },
     {
       "id": "library",
       "label": "Library",
       "group": "geography",
       "area_rank": 38,
-      "rank_note": "point marker \u2014 no polygon area, always topmost"
+      "rank_note": "point marker — no polygon area, always topmost"
     },
     {
       "id": "early-voting",
       "label": "Early Voting Site",
       "group": "political",
       "area_rank": 39,
-      "rank_note": "point marker \u2014 no polygon area, always topmost"
+      "rank_note": "point marker — no polygon area, always topmost"
     }
   ],
   "min_register_layer": 15,
-  "layer_count_note": "17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 \u2014 TIGERweb) + 6 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, library-district, county-precinct \u2014 Cook/Will/DuPage/Lake/Kane/McHenry/Kendall entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 2 Cook-only tax-agency layers (tif-district, mwrd \u2014 dedicated until a second county ships the concept) + 3 amenity nearest-point layers (post-office, library, early-voting) = 39 \u2014 live-verified 2026-07",
+  "layer_count_note": "17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 — TIGERweb) + 6 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, library-district, county-precinct — Cook/Will/DuPage/Lake/Kane/McHenry/Kendall entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 2 Cook-only tax-agency layers (tif-district, mwrd — dedicated until a second county ships the concept) + 3 amenity nearest-point layers (post-office, library, early-voting) = 39 — live-verified 2026-07",
   "anchor_point": {
     "lat": 41.8825,
     "lng": -87.6285,
-    "note": "downtown Loop \u2014 inside Cook County"
+    "note": "downtown Loop — inside Cook County"
   },
   "anchors": [
     {
@@ -434,7 +434,7 @@
   "negative_point": {
     "lat": 41.7,
     "lng": -87.1,
-    "note": "Lake Michigan, Indiana waters \u2014 outside all three anchor layers"
+    "note": "Lake Michigan, Indiana waters — outside all three anchor layers"
   },
   "data_files": {
     "geometry": [
@@ -517,7 +517,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 22,
         "max_features": 60,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry \u2014 the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro)"
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro)"
       },
       {
         "file": "metro-outline.json",
@@ -634,6 +634,18 @@
         "note": "Carroll County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "lee-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Lee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "whiteside-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Whiteside County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
         "file": "carroll-county-board-districts.json",
         "min_features": 3,
         "max_features": 3,
@@ -699,7 +711,7 @@
       {
         "file": "kane-county-board-members.json",
         "min_keys": 24,
-        "note": "24 single-member board districts + the countywide-elected Chair, scraped weekly from the county's own SharePoint Board Members list (no bot block \u2014 plain requests)"
+        "note": "24 single-member board districts + the countywide-elected Chair, scraped weekly from the county's own SharePoint Board Members list (no bot block — plain requests)"
       },
       {
         "file": "lake-county-board-roles.json",
@@ -719,7 +731,7 @@
       {
         "file": "early-voting-sites.json",
         "min_keys": 3,
-        "note": "GeoJSON FeatureCollection (type/metadata/features \u2014 key floor is shape-only); hand-curated per election from chicagoelections.gov, network-first so a new election's list is never served stale"
+        "note": "GeoJSON FeatureCollection (type/metadata/features — key floor is shape-only); hand-curated per election from chicagoelections.gov, network-first so a new election's list is never served stale"
       },
       {
         "file": "ccbr-roster.json",
@@ -769,9 +781,14 @@
         "note": "Carroll County Board members keyed by district (3 districts electing three members each) — scraped weekly from the county's board directory, which writes ROMAN numerals the scraper converts to the Arabic keys the map uses. Its member floor is the full board of 9, not one under: the county has \"District\" typo'd on one row and the first scraper silently dropped that member."
       },
       {
+        "file": "lee-county-board-members.json",
+        "min_keys": 4,
+        "note": "Lee County Board members keyed by district (4 districts electing five members each, 20 seats) — scraped weekly from the Clerk's Member Contact List, which the CMS serves as a PDF. Read by WORD POSITION (pdfplumber): pypdf flattens it into a name block and a separately-ordered e-mail block, so pairing by sequence would mis-assign addresses. The Board Chair is derived from the row carrying the county's shared leecochair@ address rather than a personal one."
+      },
+      {
         "file": "coverage-gaps.json",
         "min_keys": 8,
-        "note": "Known data gaps keyed by gap id, driving the app's Data gaps panel \u2014 emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later."
+        "note": "Known data gaps keyed by gap id, driving the app's Data gaps panel — emitted from the guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py (--check is the drift gate). Network-first like the rosters on purpose: a gap that has been closed should stop being advertised on the next visit, not a release later."
       },
       {
         "file": "municipal-officials.json",
@@ -781,7 +798,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v34",
+    "cache_name": "district-explorer-shell-v35",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -899,6 +916,11 @@
       "file": "update-carroll-county-board-roster.yml",
       "purpose": "Carroll County Board roster (carrollcountyil.gov board directory)",
       "schedule": "Mon 14:00 UTC"
+    },
+    {
+      "file": "update-lee-county-board-roster.yml",
+      "purpose": "Lee County Board roster (leecountyil.com Member Contact List PDF)",
+      "schedule": "Tue 16:00 UTC"
     },
     {
       "file": "validate-sources.yml",
