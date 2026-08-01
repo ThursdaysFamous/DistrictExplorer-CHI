@@ -1,0 +1,94 @@
+{
+  "fetched": "2026-08-01",
+  "precincts": {
+    "CHERRY GROVE/SHANNON 1": {
+      "address": "13 S. CEDAR, SHANNON,IL 61078",
+      "place": "TOWNSHIP BUILDING"
+    },
+    "CHERRY GROVE/SHANNON 2": {
+      "address": "13 S. CEDAR, SHANNON,IL 61078",
+      "place": "TOWNSHIP BUILDING"
+    },
+    "ELKHORN GROVE": {
+      "address": "31434 ELKHORN RD. ,MILLEDGEVILLE,IL 61051",
+      "place": "TOWNSHIP HALL"
+    },
+    "FAIR HAVEN": {
+      "address": "223 CALVERT ST, CHADWICK,IL 61014",
+      "place": "AMERICAN LEGION HALL"
+    },
+    "FREEDOM": {
+      "address": "19987 TOWNHALL RD, LANARK,IL 61046",
+      "place": "TOWN HALL"
+    },
+    "MT CARROLL 1": {
+      "address": "811 S. CLAY ST",
+      "place": "FARM BUREAU BLDG."
+    },
+    "MT CARROLL 2": {
+      "address": "811 S. CLAY ST",
+      "place": "FARM BUREAU BLDG."
+    },
+    "MT CARROLL 3": {
+      "address": "811 S. CLAY ST",
+      "place": "FARM BUREAU BLDG."
+    },
+    "ROCK CREEK/LIMA 1": {
+      "address": "25123 LOCUST RD, LANARK,IL 61046",
+      "place": "TOWNSHIP BUILDING"
+    },
+    "ROCK CREEK/LIMA 2": {
+      "address": "25123 LOCUST RD, LANARK,IL 61046",
+      "place": "TOWNSHIP BUILDING"
+    },
+    "SALEM": {
+      "address": "811 S. CLAY ST",
+      "place": "FARM BUREAU BLDG."
+    },
+    "SAVANNA 1": {
+      "address": "101 MAIN ST",
+      "place": "SAVANNA FIRE STATION"
+    },
+    "SAVANNA 2": {
+      "address": "101 MAIN ST",
+      "place": "SAVANNA FIRE STATION"
+    },
+    "SAVANNA 3": {
+      "address": "101 MAIN ST",
+      "place": "SAVANNA FIRE STATION"
+    },
+    "SAVANNA 4": {
+      "address": "101 MAIN ST",
+      "place": "SAVANNA FIRE STATION"
+    },
+    "SAVANNA 5": {
+      "address": "101 MAIN ST",
+      "place": "SAVANNA FIRE STATION"
+    },
+    "SAVANNA 6": {
+      "address": "101 MAIN ST",
+      "place": "SAVANNA FIRE STATION"
+    },
+    "WASHINGTON": {
+      "place": "RIVERPORT RAILROAD IN THE"
+    },
+    "WOODLAND": {
+      "address": "811 S. CLAY ST",
+      "place": "FARM BUREAU BLDG"
+    },
+    "WYSOX 1": {
+      "address": "301 N. MAIN ST, MILLEDGEVILLE,IL 61051",
+      "place": "WYSOX TOWNSHIP BUILDING"
+    },
+    "WYSOX 2": {
+      "address": "301 N. MAIN ST, MILLEDGEVILLE,IL 61051",
+      "place": "WYSOX TOWNSHIP BUILDING"
+    },
+    "YORK": {
+      "address": "2100 MARKET ST, THOMSON,IL 61285",
+      "place": "VILLAGE HALL"
+    }
+  },
+  "source": "https://cms9files.revize.com/carrollil/NOTICE%20OF%20POLLING%20PLACES%20FOR%20THE.pdf",
+  "sourcePage": "https://www.carrollcountyil.gov/county_departments/clerk___recorder/index.php"
+}

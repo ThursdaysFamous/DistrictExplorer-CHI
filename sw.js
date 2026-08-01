@@ -137,6 +137,8 @@ const ROSTER_URLS = [
   "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
   "./data/app/lasalle-county-board-members.json",
+  "./data/app/logan-precinct-polling.json",
+  "./data/app/carroll-precinct-polling.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

@@ -4379,7 +4379,7 @@ function initChiExplorer() {
     // Smallest county-scoped layer, so it renders on top of Township and County
     // (smallest-on-top); turning it on drops both to outline-only, framing the
     // precinct fills from underneath.
-    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone), county-dispatched; subOf township
+    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features, township named from the clerk's own prefix pairing, election-day polling place joined on the precinct code 292/292 and labelled with the election it was published for) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone) + Macoupin current map (45, polling place joined 45/45 from the clerk's own Socrata polling dataset by deterministic label expansion) + McLean current map (141, polling place joined 141/141 by POLLINGID on the clerk's own MapServer) + Logan current map (29, township-named; the clerk's HTML polling table ships as a same-origin file and joins 29/29) + Sangamon approved fabric (166, polling place joined 165/166 by POLLID) + Carroll (22 — the county did not re-precinct, so TIGERweb's Census 2020 voting districts ARE the current fabric; the clerk's polling notice ships as a same-origin file, 22/22), county-dispatched; subOf township
     "tif-district",      // Cook TIF districts — the Clerk's current tax-increment-financing agency tiling (418, county GIS clerkTaxDistricts L18: the un-yeared layer the Clerk refreshes in place, retired year editions archived in the year-versioned service); card shows name + Clerk agency number + the Clerk's TIF-reports link; partial coverage (most points are in no TIF), Cook-gated. Dedicated Cook layer per the consolidation rule until a second county ships TIFs (Kendall's server carries a TIF_Districts service — recorded as the next entry)
     "cps-elementary",    // Elementary School attendance zone — smallest polygon layer
     "school-site",       // individual school-campus footprints — smallest polygons, above the zones
@@ -7196,8 +7196,56 @@ function initChiExplorer() {
   var loadKaneBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/kane-county-board-members.json", {}, 2);
   });
+  /* Kane precinct codes are township-prefixed ("AU16") and the data carries
+   * no township-name field. The pairing below is the COUNTY'S OWN: the
+   * clerk's Elections Maps page files every per-precinct map under its
+   * township folder (…/Precincts/Aurora/Precinct_AU01.pdf), pairing all 16
+   * prefixes — read off that page 2026-08-01, not inferred from initials.
+   * Until then the card skipped the Township row rather than guess. */
+  var KANE_PRECINCT_TOWNSHIPS = {
+    AU: "Aurora", BA: "Batavia", BB: "Blackberry", BR: "Big Rock",
+    BU: "Burlington", CA: "Campton", DU: "Dundee", EL: "Elgin",
+    GE: "Geneva", HA: "Hampshire", KA: "Kaneville", PL: "Plato",
+    RU: "Rutland", SC: "St. Charles", SG: "Sugar Grove", VI: "Virgil"
+  };
+  /* Election-day polling place joined by the precinct code — measured
+   * 292/292 on the county's current fabric. The service also carries early
+   * voting sites (LocationType filter) and LABELS each assignment with the
+   * election it was published for; that label rides the card because a
+   * polling assignment is per-election, not a standing fact. A polling
+   * failure costs the polling rows, never the precinct. */
   var loadKanePrecincts = makeCached(function () {
-    return loadKaneFeatureServer("KaneCo_IL_ElectionsPrecincts", "1=1", "PRECINCT,CBDist", "precincts");
+    return Promise.all([
+      loadKaneFeatureServer("KaneCo_IL_ElectionsPrecincts", "1=1", "PRECINCT,CBDist", "precincts"),
+      loadKaneFeatureServer("KaneCo_IL_Elections_PollingPlaces", "LocationType='ElectionDay'",
+        "Precinct,LocationName,Address,City,Election", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byCode = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var code = findPropCI(p, ["precinct"]);
+          if (code != null && String(code).trim()) byCode[String(code).trim().toUpperCase()] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var code = findPropCI(props, ["precinct"]);
+          var place = code != null ? byCode[String(code).trim().toUpperCase()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["locationname"]);
+          var street = findPropCI(place, ["address"]);
+          var city = findPropCI(place, ["city"]);
+          if (street != null && String(street).trim()) {
+            props.dxPollingAddress = String(street).trim() +
+              (city != null && String(city).trim() ? ", " + String(city).trim() : "");
+          }
+          props.dxPollingElection = findPropCI(place, ["election"]);
+        });
+      }
+      return precincts;
+    });
   });
   // Kane codes municipal fire DEPARTMENTS with negative ids and the real fire
   // (protection) taxing districts with 13-digit IDOR codes — the positive-id
@@ -7963,6 +8011,47 @@ function initChiExplorer() {
     return out;
   }
 
+  /* McLean's precinct fabric rides the same clerk MapServer as its board
+   * layer: PollingPlaces L1 is the 141-precinct current map and L0 the
+   * polling sites, joined by POLLINGID — measured 141/141, the Kendall
+   * model. The polling features also carry the ELECTION AUTHORITY's contact
+   * (Bloomington runs its own election commission inside the county, exactly
+   * as Chicago does inside Cook) — that is authority contact, not venue
+   * contact, so it is not requested. A polling failure costs the polling
+   * rows, never the precinct. */
+  var loadMcleanPrecincts = makeCached(function () {
+    var base = "https://gis.mcleancountyil.gov/arcgis/rest/services/Clerks/PollingPlaces";
+    return Promise.all([
+      loadCountyMapServerLayer(base, 1, "PRECINCTID,NAME,POLLINGID", "McLean County precincts"),
+      loadCountyMapServerLayer(base, 0, "POLLINGID,NAME,FULLADD,CITY", "McLean County polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = findPropCI(p, ["pollingid"]);
+          if (id != null && String(id).trim()) byId[String(id).trim().toUpperCase()] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["pollingid"]);
+          var place = key != null ? byId[String(key).trim().toUpperCase()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var street = findPropCI(place, ["fulladd"]);
+          var city = findPropCI(place, ["city"]);
+          if (street != null && String(street).trim()) {
+            props.dxPollingAddress = String(street).trim() +
+              (city != null && String(city).trim() ? ", " + String(city).trim() : "");
+          }
+        });
+      }
+      return precincts;
+    });
+  });
+
   /* Logan's board districts are published by the Tri-County Regional Planning
    * Commission's ArcGIS org rather than by the county itself — the regional-GIS
    * shape, like WinGIS in Winnebago. The layer carries the district number and a
@@ -8001,6 +8090,108 @@ function initChiExplorer() {
   var loadSangamonBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/sangamon-county-board-members.json", {}, 2);
   });
+  /* Logan's precinct fabric is layer 40 of the same TCRPC service its board
+   * entry reads — 29 township-named precincts. The county publishes its
+   * polling assignment only as an HTML table on the clerk's site, so that
+   * table ships as a small same-origin file (data/app/logan-precinct-polling
+   * .json, rebuilt by scripts/build_logan_precinct_polling.py) and joins by
+   * normalized name: the GIS writes "Lake Fork/ Laenna" with a space and
+   * "Atlanta 1" with a number, the clerk "Lake Fork/Laenna" and bare
+   * "Atlanta" with "#" on its ward-style numbers — normalization plus one
+   * bare-base fallback (applied only when neither side has another numbered
+   * variant) covers all 29, measured. */
+  function normLoganPrecinct(name) {
+    return String(name || "").toUpperCase().replace(/#/g, "")
+      .replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
+  }
+  var loadLoganPrecincts = makeCached(function () {
+    var url = "https://services.arcgis.com/pPTAs43AFhhk0pXQ/arcgis/rest/services/" +
+      "Logan_County_Districts_and_Zoning/FeatureServer/40/query?where=1%3D1" +
+      "&outFields=Name&outSR=4326&f=geojson&geometryPrecision=5";
+    return Promise.all([
+      fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Logan County precincts returned no usable geometry");
+          return geojson;
+        }),
+      fetchJSONWithRetry("data/app/logan-precinct-polling.json", {}, 2)
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling && polling.precincts) {
+        var byName = {};
+        var numberedBases = {};
+        Object.keys(polling.precincts).forEach(function (label) {
+          var key = normLoganPrecinct(label);
+          byName[key] = polling.precincts[label];
+          var m = key.match(/^(.*)\s\d+$/);
+          if (m) numberedBases[m[1]] = (numberedBases[m[1]] || 0) + 1;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = normLoganPrecinct(findPropCI(props, ["name"]));
+          var entry = byName[key];
+          if (!entry) {
+            // "Atlanta 1" (GIS) -> bare "Atlanta" (clerk): only when the
+            // clerk table has no numbered Atlanta of its own.
+            var m = key.match(/^(.*)\s\d+$/);
+            if (m && byName[m[1]] && !numberedBases[m[1]]) entry = byName[m[1]];
+          }
+          if (!entry) return;
+          props.dxPollingPlace = entry.place || null;
+          props.dxPollingAddress = entry.address || null;
+        });
+      }
+      return precincts;
+    });
+  });
+  /* Sangamon's current fabric is the clerk's approved-precincts service (the
+   * date-stamped name is the ADOPTION stamp, not a vintage warning — the
+   * proposed drafts sit beside it), with the polling site joined by POLLID ->
+   * POLLINGID, measured 165/166: one precinct's id resolves to no polling
+   * feature at the source, and that card simply omits the row rather than
+   * guessing. A polling failure costs the polling rows, never the precinct. */
+  var loadSangamonPrecincts = makeCached(function () {
+    var base = "https://services.arcgis.com/XqG0RpqsNfIBGGb2/arcgis/rest/services/";
+    function layer(service, outFields, label) {
+      var url = base + service + "/FeatureServer/0/query?where=1%3D1&outFields=" +
+        outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Sangamon County " + label + " returned no usable geometry");
+          return geojson;
+        });
+    }
+    return Promise.all([
+      layer("ApprovedPrecincts20231012", "Precinct,Name,POLLID", "precincts"),
+      layer("ElectionPollingAndPrecincts", "POLLINGID,NAME,FULLADD,CITY", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = findPropCI(p, ["pollingid"]);
+          if (id != null && String(id).trim()) byId[String(id).trim()] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["pollid"]);
+          var place = key != null ? byId[String(key).trim()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var street = findPropCI(place, ["fulladd"]);
+          var city = findPropCI(place, ["city"]);
+          if (street != null && String(street).trim()) {
+            props.dxPollingAddress = String(street).trim() +
+              (city != null && String(city).trim() ? ", " + String(city).trim() : "");
+          }
+        });
+      }
+      return precincts;
+    });
+  });
 
   /* Macoupin is the only served county whose data comes from a SOCRATA portal
    * of its own (data.macoupincountyil.gov) rather than a GIS server — the
@@ -8009,14 +8200,62 @@ function initChiExplorer() {
    * shipped: the county composes them from precincts, and the only published
    * precinct-to-district mapping is a scanned image in a document still titled
    * "proposed", which is not something to draw real district lines from.
-   * Recorded as a gap instead. */
+   * Recorded as a gap instead.
+   *
+   * The clerk's POLLING dataset (rc5v-ajnf, same portal) keys 35 rows by a
+   * COMBINED label — "BRIGHTON 1,2" is two precincts sharing one hall — so
+   * the join expands those labels deterministically: "BASE a,b" becomes
+   * BASE a + BASE b, nothing fuzzier. One residual class is also the
+   * county's own doing: the polling rows say "NILWOOD 1" / "SHIPMAN 1" where
+   * the precinct fabric has bare "NILWOOD" / "SHIPMAN" — a " 1" suffix is
+   * dropped ONLY when the fabric has the bare name and neither side has any
+   * other numbered variant, which is a rename, not a guess. Measured 45/45.
+   * A polling failure costs the polling rows, never the precinct. */
   var loadMacoupinPrecincts = makeCached(function () {
     var url = "https://data.macoupincountyil.gov/resource/ab79-cnsh.geojson?$limit=500";
-    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
-      .then(function (geojson) {
-        if (!hasUsableGeometry(geojson)) throw new Error("Macoupin County precincts returned no usable geometry");
-        return geojson;
-      });
+    var pollingUrl = "https://data.macoupincountyil.gov/resource/rc5v-ajnf.json?$limit=200";
+    return Promise.all([
+      fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Macoupin County precincts returned no usable geometry");
+          return geojson;
+        }),
+      fetchJSONWithRetry(pollingUrl, {}, 2).catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling && polling.length) {
+        var byName = {};
+        var numberedBases = {};
+        polling.forEach(function (row) {
+          var label = String(row.precinct || "").replace(/\s+/g, " ").trim().toUpperCase();
+          if (!label) return;
+          var m = label.match(/^([A-Z .'-]+?)\s+(\d+(?:\s*[,&]\s*\d+)*)$/);
+          var names = [label];
+          if (m) {
+            names = m[2].split(/\s*[,&]\s*/).map(function (n) { return m[1].trim() + " " + n; });
+            numberedBases[m[1].trim()] = (numberedBases[m[1].trim()] || 0) + names.length;
+          }
+          names.forEach(function (n) { byName[n] = row; });
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var name = String(findPropCI(props, ["name"]) || "").replace(/\s+/g, " ").trim().toUpperCase();
+          var row = byName[name];
+          if (!row && byName[name + " 1"] && numberedBases[name] === 1) {
+            row = byName[name + " 1"];   // the rename class — see above
+          }
+          if (!row) return;
+          props.dxPollingPlace = row.name || null;
+          var tail = [row.city, row.state, row.zip_code]
+            .filter(function (x) { return x != null && String(x).trim(); })
+            .map(function (x) { return String(x).trim(); }).join(" ");
+          if (row.location_1 != null && String(row.location_1).trim()) {
+            props.dxPollingAddress = String(row.location_1).trim() + (tail ? ", " + tail : "");
+          }
+        });
+      }
+      return precincts;
+    });
   });
 
   /* ---------- THE METRO EAST (Madison + St. Clair) ------------------------
@@ -8350,6 +8589,42 @@ function initChiExplorer() {
   });
   var loadCarrollBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/carroll-county-board-members.json", {}, 2);
+  });
+  /* Carroll did not re-precinct after the 2020 census, so TIGERweb's Census
+   * 2020 voting-district layer IS the county's current 22-precinct fabric —
+   * verified name-for-name against the clerk's own polling notice (the
+   * 2026-07-31 validation-pass finding). The notice ships as a small
+   * same-origin file (data/app/carroll-precinct-polling.json, rebuilt by
+   * scripts/build_carroll_precinct_polling.py) joined on TIGER's BASENAME.
+   * If the county ever re-precincts, the builder's 22-name guard fails
+   * before anything wrong can ship. */
+  var loadCarrollPrecincts = makeCached(function () {
+    var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/" +
+      "tigerWMS_Census2020/MapServer/58/query?where=" +
+      encodeURIComponent("STATE='17' AND COUNTY='015'") +
+      "&outFields=BASENAME,GEOID&outSR=4326&f=geojson&geometryPrecision=5";
+    return Promise.all([
+      fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Carroll County precincts returned no usable geometry");
+          return geojson;
+        }),
+      fetchJSONWithRetry("data/app/carroll-precinct-polling.json", {}, 2)
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling && polling.precincts) {
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var name = String(findPropCI(props, ["basename"]) || "").trim().toUpperCase();
+          var entry = polling.precincts[name];
+          if (!entry) return;
+          props.dxPollingPlace = entry.place || null;
+          props.dxPollingAddress = entry.address || null;
+        });
+      }
+      return precincts;
+    });
   });
 
   /* Lee's GIS was recorded as unreachable and its portal as holding zero public
@@ -14125,27 +14400,49 @@ function initChiExplorer() {
           return (v == null || v === "") ? null : String(v);
         },
         // Kane's precinct features carry their County Board district as a
-        // FIELD (CBDist), so no spatial join is needed. The precinct code is
-        // township-prefixed ("AU16") but the data carries no township-name
-        // field — mapping the prefix to a name would be a guess, so the card
-        // skips the Township row rather than inventing one.
+        // FIELD (CBDist), so no spatial join is needed. The township name
+        // comes from the clerk's own prefix pairing (KANE_PRECINCT_TOWNSHIPS
+        // — read off the Elections Maps page, not inferred), and the polling
+        // place is stamped at load with the election it was published for.
         query: function (point, seq) {
           return loadKanePrecincts().then(function (geojson) {
             var feature = findFeatureContaining(geojson, point);
             if (!feature) return null;
             var props = feature.properties || {};
             var d = findPropCI(props, ["cbdist"]);
+            var code = findPropCI(props, ["precinct"]);
+            var township = null;
+            if (code != null) {
+              var prefix = String(code).trim().toUpperCase().slice(0, 2);
+              township = KANE_PRECINCT_TOWNSHIPS[prefix] || null;
+            }
             return {
               seq: seq,
-              name: findPropCI(props, ["precinct"]),
-              boardDistrict: d != null && d !== "" ? String(parseInt(d, 10) || d) : null
+              name: code,
+              township: township,
+              boardDistrict: d != null && d !== "" ? String(parseInt(d, 10) || d) : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null,
+              pollingElection: props.dxPollingElection || null
             };
           });
         },
         render: function (result) {
           var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
           if (result.boardDistrict != null && result.boardDistrict !== "") {
             fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
+          if (result.pollingPlace) {
+            // labelled with the election the county published it for —
+            // polling assignments are per-election, not standing facts
+            fields.push({
+              label: result.pollingElection
+                ? "Polling place (" + String(result.pollingElection) + ")"
+                : "Polling place",
+              value: String(result.pollingPlace) +
+                (result.pollingAddress ? " — " + String(result.pollingAddress) : "")
+            });
           }
           return renderFieldStack(fields);
         },
@@ -14496,10 +14793,11 @@ function initChiExplorer() {
       },
       // Macoupin — the last link in the bridge to the Metro East, and the only
       // served county whose data comes from its own SOCRATA portal rather than a
-      // GIS server. Identity-only: the clerk's precinct dataset carries a name
-      // and a description blob and nothing else, and no polling-place join is
-      // published against it. The board-district row every other entry shows is
-      // absent here on purpose — see the loader.
+      // GIS server. The polling place joins from the clerk's own polling
+      // dataset by deterministic label expansion ("BRIGHTON 1,2" is two
+      // precincts sharing one hall — see the loader; measured 45/45). The
+      // board-district row every other entry shows is absent here on purpose:
+      // the county publishes no adopted board GIS (a recorded gap).
       {
         key: "macoupin",
         coverage: macoupinCountyCoverage,
@@ -14512,15 +14810,24 @@ function initChiExplorer() {
           return loadMacoupinPrecincts().then(function (geojson) {
             var feature = findFeatureContaining(geojson, point);
             if (!feature) return null;
-            var name = findPropCI(feature.properties || {}, ["name"]);
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
             return {
               seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
             };
           });
         },
-        render: function () {
-          return renderFieldStack([{ label: "County", value: "Macoupin County" }]);
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Macoupin County" });
+          return renderFieldStack(fields);
         },
         cardIdentifier: function (result) {
           return result.name ? "Precinct " + String(result.name) : "Unknown";
@@ -14907,6 +15214,238 @@ function initChiExplorer() {
           return {
             label: "Rock Island County Clerk — Elections (official)",
             url: "https://www.rockislandcountyil.gov/247/Elections"
+          };
+        }
+      },
+      // The pass-6 precinct tranche (2026-08-02): four counties whose
+      // services the validation pass verified live.
+      // McLean — 141 precincts on the clerk's own MapServer with the polling
+      // site joined 141/141 by POLLINGID (see the loader). Board district
+      // from the usual spatial join against the clerk's board layer.
+      {
+        key: "mclean",
+        coverage: mcleanCountyCoverage,
+        loadGeometry: loadMcleanPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMcleanPrecincts(),
+            loadMcleanCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["districtid"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "McLean County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "McLean County Clerk — Elections (official)",
+            url: "https://www.mcleancountyil.gov/93/Election-Information"
+          };
+        }
+      },
+      // Logan — 29 township-named precincts from the TCRPC layer its board
+      // entry already reads, with the clerk's polling table joined from a
+      // same-origin file (see the loader). Board district via spatial join.
+      {
+        key: "logan",
+        coverage: loganCountyCoverage,
+        loadGeometry: loadLoganPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLoganPrecincts(),
+            loadLoganCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Logan County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Logan County Clerk — Polling Places (official)",
+            url: "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=178&Itemid=543&lang=en"
+          };
+        }
+      },
+      // Sangamon — the clerk's 166-precinct approved fabric with the polling
+      // site joined 165/166 by POLLID (see the loader). Board district via
+      // spatial join against the county's AGOL board layer.
+      {
+        key: "sangamon",
+        coverage: sangamonCountyCoverage,
+        loadGeometry: loadSangamonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadSangamonPrecincts(),
+            loadSangamonCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Sangamon County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Sangamon County Clerk — Elections (official)",
+            url: "https://sangamonil.gov/departments/a-c/county-clerk/elections"
+          };
+        }
+      },
+      // Carroll — the county did not re-precinct after 2020, so TIGERweb's
+      // Census 2020 voting districts ARE its current 22-precinct fabric,
+      // with the clerk's polling notice joined from a same-origin file (see
+      // the loader). Board district via spatial join against the derived
+      // board geometry.
+      {
+        key: "carroll",
+        coverage: carrollCountyCoverage,
+        loadGeometry: loadCarrollPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["basename"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadCarrollPrecincts(),
+            loadCarrollCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["basename"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Carroll County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Carroll County Clerk — Elections (official)",
+            url: "https://www.carrollcountyil.gov/county_departments/clerk___recorder/index.php"
           };
         }
       }
