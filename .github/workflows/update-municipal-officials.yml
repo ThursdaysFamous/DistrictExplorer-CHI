@@ -16,6 +16,16 @@ name: Update municipal officials roster
 #   Ogle       — Clerk's County Yearbook PDF                     (full body)
 #   Stephenson — county Cities & Villages directory page         (full body)
 #   DeKalb     — Clerk's Reference Yearbook PDF                  (full body)
+#   Grundy     — Clerk's County Directory booklet PDF            (full body)
+#   Livingston — Clerk's Yearbook PDF                            (full body)
+#   Logan      — Clerk's Reference & Yearbook PDF                (full body)
+#   McLean     — the three ward cities' own pages (Bloomington BEC,
+#                leroy.org, lexingtonil.gov) — the county-wide source is a
+#                JS-locked Airtable interface (see the scraper)
+#   Sangamon   — Clerk's per-municipality officials PDFs         (full body)
+#   Madison +  — East-West Gateway Public Officials Directory    (full body;
+#   St. Clair    one COG document sourcing two counties at once)
+#   Rock Island— Clerk's Elected Officials listing PDF           (full body)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
 #   Kane       — Clerk's Government Guide PDF                    (head + clerk)
 #   McHenry    — Clerk's County Yearbook page                    (head + clerk)
@@ -170,6 +180,46 @@ jobs:
         continue-on-error: true
         run: python3 scripts/dekalb_municipal_officials_scraper.py --out /tmp/dekalb_municipal_officials.json
 
+      # The pass-6 tranche (2026-08-01): eight counties whose sources the
+      # validation pass verified publishable. All preservable — nothing
+      # already shipped degrades if one is missing.
+      - name: Scrape the Grundy County Clerk directory booklet
+        id: scrape_grundy
+        continue-on-error: true
+        run: python3 scripts/grundy_municipal_officials_scraper.py --out /tmp/grundy_municipal_officials.json
+
+      - name: Scrape the Livingston County Clerk yearbook
+        id: scrape_livingston
+        continue-on-error: true
+        run: python3 scripts/livingston_municipal_officials_scraper.py --out /tmp/livingston_municipal_officials.json
+
+      - name: Scrape the Logan County Clerk reference and yearbook
+        id: scrape_logan
+        continue-on-error: true
+        run: python3 scripts/logan_municipal_officials_scraper.py --out /tmp/logan_municipal_officials.json
+
+      - name: Scrape the McLean ward cities' own council pages
+        id: scrape_mclean
+        continue-on-error: true
+        run: python3 scripts/mclean_municipal_officials_scraper.py --out /tmp/mclean_municipal_officials.json
+
+      - name: Scrape the Sangamon County Clerk per-municipality PDFs
+        id: scrape_sangamon
+        continue-on-error: true
+        run: python3 scripts/sangamon_municipal_officials_scraper.py --out /tmp/sangamon_municipal_officials.json
+
+      # One document, two counties: EWG's Public Officials Directory covers
+      # Madison and St. Clair at once, so a failure preserves both.
+      - name: Scrape the East-West Gateway Public Officials Directory
+        id: scrape_ewg
+        continue-on-error: true
+        run: python3 scripts/ewg_municipal_officials_scraper.py --out-madison /tmp/madison_municipal_officials.json --out-stclair /tmp/stclair_municipal_officials.json
+
+      - name: Scrape the Rock Island County Clerk elected officials listing
+        id: scrape_rock_island
+        continue-on-error: true
+        run: python3 scripts/rock_island_municipal_officials_scraper.py --out /tmp/rock_island_municipal_officials.json
+
       # Freeport is the ONLY municipality in Stephenson County that its county
       # page omits — and it is the county seat, holding more than half the
       # county's municipal population. The city publishes its own governing body
@@ -221,7 +271,10 @@ jobs:
           steps.scrape_skokie.outcome == 'failure' || steps.scrape_joliet.outcome == 'failure' ||
           steps.scrape_ogle.outcome == 'failure' || steps.scrape_stephenson.outcome == 'failure' ||
           steps.scrape_carroll.outcome == 'failure' || steps.scrape_freeport.outcome == 'failure' ||
-          steps.scrape_dekalb.outcome == 'failure'
+          steps.scrape_dekalb.outcome == 'failure' || steps.scrape_grundy.outcome == 'failure' ||
+          steps.scrape_livingston.outcome == 'failure' || steps.scrape_logan.outcome == 'failure' ||
+          steps.scrape_mclean.outcome == 'failure' || steps.scrape_sangamon.outcome == 'failure' ||
+          steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           COOK_OUTCOME: ${{ steps.scrape_cook.outcome }}
@@ -239,6 +292,13 @@ jobs:
           CARROLL_OUTCOME: ${{ steps.scrape_carroll.outcome }}
           FREEPORT_OUTCOME: ${{ steps.scrape_freeport.outcome }}
           DEKALB_OUTCOME: ${{ steps.scrape_dekalb.outcome }}
+          GRUNDY_OUTCOME: ${{ steps.scrape_grundy.outcome }}
+          LIVINGSTON_OUTCOME: ${{ steps.scrape_livingston.outcome }}
+          LOGAN_OUTCOME: ${{ steps.scrape_logan.outcome }}
+          MCLEAN_OUTCOME: ${{ steps.scrape_mclean.outcome }}
+          SANGAMON_OUTCOME: ${{ steps.scrape_sangamon.outcome }}
+          EWG_OUTCOME: ${{ steps.scrape_ewg.outcome }}
+          ROCK_ISLAND_OUTCOME: ${{ steps.scrape_rock_island.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -268,6 +328,13 @@ jobs:
           if [ "$CARROLL_OUTCOME" = "failure" ]; then raise_issue "Carroll"; fi
           if [ "$FREEPORT_OUTCOME" = "failure" ]; then raise_issue "Freeport council"; fi
           if [ "$DEKALB_OUTCOME" = "failure" ]; then raise_issue "DeKalb"; fi
+          if [ "$GRUNDY_OUTCOME" = "failure" ]; then raise_issue "Grundy"; fi
+          if [ "$LIVINGSTON_OUTCOME" = "failure" ]; then raise_issue "Livingston"; fi
+          if [ "$LOGAN_OUTCOME" = "failure" ]; then raise_issue "Logan"; fi
+          if [ "$MCLEAN_OUTCOME" = "failure" ]; then raise_issue "McLean ward-city"; fi
+          if [ "$SANGAMON_OUTCOME" = "failure" ]; then raise_issue "Sangamon"; fi
+          if [ "$EWG_OUTCOME" = "failure" ]; then raise_issue "Madison + St. Clair (EWG)"; fi
+          if [ "$ROCK_ISLAND_OUTCOME" = "failure" ]; then raise_issue "Rock Island"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -305,6 +372,15 @@ jobs:
           add "${{ steps.scrape_stephenson.outcome }}"  stephenson  county /tmp/stephenson_municipal_officials.json
           add "${{ steps.scrape_carroll.outcome }}"     carroll     county /tmp/carroll_municipal_officials.json
           add "${{ steps.scrape_dekalb.outcome }}"      dekalb      county /tmp/dekalb_municipal_officials.json
+          add "${{ steps.scrape_grundy.outcome }}"      grundy      county /tmp/grundy_municipal_officials.json
+          add "${{ steps.scrape_livingston.outcome }}"  livingston  county /tmp/livingston_municipal_officials.json
+          add "${{ steps.scrape_logan.outcome }}"       logan       county /tmp/logan_municipal_officials.json
+          add "${{ steps.scrape_mclean.outcome }}"      mclean      county /tmp/mclean_municipal_officials.json
+          add "${{ steps.scrape_sangamon.outcome }}"    sangamon    county /tmp/sangamon_municipal_officials.json
+          # one scrape step, two county payloads — both preserve if it fails
+          add "${{ steps.scrape_ewg.outcome }}"         madison     county /tmp/madison_municipal_officials.json
+          add "${{ steps.scrape_ewg.outcome }}"         st-clair    county /tmp/stclair_municipal_officials.json
+          add "${{ steps.scrape_rock_island.outcome }}" rock-island county /tmp/rock_island_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
@@ -369,7 +445,7 @@ jobs:
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
           # the force-push above already updated it.
-          body="Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication (the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, and Lake's county GIS hall contact), plus the four city-level payloads.
+          body="Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication (the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, and the three McLean ward cities' own pages), plus the four city-level payloads.
 
           Please review the diff before merging — this changes data about real officeholders.
 
