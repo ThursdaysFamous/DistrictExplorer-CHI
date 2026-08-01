@@ -111,6 +111,13 @@ ROSTER_FILES = {
     "early-voting-sites.json": 3,  # GeoJSON FeatureCollection (type/metadata/features - key floor is shape-only); hand-curated per election from sf.gov Dept of Elections pages, network-first so a new election's list is never served stale
     "bart-directors.json": 9,  # 9 BART directors keyed by district, hand-verified against bart.gov/about/bod (staggered 4-year terms; re-verify after each even-year November - see WATCH.md)
 }
+
+# Files the app references DYNAMICALLY — the URL is built from a slug at
+# runtime (the gaps panel's <slug>-county-outline.json contract), so no
+# literal appears in index.html. Exempt from the reference check only;
+# existence, shape and the negative-point test still apply.
+DYNAMIC_REFERENCE = frozenset({
+})
 # ==== GENERATED:END validator-config ====
 
 
@@ -296,6 +303,8 @@ def main():
     if blobs:
         fail("dataset(s) still embedded inline (should be in data/app/): %s" % blobs)
     for fname in list(GEOMETRY_FILES) + list(ROSTER_FILES):
+        if fname in DYNAMIC_REFERENCE:
+            continue  # URL built from a slug at runtime — see the generated set
         if ("data/app/" + fname) not in html:
             fail("index.html does not reference data/app/%s" % fname)
 

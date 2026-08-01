@@ -258,6 +258,19 @@ def render_validator_config(w):
         a("    %s: %d,%s" % (js_str(r["file"]), r["min_keys"],
                              ("  # " + r["note"]) if r.get("note") else ""))
     a("}")
+    a("")
+    a("# Files the app references DYNAMICALLY — the URL is built from a slug at")
+    a("# runtime (the gaps panel's <slug>-county-outline.json contract), so no")
+    a("# literal appears in index.html. Exempt from the reference check only;")
+    a("# existence, shape and the negative-point test still apply.")
+    a("DYNAMIC_REFERENCE = frozenset({")
+    for g in w["data_files"]["geometry"]:
+        if g.get("dynamic_reference"):
+            a("    %s," % js_str(g["file"]))
+    for r in w["data_files"]["rosters"]:
+        if r.get("dynamic_reference"):
+            a("    %s," % js_str(r["file"]))
+    a("})")
     return "\n".join(L)
 
 
