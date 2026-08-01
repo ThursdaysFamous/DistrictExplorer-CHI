@@ -3190,6 +3190,13 @@ function initChiExplorer() {
     return rings;
   }
 
+  // The most recent coverage outline in GeoJSON [lng,lat] ring form, retained
+  // so other engine surfaces (the gaps panel) can test "is this point inside
+  // the covered area" without a second fetch or their own dissolve. null until
+  // the mask loads (or if it never does) — consumers treat null as UNKNOWN and
+  // fail safe, never as "outside".
+  var coverageMaskRings = null;
+
   function drawOutOfScopeMask(loadCoverageGeometry) {
     if (typeof loadCoverageGeometry !== "function") return;
     loadCoverageGeometry().then(function (geo) {
@@ -3209,6 +3216,7 @@ function initChiExplorer() {
           }
         }
       }
+      coverageMaskRings = outline;
       // Outer ring spans several world copies so panning far east/west at
       // low zoom never slips out from under the wash.
       var rings = [[[-89, -720], [89, -720], [89, 720], [-89, 720]]];
@@ -3621,6 +3629,19 @@ function initChiExplorer() {
       "data-quality": "partial data"
     };
 
+    /* Whether the pin sits inside the covered area at all, reusing the rings
+     * the scope mask already dissolved (coverageMaskRings). Returns true /
+     * false / null-for-unknown — null when the mask hasn't loaded, and the
+     * caller falls back to the wording that doesn't claim either way. Outside
+     * the covered area, "nothing missing where you clicked" would be exactly
+     * wrong: everything is. */
+    function pointInCoverage(point) {
+      if (!point || !coverageMaskRings || !coverageMaskRings.length) return null;
+      try {
+        return pointInGeometry(point, { type: "Polygon", coordinates: coverageMaskRings });
+      } catch (e) { return null; }
+    }
+
     /* Which of a gap's counties contain the selected point. Resolves to false
      * for a gap with no counties (nothing to test) and treats an outline that
      * fails to load as "not here" — a gap still appears in the everywhere list,
@@ -3734,9 +3755,23 @@ function initChiExplorer() {
           // match, so that phrasing would claim the point is clean when really
           // the gaps simply are not mappable — for a fork with no outlines at
           // all, every one of its gaps applies and the line would be a lie.
+          // And a point OUTSIDE the covered area entirely (under the gray
+          // wash) must never be told nothing is missing there — outside the
+          // coverage everything is, so that case gets its own honest header.
+          // pointInCoverage's null (mask not loaded) falls through to the
+          // wording that claims neither.
           var mappable = rows.some(function (r) { return (r.gap.counties || []).length > 0; });
-          body.appendChild(section(here.length ? "Elsewhere in the coverage area" :
-            (point && mappable ? "Nothing missing where you clicked — elsewhere:" : "Known gaps"), rest));
+          var label;
+          if (here.length) {
+            label = "Elsewhere in the coverage area";
+          } else if (point && pointInCoverage(point) === false) {
+            label = "Where you clicked is outside the covered area — the recorded gaps:";
+          } else if (point && mappable && pointInCoverage(point) === true) {
+            label = "Nothing missing where you clicked — elsewhere:";
+          } else {
+            label = "Known gaps";
+          }
+          body.appendChild(section(label, rest));
         }
       }).catch(function () {
         body.textContent = "";

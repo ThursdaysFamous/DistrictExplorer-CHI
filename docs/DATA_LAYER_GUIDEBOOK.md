@@ -275,7 +275,9 @@ in the researched-but-unbuilt backlog.
       "id": "bureau-county-board-districts",
       "concept": "County board districts",
       "area": "Bureau County",
-      "counties": [],
+      "counties": [
+        "bureau"
+      ],
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Bureau publishes its 18 board members and their parties but draws its 18 districts nowhere the public can reach.",
@@ -351,7 +353,9 @@ in the researched-but-unbuilt backlog.
       "id": "jo-daviess-county-board-districts",
       "concept": "County board districts",
       "area": "Jo Daviess County",
-      "counties": [],
+      "counties": [
+        "jo-daviess"
+      ],
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Jo Daviess County's 17 board districts cut ACROSS precincts along roads, and nothing publishes those lines.",
@@ -375,7 +379,9 @@ in the researched-but-unbuilt backlog.
       "id": "mercer-county-board-districts",
       "concept": "County board districts",
       "area": "Mercer County",
-      "counties": [],
+      "counties": [
+        "mercer"
+      ],
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Mercer publishes its ten board members and their districts but draws the five districts nowhere.",
@@ -960,11 +966,15 @@ Every entry states its blocker as something MEASURED, and `wanted` says what a s
 would have to contain to be useful — so a reader is never invited to re-send a source that
 was already checked and found wanting. `counties` are outline slugs, which is what makes a
 gap location-aware: with a point selected the panel shows the gaps that apply THERE first.
-An empty `counties` means the gap has no mappable footprint — Bureau, Mercer and
-Jo Daviess each have a real, published board roster or district composition but nothing
-that draws the boundary, so there is no outline to attach the gap to — and it appears only
-in the everywhere list. (Henry sat in that list until 2026-08-02, when its "Alternate"
-map proved to be the adopted plan and the county shipped.) (The original example here was DeKalb, on the strength of a
+An empty `counties` means the gap has no mappable footprint and appears only in the
+everywhere list. Bureau, Mercer and Jo Daviess sat there until 2026-08-02 — each has a
+real, published board roster or district composition but nothing that draws the
+boundary — when a pin dropped in gray-washed Jo Daviess getting told "nothing missing
+where you clicked" exposed the cost: their gaps were real and unmatchable. All three now
+ship `<slug>-county-outline.json` as GAP-LOCATION geometry only (build_county_outline.py
+documents the distinction — an outline alone dispatches nothing), so their gaps attach to
+their ground. (Henry sat in the same list until 2026-08-02, when its "Alternate" map
+proved to be the adopted plan and the county shipped outright.) (The original example here was DeKalb, on the strength of a
 `dekalb-county-gis` entry claiming the county had no GIS at all. It has a 72-service
 ArcGIS Online org; the entry was wrong, not merely stale, and it is retired. A gap that
 says a source does not exist ages badly in one direction only — worth re-testing the

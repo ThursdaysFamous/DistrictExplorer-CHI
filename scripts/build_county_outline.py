@@ -438,6 +438,77 @@ COUNTIES = {
             (41.6101, -90.1763, "Hillsdale — Rock Island County"),
         ],
     },
+    # ---- Gap-location outlines (2026-08-02) ----------------------------------
+    # The three frontier counties below are NOT dispatched — no layer answers
+    # in them — but each carries a recorded gap in the guidebook's gaps block,
+    # and the gaps panel's location-awareness tests the pin against
+    # <slug>-county-outline.json. Without an outline, a pin dropped in the one
+    # county the gray wash makes most visible got told "nothing missing where
+    # you clicked" — exactly wrong. These outlines exist SOLELY so those gaps
+    # attach to their ground; shipping one adds no dispatch entry and no layer
+    # (DISPATCH_COUNTY_FIPS is untouched, so the merge gate's county
+    # accounting cannot drift from it). Inside anchors reuse coordinates
+    # already verified elsewhere in this table (several served counties name
+    # these towns as their OUTSIDE anchors); outside anchors reuse served
+    # counties' verified inside anchors.
+    "jo-daviess": {
+        "fips": "085",
+        "name": "Jo Daviess County",
+        "inside": [
+            (42.4185, -90.4253, "Galena (county seat)"),
+            (42.3494, -90.0071, "Stockton"),
+            (42.3172, -90.2213, "Elizabeth"),
+            (42.4961, -89.9887, "Warren"),
+            (42.4922, -90.6396, "East Dubuque"),
+            (42.2547, -90.2790, "Hanover"),
+        ],
+        "outside": [
+            (42.2967, -89.6212, "Freeport — Stephenson County"),
+            (42.3794, -89.8223, "Lena — Stephenson County"),
+            (42.0945, -90.1568, "Savanna — Carroll County"),
+            (42.0949, -89.9777, "Mount Carroll — Carroll County"),
+            (42.5006, -90.6646, "Dubuque — Iowa"),
+        ],
+    },
+    "bureau": {
+        "fips": "011",
+        "name": "Bureau County",
+        "inside": [
+            (41.3853, -89.4695, "Princeton (county seat)"),
+            (41.3287, -89.1998, "Spring Valley"),
+            (41.5558, -89.5920, "Walnut"),
+            (41.5558, -89.4632, "Ohio"),
+            (41.3583, -89.7373, "Sheffield"),
+            (41.2925, -89.5079, "Tiskilwa"),
+        ],
+        "outside": [
+            (41.3273, -89.1290, "Peru — LaSalle County"),
+            (41.5473, -89.1176, "Mendota — LaSalle County"),
+            (41.2456, -89.9246, "Kewanee — Henry County"),
+            (41.3978, -89.9070, "Annawan — Henry County"),
+            (41.2542, -89.3421, "Hennepin — Putnam County"),
+            (41.6073, -89.6880, "Deer Grove — Whiteside County"),
+        ],
+    },
+    "mercer": {
+        "fips": "131",
+        "name": "Mercer County",
+        "inside": [
+            (41.2008, -90.7460, "Aledo (county seat)"),
+            (41.3054, -90.4931, "Sherrard"),
+            (41.2070, -90.5865, "Viola"),
+            (41.1670, -91.0004, "New Boston"),
+            (41.1006, -90.9401, "Keithsburg"),
+            (41.2606, -90.6068, "Matherville"),
+        ],
+        "outside": [
+            (41.4852, -90.5742, "Rock Island — Rock Island County"),
+            (41.4430, -90.7209, "Andalusia — Rock Island County"),
+            (40.9114, -90.6473, "Monmouth — Warren County"),
+            (41.1675, -90.0432, "Galva — Henry County"),
+            (41.4245, -91.0432, "Muscatine — Iowa"),
+        ],
+    },
     # Henry: the 28th county, closing the gap between the served Rock Island /
     # Whiteside block and the rest of the ring. Every inside anchor was
     # verified against the county's OWN PoliticalTownships_Henry layer before

@@ -155,6 +155,9 @@ GEOMETRY_FILES = {
     "henry-county-outline.json": (1, 1),  # Henry County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "henry-county-board-districts.json": (2, 2),  # Henry County Board districts, DERIVED: TIGER townships dissolved per adopted Ordinance 21-33 (scripts/build_henry_board_districts.py; --check is the drift gate). The county publishes no board GIS — its viewer is Sidwell Portico, parcels + townships only. The 12+12 composition is proven by the adopted map's own two-census population table (all four printed district totals to the person) and by live Census POP100 on every run.
     "stephenson-fire-districts.json": (15, 15),  # Stephenson County's 15 named fire services, GEOREFERENCED from the county's own 2014 vector-PDF map (scripts/build_stephenson_fire_districts.py — fitted on hydrography, median 11.5 m; verified by the map's own town labels; --check is the drift gate). The county publishes no fire boundary as data; the card carries the 2014-vintage caveat. Several services keep their true extents past the county line — the map draws them that way — and the entry's coverage keeps answers inside Stephenson.
+    "jo-daviess-county-outline.json": (1, 1),  # Jo Daviess County outline — GAP-LOCATION geometry only, not a dispatched county: no layer answers here, but the gaps panel tests the pin against <slug>-county-outline.json, and without this file a pin in the gray-washed county was told 'nothing missing where you clicked'. Ships so jo-daviess-county-board-districts attaches to its ground.
+    "bureau-county-outline.json": (1, 1),  # Bureau County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so bureau-county-board-districts attaches to its ground.
+    "mercer-county-outline.json": (1, 1),  # Mercer County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so mercer-county-board-districts attaches to its ground.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -194,6 +197,16 @@ ROSTER_FILES = {
     "grundy-county-board-members.json": 3,  # Grundy County Board members keyed by district (3 six-member districts, 18/18 with party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides Drew Muffler's row as the page states it) — scraped weekly from the county's own board page.
     "henry-county-board-members.json": 2,  # Henry County Board members keyed by district (2 ten-member districts — the fleet's widest; 20/20 with e-mail, 15 with phone) — scraped weekly from the county's own CivicPlus directory, which the county itself keys by district (DID=39/40), so the assignment is the county's own. No chair key: the chair is elected from within the body and the directory does not mark who holds it.
 }
+
+# Files the app references DYNAMICALLY — the URL is built from a slug at
+# runtime (the gaps panel's <slug>-county-outline.json contract), so no
+# literal appears in index.html. Exempt from the reference check only;
+# existence, shape and the negative-point test still apply.
+DYNAMIC_REFERENCE = frozenset({
+    "jo-daviess-county-outline.json",
+    "bureau-county-outline.json",
+    "mercer-county-outline.json",
+})
 # ==== GENERATED:END validator-config ====
 
 
@@ -399,6 +412,8 @@ def main():
     if blobs:
         fail("dataset(s) still embedded inline (should be in data/app/): %s" % blobs)
     for fname in list(GEOMETRY_FILES) + list(ROSTER_FILES):
+        if fname in DYNAMIC_REFERENCE:
+            continue  # URL built from a slug at runtime — see the generated set
         if ("data/app/" + fname) not in html:
             fail("index.html does not reference data/app/%s" % fname)
 
