@@ -35,3 +35,12 @@ pdfplumber==0.11.10
 # scripts/generate_metro_files.py. The generator is otherwise stdlib-only;
 # validate_index.py deliberately stays stdlib and does NOT import this.
 jsonschema==4.26.0
+
+# Geometric union for scripts/build_lasalle_board_districts.py (and its monthly
+# --check in validate-sources.yml). LaSalle's county precinct fabric does not
+# share exact vertex chains along interior edges, so build_metro_outline's
+# edge-cancellation dissolve() cannot dissolve it — measured: district 16's four
+# precincts left a spurious 3-segment ring. shapely's unary_union does real
+# geometric union; the builder then re-verifies the SHIPPED GeoJSON with the
+# repo's own point_in_rings, so the two implementations cross-check.
+shapely==2.1.2
