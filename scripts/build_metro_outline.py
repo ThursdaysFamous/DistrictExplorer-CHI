@@ -94,7 +94,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
-                     "119", "163", "037", "141", "177", "015", "103", "195", "161", "203",
+                     "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -122,6 +122,7 @@ DISPATCH_COUNTY_FIPS = {
     "sangamon": "167", "macoupin": "117", "madison": "119", "st-clair": "163",
     "dekalb": "037", "ogle": "141", "stephenson": "177", "carroll": "015",
     "lee": "103", "whiteside": "195", "rock-island": "161", "woodford": "203",
+    "henry": "073",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -173,6 +174,7 @@ INSIDE = {
     "Morrison (Whiteside)": (41.8090, -89.9686),
     "Rock Island (Rock Island)": (41.4852, -90.5742),
     "Eureka (Woodford)": (40.7214, -89.2723),
+    "Cambridge (Henry)": (41.3036, -90.1929),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -200,16 +202,18 @@ OUTSIDE = {
     # build and forced the county list to be updated with it. That is the guard
     # doing its job, so the role is handed to the next counties out.
     #
-    # Lee, Whiteside and now Rock Island each sat here until the day they gained
-    # dispatch entries, exactly as DeKalb did, and this list failed the build
-    # until each was moved up to INSIDE. The frontier is now Bureau and Henry to
-    # the east, Mercer to the south, and Jo Daviess in the state's north-west
-    # corner. All three of those are RECORDED GAPS rather than un-researched:
-    # Jo Daviess cuts its districts below the precinct, Bureau publishes no GIS
-    # at all, and Henry's only district map is a raster titled "Alternate Two
-    # Board" — see docs/DATA_LAYER_GUIDEBOOK.md.
+    # Lee, Whiteside, Rock Island and now Henry each sat here until the day
+    # they gained dispatch entries, exactly as DeKalb did, and this list failed
+    # the build until each was moved up to INSIDE (Henry's "Alternate Two
+    # Board" raster turned out to BE the adopted plan — Ord 21-33, and its
+    # 12+12 township composition is proven by the map's own two-census
+    # population table). The frontier is now Bureau to the east, Mercer to the
+    # south, and Jo Daviess in the state's north-west corner. All three are
+    # RECORDED GAPS rather than un-researched: Jo Daviess cuts its districts
+    # below the precinct, Bureau's adopted 18-district map exists only as
+    # street-split JPEG scans, and Mercer's document section is empty — see
+    # docs/DATA_LAYER_GUIDEBOOK.md.
     "Princeton (Bureau)": (41.3853, -89.4695),
-    "Cambridge (Henry)": (41.3008, -90.1874),
     "Aledo (Mercer)": (41.2008, -90.7460),
     "Galena (Jo Daviess)": (42.4185, -90.4253),
 }

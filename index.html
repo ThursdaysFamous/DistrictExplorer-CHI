@@ -7912,6 +7912,33 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadHenryCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/henry-county-outline.json", {}, 2);
+  });
+  function henryCountyCoverage(point) {
+    return loadHenryCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  /* Henry (the 28th county, added 2026-08-02 — it closes the notch between
+   * the served Rock Island/Whiteside block and the rest of the ring). Its
+   * public GIS is Sidwell Portico (parcels + townships, no districts), so the
+   * board boundary is DERIVED: TIGER townships dissolved per adopted
+   * Ordinance 21-33 (scripts/build_henry_board_districts.py — two districts
+   * of twelve whole townships, ten members each; the composition proven by
+   * the adopted map's own two-census population table AND live Census POP100,
+   * all to the person). The roster is a weekly scrape of the county's own
+   * CivicPlus directory, which the county keys BY DISTRICT (20/20 with
+   * e-mail, 15 with phone). No chair is marked anywhere in the directory —
+   * the Woodford posture — so the card links the board page instead of
+   * guessing. */
+  var loadHenryBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/henry-county-board-districts.json", {}, 2);
+  });
+  var loadHenryBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/henry-county-board-members.json", {}, 2);
+  });
 
   /* Woodford (the pass-6 next-county candidate, added 2026-08-02). Its GIS of
    * record is TCRPC's — the same regional org that serves Logan — but TCRPC
@@ -13753,6 +13780,70 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadGrundyBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Henry (2 districts electing TEN members each — the fleet's widest
+      // multi-member districts) — added 2026-08-02 with the county. Boundary
+      // DERIVED from TIGER townships per adopted Ordinance 21-33 (the
+      // composition proven by the adopted map's own two-census population
+      // table and live Census POP100); roster scraped weekly from the
+      // county's own directory, which the county keys BY DISTRICT — 20/20
+      // with e-mail, 15 with phone. No chair is rendered: the chair is
+      // elected from within the body and the directory does not mark who
+      // holds it.
+      {
+        key: "henry",
+        coverage: henryCountyCoverage,
+        loadGeometry: loadHenryBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadHenryBoardDistricts(),
+            loadHenryBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Henry County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Henry County Board (official)",
+            url: "https://www.henrycty.com/193/County-Board"
+          };
+        },
+        hoverOfficial: {
+          load: loadHenryBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

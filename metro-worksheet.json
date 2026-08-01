@@ -698,6 +698,24 @@
         "min_features": 3,
         "max_features": 3,
         "note": "Woodford County Board districts, DERIVED: TIGER townships dissolved per the county's adopted Ordinance 2020/21 #005 (scripts/build_woodford_board_districts.py; --check is the drift gate). The county publishes no board GIS — TCRPC, its GIS of record, carries precincts and townships only — so this file IS the boundary source, not a cache of one."
+      },
+      {
+        "file": "grundy-county-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Grundy County Board districts, DERIVED: the county's own precinct layer dissolved per the adopted 'Approved County Board Districts (10/12/2021)' map (scripts/build_grundy_board_districts.py; --check is the drift gate). The transcription is proven by the map's printed populations — all three district totals to the person."
+      },
+      {
+        "file": "henry-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Henry County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "henry-county-board-districts.json",
+        "min_features": 2,
+        "max_features": 2,
+        "note": "Henry County Board districts, DERIVED: TIGER townships dissolved per adopted Ordinance 21-33 (scripts/build_henry_board_districts.py; --check is the drift gate). The county publishes no board GIS — its viewer is Sidwell Portico, parcels + townships only. The 12+12 composition is proven by the adopted map's own two-census population table (all four printed district totals to the person) and by live Census POP100 on every run."
       }
     ],
     "rosters": [
@@ -855,14 +873,14 @@
         "note": "Boone County Board members keyed by district (3 four-member districts, 12/12 with phone, e-mail and a term-expiry year — terms are staggered, so the year is per-seat ballot information) — scraped weekly from the county's own board page. Role tags verbatim: currently one Vice-Chairman; the page names no Chairman, so none is rendered. The boundary half is live GIS (three per-district layers merged at load time), not a data/app file."
       },
       {
-        "file": "grundy-county-board-districts.json",
-        "min_keys": 2,
-        "note": "Grundy County Board districts (3 six-member districts) DERIVED by scripts/build_grundy_board_districts.py — the county's own precinct layer dissolved per the adopted 'Approved County Board Districts (10/12/2021)' map (the county GIS publishes no board geometry). The precinct-to-district transcription is proven by the map's own printed populations: all three district totals reproduce to the person (17,663 / 17,364 / 17,506 = 52,533). Regenerate when the county re-precincts or reapportions; --check is the drift gate."
-      },
-      {
         "file": "grundy-county-board-members.json",
         "min_keys": 3,
         "note": "Grundy County Board members keyed by district (3 six-member districts, 18/18 with party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides Drew Muffler's row as the page states it) — scraped weekly from the county's own board page."
+      },
+      {
+        "file": "henry-county-board-members.json",
+        "min_keys": 2,
+        "note": "Henry County Board members keyed by district (2 ten-member districts — the fleet's widest; 20/20 with e-mail, 15 with phone) — scraped weekly from the county's own CivicPlus directory, which the county itself keys by district (DID=39/40), so the assignment is the county's own. No chair key: the chair is elected from within the body and the directory does not mark who holds it."
       }
     ]
   },
@@ -1025,6 +1043,11 @@
       "file": "update-grundy-county-board-roster.yml",
       "purpose": "Grundy County Board roster (grundycountyil.gov board-page scrape)",
       "schedule": "Wed 17:00 UTC"
+    },
+    {
+      "file": "update-henry-county-board-roster.yml",
+      "purpose": "Henry County Board roster (henrycty.com district-keyed directory scrape)",
+      "schedule": "Thu 18:00 UTC"
     }
   ],
   "geocoder": {
