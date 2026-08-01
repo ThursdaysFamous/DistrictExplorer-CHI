@@ -58,10 +58,12 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # the same regional-consortium GIS the Winnebago county-board entry uses.
     "rockford": ["Rockford"],
     # Moline (7) and Silvis (4) publish their own ward layers on Rock Island
-    # County's hosted org. Whiteside's ward layer covers six MORE municipalities
-    # and is deliberately absent: it was last edited 2019-11-05, before the
-    # post-2020-census redraw it would need to reflect (recorded as a gap).
-    "rock-island": ["Moline", "Silvis"],
+    # County's hosted org; East Moline's 7 (with per-seat contact) live on the
+    # CITY's own org and joined the same dispatch entry 2026-08-02. Whiteside's
+    # ward layer covers six MORE municipalities and is deliberately absent: it
+    # was last edited 2019-11-05, before the post-2020-census redraw it would
+    # need to reflect (recorded as a gap).
+    "rock-island": ["Moline", "Silvis", "East Moline"],
     # DeKalb County's own org publishes one ward layer per ward-electing
     # municipality: DeKalb (7), Sycamore (4), Genoa (4), Sandwich (4), all
     # edited 2023-11.
@@ -70,15 +72,31 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # publishes ward geometry anywhere; La Salle, Peru and Earlville are a
     # recorded gap. The layer is the city's own, edited 2022-12.
     "mendota": ["Mendota"],
+    # The pass-6 ward tranche (2026-08-02) — thirteen sources across
+    # twenty-two cities, every geometry vintage and officeholder posture
+    # verified live before shipping (see index.html's loader block).
+    "berwyn": ["Berwyn"],
+    "lake-cities": ["Waukegan", "North Chicago"],
+    "belvidere": ["Belvidere"],
+    "kane-cities": ["St. Charles", "Geneva", "Batavia"],
+    "dupage-cities": ["West Chicago"],
+    "mchenry-city": ["McHenry"],
+    "kendall-cities": ["Yorkville", "Plano"],
+    "pontiac": ["Pontiac"],
+    "mclean-cities": ["Bloomington", "Le Roy", "Lexington"],
+    "lincoln": ["Lincoln"],
+    "springfield": ["Springfield"],
+    "freeport": ["Freeport"],
+    "st-clair-cities": ["Belleville", "O'Fallon"],
 }
 # Chicago's wards are the city's own Socrata layer with its own coverage test
 # (chicagoCoverage); it is never part of this file.
 EXCLUDE = {"CHICAGO"}
 
-# Deliberate under-tolerance against what the eight entries resolve to at build
-# time: 21 suburban Cook + Evanston + 4 Will + Aurora + Rockford + Moline +
-# Silvis + 4 DeKalb + Mendota, less any overlap.
-MIN_MUNICIPALITIES = 28
+# Deliberate under-tolerance against what the twenty-one entries resolve to at
+# build time: 21 suburban Cook + Evanston + 4 Will + Aurora + Rockford + 3 Rock
+# Island cities + 4 DeKalb + Mendota + the pass-6 tranche's 22, less overlap.
+MIN_MUNICIPALITIES = 50
 
 
 # Ramer-Douglas-Peucker tolerance in degrees (~0.0004 deg ≈ 45 m at this
@@ -186,7 +204,13 @@ def norm_census(placename):
 # Rockford straddles the Winnebago/Ogle line, so it appears under both counties
 # in the place-by-county reference; Winnebago is where the city sits.
 ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
-                     "will": "197", "aurora": "089", "rockford": "201"}
+                     "will": "197", "aurora": "089", "rockford": "201",
+                     "berwyn": "031", "lake-cities": "097", "belvidere": "007",
+                     "kane-cities": "089", "dupage-cities": "043",
+                     "mchenry-city": "111", "kendall-cities": "093",
+                     "pontiac": "105", "mclean-cities": "113", "lincoln": "107",
+                     "springfield": "167", "freeport": "177",
+                     "st-clair-cities": "163", "rock-island": "161"}
 
 
 def load_place_geoids():

@@ -10681,6 +10681,12 @@ function initChiExplorer() {
     { service: "MolineWards2020", id: 0, municipality: "Moline" },
     { service: "SilvisWards", id: 0, municipality: "Silvis" }
   ];
+  // East Moline's 7 wards live on the CITY's own org (not the county's), with
+  // the alderman's name, e-mail and phone on every polygon — the build-ready
+  // state the pass-6 comment above recorded, shipped 2026-08-02. The wards are
+  // layer 23 of the city's general-infrastructure service.
+  var EAST_MOLINE_WARD_SERVICE = "https://services2.arcgis.com/AexCN3RZHA62zqjz/arcgis/rest/" +
+    "services/General_mapping_Infrastructure_Update_This_File/FeatureServer/23";
   var loadRockIslandWards = makeCached(function () {
     return Promise.all(ROCK_ISLAND_WARD_LAYERS.map(function (spec) {
       return loadArcGISGeoJSON(ROCK_ISLAND_GIS + spec.service + "/FeatureServer/" + spec.id)
@@ -10691,8 +10697,19 @@ function initChiExplorer() {
             var num = /(\d+)/.exec(String(raw == null ? "" : raw));
             return wardFeature(f, spec.municipality, "Ward", num ? num[1] : null);
           });
-        }, function () { return null; }); // one city down: the other still draws
-    })).then(function (parts) {
+        }, function () { return null; }); // one city down: the others still draw
+    }).concat([
+      loadArcGISGeoJSON(EAST_MOLINE_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          var p = f.properties || {};
+          return wardFeature(f, "East Moline", "Ward", findPropCI(p, ["ward"]), {
+            dxOfficial: findPropCI(p, ["alderman"]),
+            dxEmail: findPropCI(p, ["alderman_email"]),
+            dxPhone: findPropCI(p, ["alderman_phone_number"])
+          });
+        });
+      }, function () { return null; })
+    ])).then(function (parts) {
       var loaded = parts.filter(Boolean);
       if (!loaded.length) throw new Error("Rock Island ward services returned no usable geometry");
       return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
@@ -10754,6 +10771,330 @@ function initChiExplorer() {
         var num = /(\d+)/.exec(String(findPropCI(p, ["ward_name", "ward"]) || ""));
         return wardFeature(f, "Mendota", "Ward", num ? num[1] : null);
       }) };
+    });
+  });
+
+  /* ---- The pass-6 ward tranche (2026-08-02): thirteen sources across
+   * twenty-two cities, each verified live for geometry vintage AND an
+   * officeholder answer before shipping — per-seat contact ON the feature
+   * (Waukegan, Belvidere, St. Charles, Geneva, East Moline), officials-only
+   * on the feature (Batavia, West Chicago), the shipped municipal-officials
+   * roster (Berwyn, Pontiac, Bloomington/Le Roy/Lexington, Lincoln,
+   * Springfield, Freeport, Belleville, O'Fallon), or an honest seat-only
+   * card where no per-seat source exists yet (North Chicago, McHenry,
+   * Yorkville, Plano — each recorded in the guidebook). ---- */
+
+  // Berwyn's 8 wards on the city's own AGOL org (edited 2024-09). Its eight
+  // ward aldermen are already in the roster from the Cook clerk directory.
+  var BERWYN_WARD_SERVICE = "https://services7.arcgis.com/DbKiZP6rBmETqLvl/" +
+    "arcgis/rest/services/City_Wards___Election_Precincts___Berwyn_WFL1/FeatureServer/1";
+  var loadBerwynWards = makeCached(function () {
+    return loadArcGISGeoJSON(BERWYN_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        return wardFeature(f, "Berwyn", "Ward", findPropCI(f.properties || {}, ["ward"]));
+      }) };
+    });
+  });
+
+  /* Lake County's two ward-electing cities, each on its own city org (the
+   * county publishes no ward layer and no officeholder names). Waukegan's
+   * 2025 locator map carries the alderman with per-seat phone AND e-mail on
+   * every polygon; North Chicago's 2026 boundary layer is geometry-only, so
+   * its card is honestly seat-only until the city publishes seats somewhere
+   * joinable. Per-city catch: one city down never drops the other. */
+  var WAUKEGAN_WARD_SERVICE = "https://services8.arcgis.com/DHhRvCxK0wpLjxs2/arcgis/rest/" +
+    "services/CITY_OF_WAUKEGAN_WARDS_LOCATOR_MAP_2025_WFL1/FeatureServer/2";
+  var NORTH_CHICAGO_WARD_SERVICE = "https://services5.arcgis.com/dUVPCTd3mmy0bK3k/arcgis/rest/" +
+    "services/2026_Ward_Boundaries/FeatureServer/0";
+  var loadLakeCityWards = makeCached(function () {
+    return Promise.all([
+      loadArcGISGeoJSON(WAUKEGAN_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          var p = f.properties || {};
+          var num = /(\d+)/.exec(String(findPropCI(p, ["ward_name"]) || ""));
+          return wardFeature(f, "Waukegan", "Ward", num ? num[1] : null, {
+            dxOfficial: findPropCI(p, ["alderman"]),
+            dxPhone: findPropCI(p, ["phone"]),
+            dxEmail: findPropCI(p, ["email"])
+          });
+        });
+      }, function () { return null; }),
+      loadArcGISGeoJSON(NORTH_CHICAGO_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          return wardFeature(f, "North Chicago", "Ward",
+            findPropCI(f.properties || {}, ["district"]));
+        });
+      }, function () { return null; })
+    ]).then(function (parts) {
+      var loaded = parts.filter(Boolean);
+      if (!loaded.length) throw new Error("Lake County city ward services unavailable");
+      return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
+    });
+  });
+
+  // Belvidere's 5 wards ride the Boone county GIS with BOTH aldermen and
+  // their phones on every polygon — verified post-2025-election.
+  var BELVIDERE_WARD_SERVICE = BOONE_GIS + "Clerk_and_Recorder/Belvidere_Wards/MapServer/0";
+  var loadBelvidereWards = makeCached(function () {
+    return loadArcGISGeoJSON(BELVIDERE_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var p = f.properties || {};
+        return wardFeature(f, "Belvidere", "Ward", findPropCI(p, ["ward_num"]), {
+          dxOfficial: findPropCI(p, ["ald_1"]),
+          dxPhone: findPropCI(p, ["phone_1"]),
+          dxOfficial2: findPropCI(p, ["ald_2"]),
+          dxPhone2: findPropCI(p, ["phone_2"])
+        });
+      }) };
+    });
+  });
+
+  /* Kane's three ward-electing cities outside Aurora, each on its own org —
+   * the county's own Municipal_Wards layer is the SUPERSEDED pre-2020 map
+   * (its own Updated column says 04/2021), so it is read nowhere. St. Charles
+   * and Geneva publish both aldermen with per-seat contact; St. Charles
+   * writes the literal string "Unknown" where a phone is unpublished, which
+   * is dropped rather than rendered as a phone number. Batavia's city server
+   * carries both aldermen's names (its contact columns are declared and
+   * empty — a schema is not data). */
+  var ST_CHARLES_WARD_SERVICE = "https://services6.arcgis.com/K7950S4bDbtsSspe/arcgis/rest/" +
+    "services/St_Charles_Ward_Boundary/FeatureServer/1";
+  var GENEVA_WARD_SERVICE = "https://services2.arcgis.com/s98zOjUFv635m2Fp/arcgis/rest/" +
+    "services/Wards_view/FeatureServer/0";
+  var BATAVIA_WARD_SERVICE = "https://webapps.bataviail.gov/arcgis25/rest/" +
+    "services/External/WARDS_20/MapServer/0";
+  function cleanSeatValue(v) {
+    var s = v == null ? "" : String(v).trim();
+    return !s || /^unknown$/i.test(s) ? null : s;
+  }
+  var loadKaneCityWards = makeCached(function () {
+    return Promise.all([
+      loadArcGISGeoJSON(ST_CHARLES_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          var p = f.properties || {};
+          return wardFeature(f, "St. Charles", "Ward", findPropCI(p, ["district"]), {
+            dxOfficial: cleanSeatValue(findPropCI(p, ["name1"])),
+            dxPhone: cleanSeatValue(findPropCI(p, ["phone1"])),
+            dxEmail: cleanSeatValue(findPropCI(p, ["email1"])),
+            dxOfficial2: cleanSeatValue(findPropCI(p, ["name2"])),
+            dxPhone2: cleanSeatValue(findPropCI(p, ["phone2"])),
+            dxEmail2: cleanSeatValue(findPropCI(p, ["email2"]))
+          });
+        });
+      }, function () { return null; }),
+      loadArcGISGeoJSON(GENEVA_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          var p = f.properties || {};
+          var num = /(\d+)/.exec(String(findPropCI(p, ["ward"]) || ""));
+          return wardFeature(f, "Geneva", "Ward", num ? num[1] : null, {
+            dxOfficial: cleanSeatValue(findPropCI(p, ["ald1name"])),
+            dxPhone: cleanSeatValue(findPropCI(p, ["ald1phone"])),
+            dxEmail: cleanSeatValue(findPropCI(p, ["ald1email"])),
+            dxOfficial2: cleanSeatValue(findPropCI(p, ["ald2name"])),
+            dxPhone2: cleanSeatValue(findPropCI(p, ["ald2phone"])),
+            dxEmail2: cleanSeatValue(findPropCI(p, ["ald2email"]))
+          });
+        });
+      }, function () { return null; }),
+      loadArcGISGeoJSON(BATAVIA_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          var p = f.properties || {};
+          return wardFeature(f, "Batavia", "Ward", findPropCI(p, ["ward_numbe"]), {
+            dxOfficial: cleanSeatValue(findPropCI(p, ["alderman1"])),
+            dxOfficial2: cleanSeatValue(findPropCI(p, ["alderman2"]))
+          });
+        });
+      }, function () { return null; })
+    ]).then(function (parts) {
+      var loaded = parts.filter(Boolean);
+      if (!loaded.length) throw new Error("Kane city ward services unavailable");
+      return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
+    });
+  });
+
+  // West Chicago's current ward map (2025 service, 7 wards over 16 polygons)
+  // carries both aldermen plus the city's own per-ward page URL. The other
+  // DuPage ward cities' layers are still being chased (see the guidebook).
+  var WEST_CHICAGO_WARD_SERVICE = "https://services1.arcgis.com/m5a11YBVmO0IIPPX/arcgis/rest/" +
+    "services/2025_WC_WardBoundaries_service/FeatureServer/0";
+  var loadDupageCityWards = makeCached(function () {
+    return loadArcGISGeoJSON(WEST_CHICAGO_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var p = f.properties || {};
+        var num = /(\d+)/.exec(String(findPropCI(p, ["ward"]) || ""));
+        return wardFeature(f, "West Chicago", "Ward", num ? num[1] : null, {
+          dxOfficial: cleanSeatValue(findPropCI(p, ["alderman1"])),
+          dxOfficial2: cleanSeatValue(findPropCI(p, ["alderman2"])),
+          dxUrl: findPropCI(p, ["url"])
+        });
+      }) };
+    });
+  });
+
+  // City of McHenry's 7 wards (13 multipart polygons) on the city's own org,
+  // edited 2026-04. Geometry-only — no per-seat source exists yet, so the
+  // card is honestly seat-only (the recorded state).
+  var MCHENRY_CITY_WARD_SERVICE = "https://services7.arcgis.com/qtsuHpPKHCUd5VFD/arcgis/rest/" +
+    "services/Wards(Monte)/FeatureServer/0";
+  var loadMchenryCityWards = makeCached(function () {
+    return loadArcGISGeoJSON(MCHENRY_CITY_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        return wardFeature(f, "McHenry", "Ward",
+          findPropCI(f.properties || {}, ["ward_number"]));
+      }) };
+    });
+  });
+
+  /* Kendall's hosted Wards layer carries FOUR municipalities; only Yorkville
+   * and Plano are read. The Aurora and Joliet rows are those cities' small
+   * Kendall-side slivers — both cities are already served whole by their own
+   * entries, and drawing the slivers would double-answer the overlap. The
+   * layer declares an alderman column that is null on every row today; it is
+   * read anyway so a future county edit lights the seats up without a code
+   * change (Plano's missing seat source is a recorded gap). */
+  var KENDALL_WARD_SERVICE = KENDALL_GIS + "Wards/FeatureServer/0";
+  var loadKendallCityWards = makeCached(function () {
+    return loadArcGISGeoJSON(KENDALL_WARD_SERVICE).then(function (geojson) {
+      var out = [];
+      (geojson.features || []).forEach(function (f) {
+        var p = f.properties || {};
+        var muni = String(findPropCI(p, ["municipality"]) || "").trim();
+        if (muni !== "Yorkville" && muni !== "Plano") return;
+        out.push(wardFeature(f, muni, "Ward", findPropCI(p, ["ward"]), {
+          dxOfficial: cleanSeatValue(findPropCI(p, ["alderman"]))
+        }));
+      });
+      if (!out.length) throw new Error("Kendall ward layer returned no Yorkville/Plano wards");
+      return { type: "FeatureCollection", features: out };
+    });
+  });
+
+  // Pontiac's 5 wards (6 polygons — ward 3 is published in two parts) on the
+  // city's own org. Its two aldermen per ward are already in the roster from
+  // the Livingston directory.
+  var PONTIAC_WARD_SERVICE = "https://services.arcgis.com/QmrZbD3bjVB4tA6O/arcgis/rest/" +
+    "services/Wards/FeatureServer/0";
+  var loadPontiacWards = makeCached(function () {
+    return loadArcGISGeoJSON(PONTIAC_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var num = /(\d+)/.exec(String(findPropCI(f.properties || {}, ["wards"]) || ""));
+        return wardFeature(f, "Pontiac", "Ward", num ? num[1] : null);
+      }) };
+    });
+  });
+
+  /* McLean's three ward-electing cities ride ONE layer on the county clerk's
+   * GIS — 16 polygons named "City of <X> Ward <N>" (Bloomington 9, Le Roy 4,
+   * Lexington 3). The layer's REPNAME column was measured STALE on Le Roy
+   * (2/8) and Lexington (2/6) across the April 2025 election, so it is read
+   * NOWHERE — all three cities' seats join from the shipped roster, which
+   * comes from the cities' own pages and is current for all three. */
+  var MCLEAN_CITY_WARD_SERVICE = "https://gis.mcleancountyil.gov/arcgis/rest/" +
+    "services/Clerks/MyElectedRepresentatives/MapServer/0";
+  var loadMcleanCityWards = makeCached(function () {
+    return loadArcGISGeoJSON(MCLEAN_CITY_WARD_SERVICE).then(function (geojson) {
+      var out = [];
+      (geojson.features || []).forEach(function (f) {
+        var m = /^City of (.+?) Ward (\d+)$/.exec(
+          String(findPropCI(f.properties || {}, ["name"]) || "").trim());
+        if (!m) return;
+        out.push(wardFeature(f, m[1], "Ward", m[2]));
+      });
+      if (!out.length) throw new Error("McLean city-council layer returned no ward polygons");
+      return { type: "FeatureCollection", features: out };
+    });
+  });
+
+  // Lincoln's 4 wards on the city's own org. Its two aldermen per ward are in
+  // the roster from the Logan yearbook scrape; the layer's own Alderman_1/2
+  // columns (verified current) ride along as the fallback the shared entry
+  // already prefers the roster over.
+  var LINCOLN_WARD_SERVICE = "https://services5.arcgis.com/7mHVJiYKKBwzC8wp/arcgis/rest/" +
+    "services/Lincoln_Wards_View_Only/FeatureServer/0";
+  var loadLincolnWards = makeCached(function () {
+    return loadArcGISGeoJSON(LINCOLN_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var p = f.properties || {};
+        return wardFeature(f, "Lincoln", "Ward", findPropCI(p, ["ward"]), {
+          dxOfficial: cleanSeatValue(findPropCI(p, ["alderman_1"])),
+          dxOfficial2: cleanSeatValue(findPropCI(p, ["alderman_2"]))
+        });
+      }) };
+    });
+  });
+
+  // Springfield's 10 wards from the SPI org's adopted 2022 map (the service's
+  // only populated layer is id 4). Aldermen join from the roster (the
+  // Sangamon municipal-officials scrape).
+  var SPRINGFIELD_WARD_SERVICE = "https://services.arcgis.com/XqG0RpqsNfIBGGb2/ArcGIS/rest/" +
+    "services/Springfield_Wards_2022/FeatureServer/4";
+  var loadSpringfieldWards = makeCached(function () {
+    return loadArcGISGeoJSON(SPRINGFIELD_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        return wardFeature(f, "Springfield", "Ward",
+          findPropCI(f.properties || {}, ["district"]));
+      }) };
+    });
+  });
+
+  // Freeport's 7 post-census wards on the city's own org. The layer's
+  // Alderperson column is read NOWHERE: the shipped roster (the city's own
+  // council pages) is the current source, and the measured risk is exactly a
+  // stale name column shadowing it.
+  var FREEPORT_WARD_SERVICE = "https://services2.arcgis.com/1Wpk33n06s235zfI/arcgis/rest/" +
+    "services/Wards2022_Public/FeatureServer/0";
+  var loadFreeportWards = makeCached(function () {
+    return loadArcGISGeoJSON(FREEPORT_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var num = /(\d+)/.exec(String(findPropCI(f.properties || {}, ["ward"]) || ""));
+        return wardFeature(f, "Freeport", "Ward", num ? num[1] : null);
+      }) };
+    });
+  });
+
+  /* St. Clair's two ward-electing cities ride the county's own voting-
+   * districts service (layers 13 and 14). Belleville's layer publishes NINE
+   * polygons for eight wards — one is a centimeter-scale sliver duplicating
+   * a ward id — so each id keeps only its LARGEST polygon (ring area in
+   * degrees²; the sliver is ~8 orders of magnitude smaller). Both cities'
+   * two-per-ward councils join from the shipped roster (the East-West
+   * Gateway directory). */
+  var loadStClairCityWards = makeCached(function () {
+    function ringArea(geom) {
+      var rings = geom.type === "Polygon" ? [geom.coordinates]
+        : geom.type === "MultiPolygon" ? geom.coordinates : [];
+      var total = 0;
+      rings.forEach(function (poly) {
+        (poly[0] || []).forEach(function (c, i, ring) {
+          var next = ring[(i + 1) % ring.length];
+          total += c[0] * next[1] - next[0] * c[1];
+        });
+      });
+      return Math.abs(total / 2);
+    }
+    return Promise.all([
+      loadArcGISGeoJSON(STCLAIR_GIS + "13").then(function (geojson) {
+        var best = {};
+        (geojson.features || []).forEach(function (f) {
+          var ward = findPropCI(f.properties || {}, ["id"]);
+          if (ward == null) return;
+          var key = String(ward), area = ringArea(f.geometry || {});
+          if (!best[key] || area > best[key].area) best[key] = { feature: f, area: area };
+        });
+        return Object.keys(best).map(function (key) {
+          return wardFeature(best[key].feature, "Belleville", "Ward", key);
+        });
+      }, function () { return null; }),
+      loadArcGISGeoJSON(STCLAIR_GIS + "14").then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          return wardFeature(f, "O'Fallon", "Ward",
+            findPropCI(f.properties || {}, ["ward"]));
+        });
+      }, function () { return null; })
+    ]).then(function (parts) {
+      var loaded = parts.filter(Boolean);
+      if (!loaded.length) throw new Error("St. Clair city ward layers unavailable");
+      return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
     });
   });
 
@@ -10846,7 +11187,11 @@ function initChiExplorer() {
           if (seats.length) {
             return seats.map(function (m) { return String(m.name); }).join(" · ");
           }
-          return p.dxOfficial ? String(p.dxOfficial) : null;
+          // Same rule for GIS-carried officials: several sources publish TWO
+          // aldermen on the ward polygon (Belvidere, St. Charles, Geneva,
+          // Batavia, West Chicago), so both are named.
+          var gisNames = [p.dxOfficial, p.dxOfficial2].filter(Boolean);
+          return gisNames.length ? gisNames.map(String).join(" · ") : null;
         }
       },
       query: function (point, seq) {
@@ -10869,6 +11214,9 @@ function initChiExplorer() {
             gisOfficial: p.dxOfficial || null,
             gisEmail: p.dxEmail || null,
             gisPhone: p.dxPhone || null,
+            gisOfficial2: p.dxOfficial2 || null,
+            gisEmail2: p.dxEmail2 || null,
+            gisPhone2: p.dxPhone2 || null,
             gisUrl: p.dxUrl || null,
             municipalityUrl: entry && entry.url ? entry.url : null
           };
@@ -10910,10 +11258,18 @@ function initChiExplorer() {
             return person;
           })));
         } else if (result.gisOfficial) {
-          var fromGis = { name: String(result.gisOfficial), badge: "Council Member" };
-          if (result.gisPhone) fromGis.phone = String(result.gisPhone);
-          if (result.gisEmail) fromGis.email = String(result.gisEmail);
-          wrap.appendChild(renderPersonRows([fromGis]));
+          // One or two officials straight off the boundary feature — several
+          // sources publish two aldermen per ward with per-seat contact.
+          var fromGis = [{ name: String(result.gisOfficial), badge: "Council Member" }];
+          if (result.gisPhone) fromGis[0].phone = String(result.gisPhone);
+          if (result.gisEmail) fromGis[0].email = String(result.gisEmail);
+          if (result.gisOfficial2) {
+            var second = { name: String(result.gisOfficial2), badge: "Council Member" };
+            if (result.gisPhone2) second.phone = String(result.gisPhone2);
+            if (result.gisEmail2) second.email = String(result.gisEmail2);
+            fromGis.push(second);
+          }
+          wrap.appendChild(renderPersonRows(fromGis));
         }
         return wrap;
       },
@@ -11065,7 +11421,22 @@ function initChiExplorer() {
       municipalWardEntry("rockford", loadRockfordWards),
       municipalWardEntry("rock-island", loadRockIslandWards),
       municipalWardEntry("dekalb", loadDekalbWards),
-      municipalWardEntry("mendota", loadMendotaWards)
+      municipalWardEntry("mendota", loadMendotaWards),
+      // The pass-6 ward tranche (2026-08-02) — see the loader block's header
+      // comment for each source's officeholder posture.
+      municipalWardEntry("berwyn", loadBerwynWards),
+      municipalWardEntry("lake-cities", loadLakeCityWards),
+      municipalWardEntry("belvidere", loadBelvidereWards),
+      municipalWardEntry("kane-cities", loadKaneCityWards),
+      municipalWardEntry("dupage-cities", loadDupageCityWards),
+      municipalWardEntry("mchenry-city", loadMchenryCityWards),
+      municipalWardEntry("kendall-cities", loadKendallCityWards),
+      municipalWardEntry("pontiac", loadPontiacWards),
+      municipalWardEntry("mclean-cities", loadMcleanCityWards),
+      municipalWardEntry("lincoln", loadLincolnWards),
+      municipalWardEntry("springfield", loadSpringfieldWards),
+      municipalWardEntry("freeport", loadFreeportWards),
+      municipalWardEntry("st-clair-cities", loadStClairCityWards)
     ]
   });
   declareDataSource("ward", {
