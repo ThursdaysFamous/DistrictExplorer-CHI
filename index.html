@@ -4351,7 +4351,7 @@ function initChiExplorer() {
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
-    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — plus Woodford (3 DERIVED districts — TIGER townships dissolved per adopted Ordinance 2020/21 #005, five members each from a weekly directory scrape 15/15 with phone and e-mail; no chair marked, the directory doesn't say) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
+    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — plus Logan's roster join (6 two-member districts from a weekly board-page scrape, 12/12 with contact and Chair/Vice-Chair tags — the branch-3 honesty floor retired 2026-08-02) and Woodford (3 DERIVED districts — TIGER townships dissolved per adopted Ordinance 2020/21 #005, five members each from a weekly directory scrape 15/15 with phone and e-mail; no chair marked, the directory doesn't say) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
@@ -7928,6 +7928,12 @@ function initChiExplorer() {
   });
   var loadWoodfordBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/woodford-county-board-members.json", {}, 2);
+  });
+  // Logan's board roster — weekly scrape of the county's own board page (six
+  // two-member districts with Chair/Vice-Chair tags and per-member contact),
+  // the source whose appearance retired the entry's rule-4 branch-3 floor.
+  var loadLoganBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/logan-county-board-members.json", {}, 2);
   });
   /* Precincts + polling from TCRPC's Woodford election service (its layer
    * names carry the election it was drawn for — the 2024 fabric is the
@@ -12895,25 +12901,69 @@ function initChiExplorer() {
           }
         }
       },
-      // Logan (6 districts) — rule-4 branch 3, the honesty floor. The regional
-      // GIS publishes the district and nothing else, and the county's only
-      // roster is a salary publication with no district against any name, so the
-      // card resolves the district and links the board rather than inventing a
-      // member. Same identity-only adapter the fire/park/library entries use.
-      polygonCountyEntry({
+      // Logan (6 two-member districts) — the honesty floor RETIRED 2026-08-02.
+      // This entry shipped as rule-4 branch 3 (district only, board linked)
+      // because the county's only roster was a salary publication with no
+      // district against any name. The 2026-07-31 validation pass found the
+      // board page now lists all twelve members under explicit district
+      // captions with Chair/Vice-Chair tags and per-member phone + e-mail, so
+      // a weekly scrape (logan_county_board_scraper.py) closes the gap the
+      // old Note row apologized for.
+      {
         key: "logan",
         coverage: loganCountyCoverage,
-        loader: loadLoganCountyBoard,
-        pill: true,
-        fields: [
-          { name: "district", label: "District", keys: ["district"], primary: true },
-          { label: "County", value: "Logan County" },
-          { label: "Note", value: "Logan County does not publish which board member represents which district. The board is linked below." }
-        ],
+        loadGeometry: loadLoganCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLoganCountyBoard(),
+            loadLoganBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Logan County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
         primaryLink: function () {
-          return { label: "Official body", url: "https://logancountyil.gov/county-board" };
+          return {
+            label: "Official directory",
+            url: "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+          };
+        },
+        hoverOfficial: {
+          load: loadLoganBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
         }
-      }),
+      },
       // Sangamon (29 single-member districts, the state capital's county). The
       // GIS publishes the district and a per-district MEMBER URL but no name, so
       // the weekly scraper walks exactly those 29 URLs — the join key comes from

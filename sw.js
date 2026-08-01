@@ -142,6 +142,7 @@ const ROSTER_URLS = [
   "./data/app/logan-precinct-polling.json",
   "./data/app/carroll-precinct-polling.json",
   "./data/app/woodford-county-board-members.json",
+  "./data/app/logan-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
