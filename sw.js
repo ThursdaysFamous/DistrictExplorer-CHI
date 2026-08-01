@@ -104,6 +104,8 @@ const GEOMETRY_URLS = [
   "./data/app/winnebago-judicial-subcircuits.json",
   "./data/app/madison-judicial-subcircuits.json",
   "./data/app/sangamon-judicial-subcircuits.json",
+  "./data/app/woodford-county-outline.json",
+  "./data/app/woodford-county-board-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -139,6 +141,7 @@ const ROSTER_URLS = [
   "./data/app/lasalle-county-board-members.json",
   "./data/app/logan-precinct-polling.json",
   "./data/app/carroll-precinct-polling.json",
+  "./data/app/woodford-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

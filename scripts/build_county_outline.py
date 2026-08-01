@@ -378,6 +378,29 @@ COUNTIES = {
     # therefore Illinois-only by construction (the derivation picks places in
     # neighbouring Illinois counties); the river edge is tested by the inside
     # anchors that hug it, Andalusia and Rock Island itself.
+    # Woodford: the pass-6 next-county candidate, between Peoria's metro edge
+    # and the served McLean/Livingston block. Anchor coordinates geocoded, not
+    # recalled; the outside anchors are its Tazewell/Peoria/Marshall/McLean
+    # neighbours.
+    "woodford": {
+        "fips": "203",
+        "name": "Woodford County",
+        "inside": [
+            (40.7214, -89.2723, "Eureka (county seat)"),
+            (40.7903, -89.3609, "Metamora"),
+            (40.7392, -89.0165, "El Paso"),
+            (40.9045, -89.0343, "Minonk"),
+            (40.7664, -89.4670, "Germantown Hills"),
+            (40.8281, -89.5262, "Spring Bay"),
+        ],
+        "outside": [
+            (40.6131, -89.4590, "Morton — Tazewell County"),
+            (40.6936, -89.5890, "Peoria — Peoria County"),
+            (41.0245, -89.4109, "Lacon — Marshall County"),
+            (40.5142, -88.9906, "Normal — McLean County"),
+            (40.8809, -88.6298, "Pontiac — Livingston County"),
+        ],
+    },
     "rock-island": {
         "fips": "161",
         "name": "Rock Island County",

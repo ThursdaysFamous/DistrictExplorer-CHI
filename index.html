@@ -4351,7 +4351,7 @@ function initChiExplorer() {
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
-    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
+    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — plus Woodford (3 DERIVED districts — TIGER townships dissolved per adopted Ordinance 2020/21 #005, five members each from a weekly directory scrape 15/15 with phone and e-mail; no chair marked, the directory doesn't say) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
@@ -4379,7 +4379,7 @@ function initChiExplorer() {
     // Smallest county-scoped layer, so it renders on top of Township and County
     // (smallest-on-top); turning it on drops both to outline-only, framing the
     // precinct fills from underneath.
-    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features, township named from the clerk's own prefix pairing, election-day polling place joined on the precinct code 292/292 and labelled with the election it was published for) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone) + Macoupin current map (45, polling place joined 45/45 from the clerk's own Socrata polling dataset by deterministic label expansion) + McLean current map (141, polling place joined 141/141 by POLLINGID on the clerk's own MapServer) + Logan current map (29, township-named; the clerk's HTML polling table ships as a same-origin file and joins 29/29) + Sangamon approved fabric (166, polling place joined 165/166 by POLLID) + Carroll (22 — the county did not re-precinct, so TIGERweb's Census 2020 voting districts ARE the current fabric; the clerk's polling notice ships as a same-origin file, 22/22), county-dispatched; subOf township
+    "county-precinct",   // Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features, township named from the clerk's own prefix pairing, election-day polling place joined on the precinct code 292/292 and labelled with the election it was published for) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone) + Macoupin current map (45, polling place joined 45/45 from the clerk's own Socrata polling dataset by deterministic label expansion) + McLean current map (141, polling place joined 141/141 by POLLINGID on the clerk's own MapServer) + Logan current map (29, township-named; the clerk's HTML polling table ships as a same-origin file and joins 29/29) + Sangamon approved fabric (166, polling place joined 165/166 by POLLID) + Carroll (22 — the county did not re-precinct, so TIGERweb's Census 2020 voting districts ARE the current fabric; the clerk's polling notice ships as a same-origin file, 22/22) + Woodford current map (37 via TCRPC's election service, polling joined 37/37 on the numeric polling reference with the precinct's own name cross-checked in the polling row's grouped label), county-dispatched; subOf township
     "tif-district",      // Cook TIF districts — the Clerk's current tax-increment-financing agency tiling (418, county GIS clerkTaxDistricts L18: the un-yeared layer the Clerk refreshes in place, retired year editions archived in the year-versioned service); card shows name + Clerk agency number + the Clerk's TIF-reports link; partial coverage (most points are in no TIF), Cook-gated. Dedicated Cook layer per the consolidation rule until a second county ships TIFs (Kendall's server carries a TIF_Districts service — recorded as the next entry)
     "cps-elementary",    // Elementary School attendance zone — smallest polygon layer
     "school-site",       // individual school-campus footprints — smallest polygons, above the zones
@@ -7904,6 +7904,77 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadWoodfordCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/woodford-county-outline.json", {}, 2);
+  });
+  function woodfordCountyCoverage(point) {
+    return loadWoodfordCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  /* Woodford (the pass-6 next-county candidate, added 2026-08-02). Its GIS of
+   * record is TCRPC's — the same regional org that serves Logan — but TCRPC
+   * carries no board districts, so the board boundary is DERIVED: TIGER
+   * townships dissolved per the county's adopted Ordinance 2020/21 #005
+   * (scripts/build_woodford_board_districts.py — three districts of whole
+   * townships, five members elected at large from each). The roster is a
+   * weekly scrape of the county's own CivicPlus directory (15/15 with phone
+   * AND e-mail). NO chair is marked anywhere: the chair is elected from
+   * within the body every two years and the directory does not say who holds
+   * it, so the card links the directory instead of guessing. */
+  var loadWoodfordBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/woodford-county-board-districts.json", {}, 2);
+  });
+  var loadWoodfordBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/woodford-county-board-members.json", {}, 2);
+  });
+  /* Precincts + polling from TCRPC's Woodford election service (its layer
+   * names carry the election it was drawn for — the 2024 fabric is the
+   * current one). The numeric join is exact: precinct.Polling_Re resolves to
+   * polling.Prec_Num 37/37, and every matched precinct's own name appears
+   * inside the polling row's grouped label ("WORTH 4, WORTH 5, AND WORTH 6"),
+   * a built-in cross-check measured at 37/37 with zero exceptions. A polling
+   * failure costs the polling rows, never the precinct. */
+  var loadWoodfordPrecincts = makeCached(function () {
+    var base = "https://services.arcgis.com/pPTAs43AFhhk0pXQ/arcgis/rest/services/" +
+      "2024_General_Primary_Election___March_19th__2024_WFL1/FeatureServer/";
+    function layer(index, outFields, label) {
+      var url = base + index + "/query?where=1%3D1&outFields=" + outFields +
+        "&outSR=4326&f=geojson&geometryPrecision=5";
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+        .then(function (geojson) {
+          if (!hasUsableGeometry(geojson)) throw new Error("Woodford County " + label + " returned no usable geometry");
+          return geojson;
+        });
+    }
+    return Promise.all([
+      layer(2, "Precinct_N,Polling_Re", "precincts"),
+      layer(1, "Prec_Num,Facility_Name,Address", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byNum = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var num = findPropCI(p, ["prec_num"]);
+          if (num != null && String(num).trim()) {
+            byNum[String(num).trim().replace(/^0+/, "")] = p;
+          }
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["polling_re"]);
+          var place = key != null ? byNum[String(key).trim().replace(/^0+/, "")] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["facility_name"]);
+          props.dxPollingAddress = findPropCI(place, ["address"]);
+        });
+      }
+      return precincts;
+    });
+  });
 
   function loadCountyMapServerLayer(base, layerIndex, outFields, label) {
     var url = base + "/MapServer/" + layerIndex + "/query?where=1%3D1&outFields=" +
@@ -12762,6 +12833,68 @@ function initChiExplorer() {
           }
         }
       },
+      // Woodford (3 districts electing FIVE members each — the Livingston
+      // shape, one size up) — added 2026-08-02, the pass-6 next-county
+      // candidate. Boundary DERIVED from TIGER townships per the county's
+      // adopted Ordinance 2020/21 #005 (it publishes no board GIS); roster
+      // scraped weekly from the county's own directory, 15/15 with phone and
+      // e-mail. No chair is rendered: the chair is elected from within the
+      // body and the directory does not mark who holds it.
+      {
+        key: "woodford",
+        coverage: woodfordCountyCoverage,
+        loadGeometry: loadWoodfordBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWoodfordBoardDistricts(),
+            loadWoodfordBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Woodford County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Official directory",
+            url: "https://www.woodford-county.org/Directory.aspx?DID=22"
+          };
+        },
+        hoverOfficial: {
+          load: loadWoodfordBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Logan (6 districts) — rule-4 branch 3, the honesty floor. The regional
       // GIS publishes the district and nothing else, and the county's only
       // roster is a salary publication with no district against any name, so the
@@ -15446,6 +15579,65 @@ function initChiExplorer() {
           return {
             label: "Carroll County Clerk — Elections (official)",
             url: "https://www.carrollcountyil.gov/county_departments/clerk___recorder/index.php"
+          };
+        }
+      },
+      // Woodford — 37 precincts from TCRPC's election service with the
+      // polling site joined 37/37 on the numeric polling reference (and every
+      // precinct's own name cross-checked inside the polling row's grouped
+      // label — see the loader). Board district via spatial join against the
+      // derived ordinance boundary.
+      {
+        key: "woodford",
+        coverage: woodfordCountyCoverage,
+        loadGeometry: loadWoodfordPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinct_n"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWoodfordPrecincts(),
+            loadWoodfordBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["precinct_n"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Woodford County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Woodford County Clerk — Elections (official)",
+            url: "https://www.woodford-county.org/149/County-Clerk"
           };
         }
       }

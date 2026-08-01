@@ -94,7 +94,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # does become disjoint — that machinery is in place, it is just not exercised yet.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
-                     "119", "163", "037", "141", "177", "015", "103", "195", "161",
+                     "119", "163", "037", "141", "177", "015", "103", "195", "161", "203",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -121,7 +121,7 @@ DISPATCH_COUNTY_FIPS = {
     "winnebago": "201", "livingston": "105", "mclean": "113", "logan": "107",
     "sangamon": "167", "macoupin": "117", "madison": "119", "st-clair": "163",
     "dekalb": "037", "ogle": "141", "stephenson": "177", "carroll": "015",
-    "lee": "103", "whiteside": "195", "rock-island": "161",
+    "lee": "103", "whiteside": "195", "rock-island": "161", "woodford": "203",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -172,6 +172,7 @@ INSIDE = {
     "Dixon (Lee)": (41.8493, -89.4876),
     "Morrison (Whiteside)": (41.8090, -89.9686),
     "Rock Island (Rock Island)": (41.4852, -90.5742),
+    "Eureka (Woodford)": (40.7214, -89.2723),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
