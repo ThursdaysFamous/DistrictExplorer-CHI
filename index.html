@@ -8194,6 +8194,40 @@ function initChiExplorer() {
   var loadSangamonBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/sangamon-county-board-members.json", {}, 2);
   });
+  /* Sangamon's fire tiling is FireDistrictEtc layer 2 on the same county org —
+   * 226 polygon fragments carrying 30 District values: 29 fire protection
+   * districts plus SPRINGFIELD CORP, the city's corporate area (served by the
+   * city's OWN Fire Department rather than an FPD — the card says so rather
+   * than presenting the city as a district). The fragments are grouped
+   * client-side into one MultiPolygon feature per district so hover,
+   * highlight and the card treat a district as one thing; a true geometric
+   * dissolve is unnecessary because the query is containment and interior
+   * seams don't change it. The source writes "LOAMI  FPD" with a doubled
+   * space — whitespace is collapsed so the name renders cleanly. */
+  var loadSangamonFire = makeCached(function () {
+    var url = "https://services.arcgis.com/XqG0RpqsNfIBGGb2/arcgis/rest/services/" +
+      "FireDistrictEtc/FeatureServer/2/query?where=1%3D1&outFields=District" +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Sangamon fire districts returned no usable geometry");
+        var groups = {};
+        (geojson.features || []).forEach(function (f) {
+          var name = String(findPropCI(f.properties || {}, ["district"]) || "")
+            .replace(/\s+/g, " ").trim();
+          if (!name || !f.geometry) return;
+          var polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates]
+            : f.geometry.type === "MultiPolygon" ? f.geometry.coordinates : [];
+          (groups[name] = groups[name] || []).push.apply(groups[name], polys);
+        });
+        var features = Object.keys(groups).map(function (name) {
+          return { type: "Feature", properties: { district: name },
+                   geometry: { type: "MultiPolygon", coordinates: groups[name] } };
+        });
+        if (!features.length) throw new Error("Sangamon fire districts grouped to nothing");
+        return { type: "FeatureCollection", features: features };
+      });
+  });
   /* Logan's precinct fabric is layer 40 of the same TCRPC service its board
    * entry reads — 29 township-named precincts. The county publishes its
    * polling assignment only as an HTML table on the clerk's site, so that
@@ -8480,6 +8514,22 @@ function initChiExplorer() {
   }
   var loadStClairCountyBoard = makeCached(function () {
     return loadStClairLayer(2, "district,name", "board districts");
+  });
+  /* St. Clair's countywide fire tiling lives in the county's CAD folder
+   * (CentralSquare/DATA layer 8 — a different service from STCLAIR_GIS's
+   * voting districts) — 44 named departments. disttype, agency and agencyurl
+   * are declared on the layer and empty on every row, so whether a polygon
+   * maps a TAXING district or a dispatch-response area is not stated by the
+   * source; the card carries that caveat instead of guessing. */
+  var loadStClairFire = makeCached(function () {
+    var url = "https://arcgispublicmap.co.st-clair.il.us/server/rest/services/" +
+      "CentralSquare/DATA/MapServer/8/query?where=1%3D1&outFields=name" +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("St. Clair fire districts returned no usable geometry");
+        return geojson;
+      });
   });
   var loadStClairPrecincts = makeCached(function () {
     return loadStClairLayer(18, "prec_name2", "precincts");
@@ -14615,6 +14665,38 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Fire District", keys: ["firepd"], primary: true },
           { label: "County", value: "Rock Island County" }
+        ]
+      }),
+      // Sangamon's 29 FPDs + the city (2026-08-02). Identity-only — the FPD
+      // trustees are partly elected (four clerk PDFs) and partly
+      // board-appointed, with no keyed roster — and the source's 226 fragments
+      // are grouped per district at load. A Springfield click answers with the
+      // city's corporate area, and the card states that the city is served by
+      // its own Fire Department rather than a fire protection district.
+      polygonCountyEntry({
+        key: "sangamon",
+        coverage: sangamonCountyCoverage,
+        loader: loadSangamonFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["district"], primary: true },
+          { label: "Note", value: "Springfield's corporate area is served by the city's own Fire Department rather than a fire protection district.",
+            when: function (r) { return r.name === "SPRINGFIELD CORP"; } },
+          { label: "County", value: "Sangamon County" }
+        ]
+      }),
+      // St. Clair's 44 named departments (2026-08-02), from the county's CAD
+      // folder. The source declares disttype/agency columns and populates
+      // none, so whether this tiling maps taxing districts or dispatch
+      // response areas is not stated — the caveat rides every card instead of
+      // a guess.
+      polygonCountyEntry({
+        key: "st-clair",
+        coverage: stClairCountyCoverage,
+        loader: loadStClairFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["name"], primary: true },
+          { label: "Note", value: "The county publishes this tiling without stating whether it maps taxing districts or dispatch-response coverage areas." },
+          { label: "County", value: "St. Clair County" }
         ]
       })
     ]
