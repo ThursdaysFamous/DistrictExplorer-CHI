@@ -346,7 +346,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 31,
-      "rank_note": "Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features, township named from the clerk's own prefix pairing, election-day polling place joined on the precinct code 292/292 and labelled with the election it was published for) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone) + Macoupin current map (45, polling place joined 45/45 from the clerk's own Socrata polling dataset by deterministic label expansion) + McLean current map (141, polling place joined 141/141 by POLLINGID on the clerk's own MapServer) + Logan current map (29, township-named; the clerk's HTML polling table ships as a same-origin file and joins 29/29) + Sangamon approved fabric (166, polling place joined 165/166 by POLLID) + Carroll (22 — the county did not re-precinct, so TIGERweb's Census 2020 voting districts ARE the current fabric; the clerk's polling notice ships as a same-origin file, 22/22), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
@@ -816,6 +816,16 @@
         "file": "lasalle-county-board-members.json",
         "min_keys": 29,
         "note": "LaSalle County Board members keyed by district (29 single-member districts) plus the countywide-elected Chairman under 'chair' — scraped weekly from the county's own CivicPlus directory (full 10-digit phones + district-office e-mails). Replaces the 2015-frozen officeholder columns on the county's superseded board GIS."
+      },
+      {
+        "file": "logan-precinct-polling.json",
+        "min_keys": 3,
+        "note": "Logan County precinct polling places, scraped from the clerk's own Polling Places page by scripts/build_logan_precinct_polling.py (29 precincts; --check compares against the live page). Polling assignments are per-election — re-run the builder when the clerk updates the page."
+      },
+      {
+        "file": "carroll-precinct-polling.json",
+        "min_keys": 3,
+        "note": "Carroll County precinct polling places, expanded from the clerk's published polling notice by scripts/build_carroll_precinct_polling.py against the county's 22 unchanged Census-2020 precinct names (deterministic grouped-label expansion; --check compares against the live notice). Per-election, like Logan's."
       }
     ]
   },

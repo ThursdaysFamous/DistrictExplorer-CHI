@@ -1,0 +1,122 @@
+{
+  "fetched": "2026-08-01",
+  "precincts": {
+    "Aetna": {
+      "address": "209 W. South St., Chestnut, IL",
+      "place": "Aetna Township Building"
+    },
+    "Atlanta": {
+      "address": "300 Northeast 3rd St., Atlanta, IL",
+      "place": "Atlanta Christian Church"
+    },
+    "Broadwell": {
+      "address": "105 E. Pine St., Broadwell, IL",
+      "place": "Broadwell Town Hall"
+    },
+    "Chester": {
+      "address": "1197 1450th Ave., Lincoln, IL",
+      "place": "Chester Township Hall"
+    },
+    "Corwin": {
+      "address": "100 N. Monroe St., Middletown, IL",
+      "place": "Corwin Township Hall"
+    },
+    "East Lincoln #1": {
+      "address": "204 N. McLean (North Door), Lincoln, IL",
+      "place": "Lincoln Christian Church Fellowship Center"
+    },
+    "East Lincoln #2": {
+      "address": "204 N. McLean (North Door), Lincoln, IL",
+      "place": "Lincoln Christian Church Fellowship Center"
+    },
+    "East Lincoln #3": {
+      "address": "204 N. McLean (North Door), Lincoln, IL",
+      "place": "Lincoln Christian Church Fellowship Center"
+    },
+    "East Lincoln #4": {
+      "address": "204 N. McLean (North Door), Lincoln, IL",
+      "place": "Lincoln Christian Church Fellowship Center"
+    },
+    "East Lincoln #5": {
+      "address": "204 N. McLean (North Door), Lincoln, IL",
+      "place": "Lincoln Christian Church Fellowship Center"
+    },
+    "East Lincoln #6": {
+      "address": "204 N. McLean (North Door), Lincoln, IL",
+      "place": "Lincoln Christian Church Fellowship Center"
+    },
+    "Elkhart": {
+      "address": "209 Governor Oglesby St. Elkhart, IL",
+      "place": "Elkhart Village Hall"
+    },
+    "Eminence": {
+      "address": "1450 2400th St., Atlanta, IL",
+      "place": "Eminence Township Building"
+    },
+    "Hurlbut": {
+      "address": "209 Governor Oglesby St. Elkhart, IL",
+      "place": "Elkhart Village Hall"
+    },
+    "Lake Fork/Laenna": {
+      "address": "271 N. Macon St., Latham",
+      "place": "Latham Firehouse"
+    },
+    "Mt. Pulaski #1": {
+      "address": "104 Scroggin Ave., Mt. Pulaski, IL",
+      "place": "American Legion Home"
+    },
+    "Mt. Pulaski #2": {
+      "address": "104 Scroggin Ave., Mt. Pulaski, IL",
+      "place": "American Legion Home"
+    },
+    "Oran": {
+      "address": "1549 Broadway St., Beason, IL",
+      "place": "Beason Firehouse"
+    },
+    "Orvil #1": {
+      "address": "120 Market St., Emden, IL",
+      "place": "St. Peter's Lutheran Church"
+    },
+    "Orvil #2": {
+      "address": "109 W. Front St., Hartsburg, IL",
+      "place": "Hartsburg Legion Hall"
+    },
+    "Prairie Creek": {
+      "address": "119 S. Payne St., San Jose, IL",
+      "place": "Prairie Creek Township Building"
+    },
+    "Sheridan": {
+      "address": "109 W. Lincoln St., New Holland, IL",
+      "place": "New Holland Community Center"
+    },
+    "West Lincoln #1": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    },
+    "West Lincoln #2": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    },
+    "West Lincoln #3": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    },
+    "West Lincoln #4": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    },
+    "West Lincoln #5": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    },
+    "West Lincoln #6": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    },
+    "West Lincoln #7": {
+      "address": "1700 N. Jefferson St., Lincoln, IL",
+      "place": "Jefferson Street Christian Church"
+    }
+  },
+  "source": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=178&Itemid=543&lang=en"
+}
