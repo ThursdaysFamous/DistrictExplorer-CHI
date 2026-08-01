@@ -144,6 +144,8 @@ const ROSTER_URLS = [
   "./data/app/woodford-county-board-members.json",
   "./data/app/logan-county-board-members.json",
   "./data/app/boone-county-board-members.json",
+  "./data/app/grundy-county-board-districts.json",
+  "./data/app/grundy-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
