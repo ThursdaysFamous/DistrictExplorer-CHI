@@ -60,6 +60,16 @@ COUNTY_FIPS = {
     "Stephenson": "177",
     "Carroll": "015",
     "DeKalb": "037",
+    # The pass-6 tranche (2026-08-01): eight counties whose sources the
+    # validation pass verified publishable, shipped together.
+    "Grundy": "063",
+    "Livingston": "105",
+    "Logan": "107",
+    "McLean": "113",
+    "Sangamon": "167",
+    "Madison": "119",
+    "St. Clair": "163",
+    "Rock Island": "161",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -67,18 +77,24 @@ COUNTY_FIPS = {
 # officers. An office name not listed here still ships (under officers) and
 # prints a warning — new office types get a human's attention, never a silent
 # drop.
-HEAD_OFFICES = {"mayor", "president", "village president"}
+# "acting president" is a sitting trustee wearing the gavel (Spaulding,
+# Williamsville, Worden print the office exactly that way); the same person's
+# trustee row legitimately coexists with it, so the scrapers' head-duplicate
+# rules already exempt it.
+HEAD_OFFICES = {"mayor", "president", "village president", "acting president"}
 BOARD_OFFICES = {"trustee", "alderperson", "alderman", "alderwoman",
                  "council member", "commissioner", "councilman", "councilwoman",
                  "councilperson"}
 OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
                    "taxpayer advocate", "collector", "supervisor",
+                   # Oak Grove (Rock Island) elects one officer to both
+                   "clerk/treasurer",
                    # appointed staff LaSalle prints beside the elected officers;
                    # the record carries appointed=True so a card never implies
                    # these were elected
                    "deputy clerk", "administrator", "village administrator",
                    "city administrator", "city manager", "village manager",
-                   "superintendent", "superintendent of public works"}
+                   "manager", "superintendent", "superintendent of public works"}
 
 # Per-county floors: deliberate under-tolerances against the verified 2026-07
 # live values (Cook 128 municipalities / 1,035 governing records / 128 heads;
@@ -128,12 +144,27 @@ COUNTY_FLOORS = {
     # one or two under the full set. Thomson's president is vacant, which is why
     # heads is two under the municipality count rather than one.
     "Carroll": {"municipalities": 6, "members": 11, "heads": 5},         # 7 / 13 / 6
+    # The pass-6 tranche (2026-08-01 live values in parentheses), all
+    # full-governing-body sources — each scraper carries its own tighter
+    # per-source floors, so these are the coarse back-stops.
+    "Grundy": {"municipalities": 15, "members": 110, "heads": 15},       # 17 / 133 / 17
+    "Livingston": {"municipalities": 14, "members": 120, "heads": 14},   # 16 / 153 / 16
+    "Logan": {"municipalities": 10, "members": 75, "heads": 10},         # 11 / 92 / 11
+    # McLean covers ONLY its three ward-electing cities (the county-wide
+    # source is a JS-locked Airtable interface — see the scraper), so its
+    # floors describe three municipalities, not a county sweep.
+    "McLean": {"municipalities": 3, "members": 22, "heads": 3},          # 3 / 26 / 3
+    "Sangamon": {"municipalities": 22, "members": 170, "heads": 20},     # 26 / 208 / 26
+    "Madison": {"municipalities": 24, "members": 190, "heads": 24},      # 28 / 241 / 28
+    "St. Clair": {"municipalities": 22, "members": 190, "heads": 22},    # 26 / 247 / 26
+    "Rock Island": {"municipalities": 13, "members": 100, "heads": 13},  # 15 / 122 / 15
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
-# municipalities (6 of Will's 34 are shared with Cook); all seven counties
-# resolve to ~270 of the metro's 284, the rest being places no county source
-# lists.
-MIN_TOTAL_MUNICIPALITIES = 250
+# municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
+# counties resolve to ~270, and the pass-6 tranche (Grundy, Livingston, Logan,
+# McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island) adds
+# ~140 more after cross-county dedupe.
+MIN_TOTAL_MUNICIPALITIES = 380
 
 # ---------------------------------------------------------------------------
 # Preserving a blocked source's last-good entries.
@@ -174,6 +205,14 @@ PRESERVABLE = {
     "stephenson": {"kind": "county", "county": "Stephenson"},
     "carroll": {"kind": "county", "county": "Carroll"},
     "dekalb": {"kind": "county", "county": "DeKalb"},
+    "grundy": {"kind": "county", "county": "Grundy"},
+    "livingston": {"kind": "county", "county": "Livingston"},
+    "logan": {"kind": "county", "county": "Logan"},
+    "mclean": {"kind": "county", "county": "McLean"},
+    "sangamon": {"kind": "county", "county": "Sangamon"},
+    "madison": {"kind": "county", "county": "Madison"},
+    "st-clair": {"kind": "county", "county": "St. Clair"},
+    "rock-island": {"kind": "county", "county": "Rock Island"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -196,8 +235,16 @@ PRESERVABLE = {
 # job. DeKalb wins it because the village hall is in DeKalb County (LaSalle
 # lists Somonauk because the village extends across the line) and because
 # DeKalb's book additionally dates every seat's next election.
+# Grundy sits ahead of Livingston for the one municipality both publish in
+# full: Dwight. The two 2026 editions disagree on one trustee seat (Grundy:
+# Randy Irvin; Livingston: Debra Karch) and Grundy's booklet is a month
+# fresher (July vs June 2026) and dates every seat's term — the freshness
+# call, made explicit. LaSalle already precedes both, which settles Streator
+# (hall in LaSalle) the same way.
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
-                     "Stephenson", "DuPage", "Kane", "Kendall", "McHenry",
+                     "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
+                     "Sangamon", "Madison", "St. Clair", "Rock Island",
+                     "DuPage", "Kane", "Kendall", "McHenry",
                      "Carroll", "Lake"]
 
 
@@ -276,10 +323,22 @@ def load_places(path):
     return by_county, statewide, legal
 
 
+# Places incorporated AFTER the committed Census 2020 reference file. Cahokia
+# Heights formed in May 2021 from Cahokia, Alorton and Centreville; the 2020
+# file still lists its three predecessors and not it, while the app's
+# TIGERweb municipality layer serves the new city under this GEOID (verified
+# live 2026-08-01). Keyed by norm_place() form.
+POST_2020_GEOIDS = {
+    "CAHOKIAHEIGHTS": "1710373",
+}
+
+
 def resolve_geoid(name, county, by_county, statewide):
     key = norm_place(name)
     if not key:
         return None, "unparseable name"
+    if key in POST_2020_GEOIDS:
+        return POST_2020_GEOIDS[key], None
     fips = COUNTY_FIPS.get(county)
     if fips and key in by_county.get(fips, {}):
         return by_county[fips][key], None
