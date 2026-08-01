@@ -109,6 +109,7 @@ const GEOMETRY_URLS = [
   "./data/app/grundy-county-board-districts.json",
   "./data/app/henry-county-outline.json",
   "./data/app/henry-county-board-districts.json",
+  "./data/app/stephenson-fire-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
