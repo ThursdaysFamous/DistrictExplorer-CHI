@@ -848,6 +848,21 @@
         "file": "logan-county-board-members.json",
         "min_keys": 6,
         "note": "Logan County Board members keyed by district (6 two-member districts, 12/12 with phone and e-mail; the Chair and Vice Chair tags ride their member rows — the county says who holds them) — scraped weekly from the county's own board page. Its existence retired the entry's rule-4 branch-3 honesty floor."
+      },
+      {
+        "file": "boone-county-board-members.json",
+        "min_keys": 3,
+        "note": "Boone County Board members keyed by district (3 four-member districts, 12/12 with phone, e-mail and a term-expiry year — terms are staggered, so the year is per-seat ballot information) — scraped weekly from the county's own board page. Role tags verbatim: currently one Vice-Chairman; the page names no Chairman, so none is rendered. The boundary half is live GIS (three per-district layers merged at load time), not a data/app file."
+      },
+      {
+        "file": "grundy-county-board-districts.json",
+        "min_keys": 2,
+        "note": "Grundy County Board districts (3 six-member districts) DERIVED by scripts/build_grundy_board_districts.py — the county's own precinct layer dissolved per the adopted 'Approved County Board Districts (10/12/2021)' map (the county GIS publishes no board geometry). The precinct-to-district transcription is proven by the map's own printed populations: all three district totals reproduce to the person (17,663 / 17,364 / 17,506 = 52,533). Regenerate when the county re-precincts or reapportions; --check is the drift gate."
+      },
+      {
+        "file": "grundy-county-board-members.json",
+        "min_keys": 3,
+        "note": "Grundy County Board members keyed by district (3 six-member districts, 18/18 with party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides Drew Muffler's row as the page states it) — scraped weekly from the county's own board page."
       }
     ]
   },
@@ -1000,6 +1015,16 @@
       "file": "update-logan-county-board-roster.yml",
       "purpose": "Logan County Board roster (logancountyil.gov board-page scrape)",
       "schedule": "Mon 17:00 UTC"
+    },
+    {
+      "file": "update-boone-county-board-roster.yml",
+      "purpose": "Boone County Board roster (boonecountyil.gov board-page scrape)",
+      "schedule": "Tue 17:00 UTC"
+    },
+    {
+      "file": "update-grundy-county-board-roster.yml",
+      "purpose": "Grundy County Board roster (grundycountyil.gov board-page scrape)",
+      "schedule": "Wed 17:00 UTC"
     }
   ],
   "geocoder": {

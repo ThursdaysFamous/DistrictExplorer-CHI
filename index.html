@@ -8894,6 +8894,35 @@ function initChiExplorer() {
     return loadCountyMapServerLayer(BOONE_GIS + "Clerk_and_Recorder/Voting_Polling_Places", 1,
       "TWP_PRECIN,Township,Munic,Precinct,Location,Address,City", "Boone County precincts");
   });
+  /* Boone publishes its board districts as THREE sibling MapServer layers —
+   * District_1/2/3 at indexes 0/1/2 — each already dissolved to its district
+   * footprint (verified to tile the county outline: 0 overlaps on a 479-point
+   * grid). The features still carry attributes of one arbitrary census block
+   * left over from the dissolve, so nothing on them is trusted: the district
+   * number comes from WHICH layer a feature arrived in, stamped at load time.
+   * A one-layer failure fails the whole load — two districts without the
+   * third would answer some points with silence instead of an error card. */
+  var loadBooneCountyBoard = makeCached(function () {
+    return Promise.all([0, 1, 2].map(function (idx) {
+      return loadCountyMapServerLayer(BOONE_GIS + "County_Board_Districts", idx,
+        "FID", "Boone County Board district " + (idx + 1));
+    })).then(function (layers) {
+      var features = [];
+      layers.forEach(function (geojson, idx) {
+        (geojson.features || []).forEach(function (f) {
+          features.push({
+            type: "Feature",
+            properties: { district: String(idx + 1) },
+            geometry: f.geometry
+          });
+        });
+      });
+      return { type: "FeatureCollection", features: features };
+    });
+  });
+  var loadBooneBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/boone-county-board-members.json", {}, 2);
+  });
 
   var GRUNDY_GIS = "https://maps.grundyco.org/arcgis/rest/services/";
   /* Grundy's polling places live in a sibling layer keyed by POLLINGID. Stamp
@@ -8939,6 +8968,18 @@ function initChiExplorer() {
       }
       return precincts;
     });
+  });
+  /* Grundy's board districts are DERIVED: the county GIS publishes no
+   * board-district geometry, so scripts/build_grundy_board_districts.py
+   * dissolves the precinct layer above per the adopted "Approved County
+   * Board Districts (10/12/2021)" map — the transcription proven by the
+   * map's own printed populations (all three district totals reproduced to
+   * the person). Served same-origin, cache-first. */
+  var loadGrundyBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/grundy-county-board-districts.json", {}, 2);
+  });
+  var loadGrundyBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/grundy-county-board-members.json", {}, 2);
   });
 
   /* Both boards carry the member on the district feature, so one helper builds
@@ -13586,6 +13627,140 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // Boone (3 districts electing FOUR members each). Boundary live from the
+      // county GIS's three per-district layers, merged and tagged at load
+      // time; members from a weekly scrape of the county's own board page,
+      // 12/12 with phone, e-mail and a term-expiry year (terms are staggered,
+      // so the year is per-seat ballot information). The page names a
+      // Vice-Chairman on his own row and no Chairman anywhere — one member is
+      // merely listed above the district sections — so no chair is rendered.
+      {
+        key: "boone",
+        coverage: booneCountyCoverage,
+        loadGeometry: loadBooneCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadBooneCountyBoard(),
+            loadBooneBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Boone County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              var term = municipalTermNote(m);
+              if (term) p.note = p.note ? p.note + " · " + term : term;
+              return p;
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Boone County Board (official)",
+            url: "https://www.boonecountyil.gov/government/county_board_members.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadBooneBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Grundy (3 districts electing SIX members each). Boundary DERIVED —
+      // the county GIS publishes no board-district geometry, so the county's
+      // own precinct layer is dissolved per the adopted 10/12/2021 map
+      // (scripts/build_grundy_board_districts.py; the transcription proven by
+      // the map's printed populations, all three totals to the person).
+      // Members from a weekly scrape of the county's own board page, 18/18
+      // with party, the page's "Board Member Since" year, committee
+      // assignments verbatim, phone and e-mail; the Board Chairman tag rides
+      // Drew Muffler's row exactly as the page states it.
+      {
+        key: "grundy",
+        coverage: grundyCountyCoverage,
+        loadGeometry: loadGrundyBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadGrundyBoardDistricts(),
+            loadGrundyBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Grundy County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              if (m.since) {
+                var since = "Board member since " + String(m.since);
+                p.note = p.note ? p.note + " · " + since : since;
+              }
+              return p;
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Grundy County Board (official)",
+            url: "https://www.grundycountyil.gov/government/county_board.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadGrundyBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
       }
     ]
   });
@@ -14875,8 +15050,8 @@ function initChiExplorer() {
       },
       // Boone (37). The county names precincts township-compound ("Belvidere 7")
       // and — unusually — carries the polling place ON the precinct feature, so
-      // there is nothing to join: Location/Address/City come straight off the
-      // polygon the point lands in.
+      // Location/Address/City come straight off the polygon the point lands in;
+      // the only join is the best-effort board-district containment test.
       {
         key: "boone",
         coverage: booneCountyCoverage,
@@ -14886,7 +15061,11 @@ function initChiExplorer() {
           return (v == null || String(v).trim() === "") ? null : String(v).trim();
         },
         query: function (point, seq) {
-          return loadBoonePrecincts().then(function (geojson) {
+          return Promise.all([
+            loadBoonePrecincts(),
+            loadBooneCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
             var feature = findFeatureContaining(geojson, point);
             if (!feature) return null;
             var props = feature.properties || {};
@@ -14896,18 +15075,27 @@ function initChiExplorer() {
             var addr = [street, city].filter(function (x) {
               return x != null && String(x).trim();
             }).map(function (x) { return String(x).trim(); }).join(", ");
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) boardDistrict = findPropCI(bf.properties || {}, ["district"]);
+            }
             return {
               seq: seq,
               name: compound != null && String(compound).trim() ? String(compound).trim() : null,
               township: findPropCI(props, ["township"]),
               municipality: findPropCI(props, ["munic"]),
               pollingPlace: findPropCI(props, ["location"]),
-              pollingAddress: addr || null
+              pollingAddress: addr || null,
+              boardDistrict: boardDistrict
             };
           });
         },
         render: function (result) {
           var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
           if (result.township) fields.push({ label: "Township", value: String(result.township) });
           // Boone stamps unincorporated precincts Munic="County" — its own
           // shorthand, not a place. Rendering it would read as a municipality
@@ -14942,22 +15130,35 @@ function initChiExplorer() {
           return (v == null || String(v).trim() === "") ? null : String(v).trim();
         },
         query: function (point, seq) {
-          return loadGrundyPrecincts().then(function (geojson) {
+          return Promise.all([
+            loadGrundyPrecincts(),
+            loadGrundyBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
             var feature = findFeatureContaining(geojson, point);
             if (!feature) return null;
             var props = feature.properties || {};
             var name = findPropCI(props, ["name"]);
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) boardDistrict = findPropCI(bf.properties || {}, ["district"]);
+            }
             return {
               seq: seq,
               name: name != null && String(name).trim() ? String(name).trim() : null,
               pollingPlace: props.dxPollingPlace || null,
               pollingAddress: props.dxPollingAddress || null,
-              pollingPhone: props.dxPollingPhone || null
+              pollingPhone: props.dxPollingPhone || null,
+              boardDistrict: boardDistrict
             };
           });
         },
         render: function (result) {
           var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
           if (result.pollingPlace) {
             fields.push({ label: "Polling place", value: String(result.pollingPlace) +
               (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
