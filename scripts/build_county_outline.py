@@ -438,6 +438,32 @@ COUNTIES = {
             (41.6101, -90.1763, "Hillsdale — Rock Island County"),
         ],
     },
+    # Henry: the 28th county, closing the gap between the served Rock Island /
+    # Whiteside block and the rest of the ring. Every inside anchor was
+    # verified against the county's OWN PoliticalTownships_Henry layer before
+    # being written down (each lands in its expected township); the outside
+    # anchors are its Rock Island/Mercer/Knox/Stark/Bureau/Whiteside
+    # neighbours.
+    "henry": {
+        "fips": "073",
+        "name": "Henry County",
+        "inside": [
+            (41.3036, -90.1929, "Cambridge (county seat)"),
+            (41.2456, -89.9246, "Kewanee"),
+            (41.4489, -90.1543, "Geneseo"),
+            (41.4839, -90.3468, "Colona"),
+            (41.1675, -90.0432, "Galva"),
+            (41.3545, -90.3815, "Orion"),
+        ],
+        "outside": [
+            (41.5067, -90.5151, "Moline — Rock Island County"),
+            (41.3054, -90.4931, "Sherrard — Mercer County"),
+            (40.9478, -90.3712, "Galesburg — Knox County"),
+            (41.0937, -89.8651, "Toulon — Stark County"),
+            (41.3583, -89.7373, "Sheffield — Bureau County"),
+            (41.6562, -90.0793, "Erie — Whiteside County"),
+        ],
+    },
 }
 
 
