@@ -7872,6 +7872,13 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  /* Stephenson's fire tiling — the fleet's second GEOREFERENCED boundary
+   * (scripts/build_stephenson_fire_districts.py: the county's own 2014
+   * vector-PDF map, measured rather than published as data). Served
+   * same-origin, cache-first, like the county's board districts. */
+  var loadStephensonFire = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stephenson-fire-districts.json", {}, 2);
+  });
   var loadCarrollCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/carroll-county-outline.json", {}, 2);
   });
@@ -14697,6 +14704,24 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["name"], primary: true },
           { label: "Note", value: "The county publishes this tiling without stating whether it maps taxing districts or dispatch-response coverage areas." },
           { label: "County", value: "St. Clair County" }
+        ]
+      }),
+      // Stephenson's 15 named fire services (2026-08-02) — the fleet's second
+      // GEOREFERENCED boundary: the county publishes no fire boundary as
+      // data, so scripts/build_stephenson_fire_districts.py measures the
+      // county's own 2014 vector-PDF map (fitted on hydrography, verified
+      // against the map's own town labels — read that script's header before
+      // trusting the lines). The vintage caveat rides every card. Several
+      // services keep their true extents past the county line — the map
+      // draws them that way — but this entry only answers inside Stephenson.
+      polygonCountyEntry({
+        key: "stephenson",
+        coverage: stephensonCountyCoverage,
+        loader: loadStephensonFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["district"], primary: true },
+          { label: "Note", value: "Boundary georeferenced from the county's 2014-published fire district map — the newest the county publishes. Lines are approximate and predate any later changes." },
+          { label: "County", value: "Stephenson County" }
         ]
       })
     ]

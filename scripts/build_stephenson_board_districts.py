@@ -239,6 +239,98 @@ def as_features(rings, q=6):
     return out
 
 
+def pt_seg_factory(np):
+    """Point-to-segment distances, chunked. Shared by this build and the
+    special-district builds (build_stephenson_fire_districts.py), which
+    georeference SIBLING maps from the same county map series."""
+    def pt_seg(Q, S, chunk=300):
+        a, b = S[:, 0], S[:, 1]
+        ab = b - a
+        L2 = (ab ** 2).sum(1)
+        L2[L2 == 0] = 1e-18
+        dist = np.empty(len(Q))
+        near = np.empty((len(Q), 2))
+        for i in range(0, len(Q), chunk):
+            q = Q[i:i + chunk][:, None, :]
+            tt = (((q - a[None]) * ab[None]).sum(-1) / L2[None]).clip(0, 1)
+            proj = a[None] + tt[..., None] * ab[None]
+            dd = np.sqrt(((q - proj) ** 2).sum(-1))
+            j = dd.argmin(1)
+            dist[i:i + chunk] = dd[np.arange(len(j)), j]
+            near[i:i + chunk] = proj[np.arange(len(j)), j]
+        return dist, near
+    return pt_seg
+
+
+def fit_affine_icp(np, P, tparts, kx, on_fail):
+    """Trimmed-ICP affine fit from PDF page space to (kx-scaled) lon/lat,
+    exactly the schedule the board build shipped with. `tparts` is the target
+    polygon's MultiPolygon-style coordinate list; returns (A, t, pt_seg, ctrl)."""
+    pt_seg = pt_seg_factory(np)
+    T = np.array([c[:2] for p in tparts for r in p for c in r], float)
+    ctrl = np.concatenate([
+        np.stack([np.array([(c[0] * kx, c[1]) for c in r])[:-1],
+                  np.array([(c[0] * kx, c[1]) for c in r])[1:]], 1)
+        for p in tparts for r in p if len(r) > 1])
+    Tm = np.column_stack([T[:, 0] * kx, T[:, 1]])
+    sx = (Tm[:, 0].max() - Tm[:, 0].min()) / (P[:, 0].max() - P[:, 0].min())
+    sy = (Tm[:, 1].max() - Tm[:, 1].min()) / (P[:, 1].max() - P[:, 1].min())
+    A = np.array([[sx, 0.0], [0.0, -sy]])
+    t = np.array([Tm[:, 0].min() - sx * P[:, 0].min(), Tm[:, 1].max() + sy * P[:, 1].min()])
+    # Trimmed ICP: the cutoff tightens so interior enclaves - real features the
+    # target outline does not carry - stop dragging the fit.
+    for cut in [float("inf")] * 10 + [600 / 111320] * 10 + [250 / 111320] * 10 + [120 / 111320] * 30:
+        d, near = pt_seg(P @ A.T + t, ctrl)
+        keep = d <= cut
+        if keep.sum() < 200:
+            on_fail("georeference lost its correspondences — the map or the target "
+                    "polygon changed shape")
+        M = np.column_stack([P[keep], np.ones(int(keep.sum()))])
+        sol, *_ = np.linalg.lstsq(M, near[keep], rcond=None)
+        A, t = sol[:2].T, sol[2]
+    return A, t, pt_seg, ctrl
+
+
+def hydro_check(np, requests_mod, pt_seg, hydro_pts, A, t, kx, on_fail,
+                min_within=MIN_HYDRO_WITHIN_50M, max_median=MAX_HYDRO_MEDIAN_M):
+    """The INDEPENDENT accuracy check: the map's hydrography, which the fit
+    never saw, against TIGER hydrography. Returns (within50_frac, median_m)."""
+    H = np.unique(np.array(hydro_pts, float), axis=0) @ A.T + t
+    lo, hi = H[:, 0].min() / kx, H[:, 0].max() / kx
+    env = "%.5f,%.5f,%.5f,%.5f" % (lo - 0.02, H[:, 1].min() - 0.02, hi + 0.02, H[:, 1].max() + 0.02)
+    hsegs = []
+    for lyr in (0, 1):
+        resp = requests_mod.get(TIGER_HYDRO % lyr, headers=HEADERS, timeout=REQUEST_TIMEOUT, params={
+            "geometry": env, "geometryType": "esriGeometryEnvelope", "inSR": "4326",
+            "spatialRel": "esriSpatialRelIntersects", "outFields": "NAME",
+            "outSR": "4326", "f": "geojson", "returnGeometry": "true"})
+        resp.raise_for_status()
+        for f in (resp.json() or {}).get("features") or []:
+            g = f.get("geometry") or {}
+            if g.get("type") in ("Polygon", "MultiPolygon"):
+                rr = [r for p in (g["coordinates"] if g["type"] == "MultiPolygon"
+                                  else [g["coordinates"]]) for r in p]
+            elif g.get("type") in ("LineString", "MultiLineString"):
+                rr = g["coordinates"] if g["type"] == "MultiLineString" else [g["coordinates"]]
+            else:
+                continue
+            for r in rr:
+                a = np.array([(c[0] * kx, c[1]) for c in r])
+                if len(a) > 1:
+                    hsegs.append(np.stack([a[:-1], a[1:]], 1))
+    if not hsegs:
+        on_fail("TIGER returned no hydrography to validate the georeference against")
+    hd, _ = pt_seg(H, np.concatenate(hsegs))
+    hm = hd * 111320
+    within = float((hm < 50).mean())
+    median = float(np.median(hm[hm < 100]))
+    if within < min_within or median > max_median:
+        on_fail("independent hydrography check failed: %.1f%% within 50 m (min %.0f%%), "
+                "median %.1f m (max %.1f) — the georeference is not good enough to ship"
+                % (100 * within, 100 * min_within, median, max_median))
+    return within, median
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="verify the shipped file, write nothing")
@@ -310,44 +402,7 @@ def main():
     T = np.array([c[:2] for p in tparts for r in p for c in r], float)
     lat0 = float(T[:, 1].mean())
     kx = math.cos(math.radians(lat0))
-    ctrl = np.concatenate([
-        np.stack([np.array([(c[0] * kx, c[1]) for c in r])[:-1],
-                  np.array([(c[0] * kx, c[1]) for c in r])[1:]], 1)
-        for p in tparts for r in p if len(r) > 1])
-
-    def pt_seg(Q, S, chunk=300):
-        a, b = S[:, 0], S[:, 1]
-        ab = b - a
-        L2 = (ab ** 2).sum(1)
-        L2[L2 == 0] = 1e-18
-        dist = np.empty(len(Q))
-        near = np.empty((len(Q), 2))
-        for i in range(0, len(Q), chunk):
-            q = Q[i:i + chunk][:, None, :]
-            tt = (((q - a[None]) * ab[None]).sum(-1) / L2[None]).clip(0, 1)
-            proj = a[None] + tt[..., None] * ab[None]
-            dd = np.sqrt(((q - proj) ** 2).sum(-1))
-            j = dd.argmin(1)
-            dist[i:i + chunk] = dd[np.arange(len(j)), j]
-            near[i:i + chunk] = proj[np.arange(len(j)), j]
-        return dist, near
-
-    Tm = np.column_stack([T[:, 0] * kx, T[:, 1]])
-    sx = (Tm[:, 0].max() - Tm[:, 0].min()) / (P[:, 0].max() - P[:, 0].min())
-    sy = (Tm[:, 1].max() - Tm[:, 1].min()) / (P[:, 1].max() - P[:, 1].min())
-    A = np.array([[sx, 0.0], [0.0, -sy]])
-    t = np.array([Tm[:, 0].min() - sx * P[:, 0].min(), Tm[:, 1].max() + sy * P[:, 1].min()])
-    # Trimmed ICP: the cutoff tightens so interior enclaves — real features of the
-    # precinct map that the TIGER outline does not carry — stop dragging the fit.
-    for cut in [float("inf")] * 10 + [600 / 111320] * 10 + [250 / 111320] * 10 + [120 / 111320] * 30:
-        d, near = pt_seg(P @ A.T + t, ctrl)
-        keep = d <= cut
-        if keep.sum() < 200:
-            fail("georeference lost its correspondences — the map or the TIGER "
-                 "subdivision changed shape")
-        M = np.column_stack([P[keep], np.ones(int(keep.sum()))])
-        sol, *_ = np.linalg.lstsq(M, near[keep], rcond=None)
-        A, t = sol[:2].T, sol[2]
+    A, t, pt_seg, ctrl = fit_affine_icp(np, P, tparts, kx, fail)
 
     d, _ = pt_seg(P @ A.T + t, ctrl)
     matched = d[d < 120 / 111320] * 111320
@@ -357,37 +412,7 @@ def main():
              % (ctrl_median, MAX_CONTROL_MEDIAN_M, ctrl_rms, MAX_CONTROL_RMS_M))
 
     # INDEPENDENT check: hydrography, a feature class the fit never touched.
-    H = np.unique(np.array(hydro_pts, float), axis=0) @ A.T + t
-    lo, hi = H[:, 0].min() / kx, H[:, 0].max() / kx
-    env = "%.5f,%.5f,%.5f,%.5f" % (lo - 0.02, H[:, 1].min() - 0.02, hi + 0.02, H[:, 1].max() + 0.02)
-    hsegs = []
-    for lyr in (0, 1):
-        for f in fetch_geojson(TIGER_HYDRO % lyr, {
-                "geometry": env, "geometryType": "esriGeometryEnvelope", "inSR": "4326",
-                "spatialRel": "esriSpatialRelIntersects", "outFields": "NAME",
-                "outSR": "4326", "f": "geojson", "returnGeometry": "true"}):
-            g = f.get("geometry") or {}
-            if g.get("type") in ("Polygon", "MultiPolygon"):
-                rr = [r for p in (g["coordinates"] if g["type"] == "MultiPolygon"
-                                  else [g["coordinates"]]) for r in p]
-            elif g.get("type") in ("LineString", "MultiLineString"):
-                rr = g["coordinates"] if g["type"] == "MultiLineString" else [g["coordinates"]]
-            else:
-                continue
-            for r in rr:
-                a = np.array([(c[0] * kx, c[1]) for c in r])
-                if len(a) > 1:
-                    hsegs.append(np.stack([a[:-1], a[1:]], 1))
-    if not hsegs:
-        fail("TIGER returned no hydrography to validate the georeference against")
-    hd, _ = pt_seg(H, np.concatenate(hsegs))
-    hm = hd * 111320
-    hydro_within = float((hm < 50).mean())
-    hydro_median = float(np.median(hm[hm < 100]))
-    if hydro_within < MIN_HYDRO_WITHIN_50M or hydro_median > MAX_HYDRO_MEDIAN_M:
-        fail("independent hydrography check failed: %.1f%% within 50 m (min %.0f%%), "
-             "median %.1f m (max %.1f) — the georeference is not good enough to ship"
-             % (100 * hydro_within, 100 * MIN_HYDRO_WITHIN_50M, hydro_median, MAX_HYDRO_MEDIAN_M))
+    hydro_within, hydro_median = hydro_check(np, requests, pt_seg, hydro_pts, A, t, kx, fail)
 
     def to_lonlat(pt):
         q = np.array(pt, float) @ A.T + t
