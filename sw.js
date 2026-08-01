@@ -78,6 +78,7 @@ const GEOMETRY_URLS = [
   "./data/app/municipal-ward-coverage.json",
   "./data/app/metro-outline.json",
   "./data/app/lasalle-county-outline.json",
+  "./data/app/lasalle-county-board-districts.json",
   "./data/app/boone-county-outline.json",
   "./data/app/grundy-county-outline.json",
   "./data/app/kankakee-county-outline.json",
@@ -135,6 +136,7 @@ const ROSTER_URLS = [
   "./data/app/rock-island-county-board-members.json",
   "./data/app/coverage-gaps.json",
   "./data/app/municipal-officials.json",
+  "./data/app/lasalle-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

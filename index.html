@@ -4351,7 +4351,7 @@ function initChiExplorer() {
     "township",          // IL county subdivision (1,695 statewide: townships + city/precinct MCDs)
     "municipality",      // IL incorporated place (1,294 statewide; empty card = unincorporated)
     "judicial-subcircuit", // Consolidated judicial-subcircuit layer — Cook (20, live from the county GIS, + the Circuit Court's 6 municipal districts as a card row) + Will 12th-Circuit (5) + DuPage 18th-Circuit (7) + Lake 19th-Circuit (12) + Kane 16th-Circuit (4) + McHenry 22nd-Circuit (4) subcircuits (Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; Kendall's 23rd Circuit received NO subcircuits under the act — structurally n/a, the layer hides there), dispatched by county (docs/COUNTY_LAYER_CONSOLIDATION.md); link-only cards, coverage-gated to the union of its counties
-    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28) — rule-4 branch 1 with the member carried on the county's own boundary GIS (name/party/phone/e-mail, all 28/28); LaSalle's entry is SUPPRESSED as of 2026-08-01 — the county's only published board geometry is the superseded 2011-2021 map (gap lasalle-board-districts-stale; the 2022-2031 rebuild is a pass-6 ledger item) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
+    "county-board",      // Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties
     "ccbr",              // Cook County Board of Review district (only 3, county-wide)
     "fire-district",     // Consolidated fire-protection-district layer — Cook (40, the Clerk's fire tax-agency tiling, name-only) + Will (37, trustees in GIS attrs) + DuPage (30, name-only) + Lake (22, district office contact in GIS attrs) + Kane (23 IDOR-coded districts, chief + office contact in GIS attrs) + McHenry (19, name-only — the loader excludes the county's 8 'Z NO FIRE DISTRICT' fillers, the municipal Crystal Lake city-fire row, and the Marengo rescue-squad district that overlays the fire districts) + Kendall (10 FPDs on the county's parcel-derived tax-code tiling, name-only — the municipal Joliet row excluded) + Kankakee (17, identity-only: the county's taxing-district layers declare telephone/website/email and populate none of them), county-dispatched; partial coverage inside each county
     "dupage-county-special-police", // DuPage special police district (4; unincorporated-area township police-tax districts that fund supplemental DuPage County Sheriff patrol — Bloomingdale/Milton/Wayne/York townships; partial coverage, live from county GIS, coverage-gated to DuPage). DuPage-specific — no Will analog.
@@ -7572,9 +7572,24 @@ function initChiExplorer() {
     });
   }
 
-  // loadLasalleCountyBoard was REMOVED 2026-08-01: the service it read
-  // (AGOL CountyBoardDistricts, frozen 2015-08-25) is the superseded
-  // 2011-2021 apportionment — see the suppressed LaSalle county-board entry.
+  /* LaSalle's 2022-2031 board districts are a DERIVED same-origin file. The
+   * county's only published board GIS (AGOL CountyBoardDistricts) is the
+   * SUPERSEDED 2011-2021 map — frozen 2015-08-25, 2010 populations in Pop100,
+   * 18 of 29 member names stale — so nothing here reads it. The shipped file
+   * dissolves the county's own current precinct layer per the district
+   * assignment its 2024 + 2026 election canvasses administer
+   * (scripts/build_lasalle_board_districts.py; the guards there are the
+   * contract: 108 whole precincts + 11 split ones drawn with their majority
+   * side, nine districts' populations reproducing the adopted map's printed
+   * values to the person). The roster is scraped weekly from the county's own
+   * directory — the same 2026-07-31 validation-pass finding that retired the
+   * GIS roster. */
+  var loadLasalleBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lasalle-county-board-districts.json", {}, 2);
+  });
+  var loadLasalleBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lasalle-county-board-members.json", {}, 2);
+  });
   var loadKankakeeCountyBoard = makeCached(function () {
     var url = "https://k3gis.net/arcgis/rest/services/BASE/Elected_Officials/MapServer/1" +
       "/query?where=1%3D1&outFields=district,membername,party,phone,email&outSR=4326" +
@@ -12132,22 +12147,91 @@ function initChiExplorer() {
           }
         }
       },
-      // LaSalle — ENTRY SUPPRESSED 2026-08-01 (validation-pass finding). The
-      // county's only published board geometry (AGOL CountyBoardDistricts,
-      // dataLastEditDate 2015-08-25, Pop100 = 2010 census populations) is the
-      // SUPERSEDED 2011-2021 apportionment: Resolution #21-126 (Nov 2021)
-      // adopted "Redistricting Map Scenario 6A" for 2022-2031, the county
-      // renumbered districts (18 of the layer's 29 member surnames are not on
-      // the current board and returning members sit in different districts),
-      // and the 2026 primary canvass shows the CURRENT precinct fabric splits
-      // seven precincts across the adopted district lines — so neither the old
-      // layer nor a dissolve of today's precincts draws the current map.
-      // Shipping the 2015 polygons would answer "which district am I in" with
-      // a superseded line and number — the same call as Whiteside's 2019 ward
-      // layer, which was recorded as a gap rather than shipped. The rebuild
-      // path (georeference the county's adopted vector-PDF map, the Stephenson
-      // route, verified against the canvass) is recorded in the guidebook's
-      // pass-6 ledger; the gap entry is lasalle-board-districts-stale.
+      // LaSalle (29 single-member districts) — REBUILT 2026-08-01 on DERIVED
+      // geometry after the validation pass found the county's own board GIS is
+      // the superseded 2011-2021 map (frozen 2015-08-25; 18 of 29 names stale;
+      // returning members renumbered). Boundary: same-origin file dissolved
+      // from the county's own precinct layer per the assignment its 2024+2026
+      // canvasses administer; eleven precincts straddle district lines (the
+      // county re-precincted after adoption) and are drawn with their majority
+      // side — the card says so exactly where it applies. Roster: weekly scrape
+      // of the county's own directory (full 10-digit phones + district-office
+      // e-mails); the Chairman is elected COUNTYWIDE (the Nov 2024 canvass
+      // carries the county-wide contest), so he renders in a separated
+      // countywide section on every district's card — the DuPage shape.
+      {
+        key: "lasalle",
+        coverage: lasalleCountyCoverage,
+        loadGeometry: loadLasalleBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadLasalleBoardDistricts(),
+            loadLasalleBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              chair: results[1].chair || null,
+              splits: props.splits || null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var chair = result.chair && result.chair.name ? result.chair : null;
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "LaSalle County Board",
+            note: boardCountNote(members.length, chair ? "chair" : null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          if (chair) {
+            wrap.appendChild(renderSectionLabel("Countywide"));
+            wrap.appendChild(renderPersonRows(
+              [boardMemberPerson(chair, { badge: "Board Chairman" })], { tinted: true }));
+          }
+          // Boundary honesty, rendered only where it applies: this district
+          // touches one or more precincts the county lets straddle a district
+          // line, and those are drawn whole with their majority side here.
+          if (result.splits && result.splits.length) {
+            var names = result.splits.map(function (s) {
+              return String(s.precinct);
+            }).join(", ");
+            var plural = result.splits.length > 1;
+            wrap.appendChild(renderFieldStack([{
+              label: "Boundary",
+              value: "Drawn along the county's own precinct lines per its election " +
+                "canvasses. Precinct" + (plural ? "s " : " ") + names + " " +
+                (plural ? "are" : "is") + " split between two districts and drawn " +
+                "here with " + (plural ? "their" : "its") + " majority side — treat " +
+                "the line there as approximate (the county publishes no GIS of its " +
+                "adopted 2022-2031 map)."
+            }]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Official directory", url: "https://lasallecountyil.gov/Directory.aspx?DID=39" };
+        }
+      },
       // Kankakee (28 single-member districts) — rule-4 branch 1 as well, and
       // the richer of the two: the county's self-hosted server carries
       // membername/party/phone/email populated 28/28, with fully qualified
@@ -14203,11 +14287,9 @@ function initChiExplorer() {
       // the name IS the compound identity and no township join is needed. The
       // loader stamps the polling place from the county's own polling layer,
       // joined on that same name — 119/119 exact when this was built.
-      // The County Board District row was REMOVED 2026-08-01: it spatially
-      // joined the county's 2015-frozen board layer, which is the superseded
-      // 2011-2021 apportionment (see the suppressed county-board entry) — it
-      // was printing an old map's district number on every LaSalle precinct
-      // card. It returns when the 2022-2031 boundary build lands.
+      // The County Board District row joins the DERIVED 2022-2031 boundary
+      // (the county's 2015-frozen board layer is the superseded map and is not
+      // read anywhere — restored 2026-08-01 with the rebuilt board entry).
       {
         key: "lasalle",
         coverage: lasalleCountyCoverage,
@@ -14217,14 +14299,27 @@ function initChiExplorer() {
           return (v == null || String(v).trim() === "") ? null : String(v).trim();
         },
         query: function (point, seq) {
-          return loadLasallePrecincts().then(function (geojson) {
+          return Promise.all([
+            loadLasallePrecincts(),
+            loadLasalleBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var geojson = results[0], boardGeo = results[1];
             var feature = findFeatureContaining(geojson, point);
             if (!feature) return null;
             var props = feature.properties || {};
+            var boardDistrict = null;
+            if (boardGeo) {
+              var bf = findFeatureContaining(boardGeo, point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(parseInt(d, 10) || d);
+              }
+            }
             var name = findPropCI(props, ["precinct"]);
             return {
               seq: seq,
               name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
               pollingPlace: props.dxPollingPlace || null,
               pollingAddress: props.dxPollingAddress || null
             };
@@ -14232,6 +14327,9 @@ function initChiExplorer() {
         },
         render: function (result) {
           var fields = [];
+          if (result.boardDistrict) {
+            fields.push({ label: "County Board District", value: String(result.boardDistrict) });
+          }
           if (result.pollingPlace) {
             fields.push({ label: "Polling place", value: String(result.pollingPlace) +
               (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });

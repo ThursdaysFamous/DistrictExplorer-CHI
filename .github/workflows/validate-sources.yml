@@ -33,9 +33,10 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        # Only requests is needed (no BeautifulSoup/Playwright); pinned via
-        # scripts/requirements.txt.
-        run: pip install -c scripts/requirements.txt requests
+        # requests for every check; shapely only for the LaSalle derived-board
+        # check (geometric union of the county's precinct fabric). Both pinned
+        # via scripts/requirements.txt.
+        run: pip install -c scripts/requirements.txt requests shapely
 
       # Livingston's board districts are DERIVED — TIGER townships dissolved per
       # the county's published composition — so their failure mode is this
@@ -69,6 +70,17 @@ jobs:
       - name: Carroll derived board districts still match TIGER
         continue-on-error: true
         run: python3 scripts/build_carroll_board_districts.py --check
+
+      # LaSalle's are derived from the COUNTY'S OWN precinct service per its
+      # election canvasses (the county's published board GIS is the superseded
+      # 2011-2021 map). This check's failure mode is a re-precincting: the
+      # build asserts the 119 precinct names, the county population total, and
+      # nine districts' populations against the adopted map's printed values,
+      # so a changed fabric fails here — the cue to re-derive the canvass
+      # tables — rather than silently shipping stale lines.
+      - name: LaSalle derived board districts still match the county fabric
+        continue-on-error: true
+        run: python3 scripts/build_lasalle_board_districts.py --check
 
       - name: Validate layer sources
         id: validate

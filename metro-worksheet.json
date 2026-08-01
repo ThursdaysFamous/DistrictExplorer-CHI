@@ -208,7 +208,7 @@
       "label": "County Board District",
       "group": "political",
       "area_rank": 13,
-      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28) — rule-4 branch 1 with the member carried on the county's own boundary GIS (name/party/phone/e-mail, all 28/28); LaSalle's entry is SUPPRESSED as of 2026-08-01 — the county's only published board geometry is the superseded 2011-2021 map (gap lasalle-board-districts-stale; the 2022-2031 rebuild is a pass-6 ledger item) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
+      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
     },
     {
       "id": "ccbr",
@@ -532,6 +532,12 @@
         "note": "LaSalle County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "lasalle-county-board-districts.json",
+        "min_features": 29,
+        "max_features": 29,
+        "note": "LaSalle's 29 board districts (2022-2031 map, Resolution #21-126), DERIVED: the county's own precinct layer dissolved per the district assignment its Nov 2024 + Mar 2026 election canvasses administer (scripts/build_lasalle_board_districts.py; --check runs monthly in validate-sources.yml — it needs the county's precinct service and shapely). The county's published board GIS is the superseded 2011-2021 map; 11 split precincts are drawn with their majority side and the card says so."
+      },
+      {
         "file": "boone-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -805,6 +811,11 @@
         "file": "municipal-officials.json",
         "min_keys": 310,
         "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll and DeKalb shipped (360 municipalities) per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py)."
+      },
+      {
+        "file": "lasalle-county-board-members.json",
+        "min_keys": 29,
+        "note": "LaSalle County Board members keyed by district (29 single-member districts) plus the countywide-elected Chairman under 'chair' — scraped weekly from the county's own CivicPlus directory (full 10-digit phones + district-office e-mails). Replaces the 2015-frozen officeholder columns on the county's superseded board GIS."
       }
     ]
   },
@@ -942,6 +953,11 @@
       "file": "validate-sources.yml",
       "purpose": "source freshness + redistricting watch (opens/updates one tracking issue)",
       "schedule": "1st of month 14:00 UTC"
+    },
+    {
+      "file": "update-lasalle-county-board-roster.yml",
+      "purpose": "LaSalle County Board roster (county directory scrape)",
+      "schedule": "Sun 15:00 UTC"
     }
   ],
   "geocoder": {
