@@ -1,0 +1,90 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "dcordray@boonecountyil.gov",
+        "name": "Dave Cordray",
+        "phone": "815-355-7363",
+        "termExpires": 2026
+      },
+      {
+        "email": "bschneider@boonecountyil.gov",
+        "name": "Brian Schneider",
+        "phone": "847-334-4020",
+        "termExpires": 2028
+      },
+      {
+        "email": "jshumaker@boonecountyil.gov",
+        "name": "Josh Shumaker",
+        "phone": "815-997-0424",
+        "termExpires": 2028
+      },
+      {
+        "email": "dwiltse@boonecountyil.gov",
+        "name": "Dave Wiltse",
+        "phone": "847-774-6843",
+        "termExpires": 2026
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/government/county_board_members.php"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "rcurry@boonecountyil.gov",
+        "name": "Ryan Curry",
+        "phone": "815-985-0676",
+        "termExpires": 2028
+      },
+      {
+        "email": "kjohnson@boonecountyil.gov",
+        "name": "Karl Johnson",
+        "phone": "815-298-4603",
+        "termExpires": 2026
+      },
+      {
+        "email": "apatterson@boonecountyil.gov",
+        "name": "Alisa Patterson",
+        "phone": "815-719-0020",
+        "termExpires": 2026
+      },
+      {
+        "email": "twalberg@boonecountyil.gov",
+        "name": "Tom Walberg",
+        "phone": "260-409-8888",
+        "termExpires": 2028
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/government/county_board_members.php"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "dlogsdon@boonecountyil.gov",
+        "name": "Dana Logsdon",
+        "phone": "847-507-1266",
+        "termExpires": 2026
+      },
+      {
+        "email": "mragano@boonecountyil.gov",
+        "name": "Matthew Ragano",
+        "phone": "815-703-1844",
+        "termExpires": 2028
+      },
+      {
+        "email": "rriley@boonecountyil.gov",
+        "name": "Rodney Riley",
+        "phone": "815-519-3387",
+        "role": "Vice-Chairman",
+        "termExpires": 2026
+      },
+      {
+        "email": "mthornberry@boonecountyil.gov",
+        "name": "Marion Thornberry",
+        "phone": "815-985-8544",
+        "termExpires": 2028
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/government/county_board_members.php"
+  }
+}

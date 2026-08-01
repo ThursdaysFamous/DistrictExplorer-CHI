@@ -186,6 +186,7 @@ ROSTER_FILES = {
     "carroll-precinct-polling.json": 3,  # Carroll County precinct polling places, expanded from the clerk's published polling notice by scripts/build_carroll_precinct_polling.py against the county's 22 unchanged Census-2020 precinct names (deterministic grouped-label expansion; --check compares against the live notice). Per-election, like Logan's.
     "woodford-county-board-members.json": 3,  # Woodford County Board members keyed by district (3 multi-member districts, five seats each, 15/15 with phone and e-mail) — scraped weekly from the county's own CivicPlus directory. No chair key: the chair is elected from within the body and the directory does not mark who holds it.
     "logan-county-board-members.json": 6,  # Logan County Board members keyed by district (6 two-member districts, 12/12 with phone and e-mail; the Chair and Vice Chair tags ride their member rows — the county says who holds them) — scraped weekly from the county's own board page. Its existence retired the entry's rule-4 branch-3 honesty floor.
+    "boone-county-board-members.json": 3,  # Boone County Board members keyed by district (3 four-member districts, 12/12 with phone, e-mail and a term-expiry year — terms are staggered, so the year is per-seat ballot information) — scraped weekly from the county's own board page. Role tags verbatim: currently one Vice-Chairman; the page names no Chairman, so none is rendered. The boundary half is live GIS (three per-district layers merged at load time), not a data/app file.
 }
 # ==== GENERATED:END validator-config ====
 

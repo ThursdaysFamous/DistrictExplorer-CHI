@@ -848,6 +848,11 @@
         "file": "logan-county-board-members.json",
         "min_keys": 6,
         "note": "Logan County Board members keyed by district (6 two-member districts, 12/12 with phone and e-mail; the Chair and Vice Chair tags ride their member rows — the county says who holds them) — scraped weekly from the county's own board page. Its existence retired the entry's rule-4 branch-3 honesty floor."
+      },
+      {
+        "file": "boone-county-board-members.json",
+        "min_keys": 3,
+        "note": "Boone County Board members keyed by district (3 four-member districts, 12/12 with phone, e-mail and a term-expiry year — terms are staggered, so the year is per-seat ballot information) — scraped weekly from the county's own board page. Role tags verbatim: currently one Vice-Chairman; the page names no Chairman, so none is rendered. The boundary half is live GIS (three per-district layers merged at load time), not a data/app file."
       }
     ]
   },
@@ -1000,6 +1005,11 @@
       "file": "update-logan-county-board-roster.yml",
       "purpose": "Logan County Board roster (logancountyil.gov board-page scrape)",
       "schedule": "Mon 17:00 UTC"
+    },
+    {
+      "file": "update-boone-county-board-roster.yml",
+      "purpose": "Boone County Board roster (boonecountyil.gov board-page scrape)",
+      "schedule": "Tue 17:00 UTC"
     }
   ],
   "geocoder": {
