@@ -3140,6 +3140,13 @@ function initNycExplorer() {
     return rings;
   }
 
+  // The most recent coverage outline in GeoJSON [lng,lat] ring form, retained
+  // so other engine surfaces (the gaps panel) can test "is this point inside
+  // the covered area" without a second fetch or their own dissolve. null until
+  // the mask loads (or if it never does) — consumers treat null as UNKNOWN and
+  // fail safe, never as "outside".
+  var coverageMaskRings = null;
+
   function drawOutOfScopeMask(loadCoverageGeometry) {
     if (typeof loadCoverageGeometry !== "function") return;
     loadCoverageGeometry().then(function (geo) {
@@ -3159,6 +3166,7 @@ function initNycExplorer() {
           }
         }
       }
+      coverageMaskRings = outline;
       // Outer ring spans several world copies so panning far east/west at
       // low zoom never slips out from under the wash.
       var rings = [[[-89, -720], [89, -720], [89, 720], [-89, 720]]];
@@ -3310,12 +3318,18 @@ function initNycExplorer() {
 
   /* ==== ENGINE:BEGIN permalink ==== */
   /* =========================================================================
-   * SHAREABLE URL — #point=lat,lng&layers=id1,id2 mirrors the current
+   * SHAREABLE URL — #point=lat,lng&layers=id1,id2&zoom=N mirrors the current
    * selection so any view can be copied out of the URL bar (or via the
    * point chip's Copy-link button) and restored on load. replaceState, not
    * location.hash assignment, so clicking around never pollutes the back
    * button. Parsed once at boot by applyStateFromHash().
    * ======================================================================= */
+
+  // The zoom this fork boots at, read from the map rather than configured, so
+  // the engine needs no per-metro constant and every fork gets its own default.
+  // Safe to capture here: nothing between map creation and this line changes the
+  // zoom, and applyStateFromHash() runs at the end of boot.
+  var bootZoom = map.getZoom();
 
   function syncUrlHash() {
     var parts = [];
@@ -3325,6 +3339,12 @@ function initNycExplorer() {
     var on = layers.filter(function (l) { return state.layersOn[l.id]; })
       .map(function (l) { return l.id; });
     if (on.length) parts.push("layers=" + on.join(","));
+    // Zoom rides the permalink because it is part of what was shared: an embed of
+    // a whole county answers a different question from an embed of one block, and
+    // a refresh should not throw the reader back to the default view. Emitted
+    // ONLY when the user has moved off the boot zoom, so an untouched map still
+    // produces a clean, hash-free URL.
+    if (map.getZoom() !== bootZoom) parts.push("zoom=" + map.getZoom());
     var hash = parts.length ? "#" + parts.join("&") : "";
     try {
       history.replaceState(null, "", hash || location.pathname + location.search);
@@ -3333,6 +3353,11 @@ function initNycExplorer() {
       // there is fine, everything else keeps working
     }
   }
+
+  // Point and layer changes call syncUrlHash themselves; zoom has no such hook,
+  // because a zoom changes no app state — only the view. zoomend fires once per
+  // gesture (not per animation frame), so this is a handful of replaceState calls.
+  map.on("zoomend", syncUrlHash);
 
   function applyStateFromHash() {
     var raw = location.hash.replace(/^#/, "");
@@ -3348,6 +3373,16 @@ function initNycExplorer() {
         if (box && !box.checked) box.click(); // a real click, so the change handler runs
       });
     }
+    // Parsed BEFORE the point, because the point's pan has to know about it.
+    // An unparseable or out-of-range zoom is ignored rather than clamped: a link
+    // from a fork with different limits should fall back to this fork's default
+    // view, not to its nearest edge.
+    var zoom = null;
+    if (params.zoom !== undefined) {
+      var wanted = parseInt(params.zoom, 10);
+      if (isFinite(wanted) && wanted >= map.getMinZoom() && wanted <= map.getMaxZoom()) zoom = wanted;
+    }
+    var framed = false;
     if (params.point) {
       var pieces = params.point.split(",");
       var lat = parseFloat(pieces[0]), lng = parseFloat(pieces[1]);
@@ -3355,9 +3390,20 @@ function initNycExplorer() {
       if (isFinite(lat) && isFinite(lng) &&
           lat > PERMALINK_GATE.minLat && lat < PERMALINK_GATE.maxLat &&
           lng > PERMALINK_GATE.minLng && lng < PERMALINK_GATE.maxLng) {
-        setSelectedPoint(lat, lng);
+        // skipPan when the link carries its own zoom, then frame it here.
+        // setSelectedPoint's pan is ANIMATED and animates to at least zoom 15;
+        // an animation in flight settles AFTER anything applied synchronously
+        // afterwards, so a shared zoom set post-hoc is silently overwritten by
+        // the pan that was already running. Measured, not theorised — that is
+        // exactly what #point=…&zoom=9 did before this branch existed.
+        setSelectedPoint(lat, lng, zoom === null ? null : { skipPan: true });
+        if (zoom !== null) {
+          map.setView([lat, lng], zoom, { animate: false });
+          framed = true;
+        }
       }
     }
+    if (zoom !== null && !framed) map.setView(map.getCenter(), zoom, { animate: false });
   }
 
   /* ==== ENGINE:END permalink ==== */
@@ -3511,6 +3557,19 @@ function initNycExplorer() {
       "data-quality": "partial data"
     };
 
+    /* Whether the pin sits inside the covered area at all, reusing the rings
+     * the scope mask already dissolved (coverageMaskRings). Returns true /
+     * false / null-for-unknown — null when the mask hasn't loaded, and the
+     * caller falls back to the wording that doesn't claim either way. Outside
+     * the covered area, "nothing missing where you clicked" would be exactly
+     * wrong: everything is. */
+    function pointInCoverage(point) {
+      if (!point || !coverageMaskRings || !coverageMaskRings.length) return null;
+      try {
+        return pointInGeometry(point, { type: "Polygon", coordinates: coverageMaskRings });
+      } catch (e) { return null; }
+    }
+
     /* Which of a gap's counties contain the selected point. Resolves to false
      * for a gap with no counties (nothing to test) and treats an outline that
      * fails to load as "not here" — a gap still appears in the everywhere list,
@@ -3624,9 +3683,23 @@ function initNycExplorer() {
           // match, so that phrasing would claim the point is clean when really
           // the gaps simply are not mappable — for a fork with no outlines at
           // all, every one of its gaps applies and the line would be a lie.
+          // And a point OUTSIDE the covered area entirely (under the gray
+          // wash) must never be told nothing is missing there — outside the
+          // coverage everything is, so that case gets its own honest header.
+          // pointInCoverage's null (mask not loaded) falls through to the
+          // wording that claims neither.
           var mappable = rows.some(function (r) { return (r.gap.counties || []).length > 0; });
-          body.appendChild(section(here.length ? "Elsewhere in the coverage area" :
-            (point && mappable ? "Nothing missing where you clicked — elsewhere:" : "Known gaps"), rest));
+          var label;
+          if (here.length) {
+            label = "Elsewhere in the coverage area";
+          } else if (point && pointInCoverage(point) === false) {
+            label = "Where you clicked is outside the covered area — the recorded gaps:";
+          } else if (point && mappable && pointInCoverage(point) === true) {
+            label = "Nothing missing where you clicked — elsewhere:";
+          } else {
+            label = "Known gaps";
+          }
+          body.appendChild(section(label, rest));
         }
       }).catch(function () {
         body.textContent = "";

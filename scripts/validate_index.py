@@ -111,6 +111,13 @@ ROSTER_FILES = {
     "cec-members.json": 0,  # honest placeholder (floor 0): CEC members are decentralized across 32 independent council sites with no scrapable central source or Open Data dataset; card links to the DOE hub (see scripts/cec_scraper.py)
     "borough-officials.json": 5,  # 10 offices (5 BP + 5 DA), operator-maintained from official sites; floor 5 = one entry per borough (build_borough_officials.py keys by borough)
 }
+
+# Files the app references DYNAMICALLY — the URL is built from a slug at
+# runtime (the gaps panel's <slug>-county-outline.json contract), so no
+# literal appears in index.html. Exempt from the reference check only;
+# existence, shape and the negative-point test still apply.
+DYNAMIC_REFERENCE = frozenset({
+})
 # ==== GENERATED:END validator-config ====
 
 
@@ -296,6 +303,8 @@ def main():
     if blobs:
         fail("dataset(s) still embedded inline (should be in data/app/): %s" % blobs)
     for fname in list(GEOMETRY_FILES) + list(ROSTER_FILES):
+        if fname in DYNAMIC_REFERENCE:
+            continue  # URL built from a slug at runtime — see the generated set
         if ("data/app/" + fname) not in html:
             fail("index.html does not reference data/app/%s" % fname)
 
