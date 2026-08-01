@@ -110,6 +110,9 @@ const GEOMETRY_URLS = [
   "./data/app/henry-county-outline.json",
   "./data/app/henry-county-board-districts.json",
   "./data/app/stephenson-fire-districts.json",
+  "./data/app/jo-daviess-county-outline.json",
+  "./data/app/bureau-county-outline.json",
+  "./data/app/mercer-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI

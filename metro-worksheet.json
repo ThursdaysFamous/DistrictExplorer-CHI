@@ -722,6 +722,27 @@
         "min_features": 15,
         "max_features": 15,
         "note": "Stephenson County's 15 named fire services, GEOREFERENCED from the county's own 2014 vector-PDF map (scripts/build_stephenson_fire_districts.py — fitted on hydrography, median 11.5 m; verified by the map's own town labels; --check is the drift gate). The county publishes no fire boundary as data; the card carries the 2014-vintage caveat. Several services keep their true extents past the county line — the map draws them that way — and the entry's coverage keeps answers inside Stephenson."
+      },
+      {
+        "file": "jo-daviess-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jo Daviess County outline — GAP-LOCATION geometry only, not a dispatched county: no layer answers here, but the gaps panel tests the pin against <slug>-county-outline.json, and without this file a pin in the gray-washed county was told 'nothing missing where you clicked'. Ships so jo-daviess-county-board-districts attaches to its ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "bureau-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Bureau County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so bureau-county-board-districts attaches to its ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "mercer-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Mercer County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so mercer-county-board-districts attaches to its ground.",
+        "dynamic_reference": true
       }
     ],
     "rosters": [
