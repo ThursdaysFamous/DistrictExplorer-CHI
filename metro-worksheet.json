@@ -208,7 +208,7 @@
       "label": "County Board District",
       "group": "political",
       "area_rank": 13,
-      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
+      "rank_note": "Consolidated county-legislature layer — Cook Commissioner (17) + Will (11) + DuPage (6) + Lake (19, members + contact + office address carried live on the county GIS; the Chair/Vice-Chair tags join from a weekly-scraped roles file with a name-match guard) + Kane (24, members carried on the county GIS; party/office phone/email + the countywide-elected Chair join from a weekly-scraped roster of the county's SharePoint directory) + McHenry (9 districts electing 2 members each + a countywide-elected Chairman; the GIS is district-number-only, so members + the Chairman + phone/email/profile links join from the hand-verified roster of the county's own directory, re-verified 2026-07 against its Internet Archive snapshot) + Kendall (2 districts electing the 10-member board — the current line per the county's post-2020-census reapportionment; the GIS is district-number-only, so members incl. the Chairman + phone/email/profile links join from the hand-verified roster of the county's own member directory, re-verified 2026-07 against its Internet Archive snapshot) board districts + Kankakee (28, rule-4 branch 1 — the member rides the county's own boundary GIS, name/party/phone/e-mail 28/28) + LaSalle (29, REBUILT 2026-08-01 on derived geometry: the county's own board GIS is the superseded 2011-2021 map, so the boundary dissolves the county's precinct layer per its 2024+2026 election canvasses — 11 split precincts drawn with their majority side, stated on the card — and the roster is scraped weekly from the county directory, with the countywide-elected Chairman) — plus Logan's roster join (6 two-member districts from a weekly board-page scrape, 12/12 with contact and Chair/Vice-Chair tags — the branch-3 honesty floor retired 2026-08-02) and Woodford (3 DERIVED districts — TIGER townships dissolved per adopted Ordinance 2020/21 #005, five members each from a weekly directory scrape 15/15 with phone and e-mail; no chair marked, the directory doesn't say) — as per-county dispatch entries of one toggle (docs/COUNTY_LAYER_CONSOLIDATION.md); coverage-gated to the union of its counties"
     },
     {
       "id": "ccbr",
@@ -346,7 +346,7 @@
       "label": "Voting Precinct",
       "group": "geography",
       "area_rank": 31,
-      "rank_note": "Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features, township named from the clerk's own prefix pairing, election-day polling place joined on the precinct code 292/292 and labelled with the election it was published for) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone) + Macoupin current map (45, polling place joined 45/45 from the clerk's own Socrata polling dataset by deterministic label expansion) + McLean current map (141, polling place joined 141/141 by POLLINGID on the clerk's own MapServer) + Logan current map (29, township-named; the clerk's HTML polling table ships as a same-origin file and joins 29/29) + Sangamon approved fabric (166, polling place joined 165/166 by POLLID) + Carroll (22 — the county did not re-precinct, so TIGERweb's Census 2020 voting districts ARE the current fabric; the clerk's polling notice ships as a same-origin file, 22/22), county-dispatched; subOf township",
+      "rank_note": "Consolidated voting-precinct layer — suburban Cook current map (1,430, the Clerk's precinctHistorical L0; covers Cook-outside-Chicago only — city precincts are the BOE's ward-precinct layer) + Will current 2022 map (310) + DuPage current 2024 consolidated map (600) + Lake current map (431) + Kane current map (292, board district carried on the features, township named from the clerk's own prefix pairing, election-day polling place joined on the precinct code 292/292 and labelled with the election it was published for) + McHenry current map (223) + Kendall current map (78, township names derived from the county's own layers + per-precinct polling place joined by GlobalID) + LaSalle current map (119, township-compound names, per-precinct polling place joined on the precinct name — 119/119 exact) + Kankakee current map (59, name only; the county publishes no polling-place assignment to join) + Boone current 2022 map (37, township-compound names with the polling place carried ON the precinct feature — no join needed) + Grundy current map (40, polling place joined on POLLINGID, and its points carry a phone) + Macoupin current map (45, polling place joined 45/45 from the clerk's own Socrata polling dataset by deterministic label expansion) + McLean current map (141, polling place joined 141/141 by POLLINGID on the clerk's own MapServer) + Logan current map (29, township-named; the clerk's HTML polling table ships as a same-origin file and joins 29/29) + Sangamon approved fabric (166, polling place joined 165/166 by POLLID) + Carroll (22 — the county did not re-precinct, so TIGERweb's Census 2020 voting districts ARE the current fabric; the clerk's polling notice ships as a same-origin file, 22/22) + Woodford current map (37 via TCRPC's election service, polling joined 37/37 on the numeric polling reference with the precinct's own name cross-checked in the polling row's grouped label), county-dispatched; subOf township",
       "rank_comment": [
         "Smallest county-scoped layer, so it renders on top of Township and County",
         "(smallest-on-top); turning it on drops both to outline-only, framing the",
@@ -686,6 +686,18 @@
         "min_features": 7,
         "max_features": 7,
         "note": "7th Circuit (Sangamon + Greene/Jersey/Macoupin/Morgan/Scott) subcircuits, PA 102-0693 enacted map."
+      },
+      {
+        "file": "woodford-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Woodford County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "woodford-county-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Woodford County Board districts, DERIVED: TIGER townships dissolved per the county's adopted Ordinance 2020/21 #005 (scripts/build_woodford_board_districts.py; --check is the drift gate). The county publishes no board GIS — TCRPC, its GIS of record, carries precincts and townships only — so this file IS the boundary source, not a cache of one."
       }
     ],
     "rosters": [
@@ -826,6 +838,16 @@
         "file": "carroll-precinct-polling.json",
         "min_keys": 3,
         "note": "Carroll County precinct polling places, expanded from the clerk's published polling notice by scripts/build_carroll_precinct_polling.py against the county's 22 unchanged Census-2020 precinct names (deterministic grouped-label expansion; --check compares against the live notice). Per-election, like Logan's."
+      },
+      {
+        "file": "woodford-county-board-members.json",
+        "min_keys": 3,
+        "note": "Woodford County Board members keyed by district (3 multi-member districts, five seats each, 15/15 with phone and e-mail) — scraped weekly from the county's own CivicPlus directory. No chair key: the chair is elected from within the body and the directory does not mark who holds it."
+      },
+      {
+        "file": "logan-county-board-members.json",
+        "min_keys": 6,
+        "note": "Logan County Board members keyed by district (6 two-member districts, 12/12 with phone and e-mail; the Chair and Vice Chair tags ride their member rows — the county says who holds them) — scraped weekly from the county's own board page. Its existence retired the entry's rule-4 branch-3 honesty floor."
       }
     ]
   },
@@ -968,6 +990,16 @@
       "file": "update-lasalle-county-board-roster.yml",
       "purpose": "LaSalle County Board roster (county directory scrape)",
       "schedule": "Sun 15:00 UTC"
+    },
+    {
+      "file": "update-woodford-county-board-roster.yml",
+      "purpose": "Woodford County Board roster (woodford-county.org directory scrape)",
+      "schedule": "Mon 16:00 UTC"
+    },
+    {
+      "file": "update-logan-county-board-roster.yml",
+      "purpose": "Logan County Board roster (logancountyil.gov board-page scrape)",
+      "schedule": "Mon 17:00 UTC"
     }
   ],
   "geocoder": {

@@ -1,0 +1,94 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "kleesman@logancountyil.gov",
+        "name": "Keenan Leesman",
+        "phone": "217-737-2047"
+      },
+      {
+        "email": "gturner@logancountyil.gov",
+        "name": "Gil Turner",
+        "phone": "309-826-2444"
+      }
+    ],
+    "sourceUrl": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "jglenn@logancountyil.gov",
+        "name": "James Glenn",
+        "phone": "217-737-4316",
+        "role": "Chair"
+      },
+      {
+        "email": "jkuhlman@logancountyil.gov",
+        "name": "Joseph Kuhlman",
+        "phone": "708-831-0036"
+      }
+    ],
+    "sourceUrl": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "bsanders@logancountyil.gov",
+        "name": "Bob Sanders",
+        "phone": "217-737-2802"
+      },
+      {
+        "email": "kknauer@logancountyil.gov",
+        "name": "Kevin Knauer",
+        "phone": "217-737-7748"
+      }
+    ],
+    "sourceUrl": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+  },
+  "4": {
+    "members": [
+      {
+        "email": "hfitzpatrick@logancountyil.gov",
+        "name": "Hannah Fitzpatrick",
+        "phone": "217-871-9528"
+      },
+      {
+        "email": "jwessbecher@logancountyil.gov",
+        "name": "Jim Wessbecher",
+        "phone": "217-737-7291"
+      }
+    ],
+    "sourceUrl": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+  },
+  "5": {
+    "members": [
+      {
+        "email": "kschmidt@logancountyil.gov",
+        "name": "Kathy Schmidt",
+        "phone": "201-362-6039"
+      },
+      {
+        "email": "mdeross@logancountyil.gov",
+        "name": "Michael DeRoss",
+        "phone": "773-403-3789"
+      }
+    ],
+    "sourceUrl": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+  },
+  "6": {
+    "members": [
+      {
+        "email": "dnelson@logancountyil.gov",
+        "name": "Dale Nelson",
+        "phone": "217-381-4051",
+        "role": "Vice Chair"
+      },
+      {
+        "email": "lconahan@logancountyil.gov",
+        "name": "J Lance Conahan",
+        "phone": "217-737-9819"
+      }
+    ],
+    "sourceUrl": "https://www.logancountyil.gov/index.php?option=com_content&view=article&id=176&Itemid=541&lang=en"
+  }
+}
