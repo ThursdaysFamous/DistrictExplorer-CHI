@@ -826,6 +826,28 @@ suburbs join as further `ward` entries when a polygon source appears.
 Each of these cost a real build. They apply to any county, not just the ones that
 taught them.
 
+- **FETCHABLE IS NOT LICENSED. Read the publisher's terms before you build, and treat
+  the answer as part of "is there a source?"** This is now step zero of county research,
+  ahead of every technical probe. Champaign and Piatt were surveyed as BUILD-READY —
+  their board districts and precincts answer instantly once a `Referer` header is set —
+  and they are not buildable at all: the Champaign County GIS Consortium **sells** both
+  counties' GIS data under signed licence agreements, and its Terms of Use grant only a
+  personal, non-commercial, *transitory viewing* licence under which you may not copy the
+  materials, use them for any public display, or "transfer the materials to another
+  person or mirror the materials on any other server". A dispatch entry does all three.
+  The referer check was therefore the EDGE OF A LICENCE, not hotlink protection to route
+  around — and the technical ease of setting a header is exactly what makes this failure
+  mode dangerous, because nothing breaks and nothing warns.
+  **Concretely:** when a source is gated by anything (referer, token, login, a portal
+  app), find out WHY before you find out how. Check the publisher's terms-of-use,
+  data-request and store/pricing pages. A publisher that sells the layer, requires a
+  signed agreement, or forbids redistribution is a **licensing block** — record it as a
+  gap of kind `blocked`, ship the gap-location outline, and route the unlock to whoever
+  holds the underlying PUBLIC RECORD (for election geography that is the county clerk as
+  election authority, whatever a consortium licenses commercially). Never "solve" it by
+  supplying the header. The same instinct applies to a county GIS office that runs a paid
+  data-order form (the Jo Daviess shape) — same block, same route out.
+
 - **A county that publishes its board TWICE will eventually disagree with itself, and
   you must decide which surface wins BEFORE you look at the numbers.** Tazewell's GIS
   seats a member its own website no longer lists and omits one who has his own member

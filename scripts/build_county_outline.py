@@ -741,6 +741,47 @@ COUNTIES = {
             (41.1917, -90.3805, "Alpha — Henry County"),
         ],
     },
+    # Champaign and Piatt: gap-location only, and the reason is LICENSING, not
+    # technology. Their board districts and precincts are live and queryable on
+    # the CCGISC portal proxy — and the consortium SELLS that data under signed
+    # license agreements, with terms that forbid copying it, mirroring it on
+    # another server, or putting it on public display. That is exactly what a
+    # dispatch entry would do, so neither county is served. See the
+    # champaign-piatt-ccgisc-license gap.
+    "champaign": {
+        "fips": "019",
+        "name": "Champaign County",
+        "inside": [
+            (40.1115, -88.3683, "Bondville"),
+            (39.9087, -87.9971, "Broadlands"),
+            (40.1141, -88.2736, "Champaign"),
+            (40.3158, -88.3502, "Fisher"),
+            (40.3611, -88.4291, "Foosland"),
+        ],
+        "outside": [
+            (39.7993, -88.4627, "Atwood — Piatt County"),
+            (39.6833, -88.3014, "Arcola — Douglas County"),
+            (39.7154, -87.9336, "Brocton — Edgar County"),
+            (40.5681, -88.5385, "Anchor — McLean County"),
+        ],
+    },
+    "piatt": {
+        "fips": "147",
+        "name": "Piatt County",
+        "inside": [
+            (39.7993, -88.4627, "Atwood"),
+            (39.9230, -88.5724, "Bement"),
+            (39.8892, -88.7345, "Cerro Gordo"),
+            (40.0116, -88.7254, "Cisco"),
+            (40.1218, -88.6435, "De Land"),
+        ],
+        "outside": [
+            (39.6833, -88.3014, "Arcola — Douglas County"),
+            (40.1115, -88.3683, "Bondville — Champaign County"),
+            (40.5681, -88.5385, "Anchor — McLean County"),
+            (40.1470, -88.9630, "Clinton — De Witt County"),
+        ],
+    },
 }
 
 

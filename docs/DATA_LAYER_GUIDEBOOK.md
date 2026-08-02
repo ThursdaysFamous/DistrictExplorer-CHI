@@ -884,6 +884,20 @@ in the researched-but-unbuilt backlog.
       "wanted": "The 2021-adopted COUNTYWIDE board map in any vector form (it is most likely inside the 2021-10-27 board packet), plus any machine-readable roster the county permits — a JSON/CSV feed, or simply a mirror its challenge does not front."
     },
     {
+      "id": "champaign-piatt-ccgisc-license",
+      "concept": "County board districts and voting precincts",
+      "area": "Champaign and Piatt Counties",
+      "counties": [
+        "champaign",
+        "piatt"
+      ],
+      "kind": "blocked",
+      "layer": "county-board",
+      "summary": "Champaign's and Piatt's districts and precincts are live, complete and queryable — and licensed. The consortium that hosts them sells the data and forbids republishing it.",
+      "blocker": "Measured 2026-08-02, and the block is LEGAL rather than technical — the distinction this entry exists to record. The Champaign County GIS Consortium (CCGISC), which is also Piatt's GIS of record, serves both counties' board districts (11 and 3) and precincts (118 and 16) through a portal proxy that answers only to requests bearing its own portal Referer. Fetching them is trivial with that header set, and the pass-7 sweep initially called both counties BUILD-READY on exactly that basis. Reading the consortium's own pages overturned it: CCGISC SELLS Champaign and Piatt GIS data, both purchase routes require a signed license agreement, and its Terms of Use grant only a personal, non-commercial, transitory viewing licence under which a user may not copy the materials, use them for any public display, or 'transfer the materials to another person or mirror the materials on any other server'. Shipping either county would do all three. So the referer check is not incidental hotlink protection to be worked around — it is the boundary of a licence, and the app does not cross it.",
+      "wanted": "Election geography from the county CLERKS rather than the consortium: board-district and precinct boundaries are public records held by each county's election authority, whatever CCGISC licenses commercially. A FOIA response, a clerk-published file, or written permission from CCGISC would each unblock it. Both counties are otherwise ready to ship the day the data may be republished — Champaign also publishes a rich taxing-district shelf (fire, library, park, cemetery, mass transit, forest preserve) behind the same licence."
+    },
+    {
       "id": "christian-county-board-districts",
       "concept": "County board districts",
       "area": "Christian County",
@@ -1335,8 +1349,8 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   |---|---|---|---|---|
   | Peoria (~182k) | 18 districts × 1 | own AGOL org `iPiPjILCMYxPZWTc`: `2020_County_Board_Districts/FeatureServer/0` = **18** (adopted 2021-11-30) | `2020_Voting_Precincts` = **116** (edited 2026-06) + 55 polling points joining on `POLLINGID` | fire **13** / park **4** / library **10** / townships 26 / school 20 on the same org; roster = CivicPlus page, per-member profiles, no party on the index |
   | Tazewell (~131k) | 3 districts × 7 + countywide Chairman | Esri election template — `ElectionGeography_public…/FeatureServer/2` carries 21 County-Board member rows WITH party and district polygons (the Whiteside pattern; edited 2026-01) | layer 1 = **82** + 49 polling points (counts cross-checked on the on-prem `Clerk` folder) | per-municipality `*_Officials` services ≈ a GIS municipal directory (~15 munis) + 153 township-official and 126 school-board rows on the same layer; **one-seat GIS-vs-website drift** (Longfellow D3+Phillips vs D2+Glueck) — the roster scraper must tie-break; old domain tazewell.com is dead but still cited in stale GIS attrs |
-  | Champaign (~206k) | 11 × 2; roster with party, term, phone, e-mail | CCGISC (ArcGIS Enterprise): `CountyClerk/CountyBoard/MapServer/0` = **11** (`CountyBoard2011`/`2000` exist separately, so the unversioned service is the current plan) | `CountyClerk/Precincts` = **118** (`PRECINCT`,`TWPNAME`) | **CCGISC's portal proxy is REFERER-LOCKED** (`Referer: https://services.ccgisc.org/portal/apps/…` or 403; `f=geojson` 400s, `f=json&outSR=4326` works) — fetch in the PIPELINE into `data/app/` files, no runtime queries; a large taxing-district shelf (fire/library/park/cemetery/mass-transit/sanitary/forest-preserve/TIF) sits behind the same proxy; champaigncountyclerk.com is UA-filtered (plain clients 403, browser UA passes) |
-  | Piatt (~17k) | 3 × 2 | CCGISC `Piatt_CountyClerk/CountyBoardDistricts/MapServer/0` = **3** ("based on the 2020 census" per board page; `_2010`/`_2000` archived separately) | `Piatt_CountyClerk/Precincts` = **16** | same referer mechanics as Champaign — ONE integration, TWO counties; roster carries NO party; old piattcounty.org apex is dead while `maps.piattcounty.org` lives — the moved-domain trap in both directions |
+  | ~~Champaign (~206k)~~ **WITHDRAWN — LICENSED** | 11 × 2 | CCGISC `CountyClerk/CountyBoard/MapServer/0` = **11** | `CountyClerk/Precincts` = **118** | The sweep called this BUILD-READY on fetchability alone. It is not buildable: **CCGISC SELLS Champaign and Piatt GIS data under signed licence agreements**, and its Terms of Use grant only personal, non-commercial, transitory viewing — no copying, no public display, no mirroring on another server. The referer lock is the edge of that licence, not hotlink protection to route around. Recorded as `champaign-piatt-ccgisc-license`; a rich taxing-district shelf (fire/library/park/cemetery/mass-transit/forest-preserve) sits behind the same licence. (champaigncountyclerk.com is separately UA-filtered — plain clients 403, browser UA passes.) |
+  | ~~Piatt (~17k)~~ **WITHDRAWN — LICENSED** | 3 × 2 | CCGISC `Piatt_CountyClerk/CountyBoardDistricts/MapServer/0` = **3** | `Piatt_CountyClerk/Precincts` = **16** | Same licence, same consortium — CCGISC is Piatt's GIS of record too, so ONE licensing block covers both counties. Roster carries no party. (Moved-domain trap either way: the old piattcounty.org apex is dead while `maps.piattcounty.org` lives.) |
   | Iroquois (~27k) | 4 × 4 | CCAO org `6FZQl5a5SiSFMv8P`: `CountyBoardDistricts_REACH/FeatureServer/8` = **4** (item 2024-12) | `ElectionGeography_public/FeatureServer/1` = **37** + polling points (layer 0) | fire **46** / school **13** / municipal wards **7** / townships 42 on the same org; use the APEX domain with a browser UA (www 403s); roster e-mails are cf-obfuscated (mechanically decodable); the org's "Electoral Districts" layer has the rich rep-name schema and **0 features** — never populated, don't rely on it |
   | Monroe (~35k) | **COMMISSION — 3 commissioners at-large** | none needed — county outline is the geometry | `VoterPrecinct/FeatureServer/0` = **25** (geometry reloaded 2026-03 — freshest of the pass) | own ArcGIS Enterprise 11.5 + AGOL mirror; fire **26** / municipal wards **23** / school 5 / road districts 20 / polling 16; EWG's 2026 POD covers Monroe municipals but its commission rows are stale — the county page is the authority |
   | Randolph (~30k) | **COMMISSION — 3 commissioners at-large** | none needed | `VotingPrecincts/FeatureServer/1` = **35** (layer id **1**, not 0; edited 2026-04; ISBE's 37 per-precinct vector PDFs corroborate names) | ESB_FIRE = 17 is response-zone semantics (the Winnebago/Logan caveat — not a taxing tiling); municipal wards 9; the old `am.randolphco.org` still serves a stale Joomla site while staff e-mails stay @randolphco.org |
@@ -1443,7 +1457,14 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   **The pass-7 build-ready ledger** (the live work queue, recommended order):
   1. ~~**Peoria + Tazewell**~~ **SHIPPED 2026-08-02** — the two anchors (~313k), both
      standard patterns (polygon layers + roster scrape; the Esri election template).
-  2. **Champaign + Piatt** — one CCGISC referer-header pipeline covers both (~223k).
+  2. ~~**Champaign + Piatt**~~ **WITHDRAWN 2026-08-02 — LICENSED, not open.** Reading
+     the publisher's own pages before building overturned the sweep's verdict: CCGISC
+     sells both counties' GIS data under signed licence agreements, and its Terms grant
+     only personal, non-commercial, transitory viewing — no copying, no public display,
+     no mirroring, which is all three of the things a dispatch entry does. Both counties
+     are now the fleet's first LICENSING block (`champaign-piatt-ccgisc-license`) with
+     gap-location outlines; the unlock is a records request to each county CLERK, who
+     holds election geography as a public record whatever the consortium licenses.
   3. **Iroquois + Monroe + Randolph** — the full-fat eastern add plus the two commission
      counties that debut the at-large posture (~92k).
   4. **The derivation tier** — De Witt (precinct dissolve), Washington + Marshall + Mason

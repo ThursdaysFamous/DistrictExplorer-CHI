@@ -124,6 +124,8 @@ const GEOMETRY_URLS = [
   "./data/app/menard-county-outline.json",
   "./data/app/montgomery-county-outline.json",
   "./data/app/stark-county-outline.json",
+  "./data/app/champaign-county-outline.json",
+  "./data/app/piatt-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
