@@ -850,6 +850,18 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Randolph County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "dewitt-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "De Witt County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "dewitt-county-board-districts.json",
+        "min_features": 4,
+        "max_features": 4,
+        "note": "De Witt County Board districts, DERIVED: the county's own precinct layer dissolved per the composition it prints for every board member (scripts/build_dewitt_board_districts.py; --check is the drift gate). The county publishes only a raster JPG. Checked three ways: the four districts partition all 23 precincts exactly, every name resolves in the live layer, and the resulting Census 2020 populations balance to 3.2% spread. Districts are LETTERED A-D."
       }
     ],
     "rosters": [
@@ -1035,6 +1047,11 @@
         "file": "il-county-commissioners.json",
         "min_keys": 2,
         "note": "At-large county boards, keyed like il-county-clerks.json. Counties that elect their board COUNTYWIDE have no district geometry, so their members ride the COUNTY card rather than a county-board dispatch entry (EXPANSION_GUIDE §1.5). Currently Monroe and Randolph, both commission-form counties with three commissioners each; scraped weekly."
+      },
+      {
+        "file": "dewitt-county-board-members.json",
+        "min_keys": 4,
+        "note": "De Witt County Board members keyed by district LETTER (A-D, three members each; 12/12 with e-mail, 10 with phone, committees per member). Scraped weekly — and the same scrape re-reads the district composition printed on that page and FAILS if it no longer matches the compiled boundary, so a redistricting surfaces in CI rather than leaving the derived lines a cycle out of date."
       }
     ]
   },
@@ -1222,6 +1239,11 @@
       "file": "update-county-commissioners-roster.yml",
       "purpose": "At-large county boards (Monroe, Randolph) rendered on the County card",
       "schedule": "Sat 16:00 UTC"
+    },
+    {
+      "file": "update-dewitt-county-board-roster.yml",
+      "purpose": "De Witt County Board roster + district-composition drift check",
+      "schedule": "Sun 15:00 UTC"
     }
   ],
   "geocoder": {
