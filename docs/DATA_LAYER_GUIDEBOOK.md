@@ -1156,7 +1156,8 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > | Open item | Blocker | Actionable? |
 > |---|---|---|
 > | ~~LaSalle county-board rebuild~~ **SHIPPED 2026-08-01** — boundary derived from the county's precinct layer per its full 2024+2026 canvass record; weekly directory roster with the countywide Chairman; 11 split precincts drawn with their majority side and stated on the card | remaining: the split-precinct cut refinement, or the county publishing its adopted map as GIS | done — refinement recorded |
-> | **The pass-6 build-ready ledger** — ~~8 counties' municipal-officials sources~~ **SHIPPED 2026-08-01** (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island — the roster grew 360 → 492 municipalities; McLean's county-wide Airtable route stays open, see its row); ~~4 precinct counties + 3 polling/naming joins~~ **SHIPPED 2026-08-02**; ~~Woodford's board~~ shipped with the county 2026-08-02; ~~3 board-geometry builds~~ **ALL SHIPPED 2026-08-02** (Boone + Grundy + Henry — Henry as the twenty-eighth county), ~~the Logan board roster scraper~~ (SHIPPED 2026-08-02), still open: Aurora per-seat contact (re-measured 2026-08-02: Akamai 403s every rung reachable from CI — see its ledger row), ~~2 fire tilings~~ **SHIPPED 2026-08-02** (Sangamon 29 FPDs + St. Clair 44, each with its recorded caveat on the card), ~~Stephenson fire~~ **SHIPPED 2026-08-02** (georeferenced; its park/library maps measured RASTER-baked — see the new gap), ~~the verified city ward layers~~ **SHIPPED 2026-08-02** (22 cities across 13 sources; Lake Forest + 4 DuPage cities still to chase — see the ward ledger) | nothing — every source verified live 2026-07-31 | **yes — the live work queue** |
+> | **The pass-7 build-ready ledger** (RESEARCH PASS 7, below) — 8 full counties build-ready (Peoria, Tazewell, Champaign, Piatt, Iroquois, Monroe, Randolph, De Witt), 4 at-large board cards (Pike, Putnam, Brown, Calhoun), 4 more derivable (Washington, Marshall, Mason, Cass), the rest partial or blocked on named artifacts | nothing for the ready tiers — every source measured live 2026-08-02 | **yes — the live work queue** |
+> | **The pass-6 build-ready ledger** — ~~8 counties' municipal-officials sources~~ **SHIPPED 2026-08-01** (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island — the roster grew 360 → 492 municipalities; McLean's county-wide Airtable route stays open, see its row); ~~4 precinct counties + 3 polling/naming joins~~ **SHIPPED 2026-08-02**; ~~Woodford's board~~ shipped with the county 2026-08-02; ~~3 board-geometry builds~~ **ALL SHIPPED 2026-08-02** (Boone + Grundy + Henry — Henry as the twenty-eighth county), ~~the Logan board roster scraper~~ (SHIPPED 2026-08-02), still open: Aurora per-seat contact (re-measured 2026-08-02: Akamai 403s every rung reachable from CI — see its ledger row), ~~2 fire tilings~~ **SHIPPED 2026-08-02** (Sangamon 29 FPDs + St. Clair 44, each with its recorded caveat on the card), ~~Stephenson fire~~ **SHIPPED 2026-08-02** (georeferenced; its park/library maps measured RASTER-baked — see the new gap), ~~the verified city ward layers~~ **SHIPPED 2026-08-02** (22 cities across 13 sources; Lake Forest + 4 DuPage cities still to chase — see the ward ledger) | nothing — every source verified live 2026-07-31 | done — Aurora per-seat contact is the one open remainder |
 > | ~~**Woodford County**~~ **SHIPPED 2026-08-02 — the twenty-seventh dispatched county**: board (3 DERIVED districts per Ord 2020/21 #005 + 15-member weekly roster with phones and e-mails) and precincts (TCRPC, 37, polling 37/37); its fire/park/library absences were already recorded (woodford-special-districts) | — | done |
 > | The 49 no-source + 4 blocked gap entries (fire/park/library tilings in ten counties, precinct geometry in two, ward geometry in nine cities, three municipal-officials counties, four frontier boards…) | publishers — each entry's `wanted` says exactly what | no — recorded, panel-visible |
 > | McHenry / Kendall / Joliet | hard WAF denies (the two board directories now have verified 2026 Archive captures; McHenry's yearbook page and Kendall's municipal PDF still don't) | no — rule-4 terminal |
@@ -1166,13 +1167,121 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > concepts in the matrix above, Chicago ships 35; the other five are correctly
 > `n/a`/NO HONEST ANALOG (NYC-specific constructs, a countywide State's Attorney, and
 > appointed transit boards). There are no unfilled cells. So growing Illinois means
-> either *more counties for the concepts already built* — see the statewide-expansion
-> entry below, which is the live candidate list — or *proposing new concepts* under
+> either *more counties for the concepts already built* — see RESEARCH PASS 7 below,
+> which is the live candidate list — or *proposing new concepts* under
 > `docs/EXPANSION_GUIDE.md` Part 5 (community college districts, Regional Offices of
 > Education, sanitary/drainage districts and township road districts are the unresearched
 > families).
 
 **Open — Illinois**
+- **RESEARCH PASS 7 (2026-08-02) — the frontier REOPENED: twenty-five counties now adjoin
+  the served ring; surveyed six ways in parallel. Eight build-ready, four cheap at-large
+  adds, ten partial, three blocked.** PASS 5h's "expansion by adjacency has run out" was
+  true of the ring it measured and expired the moment Woodford, Henry and the
+  judicial-secondary counties (Bond, Jersey, Greene, Morgan, Scott) joined it: recomputing
+  adjacency from TIGER county geometry against the full 33-county `METRO_COUNTY_FIPS` set
+  finds 25 unresearched counties sharing a real edge with the served area — only Bureau,
+  Mercer and Jo Daviess remain researched-and-blocked (source-request emails for all
+  three, plus twelve other recorded gaps, were drafted 2026-08-02). Survey depth per
+  county: official domain → GIS of record → board geometry + roster → precincts → crawl
+  posture; every feature count below was measured by querying the named layer.
+
+  **Build-ready — full county adds (geometry + roster machine-readable today):**
+
+  | county (pop) | board | geometry | precincts | notes |
+  |---|---|---|---|---|
+  | Peoria (~182k) | 18 districts × 1 | own AGOL org `iPiPjILCMYxPZWTc`: `2020_County_Board_Districts/FeatureServer/0` = **18** (adopted 2021-11-30) | `2020_Voting_Precincts` = **116** (edited 2026-06) + 55 polling points joining on `POLLINGID` | fire **13** / park **4** / library **10** / townships 26 / school 20 on the same org; roster = CivicPlus page, per-member profiles, no party on the index |
+  | Tazewell (~131k) | 3 districts × 7 + countywide Chairman | Esri election template — `ElectionGeography_public…/FeatureServer/2` carries 21 County-Board member rows WITH party and district polygons (the Whiteside pattern; edited 2026-01) | layer 1 = **82** + 49 polling points (counts cross-checked on the on-prem `Clerk` folder) | per-municipality `*_Officials` services ≈ a GIS municipal directory (~15 munis) + 153 township-official and 126 school-board rows on the same layer; **one-seat GIS-vs-website drift** (Longfellow D3+Phillips vs D2+Glueck) — the roster scraper must tie-break; old domain tazewell.com is dead but still cited in stale GIS attrs |
+  | Champaign (~206k) | 11 × 2; roster with party, term, phone, e-mail | CCGISC (ArcGIS Enterprise): `CountyClerk/CountyBoard/MapServer/0` = **11** (`CountyBoard2011`/`2000` exist separately, so the unversioned service is the current plan) | `CountyClerk/Precincts` = **118** (`PRECINCT`,`TWPNAME`) | **CCGISC's portal proxy is REFERER-LOCKED** (`Referer: https://services.ccgisc.org/portal/apps/…` or 403; `f=geojson` 400s, `f=json&outSR=4326` works) — fetch in the PIPELINE into `data/app/` files, no runtime queries; a large taxing-district shelf (fire/library/park/cemetery/mass-transit/sanitary/forest-preserve/TIF) sits behind the same proxy; champaigncountyclerk.com is UA-filtered (plain clients 403, browser UA passes) |
+  | Piatt (~17k) | 3 × 2 | CCGISC `Piatt_CountyClerk/CountyBoardDistricts/MapServer/0` = **3** ("based on the 2020 census" per board page; `_2010`/`_2000` archived separately) | `Piatt_CountyClerk/Precincts` = **16** | same referer mechanics as Champaign — ONE integration, TWO counties; roster carries NO party; old piattcounty.org apex is dead while `maps.piattcounty.org` lives — the moved-domain trap in both directions |
+  | Iroquois (~27k) | 4 × 4 | CCAO org `6FZQl5a5SiSFMv8P`: `CountyBoardDistricts_REACH/FeatureServer/8` = **4** (item 2024-12) | `ElectionGeography_public/FeatureServer/1` = **37** + polling points (layer 0) | fire **46** / school **13** / municipal wards **7** / townships 42 on the same org; use the APEX domain with a browser UA (www 403s); roster e-mails are cf-obfuscated (mechanically decodable); the org's "Electoral Districts" layer has the rich rep-name schema and **0 features** — never populated, don't rely on it |
+  | Monroe (~35k) | **COMMISSION — 3 commissioners at-large** | none needed — county outline is the geometry | `VoterPrecinct/FeatureServer/0` = **25** (geometry reloaded 2026-03 — freshest of the pass) | own ArcGIS Enterprise 11.5 + AGOL mirror; fire **26** / municipal wards **23** / school 5 / road districts 20 / polling 16; EWG's 2026 POD covers Monroe municipals but its commission rows are stale — the county page is the authority |
+  | Randolph (~30k) | **COMMISSION — 3 commissioners at-large** | none needed | `VotingPrecincts/FeatureServer/1` = **35** (layer id **1**, not 0; edited 2026-04; ISBE's 37 per-precinct vector PDFs corroborate names) | ESB_FIRE = 17 is response-zone semantics (the Winnebago/Logan caveat — not a taxing tiling); municipal wards 9; the old `am.randolphco.org` still serves a stale Joomla site while staff e-mails stay @randolphco.org |
+  | De Witt (~16k) | 4 lettered districts (A-D) × 3 | **DERIVED**: the roster page prints the full official composition and it assigns ALL 23 precincts — dissolve the live precinct layer | `ElectionPrecincts_DeWittIL/FeatureServer/0` = **23** (Sidwell/Magnasoft org; schema is 2020-VTD but names match the county's current compositions verbatim) | roster has phone/e-mail/committees and NO party; the org's fire layer is 466 undissolved section-level slivers (needs dissolve if ever shipped) |
+
+  **At-large boards — cheap adds** (roster + county outline; the county-board concept's
+  first no-district posture — a dispatch-entry design, no engine change): **Pike** (~15k —
+  9 members with per-member e-mails; **pushes the served area's west edge to ≈ −91.5°**,
+  so the permalink-gate/metro-bbox widen will fire exactly as it did for Rock Island),
+  **Putnam** (~6k — 5 members, at-large structure proven by the certified 2026 specimen
+  ballot, not just the website), **Brown** (~6k — 7 members, unusually complete roster
+  with direct e-mails; `browncountyil.org` is a captcha-parked DECOY — the county lives at
+  browncoil.org), **Calhoun** (~4k — commission form, 5 commissioners; the `www` host is
+  required, the apex doesn't resolve). All four counties' precinct geometry is
+  raster-scan-only — recorded as gaps when the counties ship, not build items.
+
+  **Partial — board derivable now, something else missing:** **Washington** (~14k — 3×5
+  by WHOLE-township composition printed on the board page → TIGER dissolve, the Woodford
+  route; precincts raster-only), **Marshall** (~12k — 3×4 whole-township composition on
+  the county's 2026 roster PDF; 14 precincts PDF-only with two municipal splits),
+  **Mason** (~13k — 2×4 township composition WITH party on the county's May-2026 roster
+  PDF; precincts: TIGER 2020 VTDs match the current 21-precinct list **21/21**),
+  **Cass** (~13k — 4×3 by precinct-union composition in a county vector PDF; TIGER VTDs
+  match **21/21**), **Macon** (~104k — **one artifact from build-ready**: its
+  `ElectionGeography_public…/2` holds the correct five post-2022 district polygons with
+  EVERY attribute NULL, so the districts need labels from the clerk's map or the adoption
+  ordinance; precincts = **64** + fire **17** / library **10** / park **6** are ready
+  today; its site soft-404s unknown paths with a 200 stub — content-verify every hit),
+  **Clinton** (~37k — 5×3; precinct layer = **34**, current, polling table matches 34/34;
+  the 2022 district map is a text-extractable vector PDF drawn over its 15 townships; no
+  district layer among its Sidwell org's 28 public services), **Fayette** (~21k — roster
+  WITH party (12R/2D); an ArcMap-authored vector PDF carries districts AND its 28
+  precincts, so the shapefiles demonstrably exist at Sidwell — request-or-digitize),
+  **Ford** (~13k — township-precinct composition with a SHARED split (Patton 3 sits in
+  two districts); the ISBE map is titled 2011 with Last-Modified 2021 — vintage
+  unproven), **Stark** (~5k — everything exists in a county-produced Google My Maps KML:
+  2 board districts, 9 precincts, PLUS fire 6 / school 4 / library 6 / park 2 — but the
+  ISBE pointer dates to 2020-08 and the county's online minutes begin 2022-07, so the
+  post-2021-reapportionment vintage is unconfirmable online), **Montgomery** (~28k — the
+  best roster of the pass: party + full composition, revised 2024-12; but its districts
+  split precincts at SUB-precinct level ("N ½ of Butler Grove", "E of I-55 of North
+  Litchfield #1"), so a composition dissolve cannot be exact — needs the polygon layer
+  Beacon locks away, or a Stephenson-style georeference of its vector PDF).
+
+  **Blocked, each on a named artifact:** **Knox** (~50k — the county's ENTIRE web estate
+  is Cloudflare-challenge-fronted, roster page included; Galesburg's city org publishes
+  board districts 1-3 (= **3** features, adopted 2021-10-27 per the item) but the rural
+  districts 4-5 appear in NO vector source found, and ISBE's vector PDF is provably 2011
+  content), **Christian** (~34k — the current 2022 district map is RASTER while the
+  vector PDF beside it is the PRIOR-decade plan with 2010 populations — a vintage trap;
+  no member roster online beyond chair/vice), **Menard** (~12k — 5 single-member
+  commissioner districts whose only map is a 2021-12 raster; boundaries run section-line
+  roads, not precinct unions, so no composition route exists; the roster and
+  TIGER-VTD precincts (**14/14** name match) are otherwise ready).
+
+  **Pass-wide findings:** (1) the ISBE precinct-maps mirror is PRE-2021-vintage for
+  nearly everything here (Knox 2011, De Witt 2015, Piatt/Putnam 2015 scans, Montgomery
+  2012/2015) — Macon's 63 per-precinct 2022 PDFs are the exception; treat the mirror as
+  superseded unless a file proves otherwise. (2) TIGER 2020 VTDs are the small-county
+  precinct route — Mason 21/21, Menard 14/14, Cass 21/21 current-name matches — each
+  needing a one-time vintage sign-off. (3) New crawl-block class members:
+  knoxcountyil.gov (CF managed challenge, whole estate), beacon.schneidercorp.com (hard
+  403), browncountyil.org (captcha-parked decoy), champaigncountyclerk.com (UA filter).
+  (4) Dead legacy domains still alive in search indexes: tazewell.com, masoncountyil.org,
+  casscountyil.org, piattcounty.org apex, co.putnam.il.us — and Macon's CURRENT domain
+  200-stubs unknown paths. (5) Commission/at-large counties (Monroe, Randolph; Pike,
+  Putnam, Brown, Calhoun) debut the county-board concept's no-district posture: the
+  entry renders the member list on the county outline. (6) Regional orgs: TCRPC
+  (verified at 363 services) is GIS of record for Logan and Woodford ONLY — nothing
+  usable for Peoria/Marshall/Stark/Putnam; CCGISC serves TWO frontier counties
+  (Champaign + Piatt) through one integration; EWG's POD reaches only Monroe among the
+  southern five.
+
+  **The pass-7 build-ready ledger** (the live work queue, recommended order):
+  1. **Peoria + Tazewell** — the two anchors (~313k), both standard patterns (polygon
+     layers + roster scrape; the Esri election template).
+  2. **Champaign + Piatt** — one CCGISC referer-header pipeline covers both (~223k).
+  3. **Iroquois + Monroe + Randolph** — the full-fat eastern add plus the two commission
+     counties that debut the at-large posture (~92k).
+  4. **The derivation tier** — De Witt (precinct dissolve), Washington + Marshall + Mason
+     (township dissolves), Cass (VTD dissolve) (~68k).
+  5. **The at-large tier** — Pike, Putnam, Brown, Calhoun (~31k), including Pike's
+     permalink-gate widen.
+  6. **Chases, not builds** (e-mail or artifact-hunt): Macon's district labels, Stark's
+     2021 ordinance, Knox's rural map + roster access, Christian's roster + labeled map,
+     Menard's commissioner geometry, Clinton's and Fayette's Sidwell shapefiles, Ford's
+     adopted-map vintage, Montgomery's polygon layer.
+
 - **VALIDATION + SOURCING PASS 6 (2026-07-31) — every county × concept cell walked against
   this guidebook, then a 13-way live sourcing round over everything open. The gaps block
   grew 33 → 65 entries, two defects surfaced in SHIPPED data, six recorded blockers turned
