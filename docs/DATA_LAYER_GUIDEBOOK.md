@@ -1588,11 +1588,18 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   election document, not from the page's silence). **Hancock** (~17k — live site with a
   County Board Members page that renders its content client-side: 170 KB of jQuery loader
   with zero e-mails or district labels in the served HTML, so it needs a browser render this
-  sandbox cannot give a live site. No AGOL items at all). **McDonough** (~29k — NOT probed
-  to a conclusion, and the earlier note that it was "unreachable" was wrong: the domain
-  mcdonoughcountyil.gov does not resolve, and six other guesses fail DNS too, so the county
-  is simply UNLOCATED. Hostname guessing is the weakest method — this wants the web-map
-  route or a clerk contact, per the Lee lesson).
+  sandbox cannot give a live site. No AGOL items at all). **McDonough** (~29k — the county appears to have
+  NO LOCATABLE PUBLIC WEBSITE, which is a different finding from "blocked" and rarer than
+  either. Nine hostnames were tried and none resolves, including the one the ISBE clerk
+  directory implies: jbenson@mcdonoughcountyclerk.org is the state's published contact, yet
+  that domain has no A record — so it is e-mail-only or stale. DNS itself is fine in the
+  probing environment (neighbouring fultoncountyil.gov resolves), so the failures are real
+  rather than environmental, and a proxy 502 seen mid-probe was a CONNECT rejection for that
+  same unresolvable host, not a signal about the county. The route that DID work is the one
+  already in this repo: data/app/il-county-clerks.json, built weekly from ISBE, carries the
+  clerk's name, address and phone — which is how the records request was addressed. **Lesson:
+  the app's own clerk roster is a domain-discovery tool, and should be the FIRST stop when a
+  county cannot be found, ahead of hostname guessing.**).
   **Ford** (~13k — township-precinct composition with a SHARED split (Patton 3 sits in
   two districts); the ISBE map is titled 2011 with Last-Modified 2021 — vintage
   unproven), **Stark** (~5k — everything exists in a county-produced Google My Maps KML:
