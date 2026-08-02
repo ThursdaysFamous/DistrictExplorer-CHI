@@ -8068,6 +8068,32 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/washington-county-board-members.json", {}, 2);
   });
 
+  var loadCassCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cass-county-outline.json", {}, 2);
+  });
+  function cassCountyCoverage(point) {
+    return loadCassCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  /* CASS COUNTY (the 36th dispatched county, added 2026-08-02). Its GIS is a
+   * Beacon parcel viewer with no public REST surface, so the board boundary is
+   * DERIVED: Census 2020 voting districts dissolved per the county's own
+   * published district table, whose 21 precinct names match TIGER's 21 exactly.
+   *
+   * Cass is the fleet's first board whose districts are NOT all the same size —
+   * eleven members seated 3/3/3/2 — which changes how the build verifies it:
+   * per DISTRICT the populations look 28.8% apart and broken, per MEMBER they
+   * are 12.3% apart and ordinary. The seat counts come from the county's own
+   * roster page and the weekly roster build re-asserts them, which is the only
+   * tripwire available on a boundary whose composition lives in a PDF. */
+  var loadCassBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cass-county-board-districts.json", {}, 2);
+  });
+  var loadCassBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cass-county-board-members.json", {}, 2);
+  });
+
   var loadDewittCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/dewitt-county-outline.json", {}, 2);
   });
@@ -15082,6 +15108,65 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadWashingtonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Cass — 4 districts seating ELEVEN members as 3/3/3/2, the fleet's first
+      // unevenly-sized board. Boundary DERIVED from Census voting districts per
+      // the county's published district table; roster scraped weekly (11/11
+      // phones, 8 e-mails) with the Chairman badged on his own district row.
+      {
+        key: "cass",
+        coverage: cassCountyCoverage,
+        loadGeometry: loadCassBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadCassBoardDistricts(),
+            loadCassBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Cass County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Cass County Board (official)",
+            url: "https://co.cass.il.us/elected-officials/cass-county-board"
+          };
+        },
+        hoverOfficial: {
+          load: loadCassBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

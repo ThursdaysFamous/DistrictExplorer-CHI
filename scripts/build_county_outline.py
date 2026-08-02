@@ -881,6 +881,27 @@ COUNTIES = {
             (38.5434, -89.6172, "Albers — Clinton County"),
         ],
     },
+    # Cass (pass-7 tranche 4): board districts DERIVED from Census 2020 voting
+    # districts per the county's own published district table
+    # (scripts/build_cass_board_districts.py). Its GIS is a Beacon parcel
+    # viewer with no public REST surface.
+    "cass": {
+        "fips": "017",
+        "name": "Cass County",
+        "inside": [
+            (39.8805, -90.3705, "Arenzville"),
+            (39.8885, -90.0079, "Ashland"),
+            (39.9993, -90.4176, "Beardstown"),
+            (40.0470, -90.1513, "Chandlerville"),
+            (39.9524, -90.2108, "Virginia (county seat)"),
+        ],
+        "outside": [
+            (39.5763, -89.7440, "Auburn — Sangamon County"),
+            (40.0066, -90.8737, "Mound Station — Brown County"),
+            (39.9619, -89.7216, "Athens — Menard County"),
+            (40.1905, -90.1425, "Bath — Mason County"),
+        ],
+    },
 }
 
 

@@ -874,6 +874,18 @@
         "min_features": 3,
         "max_features": 3,
         "note": "Washington County Board districts, DERIVED: Census townships dissolved per the whole-township composition the county prints under each district heading (scripts/build_washington_board_districts.py; --check is the drift gate). The county runs NO GIS of any kind. No township is split, so every district edge is a township edge; the build asserts the three districts partition all 16 townships exactly and that their Census 2020 populations balance (5.1% spread)."
+      },
+      {
+        "file": "cass-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Cass County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entry."
+      },
+      {
+        "file": "cass-county-board-districts.json",
+        "min_features": 4,
+        "max_features": 4,
+        "note": "Cass County Board districts, DERIVED: Census 2020 voting districts dissolved per the county's own published district table (scripts/build_cass_board_districts.py; --check is the drift gate). Its GIS is a Beacon parcel viewer with no public REST. The table's 21 precinct names match TIGER's 21 exactly. The board seats ELEVEN members as 3/3/3/2, so the build balances per MEMBER (12.3% spread) — per district it reads 28.8% and looks broken."
       }
     ],
     "rosters": [
@@ -1069,6 +1081,11 @@
         "file": "washington-county-board-members.json",
         "min_keys": 3,
         "note": "Washington County Board members keyed by district (3 districts, five members each; 15/15 with BOTH phone and e-mail). Scraped weekly, and the same scrape re-reads the township composition printed on that page and FAILS if it no longer matches the compiled boundary. Member HOME ADDRESSES are published on that page and are deliberately never collected (the Madison precedent). One member's published e-mail domain is misspelled at the source; it ships as published and the builder WARNs."
+      },
+      {
+        "file": "cass-county-board-members.json",
+        "min_keys": 4,
+        "note": "Cass County Board members keyed by district (4 districts seating 11 as 3/3/3/2; 11/11 phones, 8 e-mails, the Chairman badged on his own district row). Scraped weekly. Because Cass publishes its district composition only in a PDF, the weekly composition check De Witt and Washington get is impossible — instead the builder asserts the SEAT COUNTS still match the boundary's SEATS table, which is what its population test depends on."
       }
     ]
   },
@@ -1266,6 +1283,11 @@
       "file": "update-washington-county-board-roster.yml",
       "purpose": "Washington County Board roster + township-composition drift check",
       "schedule": "Sun 16:00 UTC"
+    },
+    {
+      "file": "update-cass-county-board-roster.yml",
+      "purpose": "Cass County Board roster + seat-count tripwire on the derived boundary",
+      "schedule": "Sun 17:00 UTC"
     }
   ],
   "geocoder": {
