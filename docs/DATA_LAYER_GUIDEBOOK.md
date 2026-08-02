@@ -81,16 +81,17 @@ in the researched-but-unbuilt backlog.
     {
       "id": "blocked-crawlers",
       "concept": "Roster refresh",
-      "area": "McHenry and Kendall",
+      "area": "McHenry, Kendall and DeKalb",
       "counties": [
         "mchenry",
-        "kendall"
+        "kendall",
+        "dekalb"
       ],
       "kind": "blocked",
       "layer": "county-board",
-      "summary": "McHenry's and Kendall's county directories refuse all automated visits, so their board member lists are checked by hand rather than refreshed weekly.",
-      "blocker": "Re-checked 31 Jul 2026: both counties' directories refuse every request from a server. What has improved is that the Internet Archive now holds complete 2026 captures of both board directories (McHenry 20 May, Kendall 13 Mar), so an Archive-based refresh is newly possible for the board lists. McHenry's municipal yearbook page has no capture newer than 6 Mar 2025, and Kendall's municipal list has never been archived at all.",
-      "wanted": "A machine-readable list from either directory, or any mirror the counties permit automated access to."
+      "summary": "Three county directories turn away the computer that checks them each week, so their board member lists are checked by hand instead. The names on the cards are current either way.",
+      "blocker": "Re-checked 31 Jul 2026: McHenry's and Kendall's directories refuse every request from a server. What has improved is that the Internet Archive now holds complete 2026 captures of both board directories (McHenry 20 May, Kendall 13 Mar), so an Archive-based refresh is newly possible for the board lists. McHenry's municipal yearbook page has no capture newer than 6 Mar 2025, and Kendall's municipal list has never been archived at all. DeKalb joined 2 Aug 2026 and is a milder case: its site is not refusing servers in general, it is turning away the particular addresses this project's weekly job runs from. The page opens normally elsewhere, which is how DeKalb's list was confirmed current that same day.",
+      "wanted": "A machine-readable list from any of the three directories, or any mirror they permit automated access to."
     },
     {
       "id": "dupage-municipal-phones",

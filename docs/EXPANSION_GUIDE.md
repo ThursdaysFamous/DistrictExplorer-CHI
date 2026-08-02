@@ -375,6 +375,7 @@ one you have and therefore whether a rung can exist at all:
 | **Challenge** | Cloudflare; 403 or a 200 interstitial ("Just a moment", `cf-browser-verification`) | a browser rung — there is something to solve |
 | **Network deny** | same request, 200 from a developer machine and 403 from a CI runner | a browser rung **only if** a challenge sits underneath (DuPage: it did) |
 | **Hard WAF deny** | Akamai; small static body (~408 bytes) with `x-reference-error` | *nothing* — Joliet's browser rung fails identically to `requests` |
+| **Reputation score** | SiteGround; HTTP **202** (not an error status), ~220-byte body, `SG-Captcha: challenge`, refresh to `/.well-known/sgcaptcha/?…&y=ipr:<CALLER IP>` | changing the CALLER, not the request — see §2.5.1 |
 
 A hard deny is rule-4 terminal: record it, keep whatever rungs exist so the source
 resumes automatically if the edge relaxes, and let preservation carry the data. Do NOT
@@ -1062,6 +1063,38 @@ taught them.
   add NOTHING to `DISPATCH_COUNTY_FIPS` — the county stays unserved by construction.
   Derive the anchors from TIGERweb's own Incorporated Places centroids and round-trip
   each through a point-in-county query rather than recalling coordinates.
+- **A block rate measured from ONE egress is not a property of the site.** DeKalb's
+  scraper carried a confident number — "roughly two requests in three come back as the
+  stub and the third serves the page" — and its first scheduled run failed with six
+  stubs in a row, which that number makes a 1-in-700 event. The response says why:
+  SiteGround's SG-Captcha refreshes to `…/sgcaptcha/?…&y=ipr:<CALLER IP>`, `ipr` for IP
+  reputation. It scores the ADDRESS, so the observed rate is a fact about where you
+  measured from — ~1 in 2 from one egress, 6 of 6 from a GitHub Actions runner, same
+  code, same hour. Two consequences: **retry counts are the wrong dial** (no number of
+  draws beats a score), and **a block must be measured from CI before it is described**,
+  because a developer machine and a runner are different clients. Dispatch the workflow
+  on your branch and read the log — that is the only measurement that predicts the
+  weekly run. Note the scoring is per-HOST: dekalbcounty.org challenges while the
+  clerk's own dekalbcountyclerkil.gov, which serves the yearbook PDF, never did.
+- **A bug in the prober reads exactly like a block, and it is the more likely of the
+  two.** The CI run meant to answer "does a real browser clear this edge" instead
+  printed `Page.content: Unable to retrieve content because the page is navigating` —
+  the scraper asking for content while the stub's `content="0;…"` refresh was in flight.
+  The rung lasted under a second and never saw a settled document of either kind, yet
+  the log line sits next to the genuine failures and reads as one. Taken at face value
+  it would have moved a county to the terminal "blocked everywhere" posture on the
+  strength of a race in the prober. **A browser rung must POLL** — tolerate the
+  mid-navigation error as the challenge working, wait, read again — and its failure
+  message must distinguish *still navigating* from *interstitial still served*. More
+  generally: before believing a rung's verdict, check that the rung ran long enough to
+  have a verdict. Compare its wall time against what the work should have cost.
+- **Register a roster's own source URL, not just its geometry's.** DeKalb's board
+  districts were in `validate_sources.py` (an ArcGIS endpoint, always fine) while the
+  members page the card's names actually come from was not, so the monthly check
+  reported the layer healthy through the block. A layer with a scraper has TWO sources;
+  both belong in the registry. And don't reach for `"blocked"` on a conditional block —
+  that flag inverts the check, and it is for permanent ones where unreachable is the
+  expected state. Where a source answers sometimes, both states are worth reporting.
 
 ## 2.6 Verification
 

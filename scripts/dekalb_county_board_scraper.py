@@ -53,11 +53,21 @@ the escalation is the fleet's standard engine ladder instead:
 
     requests (with the retry loop)  ->  playwright  ->  wayback
 
-Playwright is a real browser and nothing more; SG-Captcha's IP-reputation tier
-serves a JS interstitial that a genuine browser resolves on its own, so the
-middle rung is a live shot at the same document rather than an evasion. If it
-too fails from CI, the run log names the rung that failed and the county gets
-the McHenry/Kendall posture — the ladder is also the measurement.
+Playwright is a real browser and nothing more; no challenge is decoded or
+replayed, so if the edge wants a human this fails like it should.
+
+AND FROM CI IT DOES. Measured 2026-08-02 by dispatching the weekly workflow:
+requests took the stub on all six attempts, a genuine headless Chromium sat on
+the interstitial for the full 24s the browser rung allows and never reached the
+document, and the Archive's newest snapshot was 144 days old against the 45-day
+guard. Every rung, refused. So DeKalb carries the McHenry/Kendall posture — the
+workflow reports the block on a standing issue instead of going red weekly, and
+the shipped roster keeps its last verified state.
+
+What that does NOT mean is that the page is gone. The same ladder's first rung
+succeeds from a well-reputed address, which is how the shipped file was verified
+current the same day. The failure is the runner's address. The ladder stays in
+place unchanged, so the week the score moves, automation resumes on its own.
 
 Note the block is scoped to dekalbcounty.org: the clerk's own domain
 (dekalbcountyclerkil.gov, which serves the yearbook PDF) is open, so a DeKalb
