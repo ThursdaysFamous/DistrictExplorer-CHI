@@ -1576,6 +1576,23 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   district layer among its Sidwell org's 28 public services), **Fayette** (~21k — roster
   WITH party (12R/2D); an ArcMap-authored vector PDF carries districts AND its 28
   precincts, so the shapefiles demonstrably exist at Sidwell — request-or-digitize),
+  **PASS-9 PROBE (2026-08-02), the three counties Adams and Schuyler made adjacent —
+  all three are a LOW-GIS frontier, unlike Adams, and none is buildable from what is
+  reachable today:** **Fulton** (~34k — the best of the three and still not enough: a live
+  county site AND a dedicated elections domain, fultoncountyilelections.gov, carrying pages
+  titled "Fulton County Election District GIS" and "Precincts and Polling Places". The GIS
+  page contains NO map — no ArcGIS service, no KML, no PDF, only a tag-manager iframe — so
+  the title promises a layer the page does not hold. 12 board-member e-mails are published,
+  several of them personal gmail/outlook addresses, and no district label appears anywhere;
+  whether the board is districted or at-large is UNDETERMINED and must come from a certified
+  election document, not from the page's silence). **Hancock** (~17k — live site with a
+  County Board Members page that renders its content client-side: 170 KB of jQuery loader
+  with zero e-mails or district labels in the served HTML, so it needs a browser render this
+  sandbox cannot give a live site. No AGOL items at all). **McDonough** (~29k — NOT probed
+  to a conclusion, and the earlier note that it was "unreachable" was wrong: the domain
+  mcdonoughcountyil.gov does not resolve, and six other guesses fail DNS too, so the county
+  is simply UNLOCATED. Hostname guessing is the weakest method — this wants the web-map
+  route or a clerk contact, per the Lee lesson).
   **Ford** (~13k — township-precinct composition with a SHARED split (Patton 3 sits in
   two districts); the ISBE map is titled 2011 with Last-Modified 2021 — vintage
   unproven), **Stark** (~5k — everything exists in a county-produced Google My Maps KML:
