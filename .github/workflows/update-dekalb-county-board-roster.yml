@@ -60,20 +60,20 @@ jobs:
       - name: Scrape DeKalb County Board member roster
         id: scrape
         # --engine auto walks the ladder and prints which rung carried each
-        # fetch, so the run log answers "is this county blocked from CI?" by
-        # itself rather than needing a separate probe. Measured that way on
-        # 2026-08-02 the answer is YES, from a runner: requests took the stub on
-        # all six attempts, a genuine headless Chromium sat on the interstitial
-        # for a full 24s without ever reaching the document, and the Archive's
-        # newest snapshot was 144 days old against the 45-day guard.
+        # fetch, so the run log records reachability per run rather than needing
+        # a separate probe. That turned out to matter, because the question
+        # "is this county blocked from CI" has no yes/no answer. Four runs on
+        # 2026-08-02 + 07-31, same commit, four runner addresses: three took the
+        # stub on all six attempts (one of them also held 24s on the
+        # interstitial under a real Chromium, with the Archive 144 days stale),
+        # and the fourth was carried by plain requests on its FIRST try in 0.9s.
         #
-        # So a total fetch failure is an EXPECTED state here, as it is for
-        # McHenry and Kendall, and it feeds a standing tracking issue instead of
-        # a red run every Friday. What is NOT expected is the same failure from
-        # elsewhere: this source answers a well-reputed address fine (the
-        # shipped roster was re-verified against it the same day), so the block
-        # is the runner's address, not the county withdrawing the page. Any rung
-        # succeeding resumes automation with no further change.
+        # dekalbcounty.org's SG-Captcha scores the CALLER'S ADDRESS, and GitHub
+        # hands out runners from a pool, so a failure here is address luck, not
+        # a source change. Hence continue-on-error + a standing issue: a job
+        # that loses a coin toss should not go red, and the weekly cadence
+        # covers it — a scored week is followed by one that may not be. A run
+        # that clears simply opens its PR as usual; nothing needs resuming.
         continue-on-error: true
         run: python3 scripts/dekalb_county_board_scraper.py /tmp/dekalb_county_board_raw.json --engine auto
 
@@ -82,13 +82,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          title="DeKalb County Board roster: automated refresh blocked from CI runners"
+          title="DeKalb County Board roster: refresh blocked on some runner addresses"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' || true)
           if [ -z "$num" ]; then
-            gh issue create --title "$title" --body "The weekly roster scrape failed on every engine (direct requests, headless Chromium, and the Internet Archive). dekalbcounty.org serves SiteGround's SG-Captcha, which scores the CALLER'S IP (\`y=ipr:<address>\` in its own redirect) rather than sampling requests — so this is specific to GitHub Actions runner addresses. The page answers a well-reputed client normally, which is how the shipped data/app/dekalb-county-board-members.json was verified current on 2026-08-02. That file keeps its last verified state and stays correct until the county changes members. Manual step when this issue is old or an election/appointment happened: re-run the scraper from a non-runner host and refresh via scripts/build_dekalb_county_board_roster.py. This issue is updated by each failed weekly run; close it if the block lifts and a run goes green. Latest failed run: $run_url"
+            gh issue create --title "$title" --body "This week's roster scrape failed on every engine (direct requests, headless Chromium, and the Internet Archive). **This is expected to happen some weeks and not others, and it does not mean the source changed.** dekalbcounty.org serves SiteGround's SG-Captcha, which scores the CALLER'S ADDRESS (\`y=ipr:<address>\` in its own redirect) rather than sampling requests, and GitHub hands out runners from a pool — measured 2026-08-02 across four runs on one commit, three runner addresses were refused and one was carried by plain requests on its first try. So a failed run is address luck; the next scheduled run may well succeed on its own and open its PR as usual. The shipped data/app/dekalb-county-board-members.json keeps its last verified state (confirmed current against the live source on 2026-08-02, from CI) and stays correct until the county changes members. Act on this issue only if it keeps recurring across many weeks or an election/appointment has happened — then re-run the scraper from any host that clears the edge and refresh via scripts/build_dekalb_county_board_roster.py. Close it once runs are landing reliably. Latest failed run: $run_url"
           else
-            gh issue comment "$num" --body "Still blocked as of $(date -u +%F) — $run_url"
+            gh issue comment "$num" --body "Refused again on $(date -u +%F) — $run_url (address luck; see the issue body)"
           fi
 
       - name: Rebuild roster data file

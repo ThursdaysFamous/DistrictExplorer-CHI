@@ -56,18 +56,28 @@ the escalation is the fleet's standard engine ladder instead:
 Playwright is a real browser and nothing more; no challenge is decoded or
 replayed, so if the edge wants a human this fails like it should.
 
-AND FROM CI IT DOES. Measured 2026-08-02 by dispatching the weekly workflow:
-requests took the stub on all six attempts, a genuine headless Chromium sat on
-the interstitial for the full 24s the browser rung allows and never reached the
-document, and the Archive's newest snapshot was 144 days old against the 45-day
-guard. Every rung, refused. So DeKalb carries the McHenry/Kendall posture — the
-workflow reports the block on a standing issue instead of going red weekly, and
-the shipped roster keeps its last verified state.
+AND SOMETIMES IT DOES — WHICH TOOK FOUR CI RUNS TO SEE. Measured 2026-08-02 by
+dispatching this workflow repeatedly, plus the scheduled run of 07-31:
 
-What that does NOT mean is that the page is gone. The same ladder's first rung
-succeeds from a well-reputed address, which is how the shipped file was verified
-current the same day. The failure is the runner's address. The ladder stays in
-place unchanged, so the week the score moves, automation resumes on its own.
+    runner A   requests 6/6 stub                                    REFUSED
+    runner B   requests 6/6 stub; Chromium held 24s on the
+               interstitial; Archive 144 days old vs the 45-day guard REFUSED
+    runner C   requests 6/6 stub                                    REFUSED
+    runner D   carried on the FIRST request, 0.9s                   CLEARED
+
+Same commit, same hour, four different runner addresses. After runs A-C the
+obvious conclusion was "blocked from CI, every rung, give it the McHenry
+posture" — and that conclusion is wrong in a way three consecutive failures
+cannot show you. There is no per-CI verdict to reach, because CI is not one
+caller: GitHub hands out addresses from a pool and DeKalb's edge scores them
+individually. The honest statement is a RATE, and even 3-of-4 is a small sample.
+
+The posture that follows is the same one, for a better reason. The scrape step
+is continue-on-error and reports on a standing issue not because the source is
+gone, but because a job that fails on address luck should not turn red — the
+weekly cadence covers it, since a week that draws a scored address is followed
+by one that may not. Nothing needs to change for automation to resume; the run
+that succeeds simply opens its PR as usual, which is exactly what runner D did.
 
 Note the block is scoped to dekalbcounty.org: the clerk's own domain
 (dekalbcountyclerkil.gov, which serves the yearbook PDF) is open, so a DeKalb

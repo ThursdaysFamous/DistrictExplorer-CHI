@@ -459,12 +459,14 @@ PROVENANCE = [
              "(which is what failed the first scheduled run, 2026-07-31). More "
              "retries cannot fix an address, so the scraper walks "
              "requests -> playwright -> wayback and its run log names the rung "
-             "that carried it. Measured from CI the same day, EVERY rung is "
-             "refused — a real headless Chromium sat on the interstitial 24s "
-             "without reaching the document — so the weekly workflow reports "
-             "the block on a standing issue rather than going red, McHenry-"
-             "style. A WARN here still means only 'this checker drew the stub'; "
-             "the page itself answers a well-reputed client normally."},
+             "that carried it. There is no single CI verdict either: across "
+             "four runs of one commit, three runner addresses were refused on "
+             "every rung (one held 24s on the interstitial under a real "
+             "Chromium) and a fourth was carried by plain requests on its first "
+             "try, so the weekly workflow treats a failure as address luck — "
+             "continue-on-error onto a standing issue rather than a red job. A "
+             "WARN here means only 'this checker drew the stub' and never that "
+             "the page changed."},
     {"layer": "DeKalb County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://dekalbcounty.org/about/reference-yearbook/",

@@ -89,8 +89,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "blocked",
       "layer": "county-board",
-      "summary": "Three county directories turn away the computer that checks them each week, so their board member lists are checked by hand instead. The names on the cards are current either way.",
-      "blocker": "Re-checked 31 Jul 2026: McHenry's and Kendall's directories refuse every request from a server. What has improved is that the Internet Archive now holds complete 2026 captures of both board directories (McHenry 20 May, Kendall 13 Mar), so an Archive-based refresh is newly possible for the board lists. McHenry's municipal yearbook page has no capture newer than 6 Mar 2025, and Kendall's municipal list has never been archived at all. DeKalb joined 2 Aug 2026 and is a milder case: its site is not refusing servers in general, it is turning away the particular addresses this project's weekly job runs from. The page opens normally elsewhere, which is how DeKalb's list was confirmed current that same day.",
+      "summary": "Three county directories turn away the computer that checks them each week, so their board member lists are checked by hand or on a delay. The names on the cards are current either way.",
+      "blocker": "Re-checked 31 Jul 2026: McHenry's and Kendall's directories refuse every request from a server. What has improved is that the Internet Archive now holds complete 2026 captures of both board directories (McHenry 20 May, Kendall 13 Mar), so an Archive-based refresh is newly possible for the board lists. McHenry's municipal yearbook page has no capture newer than 6 Mar 2025, and Kendall's municipal list has never been archived at all. DeKalb joined 2 Aug 2026 and is much the mildest of the three: it turns away some of the machines the weekly check runs from and not others, so the refresh works some weeks by itself. Its list was confirmed current on 2 Aug 2026.",
       "wanted": "A machine-readable list from any of the three directories, or any mirror they permit automated access to."
     },
     {

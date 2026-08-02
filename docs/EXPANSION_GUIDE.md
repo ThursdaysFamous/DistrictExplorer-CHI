@@ -1076,6 +1076,23 @@ taught them.
   on your branch and read the log — that is the only measurement that predicts the
   weekly run. Note the scoring is per-HOST: dekalbcounty.org challenges while the
   clerk's own dekalbcountyclerkil.gov, which serves the yearbook PDF, never did.
+- **…and "measured from CI" means SAMPLED from CI. One run is not a measurement, and
+  neither is three.** DeKalb was dispatched four times on one commit. Runs A, B and C
+  were refused on every rung — B under a real Chromium that held 24s on the
+  interstitial — which is about as convincing as a negative result gets, and the
+  conclusion drawn from it ("blocked from CI, give it the McHenry posture") went into a
+  commit message, a docstring, the source registry and a public issue comment. Run D was
+  then carried by plain `requests` on its FIRST try in 0.9s. Nothing had changed but the
+  runner's address. **A reputation-scored edge has no per-CI verdict at all**, because CI
+  is not one caller: GitHub draws runners from a pool and the edge scores each address
+  separately. The honest artifact is a rate with its sample size, not a verdict — and
+  three consecutive failures are exactly the evidence shape that feels conclusive and
+  is not. Re-run until you see the other outcome or can say how hard you looked for it.
+  The practical upside: this makes `continue-on-error` + a standing issue the right
+  posture for a better reason than "the source is gone" — a job that fails on address
+  luck should not go red, and the weekly cadence self-heals when the next draw lands
+  differently. Reserve the terminal McHenry/Kendall posture for sources that refuse
+  every caller, which is a claim you can only make after sampling several.
 - **A bug in the prober reads exactly like a block, and it is the more likely of the
   two.** The CI run meant to answer "does a real browser clear this edge" instead
   printed `Page.content: Unable to retrieve content because the page is navigating` —
