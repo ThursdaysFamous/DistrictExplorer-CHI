@@ -31,6 +31,19 @@ the caller nothing, which is exactly how the five builders were repaired. This
 gate is what keeps them that way, and what stops the next roster builder from
 reaching for a heavy module at the top of a file.
 
+WHAT IT DOES NOT CATCH, stated plainly so nobody over-trusts a green line. It is
+a static import check, not a run:
+
+  * A dependency needed at RUNTIME by a function-local import. Skipping those is
+    deliberate — the repair above turned five hard failures into lazy imports —
+    but it means a genuinely missing package inside a function still fails only
+    when that path executes. Dispatching the workflow remains the real proof.
+  * Imports built at runtime (importlib with a computed name, __import__).
+  * Anything past the import: a missing binary, a bad token, a blocked source.
+
+So this closes the specific hole that let five refreshes ship broken; it does not
+make dispatching a new workflow optional (EXPANSION_GUIDE §2.5.1).
+
 Stdlib only, so it runs in smoke-test.yml before any dependency is installed.
 
 Usage:
@@ -115,27 +128,49 @@ def normalize(spec):
     return IMPORT_NAME.get(name, name.replace("-", "_"))
 
 
-def module_scope_imports(path):
-    """Top-level imports only — a function-local import is lazy by design."""
+def module_scope_imports(path, include_local=False):
+    """Imports a module costs its importer.
+
+    Module scope by default: a function-local import is lazy, and costs an
+    importer nothing. But for the ENTRY POINT — the .py the workflow actually
+    executes — its own functions do run, so `include_local` folds those in too.
+    That distinction is the whole difference between the two failures found on
+    2026-08-02: the roster builders import a districts MODULE for a constant and
+    must not pay for its geometry (lazy is correct), while Mason's watcher RUNS
+    build_mason_board_districts.py --check, whose main() needs shapely for real
+    and whose workflow installed only requests.
+    """
     with open(path, encoding="utf-8") as f:
         tree = ast.parse(f.read(), filename=path)
     mods = set()
-    for node in tree.body:                   # body, not walk: module scope only
+    nodes = ast.walk(tree) if include_local else tree.body
+    for node in nodes:
         if isinstance(node, ast.Import):
             mods.update(a.name.split(".")[0] for a in node.names)
         elif isinstance(node, ast.ImportFrom):
             if node.level == 0 and node.module:
                 mods.add(node.module.split(".")[0])
-        elif isinstance(node, (ast.If, ast.Try)):
-            # `try: import pypdf / except ImportError:` is a declared-optional
-            # dependency, and `if TYPE_CHECKING:` never runs. Neither is a hard
-            # requirement, so neither is checked.
-            continue
+    if include_local:
+        # `try: import pypdf / except ImportError:` is a declared-optional
+        # dependency and `if TYPE_CHECKING:` never runs, so neither is a hard
+        # requirement. ast.walk() would have swept both in.
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Try, ast.If)):
+                for sub in ast.walk(node):
+                    if isinstance(sub, ast.Import):
+                        mods -= {a.name.split(".")[0] for a in sub.names}
+                    elif isinstance(sub, ast.ImportFrom) and sub.module:
+                        mods.discard(sub.module.split(".")[0])
     return mods
 
 
 def closure(entry):
-    """Every scripts/ module reachable from entry via module-scope imports."""
+    """Every scripts/ module reachable from entry via module-scope imports.
+
+    The entry point is read with its function-local imports included, because
+    running a script runs its functions; everything it merely imports is read at
+    module scope only.
+    """
     seen, stack, third_party = set(), [entry], set()
     while stack:
         name = stack.pop()
@@ -145,7 +180,7 @@ def closure(entry):
         path = os.path.join(SCRIPTS_DIR, name + ".py")
         if not os.path.exists(path):
             continue
-        for mod in module_scope_imports(path):
+        for mod in module_scope_imports(path, include_local=(name == entry)):
             if mod in sys.stdlib_module_names or mod in ALWAYS_AVAILABLE:
                 continue
             if os.path.exists(os.path.join(SCRIPTS_DIR, mod + ".py")):
@@ -180,10 +215,13 @@ def main():
             checked += 1
             if missing:
                 via = sorted(m for m in reached if m != entry)
-                fail("%s runs %s, whose module-scope imports need %s — not "
-                     "installed by that workflow. Import closure: %s. Either "
-                     "add the package to the workflow's pip line, or (usually "
-                     "right) move the import inside the function that uses it."
+                fail("%s runs %s, which needs %s — not installed by that "
+                     "workflow. Import closure: %s. Two different fixes: if the "
+                     "module needs it to RUN, add the package to that "
+                     "workflow's pip line; if it is only pulled in because some "
+                     "module in the closure imports it at module scope for a "
+                     "constant, move that import inside the function that uses "
+                     "it instead."
                      % (fname, rel, ", ".join(missing),
                         ", ".join(via) or "(no local imports)"))
 
