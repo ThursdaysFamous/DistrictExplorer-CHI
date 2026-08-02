@@ -160,6 +160,15 @@ GEOMETRY_FILES = {
     "mercer-county-outline.json": (1, 1),  # Mercer County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so mercer-county-board-districts attaches to its ground.
     "peoria-county-outline.json": (1, 1),  # Peoria County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "tazewell-county-outline.json": (1, 1),  # Tazewell County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "christian-county-outline.json": (1, 1),  # Gap-location outline for Christian County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "clinton-county-outline.json": (1, 1),  # Gap-location outline for Clinton County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "fayette-county-outline.json": (1, 1),  # Gap-location outline for Fayette County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "ford-county-outline.json": (1, 1),  # Gap-location outline for Ford County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "knox-county-outline.json": (1, 1),  # Gap-location outline for Knox County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "macon-county-outline.json": (1, 1),  # Gap-location outline for Macon County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "menard-county-outline.json": (1, 1),  # Gap-location outline for Menard County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "montgomery-county-outline.json": (1, 1),  # Gap-location outline for Montgomery County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "stark-county-outline.json": (1, 1),  # Gap-location outline for Stark County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -210,6 +219,15 @@ DYNAMIC_REFERENCE = frozenset({
     "jo-daviess-county-outline.json",
     "bureau-county-outline.json",
     "mercer-county-outline.json",
+    "christian-county-outline.json",
+    "clinton-county-outline.json",
+    "fayette-county-outline.json",
+    "ford-county-outline.json",
+    "knox-county-outline.json",
+    "macon-county-outline.json",
+    "menard-county-outline.json",
+    "montgomery-county-outline.json",
+    "stark-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 

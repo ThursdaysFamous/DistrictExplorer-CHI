@@ -871,6 +871,123 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any machine-readable council roster joliet.gov permits (JSON/CSV/RSS); until then the browser-rung scrape plus Archive fallback remains the refresh path."
     },
     {
+      "id": "knox-county-board-districts",
+      "concept": "County board districts",
+      "area": "Knox County",
+      "counties": [
+        "knox"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Knox County's whole web estate sits behind a challenge, and only the Galesburg half of its 5 board districts exists as vector geometry.",
+      "blocker": "Measured 2026-08-02 in the pass-7 frontier sweep: knoxcountyil.gov (and the legacy co.knox.il.us, which redirects into the same front) answers EVERY path with a Cloudflare managed challenge, including the county_board_members.php page that lists all 15 members with district, term and contact. The only vector board geometry published anywhere is on the CITY OF GALESBURG's ArcGIS org — districts 1-3, the three that coincide with the city, adopted by the County Board 2021-10-27 per the item's own description. Districts 4 and 5, the rural remainder, appear in no vector source found; the ISBE mirror's countywide PDF is provably 2011-vintage content, before the 2021 redistricting.",
+      "wanted": "The 2021-adopted COUNTYWIDE board map in any vector form (it is most likely inside the 2021-10-27 board packet), plus any machine-readable roster the county permits — a JSON/CSV feed, or simply a mirror its challenge does not front."
+    },
+    {
+      "id": "christian-county-board-districts",
+      "concept": "County board districts",
+      "area": "Christian County",
+      "counties": [
+        "christian"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Christian County's current board map is a raster — and the vector PDF sitting beside it on the same page is the PREVIOUS decade's plan.",
+      "blocker": "Measured 2026-08-02: County-Board-Districts-2022.pdf has zero fonts and no text layer, and the ISBE mirror holds the adopted plan only as an OCR scan. The vector-but-obsolete trap is the reason this entry names both files: County-Board-Districts-with-Rep.pdf IS text-extractable but prints 2010-census populations (8,107/8,713/8,350/9,630), so it is the pre-2021 map and using it would draw superseded lines. The county owns an AGOL org but publishes only assessment layers on it (8 services, fully enumerated). The roster half is missing too: the county site names only the Chairman and Vice-Chairman, not the 16 members or their districts.",
+      "wanted": "The 2021-adopted 4 districts as vector geometry or a labeled polygon layer, plus a member roster with district assignments. The county's own AGOL org would carry both."
+    },
+    {
+      "id": "menard-commissioner-districts",
+      "concept": "County board districts",
+      "area": "Menard County",
+      "counties": [
+        "menard"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Menard's 5 commissioner districts are drawn only on a raster map, and their lines follow section-line roads rather than precinct edges — so no composition route exists.",
+      "blocker": "Measured 2026-08-02: the only map is the ISBE mirror's Menard County Commissioner Map.pdf, dated 12/08/2021 (post-census, with district populations 2,436-2,486 printed on it) and flattened to a single image. The boundaries do NOT read as unions of the county's 14 precincts, which rules out the Ogle/Grundy/Cass composition-dissolve route that rescued other countys' geometry. The county runs no GIS — its viewer is a Beacon/Schneider product with no REST — and Sangamon's 203-service org next door carries zero Menard services (confirmed absent, not merely unfound). The roster is fine: all 5 commissioners with @menardcountyil.gov e-mails and phones.",
+      "wanted": "Machine-readable commissioner-district geometry, or the adoption ordinance's legal descriptions from the ~Dec 2021 board minutes. TIGER's 2020 voting districts already match the county's 14 precinct names 14/14, so precincts would ship the day the district lines could be tied to them."
+    },
+    {
+      "id": "macon-county-board-labels",
+      "concept": "County board districts",
+      "area": "Macon County",
+      "counties": [
+        "macon"
+      ],
+      "kind": "data-quality",
+      "layer": "county-board",
+      "summary": "Macon publishes correct post-2022 board geometry with every attribute NULL — the five polygons exist but nothing says which district each one is.",
+      "blocker": "Measured 2026-08-02: the county's ElectionGeography_public layer 2 carries exactly 5 polygons created 2022-09-14 (so, the adopted post-redistricting map) and electedoffice, district, districtid, repname1-3, party, phone and email are null on ALL of them. The county's other board webmap holds only draft precinct-composition plans and the SUPERSEDED 7-district CountyBoard2020 layer. The roster is published and plain-fetchable (15 members, party+district codes like 'R-4', phones, term expiry), and the county's 64 precincts and its fire (17) / library (10) / park (6) tilings are build-ready today — this one labeling gap is all that blocks the board.",
+      "wanted": "District numbers on the five polygons — a labeled clerk map, the adopted redistricting ordinance, or simply populating the layer's own district field."
+    },
+    {
+      "id": "montgomery-county-board-geometry",
+      "concept": "County board districts",
+      "area": "Montgomery County",
+      "counties": [
+        "montgomery"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Montgomery has the best board ROSTER of the pass-7 frontier and no polygon geometry at all — and its districts split precincts, so no dissolve can reproduce them.",
+      "blocker": "Measured 2026-08-02: the county publishes a text-extractable vector PDF map of its 7 districts plus a pure-text composition chart, and a roster PDF (revised 12/2024) carrying party, district, term flags and full composition for all 14 members. But the composition splits precincts at SUB-precinct level — 'N 1/2 & NW of Butler Grove Twp', 'NE Territory E of I-55 of North Litchfield #1 Precinct' — so the township/VTD dissolve that built Ogle, Woodford, Henry and Cass cannot be exact here. The county AGOL org carries cemeteries, tornado history, TIF/EZ and school districts only; parcels are on Schneider Beacon, which hard-403s.",
+      "wanted": "A published board-district polygon layer, or precinct geometry the sub-precinct splits could be cut against. Short of either, a georeference of the county's vector-PDF map (the Stephenson route) is the recorded fallback."
+    },
+    {
+      "id": "clinton-county-board-geometry",
+      "concept": "County board districts",
+      "area": "Clinton County",
+      "counties": [
+        "clinton"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Clinton's precincts are current and published; its 5 board districts are drawn only on a PDF.",
+      "blocker": "Measured 2026-08-02: the county's Sidwell-managed AGOL org publishes 28 services including a 34-feature precinct fabric (created 2026-04, matching the clerk's own 34-precinct polling table exactly) and a 15-feature township layer — but NO board-district service, confirmed by enumerating all 28. The districts exist as NEW-2022-Clinton-County-Board-Districts.pdf, a text-extractable vector print drawn over the 15 townships, and the roster page carries all 15 members with phone, e-mail and term (no party).",
+      "wanted": "A board-district polygon layer on the county's org — the townships and precincts it would be built from are already there — or the shapefile behind the 2022 PDF."
+    },
+    {
+      "id": "fayette-county-board-geometry",
+      "concept": "County board districts",
+      "area": "Fayette County",
+      "counties": [
+        "fayette"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Fayette's ArcMap-authored district map proves the shapefiles exist; the county publishes the print instead.",
+      "blocker": "Measured 2026-08-02: County-Board-District-Map-Effective-2022.pdf is an ArcMap 10.8.1 export whose text extracts cleanly and which draws BOTH the 7 board districts and 28 named precincts — so a GIS holds both layers. Neither appears among the 34 public services on the county's Sidwell-hosted AGOL org (fully enumerated), and the ISBE mirror carries only 2014 scanner rasters. One caveat on the PDF itself: its cartouche reads '2020 ... District & Precinct Map' though it is filed as 'Effective 2022'. The roster is the frontier's most complete: all 14 members with party (12R/2D) and term expirations.",
+      "wanted": "The board-district and precinct shapefiles behind the county's own map export, from the county or its GIS vendor."
+    },
+    {
+      "id": "ford-county-board-vintage",
+      "concept": "County board districts",
+      "area": "Ford County",
+      "counties": [
+        "ford"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Ford's districts are published as township composition with one SHARED precinct, and the only map's vintage cannot be established.",
+      "blocker": "Measured 2026-08-02: the board page prints each district's township composition (D1 3 members, D2 4, D3 4 — an unequal-membership board), but Patton 3 appears in BOTH District 1 and District 3, so it is a precinct split and TIGER township polygons alone cannot reconstruct the lines. The one map, on the ISBE mirror, is titled '2011 County Board Districts' while its Last-Modified is 2021-11-09 — either a 2021 re-upload of the old plan or a mis-titled new one, and nothing published resolves which. No county GIS exists: the assessor's viewer is a Bruce Harris parcel product, and an AGOL search returns zero Ford election items. The roster (names, district, phone, county e-mails) is plain-fetchable.",
+      "wanted": "Confirmation of which plan currently governs, plus precinct geometry (or the Patton 3 split's description) — the composition text is otherwise ready to dissolve."
+    },
+    {
+      "id": "stark-county-board-vintage",
+      "concept": "County board districts",
+      "area": "Stark County",
+      "counties": [
+        "stark"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Stark publishes ALL its geography as vector — in a Google My Maps — but at a vintage that predates the 2021 reapportionment and cannot be checked.",
+      "blocker": "Found 2026-08-02 by following the ISBE mirror's pointer file, which contains nothing but a My Maps link: its KML export works and carries 51 placemarks — 2 county board districts, 9 precincts, plus fire (6), school (4), library (6) and park (2) polygons, an unusually complete set for a county of 5,300. The blocker is vintage: the ISBE pointer and companion PDFs date to 2020-08, BEFORE the late-2021 reapportionment, and the county's online minutes archive begins 2022-07, so the adopting resolution is not published anywhere reachable. The 2x4 district structure does match the current 8-member roster, which the county publishes with per-seat e-mail aliases and term ends.",
+      "wanted": "The 2021 reapportionment ordinance or a re-export of the My Maps at current vintage — either would ship the board, the precincts and three special-district tilings at once."
+    },
+    {
       "id": "lasalle-board-districts-stale",
       "concept": "County board districts",
       "area": "LaSalle County",

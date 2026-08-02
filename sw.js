@@ -115,6 +115,15 @@ const GEOMETRY_URLS = [
   "./data/app/mercer-county-outline.json",
   "./data/app/peoria-county-outline.json",
   "./data/app/tazewell-county-outline.json",
+  "./data/app/christian-county-outline.json",
+  "./data/app/clinton-county-outline.json",
+  "./data/app/fayette-county-outline.json",
+  "./data/app/ford-county-outline.json",
+  "./data/app/knox-county-outline.json",
+  "./data/app/macon-county-outline.json",
+  "./data/app/menard-county-outline.json",
+  "./data/app/montgomery-county-outline.json",
+  "./data/app/stark-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI

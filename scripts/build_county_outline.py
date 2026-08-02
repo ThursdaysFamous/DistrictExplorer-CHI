@@ -580,6 +580,167 @@ COUNTIES = {
             (40.5570, -90.0393, "Canton — Fulton County"),
         ],
     },
+    # ---- Gap-location outlines, pass-7 frontier (2026-08-02) ----------------
+    # Same purpose as the three above, for the nine counties the pass-7 sweep
+    # measured as BLOCKED or partial and which no planned tranche will serve:
+    # each carries a recorded gap naming exactly what its publisher would have
+    # to release, and without an outline that gap cannot attach to its ground.
+    # Anchors here were DERIVED, not recalled: a script read TIGERweb's own
+    # Incorporated Places centroids inside each county (and inside each
+    # neighbour, for the outside set) and round-tripped every coordinate
+    # through a point-in-county query before it was written down.
+    "christian": {
+        "fips": "021",
+        "name": "Christian County",
+        "inside": [
+            (39.5180, -89.0477, "Assumption"),
+            (39.5919, -89.4258, "Bulpitt"),
+            (39.6579, -89.3901, "Edinburg"),
+            (39.5792, -89.4081, "Jeisyville"),
+            (39.5868, -89.4165, "Kincaid"),
+        ],
+        "outside": [
+            (39.2492, -88.8594, "Cowden — Shelby County"),
+            (39.5763, -89.7440, "Auburn — Sangamon County"),
+            (39.1975, -89.5322, "Butler — Montgomery County"),
+            (39.9855, -88.8197, "Argenta — Macon County"),
+        ],
+    },
+    "clinton": {
+        "fips": "027",
+        "name": "Clinton County",
+        "inside": [
+            (38.5434, -89.6172, "Albers"),
+            (38.6162, -89.6088, "Aviston"),
+            (38.5383, -89.4616, "Bartelso"),
+            (38.6058, -89.4331, "Beckemeyer"),
+            (38.6139, -89.5232, "Breese"),
+        ],
+        "outside": [
+            (39.1122, -89.2137, "Bingham — Fayette County"),
+            (38.8866, -89.3895, "Greenville — Bond County"),
+            (38.7229, -88.9117, "Alma — Marion County"),
+            (38.5165, -89.9900, "Belleville — St. Clair County"),
+        ],
+    },
+    "fayette": {
+        "fips": "051",
+        "name": "Fayette County",
+        "inside": [
+            (39.1122, -89.2137, "Bingham"),
+            (38.9942, -88.9553, "Brownstown"),
+            (38.8301, -88.7796, "Farina"),
+            (39.1457, -89.1103, "Ramsey"),
+            (39.0211, -88.8507, "St. Elmo"),
+        ],
+        "outside": [
+            (38.6858, -88.3486, "Clay City — Clay County"),
+            (39.2492, -88.8594, "Cowden — Shelby County"),
+            (38.8866, -89.3895, "Greenville — Bond County"),
+            (39.0561, -88.7478, "Altamont — Effingham County"),
+        ],
+    },
+    "ford": {
+        "fips": "053",
+        "name": "Ford County",
+        "inside": [
+            (40.4662, -88.2769, "Elliott"),
+            (40.4664, -88.3788, "Gibson City"),
+            (40.9355, -88.2363, "Kempton"),
+            (40.5710, -88.2470, "Melvin"),
+            (40.4563, -88.1020, "Paxton"),
+        ],
+        "outside": [
+            (40.8783, -87.9532, "Ashkum — Iroquois County"),
+            (41.0788, -87.8012, "Aroma Park — Kankakee County"),
+            (40.1115, -88.3683, "Bondville — Champaign County"),
+            (40.5681, -88.5385, "Anchor — McLean County"),
+        ],
+    },
+    "knox": {
+        "fips": "095",
+        "name": "Knox County",
+        "inside": [
+            (40.8038, -90.4009, "Abingdon"),
+            (41.1151, -90.1648, "Altona"),
+            (40.9428, -90.3109, "East Galesburg"),
+            (40.9505, -90.3762, "Galesburg"),
+            (41.0239, -90.3536, "Henderson"),
+        ],
+        "outside": [
+            (41.1988, -90.7460, "Aledo — Mercer County"),
+            (41.0629, -90.5554, "Alexis — Warren County"),
+            (40.2279, -90.3565, "Astoria — Fulton County"),
+            (41.1917, -90.3805, "Alpha — Henry County"),
+        ],
+    },
+    "macon": {
+        "fips": "115",
+        "name": "Macon County",
+        "inside": [
+            (39.9855, -88.8197, "Argenta"),
+            (39.7006, -89.1185, "Blue Mound"),
+            (39.8557, -88.9345, "Decatur"),
+            (39.9261, -88.9641, "Forsyth"),
+            (39.8429, -89.0598, "Harristown"),
+        ],
+        "outside": [
+            (39.7993, -88.4627, "Atwood — Piatt County"),
+            (39.2492, -88.8594, "Cowden — Shelby County"),
+            (40.2638, -89.2309, "Atlanta — Logan County"),
+            (39.5763, -89.7440, "Auburn — Sangamon County"),
+        ],
+    },
+    "menard": {
+        "fips": "129",
+        "name": "Menard County",
+        "inside": [
+            (39.9619, -89.7216, "Athens"),
+            (40.0849, -89.7405, "Greenview"),
+            (40.1009, -89.9653, "Oakford"),
+            (40.0143, -89.8453, "Petersburg"),
+            (39.9457, -89.9366, "Tallula"),
+        ],
+        "outside": [
+            (40.2638, -89.2309, "Atlanta — Logan County"),
+            (39.5763, -89.7440, "Auburn — Sangamon County"),
+            (40.1905, -90.1425, "Bath — Mason County"),
+            (39.8805, -90.3705, "Arenzville — Cass County"),
+        ],
+    },
+    "montgomery": {
+        "fips": "135",
+        "name": "Montgomery County",
+        "inside": [
+            (39.1975, -89.5322, "Butler"),
+            (39.2841, -89.3029, "Coalton"),
+            (39.0882, -89.3898, "Coffeen"),
+            (39.0305, -89.4756, "Donnellson"),
+            (39.4407, -89.6525, "Farmersville"),
+        ],
+        "outside": [
+            (39.2492, -88.8594, "Cowden — Shelby County"),
+            (39.1122, -89.2137, "Bingham — Fayette County"),
+            (39.0930, -89.8023, "Benld — Macoupin County"),
+            (39.5763, -89.7440, "Auburn — Sangamon County"),
+        ],
+    },
+    "stark": {
+        "fips": "175",
+        "name": "Stark County",
+        "inside": [
+            (41.1772, -89.6582, "Bradford"),
+            (41.1096, -89.9735, "La Fayette"),
+            (41.0934, -89.8632, "Toulon"),
+            (41.0638, -89.7729, "Wyoming"),
+        ],
+        "outside": [
+            (41.4718, -89.2478, "Arlington — Bureau County"),
+            (40.8038, -90.4009, "Abingdon — Knox County"),
+            (41.1173, -89.3569, "Henry — Marshall County"),
+            (41.1917, -90.3805, "Alpha — Henry County"),
+        ],
+    },
 }
 
 
