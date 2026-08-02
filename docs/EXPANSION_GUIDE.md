@@ -1129,6 +1129,30 @@ taught them.
   imports through `scripts/` and fails on any third-party module the workflow does not
   install. It is stdlib-only so it runs before any dependency exists, and it treats
   function-local and `try:`-guarded imports as lazy by design.
+- **A count floor that counts NAMES cannot tell a vacancy from a regression — count
+  SEATS.** Lee's weekly refresh failed its first-ever run with `19 members < floor 20`,
+  and the floor was right: the county's roster PDF has a literal gap where the
+  twentieth row belongs — District 3's rows run y=320.9, y=339.1, then jump to
+  y=375.3, and at y=357.6 sits a single cell reading "3" with no name, party, term or
+  address. A vacant seat, printed as one. The tempting fixes are both wrong: lowering
+  the floor to 19 blinds it to the parse regression it exists to catch (which is
+  exactly what tripped it before — a name set 3pt low, lost to a fixed row band), and
+  dropping the row ships "19 members" when the truth is "19 members and a vacancy" —
+  a different claim about the board, since the county apportioned five seats to that
+  district and one is unfilled. Record the nameless row as a vacancy, count seats
+  (named + vacant) against the floor, and attach `vacancies` to the district:
+  **counted, never named**, the Livingston/Stephenson posture the engine already
+  renders. Any county whose source prints a seat it cannot fill will hit this, so
+  reach for it before touching the floor.
+- **A source that throttles is not a source that blocks, and needs the opposite
+  response.** Henry's first run died on `429 Too Many Requests` against the second of
+  its two district listings, fetched a fraction of a second after the first. Nothing
+  is blocking: the county answers a bare client fine and simply asks to be paced, but
+  the scraper had no retry at all, so one 429 killed the week. Back off and retry,
+  honour a numeric `Retry-After` (cap it — an unbounded value from a server is a way
+  to hang CI), pace multi-page fetches apart, and do NOT retry 401/403/404: a moved
+  directory is not fixed by waiting, and burning five attempts on it turns a clear
+  error into a slow one.
 - **Register a roster's own source URL, not just its geometry's.** DeKalb's board
   districts were in `validate_sources.py` (an ArcGIS endpoint, always fine) while the
   members page the card's names actually come from was not, so the monthly check
