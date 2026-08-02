@@ -36,6 +36,10 @@ pipelines, gates, engine releases — documented once in **Part 6**.
 2. **The expansion invariant** (Part 1): expanding coverage changes **which dispatch
    entries and roster rows exist — never which layers exist.** A new toggle is justified
    only by a governance function no current concept covers, and it launches consolidated.
+   Note the "or" in that sentence is real: some counties add **roster rows only**. An
+   at-large county has no district geometry to dispatch on, so it ships with no dispatch
+   entry, no coverage function and no toggle — the four counties of tranche 5 are served
+   entirely through the County card (§2.5.1).
 3. **The at-large rule**: a body elected by the whole unit adds zero point-discrimination —
    it rides the unit's identity card, never a polygon layer.
 4. **Officeholder sourcing ships with the boundary** (rule 4, Part 2.3) — decided and
@@ -135,7 +139,10 @@ concept, different election geometry, zero new layers. Worked example:
 
 - **Commission-county boards** (17 downstate counties elect 3 commissioners county-wide;
   some township counties elect boards at-large): at-large → `county`-card roster rows, no
-  polygon, no toggle change. Decide districted-vs-at-large per county at expansion.
+  polygon, no toggle change. Decide districted-vs-at-large per county at expansion — and
+  decide it from a CERTIFIED ELECTION DOCUMENT, never from a board page that happens not
+  to mention districts (§2.5.1). Six counties ship this way as of 2026-08-02: Monroe and
+  Randolph (commission form, 3 each), Pike 9, Brown 7, Calhoun 5, Putnam 5.
 - **School governance:** every IL district board except Chicago's ERSB is elected
   whole-district → Pattern A enrichment on the `school-district-*` cards; attendance zones
   are per-district opt-ins; a new county changes nothing in the schools group.
@@ -796,10 +803,13 @@ suburbs join as further `ward` entries when a polygon source appears.
    already thought to name it; LaSalle, Kankakee, Boone and Grundy each shipped layers
    and stayed washed out for two research passes with nothing failing.
 2. `county-board`: districted → dispatch entry + officeholder story; **at-large →
-   county-card roster rows** (§1.5). Decide and record which. The at-large path is
+   county-card roster rows** (§1.5). Decide and record which, from a certified election
+   document rather than from the board page's silence (§2.5.1). The at-large path is
    implemented: add a `SITES` entry + parser to `scripts/il_county_commissioners_scraper.py`
-   so the county lands in `data/app/il-county-commissioners.json`, which the COUNTY card
-   already reads — no dispatch entry, no toggle (§2.5.1, Monroe/Randolph precedent). If
+   and a seat count to `EXPECT_MEMBERS` in `build_county_commissioners.py`, so the county
+   lands in `data/app/il-county-commissioners.json`, which the COUNTY card already reads —
+   no dispatch entry, no toggle (§2.5.1; Monroe/Randolph are the reference pair, the
+   tranche-5 four the larger case). If
    the board IS districted but the county publishes no boundary, check whether it
    publishes a COMPOSITION (whole townships or whole precincts) and derive from that, with
    the §2.5.1 drift check wired if the composition lives on an HTML page.
@@ -856,18 +866,32 @@ taught them.
 
 - **An AT-LARGE board is county-card rows, and the mechanism now exists — use it.** §1.5
   called this shape long before anything implemented it. Monroe and Randolph (2026-08-02)
-  are the reference: both elect three commissioners countywide, so there is no geometry
-  for `county-board` to join and inventing a district would misstate how the county
-  elects. Their members ride the COUNTY card via `data/app/il-county-commissioners.json`,
+  are the reference pair and Pike, Brown, Calhoun and Putnam (also 2026-08-02) the larger
+  case: every one elects its board countywide, so there is no geometry for `county-board`
+  to join and inventing a district would misstate how the county elects. Their members ride the COUNTY card via `data/app/il-county-commissioners.json`,
   keyed **exactly like `il-county-clerks.json`** (uppercase letters only) so the card
   performs one lookup shape for both rosters. Adding such a county is: a `SITES` entry
   plus a parser in `il_county_commissioners_scraper.py`, and nothing else — no dispatch
   entry, no toggle, no coverage function, no new fetch in the app. The county card grows a
   "County Board" section only for counties that appear in the roster, so a districted
-  county's card is untouched (assert this against Cook when you add one). Two knock-ons to
-  remember: such a county's PRECINCT card must NOT carry a County Board District row
-  (there isn't one), and the county still needs its coverage outline and
-  `DISPATCH_COUNTY_FIPS` entry if any other layer answers there.
+  county's card is untouched (assert this against Cook when you add one). Three knock-ons
+  to remember:
+    - such a county's PRECINCT card must NOT carry a County Board District row (there
+      isn't one);
+    - it still needs its **coverage outline**, a **`METRO_COUNTY_FIPS`** entry and an
+      **INSIDE anchor**, because a county-specific layer does answer there — the County
+      card. The outline ships flagged `dynamic_reference: true`, since index.html names no
+      loader for it (the gaps panel fetches it by slug);
+    - **CORRECTION, 2026-08-02.** This bullet used to end "and the county still needs its
+      `DISPATCH_COUNTY_FIPS` entry if any other layer answers there." Read the condition
+      carefully: add the county there **only if it really does register a dispatch entry**.
+      Monroe and Randolph do (precincts, fire), which is what made the old wording look
+      safe; Pike, Brown, Calhoun and Putnam do not, and adding them would be wrong.
+      **Nothing would catch it** — `validate_index.py`'s coverage-ring check derives its
+      county set from the dispatch tables index.html actually registers, so a
+      `DISPATCH_COUNTY_FIPS` row with no dispatch entry behind it passes silently
+      (verified by adding one and re-running the gate). The list would simply start lying
+      about what is dispatched.
 
 - **A board whose districts elect DIFFERENT numbers of members balances per MEMBER, not
   per district — check the wrong one and you will reject a correct build.** Cass

@@ -4,9 +4,11 @@ Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
 Builds data/app/metro-outline.json — the dissolved outline of the counties the
 app actually serves — from Census TIGERweb. "Serves" means at least one
-county-specific layer answers there, which as of 2026-07-30 is 24 counties: the
-19 with their own dispatch entries, plus the five secondary counties of shipped
-judicial circuits. It is deliberately ONE connected region: a county joins only
+county-specific layer answers there, which as of 2026-08-02 is 47 counties: the
+38 with their own dispatch entries, the five secondary counties of shipped
+judicial circuits, and the four AT-LARGE counties whose only county-specific
+answer is the County card's board section (they have no dispatch entry at all —
+see DISPATCH_COUNTY_FIPS below, which they deliberately do NOT appear in). It is deliberately ONE connected region: a county joins only
 once it touches the ones already served.
 
 THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.

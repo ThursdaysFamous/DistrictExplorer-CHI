@@ -1459,7 +1459,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > | **The pass-7 build-ready ledger** (RESEARCH PASS 7, below) — ~~Peoria + Tazewell~~ **SHIPPED** (29th/30th), ~~Iroquois + Monroe + Randolph~~ **SHIPPED** (31st-33rd, the at-large posture's debut), ~~De Witt~~ **SHIPPED** (34th), ~~Washington~~ **SHIPPED** (35th), ~~Cass~~ **SHIPPED** (36th), ~~Marshall~~ **SHIPPED** (37th), ~~Mason~~ **SHIPPED** (38th) — the derivation tier is COMPLETE. ~~Pike + Putnam + Brown + Calhoun~~ **SHIPPED** (the at-large tier — served through the County card, no dispatch entries). **Champaign + Piatt WITHDRAWN — licensed, not open** (see the tranche-2 entry). STILL OPEN: nothing from pass 7 — the ledger is CLEARED | nothing for the open tiers — every source measured live 2026-08-02 | **yes — the live work queue** |
 > | **The pass-6 build-ready ledger** — ~~8 counties' municipal-officials sources~~ **SHIPPED 2026-08-01** (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island — the roster grew 360 → 492 municipalities; McLean's county-wide Airtable route stays open, see its row); ~~4 precinct counties + 3 polling/naming joins~~ **SHIPPED 2026-08-02**; ~~Woodford's board~~ shipped with the county 2026-08-02; ~~3 board-geometry builds~~ **ALL SHIPPED 2026-08-02** (Boone + Grundy + Henry — Henry as the twenty-eighth county), ~~the Logan board roster scraper~~ (SHIPPED 2026-08-02), still open: Aurora per-seat contact (re-measured 2026-08-02: Akamai 403s every rung reachable from CI — see its ledger row), ~~2 fire tilings~~ **SHIPPED 2026-08-02** (Sangamon 29 FPDs + St. Clair 44, each with its recorded caveat on the card), ~~Stephenson fire~~ **SHIPPED 2026-08-02** (georeferenced; its park/library maps measured RASTER-baked — see the new gap), ~~the verified city ward layers~~ **SHIPPED 2026-08-02** (22 cities across 13 sources; Lake Forest + 4 DuPage cities still to chase — see the ward ledger) | nothing — every source verified live 2026-07-31 | done — Aurora per-seat contact is the one open remainder |
 > | ~~**Woodford County**~~ **SHIPPED 2026-08-02 — the twenty-seventh dispatched county**: board (3 DERIVED districts per Ord 2020/21 #005 + 15-member weekly roster with phones and e-mails) and precincts (TCRPC, 37, polling 37/37); its fire/park/library absences were already recorded (woodford-special-districts) | — | done |
-> | The 59 no-source + 5 blocked gap entries — 78 in all as of 2026-08-02 (fire/park/library tilings in a dozen counties, precinct geometry in four, ward geometry in nine cities, three municipal-officials counties, and eleven frontier boards incl. the two Champaign-consortium counties whose data is sold rather than published) | publishers — each entry's `wanted` says exactly what | no — recorded, panel-visible |
+> | The 64 no-source + 5 blocked + 16 data-quality gap entries — **85 in all as of 2026-08-02** (fire/park/library tilings in a dozen counties, precinct geometry or polling assignments in seventeen counties and cities, ward geometry in nine cities, three municipal-officials counties, and the frontier boards incl. the two Champaign-consortium counties whose data is sold rather than published). Every entry was rewritten in plain language on 2026-08-02 for the reader who could actually close it | publishers — each entry's `wanted` says exactly what | no — recorded, panel-visible |
 > | McHenry / Kendall / Joliet | hard WAF denies (the two board directories now have verified 2026 Archive captures; McHenry's yearbook page and Kendall's municipal PDF still don't) | no — rule-4 terminal |
 > | DuPage municipal phones; Will's `party` field | unchanged (re-verified 2026-07-31); deliberate non-ship | no |
 >
@@ -1499,16 +1499,38 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   | Randolph (~30k) | **COMMISSION — 3 commissioners at-large** | none needed | `VotingPrecincts/FeatureServer/1` = **35** (layer id **1**, not 0; edited 2026-04; ISBE's 37 per-precinct vector PDFs corroborate names) | ESB_FIRE = 17 is response-zone semantics (the Winnebago/Logan caveat — not a taxing tiling); municipal wards 9; the old `am.randolphco.org` still serves a stale Joomla site while staff e-mails stay @randolphco.org |
   | De Witt (~16k) | 4 lettered districts (A-D) × 3 | **DERIVED**: the roster page prints the full official composition and it assigns ALL 23 precincts — dissolve the live precinct layer | `ElectionPrecincts_DeWittIL/FeatureServer/0` = **23** (Sidwell/Magnasoft org; schema is 2020-VTD but names match the county's current compositions verbatim) | roster has phone/e-mail/committees and NO party; the org's fire layer is 466 undissolved section-level slivers (needs dissolve if ever shipped) |
 
-  **At-large boards — cheap adds** (roster + county outline; the county-board concept's
-  first no-district posture — a dispatch-entry design, no engine change): **Pike** (~15k —
-  9 members with per-member e-mails; **pushes the served area's west edge to ≈ −91.5°**,
-  so the permalink-gate/metro-bbox widen will fire exactly as it did for Rock Island),
-  **Putnam** (~6k — 5 members, at-large structure proven by the certified 2026 specimen
-  ballot, not just the website), **Brown** (~6k — 7 members, unusually complete roster
-  with direct e-mails; `browncountyil.org` is a captcha-parked DECOY — the county lives at
-  browncoil.org), **Calhoun** (~4k — commission form, 5 commissioners; the `www` host is
-  required, the apex doesn't resolve). All four counties' precinct geometry is
-  raster-scan-only — recorded as gaps when the counties ship, not build items.
+  ~~**At-large boards — cheap adds**~~ **SHIPPED 2026-08-02 (tranche 5)** — Pike (~15k, 9
+  members), Brown (~6k, 7), Calhoun (~4k, 5) and Putnam (~6k, 5): 26 members on the County
+  card, no dispatch entries, no toggles, no engine change. What the build found beyond the
+  sweep:
+
+  - **The sweep's "at-large" call was under-evidenced and had to be re-proved.** It rested
+    on board pages that never say "district" — which proves nothing. Each county was
+    re-checked against a certified election document first: Pike's 2024 general summary
+    names the contest **"FOR COUNTY BOARD - AT LARGE"** across all 31 precincts, Brown's
+    2026 primary shows **"COUNTY BOARD MEMBER (VOTE FOR) 3"** countywide across all 14,
+    and Calhoun's 2026 ballot file reads **"CO.COMMISSIONER CWD"**. Putnam keeps the
+    sweep's specimen-ballot finding, now cited in the scraper. Rule recorded in
+    EXPANSION_GUIDE §2.5.1.
+  - **Putnam's board page links five member profiles; all five 404, and TWO point at a
+    member who has left the board** (a ", Vice-Chairman" fragment split off one row, and
+    another member's whole row). The visible text is correct and maintained; the hrefs are
+    not. Exactly inverted from St. Clair, where the caption is wrong and the URL right.
+  - **Brown marks one member's phone `mail:` where every other row has `tel:`** — reading
+    phones out of hrefs silently drops him. Brown also publishes all seven members' HOME
+    ADDRESSES; none is collected.
+  - **Calhoun prints the same number, 618-576-9700 ext. 2, under all five commissioners** —
+    a switchboard, not five direct lines, so it is hoisted to the board office row and
+    shown once (the Monroe posture). Calhoun is also the tier's only county with a term
+    fact ("Term: YYYY to Present"), rendered as "Serving since YYYY".
+  - **Pike's widen fired as predicted**: measured west edge −91.3701, so metro_bbox went
+    −91.15 → −91.55 and permalink_gate −91.25 → −91.65.
+  - **Domain traps confirmed live**: `browncountyil.org` is a captcha-parked DECOY (the
+    county is at browncoil.org); Calhoun needs the `www` host; and Putnam has MOVED to
+    **putnamil.gov** — the `co.putnam.il.us` host the sweep recorded as a dead legacy
+    domain now fails to resolve entirely.
+  - All four counties' precinct geometry is raster- or document-only, now recorded as four
+    gaps (`pike-`, `putnam-`, `brown-`, `calhoun-precinct-geometry`).
 
   **Partial — board derivable now, something else missing:** **Washington** (~14k — 3×5
   by WHOLE-township composition printed on the board page → TIGER dissolve, the Woodford
@@ -1560,8 +1582,14 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   (4) Dead legacy domains still alive in search indexes: tazewell.com, masoncountyil.org,
   casscountyil.org, piattcounty.org apex, co.putnam.il.us — and Macon's CURRENT domain
   200-stubs unknown paths. (5) Commission/at-large counties (Monroe, Randolph; Pike,
-  Putnam, Brown, Calhoun) debut the county-board concept's no-district posture: the
-  entry renders the member list on the county outline. (6) Regional orgs: TCRPC
+  Putnam, Brown, Calhoun) debut the county-board concept's no-district posture: the member
+  list renders on the COUNTY card. All six shipped 2026-08-02. The tranche-5 four went
+  further than the posture the sweep described — they have **no dispatch entry of any
+  kind**, the first counties served that way, so `METRO_COUNTY_FIPS` gains them while
+  `DISPATCH_COUNTY_FIPS` must NOT (and no gate would catch the mistake — see
+  EXPANSION_GUIDE §2.5.1). One correction to the sweep's own method: it inferred "at
+  large" from board pages that omit districts. That is not evidence; each was re-proved
+  from a certified election document before shipping. (6) Regional orgs: TCRPC
   (verified at 363 services) is GIS of record for Logan and Woodford ONLY — nothing
   usable for Peoria/Marshall/Stark/Putnam; CCGISC serves TWO frontier counties
   (Champaign + Piatt) through one integration; EWG's POD reaches only Monroe among the
@@ -1710,6 +1738,59 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   a line-anchored regex silently drops two members' phones; and the Chairman is announced
   as "Bill Merriman" while his member row reads "William (Bill) Merriman", so the
   parenthetical had to be treated as a name he is announced under rather than stripped.
+
+  **TRANCHE 4d/4e SHIPPED 2026-08-02 — Marshall (37th) and Mason (38th), the two
+  whole-township dissolves that close the derivation tier.** Marshall's composition and
+  roster are the SAME TABLE in the SAME PDF, which makes it the tightest weekly drift
+  check in the fleet: the county cannot publish a new roster under new districts without
+  the check seeing both at once. Three districts × four members partition all 12 townships
+  (5+4+3), balancing at 1.4%. Two parser findings: fixed-width row bins silently dropped a
+  member whose name (y=361.56) and title (y=362.02) straddled a bin edge — eleven members,
+  nothing failing — so rows are clustered by proximity instead; and a blanket
+  `.capitalize()` flattens McGlasson/McLaughlin, so only the Mc/Mac/O' families are
+  re-capitalized.
+
+  **Mason is the county that changed the method.** Its roster PDF is a SCAN carrying a
+  text layer, and that layer is the trap — it is encoded so extraction returns line noise
+  ("xRF# ISgH tlgP") and NEITHER pdfplumber NOR pdftotext errors. Noise that parses is
+  worse than no text: a scraper would ship confident garbage under real officeholders'
+  names. So the roster is hand-transcribed and a weekly WATCHER replaces the scrape,
+  checking the two things software still can — that the board page still links that exact
+  PDF (a WordPress replacement lands at a new upload path while the old URL serves the old
+  file forever) and that its bytes are unchanged. Its output is a request for a person,
+  not a diff. Mason also prints seven members' home addresses and an eighth row reading
+  "SECURED ADDRESS" — a legally protected address — so the county ships NO residence data
+  at all, not even the home town: a town-for-seven roster would single her out.
+
+  **Mason closed the served ring around MENARD**, giving `metro-outline.json` its first
+  interior HOLE (one ring → two). Both consumers were already even-odd —
+  `pointInPolygonRings` and Leaflet's fill under the wash — so the enclosed county
+  correctly reads as UNCOVERED, which is true: Menard cuts its districts along section-line
+  roads. The Mason card test asserts the hole directly, because one that silently inverted
+  would tell an unserved county's residents they were covered.
+
+  A defect found while cloning workflows, worth remembering: three roster workflows cloned
+  from Iroquois kept Iroquois's DOMAIN and its "4 districts, four members each" body while
+  scraping a different county — so a Washington roster PR would have asked a reviewer to
+  approve officeholder changes under another county's provenance. A workflow's PR title
+  and body are a human-review surface, not cosmetics.
+
+  **TRANCHE 5 SHIPPED 2026-08-02 — Pike, Brown, Calhoun and Putnam: the at-large tier, and
+  the first counties in the fleet served with NO dispatch entry at all.** 26 members on the
+  County card across ~31k residents; coverage reaches **47 counties where a
+  county-specific layer answers** — 38 through their own dispatch entries, 5 through a
+  shipped judicial circuit, and these 4 through the County card alone. (The tranche-5
+  commit message said "42 counties"; that undercounted by omitting the five
+  judicial-subcircuit secondary counties, which are served too.) The structural lesson is the one to carry forward: `METRO_COUNTY_FIPS`
+  means "a county-specific layer answers here", NOT "this county has a dispatch entry", so
+  these four join it with INSIDE anchors while `DISPATCH_COUNTY_FIPS` must not gain them —
+  and `validate_index.py` would not catch that mistake, because its coverage-ring check
+  derives its county set from the dispatch tables index.html actually registers. Their
+  outlines ship `dynamic_reference: true`. Everything else the build found is recorded in
+  the at-large paragraph of the pass-7 research block above; the two rules with the widest
+  reach are **prove "at large" from a certified election document, never from a page that
+  omits districts**, and **an identical phone number on every member row is a switchboard,
+  not contact**.
 
   **The pass-7 build-ready ledger** (the live work queue, recommended order):
   1. ~~**Peoria + Tazewell**~~ **SHIPPED 2026-08-02** — the two anchors (~313k), both
@@ -3380,7 +3461,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `congress` | U.S. House District | political | Chamber | pre-built (TIGERweb L0, STATE=17) | `congress-roster.json` (weekly CI; incl. each rep's district office + D.C. office from congress-legislators — the 2026-07 enrichment) | — |
 | `il-senate` | IL State Senate District | political | Chamber | pre-built (TIGERweb L1) | `il-senate-members.json` (weekly CI) | — |
 | `il-house` | IL State House District | political | Chamber | pre-built (TIGERweb L2) | `il-house-members.json` (weekly CI) | — |
-| `county` | County | geography | Bespoke | live TIGERweb State_County | `il-county-clerks.json` (weekly CI from ISBE; Peoria deliberately absent) | — |
+| `county` | County | geography | Bespoke | live TIGERweb State_County | `il-county-clerks.json` (weekly CI from ISBE; Peoria deliberately absent) **+ `il-county-commissioners.json`** — the AT-LARGE board section (weekly CI): six counties, 32 members, each proven elected countywide from a certified election document. Monroe 3 and Randolph 3 (commission form), Pike 9, Brown 7, Calhoun 5, Putnam 5. Pike/Brown/Calhoun/Putnam have **no dispatch entry of any kind** — this card is the only county-specific answer they have | — |
 | `school-district-secondary` | High School District | schools | Polygon | live TIGERweb School L1 | — | outsideChicagoSchoolCoverage |
 | `school-district-unified` | Unified School District | schools | Polygon | live TIGERweb School L0 | — | — |
 | `school-district-elementary` | Elementary School District | schools | Polygon | live TIGERweb School L2 | — | outsideChicagoSchoolCoverage |
