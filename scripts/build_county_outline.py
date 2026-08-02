@@ -860,6 +860,48 @@ COUNTIES = {
             (39.9855, -88.8197, "Argenta — Macon County"),
         ],
     },
+    # Washington (pass-7 tranche 4): board districts DERIVED as whole-township
+    # dissolves per the composition the county prints under each district
+    # heading (scripts/build_washington_board_districts.py). The county runs no
+    # GIS at all, so nothing else about it is live.
+    "washington": {
+        "fips": "189",
+        "name": "Washington County",
+        "inside": [
+            (38.3913, -89.4865, "Addieville"),
+            (38.3289, -89.1893, "Ashley"),
+            (38.2214, -89.2127, "Du Bois"),
+            (38.4457, -89.2721, "Hoyleton"),
+            (38.4386, -89.1601, "Irvington"),
+        ],
+        "outside": [
+            (38.1838, -89.8452, "Baldwin — Randolph County"),
+            (38.7229, -88.9117, "Alma — Marion County"),
+            (38.5165, -89.9900, "Belleville — St. Clair County"),
+            (38.5434, -89.6172, "Albers — Clinton County"),
+        ],
+    },
+    # Cass (pass-7 tranche 4): board districts DERIVED from Census 2020 voting
+    # districts per the county's own published district table
+    # (scripts/build_cass_board_districts.py). Its GIS is a Beacon parcel
+    # viewer with no public REST surface.
+    "cass": {
+        "fips": "017",
+        "name": "Cass County",
+        "inside": [
+            (39.8805, -90.3705, "Arenzville"),
+            (39.8885, -90.0079, "Ashland"),
+            (39.9993, -90.4176, "Beardstown"),
+            (40.0470, -90.1513, "Chandlerville"),
+            (39.9524, -90.2108, "Virginia (county seat)"),
+        ],
+        "outside": [
+            (39.5763, -89.7440, "Auburn — Sangamon County"),
+            (40.0066, -90.8737, "Mound Station — Brown County"),
+            (39.9619, -89.7216, "Athens — Menard County"),
+            (40.1905, -90.1425, "Bath — Mason County"),
+        ],
+    },
 }
 
 

@@ -796,7 +796,13 @@ suburbs join as further `ward` entries when a polygon source appears.
    already thought to name it; LaSalle, Kankakee, Boone and Grundy each shipped layers
    and stayed washed out for two research passes with nothing failing.
 2. `county-board`: districted → dispatch entry + officeholder story; **at-large →
-   county-card roster rows** (§1.5). Decide and record which.
+   county-card roster rows** (§1.5). Decide and record which. The at-large path is
+   implemented: add a `SITES` entry + parser to `scripts/il_county_commissioners_scraper.py`
+   so the county lands in `data/app/il-county-commissioners.json`, which the COUNTY card
+   already reads — no dispatch entry, no toggle (§2.5.1, Monroe/Randolph precedent). If
+   the board IS districted but the county publishes no boundary, check whether it
+   publishes a COMPOSITION (whole townships or whole precincts) and derive from that, with
+   the §2.5.1 drift check wired if the composition lives on an HTML page.
 3. `judicial-subcircuit`: entry if the circuit has PA 102-0693 subcircuits; structurally
    n/a otherwise (Kendall precedent — record it).
 4. `fire-district` / `park-district` / `library-district`: entries per available tilings
@@ -847,6 +853,55 @@ taught them.
   election authority, whatever a consortium licenses commercially). Never "solve" it by
   supplying the header. The same instinct applies to a county GIS office that runs a paid
   data-order form (the Jo Daviess shape) — same block, same route out.
+
+- **An AT-LARGE board is county-card rows, and the mechanism now exists — use it.** §1.5
+  called this shape long before anything implemented it. Monroe and Randolph (2026-08-02)
+  are the reference: both elect three commissioners countywide, so there is no geometry
+  for `county-board` to join and inventing a district would misstate how the county
+  elects. Their members ride the COUNTY card via `data/app/il-county-commissioners.json`,
+  keyed **exactly like `il-county-clerks.json`** (uppercase letters only) so the card
+  performs one lookup shape for both rosters. Adding such a county is: a `SITES` entry
+  plus a parser in `il_county_commissioners_scraper.py`, and nothing else — no dispatch
+  entry, no toggle, no coverage function, no new fetch in the app. The county card grows a
+  "County Board" section only for counties that appear in the roster, so a districted
+  county's card is untouched (assert this against Cook when you add one). Two knock-ons to
+  remember: such a county's PRECINCT card must NOT carry a County Board District row
+  (there isn't one), and the county still needs its coverage outline and
+  `DISPATCH_COUNTY_FIPS` entry if any other layer answers there.
+
+- **A board whose districts elect DIFFERENT numbers of members balances per MEMBER, not
+  per district — check the wrong one and you will reject a correct build.** Cass
+  (2026-08-02) seats eleven members as 3/3/3/2. Its correctly-transcribed districts are
+  **28.8% apart per district** — past any sane guard, reading exactly like a botched
+  transcription — and **12.3% apart per member**, an ordinary rural apportionment. Before
+  writing a population check, get the SEATS PER DISTRICT from the county's own roster page
+  and divide by them. Do not assume every district elects the same number; that held for
+  the first thirty-five counties and then stopped. If the per-member spread is still wild,
+  *then* suspect the transcription.
+
+- **A DERIVED boundary must watch the source it was derived from, or it will silently
+  rot.** Every derived boundary shares one failure mode: the county edits its composition,
+  the compiled table does not, and the app keeps drawing superseded lines with nothing
+  failing. That is exactly how the LaSalle defect survived years. Where the composition
+  lives on an HTML page the roster is already scraped from — De Witt and Washington,
+  2026-08-02 — wire the check: have the scraper emit the composition it read, and have the
+  ROSTER builder compare it against the table compiled into the boundary builder and
+  **fail** on any difference. The weekly roster job then turns red on a redistricting.
+  Cost: a few dozen lines. Two rules learned building it:
+  - **Compare at the granularity the districts actually differ at.** De Witt's first
+    version compared township names and passed a simulated "Clintonia 7,8" against a
+    shipped "7,8,9" — the likeliest change there is, in a county where one township's nine
+    precincts split across three districts. Parse to precinct level and compare sets.
+  - **Prove it bites.** Write the negative tests (a unit lost, gained, renumbered, and a
+    whole township moved) and watch each one fail the build before you trust it.
+
+  Where the composition lives in a PDF the page merely LINKS, this check is not available.
+  Find the weakest real substitute and be explicit that it is one — Cass's roster page
+  publishes its SEAT COUNTS, which are the input its population test depends on, so the
+  weekly build asserts those instead; a reapportionment almost always moves a seat. It
+  cannot catch a redraw that leaves every district the same size. Say exactly that in the
+  builder's header and the workflow's, rather than leaving a reader to assume the same
+  protection.
 
 - **A county that publishes its board TWICE will eventually disagree with itself, and
   you must decide which surface wins BEFORE you look at the numbers.** Tazewell's GIS

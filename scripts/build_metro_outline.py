@@ -95,7 +95,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
-                     "143", "179", "075", "133", "157", "039",
+                     "143", "179", "075", "133", "157", "039", "189", "017",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -125,7 +125,7 @@ DISPATCH_COUNTY_FIPS = {
     "lee": "103", "whiteside": "195", "rock-island": "161", "woodford": "203",
     "henry": "073", "peoria": "143", "tazewell": "179",
     "iroquois": "075", "monroe": "133", "randolph": "157",
-    "dewitt": "039",
+    "dewitt": "039", "washington": "189", "cass": "017",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -184,6 +184,8 @@ INSIDE = {
     "Waterloo (Monroe)": (38.3359, -90.1498),
     "Chester (Randolph)": (37.9199, -89.8258),
     "Clinton (De Witt)": (40.1470, -88.9630),
+    "Nashville (Washington)": (38.3439, -89.3812),
+    "Virginia (Cass)": (39.9524, -90.2108),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
