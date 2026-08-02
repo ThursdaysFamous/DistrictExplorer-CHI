@@ -646,6 +646,19 @@ def check_county_coverage_list(html, repo_root):
     keys out of index.html's own dispatch tables and requires each one to be in
     METRO_COUNTY_FIPS. An unrecognised key fails too — a new county that nobody
     added to DISPATCH_COUNTY_FIPS is exactly the case that used to slip through.
+
+    IT ALSO CHECKS THE REVERSE, which for a long time nothing did: a
+    DISPATCH_COUNTY_FIPS row with no dispatch entry behind it. That gap was
+    found on 2026-08-02 while shipping the at-large tier (Pike, Brown, Calhoun,
+    Putnam) — counties served entirely through the COUNTY card, with no dispatch
+    entry of any kind. The expansion guide had said to add such a county to
+    DISPATCH_COUNTY_FIPS "if any other layer answers there", and adding one
+    anyway passed every gate silently, because this function only ever looked
+    from index.html outward. A stale row is not cosmetic: DISPATCH_COUNTY_FIPS
+    is what build_county_outline.py cross-checks FIPS against and what the
+    guidebook and CLAUDE.md quote as the count of dispatched counties, so a
+    county listed there but dispatching nothing makes all three quietly wrong.
+    An at-large county belongs in METRO_COUNTY_FIPS only.
     """
     outline_py = os.path.join(repo_root, "scripts", "build_metro_outline.py")
     if not os.path.exists(outline_py):
@@ -687,6 +700,20 @@ def check_county_coverage_list(html, repo_root):
              "them to scripts/build_metro_outline.py and rebuild "
              "data/app/metro-outline.json."
              % ", ".join(sorted(set(outside))))
+
+    # The reverse direction (see the docstring): listed as dispatched, but
+    # dispatching nothing.
+    undispatched = sorted(set(slug_fips) - seen_counties)
+    if undispatched:
+        fail("county/counties in DISPATCH_COUNTY_FIPS that register NO dispatch "
+             "entry in index.html: %s. That list is the count of dispatched "
+             "counties the docs quote and the FIPS table build_county_outline.py "
+             "cross-checks, so a row with nothing behind it makes both wrong. If "
+             "the county is served only through the COUNTY card (an AT-LARGE "
+             "board — EXPANSION_GUIDE §2.5.1), remove it from DISPATCH_COUNTY_FIPS "
+             "and leave it in METRO_COUNTY_FIPS. Otherwise its dispatch entry was "
+             "dropped — restore it."
+             % ", ".join(undispatched))
     return len(seen_counties)
 
 

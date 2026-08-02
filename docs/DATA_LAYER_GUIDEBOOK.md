@@ -1783,9 +1783,10 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   commit message said "42 counties"; that undercounted by omitting the five
   judicial-subcircuit secondary counties, which are served too.) The structural lesson is the one to carry forward: `METRO_COUNTY_FIPS`
   means "a county-specific layer answers here", NOT "this county has a dispatch entry", so
-  these four join it with INSIDE anchors while `DISPATCH_COUNTY_FIPS` must not gain them —
-  and `validate_index.py` would not catch that mistake, because its coverage-ring check
-  derives its county set from the dispatch tables index.html actually registers. Their
+  these four join it with INSIDE anchors while `DISPATCH_COUNTY_FIPS` must not gain them.
+  When the tier shipped, `validate_index.py` would NOT have caught that mistake — its
+  coverage-ring check only looked from index.html outward — so the check now runs both
+  directions and fails on a county listed as dispatched that registers nothing. Their
   outlines ship `dynamic_reference: true`. Everything else the build found is recorded in
   the at-large paragraph of the pass-7 research block above; the two rules with the widest
   reach are **prove "at large" from a certified election document, never from a page that

@@ -887,11 +887,13 @@ taught them.
       carefully: add the county there **only if it really does register a dispatch entry**.
       Monroe and Randolph do (precincts, fire), which is what made the old wording look
       safe; Pike, Brown, Calhoun and Putnam do not, and adding them would be wrong.
-      **Nothing would catch it** — `validate_index.py`'s coverage-ring check derives its
-      county set from the dispatch tables index.html actually registers, so a
-      `DISPATCH_COUNTY_FIPS` row with no dispatch entry behind it passes silently
-      (verified by adding one and re-running the gate). The list would simply start lying
-      about what is dispatched.
+      **This is now a gate rather than a warning.** When the mistake was found, nothing
+      caught it — `validate_index.py`'s coverage-ring check only ever looked from
+      index.html outward, so a `DISPATCH_COUNTY_FIPS` row with no dispatch entry behind it
+      passed silently. The check now runs both directions and fails on a listed county
+      that registers nothing, naming the at-large case in its own error message. It
+      doubles as a module-loss guard: a county whose dispatch entries are dropped or
+      retargeted now fails too (both cases negative-tested).
 
 - **A board whose districts elect DIFFERENT numbers of members balances per MEMBER, not
   per district — check the wrong one and you will reject a correct build.** Cass
