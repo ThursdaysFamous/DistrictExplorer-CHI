@@ -1,0 +1,76 @@
+{
+ "1": {
+  "members": [
+   {
+    "email": "bender70boss@yahoo.com",
+    "name": "Kimi S. Bender",
+    "party": "Democratic",
+    "phone": "309-259-0402",
+    "seatNote": "Appointed 05/12/2026 — will run for full term in 12/2026",
+    "termExpires": 2026
+   },
+   {
+    "email": "garlischfarms@gmail.com",
+    "name": "Scott Garlisch",
+    "party": "Republican",
+    "phone": "217-414-8470",
+    "termExpires": 2028
+   },
+   {
+    "email": "rknoll4020@gmail.com",
+    "name": "Ronald Knollenberg",
+    "party": "Republican",
+    "phone": "217-482-5351",
+    "termExpires": 2028
+   },
+   {
+    "email": "djhouse@casscomm.com",
+    "name": "Dorothy J. Kreiling",
+    "party": "Republican",
+    "phone": "309-597-2124",
+    "role": "Vice-Chairman",
+    "termExpires": 2026
+   }
+  ],
+  "rosterPdf": "https://masoncountyil.gov/wp-content/uploads/2026/05/Board-Members-.pdf",
+  "sourceUrl": "https://masoncountyil.gov/county-board/",
+  "transcribed": "2026-08-02"
+ },
+ "2": {
+  "members": [
+   {
+    "email": "davenportfornoff@casscomm.com",
+    "name": "Brenda Davenport-Fornoff",
+    "party": "Republican",
+    "phone": "309-357-0999",
+    "termExpires": 2028
+   },
+   {
+    "email": "adamsarnes11@gmail.com",
+    "name": "Adam Sarnes",
+    "party": "Democratic",
+    "phone": "309-338-8319",
+    "seatNote": "Seat vacant 11/03/2025 — will run for full term in 2026",
+    "termExpires": 2026
+   },
+   {
+    "email": "athomson.mcboard@gmail.com",
+    "name": "Andrea Holtmeyer Thomson",
+    "party": "Democratic",
+    "phone": "309-202-8796",
+    "termExpires": 2028
+   },
+   {
+    "email": "kr44walker@gmail.com",
+    "name": "Kenneth Walker",
+    "party": "Democratic",
+    "phone": "309-360-1723",
+    "role": "Chairman",
+    "termExpires": 2026
+   }
+  ],
+  "rosterPdf": "https://masoncountyil.gov/wp-content/uploads/2026/05/Board-Members-.pdf",
+  "sourceUrl": "https://masoncountyil.gov/county-board/",
+  "transcribed": "2026-08-02"
+ }
+}

@@ -902,6 +902,50 @@ COUNTIES = {
             (40.1905, -90.1425, "Bath — Mason County"),
         ],
     },
+    # Marshall (pass-7 tranche 4): board districts DERIVED as whole-township
+    # dissolves per the composition the county prints in the DISTRICT #n
+    # headings of its own board roster PDF
+    # (scripts/build_marshall_board_districts.py). The county runs no public
+    # GIS, so nothing else about it is live.
+    "marshall": {
+        "fips": "123",
+        "name": "Marshall County",
+        "inside": [
+            (41.0228, -89.4060, "Lacon (county seat)"),
+            (41.1173, -89.3569, "Henry"),
+            (40.9842, -89.4571, "Hopewell"),
+            (41.0044, -89.1339, "Toluca"),
+            (41.0296, -89.4412, "Sparland"),
+        ],
+        "outside": [
+            (41.2589, -89.3216, "Hennepin — Putnam County"),
+            (41.0638, -89.7729, "Wyoming — Stark County"),
+            (40.9158, -89.5020, "Chillicothe — Peoria County"),
+            (40.8507, -89.1211, "Benson — Woodford County"),
+        ],
+    },
+    # Mason (pass-7 tranche 4): board districts DERIVED as whole-township
+    # dissolves per the composition the county prints under its board roster
+    # (scripts/build_mason_board_districts.py). Its only mapping surface is a
+    # WTH parcel viewer with no feature service.
+    "mason": {
+        "fips": "125",
+        "name": "Mason County",
+        "inside": [
+            (40.2950, -90.0566, "Havana (county seat)"),
+            (40.4201, -89.7806, "Manito"),
+            (40.2022, -89.6971, "Mason City"),
+            (40.1905, -90.1425, "Bath"),
+            (40.3052, -89.6048, "San Jose"),
+        ],
+        "outside": [
+            (40.0143, -89.8453, "Petersburg — Menard County"),
+            (40.1200, -90.5665, "Rushville — Schuyler County"),
+            (40.5634, -90.0408, "Canton — Fulton County"),
+            (40.3710, -89.5461, "Delavan — Tazewell County"),
+            (40.1508, -89.3720, "Lincoln — Logan County"),
+        ],
+    },
 }
 
 

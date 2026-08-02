@@ -8094,6 +8094,72 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/cass-county-board-members.json", {}, 2);
   });
 
+  var loadMarshallCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/marshall-county-outline.json", {}, 2);
+  });
+  function marshallCountyCoverage(point) {
+    return loadMarshallCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  /* MARSHALL COUNTY (the 37th dispatched county, added 2026-08-02). It runs no
+   * public GIS — no org, no viewer — and its only district artifact is the
+   * heading line of its annual board roster PDF ("DISTRICT #1 - Henry,
+   * Hopewell, LaPrairie, Saratoga, Whitefield"). Those are whole townships, so
+   * the boundary is DERIVED by dissolving Census townships per that heading:
+   * no township is split, so every district edge is a Census township edge.
+   * The build asserts the three districts partition all 12 townships exactly
+   * and that they balance (1.4% spread across three equal four-member
+   * districts — Marshall is measured per district, unlike Cass, because its
+   * districts are equal-membered).
+   *
+   * This is the cleanest fit the fleet has for the weekly composition check:
+   * boundary and roster are the SAME TABLE in the SAME document, so the county
+   * cannot publish a new roster under new districts without the check seeing
+   * both at once. The county publishes no precinct geometry — a recorded gap —
+   * so the board is its only dispatch entry. */
+  var loadMarshallBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/marshall-county-board-districts.json", {}, 2);
+  });
+  var loadMarshallBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/marshall-county-board-members.json", {}, 2);
+  });
+
+  var loadMasonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mason-county-outline.json", {}, 2);
+  });
+  function masonCountyCoverage(point) {
+    return loadMasonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  /* MASON COUNTY (the 38th dispatched county, added 2026-08-02). Its only
+   * mapping surface is a WTH `tgis` parcel viewer with no feature service, so
+   * the board boundary is DERIVED: Census townships dissolved per the two
+   * composition lines the county prints under its roster ("District 1 - Allens
+   * Grove, Crane Creek, Forest City, …"). No township is split, so every
+   * district edge is a Census township edge; the build asserts the two
+   * districts partition all 13 townships exactly and that they balance —
+   * 6,528 against 6,558 across two equal four-member districts, 0.2%.
+   *
+   * The ROSTER here is HAND-TRANSCRIBED, not scraped, and the reason is worth
+   * knowing: Mason's roster PDF is a scan whose text layer is written in a
+   * non-embedded font that does not survive extraction, so pdfplumber and
+   * pdftotext return line noise instead of failing. A scraper would ship
+   * confident garbage under real officeholders' names. scripts/
+   * mason_roster_watch.py runs weekly in its place and checks the two things a
+   * machine still can — that the board page still links this exact PDF, and
+   * that its bytes are unchanged — opening a tracking issue for a human read.
+   * The county publishes no precinct geometry of its own; its 21 precincts
+   * match TIGER's 2020 voting districts and are a recorded gap pending a
+   * vintage sign-off, so the board is its only dispatch entry. */
+  var loadMasonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mason-county-board-districts.json", {}, 2);
+  });
+  var loadMasonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mason-county-board-members.json", {}, 2);
+  });
+
   var loadDewittCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/dewitt-county-outline.json", {}, 2);
   });
@@ -15167,6 +15233,137 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadCassBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Marshall — 3 districts electing FOUR members each. Boundary DERIVED as
+      // whole-township dissolves of the composition printed in the county's own
+      // roster PDF; roster scraped from that same PDF weekly (12/12 phones,
+      // 11 e-mails) with the Chairperson and Vice-Chairperson badged as their
+      // own rows mark them. Terms are staggered 2026/2028, so the expiry year
+      // is per-seat ballot information and rides the note (the Boone posture).
+      {
+        key: "marshall",
+        coverage: marshallCountyCoverage,
+        loadGeometry: loadMarshallBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMarshallBoardDistricts(),
+            loadMarshallBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Marshall County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+              var term = municipalTermNote(m);
+              if (term) p.note = p.note ? p.note + " · " + term : term;
+              return p;
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Marshall County Board (official)",
+            url: "https://marshallcountyillinois.gov/directory/county-board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadMarshallBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Mason — 2 districts electing FOUR members each. Boundary DERIVED as
+      // whole-township dissolves; roster HAND-TRANSCRIBED from a scanned PDF
+      // (8/8 with party, phone, e-mail and a term year) because that scan's
+      // text layer extracts as line noise. Two members carry the county's own
+      // note about how they reached the seat — an appointment and a vacancy —
+      // which rides the note, never a badge: it is not an office.
+      {
+        key: "mason",
+        coverage: masonCountyCoverage,
+        loadGeometry: loadMasonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMasonBoardDistricts(),
+            loadMasonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Mason County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+              var extra = [];
+              var term = municipalTermNote(m);
+              if (term) extra.push(term);
+              if (m.seatNote) extra.push(String(m.seatNote));
+              if (extra.length) p.note = p.note ? p.note + " · " + extra.join(" · ") : extra.join(" · ");
+              return p;
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Mason County Board (official)",
+            url: "https://masoncountyil.gov/county-board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadMasonBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

@@ -135,6 +135,10 @@ const GEOMETRY_URLS = [
   "./data/app/washington-county-board-districts.json",
   "./data/app/cass-county-outline.json",
   "./data/app/cass-county-board-districts.json",
+  "./data/app/marshall-county-outline.json",
+  "./data/app/marshall-county-board-districts.json",
+  "./data/app/mason-county-outline.json",
+  "./data/app/mason-county-board-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -182,6 +186,8 @@ const ROSTER_URLS = [
   "./data/app/dewitt-county-board-members.json",
   "./data/app/washington-county-board-members.json",
   "./data/app/cass-county-board-members.json",
+  "./data/app/marshall-county-board-members.json",
+  "./data/app/mason-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

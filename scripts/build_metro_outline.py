@@ -95,7 +95,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
-                     "143", "179", "075", "133", "157", "039", "189", "017",
+                     "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -125,7 +125,8 @@ DISPATCH_COUNTY_FIPS = {
     "lee": "103", "whiteside": "195", "rock-island": "161", "woodford": "203",
     "henry": "073", "peoria": "143", "tazewell": "179",
     "iroquois": "075", "monroe": "133", "randolph": "157",
-    "dewitt": "039", "washington": "189", "cass": "017",
+    "dewitt": "039", "washington": "189", "cass": "017", "marshall": "123",
+    "mason": "125",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -186,6 +187,8 @@ INSIDE = {
     "Clinton (De Witt)": (40.1470, -88.9630),
     "Nashville (Washington)": (38.3439, -89.3812),
     "Virginia (Cass)": (39.9524, -90.2108),
+    "Lacon (Marshall)": (41.0228, -89.4060),
+    "Havana (Mason)": (40.2950, -90.0566),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -236,6 +239,18 @@ OUTSIDE = {
     "Princeton (Bureau)": (41.3853, -89.4695),
     "Aledo (Mercer)": (41.2008, -90.7460),
     "Galena (Jo Daviess)": (42.4185, -90.4253),
+    # Putnam wraps Marshall's northern border and is the state's smallest
+    # county. It is not un-researched: it elects its board AT LARGE, so it has
+    # no district geometry to ship and joins through the county-commissioners
+    # roster rather than a dispatch entry — which means it must stay OUTSIDE
+    # this outline until it does. (Marshall moved up to INSIDE in tranche 4d.)
+    "Hennepin (Putnam)": (41.2589, -89.3216),
+    # Menard and Schuyler border Mason and are RECORDED GAPS, not gaps in the
+    # research: Menard's five commissioner districts run section-line roads
+    # rather than precinct or township unions, so no composition route exists
+    # and its only map is a 2021-12 raster. They hold the line Mason moved.
+    "Petersburg (Menard)": (40.0143, -89.8453),
+    "Rushville (Schuyler)": (40.1200, -90.5665),
 }
 
 
