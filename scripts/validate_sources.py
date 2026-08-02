@@ -201,6 +201,7 @@ PROVENANCE = [
     {"layer": "Lake County Board leadership roles (roster)",
      "app_file": "lake-county-board-roles.json",
      "source_url": "https://www.lakecountyil.gov/2336/Board-Members",
+     "blocked": "the county edge 403s datacenter clients; the scraper's Internet Archive rung carries it",
      "note": "Chair/Vice-Chair tags scraped weekly from the county's own "
              "directory (lake_county_board_roles_scraper.py; requests with an "
              "Internet Archive fallback — the site's edge 403s datacenter "
@@ -210,6 +211,7 @@ PROVENANCE = [
     {"layer": "Kendall County Board members (roster)",
      "app_file": "kendall-county-board-members.json",
      "source_url": "https://www.kendallcountyil.gov/county-board/board-members",
+     "blocked": "the county blocks every automated client including the Archive's crawler; roster is hand-verified (issue #234)",
      "note": "Hand-verified 2026-07-23 against the county's own member directory "
              "+ per-member pages (incl. the Chairman, a District 2 member); the "
              "weekly scraper (kendall_county_board_scraper.py) attempts a "
@@ -220,6 +222,7 @@ PROVENANCE = [
     {"layer": "McHenry County Board members (roster)",
      "app_file": "mchenry-county-board-members.json",
      "source_url": "https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members",
+     "blocked": "the county blocks every automated client including the Archive's crawler; roster is hand-verified (issue #235)",
      "note": "Hand-verified 2026-07-23 against the county's own member directory "
              "(incl. the countywide-elected Chairman); the weekly scraper "
              "(mchenry_county_board_scraper.py) attempts a refresh, but the county "
@@ -278,6 +281,7 @@ PROVENANCE = [
     {"layer": "Joliet council contact (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://www.joliet.gov/government/city-council-3189",
+     "blocked": "Akamai hard WAF deny, not a solvable challenge — permanent by measurement",
      "note": "Per-seat phone + e-mail for the metro's third-largest city, which "
              "the Will Clerk's directory does not publish "
              "(joliet_council_contact_scraper.py). TERMINAL BLOCK (re-measured "
@@ -329,6 +333,7 @@ PROVENANCE = [
     {"layer": "McHenry County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
+     "blocked": "Akamai fingerprints the HTTP client, so Playwright is the day-one rung",
      "note": "The Clerk's County Yearbook 'Cities & Villages' page "
              "(mchenry_municipal_officials_scraper.py). Akamai-fronted and it "
              "fingerprints the HTTP CLIENT, not just headers: measured 2026-07, "
@@ -340,6 +345,7 @@ PROVENANCE = [
     {"layer": "Kendall County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://www.kendallcountyil.gov/home/showdocument?id=184",
+     "blocked": "same Akamai client-fingerprint posture as McHenry",
      "note": "The Clerk's Yearbook & Government Guide PDF, CITY/VILLAGE "
              "OFFICIALS sections (kendall_municipal_officials_scraper.py). Same "
              "Akamai client-fingerprint posture as McHenry — a reachability WARN "
@@ -473,6 +479,7 @@ PROVENANCE = [
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",
+     "blocked": "the Board's site 403s non-browser clients; the file is hand-transcribed per election",
      "note": "Hand-transcribed per election (see WATCH.md row). The site 403s "
              "non-browser clients, so a reachability WARN here is expected, "
              "not drift — refresh the file when the Board posts the next "
@@ -757,8 +764,25 @@ def check_provenance(findings, offline):
         if offline:
             continue
         ok, res = http_get(p["source_url"], want_json=False)
-        if ok:
+        blocked = p.get("blocked")
+        if ok and blocked:
+            # The block LIFTING is the news. Every one of these entries was
+            # measured unreachable and says so in its own note, so a monthly
+            # WARN on them was pure noise — seven of the eight WARNs in the
+            # 2026-08-01 run were this, and the tracking issue reopened every
+            # month with nothing to act on. Reachable-again is the state a
+            # human should hear about, because it means automation can resume.
+            findings.add(WARN, layer,
+                         "source is REACHABLE again (%s) — its recorded block appears to "
+                         "have LIFTED. Re-test the scraper; if it works, drop the "
+                         "`blocked` flag on this entry so a future outage warns again. "
+                         "Recorded block: %s" % (p["source_url"], blocked))
+        elif ok:
             findings.add(OK, layer, "source reachable: %s — %s" % (p["source_url"], p["note"]))
+        elif blocked:
+            findings.add(OK, layer,
+                         "unreachable AS EXPECTED (%s) — %s. %s"
+                         % (res, blocked, p["source_url"]))
         else:
             findings.add(WARN, layer,
                          "source not reachable (%s): %s. Boundaries change ~once a "
