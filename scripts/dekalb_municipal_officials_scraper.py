@@ -11,8 +11,21 @@ among the county sources in this repo, the date each seat is NEXT on the ballot.
 That is Cook/Will/LaSalle/Ogle depth from one county document, so DeKalb joins as
 a full-governing-body county rather than a mayor-level one.
 
-FETCH POSTURE: open. Plain `requests` with a browser UA gets both the landing
-page and the PDF.
+FETCH POSTURE: split, and the split is the point. The PDF's host
+(dekalbcountyclerkil.gov) is open — plain `requests` with a browser UA fetches
+it every time. The DISCOVERY page's host (dekalbcounty.org) is not: it answers
+with SiteGround's SG-Captcha stub, HTTP 202 carrying a meta-refresh instead of
+the document, scored on the caller's IP rather than sampled per request (the
+same edge that failed the county-board scraper's first CI run six-for-six —
+see dekalb_county_board_scraper.py for the measurement).
+
+That mattered more here than a failed fetch would have, because discovery
+degrades to the fallback URL instead of failing. A blocked run therefore looked
+like a clean run and quietly used a hardcoded path — which is fine until the
+clerk republishes, since that path is MONTH-STAMPED and restamps annually. The
+scraper would have gone on parsing last year's yearbook and reporting success.
+So discovery now retries past the stub and escalates to a real browser, and the
+fallback says plainly in the warning that it is a stamped path.
 
 URL DISCOVERY, not a hardcoded path. The yearbook lives on the CLERK's domain
 under a month-stamped uploads path (…/wp-content/uploads/2025/11/…), but it is
@@ -52,6 +65,7 @@ import io
 import json
 import re
 import sys
+import time
 import urllib.parse
 
 import requests
@@ -71,6 +85,11 @@ HEADERS = {
                    "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
 }
 REQUEST_TIMEOUT = 120
+FETCH_ATTEMPTS = 6
+# SG-Captcha's stub is a bare <html> with a meta-refresh to /.well-known/
+# sgcaptcha/. Same marker list as every other bot-managed county source here.
+BLOCK_MARKERS = ("sgcaptcha", "just a moment", "attention required",
+                 "checking your browser", "access denied", "cf-chl")
 
 YEARBOOK_LINK_RE = re.compile(r'href="([^"]*[Yy]earbook[^"]*\.pdf)"')
 # Both headings are anchored to a WHOLE LINE. The book's index carries each of
@@ -129,15 +148,64 @@ def iso_date(raw):
     return "%s-%s-%s" % (match.group(3), match.group(1), match.group(2))
 
 
+def _looks_blocked(markup):
+    low = (markup or "").lower()
+    return any(marker in low for marker in BLOCK_MARKERS)
+
+
+def _reference_page_requests():
+    """Retry past SG-Captcha's stub, which is served with a 2xx status."""
+    last = None
+    for attempt in range(FETCH_ATTEMPTS):
+        try:
+            resp = requests.get(REFERENCE_PAGE, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+            if resp.ok and not _looks_blocked(resp.text):
+                return resp.text
+            last = ("bot-management interstitial (HTTP %d)" % resp.status_code
+                    if resp.ok else "HTTP %d" % resp.status_code)
+        except Exception as exc:  # noqa: BLE001
+            last = exc
+        time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError("%d attempts, last: %s" % (FETCH_ATTEMPTS, last))
+
+
+def _reference_page_playwright():
+    """Escalation rung: a real browser, no evasion beyond being a real browser."""
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        try:
+            page = browser.new_page(user_agent=HEADERS["User-Agent"])
+            page.goto(REFERENCE_PAGE, wait_until="domcontentloaded", timeout=90000)
+            if _looks_blocked(page.content()):
+                page.wait_for_timeout(12000)
+            markup = page.content()
+        finally:
+            browser.close()
+    if _looks_blocked(markup):
+        raise RuntimeError("interstitial persisted for the browser rung")
+    return markup
+
+
 def discover_pdf_url(warnings):
-    try:
-        resp = requests.get(REFERENCE_PAGE, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-        resp.raise_for_status()
-    except Exception as exc:  # noqa: BLE001
-        warnings.append("could not read %s (%s) — falling back to the last known "
-                        "yearbook URL" % (REFERENCE_PAGE, exc))
+    markup, failures = None, []
+    for rung in (_reference_page_requests, _reference_page_playwright):
+        try:
+            markup = rung()
+            break
+        except Exception as exc:  # noqa: BLE001
+            failures.append("%s (%s)" % (rung.__name__.split("_")[-1], exc))
+    if markup is None:
+        # Say what the fallback COSTS, not just that it happened: the path is
+        # month-stamped, so a run that lands here after the clerk republishes is
+        # parsing last year's book while reporting success.
+        warnings.append("could not read %s [%s] — falling back to the last known "
+                        "yearbook URL, whose uploads path is month-stamped and "
+                        "goes stale on the clerk's next annual republish"
+                        % (REFERENCE_PAGE, "; ".join(failures)))
         return YEARBOOK_URL
-    links = YEARBOOK_LINK_RE.findall(resp.text)
+    links = YEARBOOK_LINK_RE.findall(markup)
     if not links:
         warnings.append("no *Yearbook*.pdf link on %s — falling back to the last "
                         "known yearbook URL" % REFERENCE_PAGE)

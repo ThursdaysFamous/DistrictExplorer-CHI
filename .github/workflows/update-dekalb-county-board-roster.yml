@@ -44,15 +44,23 @@ jobs:
           python-version: "3.x"
 
       - name: Install scraper dependencies
-        # The members page is static, server-rendered WordPress — no JS to run.
-        # dekalbcounty.org sits behind Sucuri, which intermittently answers with
-        # a captcha-redirect stub carrying HTTP 202 rather than an error status;
-        # the scraper detects that document and retries, so no browser engine is
-        # needed here (unlike McHenry and Kendall).
-        run: pip install -c scripts/requirements.txt requests
+        # The members page is static, server-rendered WordPress — no JS is
+        # needed to READ it. The browser is here for the edge, not the markup:
+        # dekalbcounty.org answers with SiteGround's SG-Captcha stub (HTTP 202)
+        # scored on the CALLER'S IP, and a runner address draws the stub far
+        # harder than a residential one — the first scheduled run took it on all
+        # six retries and failed. So this job runs the scraper's
+        # requests -> playwright -> wayback ladder, same as McHenry and Kendall.
+        run: pip install -c scripts/requirements.txt requests playwright
+
+      - name: Install Chromium for Playwright
+        run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape DeKalb County Board member roster
-        run: python3 scripts/dekalb_county_board_scraper.py /tmp/dekalb_county_board_raw.json
+        # --engine auto walks the ladder and prints which rung carried each
+        # fetch, so the run log answers "is this county blocked from CI?" by
+        # itself rather than needing a separate probe.
+        run: python3 scripts/dekalb_county_board_scraper.py /tmp/dekalb_county_board_raw.json --engine auto
 
       - name: Rebuild roster data file
         run: python3 scripts/build_dekalb_county_board_roster.py /tmp/dekalb_county_board_raw.json

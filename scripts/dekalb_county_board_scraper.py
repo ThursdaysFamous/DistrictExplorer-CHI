@@ -30,13 +30,38 @@ applied only if that name matches exactly one scraped member; a chair who has
 left the board resolves to no match and the role is dropped rather than guessed
 onto someone. If that page fails, the members scrape still succeeds without it.
 
-FETCHING. dekalbcounty.org sits behind Sucuri, which INTERMITTENTLY answers with
-a ~220-byte captcha-redirect stub carrying HTTP 200 — not an error status, just
-the wrong document. Measured cold, roughly two requests in three come back as the
-stub and the third serves the page. So a fetch that only checked status_code
-would have shipped a "the markup changed" failure most weeks. Every fetch is
-retried until the response stops looking like an interstitial, using the same
-_looks_blocked marker test as the McHenry and Kendall scrapers.
+FETCHING — AND THE THING THAT WAS MISREAD ABOUT IT. dekalbcounty.org answers
+some requests with a ~220-byte captcha-redirect stub instead of the page. The
+original read of that was "intermittent, roughly two in three, so retry"; the
+retry loop below is still here and still correct, but the premise was wrong in
+the way that decides whether retrying can ever work.
+
+The stub is SiteGround's SG-Captcha, and its own headers say what it keys on:
+`SG-Captcha: challenge` alongside a refresh to
+`/.well-known/sgcaptcha/?r=<path>&y=ipr:<CALLER IP>:<nonce>` — `ipr` for IP
+reputation. It is not sampling requests, it is scoring the CLIENT ADDRESS. So
+"how often is it blocked" has no single answer: measured 2026-08-02 from a
+well-reputed egress it alternates roughly 1-in-2 and six attempts clear it
+comfortably, while from a GitHub Actions runner the first scheduled run
+(2026-07-31) took the stub on all six attempts in 33 seconds and failed the job.
+Six independent draws at the observed rate would be a 1-in-700 coincidence; the
+runner's address is simply on the wrong side of the score.
+
+That distinction is the whole design of the fetch below. Raising FETCH_ATTEMPTS
+buys nothing where it matters — the address is the variable, not the count — so
+the escalation is the fleet's standard engine ladder instead:
+
+    requests (with the retry loop)  ->  playwright  ->  wayback
+
+Playwright is a real browser and nothing more; SG-Captcha's IP-reputation tier
+serves a JS interstitial that a genuine browser resolves on its own, so the
+middle rung is a live shot at the same document rather than an evasion. If it
+too fails from CI, the run log names the rung that failed and the county gets
+the McHenry/Kendall posture — the ladder is also the measurement.
+
+Note the block is scoped to dekalbcounty.org: the clerk's own domain
+(dekalbcountyclerkil.gov, which serves the yearbook PDF) is open, so a DeKalb
+failure here says nothing about DeKalb sources generally.
 
 Committee assignments and the per-district map PDFs are on the page and
 deliberately not collected — neither is card material, matching the McHenry and
@@ -44,26 +69,34 @@ Livingston rosters. No street addresses appear on this page at all.
 
 Usage:
     python3 dekalb_county_board_scraper.py [output.json]
+    python3 dekalb_county_board_scraper.py out.json --engine playwright
 """
 
+import argparse
 import html
 import json
 import re
 import sys
 import time
+from datetime import datetime, timezone
 
 import requests
 
 SOURCE_URL = "https://dekalbcounty.org/government/county-board/county-board-members/"
 CHAIR_URL = "https://dekalbcounty.org/government/county-board/past-county-board-chairpersons/"
-# dekalbcounty.org answers a bare client with a Sucuri captcha redirect; a
-# browser UA clears it (no challenge solving involved).
+# A browser UA is table stakes, not the fix: SG-Captcha scores the address, so
+# the same headers pass from one host and fail from another.
 HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                    "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
 }
 REQUEST_TIMEOUT = 60
 FETCH_ATTEMPTS = 6
+
+WAYBACK_API = "https://archive.org/wayback/available?url=%s"
+# Same guard as the McHenry/Kendall rungs: an archived roster older than this is
+# not "the current board", so the rung refuses rather than shipping it as one.
+WAYBACK_MAX_AGE_DAYS = 45
 
 # Sucuri's stub is a bare <html> with a meta-refresh to /.well-known/sgcaptcha/.
 # The generic markers follow the McHenry/Kendall list so one convention covers
@@ -153,17 +186,17 @@ def _looks_blocked(page):
     return any(marker in low for marker in BLOCK_MARKERS)
 
 
-def fetch(url, attempts=FETCH_ATTEMPTS):
-    """Retry past Sucuri's intermittent captcha stub (which returns HTTP 200)."""
+def fetch_requests(url, attempts=FETCH_ATTEMPTS):
+    """Rung 1: plain requests, retried past the captcha stub."""
     session = requests.Session()
     last = None
     try:
         for attempt in range(attempts):
             try:
                 resp = session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-                # Sucuri serves the stub as 202, not an error status, so status
-                # alone can't tell a challenge from the page — the marker test
-                # is what decides, and any 2xx/3xx is a candidate for it.
+                # SG-Captcha serves the stub as 202, not an error status, so
+                # status alone can't tell a challenge from the page — the marker
+                # test is what decides, and any 2xx/3xx is a candidate for it.
                 if resp.ok and not _looks_blocked(resp.text):
                     return resp.text
                 last = ("bot-management interstitial (HTTP %d)" % resp.status_code
@@ -173,12 +206,83 @@ def fetch(url, attempts=FETCH_ATTEMPTS):
             time.sleep(1.5 * (attempt + 1))
     finally:
         session.close()
-    raise RuntimeError("Failed to fetch %s after %d attempts: %s" % (url, attempts, last))
+    raise RuntimeError("%d attempts, last: %s" % (attempts, last))
+
+
+def fetch_playwright(url):
+    """Rung 2: a real browser, no evasion beyond being a real browser.
+
+    SG-Captcha's IP-reputation interstitial is a meta-refresh into a JS
+    challenge that a genuine browser completes unprompted, so this rung simply
+    waits for the navigation to settle on a real document. No challenge is
+    solved, decoded or replayed here — if the edge wants a human, this fails.
+    """
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        try:
+            page = browser.new_page(user_agent=HEADERS["User-Agent"])
+            page.goto(url, wait_until="domcontentloaded", timeout=90000)
+            # The stub's refresh is content="0;…", so the hop is immediate; the
+            # wait is for the challenge round trip that follows it.
+            if _looks_blocked(page.content()):
+                page.wait_for_timeout(12000)
+            markup = page.content()
+        finally:
+            browser.close()
+    if _looks_blocked(markup):
+        raise RuntimeError("interstitial persisted for the browser rung")
+    return markup
+
+
+def fetch_wayback(url):
+    """Rung 3: the Internet Archive's newest snapshot, refused if it is stale."""
+    resp = requests.get(WAYBACK_API % url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    resp.raise_for_status()
+    snapshot = ((resp.json() or {}).get("archived_snapshots") or {}).get("closest")
+    if not snapshot or not snapshot.get("available"):
+        raise RuntimeError("no Archive snapshot available")
+    taken = datetime.strptime(snapshot.get("timestamp") or "",
+                              "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
+    age_days = (datetime.now(timezone.utc) - taken).days
+    if age_days > WAYBACK_MAX_AGE_DAYS:
+        raise RuntimeError("newest snapshot is %d days old (max %d) — refusing to "
+                           "serve a stale board as the current one"
+                           % (age_days, WAYBACK_MAX_AGE_DAYS))
+    page = requests.get(snapshot["url"], headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    page.raise_for_status()
+    return page.text
+
+
+def fetch(url, engine="auto"):
+    """Walk the ladder, naming the rung that carried the fetch (or failed)."""
+    rungs = {"requests": [fetch_requests], "playwright": [fetch_playwright],
+             "wayback": [fetch_wayback]}.get(
+                 engine, [fetch_requests, fetch_playwright, fetch_wayback])
+    last = None
+    for rung in rungs:
+        try:
+            markup = rung(url)
+            print("dekalb-scraper: %s carried by the %s rung"
+                  % (url, rung.__name__.replace("fetch_", "")), file=sys.stderr)
+            return markup
+        except Exception as exc:  # noqa: BLE001 - every rung failure escalates
+            last = exc
+            print("dekalb-scraper: %s rung failed for %s (%s)"
+                  % (rung.__name__.replace("fetch_", ""), url, exc), file=sys.stderr)
+    raise RuntimeError("every fetch rung failed for %s — last: %s" % (url, last))
 
 
 def main():
-    out_path = sys.argv[1] if len(sys.argv) > 1 else "dekalb_county_board_raw.json"
-    records = parse_members(fetch(SOURCE_URL))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("out_path", nargs="?", default="dekalb_county_board_raw.json")
+    parser.add_argument("--engine", choices=("auto", "requests", "playwright", "wayback"),
+                        default="auto",
+                        help="fetch rung; auto walks requests -> playwright -> wayback")
+    args = parser.parse_args()
+    out_path = args.out_path
+    records = parse_members(fetch(SOURCE_URL, args.engine))
     if not records:
         print("dekalb-scraper: FAIL — parsed 0 member blocks; the directory "
               "markup changed", file=sys.stderr)
@@ -199,7 +303,7 @@ def main():
     # The chair is enrichment: its absence must not fail a good members scrape.
     chair = None
     try:
-        chair = parse_chair(fetch(CHAIR_URL))
+        chair = parse_chair(fetch(CHAIR_URL, args.engine))
     except Exception as exc:  # noqa: BLE001 — any transport/parse failure is non-fatal
         print("dekalb-scraper: note — chairperson page unavailable (%s); shipping "
               "the roster without a chair role" % exc, file=sys.stderr)
