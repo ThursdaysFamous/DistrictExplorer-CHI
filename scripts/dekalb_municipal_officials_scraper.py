@@ -90,6 +90,9 @@ FETCH_ATTEMPTS = 6
 # sgcaptcha/. Same marker list as every other bot-managed county source here.
 BLOCK_MARKERS = ("sgcaptcha", "just a moment", "attention required",
                  "checking your browser", "access denied", "cf-chl")
+# The browser rung polls rather than reading once: see _reference_page_playwright.
+PW_SETTLE_MS = 3000
+PW_POLLS = 8
 
 YEARBOOK_LINK_RE = re.compile(r'href="([^"]*[Yy]earbook[^"]*\.pdf)"')
 # Both headings are anchored to a WHOLE LINE. The book's index carries each of
@@ -170,22 +173,36 @@ def _reference_page_requests():
 
 
 def _reference_page_playwright():
-    """Escalation rung: a real browser, no evasion beyond being a real browser."""
+    """Escalation rung: a real browser, no evasion beyond being a real browser.
+
+    Polls instead of reading once — the stub's meta-refresh fires immediately,
+    so page.content() lands mid-navigation and Playwright raises rather than
+    returning markup. A document in motion is the challenge working; only a
+    settled interstitial is a refusal. (Same shape and same reason as
+    dekalb_county_board_scraper.fetch_playwright, which learned it in CI.)
+    """
     from playwright.sync_api import sync_playwright
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
+        markup, last = "", "no document"
         try:
             page = browser.new_page(user_agent=HEADERS["User-Agent"])
             page.goto(REFERENCE_PAGE, wait_until="domcontentloaded", timeout=90000)
-            if _looks_blocked(page.content()):
-                page.wait_for_timeout(12000)
-            markup = page.content()
+            for _ in range(PW_POLLS):
+                try:
+                    markup = page.content()
+                except Exception as exc:  # noqa: BLE001 — mid-navigation, not a failure
+                    markup, last = "", "still navigating (%s)" % type(exc).__name__
+                if markup and not _looks_blocked(markup):
+                    return markup
+                if markup:
+                    last = "interstitial still served"
+                page.wait_for_timeout(PW_SETTLE_MS)
         finally:
             browser.close()
-    if _looks_blocked(markup):
-        raise RuntimeError("interstitial persisted for the browser rung")
-    return markup
+    raise RuntimeError("browser never reached the document after %.0fs (%s)"
+                       % (PW_POLLS * PW_SETTLE_MS / 1000.0, last))
 
 
 def discover_pdf_url(warnings):

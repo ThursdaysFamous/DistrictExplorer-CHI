@@ -93,6 +93,10 @@ HEADERS = {
 REQUEST_TIMEOUT = 60
 FETCH_ATTEMPTS = 6
 
+# The browser rung polls rather than reading once: see fetch_playwright.
+PW_SETTLE_MS = 3000
+PW_POLLS = 8
+
 WAYBACK_API = "https://archive.org/wayback/available?url=%s"
 # Same guard as the McHenry/Kendall rungs: an archived roster older than this is
 # not "the current board", so the rung refuses rather than shipping it as one.
@@ -209,31 +213,45 @@ def fetch_requests(url, attempts=FETCH_ATTEMPTS):
     raise RuntimeError("%d attempts, last: %s" % (attempts, last))
 
 
-def fetch_playwright(url):
+def fetch_playwright(url, settle_ms=PW_SETTLE_MS, polls=PW_POLLS):
     """Rung 2: a real browser, no evasion beyond being a real browser.
 
     SG-Captcha's IP-reputation interstitial is a meta-refresh into a JS
-    challenge that a genuine browser completes unprompted, so this rung simply
-    waits for the navigation to settle on a real document. No challenge is
-    solved, decoded or replayed here — if the edge wants a human, this fails.
+    challenge that a genuine browser completes unprompted, so this rung waits
+    for the navigation to settle on a real document. No challenge is solved,
+    decoded or replayed here — if the edge wants a human, this fails.
+
+    IT MUST POLL, AND THE FIRST VERSION DID NOT. The stub's refresh is
+    content="0;…", so the browser is mid-navigation almost exactly when the
+    content is asked for, and Playwright answers that with a hard error rather
+    than a page: "Unable to retrieve content because the page is navigating and
+    changing the content." That error propagated as a rung failure on the first
+    CI run, which read as "a real browser doesn't clear it either" — a
+    conclusion this rung had not actually tested. A document in motion is the
+    challenge WORKING; only a settled interstitial is a refusal.
     """
     from playwright.sync_api import sync_playwright
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
+        markup, last = "", "no document"
         try:
             page = browser.new_page(user_agent=HEADERS["User-Agent"])
             page.goto(url, wait_until="domcontentloaded", timeout=90000)
-            # The stub's refresh is content="0;…", so the hop is immediate; the
-            # wait is for the challenge round trip that follows it.
-            if _looks_blocked(page.content()):
-                page.wait_for_timeout(12000)
-            markup = page.content()
+            for _ in range(polls):
+                try:
+                    markup = page.content()
+                except Exception as exc:  # noqa: BLE001 — mid-navigation, not a failure
+                    markup, last = "", "still navigating (%s)" % type(exc).__name__
+                if markup and not _looks_blocked(markup):
+                    return markup
+                if markup:
+                    last = "interstitial still served"
+                page.wait_for_timeout(settle_ms)
         finally:
             browser.close()
-    if _looks_blocked(markup):
-        raise RuntimeError("interstitial persisted for the browser rung")
-    return markup
+    raise RuntimeError("browser never reached the document after %.0fs (%s)"
+                       % (polls * settle_ms / 1000.0, last))
 
 
 def fetch_wayback(url):
