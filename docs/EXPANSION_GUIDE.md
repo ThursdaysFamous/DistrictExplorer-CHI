@@ -950,6 +950,39 @@ taught them.
   Also: block service workers (they bypass `page.route`), and force a real document load
   between points — a hash-only change leaves the previous point's cards on screen and
   silently passes stale assertions.
+- **PROVE "AT LARGE" FROM A CERTIFIED ELECTION DOCUMENT. A board page that never
+  says "district" is not evidence.** Putting a county's whole board on the County
+  card claims that all N members represent every resident. If the county actually
+  elects by district and merely fails to publish them, that claim is wrong in the
+  worst direction — it tells a reader nine people represent them when one does. The
+  page's silence proves nothing; the ballot does. Each tranche-5 county was checked
+  against its own canvass or specimen ballot before shipping: Pike's 2024 summary
+  names the contest "FOR COUNTY BOARD - AT LARGE" across all 31 precincts, Brown's
+  2026 primary shows "COUNTY BOARD MEMBER (VOTE FOR) 3" countywide across all 14,
+  and Calhoun's ballot file reads "CO.COMMISSIONER **CWD**". Record WHICH document
+  proved it, per county, in the scraper — the next reader should not have to redo
+  the search to trust the card.
+- **A county can be SERVED with no dispatch entry at all.** The at-large tier is the
+  first group whose only county-specific answer is the County card's board section:
+  no coverage function, no toggle, no `DISPATCH_COUNTY_FIPS` row. They still belong
+  in `METRO_COUNTY_FIPS` with an INSIDE anchor, because that list means "a
+  county-specific layer answers here", not "this county has a dispatch entry" — the
+  same reason the judicial-subcircuit secondary counties are in it. Their outlines
+  ship flagged `dynamic_reference: true`, since index.html names no loader for them
+  and they are fetched by slug for the gaps panel.
+- **AN IDENTICAL PHONE NUMBER ON EVERY MEMBER ROW IS A SWITCHBOARD, NOT CONTACT.**
+  Calhoun prints 618-576-9700 ext. 2 under all five commissioners. Repeating it five
+  times implies five direct lines that do not exist, so it is hoisted to the board
+  office and shown once. The test is mechanical — collect the distinct numbers, and
+  if exactly one covers the whole board, it belongs to the board.
+- **READ THE TEXT OR READ THE LINK — decide per source, and never assume the link is
+  the safer one.** Putnam's board page 404s on all five member profile links and
+  points TWO of them at a member who has left the board; the visible text is
+  correct. St. Clair is the exact mirror: its captions are wrong and the URLs right.
+  Neither surface earns blanket trust, so check which one the county actually
+  maintains before keying on it. (Brown adds the miniature version: one member's
+  phone is marked up as `mail:` where every other row has `tel:`, so reading phones
+  out of hrefs silently drops him. Read the visible number.)
 - **A TEXT LAYER THAT EXTRACTS AS NOISE IS WORSE THAN NO TEXT LAYER, because it parses.**
   Mason's roster PDF is a scan carrying a text layer written in a non-embedded font whose
   encoding does not survive extraction: pdfplumber and pdftotext both return line noise

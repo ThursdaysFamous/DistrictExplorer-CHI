@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -91.15, minLat: 37.75, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -91.55, minLat: 37.75, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 37.7, maxLat: 42.75, minLng: -91.25, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 37.7, maxLat: 42.75, minLng: -91.65, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -6381,15 +6381,22 @@ function initChiExplorer() {
           if (m.role) person.badge = String(m.role);
           if (m.phone) person.phone = String(m.phone);
           if (m.email) person.email = String(m.email);
+          // "Term: 2017 to Present" is a START, not an expiry — the one term
+          // fact these sources publish, worded as the source words it.
+          if (m.since) person.note = "Serving since " + String(m.since);
           return person;
         }), { tinted: true }));
         var note = board.structure ? String(board.structure) : null;
         if (note) wrap.appendChild(renderFieldStack([{ label: "Board", value: note }]));
-        if (board.office && board.office.address) {
+        // Address OR phone: a board whose only published contact is a shared
+        // switchboard (Calhoun prints the same number under all five members,
+        // so it is the board's line, not theirs) still gets an office row —
+        // one honest shared number beats five implied direct ones.
+        if (board.office && (board.office.address || board.office.phone)) {
           wrap.appendChild(renderOfficeGroup({
             offices: [{
               label: board.office.label ? String(board.office.label) : "Board Office",
-              lines: [String(board.office.address)].concat(
+              lines: (board.office.address ? [String(board.office.address)] : []).concat(
                 board.office.phone ? [String(board.office.phone)] : [])
             }]
           }));

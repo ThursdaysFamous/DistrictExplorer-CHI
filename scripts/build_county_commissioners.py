@@ -25,12 +25,18 @@ import os
 import re
 import sys
 
-# Every county here elects at large; a member count outside this range means
-# the page changed shape and the roster should not ship.
+# Every county here elects at large. The per-county seat count is the real
+# guard — a board that suddenly parses one member short means the page changed
+# shape, and that must not ship quietly. The range below is the backstop for a
+# county added to the scraper before this table.
 MIN_MEMBERS = 3
 MAX_MEMBERS = 9
-MIN_COUNTIES = 2
-ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Commissioner")
+EXPECT_MEMBERS = {
+    "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
+    "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
+}
+MIN_COUNTIES = 6
+ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Commissioner", "Board Member")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -58,6 +64,11 @@ def main():
         if not (MIN_MEMBERS <= len(members) <= MAX_MEMBERS):
             fail("%s parsed %d members, outside the %d-%d an at-large board should have"
                  % (key, len(members), MIN_MEMBERS, MAX_MEMBERS))
+        seats = EXPECT_MEMBERS.get(key)
+        if seats is not None and len(members) != seats:
+            fail("%s parsed %d members, the county seats %d — the page's shape "
+                 "changed, or the board did. Re-read it before shipping."
+                 % (key, len(members), seats))
         names = [m.get("name") for m in members]
         if len(set(names)) != len(names):
             fail("%s has duplicate member names (%s)" % (key, ", ".join(sorted(names))))
@@ -72,7 +83,7 @@ def main():
             if role and role not in ALLOWED_ROLES:
                 fail("%s: unrecognized role %r for %s" % (key, role, m["name"]))
             entry = {"name": m["name"]}
-            for f_ in ("role", "phone", "email"):
+            for f_ in ("role", "phone", "email", "since"):
                 if m.get(f_):
                     entry[f_] = m[f_]
             clean_members.append(entry)

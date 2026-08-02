@@ -184,6 +184,10 @@ GEOMETRY_FILES = {
     "marshall-county-board-districts.json": (3, 3),  # Marshall County Board districts, DERIVED: Census townships dissolved per the composition the county prints in the DISTRICT #n headings of its own board roster PDF (scripts/build_marshall_board_districts.py; --check is the drift gate). The county runs no public GIS. No township is split, so every district edge is a township edge; the build asserts the three districts partition all 12 townships exactly and that their Census 2020 populations balance (1.4% spread across three equal four-member districts).
     "mason-county-outline.json": (1, 1),  # Mason County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entry.
     "mason-county-board-districts.json": (2, 2),  # Mason County Board districts, DERIVED: Census townships dissolved per the two composition lines the county prints under its board roster (scripts/build_mason_board_districts.py; --check is the drift gate). Its only mapping surface is a WTH parcel viewer with no feature service. No township is split, so every district edge is a township edge; the build asserts the two districts partition all 13 townships exactly and that their Census 2020 populations balance (0.2% spread — 6,528 against 6,558 — across two equal four-member districts).
+    "pike-county-outline.json": (1, 1),  # Pike County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
+    "putnam-county-outline.json": (1, 1),  # Putnam County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
+    "brown-county-outline.json": (1, 1),  # Brown County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
+    "calhoun-county-outline.json": (1, 1),  # Calhoun County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -252,6 +256,10 @@ DYNAMIC_REFERENCE = frozenset({
     "stark-county-outline.json",
     "champaign-county-outline.json",
     "piatt-county-outline.json",
+    "pike-county-outline.json",
+    "putnam-county-outline.json",
+    "brown-county-outline.json",
+    "calhoun-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 

@@ -1,4 +1,94 @@
 {
+ "BROWN": {
+  "county": "Brown County",
+  "members": [
+   {
+    "email": "d.ferrill@browncoil.org",
+    "name": "David Ferrill",
+    "phone": "217-257-7508",
+    "role": "Chairman"
+   },
+   {
+    "email": "b.willis@browncoil.org",
+    "name": "Bob Willis",
+    "phone": "217-653-8827",
+    "role": "Vice Chairman"
+   },
+   {
+    "email": "e.koch@browncoil.org",
+    "name": "Ethan Koch",
+    "phone": "217-440-1917",
+    "role": "Board Member"
+   },
+   {
+    "email": "mark.yingling@browncoil.org",
+    "name": "Mark Yingling",
+    "phone": "217-740-2680",
+    "role": "Board Member"
+   },
+   {
+    "email": "k.groesch@browncoil.org",
+    "name": "Karl Groesch",
+    "phone": "217-473-3961",
+    "role": "Board Member"
+   },
+   {
+    "email": "r.akright@browncoil.org",
+    "name": "Robert Akright",
+    "phone": "217-801-8296",
+    "role": "Board Member"
+   },
+   {
+    "email": "m.myers@browncoil.org",
+    "name": "Mick Myers",
+    "phone": "217-322-7393",
+    "role": "Board Member"
+   }
+  ],
+  "sourceUrl": "https://www.browncoil.org/county-board/",
+  "structure": "7 members elected countywide — no districts"
+ },
+ "CALHOUN": {
+  "county": "Calhoun County",
+  "members": [
+   {
+    "email": "phil.robeen@calhouncountyil.gov",
+    "name": "Phil Robeen",
+    "role": "Chairman",
+    "since": 2017
+   },
+   {
+    "email": "patrick.simon@calhouncountyil.gov",
+    "name": "Patrick Simon",
+    "role": "Vice Chairman",
+    "since": 2022
+   },
+   {
+    "email": "terry.woelfel@calhouncountyil.gov",
+    "name": "Terry Woelfel",
+    "role": "Commissioner",
+    "since": 2016
+   },
+   {
+    "email": "deann.fester@calhouncountyil.gov",
+    "name": "Deann Koster-Fester",
+    "role": "Commissioner",
+    "since": 2022
+   },
+   {
+    "email": "marylouise.clark@calhouncountyil.gov",
+    "name": "Mary Louise Clark",
+    "role": "Commissioner",
+    "since": 2026
+   }
+  ],
+  "office": {
+   "label": "Board of Commissioners",
+   "phone": "618-576-9700 ext. 2"
+  },
+  "sourceUrl": "https://www.calhouncountyil.gov/government/county-board/members/",
+  "structure": "Commission form — 5 commissioners elected countywide"
+ },
  "MONROE": {
   "county": "Monroe County",
   "members": [
@@ -22,6 +112,90 @@
   },
   "sourceUrl": "https://monroecountyil.gov/departments/board-of-commissioners/",
   "structure": "Commission form — 3 commissioners elected countywide"
+ },
+ "PIKE": {
+  "county": "Pike County",
+  "members": [
+   {
+    "email": "rhoskin@pikecountyil.org",
+    "name": "Reta Hoskin",
+    "role": "Chairman"
+   },
+   {
+    "email": "tlewis@pikecountyil.org",
+    "name": "Tom Lewis",
+    "role": "Vice Chairman"
+   },
+   {
+    "email": "aborrowman@pikecountyil.org",
+    "name": "Andy Borrowman",
+    "role": "Board Member"
+   },
+   {
+    "email": "jcobb@pikecountyil.org",
+    "name": "Joseph Cobb",
+    "role": "Board Member"
+   },
+   {
+    "email": "dfoster@pikecountyil.org",
+    "name": "Don Foster",
+    "role": "Board Member"
+   },
+   {
+    "email": "lkendrick@pikecountyil.org",
+    "name": "Lance Kendrick",
+    "role": "Board Member"
+   },
+   {
+    "email": "mmountain@pikecountyil.org",
+    "name": "Mark Mountain",
+    "role": "Board Member"
+   },
+   {
+    "email": "dross@pikecountyil.org",
+    "name": "Derek Ross",
+    "role": "Board Member"
+   },
+   {
+    "email": "jsheppard@pikecountyil.org",
+    "name": "Jim Sheppard",
+    "role": "Board Member"
+   }
+  ],
+  "sourceUrl": "https://www.pikecountyil.org/county-boards/",
+  "structure": "9 members elected countywide — no districts"
+ },
+ "PUTNAM": {
+  "county": "Putnam County",
+  "members": [
+   {
+    "name": "Charles Lenkaitis",
+    "role": "Chairman"
+   },
+   {
+    "name": "Anthony \"Tony\" Rue, Jr",
+    "role": "Vice Chairman"
+   },
+   {
+    "name": "Luke Holly",
+    "role": "Board Member"
+   },
+   {
+    "name": "Marlee Giacometti",
+    "role": "Board Member"
+   },
+   {
+    "name": "Floyd \"BJ\" Holocker, III",
+    "role": "Board Member"
+   }
+  ],
+  "office": {
+   "address": "120 Fourth St., Hennepin, IL 61327",
+   "label": "County Board",
+   "phone": "815-925-7129"
+  },
+  "sourceUrl": "https://putnamil.gov/government/county_board/index.php",
+  "structure": "5 members elected countywide — no districts"
  },
  "RANDOLPH": {
   "county": "Randolph County",
