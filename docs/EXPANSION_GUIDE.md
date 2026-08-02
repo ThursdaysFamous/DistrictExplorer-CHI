@@ -950,6 +950,52 @@ taught them.
   Also: block service workers (they bypass `page.route`), and force a real document load
   between points — a hash-only change leaves the previous point's cards on screen and
   silently passes stale assertions.
+- **A TEXT LAYER THAT EXTRACTS AS NOISE IS WORSE THAN NO TEXT LAYER, because it parses.**
+  Mason's roster PDF is a scan carrying a text layer written in a non-embedded font whose
+  encoding does not survive extraction: pdfplumber and pdftotext both return line noise
+  ("xRF# ISgH tlgP") and neither errors. A scraper reading that would not fail — it would
+  ship confident garbage under real officeholders' names, which is the single worst
+  outcome this pipeline can produce. **Before writing any PDF scraper, look at what
+  extraction actually returns and check it against the document.** `pdfimages -list` tells
+  you in one command whether you are reading a page or a photograph of one.
+- **A source that is FETCHABLE but not MACHINE-READABLE gets a WATCHER, not a scraper.**
+  When the only roster is a scan, transcribe it by hand (the Kendall/McHenry posture) and
+  automate the one thing a machine can still do: notice that the source moved. Mason's
+  `scripts/mason_roster_watch.py` checks two things weekly and edits nothing —
+  **(1) the page still links THAT EXACT document**, which matters most because a
+  WordPress-published replacement lands at a new upload path and the old URL keeps
+  serving the old file with a 200 forever (the `validate_sources.py` supersession
+  failure), and **(2) the bytes still hash to a recorded fingerprint.** Either change
+  opens a tracking issue asking a person to re-read. Make it deliberately noisy: a
+  re-export of an identical scan raises a false alarm that costs one minute, while a
+  missed roster change ships a wrong officeholder indefinitely. Say in the workflow that
+  its output is a request for a person, not a diff.
+- **When a source marks ANY member's address as legally protected, drop the
+  residence-derived columns for the WHOLE roster — including the town.** Mason prints
+  seven members' home addresses and an eighth row reading "SECURED ADDRESS". Shipping
+  town-for-seven-and-blank-for-one would make the protected member the one row that
+  stands out, which is the exact outcome the protection exists to prevent. The Madison
+  precedent (never collect a residence) extends one column further here, and costs
+  nothing: the card still carries name, district, party, role, phone, e-mail and term.
+- **A note about how someone REACHED a seat is a note, never a badge.** Mason annotates
+  two rows — an appointment date and a vacancy date, each with "will run for full term".
+  Those describe a route to office, not an office; badging them would read as a title the
+  member does not hold. They ride the muted note next to the term year.
+- **The coverage outline can acquire an interior HOLE, and that is a correct state.**
+  Mason closed the served ring around Menard, so `metro-outline.json` went from one ring
+  to two — an outer ring plus a hole. Both consumers were already even-odd
+  (`pointInPolygonRings`, and Leaflet's even-odd fill under the wash), so the enclosed
+  county correctly reads as uncovered. **Check both before shipping the county that
+  closes a ring**, and add the enclosed county to `OUTSIDE`: that anchor is what proves
+  the hole is real rather than the outline having swallowed a county whole. Assert it in
+  a card test too — a hole that silently inverts would tell residents of an unserved
+  county that they are covered.
+- **A workflow's PR title and body are a human-review surface: county drift there is a
+  real defect, not cosmetics.** Three roster workflows cloned from Iroquois's kept
+  Iroquois's DOMAIN and its "4 districts, four members each" description while scraping
+  and titling a different county — so a Washington roster PR would have asked a reviewer
+  to approve officeholder changes under another county's provenance. When cloning a
+  workflow, grep the new file for the OLD county's name and domain before committing.
 - **A frontier county you cannot serve still needs its outline** if it carries a recorded
   gap: the gaps panel tests the pin against `<slug>-county-outline.json`, so without one
   a reader in a greyed-out county is told nothing is missing there. Ship the outline,
