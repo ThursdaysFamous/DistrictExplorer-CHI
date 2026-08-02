@@ -132,6 +132,25 @@ def jurisdiction_of(results, county, muni):
     return "?"
 
 
+# THE DIRECTORY ABBREVIATES ONE PLACE INTO ANOTHER COUNTY'S CITY. EWG prints
+# St. Clair's Washington Park as "VILLAGE OF WASHINGTON", and Illinois has
+# exactly one place named plainly "Washington" — the CITY of Washington in
+# TAZEWELL County, population ~16,000. So the name matched, cleanly and wrongly:
+# Washington Park's six trustees shipped on Washington-in-Tazewell's Census
+# GEOID (1779033), that city's own government never appeared, and Washington
+# Park's own GEOID (1779085) held nothing at all. It went unnoticed because
+# nothing else claimed 1779033 until Tazewell County was added and the two
+# collided.
+#
+# Keyed by (county, jurisdiction) rather than by name alone: an alias that fires
+# on "Village of Washington" everywhere would be a second version of the same
+# bug. It stops matching if EWG prints the full name, which is the point — the
+# Minooka posture.
+NAME_ALIASES = {
+    ("St. Clair", "Village of Washington"): "Village of Washington Park",
+}
+
+
 def looks_like_name(text):
     if not text or "@" in text or re.search(r"\d", text):
         return False
@@ -233,6 +252,7 @@ def parse(pdf_bytes, warnings):
         name = clean(re.sub(r"^(CITY|VILLAGE|TOWN)\s+OF\s+", "", header_text, flags=re.I))
         m = re.match(r"^(CITY|VILLAGE|TOWN)\s+OF\s+", header_text, re.I)
         jurisdiction = "%s of %s" % (m.group(1).capitalize(), name.title())
+        jurisdiction = NAME_ALIASES.get((county_name, jurisdiction), jurisdiction)
         muni = results[county_name].setdefault(jurisdiction, {
             "hall": {}, "people": [], "in_hall": True})
         section = None

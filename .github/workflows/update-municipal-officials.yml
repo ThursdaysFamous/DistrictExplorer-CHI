@@ -215,6 +215,14 @@ jobs:
         continue-on-error: true
         run: python3 scripts/ewg_municipal_officials_scraper.py --out-madison /tmp/madison_municipal_officials.json --out-stclair /tmp/stclair_municipal_officials.json
 
+      # Tazewell's Clerk yearbook, read from word POSITIONS: on many pages the
+      # office titles and the officers' names extract as separate blocks, so a
+      # line-based read would pair the wrong people with the wrong offices.
+      - name: Scrape the Tazewell County Clerk yearbook
+        id: scrape_tazewell
+        continue-on-error: true
+        run: python3 scripts/tazewell_municipal_officials_scraper.py --out /tmp/tazewell_municipal_officials.json
+
       - name: Scrape the Rock Island County Clerk elected officials listing
         id: scrape_rock_island
         continue-on-error: true
@@ -274,6 +282,7 @@ jobs:
           steps.scrape_dekalb.outcome == 'failure' || steps.scrape_grundy.outcome == 'failure' ||
           steps.scrape_livingston.outcome == 'failure' || steps.scrape_logan.outcome == 'failure' ||
           steps.scrape_mclean.outcome == 'failure' || steps.scrape_sangamon.outcome == 'failure' ||
+          steps.scrape_tazewell.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -381,6 +390,7 @@ jobs:
           add "${{ steps.scrape_ewg.outcome }}"         madison     county /tmp/madison_municipal_officials.json
           add "${{ steps.scrape_ewg.outcome }}"         st-clair    county /tmp/stclair_municipal_officials.json
           add "${{ steps.scrape_rock_island.outcome }}" rock-island county /tmp/rock_island_municipal_officials.json
+          add "${{ steps.scrape_tazewell.outcome }}"    tazewell    county /tmp/tazewell_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json

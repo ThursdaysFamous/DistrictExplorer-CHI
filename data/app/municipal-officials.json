@@ -370,6 +370,51 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vah.com"
   },
+  "1702206": {
+    "board": [
+      {
+        "name": "Brad Robbins",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cheyna Harris",
+        "role": "Trustee"
+      },
+      {
+        "name": "Danny Harris",
+        "role": "Trustee"
+      },
+      {
+        "name": "Frankie Boyd",
+        "role": "Trustee"
+      },
+      {
+        "name": "James Kisner",
+        "role": "Trustee"
+      },
+      {
+        "name": "Theresa Funk",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Eric Boesdorfer",
+      "role": "President"
+    },
+    "name": "Village of Armington",
+    "office": {
+      "email": "armingtonvillagehall@yahoo.com"
+    },
+    "officers": [
+      {
+        "name": "Tammy Lindsey",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://yahoo.com"
+  },
   "1702752": {
     "board": [
       {
@@ -4322,6 +4367,47 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://crestwood.illinois.gov"
   },
+  "1717549": {
+    "board": [
+      {
+        "name": "Cara Paul",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eben McEndollar",
+        "role": "Trustee"
+      },
+      {
+        "name": "Norma Dison",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ron Talbot",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shanita Wallace",
+        "role": "Trustee"
+      },
+      {
+        "name": "Terry Keogel",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Fred Lang",
+      "role": "Mayor"
+    },
+    "name": "Village of Creve Coeur",
+    "officers": [
+      {
+        "name": "Jacqueline Lyle",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf"
+  },
   "1717887": {
     "county": "McHenry",
     "head": {
@@ -4742,6 +4828,52 @@
     "sourceUrl": "https://sangamonil.gov/departments/a-c/county-clerk/elected-officials/local-officials/city-village-officials",
     "url": "http://villageofdawson.com"
   },
+  "1718940": {
+    "board": [
+      {
+        "name": "Brock Wiegand",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cole Wiegand",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jake Smith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jim Hackney",
+        "role": "Trustee"
+      },
+      {
+        "name": "Josh Rossman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ross Kraemer",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Grant Hackney",
+      "role": "President"
+    },
+    "name": "Village of Deer Creek",
+    "officers": [
+      {
+        "name": "Lori C. Lewis",
+        "role": "Clerk"
+      },
+      {
+        "name": "Jodi McMahon",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://deercreekillinois.org"
+  },
   "1718992": {
     "board": [
       {
@@ -4903,6 +5035,60 @@
     ],
     "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
     "url": "https://www.cityofdekalb.com"
+  },
+  "1719226": {
+    "board": [
+      {
+        "name": "Brent Nafziger",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Douglas Bury",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Joseph Watts",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Joshua Lusher",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Levi Birkey",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Linda Slabaugh",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Adam White",
+      "role": "Mayor"
+    },
+    "name": "City of Delavan",
+    "office": {
+      "email": "cityofdelavan@delavanil.org"
+    },
+    "officers": [
+      {
+        "name": "Tia Galloway",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Tammy Hintz",
+        "role": "Deputy Clerk"
+      },
+      {
+        "name": "Gail Mitchell",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://delavanil.org"
   },
   "1719642": {
     "board": [
@@ -5732,6 +5918,43 @@
       }
     ],
     "sourceUrl": "https://rockislandcountyil.gov/DocumentCenter/View/291/Elected-Officials-Listing-PDF"
+  },
+  "1722164": {
+    "board": [
+      {
+        "name": "Daniel S. Decker",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Mark Hill",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Michael Lee Sutherland",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Seth D. Mingus",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "John P Kahl",
+      "role": "Mayor"
+    },
+    "name": "City of East Peoria",
+    "office": {
+      "email": "morgancadwalader@cityofeastpeoria.com"
+    },
+    "officers": [
+      {
+        "name": "Morgan R. Haning",
+        "role": "City Clerk"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://cityofeastpeoria.com"
   },
   "1722255": {
     "board": [
@@ -8128,6 +8351,55 @@
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "http://www.greenoaks.org/"
   },
+  "1731563": {
+    "board": [
+      {
+        "name": "Daniel Beal",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eric Terrill",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ken Gregory",
+        "role": "Trustee"
+      },
+      {
+        "name": "Renee Coile",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Terrill",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steve Baker",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Keith Beal",
+      "role": "President"
+    },
+    "name": "Village of Green Valley",
+    "office": {
+      "email": "gvvillage@mediacombb.net"
+    },
+    "officers": [
+      {
+        "name": "Carla Ford",
+        "role": "Clerk"
+      },
+      {
+        "name": "Janice E. Runyon",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://mediacombb.net"
+  },
   "1731667": {
     "county": "McHenry",
     "head": {
@@ -9402,6 +9674,55 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://village.homewood.il.us"
+  },
+  "1736126": {
+    "board": [
+      {
+        "name": "Jay Wittrig",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joe Springer",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kevin Mohr",
+        "role": "Trustee"
+      },
+      {
+        "name": "Larry Maness",
+        "role": "Trustee"
+      },
+      {
+        "name": "Marshall Nafziger",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Thornton",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "August C. Eilts",
+      "role": "President"
+    },
+    "name": "Village of Hopedale",
+    "office": {
+      "email": "hopedale@speednet.com"
+    },
+    "officers": [
+      {
+        "name": "Laurie Elless",
+        "role": "Clerk"
+      },
+      {
+        "name": "Amber Myers",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://speednet.com"
   },
   "1736750": {
     "county": "Kane",
@@ -12034,6 +12355,51 @@
     "name": "Village of Machesney Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
+  "1745785": {
+    "board": [
+      {
+        "name": "Candy Haynes",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jerry Peterson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kraig Kamp",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Morman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Timothy E. Severt",
+        "role": "Trustee"
+      },
+      {
+        "name": "Willie Cotton",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Josh Schmidgall",
+      "role": "President"
+    },
+    "name": "Village of Mackinaw",
+    "office": {
+      "email": "village@mackinawil.gov"
+    },
+    "officers": [
+      {
+        "name": "Lisa Spencer",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://mackinawil.gov"
+  },
   "1745993": {
     "board": [
       {
@@ -12424,6 +12790,55 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://cityofmarkham.net"
+  },
+  "1747111": {
+    "board": [
+      {
+        "name": "Bob Neuhaus",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Cathi Sipes",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Justin Neuman",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Lisa Joos",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Rick Crum",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Ron Babb",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Dale Little",
+      "role": "Mayor"
+    },
+    "name": "City of Marquette Heights",
+    "office": {
+      "email": "mhoffice@cityofmhgov.org"
+    },
+    "officers": [
+      {
+        "name": "Vikki Steele",
+        "role": "Clerk"
+      },
+      {
+        "name": "Rick Worrent",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://cityofmhgov.org"
   },
   "1747150": {
     "board": [
@@ -13286,6 +13701,51 @@
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://villageofmillstadt.org"
   },
+  "1749555": {
+    "board": [
+      {
+        "name": "Angie Swartzendruber",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dane Moriconi",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joe Dial",
+        "role": "Trustee"
+      },
+      {
+        "name": "Keith Williams",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Hoeft",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Nathan Fosdick",
+      "role": "President"
+    },
+    "name": "Village of Minier",
+    "office": {
+      "email": "minier@minier.com"
+    },
+    "officers": [
+      {
+        "name": "Sasha Horner",
+        "role": "Clerk"
+      },
+      {
+        "name": "Cindy Nystrom",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://minier.com"
+  },
   "1749607": {
     "board": [
       {
@@ -13655,6 +14115,57 @@
     ],
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf",
     "url": "https://www.morrisil.com"
+  },
+  "1750621": {
+    "board": [
+      {
+        "name": "Brad Menold",
+        "role": "Trustee"
+      },
+      {
+        "name": "Craig Hilliard",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Cirilli",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nate Parrott",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rod Blunier",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steven Leitch",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Jeff Kaufman",
+      "role": "President"
+    },
+    "name": "Village of Morton",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Julie Smick",
+        "role": "Administrator"
+      },
+      {
+        "name": "Sam Ritthaler",
+        "role": "Clerk"
+      },
+      {
+        "name": "Julie Smick",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://morton-il.gov"
   },
   "1750647": {
     "board": [
@@ -14724,6 +15235,55 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://northlakecity.com"
+  },
+  "1754092": {
+    "board": [
+      {
+        "name": "Bill Atkisson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dave Johnson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gloria Arrington",
+        "role": "Trustee"
+      },
+      {
+        "name": "Pat Landrith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah Swibold",
+        "role": "Trustee"
+      },
+      {
+        "name": "Terri Lynn Plemons",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Steve Flowers",
+      "role": "President"
+    },
+    "name": "Village of North Pekin",
+    "office": {
+      "email": "northpekinvillage@gmail.com"
+    },
+    "officers": [
+      {
+        "name": "Kathy Curless",
+        "role": "Clerk"
+      },
+      {
+        "name": "Sharon Rast",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://northpekin.us"
   },
   "1754144": {
     "board": [
@@ -16244,6 +16804,55 @@
     },
     "name": "Village of Pecatonica",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
+  },
+  "1758447": {
+    "board": [
+      {
+        "name": "Chris Onken",
+        "role": "Council Member"
+      },
+      {
+        "name": "David Nutter",
+        "role": "Council Member"
+      },
+      {
+        "name": "John Abel",
+        "role": "Council Member"
+      },
+      {
+        "name": "Karen Hohimer",
+        "role": "Council Member"
+      },
+      {
+        "name": "Lloyd Orrick Phone",
+        "role": "Council Member"
+      },
+      {
+        "name": "Rick Hilst Phone",
+        "role": "Council Member"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Mary Burress",
+      "role": "Mayor"
+    },
+    "name": "City of Pekin",
+    "office": {
+      "email": "smcmillan@ci.pekin.il.us"
+    },
+    "officers": [
+      {
+        "name": "Nicole Stewart",
+        "role": "Clerk"
+      },
+      {
+        "name": "Roy Beckham",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://ci.pekin.il.us"
   },
   "1759052": {
     "board": [
@@ -19895,6 +20504,51 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://southholland.org"
   },
+  "1771175": {
+    "board": [
+      {
+        "name": "Baltazar Gonzalez",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cheryl Revelle",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jarvis Young",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joyce Dane",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michelle Caldwell",
+        "role": "Trustee"
+      },
+      {
+        "name": "Remmington Hawkins",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Eric Stout",
+      "role": "President"
+    },
+    "name": "Village of South Pekin",
+    "office": {
+      "email": "info@villageofsouthpekin.org"
+    },
+    "officers": [
+      {
+        "name": "Sue Pinney",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://villageofsouthpekin.org"
+  },
   "1771240": {
     "board": [
       {
@@ -21104,6 +21758,60 @@
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "http://www.towerlakes-il.gov/"
   },
+  "1775965": {
+    "board": [
+      {
+        "name": "Drew Scranton",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jason Kreiling",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jeff Hinman",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Replogie",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nathan Zuercher",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sherena J. Smith",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Ken Harding",
+      "role": "President"
+    },
+    "name": "Village of Tremont",
+    "office": {
+      "email": "villageoftremont@comcast.net"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Michael R. Seghetti",
+        "role": "Attorney"
+      },
+      {
+        "name": "Jena Alig",
+        "role": "Clerk"
+      },
+      {
+        "name": "Jeanine M. Royer",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
+    "url": "https://tremontil.gov"
+  },
   "1776160": {
     "county": "McHenry",
     "head": {
@@ -21602,6 +22310,59 @@
   "1779033": {
     "board": [
       {
+        "name": "Bobby Martin III",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Brandon Moss",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Jamie Smith",
+        "role": "Alderperson"
+      },
+      {
+        "name": "John Blundy",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Michael Ernst",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Michael McIntyre",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Paula Johnson",
+        "role": "Alderperson"
+      },
+      {
+        "name": "Todd Sluder",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Tazewell",
+    "head": {
+      "name": "Lilija V. Stevens",
+      "role": "Mayor"
+    },
+    "name": "City of Washington",
+    "officers": [
+      {
+        "name": "Valeri Brod",
+        "role": "Clerk"
+      },
+      {
+        "name": "Carol Crocker",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf"
+  },
+  "1779085": {
+    "board": [
+      {
         "name": "Carlene Tucker",
         "role": "Trustee"
       },
@@ -21632,7 +22393,7 @@
       "name": "Angie “Ann” Rodgers",
       "role": "Mayor"
     },
-    "name": "Village of Washington",
+    "name": "Village of Washington Park",
     "office": {
       "address": "5218 North Park Drive, Washington Park IL 62204",
       "phone": "618-874-2040"
