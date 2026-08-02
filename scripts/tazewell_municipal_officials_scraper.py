@@ -29,8 +29,12 @@ by x. Same recipe as LaSalle, for the same reason.
 The columns are stable across the section (measured against the 2026-05
 edition): the office title starts left of X_NAME, the officer's name occupies
 X_NAME..X_CONTACT, and the hall address / phone / website / e-mail sit right of
-X_CONTACT. A municipality's name is a row of CAPS with nothing in the contact
-column.
+X_CONTACT. A municipality's name is a row of CAPS in the office/name columns
+that is FOLLOWED by an office row — the contact column is ignored, because most
+headings share their row with the start of the hall address ("MARQUETTE HEIGHTS
+Address: City Hall"). Requiring an empty contact column silently dropped that
+municipality; requiring only CAPS captured the section title and a page header
+as two more. The look-ahead is what separates a place from a heading.
 
 TWO RULES THIS DOCUMENT TRIGGERS ON SIGHT, both already fleet convention:
 
