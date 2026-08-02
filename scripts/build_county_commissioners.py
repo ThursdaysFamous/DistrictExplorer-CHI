@@ -34,9 +34,11 @@ MAX_MEMBERS = 9
 EXPECT_MEMBERS = {
     "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
+    "SCHUYLER": 7,                   # pass-8; at-large proven from the canvass
 }
-MIN_COUNTIES = 6
-ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Commissioner", "Board Member")
+MIN_COUNTIES = 7
+ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Vice-Chairman",
+                 "Commissioner", "Board Member")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
