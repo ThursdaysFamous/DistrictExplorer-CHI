@@ -839,6 +839,27 @@ COUNTIES = {
             (38.3913, -89.4865, "Addieville — Washington County"),
         ],
     },
+    # De Witt (pass-7 tranche 4): board districts DERIVED by dissolving the
+    # county's own precinct layer per the composition it prints for every board
+    # member (scripts/build_dewitt_board_districts.py). Anchors derived from
+    # TIGERweb place centroids and point-verified.
+    "dewitt": {
+        "fips": "039",
+        "name": "De Witt County",
+        "inside": [
+            (40.1470, -88.9630, "Clinton (county seat)"),
+            (40.1846, -88.7853, "De Witt"),
+            (40.2480, -88.6423, "Farmer City"),
+            (40.0980, -89.0862, "Kenney"),
+            (40.2216, -88.9613, "Wapella"),
+        ],
+        "outside": [
+            (39.7993, -88.4627, "Atwood — Piatt County"),
+            (40.2638, -89.2309, "Atlanta — Logan County"),
+            (40.5681, -88.5385, "Anchor — McLean County"),
+            (39.9855, -88.8197, "Argenta — Macon County"),
+        ],
+    },
 }
 
 

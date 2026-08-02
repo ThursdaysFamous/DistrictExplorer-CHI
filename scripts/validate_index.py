@@ -174,6 +174,8 @@ GEOMETRY_FILES = {
     "iroquois-county-outline.json": (1, 1),  # Iroquois County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "monroe-county-outline.json": (1, 1),  # Monroe County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
     "randolph-county-outline.json": (1, 1),  # Randolph County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "dewitt-county-outline.json": (1, 1),  # De Witt County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "dewitt-county-board-districts.json": (4, 4),  # De Witt County Board districts, DERIVED: the county's own precinct layer dissolved per the composition it prints for every board member (scripts/build_dewitt_board_districts.py; --check is the drift gate). The county publishes only a raster JPG. Checked three ways: the four districts partition all 23 precincts exactly, every name resolves in the live layer, and the resulting Census 2020 populations balance to 3.2% spread. Districts are LETTERED A-D.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -216,6 +218,7 @@ ROSTER_FILES = {
     "tazewell-county-board-members.json": 4,  # Tazewell County Board members keyed by district (3 districts seating 21 members) plus a `chair` key for the COUNTYWIDE-elected Board Chairman (the McHenry shape). Scraped weekly from the county's own member pages (21 e-mails, 18 phones) rather than from its GIS layer, whose member attributes are stale. The scraper records the one district assignment the county's two surfaces disagree about instead of silently picking the tidier arithmetic.
     "iroquois-county-board-members.json": 4,  # Iroquois County Board members keyed by district (4 districts, four members each; 16/16 with phone, 15 with e-mail, every seat with a home town and term-expiry year). Scraped weekly from the county's own table, which prints ROMAN numerals the scraper converts to the integers its GIS keys by. Chairman and Vice Chairman are badged on their own district rows — both hold district seats.
     "il-county-commissioners.json": 2,  # At-large county boards, keyed like il-county-clerks.json. Counties that elect their board COUNTYWIDE have no district geometry, so their members ride the COUNTY card rather than a county-board dispatch entry (EXPANSION_GUIDE §1.5). Currently Monroe and Randolph, both commission-form counties with three commissioners each; scraped weekly.
+    "dewitt-county-board-members.json": 4,  # De Witt County Board members keyed by district LETTER (A-D, three members each; 12/12 with e-mail, 10 with phone, committees per member). Scraped weekly — and the same scrape re-reads the district composition printed on that page and FAILS if it no longer matches the compiled boundary, so a redistricting surfaces in CI rather than leaving the derived lines a cycle out of date.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at

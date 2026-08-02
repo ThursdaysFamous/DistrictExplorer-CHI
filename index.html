@@ -8043,6 +8043,48 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadDewittCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dewitt-county-outline.json", {}, 2);
+  });
+  function dewittCountyCoverage(point) {
+    return loadDewittCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  /* DE WITT COUNTY (the 34th dispatched county, added 2026-08-02 — the pass-7
+   * tranche-4 derivation tier, reaching the ring through McLean and Logan).
+   *
+   * Its board boundary is DERIVED: the county publishes no board-district GIS
+   * (its only artifact is a raster JPG), but it states each district's PRECINCT
+   * COMPOSITION as text on every one of its twelve members' rows, and its
+   * precinct fabric IS published. scripts/build_dewitt_board_districts.py
+   * dissolves the latter per the former, checked three ways — the four
+   * districts must partition all 23 precincts exactly, every name must resolve
+   * in the live layer, and the resulting Census 2020 populations must balance
+   * (measured 3.2% spread across A-D, consistent with a real apportionment).
+   *
+   * The roster scraper re-reads that composition every week and FAILS if it no
+   * longer matches the compiled boundary — so a redistricting surfaces in CI
+   * rather than leaving the shipped lines quietly a cycle out of date, which is
+   * how the LaSalle defect happened.
+   *
+   * Districts are LETTERED (A-D), not numbered — the first in the fleet. */
+  var loadDewittBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dewitt-county-board-districts.json", {}, 2);
+  });
+  var loadDewittBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dewitt-county-board-members.json", {}, 2);
+  });
+  /* Precincts live from the county's Sidwell/Magnasoft org. The layer is built
+   * on the Census 2020 voting-district schema (NAME20) and carries that year's
+   * election results, which are read nowhere; its 23 names match the county's
+   * current precinct list verbatim. No polling layer is published. */
+  var loadDewittPrecincts = makeCached(function () {
+    return loadSimpleFeatureLayer(
+      "https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/",
+      "ElectionPrecincts_DeWittIL", 0, "NAME20", "De Witt County precincts");
+  });
 
   /* IROQUOIS COUNTY (the 31st dispatched county, added 2026-08-02 — the
    * pass-7 tranche-3 full-fat add, reaching the ring through Kankakee).
@@ -14903,6 +14945,67 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // De Witt — 4 LETTERED districts (A-D), the fleet's first, each electing
+      // three members. Boundary DERIVED: the county's own precincts dissolved
+      // per the composition it prints for every member
+      // (scripts/build_dewitt_board_districts.py). Roster scraped weekly, and
+      // that same scrape re-checks the composition against the compiled
+      // boundary so a redistricting fails CI instead of going unnoticed.
+      {
+        key: "dewitt",
+        coverage: dewittCountyCoverage,
+        loadGeometry: loadDewittBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDewittBoardDistricts(),
+            loadDewittBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "De Witt County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "De Witt County Board (official)",
+            url: "https://www.dewittcountyil.gov/government/county_board.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadDewittBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
       }
     ]
   });
@@ -17409,6 +17512,57 @@ function initChiExplorer() {
           return {
             label: "Randolph County Clerk — Elections (official)",
             url: "https://randolphcountyil.gov/county-clerk-recorder/"
+          };
+        }
+      },
+      // De Witt — 23 precincts, which are also what its board districts are
+      // dissolved from, so the board-district row here comes from the derived
+      // boundary the same way every other county's does. The county publishes
+      // no polling assignment.
+      {
+        key: "dewitt",
+        coverage: dewittCountyCoverage,
+        loadGeometry: loadDewittPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name20"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDewittPrecincts(),
+            loadDewittBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(feature.properties || {}, ["name20"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          fields.push({ label: "County", value: "De Witt County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "De Witt County Clerk — Elections (official)",
+            url: "https://www.dewittcountyil.gov/government/county_clerk.php"
           };
         }
       }

@@ -1,0 +1,146 @@
+{
+ "A": {
+  "members": [
+   {
+    "committees": [
+     "Land Use (Chair)",
+     "Public Safety (Vice Chair)",
+     "Liquor Commission",
+     "Finance"
+    ],
+    "email": "ccarter@dewittcountyil.gov",
+    "name": "Claro Carter",
+    "phone": "217-935-3892"
+   },
+   {
+    "committees": [
+     "Road and Bridge (Chair)",
+     "Liquor Commission",
+     "Finance"
+    ],
+    "email": "jprestegaard@dewittcountyil.gov",
+    "name": "Jamison Prestegaard",
+    "phone": "618-830-5531"
+   },
+   {
+    "committees": [
+     "Land Use",
+     "DCDC",
+     "Property",
+     "Compliance and Technology"
+    ],
+    "email": "jwitte@dewittcountyil.gov",
+    "name": "Joe Witte",
+    "phone": "309-530-7052",
+    "role": "Chairman"
+   }
+  ],
+  "sourceUrl": "https://www.dewittcountyil.gov/government/county_board.php"
+ },
+ "B": {
+  "members": [
+   {
+    "committees": [
+     "Property (Chair)",
+     "Liquor Commission (Vice Chair)",
+     "Finance"
+    ],
+    "email": "tferguson@dewittcountyil.gov",
+    "name": "Terry Ferguson",
+    "phone": "217-519-0016",
+    "role": "Vice-Chairman"
+   },
+   {
+    "committees": [
+     "Land Use (Vice Chair)",
+     "Property",
+     "Liquor Commission (Chair)",
+     "Compliance and Technology (Chair)"
+    ],
+    "email": "pryan@dewittcountyil.gov",
+    "name": "Patrick Ryan",
+    "phone": "309-830-4835"
+   },
+   {
+    "committees": [
+     "Public Safety",
+     "Road and Bridge",
+     "Liquor Commission",
+     "Friendship Center"
+    ],
+    "email": "jwerts@dewittcountyil.gov",
+    "name": "John Werts",
+    "phone": "217-433-0415"
+   }
+  ],
+  "sourceUrl": "https://www.dewittcountyil.gov/government/county_board.php"
+ },
+ "C": {
+  "members": [
+   {
+    "committees": [
+     "Property",
+     "Public Safety",
+     "911 Board and ETSB"
+    ],
+    "email": "tearle@dewittcountyil.gov",
+    "name": "Tim Earle"
+   },
+   {
+    "committees": [
+     "Road and Bridge",
+     "Land Use",
+     "DeWitt County Community Mental Health Board"
+    ],
+    "email": "tfarris@dewittcountyil.gov",
+    "name": "Thomas Farris",
+    "phone": "217-358-0894"
+   },
+   {
+    "committees": [
+     "Public Safety (Chair)",
+     "Finance",
+     "DCDC",
+     "Compliance and Technology (Vice Chair)"
+    ],
+    "email": "mmyers@dewittcountyil.gov",
+    "name": "Megan Myers",
+    "phone": "217-358-9750"
+   }
+  ],
+  "sourceUrl": "https://www.dewittcountyil.gov/government/county_board.php"
+ },
+ "D": {
+  "members": [
+   {
+    "committees": [
+     "Road and Bridge",
+     "Land Use",
+     "Regional Office of Education"
+    ],
+    "email": "chammer@dewittcountyil.gov",
+    "name": "Chris Hammer"
+   },
+   {
+    "committees": [
+     "Finance (Chair)",
+     "Property",
+     "Bi-County Health"
+    ],
+    "email": "tilleywood@gmail.com",
+    "name": "Melonie Tilley",
+    "phone": "217-935-6538"
+   },
+   {
+    "committees": [
+     "Road and Bridge",
+     "Public Safety"
+    ],
+    "email": "rwalters@dewittcountyil.gov",
+    "name": "Robb Walters",
+    "phone": "217-899-3579"
+   }
+  ],
+  "sourceUrl": "https://www.dewittcountyil.gov/government/county_board.php"
+ }
+}

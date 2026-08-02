@@ -129,6 +129,8 @@ const GEOMETRY_URLS = [
   "./data/app/iroquois-county-outline.json",
   "./data/app/monroe-county-outline.json",
   "./data/app/randolph-county-outline.json",
+  "./data/app/dewitt-county-outline.json",
+  "./data/app/dewitt-county-board-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -173,6 +175,7 @@ const ROSTER_URLS = [
   "./data/app/tazewell-county-board-members.json",
   "./data/app/iroquois-county-board-members.json",
   "./data/app/il-county-commissioners.json",
+  "./data/app/dewitt-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
