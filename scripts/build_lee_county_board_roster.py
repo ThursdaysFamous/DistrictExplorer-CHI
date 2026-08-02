@@ -59,7 +59,7 @@ def member_obj(rec):
     return member
 
 
-def resolve_roster(records):
+def resolve_roster(records, vacancies=()):
     roster = {}
     for rec in records:
         district = str(rec.get("district") or "").strip()
@@ -68,6 +68,16 @@ def resolve_roster(records):
             continue
         slot = roster.setdefault(district, {"members": [], "sourceUrl": SOURCE_URL})
         slot["members"].append(member_obj(rec))
+    # A seat the county prints with no name is counted and never named — the
+    # Livingston/Stephenson posture. Lee's District 3 went unfilled in the
+    # 2026-04-24 revision; the card should say a seat is vacant rather than
+    # quietly show four members where the county apportioned five.
+    for district in vacancies or ():
+        district = str(district).strip()
+        if not district:
+            continue
+        slot = roster.setdefault(district, {"members": [], "sourceUrl": SOURCE_URL})
+        slot["vacancies"] = slot.get("vacancies", 0) + 1
     for slot in roster.values():
         # Chair first, then alphabetical — so a card does not reshuffle between
         # weekly refreshes because the PDF was re-sorted.
@@ -82,7 +92,8 @@ def main():
     with open(sys.argv[1], encoding="utf-8") as f:
         payload = json.load(f)
     records = payload.get("members") if isinstance(payload, dict) else payload
-    roster = resolve_roster(records or [])
+    vacancies = payload.get("vacancies") if isinstance(payload, dict) else []
+    roster = resolve_roster(records or [], vacancies or [])
 
     members = sum(len(v["members"]) for v in roster.values())
     emails = sum(1 for v in roster.values() for m in v["members"] if m.get("email"))
@@ -91,8 +102,10 @@ def main():
     problems = []
     if len(roster) < MIN_DISTRICTS:
         problems.append("%d districts (< %d)" % (len(roster), MIN_DISTRICTS))
-    if members < MIN_MEMBERS:
-        problems.append("%d members (< %d)" % (members, MIN_MEMBERS))
+    vacant = sum(v.get("vacancies", 0) for v in roster.values())
+    if members + vacant < MIN_MEMBERS:
+        problems.append("%d seats: %d members + %d vacant (< %d)"
+                        % (members + vacant, members, vacant, MIN_MEMBERS))
     if emails < MIN_EMAILS:
         problems.append("%d e-mails (< %d)" % (emails, MIN_EMAILS))
     if parties < MIN_PARTIES:

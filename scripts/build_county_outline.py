@@ -997,6 +997,25 @@ COUNTIES = {
     # dissolves per the composition the county prints under its board roster
     # (scripts/build_mason_board_districts.py). Its only mapping surface is a
     # WTH parcel viewer with no feature service.
+    "adams": {
+        "fips": "001",
+        "name": "Adams County",
+        # Anchors derived from TIGERweb Incorporated Places centroids and
+        # round-tripped through a point-in-county query, not recalled.
+        "inside": [
+            (39.9351, -91.3684, "Quincy (county seat)"),
+            (40.0364, -91.0642, "Camp Point"),
+            (39.8170, -91.2436, "Payson"),
+            (40.0296, -90.9577, "Clayton"),
+            (40.0882, -91.2839, "Mendon"),
+        ],
+        "outside": [
+            (39.7296, -90.9095, "Baylis — Pike County"),
+            (40.2316, -90.9498, "Augusta — Hancock County"),
+            (40.0058, -90.8738, "Mound Station — Brown County"),
+            (40.1521, -90.7730, "Camden — Schuyler County"),
+        ],
+    },
     "mason": {
         "fips": "125",
         "name": "Mason County",

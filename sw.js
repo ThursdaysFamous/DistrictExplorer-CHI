@@ -137,6 +137,7 @@ const GEOMETRY_URLS = [
   "./data/app/cass-county-board-districts.json",
   "./data/app/marshall-county-outline.json",
   "./data/app/marshall-county-board-districts.json",
+  "./data/app/adams-county-outline.json",
   "./data/app/mason-county-outline.json",
   "./data/app/mason-county-board-districts.json",
   "./data/app/pike-county-outline.json",

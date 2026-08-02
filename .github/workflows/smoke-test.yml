@@ -36,6 +36,17 @@ jobs:
       - name: Coverage gaps match the guidebook
         run: python3 scripts/build_coverage_gaps.py --check
 
+      # Every script a workflow runs must import under the dependencies that
+      # workflow installs. This catches the seam no other gate looks at: the
+      # five derived-boundary roster refreshes (Cass, De Witt, Marshall, Mason,
+      # Washington) were dead from the day they shipped because their builders
+      # imported a composition constant from a module that pulled in shapely at
+      # module scope, which those jobs correctly never install. Scrapers fine,
+      # data fine, validate_index fine, every local run fine. Stdlib only, so it
+      # runs before anything is installed.
+      - name: Workflow scripts import under their declared dependencies
+        run: python3 scripts/validate_workflow_deps.py
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

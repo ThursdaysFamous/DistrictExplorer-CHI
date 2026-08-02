@@ -46,7 +46,11 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install -c scripts/requirements.txt requests
+        # shapely is for the LAST step, not the watcher: this job also re-checks
+        # the derived district boundary (build_mason_board_districts.py --check),
+        # which is real geometry against live Census townships. The watcher and
+        # the roster --check need only requests.
+        run: pip install -c scripts/requirements.txt requests shapely
 
       - name: Check the roster source
         id: watch

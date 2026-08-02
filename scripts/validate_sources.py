@@ -445,6 +445,28 @@ PROVENANCE = [
              "carries its edition and the scraper discovers it here; note the "
              "link is RELATIVE and only resolves against the Revize CDN root, "
              "which the scraper tries first."},
+    {"layer": "DeKalb County Board members (roster)",
+     "app_file": "dekalb-county-board-members.json",
+     "source_url": "https://dekalbcounty.org/government/county-board/county-board-members/",
+     "note": "The county's own members page (dekalb_county_board_scraper.py) — "
+             "party, term, 22 phones and 24 e-mails, none of which its boundary "
+             "GIS actually populates. Not flagged 'blocked': the block is REAL "
+             "but conditional, so both states are informative. The host serves "
+             "SiteGround's SG-Captcha stub (HTTP 202 + a /.well-known/sgcaptcha/ "
+             "refresh) whose own query string reads y=ipr:<caller ip> — it "
+             "scores the ADDRESS, not the request. Measured 2026-08-02: ~1 in 2 "
+             "from a well-reputed egress, 6 of 6 from a GitHub Actions runner "
+             "(which is what failed the first scheduled run, 2026-07-31). More "
+             "retries cannot fix an address, so the scraper walks "
+             "requests -> playwright -> wayback and its run log names the rung "
+             "that carried it. There is no single CI verdict either: across "
+             "four runs of one commit, three runner addresses were refused on "
+             "every rung (one held 24s on the interstitial under a real "
+             "Chromium) and a fourth was carried by plain requests on its first "
+             "try, so the weekly workflow treats a failure as address luck — "
+             "continue-on-error onto a standing issue rather than a red job. A "
+             "WARN here means only 'this checker drew the stub' and never that "
+             "the page changed."},
     {"layer": "DeKalb County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://dekalbcounty.org/about/reference-yearbook/",
@@ -457,7 +479,14 @@ PROVENANCE = [
              "dekalbcountyclerkil.gov/wp-content/uploads/<year>/<month>/ under a "
              "path that restamps annually, and the scraper discovers it from "
              "this page. Both section headings are matched whole-line — the "
-             "book's own index carries each of them followed by dot leaders."},
+             "book's own index carries each of them followed by dot leaders. "
+             "REACHABILITY IS INTERMITTENT BY DESIGN and a WARN here is not "
+             "necessarily drift: this host serves SiteGround's SG-Captcha stub "
+             "(HTTP 202 + a /.well-known/sgcaptcha/ refresh) scored on the "
+             "CALLER'S IP — measured 2026-08-02 it alternated roughly 1-in-2 "
+             "from one address while taking every attempt from a GitHub Actions "
+             "runner. Confirm against the PDF host before treating a WARN as a "
+             "source change; dekalbcountyclerkil.gov is open and unaffected."},
     {"layer": "Board of Review commissioners (roster)",
      "app_file": "ccbr-roster.json",
      "source_url": "https://www.cookcountyboardofreview.com/",

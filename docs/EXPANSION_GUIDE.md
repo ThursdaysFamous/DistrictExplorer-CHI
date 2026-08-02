@@ -375,6 +375,7 @@ one you have and therefore whether a rung can exist at all:
 | **Challenge** | Cloudflare; 403 or a 200 interstitial ("Just a moment", `cf-browser-verification`) | a browser rung — there is something to solve |
 | **Network deny** | same request, 200 from a developer machine and 403 from a CI runner | a browser rung **only if** a challenge sits underneath (DuPage: it did) |
 | **Hard WAF deny** | Akamai; small static body (~408 bytes) with `x-reference-error` | *nothing* — Joliet's browser rung fails identically to `requests` |
+| **Reputation score** | SiteGround; HTTP **202** (not an error status), ~220-byte body, `SG-Captcha: challenge`, refresh to `/.well-known/sgcaptcha/?…&y=ipr:<CALLER IP>` | changing the CALLER, not the request — see §2.5.1 |
 
 A hard deny is rule-4 terminal: record it, keep whatever rungs exist so the source
 resumes automatically if the edge relaxes, and let preservation carry the data. Do NOT
@@ -1062,6 +1063,103 @@ taught them.
   add NOTHING to `DISPATCH_COUNTY_FIPS` — the county stays unserved by construction.
   Derive the anchors from TIGERweb's own Incorporated Places centroids and round-trip
   each through a point-in-county query rather than recalling coordinates.
+- **A block rate measured from ONE egress is not a property of the site.** DeKalb's
+  scraper carried a confident number — "roughly two requests in three come back as the
+  stub and the third serves the page" — and its first scheduled run failed with six
+  stubs in a row, which that number makes a 1-in-700 event. The response says why:
+  SiteGround's SG-Captcha refreshes to `…/sgcaptcha/?…&y=ipr:<CALLER IP>`, `ipr` for IP
+  reputation. It scores the ADDRESS, so the observed rate is a fact about where you
+  measured from — ~1 in 2 from one egress, 6 of 6 from a GitHub Actions runner, same
+  code, same hour. Two consequences: **retry counts are the wrong dial** (no number of
+  draws beats a score), and **a block must be measured from CI before it is described**,
+  because a developer machine and a runner are different clients. Dispatch the workflow
+  on your branch and read the log — that is the only measurement that predicts the
+  weekly run. Note the scoring is per-HOST: dekalbcounty.org challenges while the
+  clerk's own dekalbcountyclerkil.gov, which serves the yearbook PDF, never did.
+- **…and "measured from CI" means SAMPLED from CI. One run is not a measurement, and
+  neither is three.** DeKalb was dispatched four times on one commit. Runs A, B and C
+  were refused on every rung — B under a real Chromium that held 24s on the
+  interstitial — which is about as convincing as a negative result gets, and the
+  conclusion drawn from it ("blocked from CI, give it the McHenry posture") went into a
+  commit message, a docstring, the source registry and a public issue comment. Run D was
+  then carried by plain `requests` on its FIRST try in 0.9s. Nothing had changed but the
+  runner's address. **A reputation-scored edge has no per-CI verdict at all**, because CI
+  is not one caller: GitHub draws runners from a pool and the edge scores each address
+  separately. The honest artifact is a rate with its sample size, not a verdict — and
+  three consecutive failures are exactly the evidence shape that feels conclusive and
+  is not. Re-run until you see the other outcome or can say how hard you looked for it.
+  The practical upside: this makes `continue-on-error` + a standing issue the right
+  posture for a better reason than "the source is gone" — a job that fails on address
+  luck should not go red, and the weekly cadence self-heals when the next draw lands
+  differently. Reserve the terminal McHenry/Kendall posture for sources that refuse
+  every caller, which is a claim you can only make after sampling several.
+- **A bug in the prober reads exactly like a block, and it is the more likely of the
+  two.** The CI run meant to answer "does a real browser clear this edge" instead
+  printed `Page.content: Unable to retrieve content because the page is navigating` —
+  the scraper asking for content while the stub's `content="0;…"` refresh was in flight.
+  The rung lasted under a second and never saw a settled document of either kind, yet
+  the log line sits next to the genuine failures and reads as one. Taken at face value
+  it would have moved a county to the terminal "blocked everywhere" posture on the
+  strength of a race in the prober. **A browser rung must POLL** — tolerate the
+  mid-navigation error as the challenge working, wait, read again — and its failure
+  message must distinguish *still navigating* from *interstitial still served*. More
+  generally: before believing a rung's verdict, check that the rung ran long enough to
+  have a verdict. Compare its wall time against what the work should have cost.
+- **A workflow that has never run is not a workflow yet — dispatch it the day you
+  ship it.** Six workflows were merged without ever having executed. Dispatched
+  manually on 2026-08-02, FIVE failed in the same minute on the same line, and had
+  been broken since the day each shipped: `ModuleNotFoundError: No module named
+  'shapely'`. Every derived-boundary roster builder imports its district composition
+  from the matching `*_board_districts.py` (that is the weekly drift check, and it is
+  the right design), and those modules imported shapely at MODULE SCOPE — so importing
+  a tuple of township names dragged in the geometry stack, which the roster jobs
+  correctly never install because they do no geometry. Cass, De Witt, Marshall, Mason
+  and Washington: the entire tranche-4 tier, silently, from day one. The sixth passed,
+  and it is the at-large roster — the one county tier with no districts module to
+  import from. **Nothing else could have caught it.** The scrapers were fine, the
+  builders were fine, the data was fine, `validate_index` passed, and every local run
+  worked because a developer machine has shapely installed. The defect lived in the
+  seam between a script's import graph and its workflow's pip line, and no gate looked
+  at that seam. Two rules follow. (1) **Dispatch every new workflow before you call the
+  tranche done** — a green `validate_index` says nothing about whether the job runs.
+  (2) The fix is to move the heavy import into the function that uses it, not to add
+  the package to the pip line: a module exporting a constant should cost a constant to
+  import. `scripts/validate_workflow_deps.py` now enforces exactly this in
+  `smoke-test.yml` — it walks each workflow entry point's transitive module-scope
+  imports through `scripts/` and fails on any third-party module the workflow does not
+  install. It is stdlib-only so it runs before any dependency exists, and it treats
+  function-local and `try:`-guarded imports as lazy by design.
+- **A count floor that counts NAMES cannot tell a vacancy from a regression — count
+  SEATS.** Lee's weekly refresh failed its first-ever run with `19 members < floor 20`,
+  and the floor was right: the county's roster PDF has a literal gap where the
+  twentieth row belongs — District 3's rows run y=320.9, y=339.1, then jump to
+  y=375.3, and at y=357.6 sits a single cell reading "3" with no name, party, term or
+  address. A vacant seat, printed as one. The tempting fixes are both wrong: lowering
+  the floor to 19 blinds it to the parse regression it exists to catch (which is
+  exactly what tripped it before — a name set 3pt low, lost to a fixed row band), and
+  dropping the row ships "19 members" when the truth is "19 members and a vacancy" —
+  a different claim about the board, since the county apportioned five seats to that
+  district and one is unfilled. Record the nameless row as a vacancy, count seats
+  (named + vacant) against the floor, and attach `vacancies` to the district:
+  **counted, never named**, the Livingston/Stephenson posture the engine already
+  renders. Any county whose source prints a seat it cannot fill will hit this, so
+  reach for it before touching the floor.
+- **A source that throttles is not a source that blocks, and needs the opposite
+  response.** Henry's first run died on `429 Too Many Requests` against the second of
+  its two district listings, fetched a fraction of a second after the first. Nothing
+  is blocking: the county answers a bare client fine and simply asks to be paced, but
+  the scraper had no retry at all, so one 429 killed the week. Back off and retry,
+  honour a numeric `Retry-After` (cap it — an unbounded value from a server is a way
+  to hang CI), pace multi-page fetches apart, and do NOT retry 401/403/404: a moved
+  directory is not fixed by waiting, and burning five attempts on it turns a clear
+  error into a slow one.
+- **Register a roster's own source URL, not just its geometry's.** DeKalb's board
+  districts were in `validate_sources.py` (an ArcGIS endpoint, always fine) while the
+  members page the card's names actually come from was not, so the monthly check
+  reported the layer healthy through the block. A layer with a scraper has TWO sources;
+  both belong in the registry. And don't reach for `"blocked"` on a conditional block —
+  that flag inverts the check, and it is for permanent ones where unreachable is the
+  expected state. Where a source answers sometimes, both states are worth reporting.
 
 ## 2.6 Verification
 

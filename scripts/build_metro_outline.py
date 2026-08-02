@@ -98,7 +98,7 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
-                     "149", "155", "009", "013",
+                     "149", "155", "009", "013", "169", "001",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -129,7 +129,7 @@ DISPATCH_COUNTY_FIPS = {
     "henry": "073", "peoria": "143", "tazewell": "179",
     "iroquois": "075", "monroe": "133", "randolph": "157",
     "dewitt": "039", "washington": "189", "cass": "017", "marshall": "123",
-    "mason": "125",
+    "mason": "125", "adams": "001",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -154,6 +154,14 @@ SIMPLIFY_TOLERANCE_M = 25
 # outside it. A dissolve that silently drops a county still closes its rings,
 # so ring-closure alone is not proof — these are.
 INSIDE = {
+    # Pass 8: the county GIS carries board districts, precincts and Quincy's
+    # wards; only the roster is blocked, which is a gap, not a reason to stay out.
+    "Quincy (Adams)": (39.9356, -91.4098),
+    # Promoted from OUTSIDE in pass 8, the Putnam/Waterloo move: Schuyler joins
+    # through the county-commissioners roster alone — at-large board, no district
+    # geometry, so no dispatch entry — which is precisely what its OUTSIDE
+    # comment predicted when Mason and Brown closed the line around it.
+    "Rushville (Schuyler)": (40.1200, -90.5665),
     "Chicago (Cook)": (41.8825, -87.6285),
     "Wheaton (DuPage)": (41.8661, -88.1070),
     "Joliet (Will)": (41.5250, -88.0817),
@@ -256,12 +264,9 @@ OUTSIDE = {
     # 2021-12 raster. Schuyler now borders BOTH Mason and Brown; between them
     # these two hold the line the tranche-4 and tranche-5 counties moved.
     "Petersburg (Menard)": (40.0143, -89.8453),
-    "Rushville (Schuyler)": (40.1200, -90.5665),
-    # Adams is the unresearched western frontier Pike and Brown created — it was
-    # not adjacent to the served area at all before they shipped.
-    # (Putnam's anchor moved up to INSIDE in tranche 5, joining through the
-    # county-commissioners roster exactly as its OUTSIDE comment said it would.)
-    "Clayton (Adams)": (40.0301, -90.9580),
+    # (Putnam's anchor moved up to INSIDE in tranche 5, and Adams's Clayton in
+    # pass 8, each joining exactly as its OUTSIDE comment said it would — Adams
+    # on the strength of its own GIS, with only the roster left as a gap.)
 }
 
 

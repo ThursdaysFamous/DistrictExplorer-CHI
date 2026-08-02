@@ -15,7 +15,14 @@ no chair is tagged (the Woodford posture).
 The district is the LISTING fetched, not a parsed field — the county keyed
 its directory by district, so the assignment is the county's own.
 
-FETCH POSTURE: open. Plain server-rendered CivicPlus HTML.
+FETCH POSTURE: open, but RATE LIMITED. Plain server-rendered CivicPlus HTML,
+no challenge — the county answers a bare client fine. What it does do is throttle:
+the first CI run of this workflow (2026-08-02) died on `429 Client Error: Too
+Many Requests` against DID=40, the SECOND of the two district listings, having
+fetched the first a fraction of a second earlier. A weekly job that gives up the
+moment a county's CMS asks it to slow down is a job that fails on the county's
+terms rather than its own, so the fetch below backs off and retries, honouring
+Retry-After when the server sends one, and paces the two listings apart.
 
 Usage:
     python3 henry_county_board_scraper.py [output.json]   # default: stdout
@@ -25,6 +32,7 @@ import html as html_mod
 import json
 import re
 import sys
+import time
 
 import requests
 
@@ -33,6 +41,37 @@ DISTRICT_LISTS = {
     2: "https://www.henrycty.com/Directory.aspx?DID=40",
 }
 UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+REQUEST_TIMEOUT = 60
+FETCH_ATTEMPTS = 5
+# Between the two district listings. Small, but the 429 arrived on back-to-back
+# requests, so not zero.
+PACING_SECONDS = 2.0
+
+
+def fetch(url):
+    """GET with backoff on throttling. 429 and 5xx are retried; a 404 is not —
+    that would be the directory moving, which no amount of waiting fixes."""
+    last = None
+    for attempt in range(FETCH_ATTEMPTS):
+        try:
+            resp = requests.get(url, headers=UA, timeout=REQUEST_TIMEOUT)
+            if resp.status_code == 429 or resp.status_code >= 500:
+                # Retry-After may be seconds or a date; only the numeric form is
+                # honoured, and it is capped so a hostile value cannot hang CI.
+                after = (resp.headers.get("Retry-After") or "").strip()
+                delay = min(float(after), 30.0) if after.isdigit() else 2.0 * (attempt + 1)
+                last = "HTTP %d" % resp.status_code
+                time.sleep(delay)
+                continue
+            resp.raise_for_status()
+            return resp.text
+        except requests.RequestException as exc:
+            if getattr(exc.response, "status_code", None) in (401, 403, 404):
+                raise
+            last = str(exc)
+            time.sleep(2.0 * (attempt + 1))
+    raise RuntimeError("failed to fetch %s after %d attempts: %s"
+                       % (url, FETCH_ATTEMPTS, last))
 
 NAME_RE = re.compile(
     r'href="/m/directory/employee\?eid=\d+"[^>]*>\s*([^<]+?)\s*</a>')
@@ -52,10 +91,11 @@ def tidy_name(name):
 
 def main():
     records = []
-    for district, url in DISTRICT_LISTS.items():
-        r = requests.get(url, headers=UA, timeout=60)
-        r.raise_for_status()
-        for item in r.text.split('<li class="list-group-item')[1:]:
+    for index, (district, url) in enumerate(sorted(DISTRICT_LISTS.items())):
+        if index:
+            time.sleep(PACING_SECONDS)
+        page = fetch(url)
+        for item in page.split('<li class="list-group-item')[1:]:
             item = item.split("</li>")[0]
             nm = NAME_RE.search(item)
             if not nm:

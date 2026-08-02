@@ -221,5 +221,58 @@
   ],
   "sourceUrl": "https://randolphcountyil.gov/board-of-commissioners/",
   "structure": "Commission form — 3 commissioners elected countywide"
+ },
+ "SCHUYLER": {
+  "county": "Schuyler County",
+  "members": [
+   {
+    "email": "c.esther@schuylercountyil.gov",
+    "name": "Chet Esther",
+    "phone": "217-248-0864",
+    "role": "Chairman"
+   },
+   {
+    "email": "c.billingsley@schuylercountyil.gov",
+    "name": "Chris Billingsley",
+    "phone": "309-256-5985",
+    "role": "Vice-Chairman"
+   },
+   {
+    "email": "r.wright@schuylercountyil.gov",
+    "name": "Rick Wright",
+    "phone": "217-322-6738",
+    "role": "Board Member"
+   },
+   {
+    "email": "t.kettering@schuylercountyil.gov",
+    "name": "Tim Kettering",
+    "phone": "217-242-3456",
+    "role": "Board Member"
+   },
+   {
+    "email": "a.armstrong@schuylercountyil.gov",
+    "name": "Alison Armstrong",
+    "phone": "309-333-4674",
+    "role": "Board Member"
+   },
+   {
+    "email": "s.korsmeyer@schuylercountyil.gov",
+    "name": "Stuart Korsmeyer",
+    "phone": "309-221-2651",
+    "role": "Board Member"
+   },
+   {
+    "email": "m.mcclelland@schuylercountyil.gov",
+    "name": "Morris McClelland",
+    "phone": "309-333-2567",
+    "role": "Board Member"
+   }
+  ],
+  "office": {
+   "address": "102 S. Congress St., Suite 104, Rushville, IL 62681",
+   "label": "Schuyler County Board"
+  },
+  "sourceUrl": "https://www.schuylercounty.org/county-board/county-board-members/",
+  "structure": "7 members elected countywide"
  }
 }

@@ -25,6 +25,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   update-roster:
@@ -44,27 +45,66 @@ jobs:
           python-version: "3.x"
 
       - name: Install scraper dependencies
-        # The members page is static, server-rendered WordPress — no JS to run.
-        # dekalbcounty.org sits behind Sucuri, which intermittently answers with
-        # a captcha-redirect stub carrying HTTP 202 rather than an error status;
-        # the scraper detects that document and retries, so no browser engine is
-        # needed here (unlike McHenry and Kendall).
-        run: pip install -c scripts/requirements.txt requests
+        # The members page is static, server-rendered WordPress — no JS is
+        # needed to READ it. The browser is here for the edge, not the markup:
+        # dekalbcounty.org answers with SiteGround's SG-Captcha stub (HTTP 202)
+        # scored on the CALLER'S IP, and a runner address draws the stub far
+        # harder than a residential one — the first scheduled run took it on all
+        # six retries and failed. So this job runs the scraper's
+        # requests -> playwright -> wayback ladder, same as McHenry and Kendall.
+        run: pip install -c scripts/requirements.txt requests playwright
+
+      - name: Install Chromium for Playwright
+        run: python3 -m playwright install --with-deps chromium
 
       - name: Scrape DeKalb County Board member roster
-        run: python3 scripts/dekalb_county_board_scraper.py /tmp/dekalb_county_board_raw.json
+        id: scrape
+        # --engine auto walks the ladder and prints which rung carried each
+        # fetch, so the run log records reachability per run rather than needing
+        # a separate probe. That turned out to matter, because the question
+        # "is this county blocked from CI" has no yes/no answer. Four runs on
+        # 2026-08-02 + 07-31, same commit, four runner addresses: three took the
+        # stub on all six attempts (one of them also held 24s on the
+        # interstitial under a real Chromium, with the Archive 144 days stale),
+        # and the fourth was carried by plain requests on its FIRST try in 0.9s.
+        #
+        # dekalbcounty.org's SG-Captcha scores the CALLER'S ADDRESS, and GitHub
+        # hands out runners from a pool, so a failure here is address luck, not
+        # a source change. Hence continue-on-error + a standing issue: a job
+        # that loses a coin toss should not go red, and the weekly cadence
+        # covers it — a scored week is followed by one that may not be. A run
+        # that clears simply opens its PR as usual; nothing needs resuming.
+        continue-on-error: true
+        run: python3 scripts/dekalb_county_board_scraper.py /tmp/dekalb_county_board_raw.json --engine auto
+
+      - name: Report blocked source on the standing issue
+        if: steps.scrape.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="DeKalb County Board roster: refresh blocked on some runner addresses"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' || true)
+          if [ -z "$num" ]; then
+            gh issue create --title "$title" --body "This week's roster scrape failed on every engine (direct requests, headless Chromium, and the Internet Archive). **This is expected to happen some weeks and not others, and it does not mean the source changed.** dekalbcounty.org serves SiteGround's SG-Captcha, which scores the CALLER'S ADDRESS (\`y=ipr:<address>\` in its own redirect) rather than sampling requests, and GitHub hands out runners from a pool — measured 2026-08-02 across four runs on one commit, three runner addresses were refused and one was carried by plain requests on its first try. So a failed run is address luck; the next scheduled run may well succeed on its own and open its PR as usual. The shipped data/app/dekalb-county-board-members.json keeps its last verified state (confirmed current against the live source on 2026-08-02, from CI) and stays correct until the county changes members. Act on this issue only if it keeps recurring across many weeks or an election/appointment has happened — then re-run the scraper from any host that clears the edge and refresh via scripts/build_dekalb_county_board_roster.py. Close it once runs are landing reliably. Latest failed run: $run_url"
+          else
+            gh issue comment "$num" --body "Refused again on $(date -u +%F) — $run_url (address luck; see the issue body)"
+          fi
 
       - name: Rebuild roster data file
+        if: steps.scrape.outcome == 'success'
         run: python3 scripts/build_dekalb_county_board_roster.py /tmp/dekalb_county_board_raw.json
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present and
       # well formed.
       - name: Validate app + data files
+        if: steps.scrape.outcome == 'success'
         run: python3 scripts/validate_index.py index.html
 
       - name: Check for changes
         id: diff
+        if: steps.scrape.outcome == 'success'
         run: |
           if git diff --quiet -- data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -73,7 +113,7 @@ jobs:
           fi
 
       - name: Open or update pull request
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.scrape.outcome == 'success' && steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
         run: |

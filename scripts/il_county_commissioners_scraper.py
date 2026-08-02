@@ -300,6 +300,71 @@ def parse_calhoun(page):
     return members, office
 
 
+
+def parse_schuyler(page):
+    """Schuyler prints the board as three HEADED groups — "Chairman",
+    "Vice-Chairman", then "County Board Members" — with each person followed by
+    the courthouse address, a phone and a county e-mail.
+
+    THE ROLE IS THE HEADING, NOT THE ROW. Every other county in this file marks
+    the officer on the person's own line; here the heading above a name is the
+    only thing that says who chairs. So the parse carries the current heading
+    forward and applies it to the names beneath it, and a name appearing before
+    any heading is dropped rather than given a default role.
+
+    THE ADDRESS IS THE COURTHOUSE, ON ALL SEVEN ROWS — 102 S. Congress St.,
+    Suite 104, Rushville. That makes it the board's office, not seven
+    residences, so it is hoisted once (the Calhoun/Monroe posture) rather than
+    repeated under each name as if it were personal. The PHONES do differ per
+    member, so those stay on the rows.
+
+    AT-LARGE, PROVEN: the County Clerk's own certified results
+    (elections.schuyler.il.us/results-2.pdf) name the contest "FOR MEMBERS OF
+    THE COUNTY BOARD ... (Vote for not more than four)" with "Precincts
+    Reporting 17 of 17" — one countywide contest, and the word "District" does
+    not appear anywhere in the 11-page canvass. Seven seats, elected in
+    staggered groups."""
+    ROLES = (("(?i)^vice[-\s]*chair", "Vice-Chairman"),
+             ("(?i)^chair", "Chairman"),
+             ("(?i)^county board members", "Board Member"))
+    text = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", page)
+    text = re.sub(r"(?i)<br\s*/?>|</(p|div|li|h\d|td|tr)>", "\n", text)
+    lines = [clean(l) for l in re.sub(r"<[^>]+>", "\n", text).split("\n")]
+    lines = [l for l in lines if l]
+
+    members, role, office_phone = [], None, None
+    seen = set()
+    for i, line in enumerate(lines):
+        matched = next((r for pat, r in ROLES if re.search(pat, line)), None)
+        if matched:
+            role = matched
+            continue
+        if not role:
+            continue
+        if not re.fullmatch(r"[A-Z][A-Za-z.'\-]+(?:\s+[A-Z][A-Za-z.'\-]*){1,3}", line):
+            continue
+        window = " ".join(lines[i:i + 4])
+        email = re.search(r"[\w.+-]+@[\w.-]+\.\w+", window)
+        phone = re.search(r"\b(\d{3}-\d{3}-\d{4})\b", window)
+        # A name with neither is a nav item or a caption, not a member row.
+        if not (email or phone):
+            continue
+        key = line.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        entry = {"name": line, "role": role}
+        if email:
+            entry["email"] = email.group(0).lower()
+        if phone:
+            entry["phone"] = phone.group(1)
+        members.append(entry)
+
+    office = {"label": "Schuyler County Board",
+              "address": "102 S. Congress St., Suite 104, Rushville, IL 62681"}
+    return members, office
+
+
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
     "MONROE": {
@@ -315,6 +380,13 @@ SITES = {
         "structure": "Commission form — 3 commissioners elected countywide",
         "expect": 3,
         "parse": parse_randolph,
+    },
+    "SCHUYLER": {
+        "name": "Schuyler County",
+        "url": "https://www.schuylercounty.org/county-board/county-board-members/",
+        "structure": "7 members elected countywide",
+        "expect": 7,
+        "parse": parse_schuyler,
     },
     "PIKE": {
         "name": "Pike County",

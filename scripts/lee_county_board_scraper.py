@@ -86,7 +86,7 @@ def fetch_pdf(url):
     return resp.content
 
 
-def rows_from(pdf_bytes, warnings):
+def rows_from(pdf_bytes, warnings, vacancies):
     if pdfplumber is None:
         raise RuntimeError("pdfplumber is required "
                            "(pip install -c scripts/requirements.txt pdfplumber)")
@@ -129,7 +129,17 @@ def rows_from(pdf_bytes, warnings):
         year = " ".join(cells.get("year", [])).strip()
         party = " ".join(cells.get("party", [])).strip()
         if not name:
-            warnings.append("district %s row has no name — skipped" % district)
+            # A district row printed with NO name is a vacant seat, not a parse
+            # miss — measured 2026-08-02, when the county published District 3
+            # with a row carrying the district number and nothing else (y=357.6
+            # in the PDF: a lone "3", no party, no term, no address). Dropping it
+            # cost a seat and tripped the 20-member floor, which is the floor
+            # working; but "19 members" and "19 members and a vacancy" are
+            # different claims about the board, and only the second is true.
+            # Counted here and named nowhere, the Livingston/Stephenson posture.
+            warnings.append("district %s row carries no name — recorded as a "
+                            "VACANT seat, not dropped" % district)
+            vacancies.append(str(int(district)))
             continue
         if email and not EMAIL_RE.match(email):
             warnings.append("%s: %r is not an e-mail address — dropped rather than "
@@ -154,10 +164,10 @@ def main():
     parser.add_argument("--pdf", help="parse a local copy instead of fetching")
     args = parser.parse_args()
 
-    warnings = []
+    warnings, vacancies = [], []
     try:
         pdf_bytes = open(args.pdf, "rb").read() if args.pdf else fetch_pdf(SOURCE_URL)
-        records = rows_from(pdf_bytes, warnings)
+        records = rows_from(pdf_bytes, warnings, vacancies)
     except Exception as exc:  # noqa: BLE001
         print("FATAL: %s" % exc, file=sys.stderr)
         sys.exit(1)
@@ -165,10 +175,16 @@ def main():
     for warning in sorted(set(warnings)):
         print("  warning: %s" % warning, file=sys.stderr)
 
-    districts = sorted({r["district"] for r in records}, key=int)
+    districts = sorted({r["district"] for r in records} | set(vacancies), key=int)
     problems = []
-    if len(records) < MIN_MEMBERS:
-        problems.append("%d members < floor %d" % (len(records), MIN_MEMBERS))
+    # The floor counts SEATS, not names: a vacancy is still a seat the county
+    # apportioned, and the board did not shrink because one is unfilled. Counting
+    # names here would make an ordinary vacancy indistinguishable from the parse
+    # regression this floor exists to catch.
+    seats = len(records) + len(vacancies)
+    if seats < MIN_MEMBERS:
+        problems.append("%d seats (%d named + %d vacant) < floor %d"
+                        % (seats, len(records), len(vacancies), MIN_MEMBERS))
     if len(districts) < MIN_DISTRICTS:
         problems.append("%d districts < floor %d" % (len(districts), MIN_DISTRICTS))
     # A row whose e-mail landed in the wrong column would show up as a member
@@ -193,12 +209,19 @@ def main():
         "board_page": BOARD_PAGE,
         "scraped_at": scraped_at,
         "members": records,
+        # Empty list when the board is full, so the builder needs no special
+        # case and the field never has to be guessed at from a count mismatch.
+        "vacancies": vacancies,
     }
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     per = collections.Counter(r["district"] for r in records)
-    print("scraped %d members across %d districts (%s), %d with e-mail -> %s"
-          % (len(records), len(districts),
+    vacant_note = ""
+    if vacancies:
+        vacant_note = (" + %d VACANT seat(s) in district %s"
+                       % (len(vacancies), ", ".join(sorted(set(vacancies), key=int))))
+    print("scraped %d members%s across %d districts (%s), %d with e-mail -> %s"
+          % (len(records), vacant_note, len(districts),
              ", ".join("D%s=%d" % (d, per[d]) for d in districts),
              sum(1 for r in records if r["email"]), args.out), file=sys.stderr)
 

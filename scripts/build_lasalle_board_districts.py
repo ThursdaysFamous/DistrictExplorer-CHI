@@ -55,8 +55,6 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import requests  # noqa: E402
-from shapely.geometry import mapping, shape  # noqa: E402
-from shapely.ops import unary_union  # noqa: E402
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     HEADERS, REQUEST_TIMEOUT, point_in_rings,
 )
@@ -180,6 +178,10 @@ def interior_point(feature):
     county fabric carries centimeter-scale sliver parts — Ottawa 4's first
     MultiPolygon part is ~4 cm wide — and a sliver's interior sits exactly on
     the seam between districts, where independently simplified unions blur)."""
+    # Local, not module scope: this module's composition constant is
+    # imported by the ROSTER builder, whose CI job installs no geometry
+    # stack. Keep the heavy imports on the path that needs them.
+    from shapely.geometry import shape
     geom = shape(feature["geometry"]).buffer(0)
     if geom.geom_type == "MultiPolygon":
         geom = max(geom.geoms, key=lambda g: g.area)
@@ -188,6 +190,11 @@ def interior_point(feature):
 
 
 def main():
+    # Local, not module scope: this module's composition constant is
+    # imported by the ROSTER builder, whose CI job installs no geometry
+    # stack. Keep the heavy imports on the path that needs them.
+    from shapely.geometry import mapping, shape
+    from shapely.ops import unary_union
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="verify the shipped file, write nothing")
     args = ap.parse_args()
