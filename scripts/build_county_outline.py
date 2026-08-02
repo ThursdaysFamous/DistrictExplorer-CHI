@@ -535,6 +535,51 @@ COUNTIES = {
             (41.6562, -90.0793, "Erie — Whiteside County"),
         ],
     },
+    # Peoria and Tazewell: the pass-7 tranche-1 pair, the two largest counties
+    # on the reopened frontier and adjacent to each other across the Illinois
+    # River. Both reach the served ring through Woodford, which they share a
+    # border with. Every anchor below was verified against TIGERweb's county
+    # polygons before being written down (each lands in its stated county).
+    "peoria": {
+        "fips": "143",
+        "name": "Peoria County",
+        "inside": [
+            (40.6936, -89.5890, "Peoria (county seat)"),
+            (40.7509, -89.6151, "Peoria Heights"),
+            (40.9223, -89.4859, "Chillicothe"),
+            (40.6217, -89.6820, "Bartonville"),
+            (40.9034, -89.7515, "Princeville"),
+            (40.6875, -89.9145, "Elmwood"),
+        ],
+        "outside": [
+            (40.6664, -89.5709, "East Peoria — Tazewell County"),
+            (40.7889, -89.3628, "Metamora — Woodford County"),
+            (40.9478, -90.3712, "Galesburg — Knox County"),
+            (40.5570, -90.0393, "Canton — Fulton County"),
+            (41.0937, -89.8651, "Toulon — Stark County"),
+            (41.0295, -89.3628, "Lacon — Marshall County"),
+        ],
+    },
+    "tazewell": {
+        "fips": "179",
+        "name": "Tazewell County",
+        "inside": [
+            (40.5675, -89.6407, "Pekin (county seat)"),
+            (40.6664, -89.5709, "East Peoria"),
+            (40.6136, -89.4595, "Morton"),
+            (40.7053, -89.4090, "Washington"),
+            (40.4867, -89.4245, "Delavan"),
+            (40.4331, -89.6668, "Green Valley"),
+        ],
+        "outside": [
+            (40.6936, -89.5890, "Peoria — Peoria County"),
+            (40.7889, -89.3628, "Metamora — Woodford County"),
+            (40.4842, -88.9937, "Bloomington — McLean County"),
+            (40.1164, -89.4090, "Lincoln — Logan County"),
+            (40.2461, -89.7418, "Havana — Mason County"),
+            (40.5570, -90.0393, "Canton — Fulton County"),
+        ],
+    },
 }
 
 

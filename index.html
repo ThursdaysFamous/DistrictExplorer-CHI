@@ -7962,6 +7962,187 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadPeoriaCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
+  });
+  function peoriaCountyCoverage(point) {
+    return loadPeoriaCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadTazewellCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/tazewell-county-outline.json", {}, 2);
+  });
+  function tazewellCountyCoverage(point) {
+    return loadTazewellCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  /* PEORIA COUNTY (the 29th dispatched county, added 2026-08-02 with Tazewell
+   * as the pass-7 tranche-1 pair — the two largest counties on the reopened
+   * frontier, facing each other across the Illinois River and both reaching
+   * the ring through Woodford).
+   *
+   * Peoria runs its own open-data ArcGIS org and publishes an unusually
+   * complete set: the adopted 2021-11-30 board map, the current precinct
+   * fabric with a polling join, and fire/park/library taxing tilings. Every
+   * layer below is live from that org.
+   *
+   * The board map is `2020_County_Board_Districts` rather than the roster-
+   * carrying `ElectoralDistricts/3`, though the two draw the SAME lines
+   * (point-tested 8/8 across the county, the apparent area difference being
+   * projection only): the chosen layer is the one carrying per-district 2020
+   * populations (~10,100 each across 18), which is what proves it is the
+   * adopted post-census map rather than a copy of unknown vintage. The roster
+   * rides the weekly scrape instead, because the county's own member pages
+   * carry phone and e-mail that no GIS layer does. */
+  var PEORIA_GIS = "https://services.arcgis.com/iPiPjILCMYxPZWTc/arcgis/rest/services/";
+  function loadPeoriaLayer(service, outFields, label, layerIndex) {
+    var url = PEORIA_GIS + service + "/FeatureServer/" + (layerIndex == null ? 0 : layerIndex) +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Peoria County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadPeoriaCountyBoard = makeCached(function () {
+    return loadPeoriaLayer("2020_County_Board_Districts", "DISTRICT", "board districts");
+  });
+  var loadPeoriaBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/peoria-county-board-members.json", {}, 2);
+  });
+  /* Precincts (116) with the polling place joined on POLLINGID — the county
+   * publishes 55 polling locations serving those 116 precincts, so the join
+   * is many-to-one by design and a precinct sharing its site with neighbours
+   * is normal, not a defect. A polling failure costs the polling rows only. */
+  var loadPeoriaPrecincts = makeCached(function () {
+    return Promise.all([
+      loadPeoriaLayer("2020_Voting_Precincts", "NAME,PRECINCTID,POLLINGID", "precincts"),
+      loadPeoriaLayer("Polling_Places", "POLLINGID,NAME,FULLADD,CITY", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = findPropCI(p, ["pollingid"]);
+          if (id != null && String(id).trim()) byId[String(id).trim()] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["pollingid"]);
+          var place = key != null ? byId[String(key).trim()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var addr = findPropCI(place, ["fulladd"]);
+          var city = findPropCI(place, ["city"]);
+          props.dxPollingAddress = addr ? (city ? addr + ", " + city : addr) : null;
+        });
+      }
+      return precincts;
+    });
+  });
+  /* The three taxing tilings. Each carries District_Name and a WebSite column
+   * the county populates per district — the first fire/park/library entries in
+   * the fleet whose cards can link the district's OWN site rather than only
+   * naming it. */
+  var loadPeoriaFireDistricts = makeCached(function () {
+    return loadPeoriaLayer("Fire_Protection_Districts", "District_Name,WebSite", "fire districts");
+  });
+  var loadPeoriaParkDistricts = makeCached(function () {
+    return loadPeoriaLayer("Park_Districts", "District_Name,WebSite", "park districts");
+  });
+  var loadPeoriaLibraryDistricts = makeCached(function () {
+    return loadPeoriaLayer("Library_Districts", "District_Name,WebSite", "library districts");
+  });
+
+  /* TAZEWELL COUNTY (the 30th dispatched county, added 2026-08-02).
+   *
+   * Its GIS runs the Esri "election geography" template — the same one
+   * Whiteside's entry reads — so boundary and roster arrive from one service:
+   * layer 1 is the 82-precinct fabric, layer 2 tiles every elected office in
+   * the county, of which the three `County Board District` polygons are the
+   * board map.
+   *
+   * The BOUNDARY comes from that layer; the ROSTER deliberately does not. The
+   * layer's member attributes are stale (they still seat a member the county's
+   * own site no longer lists anywhere, and omit one who has his own member
+   * page) and carry no phone or e-mail, so the roster is a weekly scrape of
+   * the county website — see scripts/tazewell_county_board_scraper.py, which
+   * records the one district assignment the two county surfaces still
+   * disagree about rather than silently picking the tidier arithmetic. */
+  var TAZEWELL_ELECTION_SERVICE =
+    "https://services.arcgis.com/LIEind9C2d6XYeOY/arcgis/rest/services/" +
+    "ElectionGeography_public_280605e69d4f4c2696479fc6050cab53/FeatureServer/";
+  function loadTazewellLayer(layerIndex, where, outFields, label) {
+    var url = TAZEWELL_ELECTION_SERVICE + layerIndex + "/query?where=" +
+      encodeURIComponent(where) + "&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Tazewell County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  /* Layer 2 repeats a district polygon once per member, so the board map
+   * arrives as 21 rows drawing 3 districts. Dedupe to one feature per
+   * district — the card's identity is the district, and the members come from
+   * the roster file. */
+  var loadTazewellCountyBoard = makeCached(function () {
+    return loadTazewellLayer(2, "electedoffice='County Board Member'",
+                             "districtid", "board districts")
+      .then(function (geojson) {
+        var seen = {}, out = [];
+        (geojson.features || []).forEach(function (f) {
+          var d = findPropCI(f.properties || {}, ["districtid"]);
+          if (d == null || d === "") return;
+          var key = String(d).trim();
+          if (seen[key]) return;
+          seen[key] = true;
+          f.properties.dxDistrict = key;
+          out.push(f);
+        });
+        if (!out.length) throw new Error("Tazewell County board districts resolved no district ids");
+        return { type: "FeatureCollection", features: out };
+      });
+  });
+  var loadTazewellBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/tazewell-county-board-members.json", {}, 2);
+  });
+  /* Precincts (82) with the polling place joined on facilityid against layer
+   * 0's 49 voting locations — many-to-one, as the county runs fewer sites than
+   * precincts. Polling failure costs the polling rows only. */
+  var loadTazewellPrecincts = makeCached(function () {
+    return Promise.all([
+      loadTazewellLayer(1, "1=1", "name,precinctid,facilityid", "precincts"),
+      loadTazewellLayer(0, "1=1", "facilityid,name,fulladdr,municipality", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = findPropCI(p, ["facilityid"]);
+          if (id != null && String(id).trim()) byId[String(id).trim()] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["facilityid"]);
+          var place = key != null ? byId[String(key).trim()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var addr = findPropCI(place, ["fulladdr"]);
+          var city = findPropCI(place, ["municipality"]);
+          props.dxPollingAddress = addr ? (city ? addr + ", " + city : addr) : null;
+        });
+      }
+      return precincts;
+    });
+  });
 
   /* Henry (the 28th county, added 2026-08-02 — it closes the notch between
    * the served Rock Island/Whiteside block and the rest of the ring). Its
@@ -12491,6 +12672,11 @@ function initChiExplorer() {
       render: function (result) {
         var rows = [];
         opts.fields.forEach(function (f) {
+          // `hidden` captures a source column for primaryLink()/when() without
+          // rendering it as a body row — query() populates every keyed field
+          // regardless, so a district's own WEBSITE can become the card's
+          // footer link instead of a URL printed in the middle of the card.
+          if (f.hidden) return;
           if (f.when && !f.when(result)) return;
           if (f.keys) {
             var val = result[f.name];
@@ -14315,6 +14501,139 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // Peoria — 18 SINGLE-member districts, the largest single-member county
+      // board in the app. Boundary live from the county's own open-data org
+      // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
+      // scraped weekly, 18/18 with party and e-mail. The Chairperson and
+      // Vice-Chairperson are elected from among the 18 and hold their own
+      // district seats, so each is badged on that member's own row rather
+      // than shown as a countywide officer.
+      {
+        key: "peoria",
+        coverage: peoriaCountyCoverage,
+        loadGeometry: loadPeoriaCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadPeoriaCountyBoard(),
+            loadPeoriaBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Peoria County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Peoria County Board (official)",
+            url: "https://www.peoriacounty.gov/755/County-Board-Members"
+          };
+        },
+        hoverOfficial: {
+          load: loadPeoriaBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Tazewell — 3 districts seating 21 members between them, plus a
+      // COUNTYWIDE-elected Board Chairman (the McHenry shape), who therefore
+      // gets the separated Countywide section on every card. Boundary from the
+      // county's Esri election-template layer, deduped to one polygon per
+      // district; roster scraped weekly from the county's own member pages
+      // (21 e-mails, 18 phones) rather than from the layer's own stale member
+      // attributes. The Vice-Chairman holds a district seat and is badged on
+      // it.
+      {
+        key: "tazewell",
+        coverage: tazewellCountyCoverage,
+        loadGeometry: loadTazewellCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["dxdistrict", "districtid"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadTazewellCountyBoard(),
+            loadTazewellBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var roster = results[1];
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["dxdistrict", "districtid"]);
+            var entry = district != null ? roster[String(district)] : null;
+            return { seq: seq, district: district, entry: entry, chair: roster.chair || null };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var chair = result.chair && result.chair.name ? result.chair : null;
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Tazewell County Board",
+            note: boardCountNote(members.length, chair ? "chairman" : null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+            })));
+          }
+          // the Chairman is elected countywide, so he represents every
+          // Tazewell resident — the separated countywide section on every card
+          if (chair) {
+            wrap.appendChild(renderSectionLabel("Countywide"));
+            wrap.appendChild(renderPersonRows([boardMemberPerson(chair, { badge: "Board Chairman" })], { tinted: true }));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Tazewell County Board (official)",
+            url: "https://tazewell-il.gov/boardreps/"
+          };
+        },
+        hoverOfficial: {
+          load: loadTazewellBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["dxdistrict", "districtid"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
       }
     ]
   });
@@ -14715,6 +15034,24 @@ function initChiExplorer() {
       // are grouped per district at load. A Springfield click answers with the
       // city's corporate area, and the card states that the city is served by
       // its own Fire Department rather than a fire protection district.
+      // Peoria's 13 — the first fire tiling in the fleet whose source carries
+      // a per-district WEBSITE, so the card can link the district that answers
+      // the call rather than only naming it. Still identity-only otherwise:
+      // FPD trustees are separately elected with no keyed roster published.
+      polygonCountyEntry({
+        key: "peoria",
+        coverage: peoriaCountyCoverage,
+        loader: loadPeoriaFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["district_name"], primary: true },
+          { name: "website", keys: ["website"], hidden: true },
+          { label: "County", value: "Peoria County" }
+        ],
+        primaryLink: function (result) {
+          var site = result && result.website ? safeHttpUrl(result.website) : null;
+          return site ? { label: (result.name || "Fire district") + " (official)", url: site } : null;
+        }
+      }),
       polygonCountyEntry({
         key: "sangamon",
         coverage: sangamonCountyCoverage,
@@ -14914,6 +15251,23 @@ function initChiExplorer() {
           { name: "name", label: "Park District", keys: ["park_distr"], primary: true },
           { label: "County", value: "Rock Island County" }
         ]
+      }),
+      // Peoria's 4 — from the same taxing family as its fire and library
+      // entries, and carrying the same per-district WebSite column, so each
+      // park district's card links the district itself.
+      polygonCountyEntry({
+        key: "peoria",
+        coverage: peoriaCountyCoverage,
+        loader: loadPeoriaParkDistricts,
+        fields: [
+          { name: "name", label: "Park District", keys: ["district_name"], primary: true },
+          { name: "website", keys: ["website"], hidden: true },
+          { label: "County", value: "Peoria County" }
+        ],
+        primaryLink: function (result) {
+          var site = result && result.website ? safeHttpUrl(result.website) : null;
+          return site ? { label: (result.name || "Park district") + " (official)", url: site } : null;
+        }
       })
     ]
   });
@@ -15128,6 +15482,23 @@ function initChiExplorer() {
           { name: "name", label: "Library District", keys: ["library_di"], primary: true },
           { label: "County", value: "Rock Island County" }
         ]
+      }),
+      // Peoria's 10 — the third of the county's taxing tilings, and like its
+      // fire and park siblings it carries the district's own WebSite, so the
+      // card links the library rather than only naming it.
+      polygonCountyEntry({
+        key: "peoria",
+        coverage: peoriaCountyCoverage,
+        loader: loadPeoriaLibraryDistricts,
+        fields: [
+          { name: "name", label: "Library District", keys: ["district_name"], primary: true },
+          { name: "website", keys: ["website"], hidden: true },
+          { label: "County", value: "Peoria County" }
+        ],
+        primaryLink: function (result) {
+          var site = result && result.website ? safeHttpUrl(result.website) : null;
+          return site ? { label: (result.name || "Library district") + " (official)", url: site } : null;
+        }
       })
     ]
   });
@@ -16493,6 +16864,123 @@ function initChiExplorer() {
           return {
             label: "Woodford County Clerk — Elections (official)",
             url: "https://www.woodford-county.org/149/County-Clerk"
+          };
+        }
+      },
+      // Peoria — 116 precincts from the county's own open-data org, with the
+      // polling place joined on POLLINGID against its 55 published locations
+      // (many-to-one by design: the county runs fewer sites than precincts).
+      // Board district via spatial join against the same boundary the board
+      // card reads.
+      {
+        key: "peoria",
+        coverage: peoriaCountyCoverage,
+        loadGeometry: loadPeoriaPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadPeoriaPrecincts(),
+            loadPeoriaCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Peoria County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Peoria County Election Commission (official)",
+            url: "https://www.peoriaelections.gov/"
+          };
+        }
+      },
+      // Tazewell — 82 precincts from the county's Esri election service, with
+      // the polling place joined on facilityid against its 49 voting
+      // locations. Board district via spatial join against the deduped board
+      // boundary from the same service.
+      {
+        key: "tazewell",
+        coverage: tazewellCountyCoverage,
+        loadGeometry: loadTazewellPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadTazewellPrecincts(),
+            loadTazewellCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["dxdistrict", "districtid"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Tazewell County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Tazewell County Clerk — Elections (official)",
+            url: "https://tazewell-il.gov/county-clerk/"
           };
         }
       }

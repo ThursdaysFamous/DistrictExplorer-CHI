@@ -113,6 +113,8 @@ const GEOMETRY_URLS = [
   "./data/app/jo-daviess-county-outline.json",
   "./data/app/bureau-county-outline.json",
   "./data/app/mercer-county-outline.json",
+  "./data/app/peoria-county-outline.json",
+  "./data/app/tazewell-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -153,6 +155,8 @@ const ROSTER_URLS = [
   "./data/app/boone-county-board-members.json",
   "./data/app/grundy-county-board-members.json",
   "./data/app/henry-county-board-members.json",
+  "./data/app/peoria-county-board-members.json",
+  "./data/app/tazewell-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
