@@ -12,7 +12,11 @@ This is the reference implementation of a small fleet of sibling metro forks ([n
 
 ## What it answers
 
-Pick a point. The app runs a point-in-district lookup across every layer you have toggled on and builds a "civic profile" for that location. 39 layers ship today; layers are location-aware, so city-only layers hide outside Chicago, county-scoped layers appear only inside their counties (six consolidated layers — County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct — span all seven metro counties, Cook/Will/DuPage/Lake/Kane/McHenry/Kendall, and pick the right county's data automatically), and the statewide layers work anywhere in Illinois.
+Pick a point. The app runs a point-in-district lookup across every layer you have toggled on and builds a "civic profile" for that location. 39 layers ship today; layers are location-aware, so city-only layers hide outside Chicago, county-scoped layers appear only inside the counties that publish them, and the statewide layers work anywhere in Illinois.
+
+Coverage started as the seven Chicago-metro counties and has grown one contiguous county at a time to **35 counties** — north to the Wisconsin line, west to the Mississippi, and south through the Metro East to the Missouri border. Six consolidated layers (County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct) span every county that publishes the data and pick the right county's source automatically; where a county elects its board countywide instead of by district, its commissioners appear on the County card, because there is no district to draw.
+
+Where a county publishes nothing, the app says so rather than guessing: the **Data gaps** panel lists every recorded absence — currently 78 — each naming the specific artifact its publisher would have to release.
 
 | Group | Layer | What you get |
 |---|---|---|
