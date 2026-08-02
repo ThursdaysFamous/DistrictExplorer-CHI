@@ -660,6 +660,16 @@ def http_get(url, want_json=True, params=None):
         return False, "request failed: %s" % e
     if resp.status_code >= 400:
         return False, "HTTP %d" % resp.status_code
+    # 202 is never a real document. "Accepted" means the request was taken for
+    # later processing, and the bot-management fronts in front of several county
+    # sites use it for their interstitial — dekalbcounty.org started doing so
+    # around 2026-07-31, which failed the DeKalb board scraper outright while
+    # this validator went on reporting the source reachable, because 202 < 400.
+    # (The Will County Clerk entry has documented the same "202/empty to
+    # non-browser user agents" behaviour for longer.) Treat it as unreachable
+    # and say why, so the two signals agree.
+    if resp.status_code == 202:
+        return False, "HTTP 202 — bot-management interstitial, not the document"
     if not want_json:
         return True, resp
     try:
