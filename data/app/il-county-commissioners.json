@@ -1,0 +1,51 @@
+{
+ "MONROE": {
+  "county": "Monroe County",
+  "members": [
+   {
+    "name": "George E. Green",
+    "role": "Chairman"
+   },
+   {
+    "name": "Vicki Koerber",
+    "role": "Vice Chairman"
+   },
+   {
+    "name": "Douglas Garmer",
+    "role": "Commissioner"
+   }
+  ],
+  "office": {
+   "address": "100 S. Main St., Waterloo, IL 62298",
+   "label": "Board of Commissioners",
+   "phone": "618-939-8681 ext. 214"
+  },
+  "sourceUrl": "https://monroecountyil.gov/departments/board-of-commissioners/",
+  "structure": "Commission form — 3 commissioners elected countywide"
+ },
+ "RANDOLPH": {
+  "county": "Randolph County",
+  "members": [
+   {
+    "email": "agerlach@randolphcountyil.gov",
+    "name": "Andy Gerlach",
+    "phone": "618-826-5000 ext. 142",
+    "role": "Commissioner"
+   },
+   {
+    "email": "dholder@randolphcountyil.gov",
+    "name": "Dave Holder",
+    "phone": "618-826-5000 ext. 143",
+    "role": "Chairman"
+   },
+   {
+    "email": "rwhite@randolphcountyil.gov",
+    "name": "Ronnie White",
+    "phone": "618-826-5000 ext. 138",
+    "role": "Commissioner"
+   }
+  ],
+  "sourceUrl": "https://randolphcountyil.gov/board-of-commissioners/",
+  "structure": "Commission form — 3 commissioners elected countywide"
+ }
+}

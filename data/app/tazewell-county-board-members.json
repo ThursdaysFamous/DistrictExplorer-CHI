@@ -1,0 +1,164 @@
+{
+ "1": {
+  "members": [
+   {
+    "email": "mgoddard@tazewell-il.gov",
+    "name": "Mark Goddard",
+    "party": "Republican",
+    "phone": "309-267-4983",
+    "url": "https://tazewell-il.gov/members/mark-goddard/"
+   },
+   {
+    "email": "jhall@tazewell-il.gov",
+    "name": "Jay Hall",
+    "party": "Republican",
+    "phone": "309-642-9286",
+    "url": "https://tazewell-il.gov/members/jay-hall/"
+   },
+   {
+    "email": "kjoesting@tazewell-il.gov",
+    "name": "Kim D. Joesting",
+    "party": "Republican",
+    "phone": "309-264-4299",
+    "url": "https://tazewell-il.gov/members/kim-d-joesting/"
+   },
+   {
+    "name": "Deene Milam",
+    "party": "Republican",
+    "phone": "309-346-6481",
+    "url": "https://tazewell-il.gov/members/deene-milam/"
+   },
+   {
+    "email": "knelms@tazewell-il.gov",
+    "name": "Kaden Nelms",
+    "party": "Republican",
+    "phone": "309-840-1445",
+    "url": "https://tazewell-il.gov/members/kaden-nelms/"
+   },
+   {
+    "email": "nproehl@tazewell-il.gov",
+    "name": "Nancy Proehl",
+    "party": "Republican",
+    "phone": "309-968-6780",
+    "url": "https://tazewell-il.gov/members/nancy-proehl/"
+   },
+   {
+    "email": "jwoodrow@tazewell-il.gov",
+    "name": "Joe Woodrow",
+    "party": "Republican",
+    "url": "https://tazewell-il.gov/members/joe-woodrow/"
+   }
+  ],
+  "sourceUrl": "https://tazewell-il.gov/boardreps/"
+ },
+ "2": {
+  "members": [
+   {
+    "email": "ngraff@tazewell-il.gov",
+    "name": "Nick Graff",
+    "party": "Republican",
+    "phone": "309-263-2560",
+    "url": "https://tazewell-il.gov/members/nick-graff/"
+   },
+   {
+    "email": "jhopkins@tazewell-il.gov",
+    "name": "Jon Hopkins",
+    "party": "Republican",
+    "url": "https://tazewell-il.gov/members/jon-hopkins/"
+   },
+   {
+    "email": "glongfellow@tazewell-il.gov",
+    "name": "Greg Longfellow",
+    "party": "Republican",
+    "phone": "309-303-0820",
+    "url": "https://tazewell-il.gov/members/greg-longfellow/"
+   },
+   {
+    "email": "gmenold@tazewell-il.gov",
+    "name": "Greg Menold",
+    "party": "Republican",
+    "phone": "309-303-5567",
+    "url": "https://tazewell-il.gov/members/greg-menold/"
+   },
+   {
+    "email": "mschneider@tazewell-il.gov",
+    "name": "Maxwell Schneider",
+    "party": "Republican",
+    "phone": "309-642-0635",
+    "url": "https://tazewell-il.gov/members/maxwell-schneider/"
+   },
+   {
+    "email": "gsinn@tazewell-il.gov",
+    "name": "Greg Sinn",
+    "party": "Republican",
+    "phone": "309-267-5156",
+    "url": "https://tazewell-il.gov/members/greg-sinn/"
+   },
+   {
+    "email": "estahl@tazewell-il.gov",
+    "name": "Eric Stahl",
+    "party": "Republican",
+    "phone": "309-361-0236",
+    "url": "https://tazewell-il.gov/members/eric-stahl/"
+   },
+   {
+    "email": "cstump@tazewell-il.gov",
+    "name": "Cathryn Stump",
+    "party": "Republican",
+    "phone": "309-657-2215",
+    "url": "https://tazewell-il.gov/members/cathryn-stump/"
+   }
+  ],
+  "sourceUrl": "https://tazewell-il.gov/boardreps/"
+ },
+ "3": {
+  "members": [
+   {
+    "email": "rcrawford@tazewell-il.gov",
+    "name": "Russ Crawford",
+    "party": "Republican",
+    "phone": "309-265-2468",
+    "url": "https://tazewell-il.gov/members/russ-crawford/"
+   },
+   {
+    "email": "eglueck@tazewell-il.gov",
+    "name": "Eugene Glueck",
+    "phone": "309-696-9070",
+    "url": "https://tazewell-il.gov/members/eugene-glueck/"
+   },
+   {
+    "email": "mharris@tazewell-il.gov",
+    "name": "Michael Harris",
+    "party": "Republican",
+    "phone": "309-359-8969",
+    "role": "Vice-Chairman",
+    "url": "https://tazewell-il.gov/members/michael-harris/"
+   },
+   {
+    "email": "dmingus@tazewell-il.gov",
+    "name": "David Mingus",
+    "party": "Republican",
+    "phone": "309-645-3393",
+    "url": "https://tazewell-il.gov/members/david-mingus/"
+   },
+   {
+    "email": "tstimson@tazewell-il.gov",
+    "name": "Tammy Rich-Stimson",
+    "party": "Republican",
+    "url": "https://tazewell-il.gov/members/tammy-rich-stimson/"
+   },
+   {
+    "email": "eschmidgall@tazewell-il.gov",
+    "name": "Eric Schmidgall",
+    "url": "https://tazewell-il.gov/members/eric-schmidgall/"
+   }
+  ],
+  "sourceUrl": "https://tazewell-il.gov/boardreps/"
+ },
+ "chair": {
+  "email": "bgrimm@tazewell-il.gov",
+  "name": "Brett Grimm",
+  "phone": "309-477-2272",
+  "url": "https://tazewell-il.gov/members/brett-grimm/"
+ }
+}

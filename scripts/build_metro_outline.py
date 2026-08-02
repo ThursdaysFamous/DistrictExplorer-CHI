@@ -95,6 +95,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
+                     "143", "179", "075", "133", "157",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -122,7 +123,8 @@ DISPATCH_COUNTY_FIPS = {
     "sangamon": "167", "macoupin": "117", "madison": "119", "st-clair": "163",
     "dekalb": "037", "ogle": "141", "stephenson": "177", "carroll": "015",
     "lee": "103", "whiteside": "195", "rock-island": "161", "woodford": "203",
-    "henry": "073",
+    "henry": "073", "peoria": "143", "tazewell": "179",
+    "iroquois": "075", "monroe": "133", "randolph": "157",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -175,6 +177,11 @@ INSIDE = {
     "Rock Island (Rock Island)": (41.4852, -90.5742),
     "Eureka (Woodford)": (40.7214, -89.2723),
     "Cambridge (Henry)": (41.3036, -90.1929),
+    "Peoria (Peoria)": (40.6936, -89.5890),
+    "Pekin (Tazewell)": (40.5675, -89.6407),
+    "Watseka (Iroquois)": (40.7761, -87.7364),
+    "Waterloo (Monroe)": (38.3359, -90.1498),
+    "Chester (Randolph)": (37.9199, -89.8258),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -183,17 +190,26 @@ INSIDE = {
     "Winchester (Scott, 7th Circuit)": (39.6297, -90.4563),
 }
 OUTSIDE = {
-    # Waterloo (Monroe) and Carlyle (Clinton) sit just past the new southern and
-    # eastern edges, so the Metro East is shown to have MOVED the boundary rather
-    # than merely widened an untested interior — and either would fail the build
-    # if a future county list quietly swallowed a neighbour.
-    "Waterloo (Monroe)": (38.3359, -90.1498),
+    # Carlyle (Clinton) sits just past the eastern edge, so the Metro East is
+    # shown to have MOVED the boundary rather than merely widened an untested
+    # interior — and it would fail the build if a future county list quietly
+    # swallowed a neighbour. (Waterloo moved to INSIDE when Monroe shipped as a
+    # commission county in pass-7 tranche 3; Sparta stands in for the southern
+    # frontier now that Randolph is served.)
     "Carlyle (Clinton)": (38.6103, -89.3726),
+    "Ava (Jackson)": (37.8886, -89.4964),
     # Fayette and Pike border the newly added subcircuit counties but are in no
     # shipped circuit, so they must stay outside — the guard that keeps "a
     # circuit's secondary counties" from quietly becoming "everything nearby".
     "Vandalia (Fayette)": (38.9606, -89.0937),
     "Pittsfield (Pike)": (39.6078, -90.8051),
+    # Canton (Fulton) and Toulon (Stark) border Peoria and are the frontier
+    # the pass-7 tranche-1 pair created: Fulton was not adjacent to the served
+    # ring at all before Peoria joined it. They guard the same way Waterloo and
+    # Carlyle do on the southern edge — the new counties must move the boundary
+    # exactly as far as their own borders and not one county further.
+    "Canton (Fulton)": (40.5570, -90.0393),
+    "Toulon (Stark)": (41.0937, -89.8651),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb used to sit here, described as "enclosed on three sides by served
     # counties and the one border-ring county with no locatable GIS". The second

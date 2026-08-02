@@ -1,0 +1,135 @@
+{
+ "1": {
+  "members": [
+   {
+    "email": "behr89@protonmail.com",
+    "homeTown": "Ashkum",
+    "name": "Lyle Behrends",
+    "phone": "815-383-3146",
+    "termExpires": 2028
+   },
+   {
+    "email": "pducat@iroquoiscountyil.gov",
+    "homeTown": "Chebanse",
+    "name": "Paul Ducat",
+    "phone": "815-685-3196",
+    "role": "Chairman",
+    "termExpires": 2026
+   },
+   {
+    "email": "jgrant@iroquoiscountyil.gov",
+    "homeTown": "Donovan",
+    "name": "John Grant",
+    "phone": "815-260-0229",
+    "termExpires": 2026
+   },
+   {
+    "email": "cmcginnis@co.iroquois.il.us",
+    "homeTown": "Chebanse",
+    "name": "Chad McGinnis",
+    "phone": "815-383-2654",
+    "termExpires": 2028
+   }
+  ],
+  "sourceUrl": "https://iroquoiscountyil.gov/offices/county-board"
+ },
+ "2": {
+  "members": [
+   {
+    "homeTown": "Gilman",
+    "name": "Steve Huse",
+    "phone": "815-265-4421",
+    "termExpires": 2026
+   },
+   {
+    "email": "jmunsterman@iroquoiscountyil.gov",
+    "homeTown": "Onarga",
+    "name": "Jody Munsterman",
+    "phone": "815-383-0608",
+    "termExpires": 2028
+   },
+   {
+    "email": "kjperkinson@iroquoiscountyil.gov",
+    "homeTown": "Onarga",
+    "name": "Kathleen Perkinson",
+    "phone": "805-405-2860",
+    "termExpires": 2026
+   },
+   {
+    "email": "g.whitlow@sbcglobal.net",
+    "homeTown": "Gilman",
+    "name": "Gerald Whitlow",
+    "phone": "815-383-0626",
+    "termExpires": 2028
+   }
+  ],
+  "sourceUrl": "https://iroquoiscountyil.gov/offices/county-board"
+ },
+ "3": {
+  "members": [
+   {
+    "email": "altcharlesr@gmail.com",
+    "homeTown": "Cissna Park",
+    "name": "Charles Alt",
+    "phone": "815-457-2098",
+    "termExpires": 2026
+   },
+   {
+    "email": "jbakken@iroquoiscountyil.gov",
+    "homeTown": "Milford",
+    "name": "Jamie Bakken",
+    "phone": "217-552-6062",
+    "role": "Vice-Chairman",
+    "termExpires": 2028
+   },
+   {
+    "email": "donnacrow90@gmail.com",
+    "homeTown": "Milford",
+    "name": "Donna Crow",
+    "phone": "815-471-4713",
+    "termExpires": 2026
+   },
+   {
+    "email": "rwilliams@co.iroquois.il.us",
+    "homeTown": "Hoopeston",
+    "name": "Raymond Williams",
+    "phone": "217-260-1622",
+    "termExpires": 2028
+   }
+  ],
+  "sourceUrl": "https://iroquoiscountyil.gov/offices/county-board"
+ },
+ "4": {
+  "members": [
+   {
+    "email": "kbaier@iroquoiscountyil.gov",
+    "homeTown": "Watseka",
+    "name": "Kenneth Baier",
+    "phone": "815-383-5555",
+    "termExpires": 2026
+   },
+   {
+    "email": "snowsoar37@gmail.com",
+    "homeTown": "Watseka",
+    "name": "Roger Bard",
+    "phone": "815-644-1062",
+    "termExpires": 2028
+   },
+   {
+    "email": "thebences@yahoo.com",
+    "homeTown": "Watseka",
+    "name": "Mitchell Bence",
+    "phone": "815-953-5119",
+    "termExpires": 2026
+   },
+   {
+    "email": "kevinb1957@icloud.com",
+    "homeTown": "Watseka",
+    "name": "Kevin Bohlman",
+    "phone": "815-383-1057",
+    "termExpires": 2026
+   }
+  ],
+  "sourceUrl": "https://iroquoiscountyil.gov/offices/county-board"
+ }
+}

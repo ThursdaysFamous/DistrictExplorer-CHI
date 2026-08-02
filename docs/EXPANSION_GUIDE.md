@@ -821,6 +821,88 @@ suburbs join as further `ward` entries when a polygon source appears.
 
 **Layer-count check: unchanged** — if a step wants a new toggle, run §1.6.
 
+### 2.5.1 Rules earned by the pass-7 tranches (2026-08-02 onward)
+
+Each of these cost a real build. They apply to any county, not just the ones that
+taught them.
+
+- **FETCHABLE IS NOT LICENSED. Read the publisher's terms before you build, and treat
+  the answer as part of "is there a source?"** This is now step zero of county research,
+  ahead of every technical probe. Champaign and Piatt were surveyed as BUILD-READY —
+  their board districts and precincts answer instantly once a `Referer` header is set —
+  and they are not buildable at all: the Champaign County GIS Consortium **sells** both
+  counties' GIS data under signed licence agreements, and its Terms of Use grant only a
+  personal, non-commercial, *transitory viewing* licence under which you may not copy the
+  materials, use them for any public display, or "transfer the materials to another
+  person or mirror the materials on any other server". A dispatch entry does all three.
+  The referer check was therefore the EDGE OF A LICENCE, not hotlink protection to route
+  around — and the technical ease of setting a header is exactly what makes this failure
+  mode dangerous, because nothing breaks and nothing warns.
+  **Concretely:** when a source is gated by anything (referer, token, login, a portal
+  app), find out WHY before you find out how. Check the publisher's terms-of-use,
+  data-request and store/pricing pages. A publisher that sells the layer, requires a
+  signed agreement, or forbids redistribution is a **licensing block** — record it as a
+  gap of kind `blocked`, ship the gap-location outline, and route the unlock to whoever
+  holds the underlying PUBLIC RECORD (for election geography that is the county clerk as
+  election authority, whatever a consortium licenses commercially). Never "solve" it by
+  supplying the header. The same instinct applies to a county GIS office that runs a paid
+  data-order form (the Jo Daviess shape) — same block, same route out.
+
+- **A county that publishes its board TWICE will eventually disagree with itself, and
+  you must decide which surface wins BEFORE you look at the numbers.** Tazewell's GIS
+  seats a member its own website no longer lists and omits one who has his own member
+  page; the website in turn puts a member in a district the GIS contradicts. The rule
+  that survived scrutiny: **the surface that is demonstrably stale about WHO is on the
+  board does not get to decide WHICH DISTRICT anyone represents — but it may still fill
+  a district the fresher surface leaves blank, because filling a silence overrides
+  nothing.** Record both values on every record (`districtSource`, plus the other
+  surface's claim) and LOG each divergence in the scraper, so a county fixing or
+  breaking its own page shows up in the weekly run rather than silently changing data.
+- **Never let a count guard launder a disagreement into a decision.** Tazewell's two
+  surfaces imply 7/7/7 and 7/8/6. A builder that enforced equal district sizes would
+  have "resolved" the conflict by discarding the county's own current claim — which
+  is exactly the kind of tidy arithmetic that reads as authoritative and isn't. Gate on
+  what the sources AGREE about (here: 21 district members plus a countywide chairman)
+  and leave the rest visible. If the county fixes its page, the file corrects itself.
+- **Two layers can draw the same lines and still not be interchangeable.** Peoria's
+  roster-carrying `ElectoralDistricts/3` and its `2020_County_Board_Districts` agreed at
+  8/8 point tests; only the latter carries the per-district 2020 populations that PROVE
+  it is the adopted map. Prefer the layer that carries its own evidence, and get the
+  roster elsewhere. (Corollary: a large constant area ratio between two layers is a
+  projection difference, not a geometry difference — point-test before concluding.)
+- **A GIS layer can be the roster's SPINE without being the roster.** Peoria's
+  `ElectoralDistricts/3` enumerates district → member name, party and member-page URL;
+  the member pages carry the phone and e-mail no layer has. Machine-readable enumeration
+  + per-page enrichment beats parsing an index page's markup, and gives a free
+  cross-check against a third county surface.
+- **Match names across county surfaces on surname + first initial, and require the match
+  to be UNIQUE.** Prefix matching joins Rob/Robert and Matt/Matthew but NOT Mike/Michael,
+  which is how a real member silently failed a cross-check. Uniqueness is what keeps the
+  looseness safe; drop ambiguous keys from the lookup table entirely.
+- **Read the annotations a source appends to a name, but only the unambiguous ones.**
+  Tazewell prints "Jay Hall (R) 2024". The party letter ships (the county GIS
+  independently agrees); the YEAR does not, because nothing on the page says whether it
+  is a term expiry or an election year. Same page publishes a HOME ADDRESS — never
+  collected, per the Madison precedent (a residence is not an office you can visit).
+- **A source column that is a LINK belongs in the card's footer, not its body.** Peoria's
+  taxing tilings are the fleet's first with a per-district website. `polygonCountyEntry`
+  gained `hidden: true`, which captures a column for `primaryLink()`/`when()` without
+  rendering it as a row — `query()` populates every keyed field regardless.
+- **Test harness, not the app:** when a route-mocked test makes county A's entry answer
+  in county B, suspect the mock before the dispatcher. URL needles must name the
+  ORG AND SERVICE (`services.arcgis.com/<org>/…/<Service>`); a bare `FeatureServer/2/query`
+  matches half the fleet's counties and will feed them the wrong county's polygons.
+  Also: block service workers (they bypass `page.route`), and force a real document load
+  between points — a hash-only change leaves the previous point's cards on screen and
+  silently passes stale assertions.
+- **A frontier county you cannot serve still needs its outline** if it carries a recorded
+  gap: the gaps panel tests the pin against `<slug>-county-outline.json`, so without one
+  a reader in a greyed-out county is told nothing is missing there. Ship the outline,
+  tag the gap with the slug, mark the worksheet entry `dynamic_reference: true`, and
+  add NOTHING to `DISPATCH_COUNTY_FIPS` — the county stays unserved by construction.
+  Derive the anchors from TIGERweb's own Incorporated Places centroids and round-trip
+  each through a point-in-county query rather than recalling coordinates.
+
 ## 2.6 Verification
 
 The standard gates (Part 6.5) plus: the Playwright smoke test's coverage-hide, permalink

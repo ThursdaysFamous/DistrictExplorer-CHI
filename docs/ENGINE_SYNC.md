@@ -198,6 +198,27 @@ original head SHA — after fixing the fork's main, trigger a fresh fan-out
 (re-run the CHI release workflow; publish self-skips, dispatch repeats)
 rather than re-running the failed sibling run.
 
+> **"Nothing outside the fences" is a claim about the ENGINE, not about the
+> RELEASE.** Changing what `generate_metro_files.py` EMITS is an engine-adjacent
+> change that no fence contains, and a bump PR cannot apply it: the generator
+> is a script, its output lands in a GENERATED region of each fork's own files,
+> and the code that CONSUMES the new output may sit outside every generated
+> region. Learned shipping `engine-v1.0.22`, whose changelog said adopting forks
+> needed "nothing outside the fences" — true of the two changed blocks, wrong
+> about the release. The fork half of that change (a new `DYNAMIC_REFERENCE`
+> frozenset emitted into the validator-config region, plus the two-line check in
+> `validate_index.py` that reads it) meant both siblings' bump PRs failed CI in
+> nine seconds on `generate_metro_files.py --check` drift, and had to be fixed
+> by hand on their `bot/engine-bump` branches: regenerate the region, then patch
+> the consuming line.
+>
+> So: **before tagging a release, ask separately whether the change touches the
+> GENERATOR'S OUTPUT SHAPE.** If it does, the release needs the same treatment
+> as a new ENGINE block — land the regeneration and any out-of-region consumer
+> in each sibling (a small PR, or in the bump branch before merging), and say so
+> in the changelog. A changelog that promises a clean adoption and doesn't
+> deliver one costs every sibling a red CI run and a manual repair.
+
 ## Current ENGINE block inventory (50 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,

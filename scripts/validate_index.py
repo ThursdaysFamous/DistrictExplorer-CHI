@@ -158,6 +158,22 @@ GEOMETRY_FILES = {
     "jo-daviess-county-outline.json": (1, 1),  # Jo Daviess County outline — GAP-LOCATION geometry only, not a dispatched county: no layer answers here, but the gaps panel tests the pin against <slug>-county-outline.json, and without this file a pin in the gray-washed county was told 'nothing missing where you clicked'. Ships so jo-daviess-county-board-districts attaches to its ground.
     "bureau-county-outline.json": (1, 1),  # Bureau County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so bureau-county-board-districts attaches to its ground.
     "mercer-county-outline.json": (1, 1),  # Mercer County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so mercer-county-board-districts attaches to its ground.
+    "peoria-county-outline.json": (1, 1),  # Peoria County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "tazewell-county-outline.json": (1, 1),  # Tazewell County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "christian-county-outline.json": (1, 1),  # Gap-location outline for Christian County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "clinton-county-outline.json": (1, 1),  # Gap-location outline for Clinton County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "fayette-county-outline.json": (1, 1),  # Gap-location outline for Fayette County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "ford-county-outline.json": (1, 1),  # Gap-location outline for Ford County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "knox-county-outline.json": (1, 1),  # Gap-location outline for Knox County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "macon-county-outline.json": (1, 1),  # Gap-location outline for Macon County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "menard-county-outline.json": (1, 1),  # Gap-location outline for Menard County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "montgomery-county-outline.json": (1, 1),  # Gap-location outline for Montgomery County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "stark-county-outline.json": (1, 1),  # Gap-location outline for Stark County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it.
+    "champaign-county-outline.json": (1, 1),  # Gap-location outline for Champaign County — NOT a dispatched county. Its districts and precincts are live on the CCGISC portal but LICENSED (sold under signed agreement; the terms forbid copying, mirroring and public display), so no layer answers there. This outline exists solely so the champaign-piatt-ccgisc-license gap attaches to its ground.
+    "piatt-county-outline.json": (1, 1),  # Gap-location outline for Piatt County — NOT a dispatched county. Its districts and precincts are live on the CCGISC portal but LICENSED (sold under signed agreement; the terms forbid copying, mirroring and public display), so no layer answers there. This outline exists solely so the champaign-piatt-ccgisc-license gap attaches to its ground.
+    "iroquois-county-outline.json": (1, 1),  # Iroquois County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "monroe-county-outline.json": (1, 1),  # Monroe County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
+    "randolph-county-outline.json": (1, 1),  # Randolph County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -196,6 +212,10 @@ ROSTER_FILES = {
     "boone-county-board-members.json": 3,  # Boone County Board members keyed by district (3 four-member districts, 12/12 with phone, e-mail and a term-expiry year — terms are staggered, so the year is per-seat ballot information) — scraped weekly from the county's own board page. Role tags verbatim: currently one Vice-Chairman; the page names no Chairman, so none is rendered. The boundary half is live GIS (three per-district layers merged at load time), not a data/app file.
     "grundy-county-board-members.json": 3,  # Grundy County Board members keyed by district (3 six-member districts, 18/18 with party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides Drew Muffler's row as the page states it) — scraped weekly from the county's own board page.
     "henry-county-board-members.json": 2,  # Henry County Board members keyed by district (2 ten-member districts — the fleet's widest; 20/20 with e-mail, 15 with phone) — scraped weekly from the county's own CivicPlus directory, which the county itself keys by district (DID=39/40), so the assignment is the county's own. No chair key: the chair is elected from within the body and the directory does not mark who holds it.
+    "peoria-county-board-members.json": 18,  # Peoria County Board members keyed by district (18 SINGLE-member districts — the app's largest single-member board; 18/18 with party and e-mail, 12 with phone). Scraped weekly: the county's own ElectoralDistricts GIS layer is the machine-readable spine (district -> name, party, member-page URL) and each member page supplies the contact. The Chairperson and Vice-Chairperson are badged on their own district rows — both hold district seats — and only where the county's index page states the role.
+    "tazewell-county-board-members.json": 4,  # Tazewell County Board members keyed by district (3 districts seating 21 members) plus a `chair` key for the COUNTYWIDE-elected Board Chairman (the McHenry shape). Scraped weekly from the county's own member pages (21 e-mails, 18 phones) rather than from its GIS layer, whose member attributes are stale. The scraper records the one district assignment the county's two surfaces disagree about instead of silently picking the tidier arithmetic.
+    "iroquois-county-board-members.json": 4,  # Iroquois County Board members keyed by district (4 districts, four members each; 16/16 with phone, 15 with e-mail, every seat with a home town and term-expiry year). Scraped weekly from the county's own table, which prints ROMAN numerals the scraper converts to the integers its GIS keys by. Chairman and Vice Chairman are badged on their own district rows — both hold district seats.
+    "il-county-commissioners.json": 2,  # At-large county boards, keyed like il-county-clerks.json. Counties that elect their board COUNTYWIDE have no district geometry, so their members ride the COUNTY card rather than a county-board dispatch entry (EXPANSION_GUIDE §1.5). Currently Monroe and Randolph, both commission-form counties with three commissioners each; scraped weekly.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at
@@ -206,6 +226,17 @@ DYNAMIC_REFERENCE = frozenset({
     "jo-daviess-county-outline.json",
     "bureau-county-outline.json",
     "mercer-county-outline.json",
+    "christian-county-outline.json",
+    "clinton-county-outline.json",
+    "fayette-county-outline.json",
+    "ford-county-outline.json",
+    "knox-county-outline.json",
+    "macon-county-outline.json",
+    "menard-county-outline.json",
+    "montgomery-county-outline.json",
+    "stark-county-outline.json",
+    "champaign-county-outline.json",
+    "piatt-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 
