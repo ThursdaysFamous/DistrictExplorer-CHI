@@ -900,6 +900,12 @@
         "note": "Marshall County Board districts, DERIVED: Census townships dissolved per the composition the county prints in the DISTRICT #n headings of its own board roster PDF (scripts/build_marshall_board_districts.py; --check is the drift gate). The county runs no public GIS. No township is split, so every district edge is a township edge; the build asserts the three districts partition all 12 townships exactly and that their Census 2020 populations balance (1.4% spread across three equal four-member districts)."
       },
       {
+        "file": "adams-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Adams County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
         "file": "mason-county-outline.json",
         "min_features": 1,
         "max_features": 1,

@@ -8225,6 +8225,46 @@ function initChiExplorer() {
    * Cissna Park." The card surfaces that text wherever it is present rather
    * than hiding it, because a reader deciding who covers their property should
    * see the county's own caveat. */
+  // ---- Adams County (pass 8). The county's OWN GIS org publishes the full
+  // election fabric: 7 board districts, 92 precincts that carry both their
+  // polling place AND their own board-district assignment, and Quincy's wards.
+  // The 7 districts were verified to TILE the county before shipping — 99.997%
+  // of the TIGER outline covered, largest pairwise overlap 5e-7 deg^2, and
+  // Quincy / Camp Point / Mendon each resolving to exactly one district.
+  //
+  // NO ROSTER. adamscountyil.gov is an Akamai hard WAF deny (391 bytes,
+  // x-reference-error, errors.edgesuite.net — the Joliet class, where a browser
+  // rung fails identically to requests) and the Archive holds the site root but
+  // not the board page. So this ships at the rule-4 honesty floor: the district
+  // the reader is in, and a link to the body. No name is guessed. The gap
+  // adams-county-board-roster records what would lift it.
+  var ADAMS_GIS = "https://services3.arcgis.com/BXTAaNPMn1VANOeH/arcgis/rest/services/";
+  function loadAdamsLayer(service, layerIndex, outFields, label) {
+    var url = ADAMS_GIS + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Adams County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadAdamsCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/adams-county-outline.json", {}, 2);
+  });
+  function adamsCountyCoverage(point) {
+    return loadAdamsCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadAdamsCountyBoard = makeCached(function () {
+    return loadAdamsLayer("Web_Voting_Data", 2, "DIST_NAME", "board districts");
+  });
+  // Precincts2021 rather than Web_Voting_Data/1: same 92 shapes, but this one
+  // also carries PollingPlace, populated on all 92.
+  var loadAdamsPrecincts = makeCached(function () {
+    return loadAdamsLayer("Adams_County_Voting_Precincts_view", 0,
+                          "Precinct,Ward,CountyBoard,PollingPlace", "precincts");
+  });
   var IROQUOIS_GIS = "https://services6.arcgis.com/6FZQl5a5SiSFMv8P/arcgis/rest/services/";
   function loadIroquoisLayer(service, layerIndex, outFields, label) {
     var url = IROQUOIS_GIS + service + "/FeatureServer/" + layerIndex +
@@ -15011,6 +15051,46 @@ function initChiExplorer() {
       // the GIS keys by integer — the scraper converts, so the join holds. The
       // Chairman and Vice Chairman are elected from among the 16 and each
       // holds a district seat, so both are badged on their own rows.
+      // Adams — 7 districts, county GIS, NO ROSTER. The county's own site is an
+      // Akamai hard deny and the Archive never captured its board page, so no
+      // member is named here: the card gives the district and links the body,
+      // which is the rule-4 floor rather than a guess. If a roster ever becomes
+      // reachable this entry gains it exactly as Logan's did.
+      {
+        key: "adams",
+        coverage: adamsCountyCoverage,
+        loadGeometry: loadAdamsCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["dist_name"]);
+          return (v == null || v === "") ? null : String(v).replace(/^D/, "District ");
+        },
+        query: function (point, seq) {
+          return loadAdamsCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var d = findPropCI(feature.properties || {}, ["dist_name"]);
+            return { seq: seq, district: (d == null || d === "") ? null : String(d) };
+          });
+        },
+        render: function (result) {
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Adams County Board",
+            note: "Adams County does not publish its board membership anywhere reachable, so this card names the district only."
+          }));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          // The source labels them "D1".."D7"; readers say "District 1".
+          return result.district ? "District " + String(result.district).replace(/^D/, "") : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Adams County Board (official)",
+            url: "https://www.adamscountyil.gov/county-board"
+          };
+        }
+      },
       {
         key: "iroquois",
         coverage: iroquoisCountyCoverage,
@@ -17752,6 +17832,57 @@ function initChiExplorer() {
       // Iroquois — 37 precincts with the polling place joined on pollingid
       // against 32 published voting locations. Board district via spatial join
       // against the same boundary the board card reads.
+      // Adams — 92 precincts. Unusually, the county's own precinct layer carries
+      // BOTH the polling place (92/92) and the precinct's board district, so
+      // neither is a spatial join nor a name match: both are the county's own
+      // assignment, read off the feature the reader is standing in.
+      {
+        key: "adams",
+        coverage: adamsCountyCoverage,
+        loadGeometry: loadAdamsPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinct"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadAdamsPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["precinct"]);
+            var board = findPropCI(props, ["countyboard"]);
+            var ward = findPropCI(props, ["ward"]);
+            // The Ward column is blank outside Quincy and carries stray trailing
+            // spaces inside it, so it is trimmed and shown only when it is real.
+            ward = (ward == null) ? "" : String(ward).trim();
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: (board == null || String(board).trim() === "")
+                ? null : String(board).trim(),
+              ward: ward || null,
+              pollingPlace: findPropCI(props, ["pollingplace"]) || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.ward) fields.push({ label: "Quincy ward", value: result.ward });
+          if (result.pollingPlace) fields.push({ label: "Polling place", value: String(result.pollingPlace) });
+          fields.push({ label: "County", value: "Adams County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Adams County Clerk — Elections (official)",
+            url: "https://www.adamscountyil.gov/county-clerk"
+          };
+        }
+      },
       {
         key: "iroquois",
         coverage: iroquoisCountyCoverage,
