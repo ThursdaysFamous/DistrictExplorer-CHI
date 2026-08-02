@@ -8043,6 +8043,31 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadWashingtonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/washington-county-outline.json", {}, 2);
+  });
+  function washingtonCountyCoverage(point) {
+    return loadWashingtonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  /* WASHINGTON COUNTY (the 35th dispatched county, added 2026-08-02). It runs
+   * NO GIS of any kind — no org, no viewer, no maps page — so its board
+   * boundary is DERIVED from Census townships per the composition the county
+   * prints under each district heading ("Composed of Ashley, Beaucoup, Du Bois,
+   * Irvington, Hoyleton, Richview Townships"). No township is split, so every
+   * district edge is a Census township edge; the build asserts the three
+   * districts partition all 16 townships exactly and that their populations
+   * balance (5.1% spread). The roster scrape re-checks that composition weekly.
+   * The county publishes no precinct geometry — a recorded gap — so the board
+   * is its only dispatch entry. */
+  var loadWashingtonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/washington-county-board-districts.json", {}, 2);
+  });
+  var loadWashingtonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/washington-county-board-members.json", {}, 2);
+  });
+
   var loadDewittCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/dewitt-county-outline.json", {}, 2);
   });
@@ -14998,6 +15023,65 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadDewittBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Washington — 3 districts electing FIVE members each. Boundary DERIVED
+      // as whole-township dissolves (the county runs no GIS at all); roster
+      // scraped weekly, 15/15 with phone AND e-mail. No chair is marked
+      // anywhere on the county's page, so none is rendered.
+      {
+        key: "washington",
+        coverage: washingtonCountyCoverage,
+        loadGeometry: loadWashingtonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWashingtonBoardDistricts(),
+            loadWashingtonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Washington County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Washington County Board (official)",
+            url: "https://washingtonco.illinois.gov/county-board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadWashingtonBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

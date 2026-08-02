@@ -131,6 +131,8 @@ const GEOMETRY_URLS = [
   "./data/app/randolph-county-outline.json",
   "./data/app/dewitt-county-outline.json",
   "./data/app/dewitt-county-board-districts.json",
+  "./data/app/washington-county-outline.json",
+  "./data/app/washington-county-board-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -176,6 +178,7 @@ const ROSTER_URLS = [
   "./data/app/iroquois-county-board-members.json",
   "./data/app/il-county-commissioners.json",
   "./data/app/dewitt-county-board-members.json",
+  "./data/app/washington-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

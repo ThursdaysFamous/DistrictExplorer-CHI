@@ -1,0 +1,92 @@
+{
+ "1": {
+  "members": [
+   {
+    "email": "kurtelsesser@yahoo.com",
+    "name": "Kurt Elsesser",
+    "phone": "618-315-7316"
+   },
+   {
+    "email": "lunafullerd@gmail.com",
+    "name": "Daniel Luna-Fuller",
+    "phone": "618-899-0708"
+   },
+   {
+    "email": "emalick26@gmail.com",
+    "name": "Eric Malick",
+    "phone": "618-599-8606"
+   },
+   {
+    "email": "drsmall62@hotmail.com",
+    "name": "Rodney Small",
+    "phone": "618-967-1510"
+   },
+   {
+    "email": "larry.unverfehrt@washingtonco.illinois.gov",
+    "name": "Larry Unverfehrt",
+    "phone": "618-214-1359"
+   }
+  ],
+  "sourceUrl": "https://washingtonco.illinois.gov/county-board/"
+ },
+ "2": {
+  "members": [
+   {
+    "email": "daniel.bronke@washingtonco.illinois.gov",
+    "name": "Dan Bronke",
+    "phone": "618-314-6485"
+   },
+   {
+    "email": "kyle.heggemeier@washingtonco.illinois.gov",
+    "name": "Kyle Heggemeier",
+    "phone": "618-314-0733"
+   },
+   {
+    "email": "nfpd4800@gmail.com",
+    "name": "Alan Hohlt",
+    "phone": "618-201-5633"
+   },
+   {
+    "email": "dave.ibendahl@washingtonco.illinois.gov",
+    "name": "Dave Ibendahl",
+    "phone": "618-336-5233"
+   },
+   {
+    "email": "desdkszls@gmail.com",
+    "name": "Dennis Shemonic",
+    "phone": "618-246-8205"
+   }
+  ],
+  "sourceUrl": "https://washingtonco.illinois.gov/county-board/"
+ },
+ "3": {
+  "members": [
+   {
+    "email": "doug.bening@washingtonco.illnois.gov",
+    "name": "Doug Bening",
+    "phone": "618-978-9755"
+   },
+   {
+    "email": "eric.brammeier@washingtonco.illinois.gov",
+    "name": "Eric Brammeier",
+    "phone": "618-201-1979"
+   },
+   {
+    "email": "david_karg@yahoo.com",
+    "name": "David Karg",
+    "phone": "618-314-3058"
+   },
+   {
+    "email": "ddmeyerfarms@att.net",
+    "name": "David Meyer",
+    "phone": "618-534-5921"
+   },
+   {
+    "email": "paul.todd@washingtonco.illinois.gov",
+    "name": "Paul Todd",
+    "phone": "618-599-0821"
+   }
+  ],
+  "sourceUrl": "https://washingtonco.illinois.gov/county-board/"
+ }
+}

@@ -860,6 +860,27 @@ COUNTIES = {
             (39.9855, -88.8197, "Argenta — Macon County"),
         ],
     },
+    # Washington (pass-7 tranche 4): board districts DERIVED as whole-township
+    # dissolves per the composition the county prints under each district
+    # heading (scripts/build_washington_board_districts.py). The county runs no
+    # GIS at all, so nothing else about it is live.
+    "washington": {
+        "fips": "189",
+        "name": "Washington County",
+        "inside": [
+            (38.3913, -89.4865, "Addieville"),
+            (38.3289, -89.1893, "Ashley"),
+            (38.2214, -89.2127, "Du Bois"),
+            (38.4457, -89.2721, "Hoyleton"),
+            (38.4386, -89.1601, "Irvington"),
+        ],
+        "outside": [
+            (38.1838, -89.8452, "Baldwin — Randolph County"),
+            (38.7229, -88.9117, "Alma — Marion County"),
+            (38.5165, -89.9900, "Belleville — St. Clair County"),
+            (38.5434, -89.6172, "Albers — Clinton County"),
+        ],
+    },
 }
 
 
