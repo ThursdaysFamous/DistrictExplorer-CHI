@@ -92,6 +92,19 @@ in the researched-but-unbuilt backlog.
       "wanted": "The list of board members by district from any source that permits automated reading — the county's own page becoming reachable, an Archive capture of it, or a Clerk directory."
     },
     {
+      "id": "peoria-municipal-officials",
+      "concept": "City and village officials",
+      "area": "Peoria County",
+      "counties": [
+        "peoria"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "Peoria County publishes no list of its cities' and villages' officials anywhere we can read, so those cards name the place without naming who runs it.",
+      "blocker": "Checked 2 Aug 2026, working through the usual sources in order. Peoria is run by an election commission rather than a county clerk, and the commission publishes candidates rather than people currently in office. The county's phone directory is county staff. The regional planning commission, which covers Peoria, Tazewell and Woodford, publishes no member list. And the county mapping service's municipality layer carries the corporate name and nothing else — no address, no phone, no officer. Neighbouring Tazewell's clerk yearbook does carry all of this, which is what a workable source looks like; Peoria has no equivalent.",
+      "wanted": "Any county-level list of municipal officeholders — a clerk's yearbook or directory of the kind most neighbouring counties publish."
+    },
+    {
       "id": "quincy-ward-officeholders",
       "concept": "City council members",
       "area": "Quincy (Adams County)",
@@ -1576,6 +1589,56 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   district layer among its Sidwell org's 28 public services), **Fayette** (~21k — roster
   WITH party (12R/2D); an ArcMap-authored vector PDF carries districts AND its 28
   precincts, so the shapefiles demonstrably exist at Sidwell — request-or-digitize),
+  | ~~municipal officials — Tazewell~~ **SHIPPED 2026-08-02, 22nd county on the Municipality card** | the County Clerk's yearbook on **tazewell-il.gov** (the app's own il-county-clerks.json named that domain; tazewell.com fails TLS at the gateway with a VALID cert and tazewellcountyil.gov does not resolve) | 16 municipalities, 141 officials, 16 heads — full governing bodies with hall address, website and e-mail. Read from word POSITIONS, not lines: on many pages the office titles and the names extract as separate blocks (Marquette Heights prints Mayor/Clerk/Treasurer/6x Alderperson, then eight names), so a line read pairs the wrong people with the wrong offices. Verified against a hand-read page before the parser was written and again after. ZERO phones ship: the yearbook prints 389 of them with no area code and states no default, so the DMMC rule nulls them all — Tazewell is entirely 309, but the document does not say so. Minier's vacant deputy clerk is counted and never named |
+  **MUNICIPAL BACKLOG, first pair probed (2026-08-02) — Peoria and Tazewell, the two
+  largest served counties with no municipal officials.** Opposite outcomes. **Peoria: no
+  source at any rung** (recorded as gap peoria-municipal-officials). Its election authority
+  is a commission, which publishes CANDIDATES rather than seated officers; the county phone
+  directory is county staff; Tri-County RPC — which covers Peoria, Tazewell and Woodford, and
+  looked like the one source that could answer two counties at once — publishes no member
+  roster at all (zero "mayor"/"village president" occurrences across every About page); and
+  the county GIS Municipality layer is CORP_NAME and nothing else, the Lee shape, with no
+  address, phone or officer to ship even at the contact-only floor. **Tazewell: BUILDABLE,
+  and the domain was the whole obstacle.** tazewell.com fails TLS at the egress gateway
+  (valid cert, handshake rejected — not a bot block and not fixable by disabling
+  verification), and www.tazewellcountyil.gov does not exist. The county is actually at
+  **tazewell-il.gov**, which the app's own il-county-clerks.json named all along via
+  jcackerman@tazewell-il.gov — the SECOND time in one day the shipped clerk roster located a
+  county that hostname guessing could not (see McDonough). Its Clerk's Yearbook (FULL-YEARBOOK-1.pdf,
+  uploaded 2026-05) carries "OFFICERS OF CITIES AND VILLAGES OF TAZEWELL COUNTY" — full
+  governing bodies with hall address, phone, website and e-mail. It needs POSITIONAL parsing,
+  not line parsing: on many pages the office titles and the names extract as separate blocks
+  (Marquette Heights lists Mayor/Clerk/Treasurer/6x Alderperson, then eight names), so a
+  line-based read pairs the wrong people with the wrong offices — the LaSalle problem, and
+  the LaSalle recipe (pdfplumber, y-banded at 3pt, split by x: office <128, name 128-282,
+  contact >282) recovers every row cleanly. Two rules already in this file apply on sight:
+  "Vacant" appears as a name (Minier's deputy clerk) and must be counted and never named, and
+  the yearbook prints 389 phones WITHOUT an area code while stating no default, so those ship
+  null under the DMMC rule — Tazewell is entirely 309, but mostly-true is not stated.
+  **PASS-9 PROBE (2026-08-02), the three counties Adams and Schuyler made adjacent —
+  all three are a LOW-GIS frontier, unlike Adams, and none is buildable from what is
+  reachable today:** **Fulton** (~34k — the best of the three and still not enough: a live
+  county site AND a dedicated elections domain, fultoncountyilelections.gov, carrying pages
+  titled "Fulton County Election District GIS" and "Precincts and Polling Places". The GIS
+  page contains NO map — no ArcGIS service, no KML, no PDF, only a tag-manager iframe — so
+  the title promises a layer the page does not hold. 12 board-member e-mails are published,
+  several of them personal gmail/outlook addresses, and no district label appears anywhere;
+  whether the board is districted or at-large is UNDETERMINED and must come from a certified
+  election document, not from the page's silence). **Hancock** (~17k — live site with a
+  County Board Members page that renders its content client-side: 170 KB of jQuery loader
+  with zero e-mails or district labels in the served HTML, so it needs a browser render this
+  sandbox cannot give a live site. No AGOL items at all). **McDonough** (~29k — the county appears to have
+  NO LOCATABLE PUBLIC WEBSITE, which is a different finding from "blocked" and rarer than
+  either. Nine hostnames were tried and none resolves, including the one the ISBE clerk
+  directory implies: jbenson@mcdonoughcountyclerk.org is the state's published contact, yet
+  that domain has no A record — so it is e-mail-only or stale. DNS itself is fine in the
+  probing environment (neighbouring fultoncountyil.gov resolves), so the failures are real
+  rather than environmental, and a proxy 502 seen mid-probe was a CONNECT rejection for that
+  same unresolvable host, not a signal about the county. The route that DID work is the one
+  already in this repo: data/app/il-county-clerks.json, built weekly from ISBE, carries the
+  clerk's name, address and phone — which is how the records request was addressed. **Lesson:
+  the app's own clerk roster is a domain-discovery tool, and should be the FIRST stop when a
+  county cannot be found, ahead of hostname guessing.**).
   **Ford** (~13k — township-precinct composition with a SHARED split (Patton 3 sits in
   two districts); the ISBE map is titled 2011 with Last-Modified 2021 — vintage
   unproven), **Stark** (~5k — everything exists in a county-produced Google My Maps KML:

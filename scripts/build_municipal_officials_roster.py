@@ -213,6 +213,7 @@ PRESERVABLE = {
     "madison": {"kind": "county", "county": "Madison"},
     "st-clair": {"kind": "county", "county": "St. Clair"},
     "rock-island": {"kind": "county", "county": "Rock Island"},
+    "tazewell": {"kind": "county", "county": "Tazewell"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
