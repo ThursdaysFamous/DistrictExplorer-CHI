@@ -869,6 +869,16 @@ taught them.
   (there isn't one), and the county still needs its coverage outline and
   `DISPATCH_COUNTY_FIPS` entry if any other layer answers there.
 
+- **A board whose districts elect DIFFERENT numbers of members balances per MEMBER, not
+  per district — check the wrong one and you will reject a correct build.** Cass
+  (2026-08-02) seats eleven members as 3/3/3/2. Its correctly-transcribed districts are
+  **28.8% apart per district** — past any sane guard, reading exactly like a botched
+  transcription — and **12.3% apart per member**, an ordinary rural apportionment. Before
+  writing a population check, get the SEATS PER DISTRICT from the county's own roster page
+  and divide by them. Do not assume every district elects the same number; that held for
+  the first thirty-five counties and then stopped. If the per-member spread is still wild,
+  *then* suspect the transcription.
+
 - **A DERIVED boundary must watch the source it was derived from, or it will silently
   rot.** Every derived boundary shares one failure mode: the county edits its composition,
   the compiled table does not, and the app keeps drawing superseded lines with nothing
@@ -885,8 +895,13 @@ taught them.
   - **Prove it bites.** Write the negative tests (a unit lost, gained, renumbered, and a
     whole township moved) and watch each one fail the build before you trust it.
 
-  Where the composition lives in a PDF, this check is NOT available — say so explicitly in
-  the builder's header rather than leaving the reader to assume the same protection.
+  Where the composition lives in a PDF the page merely LINKS, this check is not available.
+  Find the weakest real substitute and be explicit that it is one — Cass's roster page
+  publishes its SEAT COUNTS, which are the input its population test depends on, so the
+  weekly build asserts those instead; a reapportionment almost always moves a seat. It
+  cannot catch a redraw that leaves every district the same size. Say exactly that in the
+  builder's header and the workflow's, rather than leaving a reader to assume the same
+  protection.
 
 - **A county that publishes its board TWICE will eventually disagree with itself, and
   you must decide which surface wins BEFORE you look at the numbers.** Tazewell's GIS
