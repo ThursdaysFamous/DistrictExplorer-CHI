@@ -924,6 +924,75 @@ COUNTIES = {
             (40.8507, -89.1211, "Benson — Woodford County"),
         ],
     },
+    # The pass-7 tranche-5 AT-LARGE tier. None of these four has board-district
+    # geometry to ship — each elects its board countywide — so their outlines
+    # exist for the coverage ring and the gaps panel, not for a dispatch entry.
+    "pike": {
+        "fips": "149",
+        "name": "Pike County",
+        "inside": [
+            (39.7078, -90.7276, "Griggsville"),
+            (39.6983, -91.0399, "Barry"),
+            (39.7087, -91.2033, "Hull"),
+            (39.6288, -90.6108, "Florence"),
+            (39.7295, -90.9094, "Baylis"),
+        ],
+        "outside": [
+            (39.8843, -91.1084, "Liberty — Adams County"),
+            (39.9854, -90.7641, "Mount Sterling — Brown County"),
+            (39.6298, -90.4560, "Winchester — Scott County"),
+            (39.2948, -90.4062, "Carrollton — Greene County"),
+            (39.1591, -90.6248, "Hardin — Calhoun County"),
+        ],
+    },
+    "putnam": {
+        "fips": "155",
+        "name": "Putnam County",
+        "inside": [
+            (41.2589, -89.3216, "Hennepin (county seat)"),
+            (41.2658, -89.2305, "Granville"),
+            (41.1141, -89.1957, "Magnolia"),
+            (41.1771, -89.2097, "McNabb"),
+            (41.2558, -89.1817, "Standard"),
+        ],
+        "outside": [
+            (41.2877, -89.3640, "Bureau Junction — Bureau County"),
+            (41.0228, -89.4060, "Lacon — Marshall County"),
+            (41.3588, -89.0738, "LaSalle — LaSalle County"),
+        ],
+    },
+    "brown": {
+        "fips": "009",
+        "name": "Brown County",
+        "inside": [
+            (39.9854, -90.7641, "Mount Sterling (county seat)"),
+            (40.0066, -90.8737, "Mound Station"),
+            (40.0252, -90.6380, "Ripley"),
+            (39.8842, -90.6587, "Versailles"),
+        ],
+        "outside": [
+            (40.1200, -90.5665, "Rushville — Schuyler County"),
+            (39.9524, -90.2108, "Virginia — Cass County"),
+            (39.7078, -90.7276, "Griggsville — Pike County"),
+            (40.0301, -90.9580, "Clayton — Adams County"),
+        ],
+    },
+    "calhoun": {
+        "fips": "013",
+        "name": "Calhoun County",
+        "inside": [
+            (39.1591, -90.6248, "Hardin (county seat)"),
+            (38.9485, -90.5891, "Brussels"),
+            (39.0332, -90.6534, "Batchtown"),
+            (39.2971, -90.6127, "Kampsville"),
+            (39.2327, -90.7152, "Hamburg"),
+        ],
+        "outside": [
+            (39.2862, -90.5540, "Eldred — Greene County"),
+            (38.9765, -90.4257, "Grafton — Jersey County"),
+            (39.6983, -91.0399, "Barry — Pike County"),
+        ],
+    },
     # Mason (pass-7 tranche 4): board districts DERIVED as whole-township
     # dissolves per the composition the county prints under its board roster
     # (scripts/build_mason_board_districts.py). Its only mapping surface is a

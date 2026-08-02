@@ -2,7 +2,7 @@
   "this_metro": "chicago",
   "metro_name": "Chicago",
   "metro_bbox": {
-    "minLng": -91.15,
+    "minLng": -91.55,
     "minLat": 37.75,
     "maxLng": -87.0,
     "maxLat": 42.6
@@ -14,7 +14,7 @@
   "permalink_gate": {
     "minLat": 37.7,
     "maxLat": 42.75,
-    "minLng": -91.25,
+    "minLng": -91.65,
     "maxLng": -86.9
   },
   "poi_geocode_bbox": {
@@ -910,6 +910,34 @@
         "min_features": 2,
         "max_features": 2,
         "note": "Mason County Board districts, DERIVED: Census townships dissolved per the two composition lines the county prints under its board roster (scripts/build_mason_board_districts.py; --check is the drift gate). Its only mapping surface is a WTH parcel viewer with no feature service. No township is split, so every district edge is a township edge; the build asserts the two districts partition all 13 townships exactly and that their Census 2020 populations balance (0.2% spread — 6,528 against 6,558 — across two equal four-member districts)."
+      },
+      {
+        "file": "pike-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Pike County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "putnam-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Putnam County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "brown-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Brown County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "calhoun-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Calhoun County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.",
+        "dynamic_reference": true
       }
     ],
     "rosters": [

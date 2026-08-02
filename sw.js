@@ -139,6 +139,10 @@ const GEOMETRY_URLS = [
   "./data/app/marshall-county-board-districts.json",
   "./data/app/mason-county-outline.json",
   "./data/app/mason-county-board-districts.json",
+  "./data/app/pike-county-outline.json",
+  "./data/app/putnam-county-outline.json",
+  "./data/app/brown-county-outline.json",
+  "./data/app/calhoun-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI

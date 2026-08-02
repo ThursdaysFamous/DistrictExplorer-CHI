@@ -4,9 +4,11 @@ Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
 Builds data/app/metro-outline.json — the dissolved outline of the counties the
 app actually serves — from Census TIGERweb. "Serves" means at least one
-county-specific layer answers there, which as of 2026-07-30 is 24 counties: the
-19 with their own dispatch entries, plus the five secondary counties of shipped
-judicial circuits. It is deliberately ONE connected region: a county joins only
+county-specific layer answers there, which as of 2026-08-02 is 47 counties: the
+38 with their own dispatch entries, the five secondary counties of shipped
+judicial circuits, and the four AT-LARGE counties whose only county-specific
+answer is the County card's board section (they have no dispatch entry at all —
+see DISPATCH_COUNTY_FIPS below, which they deliberately do NOT appear in). It is deliberately ONE connected region: a county joins only
 once it touches the ones already served.
 
 THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
@@ -96,6 +98,7 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
+                     "149", "155", "009", "013",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -189,6 +192,14 @@ INSIDE = {
     "Virginia (Cass)": (39.9524, -90.2108),
     "Lacon (Marshall)": (41.0228, -89.4060),
     "Havana (Mason)": (40.2950, -90.0566),
+    # The at-large tier: served through the COUNTY card's board section rather
+    # than a dispatch entry, because none of the four has district geometry to
+    # dispatch on. They belong here for the same reason the judicial-subcircuit
+    # secondary counties do — county-specific data answers there.
+    "Griggsville (Pike)": (39.7078, -90.7276),
+    "Hennepin (Putnam)": (41.2589, -89.3216),
+    "Mount Sterling (Brown)": (39.9854, -90.7641),
+    "Hardin (Calhoun)": (39.1591, -90.6248),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -205,11 +216,11 @@ OUTSIDE = {
     # frontier now that Randolph is served.)
     "Carlyle (Clinton)": (38.6103, -89.3726),
     "Ava (Jackson)": (37.8886, -89.4964),
-    # Fayette and Pike border the newly added subcircuit counties but are in no
-    # shipped circuit, so they must stay outside — the guard that keeps "a
-    # circuit's secondary counties" from quietly becoming "everything nearby".
+    # Fayette borders the subcircuit counties but is in no shipped circuit, so
+    # it must stay outside — the guard that keeps "a circuit's secondary
+    # counties" from quietly becoming "everything nearby". (Pittsfield sat
+    # beside it until Pike shipped in tranche 5.)
     "Vandalia (Fayette)": (38.9606, -89.0937),
-    "Pittsfield (Pike)": (39.6078, -90.8051),
     # Canton (Fulton) and Toulon (Stark) border Peoria and are the frontier
     # the pass-7 tranche-1 pair created: Fulton was not adjacent to the served
     # ring at all before Peoria joined it. They guard the same way Waterloo and
@@ -239,18 +250,18 @@ OUTSIDE = {
     "Princeton (Bureau)": (41.3853, -89.4695),
     "Aledo (Mercer)": (41.2008, -90.7460),
     "Galena (Jo Daviess)": (42.4185, -90.4253),
-    # Putnam wraps Marshall's northern border and is the state's smallest
-    # county. It is not un-researched: it elects its board AT LARGE, so it has
-    # no district geometry to ship and joins through the county-commissioners
-    # roster rather than a dispatch entry — which means it must stay OUTSIDE
-    # this outline until it does. (Marshall moved up to INSIDE in tranche 4d.)
-    "Hennepin (Putnam)": (41.2589, -89.3216),
-    # Menard and Schuyler border Mason and are RECORDED GAPS, not gaps in the
-    # research: Menard's five commissioner districts run section-line roads
-    # rather than precinct or township unions, so no composition route exists
-    # and its only map is a 2021-12 raster. They hold the line Mason moved.
+    # Menard and Schuyler are RECORDED GAPS, not gaps in the research: Menard's
+    # five commissioner districts run section-line roads rather than precinct or
+    # township unions, so no composition route exists and its only map is a
+    # 2021-12 raster. Schuyler now borders BOTH Mason and Brown; between them
+    # these two hold the line the tranche-4 and tranche-5 counties moved.
     "Petersburg (Menard)": (40.0143, -89.8453),
     "Rushville (Schuyler)": (40.1200, -90.5665),
+    # Adams is the unresearched western frontier Pike and Brown created — it was
+    # not adjacent to the served area at all before they shipped.
+    # (Putnam's anchor moved up to INSIDE in tranche 5, joining through the
+    # county-commissioners roster exactly as its OUTSIDE comment said it would.)
+    "Clayton (Adams)": (40.0301, -90.9580),
 }
 
 
