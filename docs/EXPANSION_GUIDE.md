@@ -1105,6 +1105,30 @@ taught them.
   message must distinguish *still navigating* from *interstitial still served*. More
   generally: before believing a rung's verdict, check that the rung ran long enough to
   have a verdict. Compare its wall time against what the work should have cost.
+- **A workflow that has never run is not a workflow yet — dispatch it the day you
+  ship it.** Six workflows were merged without ever having executed. Dispatched
+  manually on 2026-08-02, FIVE failed in the same minute on the same line, and had
+  been broken since the day each shipped: `ModuleNotFoundError: No module named
+  'shapely'`. Every derived-boundary roster builder imports its district composition
+  from the matching `*_board_districts.py` (that is the weekly drift check, and it is
+  the right design), and those modules imported shapely at MODULE SCOPE — so importing
+  a tuple of township names dragged in the geometry stack, which the roster jobs
+  correctly never install because they do no geometry. Cass, De Witt, Marshall, Mason
+  and Washington: the entire tranche-4 tier, silently, from day one. The sixth passed,
+  and it is the at-large roster — the one county tier with no districts module to
+  import from. **Nothing else could have caught it.** The scrapers were fine, the
+  builders were fine, the data was fine, `validate_index` passed, and every local run
+  worked because a developer machine has shapely installed. The defect lived in the
+  seam between a script's import graph and its workflow's pip line, and no gate looked
+  at that seam. Two rules follow. (1) **Dispatch every new workflow before you call the
+  tranche done** — a green `validate_index` says nothing about whether the job runs.
+  (2) The fix is to move the heavy import into the function that uses it, not to add
+  the package to the pip line: a module exporting a constant should cost a constant to
+  import. `scripts/validate_workflow_deps.py` now enforces exactly this in
+  `smoke-test.yml` — it walks each workflow entry point's transitive module-scope
+  imports through `scripts/` and fails on any third-party module the workflow does not
+  install. It is stdlib-only so it runs before any dependency exists, and it treats
+  function-local and `try:`-guarded imports as lazy by design.
 - **Register a roster's own source URL, not just its geometry's.** DeKalb's board
   districts were in `validate_sources.py` (an ArcGIS endpoint, always fine) while the
   members page the card's names actually come from was not, so the monthly check
