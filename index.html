@@ -8265,6 +8265,33 @@ function initChiExplorer() {
     return loadAdamsLayer("Adams_County_Voting_Precincts_view", 0,
                           "Precinct,Ward,CountyBoard,PollingPlace", "precincts");
   });
+  // 48 polygons but only 26 fire districts: the county's 911 layer splits each
+  // district into MUTUAL-AID sub-areas ("TTFD: MA-Payson", "TTFD: MA-E4"), so
+  // DsplayName is the district and MapLabel is which partner responds there.
+  // The card reads the district; the sub-areas are the county's own tiling and
+  // are drawn as published rather than dissolved, since each is a real answer
+  // to "who comes here". This is a DISPATCH tiling, not a taxing-district one —
+  // every row is keyed to @quincyadams911.org — and the card says so, the
+  // St. Clair posture.
+  var loadAdamsFireDistricts = makeCached(function () {
+    return loadAdamsLayer("Web_District_Data", 3, "DsplayName,MapLabel", "fire districts");
+  });
+  // 10 polygons, 7 named libraries — and one polygon whose name is literally
+  // "None", which is the county saying that area is served by no library
+  // district at all. Rendering "None" as a district name would invent a body;
+  // the entry states the absence instead (the Sangamon SPRINGFIELD CORP move).
+  var loadAdamsLibraryDistricts = makeCached(function () {
+    return loadAdamsLayer("Web_District_Data", 2, "LIBRARY_NM", "library districts");
+  });
+  // Quincy's 7 wards, labelled W1..W7 at the source.
+  var loadQuincyWards = makeCached(function () {
+    return loadAdamsLayer("Web_Voting_Data", 0, "Ward", "Quincy wards").then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var num = /(\d+)/.exec(String(findPropCI(f.properties || {}, ["ward"]) || ""));
+        return wardFeature(f, "Quincy", "Ward", num ? num[1] : null);
+      }) };
+    });
+  });
   var IROQUOIS_GIS = "https://services6.arcgis.com/6FZQl5a5SiSFMv8P/arcgis/rest/services/";
   function loadIroquoisLayer(service, layerIndex, outFields, label) {
     var url = IROQUOIS_GIS + service + "/FeatureServer/" + layerIndex +
@@ -12104,6 +12131,12 @@ function initChiExplorer() {
       municipalWardEntry("rock-island", loadRockIslandWards),
       municipalWardEntry("dekalb", loadDekalbWards),
       municipalWardEntry("mendota", loadMendotaWards),
+      // Quincy (Adams, pass 8) — SEAT-ONLY. The city's own site sits behind the
+      // same Akamai deny as its county's (403 on every path tried), so no
+      // per-seat officeholder source is reachable and none is invented: the card
+      // names the ward and nothing more, the North Chicago/Yorkville posture.
+      // Gap quincy-ward-officeholders records it.
+      municipalWardEntry("quincy", loadQuincyWards),
       // The pass-6 ward tranche (2026-08-02) — see the loader block's header
       // comment for each source's officeholder posture.
       municipalWardEntry("berwyn", loadBerwynWards),
@@ -15865,6 +15898,19 @@ function initChiExplorer() {
       // but map shows Cissna Park"). That text rides the card wherever it is
       // present, because a reader working out who covers their property should
       // see the county's caveat rather than a false certainty.
+      // Adams — 26 fire districts across the county's 48 mutual-aid polygons.
+      // Identity-only: the source is the 911 centre's response tiling, so it
+      // names who responds, not a taxing body with keyed trustees.
+      polygonCountyEntry({
+        key: "adams",
+        coverage: adamsCountyCoverage,
+        loader: loadAdamsFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["dsplayname"], primary: true },
+          { label: "Note", value: "Adams County publishes this as its 911 response tiling, so it names the department that answers here rather than a fire protection district's taxing boundary." },
+          { label: "County", value: "Adams County" }
+        ]
+      }),
       polygonCountyEntry({
         key: "iroquois",
         coverage: iroquoisCountyCoverage,
@@ -16284,6 +16330,21 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "Kendall County" }
+        ]
+      }),
+      // Adams — 7 library districts on a 10-polygon tiling. One polygon is named
+      // "None": that is the county recording an area no library district serves,
+      // so the card says exactly that instead of naming a district called None.
+      polygonCountyEntry({
+        key: "adams",
+        coverage: adamsCountyCoverage,
+        loader: loadAdamsLibraryDistricts,
+        fields: [
+          { name: "name", label: "Library District", keys: ["library_nm"], primary: true,
+            when: function (r) { return String(r.name || "").trim().toLowerCase() !== "none"; } },
+          { label: "Library District", value: "No library district serves this area — the county's own tiling records it as unserved.",
+            when: function (r) { return String(r.name || "").trim().toLowerCase() === "none"; } },
+          { label: "County", value: "Adams County" }
         ]
       }),
       // Kankakee's library tiling (8) — identity-only, same measured reason as fire.
