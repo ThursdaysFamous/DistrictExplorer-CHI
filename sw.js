@@ -126,6 +126,9 @@ const GEOMETRY_URLS = [
   "./data/app/stark-county-outline.json",
   "./data/app/champaign-county-outline.json",
   "./data/app/piatt-county-outline.json",
+  "./data/app/iroquois-county-outline.json",
+  "./data/app/monroe-county-outline.json",
+  "./data/app/randolph-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -168,6 +171,8 @@ const ROSTER_URLS = [
   "./data/app/henry-county-board-members.json",
   "./data/app/peoria-county-board-members.json",
   "./data/app/tazewell-county-board-members.json",
+  "./data/app/iroquois-county-board-members.json",
+  "./data/app/il-county-commissioners.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

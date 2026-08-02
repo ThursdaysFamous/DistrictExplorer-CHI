@@ -3,7 +3,7 @@
   "metro_name": "Chicago",
   "metro_bbox": {
     "minLng": -91.15,
-    "minLat": 38.1,
+    "minLat": 37.75,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,7 +12,7 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 38.05,
+    "minLat": 37.7,
     "maxLat": 42.75,
     "minLng": -91.25,
     "maxLng": -86.9
@@ -832,6 +832,24 @@
         "max_features": 1,
         "dynamic_reference": true,
         "note": "Gap-location outline for Piatt County — NOT a dispatched county. Its districts and precincts are live on the CCGISC portal but LICENSED (sold under signed agreement; the terms forbid copying, mirroring and public display), so no layer answers there. This outline exists solely so the champaign-piatt-ccgisc-license gap attaches to its ground."
+      },
+      {
+        "file": "iroquois-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Iroquois County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "monroe-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Monroe County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "randolph-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Randolph County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       }
     ],
     "rosters": [
@@ -1007,6 +1025,16 @@
         "file": "tazewell-county-board-members.json",
         "min_keys": 4,
         "note": "Tazewell County Board members keyed by district (3 districts seating 21 members) plus a `chair` key for the COUNTYWIDE-elected Board Chairman (the McHenry shape). Scraped weekly from the county's own member pages (21 e-mails, 18 phones) rather than from its GIS layer, whose member attributes are stale. The scraper records the one district assignment the county's two surfaces disagree about instead of silently picking the tidier arithmetic."
+      },
+      {
+        "file": "iroquois-county-board-members.json",
+        "min_keys": 4,
+        "note": "Iroquois County Board members keyed by district (4 districts, four members each; 16/16 with phone, 15 with e-mail, every seat with a home town and term-expiry year). Scraped weekly from the county's own table, which prints ROMAN numerals the scraper converts to the integers its GIS keys by. Chairman and Vice Chairman are badged on their own district rows — both hold district seats."
+      },
+      {
+        "file": "il-county-commissioners.json",
+        "min_keys": 2,
+        "note": "At-large county boards, keyed like il-county-clerks.json. Counties that elect their board COUNTYWIDE have no district geometry, so their members ride the COUNTY card rather than a county-board dispatch entry (EXPANSION_GUIDE §1.5). Currently Monroe and Randolph, both commission-form counties with three commissioners each; scraped weekly."
       }
     ]
   },
@@ -1184,6 +1212,16 @@
       "file": "update-tazewell-county-board-roster.yml",
       "purpose": "Tazewell County Board roster (tazewell-il.gov member-page scrape)",
       "schedule": "Fri 16:00 UTC"
+    },
+    {
+      "file": "update-iroquois-county-board-roster.yml",
+      "purpose": "Iroquois County Board roster (county board-page table scrape)",
+      "schedule": "Sat 15:00 UTC"
+    },
+    {
+      "file": "update-county-commissioners-roster.yml",
+      "purpose": "At-large county boards (Monroe, Randolph) rendered on the County card",
+      "schedule": "Sat 16:00 UTC"
     }
   ],
   "geocoder": {

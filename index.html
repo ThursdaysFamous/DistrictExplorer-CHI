@@ -2547,10 +2547,10 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -91.15, minLat: 38.1, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -91.15, minLat: 37.75, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 38.05, maxLat: 42.75, minLng: -91.25, maxLng: -86.9 };
+  var PERMALINK_GATE = { minLat: 37.7, maxLat: 42.75, minLng: -91.25, maxLng: -86.9 };
   // Envelope the POI (office-address) geocoder is bounded to. It tracks the
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
@@ -6291,6 +6291,17 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/il-county-clerks.json", {}, 2);
   });
 
+  /* At-large county boards, keyed the SAME way as the clerk roster. Seventeen
+   * Illinois counties run the commission form (three commissioners elected
+   * countywide) and some township counties elect their board at large; those
+   * boards have no district geometry, so they are not `county-board` dispatch
+   * entries — their members represent every resident of the county, which is
+   * what this card answers (docs/EXPANSION_GUIDE.md §1.5). Adding such a
+   * county adds rows here, not a layer. */
+  var loadIlCountyCommissioners = makeCached(function () {
+    return fetchJSONWithRetry("data/app/il-county-commissioners.json", {}, 2);
+  });
+
   function normCountyName(name) {
     return String(name || "").toUpperCase().replace(/\s*COUNTY\s*$/, "").replace(/[^A-Z]/g, "");
   }
@@ -6319,17 +6330,21 @@ function initChiExplorer() {
     query: function (point, seq) {
       return Promise.all([
         loadIlCounties(),
-        loadIlCountyClerks().catch(function () { return {}; })
+        loadIlCountyClerks().catch(function () { return {}; }),
+        loadIlCountyCommissioners().catch(function () { return {}; })
       ]).then(function (results) {
-        var geojson = results[0], roster = results[1];
+        var geojson = results[0], roster = results[1], commissioners = results[2];
         var feature = findFeatureContaining(geojson, point);
         if (!feature) return null;
         var props = feature.properties || {};
+        var base = findPropCI(props, ["basename"]) || findPropCI(props, ["name"]);
+        var key = normCountyName(base);
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
           geoid: findPropCI(props, ["geoid"]),
-          clerk: countyClerkFor(feature, roster)
+          clerk: countyClerkFor(feature, roster),
+          board: (key && commissioners) ? commissioners[key] || null : null
         };
       });
     },
@@ -6351,6 +6366,32 @@ function initChiExplorer() {
         if (clerk.address) {
           wrap.appendChild(renderOfficeGroup({
             offices: [{ label: "Clerk's Office", lines: [String(clerk.address)] }]
+          }));
+        }
+      }
+      // At-large county board: rendered here rather than on county-board,
+      // because there is no district to answer with — these members represent
+      // the whole county. Only counties whose board IS elected at large appear
+      // in the roster, so a districted county's card is unchanged.
+      var board = result.board;
+      if (board && board.members && board.members.length) {
+        wrap.appendChild(renderSectionLabel("County Board"));
+        wrap.appendChild(renderPersonRows(board.members.map(function (m) {
+          var person = { name: String(m.name) };
+          if (m.role) person.badge = String(m.role);
+          if (m.phone) person.phone = String(m.phone);
+          if (m.email) person.email = String(m.email);
+          return person;
+        }), { tinted: true }));
+        var note = board.structure ? String(board.structure) : null;
+        if (note) wrap.appendChild(renderFieldStack([{ label: "Board", value: note }]));
+        if (board.office && board.office.address) {
+          wrap.appendChild(renderOfficeGroup({
+            offices: [{
+              label: board.office.label ? String(board.office.label) : "Board Office",
+              lines: [String(board.office.address)].concat(
+                board.office.phone ? [String(board.office.phone)] : [])
+            }]
           }));
         }
       }
@@ -7978,6 +8019,168 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadIroquoisCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/iroquois-county-outline.json", {}, 2);
+  });
+  function iroquoisCountyCoverage(point) {
+    return loadIroquoisCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMonroeCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/monroe-county-outline.json", {}, 2);
+  });
+  function monroeCountyCoverage(point) {
+    return loadMonroeCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadRandolphCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/randolph-county-outline.json", {}, 2);
+  });
+  function randolphCountyCoverage(point) {
+    return loadRandolphCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  /* IROQUOIS COUNTY (the 31st dispatched county, added 2026-08-02 — the
+   * pass-7 tranche-3 full-fat add, reaching the ring through Kankakee).
+   *
+   * Its GIS of record is the assessor's own AGOL org, which publishes the
+   * "REACH" static layers alongside an Esri election-geography service. Board
+   * districts (4, each electing four members), precincts (37) and a 46-feature
+   * FIRE tiling all come from it, anonymously and with no licence restriction
+   * (checked before building — see docs/EXPANSION_GUIDE.md §2.5.1).
+   *
+   * A note on the fire layer, which is unusual and good: it carries a
+   * `Discrepancy` column in which the county RECORDS WHERE ITS OWN SOURCES
+   * DISAGREE — "Parcel Data shows this in Milford Fire District, but map shows
+   * Cissna Park." The card surfaces that text wherever it is present rather
+   * than hiding it, because a reader deciding who covers their property should
+   * see the county's own caveat. */
+  var IROQUOIS_GIS = "https://services6.arcgis.com/6FZQl5a5SiSFMv8P/arcgis/rest/services/";
+  function loadIroquoisLayer(service, layerIndex, outFields, label) {
+    var url = IROQUOIS_GIS + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Iroquois County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadIroquoisCountyBoard = makeCached(function () {
+    return loadIroquoisLayer("CountyBoardDistricts_REACH", 8, "District", "board districts");
+  });
+  var loadIroquoisBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/iroquois-county-board-members.json", {}, 2);
+  });
+  var loadIroquoisFireDistricts = makeCached(function () {
+    return loadIroquoisLayer("FireDistricts_REACH", 5, "Name,Discrepancy", "fire districts");
+  });
+  /* Precincts (37) with the polling place joined on pollingid against the 32
+   * published voting locations — many-to-one, as several precincts share a
+   * site. A polling failure costs the polling rows only. */
+  var loadIroquoisPrecincts = makeCached(function () {
+    return Promise.all([
+      loadIroquoisLayer("ElectionGeography_public", 1, "name,precinctid,pollingid", "precincts"),
+      loadIroquoisLayer("ElectionGeography_public", 0, "facilityid,name,fulladdr,municipality", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = findPropCI(p, ["facilityid"]);
+          if (id != null && String(id).trim()) byId[String(id).trim()] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = findPropCI(props, ["pollingid"]);
+          var place = key != null ? byId[String(key).trim()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var addr = findPropCI(place, ["fulladdr"]);
+          var city = findPropCI(place, ["municipality"]);
+          props.dxPollingAddress = addr ? (city ? addr + ", " + city : addr) : null;
+        });
+      }
+      return precincts;
+    });
+  });
+
+  /* MONROE COUNTY (32nd) and RANDOLPH COUNTY (33rd), added 2026-08-02.
+   *
+   * Both run the COMMISSION form — three commissioners elected countywide,
+   * no districts at all — so NEITHER gets a county-board dispatch entry.
+   * There is no geometry to join: their commissioners represent every
+   * resident, which is what the COUNTY card already answers, so they ride it
+   * through data/app/il-county-commissioners.json (EXPANSION_GUIDE §1.5).
+   * This is the first at-large board posture in the fleet.
+   *
+   * What they do contribute is precincts. Monroe's polling list keys its 16
+   * sites by a COMMA-SEPARATED precinct list ("1, 4, 35, 37"); every token is
+   * a bare integer matching the precinct layer's own PRECINCT value exactly,
+   * so the expansion is deterministic — unlike St. Clair's prose labels, which
+   * remain a recorded gap. The list still names 12 precinct numbers the
+   * current 25-precinct layer no longer has (the county re-precincted); those
+   * simply go unused, and every current precinct resolves (25/25 measured).
+   *
+   * Randolph publishes no polling assignment at all — its precinct layer's
+   * pollingid is null on every row — so its card carries precinct identity
+   * only. Its ESB_FIRE layer is deliberately NOT wired: it is a 911 response
+   * segmentation, not a taxing tiling, and presenting one as the other would
+   * misstate who levies the tax (the Winnebago/Logan precedent). */
+  var MONROE_GIS = "https://services.arcgis.com/AZVIEb4WFZST2UYx/arcgis/rest/services/";
+  var RANDOLPH_GIS = "https://services5.arcgis.com/pweYHqdOby1TE9DD/arcgis/rest/services/";
+  function loadSimpleFeatureLayer(base, service, layerIndex, outFields, label) {
+    var url = base + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadMonroePrecincts = makeCached(function () {
+    return Promise.all([
+      loadSimpleFeatureLayer(MONROE_GIS, "VoterPrecinct", 0, "PRECINCT", "Monroe County precincts"),
+      loadSimpleFeatureLayer(MONROE_GIS, "Polling_Places", 0, "PRECINCT,NAME,ADDRESS,CITY", "Monroe County polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byPrecinct = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var label = findPropCI(p, ["precinct"]);
+          if (label == null) return;
+          String(label).split(",").forEach(function (token) {
+            var t = token.trim();
+            // only bare integers are expanded — anything else is prose this
+            // deliberately refuses to guess at (the St. Clair lesson)
+            if (/^\d+$/.test(t)) byPrecinct[t] = p;
+          });
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var num = findPropCI(props, ["precinct"]);
+          var place = num != null ? byPrecinct[String(num).trim()] : null;
+          if (!place) return;
+          props.dxPollingPlace = findPropCI(place, ["name"]);
+          var addr = findPropCI(place, ["address"]);
+          var city = findPropCI(place, ["city"]);
+          props.dxPollingAddress = addr ? (city ? addr + ", " + city : addr) : null;
+        });
+      }
+      return precincts;
+    });
+  });
+  var loadRandolphPrecincts = makeCached(function () {
+    return loadSimpleFeatureLayer(RANDOLPH_GIS, "VotingPrecincts", 1, "name,precinctid",
+                                  "Randolph County precincts");
+  });
 
   /* PEORIA COUNTY (the 29th dispatched county, added 2026-08-02 with Tazewell
    * as the pass-7 tranche-1 pair — the two largest counties on the reopened
@@ -14634,6 +14837,72 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // Iroquois — 4 districts electing FOUR members each. Boundary live from
+      // the county's own AGOL org; roster scraped weekly from the county's own
+      // table (16/16 with phone, 15 with e-mail, every seat with a home town
+      // and term-expiry year). The roster table prints ROMAN numerals while
+      // the GIS keys by integer — the scraper converts, so the join holds. The
+      // Chairman and Vice Chairman are elected from among the 16 and each
+      // holds a district seat, so both are badged on their own rows.
+      {
+        key: "iroquois",
+        coverage: iroquoisCountyCoverage,
+        loadGeometry: loadIroquoisCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadIroquoisCountyBoard(),
+            loadIroquoisBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Iroquois County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var person = boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+              // the county publishes each member's home TOWN (a municipality,
+              // not a street address) — location the reader can act on
+              if (m.homeTown) person.note = String(m.homeTown);
+              return person;
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Iroquois County Board (official)",
+            url: "https://iroquoiscountyil.gov/offices/county-board"
+          };
+        },
+        hoverOfficial: {
+          load: loadIroquoisBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
       }
     ]
   });
@@ -15034,6 +15303,26 @@ function initChiExplorer() {
       // are grouped per district at load. A Springfield click answers with the
       // city's corporate area, and the card states that the city is served by
       // its own Fire Department rather than a fire protection district.
+      // Iroquois's 46 — and the source does something no other county's does:
+      // it carries a `Discrepancy` column recording where the county's OWN two
+      // sources disagree ("Parcel Data shows this in Milford Fire District,
+      // but map shows Cissna Park"). That text rides the card wherever it is
+      // present, because a reader working out who covers their property should
+      // see the county's caveat rather than a false certainty.
+      polygonCountyEntry({
+        key: "iroquois",
+        coverage: iroquoisCountyCoverage,
+        loader: loadIroquoisFireDistricts,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["name"], primary: true },
+          { name: "discrepancy", label: "County's note", keys: ["discrepancy"],
+            when: function (r) {
+              var d = r && r.discrepancy;
+              return !!d && String(d).trim() && String(d).trim().toLowerCase() !== "none";
+            } },
+          { label: "County", value: "Iroquois County" }
+        ]
+      }),
       // Peoria's 13 — the first fire tiling in the fleet whose source carries
       // a per-district WEBSITE, so the card can link the district that answers
       // the call rather than only naming it. Still identity-only otherwise:
@@ -16981,6 +17270,145 @@ function initChiExplorer() {
           return {
             label: "Tazewell County Clerk — Elections (official)",
             url: "https://tazewell-il.gov/county-clerk/"
+          };
+        }
+      },
+      // Iroquois — 37 precincts with the polling place joined on pollingid
+      // against 32 published voting locations. Board district via spatial join
+      // against the same boundary the board card reads.
+      {
+        key: "iroquois",
+        coverage: iroquoisCountyCoverage,
+        loadGeometry: loadIroquoisPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadIroquoisPrecincts(),
+            loadIroquoisCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) {
+                var d = findPropCI(bf.properties || {}, ["district"]);
+                if (d != null && d !== "") boardDistrict = String(d);
+              }
+            }
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Iroquois County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Iroquois County Clerk — Elections (official)",
+            url: "https://iroquoiscountyil.gov/offices/county-clerk"
+          };
+        }
+      },
+      // Monroe — 25 precincts. No County Board District row: Monroe elects
+      // three commissioners countywide, so there is no district to name (they
+      // appear on the County card instead). The polling place comes from the
+      // county's 16 sites, whose PRECINCT label is a comma-separated list of
+      // bare integers the loader expands deterministically — 25/25 measured.
+      {
+        key: "monroe",
+        coverage: monroeCountyCoverage,
+        loadGeometry: loadMonroePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinct"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMonroePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var num = findPropCI(props, ["precinct"]);
+            return {
+              seq: seq,
+              name: num != null && String(num).trim() ? String(num).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Monroe County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Monroe County Clerk — Elections (official)",
+            url: "https://monroecountyil.gov/departments/county-clerk-and-recording/"
+          };
+        }
+      },
+      // Randolph — 35 precincts, identity only. The county's precinct layer
+      // declares a pollingid and populates it on NO row, and Randolph's board
+      // is elected countywide, so neither a polling place nor a board district
+      // exists to add. A thin card that says only what the county publishes.
+      {
+        key: "randolph",
+        coverage: randolphCountyCoverage,
+        loadGeometry: loadRandolphPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadRandolphPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null
+            };
+          });
+        },
+        render: function (result) {
+          return renderFieldStack([{ label: "County", value: "Randolph County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Randolph County Clerk — Elections (official)",
+            url: "https://randolphcountyil.gov/county-clerk-recorder/"
           };
         }
       }

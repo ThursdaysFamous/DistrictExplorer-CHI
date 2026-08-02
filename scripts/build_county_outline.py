@@ -782,6 +782,63 @@ COUNTIES = {
             (40.1470, -88.9630, "Clinton — De Witt County"),
         ],
     },
+    # Pass-7 tranche 3 (2026-08-02): the eastern full-fat add plus the two
+    # COMMISSION counties, whose 3 at-large commissioners ride the county card
+    # rather than a county-board dispatch entry (EXPANSION_GUIDE §1.5).
+    # Anchors derived from TIGERweb Incorporated Places centroids and
+    # point-verified, like the pass-7 gap-location set.
+    "iroquois": {
+        "fips": "075",
+        "name": "Iroquois County",
+        "inside": [
+            (40.8783, -87.9532, "Ashkum"),
+            (40.9534, -87.6547, "Beaverville"),
+            (40.5973, -88.0377, "Buckley"),
+            (41.0003, -87.9111, "Chebanse"),
+            (40.5670, -87.8922, "Cissna Park"),
+            (40.7761, -87.7364, "Watseka (county seat)"),
+        ],
+        "outside": [
+            (41.0788, -87.8012, "Aroma Park — Kankakee County"),
+            (39.9161, -87.9353, "Allerton — Vermilion County"),
+            (40.4563, -88.1020, "Paxton — Ford County"),
+            (41.1254, -87.8487, "Kankakee — Kankakee County"),
+        ],
+    },
+    "monroe": {
+        "fips": "133",
+        "name": "Monroe County",
+        "inside": [
+            (38.4580, -90.2147, "Columbia"),
+            (38.1644, -90.2128, "Fults"),
+            (38.3051, -89.9935, "Hecker"),
+            (38.2268, -90.2330, "Maeystown"),
+            (38.3064, -90.2976, "Valmeyer"),
+            (38.3359, -90.1498, "Waterloo (county seat)"),
+        ],
+        "outside": [
+            (38.1838, -89.8452, "Baldwin — Randolph County"),
+            (38.5165, -89.9900, "Belleville — St. Clair County"),
+            (38.5136, -89.9842, "Belleville — St. Clair County (2)"),
+        ],
+    },
+    "randolph": {
+        "fips": "157",
+        "name": "Randolph County",
+        "inside": [
+            (38.1838, -89.8452, "Baldwin"),
+            (37.9199, -89.8258, "Chester (county seat)"),
+            (38.1849, -89.6046, "Coulterville"),
+            (38.0093, -89.9100, "Ellis Grove"),
+            (38.0889, -89.9323, "Evansville"),
+        ],
+        "outside": [
+            (38.4580, -90.2147, "Columbia — Monroe County"),
+            (37.8886, -89.4964, "Ava — Jackson County"),
+            (38.5165, -89.9900, "Belleville — St. Clair County"),
+            (38.3913, -89.4865, "Addieville — Washington County"),
+        ],
+    },
 }
 
 
