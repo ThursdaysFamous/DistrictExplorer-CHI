@@ -8292,6 +8292,45 @@ function initChiExplorer() {
       }) };
     });
   });
+  /* McDonough — the county whose data is hosted by a UNIVERSITY.
+   *
+   * Everything here is a same-origin file rather than a live service, and that
+   * is forced by the source rather than chosen. The county's GIS lives on
+   * Western Illinois University's ArcGIS server (gis.wiu.edu), and its precinct
+   * layer is a JOIN whose /query returns attributes with the geometry silently
+   * omitted — in Esri JSON and GeoJSON alike, for one feature or for all 27.
+   * The only endpoint that returns those polygons is /identify, a
+   * whole-map-extent request no browser layer should issue on a first toggle,
+   * and it answers in the service's native state-plane feet regardless of
+   * outSR. So the precincts are fetched, reprojected and shipped by
+   * scripts/build_mcdonough_precincts.py, and the board districts are dissolved
+   * from them by scripts/build_mcdonough_board_districts.py.
+   *
+   * The board districts are DERIVED even though the county publishes a
+   * board-district layer, because that layer's attribute table is visibly
+   * corrupt: two of its three districts carry an identical population AND an
+   * identical acreage to eight decimals, the third has neither, and the two
+   * sum to half again the county's actual population. The derivation is
+   * cross-checked against those same polygons at build time and agrees with
+   * them to better than 0.999 IoU on all three — so the geometry is confirmed
+   * while the arithmetic is not trusted. */
+  var loadMcdonoughCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mcdonough-county-outline.json", {}, 2);
+  });
+  function mcdonoughCountyCoverage(point) {
+    return loadMcdonoughCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMcdonoughBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mcdonough-board-districts.json", {}, 2);
+  });
+  var loadMcdonoughBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mcdonough-county-board-members.json", {}, 2);
+  });
+  var loadMcdonoughPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mcdonough-precincts.json", {}, 2);
+  });
   var IROQUOIS_GIS = "https://services6.arcgis.com/6FZQl5a5SiSFMv8P/arcgis/rest/services/";
   function loadIroquoisLayer(service, layerIndex, outFields, label) {
     var url = IROQUOIS_GIS + service + "/FeatureServer/" + layerIndex +
@@ -15162,6 +15201,71 @@ function initChiExplorer() {
           };
         }
       },
+      // McDonough — 3 districts of SEVEN members each, the boundary DERIVED
+      // from the county's own 27 precincts per the composition its board page
+      // prints under each district heading, and cross-checked against the
+      // county's own board polygons (>0.999 IoU on all three) because that
+      // layer's attribute table cannot be trusted. Roster scraped weekly from
+      // the same page, so boundary and membership move together.
+      //
+      // The page also prints every member's HOME ADDRESS. None is collected:
+      // the scraper reads only the phone out of that cell and the builder
+      // refuses to write any field whose name looks like an address.
+      {
+        key: "mcdonough",
+        coverage: mcdonoughCountyCoverage,
+        loadGeometry: loadMcdonoughBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : "District " + String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMcdonoughBoardDistricts(),
+            loadMcdonoughBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "McDonough County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "McDonough County Board (official)",
+            url: "http://mcg.mcdonough.il.us/members.html"
+          };
+        },
+        hoverOfficial: {
+          load: loadMcdonoughBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       {
         key: "iroquois",
         coverage: iroquoisCountyCoverage,
@@ -17979,6 +18083,73 @@ function initChiExplorer() {
           return {
             label: "Adams County Clerk — Elections (official)",
             url: "https://www.adamscountyil.gov/county-clerk"
+          };
+        }
+      },
+      // McDonough — 27 precincts, each carrying its own polling place and
+      // address on the feature (27/27), so like Adams neither is a join. The
+      // board district is not on the feature, but it needs no spatial join
+      // either: the districts are DISSOLVED FROM THESE PRECINCTS, so the
+      // precinct's own name resolves it exactly through the same composition
+      // the boundary was built from.
+      {
+        key: "mcdonough",
+        coverage: mcdonoughCountyCoverage,
+        loadGeometry: loadMcdonoughPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMcdonoughPrecincts(),
+            loadMcdonoughBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
+            name = (name == null) ? "" : String(name).trim();
+            // Exact membership, not a spatial join: each district feature lists
+            // the precincts it was dissolved from.
+            var district = null;
+            var districts = (results[1] && results[1].features) || [];
+            for (var i = 0; i < districts.length; i++) {
+              var dp = districts[i].properties || {};
+              var list = dp.precincts || [];
+              for (var j = 0; j < list.length; j++) {
+                if (String(list[j]) === name) { district = String(dp.district); break; }
+              }
+              if (district) break;
+            }
+            return {
+              seq: seq,
+              name: name || null,
+              precinctId: findPropCI(props, ["precinctid"]) || null,
+              boardDistrict: district,
+              pollName: findPropCI(props, ["pollname"]) || null,
+              pollAddress: findPropCI(props, ["polladdress"]) || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) {
+            fields.push({ label: "County Board District", value: "District " + result.boardDistrict });
+          }
+          if (result.pollName) fields.push({ label: "Polling place", value: String(result.pollName) });
+          if (result.pollAddress) fields.push({ label: "Polling address", value: String(result.pollAddress) });
+          if (result.precinctId) fields.push({ label: "Precinct code", value: String(result.precinctId) });
+          fields.push({ label: "County", value: "McDonough County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "McDonough County Clerk — Elections (official)",
+            url: "http://mcg.mcdonough.il.us/voterreg.html"
           };
         }
       },

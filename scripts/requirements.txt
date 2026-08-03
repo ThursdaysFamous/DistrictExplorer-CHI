@@ -44,3 +44,12 @@ jsonschema==4.26.0
 # geometric union; the builder then re-verifies the SHIPPED GeoJSON with the
 # repo's own point_in_rings, so the two implementations cross-check.
 shapely==2.1.2
+
+# Coordinate transform for scripts/build_mcdonough_precincts.py. McDonough's
+# precinct geometry is only obtainable from its GIS host's /identify endpoint,
+# and identify IGNORES outSR: it answers in the service's native wkid 102672
+# (EPSG:3436, NAD83 / Illinois West, US survey feet) no matter what is asked
+# for, so the reprojection cannot be pushed to the server the way every other
+# county's can. A hand-rolled Transverse Mercator inverse was considered and
+# rejected — civic boundaries are not the place to debug projection math.
+pyproj==3.7.2

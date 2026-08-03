@@ -1,0 +1,165 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "larryaspizza@gmail.com",
+        "name": "Larry Aurelio",
+        "party": "R",
+        "phone": "309-837-4999",
+        "termExpires": 2026
+      },
+      {
+        "email": "blakeleyfarms@gmail.com",
+        "name": "Eric Blakeley",
+        "party": "R",
+        "phone": "309-313-1393",
+        "role": "Chair",
+        "termExpires": 2026
+      },
+      {
+        "email": "kw-durkin@comcast.net",
+        "name": "Ken Durkin",
+        "party": "D",
+        "phone": "309-837-7892",
+        "termExpires": 2028
+      },
+      {
+        "email": "elderahenderson@gmail.com",
+        "name": "Allen Henderson",
+        "party": "D",
+        "phone": "309-387-3605",
+        "termExpires": 2026
+      },
+      {
+        "email": "mdkirby63@hotmail.com",
+        "name": "Michael Kirby",
+        "party": "D",
+        "phone": "309-833-3974",
+        "termExpires": 2026
+      },
+      {
+        "email": "jraby29@gmail.com",
+        "name": "Jerry Raby",
+        "party": "R",
+        "phone": "309-333-0670",
+        "termExpires": 2028
+      },
+      {
+        "name": "Dana Roy Walker",
+        "party": "D",
+        "phone": "309-833-3268",
+        "termExpires": 2028
+      }
+    ],
+    "sourceUrl": "http://mcg.mcdonough.il.us/members.html"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "ewc1973@gmail.com",
+        "name": "Eric Chapman",
+        "party": "R",
+        "phone": "309-696-3523",
+        "termExpires": 2026
+      },
+      {
+        "email": "ccook8907@gmail.com",
+        "name": "Clayton Cook",
+        "party": "R",
+        "phone": "309-333-8883",
+        "termExpires": 2028
+      },
+      {
+        "email": "davecortelyou@gmail.com",
+        "name": "David Cortelyou",
+        "party": "R",
+        "phone": "309-333-1452",
+        "termExpires": 2026
+      },
+      {
+        "email": "jne6495@gmail.com",
+        "name": "Joe Erlandson",
+        "party": "R",
+        "phone": "309-221-4425",
+        "termExpires": 2028
+      },
+      {
+        "email": "craig_foster@comcast.net",
+        "name": "Craig Foster",
+        "party": "R",
+        "phone": "309-337-0416",
+        "termExpires": 2028
+      },
+      {
+        "email": "thiel@hiels.com",
+        "name": "Travis Hiel",
+        "party": "R",
+        "phone": "309-775-3333",
+        "termExpires": 2026
+      },
+      {
+        "email": "cmurph984@gmail.com",
+        "name": "Clayton Murphy",
+        "party": "R",
+        "phone": "309-252-2595",
+        "termExpires": 2026
+      }
+    ],
+    "sourceUrl": "http://mcg.mcdonough.il.us/members.html"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "mike@coxmacomb.com",
+        "name": "Mike Cox",
+        "party": "R",
+        "phone": "309-255-0643",
+        "role": "Vice-Chair",
+        "termExpires": 2026
+      },
+      {
+        "email": "vlkipling3@gmail.com",
+        "name": "Vicky Kipling",
+        "party": "R",
+        "phone": "309-333-3883",
+        "termExpires": 2026
+      },
+      {
+        "email": "rjlitch22@gmail.com",
+        "name": "Ryan Litchfield",
+        "party": "R",
+        "phone": "309-333-7265",
+        "termExpires": 2028
+      },
+      {
+        "email": "royerfarms2005@gmail.com",
+        "name": "Jarad Royer",
+        "party": "R",
+        "phone": "309-255-1564",
+        "termExpires": 2026
+      },
+      {
+        "email": "smithfarms01@outlook.com",
+        "name": "Riley Smith",
+        "party": "R",
+        "phone": "309-333-7772",
+        "termExpires": 2028
+      },
+      {
+        "email": "terthomp65@gmail.com",
+        "name": "Terry Thompson",
+        "party": "R",
+        "phone": "309-255-2800",
+        "termExpires": 2028
+      },
+      {
+        "email": "twodogsbb@yahoo.com",
+        "name": "Roger Ward",
+        "party": "R",
+        "phone": "309-221-3246",
+        "termExpires": 2028
+      }
+    ],
+    "sourceUrl": "http://mcg.mcdonough.il.us/members.html"
+  }
+}

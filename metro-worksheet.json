@@ -906,6 +906,24 @@
         "note": "Adams County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "mcdonough-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "McDonough County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "mcdonough-precincts.json",
+        "min_features": 27,
+        "max_features": 27,
+        "note": "McDonough's 27 voting precincts, each carrying its own polling place and address (27/27). Built by scripts/build_mcdonough_precincts.py from the WIU GIS Center's precinct_map layer 4 via /identify — the layer is a JOIN whose /query returns attributes with the geometry silently omitted, and identify ignores outSR, so the polygons are reprojected here from EPSG:3436 rather than by the server. Bounds are an EQUALITY, not a floor: the board-district composition names all 27 exactly once, so any other count means the fabric changed and the districts must be re-derived first."
+      },
+      {
+        "file": "mcdonough-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "McDonough's 3 county board districts, seven members each. DERIVED by scripts/build_mcdonough_board_districts.py: the 27 precincts above dissolved per the composition the county board page prints under each district heading, verified to be a perfect partition (4+12+11) before anything is unioned. The county DOES publish a board-district layer, but its attribute table is corrupt — two districts share an identical population and acreage to eight decimals, the third has neither — so that layer is used only as a geometric cross-check, which the derivation passes at better than 0.999 IoU on all three."
+      },
+      {
         "file": "mason-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -1149,6 +1167,11 @@
         "file": "marshall-county-board-members.json",
         "min_keys": 3,
         "note": "Marshall County Board members keyed by district (3 districts, four members each; 12/12 phones, 11 e-mails, Chairperson and Vice-Chairperson badged, staggered 2026/2028 term years). Scraped weekly from the roster PDF, and the same scrape re-reads the township composition printed in that PDF's district headings and FAILS if it no longer matches the compiled boundary. Member home addresses are printed in that table and are deliberately never collected (the Madison precedent)."
+      },
+      {
+        "file": "mcdonough-county-board-members.json",
+        "min_keys": 3,
+        "note": "McDonough County Board members keyed by district (3 districts of SEVEN members each = 21, the county's full board), scraped weekly from http://mcg.mcdonough.il.us/members.html — the same page whose district headings supply the boundary composition, so membership and boundary move together and are checked together. The page prints every member's HOME ADDRESS and none is collected: the scraper reads only the phone out of that cell, and the builder refuses to write any field whose name looks like an address."
       },
       {
         "file": "mason-county-board-members.json",

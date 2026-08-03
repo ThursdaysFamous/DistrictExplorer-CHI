@@ -98,7 +98,7 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
-                     "149", "155", "009", "013", "169", "001",
+                     "149", "155", "009", "013", "169", "001", "109",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -129,7 +129,7 @@ DISPATCH_COUNTY_FIPS = {
     "henry": "073", "peoria": "143", "tazewell": "179",
     "iroquois": "075", "monroe": "133", "randolph": "157",
     "dewitt": "039", "washington": "189", "cass": "017", "marshall": "123",
-    "mason": "125", "adams": "001",
+    "mason": "125", "adams": "001", "mcdonough": "109",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -162,6 +162,12 @@ INSIDE = {
     # geometry, so no dispatch entry — which is precisely what its OUTSIDE
     # comment predicted when Mason and Brown closed the line around it.
     "Rushville (Schuyler)": (40.1200, -90.5665),
+    # Pass 9: found by ASKING. The 2026-08-02 sweep recorded McDonough as having
+    # no locatable public website after nine hostnames failed; the county is at
+    # mcg.mcdonough.il.us (a subdomain, HTTP only) and its GIS is hosted by
+    # Western Illinois University. Its clerk supplied both on request. Joins the
+    # ring through Schuyler, which is its southern neighbour.
+    "Macomb (McDonough)": (40.4592, -90.6718),
     "Chicago (Cook)": (41.8825, -87.6285),
     "Wheaton (DuPage)": (41.8661, -88.1070),
     "Joliet (Will)": (41.5250, -88.0817),

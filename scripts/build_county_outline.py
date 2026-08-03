@@ -725,6 +725,25 @@ COUNTIES = {
             (39.5763, -89.7440, "Auburn — Sangamon County"),
         ],
     },
+    # McDonough — pass 9, found by asking its clerk after a nine-hostname sweep
+    # wrongly concluded the county had no public website. Gates its county-board
+    # and county-precinct dispatch entries.
+    "mcdonough": {
+        "fips": "109",
+        "name": "McDonough County",
+        "inside": [
+            (40.4592, -90.6718, "Macomb (county seat)"),
+            (40.5534, -90.5065, "Bushnell"),
+            (40.4295, -90.7940, "Colchester"),
+            (40.5573, -90.8646, "Blandinsville"),
+        ],
+        "outside": [
+            (40.7930, -90.6104, "Monmouth — Warren County"),
+            (40.2734, -90.4051, "Rushville — Schuyler County"),
+            (40.3417, -90.9968, "Carthage — Hancock County"),
+            (40.6414, -90.1615, "Avon — Fulton County"),
+        ],
+    },
     "stark": {
         "fips": "175",
         "name": "Stark County",

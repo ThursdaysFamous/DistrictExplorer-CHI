@@ -138,6 +138,9 @@ const GEOMETRY_URLS = [
   "./data/app/marshall-county-outline.json",
   "./data/app/marshall-county-board-districts.json",
   "./data/app/adams-county-outline.json",
+  "./data/app/mcdonough-county-outline.json",
+  "./data/app/mcdonough-precincts.json",
+  "./data/app/mcdonough-board-districts.json",
   "./data/app/mason-county-outline.json",
   "./data/app/mason-county-board-districts.json",
   "./data/app/pike-county-outline.json",
@@ -192,6 +195,7 @@ const ROSTER_URLS = [
   "./data/app/washington-county-board-members.json",
   "./data/app/cass-county-board-members.json",
   "./data/app/marshall-county-board-members.json",
+  "./data/app/mcdonough-county-board-members.json",
   "./data/app/mason-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */

@@ -1,0 +1,124 @@
+name: Update McDonough County Board roster
+
+# Weekly refresh of the McDonough County Board District card's member roster
+# (data/app/mcdonough-county-board-members.json, fetched by index.html) — and
+# the weekly DRIFT CHECK on that county's derived district boundary.
+#
+# McDonough's board districts are DISSOLVED from its own 27 voting precincts,
+# per the composition its board page prints under each district heading. That
+# page is the same one this job scrapes for the members, so a redistricting and
+# a membership change arrive together and are checked together: the district
+# builder re-verifies that the compiled composition is still a perfect
+# partition of the precinct layer (4 + 12 + 11 = 27, every precinct named
+# exactly once) and FAILS if it is not.
+#
+# It also re-runs the geometric cross-check that made the derivation
+# trustworthy in the first place. The county DOES publish a board-district
+# layer, but its attribute table is corrupt — two of its three districts carry
+# an identical population AND an identical acreage to eight decimal places, the
+# third has neither, and the two sum to half again the county's real
+# population. So that layer is never the source; it is the independent geometry
+# the derivation must agree with, and the build refuses to write below 0.97 IoU
+# (it currently exceeds 0.999 on all three).
+#
+# THE COUNTY IS AT mcg.mcdonough.il.us, over HTTP, with no HTTPS listener. A
+# nine-hostname sweep on 2026-08-02 concluded McDonough had no public website
+# at all; its clerk supplied the address the next day, along with the fact that
+# its GIS is hosted by Western Illinois University rather than by the county.
+# Neither was guessable. Do not "fix" the scheme to https — there is nothing
+# listening there.
+#
+# One thing to watch in the log rather than the diff: the board page prints
+# every member's HOME ADDRESS, and none is collected. The scraper reads only
+# the phone out of that cell, and the builder refuses to write any field whose
+# name looks like an address.
+#
+# If this job fails on a composition change, the fix is to re-read
+# http://mcg.mcdonough.il.us/members.html, update DISTRICTS in
+# scripts/build_mcdonough_board_districts.py, and regenerate both
+# data/app/mcdonough-precincts.json and
+# data/app/mcdonough-board-districts.json.
+
+on:
+  schedule:
+    - cron: "0 19 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI (a PR opened with the default GITHUB_TOKEN fires no workflows).
+      # Falls back to github.token when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # requests for the roster page; shapely and pyproj for the boundary
+        # drift check below, which does real geometry (unary_union) against
+        # coordinates it must first reproject out of EPSG:3436 — the county's
+        # GIS host ignores outSR on the only endpoint that returns its precinct
+        # polygons at all.
+        run: pip install -c scripts/requirements.txt requests shapely pyproj
+
+      - name: Scrape roster
+        run: python3 scripts/mcdonough_county_board_scraper.py --out /tmp/raw.json
+
+      - name: Rebuild roster data file
+        run: python3 scripts/build_mcdonough_board_roster.py /tmp/raw.json
+
+      # The boundary drift check. --check rebuilds the precincts and the
+      # districts from the live source and compares them to what is shipped, so
+      # a re-precincting or a reapportionment turns this job red rather than
+      # leaving the shipped lines quietly a cycle out of date.
+      - name: Re-check the derived boundary against the county's own data
+        run: |
+          python3 scripts/build_mcdonough_precincts.py --check
+          python3 scripts/build_mcdonough_board_districts.py --check
+
+      # Gate the regenerated data before it can reach a PR.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR.
+          branch="bot/mcdonough-county-board-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/mcdonough-county-board-members.json
+          git commit -m "Update McDonough County Board roster from mcg.mcdonough.il.us"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update McDonough County Board roster from mcg.mcdonough.il.us" \
+              --body "Automated weekly refresh of the McDonough County Board District card's member roster (3 districts of seven members each, with party, phone, e-mail and term-expiry year), generated by \`scripts/mcdonough_county_board_scraper.py\` + \`scripts/build_mcdonough_board_roster.py\`. The same run re-checks the precinct COMPOSITION the shipped boundary is dissolved from and the geometric agreement between that derivation and the county's own board polygons, so this job going red means a redistricting rather than a broken scrape. Member home addresses are printed on the source page and are deliberately never collected. Please review the diff before merging — this changes data about real officeholders." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
