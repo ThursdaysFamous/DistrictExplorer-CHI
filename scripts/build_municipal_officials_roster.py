@@ -70,9 +70,11 @@ COUNTY_FIPS = {
     "Madison": "119",
     "St. Clair": "163",
     "Rock Island": "161",
-    # Pass-9 (2026-08-03): the county clerk answered a direct question with a
-    # link to a handbook nothing on the site's search surfaced.
+    # Pass-9 (2026-08-03): three counties unlocked by ASKING their clerks, each
+    # pointing at a document no search had surfaced.
     "Henry": "073",
+    "Cass": "017",
+    "Whiteside": "195",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -167,6 +169,15 @@ COUNTY_FLOORS = {
     # those fifteen (Coal Valley) is also published by Rock Island, so the
     # county's contribution after dedupe is fourteen.
     "Henry": {"municipalities": 13, "members": 100, "heads": 13},        # 15 / 120 / 15
+    # Cass (2026-08-03 live: 5 / 47 / 5). The county has exactly five
+    # incorporated places and its directory carries all five in full, so these
+    # sit as close to the true values as a floor sensibly can.
+    "Cass": {"municipalities": 5, "members": 40, "heads": 5},            # 5 / 47 / 5
+    # Whiteside (2026-08-03 live: 11 / 22 / 11) is a MAYOR-AND-CLERK source —
+    # its yearbook publishes no trustees — so `members` counts the head plus the
+    # clerk only, and a floor equal to the head count would pass on a run that
+    # silently lost every clerk.
+    "Whiteside": {"municipalities": 9, "members": 18, "heads": 9},       # 11 / 22 / 11
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -224,6 +235,8 @@ PRESERVABLE = {
     "rock-island": {"kind": "county", "county": "Rock Island"},
     "tazewell": {"kind": "county", "county": "Tazewell"},
     "henry": {"kind": "county", "county": "Henry"},
+    "cass": {"kind": "county", "county": "Cass"},
+    "whiteside": {"kind": "county", "county": "Whiteside"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -260,8 +273,8 @@ PRESERVABLE = {
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
                      "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
-                     "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
-                     "Carroll", "Lake"]
+                     "Cass", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
+                     "Carroll", "Whiteside", "Lake"]
 
 
 def _fold(text):

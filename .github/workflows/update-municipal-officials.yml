@@ -29,6 +29,9 @@ name: Update municipal officials roster
 #   Tazewell   — Clerk's FULL YEARBOOK PDF                       (full body)
 #   Henry      — Clerk's Handbook of Elected & Appointed
 #                Officials PDF                                   (full body)
+#   Cass       — Clerk's County Directory PDF                    (full body)
+#   Whiteside  — Clerk's County Yearbook PDF                (head + clerk; the
+#                yearbook publishes no trustees, and its clerk said so)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
 #   Kane       — Clerk's Government Guide PDF                    (head + clerk)
 #   McHenry    — Clerk's County Yearbook page                    (head + clerk)
@@ -241,6 +244,24 @@ jobs:
         continue-on-error: true
         run: python3 scripts/henry_municipal_officials_scraper.py --out /tmp/henry_municipal_officials.json
 
+      # Cass: full governing bodies for all five of its municipalities, read
+      # from word POSITIONS because the office titles wrap across two printed
+      # lines ("President of / Village Board") with a member's name on the first
+      # and their phone on the second. The x-split is also what keeps every
+      # officer's HOME address out of the payload — that column is never read.
+      - name: Scrape the Cass County Clerk directory
+        id: scrape_cass
+        continue-on-error: true
+        run: python3 scripts/cass_municipal_officials_scraper.py --out /tmp/cass_municipal_officials.json
+
+      # Whiteside: mayor-and-clerk depth, which is all its yearbook publishes.
+      # An address ships only from a row the county itself marks "(Office)";
+      # three of the eleven are unmarked and ship none.
+      - name: Scrape the Whiteside County Clerk yearbook
+        id: scrape_whiteside
+        continue-on-error: true
+        run: python3 scripts/whiteside_municipal_officials_scraper.py --out /tmp/whiteside_municipal_officials.json
+
       # Freeport is the ONLY municipality in Stephenson County that its county
       # page omits — and it is the county seat, holding more than half the
       # county's municipal population. The city publishes its own governing body
@@ -296,6 +317,7 @@ jobs:
           steps.scrape_livingston.outcome == 'failure' || steps.scrape_logan.outcome == 'failure' ||
           steps.scrape_mclean.outcome == 'failure' || steps.scrape_sangamon.outcome == 'failure' ||
           steps.scrape_tazewell.outcome == 'failure' || steps.scrape_henry.outcome == 'failure' ||
+          steps.scrape_cass.outcome == 'failure' || steps.scrape_whiteside.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -327,6 +349,8 @@ jobs:
           # are wired through now.
           TAZEWELL_OUTCOME: ${{ steps.scrape_tazewell.outcome }}
           HENRY_OUTCOME: ${{ steps.scrape_henry.outcome }}
+          CASS_OUTCOME: ${{ steps.scrape_cass.outcome }}
+          WHITESIDE_OUTCOME: ${{ steps.scrape_whiteside.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -365,6 +389,8 @@ jobs:
           if [ "$ROCK_ISLAND_OUTCOME" = "failure" ]; then raise_issue "Rock Island"; fi
           if [ "$TAZEWELL_OUTCOME" = "failure" ]; then raise_issue "Tazewell"; fi
           if [ "$HENRY_OUTCOME" = "failure" ]; then raise_issue "Henry"; fi
+          if [ "$CASS_OUTCOME" = "failure" ]; then raise_issue "Cass"; fi
+          if [ "$WHITESIDE_OUTCOME" = "failure" ]; then raise_issue "Whiteside"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -413,6 +439,8 @@ jobs:
           add "${{ steps.scrape_rock_island.outcome }}" rock-island county /tmp/rock_island_municipal_officials.json
           add "${{ steps.scrape_tazewell.outcome }}"    tazewell    county /tmp/tazewell_municipal_officials.json
           add "${{ steps.scrape_henry.outcome }}"       henry       county /tmp/henry_municipal_officials.json
+          add "${{ steps.scrape_cass.outcome }}"        cass        county /tmp/cass_municipal_officials.json
+          add "${{ steps.scrape_whiteside.outcome }}"   whiteside   county /tmp/whiteside_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
