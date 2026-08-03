@@ -68,7 +68,7 @@
 | Scott | 17171 | judicial circuit | no board layer — see gaps | — | none |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | none |
-| Stephenson | 17177 | dispatch | districted | `county-board`, `fire-district` | 5 — `county-board-office-addresses` (no-source); `dakota-village-president` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source); `stephenson-precincts` (no-source) |
+| Stephenson | 17177 | dispatch | districted | `county-board`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `dakota-village-president` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
 | Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `tazewell-precinct-polling` (data-quality) |
 | Washington | 17189 | dispatch | districted | `county-board` | 1 — `washington-precinct-geometry` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
@@ -110,4 +110,4 @@ Alexander, Clark, Clay, Coles, Crawford, Cumberland, Douglas, Edgar, Edwards, Ef
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 90 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 89 records in the Data gaps panel: `chicago-amenity-phones`.

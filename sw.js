@@ -151,6 +151,7 @@ const GEOMETRY_URLS = [
   "./data/app/mcdonough-precincts.json",
   "./data/app/mcdonough-board-districts.json",
   "./data/app/ogle-precincts.json",
+  "./data/app/stephenson-precincts.json",
   "./data/app/stark-county-board-districts.json",
   "./data/app/stark-precincts.json",
   "./data/app/stark-fire-districts.json",

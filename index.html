@@ -9593,6 +9593,28 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/stephenson-county-board-members.json", {}, 2);
   });
 
+  /* Stephenson's 36 precincts, and the reason they exist at all is worth a note.
+   * For a year this app said the county published no current precinct
+   * boundaries. It does — as two vector PDFs on the County Clerk's Elections
+   * page, one page away from the district maps already used here. County Clerk
+   * Jazmin Wingert pointed at them on 3 Aug 2026 in reply to a records request.
+   *
+   * So these are georeferenced off the county's own adopted maps rather than
+   * fetched as data, exactly like the four Freeport board districts above, and
+   * the card says so. Two things make them trustworthy beyond the fit numbers:
+   * the 36 populations the maps print total 44,630, which is the county's live
+   * Census 2020 count to the person; and the Freeport half is the SAME sixteen
+   * polygons the board-district map draws, georeferenced independently from a
+   * different document — all 16 land in the district the board build assigns.
+   * scripts/build_stephenson_precincts.py asserts both on every run.
+   *
+   * PRECINCT LINES ARE NOT TOWNSHIP LINES here. The rural precincts reach into
+   * Freeport township and take 329 people with them, so the card names the
+   * township a precinct belongs to without implying the two are the same shape. */
+  var loadStephensonPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stephenson-precincts.json", {}, 2);
+  });
+
   /* Carroll is the fleet's THIRD county with both halves derived, after
    * Livingston and Ogle — and the simplest of the three. Its three districts run
    * exactly along township lines, so the composition reads straight off the
@@ -14805,9 +14827,9 @@ function initChiExplorer() {
             wrap.appendChild(renderFieldStack([{
               label: "Boundary",
               value: "Traced from Stephenson County's published district map (adopted " +
-                "2022), because the county publishes no precinct data for Freeport " +
-                "Township. Accurate to about 20 metres — treat the district line itself " +
-                "as approximate."
+                "2022), which the county publishes as a printed map rather than as " +
+                "map data. Accurate to about 20 metres — treat the district line " +
+                "itself as approximate."
             }]));
           }
           return wrap;
@@ -15567,6 +15589,77 @@ function initChiExplorer() {
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
+        }
+      },
+      // Stephenson — 36 precincts georeferenced from the County Clerk's own two
+      // adopted maps (see loadStephensonPrecincts). The board district is a
+      // spatial join rather than a membership table: the maps name each precinct
+      // by township, and the board's own composition is expressed in townships
+      // and colours, not in precinct lists, so containment is the only honest
+      // link between them — and it is a good one, because the Freeport half of
+      // this file and the Freeport half of the board file are the same sixteen
+      // polygons read off two different documents.
+      //
+      // No polling place. The Clerk's Elections page links a countywide polling
+      // list, but the link is dead at the source (404), so there is nothing to
+      // join on and the card does not pretend otherwise.
+      {
+        key: "stephenson",
+        coverage: stephensonCountyCoverage,
+        loadGeometry: loadStephensonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStephensonPrecincts(),
+            loadStephensonCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              township: findPropCI(props, ["township"]),
+              population: findPropCI(props, ["population"]),
+              boardDistrict: district
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          if (result.population != null && result.population !== "") {
+            fields.push({ label: "Population (2020 census)", value: String(result.population) });
+          }
+          fields.push({ label: "County", value: "Stephenson County" });
+          fields.push({
+            label: "Boundary",
+            value: "Traced from Stephenson County's own adopted precinct maps " +
+              "(2022), which the county publishes as printed maps rather than " +
+              "as map data. Accurate to about 20 metres — treat the precinct " +
+              "line itself as approximate."
+          });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Stephenson County Clerk — Elections (official)",
+            url: "https://stephensoncountyil.gov/government/county_clerk_and_recorder/elections.php"
+          };
         }
       },
       // Stark — 2 districts of FOUR members each, the smallest board the layer
