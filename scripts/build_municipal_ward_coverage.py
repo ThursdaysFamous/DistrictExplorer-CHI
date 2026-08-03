@@ -67,6 +67,9 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # redrawn at the time of the census in 2020").
     "whiteside-cities": ["Sterling", "Rock Falls", "Morrison", "Fulton",
                          "Prophetstown", "Erie"],
+    # The CITY of Peoria's five council districts, on the city's own org. Its
+    # other five council members are elected at large and belong to no district.
+    "peoria-city": ["Peoria"],
     # DeKalb County's own org publishes one ward layer per ward-electing
     # municipality: DeKalb (7), Sycamore (4), Genoa (4), Sandwich (4), all
     # edited 2023-11.
@@ -214,7 +217,8 @@ ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
                      "pontiac": "105", "mclean-cities": "113", "lincoln": "107",
                      "springfield": "167", "freeport": "177",
                      "st-clair-cities": "163", "rock-island": "161",
-                     "whiteside-cities": "195"}
+                     "whiteside-cities": "195",
+                     "peoria-city": "143"}
 
 
 def load_place_geoids():
