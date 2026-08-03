@@ -1485,7 +1485,7 @@
     },
     "name": "City of Beardstown",
     "office": {
-      "address": "105 W. 3Rd St., Beardstown IL 62618"
+      "address": "105 W. 3rd St., Beardstown IL 62618"
     },
     "officers": [
       {
@@ -25841,60 +25841,59 @@
     "board": [
       {
         "name": "Brock Flanigan",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "John Simmons",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
-      },
-      {
-        "name": "Julia Kitchens",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
         "name": "Kym Healy",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
-        "name": "Nathen Anderson",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
+        "name": "Matt Zulz",
+        "phone": "309-303-4014",
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
-        "name": "Randy Lohr",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
+        "name": "Nathan Anderson",
+        "role": "Trustee",
+        "termExpires": "2027"
       },
       {
-        "name": "Russell Skaggs Sr.",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
-      },
-      {
-        "name": "William Simmons",
-        "phone": "815-853-4227",
-        "role": "Alderperson"
+        "name": "Russell Skaggs",
+        "phone": "815-257-4808",
+        "role": "Trustee",
+        "termExpires": "2027"
       }
     ],
-    "county": "LaSalle",
+    "county": "Marshall",
     "head": {
       "name": "Mary Jane Bade",
-      "phone": "815-853-4227",
-      "role": "Mayor"
+      "role": "Mayor",
+      "termExpires": "2029"
     },
     "name": "City of Wenona",
     "officers": [
       {
-        "name": "Deb Longbons",
-        "phone": "815-853-4227",
+        "appointed": true,
+        "name": "Deborah Longbons",
+        "phone": "708-882-3173",
         "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Jaclyn DeRubeis",
+        "phone": "815-853-4088",
+        "role": "Treasurer"
       }
     ],
-    "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+    "sourceUrl": "https://marshallcountyillinois.gov/"
   },
   "1780047": {
     "board": [
