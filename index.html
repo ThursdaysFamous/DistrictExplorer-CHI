@@ -8238,6 +8238,51 @@ function initChiExplorer() {
   // not the board page. So this ships at the rule-4 honesty floor: the district
   // the reader is in, and a link to the body. No name is guessed. The gap
   // adams-county-board-roster records what would lift it.
+  /* Fulton — the county the frontier sweep recorded as needing NOTHING from
+   * anybody, and the one whose layer numbering would have hidden it.
+   *
+   * Fulton runs its own ArcGIS at gis.fultoncountyil.gov and publishes the whole
+   * set: 3 board districts, 44 precincts, 30 polling places. What makes it worth
+   * a comment is the numbering. Each dataset is its own hosted FeatureServer
+   * carrying a SINGLE layer at a non-zero id — board districts at 50, precincts
+   * at 43, polls at 12 — so the usual probe of `/FeatureServer/0` returns an
+   * error on every one of them, and an automated sweep that assumed layer 0
+   * would file this county as publishing nothing at all. It publishes more than
+   * most.
+   *
+   * NO POLLING JOIN IS NEEDED. Each precinct carries its own polling place NAME,
+   * ADDRESS and TOWN on the feature (44/44), so the separate polls layer is
+   * never fetched — the Adams and McDonough shape, and the reason this county's
+   * precinct card is complete on one request. */
+  var FULTON_GIS = "https://gis.fultoncountyil.gov/arcgis/rest/services/Hosted/";
+  function loadFultonLayer(service, layerIndex, outFields, label) {
+    var url = FULTON_GIS + service + "/FeatureServer/" + layerIndex +
+      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Fulton County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadFultonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/fulton-county-outline.json", {}, 2);
+  });
+  function fultonCountyCoverage(point) {
+    return loadFultonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadFultonCountyBoard = makeCached(function () {
+    return loadFultonLayer("county_board_districts", 50, "name", "board districts");
+  });
+  var loadFultonPrecincts = makeCached(function () {
+    return loadFultonLayer("voting_precincts", 43,
+                           "name,polllocation,polladdr,polltown", "precincts");
+  });
+  var loadFultonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/fulton-county-board-members.json", {}, 2);
+  });
+
   var ADAMS_GIS = "https://services3.arcgis.com/BXTAaNPMn1VANOeH/arcgis/rest/services/";
   function loadAdamsLayer(service, layerIndex, outFields, label) {
     var url = ADAMS_GIS + service + "/FeatureServer/" + layerIndex +
@@ -15464,6 +15509,66 @@ function initChiExplorer() {
           }
         }
       },
+      // Fulton — 3 districts of FIVE members each, on the county's own GIS (see
+      // loadFultonCountyBoard for the layer-numbering trap). The Chair and
+      // Vice-Chair are district members rather than countywide seats — Fulton
+      // picks both from among the fifteen — so they ride their own district's
+      // rows with a badge, the Grundy shape rather than the DuPage one.
+      {
+        key: "fulton",
+        coverage: fultonCountyCoverage,
+        loadGeometry: loadFultonCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || v === "") ? null : "District " + String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadFultonCountyBoard(),
+            loadFultonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["name"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Fulton County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Fulton County Board (official)",
+            url: "https://fultoncountyil.gov/county-board/members/"
+          };
+        },
+        hoverOfficial: {
+          load: loadFultonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["name"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Stark — 2 districts of FOUR members each, the smallest board the layer
       // carries. Boundary from the County Clerk's own Google My Maps, which she
       // confirmed current on 3 Aug 2026 (see loadStarkBoardDistricts above);
@@ -18512,6 +18617,62 @@ function initChiExplorer() {
           return {
             label: "McDonough County Clerk — Elections (official)",
             url: "http://mcg.mcdonough.il.us/voterreg.html"
+          };
+        }
+      },
+      // Fulton — 44 precincts, each carrying its own polling place NAME, ADDRESS
+      // and TOWN on the feature (44/44), so neither is a join and the separate
+      // polls layer is never fetched. Board district comes from the usual
+      // spatial join against the county's own board layer.
+      {
+        key: "fulton",
+        coverage: fultonCountyCoverage,
+        loadGeometry: loadFultonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadFultonPrecincts(),
+            loadFultonCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["name"]);
+            }
+            var town = findPropCI(props, ["polltown"]);
+            var addr = findPropCI(props, ["polladdr"]);
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: district,
+              pollName: findPropCI(props, ["polllocation"]),
+              pollAddress: [addr, town].filter(Boolean).join(", ") || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          if (result.pollName) fields.push({ label: "Polling place", value: String(result.pollName) });
+          if (result.pollAddress) fields.push({ label: "Address", value: String(result.pollAddress) });
+          fields.push({ label: "County", value: "Fulton County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Fulton County Clerk — Elections (official)",
+            url: "https://fultoncountyil.gov/officials/elected/county-clerk-recorder/"
           };
         }
       },

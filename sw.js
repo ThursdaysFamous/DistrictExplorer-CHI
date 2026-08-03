@@ -212,6 +212,7 @@ const ROSTER_URLS = [
   "./data/app/cass-county-board-members.json",
   "./data/app/marshall-county-board-members.json",
   "./data/app/mcdonough-county-board-members.json",
+  "./data/app/fulton-county-board-members.json",
   "./data/app/stark-county-board-members.json",
   "./data/app/mason-county-board-members.json",
 ];

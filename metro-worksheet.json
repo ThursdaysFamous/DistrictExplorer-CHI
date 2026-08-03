@@ -1277,6 +1277,11 @@
         "min_keys": 3,
         "note": "McDonough County Board members keyed by district (3 districts of SEVEN members each = 21, the county's full board), scraped weekly from http://mcg.mcdonough.il.us/members.html — the same page whose district headings supply the boundary composition, so membership and boundary move together and are checked together. The page prints every member's HOME ADDRESS and none is collected: the scraper reads only the phone out of that cell, and the builder refuses to write any field whose name looks like an address."
       },
+{
+        "file": "fulton-county-board-members.json",
+        "min_keys": 3,
+        "note": "Fulton County Board members keyed by district (3 districts of FIVE members each = 15, the count the county states on the same page it publishes them). Scraped weekly from https://fultoncountyil.gov/county-board/members/, which publishes the board TWICE — a photo grid grouped by district (the only place the district is stated) and hidden popup blocks carrying the e-mail the grid omits — so the scraper joins the two halves on the member's name. Above District #1 sits a fourth section headed \"Fulton County Board Chairman\" containing a member who ALSO appears in his own district; it is read as the source of the Chair ROLE, not as a sixteenth seat, and the per-district ceiling fails the build if it is ever swept in as one. Names ship as the county prints them, including \"Karl WIlliams\" with its capital I."
+      },
       {
         "file": "stark-county-board-members.json",
         "min_keys": 2,
@@ -1498,6 +1503,11 @@
       "file": "update-mcdonough-county-board-roster.yml",
       "purpose": "McDonough County Board roster + derived-boundary drift check (mcg.mcdonough.il.us, HTTP-only)",
       "schedule": "Mon 19:00 UTC"
+    },
+    {
+      "file": "update-fulton-county-board-roster.yml",
+      "purpose": "Fulton County Board roster (fultoncountyil.gov Members page — a district-grouped grid joined by name to hidden per-member popups for the e-mails)",
+      "schedule": "Tue 20:00 UTC"
     },
     {
       "file": "update-stark-county-board-roster.yml",

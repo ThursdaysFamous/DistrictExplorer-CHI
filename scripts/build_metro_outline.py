@@ -122,7 +122,7 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
-                     "149", "155", "009", "013", "169", "001", "109", "175",
+                     "149", "155", "009", "013", "169", "001", "109", "175", "057",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -154,6 +154,7 @@ DISPATCH_COUNTY_FIPS = {
     "iroquois": "075", "monroe": "133", "randolph": "157",
     "dewitt": "039", "washington": "189", "cass": "017", "marshall": "123",
     "mason": "125", "adams": "001", "mcdonough": "109", "stark": "175",
+    "fulton": "057",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -231,6 +232,7 @@ INSIDE = {
     "Lacon (Marshall)": (41.0228, -89.4060),
     "Havana (Mason)": (40.2950, -90.0566),
     "Toulon (Stark)": (41.0937, -89.8651),
+    "Canton (Fulton)": (40.5570, -90.0393),
     # The at-large tier: served through the COUNTY card's board section rather
     # than a dispatch entry, because none of the four has district geometry to
     # dispatch on. They belong here for the same reason the judicial-subcircuit
@@ -260,16 +262,20 @@ OUTSIDE = {
     # counties" from quietly becoming "everything nearby". (Pittsfield sat
     # beside it until Pike shipped in tranche 5.)
     "Vandalia (Fayette)": (38.9606, -89.0937),
-    # Canton (Fulton) borders Peoria and is the frontier the pass-7 tranche-1
-    # pair created: it was not adjacent to the served ring at all before Peoria
-    # joined it. It guards the same way Waterloo and Carlyle do on the southern
-    # edge — a new county must move the boundary exactly as far as its own
-    # borders and not one county further. (Toulon sat beside it until Stark
-    # shipped: its whole GIS is one hand-maintained Google My Maps, which was
-    # unusable only because its DATE could not be established, and the County
-    # Clerk settling that in an e-mail turned five layers on at once. It is the
-    # first county in the fleet unlocked by asking rather than by finding.)
-    "Canton (Fulton)": (40.5570, -90.0393),
+    # Canton and Toulon both sat here until their counties shipped. Toulon left
+    # when Stark's whole GIS — one hand-maintained Google My Maps — was dated by
+    # its County Clerk in an e-mail, and Canton left when Fulton was built: the
+    # frontier sweep found Fulton needing NOTHING from anybody, its own ArcGIS
+    # already serving board districts, precincts and polling places, hidden only
+    # behind non-zero layer ids that make a layer-0 probe report it empty. The
+    # guard did its job both times — this list failed the build until each county
+    # was moved up to INSIDE. The frontier they leave behind is Schuyler, Hancock
+    # and McDonough's western neighbours. Schuyler cannot serve as that anchor
+    # even though it borders Fulton — it is already IN the ring through the
+    # at-large tier, and naming it here failed this build immediately, which is
+    # the OUTSIDE list doing exactly its job. Knox is the honest frontier: it
+    # borders Fulton, is served by nothing, and carries its own recorded gap.
+    "Galesburg (Knox)": (40.9478, -90.3712),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb used to sit here, described as "enclosed on three sides by served
     # counties and the one border-ring county with no locatable GIS". The second
