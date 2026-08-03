@@ -1,0 +1,13 @@
+{
+ "fetched": "2026-08-03",
+ "source": "Whiteside County Clerk Karen Stralow, by e-mail",
+ "note": "The county's own polling-place layer publishes 29 voting locations, and its precinct layer references two facility ids that are not among them — 22 and 26 — leaving four of 60 precincts with no polling place. Asked which buildings those are, the County Clerk named them. These records exist ONLY to fill those two ids: the loader consults this file only when the county's own layer has no match, so the day the county publishes facilities 22 and 26 this file stops being read without anything needing to change. Building names only — the Clerk gave names, not addresses, and an address looked up elsewhere would not be hers.",
+ "facilities": {
+  "22": {
+   "place": "Self Help Enterprises"
+  },
+  "26": {
+   "place": "Winning Wheels"
+  }
+ }
+}

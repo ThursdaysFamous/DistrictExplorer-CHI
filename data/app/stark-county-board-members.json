@@ -1,0 +1,54 @@
+{
+ "1": {
+  "members": [
+   {
+    "email": "boarddist1-4@starkco.illinois.gov",
+    "name": "Kari Bush",
+    "role": "Chair",
+    "termExpires": 2028
+   },
+   {
+    "email": "boarddist1-1@starkco.illinois.gov",
+    "name": "J. Thomas Howes",
+    "termExpires": 2026
+   },
+   {
+    "email": "boarddist1-2@starkco.illinois.gov",
+    "name": "Jamie Schaffer",
+    "termExpires": 2026
+   },
+   {
+    "email": "boarddist1-3@starkco.illinois.gov",
+    "name": "Adam Wilson",
+    "termExpires": 2028
+   }
+  ],
+  "sourceUrl": "https://starkco.illinois.gov/government/elected-officials-and-staff"
+ },
+ "2": {
+  "members": [
+   {
+    "email": "boarddist2-2@starkco.illinois.gov",
+    "name": "William Loane",
+    "termExpires": 2028
+   },
+   {
+    "email": "boarddist2-4@starkco.illinois.gov",
+    "name": "Robin Nowlan",
+    "role": "Vice-Chair",
+    "termExpires": 2028
+   },
+   {
+    "email": "boarddist2-1@starkco.illinois.gov",
+    "name": "Joe Orwig",
+    "termExpires": 2026
+   },
+   {
+    "email": "boarddist2-3@starkco.illinois.gov",
+    "name": "Melissa Shipp",
+    "termExpires": 2026
+   }
+  ],
+  "sourceUrl": "https://starkco.illinois.gov/government/elected-officials-and-staff"
+ }
+}

@@ -150,6 +150,11 @@ const GEOMETRY_URLS = [
   "./data/app/mcdonough-county-outline.json",
   "./data/app/mcdonough-precincts.json",
   "./data/app/mcdonough-board-districts.json",
+  "./data/app/stark-county-board-districts.json",
+  "./data/app/stark-precincts.json",
+  "./data/app/stark-fire-districts.json",
+  "./data/app/stark-library-districts.json",
+  "./data/app/stark-park-districts.json",
   "./data/app/mason-county-outline.json",
   "./data/app/mason-county-board-districts.json",
   "./data/app/pike-county-outline.json",
@@ -191,6 +196,7 @@ const ROSTER_URLS = [
   "./data/app/lasalle-county-board-members.json",
   "./data/app/logan-precinct-polling.json",
   "./data/app/carroll-precinct-polling.json",
+  "./data/app/whiteside-precinct-polling.json",
   "./data/app/woodford-county-board-members.json",
   "./data/app/logan-county-board-members.json",
   "./data/app/boone-county-board-members.json",
@@ -205,6 +211,7 @@ const ROSTER_URLS = [
   "./data/app/cass-county-board-members.json",
   "./data/app/marshall-county-board-members.json",
   "./data/app/mcdonough-county-board-members.json",
+  "./data/app/stark-county-board-members.json",
   "./data/app/mason-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
