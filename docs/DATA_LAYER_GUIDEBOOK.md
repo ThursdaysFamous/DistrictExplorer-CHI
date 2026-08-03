@@ -299,6 +299,75 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any DeKalb County list that pairs a precinct code with its township or full precinct name — a clerk's precinct table, a polling place list carrying both, or a key printed on the precinct map."
     },
     {
+      "id": "fulton-county-build-ready",
+      "concept": "County board districts",
+      "area": "Fulton County",
+      "counties": [
+        "fulton"
+      ],
+      "kind": "data-quality",
+      "layer": "county-board",
+      "summary": "Fulton County publishes everything needed and is simply not built yet.",
+      "blocker": "Found 3 Aug 2026 in the pass-10 frontier sweep, and it is the rare county where nothing is missing. Fulton runs its own mapping portal at gis.fultoncountyil.gov, which serves the 3 county board districts, all 44 voting precincts, and 30 polling places. Better still, each precinct carries its own polling place NAME and ADDRESS on the precinct itself, so the polling place needs no matching step at all \u2014 the same shape as Adams and McDonough. One trap for whoever builds it: the layer numbers are not the usual ones. The board districts are layer 50, the precincts 43 and the polling places 12, and asking for layer 0 returns an error, so an automated probe that assumes the first layer would wrongly report this county as empty.",
+      "wanted": "Nothing from the county. This is a build, not a request \u2014 it needs the county board's membership list matched to the three districts, which the county board page publishes."
+    },
+    {
+      "id": "vermilion-county-website",
+      "concept": "County board districts",
+      "area": "Vermilion County",
+      "counties": [
+        "vermilion"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "The largest unserved county on the frontier, and the address the state publishes for its clerk is not its website.",
+      "blocker": "Checked 3 Aug 2026. Vermilion is about 74,000 people, the biggest county adjacent to the served area, and none of its geography is on the site. The state's election directory gives the clerk an address at vercountyil.gov. That domain exists, but it refuses secure connections and, over an ordinary one, forwards visitors to Google \u2014 it is parked, not a county website. Several likely alternatives were tried and none exists. This is the same trap McDonough set: an e-mail address at a domain that hosts nothing. McDonough was solved by asking its clerk, who named a website no amount of guessing would have found.",
+      "wanted": "The county's actual website address, and whether its board districts and precincts exist as map data. Its clerk has a working e-mail and is the obvious person to ask."
+    },
+    {
+      "id": "perry-county-website-blocked",
+      "concept": "County board districts",
+      "area": "Perry County",
+      "counties": [
+        "perry"
+      ],
+      "kind": "blocked",
+      "layer": "county-board",
+      "summary": "Perry County's website answers automated visits with a holding page instead of its content.",
+      "blocker": "Checked 3 Aug 2026. Requests to perrycountyil.gov come back as a 168-byte holding response rather than any of the county's pages \u2014 the signature of a challenge screen sitting in front of the site, the same one this project has recorded in front of other county sites. Nothing about the county's board districts or precincts can be read while that is in place, and the state's map catalogue lists nothing for the county either.",
+      "wanted": "Either a way through for an automated reader, or the board district and precinct information sent directly. The clerk's e-mail works."
+    },
+    {
+      "id": "henderson-county-website",
+      "concept": "County board districts",
+      "area": "Henderson County",
+      "counties": [
+        "henderson"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Henderson County's published web address leads to a holding page, not a county site.",
+      "blocker": "Checked 3 Aug 2026. hendersoncountyil.gov, the domain in the state's clerk directory, returns a 114-byte page whose only content forwards the visitor to a generic parking screen. At roughly 6,000 people Henderson is the smallest county on the frontier, and it became one only because neighbouring McDonough was added the same day. Nothing for it appears in the state map catalogue.",
+      "wanted": "Whether the county has a website at all, and whether its board districts and precincts exist as map data. Its clerk has a working e-mail."
+    },
+    {
+      "id": "pass10-frontier-unasked",
+      "concept": "County board districts",
+      "area": "Hancock, Jackson, Jefferson, Marion and Warren counties",
+      "counties": [
+        "hancock",
+        "jackson",
+        "jefferson",
+        "marion",
+        "warren"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Five frontier counties have working websites but no map data anyone has found; none has been asked directly yet.",
+      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All five answer normally on the web \u2014 Warren's board page even numbers four districts, and Jefferson's lists sixteen member e-mail addresses \u2014 but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one of the five has a working e-mail address.",
+      "wanted": "For each: whether the county's board districts and voting precincts exist as map data, and where. Asking the five clerks is the next move, not more searching."
+    },
+    {
       "id": "bureau-county-board-districts",
       "concept": "County board districts",
       "area": "Bureau County",

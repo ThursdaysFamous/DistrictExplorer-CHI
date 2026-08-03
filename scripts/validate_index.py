@@ -156,6 +156,15 @@ GEOMETRY_FILES = {
     "henry-county-board-districts.json": (2, 2),  # Henry County Board districts, DERIVED: TIGER townships dissolved per adopted Ordinance 21-33 (scripts/build_henry_board_districts.py; --check is the drift gate). The county publishes no board GIS — its viewer is Sidwell Portico, parcels + townships only. The 12+12 composition is proven by the adopted map's own two-census population table (all four printed district totals to the person) and by live Census POP100 on every run.
     "stephenson-fire-districts.json": (15, 15),  # Stephenson County's 15 named fire services, GEOREFERENCED from the county's own 2014 vector-PDF map (scripts/build_stephenson_fire_districts.py — fitted on hydrography, median 11.5 m; verified by the map's own town labels; --check is the drift gate). The county publishes no fire boundary as data; the card carries the 2014-vintage caveat. Several services keep their true extents past the county line — the map draws them that way — and the entry's coverage keeps answers inside Stephenson.
     "jo-daviess-county-outline.json": (1, 1),  # Jo Daviess County outline — GAP-LOCATION geometry only, not a dispatched county: no layer answers here, but the gaps panel tests the pin against <slug>-county-outline.json, and without this file a pin in the gray-washed county was told 'nothing missing where you clicked'. Ships so jo-daviess-county-board-districts attaches to its ground.
+    "fulton-county-outline.json": (1, 1),  # Fulton County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "hancock-county-outline.json": (1, 1),  # Hancock County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "henderson-county-outline.json": (1, 1),  # Henderson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "jackson-county-outline.json": (1, 1),  # Jackson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "jefferson-county-outline.json": (1, 1),  # Jefferson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "marion-county-outline.json": (1, 1),  # Marion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "perry-county-outline.json": (1, 1),  # Perry County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "vermilion-county-outline.json": (1, 1),  # Vermilion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
+    "warren-county-outline.json": (1, 1),  # Warren County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.
     "bureau-county-outline.json": (1, 1),  # Bureau County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so bureau-county-board-districts attaches to its ground.
     "mercer-county-outline.json": (1, 1),  # Mercer County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so mercer-county-board-districts attaches to its ground.
     "peoria-county-outline.json": (1, 1),  # Peoria County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries.
@@ -248,6 +257,15 @@ ROSTER_FILES = {
 # existence, shape and the negative-point test still apply.
 DYNAMIC_REFERENCE = frozenset({
     "jo-daviess-county-outline.json",
+    "fulton-county-outline.json",
+    "hancock-county-outline.json",
+    "henderson-county-outline.json",
+    "jackson-county-outline.json",
+    "jefferson-county-outline.json",
+    "marion-county-outline.json",
+    "perry-county-outline.json",
+    "vermilion-county-outline.json",
+    "warren-county-outline.json",
     "bureau-county-outline.json",
     "mercer-county-outline.json",
     "christian-county-outline.json",

@@ -731,6 +731,69 @@
         "dynamic_reference": true
       },
       {
+        "file": "fulton-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Fulton County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "hancock-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Hancock County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "henderson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Henderson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jackson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jackson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jefferson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jefferson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marion-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Marion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "perry-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Perry County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "vermilion-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Vermilion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "warren-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Warren County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
         "file": "bureau-county-outline.json",
         "min_features": 1,
         "max_features": 1,
