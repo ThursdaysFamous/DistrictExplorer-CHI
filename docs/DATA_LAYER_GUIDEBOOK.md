@@ -377,7 +377,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Bureau publishes its 18 board members and their parties, but its 18 district boundaries appear nowhere the public can use.",
-      "blocker": "Re-checked 31 Jul 2026, with better news than before: the adopted map IS downloadable — the 9 Nov 2021 board minutes and meeting packet record its 23-0 adoption and include it — but every page is a photograph of a map, with no readable lines or text, and the Princeton and Spring Valley insets split those cities street by street. So the districts cannot be rebuilt from townships or precincts, and the county publishes no precinct boundaries either. It runs no mapping system at all, and its board page still lists only 16 of the 18 seats (districts 9 and 15 are the missing two).",
+      "blocker": "Re-checked 31 Jul 2026, with better news than before: the adopted map IS downloadable — the 9 Nov 2021 board minutes and meeting packet record its 23-0 adoption and include it — but every page is a photograph of a map, with no readable lines or text, and the Princeton and Spring Valley insets split those cities street by street. So the districts cannot be rebuilt from townships or precincts, and the county publishes no precinct boundaries either. It runs no mapping system at all, and its board page still lists only 16 of the 18 seats (districts 9 and 15 are the missing two).  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
       "wanted": "The 18 districts as map data — or a written description of which precincts and streets make up each one, plus precinct boundaries to rebuild them from. The map in the 2021 packet is the authority to check any submission against."
     },
     {
@@ -482,7 +482,7 @@ in the researched-but-unbuilt backlog.
       "kind": "data-quality",
       "layer": "county-board",
       "summary": "Stephenson's four Freeport Township districts are traced from the county's printed map rather than built from published data. They are accurate to roughly 20 metres, and the card says so.",
-      "blocker": "Stephenson publishes no precinct boundaries. The 2020 Census recorded Freeport 1 to 18; the county redrew its precincts afterwards and now runs Freeport 01 to 16, which is what these four districts are made of — so census data cannot draw them. The county runs no mapping system of its own and the state's map viewer is offline. The four districts are therefore traced from the county's own adopted map, whose lines are real drawing instructions rather than a photograph, and fitted onto real-world coordinates. As a check, that fit places the map's own rivers and creeks — features it was never fitted against — within 50 metres for 98.9% of their points, with a typical error of 16 metres. The county's four rural districts are whole townships and are exact.",
+      "blocker": "Stephenson publishes no precinct boundaries. The 2020 Census recorded Freeport 1 to 18; the county redrew its precincts afterwards and now runs Freeport 01 to 16, which is what these four districts are made of — so census data cannot draw them. The county runs no mapping system of its own and the state's map viewer is offline. The four districts are therefore traced from the county's own adopted map, whose lines are real drawing instructions rather than a photograph, and fitted onto real-world coordinates. As a check, that fit places the map's own rivers and creeks — features it was never fitted against — within 50 metres for 98.9% of their points, with a typical error of 16 metres. The county's four rural districts are whole townships and are exact.  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
       "wanted": "Freeport Township's current 16 precinct boundaries as map data of any kind. That single file would replace the traced lines with published ones."
     },
     {
@@ -654,7 +654,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "fire-district",
       "summary": "Livingston's fire, park and library districts are not shown — no boundary source exists.",
-      "blocker": "The same finding as Livingston's precincts: the county publishes no mapping data at all. The one fragment we found is Flanagan Park District, which appears inside a neighbouring region's combined park map — one of the county's own districts, in someone else's dataset.",
+      "blocker": "The same finding as Livingston's precincts: the county publishes no mapping data at all. The one fragment we found is Flanagan Park District, which appears inside a neighbouring region's combined park map — one of the county's own districts, in someone else's dataset.  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
       "wanted": "Countywide fire, park and library district boundaries from any official source. The yearbook's fire agency directory supplies contacts the day boundaries exist."
     },
     {
@@ -1005,7 +1005,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Marshall County's 14 voting precincts exist only inside a PDF map, and two of them split municipalities rather than following township lines.",
-      "blocker": "Checked 2 Aug 2026, when the county was added: Marshall runs no public mapping system, and the regional planning commission that maps Logan and Woodford carries nothing for it. Its precinct map is a PDF, and unlike its board districts the precincts do not follow whole township lines — two split municipalities, so census data cannot rebuild them. The board districts were added anyway because they ARE whole townships, which the census publishes as usable map data.",
+      "blocker": "Checked 2 Aug 2026, when the county was added: Marshall runs no public mapping system, and the regional planning commission that maps Logan and Woodford carries nothing for it. Its precinct map is a PDF, and unlike its board districts the precincts do not follow whole township lines — two split municipalities, so census data cannot rebuild them. The board districts were added anyway because they ARE whole townships, which the census publishes as usable map data.  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
       "wanted": "Marshall County's precinct boundaries as map data, plus polling places if published. The board half is already covered."
     },
     {
@@ -1210,7 +1210,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Pike County's 31 voting precincts are not shown — the county runs no mapping system of its own.",
-      "blocker": "Checked 2 Aug 2026 when the county was added: Pike publishes no precinct boundaries anywhere, and nothing for the county appears in any public map catalogue. Its election results are handled by an outside vendor whose site publishes turnout and totals, not boundaries. The precincts themselves are certainly defined — the county's own 2024 results report counts all 31 — but only as names.",
+      "blocker": "Checked 2 Aug 2026 when the county was added: Pike publishes no precinct boundaries anywhere, and nothing for the county appears in any public map catalogue. Its election results are handled by an outside vendor whose site publishes turnout and totals, not boundaries. The precincts themselves are certainly defined — the county's own 2024 results report counts all 31 — but only as names.  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
       "wanted": "Pike County's precinct boundaries as map data, plus polling places if published. The board half needs nothing: Pike elects its nine members countywide, and they already show on the County card."
     },
     {
@@ -1236,7 +1236,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Brown County's 14 voting precincts are not shown, and the county's own election reports are scans rather than text.",
-      "blocker": "Checked 2 Aug 2026 when the county was added: Brown publishes no precinct boundaries, and no county items appear in any public map catalogue. Its election summaries and precinct reports are posted as scanned images — readable by a person, not by software — so even the precinct NAMES cannot be lifted from them automatically. (A separate warning for anyone searching: browncountyil.org is a captcha-parked decoy. The county's real site is browncoil.org.)",
+      "blocker": "Checked 2 Aug 2026 when the county was added: Brown publishes no precinct boundaries, and no county items appear in any public map catalogue. Its election summaries and precinct reports are posted as scanned images — readable by a person, not by software — so even the precinct NAMES cannot be lifted from them automatically. (A separate warning for anyone searching: browncountyil.org is a captcha-parked decoy. The county's real site is browncoil.org.)  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
       "wanted": "Brown County's precinct boundaries as map data, and ideally election reports with a text layer. The board half is already served — its seven members are elected countywide."
     },
     {
@@ -1513,6 +1513,118 @@ filter chips + typed rows + per-session persistence) mirroring Chicago's
 reference. The three `school-site` cards now share one interaction model,
 differing only in each metro's type taxonomy (CHI grade-band, NYC/SF
 public/charter/private) and whether the feed carries a grade range.
+
+## The ask ledger — what a clerk e-mail actually returns
+
+**Recorded 2026-08-03, after seven asks produced seven usable answers in one day.**
+This section exists because that success rate is not what the gap records predicted, and
+the reason they were wrong is worth stating precisely.
+
+### What the seven asks returned
+
+| County | What was asked | What came back |
+|---|---|---|
+| Stark | "Is the Google map current?" | "The board districts and precincts are correct." **Five layers**, from one sentence |
+| Ogle (GIS) | "Do the current precincts exist as map data?" | The shapefile, by return e-mail |
+| Ogle (Clerk) | "How was Forreston 3 absorbed?" | "Forreston 1 and 2 became Forreston 1. Forreston 3 became 2." |
+| Whiteside | "Which buildings are facilities 22 and 26?" | Both names, then both **street addresses** on a follow-up |
+| Boone | "What are the fire district names?" | Names, **plus the caveat that made them unusable** — and the numbering that was usable |
+| Marshall | "Do you publish a municipal list?" | A 5-page elected-officers table |
+| Washington | "Do you publish a municipal list?" | A 40-page Blue Book, the richest municipal source in the fleet |
+
+### The finding: "publishes no X" is not "cannot obtain X"
+
+Ogle is the proof. Its gap record read *"The county publishes no precinct boundaries —
+only a 51-page PDF map book and a polling-location dataset that is points only."* Every
+word of that was **true**, and had been re-verified. The shapefile still arrived the day
+someone asked for it, because a county that runs elections necessarily HAS precinct
+geometry; publishing it on a website is a separate act it may simply never have had a
+reason to perform.
+
+So a blocker sentence of the form "the county publishes no …" is evidence about a
+**website**, not about a **county**. Fifteen of the ninety gaps here assert exactly that,
+and ten of those record no ask at all. Those ten are not blocked; they are unasked, and
+the guidebook was quietly filing them as the same thing.
+
+The same reframing applies to the tax-funded special districts: a county that levies for
+a fire district necessarily knows its boundary, whatever its GIS portal shows.
+
+### The three shapes that work, in order of hit rate
+
+1. **One narrow factual question a clerk can answer from memory.** "Is this current?"
+   "Which building is this?" "How was this precinct absorbed?" "Which district is this
+   shape?" Four of today's seven were this, and all four came back same-day. It costs the
+   clerk a sentence, which is why it works.
+2. **"Do you publish X in any form — and if you don't, that's a useful answer too."**
+   Both document sources today came from this, phrased with the explicit permission to
+   say no. Neither document was findable by search; neither is on the county's website.
+3. **Ask the GIS office for geometry, not the Clerk.** Ogle's shapefile came from the GIS
+   Coordinator after the Clerk forwarded the request. The Clerk owns the *facts*; GIS owns
+   the *files*. Sending a geometry request to the Clerk still works — it gets forwarded —
+   but naming both offices is faster.
+
+A fourth, learned from Boone: **invite the caveat.** Amy Ohlsen volunteered that she had
+"just done a google search" for the fire district names, which is what stopped this
+project from publishing them as a county record. An ask phrased so that "I'm not certain"
+is a comfortable answer returns better data than one that pressures a source into
+confidence.
+
+### Candidates, highest expected return first
+
+Contact details for every Illinois county clerk already ship in
+`data/app/il-county-clerks.json` (name, office address, phone, e-mail; refreshed weekly by
+`update-county-clerk-roster.yml`). Use that rather than a list copied into this document,
+which would rot.
+
+**Tier 1 — a single question, answerable from memory.** These are the Stark/Whiteside
+shape and should go first.
+
+| Gap | County | The question |
+|---|---|---|
+| `mason-precinct-vintage` | Mason | Are the 21 precincts unchanged since 2020? *(We already hold the shapes — this is a yes/no.)* |
+| `ford-county-board-vintage` | Ford | Which board plan is in force, and how is Patton 3 split between districts 1 and 3? |
+| `monroe-fire-district-names` | Monroe | What do the fire district abbreviations stand for? *(Shapes already published.)* |
+| `macon-county-board-labels` | Macon | Which district is which, for the five unlabelled shapes? |
+| `tazewell-precinct-polling` | Tazewell | What are building IDs 43, 50 and 54? *(The Whiteside question, verbatim.)* |
+| `dekalb-precinct-codes` | DeKalb | Is there a key pairing each precinct code with its township name? |
+| `randolph-precinct-polling` | Randolph | Which polling place serves each precinct? |
+| `st-clair-precinct-polling-places` | St. Clair | Same, one per precinct |
+| `dakota-village-president` · `dekalb-hinckley-board` · `winnebago-village-heads` | Stephenson · DeKalb · Winnebago | Who currently holds this one seat? |
+| `wenona-two-clerks-disagree` | Marshall / LaSalle | Whose council list is current? **Asked 2026-08-03.** |
+
+**Tier 2 — "do you publish it in any form?"** The Marshall/Washington shape. Every one of
+these is a municipal-officials or roster gap where the county may hold a document.
+
+`kankakee-municipal-officials` · `lake-municipal-names` · `lee-municipal-officials` ·
+`whiteside-municipal-officials` · `mason-roster-is-a-scan` (ask for the board list as text
+or a spreadsheet rather than a scan) · `adams-county-board-roster` and
+`quincy-ward-officeholders` (both blocked at the website, neither asked directly).
+
+**Tier 3 — geometry, addressed to GIS.** The Ogle shape, and the largest tier by count.
+Precinct boundaries: Brown, Calhoun, Henry, Livingston, Marshall, Pike, Putnam,
+Stephenson (incl. Freeport Township), Washington. Board districts: Bureau, Christian,
+Clinton, Fayette, Knox, Menard, Mercer, Montgomery, Macoupin, Jo Daviess (whose mapping
+department *sells* the data, so it demonstrably exists). Special districts, where the
+county levies the tax and therefore holds the boundary: Boone, Carroll, Grundy,
+Livingston, Logan, Macoupin, McHenry, McLean, Ogle, LaSalle, Randolph, Sangamon,
+St. Clair, Stephenson, Whiteside, Winnebago, Woodford. City wards, addressed to the city:
+the eight in `pass9-ward-seats-without-maps`, plus LaSalle, Macoupin, Carroll, Ogle,
+Morris, Momence, Park City, Plano.
+
+**Tier 4 — the five never contacted at all.** `pass10-frontier-unasked` (Hancock, Jackson,
+Jefferson, Marion, Perry, Vermilion, Warren, Fulton, Henderson) says so in its own text:
+*"Asking the five clerks is the next move, not more searching."* Two of them —
+`henderson-county-website` and `vermilion-county-website` — are asking whether the county
+has a website at all, which is the cheapest question on this page.
+
+### The standing caution
+
+Four sources now ship from **archived files** rather than live fetches — Stark's map,
+Ogle's shapefile, Marshall's table, Washington's Blue Book. Their weekly jobs guard the
+parsers, not the sources. If one of those counties changes something, nothing turns red.
+Every ask that returns a file adds one of these, so the cost of this strategy is a slowly
+growing set of things that must be re-asked rather than re-fetched. Worth it, and worth
+counting.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
