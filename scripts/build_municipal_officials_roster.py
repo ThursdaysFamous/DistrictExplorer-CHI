@@ -75,6 +75,7 @@ COUNTY_FIPS = {
     "Henry": "073",
     "Cass": "017",
     "Whiteside": "195",
+    "Peoria": "143",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -178,6 +179,11 @@ COUNTY_FLOORS = {
     # clerk only, and a floor equal to the head count would pass on a run that
     # silently lost every clerk.
     "Whiteside": {"municipalities": 9, "members": 18, "heads": 9},       # 11 / 22 / 11
+    # Peoria (2026-08-03 live: 15 / 140 / 15) — the largest county on this card
+    # outside the collar, and the richest source in the fleet: hall address,
+    # phone, e-mail AND website per municipality, plus every seat with its ward
+    # or district. All fifteen of the county's incorporated places are covered.
+    "Peoria": {"municipalities": 13, "members": 110, "heads": 13},       # 15 / 140 / 15
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -237,6 +243,7 @@ PRESERVABLE = {
     "henry": {"kind": "county", "county": "Henry"},
     "cass": {"kind": "county", "county": "Cass"},
     "whiteside": {"kind": "county", "county": "Whiteside"},
+    "peoria": {"kind": "county", "county": "Peoria"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -273,7 +280,7 @@ PRESERVABLE = {
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
                      "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
-                     "Cass", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
+                     "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
                      "Carroll", "Whiteside", "Lake"]
 
 

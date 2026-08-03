@@ -30,6 +30,9 @@ name: Update municipal officials roster
 #   Henry      — Clerk's Handbook of Elected & Appointed
 #                Officials PDF                                   (full body)
 #   Cass       — Clerk's County Directory PDF                    (full body)
+#   Peoria     — Clerk's Officials & Services Directory PDF (full body; the
+#                richest source in the fleet — hall address, phone, e-mail AND
+#                website per municipality, every seat with its ward/district)
 #   Whiteside  — Clerk's County Yearbook PDF                (head + clerk; the
 #                yearbook publishes no trustees, and its clerk said so)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
@@ -257,6 +260,15 @@ jobs:
       # Whiteside: mayor-and-clerk depth, which is all its yearbook publishes.
       # An address ships only from a row the county itself marks "(Office)";
       # three of the eleven are unmarked and ship none.
+      # Peoria: the gap peoria-municipal-officials recorded "no source at any
+      # rung" on 2026-08-02 — a correct finding about the places looked at and a
+      # wrong conclusion about the county. Its Clerk's office named this
+      # directory on request the next day.
+      - name: Scrape the Peoria County officials and services directory
+        id: scrape_peoria
+        continue-on-error: true
+        run: python3 scripts/peoria_municipal_officials_scraper.py --out /tmp/peoria_municipal_officials.json
+
       - name: Scrape the Whiteside County Clerk yearbook
         id: scrape_whiteside
         continue-on-error: true
@@ -318,6 +330,7 @@ jobs:
           steps.scrape_mclean.outcome == 'failure' || steps.scrape_sangamon.outcome == 'failure' ||
           steps.scrape_tazewell.outcome == 'failure' || steps.scrape_henry.outcome == 'failure' ||
           steps.scrape_cass.outcome == 'failure' || steps.scrape_whiteside.outcome == 'failure' ||
+          steps.scrape_peoria.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -351,6 +364,7 @@ jobs:
           HENRY_OUTCOME: ${{ steps.scrape_henry.outcome }}
           CASS_OUTCOME: ${{ steps.scrape_cass.outcome }}
           WHITESIDE_OUTCOME: ${{ steps.scrape_whiteside.outcome }}
+          PEORIA_OUTCOME: ${{ steps.scrape_peoria.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -391,6 +405,7 @@ jobs:
           if [ "$HENRY_OUTCOME" = "failure" ]; then raise_issue "Henry"; fi
           if [ "$CASS_OUTCOME" = "failure" ]; then raise_issue "Cass"; fi
           if [ "$WHITESIDE_OUTCOME" = "failure" ]; then raise_issue "Whiteside"; fi
+          if [ "$PEORIA_OUTCOME" = "failure" ]; then raise_issue "Peoria"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -441,6 +456,7 @@ jobs:
           add "${{ steps.scrape_henry.outcome }}"       henry       county /tmp/henry_municipal_officials.json
           add "${{ steps.scrape_cass.outcome }}"        cass        county /tmp/cass_municipal_officials.json
           add "${{ steps.scrape_whiteside.outcome }}"   whiteside   county /tmp/whiteside_municipal_officials.json
+          add "${{ steps.scrape_peoria.outcome }}"      peoria      county /tmp/peoria_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
