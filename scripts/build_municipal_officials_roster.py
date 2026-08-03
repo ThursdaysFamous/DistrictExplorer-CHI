@@ -70,6 +70,12 @@ COUNTY_FIPS = {
     "Madison": "119",
     "St. Clair": "163",
     "Rock Island": "161",
+    # Pass-9 (2026-08-03): three counties unlocked by ASKING their clerks, each
+    # pointing at a document no search had surfaced.
+    "Henry": "073",
+    "Cass": "017",
+    "Whiteside": "195",
+    "Peoria": "143",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -158,6 +164,26 @@ COUNTY_FLOORS = {
     "Madison": {"municipalities": 24, "members": 190, "heads": 24},      # 28 / 241 / 28
     "St. Clair": {"municipalities": 22, "members": 190, "heads": 22},    # 26 / 247 / 26
     "Rock Island": {"municipalities": 13, "members": 100, "heads": 13},  # 15 / 122 / 15
+    # Henry (2026-08-03 live: 15 / 120 / 15). The handbook covers all fifteen of
+    # the county's incorporated places, so these sit two under the full set —
+    # this source cannot lose three municipalities and still be right. One of
+    # those fifteen (Coal Valley) is also published by Rock Island, so the
+    # county's contribution after dedupe is fourteen.
+    "Henry": {"municipalities": 13, "members": 100, "heads": 13},        # 15 / 120 / 15
+    # Cass (2026-08-03 live: 5 / 47 / 5). The county has exactly five
+    # incorporated places and its directory carries all five in full, so these
+    # sit as close to the true values as a floor sensibly can.
+    "Cass": {"municipalities": 5, "members": 40, "heads": 5},            # 5 / 47 / 5
+    # Whiteside (2026-08-03 live: 11 / 22 / 11) is a MAYOR-AND-CLERK source —
+    # its yearbook publishes no trustees — so `members` counts the head plus the
+    # clerk only, and a floor equal to the head count would pass on a run that
+    # silently lost every clerk.
+    "Whiteside": {"municipalities": 9, "members": 18, "heads": 9},       # 11 / 22 / 11
+    # Peoria (2026-08-03 live: 15 / 140 / 15) — the largest county on this card
+    # outside the collar, and the richest source in the fleet: hall address,
+    # phone, e-mail AND website per municipality, plus every seat with its ward
+    # or district. All fifteen of the county's incorporated places are covered.
+    "Peoria": {"municipalities": 13, "members": 110, "heads": 13},       # 15 / 140 / 15
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -214,6 +240,10 @@ PRESERVABLE = {
     "st-clair": {"kind": "county", "county": "St. Clair"},
     "rock-island": {"kind": "county", "county": "Rock Island"},
     "tazewell": {"kind": "county", "county": "Tazewell"},
+    "henry": {"kind": "county", "county": "Henry"},
+    "cass": {"kind": "county", "county": "Cass"},
+    "whiteside": {"kind": "county", "county": "Whiteside"},
+    "peoria": {"kind": "county", "county": "Peoria"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -242,11 +272,16 @@ PRESERVABLE = {
 # fresher (July vs June 2026) and dates every seat's term — the freshness
 # call, made explicit. LaSalle already precedes both, which settles Streator
 # (hall in LaSalle) the same way.
+# Rock Island sits ahead of Henry for the one municipality both publish in full:
+# Coal Valley. Both name its whole board and the two agree, so this is a
+# provenance call rather than a freshness one — and Henry's own handbook makes
+# it, printing Coal Valley's clerk as "(R.I. Co.)". The village hall is in Rock
+# Island County; Henry lists the village because it extends across the line.
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
-                     "Sangamon", "Madison", "St. Clair", "Rock Island",
-                     "DuPage", "Kane", "Kendall", "McHenry",
-                     "Carroll", "Lake"]
+                     "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
+                     "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
+                     "Carroll", "Whiteside", "Lake"]
 
 
 def _fold(text):

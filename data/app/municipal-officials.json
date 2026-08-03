@@ -61,6 +61,25 @@
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf"
   },
+  "1700516": {
+    "county": "Whiteside",
+    "head": {
+      "name": "John (Jack) Seifert",
+      "role": "Mayor"
+    },
+    "name": "Village of Albany",
+    "office": {
+      "address": "102 S. Main St. PO Box 356, Albany IL 61230",
+      "phone": "309-887-4064"
+    },
+    "officers": [
+      {
+        "name": "Jessica Kuebel",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
   "1700685": {
     "county": "Kane",
     "head": {
@@ -129,6 +148,60 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.villageofalhambra.com"
+  },
+  "1700971": {
+    "board": [
+      {
+        "name": "Brad Barton",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Dennis Shannon",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "John Duyvejonck",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Michael Petrovich",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Ronald H. Medley",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Tena L. Anseeuw",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Rebecca Brown",
+      "phone": "309-236-9236",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Alpha",
+    "office": {
+      "address": "102 S 2nd St, PO Box 206, Alpha IL 61413",
+      "phone": "309-629-9881"
+    },
+    "officers": [
+      {
+        "name": "Heather DeShane",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1701010": {
     "board": [
@@ -302,6 +375,114 @@
     ],
     "sourceUrl": "https://rockislandcountyil.gov/DocumentCenter/View/291/Elected-Officials-Listing-PDF"
   },
+  "1701491": {
+    "board": [
+      {
+        "name": "Conner Riddell",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Daniel Heiar",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Elma Gay",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jennifer Hirsch",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kevin Betcher",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Valli Putnam",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Michael Mielke",
+      "phone": "309-476-8520",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Andover",
+    "office": {
+      "address": "342 5th St, Andover IL 61233",
+      "phone": "309-521-8116"
+    },
+    "officers": [
+      {
+        "name": "Beverly Josephson",
+        "phone": "309-738-8211",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
+  "1701569": {
+    "board": [
+      {
+        "name": "John Davis",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "John Rico",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Kate Sturtewagen",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kim Nordstrom",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Matthrew Nordstrom",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Robert Shrum",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Tim Wise",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Town of Annawan",
+    "office": {
+      "address": "200 N Meadow Lane, Suite 1, Annawan IL 61234",
+      "phone": "309-935-6226"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Susan Nelson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1701595": {
     "county": "Lake",
     "name": "Village of Antioch",
@@ -311,6 +492,71 @@
     },
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "https://www.antioch.il.gov/"
+  },
+  "1701946": {
+    "board": [
+      {
+        "name": "Andy Phelps",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Anthony Isringhausen",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "James Bateman",
+        "phone": "217-997-5963",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Johnnie G. Wood",
+        "phone": "217-997-2292",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Karmen Kruse",
+        "phone": "217-997-5885",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lindsey Wood",
+        "phone": "217-997-5550",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Cass",
+    "head": {
+      "name": "William Privia",
+      "phone": "217-997-5563",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Arenzville",
+    "office": {
+      "address": "201 E. Main, Arenzville IL 62611"
+    },
+    "officers": [
+      {
+        "name": "Lori Ring",
+        "phone": "217-899-1585",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Jessica Lomelino",
+        "phone": "217-997-5563",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
   },
   "1702154": {
     "board": [
@@ -414,6 +660,125 @@
     ],
     "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
     "url": "https://yahoo.com"
+  },
+  "1702505": {
+    "board": [
+      {
+        "name": "Angela R. Breedlove",
+        "phone": "217-836-1887",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "David A. Wilken",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Kelly Buker",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Richard Turner",
+        "phone": "217-473-7199",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Robert J. Gardner",
+        "phone": "217-971-6176",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Shawn Eskew",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Cass",
+    "head": {
+      "name": "Nancy Kyrouac",
+      "phone": "217-476-3358",
+      "role": "President",
+      "termExpires": "2027"
+    },
+    "name": "Village of Ashland",
+    "office": {
+      "address": "101 N. Yates St., Ashland IL 62612"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Pamela J. Gardner",
+        "phone": "217-476-3429",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Vanessa Doellman",
+        "phone": "727-517-6363",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+  },
+  "1702726": {
+    "board": [
+      {
+        "name": "Bobby Burton",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Dawn Stage",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jeana Lea Jagers",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Richard DeSmith",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Robert Westfall",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Ryan Rahn",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Kenneth Taber",
+      "phone": "309-936-7451",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Town of Atkinson",
+    "office": {
+      "address": "107 N Main St, PO Box 614, Atkinson IL 61235",
+      "phone": "309-936-7658"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Krystle Thomas",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1702752": {
     "board": [
@@ -851,6 +1216,57 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://bartlettil.gov"
   },
+  "1704039": {
+    "board": [
+      {
+        "name": "Duston Griffin",
+        "role": "Trustee"
+      },
+      {
+        "name": "Heidi Rhea",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nate Woosley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shawn Spencer Zachman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Teresa L. Donley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tim Carroll",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Leon Ricca",
+      "role": "Mayor"
+    },
+    "name": "Village of Bartonville",
+    "office": {
+      "address": "5912 S Adams St, Bartonville IL 61607",
+      "email": "vh@bartonville.org",
+      "phone": "309-633-2053"
+    },
+    "officers": [
+      {
+        "name": "Michelle Carr-Bruce",
+        "role": "Clerk"
+      },
+      {
+        "name": "’s Email: clerk@bartonville.org",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.bartonville.org"
+  },
   "1704078": {
     "county": "Kane",
     "head": {
@@ -881,6 +1297,88 @@
     },
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "http://www.villageofbeachpark.com/"
+  },
+  "1704351": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Eric Harbin",
+        "phone": "217-323-5545",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Mary Ann Davis",
+        "phone": "217-323-9044",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Alexis (Allie) Dawson",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Shawn Taylor",
+        "phone": "217-371-6496",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Dawn Seward",
+        "phone": "217-323-3706",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Ronald Culves",
+        "phone": "217-652-5037",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Keith Schramm",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Lisa D Buhlig",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Cass",
+    "head": {
+      "name": "Tim Harris",
+      "phone": "217-323-3261",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Beardstown",
+    "office": {
+      "address": "105 W. 3Rd St., Beardstown IL 62618"
+    },
+    "officers": [
+      {
+        "name": "Katherine “Katie” Vitale",
+        "phone": "217-323-3110",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Karen Whitlow",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
   },
   "1704572": {
     "board": [
@@ -1097,6 +1595,53 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.belleville.net"
+  },
+  "1704871": {
+    "board": [
+      {
+        "name": "Aaron J. Lannert",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brian Mullens",
+        "role": "Trustee"
+      },
+      {
+        "name": "Judith Wight",
+        "role": "Trustee"
+      },
+      {
+        "name": "M. Leroy Wiseman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Paul Joseph Eichhorn",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sandra Cooper",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Ross Pesch",
+      "role": "Mayor"
+    },
+    "name": "Village of Bellevue",
+    "office": {
+      "address": "320 Main St, Bellevue IL 61604",
+      "email": "clerk@villageofbellevueil.com",
+      "phone": "309-697-4808"
+    },
+    "officers": [
+      {
+        "name": "Susan Pesch",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.villageofbellevueil.com"
   },
   "1704975": {
     "board": [
@@ -1416,6 +1961,60 @@
     ],
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.villageofbigrock.us"
+  },
+  "1706171": {
+    "board": [
+      {
+        "name": "Amanda Laub",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Ben Strand",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jim Nolan",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lisa Nordstrom",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mike Keup",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Patrick Light",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Michael Funke",
+      "phone": "309-927-3024",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Bishop Hill",
+    "office": {
+      "address": "PO Box 117, Bishop Hill IL 61419"
+    },
+    "officers": [
+      {
+        "name": "Terri A. Wigant",
+        "phone": "309-927-3583",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1706587": {
     "county": "DuPage",
@@ -1796,6 +2395,57 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://bridgeview-il.gov"
+  },
+  "1708303": {
+    "board": [
+      {
+        "name": "Allison L. Porter",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brian Porter",
+        "role": "Trustee"
+      },
+      {
+        "name": "Charles Christy",
+        "role": "Trustee"
+      },
+      {
+        "name": "Joseph Arbogast",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael R. Meinders",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rod Gilles",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Dan J. Fishel",
+      "role": "President"
+    },
+    "name": "Village of Brimfield",
+    "office": {
+      "address": "106 E Knoxville St, Brimfield IL 61517",
+      "email": "villagebrimfield@outlook.com",
+      "phone": "309-446-3412"
+    },
+    "officers": [
+      {
+        "name": "Holly A. Johnson",
+        "role": "Clerk"
+      },
+      {
+        "name": "Karen Christy",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.brimfieldil.org"
   },
   "1708446": {
     "board": [
@@ -2599,6 +3249,59 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://calumetparkvillage.org"
   },
+  "1710643": {
+    "board": [
+      {
+        "name": "Amanda Johnson",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Dan Galle",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "John Taylor",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Karen Brandau",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Ryan Franck",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Sam Bennett",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Jason Beam",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Cambridge",
+    "office": {
+      "address": "124 W Exchange St, Cambridge IL 61238",
+      "phone": "309-937-2570"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Sarah Jern",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1710906": {
     "county": "Kane",
     "head": {
@@ -3045,6 +3748,70 @@
       }
     ],
     "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
+  },
+  "1712450": {
+    "board": [
+      {
+        "name": "Adam Pherigo",
+        "phone": "217-248-7967",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Claudette Givens",
+        "phone": "217-371-3349",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Cole Whitehead",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Kenny Collins",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Ross Cloninger",
+        "phone": "217-341-7011",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Troy Campbell",
+        "phone": "217-204-7715",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Cass",
+    "head": {
+      "name": "Ronald Dean Eilers",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Chandlerville",
+    "office": {
+      "address": "111 W Lake St., Chandlerville IL 62627"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Dena Leinberger",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Rosanna Flinn",
+        "phone": "217-458-2242",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
   },
   "1712476": {
     "board": [
@@ -3725,6 +4492,73 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://chicagoridge.org"
   },
+  "1714117": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Michael Crabtree",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Sandra Levell",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Barry Bredeman",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Courtney Gehrig",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Patricia G. Westerman-Connor",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Patrick Semtner",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Brett Cantwell",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Gary L. Sharp",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Michael Hughes",
+      "role": "Mayor"
+    },
+    "name": "City of Chillicothe",
+    "office": {
+      "address": "908 N Second St, Chillicothe IL 61523",
+      "email": "cityclerk@cityofchillicotheil.org",
+      "phone": "309-274-2020"
+    },
+    "officers": [
+      {
+        "name": "Jill Byrnes",
+        "role": "Clerk"
+      },
+      {
+        "name": "Andrea Bredeman",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.cityofchillicotheil.org"
+  },
   "1714572": {
     "county": "DuPage",
     "head": {
@@ -3737,6 +4571,59 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.clarendonhills.us"
+  },
+  "1714923": {
+    "board": [
+      {
+        "name": "Kathy Shannon",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Leo A. Henkelman",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mary Slaughter",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Scott Flaker",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Sherri Stout",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Steve Ballegeer",
+      "phone": "309-792-1682",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Cleveland",
+    "office": {
+      "address": "408 Jackson St, Cleveland IL 61241",
+      "phone": "309-792-0930"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Michele Tucker",
+        "role": "Clerk"
+      },
+      {
+        "name": "Lisa Sides",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1715170": {
     "board": [
@@ -3852,6 +4739,26 @@
     ],
     "sourceUrl": "https://rockislandcountyil.gov/DocumentCenter/View/291/Elected-Officials-Listing-PDF"
   },
+  "1715469": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Randolph (Randy) Engelbarts",
+      "phone": "815-336-2132",
+      "role": "Mayor"
+    },
+    "name": "Village of Coleta",
+    "office": {
+      "address": "Coleta IL"
+    },
+    "officers": [
+      {
+        "name": "Kendra Harrington",
+        "phone": "815-622-6008",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
   "1715599": {
     "board": [
       {
@@ -3892,6 +4799,77 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.collinsvilleil.org"
+  },
+  "1715664": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Amanda Stablein",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Jim Dooley",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Larry Swemline",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Sarah Lack",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Melanie Hergert",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Tom Jones",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Darlene Strobbe",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Jacob Waterman",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Brian Johnson",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Colona",
+    "office": {
+      "address": "100 E 9th Ave, PO Box 170, Colona IL 61241",
+      "phone": "309-792-8628"
+    },
+    "officers": [
+      {
+        "name": "Charlotte Park",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1716366": {
     "board": [
@@ -4922,6 +5900,26 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://deerfield.il.us"
   },
+  "1719031": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Michael Masini",
+      "phone": "815-213-1512",
+      "role": "Mayor"
+    },
+    "name": "Village of Deer Grove",
+    "office": {
+      "address": "Deer Grove IL"
+    },
+    "officers": [
+      {
+        "name": "Janis Thompson",
+        "phone": "815-438-4225",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
   "1719083": {
     "board": [
       {
@@ -5407,6 +6405,57 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.downers.us"
+  },
+  "1721176": {
+    "board": [
+      {
+        "name": "Beau Feuchter",
+        "role": "Trustee"
+      },
+      {
+        "name": "Hilary McEvoy",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kaleb Wagenbach",
+        "role": "Trustee"
+      },
+      {
+        "name": "Perry Camp",
+        "role": "Trustee"
+      },
+      {
+        "name": "Phil Raso",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott Robinson",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Roger Nelson",
+      "role": "Mayor"
+    },
+    "name": "Village of Dunlap",
+    "office": {
+      "address": "104 N Second St, Dunlap IL 61525",
+      "email": "msimpson@villageofdunlap-il.gov",
+      "phone": "309-243-7500"
+    },
+    "officers": [
+      {
+        "name": "Sharon Conlee",
+        "role": "Clerk"
+      },
+      {
+        "name": "Dwight D. Johnson",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.villageofdunlap-il.gov"
   },
   "1721254": {
     "board": [
@@ -6263,6 +7312,63 @@
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.elmhurst.org"
   },
+  "1723698": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Nathan Brunnelson",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Tim Teel",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Julie Davis",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Kristy Johns",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Kristen Strom",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Robert S. Paige",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Andrew Almasi",
+      "role": "Mayor"
+    },
+    "name": "City of Elmwood",
+    "office": {
+      "address": "201 W Main St, Elmwood IL 61529",
+      "email": "elmwoodillinois@gmail.com",
+      "phone": "309-742-2351"
+    },
+    "officers": [
+      {
+        "name": "Bethany Lovingood",
+        "role": "Clerk"
+      },
+      {
+        "name": "Bonnie Beal",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.elmwoodil.com"
+  },
   "1723724": {
     "board": [
       {
@@ -6470,6 +7576,25 @@
       }
     ],
     "sourceUrl": "https://www.livingstoncountyil.gov/Documents/Government/Yearbook%20updated%2006-2026.pdf"
+  },
+  "1724374": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Carla Jaquet",
+      "role": "Mayor"
+    },
+    "name": "Village of Erie",
+    "office": {
+      "address": "740 Main St, Erie IL 61250",
+      "phone": "309-659-7740"
+    },
+    "officers": [
+      {
+        "name": "Michelle Misfeldt",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
   },
   "1724582": {
     "board": [
@@ -7483,6 +8608,91 @@
     "sourceUrl": "https://cityoffreeport.org/people2/",
     "url": "https://cityoffreeport.org/"
   },
+  "1728144": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Shane Michael Malone",
+      "phone": "815-589-2617",
+      "role": "Mayor"
+    },
+    "name": "City of Fulton",
+    "office": {
+      "address": "415 11th Ave, Fulton IL 61252"
+    },
+    "officers": [
+      {
+        "name": "Tori Wade",
+        "phone": "815-589-2616",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
+  "1728430": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Jayme Hopping",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Jeff Olson",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "John Wirth",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Rick Otterstrom",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Jacqueline Clucas",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "M. Douglas Anderson",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Richard Volkert",
+      "phone": "309-932-2533",
+      "role": "Mayor",
+      "termExpires": "2027"
+    },
+    "name": "City of Galva",
+    "office": {
+      "address": "311 N.W. 4th Ave, PO Box 171, Galva IL 61434",
+      "phone": "309-932-2555"
+    },
+    "officers": [
+      {
+        "name": "Debbie VanWassenhove",
+        "role": "Clerk",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Melissa Halsall",
+        "role": "Treasurer",
+        "termExpires": "2027"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1728638": {
     "board": [
       {
@@ -7531,6 +8741,82 @@
       }
     ],
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf"
+  },
+  "1728846": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Craig Arnold",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Paula Simosky",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "James Roodhouse",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Robert P. James",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Keith Kennett",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Martin Rothschild",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Brett Barnhart",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Kent Swanson",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Sean Johnson",
+      "role": "Mayor",
+      "termExpires": "2026"
+    },
+    "name": "City of Geneseo",
+    "office": {
+      "address": "115 S Oakwood Ave, Geneseo IL 61254",
+      "phone": "309-944-6419"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "JoAnn Hollenkamp",
+        "role": "City Administrator"
+      },
+      {
+        "appointed": true,
+        "name": "Paige Seibel",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1728872": {
     "county": "Kane",
@@ -7695,6 +8981,53 @@
     ],
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.villageofgilberts.com"
+  },
+  "1729483": {
+    "board": [
+      {
+        "name": "Connie Wall",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Kingsley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mary Pilgrim",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah Malin",
+        "role": "Trustee"
+      },
+      {
+        "name": "Thomas Robertson, Jr",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tiffany Randle",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Jack W. Rudd Jr",
+      "role": "President"
+    },
+    "name": "Village of Glasford",
+    "office": {
+      "address": "305 S Oak St, Glasford IL 61533",
+      "email": "glasfordvill@glastel.net",
+      "phone": "309-389-5152"
+    },
+    "officers": [
+      {
+        "name": "Tammy Jo Stetler",
+        "role": "Clerk/Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.glasfordil.com"
   },
   "1729639": {
     "board": [
@@ -8558,6 +9891,62 @@
       }
     ],
     "sourceUrl": "https://rockislandcountyil.gov/DocumentCenter/View/291/Elected-Officials-Listing-PDF"
+  },
+  "1732668": {
+    "board": [
+      {
+        "name": "Chris Johnson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eric Miller",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rod Weaver",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ryan Pierson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Wiley Holt",
+        "role": "Trustee"
+      },
+      {
+        "name": "Zachery Siadek",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Anthony Fryxell",
+      "role": "President"
+    },
+    "name": "Village of Hanna City",
+    "office": {
+      "address": "313 N First St, Hanna City IL 61536",
+      "email": "administrator@hannacityil.com",
+      "phone": "309-565-7411"
+    },
+    "officers": [
+      {
+        "name": "Denise Siadek",
+        "role": "Clerk"
+      },
+      {
+        "name": "Cassandra Schlatter",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Brian Baylor",
+        "role": "Village Administrator"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.hannacityil.com"
   },
   "1732746": {
     "board": [
@@ -9675,6 +11064,50 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://village.homewood.il.us"
   },
+  "1736074": {
+    "board": [
+      {
+        "name": "Charity VanDamme",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Dennis Nussear",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lisa Brants",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Todd Cassens",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Sheldon Miller",
+      "phone": "563-468-1172",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Hooppole",
+    "office": {
+      "address": "Hooppole IL 61258"
+    },
+    "officers": [
+      {
+        "name": "Rylie Ketelsen Miller",
+        "phone": "815-499-8849",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1736126": {
     "board": [
       {
@@ -10325,6 +11758,49 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vok.org"
   },
+  "1739727": {
+    "board": [
+      {
+        "name": "Adam Cernovich",
+        "role": "Council Member",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Chris Colomer",
+        "role": "Council Member",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mike Komnick",
+        "role": "Council Member",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Tyrone Baker",
+        "role": "Council Member",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Gary Moore",
+      "role": "Mayor",
+      "termExpires": "2027"
+    },
+    "name": "City of Kewanee",
+    "office": {
+      "address": "401 E 3rd St, Kewanee IL 61443",
+      "phone": "309-852-2611"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Kasey Mitchell",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1739883": {
     "county": "Lake",
     "name": "Village of Kildeer",
@@ -10388,6 +11864,56 @@
     ],
     "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
     "url": "https://www.villageofkingston.org"
+  },
+  "1740091": {
+    "board": [
+      {
+        "name": "Chris Hanse",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dave Utt",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jesse Howard",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Rudd",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kacey Kerans",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lief Faichney",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Perley Miller",
+      "role": "President"
+    },
+    "name": "Village of Kingston Mines",
+    "office": {
+      "address": "209 Washington St, Kingston Mines IL 61539",
+      "email": "kingstonminesclerk@gmail.com",
+      "phone": "309-389-4494"
+    },
+    "officers": [
+      {
+        "name": "Victoria Miller",
+        "role": "Clerk"
+      },
+      {
+        "name": "Darcy Spenny",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295"
   },
   "1740143": {
     "board": [
@@ -12106,6 +13632,25 @@
     "name": "City of Loves Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
+  "1745278": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Tyler Scott",
+      "role": "Mayor"
+    },
+    "name": "Village of Lyndon",
+    "office": {
+      "address": "605 W. Commercial St, Lyndon IL 61261",
+      "phone": "815-778-4484"
+    },
+    "officers": [
+      {
+        "name": "Maureen Johnson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
   "1745421": {
     "board": [
       {
@@ -12624,6 +14169,45 @@
     ],
     "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
     "url": "https://villageofmaplepark.org"
+  },
+  "1746643": {
+    "board": [
+      {
+        "name": "Ben Hausam",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Bassett",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rodney Smith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Teresa (Terri) Sue Baker",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Rhonda Hodges",
+      "role": "Mayor"
+    },
+    "name": "Village of Mapleton",
+    "office": {
+      "address": "8524 W Main St, Mapleton IL 61547",
+      "email": "clerk@mapletonillinois.com",
+      "phone": "309-697-0137"
+    },
+    "officers": [
+      {
+        "name": "Terry Francis Wright",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.mapletonillinois.com"
   },
   "1746786": {
     "county": "McHenry",
@@ -14116,6 +15700,25 @@
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf",
     "url": "https://www.morrisil.com"
   },
+  "1750530": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Scott Vandermyde",
+      "role": "Mayor"
+    },
+    "name": "City of Morrison",
+    "office": {
+      "address": "200 W. Main St, Morrison IL 61270",
+      "phone": "815-772-7657"
+    },
+    "officers": [
+      {
+        "name": "Michael Hemmer",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
   "1750621": {
     "board": [
       {
@@ -15389,6 +16992,48 @@
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
+  "1754404": {
+    "board": [
+      {
+        "name": "Abigail Hardisty",
+        "role": "Trustee"
+      },
+      {
+        "name": "Daniel Massey",
+        "role": "Trustee"
+      },
+      {
+        "name": "Matthew Simmons",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shawna Rogy",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sherry Bennett",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Thomas Larke",
+      "role": "President"
+    },
+    "name": "Village of Norwood",
+    "office": {
+      "address": "1515 N Norwood Blvd, Peoria, Norwood IL 61604",
+      "phone": "309-674-8651"
+    },
+    "officers": [
+      {
+        "name": "Janet Krouse",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.villageofnorwoodil.com"
+  },
   "1754534": {
     "board": [
       {
@@ -16045,6 +17690,54 @@
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
     "url": "https://www.cityoforegon.org"
+  },
+  "1756601": {
+    "board": [
+      {
+        "name": "Dan Lees",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Dan Meiresonne",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "James Hickerson",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lori Sampson",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Stephen R. Newman",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Steve Newman",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Orion",
+    "office": {
+      "address": "1202 4th St, Orion IL 61273",
+      "phone": "309-526-8139"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Erin Lange",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1756627": {
     "board": [
@@ -16854,6 +18547,143 @@
     "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
     "url": "https://ci.pekin.il.us"
   },
+  "1759000": {
+    "board": [
+      {
+        "district": "District 1",
+        "name": "Denise Jackson",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 2",
+        "name": "Alex Carmona",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 3",
+        "name": "Timothy D. Riggenbach",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 4",
+        "name": "Dr. Andre W. Allen",
+        "role": "Council Member"
+      },
+      {
+        "district": "District 5",
+        "name": "Denis Cyr",
+        "role": "Council Member"
+      },
+      {
+        "district": "At-Large",
+        "name": "Dr. Bernice Gordon-Young",
+        "role": "Council Member"
+      },
+      {
+        "district": "At-Large",
+        "name": "Dr. Kiran K Velpula",
+        "role": "Council Member"
+      },
+      {
+        "district": "At-Large",
+        "name": "John L. Kelly",
+        "role": "Council Member"
+      },
+      {
+        "district": "At-Large",
+        "name": "Michael Vespa",
+        "role": "Council Member"
+      },
+      {
+        "district": "At-Large",
+        "name": "Zachary M. Oyler",
+        "role": "Council Member"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Rita Ali",
+      "role": "Mayor"
+    },
+    "name": "City of Peoria",
+    "office": {
+      "address": "419 Fulton St, Peoria IL 61602",
+      "phone": "309-494-2273"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Patrick Urich",
+        "role": "City Manager"
+      },
+      {
+        "name": "Stefanie Tarr",
+        "role": "Clerk"
+      },
+      {
+        "name": "Jim Montelongo",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.peoriagov.org"
+  },
+  "1759026": {
+    "board": [
+      {
+        "name": "Brandon Wisenburg",
+        "role": "Trustee"
+      },
+      {
+        "name": "Elizabeth Khazzam",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Reichert",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nathan Steinwedel",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah DeVore",
+        "role": "Trustee"
+      },
+      {
+        "name": "Teresa Symmonds",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Matthew H Wigginton",
+      "role": "Mayor"
+    },
+    "name": "Village of Peoria Heights",
+    "office": {
+      "address": "4901 N Prospect Rd, Peoria Heights IL 61616",
+      "email": "administration@peoriaheights.org",
+      "phone": "309-686-2385"
+    },
+    "officers": [
+      {
+        "name": "Stephanie Turner",
+        "role": "Clerk"
+      },
+      {
+        "name": "Bart Cumming",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Dustin Sutton",
+        "role": "Village Administrator"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.peoriaheights.org"
+  },
   "1759052": {
     "board": [
       {
@@ -17591,6 +19421,77 @@
     ],
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.prairiegrove.org"
+  },
+  "1761925": {
+    "board": [
+      {
+        "name": "Donald Peterson Jr",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rick Pope",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ron Delbridge",
+        "role": "Trustee"
+      },
+      {
+        "name": "Spencer Wilson",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steve Potter",
+        "role": "Trustee"
+      },
+      {
+        "name": "Teresa Gilroy",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "Jeffrey D. Troutman",
+      "role": "President"
+    },
+    "name": "Village of Princeville",
+    "office": {
+      "address": "206 N Walnut Ave, Princeville IL 61559",
+      "email": "villagehall@princeville.org",
+      "phone": "309-385-4765"
+    },
+    "officers": [
+      {
+        "name": "Sarah Cordis",
+        "role": "Clerk"
+      },
+      {
+        "name": "Julie Delbridge",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.princeville.org"
+  },
+  "1761977": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Bruce Franks",
+      "phone": "815-499-5924",
+      "role": "Mayor"
+    },
+    "name": "City of Prophetstown",
+    "office": {
+      "address": "339 Washington St, Prophetstown IL 61277"
+    },
+    "officers": [
+      {
+        "name": "Constance Jensen",
+        "phone": "815-537-5598",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
   },
   "1762016": {
     "board": [
@@ -18530,6 +20431,26 @@
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://rockdaleillinois.org"
+  },
+  "1764928": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Rodney G. Kleckler",
+      "phone": "815-622-1110",
+      "role": "Mayor"
+    },
+    "name": "City of Rock Falls",
+    "office": {
+      "address": "603 W. 10th St, Rock Falls IL 61071"
+    },
+    "officers": [
+      {
+        "name": "Pam Martinez",
+        "phone": "815-622-1100",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
   },
   "1765000": {
     "board": [
@@ -20893,6 +22814,26 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofsteger.org"
   },
+  "1772546": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Diana Merdian",
+      "phone": "815-632-6621",
+      "role": "Mayor"
+    },
+    "name": "City of Sterling",
+    "office": {
+      "address": "212 3rd Ave, Sterling IL 61081"
+    },
+    "officers": [
+      {
+        "name": "Teri Sathoff",
+        "phone": "815-632-6630",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
+  },
   "1772676": {
     "board": [
       {
@@ -21495,6 +23436,26 @@
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/"
+  },
+  "1774470": {
+    "county": "Whiteside",
+    "head": {
+      "name": "Bruce Peltier",
+      "phone": "815-438-2505",
+      "role": "Mayor"
+    },
+    "name": "Village of Tampico",
+    "office": {
+      "address": "Tampico IL"
+    },
+    "officers": [
+      {
+        "name": "Jamie McIntire",
+        "phone": "815-438-2505",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
   },
   "1774860": {
     "board": [
@@ -22273,6 +24234,75 @@
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.villageofvirgil.net"
   },
+  "1778201": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Crista Stanbridge",
+        "phone": "217-313-8765",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 1",
+        "name": "John Shaner",
+        "phone": "217-204-6768",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Chris Behrens",
+        "phone": "217-370-7407",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Kent Andrews",
+        "phone": "217-473-2498",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Janet Martin",
+        "phone": "217-371-5331",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Megan Werner",
+        "phone": "217-473-1977",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Cass",
+    "head": {
+      "name": "Steve Clark",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Virginia",
+    "office": {
+      "address": "153 S. Front St., Virginia IL 62691"
+    },
+    "officers": [
+      {
+        "name": "Ashley Cox",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Griffin Giovannini",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+  },
   "1778227": {
     "county": "Lake",
     "name": "Village of Volo",
@@ -22714,6 +24744,78 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.westmont.il.gov"
+  },
+  "1780736": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Larry McMasters",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 1",
+        "name": "LeRoy C Dohm Jr",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Matt Dillon",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Merlin “Rocky” Mathewson",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Clark Abraham",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Scott Ruskusky",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Jamie Silver",
+        "role": "Alderperson"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Mike Menke",
+        "role": "Alderperson"
+      }
+    ],
+    "county": "Peoria",
+    "head": {
+      "name": "James R. Dillon",
+      "role": "Mayor"
+    },
+    "name": "City of West Peoria",
+    "office": {
+      "address": "2421 W Rohmann Ave, West Peoria IL 61604",
+      "email": "city_clerk@cityofwestpeoria.com",
+      "phone": "309-674-1993"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Kinga Krider",
+        "role": "City Administrator"
+      },
+      {
+        "name": "Mary “Margie” Barnes",
+        "role": "Clerk"
+      },
+      {
+        "name": "Julie McGill",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
+    "url": "https://www.cityofwestpeoria.org"
   },
   "1781048": {
     "county": "DuPage",
@@ -23252,6 +25354,55 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.wooddale.com"
+  },
+  "1783063": {
+    "board": [
+      {
+        "name": "Conner Brinson",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Hannah Garrett",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Jeff McCready",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Mark Bethell",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Scott Francis",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Dave Holmes",
+      "phone": "309-334-2500",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Woodhull",
+    "office": {
+      "address": "254 N Division St, PO Box 39, Woodhull IL 61490",
+      "phone": "309-334-3230"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Deb Krueger",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1783245": {
     "board": [

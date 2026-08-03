@@ -63,7 +63,7 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # ward layer covers six MORE municipalities and is deliberately absent: it
     # was last edited 2019-11-05, before the post-2020-census redraw it would
     # need to reflect (recorded as a gap).
-    "rock-island": ["Moline", "Silvis", "East Moline"],
+    "rock-island": ["Moline", "Silvis", "East Moline", "Rock Island"],
     # DeKalb County's own org publishes one ward layer per ward-electing
     # municipality: DeKalb (7), Sycamore (4), Genoa (4), Sandwich (4), all
     # edited 2023-11.

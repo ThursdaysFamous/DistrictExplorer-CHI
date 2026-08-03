@@ -26,6 +26,15 @@ name: Update municipal officials roster
 #   Madison +  — East-West Gateway Public Officials Directory    (full body;
 #   St. Clair    one COG document sourcing two counties at once)
 #   Rock Island— Clerk's Elected Officials listing PDF           (full body)
+#   Tazewell   — Clerk's FULL YEARBOOK PDF                       (full body)
+#   Henry      — Clerk's Handbook of Elected & Appointed
+#                Officials PDF                                   (full body)
+#   Cass       — Clerk's County Directory PDF                    (full body)
+#   Peoria     — Clerk's Officials & Services Directory PDF (full body; the
+#                richest source in the fleet — hall address, phone, e-mail AND
+#                website per municipality, every seat with its ward/district)
+#   Whiteside  — Clerk's County Yearbook PDF                (head + clerk; the
+#                yearbook publishes no trustees, and its clerk said so)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
 #   Kane       — Clerk's Government Guide PDF                    (head + clerk)
 #   McHenry    — Clerk's County Yearbook page                    (head + clerk)
@@ -228,6 +237,43 @@ jobs:
         continue-on-error: true
         run: python3 scripts/rock_island_municipal_officials_scraper.py --out /tmp/rock_island_municipal_officials.json
 
+      # Henry's Handbook of Elected & Appointed Officials, which the county
+      # clerk pointed at directly (2026-08-03) after this project asked whether
+      # the county published one — nothing on the site's own search surfaced it.
+      # The DocumentCenter id is discovered from the clerk page rather than
+      # hardcoded, because CivicPlus restamps it when a document is replaced.
+      - name: Scrape the Henry County Clerk handbook
+        id: scrape_henry
+        continue-on-error: true
+        run: python3 scripts/henry_municipal_officials_scraper.py --out /tmp/henry_municipal_officials.json
+
+      # Cass: full governing bodies for all five of its municipalities, read
+      # from word POSITIONS because the office titles wrap across two printed
+      # lines ("President of / Village Board") with a member's name on the first
+      # and their phone on the second. The x-split is also what keeps every
+      # officer's HOME address out of the payload — that column is never read.
+      - name: Scrape the Cass County Clerk directory
+        id: scrape_cass
+        continue-on-error: true
+        run: python3 scripts/cass_municipal_officials_scraper.py --out /tmp/cass_municipal_officials.json
+
+      # Whiteside: mayor-and-clerk depth, which is all its yearbook publishes.
+      # An address ships only from a row the county itself marks "(Office)";
+      # three of the eleven are unmarked and ship none.
+      # Peoria: the gap peoria-municipal-officials recorded "no source at any
+      # rung" on 2026-08-02 — a correct finding about the places looked at and a
+      # wrong conclusion about the county. Its Clerk's office named this
+      # directory on request the next day.
+      - name: Scrape the Peoria County officials and services directory
+        id: scrape_peoria
+        continue-on-error: true
+        run: python3 scripts/peoria_municipal_officials_scraper.py --out /tmp/peoria_municipal_officials.json
+
+      - name: Scrape the Whiteside County Clerk yearbook
+        id: scrape_whiteside
+        continue-on-error: true
+        run: python3 scripts/whiteside_municipal_officials_scraper.py --out /tmp/whiteside_municipal_officials.json
+
       # Freeport is the ONLY municipality in Stephenson County that its county
       # page omits — and it is the county seat, holding more than half the
       # county's municipal population. The city publishes its own governing body
@@ -282,7 +328,9 @@ jobs:
           steps.scrape_dekalb.outcome == 'failure' || steps.scrape_grundy.outcome == 'failure' ||
           steps.scrape_livingston.outcome == 'failure' || steps.scrape_logan.outcome == 'failure' ||
           steps.scrape_mclean.outcome == 'failure' || steps.scrape_sangamon.outcome == 'failure' ||
-          steps.scrape_tazewell.outcome == 'failure' ||
+          steps.scrape_tazewell.outcome == 'failure' || steps.scrape_henry.outcome == 'failure' ||
+          steps.scrape_cass.outcome == 'failure' || steps.scrape_whiteside.outcome == 'failure' ||
+          steps.scrape_peoria.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -308,6 +356,15 @@ jobs:
           SANGAMON_OUTCOME: ${{ steps.scrape_sangamon.outcome }}
           EWG_OUTCOME: ${{ steps.scrape_ewg.outcome }}
           ROCK_ISLAND_OUTCOME: ${{ steps.scrape_rock_island.outcome }}
+          # Tazewell reached the `if:` condition above without an env entry or a
+          # raise_issue line, so a Tazewell-only failure ran this step and filed
+          # nothing — the step's whole purpose, silently skipped. Both counties
+          # are wired through now.
+          TAZEWELL_OUTCOME: ${{ steps.scrape_tazewell.outcome }}
+          HENRY_OUTCOME: ${{ steps.scrape_henry.outcome }}
+          CASS_OUTCOME: ${{ steps.scrape_cass.outcome }}
+          WHITESIDE_OUTCOME: ${{ steps.scrape_whiteside.outcome }}
+          PEORIA_OUTCOME: ${{ steps.scrape_peoria.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -344,6 +401,11 @@ jobs:
           if [ "$SANGAMON_OUTCOME" = "failure" ]; then raise_issue "Sangamon"; fi
           if [ "$EWG_OUTCOME" = "failure" ]; then raise_issue "Madison + St. Clair (EWG)"; fi
           if [ "$ROCK_ISLAND_OUTCOME" = "failure" ]; then raise_issue "Rock Island"; fi
+          if [ "$TAZEWELL_OUTCOME" = "failure" ]; then raise_issue "Tazewell"; fi
+          if [ "$HENRY_OUTCOME" = "failure" ]; then raise_issue "Henry"; fi
+          if [ "$CASS_OUTCOME" = "failure" ]; then raise_issue "Cass"; fi
+          if [ "$WHITESIDE_OUTCOME" = "failure" ]; then raise_issue "Whiteside"; fi
+          if [ "$PEORIA_OUTCOME" = "failure" ]; then raise_issue "Peoria"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -391,6 +453,10 @@ jobs:
           add "${{ steps.scrape_ewg.outcome }}"         st-clair    county /tmp/stclair_municipal_officials.json
           add "${{ steps.scrape_rock_island.outcome }}" rock-island county /tmp/rock_island_municipal_officials.json
           add "${{ steps.scrape_tazewell.outcome }}"    tazewell    county /tmp/tazewell_municipal_officials.json
+          add "${{ steps.scrape_henry.outcome }}"       henry       county /tmp/henry_municipal_officials.json
+          add "${{ steps.scrape_cass.outcome }}"        cass        county /tmp/cass_municipal_officials.json
+          add "${{ steps.scrape_whiteside.outcome }}"   whiteside   county /tmp/whiteside_municipal_officials.json
+          add "${{ steps.scrape_peoria.outcome }}"      peoria      county /tmp/peoria_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
