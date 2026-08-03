@@ -1,0 +1,387 @@
+#!/usr/bin/env python3
+"""
+Emit docs/COUNTY_STATUS.md — the standing per-county completion view.
+
+Why this exists: "is county X complete?" had no single place to look. The
+answer was spread over three artifacts, each individually gated but never
+joined — the coverage-ring lists in scripts/build_metro_outline.py (which
+counties are served, and how), index.html's own dispatch tables (which
+concepts answer in each), and the guidebook's gaps block via
+data/app/coverage-gaps.json (what is known to be missing, and why). Every
+prose count of those things goes stale by design (CLAUDE.md's own coverage
+sentence disclaims itself); this file is the join, regenerated instead of
+maintained, so it cannot rot the way prose does.
+
+Everything here is DERIVED — the only data this script owns is the static
+list of all 102 Illinois counties (name + Census FIPS), which changes on a
+constitutional timescale. Tiers are computed, never asserted:
+
+    dispatch    = the slugs of DISPATCH_COUNTY_FIPS (cross-checked below)
+    County card = counties in data/app/il-county-commissioners.json with no
+                  dispatch entry (the at-large tier)
+    judicial    = the remainder of METRO_COUNTY_FIPS (secondary counties of
+                  shipped judicial circuits)
+    frontier    = named by a gap record but outside the coverage ring
+    unresearched= the rest of the 102
+
+The dispatch-table scan is the same split-and-key read as
+scripts/validate_index.py check_county_coverage_list — KEEP THEM IN LOCKSTEP.
+If they ever disagree, the cross-assert here (scanned counties must equal
+DISPATCH_COUNTY_FIPS exactly, the invariant that check enforces) fails loudly
+rather than printing a wrong table.
+
+`--check` re-emits and byte-compares, wired into smoke-test.yml next to
+build_coverage_gaps.py --check: a county change that skips the regenerate
+fails CI. Stdlib only, so it runs before anything is installed.
+
+Usage:
+    python3 scripts/build_county_status.py            # write docs/COUNTY_STATUS.md
+    python3 scripts/build_county_status.py --check    # verify, write nothing
+"""
+
+import argparse
+import ast
+import json
+import os
+import re
+import sys
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTLINE_PY = os.path.join(REPO_ROOT, "scripts", "build_metro_outline.py")
+VALIDATE_PY = os.path.join(REPO_ROOT, "scripts", "validate_index.py")
+INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
+GAPS_JSON = os.path.join(REPO_ROOT, "data", "app", "coverage-gaps.json")
+COMMISSIONERS_JSON = os.path.join(REPO_ROOT, "data", "app",
+                                  "il-county-commissioners.json")
+OUT_PATH = os.path.join(REPO_ROOT, "docs", "COUNTY_STATUS.md")
+STATE_FIPS = "17"
+
+# All 102 Illinois counties, name -> county FIPS. Static on purpose: this is
+# the denominator of every "N of 102" claim, and it is the one input no other
+# artifact carries. 42 of the pairs are cross-checked against
+# DISPATCH_COUNTY_FIPS below and ten more against the tier derivation, so a
+# typo in a served county cannot survive a run.
+ALL_COUNTIES = (
+    ("Adams", "001"), ("Alexander", "003"), ("Bond", "005"), ("Boone", "007"),
+    ("Brown", "009"), ("Bureau", "011"), ("Calhoun", "013"), ("Carroll", "015"),
+    ("Cass", "017"), ("Champaign", "019"), ("Christian", "021"), ("Clark", "023"),
+    ("Clay", "025"), ("Clinton", "027"), ("Coles", "029"), ("Cook", "031"),
+    ("Crawford", "033"), ("Cumberland", "035"), ("DeKalb", "037"), ("De Witt", "039"),
+    ("Douglas", "041"), ("DuPage", "043"), ("Edgar", "045"), ("Edwards", "047"),
+    ("Effingham", "049"), ("Fayette", "051"), ("Ford", "053"), ("Franklin", "055"),
+    ("Fulton", "057"), ("Gallatin", "059"), ("Greene", "061"), ("Grundy", "063"),
+    ("Hamilton", "065"), ("Hancock", "067"), ("Hardin", "069"), ("Henderson", "071"),
+    ("Henry", "073"), ("Iroquois", "075"), ("Jackson", "077"), ("Jasper", "079"),
+    ("Jefferson", "081"), ("Jersey", "083"), ("Jo Daviess", "085"), ("Johnson", "087"),
+    ("Kane", "089"), ("Kankakee", "091"), ("Kendall", "093"), ("Knox", "095"),
+    ("Lake", "097"), ("LaSalle", "099"), ("Lawrence", "101"), ("Lee", "103"),
+    ("Livingston", "105"), ("Logan", "107"), ("McDonough", "109"), ("McHenry", "111"),
+    ("McLean", "113"), ("Macon", "115"), ("Macoupin", "117"), ("Madison", "119"),
+    ("Marion", "121"), ("Marshall", "123"), ("Mason", "125"), ("Massac", "127"),
+    ("Menard", "129"), ("Mercer", "131"), ("Monroe", "133"), ("Montgomery", "135"),
+    ("Morgan", "137"), ("Moultrie", "139"), ("Ogle", "141"), ("Peoria", "143"),
+    ("Perry", "145"), ("Piatt", "147"), ("Pike", "149"), ("Pope", "151"),
+    ("Pulaski", "153"), ("Putnam", "155"), ("Randolph", "157"), ("Richland", "159"),
+    ("Rock Island", "161"), ("St. Clair", "163"), ("Saline", "165"), ("Sangamon", "167"),
+    ("Schuyler", "169"), ("Scott", "171"), ("Shelby", "173"), ("Stark", "175"),
+    ("Stephenson", "177"), ("Tazewell", "179"), ("Union", "181"), ("Vermilion", "183"),
+    ("Wabash", "185"), ("Warren", "187"), ("Washington", "189"), ("Wayne", "191"),
+    ("White", "193"), ("Whiteside", "195"), ("Will", "197"), ("Williamson", "199"),
+    ("Winnebago", "201"), ("Woodford", "203"),
+)
+
+# The repo's slug convention is the default rule below except where it isn't:
+# "De Witt" ships as "dewitt" everywhere (dispatch table, outline file, gaps).
+SLUG_OVERRIDES = {"De Witt": "dewitt"}
+
+
+def fail(msg):
+    print("build-county-status: FAIL — %s" % msg, file=sys.stderr)
+    sys.exit(1)
+
+
+def slug_of(name):
+    if name in SLUG_OVERRIDES:
+        return SLUG_OVERRIDES[name]
+    return name.lower().replace(".", "").replace(" ", "-")
+
+
+def literals_from(path, names):
+    """ast-read module constants without importing (build_metro_outline.py
+    imports requests, which CI does not install for this gate — same approach
+    and same reason as validate_index.py's _literals_from)."""
+    with open(path, encoding="utf-8") as f:
+        tree = ast.parse(f.read(), path)
+    found = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name) and target.id in names:
+                try:
+                    found[target.id] = ast.literal_eval(node.value)
+                except ValueError:
+                    pass
+    missing = sorted(set(names) - set(found))
+    if missing:
+        fail("%s no longer defines %s" % (os.path.basename(path), ", ".join(missing)))
+    return found
+
+
+def scan_dispatch_tables(html, skip_layers):
+    """layer id -> sorted county slugs, from index.html's registerCountyLayer
+    tables. Same split and key regexes as validate_index.py
+    check_county_coverage_list — keep in lockstep (the cross-assert in main()
+    catches divergence)."""
+    chunks = re.split(r"\n  (register[A-Za-z]*)\(\{", html)
+    by_layer = {}
+    for i in range(1, len(chunks) - 1, 2):
+        if chunks[i] != "registerCountyLayer":
+            continue
+        body = chunks[i + 1]
+        layer_id = re.search(r'id:\s*"([a-z-]+)"', body)
+        if not layer_id or layer_id.group(1) in skip_layers:
+            continue
+        keys = re.findall(r'key:\s*"([a-z-]+)"', body)
+        by_layer.setdefault(layer_id.group(1), set()).update(keys)
+    return {layer: sorted(keys) for layer, keys in by_layer.items()}
+
+
+def load_inputs():
+    consts = literals_from(OUTLINE_PY, ("DISPATCH_COUNTY_FIPS", "METRO_COUNTY_FIPS"))
+    skip = literals_from(VALIDATE_PY, ("MUNICIPALITY_KEYED_LAYERS",))[
+        "MUNICIPALITY_KEYED_LAYERS"]
+    with open(INDEX_HTML, encoding="utf-8") as f:
+        dispatch_tables = scan_dispatch_tables(f.read(), skip)
+    with open(GAPS_JSON, encoding="utf-8") as f:
+        gaps = json.load(f)
+    with open(COMMISSIONERS_JSON, encoding="utf-8") as f:
+        commissioners = json.load(f)
+    return consts, dispatch_tables, gaps, commissioners
+
+
+def derive(consts, dispatch_tables, gaps, commissioners):
+    fips_by_slug = {slug_of(n): f for n, f in ALL_COUNTIES}
+    name_by_slug = {slug_of(n): n for n, f in ALL_COUNTIES}
+    slug_by_fips = {f: slug_of(n) for n, f in ALL_COUNTIES}
+
+    # The static list has to be internally sound before anything trusts it.
+    if len(ALL_COUNTIES) != 102 or len(fips_by_slug) != 102 or len(slug_by_fips) != 102:
+        fail("ALL_COUNTIES must hold 102 unique names and unique FIPS")
+    expected = ["%03d" % n for n in range(1, 204, 2)]
+    if sorted(f for _, f in ALL_COUNTIES) != expected:
+        fail("ALL_COUNTIES FIPS must be exactly the odd codes 001..203")
+
+    dispatch = consts["DISPATCH_COUNTY_FIPS"]
+    ring = set(consts["METRO_COUNTY_FIPS"])
+    # Cross-check the static list against the repo's own slug->FIPS table.
+    for slug, fips in sorted(dispatch.items()):
+        if fips_by_slug.get(slug) != fips:
+            fail("ALL_COUNTIES disagrees with DISPATCH_COUNTY_FIPS on %r "
+                 "(%s vs %s)" % (slug, fips_by_slug.get(slug), fips))
+    unknown_ring = sorted(ring - set(slug_by_fips))
+    if unknown_ring:
+        fail("METRO_COUNTY_FIPS names FIPS not in ALL_COUNTIES: %s" % unknown_ring)
+
+    # Same invariant validate_index.py check 8 enforces; if the scan and that
+    # check ever read the tables differently, this is where it surfaces.
+    scanned = set()
+    for keys in dispatch_tables.values():
+        scanned.update(keys)
+    if scanned != set(dispatch):
+        fail("dispatch-table scan disagrees with DISPATCH_COUNTY_FIPS "
+             "(scan-only: %s; list-only: %s) — this script's scanner has "
+             "drifted from validate_index.py check_county_coverage_list"
+             % (sorted(scanned - set(dispatch)), sorted(set(dispatch) - scanned)))
+
+    # At-large counties: keyed by shouting name in the commissioners file.
+    atlarge_slugs = set()
+    for key in commissioners:
+        matches = [s for s in fips_by_slug
+                   if name_by_slug[s].upper().replace(".", "").replace(" ", "")
+                   == key.replace(".", "").replace(" ", "")]
+        if len(matches) != 1:
+            fail("commissioners key %r matches %d counties" % (key, len(matches)))
+        atlarge_slugs.add(matches[0])
+
+    dispatch_slugs = set(dispatch)
+    card_only = atlarge_slugs - dispatch_slugs
+    judicial = {slug_by_fips[f] for f in ring} - dispatch_slugs - card_only
+    served = dispatch_slugs | card_only | judicial
+    if {fips_by_slug[s] for s in served} != ring:
+        fail("derived served set does not reproduce METRO_COUNTY_FIPS")
+
+    # Gap records per county. A record may name several counties (it appears
+    # in each row) or none (listed separately so totals still reconcile).
+    gaps_by_county, untagged = {}, []
+    for gap_id in sorted(gaps):
+        counties = gaps[gap_id].get("counties") or []
+        if not counties:
+            untagged.append(gap_id)
+        for slug in counties:
+            if slug not in fips_by_slug:
+                fail("gap %r names unknown county slug %r" % (gap_id, slug))
+            gaps_by_county.setdefault(slug, []).append(gap_id)
+
+    frontier = set(gaps_by_county) - served
+    unresearched = set(fips_by_slug) - served - frontier
+    layers_by_county = {}
+    for layer, keys in dispatch_tables.items():
+        for slug in keys:
+            layers_by_county.setdefault(slug, []).append(layer)
+
+    return {
+        "name_by_slug": name_by_slug, "fips_by_slug": fips_by_slug,
+        "dispatch": dispatch_slugs, "card_only": card_only,
+        "judicial": judicial, "served": served, "frontier": frontier,
+        "unresearched": unresearched, "atlarge": atlarge_slugs,
+        "gaps_by_county": gaps_by_county, "untagged": untagged,
+        "layers_by_county": layers_by_county, "gaps": gaps,
+    }
+
+
+def render(d):
+    name, fips = d["name_by_slug"], d["fips_by_slug"]
+
+    def gap_cell(slug):
+        ids = d["gaps_by_county"].get(slug, [])
+        if not ids:
+            return "none"
+        return "%d — %s" % (len(ids), "; ".join(
+            "`%s` (%s)" % (g, d["gaps"][g]["kind"]) for g in ids))
+
+    def board_cell(slug):
+        if slug in d["atlarge"]:
+            return "at-large — County card"
+        if "county-board" in d["layers_by_county"].get(slug, []):
+            return "districted"
+        return "no board layer — see gaps"
+
+    lines = [
+        "# Illinois county completion status",
+        "",
+        "<!-- ==== GENERATED FILE — DO NOT HAND-EDIT ==== -->",
+        "<!-- Emitted by scripts/build_county_status.py from the coverage-ring",
+        "     lists (scripts/build_metro_outline.py), index.html's dispatch",
+        "     tables, data/app/coverage-gaps.json and",
+        "     data/app/il-county-commissioners.json. Regenerate:",
+        "         python3 scripts/build_county_status.py",
+        "     CI drift gate (smoke-test.yml):",
+        "         python3 scripts/build_county_status.py --check -->",
+        "",
+        "**%d of 102 Illinois counties are served** — %d through their own"
+        " dispatch entries, %d through a shipped judicial circuit, and %d"
+        " through the County card alone. %d more are researched-but-unserved"
+        " (every one carries a recorded gap saying why), leaving %d"
+        " unresearched." % (
+            len(d["served"]), len(d["dispatch"]), len(d["judicial"]),
+            len(d["card_only"]), len(d["frontier"]), len(d["unresearched"])),
+        "",
+        "## How to read this",
+        "",
+        "- **Served through** — `dispatch`: the county has its own entries in"
+        " index.html's county dispatch tables; `judicial circuit`: a secondary"
+        " county of a shipped judicial circuit (its only county-specific card"
+        " is the subcircuit); `County card`: an at-large county with no"
+        " district geometry, its board riding the County card"
+        " (`docs/EXPANSION_GUIDE.md` §2.5.1).",
+        "- **Board** — how the county board surfaces: `districted` (own"
+        " `county-board` dispatch entry), `at-large — County card`"
+        " (data/app/il-county-commissioners.json), or a pointer to the gap"
+        " record that says why neither ships.",
+        "- **County-keyed dispatch entries** — read from index.html itself,"
+        " the same scan `validate_index.py` check 8 gates on.",
+        "- **Open gaps** — records from the guidebook's gaps block"
+        " (`data/app/coverage-gaps.json`, the app's Data gaps panel). A"
+        " record naming several counties appears in each of their rows.",
+        "- **\"Complete\"** here means: served, and `none` in the gaps column."
+        " A served county with open gaps is honest-but-unfinished; what each"
+        " gap needs is the record's `wanted` line in the guidebook.",
+        "",
+        "## Served counties (%d)" % len(d["served"]),
+        "",
+        "| County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |",
+        "|---|---|---|---|---|---|",
+    ]
+    for slug in sorted(d["served"], key=lambda s: name[s]):
+        if slug in d["dispatch"]:
+            tier = "dispatch"
+            entries = ", ".join("`%s`" % l for l in sorted(d["layers_by_county"][slug]))
+        elif slug in d["judicial"]:
+            tier = "judicial circuit"
+            entries = "—"
+        else:
+            tier = "County card"
+            entries = "—"
+        lines.append("| %s | %s%s | %s | %s | %s | %s |" % (
+            name[slug], STATE_FIPS, fips[slug], tier, board_cell(slug),
+            entries, gap_cell(slug)))
+
+    lines += [
+        "",
+        "## Researched frontier (%d) — gap-recorded, not yet served" % len(d["frontier"]),
+        "",
+        "Counties outside the coverage ring that a research pass has already"
+        " measured; each row's records say what blocks it and what a"
+        " submission would need to contain.",
+        "",
+        "| County | FIPS | Gap records |",
+        "|---|---|---|",
+    ]
+    for slug in sorted(d["frontier"], key=lambda s: name[s]):
+        lines.append("| %s | %s%s | %s |" % (
+            name[slug], STATE_FIPS, fips[slug], gap_cell(slug)))
+
+    lines += [
+        "",
+        "## Unresearched (%d)" % len(d["unresearched"]),
+        "",
+        ", ".join(sorted(name[s] for s in d["unresearched"])) + ".",
+        "",
+        "## Gap records not tagged to a county (%d)" % len(d["untagged"]),
+        "",
+        ("None." if not d["untagged"] else
+         "City- or app-scoped records with no `counties` tag, listed so the"
+         " table reconciles with the %d records in the Data gaps panel: %s."
+         % (len(d["gaps"]),
+            ", ".join("`%s`" % g for g in d["untagged"]))),
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--check", action="store_true",
+                    help="verify the shipped file, write nothing")
+    args = ap.parse_args()
+
+    d = derive(*load_inputs())
+    payload = render(d)
+    summary = ("%d served (%d dispatch, %d judicial, %d card), %d frontier, "
+               "%d unresearched, %d gap records" % (
+                   len(d["served"]), len(d["dispatch"]), len(d["judicial"]),
+                   len(d["card_only"]), len(d["frontier"]),
+                   len(d["unresearched"]), len(d["gaps"])))
+
+    if args.check:
+        if not os.path.exists(OUT_PATH):
+            fail("docs/COUNTY_STATUS.md is missing — run this script")
+        with open(OUT_PATH, encoding="utf-8") as f:
+            shipped = f.read()
+        if shipped != payload:
+            fail("docs/COUNTY_STATUS.md is stale (%d vs %d bytes). It is "
+                 "generated, never hand-edited — rerun "
+                 "python3 scripts/build_county_status.py"
+                 % (len(shipped), len(payload)))
+        print("build-county-status: OK — %s" % summary)
+        return
+
+    with open(OUT_PATH, "w", encoding="utf-8") as f:
+        f.write(payload)
+    print("build-county-status: wrote %s — %s"
+          % (os.path.relpath(OUT_PATH, REPO_ROOT), summary))
+
+
+if __name__ == "__main__":
+    main()

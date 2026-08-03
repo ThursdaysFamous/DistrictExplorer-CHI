@@ -36,6 +36,14 @@ jobs:
       - name: Coverage gaps match the guidebook
         run: python3 scripts/build_coverage_gaps.py --check
 
+      # The per-county completion table (docs/COUNTY_STATUS.md) is generated
+      # from the coverage-ring lists, index.html's dispatch tables,
+      # coverage-gaps.json and the commissioners roster. This is its drift
+      # gate: a county change that skips the regenerate fails here rather
+      # than letting the table rot the way prose counts do. Stdlib only.
+      - name: County status matches its sources
+        run: python3 scripts/build_county_status.py --check
+
       # Every script a workflow runs must import under the dependencies that
       # workflow installs. This catches the seam no other gate looks at: the
       # five derived-boundary roster refreshes (Cass, De Witt, Marshall, Mason,

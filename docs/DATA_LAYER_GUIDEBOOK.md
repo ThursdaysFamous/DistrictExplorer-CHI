@@ -1182,7 +1182,9 @@ in the researched-but-unbuilt backlog.
       "id": "woodford-special-districts",
       "concept": "Fire, park and library districts",
       "area": "Woodford County",
-      "counties": [],
+      "counties": [
+        "woodford"
+      ],
       "kind": "no-source",
       "layer": "fire-district",
       "summary": "Woodford names its fire, park and library districts, but every “district” dataset it publishes is the parcel map wearing the district's name.",
@@ -1676,7 +1678,10 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > **Read this first — what is actually open.** Most of what follows is a *completion
 > log*, not a queue: an entry titled "… — SHIPPED/FIXED/RESOLVED (date)" is a record of
 > work already done, kept for its rationale. Grepping this section for open work returns
-> mostly noise, which is why "what's next?" is hard to answer from it. As of
+> mostly noise, which is why "what's next?" is hard to answer from it. For "where does
+> county X stand?" don't grep at all: `docs/COUNTY_STATUS.md` is the GENERATED per-county
+> join of the coverage-ring lists, the dispatch tables and the gaps block (service tier,
+> board posture, entries, open gaps) — start there, come back here for rationale. As of
 > **2026-08-02** (RESEARCH PASS 7 and its build tranches, below) the open items split
 > cleanly into work that is ready and gaps that need a publisher:
 >
