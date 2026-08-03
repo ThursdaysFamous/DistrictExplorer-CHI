@@ -60,3 +60,8 @@ pyproj==3.7.2
 # document's own piece table, which is the only way to recover the text in
 # document order with its encodings intact.
 olefile==0.47
+
+# Ogle County's GIS Coordinator supplied its precincts as a plain shapefile
+# (the county publishes no boundary service), so the builder reads .shp/.dbf
+# directly out of the archived zip.
+pyshp==2.3.1

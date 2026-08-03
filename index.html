@@ -9495,6 +9495,33 @@ function initChiExplorer() {
   var loadOgleBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/ogle-county-board-members.json", {}, 2);
   });
+  /* Ogle's 51 CURRENT precincts, and the reason they took two answers to ship.
+   *
+   * The county publishes no precinct boundaries — a 51-page PDF map book and a
+   * points-only polling dataset, nothing more. The 2020 Census versions were
+   * available all along (the board districts above are dissolved from them),
+   * but that was the 52-precinct fabric of 2020 and the county now runs 51: it
+   * had retired Forreston 3, and nothing published said where its territory
+   * went. Shipping the old set would have put a precinct on a card that no
+   * longer exists.
+   *
+   * Both halves arrived on 2026-08-03. GIS Coordinator Kris Gilbert sent the
+   * shapefile; County Clerk Becky Duke answered the other half in one line —
+   * "Forreston 1 and 2 became Forreston 1. Forreston 3 became 2." The builder
+   * asserts that statement against the data rather than trusting it, and the
+   * two new Forreston precincts measure 99.88% and 99.99% inside board District
+   * 7, which is where all three of the old ones sat — so the retirement moved
+   * no board line, exactly as the gap record predicted.
+   *
+   * THE BOARD DISTRICT IS A SPATIAL JOIN HERE, not the membership lookup Stark
+   * and McDonough use. The board districts carry their composition from the
+   * 2021 resolution, which names the bare townships ("Dement", "Lynnville")
+   * where this shapefile numbers them ("Dement 1", "Lynnville 1"), so an exact
+   * name match would silently miss them. Containment was measured instead:
+   * every one of the 51 sits at least 97.3% inside a single district. */
+  var loadOglePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ogle-precincts.json", {}, 2);
+  });
 
   /* Stephenson carries the fleet's ONLY georeferenced boundary, and the card
    * says so rather than leaving it in a build script.
@@ -18481,6 +18508,59 @@ function initChiExplorer() {
           return {
             label: "McDonough County Clerk — Elections (official)",
             url: "http://mcg.mcdonough.il.us/voterreg.html"
+          };
+        }
+      },
+      // Ogle — 51 precincts from the county GIS Coordinator's own shapefile
+      // (see loadOglePrecincts). Township comes off the feature; the board
+      // district is a spatial join, for the naming reason recorded there. No
+      // polling place: the county's polling dataset is points with no precinct
+      // key, so there is nothing to join on.
+      {
+        key: "ogle",
+        coverage: ogleCountyCoverage,
+        loadGeometry: loadOglePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadOglePrecincts(),
+            loadOgleCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              township: findPropCI(props, ["township"]),
+              boardDistrict: district
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Ogle County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Ogle County Clerk — Elections (official)",
+            url: "https://www.oglecountyil.gov/departments/county_clerk_and_recorder/elections.php"
           };
         }
       },
