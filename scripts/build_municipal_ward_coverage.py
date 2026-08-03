@@ -59,11 +59,14 @@ STATIC_ENTRY_MUNICIPALITIES = {
     "rockford": ["Rockford"],
     # Moline (7) and Silvis (4) publish their own ward layers on Rock Island
     # County's hosted org; East Moline's 7 (with per-seat contact) live on the
-    # CITY's own org and joined the same dispatch entry 2026-08-02. Whiteside's
-    # ward layer covers six MORE municipalities and is deliberately absent: it
-    # was last edited 2019-11-05, before the post-2020-census redraw it would
-    # need to reflect (recorded as a gap).
+    # CITY's own org and joined the same dispatch entry 2026-08-02. Rock Island
+    # city joined 2026-08-03, once its clerk confirmed the wards were kept.
     "rock-island": ["Moline", "Silvis", "East Moline", "Rock Island"],
+    # Whiteside's six ward-electing municipalities. The layer is a 2016 edit,
+    # confirmed current by the County Clerk on 2026-08-03 ("The wards were not
+    # redrawn at the time of the census in 2020").
+    "whiteside-cities": ["Sterling", "Rock Falls", "Morrison", "Fulton",
+                         "Prophetstown", "Erie"],
     # DeKalb County's own org publishes one ward layer per ward-electing
     # municipality: DeKalb (7), Sycamore (4), Genoa (4), Sandwich (4), all
     # edited 2023-11.
@@ -210,7 +213,8 @@ ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
                      "mchenry-city": "111", "kendall-cities": "093",
                      "pontiac": "105", "mclean-cities": "113", "lincoln": "107",
                      "springfield": "167", "freeport": "177",
-                     "st-clair-cities": "163", "rock-island": "161"}
+                     "st-clair-cities": "163", "rock-island": "161",
+                     "whiteside-cities": "195"}
 
 
 def load_place_geoids():

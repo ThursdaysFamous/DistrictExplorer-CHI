@@ -9531,6 +9531,52 @@ function initChiExplorer() {
         return geojson;
       });
   }
+  /* Whiteside's 21 municipal wards, on a SEPARATE service from the election
+   * geography above (PrecinctWardMap rather than ElectionGeography_public).
+   *
+   * Held back from the pass-6 ward tranche and recorded as the gap
+   * whiteside-municipal-wards, for one reason: the layer was last edited in
+   * 2016 and municipal wards are redrawn on the census cycle, so publishing it
+   * risked answering "which ward am I in" with a pre-2020 line and no way for a
+   * reader to tell. The gap asked for exactly one of two things — a refreshed
+   * dataset, or confirmation from the county that these municipalities did not
+   * redistrict. County Clerk Karen Stralow gave the second on 2026-08-03: "The
+   * wards were not redrawn at the time of the census in 2020." So the 2016 edit
+   * date is a stale TIMESTAMP on a current boundary, the same posture as Rock
+   * Island's Pop_2010 column.
+   *
+   * 21 wards on 22 polygons: Fulton Ward 4 is published twice. Both parts carry
+   * the same name, so either answers the same seat (the DeKalb Ward 7 shape).
+   * The gap's "Fulton (5)" counted polygons rather than wards.
+   *
+   * REPNAME is declared and null on all 22, and the county's yearbook stops at
+   * mayors and clerks, so no alderperson is named here — the card gives the
+   * ward and links the municipality, which is the honest floor and the same
+   * posture as Quincy and McHenry city. */
+  var WHITESIDE_WARD_SERVICE = WHITESIDE_GIS +
+    "PrecinctWardMap/FeatureServer/0/query?where=1%3D1&outFields=NAME&outSR=4326" +
+    "&f=geojson&geometryPrecision=5";
+  // "Sterling Ward 1" -> municipality "Sterling", ward "1".
+  var WHITESIDE_WARD_NAME_RE = /^(.+?)\s+Ward\s+(\d+)\s*$/i;
+  var loadWhitesideWards = makeCached(function () {
+    return fetchJSONWithRetry(WHITESIDE_WARD_SERVICE, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) {
+          throw new Error("Whiteside ward layer returned no usable geometry");
+        }
+        var out = [];
+        (geojson.features || []).forEach(function (f) {
+          var raw = String(findPropCI(f.properties || {}, ["name"]) || "").trim();
+          var m = WHITESIDE_WARD_NAME_RE.exec(raw);
+          // A row whose name does not parse is skipped rather than shown under
+          // a guessed municipality — the name is the only key this layer has.
+          if (!m) return;
+          out.push(wardFeature(f, m[1].trim(), "Ward", m[2]));
+        });
+        if (!out.length) throw new Error("Whiteside ward names no longer parse");
+        return { type: "FeatureCollection", features: out };
+      });
+  });
   var loadWhitesideCountyBoard = makeCached(function () {
     return loadWhitesideLayer(2, "electedoffice,name,repname1,districturl1",
       "Whiteside County electoral districts").then(function (geojson) {
@@ -12228,7 +12274,8 @@ function initChiExplorer() {
       municipalWardEntry("lincoln", loadLincolnWards),
       municipalWardEntry("springfield", loadSpringfieldWards),
       municipalWardEntry("freeport", loadFreeportWards),
-      municipalWardEntry("st-clair-cities", loadStClairCityWards)
+      municipalWardEntry("st-clair-cities", loadStClairCityWards),
+      municipalWardEntry("whiteside-cities", loadWhitesideWards)
     ]
   });
   declareDataSource("ward", {
