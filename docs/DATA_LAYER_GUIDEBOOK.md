@@ -944,6 +944,19 @@ in the researched-but-unbuilt backlog.
       "wanted": "Any council list joliet.gov is willing to publish in a machine-readable form (JSON, CSV or RSS). Until then, the browser-and-Archive route keeps this current."
     },
     {
+      "id": "galesburg-wards-outside-the-ring",
+      "concept": "City council district",
+      "area": "City of Galesburg",
+      "counties": [
+        "knox"
+      ],
+      "kind": "data-quality",
+      "layer": "ward",
+      "summary": "Galesburg publishes its seven council wards as map data — the only buildable ward source found outside the coverage ring — and building it alone would be the first ward group in an unserved county.",
+      "blocker": "Found 3 Aug 2026 in the pass-11 probe. The City of Galesburg runs a 75-service ArcGIS Online account which publishes Galesburg_City_Council_Wards, a Precincts layer (20 city precincts carrying ward, county board district and polling place), and Knox County Board Districts *in the City of Galesburg*. All three are real and current. None is countywide, so none of them serves Knox County itself. That is what makes this a decision rather than a build: every one of the 21 ward groups shipped today sits in a county inside the coverage ring, 21 of 21 with no exception, and Galesburg would be the first outside it. A Galesburg resident would then resolve the ward layer — which is dispatched, not statewide — while the out-of-scope wash greys their location out, which is the shape of the 2026-07-30 Kankakee bug rather than the Centralia municipality case (see scripts/build_metro_outline.py: `municipality` is statewide, `ward` is not). Adding Knox to the ring to compensate would be worse: nothing county-keyed answers anywhere else in Knox.",
+      "wanted": "An operator decision on whether a city ward group may ship in a county outside the coverage ring, and if so how the wash should describe that county. Alternatively Knox County publishing its board districts and precincts countywide, which would settle it by making Knox genuinely served — the city's own account already proves the county's lines exist in digital form."
+    },
+    {
       "id": "knox-county-board-districts",
       "concept": "County board districts",
       "area": "Knox County",
@@ -1603,6 +1616,48 @@ Jefferson, Marion, Perry, Vermilion, Warren, Fulton, Henderson) says so in its o
 *"Asking the five clerks is the next move, not more searching."* Two of them —
 `henderson-county-website` and `vermilion-county-website` — are asking whether the county
 has a website at all, which is the cheapest question on this page.
+
+### Pass 11 (2026-08-03): the search lever is spent
+
+Fulton shipped from this pass — the county the pass-10 sweep had already marked
+build-ready, hidden behind non-zero layer ids. After that, the same pass went
+looking for another and **found none**, which is worth recording as a result
+rather than as an absence of work.
+
+**What was probed.** All 21 counties that appear in a gap record but sit outside
+the coverage ring: Bureau, Champaign, Christian, Clinton, Fayette, Ford, Hancock,
+Henderson, Jackson, Jefferson, Jo Daviess, Knox, Macon, Marion, Menard, Mercer,
+Montgomery, Perry, Piatt, Vermilion, Warren. Two methods, both applied to all 21:
+
+  * **Hostname probing** — ten naming patterns (`gis.<county>countyil.gov`,
+    `maps.<county>county.org`, `gis.co.<county>.il.us`, …) against both
+    `/arcgis/rest/services` and `/server/rest/services`. Every layer id of every
+    hit was enumerated rather than assuming `0`, which is the trap that hid
+    Fulton and would otherwise have hidden anything shaped like it.
+  * **ArcGIS Online catalogue search**, per county, for precinct and board
+    district services, filtered to items whose title, owner or snippet actually
+    names the county.
+
+**What came back.** One hostname hit, `maps.mercercounty.org`, **correctly
+rejected**: its extent resolves to roughly -74.9°, 40.1°, which is Mercer County
+NEW JERSEY. Checking the extent rather than trusting the name is the whole
+lesson of that one. Knox returned real services, all of them **city-scoped** —
+Galesburg's own account publishes Galesburg precincts, Galesburg council wards
+and "Knox County Board Districts *in the City of Galesburg*", but nothing
+countywide. Nothing else returned anything usable.
+
+**So the frontier is ask-gated, not search-gated.** That is the ask ledger's
+central claim, now with a measured negative to sit beside the seven positives:
+searching 21 counties two ways produced zero builds, while asking seven counties
+produced seven answers on the same day. The remaining counties do not have
+findable data that we have failed to find; they have data that is not published,
+which is a different problem with a different lever.
+
+Two counties are excluded from that conclusion for a reason that is not about
+searching at all: **Champaign and Piatt** publish complete, current maps through
+the Champaign County GIS Consortium and we are **not licensed to republish
+them**. Easy to fetch is not the same as allowed, and no amount of asking a
+clerk changes a licence.
 
 ### The standing caution
 
