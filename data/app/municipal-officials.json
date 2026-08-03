@@ -1,4 +1,58 @@
 {
+  "1700230": {
+    "board": [
+      {
+        "email": "bradenmeyer1999@gmail.com",
+        "name": "Braden Meyer",
+        "role": "Trustee"
+      },
+      {
+        "email": "dasavard99@gmail.com",
+        "name": "Daniel Savard",
+        "role": "Trustee"
+      },
+      {
+        "name": "Eben Lisk",
+        "role": "Trustee"
+      },
+      {
+        "email": "marketing.lisa.clark@gmail.com",
+        "name": "Lisa Clark",
+        "role": "Trustee"
+      },
+      {
+        "email": "dulle1999@yahoo.com",
+        "name": "Michael Dulle",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nick Zapp",
+        "phone": "618-314-0217",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "changegaebe@gmail.com",
+      "name": "Chance Gaebe",
+      "role": "President"
+    },
+    "name": "Village of Addieville",
+    "office": {
+      "address": "PO Box 52, Addieville IL 62214"
+    },
+    "officers": [
+      {
+        "name": "Carla Zapp",
+        "role": "Clerk"
+      },
+      {
+        "name": "Kimberly Hale",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1700243": {
     "county": "DuPage",
     "head": {
@@ -725,6 +779,74 @@
       }
     ],
     "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+  },
+  "1702531": {
+    "board": [
+      {
+        "email": "adamschwartz1980@gmail.com",
+        "name": "Adam Schwartz",
+        "phone": "618-363-1076",
+        "role": "Trustee"
+      },
+      {
+        "name": "Alan Sherman",
+        "phone": "618-731-0349",
+        "role": "Trustee"
+      },
+      {
+        "name": "Darrell Malick",
+        "role": "Trustee"
+      },
+      {
+        "email": "Kristy1332@yahoo.com",
+        "name": "Deona Jannett",
+        "phone": "618-521-8890",
+        "role": "Trustee"
+      },
+      {
+        "email": "didi_37_99@yahoo.com",
+        "name": "Diana Joseph",
+        "phone": "618-314-2563",
+        "role": "Trustee"
+      },
+      {
+        "email": "fajohnson1943@gmail.com",
+        "name": "Fred Johnson",
+        "phone": "618-267-0422",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "lamczyksolutions@gmail.com",
+      "name": "Sam R. Lamczyk",
+      "phone": "618-314-6967",
+      "role": "Mayor"
+    },
+    "name": "City of Ashley",
+    "office": {
+      "address": "474 W. Main Street, PO Box 341, Ashley IL 62808",
+      "phone": "618-485-2270"
+    },
+    "officers": [
+      {
+        "name": "Margie Clark",
+        "phone": "618-335-9436",
+        "role": "Clerk"
+      },
+      {
+        "name": "Tammy Fulton",
+        "phone": "618-314-5321",
+        "role": "Comptroller"
+      },
+      {
+        "email": "bassman62808@yahoo.com",
+        "name": "Leonard Piasecki",
+        "phone": "618-534-5225",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1702726": {
     "board": [
@@ -3730,6 +3852,49 @@
     ],
     "sourceUrl": "https://stephensoncountyil.gov/government/boards_commissions_committees/city_and_villages.php"
   },
+  "1712164": {
+    "board": [
+      {
+        "name": "Barri Allen",
+        "phone": "618-533-7623",
+        "role": "Councilman"
+      },
+      {
+        "name": "Isreael Fontanez",
+        "phone": "618-533-7623",
+        "role": "Councilman"
+      },
+      {
+        "name": "Rob Jackson",
+        "phone": "618-533-7623",
+        "role": "Councilman"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "name": "Bryan Kuder",
+      "phone": "618-533-7623",
+      "role": "Mayor"
+    },
+    "name": "City of Centralia",
+    "office": {
+      "address": "101 S. Locust St., P.O. Box 569, Centralia IL 62801",
+      "phone": "618-533-7623"
+    },
+    "officers": [
+      {
+        "name": "Kimberly A. Enke",
+        "phone": "618-533-7636",
+        "role": "Clerk"
+      },
+      {
+        "name": "Bill Agee",
+        "phone": "618-533-7632",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1712294": {
     "county": "Carroll",
     "head": {
@@ -6405,6 +6570,65 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.downers.us"
+  },
+  "1720890": {
+    "board": [
+      {
+        "email": "erienw@hotmail.com",
+        "name": "Erien White",
+        "phone": "618-315-1575",
+        "role": "Trustee"
+      },
+      {
+        "email": "ktubbs83@gmail.com",
+        "name": "Kathleen Tubbs",
+        "phone": "618-214-8172",
+        "role": "Trustee"
+      },
+      {
+        "email": "bettysexton50@gmail.com",
+        "name": "Larry Browder",
+        "phone": "580-618-5193",
+        "role": "Trustee"
+      },
+      {
+        "email": "linda.wier@gmail.com",
+        "name": "Linda Biebuck",
+        "phone": "314-683-8983",
+        "role": "Trustee"
+      },
+      {
+        "name": "Marvin Damazyn",
+        "phone": "618-318-7404",
+        "role": "Trustee"
+      },
+      {
+        "email": "tomkabat1970@yahoo.com",
+        "name": "Thomas J. Kabat",
+        "phone": "618-521-5024",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "mpille2010@gmail.com",
+      "name": "Melissa D. Pille",
+      "phone": "618-201-0568",
+      "role": "President"
+    },
+    "name": "Village of Du Bois",
+    "office": {
+      "address": "75 W. Broadway, PO Box 116, Dubois IL 62831",
+      "phone": "618-787-2220"
+    },
+    "officers": [
+      {
+        "name": "Rosalie Kostecki",
+        "phone": "618-246-4181",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1721176": {
     "board": [
@@ -10338,6 +10562,62 @@
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.villageofhebron.org"
   },
+  "1734163": {
+    "board": [
+      {
+        "district": "1st Ward",
+        "name": "Darren Krafft",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "2nd Ward",
+        "name": "Brett Wiedman",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "2nd Ward",
+        "name": "Bryan Gibson",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "3rd Ward",
+        "name": "Derrik Gaspardo",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "3rd Ward",
+        "name": "Terry Hatton",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "Jeff Bergfeld",
+      "phone": "309-364-3071",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Henry",
+    "officers": [
+      {
+        "name": "Erica Johnson",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Kristyn Young",
+        "phone": "815-993-2498",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
   "1734514": {
     "board": [
       {
@@ -11157,6 +11437,114 @@
     "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
     "url": "https://speednet.com"
   },
+  "1736150": {
+    "board": [
+      {
+        "name": "James Casey",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kevin Bennett",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Randal Chiaravalle",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Vicky Gray",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "William McCasky",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "John Mayerhofer",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Hopewell",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Amanda Kolb",
+        "phone": "309-238-7277",
+        "role": "Clerk",
+        "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "Brian Kimmel",
+        "phone": "309-274-5272",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
+  "1736347": {
+    "board": [
+      {
+        "name": "Devin Holle",
+        "role": "Trustee"
+      },
+      {
+        "name": "Frank P. Tomasek",
+        "phone": "618-322-5693",
+        "role": "Trustee"
+      },
+      {
+        "email": "bygrace1224@yahoo.com",
+        "name": "Leo Ohms",
+        "phone": "618-493-6467",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Habeck",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard Smith",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rick Bourgeois",
+        "phone": "618-246-8083",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "villageofhoyleton1858@outlook.com",
+      "name": "Kris Schnitker",
+      "phone": "618-493-7308",
+      "role": "President"
+    },
+    "name": "Village of Hoyleton",
+    "office": {
+      "address": "66 N. Park, P.O. Box 128, Hoyleton IL 62803"
+    },
+    "officers": [
+      {
+        "name": "Dawn Mavers",
+        "role": "Clerk"
+      },
+      {
+        "email": "villageofhoyleton1858@outlook.com",
+        "name": "Janis Bourgeois",
+        "phone": "618-246-8417",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1736750": {
     "county": "Kane",
     "head": {
@@ -11370,6 +11758,77 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://inverness-il.gov"
+  },
+  "1737777": {
+    "board": [
+      {
+        "email": "villageofirvington@gmail.com",
+        "name": "Carla Barrett",
+        "phone": "618-249-6463",
+        "role": "Trustee"
+      },
+      {
+        "email": "irvfirebd@frontier.com",
+        "name": "Delores Howe",
+        "phone": "618-367-3298",
+        "role": "Trustee"
+      },
+      {
+        "email": "medic6773@yahoo.com",
+        "name": "Gene Howe",
+        "phone": "618-314-3149",
+        "role": "Trustee"
+      },
+      {
+        "email": "Kadopt_4@yahoo.com",
+        "name": "Keith Droege",
+        "phone": "618-249-8580",
+        "role": "Trustee"
+      },
+      {
+        "email": "etajenhorst@hormIL.XOM",
+        "name": "Steve Tajenhorst",
+        "phone": "618-581-6602",
+        "role": "Trustee"
+      },
+      {
+        "email": "s.durbin.jr@gmail.com",
+        "name": "Steven M. Durbin",
+        "phone": "618-920-0158",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "Hohalan67@gmail.com",
+      "name": "Alan Hoh",
+      "phone": "618-249-6483",
+      "role": "President"
+    },
+    "name": "Village of Irvington",
+    "office": {
+      "address": "P.O. Box 515, Irvington IL 62848",
+      "phone": "618-249-6225"
+    },
+    "officers": [
+      {
+        "email": "villageclerk@gmail.com",
+        "name": "Kathy McKinney",
+        "phone": "618-249-8298",
+        "role": "Clerk"
+      },
+      {
+        "name": "Kelly Rupe",
+        "role": "Treasurer"
+      },
+      {
+        "email": "beigeleisen86@gmail.com",
+        "name": "Water Billing",
+        "phone": "618-249-8520",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1737894": {
     "county": "McHenry",
@@ -12012,6 +12471,65 @@
     "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
     "url": "https://villageofkirkland.com"
   },
+  "1740559": {
+    "board": [
+      {
+        "district": "North Ward",
+        "name": "Donna K. Cordes",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "South Ward",
+        "name": "James R. Szalko",
+        "phone": "708-359-8835",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "East Ward",
+        "name": "Jon Zellmer",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "North Ward",
+        "name": "Leslie Hattan",
+        "phone": "309-246-8938",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "South Ward",
+        "name": "Tim Jason",
+        "phone": "309-246-3084",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "Tim Strawn",
+      "phone": "309-246-3948",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Lacon",
+    "officers": [
+      {
+        "name": "Connie Anderle",
+        "phone": "309-246-3029",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Danielle Taylor",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
   "1740767": {
     "board": [
       {
@@ -12308,6 +12826,61 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageoflansing.org"
+  },
+  "1742171": {
+    "board": [
+      {
+        "name": "Anthony Ranallo",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "David Morgan",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Dennis Fuchs",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Flavel Streitmatter",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "James Morgan",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kolton White",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "Jonathan Moore",
+      "role": "President",
+      "termExpires": "2027"
+    },
+    "name": "Village of La Rose",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Carrie Fuchs",
+        "role": "Clerk",
+        "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "Shirley Newman",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
   },
   "1742184": {
     "board": [
@@ -16130,6 +16703,74 @@
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
   },
+  "1751700": {
+    "board": [
+      {
+        "email": "chborgmann@yahoo.com",
+        "name": "Christine-Harre Borgmann",
+        "phone": "618-314-6479",
+        "role": "Councilman"
+      },
+      {
+        "email": "erirtj@hotmail.com",
+        "name": "Ernst R. Irwin",
+        "phone": "618-246-3195",
+        "role": "Councilman"
+      },
+      {
+        "name": "Jennifer Szopinski",
+        "phone": "618-314-0252",
+        "role": "Councilman"
+      },
+      {
+        "name": "Joshua Fark",
+        "phone": "618-237-0884",
+        "role": "Councilman"
+      },
+      {
+        "email": "shawnk@notslogistics.com",
+        "name": "Shawn Kabat",
+        "phone": "618-314-5252",
+        "role": "Councilman"
+      },
+      {
+        "email": "tomp1959@yahoo.com",
+        "name": "Tom Polczynski",
+        "phone": "618-435-7990",
+        "role": "Councilman"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "terrykozuszek@nashville.illinois.gov",
+      "name": "Terry Kozuszek",
+      "phone": "618-327-3058",
+      "role": "Mayor"
+    },
+    "name": "City of Nashville",
+    "office": {
+      "address": "190 N. East Court, Nashville IL 62263",
+      "phone": "618-327-3058"
+    },
+    "officers": [
+      {
+        "name": "Theresa L. Kurwicki",
+        "phone": "618-327-3058",
+        "role": "Clerk"
+      },
+      {
+        "name": "Terrie Kurwicki",
+        "phone": "618-327-3058",
+        "role": "Collector"
+      },
+      {
+        "name": "Ricki Heggemeier",
+        "phone": "618-246-3215",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1752103": {
     "county": "Kendall",
     "head": {
@@ -16517,6 +17158,62 @@
     },
     "name": "Village of New Milford",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
+  },
+  "1752714": {
+    "board": [
+      {
+        "name": "Bethany Karch",
+        "phone": "618-977-7926",
+        "role": "Trustee"
+      },
+      {
+        "email": "chaserwise21@gmail.com",
+        "name": "Chase Wise",
+        "phone": "618-335-8103",
+        "role": "Trustee"
+      },
+      {
+        "name": "Chuck Funke",
+        "phone": "618-599-3418",
+        "role": "Trustee"
+      },
+      {
+        "email": "rosey_74@hotmail.com",
+        "name": "Heather Dunmyer",
+        "phone": "618-713-7384",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lynnette Shew",
+        "phone": "618-214-1706",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "name": "Candice Cross",
+      "phone": "618-641-1248",
+      "role": "President"
+    },
+    "name": "Village of New Minden",
+    "office": {
+      "address": "82 E. Front St., New Minden IL 62263",
+      "phone": "618-478-5312"
+    },
+    "officers": [
+      {
+        "name": "Rhonda Zapp",
+        "phone": "618-967-8578",
+        "role": "Clerk"
+      },
+      {
+        "email": "jqkarmeier@gmail.com",
+        "name": "Julia Karmeier",
+        "phone": "618-367-2480",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1753000": {
     "board": [
@@ -17102,6 +17799,73 @@
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.oakbrookterrace.net"
   },
+  "1754586": {
+    "board": [
+      {
+        "email": "cindykharre@gmail.com",
+        "name": "Cinda Harre",
+        "phone": "618-329-5571",
+        "role": "Trustee"
+      },
+      {
+        "email": "coltonking55555@hotmail.com",
+        "name": "Colton King",
+        "phone": "618-314-6269",
+        "role": "Trustee"
+      },
+      {
+        "email": "dsnnj8@gmail.com",
+        "name": "Dale Jones",
+        "phone": "618-329-5316",
+        "role": "Trustee"
+      },
+      {
+        "email": "missya75@yahoo.com",
+        "name": "Melissa Turner",
+        "phone": "618-201-1823",
+        "role": "Trustee"
+      },
+      {
+        "email": "buckhead252@yahoo.com",
+        "name": "Michael Paszkiewicz",
+        "phone": "618-314-3526",
+        "role": "Trustee"
+      },
+      {
+        "email": "downtownbrown618@yahoo.com",
+        "name": "Nicholas Brown",
+        "phone": "618-314-5296",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "pcbahre@hotmail.com",
+      "name": "Charles R. Bahre",
+      "phone": "618-214-3728",
+      "role": "President"
+    },
+    "name": "Village of Oakdale",
+    "office": {
+      "address": "75 N. Weigh St., Oakdale IL 62268",
+      "phone": "618-214-3728"
+    },
+    "officers": [
+      {
+        "email": "aliciahiller24@gmail.com",
+        "name": "Alicia Hiller",
+        "phone": "618-329-5558",
+        "role": "Clerk"
+      },
+      {
+        "email": "nccarson@egyptian.net",
+        "name": "Carol Carson",
+        "phone": "618-201-5160",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1754638": {
     "board": [
       {
@@ -17544,6 +18308,71 @@
       }
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
+  "1755470": {
+    "board": [
+      {
+        "email": "bheb91@hotmail.com",
+        "name": "Brett Heberer",
+        "role": "Trustee"
+      },
+      {
+        "email": "donna8365@sbcglobal.net",
+        "name": "Donna Davis",
+        "role": "Trustee"
+      },
+      {
+        "email": "ktkink@yahoo.com",
+        "name": "Kevin Kink",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nathan Dick",
+        "role": "Trustee"
+      },
+      {
+        "email": "scragen@hotmail.com",
+        "name": "Scott Cragen",
+        "phone": "618-967-6635",
+        "role": "Trustee"
+      },
+      {
+        "name": "Stacy Friedrich",
+        "phone": "618-520-9159",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tully Chad Parker",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "jasper6442@yahoo.com",
+      "name": "David Jasper",
+      "phone": "618-204-0068",
+      "role": "President"
+    },
+    "name": "Village of Okawville",
+    "office": {
+      "address": "304 N. Front St., P.O. Box 483, Okawville IL 62271",
+      "phone": "618-243-5972"
+    },
+    "officers": [
+      {
+        "email": "villageofokawville@gmail.com",
+        "name": "Dawn Moyer",
+        "phone": "618-977-5896",
+        "role": "Clerk"
+      },
+      {
+        "email": "villageofokawville@gmail.com",
+        "name": "Dawn Moyer",
+        "phone": "618-977-5896",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1755639": {
     "county": "Lake",
@@ -19553,6 +20382,64 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://prospect-heights.il.us"
   },
+  "1762523": {
+    "board": [
+      {
+        "name": "Amie Evans",
+        "phone": "618-322-3412",
+        "role": "Trustee"
+      },
+      {
+        "name": "Anita Jurkowski",
+        "phone": "618-246-8208",
+        "role": "Trustee"
+      },
+      {
+        "name": "Claire Bauer",
+        "phone": "618-214-1730",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mike Tomaszewski",
+        "phone": "618-237-3680",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard Rybacki",
+        "phone": "618-485-6605",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tyler Setzekorn",
+        "phone": "618-214-9342",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "name": "Larry Wachowski",
+      "phone": "618-485-2241",
+      "role": "President"
+    },
+    "name": "Village of Radom",
+    "office": {
+      "address": "337 E. Main St., PO Box 96, Radom IL 62876",
+      "phone": "618-485-6144"
+    },
+    "officers": [
+      {
+        "name": "Molly Pierjok",
+        "phone": "618-316-6292",
+        "role": "Clerk"
+      },
+      {
+        "name": "Kayla Pedtke",
+        "phone": "618-713-3145",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1762757": {
     "board": [
       {
@@ -19823,6 +20710,73 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://richtonpark.org"
+  },
+  "1763719": {
+    "board": [
+      {
+        "email": "jim_hodge110@yahoo.com",
+        "name": "James Hodge",
+        "phone": "618-214-1441",
+        "role": "Trustee"
+      },
+      {
+        "email": "mshelton_6981@gmail.com",
+        "name": "Melvin Shelton",
+        "phone": "618-696-1124",
+        "role": "Trustee"
+      },
+      {
+        "email": "sdhodgern@gmail.com",
+        "name": "Stacie Hodge",
+        "phone": "618-316-1966",
+        "role": "Trustee"
+      },
+      {
+        "email": "sfoutch@gmail.com",
+        "name": "Steven Foutch Jr.",
+        "phone": "706-296-9386",
+        "role": "Trustee"
+      },
+      {
+        "email": "steven_malick@yahoo.com",
+        "name": "Steven Malick",
+        "phone": "618-214-3014",
+        "role": "Trustee"
+      },
+      {
+        "email": "hawki32@hotmail.com",
+        "name": "William Reinburg",
+        "phone": "618-534-2024",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "email": "mnewman_67@yahoo.com",
+      "name": "Mary Anne Maxwell",
+      "phone": "618-237-4356",
+      "role": "President"
+    },
+    "name": "Village of Richview",
+    "office": {
+      "address": "P.O. Box 86, Richview IL 62877",
+      "phone": "618-249-8123"
+    },
+    "officers": [
+      {
+        "email": "stephaniet294@gmail.com",
+        "name": "Stephanie Thomas",
+        "phone": "618-731-1192",
+        "role": "Clerk"
+      },
+      {
+        "email": "kpedtke@gmail.com",
+        "name": "Kayla Pedtke",
+        "phone": "618-713-3145",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1764044": {
     "board": [
@@ -22576,6 +23530,66 @@
     ],
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf"
   },
+  "1771422": {
+    "board": [
+      {
+        "name": "Andrea Mahoney-Platt",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Chalea Dentinger",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Charles Kear",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Michelle (Shelly) Urnikis",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Samantha Allen",
+        "phone": "309-573-3739",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Tracey Farley",
+        "phone": "815-673-8970",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "appointed": true,
+      "name": "Andrea Mahoney-Platt",
+      "phone": "309-361-0123",
+      "role": "Mayor",
+      "termExpires": "2027"
+    },
+    "name": "Village of Sparland",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Dave Murphy",
+        "phone": "309-238-9218",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Dave Murphy",
+        "phone": "309-238-9218",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
   "1771474": {
     "board": [
       {
@@ -23662,6 +24676,73 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://tinleypark.org"
   },
+  "1775653": {
+    "board": [
+      {
+        "district": "1st Ward",
+        "name": "Paul Perry",
+        "phone": "815-253-1443",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "1st Ward",
+        "name": "Scott Richard",
+        "phone": "815-452-2912",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "2nd Ward",
+        "name": "Jesse Middleton",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "2nd Ward",
+        "name": "Richard Alden",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "3rd Ward",
+        "name": "James E. Vallaza",
+        "phone": "815-452-2886",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "3rd Ward",
+        "name": "Terry W. Miller",
+        "phone": "815-452-2727",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "Henry A. Zilm",
+      "phone": "309-238-8665",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Toluca",
+    "officers": [
+      {
+        "name": "Roanna Lee Richard",
+        "phone": "815-452-2912",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Ann Miller",
+        "phone": "815-780-7951",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
   "1775718": {
     "board": [
       {
@@ -23985,6 +25066,122 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://university-park-il.com"
+  },
+  "1777395": {
+    "board": [
+      {
+        "name": "Barry Meierkord",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "David Todd",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "Jeff Rinaldo",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "LeRoy Marliere",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Martha J. Sloan-Kruse",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Susan Chambers",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "Louis Holocker Jr",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Varna",
+    "officers": [
+      {
+        "name": "Wendy Todd",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Teryl Holocker",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
+  "1777408": {
+    "board": [
+      {
+        "name": "Al Schrader",
+        "phone": "618-540-9159",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gerald Scanlan",
+        "phone": "618-615-6171",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Segelhorst",
+        "phone": "618-713-0743",
+        "role": "Trustee"
+      },
+      {
+        "email": "mpowers1979@gmail.com",
+        "name": "Matt Powers",
+        "phone": "618-830-8849",
+        "role": "Trustee"
+      },
+      {
+        "name": "Roger Green",
+        "phone": "618-971-5140",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tom Segelhorst",
+        "phone": "618-314-0277",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "name": "Philip Leadendecker",
+      "phone": "618-973-2696",
+      "role": "President"
+    },
+    "name": "Village of Venedy",
+    "office": {
+      "address": "214 S. Elkhorn Rd., Venedy IL 62214",
+      "phone": "618-314-5169"
+    },
+    "officers": [
+      {
+        "email": "ruffym62214@yahoo.com",
+        "name": "Mark Martens",
+        "phone": "618-314-5169",
+        "role": "Clerk"
+      },
+      {
+        "name": "Linda Blumhorst",
+        "phone": "618-972-4315",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
   },
   "1777473": {
     "board": [
@@ -24324,6 +25521,61 @@
     "sourceUrl": "https://data-lakecountyil.opendata.arcgis.com/",
     "url": "https://www.villageofwadsworth.org/"
   },
+  "1778721": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Laurie Holmes",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Vicki Rodgers",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Norman Faulkner",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Ruth Paradee",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Bobby Alli",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Mike Phelps",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Washington",
+    "head": {
+      "name": "Jackie Butch Mathus, Jr.",
+      "role": "Mayor"
+    },
+    "name": "City of Wamac",
+    "office": {
+      "address": "100 S. Wabash Ave., Centralia IL 62801",
+      "phone": "618-532-1138"
+    },
+    "officers": [
+      {
+        "name": "Marian Suhl",
+        "role": "Clerk"
+      },
+      {
+        "name": "Elisabeth Jackson",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://washingtonco.illinois.gov/"
+  },
   "1778929": {
     "county": "DuPage",
     "head": {
@@ -24336,6 +25588,62 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.warrenville.il.us"
+  },
+  "1779007": {
+    "board": [
+      {
+        "name": "Ginger Humphrey",
+        "phone": "309-712-9709",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kevin Burdette",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kris Hammond",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Randy Knoblauch",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Rebecca Schupp",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Stephen Prather",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Marshall",
+    "head": {
+      "name": "Steve Forney",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "Village of Washburn",
+    "officers": [
+      {
+        "name": "Deidre Guy",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Heather Hare",
+        "phone": "309-248-7222",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://marshallcountyillinois.gov/"
   },
   "1779033": {
     "board": [

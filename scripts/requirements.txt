@@ -53,3 +53,10 @@ shapely==2.1.2
 # county's can. A hand-rolled Transverse Mercator inverse was considered and
 # rejected — civic boundaries are not the place to debug projection math.
 pyproj==3.7.2
+
+# Washington County's Blue Book is a Word 97 binary .doc, and LibreOffice — which
+# IS installed in the runner image — refuses to load it ("source file could not
+# be loaded"). olefile opens the OLE2 container so the scraper can walk the
+# document's own piece table, which is the only way to recover the text in
+# document order with its encodings intact.
+olefile==0.47

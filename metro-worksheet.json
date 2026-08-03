@@ -1178,8 +1178,8 @@
       },
       {
         "file": "municipal-officials.json",
-        "min_keys": 440,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb and the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island) shipped — 492 municipalities — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
+        "min_keys": 500,
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell) and the two counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table and Washington's 40-page Blue Book, both archived under data/source/raw/ and parsed from there — shipped: 575 municipalities — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
       },
       {
         "file": "lasalle-county-board-members.json",

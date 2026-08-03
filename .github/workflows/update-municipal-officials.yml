@@ -87,7 +87,7 @@ jobs:
         # the three counties whose source is a published PDF; pdfplumber reads
         # LaSalle's, which needs word POSITIONS rather than flattened lines (see
         # its scraper); beautifulsoup4 parses McHenry's yearbook page.
-        run: pip install -c scripts/requirements.txt requests beautifulsoup4 pypdf pdfplumber playwright
+        run: pip install -c scripts/requirements.txt requests beautifulsoup4 pypdf pdfplumber olefile playwright
 
       - name: Install Chromium for the edge-blocked sources
         # Two different blocks, both needing a real browser.
@@ -269,6 +269,24 @@ jobs:
         continue-on-error: true
         run: python3 scripts/peoria_municipal_officials_scraper.py --out /tmp/peoria_municipal_officials.json
 
+      # Marshall and Washington are the fleet's first ARCHIVED-DOCUMENT municipal
+      # sources. Neither county publishes its list on the web: Marshall's Clerk
+      # sent a 5-page elected-officers table and Washington's office sent the
+      # 40-page Blue Book, both by e-mail on 2026-08-03, and both are committed
+      # under data/source/raw/. So these two steps cannot fail on a network blip
+      # — they re-parse the archive, which makes them a PARSER regression guard
+      # rather than a freshness check. Refreshing the data means asking the
+      # clerk again and replacing the archived file.
+      - name: Re-parse the Marshall County elected-officers table
+        id: scrape_marshall
+        continue-on-error: true
+        run: python3 scripts/marshall_municipal_officials_scraper.py --out /tmp/marshall_municipal_officials.json
+
+      - name: Re-parse the Washington County Blue Book
+        id: scrape_washington
+        continue-on-error: true
+        run: python3 scripts/washington_municipal_officials_scraper.py --out /tmp/washington_municipal_officials.json
+
       - name: Scrape the Whiteside County Clerk yearbook
         id: scrape_whiteside
         continue-on-error: true
@@ -331,6 +349,8 @@ jobs:
           steps.scrape_tazewell.outcome == 'failure' || steps.scrape_henry.outcome == 'failure' ||
           steps.scrape_cass.outcome == 'failure' || steps.scrape_whiteside.outcome == 'failure' ||
           steps.scrape_peoria.outcome == 'failure' ||
+          steps.scrape_marshall.outcome == 'failure' ||
+          steps.scrape_washington.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -365,6 +385,8 @@ jobs:
           CASS_OUTCOME: ${{ steps.scrape_cass.outcome }}
           WHITESIDE_OUTCOME: ${{ steps.scrape_whiteside.outcome }}
           PEORIA_OUTCOME: ${{ steps.scrape_peoria.outcome }}
+          MARSHALL_OUTCOME: ${{ steps.scrape_marshall.outcome }}
+          WASHINGTON_OUTCOME: ${{ steps.scrape_washington.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -386,6 +408,8 @@ jobs:
           if [ "$MCHENRY_OUTCOME" = "failure" ]; then raise_issue "McHenry"; fi
           if [ "$KENDALL_OUTCOME" = "failure" ]; then raise_issue "Kendall"; fi
           if [ "$LAKE_OUTCOME" = "failure" ]; then raise_issue "Lake"; fi
+          if [ "$MARSHALL_OUTCOME" = "failure" ]; then raise_issue "Marshall"; fi
+          if [ "$WASHINGTON_OUTCOME" = "failure" ]; then raise_issue "Washington"; fi
           if [ "$WILL_CITIES_OUTCOME" = "failure" ]; then raise_issue "Will ward-city"; fi
           if [ "$SKOKIE_OUTCOME" = "failure" ]; then raise_issue "Skokie trustee-district"; fi
           if [ "$JOLIET_OUTCOME" = "failure" ]; then raise_issue "Joliet council-contact"; fi
@@ -457,6 +481,8 @@ jobs:
           add "${{ steps.scrape_cass.outcome }}"        cass        county /tmp/cass_municipal_officials.json
           add "${{ steps.scrape_whiteside.outcome }}"   whiteside   county /tmp/whiteside_municipal_officials.json
           add "${{ steps.scrape_peoria.outcome }}"      peoria      county /tmp/peoria_municipal_officials.json
+          add "${{ steps.scrape_marshall.outcome }}"    marshall    county /tmp/marshall_municipal_officials.json
+          add "${{ steps.scrape_washington.outcome }}"  washington  county /tmp/washington_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
