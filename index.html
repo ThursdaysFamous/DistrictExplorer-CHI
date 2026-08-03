@@ -8485,6 +8485,46 @@ function initChiExplorer() {
   var loadPeoriaCountyBoard = makeCached(function () {
     return loadPeoriaLayer("2020_County_Board_Districts", "DISTRICT", "board districts");
   });
+  /* The CITY of Peoria's five council districts, on the CITY's own org
+   * (services1/Vm4J3EDyqMzmDYgP, "Council of Districts of Peoria") rather than
+   * the county's. At ~113,000 people Peoria is the largest municipality the app
+   * districts outside Chicago and the collar.
+   *
+   * Its council is five DISTRICT seats plus five AT-LARGE, which is why the
+   * seat label is "District" and not "Ward": the at-large five represent the
+   * whole city and belong on the Municipality card, not on any one district's.
+   * municipalSeatHolders keys on the digit in the roster's district string, so
+   * "District 3" joins here and "At-Large" correctly matches nothing.
+   *
+   * VINTAGE: last edited May 2022 — after the post-2020-census redraw, which is
+   * the same bar Moline and Silvis were shipped on. Verified geometrically as
+   * well as by date: the five districts tile the city's LAND essentially
+   * exactly. Measured against the TIGER place polygon they cover 94.9% of it —
+   * and the 5.07% they miss is the Illinois River, because TIGER counts a
+   * city's water and a council map does not. Peoria's own water share is 5.09%.
+   * The two figures agree to two hundredths of a point, and no two districts
+   * overlap (largest pairwise intersection 2.7e-9 deg²).
+   *
+   * REPNAME is READ NOWHERE. The column is four years old and already wrong: it
+   * names Chuck Grayeb in District 2, where the county clerk's 2026-2027
+   * directory names Alex Carmona. The roster shipped from that directory
+   * supplies every name instead — the Freeport / McLean-cities posture, and the
+   * third stale officer column this pass. */
+  var PEORIA_CITY_DISTRICTS = "https://services1.arcgis.com/Vm4J3EDyqMzmDYgP/arcgis/" +
+    "rest/services/Council_Districts/FeatureServer/0/query?where=1%3D1" +
+    "&outFields=DISTRICTID&outSR=4326&f=geojson&geometryPrecision=5";
+  var loadPeoriaCityDistricts = makeCached(function () {
+    return fetchJSONWithRetry(PEORIA_CITY_DISTRICTS, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) {
+          throw new Error("Peoria city council districts returned no usable geometry");
+        }
+        return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+          var id = findPropCI(f.properties || {}, ["districtid"]);
+          return wardFeature(f, "Peoria", "District", id);
+        }) };
+      });
+  });
   var loadPeoriaBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-board-members.json", {}, 2);
   });
@@ -12275,7 +12315,8 @@ function initChiExplorer() {
       municipalWardEntry("springfield", loadSpringfieldWards),
       municipalWardEntry("freeport", loadFreeportWards),
       municipalWardEntry("st-clair-cities", loadStClairCityWards),
-      municipalWardEntry("whiteside-cities", loadWhitesideWards)
+      municipalWardEntry("whiteside-cities", loadWhitesideWards),
+      municipalWardEntry("peoria-city", loadPeoriaCityDistricts)
     ]
   });
   declareDataSource("ward", {
@@ -19072,7 +19113,7 @@ function initChiExplorer() {
   whenIdle(function () { drawOutOfScopeMask(loadMetroOutline); });
 
   var verifiedEl = document.getElementById("verified-date");
-  verifiedEl.textContent = "July 28, 2026";
+  verifiedEl.textContent = "August 3, 2026";
 
   /* ==== ENGINE:BEGIN metro-links ==== */
   (function renderMetroLinks() {
