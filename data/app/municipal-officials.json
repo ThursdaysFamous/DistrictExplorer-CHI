@@ -130,6 +130,60 @@
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.villageofalhambra.com"
   },
+  "1700971": {
+    "board": [
+      {
+        "name": "Brad Barton",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Dennis Shannon",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "John Duyvejonck",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Michael Petrovich",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Ronald H. Medley",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Tena L. Anseeuw",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Rebecca Brown",
+      "phone": "309-236-9236",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Alpha",
+    "office": {
+      "address": "102 S 2nd St, PO Box 206, Alpha IL 61413",
+      "phone": "309-629-9881"
+    },
+    "officers": [
+      {
+        "name": "Heather DeShane",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1701010": {
     "board": [
       {
@@ -302,6 +356,114 @@
     ],
     "sourceUrl": "https://rockislandcountyil.gov/DocumentCenter/View/291/Elected-Officials-Listing-PDF"
   },
+  "1701491": {
+    "board": [
+      {
+        "name": "Conner Riddell",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Daniel Heiar",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Elma Gay",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jennifer Hirsch",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kevin Betcher",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Valli Putnam",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Michael Mielke",
+      "phone": "309-476-8520",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Andover",
+    "office": {
+      "address": "342 5th St, Andover IL 61233",
+      "phone": "309-521-8116"
+    },
+    "officers": [
+      {
+        "name": "Beverly Josephson",
+        "phone": "309-738-8211",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
+  "1701569": {
+    "board": [
+      {
+        "name": "John Davis",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "John Rico",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Kate Sturtewagen",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kim Nordstrom",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Matthrew Nordstrom",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Robert Shrum",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Tim Wise",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Town of Annawan",
+    "office": {
+      "address": "200 N Meadow Lane, Suite 1, Annawan IL 61234",
+      "phone": "309-935-6226"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Susan Nelson",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1701595": {
     "county": "Lake",
     "name": "Village of Antioch",
@@ -414,6 +576,60 @@
     ],
     "sourceUrl": "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf",
     "url": "https://yahoo.com"
+  },
+  "1702726": {
+    "board": [
+      {
+        "name": "Bobby Burton",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Dawn Stage",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jeana Lea Jagers",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Richard DeSmith",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Robert Westfall",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Ryan Rahn",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Kenneth Taber",
+      "phone": "309-936-7451",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Town of Atkinson",
+    "office": {
+      "address": "107 N Main St, PO Box 614, Atkinson IL 61235",
+      "phone": "309-936-7658"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Krystle Thomas",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1702752": {
     "board": [
@@ -1416,6 +1632,60 @@
     ],
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.villageofbigrock.us"
+  },
+  "1706171": {
+    "board": [
+      {
+        "name": "Amanda Laub",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Ben Strand",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jim Nolan",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lisa Nordstrom",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mike Keup",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Patrick Light",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Michael Funke",
+      "phone": "309-927-3024",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Bishop Hill",
+    "office": {
+      "address": "PO Box 117, Bishop Hill IL 61419"
+    },
+    "officers": [
+      {
+        "name": "Terri A. Wigant",
+        "phone": "309-927-3583",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1706587": {
     "county": "DuPage",
@@ -2599,6 +2869,59 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://calumetparkvillage.org"
   },
+  "1710643": {
+    "board": [
+      {
+        "name": "Amanda Johnson",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Dan Galle",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "John Taylor",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Karen Brandau",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Ryan Franck",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Sam Bennett",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Jason Beam",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Cambridge",
+    "office": {
+      "address": "124 W Exchange St, Cambridge IL 61238",
+      "phone": "309-937-2570"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Sarah Jern",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1710906": {
     "county": "Kane",
     "head": {
@@ -3738,6 +4061,59 @@
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.clarendonhills.us"
   },
+  "1714923": {
+    "board": [
+      {
+        "name": "Kathy Shannon",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Leo A. Henkelman",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mary Slaughter",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Scott Flaker",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Sherri Stout",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Steve Ballegeer",
+      "phone": "309-792-1682",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Cleveland",
+    "office": {
+      "address": "408 Jackson St, Cleveland IL 61241",
+      "phone": "309-792-0930"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Michele Tucker",
+        "role": "Clerk"
+      },
+      {
+        "name": "Lisa Sides",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1715170": {
     "board": [
       {
@@ -3892,6 +4268,77 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.collinsvilleil.org"
+  },
+  "1715664": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Amanda Stablein",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Jim Dooley",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Larry Swemline",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Sarah Lack",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Melanie Hergert",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Tom Jones",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Darlene Strobbe",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Jacob Waterman",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Brian Johnson",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Colona",
+    "office": {
+      "address": "100 E 9th Ave, PO Box 170, Colona IL 61241",
+      "phone": "309-792-8628"
+    },
+    "officers": [
+      {
+        "name": "Charlotte Park",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1716366": {
     "board": [
@@ -7483,6 +7930,71 @@
     "sourceUrl": "https://cityoffreeport.org/people2/",
     "url": "https://cityoffreeport.org/"
   },
+  "1728430": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Jayme Hopping",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Jeff Olson",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "John Wirth",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Rick Otterstrom",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Jacqueline Clucas",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "M. Douglas Anderson",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Richard Volkert",
+      "phone": "309-932-2533",
+      "role": "Mayor",
+      "termExpires": "2027"
+    },
+    "name": "City of Galva",
+    "office": {
+      "address": "311 N.W. 4th Ave, PO Box 171, Galva IL 61434",
+      "phone": "309-932-2555"
+    },
+    "officers": [
+      {
+        "name": "Debbie VanWassenhove",
+        "role": "Clerk",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Melissa Halsall",
+        "role": "Treasurer",
+        "termExpires": "2027"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1728638": {
     "board": [
       {
@@ -7531,6 +8043,82 @@
       }
     ],
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf"
+  },
+  "1728846": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Craig Arnold",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 1",
+        "name": "Paula Simosky",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "name": "James Roodhouse",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Robert P. James",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Keith Kennett",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Martin Rothschild",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Brett Barnhart",
+        "role": "Alderperson",
+        "termExpires": "2026"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Kent Swanson",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Sean Johnson",
+      "role": "Mayor",
+      "termExpires": "2026"
+    },
+    "name": "City of Geneseo",
+    "office": {
+      "address": "115 S Oakwood Ave, Geneseo IL 61254",
+      "phone": "309-944-6419"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "JoAnn Hollenkamp",
+        "role": "City Administrator"
+      },
+      {
+        "appointed": true,
+        "name": "Paige Seibel",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1728872": {
     "county": "Kane",
@@ -9675,6 +10263,50 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://village.homewood.il.us"
   },
+  "1736074": {
+    "board": [
+      {
+        "name": "Charity VanDamme",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Dennis Nussear",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lisa Brants",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Todd Cassens",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Sheldon Miller",
+      "phone": "563-468-1172",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Hooppole",
+    "office": {
+      "address": "Hooppole IL 61258"
+    },
+    "officers": [
+      {
+        "name": "Rylie Ketelsen Miller",
+        "phone": "815-499-8849",
+        "role": "Clerk",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
   "1736126": {
     "board": [
       {
@@ -10324,6 +10956,49 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vok.org"
+  },
+  "1739727": {
+    "board": [
+      {
+        "name": "Adam Cernovich",
+        "role": "Council Member",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Chris Colomer",
+        "role": "Council Member",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mike Komnick",
+        "role": "Council Member",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Tyrone Baker",
+        "role": "Council Member",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Gary Moore",
+      "role": "Mayor",
+      "termExpires": "2027"
+    },
+    "name": "City of Kewanee",
+    "office": {
+      "address": "401 E 3rd St, Kewanee IL 61443",
+      "phone": "309-852-2611"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Kasey Mitchell",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1739883": {
     "county": "Lake",
@@ -16045,6 +16720,54 @@
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
     "url": "https://www.cityoforegon.org"
+  },
+  "1756601": {
+    "board": [
+      {
+        "name": "Dan Lees",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Dan Meiresonne",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "James Hickerson",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lori Sampson",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Stephen R. Newman",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Steve Newman",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Orion",
+    "office": {
+      "address": "1202 4th St, Orion IL 61273",
+      "phone": "309-526-8139"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Erin Lange",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1756627": {
     "board": [
@@ -23252,6 +23975,55 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.wooddale.com"
+  },
+  "1783063": {
+    "board": [
+      {
+        "name": "Conner Brinson",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Hannah Garrett",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Jeff McCready",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Mark Bethell",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Scott Francis",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Henry",
+    "head": {
+      "name": "Dave Holmes",
+      "phone": "309-334-2500",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Woodhull",
+    "office": {
+      "address": "254 N Division St, PO Box 39, Woodhull IL 61490",
+      "phone": "309-334-3230"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Deb Krueger",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
   "1783245": {
     "board": [

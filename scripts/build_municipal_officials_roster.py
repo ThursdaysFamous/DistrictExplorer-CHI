@@ -70,6 +70,9 @@ COUNTY_FIPS = {
     "Madison": "119",
     "St. Clair": "163",
     "Rock Island": "161",
+    # Pass-9 (2026-08-03): the county clerk answered a direct question with a
+    # link to a handbook nothing on the site's search surfaced.
+    "Henry": "073",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -158,6 +161,12 @@ COUNTY_FLOORS = {
     "Madison": {"municipalities": 24, "members": 190, "heads": 24},      # 28 / 241 / 28
     "St. Clair": {"municipalities": 22, "members": 190, "heads": 22},    # 26 / 247 / 26
     "Rock Island": {"municipalities": 13, "members": 100, "heads": 13},  # 15 / 122 / 15
+    # Henry (2026-08-03 live: 15 / 120 / 15). The handbook covers all fifteen of
+    # the county's incorporated places, so these sit two under the full set —
+    # this source cannot lose three municipalities and still be right. One of
+    # those fifteen (Coal Valley) is also published by Rock Island, so the
+    # county's contribution after dedupe is fourteen.
+    "Henry": {"municipalities": 13, "members": 100, "heads": 13},        # 15 / 120 / 15
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -214,6 +223,7 @@ PRESERVABLE = {
     "st-clair": {"kind": "county", "county": "St. Clair"},
     "rock-island": {"kind": "county", "county": "Rock Island"},
     "tazewell": {"kind": "county", "county": "Tazewell"},
+    "henry": {"kind": "county", "county": "Henry"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -242,10 +252,15 @@ PRESERVABLE = {
 # fresher (July vs June 2026) and dates every seat's term — the freshness
 # call, made explicit. LaSalle already precedes both, which settles Streator
 # (hall in LaSalle) the same way.
+# Rock Island sits ahead of Henry for the one municipality both publish in full:
+# Coal Valley. Both name its whole board and the two agree, so this is a
+# provenance call rather than a freshness one — and Henry's own handbook makes
+# it, printing Coal Valley's clerk as "(R.I. Co.)". The village hall is in Rock
+# Island County; Henry lists the village because it extends across the line.
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
-                     "Sangamon", "Madison", "St. Clair", "Rock Island",
-                     "DuPage", "Kane", "Kendall", "McHenry",
+                     "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
+                     "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
                      "Carroll", "Lake"]
 
 
