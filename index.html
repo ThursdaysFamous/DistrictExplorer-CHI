@@ -11396,6 +11396,26 @@ function initChiExplorer() {
   // layer 23 of the city's general-infrastructure service.
   var EAST_MOLINE_WARD_SERVICE = "https://services2.arcgis.com/AexCN3RZHA62zqjz/arcgis/rest/" +
     "services/General_mapping_Infrastructure_Update_This_File/FeatureServer/23";
+  /* The CITY of Rock Island's own 7 wards, on the city's org (rigov), with the
+   * alderman and a per-ward directory page on every polygon.
+   *
+   * This layer was held back from the pass-6 ward tranche and recorded as the
+   * gap rock-island-city-wards, for one reason: nothing published proved the
+   * lines were still in force. The service was created in 2017 from a 2012 map,
+   * its only population column is Pop_2010, no post-2020 redistricting
+   * ordinance could be found, and the city code library blocks automated access.
+   * The gap asked for one of three things, the second being "a clerk's
+   * statement that the older wards were kept".
+   *
+   * The City Clerk gave exactly that on 2026-08-03: "The existing ward
+   * boundaries were retained after the 2020 census." So Pop_2010 is a stale
+   * ATTRIBUTE on a current BOUNDARY — the city decided not to redraw — and the
+   * column is read nowhere rather than shown as if it described today.
+   *
+   * Seven wards arrive as EIGHT polygons: Ward Two is published in two parts.
+   * Both carry ID 2, so either answers the same seat (the DeKalb Ward 7 shape). */
+  var ROCK_ISLAND_CITY_WARD_SERVICE = "https://services.arcgis.com/MnSL3OxrZYrc6w4v/" +
+    "arcgis/rest/services/Wards_Map/FeatureServer/0";
   var loadRockIslandWards = makeCached(function () {
     return Promise.all(ROCK_ISLAND_WARD_LAYERS.map(function (spec) {
       return loadArcGISGeoJSON(ROCK_ISLAND_GIS + spec.service + "/FeatureServer/" + spec.id)
@@ -11415,6 +11435,24 @@ function initChiExplorer() {
             dxOfficial: findPropCI(p, ["alderman"]),
             dxEmail: findPropCI(p, ["alderman_email"]),
             dxPhone: findPropCI(p, ["alderman_phone_number"])
+          });
+        });
+      }, function () { return null; }),
+      loadArcGISGeoJSON(ROCK_ISLAND_CITY_WARD_SERVICE).then(function (geojson) {
+        return (geojson.features || []).map(function (f) {
+          var p = f.properties || {};
+          // The ward NUMBER comes from ID, not from Label: Label spells the
+          // number out ("Ward Two"), and the seat is numbered everywhere else.
+          //
+          // The layer's own Alderman column is READ NOWHERE — the Freeport and
+          // McLean-cities posture. The county clerk's roster already names all
+          // seven seats with their terms and phones, and it is the certified
+          // record; the GIS column merely restates it in familiar forms
+          // ("Randy" for Randall, "Bill" for William) and is one un-edited
+          // election away from being wrong. Only the per-ward directory page,
+          // which the roster does not carry, is taken from the feature.
+          return wardFeature(f, "Rock Island", "Ward", findPropCI(p, ["id"]), {
+            dxUrl: findPropCI(p, ["info"])
           });
         });
       }, function () { return null; })
