@@ -725,6 +725,141 @@ COUNTIES = {
             (39.5763, -89.7440, "Auburn — Sangamon County"),
         ],
     },
+    # The pass-10 frontier sweep (2026-08-03): nine counties touching the served
+    # ring that no earlier pass had probed. FOUR of them — Fulton, Hancock,
+    # Henderson and Warren — became frontier only because McDonough shipped the
+    # same day, which is the sweep's structural lesson: adding a county grows the
+    # frontier rather than shrinking it. None is served; these outlines exist so
+    # the Data gaps panel can place each county on the map.
+    "fulton": {
+        "fips": "057",
+        "name": "Fulton County",
+        "inside": [
+            (40.3956, -90.1526, "Lewistown (county seat)"),
+            (40.5581, -90.0351, "Canton"),
+            (40.6975, -90.0009, "Farmington"),
+            (40.2270, -90.3576, "Astoria"),
+        ],
+        "outside": [
+            (40.4592, -90.6718, "Macomb — McDonough County"),
+            (40.6936, -89.5890, "Peoria — Peoria County"),
+            (40.1200, -90.5665, "Rushville — Schuyler County"),
+            (40.2992, -90.0612, "Havana — Mason County"),
+        ],
+    },
+    "hancock": {
+        "fips": "067",
+        "name": "Hancock County",
+        "inside": [
+            (40.4164, -91.1354, "Carthage (county seat)"),
+            (40.5501, -91.3849, "Nauvoo"),
+            (40.3956, -91.3374, "Hamilton"),
+            (40.3564, -91.4346, "Warsaw"),
+        ],
+        "outside": [
+            (40.4592, -90.6718, "Macomb — McDonough County"),
+            (39.9356, -91.4098, "Quincy — Adams County"),
+            (40.1200, -90.5665, "Rushville — Schuyler County"),
+        ],
+    },
+    "henderson": {
+        "fips": "071",
+        "name": "Henderson County",
+        "inside": [
+            (40.9339, -90.9457, "Oquawka (county seat)"),
+            (40.7492, -90.9107, "Stronghurst"),
+            (40.8542, -90.8646, "Biggsville"),
+        ],
+        "outside": [
+            (40.9114, -90.6473, "Monmouth — Warren County"),
+            (40.4592, -90.6718, "Macomb — McDonough County"),
+            (41.1997, -90.7490, "Aledo — Mercer County"),
+        ],
+    },
+    "jackson": {
+        "fips": "077",
+        "name": "Jackson County",
+        "inside": [
+            (37.7645, -89.3348, "Murphysboro (county seat)"),
+            (37.7273, -89.2168, "Carbondale"),
+            (37.8878, -89.4923, "Ava"),
+        ],
+        "outside": [
+            (37.9134, -89.8223, "Chester — Randolph County"),
+            (38.0803, -89.3823, "Pinckneyville — Perry County"),
+            (37.7306, -88.9331, "Marion — Williamson County"),
+        ],
+    },
+    "jefferson": {
+        "fips": "081",
+        "name": "Jefferson County",
+        "inside": [
+            (38.3173, -88.9031, "Mount Vernon (county seat)"),
+            (38.2145, -89.0393, "Waltonville"),
+            (38.3273, -88.7345, "Bluford"),
+        ],
+        "outside": [
+            (38.6270, -88.9456, "Salem — Marion County"),
+            (38.0803, -89.3823, "Pinckneyville — Perry County"),
+            (38.3437, -89.3812, "Nashville — Washington County"),
+        ],
+    },
+    "marion": {
+        "fips": "121",
+        "name": "Marion County",
+        "inside": [
+            (38.6270, -88.9456, "Salem (county seat)"),
+            (38.5250, -89.1334, "Centralia"),
+            (38.6167, -89.0537, "Odin"),
+        ],
+        "outside": [
+            (38.3173, -88.9031, "Mount Vernon — Jefferson County"),
+            (38.3437, -89.3812, "Nashville — Washington County"),
+            (38.9606, -89.0937, "Vandalia — Fayette County"),
+        ],
+    },
+    "perry": {
+        "fips": "145",
+        "name": "Perry County",
+        "inside": [
+            (38.0803, -89.3823, "Pinckneyville (county seat)"),
+            (38.0114, -89.2373, "Du Quoin"),
+            (38.1370, -89.2278, "Tamaroa"),
+        ],
+        "outside": [
+            (37.9134, -89.8223, "Chester — Randolph County"),
+            (38.3437, -89.3812, "Nashville — Washington County"),
+            (37.7645, -89.3348, "Murphysboro — Jackson County"),
+        ],
+    },
+    "vermilion": {
+        "fips": "183",
+        "name": "Vermilion County",
+        "inside": [
+            (40.1245, -87.6300, "Danville (county seat)"),
+            (40.4670, -87.6684, "Hoopeston"),
+            (39.9773, -87.6353, "Georgetown"),
+        ],
+        "outside": [
+            (40.7767, -87.7361, "Watseka — Iroquois County"),
+            (40.4606, -88.0956, "Paxton — Ford County"),
+            (40.1106, -88.2073, "Urbana — Champaign County"),
+        ],
+    },
+    "warren": {
+        "fips": "187",
+        "name": "Warren County",
+        "inside": [
+            (40.9114, -90.6473, "Monmouth (county seat)"),
+            (40.7295, -90.6626, "Roseville"),
+            (40.8617, -90.7501, "Kirkwood"),
+        ],
+        "outside": [
+            (40.4592, -90.6718, "Macomb — McDonough County"),
+            (40.9478, -90.3712, "Galesburg — Knox County"),
+            (40.9339, -90.9457, "Oquawka — Henderson County"),
+        ],
+    },
     # McDonough — pass 9, found by asking its clerk after a nine-hostname sweep
     # wrongly concluded the county had no public website. Gates its county-board
     # and county-precinct dispatch entries.

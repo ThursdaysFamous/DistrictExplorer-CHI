@@ -76,6 +76,13 @@ COUNTY_FIPS = {
     "Cass": "017",
     "Whiteside": "195",
     "Peoria": "143",
+    # Two counties whose clerks sent a DOCUMENT rather than a link, on the same
+    # day: Marshall's 5-page elected-officers table and Washington's 40-page
+    # Blue Book. Neither is published on the county's website, so both are
+    # archived under data/source/raw/ and parsed from there — refreshing them
+    # means asking again rather than re-fetching a URL.
+    "Marshall": "123",
+    "Washington": "189",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -93,6 +100,9 @@ BOARD_OFFICES = {"trustee", "alderperson", "alderman", "alderwoman",
                  "councilperson"}
 OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
                    "taxpayer advocate", "collector", "supervisor",
+                   # Ashley (Washington County) elects one; a municipal finance
+                   # officer like the treasurer beside it, not hired staff
+                   "comptroller",
                    # Oak Grove (Rock Island) elects one officer to both
                    "clerk/treasurer",
                    # appointed staff LaSalle prints beside the elected officers;
@@ -244,6 +254,12 @@ PRESERVABLE = {
     "cass": {"kind": "county", "county": "Cass"},
     "whiteside": {"kind": "county", "county": "Whiteside"},
     "peoria": {"kind": "county", "county": "Peoria"},
+    # Both are archived DOCUMENTS rather than fetched pages, so their "scrape"
+    # cannot fail on a network blip — but they are preservable anyway, so that a
+    # parser regression carries last-good entries forward instead of dropping a
+    # county's whole governing body.
+    "marshall": {"kind": "county", "county": "Marshall"},
+    "washington": {"kind": "county", "county": "Washington"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -281,7 +297,7 @@ COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
                      "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
                      "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
-                     "Carroll", "Whiteside", "Lake"]
+                     "Carroll", "Whiteside", "Marshall", "Washington", "Lake"]
 
 
 def _fold(text):

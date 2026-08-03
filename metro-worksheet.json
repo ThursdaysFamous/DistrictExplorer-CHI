@@ -731,6 +731,69 @@
         "dynamic_reference": true
       },
       {
+        "file": "fulton-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Fulton County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "hancock-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Hancock County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "henderson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Henderson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jackson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jackson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jefferson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jefferson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marion-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Marion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "perry-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Perry County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "vermilion-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Vermilion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "warren-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Warren County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
         "file": "bureau-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -924,6 +987,42 @@
         "note": "McDonough's 3 county board districts, seven members each. DERIVED by scripts/build_mcdonough_board_districts.py: the 27 precincts above dissolved per the composition the county board page prints under each district heading, verified to be a perfect partition (4+12+11) before anything is unioned. The county DOES publish a board-district layer, but its attribute table is corrupt — two districts share an identical population and acreage to eight decimals, the third has neither — so that layer is used only as a geometric cross-check, which the derivation passes at better than 0.999 IoU on all three."
       },
       {
+        "file": "ogle-precincts.json",
+        "min_features": 51,
+        "max_features": 51,
+        "note": "Ogle's 51 CURRENT voting precincts, each with its township. The county publishes no precinct boundaries — a 51-page PDF map book and a points-only polling dataset — so this comes from a shapefile the county's GIS Coordinator sent by e-mail 2026-08-03, archived under data/source/raw/ and reprojected from EPSG:3436 by scripts/build_ogle_precincts.py. Bounds are an EQUALITY because the count is the substance of the answer: the app already had the 2020 Census versions (the board districts are dissolved from them) but that was the 52-precinct fabric, and shipping it would have put the retired Forreston 3 on a card. The County Clerk supplied the missing half in one line — Forreston 1 and 2 became Forreston 1, Forreston 3 became 2 — which the builder asserts against the data rather than trusting."
+      },
+      {
+        "file": "stark-county-board-districts.json",
+        "min_features": 2,
+        "max_features": 2,
+        "note": "Stark's 2 county board districts, FOUR members each — the smallest board the layer carries. Built by scripts/build_stark_districts.py from the County Clerk's own Google My Maps, the county's entire GIS. That map was unusable for a year because its DATE could not be established (the state's pointer files are from August 2020, before the late-2021 redistricting, and the county's online minutes only begin in July 2022), and what settled it was asking: Clerk Heather Hollis wrote on 2026-08-03 that \"the board districts and precincts are correct\" and that \"the only thing that changed on the map is the congressional district\". Bounds are an EQUALITY: the county has exactly two districts, and each is a whole-precinct union cross-checked at build time with every precinct >=99.99% inside its district."
+      },
+      {
+        "file": "stark-precincts.json",
+        "min_features": 9,
+        "max_features": 9,
+        "note": "Stark's 9 voting precincts — the county's eight congressional-survey townships with Toulon split east/west, which is why they are drawn as near-rectangles and why that is correct rather than approximate. Same clerk-confirmed My Maps source as the board districts, and the two folders agree exactly: the board composition names all 9 precincts exactly once. No polling place is published as data. Clipped to the TIGER county outline, since a Stark precinct cannot lie outside Stark."
+      },
+      {
+        "file": "stark-fire-districts.json",
+        "min_features": 6,
+        "max_features": 6,
+        "note": "Stark's 6 fire departments from the clerk-confirmed My Maps. Uniquely in the fire layer, the source also names who responds with an AMBULANCE, and it is not always the fire department — three districts are covered by Stark County Ambulance, Bradford by Bradford Rescue Squad, Kewanee Rural and Neponset by themselves — so that column ships as its own card row. Tiles 99.65% of the county; Toulon and LaFayette overlap by 0.024% on a hand-drawn seam."
+      },
+      {
+        "file": "stark-library-districts.json",
+        "min_features": 6,
+        "max_features": 6,
+        "note": "Stark's 6 library districts from the clerk-confirmed My Maps. Two of the six (Kewanee, Williamsfield) are seated in a NEIGHBOURING county and reach across the line, which is why the county drew them — a Stark resident's library is not always a Stark library."
+      },
+      {
+        "file": "stark-park-districts.json",
+        "min_features": 2,
+        "max_features": 2,
+        "note": "Stark's 2 park districts (LaFayette, Bradford) from the clerk-confirmed My Maps — together about 9% of the county, the rest genuinely sitting in none. NAME ONLY: this folder carries a `Fire Department` column left over from whoever built it by copying the fire layer, and it is confidently wrong rather than blank (\"LaFayette Park District\" claims a fire department), so the builder never carries it forward and nothing reads it."
+      },
+      {
         "file": "mason-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -1085,8 +1184,8 @@
       },
       {
         "file": "municipal-officials.json",
-        "min_keys": 440,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb and the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island) shipped — 492 municipalities — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
+        "min_keys": 500,
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell) and the two counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table and Washington's 40-page Blue Book, both archived under data/source/raw/ and parsed from there — shipped: 575 municipalities — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
       },
       {
         "file": "lasalle-county-board-members.json",
@@ -1102,6 +1201,11 @@
         "file": "carroll-precinct-polling.json",
         "min_keys": 3,
         "note": "Carroll County precinct polling places, expanded from the clerk's published polling notice by scripts/build_carroll_precinct_polling.py against the county's 22 unchanged Census-2020 precinct names (deterministic grouped-label expansion; --check compares against the live notice). Per-election, like Logan's."
+      },
+      {
+        "file": "whiteside-precinct-polling.json",
+        "min_keys": 3,
+        "note": "The TWO voting locations Whiteside County references but does not publish. Its precinct layer points at facility ids 22 and 26, which are absent from the 29 locations its own polling layer publishes, leaving Sterling 9/14/18 and Prophetstown 1 with no polling place on the card. County Clerk Karen Stralow named both buildings by e-mail on 2026-08-03 — facility 22 is Self Help Enterprises, facility 26 is Winning Wheels — and this file exists only to fill those two ids. The loader consults it ONLY when the county's own layer has no match, so publishing those facilities upstream retires it silently. Building names only: the Clerk gave names, not addresses, and an address looked up elsewhere would not be hers. Unlike Logan's and Carroll's this is NOT a whole-county polling table and has no builder — it is two hand-entered records from a named source."
       },
       {
         "file": "woodford-county-board-members.json",
@@ -1172,6 +1276,11 @@
         "file": "mcdonough-county-board-members.json",
         "min_keys": 3,
         "note": "McDonough County Board members keyed by district (3 districts of SEVEN members each = 21, the county's full board), scraped weekly from http://mcg.mcdonough.il.us/members.html — the same page whose district headings supply the boundary composition, so membership and boundary move together and are checked together. The page prints every member's HOME ADDRESS and none is collected: the scraper reads only the phone out of that cell, and the builder refuses to write any field whose name looks like an address."
+      },
+      {
+        "file": "stark-county-board-members.json",
+        "min_keys": 2,
+        "note": "Stark County Board members keyed by district (2 districts of four = 8, the county's full board; 8/8 with an e-mail and a term year, Chair and Vice-Chair badged). Scraped weekly from the county's Elected Officials page. The e-mail addresses belong to the SEAT rather than the person — boarddist1-1 through boarddist2-4 — which is better practice than most of the fleet manages and means the contact survives turnover; the builder asserts that pattern still holds and fails if a personal address appears in its place. No member home addresses are published by the county, and the address-key assertion runs anyway so that the day it starts, the build fails rather than the app quietly shipping them."
       },
       {
         "file": "mason-county-board-members.json",
@@ -1384,6 +1493,16 @@
       "file": "update-marshall-county-board-roster.yml",
       "purpose": "Marshall County Board roster + township-composition drift check",
       "schedule": "Mon 18:00 UTC"
+    },
+    {
+      "file": "update-mcdonough-county-board-roster.yml",
+      "purpose": "McDonough County Board roster + derived-boundary drift check (mcg.mcdonough.il.us, HTTP-only)",
+      "schedule": "Mon 19:00 UTC"
+    },
+    {
+      "file": "update-stark-county-board-roster.yml",
+      "purpose": "Stark County Board roster (starkco.illinois.gov) + drift check on the five boundaries built from the Clerk's archived Google My Maps export",
+      "schedule": "Tue 19:00 UTC"
     },
     {
       "file": "watch-mason-roster-source.yml",

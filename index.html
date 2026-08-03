@@ -8331,6 +8331,62 @@ function initChiExplorer() {
   var loadMcdonoughPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/mcdonough-precincts.json", {}, 2);
   });
+  /* Stark — the county whose entire GIS is a GOOGLE MY MAPS, and the first one
+   * unlocked by a clerk's sentence rather than by finding a file.
+   *
+   * Stark has ~5,300 residents, no GIS server, no shapefiles and no open-data
+   * portal. What its County Clerk keeps instead is one hand-maintained Google
+   * My Maps, and it is unusually complete: board districts, precincts, fire,
+   * library and park districts all live in it. The state's pointer file for
+   * Stark contains nothing but a link to that map.
+   *
+   * For a year that map was unusable to us for exactly one reason — DATE. The
+   * state's pointer and its companion files are from August 2020, BEFORE the
+   * late-2021 redistricting, and the county's online minutes only begin in July
+   * 2022, so the adopting resolution is published nowhere reachable. A map that
+   * might or might not predate a redistricting is not a source, and no amount
+   * of further searching could have made it one. What settled it was asking:
+   * County Clerk Heather Hollis wrote on 3 Aug 2026 that "the board districts
+   * and precincts are correct" and that "the only thing that changed on the map
+   * is the congressional district." So we build both halves of that sentence
+   * and nothing else — the congressional districts she names as changed are the
+   * one folder we take from this map under no circumstances (TIGERweb already
+   * answers those), and the school/ZIP/municipality folders are skipped because
+   * those are statewide layers here, not Stark's to supply.
+   *
+   * Hand-drawn does not mean approximate here, and the build measures rather
+   * than assumes: the precincts ARE congressional-survey townships, so a
+   * rectangle is the correct shape for one, and the two folders drawn most
+   * independently agree exactly — every board district is a whole-precinct
+   * union with each precinct >=99.99% inside it. See
+   * scripts/build_stark_districts.py for the full measurement, including the
+   * park folder's stale `Fire Department` column, which is read nowhere. */
+  var loadStarkCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-county-outline.json", {}, 2);
+  });
+  function starkCountyCoverage(point) {
+    return loadStarkCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadStarkBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-county-board-districts.json", {}, 2);
+  });
+  var loadStarkBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-county-board-members.json", {}, 2);
+  });
+  var loadStarkPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-precincts.json", {}, 2);
+  });
+  var loadStarkFire = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-fire-districts.json", {}, 2);
+  });
+  var loadStarkLibrary = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-library-districts.json", {}, 2);
+  });
+  var loadStarkPark = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stark-park-districts.json", {}, 2);
+  });
   var IROQUOIS_GIS = "https://services6.arcgis.com/6FZQl5a5SiSFMv8P/arcgis/rest/services/";
   function loadIroquoisLayer(service, layerIndex, outFields, label) {
     var url = IROQUOIS_GIS + service + "/FeatureServer/" + layerIndex +
@@ -9439,6 +9495,33 @@ function initChiExplorer() {
   var loadOgleBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/ogle-county-board-members.json", {}, 2);
   });
+  /* Ogle's 51 CURRENT precincts, and the reason they took two answers to ship.
+   *
+   * The county publishes no precinct boundaries — a 51-page PDF map book and a
+   * points-only polling dataset, nothing more. The 2020 Census versions were
+   * available all along (the board districts above are dissolved from them),
+   * but that was the 52-precinct fabric of 2020 and the county now runs 51: it
+   * had retired Forreston 3, and nothing published said where its territory
+   * went. Shipping the old set would have put a precinct on a card that no
+   * longer exists.
+   *
+   * Both halves arrived on 2026-08-03. GIS Coordinator Kris Gilbert sent the
+   * shapefile; County Clerk Becky Duke answered the other half in one line —
+   * "Forreston 1 and 2 became Forreston 1. Forreston 3 became 2." The builder
+   * asserts that statement against the data rather than trusting it, and the
+   * two new Forreston precincts measure 99.88% and 99.99% inside board District
+   * 7, which is where all three of the old ones sat — so the retirement moved
+   * no board line, exactly as the gap record predicted.
+   *
+   * THE BOARD DISTRICT IS A SPATIAL JOIN HERE, not the membership lookup Stark
+   * and McDonough use. The board districts carry their composition from the
+   * 2021 resolution, which names the bare townships ("Dement", "Lynnville")
+   * where this shapefile numbers them ("Dement 1", "Lynnville 1"), so an exact
+   * name match would silently miss them. Containment was measured instead:
+   * every one of the 51 sits at least 97.3% inside a single district. */
+  var loadOglePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ogle-precincts.json", {}, 2);
+  });
 
   /* Stephenson carries the fleet's ONLY georeferenced boundary, and the card
    * says so rather than leaving it in a build script.
@@ -9636,6 +9719,11 @@ function initChiExplorer() {
   var loadWhitesidePrecincts = makeCached(function () {
     return loadWhitesideLayer(1, "name,precinctid,pollingid", "Whiteside County precincts");
   });
+  /* The two voting locations the county references but does not publish — see
+   * the whiteside county-precinct entry for why this file is this small. */
+  var loadWhitesideClerkPolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/whiteside-precinct-polling.json", {}, 2);
+  });
   var loadWhitesidePollingPlaces = makeCached(function () {
     return loadWhitesideLayer(0, "facilityid,name,fulladdr,municipality,pstlzip5,phone",
       "Whiteside County polling places");
@@ -9783,6 +9871,23 @@ function initChiExplorer() {
   });
   var loadBooneBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/boone-county-board-members.json", {}, 2);
+  });
+  /* Boone's 5 fire districts, and the county identifies them BY NUMBER — there
+   * is no name column on the layer and no county list of names behind it.
+   *
+   * This was a recorded gap rather than an oversight: a card reading "Fire
+   * District 1" looked like it told a reader nothing they could act on, so the
+   * boundaries sat unshipped waiting for names. Asking the County Clerk settled
+   * it in the opposite direction from the one expected. Amy Ohlsen replied on
+   * 2026-08-03 with names — and then volunteered that she had "just done a
+   * google search to get these names", and that "when we complete tax
+   * extensions, it is just 1-5". So the names she sent are not a county record
+   * and are deliberately NOT used; the numbers are, because they are what the
+   * county's own tax extensions run on. The layer ships numbered, saying so,
+   * which is the honest form of this data rather than a degraded one. */
+  var loadBooneFire = makeCached(function () {
+    return loadCountyMapServerLayer(BOONE_GIS + "Fire_Districts", 0,
+      "district", "Boone County fire districts");
   });
 
   var GRUNDY_GIS = "https://maps.grundyco.org/arcgis/rest/services/";
@@ -13262,10 +13367,15 @@ function initChiExplorer() {
       key: opts.key,
       coverage: opts.coverage,
       loadGeometry: opts.loader,
-      hoverName: primaryField ? function (feature) {
+      // Derived from the same field the card reads, so hover and card cannot
+      // disagree about a district's identity. The exception is an entry whose
+      // primary value is a bare NUMBER — Boone names its fire districts 1-5 —
+      // which would hover as a meaningless "3". Those pass opts.hoverName to
+      // say "Fire District 3"; it still reads the same property.
+      hoverName: opts.hoverName || (primaryField ? function (feature) {
         var v = findPropCI(feature.properties || {}, primaryField.keys);
         return (v == null || v === "") ? null : String(v);
-      } : undefined,
+      } : undefined),
       query: function (point, seq) {
         return opts.loader().then(function (geojson) {
           var feature = findFeatureContaining(geojson, point);
@@ -15354,6 +15464,70 @@ function initChiExplorer() {
           }
         }
       },
+      // Stark — 2 districts of FOUR members each, the smallest board the layer
+      // carries. Boundary from the County Clerk's own Google My Maps, which she
+      // confirmed current on 3 Aug 2026 (see loadStarkBoardDistricts above);
+      // roster scraped weekly from the county's Elected Officials page.
+      //
+      // Stark gives each SEAT its own mailbox — boarddist1-1 through
+      // boarddist2-4 — rather than publishing members' personal addresses, so
+      // the contact on this card survives turnover. The builder asserts that
+      // pattern still holds and fails if a personal address appears in its place.
+      {
+        key: "stark",
+        coverage: starkCountyCoverage,
+        loadGeometry: loadStarkBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : "District " + String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStarkBoardDistricts(),
+            loadStarkBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Stark County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Stark County Board (official)",
+            url: "https://starkco.illinois.gov/government/elected-officials-and-staff"
+          };
+        },
+        hoverOfficial: {
+          load: loadStarkBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       {
         key: "iroquois",
         coverage: iroquoisCountyCoverage,
@@ -16216,6 +16390,41 @@ function initChiExplorer() {
           { label: "Note", value: "Boundary georeferenced from the county's 2014-published fire district map — the newest the county publishes. Lines are approximate and predate any later changes." },
           { label: "County", value: "Stephenson County" }
         ]
+      }),
+      // Boone — 5 districts the county identifies by NUMBER, not by name (see
+      // loadBooneFire). The pill reads "Fire District 3" and a note says why,
+      // rather than the card implying a name exists and is missing.
+      polygonCountyEntry({
+        key: "boone",
+        coverage: booneCountyCoverage,
+        loader: loadBooneFire,
+        pill: true,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || String(v) === "") ? null : "Fire District " + String(v);
+        },
+        fields: [
+          { name: "district", label: "Fire District", keys: ["district"], primary: true },
+          { label: "Note", value: "Boone County identifies its fire protection districts by number rather than by name — the numbering its tax extensions are run on. The county publishes no name for them." },
+          { label: "County", value: "Boone County" }
+        ]
+      }),
+      // Stark — 6 departments from the County Clerk's own Google My Maps
+      // (clerk-confirmed 3 Aug 2026; see loadStarkFire). Uniquely in this
+      // layer, the source also names WHO RESPONDS WITH AN AMBULANCE, and it is
+      // not always the fire department: three districts are covered by Stark
+      // County Ambulance, Bradford by Bradford Rescue Squad, and Kewanee Rural
+      // and Neponset run their own. That is a real fact about the point you
+      // clicked, so it gets a row.
+      polygonCountyEntry({
+        key: "stark",
+        coverage: starkCountyCoverage,
+        loader: loadStarkFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["name"], primary: true },
+          { name: "ambulance", label: "Ambulance", keys: ["ambulance"] },
+          { label: "County", value: "Stark County" }
+        ]
       })
     ]
   });
@@ -16389,6 +16598,24 @@ function initChiExplorer() {
           var site = result && result.website ? safeHttpUrl(result.website) : null;
           return site ? { label: (result.name || "Park district") + " (official)", url: site } : null;
         }
+      }),
+      // Stark levies two park districts (LaFayette and Bradford), together
+      // about 9% of the county — the rest genuinely sits in none.
+      //
+      // NAME ONLY. This folder of the county's map carries a `Fire Department`
+      // column left over from whoever built it by copying the fire layer, and
+      // it is confidently wrong rather than merely blank: "LaFayette Park
+      // District" claims a fire department. The builder never carries it
+      // forward and nothing here reads it — the same posture as Freeport's
+      // stale officer column and Peoria's stale REPNAME.
+      polygonCountyEntry({
+        key: "stark",
+        coverage: starkCountyCoverage,
+        loader: loadStarkPark,
+        fields: [
+          { name: "name", label: "Park District", keys: ["name"], primary: true },
+          { label: "County", value: "Stark County" }
+        ]
       })
     ]
   });
@@ -16635,6 +16862,19 @@ function initChiExplorer() {
           var site = result && result.website ? safeHttpUrl(result.website) : null;
           return site ? { label: (result.name || "Library district") + " (official)", url: site } : null;
         }
+      }),
+      // Stark's 6 — from the County Clerk's own Google My Maps. Two of the six
+      // (Kewanee, Williamsfield) are libraries seated in the NEIGHBOURING
+      // county whose districts reach across the line, which is why the county
+      // drew them: a Stark resident's library is not always a Stark library.
+      polygonCountyEntry({
+        key: "stark",
+        coverage: starkCountyCoverage,
+        loader: loadStarkLibrary,
+        fields: [
+          { name: "name", label: "Library District", keys: ["name"], primary: true },
+          { label: "County", value: "Stark County" }
+        ]
       })
     ]
   });
@@ -17594,10 +17834,22 @@ function initChiExplorer() {
         }
       },
       // Whiteside — 60 precincts, each carrying a pollingid that joins the
-      // county's own polling-place layer. The join resolves 55 of 60: three
-      // facility ids the precincts reference (22, 26, 32) are absent from the
-      // published locations, so five precincts show identity only rather than a
-      // guessed address. Recorded as a gap, not papered over.
+      // county's own polling-place layer. The county publishes 29 locations and
+      // its precincts reference two ids that are not among them — 22 and 26 —
+      // leaving Sterling 9, 14 and 18 (all facility 22) and Prophetstown 1
+      // (facility 26) with nowhere to vote on the card. County Clerk Karen
+      // Stralow named both buildings by e-mail on 2026-08-03: facility 22 is
+      // Self Help Enterprises, facility 26 is Winning Wheels. They ship in
+      // whiteside-precinct-polling.json and are consulted ONLY when the
+      // county's own layer has no match, so the day the county publishes those
+      // two facilities the file stops being read with nothing to change here.
+      //
+      // The fallback is deliberately narrow. An earlier draft of this work also
+      // hardcoded Coloma 9 from a separate statement of hers — and measurement
+      // showed the county's layer already resolved it correctly (facility 4,
+      // Rock River Christian Center), so that override was reverted before it
+      // shipped. An override for data that is already right is dead code that
+      // rots silently; only genuinely absent records belong in that file.
       {
         key: "whiteside",
         coverage: whitesideCountyCoverage,
@@ -17610,21 +17862,31 @@ function initChiExplorer() {
           return Promise.all([
             loadWhitesidePrecincts(),
             loadWhitesidePollingPlaces().catch(function () { return null; }),
-            loadWhitesideCountyBoard().catch(function () { return null; })
+            loadWhitesideCountyBoard().catch(function () { return null; }),
+            loadWhitesideClerkPolling().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var props = feature.properties || {};
             var pollingId = findPropCI(props, ["pollingid"]);
             var polling = null;
-            if (results[1] && pollingId != null && String(pollingId) !== "") {
+            var fromClerk = false;
+            if (pollingId != null && String(pollingId) !== "") {
               var wanted = String(pollingId);
-              (results[1].features || []).some(function (f) {
-                var fid = findPropCI(f.properties || {}, ["facilityid"]);
-                if (fid == null || String(fid) !== wanted) return false;
-                polling = f.properties || {};
-                return true;
-              });
+              if (results[1]) {
+                (results[1].features || []).some(function (f) {
+                  var fid = findPropCI(f.properties || {}, ["facilityid"]);
+                  if (fid == null || String(fid) !== wanted) return false;
+                  polling = f.properties || {};
+                  return true;
+                });
+              }
+              // Only when the county's own layer has nothing for this id.
+              if (!polling && results[3] && results[3].facilities &&
+                  results[3].facilities[wanted]) {
+                polling = results[3].facilities[wanted];
+                fromClerk = true;
+              }
             }
             var boardDistrict = null;
             if (results[2]) {
@@ -17636,7 +17898,8 @@ function initChiExplorer() {
               seq: seq,
               name: name != null && String(name).trim() ? String(name).trim() : null,
               boardDistrict: boardDistrict,
-              polling: polling
+              polling: polling,
+              pollingFromClerk: fromClerk
             };
           });
         },
@@ -17645,13 +17908,20 @@ function initChiExplorer() {
           if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
           var p = result.polling;
           if (p) {
-            var place = findPropCI(p, ["name"]);
+            // the clerk's records carry `place`; the county GIS carries `name`
+            var place = findPropCI(p, ["place", "name"]);
             if (place) fields.push({ label: "Polling place", value: String(place) });
             var addr = findPropCI(p, ["fulladdr"]);
             var city = findPropCI(p, ["municipality"]);
             var zip = findPropCI(p, ["pstlzip5"]);
             var line = [addr, [city, zip].filter(Boolean).join(" ")].filter(Boolean).join(", ");
             if (line) fields.push({ label: "Address", value: line });
+            if (result.pollingFromClerk) {
+              fields.push({
+                label: "Note",
+                value: "This building is not in the county's published list of voting locations — the County Clerk named it directly. No address was given, so none is shown."
+              });
+            }
           }
           fields.push({ label: "County", value: "Whiteside County" });
           return renderFieldStack(fields);
@@ -18238,6 +18508,113 @@ function initChiExplorer() {
           return {
             label: "McDonough County Clerk — Elections (official)",
             url: "http://mcg.mcdonough.il.us/voterreg.html"
+          };
+        }
+      },
+      // Ogle — 51 precincts from the county GIS Coordinator's own shapefile
+      // (see loadOglePrecincts). Township comes off the feature; the board
+      // district is a spatial join, for the naming reason recorded there. No
+      // polling place: the county's polling dataset is points with no precinct
+      // key, so there is nothing to join on.
+      {
+        key: "ogle",
+        coverage: ogleCountyCoverage,
+        loadGeometry: loadOglePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadOglePrecincts(),
+            loadOgleCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              township: findPropCI(props, ["township"]),
+              boardDistrict: district
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Ogle County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Ogle County Clerk — Elections (official)",
+            url: "https://www.oglecountyil.gov/departments/county_clerk_and_recorder/elections.php"
+          };
+        }
+      },
+      // Stark — 9 precincts, which are the county's eight survey townships with
+      // Toulon split east/west. No polling place is published as data, so the
+      // card carries the identity and the board district and links the Clerk.
+      // The board district is exact rather than a spatial join: the board
+      // districts were cross-checked as whole-precinct unions at build time and
+      // each district feature carries the list it is made of.
+      {
+        key: "stark",
+        coverage: starkCountyCoverage,
+        loadGeometry: loadStarkPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStarkPrecincts(),
+            loadStarkBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var name = findPropCI(feature.properties || {}, ["name"]);
+            name = (name == null) ? "" : String(name).trim();
+            var district = null;
+            var districts = (results[1] && results[1].features) || [];
+            for (var i = 0; i < districts.length; i++) {
+              var dp = districts[i].properties || {};
+              var list = dp.precincts || [];
+              for (var j = 0; j < list.length; j++) {
+                if (String(list[j]) === name) { district = String(dp.district); break; }
+              }
+              if (district) break;
+            }
+            return { seq: seq, name: name || null, boardDistrict: district };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) {
+            fields.push({ label: "County Board District", value: "District " + result.boardDistrict });
+          }
+          fields.push({ label: "County", value: "Stark County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Stark County Clerk — Elections (official)",
+            url: "https://starkco.illinois.gov/elections/election-news"
           };
         }
       },
