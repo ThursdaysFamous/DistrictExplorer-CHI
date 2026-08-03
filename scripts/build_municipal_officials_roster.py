@@ -299,6 +299,43 @@ COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
                      "Carroll", "Whiteside", "Marshall", "Washington", "Lake"]
 
+# ONE municipality at a time, where evidence settles a cross-county tie that
+# the general rules above get wrong. Keyed by Census GEOID -> (county, reason).
+# The reason is not a comment: the build refuses to run without one, because
+# overriding the ordering for a single place is precisely the edit that should
+# never be possible to make quietly.
+#
+# This is deliberately NOT a reordering of COUNTY_PRECEDENCE. The ordering is a
+# statement about two counties in general; an override is a statement about one
+# town, and the evidence here is about one town.
+PLACE_SOURCE_OVERRIDE = {
+    # Wenona straddles the Marshall/LaSalle line and both clerks publish it in
+    # full, so depth cannot separate them and LaSalle wins on ordering. The two
+    # lists disagree about the council: LaSalle names eight alderpersons and no
+    # treasurer, Marshall names six trustees plus a treasurer, dates every seat
+    # 2027 or 2029, and carries three direct phone numbers where LaSalle repeats
+    # the city-hall line on every row.
+    #
+    # What settles it is provenance, not our reading of which looks fresher.
+    # Marshall County Clerk Jill Kenyon, asked directly on 2026-08-03: "I just
+    # go by what the City has furnished to me." That is a chain — City of Wenona
+    # to its county clerk to here — and LaSalle's directory states no origin at
+    # all. Marshall's document is also not careless about the distinction it is
+    # being trusted on: it labels the board of its three OTHER cities
+    # "Alderperson" and only Wenona's "Trustee", so that word is the city's, not
+    # a habit of the table.
+    #
+    # Three people LaSalle names (Julia Kitchens, Randy Lohr, William Simmons)
+    # are therefore no longer shown, and Matt Zulz and Treasurer Jaclyn DeRubeis
+    # now are. The disagreement itself stays on the record as the gap
+    # wenona-two-clerks-disagree rather than being retired, because only one of
+    # the two clerks has explained where her list comes from.
+    "1779813": ("Marshall",
+                "Marshall's clerk states her list is furnished by the City "
+                "itself (e-mail, 2026-08-03); LaSalle's directory names no "
+                "source. See wenona-two-clerks-disagree."),
+}
+
 
 def _fold(text):
     """Shared tail of both normalizers: expand "Mt.", then letters only.
@@ -729,8 +766,27 @@ def describe_depth(entry):
             0: "contact only"}[entry_depth(entry)]
 
 
-def pick_entry(a, b):
+def pick_entry(a, b, geoid=None):
     """-> (kept, dropped) for one municipality claimed by two counties."""
+    override = PLACE_SOURCE_OVERRIDE.get(geoid)
+    if override:
+        county, reason = override
+        if not reason or not reason.strip():
+            print("FATAL: PLACE_SOURCE_OVERRIDE[%r] carries no reason" % geoid,
+                  file=sys.stderr)
+            sys.exit(1)
+        # Only act when the named county is actually one of the two in hand.
+        # If it is not, the override has gone stale — the county stopped
+        # publishing this place, or its name changed — and silently falling
+        # back to the ordering would undo a decision made on evidence.
+        if a["county"] == county:
+            return a, b
+        if b["county"] == county:
+            return b, a
+        print("FATAL: PLACE_SOURCE_OVERRIDE[%r] names %s County, but this place "
+              "is claimed by %s and %s — the override is stale"
+              % (geoid, county, a["county"], b["county"]), file=sys.stderr)
+        sys.exit(1)
     if entry_depth(a) != entry_depth(b):
         return (a, b) if entry_depth(a) > entry_depth(b) else (b, a)
     rank = {c: i for i, c in enumerate(COUNTY_PRECEDENCE)}
@@ -784,12 +840,15 @@ def main():
         if geoid not in roster:
             roster[geoid] = entry
             return
-        keep, drop = pick_entry(roster[geoid], entry)
+        keep, drop = pick_entry(roster[geoid], entry, geoid)
+        override = PLACE_SOURCE_OVERRIDE.get(geoid)
         print("NOTE: %s (%s) is listed by both %s and %s County — keeping the "
-              "%s entry (%s)" % (geoid, keep["name"], roster[geoid]["county"],
-                                 entry["county"], keep["county"],
-                                 describe_depth(keep)), file=sys.stderr)
-        if drop.get("board") and not keep.get("board"):
+              "%s entry (%s)%s" % (geoid, keep["name"], roster[geoid]["county"],
+                                   entry["county"], keep["county"],
+                                   describe_depth(keep),
+                                   " [OVERRIDE: %s]" % override[1] if override else ""),
+              file=sys.stderr)
+        if drop.get("board") and not keep.get("board") and not override:
             print("FATAL: dropped entry for %s had a board and the kept one "
                   "does not — precedence is wrong" % geoid, file=sys.stderr)
             sys.exit(1)

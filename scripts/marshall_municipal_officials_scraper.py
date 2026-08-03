@@ -95,6 +95,9 @@ BARE_SEAT_RE = re.compile(r"(?i)^Trustee\(?s\)?\s*[-:]?\s*$")
 OFFICE_WORDS = ("Mayor", "President", "Clerk", "Treasurer", "Comptroller",
                 "Supervisor", "Collector", "Attorney")
 PHONE_LABEL_RE = re.compile(r"(?i)^phone:?$")
+# The same label with no space before the number, which the document does once.
+PHONE_LABEL_GLUED_RE = re.compile(
+    r"(?i)^phone:\s*(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})$")
 VACANT_RE = re.compile(r"(?i)^vacant\b")
 
 
@@ -232,8 +235,18 @@ def scrape(path, warnings):
 
                 first = row[0]["text"].strip()
 
-                # "Phone: 309-238-8665" continues the previous person's record
-                if PHONE_LABEL_RE.match(first.rstrip(":")) and last is not None:
+                # "Phone: 309-238-8665" continues the previous person's record.
+                # The label and the number are usually separate words, but the
+                # document is not consistent about the space after the colon —
+                # Wenona's city clerk is written "Phone:708-882-3173" as ONE
+                # word, and reading only row[1:] dropped her number silently
+                # (14 of the document's 15 numbers have the space, which is
+                # exactly why the odd one out went unnoticed).
+                glued = PHONE_LABEL_GLUED_RE.match(first)
+                if (glued or PHONE_LABEL_RE.match(first.rstrip(":"))) and last is not None:
+                    if glued:
+                        last["person_phone"] = glued.group(1)
+                        continue
                     for word in row[1:]:
                         if PHONE_RE.match(word["text"].strip(".,")):
                             last["person_phone"] = word["text"].strip(".,")
