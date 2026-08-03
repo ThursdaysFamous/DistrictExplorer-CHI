@@ -17838,11 +17838,14 @@ function initChiExplorer() {
       // its precincts reference two ids that are not among them — 22 and 26 —
       // leaving Sterling 9, 14 and 18 (all facility 22) and Prophetstown 1
       // (facility 26) with nowhere to vote on the card. County Clerk Karen
-      // Stralow named both buildings by e-mail on 2026-08-03: facility 22 is
-      // Self Help Enterprises, facility 26 is Winning Wheels. They ship in
-      // whiteside-precinct-polling.json and are consulted ONLY when the
-      // county's own layer has no match, so the day the county publishes those
-      // two facilities the file stops being read with nothing to change here.
+      // Stralow named both buildings by e-mail on 2026-08-03 — facility 22 is
+      // Self Help Enterprises, facility 26 is Winning Wheels — and supplied
+      // their street addresses on a follow-up, so these four cards now show a
+      // polling place and an address like every other precinct in the county.
+      // They ship in whiteside-precinct-polling.json and are consulted ONLY
+      // when the county's own layer has no match, so the day the county
+      // publishes those two facilities the file stops being read with nothing
+      // to change here.
       //
       // The fallback is deliberately narrow. An earlier draft of this work also
       // hardcoded Coloma 9 from a separate statement of hers — and measurement
@@ -17908,18 +17911,19 @@ function initChiExplorer() {
           if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
           var p = result.polling;
           if (p) {
-            // the clerk's records carry `place`; the county GIS carries `name`
+            // the clerk's records carry `place`/`address`/`city`/`zip`; the
+            // county GIS carries `name`/`fulladdr`/`municipality`/`pstlzip5`
             var place = findPropCI(p, ["place", "name"]);
             if (place) fields.push({ label: "Polling place", value: String(place) });
-            var addr = findPropCI(p, ["fulladdr"]);
-            var city = findPropCI(p, ["municipality"]);
-            var zip = findPropCI(p, ["pstlzip5"]);
+            var addr = findPropCI(p, ["fulladdr", "address"]);
+            var city = findPropCI(p, ["municipality", "city"]);
+            var zip = findPropCI(p, ["pstlzip5", "zip"]);
             var line = [addr, [city, zip].filter(Boolean).join(" ")].filter(Boolean).join(", ");
             if (line) fields.push({ label: "Address", value: line });
             if (result.pollingFromClerk) {
               fields.push({
                 label: "Note",
-                value: "This building is not in the county's published list of voting locations — the County Clerk named it directly. No address was given, so none is shown."
+                value: "This polling place is not in the county's published list of voting locations — the County Clerk supplied it directly."
               });
             }
           }
