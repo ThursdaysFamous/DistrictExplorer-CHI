@@ -993,6 +993,12 @@
         "note": "Ogle's 51 CURRENT voting precincts, each with its township. The county publishes no precinct boundaries — a 51-page PDF map book and a points-only polling dataset — so this comes from a shapefile the county's GIS Coordinator sent by e-mail 2026-08-03, archived under data/source/raw/ and reprojected from EPSG:3436 by scripts/build_ogle_precincts.py. Bounds are an EQUALITY because the count is the substance of the answer: the app already had the 2020 Census versions (the board districts are dissolved from them) but that was the 52-precinct fabric, and shipping it would have put the retired Forreston 3 on a card. The County Clerk supplied the missing half in one line — Forreston 1 and 2 became Forreston 1, Forreston 3 became 2 — which the builder asserts against the data rather than trusting."
       },
       {
+        "file": "stephenson-precincts.json",
+        "min_features": 36,
+        "max_features": 36,
+        "note": "Stephenson's 36 CURRENT voting precincts \u2014 20 rural + Freeport 01-16. Bounds are an EQUALITY because the two source maps enumerate the whole county exactly once. For a year the app recorded that Stephenson published no current precinct boundaries; it does, as two vector PDFs on the County Clerk's own Elections page, which Clerk Jazmin Wingert pointed at on 2026-08-03 in reply to a records request. Georeferenced by scripts/build_stephenson_precincts.py, which proves the transcription two ways before writing: the 36 printed populations total 44,630, the county's live Census 2020 POP100 to the person, and the Freeport sixteen are cross-checked against the SAME sixteen polygons the board-district map draws \u2014 read off a different document, georeferenced independently, and agreeing 16/16 on district assignment at IoU 0.996 or better."
+      },
+      {
         "file": "stark-county-board-districts.json",
         "min_features": 2,
         "max_features": 2,
