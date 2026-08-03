@@ -1,0 +1,105 @@
+{
+ "1": {
+  "members": [
+   {
+    "name": "David Barbknecht",
+    "party": "D",
+    "termExpires": 2028
+   },
+   {
+    "email": "Lheppkessel@fultonco.org",
+    "name": "Laura Hepp Kessel",
+    "party": "D",
+    "termExpires": 2028
+   },
+   {
+    "email": "LSmith.FultonCountyBoard@gmail.com",
+    "name": "Landon Smith",
+    "party": "R",
+    "termExpires": 2028
+   },
+   {
+    "name": "Matt Vogel",
+    "termExpires": 2026
+   },
+   {
+    "email": "dave.widger@yahoo.com",
+    "name": "David Widger",
+    "party": "D",
+    "termExpires": 2026
+   }
+  ],
+  "sourceUrl": "https://fultoncountyil.gov/county-board/members/"
+ },
+ "2": {
+  "members": [
+   {
+    "email": "suebar64@gmail.com",
+    "name": "Barry Beck",
+    "party": "R",
+    "termExpires": 2028
+   },
+   {
+    "email": "woody1426@gmail.com",
+    "name": "Chris Southwood",
+    "party": "R",
+    "termExpires": 2028
+   },
+   {
+    "email": "Lauren.FultonCounty@gmail.com",
+    "name": "Lauren Southwood",
+    "party": "R",
+    "termExpires": 2026
+   },
+   {
+    "email": "spanglerfarms@gmail.com",
+    "name": "John Spangler",
+    "party": "R",
+    "role": "Chair",
+    "termExpires": 2026
+   },
+   {
+    "email": "karlwillams75@yahoo.com",
+    "name": "Karl WIlliams",
+    "party": "R",
+    "termExpires": 2026
+   }
+  ],
+  "sourceUrl": "https://fultoncountyil.gov/county-board/members/"
+ },
+ "3": {
+  "members": [
+   {
+    "email": "jamesbarclay271@gmail.com",
+    "name": "James A Barclay",
+    "party": "R",
+    "role": "Vice-Chair",
+    "termExpires": 2026
+   },
+   {
+    "email": "smberry101@gmail.com",
+    "name": "Susie Berry",
+    "party": "R",
+    "termExpires": 2028
+   },
+   {
+    "name": "Daniel E. Kumer",
+    "party": "D",
+    "termExpires": 2026
+   },
+   {
+    "email": "brian.platt@outlook.com",
+    "name": "Brian Platt",
+    "party": "R",
+    "termExpires": 2026
+   },
+   {
+    "email": "warrant322@gmail.com",
+    "name": "Andy Steck",
+    "party": "R",
+    "termExpires": 2028
+   }
+  ],
+  "sourceUrl": "https://fultoncountyil.gov/county-board/members/"
+ }
+}
