@@ -85,6 +85,30 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # dispatch entry. All five are contiguous with the served area, so the ring
 # stays single.
 #
+# THE WORD DOING THE WORK IN THAT SENTENCE IS "COUNTY-SPECIFIC", AND A RICH
+# STATEWIDE LAYER IS NOT A REASON TO ADD A COUNTY HERE. The trap is concrete
+# and already live, so it is written down rather than left to be rediscovered:
+# Washington County's Blue Book (2026-08-03) gave us the full governing bodies
+# of Centralia and Wamac, and both cities extend well past Washington County —
+# Centralia into Clinton, Jefferson and Marion, Wamac into Clinton and Marion.
+# So a resident standing in the MARION County part of Centralia now gets their
+# whole city council on the Municipality card while the wash greys their
+# location out.
+#
+# That looks exactly like the 2026-07-30 bug this list was rewritten to fix, and
+# it is NOT the same thing. `municipality` is one of the STATEWIDE layers — it
+# answers everywhere in Illinois, keyed by Census place GEOID rather than by
+# county — so the set of layers answering in Marion has not changed. What
+# changed is how good one statewide answer is there. Adding Marion or Clinton
+# would assert that a Marion resident ANYWHERE gets county-specific data, which
+# is false the moment they step outside Centralia's city limits, and would
+# overstate coverage in precisely the direction this list exists to prevent.
+#
+# The test to apply, when a county looks like it should join: does a point
+# ANYWHERE in it resolve a layer keyed to that COUNTY? If the honest answer is
+# "only inside one municipality, through a statewide layer", the county stays
+# out.
+#
 # ONE RING IS A DELIBERATE CONSTRAINT, not a coincidence: a detached county would
 # make the served area a set of islands, and the operator's call is that coverage
 # grows as a connected region. The Livingston -> McLean -> Logan -> Sangamon ->
