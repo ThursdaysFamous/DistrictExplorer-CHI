@@ -2091,7 +2091,10 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   county-specific layer answers** — 38 through their own dispatch entries, 5 through a
   shipped judicial circuit, and these 4 through the County card alone. (The tranche-5
   commit message said "42 counties"; that undercounted by omitting the five
-  judicial-subcircuit secondary counties, which are served too.) The structural lesson is the one to carry forward: `METRO_COUNTY_FIPS`
+  judicial-subcircuit secondary counties, which are served too. Both figures are the
+  2026-08-02 snapshot and stayed in this log as if current until 2026-08-03 — for the
+  live count and the per-county roll-up read `docs/COUNTY_STATUS.md`, GENERATED from
+  the coverage-ring lists precisely so this arithmetic is never done by hand again.) The structural lesson is the one to carry forward: `METRO_COUNTY_FIPS`
   means "a county-specific layer answers here", NOT "this county has a dispatch entry", so
   these four join it with INSIDE anchors while `DISPATCH_COUNTY_FIPS` must not gain them.
   When the tier shipped, `validate_index.py` would NOT have caught that mistake — its
