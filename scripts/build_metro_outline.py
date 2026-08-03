@@ -4,12 +4,16 @@ Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
 Builds data/app/metro-outline.json — the dissolved outline of the counties the
 app actually serves — from Census TIGERweb. "Serves" means at least one
-county-specific layer answers there, which as of 2026-08-02 is 47 counties: the
-38 with their own dispatch entries, the five secondary counties of shipped
-judicial circuits, and the four AT-LARGE counties whose only county-specific
-answer is the County card's board section (they have no dispatch entry at all —
-see DISPATCH_COUNTY_FIPS below, which they deliberately do NOT appear in). It is deliberately ONE connected region: a county joins only
-once it touches the ones already served.
+county-specific layer answers there, which is deliberately broader than "has
+its own dispatch entries": METRO_COUNTY_FIPS below also carries the secondary
+counties of shipped judicial circuits and the AT-LARGE counties whose only
+county-specific answer is the County card's board section (no dispatch entry
+at all — see DISPATCH_COUNTY_FIPS, which they deliberately do NOT appear in).
+This paragraph used to quote the counts and went stale within a tranche; the
+live numbers and the per-county roll-up are GENERATED from the two lists below
+into docs/COUNTY_STATUS.md, so no prose — this docstring included — quotes
+them by hand anymore. It is deliberately ONE connected region: a county joins
+only once it touches the ones already served.
 
 THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
 Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers
