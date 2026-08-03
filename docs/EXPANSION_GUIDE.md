@@ -834,7 +834,10 @@ suburbs join as further `ward` entries when a polygon source appears.
    `zip-code`): **nothing to do.**
 10. Bookkeeping + gates: Part 6.1 worksheet entries and regeneration, Part 6.3 pipeline
     artifacts per new roster, Part 6.5 gates, guidebook coverage-map/inventory/matrix
-    rows, smoke ground truth if the county adds an anchor.
+    rows, smoke ground truth if the county adds an anchor — and regenerate the
+    per-county completion table (`python3 scripts/build_county_status.py`, emitting
+    `docs/COUNTY_STATUS.md`; its `--check` in smoke-test.yml fails the merge if the
+    table lags the county change).
 
 **Layer-count check: unchanged** — if a step wants a new toggle, run §1.6.
 
