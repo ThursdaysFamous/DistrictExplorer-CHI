@@ -1135,8 +1135,7 @@
         "file": "effingham-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Effingham County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Effingham County outline — the coverage test for the county's five dispatch entries (board/precinct/fire/park/library), and the FIRST ISLAND: joined detached on 2026-08-04 under the retired-contiguity policy, so metro-outline.json is now a MultiPolygon. Shipped as a gap-location outline by pass 13 and promoted in the same week."
       },
       {
         "file": "franklin-county-outline.json",

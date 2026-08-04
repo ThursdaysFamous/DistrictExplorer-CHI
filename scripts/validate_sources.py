@@ -652,6 +652,17 @@ ENDPOINTS = [
     {"layer": "Mendota municipal wards",
      "url": ("https://services6.arcgis.com/z8UuifZkerkF2dpG/arcgis/rest/services/"
              "Mendota_Wards/FeatureServer?f=json")},
+    # Effingham (the first island, 2026-08-04). Board + precincts + polling ride
+    # the org's CentralSquare election service — the board's roster lives ON the
+    # district features (name/party/phone/e-mail per seat), so this endpoint is
+    # also the county's officeholder source; fire comes from the org's Districts
+    # service and park/library from TaxDistricts_public.
+    {"layer": "Effingham County electoral districts + precincts + polling (board roster on-feature)",
+     "url": ("https://services.arcgis.com/vj0V9Lal6oiz0YXp/arcgis/rest/services/"
+             "ElectionGeography_public_2d9b4955467947e2802e5d4c4173060f/FeatureServer?f=json")},
+    {"layer": "Effingham County fire districts (Districts service) + park/library (TaxDistricts_public)",
+     "url": ("https://services.arcgis.com/vj0V9Lal6oiz0YXp/arcgis/rest/services/"
+             "Districts/FeatureServer?f=json")},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
