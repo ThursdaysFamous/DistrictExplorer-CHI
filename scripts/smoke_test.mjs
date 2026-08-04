@@ -432,6 +432,63 @@ try {
     await context.close();
   }
 
+  // 2d. The county-board union overlay draws INCREMENTALLY: boundaries appear
+  //     as soon as the first county's geometry is in, instead of waiting out
+  //     the slowest of ~40 independent county servers (the 2026-08-04
+  //     regression report: one slow host kept every county's boundaries off
+  //     the map for a minute-plus while the card answered in a second). Delay
+  //     one same-origin county's geometry behind a long route stall and assert
+  //     (a) other counties' boundaries are on the map well before it lands,
+  //     (b) once it lands it is appended to the drawing and the selected
+  //     point's own district — inside the delayed county — gets highlighted.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const STRAGGLER_FILE = "data/app/stephenson-county-board-districts.json";
+    const stragglerBody = readFileSync(STRAGGLER_FILE, "utf8");
+    const stragglerFeatures = JSON.parse(stragglerBody).features.length;
+    const STRAGGLER_DELAY_MS = 8000;
+    // Freeport, Stephenson County — inside board District B of the delayed file
+    const page = await booted(
+      context,
+      `${BASE}#point=42.29660,-89.62120&layers=county-board`,
+      (p) => p.route("**/" + STRAGGLER_FILE, async (r) => {
+        await new Promise((res) => setTimeout(res, STRAGGLER_DELAY_MS));
+        await r.fulfill({ status: 200, contentType: "application/json", body: stragglerBody });
+      })
+    );
+    const overlayPathCount = () =>
+      page.evaluate(() => document.querySelectorAll("#map .leaflet-overlay-pane path").length);
+    // (a) the fast counties draw long before the straggler's 8 s stall is up
+    const EARLY_BUDGET_MS = 4000;
+    const earlyDeadline = Date.now() + EARLY_BUDGET_MS;
+    let earlyPaths = 0;
+    while (Date.now() < earlyDeadline && earlyPaths === 0) {
+      earlyPaths = await overlayPathCount();
+      if (earlyPaths === 0) await new Promise((res) => setTimeout(res, 200));
+    }
+    check(
+      "county-board boundaries draw before the slowest county settles",
+      earlyPaths > 0,
+      `${earlyPaths} paths within ${EARLY_BUDGET_MS}ms (straggler stalled ${STRAGGLER_DELAY_MS}ms)`
+    );
+    // (b) the straggler is appended once it arrives — proven end-to-end by the
+    // selection highlight, which can only appear after the delayed county's
+    // features are BOTH in rt.geojson and drawn as paths (updateLayerHighlight
+    // matches Leaflet sub-layers by feature identity). Disjoint county
+    // footprints guarantee no earlier county can light this point up.
+    const highlighted = await page
+      .waitForFunction(() => document.querySelectorAll("#map path.region-highlight").length >= 1,
+        null, { timeout: STRAGGLER_DELAY_MS + QUERY_TIMEOUT })
+      .then(() => true, () => false);
+    const finalPaths = await overlayPathCount();
+    check(
+      "late county appends to the drawing and highlights the selected district",
+      highlighted && finalPaths >= earlyPaths + stragglerFeatures,
+      `highlighted=${highlighted} paths ${earlyPaths} -> ${finalPaths} (straggler has ${stragglerFeatures})`
+    );
+    await context.close();
+  }
+
   // 3. A failing data source degrades to that layer's error card + Retry, in
   //    isolation — the app's per-layer failure-isolation rule.
   {

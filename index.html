@@ -13395,31 +13395,89 @@ function initChiExplorer() {
       byKey[entry.key] = entry;
     });
 
-    // Union overlay: one attempt per county, each feature WRAPPED (never
-    // mutating the per-county caches — other cards spatial-join against them)
-    // and stamped dxCounty so hover dispatches per feature. A county whose
-    // source is down drops out of the drawing while the others still render;
-    // only if every county fails does the load reject (overlay error + Retry).
-    // Deliberately not makeCached, so the total-failure path stays retryable:
-    // a rejection is never pinned — Retry re-invokes this and the per-county
-    // loaders underneath (which do cache successes) re-attempt. A PARTIAL
-    // union, by contrast, resolves and is then session-cached by the engine
-    // (rt.geojson, P11) — the recorded tradeoff in
-    // docs/COUNTY_LAYER_CONSOLIDATION.md: the missing county's boundaries
-    // stay off the overlay until reload, while its card/query path (fetched
-    // per query, below) keeps working and keeps its own Retry.
+    // Union overlay, drawn INCREMENTALLY: one attempt per county, each feature
+    // WRAPPED (never mutating the per-county caches — other cards spatial-join
+    // against them) and stamped dxCounty so hover dispatches per feature.
+    //
+    // The union used to resolve only when EVERY county had settled, which made
+    // the whole drawing hostage to the slowest of ~40 independent county
+    // servers: one slow or down host — up to 28.5 s through the fetch-retry
+    // ladder, longer on the 30 s-timeout sources — kept every county's
+    // boundaries off the map for a minute-plus, even though most of them were
+    // in memory within seconds (reported 2026-08-04 as "the county board layer
+    // no longer shows boundaries"). Now the load resolves as soon as the FIRST
+    // county's geometry is in. The engine caches the resolved FeatureCollection
+    // as rt.geojson and builds the Leaflet overlay from it; this closure keeps
+    // mutating that same live object as later counties land, so every
+    // rt.geojson consumer (highlight, hover, relationship outlines, the P11
+    // rebuild) sees them — and drawAppendedCountyFeatures below teaches the
+    // already-built Leaflet layer about them.
+    //
+    // A county whose source is DOWN still just drops out of the drawing while
+    // the others render; only if every county fails does the load reject
+    // (overlay error + Retry). Deliberately not makeCached, so the
+    // total-failure path stays retryable: a rejection is never pinned — Retry
+    // re-invokes this and the per-county loaders underneath (which do cache
+    // successes) re-attempt. The recorded partial-union tradeoff
+    // (docs/COUNTY_LAYER_CONSOLIDATION.md) now applies only to counties whose
+    // fetch actually FAILED: a merely slow county appends whenever it arrives,
+    // while a failed one stays off the overlay until reload — its card/query
+    // path (fetched per query, below) keeps working and keeps its own Retry.
     function loadUnion() {
-      return Promise.all(entries.map(function (entry) {
-        return entry.loadGeometry().then(function (geojson) {
-          return (geojson.features || []).map(function (f) {
-            return { type: "Feature", geometry: f.geometry, properties: f.properties, dxCounty: entry.key };
-          });
-        }, function () { return null; });
-      })).then(function (parts) {
-        var loaded = parts.filter(Boolean);
-        if (!loaded.length) throw new Error(opts.label + ": no county source responded");
-        return { type: "FeatureCollection", features: [].concat.apply([], loaded) };
+      var fc = { type: "FeatureCollection", features: [] };
+      return new Promise(function (resolve, reject) {
+        var resolved = false, pending = entries.length, anySuccess = false;
+        if (!pending) { reject(new Error(opts.label + ": no county source responded")); return; }
+        entries.forEach(function (entry) {
+          entry.loadGeometry().then(function (geojson) {
+            var wrapped = (geojson.features || []).map(function (f) {
+              return { type: "Feature", geometry: f.geometry, properties: f.properties, dxCounty: entry.key };
+            });
+            anySuccess = true;
+            Array.prototype.push.apply(fc.features, wrapped);
+            if (!resolved) { resolved = true; resolve(fc); }
+            else drawAppendedCountyFeatures(wrapped);
+          }, function () { /* down county: absent from the drawing (tradeoff above) */ })
+            .catch(function () { /* a drawing hiccup in one county must not skew the settle count */ })
+            .then(function () {
+              pending--;
+              if (!pending && !anySuccess) reject(new Error(opts.label + ": no county source responded"));
+            });
+        });
       });
+    }
+
+    // Draw one late-arriving county onto the already-built union overlay. Its
+    // features are already in the resolved FeatureCollection (=== rt.geojson,
+    // which highlight/hover/outline consumers re-read on every event), so this
+    // only has to teach the LEAFLET layer about them: addData creates their
+    // paths, then they're restyled to the current stack state — the flat style
+    // captured at L.geoJSON build time goes stale, because fill-opacity scaling
+    // tracks the active-layer count and an active selection highlight keeps
+    // every non-matched path faded.
+    function drawAppendedCountyFeatures(features) {
+      var rt = layerRuntime[spec.id];
+      // No live Leaflet layer (toggled off, relevance-hidden, or the engine's
+      // load handler hasn't built it yet): nothing to draw — the engine
+      // (re)builds from rt.geojson when the overlay next attaches, and these
+      // features are already in it.
+      if (!rt || !rt.overlayLayer || !features.length) return;
+      rt.overlayLayer.addData({ type: "FeatureCollection", features: features });
+      var style = rt.highlightApplied ? fadedStyle(baseStyleFor(spec)) : baseStyleFor(spec);
+      if (style) {
+        rt.overlayLayer.eachLayer(function (subLayer) {
+          if (subLayer.setStyle && features.indexOf(subLayer.feature) !== -1) subLayer.setStyle(style);
+        });
+      }
+      reorderActiveLayers(); // fresh paths must not sit above smaller layers' boundaries
+      // Disjoint county footprints mean an active highlight never belongs to an
+      // appended county — but the selected point CAN (the previously-no-match
+      // case). Run the full highlight pass so the user's own district lights up
+      // the moment its county lands, instead of waiting for the next point move.
+      if (state.selectedPoint && state.layersOn[spec.id] &&
+          findFeatureContaining({ type: "FeatureCollection", features: features }, state.selectedPoint)) {
+        updateLayerHighlight(spec);
+      }
     }
 
     var anyHoverOfficial = entries.some(function (entry) { return !!entry.hoverOfficial; });
@@ -13455,7 +13513,10 @@ function initChiExplorer() {
       });
     }
 
-    registerLayer({
+    // Held in a var (rather than passed as a literal) so
+    // drawAppendedCountyFeatures above can hand the registered module to the
+    // engine's style/highlight helpers — registerLayer stores this same object.
+    var spec = {
       id: opts.id,
       group: opts.group,
       label: opts.label,
@@ -13553,7 +13614,8 @@ function initChiExplorer() {
           return entry.hoverOfficial.name(feature, byCounty[entry.key]);
         }
       } : undefined
-    });
+    };
+    registerLayer(spec);
   }
 
   // Adapter: a registerPolygonLayer-style spec (loader + declarative fields)
