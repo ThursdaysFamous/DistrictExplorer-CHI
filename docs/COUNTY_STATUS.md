@@ -48,7 +48,7 @@
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
 | Livingston | 17105 | dispatch | districted | `county-board` | 3 — `county-board-office-addresses` (no-source); `livingston-precincts` (no-source); `livingston-special-districts` (no-source) |
 | Logan | 17107 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `logan-fire-districts` (no-source) |
-| Macon | 17115 | dispatch | districted | `county-board`, `fire-district`, `library-district`, `park-district` | 2 — `macon-county-board-labels` (data-quality); `macon-district-name-formatting` (data-quality) |
+| Macon | 17115 | dispatch | no board layer — see gaps | `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `macon-county-board-labels` (data-quality); `macon-district-name-formatting` (data-quality) |
 | Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 4 — `macoupin-county-board-districts` (no-source); `macoupin-municipal-officials` (blocked); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
 | Madison | 17119 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `madison-ward-officials` (no-source) |
 | Marshall | 17123 | dispatch | districted | `county-board` | 2 — `marshall-precinct-geometry` (no-source); `wenona-two-clerks-disagree` (data-quality) |
@@ -69,7 +69,7 @@
 | Scott | 17171 | judicial circuit | no board layer — see gaps | — | none |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | none |
-| Stephenson | 17177 | dispatch | districted | `county-board`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `dakota-village-president` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
+| Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `dakota-village-president` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
 | Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `tazewell-precinct-polling` (data-quality) |
 | Washington | 17189 | dispatch | districted | `county-board` | 1 — `washington-precinct-geometry` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
