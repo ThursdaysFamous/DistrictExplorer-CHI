@@ -83,6 +83,11 @@ COUNTY_FIPS = {
     # means asking again rather than re-fetching a URL.
     "Marshall": "123",
     "Washington": "189",
+    # Mason's directory is neither a website nor an archived document: it is a
+    # Google Sheet the County Clerk publishes, readable by anyone with the link
+    # and exportable as CSV. That is what made a scraper possible where the
+    # county's board roster still needs a hand transcription from a scan.
+    "Mason": "125",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -194,6 +199,10 @@ COUNTY_FLOORS = {
     # phone, e-mail AND website per municipality, plus every seat with its ward
     # or district. All fifteen of the county's incorporated places are covered.
     "Peoria": {"municipalities": 13, "members": 110, "heads": 13},       # 15 / 140 / 15
+    # Mason (2026-08-04 live: 9 / 82 / 9). All nine incorporated places, each
+    # with its whole body — president or mayor, clerk, treasurer and every
+    # trustee or alderman — and Havana's eight aldermen carry their ward.
+    "Mason": {"municipalities": 8, "members": 70, "heads": 8},           # 9 / 82 / 9
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -254,6 +263,7 @@ PRESERVABLE = {
     "cass": {"kind": "county", "county": "Cass"},
     "whiteside": {"kind": "county", "county": "Whiteside"},
     "peoria": {"kind": "county", "county": "Peoria"},
+    "mason": {"kind": "county", "county": "Mason"},
     # Both are archived DOCUMENTS rather than fetched pages, so their "scrape"
     # cannot fail on a network blip — but they are preservable anyway, so that a
     # parser regression carries last-good entries forward instead of dropping a

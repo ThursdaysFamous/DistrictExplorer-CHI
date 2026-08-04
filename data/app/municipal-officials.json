@@ -1410,6 +1410,67 @@
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.cityofbatavia.net"
   },
+  "1704156": {
+    "board": [
+      {
+        "name": "Desiree Wyzard",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Floyd Foutch",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jane Fielden",
+        "phone": "309-546-2309",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Jessica Hughes",
+        "phone": "217-371-3319",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Leha Yackley",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Raymond Thomas",
+        "phone": "309-546-2751",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Jason DeFord",
+      "phone": "309/357-9196; 309/546-2524",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Bath",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Wendy Deford",
+        "phone": "309-267-2841; 309/546-2663",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kim Whitehead",
+        "phone": "309/546-2409 or 217-415-6154",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
+  },
   "1704303": {
     "county": "Lake",
     "name": "Village of Beach Park",
@@ -7192,6 +7253,70 @@
     ],
     "sourceUrl": "https://rockislandcountyil.gov/DocumentCenter/View/291/Elected-Officials-Listing-PDF"
   },
+  "1722151": {
+    "board": [
+      {
+        "name": "Becky Montgomery-Gray",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "Cathy J Nunn",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Louis Wagner",
+        "phone": "309-562-7317",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Missy Ross-Nance",
+        "phone": "217-737-7864",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Nicole Rose",
+        "phone": "309-562-7665",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Scott Entwistle",
+        "phone": "217-482-5076",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Donald Mustered III",
+      "phone": "217/737-7699 309/208-7924",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Easton",
+    "officers": [
+      {
+        "name": "Joanna Mustered",
+        "phone": "217/737-7699; 309/562-7459",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Judy Miller",
+        "phone": "217-691-5757",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
+  },
   "1722164": {
     "board": [
       {
@@ -8356,6 +8481,62 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villagesoffordheights.com"
+  },
+  "1726753": {
+    "board": [
+      {
+        "name": "Amanda Vance",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jessica Herndon",
+        "phone": "217-871-4786",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "John Uhler",
+        "phone": "309-202-9260",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Mary F Hundt",
+        "phone": "309-696-8622",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Paulette Carroll",
+        "phone": "309-202-2665",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Danny Gordon II",
+      "phone": "309-840-0013",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Forest City",
+    "officers": [
+      {
+        "name": "Kati Wooding",
+        "phone": "309-620-3605",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "name": "Kelli Saunders",
+        "phone": "309-613-3187",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
   },
   "1726935": {
     "board": [
@@ -10475,6 +10656,90 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://harwoodheights.org"
   },
+  "1733513": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Christopher J. Rilea",
+        "phone": "309-338-0282",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "1",
+        "name": "Robert Cooper",
+        "phone": "309-543-3853",
+        "role": "Alderman",
+        "termExpires": "2029"
+      },
+      {
+        "district": "2",
+        "name": "Richard Shore",
+        "phone": "309-543-3934",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "2",
+        "name": "William Janis",
+        "phone": "309-573-1219",
+        "role": "Alderman",
+        "termExpires": "2029"
+      },
+      {
+        "district": "3",
+        "name": "Daniel G Griffin",
+        "phone": "309-696-9964",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "3",
+        "name": "James \"Gus\" Stroh",
+        "phone": "309-543-2317",
+        "role": "Alderman",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "district": "4",
+        "name": "Brenda Stadsholt",
+        "phone": "309-543-6863",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "4",
+        "name": "Ross McDowell",
+        "phone": "217-871-9500",
+        "role": "Alderman",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Denis Bryant",
+      "phone": "309/543-6874 309/258-6454",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Havana",
+    "officers": [
+      {
+        "name": "Jesse Hall",
+        "phone": "309-360-7064",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Alex Noble",
+        "phone": "309-338-4784",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
+  },
   "1733630": {
     "county": "Lake",
     "name": "Village of Hawthorn Woods",
@@ -12259,6 +12524,68 @@
       }
     ],
     "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
+  },
+  "1739857": {
+    "board": [
+      {
+        "name": "David L Atwater",
+        "phone": "309-303-0500",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Michael Case",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Robert E Williams",
+        "phone": "309-538-4574",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Stacie Close",
+        "phone": "309-538-4265",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Tony Cowin",
+        "phone": "217-341-4598",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Vernel Smith",
+        "phone": "309-824-0044",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Calvin Hodgson",
+      "phone": "217-671-1484",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Kilbourne",
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Shellie McGary",
+        "phone": "309-531-8908",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Shellie McGary",
+        "phone": "309-531-8908",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
   },
   "1739883": {
     "county": "Lake",
@@ -14689,6 +15016,69 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://villageofmanhattan.org"
   },
+  "1746383": {
+    "board": [
+      {
+        "name": "Guy Mattson",
+        "phone": "309-968-6049",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jack Nieuwkoop",
+        "phone": "309-968-6257",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Jerald Howard Schier",
+        "phone": "309-968-9876",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Kenneth A. Lacey",
+        "phone": "309-968-0058",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Linda Kalhammer",
+        "phone": "309-360-3684",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "Toni Bortell",
+        "phone": "309-202-4295",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Timothy W. Sondag",
+      "phone": "309-840-8539",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Manito",
+    "officers": [
+      {
+        "name": "Tera Butler",
+        "phone": "309-213-1458",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Rebecca Switzer",
+        "phone": "309-968-6139",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
+  },
   "1746604": {
     "board": [
       {
@@ -15125,6 +15515,75 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.mascoutah.org"
+  },
+  "1747475": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Brian Scott Durbin",
+        "phone": "217-381-2609",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "1",
+        "name": "Julie K. Mize",
+        "phone": "217-971-0115",
+        "role": "Alderman",
+        "termExpires": "2029"
+      },
+      {
+        "district": "2",
+        "name": "Gerald B. Mahin",
+        "phone": "217-482-5119",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "2",
+        "name": "Scott P. Whitehead",
+        "phone": "217-482-5669",
+        "role": "Alderman",
+        "termExpires": "2029"
+      },
+      {
+        "district": "3",
+        "name": "Daniel E. Mason",
+        "phone": "217-482-3623",
+        "role": "Alderman",
+        "termExpires": "2027"
+      },
+      {
+        "district": "3",
+        "name": "Shari Kelly Klassen",
+        "phone": "217-891-0193",
+        "role": "Alderman",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Kevin M. Snyder",
+      "phone": "217-314-9021",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Mason City",
+    "officers": [
+      {
+        "name": "Michele L. Whitehead",
+        "phone": "217-482-3669",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Michael R. Griffin",
+        "phone": "217-482-9618",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
   },
   "1747540": {
     "board": [
@@ -24788,6 +25247,67 @@
       }
     ],
     "sourceUrl": "https://lasallecountyil.gov/DocumentCenter/View/1425/Municipality-Officials-PDF"
+  },
+  "1775757": {
+    "board": [
+      {
+        "name": "Donald Elgin",
+        "phone": "309-357-0227",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Forest Briese",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "George Pote",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Lisa A. Gilmore",
+        "phone": "309-403-6784",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Lisa Wiseman",
+        "phone": "309-535-2774",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Sandra Cluney",
+        "phone": "309-535-4004",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Mason",
+    "head": {
+      "name": "Terry G. Gathman",
+      "phone": "309/360-7869; 309-535-2105",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Topeka",
+    "officers": [
+      {
+        "name": "Doris Allison",
+        "phone": "309-543-4440",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Debbie Gathman",
+        "phone": "309-397-3657",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://masoncountyil.gov/county-clerk/"
   },
   "1775874": {
     "county": "Lake",

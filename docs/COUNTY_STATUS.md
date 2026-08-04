@@ -52,7 +52,7 @@
 | Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 4 — `macoupin-county-board-districts` (no-source); `macoupin-municipal-officials` (blocked); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
 | Madison | 17119 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `madison-ward-officials` (no-source) |
 | Marshall | 17123 | dispatch | districted | `county-board` | 2 — `marshall-precinct-geometry` (no-source); `wenona-two-clerks-disagree` (data-quality) |
-| Mason | 17125 | dispatch | districted | `county-board` | 2 — `mason-precinct-vintage` (data-quality); `mason-roster-is-a-scan` (data-quality) |
+| Mason | 17125 | dispatch | districted | `county-board` | 1 — `mason-precinct-vintage` (data-quality) |
 | McDonough | 17109 | dispatch | districted | `county-board`, `county-precinct` | none |
 | McHenry | 17111 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district` | 4 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `mchenry-park-district` (no-source); `mchenry-ward-cities` (blocked) |
 | McLean | 17113 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `mclean-special-districts` (no-source) |
@@ -110,4 +110,4 @@ Alexander, Clark, Clay, Coles, Crawford, Cumberland, Douglas, Edgar, Edwards, Ef
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 90 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 89 records in the Data gaps panel: `chicago-amenity-phones`.

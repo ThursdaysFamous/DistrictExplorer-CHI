@@ -33,6 +33,11 @@ name: Update municipal officials roster
 #   Peoria     — Clerk's Officials & Services Directory PDF (full body; the
 #                richest source in the fleet — hall address, phone, e-mail AND
 #                website per municipality, every seat with its ward/district)
+#   Mason      — the Clerk's OWN Google Sheet, published readable-to-
+#                anyone and exported as CSV                     (full body;
+#                nine municipalities, Havana's aldermen by ward. No address
+#                and no home town for anyone — one Mason official's address is
+#                legally protected, see build_mason_board_roster.py)
 #   Whiteside  — Clerk's County Yearbook PDF                (head + clerk; the
 #                yearbook publishes no trustees, and its clerk said so)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
@@ -287,6 +292,11 @@ jobs:
         continue-on-error: true
         run: python3 scripts/washington_municipal_officials_scraper.py --out /tmp/washington_municipal_officials.json
 
+      - name: Read the Mason County Clerk's published directory
+        id: scrape_mason
+        continue-on-error: true
+        run: python3 scripts/mason_municipal_officials_scraper.py --out /tmp/mason_municipal_officials.json
+
       - name: Scrape the Whiteside County Clerk yearbook
         id: scrape_whiteside
         continue-on-error: true
@@ -351,6 +361,7 @@ jobs:
           steps.scrape_peoria.outcome == 'failure' ||
           steps.scrape_marshall.outcome == 'failure' ||
           steps.scrape_washington.outcome == 'failure' ||
+          steps.scrape_mason.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -387,6 +398,7 @@ jobs:
           PEORIA_OUTCOME: ${{ steps.scrape_peoria.outcome }}
           MARSHALL_OUTCOME: ${{ steps.scrape_marshall.outcome }}
           WASHINGTON_OUTCOME: ${{ steps.scrape_washington.outcome }}
+          MASON_OUTCOME: ${{ steps.scrape_mason.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -483,6 +495,7 @@ jobs:
           add "${{ steps.scrape_peoria.outcome }}"      peoria      county /tmp/peoria_municipal_officials.json
           add "${{ steps.scrape_marshall.outcome }}"    marshall    county /tmp/marshall_municipal_officials.json
           add "${{ steps.scrape_washington.outcome }}"  washington  county /tmp/washington_municipal_officials.json
+          add "${{ steps.scrape_mason.outcome }}"        mason       county /tmp/mason_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
