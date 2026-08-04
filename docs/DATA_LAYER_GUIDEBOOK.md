@@ -1240,6 +1240,383 @@ in the researched-but-unbuilt backlog.
       "summary": "Calhoun County's voting precincts are not shown — the county publishes election documents but no boundaries.",
       "blocker": "Checked 2 Aug 2026 when the county was added: Calhoun runs no mapping system, and nothing for the county appears in any public map catalogue. The clerk does publish election files, though in an unusual form — the 2026 primary summary is a raw printer file rather than a PDF — and none of them carries geometry. The board half needs none: its five commissioners are elected countywide.",
       "wanted": "Calhoun County's precinct boundaries as map data, or a polling place list keyed by precinct."
+    },
+    {
+      "id": "alexander-county-board",
+      "concept": "County board",
+      "area": "Alexander County",
+      "counties": [
+        "alexander"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Alexander County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "clark-county-board",
+      "concept": "County board",
+      "area": "Clark County",
+      "counties": [
+        "clark"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Clark County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "clay-county-board",
+      "concept": "County board",
+      "area": "Clay County",
+      "counties": [
+        "clay"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Clay County's board is not shown — the pass-13 probe found nothing for the Illinois county; the name's only catalogue hit is Clay County MISSOURI's election service.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The one ArcGIS Online result for the name — an ElectionDistricts service owned by voteclaycountymo.gov, carrying a 'MO Central Committee' layer — is Clay County MISSOURI, rejected by owner and layer names exactly as pass 11 rejected Mercer County New Jersey: check what a hit IS before recording it. No Illinois county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "coles-county-board",
+      "concept": "County board",
+      "area": "Coles County",
+      "counties": [
+        "coles"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Coles County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "crawford-county-board",
+      "concept": "County board",
+      "area": "Crawford County",
+      "counties": [
+        "crawford"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Crawford County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "cumberland-county-board",
+      "concept": "County board",
+      "area": "Cumberland County",
+      "counties": [
+        "cumberland"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Cumberland County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed — cumberlandcounty.org is Cumberland County MAINE's, a decoy of the browncountyil.org kind. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "douglas-county-board-districts",
+      "concept": "County board districts",
+      "area": "Douglas County",
+      "counties": [
+        "douglas"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Douglas County's board districts are not shown — the county has a real website but publishes no election geometry.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (douglascountyil.gov) is real and current: elections live under the County Clerk, and assessments run on DEVNET tooling plus the illinoisassessors.com parcel viewer — a commercial parcel product, not an election map system. Nothing on the site links district or precinct boundaries.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "Douglas County's board district boundaries as map data, or the composition (whole townships or precincts) they are built from."
+    },
+    {
+      "id": "edgar-county-board",
+      "concept": "County board",
+      "area": "Edgar County",
+      "counties": [
+        "edgar"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Edgar County's board is not shown — its .gov domain redirects to a site that surfaced no election, board, or map links in this probe.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. edgarcountyil.gov does not resolve; edgarcountyillinois.gov answers and redirects to edgarcountyillinois.com, whose homepage surfaced no GIS, election, or board links to follow. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "edwards-county-board",
+      "concept": "County board",
+      "area": "Edwards County",
+      "counties": [
+        "edwards"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Edwards County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "effingham-municipal-officials",
+      "concept": "Municipal officials",
+      "area": "Effingham County",
+      "counties": [
+        "effingham"
+      ],
+      "kind": "no-source",
+      "layer": "municipality",
+      "summary": "Effingham County's 12 municipalities' councils are not shown — the county's own GIS names its BOARD members, but no source for city councils was found in this pass.",
+      "blocker": "Found 4 Aug 2026, and the finding is the inverse of this list's usual shape: Effingham is the pass-13 sweep's build-ready county (see the ask ledger's pass-13 section and the Backlog). Its GIS org — effinghamcoil.maps.arcgis.com, EFFINGHAM COUNTY GIS, invisible to keyword search because no item title names the county — publishes ElectionGeography_public with 9 labelled County Board districts (A–I) carrying member name, party and e-mail on the features, 38 voting precincts joined to 24 polling locations, and fire/park/library/school tilings. What it does NOT carry is the municipalities: 12 boundary shapes with no officials. Their councils need their own source when the county is built.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "A roster source for the 12 municipalities' presidents/mayors and councils — the county build ships without them otherwise, linking each municipality's official site instead."
+    },
+    {
+      "id": "franklin-county-board-districts",
+      "concept": "County board districts",
+      "area": "Franklin County",
+      "counties": [
+        "franklin"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Franklin County's board districts are not shown — the board IS districted (its own members page groups Districts 1–3) but no boundary is published as data.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (franklincountyil.gov) is real: a County Board Members page grouping members under Districts 1, 2 and 3 — so the board is districted and the site itself is a roster source — plus Elections pages and a GIS page. The GIS page, though, links no public map service the probe could reach, and assessments run on DEVNET's parcel product.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "Franklin County's three board-district boundaries as map data, or the precinct/township composition they are built from — the members page already covers the roster half."
+    },
+    {
+      "id": "gallatin-county-board",
+      "concept": "County board",
+      "area": "Gallatin County",
+      "counties": [
+        "gallatin"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Gallatin County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "hamilton-county-board",
+      "concept": "County board",
+      "area": "Hamilton County",
+      "counties": [
+        "hamilton"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Hamilton County's board is not shown — the county has a real website with a board members page, but no election geometry and no district labels the probe could see.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (hamiltoncountyil.gov) is real and carries a County Board page and a County Board Members page — a roster source — but the members page shows no district labels, and the site links no map system beyond Sidwell assessment tooling. hamiltoncounty.org is Hamilton County IOWA's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "hardin-county-board",
+      "concept": "County board",
+      "area": "Hardin County",
+      "counties": [
+        "hardin"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Hardin County's board is not shown — the county's minimal website surfaced no election, board, or map links.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. hardincountyil.gov answers but is minimal: its homepage surfaced no GIS, election, or board links to follow. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "jasper-county-board",
+      "concept": "County board",
+      "area": "Jasper County",
+      "counties": [
+        "jasper"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Jasper County's board is not shown — the county shares a website with the City of Newton, and its Maps page carries reference PDFs but no election geometry.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county's web presence is a SHARED site with the City of Newton (jaspercountyillinois.gov) — one site, two governments. It carries a County Board page and a Maps page, but the maps are reference PDFs (county map, city limits, TIF areas), not election geometry, and no district or precinct boundary appears. jaspercounty.org is Jasper County MISSOURI's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "johnson-county-board",
+      "concept": "County board",
+      "area": "Johnson County",
+      "counties": [
+        "johnson"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Johnson County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "lawrence-county-board",
+      "concept": "County board",
+      "area": "Lawrence County",
+      "counties": [
+        "lawrence"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Lawrence County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "massac-county-board",
+      "concept": "County board",
+      "area": "Massac County",
+      "counties": [
+        "massac"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Massac County's board is not shown — the county has a real website, but it surfaced only clerk and assessment pages, no board or election geometry.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (massaccountyil.gov) is real; the probe surfaced Circuit Clerk, County Clerk and Supervisor of Assessments pages, and nothing carrying district or precinct geometry. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "moultrie-county-board",
+      "concept": "County board",
+      "area": "Moultrie County",
+      "counties": [
+        "moultrie"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Moultrie County's board is not shown — the county has a full website with election pages, but publishes no election geometry.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (moultriecountyil.gov, also at co.moultrie.il.us) is real and current: an Election & Voting department, a Precinct Committeemen page, and a separate Circuit Clerk site (moultrieco.org). None of it carries boundaries. Moultrie was one of the two counties pass 12 pushed the frontier onto when Macon shipped; it is now researched. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "pope-county-board",
+      "concept": "County board",
+      "area": "Pope County",
+      "counties": [
+        "pope"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Pope County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "pulaski-county-board",
+      "concept": "County board",
+      "area": "Pulaski County",
+      "counties": [
+        "pulaski"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Pulaski County's board is not shown — the county's domain resolves to an address this project's environment refuses to connect to, so even its website went unverified.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. pulaskicountyil.gov resolves in DNS, but to an address the research environment's egress proxy refuses (\"DNS points to prohibited IP\") — a fact about THIS probe's environment, not about the county, recorded so the next pass knows the site was never actually seen. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "richland-county-board",
+      "concept": "County board",
+      "area": "Richland County",
+      "counties": [
+        "richland"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Richland County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "saline-county-board",
+      "concept": "County board",
+      "area": "Saline County",
+      "counties": [
+        "saline"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Saline County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed — salinecounty.org is Saline County ARKANSAS's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "shelby-county-board",
+      "concept": "County board",
+      "area": "Shelby County",
+      "counties": [
+        "shelby"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Shelby County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Shelby was one of the two counties pass 12 pushed the frontier onto when Macon shipped; it is now researched. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "union-county-board",
+      "concept": "County board",
+      "area": "Union County",
+      "counties": [
+        "union"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Union County's board is not shown — the county's website refuses every automated request, the Knox pattern.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. unioncountyil.gov answers 403 Forbidden to every request from this environment, on both the apex and www hosts — the same refuse-all posture Knox County's site takes, so nothing behind it could be characterized. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "wabash-county-board",
+      "concept": "County board",
+      "area": "Wabash County",
+      "counties": [
+        "wabash"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Wabash County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "wayne-county-board",
+      "concept": "County board",
+      "area": "Wayne County",
+      "counties": [
+        "wayne"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Wayne County's board is not shown — the county has a real website whose mapping runs on a parcel portal, with no election geometry.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (waynecountyil.gov) is real: a Wayne County Board page, a Voting and Elections page, and an Online Mapping link into Sidwell's Portico portal — an ArcGIS-based PARCEL product whose configuration loads client-side; no election layer surfaced. waynecounty.org is a domain-for-sale page, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "white-county-board",
+      "concept": "County board",
+      "area": "White County",
+      "counties": [
+        "white"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "White County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+    },
+    {
+      "id": "williamson-county-board",
+      "concept": "County board",
+      "area": "Williamson County",
+      "counties": [
+        "williamson"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Williamson County's board is not shown — the county's website refuses every automated request, the Knox pattern.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. williamsoncountyil.gov answers 403 Forbidden to every request from this environment, on both the apex and www hosts — the same refuse-all posture Knox County's site takes, so nothing behind it could be characterized. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     }
   ],
   "nyc": [
@@ -1701,6 +2078,50 @@ with a full GIS ships as the outline's first island (first-island checklist,
 cannot carry its unserved county (`galesburg-wards-outside-the-ring`, decided
 the same day).
 
+### Pass 13 (2026-08-04): the detached sweep — and its Fulton
+
+The retirement's first test, run the same day: all 29 never-researched counties
+— the deep south plus the Moultrie/Shelby/Coles belt — probed with the pass-11
+method (ten hostname patterns × two service roots, every layer id enumerated;
+per-county ArcGIS Online catalogue search) plus a website-reachability sweep
+and a homepage-link crawl of every site that answered.
+
+**What came back, in pass-11's terms: zero hostname hits in 29 counties, and
+one catalogue hit that was Clay County MISSOURI** (voteclaycountymo.gov's
+election service, rejected by owner and layer names — Mercer New Jersey's
+lesson, reapplied). Ten counties have real websites (Douglas, Edgar via a
+.gov→.com redirect, Effingham, Franklin, Hamilton, Hardin, Jasper — shared
+with the City of Newton — Massac, Moultrie, Wayne); two more refuse all
+automation in the Knox posture (Union, Williamson); Pulaski's domain resolves
+to an address this environment's proxy refuses, so it went unseen; the rest
+answered under none of the probed patterns. Three name-decoys recorded so
+nobody re-walks them: cumberlandcounty.org is Maine, salinecounty.org is
+Arkansas, jaspercounty.org and hamiltoncounty.org are Missouri and Iowa.
+
+**The exception found the same way Fulton was — by refusing the conventional
+probe's verdict.** Effingham's county site links Instant Apps on an ArcGIS
+Online org (effinghamcoil.maps.arcgis.com, "EFFINGHAM COUNTY GIS") that
+keyword search cannot see, because no item title names the county. Enumerating
+the org's 39 public items instead of searching for them found
+`ElectionGeography_public` — the same CentralSquare family Tazewell, Whiteside,
+Iroquois and Macon already ship from — with **9 labelled County Board districts
+(A–I) carrying member name, party and e-mail on the features themselves**, 38
+voting precincts joined to 24 polling locations, and fire (18) / park (5) /
+library / school tilings, plus countywide officers with contacts. That is more
+than several SERVED counties publish, and it makes Effingham the first-island
+candidate (Backlog). The method lesson for this ledger: **when a county site
+links any *.maps.arcgis.com app, enumerate that org's public items — catalogue
+search misses orgs whose item titles don't name the county.**
+
+One roster fact worth its own line: Franklin County's board members page groups
+its members under Districts 1–3, so that board is districted and its roster is
+already published — the ask there is geometry only.
+
+The 29 records this pass added follow the post-Ogle discipline: each states
+what the probe could see, and none claims the county publishes nothing — ten of
+them could not even be looked at. All 29 are Tier-4 candidates; clerk contacts
+ship in `data/app/il-county-clerks.json`.
+
 ### The standing caution
 
 Four sources now ship from **archived files** rather than live fetches — Stark's map,
@@ -1727,6 +2148,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 >
 > | Open item | Blocker | Actionable? |
 > |---|---|---|
+> | **The pass-13 build-ready ledger** (2026-08-04, the detached sweep — see the ask ledger's pass-13 section) — **Effingham**: 9 labelled board districts (A–I) with member name, party and e-mail ON the features, 38 precincts joined to 24 polling locations, fire (18) / park (5) / library / school tilings, countywide officers with contacts, all on effinghamcoil.maps.arcgis.com's ElectionGeography family. Ships as the outline's **first island** (§2.5.1 checklist) — the served area's nearest county is two hops away. STILL OPEN: the build itself; its municipal councils have no source yet (`effingham-municipal-officials`) | nothing — every layer counted live 2026-08-04 | **yes — the next build** |
 > | ~~LaSalle county-board rebuild~~ **SHIPPED 2026-08-01** — boundary derived from the county's precinct layer per its full 2024+2026 canvass record; weekly directory roster with the countywide Chairman; 11 split precincts drawn with their majority side and stated on the card | remaining: the split-precinct cut refinement, or the county publishing its adopted map as GIS | done — refinement recorded |
 > | **The pass-7 build-ready ledger** (RESEARCH PASS 7, below) — ~~Peoria + Tazewell~~ **SHIPPED** (29th/30th), ~~Iroquois + Monroe + Randolph~~ **SHIPPED** (31st-33rd, the at-large posture's debut), ~~De Witt~~ **SHIPPED** (34th), ~~Washington~~ **SHIPPED** (35th), ~~Cass~~ **SHIPPED** (36th), ~~Marshall~~ **SHIPPED** (37th), ~~Mason~~ **SHIPPED** (38th) — the derivation tier is COMPLETE. ~~Pike + Putnam + Brown + Calhoun~~ **SHIPPED** (the at-large tier — served through the County card, no dispatch entries). **Champaign + Piatt WITHDRAWN — licensed, not open** (see the tranche-2 entry). STILL OPEN: nothing from pass 7 — the ledger is CLEARED | nothing for the open tiers — every source measured live 2026-08-02 | **yes — the live work queue** |
 > | **The pass-6 build-ready ledger** — ~~8 counties' municipal-officials sources~~ **SHIPPED 2026-08-01** (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island — the roster grew 360 → 492 municipalities; McLean's county-wide Airtable route stays open, see its row); ~~4 precinct counties + 3 polling/naming joins~~ **SHIPPED 2026-08-02**; ~~Woodford's board~~ shipped with the county 2026-08-02; ~~3 board-geometry builds~~ **ALL SHIPPED 2026-08-02** (Boone + Grundy + Henry — Henry as the twenty-eighth county), ~~the Logan board roster scraper~~ (SHIPPED 2026-08-02), still open: Aurora per-seat contact (re-measured 2026-08-02: Akamai 403s every rung reachable from CI — see its ledger row), ~~2 fire tilings~~ **SHIPPED 2026-08-02** (Sangamon 29 FPDs + St. Clair 44, each with its recorded caveat on the card), ~~Stephenson fire~~ **SHIPPED 2026-08-02** (georeferenced; its park/library maps measured RASTER-baked — see the new gap), ~~the verified city ward layers~~ **SHIPPED 2026-08-02** (22 cities across 13 sources; Lake Forest + 4 DuPage cities still to chase — see the ward ledger) | nothing — every source verified live 2026-07-31 | done — Aurora per-seat contact is the one open remainder |
@@ -1746,6 +2168,15 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > families).
 
 **Open — Illinois**
+- **RESEARCH PASS 13 (2026-08-04) — the detached sweep: all 29 never-researched counties
+  probed the day contiguity retired; one build-ready (Effingham, the first-island
+  candidate), one districted-with-roster (Franklin, geometry ask only), two Knox-style
+  refuse-all sites (Union, Williamson), ten live websites, zero self-hosted GIS.** Full
+  findings in the ask ledger's pass-13 section; per-county records in the gaps block
+  (every one of the 29 now carries a gap record and an outline, so COUNTY_STATUS's
+  unresearched tier is EMPTY — the whole state is now either served, or recorded with a
+  reason). The board-form question (districted vs at-large) is open in 24 of the 29 and
+  is a certified-document check, not a website check (§2.5 step 2).
 - **RESEARCH PASS 7 (2026-08-02) — the frontier REOPENED: twenty-five counties now adjoin
   the served ring; surveyed six ways in parallel. Eight build-ready, four cheap at-large
   adds, ten partial, three blocked.** PASS 5h's "expansion by adjacency has run out" was

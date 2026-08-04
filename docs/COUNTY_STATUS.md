@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**53 of 102 Illinois counties are served** — 43 through their own dispatch entries, 5 through a shipped judicial circuit, and 5 through the County card alone. 20 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 29 unresearched.
+**53 of 102 Illinois counties are served** — 43 through their own dispatch entries, 5 through a shipped judicial circuit, and 5 through the County card alone. 49 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -77,37 +77,66 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source); `winnebago-village-heads` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (20) — gap-recorded, not yet served
+## Researched frontier (49) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
 | County | FIPS | Gap records |
 |---|---|---|
+| Alexander | 17003 | 1 — `alexander-county-board` (no-source) |
 | Bureau | 17011 | 1 — `bureau-county-board-districts` (no-source) |
 | Champaign | 17019 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Christian | 17021 | 1 — `christian-county-board-districts` (no-source) |
+| Clark | 17023 | 1 — `clark-county-board` (no-source) |
+| Clay | 17025 | 1 — `clay-county-board` (no-source) |
 | Clinton | 17027 | 1 — `clinton-county-board-geometry` (no-source) |
+| Coles | 17029 | 1 — `coles-county-board` (no-source) |
+| Crawford | 17033 | 1 — `crawford-county-board` (no-source) |
+| Cumberland | 17035 | 1 — `cumberland-county-board` (no-source) |
+| Douglas | 17041 | 1 — `douglas-county-board-districts` (no-source) |
+| Edgar | 17045 | 1 — `edgar-county-board` (no-source) |
+| Edwards | 17047 | 1 — `edwards-county-board` (no-source) |
+| Effingham | 17049 | 1 — `effingham-municipal-officials` (no-source) |
 | Fayette | 17051 | 1 — `fayette-county-board-geometry` (no-source) |
 | Ford | 17053 | 1 — `ford-county-board-vintage` (no-source) |
+| Franklin | 17055 | 1 — `franklin-county-board-districts` (no-source) |
+| Gallatin | 17059 | 1 — `gallatin-county-board` (no-source) |
+| Hamilton | 17065 | 1 — `hamilton-county-board` (no-source) |
 | Hancock | 17067 | 1 — `pass10-frontier-unasked` (no-source) |
+| Hardin | 17069 | 1 — `hardin-county-board` (no-source) |
 | Henderson | 17071 | 1 — `henderson-county-website` (no-source) |
 | Jackson | 17077 | 1 — `pass10-frontier-unasked` (no-source) |
+| Jasper | 17079 | 1 — `jasper-county-board` (no-source) |
 | Jefferson | 17081 | 1 — `pass10-frontier-unasked` (no-source) |
 | Jo Daviess | 17085 | 1 — `jo-daviess-county-board-districts` (no-source) |
+| Johnson | 17087 | 1 — `johnson-county-board` (no-source) |
 | Knox | 17095 | 2 — `galesburg-wards-outside-the-ring` (data-quality); `knox-county-board-districts` (no-source) |
+| Lawrence | 17101 | 1 — `lawrence-county-board` (no-source) |
 | Marion | 17121 | 1 — `pass10-frontier-unasked` (no-source) |
+| Massac | 17127 | 1 — `massac-county-board` (no-source) |
 | Menard | 17129 | 1 — `menard-commissioner-districts` (no-source) |
 | Mercer | 17131 | 1 — `mercer-county-board-districts` (no-source) |
 | Montgomery | 17135 | 1 — `montgomery-county-board-geometry` (no-source) |
+| Moultrie | 17139 | 1 — `moultrie-county-board` (no-source) |
 | Perry | 17145 | 1 — `perry-county-website-blocked` (blocked) |
 | Piatt | 17147 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
+| Pope | 17151 | 1 — `pope-county-board` (no-source) |
+| Pulaski | 17153 | 1 — `pulaski-county-board` (no-source) |
+| Richland | 17159 | 1 — `richland-county-board` (no-source) |
+| Saline | 17165 | 1 — `saline-county-board` (no-source) |
+| Shelby | 17173 | 1 — `shelby-county-board` (no-source) |
+| Union | 17181 | 1 — `union-county-board` (no-source) |
 | Vermilion | 17183 | 1 — `vermilion-county-website` (no-source) |
+| Wabash | 17185 | 1 — `wabash-county-board` (no-source) |
 | Warren | 17187 | 1 — `pass10-frontier-unasked` (no-source) |
+| Wayne | 17191 | 1 — `wayne-county-board` (no-source) |
+| White | 17193 | 1 — `white-county-board` (no-source) |
+| Williamson | 17199 | 1 — `williamson-county-board` (no-source) |
 
-## Unresearched (29)
+## Unresearched (0)
 
-Alexander, Clark, Clay, Coles, Crawford, Cumberland, Douglas, Edgar, Edwards, Effingham, Franklin, Gallatin, Hamilton, Hardin, Jasper, Johnson, Lawrence, Massac, Moultrie, Pope, Pulaski, Richland, Saline, Shelby, Union, Wabash, Wayne, White, Williamson.
+.
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 89 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 118 records in the Data gaps panel: `chicago-amenity-phones`.

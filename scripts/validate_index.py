@@ -208,6 +208,35 @@ GEOMETRY_FILES = {
     "putnam-county-outline.json": (1, 1),  # Putnam County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
     "brown-county-outline.json": (1, 1),  # Brown County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
     "calhoun-county-outline.json": (1, 1),  # Calhoun County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.
+    "alexander-county-outline.json": (1, 1),  # Alexander County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "clark-county-outline.json": (1, 1),  # Clark County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "clay-county-outline.json": (1, 1),  # Clay County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "coles-county-outline.json": (1, 1),  # Coles County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "crawford-county-outline.json": (1, 1),  # Crawford County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "cumberland-county-outline.json": (1, 1),  # Cumberland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "douglas-county-outline.json": (1, 1),  # Douglas County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "edgar-county-outline.json": (1, 1),  # Edgar County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "edwards-county-outline.json": (1, 1),  # Edwards County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "effingham-county-outline.json": (1, 1),  # Effingham County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "franklin-county-outline.json": (1, 1),  # Franklin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "gallatin-county-outline.json": (1, 1),  # Gallatin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "hamilton-county-outline.json": (1, 1),  # Hamilton County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "hardin-county-outline.json": (1, 1),  # Hardin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "jasper-county-outline.json": (1, 1),  # Jasper County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "johnson-county-outline.json": (1, 1),  # Johnson County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "lawrence-county-outline.json": (1, 1),  # Lawrence County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "massac-county-outline.json": (1, 1),  # Massac County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "moultrie-county-outline.json": (1, 1),  # Moultrie County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "pope-county-outline.json": (1, 1),  # Pope County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "pulaski-county-outline.json": (1, 1),  # Pulaski County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "richland-county-outline.json": (1, 1),  # Richland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "saline-county-outline.json": (1, 1),  # Saline County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "shelby-county-outline.json": (1, 1),  # Shelby County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "union-county-outline.json": (1, 1),  # Union County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "wabash-county-outline.json": (1, 1),  # Wabash County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "wayne-county-outline.json": (1, 1),  # Wayne County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "white-county-outline.json": (1, 1),  # White County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "williamson-county-outline.json": (1, 1),  # Williamson County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -293,6 +322,35 @@ DYNAMIC_REFERENCE = frozenset({
     "putnam-county-outline.json",
     "brown-county-outline.json",
     "calhoun-county-outline.json",
+    "alexander-county-outline.json",
+    "clark-county-outline.json",
+    "clay-county-outline.json",
+    "coles-county-outline.json",
+    "crawford-county-outline.json",
+    "cumberland-county-outline.json",
+    "douglas-county-outline.json",
+    "edgar-county-outline.json",
+    "edwards-county-outline.json",
+    "effingham-county-outline.json",
+    "franklin-county-outline.json",
+    "gallatin-county-outline.json",
+    "hamilton-county-outline.json",
+    "hardin-county-outline.json",
+    "jasper-county-outline.json",
+    "johnson-county-outline.json",
+    "lawrence-county-outline.json",
+    "massac-county-outline.json",
+    "moultrie-county-outline.json",
+    "pope-county-outline.json",
+    "pulaski-county-outline.json",
+    "richland-county-outline.json",
+    "saline-county-outline.json",
+    "shelby-county-outline.json",
+    "union-county-outline.json",
+    "wabash-county-outline.json",
+    "wayne-county-outline.json",
+    "white-county-outline.json",
+    "williamson-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 

@@ -996,7 +996,7 @@
         "file": "stephenson-precincts.json",
         "min_features": 36,
         "max_features": 36,
-        "note": "Stephenson's 36 CURRENT voting precincts \u2014 20 rural + Freeport 01-16. Bounds are an EQUALITY because the two source maps enumerate the whole county exactly once. For a year the app recorded that Stephenson published no current precinct boundaries; it does, as two vector PDFs on the County Clerk's own Elections page, which Clerk Jazmin Wingert pointed at on 2026-08-03 in reply to a records request. Georeferenced by scripts/build_stephenson_precincts.py, which proves the transcription two ways before writing: the 36 printed populations total 44,630, the county's live Census 2020 POP100 to the person, and the Freeport sixteen are cross-checked against the SAME sixteen polygons the board-district map draws \u2014 read off a different document, georeferenced independently, and agreeing 16/16 on district assignment at IoU 0.996 or better."
+        "note": "Stephenson's 36 CURRENT voting precincts — 20 rural + Freeport 01-16. Bounds are an EQUALITY because the two source maps enumerate the whole county exactly once. For a year the app recorded that Stephenson published no current precinct boundaries; it does, as two vector PDFs on the County Clerk's own Elections page, which Clerk Jazmin Wingert pointed at on 2026-08-03 in reply to a records request. Georeferenced by scripts/build_stephenson_precincts.py, which proves the transcription two ways before writing: the 36 printed populations total 44,630, the county's live Census 2020 POP100 to the person, and the Freeport sixteen are cross-checked against the SAME sixteen polygons the board-district map draws — read off a different document, georeferenced independently, and agreeing 16/16 on district assignment at IoU 0.996 or better."
       },
       {
         "file": "stark-county-board-districts.json",
@@ -1066,6 +1066,209 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Calhoun County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "alexander-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Alexander County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "clark-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Clark County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "clay-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Clay County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "coles-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Coles County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "crawford-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Crawford County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "cumberland-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Cumberland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "douglas-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Douglas County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "edgar-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Edgar County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "edwards-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Edwards County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "effingham-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Effingham County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "franklin-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Franklin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "gallatin-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Gallatin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "hamilton-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Hamilton County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "hardin-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Hardin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jasper-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jasper County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "johnson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Johnson County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "lawrence-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Lawrence County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "massac-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Massac County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "moultrie-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Moultrie County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "pope-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Pope County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "pulaski-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Pulaski County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "richland-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Richland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "saline-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Saline County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "shelby-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Shelby County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "union-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Union County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "wabash-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Wabash County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "wayne-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Wayne County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "white-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "White County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "williamson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Williamson County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
         "dynamic_reference": true
       }
     ],
@@ -1283,7 +1486,7 @@
         "min_keys": 3,
         "note": "McDonough County Board members keyed by district (3 districts of SEVEN members each = 21, the county's full board), scraped weekly from http://mcg.mcdonough.il.us/members.html — the same page whose district headings supply the boundary composition, so membership and boundary move together and are checked together. The page prints every member's HOME ADDRESS and none is collected: the scraper reads only the phone out of that cell, and the builder refuses to write any field whose name looks like an address."
       },
-{
+      {
         "file": "fulton-county-board-members.json",
         "min_keys": 3,
         "note": "Fulton County Board members keyed by district (3 districts of FIVE members each = 15, the count the county states on the same page it publishes them). Scraped weekly from https://fultoncountyil.gov/county-board/members/, which publishes the board TWICE — a photo grid grouped by district (the only place the district is stated) and hidden popup blocks carrying the e-mail the grid omits — so the scraper joins the two halves on the member's name. Above District #1 sits a fourth section headed \"Fulton County Board Chairman\" containing a member who ALSO appears in his own district; it is read as the source of the Chair ROLE, not as a sixteenth seat, and the per-district ceiling fails the build if it is ever swept in as one. Names ship as the county prints them, including \"Karl WIlliams\" with its capital I."

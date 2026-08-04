@@ -1196,6 +1196,418 @@ COUNTIES = {
             (40.1508, -89.3720, "Lincoln — Logan County"),
         ],
     },
+    # ---- Pass-13 research sweep (2026-08-04): the 29 counties that had no gap
+    # record at all, researched together after contiguity was retired as a
+    # shipping gate. GAP-LOCATION outlines only — none is dispatched. Anchors
+    # derived from TIGERweb Incorporated Places centroids and round-tripped
+    # through a point-in-county test (EXPANSION_GUIDE §2.5.1), never recalled
+    # coordinates; outside anchors are the largest place of neighbouring
+    # counties. Alexander has two outside anchors, not three — its remaining
+    # borders are the Mississippi and Ohio rivers, not Illinois counties.
+    "alexander": {
+        "fips": "003",
+        "name": "Alexander County",
+        "inside": [
+            (37.0061, -89.1819, "Cairo (county seat)"),
+            (37.2415, -89.2713, "Tamms"),
+            (37.2957, -89.4869, "East Cape Girardeau"),
+        ],
+        "outside": [
+            (37.1826, -89.0849, "Olmsted — Pulaski County"),
+            (37.4612, -89.2378, "Anna — Union County"),
+        ],
+    },
+    "clark": {
+        "fips": "023",
+        "name": "Clark County",
+        "inside": [
+            (39.3986, -87.6900, "Marshall (county seat)"),
+            (39.3054, -87.9888, "Casey"),
+            (39.3381, -87.8813, "Martinsville"),
+        ],
+        "outside": [
+            (39.6148, -87.6909, "Paris — Edgar County"),
+            (39.0089, -87.7333, "Robinson — Crawford County"),
+            (39.2484, -88.1598, "Greenup — Cumberland County"),
+        ],
+    },
+    "clay": {
+        "fips": "025",
+        "name": "Clay County",
+        "inside": [
+            (38.7694, -88.5069, "Louisville (county seat)"),
+            (38.6688, -88.4759, "Flora"),
+            (38.6858, -88.3486, "Clay City"),
+        ],
+        "outside": [
+            (38.7285, -88.0839, "Olney — Richland County"),
+            (39.1202, -88.5508, "Effingham — Effingham County"),
+            (38.5224, -89.1233, "Centralia — Marion County"),
+        ],
+    },
+    "coles": {
+        "fips": "029",
+        "name": "Coles County",
+        "inside": [
+            (39.4844, -88.1778, "Charleston (county seat)"),
+            (39.4774, -88.3623, "Mattoon"),
+            (39.5306, -88.0201, "Ashmore"),
+        ],
+        "outside": [
+            (39.2484, -88.1598, "Greenup — Cumberland County"),
+            (39.7967, -88.2748, "Tuscola — Douglas County"),
+            (39.6148, -87.6909, "Paris — Edgar County"),
+        ],
+    },
+    "crawford": {
+        "fips": "033",
+        "name": "Crawford County",
+        "inside": [
+            (39.0089, -87.7333, "Robinson (county seat)"),
+            (39.0022, -87.9106, "Oblong"),
+            (38.9968, -87.8336, "Stoy"),
+        ],
+        "outside": [
+            (38.7263, -87.6873, "Lawrenceville — Lawrence County"),
+            (39.3986, -87.6900, "Marshall — Clark County"),
+            (38.9873, -88.1645, "Newton — Jasper County"),
+        ],
+    },
+    "cumberland": {
+        "fips": "035",
+        "name": "Cumberland County",
+        "inside": [
+            (39.2728, -88.2422, "Toledo (county seat)"),
+            (39.2484, -88.1598, "Greenup"),
+            (39.3216, -88.4503, "Neoga"),
+        ],
+        "outside": [
+            (39.4774, -88.3623, "Mattoon — Coles County"),
+            (38.9873, -88.1645, "Newton — Jasper County"),
+            (39.4098, -88.8007, "Shelbyville — Shelby County"),
+        ],
+    },
+    "douglas": {
+        "fips": "041",
+        "name": "Douglas County",
+        "inside": [
+            (39.7967, -88.2748, "Tuscola (county seat)"),
+            (39.6833, -88.3014, "Arcola"),
+            (39.8645, -88.1600, "Villa Grove"),
+        ],
+        "outside": [
+            (40.1141, -88.2736, "Champaign — Champaign County"),
+            (39.5951, -88.6085, "Sullivan — Moultrie County"),
+            (39.4774, -88.3623, "Mattoon — Coles County"),
+        ],
+    },
+    "edgar": {
+        "fips": "045",
+        "name": "Edgar County",
+        "inside": [
+            (39.6148, -87.6909, "Paris (county seat)"),
+            (39.5545, -87.9396, "Kansas"),
+            (39.8044, -87.6749, "Chrisman"),
+        ],
+        "outside": [
+            (39.3986, -87.6900, "Marshall — Clark County"),
+            (40.1426, -87.6111, "Danville — Vermilion County"),
+            (39.4774, -88.3623, "Mattoon — Coles County"),
+        ],
+    },
+    "edwards": {
+        "fips": "047",
+        "name": "Edwards County",
+        "inside": [
+            (38.3767, -88.0579, "Albion (county seat)"),
+            (38.5198, -88.0092, "West Salem"),
+            (38.4449, -87.9976, "Bone Gap"),
+        ],
+        "outside": [
+            (38.4187, -87.7694, "Mount Carmel — Wabash County"),
+            (38.3798, -88.3724, "Fairfield — Wayne County"),
+            (38.7285, -88.0839, "Olney — Richland County"),
+        ],
+    },
+    "effingham": {
+        "fips": "049",
+        "name": "Effingham County",
+        "inside": [
+            (39.1202, -88.5508, "Effingham (county seat)"),
+            (39.1320, -88.4796, "Teutopolis"),
+            (39.0561, -88.7478, "Altamont"),
+        ],
+        "outside": [
+            (38.6688, -88.4759, "Flora — Clay County"),
+            (38.9753, -89.1117, "Vandalia — Fayette County"),
+            (38.9873, -88.1645, "Newton — Jasper County"),
+        ],
+    },
+    "franklin": {
+        "fips": "055",
+        "name": "Franklin County",
+        "inside": [
+            (38.0110, -88.9178, "Benton (county seat)"),
+            (37.8997, -88.9301, "West Frankfort"),
+            (37.9918, -89.0636, "North City"),
+        ],
+        "outside": [
+            (38.0019, -89.2323, "Du Quoin — Perry County"),
+            (38.0902, -88.5387, "McLeansboro — Hamilton County"),
+            (37.7344, -88.9419, "Marion — Williamson County"),
+        ],
+    },
+    "gallatin": {
+        "fips": "059",
+        "name": "Gallatin County",
+        "inside": [
+            (37.7158, -88.1865, "Shawneetown (county seat)"),
+            (37.9025, -88.1279, "New Haven"),
+            (37.7979, -88.2606, "Ridgway"),
+        ],
+        "outside": [
+            (38.0862, -88.1720, "Carmi — White County"),
+            (37.7375, -88.5457, "Harrisburg — Saline County"),
+            (37.4240, -88.3501, "Rosiclare — Hardin County"),
+        ],
+    },
+    "hamilton": {
+        "fips": "065",
+        "name": "Hamilton County",
+        "inside": [
+            (38.0902, -88.5387, "McLeansboro (county seat)"),
+            (37.9345, -88.4624, "Broughton"),
+            (38.1981, -88.6847, "Dahlgren"),
+        ],
+        "outside": [
+            (38.0862, -88.1720, "Carmi — White County"),
+            (38.0110, -88.9178, "Benton — Franklin County"),
+            (37.7375, -88.5457, "Harrisburg — Saline County"),
+        ],
+    },
+    "hardin": {
+        "fips": "069",
+        "name": "Hardin County",
+        "inside": [
+            (37.4499, -88.3051, "Elizabethtown (county seat)"),
+            (37.4240, -88.3501, "Rosiclare"),
+            (37.4709, -88.1659, "Cave-In-Rock"),
+        ],
+        "outside": [
+            (37.9025, -88.1279, "New Haven — Gallatin County"),
+            (37.3619, -88.4871, "Golconda — Pope County"),
+            (37.7375, -88.5457, "Harrisburg — Saline County"),
+        ],
+    },
+    "jasper": {
+        "fips": "079",
+        "name": "Jasper County",
+        "inside": [
+            (38.9873, -88.1645, "Newton (county seat)"),
+            (38.9300, -88.0277, "Ste. Marie"),
+            (38.9958, -88.0218, "Willow Hill"),
+        ],
+        "outside": [
+            (39.2484, -88.1598, "Greenup — Cumberland County"),
+            (38.7285, -88.0839, "Olney — Richland County"),
+            (39.1202, -88.5508, "Effingham — Effingham County"),
+        ],
+    },
+    "johnson": {
+        "fips": "087",
+        "name": "Johnson County",
+        "inside": [
+            (37.4143, -88.8870, "Vienna (county seat)"),
+            (37.5610, -88.9557, "Goreville"),
+            (37.4716, -88.9746, "Buncombe"),
+        ],
+        "outside": [
+            (37.1826, -89.0849, "Olmsted — Pulaski County"),
+            (37.4612, -89.2378, "Anna — Union County"),
+            (37.1565, -88.7082, "Metropolis — Massac County"),
+        ],
+    },
+    "lawrence": {
+        "fips": "101",
+        "name": "Lawrence County",
+        "inside": [
+            (38.7263, -87.6873, "Lawrenceville (county seat)"),
+            (38.7196, -87.8722, "Sumner"),
+            (38.7096, -87.7590, "Bridgeport"),
+        ],
+        "outside": [
+            (39.0089, -87.7333, "Robinson — Crawford County"),
+            (38.7285, -88.0839, "Olney — Richland County"),
+            (38.4187, -87.7694, "Mount Carmel — Wabash County"),
+        ],
+    },
+    "massac": {
+        "fips": "127",
+        "name": "Massac County",
+        "inside": [
+            (37.1565, -88.7082, "Metropolis (county seat)"),
+            (37.1264, -88.6275, "Brookport"),
+            (37.2071, -88.8447, "Joppa"),
+        ],
+        "outside": [
+            (37.4143, -88.8870, "Vienna — Johnson County"),
+            (37.3619, -88.4871, "Golconda — Pope County"),
+            (37.1826, -89.0849, "Olmsted — Pulaski County"),
+        ],
+    },
+    "moultrie": {
+        "fips": "139",
+        "name": "Moultrie County",
+        "inside": [
+            (39.5951, -88.6085, "Sullivan (county seat)"),
+            (39.6444, -88.7411, "Bethany"),
+            (39.5583, -88.5387, "Allenville"),
+        ],
+        "outside": [
+            (39.7967, -88.2748, "Tuscola — Douglas County"),
+            (39.4098, -88.8007, "Shelbyville — Shelby County"),
+            (39.8557, -88.9345, "Decatur — Macon County"),
+        ],
+    },
+    "pope": {
+        "fips": "151",
+        "name": "Pope County",
+        "inside": [
+            (37.3619, -88.4871, "Golconda (county seat)"),
+            (37.5005, -88.5847, "Eddyville"),
+        ],
+        "outside": [
+            (37.1565, -88.7082, "Metropolis — Massac County"),
+            (37.4143, -88.8870, "Vienna — Johnson County"),
+            (37.4240, -88.3501, "Rosiclare — Hardin County"),
+        ],
+    },
+    "pulaski": {
+        "fips": "153",
+        "name": "Pulaski County",
+        "inside": [
+            (37.0853, -89.1629, "Mound City (county seat)"),
+            (37.1826, -89.0849, "Olmsted"),
+            (37.2777, -89.1752, "Ullin"),
+        ],
+        "outside": [
+            (37.0061, -89.1819, "Cairo — Alexander County"),
+            (37.4143, -88.8870, "Vienna — Johnson County"),
+            (37.4612, -89.2378, "Anna — Union County"),
+        ],
+    },
+    "richland": {
+        "fips": "159",
+        "name": "Richland County",
+        "inside": [
+            (38.7285, -88.0839, "Olney (county seat)"),
+            (38.6974, -88.2233, "Noble"),
+            (38.6512, -88.0440, "Calhoun"),
+        ],
+        "outside": [
+            (38.6688, -88.4759, "Flora — Clay County"),
+            (38.7263, -87.6873, "Lawrenceville — Lawrence County"),
+            (38.3767, -88.0579, "Albion — Edwards County"),
+        ],
+    },
+    "saline": {
+        "fips": "165",
+        "name": "Saline County",
+        "inside": [
+            (37.7375, -88.5457, "Harrisburg (county seat)"),
+            (37.8113, -88.4416, "Eldorado"),
+            (37.8262, -88.5304, "Raleigh"),
+        ],
+        "outside": [
+            (38.0902, -88.5387, "McLeansboro — Hamilton County"),
+            (37.9025, -88.1279, "New Haven — Gallatin County"),
+            (37.7344, -88.9419, "Marion — Williamson County"),
+        ],
+    },
+    "shelby": {
+        "fips": "173",
+        "name": "Shelby County",
+        "inside": [
+            (39.4098, -88.8007, "Shelbyville (county seat)"),
+            (39.6258, -89.0214, "Moweaqua"),
+            (39.3868, -88.9592, "Tower Hill"),
+        ],
+        "outside": [
+            (39.5328, -89.2803, "Taylorville — Christian County"),
+            (38.9753, -89.1117, "Vandalia — Fayette County"),
+            (39.8557, -88.9345, "Decatur — Macon County"),
+        ],
+    },
+    "union": {
+        "fips": "181",
+        "name": "Union County",
+        "inside": [
+            (37.4510, -89.2666, "Jonesboro (county seat)"),
+            (37.4612, -89.2378, "Anna"),
+            (37.5737, -89.3191, "Alto Pass"),
+        ],
+        "outside": [
+            (37.4143, -88.8870, "Vienna — Johnson County"),
+            (37.7223, -89.2238, "Carbondale — Jackson County"),
+            (37.1826, -89.0849, "Olmsted — Pulaski County"),
+        ],
+    },
+    "wabash": {
+        "fips": "185",
+        "name": "Wabash County",
+        "inside": [
+            (38.4187, -87.7694, "Mount Carmel (county seat)"),
+            (38.3830, -87.9106, "Bellmont"),
+            (38.5276, -87.7103, "Allendale"),
+        ],
+        "outside": [
+            (38.3767, -88.0579, "Albion — Edwards County"),
+            (38.7263, -87.6873, "Lawrenceville — Lawrence County"),
+            (38.7285, -88.0839, "Olney — Richland County"),
+        ],
+    },
+    "wayne": {
+        "fips": "191",
+        "name": "Wayne County",
+        "inside": [
+            (38.3798, -88.3724, "Fairfield (county seat)"),
+            (38.3480, -88.5890, "Wayne City"),
+            (38.3618, -88.5355, "Sims"),
+        ],
+        "outside": [
+            (38.3767, -88.0579, "Albion — Edwards County"),
+            (38.6688, -88.4759, "Flora — Clay County"),
+            (38.0902, -88.5387, "McLeansboro — Hamilton County"),
+        ],
+    },
+    "white": {
+        "fips": "193",
+        "name": "White County",
+        "inside": [
+            (38.0862, -88.1720, "Carmi (county seat)"),
+            (38.2553, -87.9970, "Grayville"),
+            (37.9789, -88.3279, "Norris City"),
+        ],
+        "outside": [
+            (38.0902, -88.5387, "McLeansboro — Hamilton County"),
+            (37.9025, -88.1279, "New Haven — Gallatin County"),
+            (38.3798, -88.3724, "Fairfield — Wayne County"),
+        ],
+    },
+    "williamson": {
+        "fips": "199",
+        "name": "Williamson County",
+        "inside": [
+            (37.7344, -88.9419, "Marion (county seat)"),
+            (37.7983, -89.0305, "Herrin"),
+            (37.7629, -89.0841, "Carterville"),
+        ],
+        "outside": [
+            (38.0110, -88.9178, "Benton — Franklin County"),
+            (37.7223, -89.2238, "Carbondale — Jackson County"),
+            (37.7375, -88.5457, "Harrisburg — Saline County"),
+        ],
+    },
 }
 
 
