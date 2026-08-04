@@ -1053,6 +1053,32 @@ taught them.
   the hole is real rather than the outline having swallowed a county whole. Assert it in
   a card test too — a hole that silently inverts would tell residents of an unserved
   county that they are covered.
+- **The served area can be DISJOINT — contiguity retired as a shipping gate
+  (2026-08-04, operator decision).** Growth had been "one contiguous county at a time";
+  by pass 12 the outline already carried two holes (Menard and Bureau: enclosed,
+  researched, source-blocked — proof that adjacency never predicted serveability), and
+  pass 11 measured the frontier as ask-gated, so holding new counties to ring-adjacency
+  had stopped ordering the work and started refusing it. A county now joins the moment a
+  county-keyed layer answers in it, wherever it sits; contiguity survives only as a
+  research-ordering preference. Two rules are UNCHANGED and still binding: a county
+  never joins for a rich statewide answer (the Centralia/Marion trap,
+  `build_metro_outline.py`), and a dispatched layer never answers inside the wash — a
+  municipality in an unserved county waits for its county (the Galesburg record,
+  `galesburg-wards-outside-the-ring`). **First-island checklist** — `group_rings()`
+  emits a MultiPolygon for a disjoint served area, but no shipped build has exercised
+  that path, so the first detached county must: (1) rebuild `build_metro_outline.py`,
+  run `--check`, and confirm the emitted geometry is a MultiPolygon with the island as
+  its own OUTER ring — not a hole (the pass-4 nesting bug this machinery was written
+  against: an island emitted as a second ring of one Polygon reads as a hole, renders
+  identically under the wash, and answers False to every containment test inside it);
+  (2) give the island an INSIDE anchor and anchor the gap between island and mainland
+  OUTSIDE, so the unserved corridor is proven washed; (3) load the app and eyeball the
+  wash at the island's edges — even-odd rendering is verified for holes, not yet for a
+  second outer; (4) run the §2.5 step-1 mechanics unchanged (`DISPATCH_COUNTY_FIPS` +
+  `METRO_COUNTY_FIPS` + `validate_index.py` check 8); (5) `check_envelopes` will force
+  `metro_bbox`/`permalink_gate` to widen around the island — that also widens the
+  bounded geocoder's viewbox for the whole metro, so re-read the §6.1 worksheet
+  implications deliberately instead of accepting the automatic number.
 - **A workflow's PR title and body are a human-review surface: county drift there is a
   real defect, not cosmetics.** Three roster workflows cloned from Iroquois's kept
   Iroquois's DOMAIN and its "4 districts, four members each" description while scraping
@@ -1217,9 +1243,10 @@ Source classes (per family): **FREE** = one statewide GIS lights up all 102 coun
 shipped). **DERIVE** = FREE layer + a lookup table (judicial circuit — **blocked**: no
 authoritative machine-readable county→circuit source; ROE regions — candidate, verify
 carve-outs; never hand-encode either). **PER-COUNTY** = no uniform source (boards,
-precincts, park/fire/library, subcircuits beyond the enacted shapefiles) → collar-first,
-grow outward by data availability, **hidden where unsourced** — relevance-hiding is what
-makes deep-in-some-places coverage honest and legible. All Part 2 rules apply per county;
+precincts, park/fire/library, subcircuits beyond the enacted shapefiles) → grow by data
+availability wherever it surfaces (collar-first historically; contiguity retired as a
+shipping gate 2026-08-04 — §2.5.1's island bullet), **hidden where unsourced** —
+relevance-hiding is what makes deep-in-some-places coverage honest and legible. All Part 2 rules apply per county;
 at-large boards land as county-card rows (§1.5).
 
 **Risks, ranked:** precinct sourcing statewide is hardest (102 clerks, non-uniform,

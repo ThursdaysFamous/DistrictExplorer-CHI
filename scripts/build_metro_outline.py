@@ -12,8 +12,10 @@ at all — see DISPATCH_COUNTY_FIPS, which they deliberately do NOT appear in).
 This paragraph used to quote the counts and went stale within a tranche; the
 live numbers and the per-county roll-up are GENERATED from the two lists below
 into docs/COUNTY_STATUS.md, so no prose — this docstring included — quotes
-them by hand anymore. It is deliberately ONE connected region: a county joins
-only once it touches the ones already served.
+them by hand anymore. The served area is NOT required to be one connected
+region (contiguity was retired as a shipping gate 2026-08-04 — see the policy
+note above METRO_COUNTY_FIPS): a county joins whenever a county-keyed layer
+answers in it, wherever it sits.
 
 THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
 Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers
@@ -51,9 +53,11 @@ vertices), which is what makes the dissolve sound.
 The dissolve mirrors the app's `coverageOutlineRings` exactly: a segment walked
 by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
-edges left to cancel. Disjoint regions would fall out of the same walk — each
-closed ring is chained independently — but see METRO_COUNTY_FIPS: the served area
-is kept connected on purpose, so that path stays unexercised.
+edges left to cancel. Disjoint regions fall out of the same walk — each closed
+ring is chained independently — and group_rings() nests them into a MultiPolygon.
+No shipped build has produced one yet: the first detached county to ship
+exercises that path deliberately (first-island checklist,
+docs/EXPANSION_GUIDE.md §2.5.1) rather than trusting the dormant machinery.
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json
@@ -113,15 +117,38 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # "only inside one municipality, through a statewide layer", the county stays
 # out.
 #
-# ONE RING IS A DELIBERATE CONSTRAINT, not a coincidence: a detached county would
-# make the served area a set of islands, and the operator's call is that coverage
-# grows as a connected region. The Livingston -> McLean -> Logan -> Sangamon ->
-# Macoupin bridge exists for exactly that reason — built one contiguous county at
-# a time, it carried the served area from the Wisconsin line to the Metro East
-# without Madison and St. Clair ever being an island.
+# ONE RING WAS A DELIBERATE CONSTRAINT, RETIRED 2026-08-04 (operator decision).
+# Through pass 12 the call was that coverage grows as one connected region — the
+# Livingston -> McLean -> Logan -> Sangamon -> Macoupin bridge carried the
+# served area to the Metro East one contiguous county at a time precisely so
+# Madison and St. Clair were never an island. Two facts ended the rule. First,
+# the map had already stopped honouring its premise: Menard and Bureau sit fully
+# enclosed by served counties as HOLES in this outline, because serveability
+# follows published data and data availability is not spatially contiguous — a
+# connected ring never bought a hole-free region. Second, pass 11 measured the
+# frontier as ASK-gated, not search-gated (docs/DATA_LAYER_GUIDEBOOK.md, "the
+# search lever is spent"): once the lever is a records request, restricting
+# growth to ring-adjacent counties stopped being an ordering preference and
+# started refusing wins outright — a detached county that answers an ask with a
+# full GIS could not ship without a land bridge through counties that may have
+# nothing to publish.
 #
-# group_rings() below nests rings correctly and emits a MultiPolygon if this ever
-# does become disjoint — that machinery is in place, it is just not exercised yet.
+# What remains the rule is everything that was actually load-bearing: the
+# county-keyed test above (a county joins when a county-specific layer answers
+# SOMEWHERE in it — never for a rich statewide answer), the INSIDE/OUTSIDE
+# anchors, and a recorded gap for whatever a county still lacks. Contiguity
+# survives only as a research-ordering preference — a neighbour is cheaper to
+# verify against the counties around it — never as a shipping gate. And the
+# rule's granularity is the COUNTY: a municipality in an unserved county still
+# cannot carry its county in (the Galesburg record,
+# galesburg-wards-outside-the-ring).
+#
+# group_rings() below nests rings correctly and emits a MultiPolygon when the
+# served area becomes disjoint. That machinery is in place but no shipped build
+# has exercised it — the first island county follows the first-island checklist
+# in docs/EXPANSION_GUIDE.md §2.5.1 (prove the MultiPolygon emission, anchor the
+# island INSIDE and the water between OUTSIDE, eyeball the wash) rather than
+# assuming the dormant path still works.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
