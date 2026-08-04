@@ -940,8 +940,8 @@ in the researched-but-unbuilt backlog.
       "kind": "data-quality",
       "layer": "ward",
       "summary": "Galesburg publishes its seven council wards as map data — the only buildable ward source found outside the coverage ring — and building it alone would be the first ward group in an unserved county.",
-      "blocker": "Found 3 Aug 2026 in the pass-11 probe. The City of Galesburg runs a 75-service ArcGIS Online account which publishes Galesburg_City_Council_Wards, a Precincts layer (20 city precincts carrying ward, county board district and polling place), and Knox County Board Districts *in the City of Galesburg*. All three are real and current. None is countywide, so none of them serves Knox County itself. That is what makes this a decision rather than a build: every one of the 21 ward groups shipped today sits in a county inside the coverage ring, 21 of 21 with no exception, and Galesburg would be the first outside it. A Galesburg resident would then resolve the ward layer — which is dispatched, not statewide — while the out-of-scope wash greys their location out, which is the shape of the 2026-07-30 Kankakee bug rather than the Centralia municipality case (see scripts/build_metro_outline.py: `municipality` is statewide, `ward` is not). Adding Knox to the ring to compensate would be worse: nothing county-keyed answers anywhere else in Knox.",
-      "wanted": "An operator decision on whether a city ward group may ship in a county outside the coverage ring, and if so how the wash should describe that county. Alternatively Knox County publishing its board districts and precincts countywide, which would settle it by making Knox genuinely served — the city's own account already proves the county's lines exist in digital form."
+      "blocker": "Found 3 Aug 2026 in the pass-11 probe. The City of Galesburg runs a 75-service ArcGIS Online account which publishes Galesburg_City_Council_Wards, a Precincts layer (20 city precincts carrying ward, county board district and polling place), and Knox County Board Districts *in the City of Galesburg*. All three are real and current. None is countywide, so none of them serves Knox County itself. That is what makes this a decision rather than a build: every one of the 21 ward groups shipped today sits in a county inside the coverage ring, 21 of 21 with no exception, and Galesburg would be the first outside it. A Galesburg resident would then resolve the ward layer — which is dispatched, not statewide — while the out-of-scope wash greys their location out, which is the shape of the 2026-07-30 Kankakee bug rather than the Centralia municipality case (see scripts/build_metro_outline.py: `municipality` is statewide, `ward` is not). Adding Knox to the ring to compensate would be worse: nothing county-keyed answers anywhere else in Knox. DECIDED 4 Aug 2026, in the same decision that retired contiguity as a shipping gate (EXPANSION_GUIDE §2.5.1): the county stays the unit of coverage — a city cannot carry its unserved county in, so these wards wait for Knox rather than shipping into the wash. Note the retirement itself changes nothing here: Knox borders Fulton, so it was never contiguity-blocked; this gap always turned on the county-keyed test, and still does.",
+      "wanted": "Any county-keyed Knox layer makes Knox served and ships these wards in the same change. The live asks (Tier 3): the adopted board plan's districts 4 and 5 — the rural remainder the city's own account proves exists in digital form — or countywide precincts, from Knox County GIS or the County Clerk."
     },
     {
       "id": "knox-county-board-districts",
@@ -1683,6 +1683,23 @@ searching at all: **Champaign and Piatt** publish complete, current maps through
 the Champaign County GIS Consortium and we are **not licensed to republish
 them**. Easy to fetch is not the same as allowed, and no amount of asking a
 clerk changes a licence.
+
+### 2026-08-04: the ring stopped ordering the asks
+
+The day after pass 11, contiguity was retired as a shipping gate (EXPANSION_GUIDE
+§2.5.1; the policy note in `scripts/build_metro_outline.py` records the full
+reasoning — the short form is that the outline already carried two holes, so
+adjacency had stopped predicting serveability, and an ask-gated frontier makes a
+ring-adjacency rule refuse wins rather than order work). For this ledger it
+changes exactly one thing: **an ask's expected return no longer discounts by
+distance from the frontier.** The 29 counties with no gap record at all were
+unresearched mostly because research passes walked the frontier; they are now
+ordinary candidates for the Tier-4 cheapest question, and a county that answers
+with a full GIS ships as the outline's first island (first-island checklist,
+§2.5.1) instead of waiting for a bridge. What a licence forbids still stands
+(Champaign, Piatt), and what the county-keyed test forbids still stands — a city
+cannot carry its unserved county (`galesburg-wards-outside-the-ring`, decided
+the same day).
 
 ### The standing caution
 
