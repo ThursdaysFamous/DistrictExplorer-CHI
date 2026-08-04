@@ -637,6 +637,19 @@ def check_sw_lists(repo_root, app_dir):
 MUNICIPALITY_KEYED_LAYERS = {"ward"}
 
 
+# The distinctive word each county-dispatched layer's loader names carry. Used
+# to catch an entry pasted into the wrong table: a loader that reads as another
+# concept, and not as its own, is misfiled. Keys absent here are not checked.
+LAYER_CONCEPT_TOKEN = {
+    "county-board": "Board",
+    "county-precinct": "Precinct",
+    "fire-district": "Fire",
+    "library-district": "Library",
+    "park-district": "Park",
+    "judicial-subcircuit": "Subcircuit",
+}
+
+
 def _literals_from(path, names):
     """Read module-level literals without importing the module.
 
@@ -704,7 +717,7 @@ def check_county_coverage_list(html, repo_root):
     # Split the script at every top-level register*() call so each dispatch
     # table is read within its own call and cannot absorb a neighbour's keys.
     chunks = re.split(r"\n  (register[A-Za-z]*)\(\{", html)
-    unknown, outside = [], []
+    unknown, outside, misfiled = [], [], []
     seen_counties = set()
     for i in range(1, len(chunks) - 1, 2):
         if chunks[i] != "registerCountyLayer":
@@ -713,14 +726,43 @@ def check_county_coverage_list(html, repo_root):
         layer_id = re.search(r'id:\s*"([a-z-]+)"', body)
         if not layer_id or layer_id.group(1) in MUNICIPALITY_KEYED_LAYERS:
             continue
-        for key in re.findall(r'key:\s*"([a-z-]+)"', body):
+        lid = layer_id.group(1)
+        keys_here = re.findall(r'key:\s*"([a-z-]+)"', body)
+        dupes = sorted({k for k in keys_here if keys_here.count(k) > 1})
+        if dupes:
+            fail("%s registers the same county key twice: %s. registerCountyLayer's "
+                 "byKey lookup is LAST-WINS and render/cardIdentifier/primaryLink "
+                 "all dispatch through it, so the duplicate silently re-points the "
+                 "first entry's card at the second entry's renderer — no gate "
+                 "notices, because the layer still registers and still queries."
+                 % (lid, ", ".join(dupes)))
+        # An entry whose loader belongs to a DIFFERENT concept is an entry pasted
+        # into the wrong table. That shipped twice (2026-08-03/04): precinct
+        # entries for Stephenson and Macon landed in county-board, which gave
+        # Macon a board card it must not have and broke Stephenson's. The keys
+        # were legal and unique, so nothing above caught it.
+        own = LAYER_CONCEPT_TOKEN.get(lid)
+        if own:
+            others = {t for k, t in LAYER_CONCEPT_TOKEN.items() if t != own}
+            for ekey, loader in re.findall(
+                    r'key:\s*"([a-z-]+)",\s*\n\s*coverage:[^\n]*\n\s*'
+                    r'(?:loadGeometry|loader):\s*(\w+)', body):
+                foreign = sorted(t for t in others if t in loader)
+                if foreign and own not in loader:
+                    misfiled.append("%s entry '%s' uses %s (reads as %s, not %s)"
+                                    % (lid, ekey, loader, "/".join(foreign), own))
+        for key in keys_here:
             if key not in slug_fips:
-                unknown.append("%s: %s" % (layer_id.group(1), key))
+                unknown.append("%s: %s" % (lid, key))
                 continue
             seen_counties.add(key)
             if slug_fips[key] not in in_ring:
-                outside.append("%s (%s)" % (key, layer_id.group(1)))
+                outside.append("%s (%s)" % (key, lid))
 
+    if misfiled:
+        fail("dispatch entr%s sitting in the wrong layer's table: %s. Move the "
+             "entry into the registerCountyLayer call for its own concept."
+             % ("ies are" if len(misfiled) > 1 else "y is", "; ".join(sorted(misfiled))))
     if unknown:
         fail("dispatch entr%s for a county with no DISPATCH_COUNTY_FIPS entry: %s. "
              "Add the county (slug -> Census FIPS) to scripts/build_metro_outline.py, "

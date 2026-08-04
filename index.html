@@ -13378,7 +13378,22 @@ function initChiExplorer() {
     // (docs/COUNTY_LAYER_CONSOLIDATION.md).
     var entries = opts.entries || opts.counties;
     var byKey = {};
-    entries.forEach(function (entry) { byKey[entry.key] = entry; });
+    entries.forEach(function (entry) {
+      // A DUPLICATE KEY IS A SILENT DISASTER, so it throws at boot instead.
+      // byKey is last-wins, and render/cardIdentifier/primaryLink all dispatch
+      // through it — so a second entry under an existing key does not merely
+      // add a redundant lookup, it silently re-points the FIRST entry's cards
+      // at the second entry's renderer. That shipped: a precinct entry was
+      // pasted into the county-board table under key "stephenson" (2026-08-03),
+      // and from then until 2026-08-04 a Stephenson board result rendered
+      // through the precinct card. Nothing failed — every gate passed, because
+      // the layer still registered and still had a working query walk.
+      if (byKey[entry.key]) {
+        throw new Error(opts.id + ": duplicate county entry key '" + entry.key +
+          "' — byKey is last-wins, so this would re-point the earlier entry's card");
+      }
+      byKey[entry.key] = entry;
+    });
 
     // Union overlay: one attempt per county, each feature WRAPPED (never
     // mutating the per-county caches — other cards spatial-join against them)
@@ -13409,27 +13424,51 @@ function initChiExplorer() {
 
     var anyHoverOfficial = entries.some(function (entry) { return !!entry.hoverOfficial; });
 
+    /* Which counties' COVERAGE contains the point, evaluated in PARALLEL.
+     *
+     * This is the layer's hot path, and it used to be a serial walk. The query
+     * dispatcher below asked each county's `query` in table order until one
+     * returned a hit — and a county's query fetches that county's district
+     * geometry from that county's own GIS before it can test containment. So a
+     * point in the LAST county of a 39-entry table cost 39 sequential
+     * round-trips to 39 different servers, each one waiting on the last. That
+     * is what made the county board card slow, and it got worse with every
+     * county added, because new counties append to the end of the table.
+     *
+     * Coverage is the cheap question: every entry gates on a county OUTLINE
+     * that is same-origin, a couple of KB, and cached after first use. Asking
+     * all of them at once costs one round of small local fetches and names the
+     * ONE county worth querying — so the expensive remote call happens once
+     * instead of up to 39 times.
+     *
+     * Errors are collected, not thrown, so a single county's coverage outage
+     * cannot decide the answer for the others; both callers below re-raise the
+     * first error only when nothing matched, which is the behaviour they had. */
+    function coverageMatches(point) {
+      var firstErr = null;
+      return Promise.all(entries.map(function (entry) {
+        return Promise.resolve().then(function () { return entry.coverage(point); })
+          .then(function (inside) { return inside ? entry : null; },
+                function (err) { if (!firstErr) firstErr = err; return null; });
+      })).then(function (hits) {
+        return { matches: hits.filter(Boolean), firstErr: firstErr };
+      });
+    }
+
     registerLayer({
       id: opts.id,
       group: opts.group,
       label: opts.label,
-      // OR of the per-county coverage tests, in table order (each a cached
-      // same-origin outline check). A throwing test falls through to the next
-      // county; if none matched and one threw, the error propagates so the
+      // OR of the per-county coverage tests (each a cached same-origin outline
+      // check), asked in parallel. A throwing test cannot decide the answer for
+      // the others; if none matched and one threw, the error propagates so the
       // engine's fail-open applies — a coverage outage never hides the layer.
       coverage: function (point) {
-        var i = 0, firstErr = null;
-        function next() {
-          if (i >= entries.length) {
-            if (firstErr) throw firstErr;
-            return false;
-          }
-          var entry = entries[i++];
-          return Promise.resolve().then(function () { return entry.coverage(point); })
-            .then(function (inside) { return inside ? true : next(); },
-                  function (err) { if (!firstErr) firstErr = err; return next(); });
-        }
-        return Promise.resolve().then(next);
+        return coverageMatches(point).then(function (r) {
+          if (r.matches.length) return true;
+          if (r.firstErr) throw r.firstErr;
+          return false;
+        });
       },
       hoverName: function (feature) {
         var entry = byKey[feature.dxCounty];
@@ -13442,19 +13481,29 @@ function initChiExplorer() {
       // errored, that error propagates — a point in the downed county gets the
       // honest error card + Retry, never a lying "No result for this point."
       query: function (point, seq) {
-        var i = 0, firstErr = null;
-        function next() {
-          if (i >= entries.length) {
-            if (firstErr) throw firstErr;
-            return null;
+        // COVERAGE NARROWS, CONTAINMENT DECIDES. The final answer is still the
+        // county whose geometry actually contains the point — coverage only
+        // chooses which counties are worth asking, which is what turns up to N
+        // sequential remote fetches into (normally) one. If coverage names
+        // nobody, fall back to the full table: that is the pre-2026-08-04
+        // behaviour exactly, so an entry whose coverage test is missing or
+        // wrong still resolves rather than silently going blank.
+        return coverageMatches(point).then(function (r) {
+          var list = r.matches.length ? r.matches : entries;
+          var i = 0, firstErr = r.matches.length ? null : r.firstErr;
+          function next() {
+            if (i >= list.length) {
+              if (firstErr) throw firstErr;
+              return null;
+            }
+            var entry = list[i++];
+            return entry.query(point, seq).then(function (result) {
+              if (result) { result.dxCounty = entry.key; return result; }
+              return next();
+            }, function (err) { if (!firstErr) firstErr = err; return next(); });
           }
-          var entry = entries[i++];
-          return entry.query(point, seq).then(function (result) {
-            if (result) { result.dxCounty = entry.key; return result; }
-            return next();
-          }, function (err) { if (!firstErr) firstErr = err; return next(); });
-        }
-        return next();
+          return next();
+        });
       },
       render: function (result) {
         return byKey[result.dxCounty].render(result);
@@ -15674,122 +15723,6 @@ function initChiExplorer() {
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
-        }
-      },
-      // Macon — 64 precincts joined 64/64 to the county's own 29 voting
-      // locations (see loadMaconPrecincts). NO county-board row: Macon's board
-      // shapes carry no district numbers at all, so there is nothing honest to
-      // put there — the gap macon-county-board-labels says so on the card list.
-      {
-        key: "macon",
-        coverage: maconCountyCoverage,
-        loadGeometry: loadMaconPrecincts,
-        hoverName: function (feature) {
-          var v = findPropCI(feature.properties || {}, ["name"]);
-          return (v == null || String(v).trim() === "") ? null : String(v).trim();
-        },
-        query: function (point, seq) {
-          return loadMaconPrecincts().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
-            if (!feature) return null;
-            var props = feature.properties || {};
-            var name = findPropCI(props, ["name"]);
-            return {
-              seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null,
-              pollingPlace: props.dxPollingPlace || null,
-              pollingAddress: props.dxPollingAddress || null
-            };
-          });
-        },
-        render: function (result) {
-          var fields = [];
-          if (result.pollingPlace) {
-            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
-              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
-          }
-          fields.push({ label: "County", value: "Macon County" });
-          return renderFieldStack(fields);
-        },
-        cardIdentifier: function (result) {
-          return result.name ? "Precinct " + String(result.name) : "Unknown";
-        },
-        primaryLink: function () {
-          return {
-            label: "Macon County Clerk — Elections (official)",
-            url: "https://maconcountyil.gov/county-clerk/"
-          };
-        }
-      },
-      // Stephenson — 36 precincts georeferenced from the County Clerk's own two
-      // adopted maps (see loadStephensonPrecincts). The board district is a
-      // spatial join rather than a membership table: the maps name each precinct
-      // by township, and the board's own composition is expressed in townships
-      // and colours, not in precinct lists, so containment is the only honest
-      // link between them — and it is a good one, because the Freeport half of
-      // this file and the Freeport half of the board file are the same sixteen
-      // polygons read off two different documents.
-      //
-      // No polling place. The Clerk's Elections page links a countywide polling
-      // list, but the link is dead at the source (404), so there is nothing to
-      // join on and the card does not pretend otherwise.
-      {
-        key: "stephenson",
-        coverage: stephensonCountyCoverage,
-        loadGeometry: loadStephensonPrecincts,
-        hoverName: function (feature) {
-          var v = findPropCI(feature.properties || {}, ["name"]);
-          return (v == null || String(v).trim() === "") ? null : String(v).trim();
-        },
-        query: function (point, seq) {
-          return Promise.all([
-            loadStephensonPrecincts(),
-            loadStephensonCountyBoard().catch(function () { return null; })
-          ]).then(function (results) {
-            var feature = findFeatureContaining(results[0], point);
-            if (!feature) return null;
-            var props = feature.properties || {};
-            var district = null;
-            if (results[1]) {
-              var bf = findFeatureContaining(results[1], point);
-              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
-            }
-            return {
-              seq: seq,
-              name: findPropCI(props, ["name"]),
-              township: findPropCI(props, ["township"]),
-              population: findPropCI(props, ["population"]),
-              boardDistrict: district
-            };
-          });
-        },
-        render: function (result) {
-          var fields = [];
-          if (result.township) fields.push({ label: "Township", value: String(result.township) });
-          if (result.boardDistrict != null && result.boardDistrict !== "") {
-            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
-          }
-          if (result.population != null && result.population !== "") {
-            fields.push({ label: "Population (2020 census)", value: String(result.population) });
-          }
-          fields.push({ label: "County", value: "Stephenson County" });
-          fields.push({
-            label: "Boundary",
-            value: "Traced from Stephenson County's own adopted precinct maps " +
-              "(2022), which the county publishes as printed maps rather than " +
-              "as map data. Accurate to about 20 metres — treat the precinct " +
-              "line itself as approximate."
-          });
-          return renderFieldStack(fields);
-        },
-        cardIdentifier: function (result) {
-          return result.name ? "Precinct " + String(result.name) : "Unknown";
-        },
-        primaryLink: function () {
-          return {
-            label: "Stephenson County Clerk — Elections (official)",
-            url: "https://stephensoncountyil.gov/government/county_clerk_and_recorder/elections.php"
-          };
         }
       },
       // Stark — 2 districts of FOUR members each, the smallest board the layer
@@ -18985,6 +18918,122 @@ function initChiExplorer() {
       // The board district is exact rather than a spatial join: the board
       // districts were cross-checked as whole-precinct unions at build time and
       // each district feature carries the list it is made of.
+      // Stephenson — 36 precincts georeferenced from the County Clerk's own two
+      // adopted maps (see loadStephensonPrecincts). The board district is a
+      // spatial join rather than a membership table: the maps name each precinct
+      // by township, and the board's own composition is expressed in townships
+      // and colours, not in precinct lists, so containment is the only honest
+      // link between them — and it is a good one, because the Freeport half of
+      // this file and the Freeport half of the board file are the same sixteen
+      // polygons read off two different documents.
+      //
+      // No polling place. The Clerk's Elections page links a countywide polling
+      // list, but the link is dead at the source (404), so there is nothing to
+      // join on and the card does not pretend otherwise.
+      {
+        key: "stephenson",
+        coverage: stephensonCountyCoverage,
+        loadGeometry: loadStephensonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadStephensonPrecincts(),
+            loadStephensonCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              township: findPropCI(props, ["township"]),
+              population: findPropCI(props, ["population"]),
+              boardDistrict: district
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.township) fields.push({ label: "Township", value: String(result.township) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          if (result.population != null && result.population !== "") {
+            fields.push({ label: "Population (2020 census)", value: String(result.population) });
+          }
+          fields.push({ label: "County", value: "Stephenson County" });
+          fields.push({
+            label: "Boundary",
+            value: "Traced from Stephenson County's own adopted precinct maps " +
+              "(2022), which the county publishes as printed maps rather than " +
+              "as map data. Accurate to about 20 metres — treat the precinct " +
+              "line itself as approximate."
+          });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Stephenson County Clerk — Elections (official)",
+            url: "https://stephensoncountyil.gov/government/county_clerk_and_recorder/elections.php"
+          };
+        }
+      },
+      // Macon — 64 precincts joined 64/64 to the county's own 29 voting
+      // locations (see loadMaconPrecincts). NO county-board row: Macon's board
+      // shapes carry no district numbers at all, so there is nothing honest to
+      // put there — the gap macon-county-board-labels says so on the card list.
+      {
+        key: "macon",
+        coverage: maconCountyCoverage,
+        loadGeometry: loadMaconPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMaconPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Macon County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Macon County Clerk — Elections (official)",
+            url: "https://maconcountyil.gov/county-clerk/"
+          };
+        }
+      },
       {
         key: "stark",
         coverage: starkCountyCoverage,
