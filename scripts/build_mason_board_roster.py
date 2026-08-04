@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Write data/app/mason-county-board-members.json from a HAND-TRANSCRIBED table.
+Write data/app/mason-county-board-members.json from the County Clerk's own
+published spreadsheet, cross-checked against the hand transcription it replaced.
 
-WHY THERE IS NO SCRAPER. Mason publishes its board roster as one PDF, and that
+WHY THERE WAS NO SCRAPER UNTIL 2026-08-04. Mason publishes its board roster as one PDF, and that
 PDF is a SCAN — a single 1690x2216 greyscale JPEG. It does carry a text layer,
 which is the trap: the layer is written in a non-embedded Helvetica whose
 encoding does not survive extraction, so pdfplumber and pdftotext both return
@@ -12,7 +13,18 @@ real officeholder's name. So the roster is transcribed by hand from the scan
 (2026-08-02), which is the fleet's existing posture for sources automation
 cannot read (Kendall, McHenry, the early-voting sites).
 
-WHAT WATCHES IT INSTEAD. scripts/mason_roster_watch.py runs weekly and checks
+WHAT CHANGED. On 2026-08-04 the Clerk's elections office shared the county's
+own "Mason County Directory" as a Google Sheet — owned by countyclerk@
+masoncountyil.gov, readable by anyone with the link, and exportable as CSV. The
+scan is no longer the only machine-reachable copy of the roster, so this build
+now READS that sheet. The hand transcription below is kept, and it is not
+decoration: the sheet is parsed on every run and compared against it, so the
+first time the county changes a member the difference is printed rather than
+applied silently. It confirmed the transcription exactly on the day it arrived
+— all eight members, every name, party, phone, e-mail, term year and both
+officer roles.
+
+WHAT STILL WATCHES THE SCAN. scripts/mason_roster_watch.py runs weekly and checks
 two things it CAN check without reading the scan: that the county-board page
 still links this exact PDF (a superseded roster almost always lands at a new
 WordPress upload path, leaving the old URL serving the old file forever), and
@@ -84,6 +96,37 @@ MEMBERS = [
      "phone": "309-202-8796", "email": "athomson.mcboard@gmail.com", "termExpires": 2028},
 ]
 
+SHEET_ID = "1pffRO68CZLhQkVmFKlmDy_J1YyaDlYDkS2TATLpeNkQ"
+SHEET_TAB = "County Board Members"
+SHEET_URL = ("https://docs.google.com/spreadsheets/d/%s/gviz/tq"
+             "?tqx=out:csv&sheet=%s" % (SHEET_ID, SHEET_TAB.replace(" ", "%20")))
+SHEET_NOTE = ("Mason County Clerk & Recorder, \"Mason County Directory\" "
+              "(County Board Members tab), shared 2026-08-04")
+ROLE_WORDS = ("Chairman", "Vice-Chairman")
+
+
+def normalize_note(text):
+    """The county's own seat note, punctuated so a card cannot misread it.
+
+    Two transforms, both documented because neither may change a fact:
+
+    1. The sheet writes the separator as a bare hyphen, sometimes with no
+       spaces ("Vacant 11/03/2025-Will run for full term in 2026"). It becomes
+       a spaced em dash so the note reads as one sentence.
+    2. A note that OPENS with "Vacant" is prefixed "Seat ". On the card the note
+       sits directly under a named member, and "Vacant 11/03/2025" under
+       "Adam Sarnes" reads as though the person is vacant. He is not — he holds
+       the seat that fell vacant on that date, which is what the county means
+       and what its own Position column is describing.
+
+    Nothing else is touched: no word is dropped, added or reordered.
+    """
+    note = re.sub(r"\s*-\s*", " — ", (text or "").strip())
+    note = re.sub(r"\s+", " ", note)
+    if note.lower().startswith("vacant"):
+        note = "Seat " + note[0].lower() + note[1:]
+    return re.sub(r"— Will run", "— will run", note)
+
 EXPECT_DISTRICTS = ("1", "2")
 PHONE_RE = re.compile(r"^\d{3}-\d{3}-\d{4}$")
 EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
@@ -95,13 +138,80 @@ def fail(msg):
     sys.exit(1)
 
 
+def fetch_sheet_members():
+    """The Clerk's published tab, parsed into the same shape as MEMBERS.
+
+    A gviz request for an unknown tab silently returns the FIRST sheet rather
+    than erroring, so the parse asserts it found the board header before
+    trusting anything it read."""
+    import csv as _csv
+    import io as _io
+    import requests
+    from build_metro_outline import HEADERS, REQUEST_TIMEOUT
+    resp = requests.get(SHEET_URL, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    resp.raise_for_status()
+    rows = [[c.strip() for c in r] for r in _csv.reader(_io.StringIO(resp.text))]
+    if not any("MEMBERS OF THE MASON COUNTY BOARD" in " ".join(r) for r in rows[:5]):
+        fail("the %r tab did not come back — gviz returns the first sheet for an "
+             "unknown tab name, and this is not the board tab" % SHEET_TAB)
+    out = []
+    for row in rows:
+        if len(row) < 8:
+            continue
+        name, _addr, email, _city, phone, district, party, term = row[:8]
+        position = row[8] if len(row) > 8 else ""
+        if district not in EXPECT_DISTRICTS or not EMAIL_RE.match(email or ""):
+            continue
+        member = {"name": name, "district": district, "party": party,
+                  "phone": (phone or "").replace("/", "-"), "email": email,
+                  "termExpires": int(term)}
+        role = next((w for w in ROLE_WORDS if position.strip() == w), None)
+        if role:
+            member["role"] = role
+        elif position.strip():
+            member["seatNote"] = normalize_note(position)
+        out.append(member)
+    return out
+
+
+def compare_to_transcription(scraped):
+    """Print any drift between the Clerk's sheet and the recorded transcription.
+
+    NOT a failure: a difference is how turnover looks, and the sheet is the
+    source. It is printed so the first divergence is seen by a person rather
+    than shipped silently."""
+    def key(m):
+        return (m["name"], m["district"], m["party"], m["phone"], m["email"],
+                str(m["termExpires"]), m.get("role") or "")
+    a = {key(m) for m in scraped}
+    b = {key(m) for m in MEMBERS}
+    if a == b:
+        return "sheet matches the %s transcription exactly (8/8)" % TRANSCRIBED
+    added = sorted(x[0] for x in a - b)
+    gone = sorted(x[0] for x in b - a)
+    return ("SHEET DIFFERS from the %s transcription — now on the sheet: %s; no "
+            "longer: %s. The sheet is the source; review before merging."
+            % (TRANSCRIBED, ", ".join(added) or "(none)", ", ".join(gone) or "(none)"))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="verify the shipped file, write nothing")
+    ap.add_argument("--offline", action="store_true",
+                    help="build from the recorded transcription without fetching the sheet")
     args = ap.parse_args()
 
+    if args.offline:
+        source, drift = MEMBERS, "offline — built from the recorded transcription"
+    else:
+        source = fetch_sheet_members()
+        if len(source) != len(MEMBERS):
+            fail("the Clerk's sheet parsed %d members, the county seats %d — refusing "
+                 "to ship a partial board" % (len(source), len(MEMBERS)))
+        drift = compare_to_transcription(source)
+
     roster = {}
-    for m in MEMBERS:
+    for m in source:
         d = m["district"]
         if d not in EXPECT_DISTRICTS:
             fail("member %s sits in district %r, which the county does not have" % (m["name"], d))
@@ -147,6 +257,7 @@ def main():
         with open(OUT_PATH, encoding="utf-8") as f:
             if f.read() != body:
                 fail("%s differs from the transcribed table in this file" % OUT_PATH)
+        print("mason-board-roster: %s" % drift)
         print("mason-board-roster: OK — %s matches the table transcribed %s"
               % (OUT_PATH, TRANSCRIBED))
         return

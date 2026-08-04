@@ -126,7 +126,7 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
-                     "149", "155", "009", "013", "169", "001", "109", "175", "057",
+                     "149", "155", "009", "013", "169", "001", "109", "175", "057", "115",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -159,6 +159,7 @@ DISPATCH_COUNTY_FIPS = {
     "dewitt": "039", "washington": "189", "cass": "017", "marshall": "123",
     "mason": "125", "adams": "001", "mcdonough": "109", "stark": "175",
     "fulton": "057",
+    "macon": "115",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -197,6 +198,15 @@ INSIDE = {
     # Western Illinois University. Its clerk supplied both on request. Joins the
     # ring through Schuyler, which is its southern neighbour.
     "Macomb (McDonough)": (40.4592, -90.6718),
+    # Pass 12: Macon joins on FOUR layers and deliberately not on its board.
+    # Its ArcGIS Online org publishes ElectionGeography_public — the same
+    # CentralSquare service family Tazewell, Whiteside and Iroquois already ship
+    # from — with 64 named precincts joined to 29 polling places, plus fire (17),
+    # library (10) and park (6) tilings. Its Electoral Districts layer holds the
+    # right FIVE shapes and every attribute on every one of them is null, so the
+    # board is a recorded gap rather than a guess (macon-county-board-labels).
+    # Macoupin is the precedent for joining on precincts with no board layer.
+    "Decatur (Macon)": (39.8588, -88.9588),
     "Chicago (Cook)": (41.8825, -87.6285),
     "Wheaton (DuPage)": (41.8661, -88.1070),
     "Joliet (Will)": (41.5250, -88.0817),
@@ -280,6 +290,11 @@ OUTSIDE = {
     # the OUTSIDE list doing exactly its job. Knox is the honest frontier: it
     # borders Fulton, is served by nothing, and carries its own recorded gap.
     "Galesburg (Knox)": (40.9478, -90.3712),
+    # Macon's arrival (pass 12) pushes the line south-east onto two counties this
+    # project had never researched — they were a second ring out until Macon
+    # closed the distance. Both are named here so neither can be quietly served.
+    "Sullivan (Moultrie)": (39.5868, -88.6069),
+    "Shelbyville (Shelby)": (39.4130, -88.7940),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb used to sit here, described as "enclosed on three sides by served
     # counties and the one border-ring county with no locatable GIS". The second

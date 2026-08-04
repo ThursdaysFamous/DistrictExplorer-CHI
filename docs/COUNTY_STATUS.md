@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**52 of 102 Illinois counties are served** — 42 through their own dispatch entries, 5 through a shipped judicial circuit, and 5 through the County card alone. 21 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 29 unresearched.
+**53 of 102 Illinois counties are served** — 43 through their own dispatch entries, 5 through a shipped judicial circuit, and 5 through the County card alone. 20 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 29 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook.
 
-## Served counties (52)
+## Served counties (53)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -48,10 +48,11 @@
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
 | Livingston | 17105 | dispatch | districted | `county-board` | 3 — `county-board-office-addresses` (no-source); `livingston-precincts` (no-source); `livingston-special-districts` (no-source) |
 | Logan | 17107 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `logan-fire-districts` (no-source) |
+| Macon | 17115 | dispatch | districted | `county-board`, `fire-district`, `library-district`, `park-district` | 2 — `macon-county-board-labels` (data-quality); `macon-district-name-formatting` (data-quality) |
 | Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 4 — `macoupin-county-board-districts` (no-source); `macoupin-municipal-officials` (blocked); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
 | Madison | 17119 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `madison-ward-officials` (no-source) |
 | Marshall | 17123 | dispatch | districted | `county-board` | 2 — `marshall-precinct-geometry` (no-source); `wenona-two-clerks-disagree` (data-quality) |
-| Mason | 17125 | dispatch | districted | `county-board` | 2 — `mason-precinct-vintage` (data-quality); `mason-roster-is-a-scan` (data-quality) |
+| Mason | 17125 | dispatch | districted | `county-board` | 1 — `mason-precinct-vintage` (data-quality) |
 | McDonough | 17109 | dispatch | districted | `county-board`, `county-precinct` | none |
 | McHenry | 17111 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district` | 4 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `mchenry-park-district` (no-source); `mchenry-ward-cities` (blocked) |
 | McLean | 17113 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `mclean-special-districts` (no-source) |
@@ -76,7 +77,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source); `winnebago-village-heads` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (21) — gap-recorded, not yet served
+## Researched frontier (20) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -94,7 +95,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Jefferson | 17081 | 1 — `pass10-frontier-unasked` (no-source) |
 | Jo Daviess | 17085 | 1 — `jo-daviess-county-board-districts` (no-source) |
 | Knox | 17095 | 2 — `galesburg-wards-outside-the-ring` (data-quality); `knox-county-board-districts` (no-source) |
-| Macon | 17115 | 1 — `macon-county-board-labels` (data-quality) |
 | Marion | 17121 | 1 — `pass10-frontier-unasked` (no-source) |
 | Menard | 17129 | 1 — `menard-commissioner-districts` (no-source) |
 | Mercer | 17131 | 1 — `mercer-county-board-districts` (no-source) |
