@@ -1064,9 +1064,11 @@ taught them.
   never joins for a rich statewide answer (the Centralia/Marion trap,
   `build_metro_outline.py`), and a dispatched layer never answers inside the wash — a
   municipality in an unserved county waits for its county (the Galesburg record,
-  `galesburg-wards-outside-the-ring`). **First-island checklist** — `group_rings()`
-  emits a MultiPolygon for a disjoint served area, but no shipped build has exercised
-  that path, so the first detached county must: (1) rebuild `build_metro_outline.py`,
+  `galesburg-wards-outside-the-ring`). **First-island checklist** — EXERCISED by
+  Effingham on 2026-08-04, the same day this rule landed (the pass-13 sweep found it
+  build-ready; the shipped metro-outline.json is now a MultiPolygon whose second
+  polygon is the island's own outer ring). Kept as the recipe for every later island —
+  the first detached county had to, and each next one must: (1) rebuild `build_metro_outline.py`,
   run `--check`, and confirm the emitted geometry is a MultiPolygon with the island as
   its own OUTER ring — not a hole (the pass-4 nesting bug this machinery was written
   against: an island emitted as a second ring of one Polygon reads as a hole, renders

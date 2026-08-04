@@ -55,9 +55,10 @@ by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
 edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
-No shipped build has produced one yet: the first detached county to ship
-exercises that path deliberately (first-island checklist,
-docs/EXPANSION_GUIDE.md §2.5.1) rather than trusting the dormant machinery.
+Effingham exercised that path on 2026-08-04 (the first island, §2.5.1 checklist):
+the shipped file is now a MultiPolygon whose second polygon is the island's own
+OUTER ring — verified by anchor, not by eye, because an island mis-nested as a
+hole renders identically and answers False to every containment test inside it.
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json
@@ -144,16 +145,20 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # galesburg-wards-outside-the-ring).
 #
 # group_rings() below nests rings correctly and emits a MultiPolygon when the
-# served area becomes disjoint. That machinery is in place but no shipped build
-# has exercised it — the first island county follows the first-island checklist
-# in docs/EXPANSION_GUIDE.md §2.5.1 (prove the MultiPolygon emission, anchor the
-# island INSIDE and the water between OUTSIDE, eyeball the wash) rather than
-# assuming the dormant path still works.
+# served area becomes disjoint. Effingham (FIPS 049) exercised it on 2026-08-04
+# as the first island, following the §2.5.1 checklist: its INSIDE anchor plus
+# the Vandalia/Shelbyville corridor OUTSIDE anchors prove the island landed as
+# its own OUTER ring — mis-nested as a hole it would render identically under
+# the wash and answer False to every containment test inside it.
 METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      "099", "091", "007", "063", "201", "105", "113", "107", "167", "117",
                      "119", "163", "037", "141", "177", "015", "103", "195", "161", "203", "073",
                      "143", "179", "075", "133", "157", "039", "189", "017", "123", "125",
                      "149", "155", "009", "013", "169", "001", "109", "175", "057", "115",
+                     # Effingham — the FIRST ISLAND (pass 13): two hops beyond
+                     # the served area, joined 2026-08-04 under the retired-
+                     # contiguity policy, so the dissolve emits a MultiPolygon
+                     "049",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -187,6 +192,7 @@ DISPATCH_COUNTY_FIPS = {
     "mason": "125", "adams": "001", "mcdonough": "109", "stark": "175",
     "fulton": "057",
     "macon": "115",
+    "effingham": "049",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -274,6 +280,11 @@ INSIDE = {
     "Havana (Mason)": (40.2950, -90.0566),
     "Toulon (Stark)": (41.0937, -89.8651),
     "Canton (Fulton)": (40.5570, -90.0393),
+    # The FIRST ISLAND (pass 13, 2026-08-04): Effingham joins detached — its
+    # ring is the outline's second polygon. The corridor between it and the
+    # mainland is held OUTSIDE by Vandalia (Fayette) and Shelbyville (Shelby),
+    # which is what proves the gap between island and mainland stays washed.
+    "Effingham (Effingham)": (39.1200, -88.5434),
     # The at-large tier: served through the COUNTY card's board section rather
     # than a dispatch entry, because none of the four has district geometry to
     # dispatch on. They belong here for the same reason the judicial-subcircuit

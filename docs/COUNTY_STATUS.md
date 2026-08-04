@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**53 of 102 Illinois counties are served** — 43 through their own dispatch entries, 5 through a shipped judicial circuit, and 5 through the County card alone. 49 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**54 of 102 Illinois counties are served** — 44 through their own dispatch entries, 5 through a shipped judicial circuit, and 5 through the County card alone. 48 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook.
 
-## Served counties (53)
+## Served counties (54)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -34,6 +34,7 @@
 | De Witt | 17039 | dispatch | districted | `county-board`, `county-precinct` | none |
 | DeKalb | 17037 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `dekalb-hinckley-board` (data-quality); `dekalb-precinct-codes` (data-quality) |
 | DuPage | 17043 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source); `dupage-municipal-phones` (data-quality); `dupage-ward-cities` (no-source) |
+| Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `effingham-municipal-officials` (no-source) |
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Greene | 17061 | judicial circuit | no board layer — see gaps | — | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 2 — `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source) |
@@ -77,7 +78,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source); `winnebago-village-heads` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (49) — gap-recorded, not yet served
+## Researched frontier (48) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -96,7 +97,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Douglas | 17041 | 1 — `douglas-county-board-districts` (no-source) |
 | Edgar | 17045 | 1 — `edgar-county-board` (no-source) |
 | Edwards | 17047 | 1 — `edwards-county-board` (no-source) |
-| Effingham | 17049 | 1 — `effingham-municipal-officials` (no-source) |
 | Fayette | 17051 | 1 — `fayette-county-board-geometry` (no-source) |
 | Ford | 17053 | 1 — `ford-county-board-vintage` (no-source) |
 | Franklin | 17055 | 1 — `franklin-county-board-districts` (no-source) |

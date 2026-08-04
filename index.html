@@ -7970,6 +7970,14 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  var loadEffinghamCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/effingham-county-outline.json", {}, 2);
+  });
+  function effinghamCountyCoverage(point) {
+    return loadEffinghamCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
   var loadCarrollCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/carroll-county-outline.json", {}, 2);
   });
@@ -8843,6 +8851,111 @@ function initChiExplorer() {
   var loadMaconPark = makeCached(function () {
     return loadMaconLayer(MACON_ORG_SERVICE + "ParkJoin_Dissolve/FeatureServer/0",
                           "1=1", "Park", "park districts");
+  });
+
+  /* Effingham (the 44th dispatched county, added 2026-08-04 — and the FIRST
+   * ISLAND: pass 13 found it two hops beyond the served area on the day
+   * contiguity retired as a shipping gate, so its county ring joins
+   * metro-outline.json as a second polygon rather than widening the first;
+   * the §2.5.1 first-island checklist was exercised with this change).
+   *
+   * Its AGO org ("EFFINGHAM COUNTY GIS", found by enumerating the org behind
+   * the county site's Instant Apps — catalogue search misses it because no
+   * item title names the county) runs ElectionGeography_public, the same
+   * CentralSquare family Tazewell, Whiteside, Iroquois and Macon ship from.
+   * Unlike Macon's, its Electoral Districts layer is fully ATTRIBUTED: 9
+   * board districts lettered A-I, one member each, with name, party, phone
+   * and e-mail ON the feature — so the board card reads its roster straight
+   * off the boundary fetch (the McLean pattern, one seat per district) and
+   * needs no scraper or weekly workflow; the source is the county's own
+   * live service. Cross-checked 2026-08-04 against the county's board page:
+   * 8 of 9 names corroborated by its committee lists; the ninth (District F,
+   * edited by the county 2024-07 — the layer's freshest row) holds no
+   * committee seat and the page publishes no per-district roster to check
+   * against, so it ships on the county's own record.
+   *
+   * Precincts: 38, joined 38/38 to 24 polling locations by facilityid (the
+   * Macon join), every location with a full address. Fire: the org's
+   * dissolved 18-zone tiling whose names match the county's own list of fire
+   * protection districts; the one zone literally named 'None' is EXCLUDED in
+   * the loader — that area has no fire district, and drawing it would claim
+   * otherwise. Park: 4 named districts (Effingham's drawn as two polygons).
+   * Library: ONE feature — the St Elmo district reaching in from Fayette;
+   * everywhere else in the county the card's honest answer is the empty
+   * state. */
+  var EFFINGHAM_ELECTION_SERVICE =
+    "https://services.arcgis.com/vj0V9Lal6oiz0YXp/arcgis/rest/services/" +
+    "ElectionGeography_public_2d9b4955467947e2802e5d4c4173060f/FeatureServer/";
+  var EFFINGHAM_ORG_SERVICE =
+    "https://services.arcgis.com/vj0V9Lal6oiz0YXp/arcgis/rest/services/";
+  function effinghamTrim(value) {
+    return value == null ? null : (String(value).replace(/\s+/g, " ").trim() || null);
+  }
+  function loadEffinghamLayer(url, where, outFields, label) {
+    var full = url + "/query?where=" + encodeURIComponent(where) +
+      "&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(full, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Effingham County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadEffinghamCountyBoard = makeCached(function () {
+    return loadEffinghamLayer(EFFINGHAM_ELECTION_SERVICE + "2",
+      "electedoffice = 'County Board Member'",
+      "district,repname1,party1,phone1,email1", "board districts");
+  });
+  /* One seat per district. A district with no name (a vacancy between
+   * appointments) drops out rather than rendering an empty person — the
+   * McLean rule, one column earlier. */
+  function effinghamBoardMembers(props) {
+    var raw = findPropCI(props, ["repname1"]);
+    var name = raw == null ? "" : String(raw).trim();
+    if (!name) return [];
+    return [{
+      name: name,
+      party: partyBadge(findPropCI(props, ["party1"])),
+      phone: effinghamTrim(findPropCI(props, ["phone1"])),
+      email: effinghamTrim(findPropCI(props, ["email1"]))
+    }];
+  }
+  var loadEffinghamPrecincts = makeCached(function () {
+    return Promise.all([
+      loadEffinghamLayer(EFFINGHAM_ELECTION_SERVICE + "1", "1=1", "name,precinctid,facilityid", "precincts"),
+      loadEffinghamLayer(EFFINGHAM_ELECTION_SERVICE + "0", "1=1", "facilityid,name,fulladdr", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = effinghamTrim(findPropCI(p, ["facilityid"]));
+          if (id) byId[id] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = effinghamTrim(findPropCI(props, ["facilityid"]));
+          var place = key ? byId[key] : null;
+          if (!place) return;
+          props.dxPollingPlace = effinghamTrim(findPropCI(place, ["name"]));
+          props.dxPollingAddress = effinghamTrim(findPropCI(place, ["fulladdr"]));
+        });
+      }
+      return precincts;
+    });
+  });
+  var loadEffinghamFire = makeCached(function () {
+    return loadEffinghamLayer(EFFINGHAM_ORG_SERVICE + "Districts/FeatureServer/5",
+                              "ZoneDesc <> 'None'", "ZoneDesc", "fire districts");
+  });
+  var loadEffinghamPark = makeCached(function () {
+    return loadEffinghamLayer(EFFINGHAM_ORG_SERVICE + "TaxDistricts_public/FeatureServer/7",
+                              "1=1", "NAME", "park districts");
+  });
+  var loadEffinghamLibrary = makeCached(function () {
+    return loadEffinghamLayer(EFFINGHAM_ORG_SERVICE + "TaxDistricts_public/FeatureServer/6",
+                              "1=1", "Name", "library districts");
   });
 
   /* Henry (the 28th county, added 2026-08-02 — it closes the notch between
@@ -16219,6 +16332,63 @@ function initChiExplorer() {
             return e.members.map(function (m) { return m.name; }).join(", ");
           }
         }
+      },
+      // Effingham — 9 single-member districts lettered A-I, the first island
+      // county (pass 13). The roster rides the district features themselves
+      // (name, party, phone, e-mail — see loadEffinghamCountyBoard's
+      // provenance note), so card and hover read the county's own live
+      // service with no scraper between them.
+      {
+        key: "effingham",
+        coverage: effinghamCountyCoverage,
+        loadGeometry: loadEffinghamCountyBoard,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadEffinghamCountyBoard().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var d = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: d != null && String(d).trim() !== "" ? String(d).trim() : null,
+              members: effinghamBoardMembers(props)
+            };
+          });
+        },
+        render: function (result) {
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Effingham County Board",
+            note: boardCountNote(result.members.length, null)
+          }));
+          if (result.members.length) {
+            wrap.appendChild(renderPersonRows(result.members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Effingham County Board (official)",
+            url: "https://effinghamcountyil.gov/county-board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadEffinghamCountyBoard,
+          name: function (feature) {
+            var names = effinghamBoardMembers(feature.properties || {})
+              .map(function (m) { return m.name; });
+            return names.length ? names.join(", ") : null;
+          }
+        }
       }
     ]
   });
@@ -16754,8 +16924,20 @@ function initChiExplorer() {
         coverage: maconCountyCoverage,
         loader: loadMaconFire,
         fields: [
-          { name: "name", label: "Fire District", keys: ["Fire"], primary: true },
+          { name: "name", label: "Fire District", keys: ["fire"], primary: true },
           { label: "County", value: "Macon County" }
+        ]
+      }),
+      // Effingham — the org's dissolved 18-zone tiling, names matching the
+      // county's own fire-protection-district list; the 'None' zone is
+      // excluded in the loader (no district there is the honest answer)
+      polygonCountyEntry({
+        key: "effingham",
+        coverage: effinghamCountyCoverage,
+        loader: loadEffinghamFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["zonedesc"], primary: true },
+          { label: "County", value: "Effingham County" }
         ]
       })
     ]
@@ -16954,8 +17136,17 @@ function initChiExplorer() {
         coverage: maconCountyCoverage,
         loader: loadMaconPark,
         fields: [
-          { name: "name", label: "Park District", keys: ["Park"], primary: true },
+          { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "Macon County" }
+        ]
+      }),
+      polygonCountyEntry({
+        key: "effingham",
+        coverage: effinghamCountyCoverage,
+        loader: loadEffinghamPark,
+        fields: [
+          { name: "name", label: "Park District", keys: ["name"], primary: true },
+          { label: "County", value: "Effingham County" }
         ]
       })
     ]
@@ -17222,8 +17413,19 @@ function initChiExplorer() {
         coverage: maconCountyCoverage,
         loader: loadMaconLibrary,
         fields: [
-          { name: "name", label: "Library District", keys: ["Library"], primary: true },
+          { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "Macon County" }
+        ]
+      }),
+      // Effingham — ONE feature: the St Elmo district reaching in from
+      // Fayette; everywhere else in the county the empty state is the answer
+      polygonCountyEntry({
+        key: "effingham",
+        coverage: effinghamCountyCoverage,
+        loader: loadEffinghamLibrary,
+        fields: [
+          { name: "name", label: "Library District", keys: ["name"], primary: true },
+          { label: "County", value: "Effingham County" }
         ]
       })
     ]
@@ -19328,6 +19530,50 @@ function initChiExplorer() {
           return {
             label: "De Witt County Clerk — Elections (official)",
             url: "https://www.dewittcountyil.gov/government/county_clerk.php"
+          };
+        }
+      },
+      // Effingham — 38 precincts joined 38/38 to the county's own 24 voting
+      // locations by facilityid (see loadEffinghamPrecincts), every location
+      // with a full address; the Macon join, one county south-east.
+      {
+        key: "effingham",
+        coverage: effinghamCountyCoverage,
+        loadGeometry: loadEffinghamPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadEffinghamPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Effingham County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Effingham County Clerk — Elections (official)",
+            url: "https://effinghamcountyil.gov/county-clerk/elections/"
           };
         }
       }

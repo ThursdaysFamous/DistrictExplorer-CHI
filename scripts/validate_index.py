@@ -217,7 +217,7 @@ GEOMETRY_FILES = {
     "douglas-county-outline.json": (1, 1),  # Douglas County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "edgar-county-outline.json": (1, 1),  # Edgar County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "edwards-county-outline.json": (1, 1),  # Edwards County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
-    "effingham-county-outline.json": (1, 1),  # Effingham County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "effingham-county-outline.json": (1, 1),  # Effingham County outline — the coverage test for the county's five dispatch entries (board/precinct/fire/park/library), and the FIRST ISLAND: joined detached on 2026-08-04 under the retired-contiguity policy, so metro-outline.json is now a MultiPolygon. Shipped as a gap-location outline by pass 13 and promoted in the same week.
     "franklin-county-outline.json": (1, 1),  # Franklin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "gallatin-county-outline.json": (1, 1),  # Gallatin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "hamilton-county-outline.json": (1, 1),  # Hamilton County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
@@ -331,7 +331,6 @@ DYNAMIC_REFERENCE = frozenset({
     "douglas-county-outline.json",
     "edgar-county-outline.json",
     "edwards-county-outline.json",
-    "effingham-county-outline.json",
     "franklin-county-outline.json",
     "gallatin-county-outline.json",
     "hamilton-county-outline.json",
