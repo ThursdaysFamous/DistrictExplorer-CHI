@@ -364,7 +364,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Bureau publishes its 18 board members and their parties, but its 18 district boundaries appear nowhere the public can use.",
-      "blocker": "Re-checked 31 Jul 2026, with better news than before: the adopted map IS downloadable — the 9 Nov 2021 board minutes and meeting packet record its 23-0 adoption and include it — but every page is a photograph of a map, with no readable lines or text, and the Princeton and Spring Valley insets split those cities street by street. So the districts cannot be rebuilt from townships or precincts, and the county publishes no precinct boundaries either. It runs no mapping system at all, and its board page still lists only 16 of the 18 seats (districts 9 and 15 are the missing two).  NOT YET ASKED: this records what the county's WEBSITE shows, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "blocker": "Re-checked 31 Jul 2026, with better news than before: the adopted map IS downloadable — the 9 Nov 2021 board minutes and meeting packet record its 23-0 adoption and include it — but every page is a photograph of a map, with no readable lines or text, and the Princeton and Spring Valley insets split those cities street by street. So the districts cannot be rebuilt from townships or precincts, and the county publishes no precinct boundaries either. It runs no mapping system at all, and its board page still lists only 16 of the 18 seats (districts 9 and 15 are the missing two). ASKED 1 Aug 2026 (the plan's descriptions or map files, to Clerk Eggers, with the districts 9/15 seat question held for a follow-up); no response as of 4 Aug — recorded by the 2026-08-04 mailbox reconciliation, which found this and six other asks the ledger had not recorded.",
       "wanted": "The 18 districts as map data — or a written description of which precincts and streets make up each one, plus precinct boundaries to rebuild them from. The map in the 2021 packet is the authority to check any submission against."
     },
     {
@@ -495,7 +495,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Mercer publishes its ten board members and their districts but draws the five districts nowhere.",
-      "blocker": "The county runs no mapping system: parcels go to an outside tax vendor, and the only map results for the county are commercial aggregators rather than anything it publishes. Its own board page says “Mercer County Board Districts, Map and Contact List are found in the Document Section”, and they are NOT there — the public document index carries 90 files across eight folders, and none is a district map, a composition list or a reapportionment ordinance. The elections page's 109 files are election results and candidate packets. Re-checked 31 Jul 2026: the board page still points at the Document Section, the documents are still missing, and the index now even has a “County Board” category, which is empty.",
+      "blocker": "The county runs no mapping system: parcels go to an outside tax vendor, and the only map results for the county are commercial aggregators rather than anything it publishes. Its own board page says “Mercer County Board Districts, Map and Contact List are found in the Document Section”, and they are NOT there — the public document index carries 90 files across eight folders, and none is a district map, a composition list or a reapportionment ordinance. The elections page's 109 files are election results and candidate packets. Re-checked 31 Jul 2026: the board page still points at the Document Section, the documents are still missing, and the index now even has a “County Board” category, which is empty. ASKED 1 Aug 2026 — the broken Document-Section link named to Clerk Gerber; no response as of 4 Aug (mailbox reconciliation).",
       "wanted": "Mercer County board district boundaries, or a list naming the townships or precincts in each of the five districts — the document its own board page already claims to publish. The member list is published and detailed: 5 districts electing two members each, with party, home town, term and the Chairman flagged."
     },
     {
@@ -1045,7 +1045,7 @@ in the researched-but-unbuilt backlog.
       "kind": "blocked",
       "layer": "county-board",
       "summary": "Champaign's and Piatt's district and precinct maps are complete, current and online — but we are not allowed to republish them.",
-      "blocker": "Checked 2 Aug 2026. This block is legal, not technical. Both counties' maps are run by the Champaign County GIS Consortium, which sells this data: buying it requires a signed licence, and the consortium's terms let you view the maps but not copy them, display them publicly, or put them on another server. Showing them here would do all three. The maps are easy to fetch, and that is exactly what makes this worth spelling out — easy is not the same as allowed. CONFIRMED BY THE COUNTY CLERK, 3 Aug 2026. A records request to Champaign County's election authority for the board-district and precinct boundaries was answered by the Clerk's elections division: \"The shape files for the requested data are maintained by the Champaign County GIS Consortium. You will need to reach out to them.\" So the county's own election authority says it does not hold the files \u2014 this blocker is now a named source rather than an inference from the consortium's terms, and the remaining ask is to the consortium, not to the clerk.",
+      "blocker": "Checked 2 Aug 2026. This block is legal, not technical. Both counties' maps are run by the Champaign County GIS Consortium, which sells this data: buying it requires a signed licence, and the consortium's terms let you view the maps but not copy them, display them publicly, or put them on another server. Showing them here would do all three. The maps are easy to fetch, and that is exactly what makes this worth spelling out — easy is not the same as allowed. CONFIRMED BY THE COUNTY CLERK, 3 Aug 2026. A records request to Champaign County's election authority for the board-district and precinct boundaries was answered by the Clerk's elections division: \"The shape files for the requested data are maintained by the Champaign County GIS Consortium. You will need to reach out to them.\" So the county's own election authority says it does not hold the files \u2014 this blocker is now a named source rather than an inference from the consortium's terms, and the remaining ask is to the consortium, not to the clerk. The Piatt half was ALSO asked directly (3 Aug 2026, board+precinct GIS to Clerk Harper — pending), and the consortium permission letter is drafted in pass 14.",
       "wanted": "Written permission from the Champaign County GIS Consortium, or the same boundaries released by a county under its own records law. The clerk route has now been tried in Champaign and closed \u2014 the election authority says it does not hold the shapefiles \u2014 so the live ask is to the consortium itself, and Piatt's clerk has not been asked yet. Both counties are ready to add the day the data may be republished; Champaign also has fire, library, park, cemetery and transit district maps behind the same licence."
     },
     {
@@ -1071,7 +1071,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Menard's 5 commissioner districts are drawn only on a picture map, and their lines follow section-line roads rather than precinct edges — so they cannot be rebuilt from anything published.",
-      "blocker": "Checked 2 Aug 2026: the only map is on the state's site, dated 8 Dec 2021 (after the census, with district populations of 2,436 to 2,486 printed on it) and flattened to a single image. The boundaries do not follow the county's 14 precincts, which rules out the combine-the-precincts approach that rescued several other counties. The county runs no mapping system — its viewer is a commercial parcel product — and neighbouring Sangamon's 203 datasets carry nothing for Menard. The member list is fine: all 5 commissioners with county emails and phones.",
+      "blocker": "Checked 2 Aug 2026: the only map is on the state's site, dated 8 Dec 2021 (after the census, with district populations of 2,436 to 2,486 printed on it) and flattened to a single image. The boundaries do not follow the county's 14 precincts, which rules out the combine-the-precincts approach that rescued several other counties. The county runs no mapping system — its viewer is a commercial parcel product — and neighbouring Sangamon's 203 datasets carry nothing for Menard. The member list is fine: all 5 commissioners with county emails and phones. ASKED 3 Aug 2026, ANSWERED 4 Aug: Clerk Gum looped in Supervisor of Assessments Dawn Kelton, who has requested the district shapefile from Beacon (the county's GIS vendor) and will forward it — the boundary this record says cannot be rebuilt is INBOUND, and the record closes when the file lands.",
       "wanted": "Commissioner district boundaries as map data, or the legal descriptions from the adopting ordinance in the December 2021 board minutes. The 2020 Census already matches the county's 14 precinct names exactly, so precincts would be ready the day the district lines could be tied to them."
     },
     {
@@ -1149,7 +1149,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Ford lists which townships make up each district, but one precinct is shared between two districts — and the only map's date cannot be established.",
-      "blocker": "Checked 2 Aug 2026: the board page prints each district's townships, and the board is unevenly sized (District 1 has 3 members, District 2 has 4, District 3 has 4). But Patton 3 appears in both District 1 and District 3, so that precinct is split and township boundaries alone cannot rebuild the lines. The one map, on the state's site, is titled “2011 County Board Districts” while the file itself was last changed on 9 Nov 2021 — either a re-upload of the old plan or a mistitled new one, and nothing published settles which. The county runs no mapping system of its own. The member list (names, district, phone and county emails) is freely available.",
+      "blocker": "Checked 2 Aug 2026: the board page prints each district's townships, and the board is unevenly sized (District 1 has 3 members, District 2 has 4, District 3 has 4). But Patton 3 appears in both District 1 and District 3, so that precinct is split and township boundaries alone cannot rebuild the lines. The one map, on the state's site, is titled “2011 County Board Districts” while the file itself was last changed on 9 Nov 2021 — either a re-upload of the old plan or a mistitled new one, and nothing published settles which. The county runs no mapping system of its own. The member list (names, district, phone and county emails) is freely available. ASKED 3 Aug 2026 — this record's exact question (which plan is in force, and the Patton 3 split), to Clerk Vaughn; no response as of 4 Aug.",
       "wanted": "Confirmation of which plan is currently in force, plus precinct boundaries — or simply a description of how Patton 3 is split. The township list is otherwise ready to use."
     },
     {
@@ -1446,7 +1446,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Johnson County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. PARTLY ANSWERED BEFORE IT WAS ASKED: the Clerk herself wrote on 21 Jul 2026 — \"We don't have a website to point back to\" — so the probe's no-website finding is now the county's own statement. The board-form and boundary questions remain open; the pass-14 draft asks them and thanks her for the earlier reply.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1576,7 +1576,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Wabash County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. ONE CLUE ARRIVED BEFORE THE ASK: the Clerk's 20 Jul 2026 reply (on the seal question) refers to attesting documents \"for the Wabash County Board of Commissioners\" — commission-form language, still to be confirmed from a certified document per §2.5 step 2; the pass-14 draft asks exactly that, quoting her own phrase back.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1602,7 +1602,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "White County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. AND THE ASK CANNOT REACH THE ROSTER ADDRESS: clerk@whitecounty-il.gov — the address the weekly clerk roster ships — hard-bounced on 31 Jul 2026 after five days of retries (permanent failure). The pass-14 draft is phone-first for that reason, and the roster address needs a human check.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -2121,6 +2121,41 @@ The 29 records this pass added follow the post-Ogle discipline: each states
 what the probe could see, and none claims the county publishes nothing — ten of
 them could not even be looked at. All 29 are Tier-4 candidates; clerk contacts
 ship in `data/app/il-county-clerks.json`.
+
+### 2026-08-04, evening: the mailbox is the second ledger
+
+Drafting the pass-14 asks surfaced a recording failure in this ledger itself:
+**seven boundary asks had already been sent (1–3 Aug) and never recorded here**
+— Bureau, Jo Daviess (to the GIS desk, the right one), Mercer (the
+broken-Document-Section angle) on the 1st; Ford (this ledger's own Tier-1
+question, verbatim), Piatt, Menard and the Champaign referral follow-up on the
+3rd. The ledger records what someone remembered to write down; the mailbox
+records what happened. **The corrective is now procedure: cross-reference the
+mailbox before drafting or recording an ask** — the pass-14 drafts were rebuilt
+against it, which converted five would-be duplicate asks into status rows.
+
+What the mailbox also held, none of it recorded anywhere:
+
+- **Menard ANSWERED (4 Aug), a Tier-3 success in motion**: Clerk Gum looped in
+  Supervisor of Assessments Dawn Kelton, who has requested the commissioner-
+  district shapefile from Beacon and will forward it. When it lands, Menard
+  builds — and the coverage outline's first HOLE closes.
+- **Mason's municipal-officials ask ANSWERED (4 Aug)**: Election Coordinator
+  Mariah Kolves added the project to the county's Google Doc directory; the
+  share notification arrives separately. (`mason-roster-is-a-scan`'s successor
+  question, answered by access rather than by file.)
+- **A July seal-permission campaign** (18–21 Jul) had already reached most
+  frontier clerks — so most pass-14 drafts open as follow-ups, the shape the
+  Mason/Marshall/Stark follow-ups proved. Its three substantive replies each
+  carried intelligence: Johnson's Clerk confirmed the county has NO website
+  (her words — the pass-13 finding, county-stated); Wabash's Clerk referred in
+  passing to the "Wabash County Board of Commissioners" (commission-form
+  language, certified-document check still owed); Jo Daviess has no seal PNG.
+- **Two address facts the weekly clerk roster needs a human look at**: White's
+  published address (clerk@whitecounty-il.gov) hard-bounced permanently on
+  31 Jul — the roster ships a dead e-mail; and Marshall's Clerk states her
+  e-mail changed ("please update your records") even though the old address
+  still delivered.
 
 ### The standing caution
 
