@@ -689,6 +689,14 @@ COUNTIES = {
             (39.2492, -88.8594, "Cowden — Shelby County"),
             (40.2638, -89.2309, "Atlanta — Logan County"),
             (39.5763, -89.7440, "Auburn — Sangamon County"),
+            # Added when Macon gained dispatch entries (2026-08-04): the four
+            # above leave three of its seven neighbours untested, and two of
+            # them (Moultrie, Shelby) are the frontier Macon's arrival opens.
+            # Each point was COMPUTED to lie inside the named county and clear
+            # of Macon, not recalled.
+            (40.0575, -88.9257, "De Witt County"),
+            (39.7265, -88.8105, "Moultrie County"),
+            (39.7359, -89.1455, "Christian County"),
         ],
     },
     "menard": {

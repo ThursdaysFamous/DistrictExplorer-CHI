@@ -7962,6 +7962,14 @@ function initChiExplorer() {
   var loadStephensonFire = makeCached(function () {
     return fetchJSONWithRetry("data/app/stephenson-fire-districts.json", {}, 2);
   });
+  var loadMaconCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/macon-county-outline.json", {}, 2);
+  });
+  function maconCountyCoverage(point) {
+    return loadMaconCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
   var loadCarrollCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/carroll-county-outline.json", {}, 2);
   });
@@ -8758,6 +8766,83 @@ function initChiExplorer() {
       }
       return precincts;
     });
+  });
+
+  /* Macon (the 43rd dispatched county, added 2026-08-04) — and the county the
+   * app deliberately serves WITHOUT its county board.
+   *
+   * Its ArcGIS Online org runs ElectionGeography_public, the same CentralSquare
+   * service family Tazewell, Whiteside and Iroquois already ship from, and the
+   * precinct half is as clean as any of them: 64 named precincts joined to 29
+   * voting locations. The org also publishes fire (17), library (10) and park
+   * (6) tilings, all named.
+   *
+   * WHAT IS NOT HERE IS THE BOARD. Layer 2 holds the right FIVE district
+   * shapes, created 2022-09-14, and every attribute on every one of them —
+   * electedoffice, district, districtid, the representative names, party,
+   * phone and e-mail — is null. So the shapes exist and nothing says which
+   * district is which. Numbering them by position would be a guess about who
+   * represents whom, which is the one thing this project does not do, so the
+   * board stays a recorded gap (macon-county-board-labels) and the county
+   * joins on its other four layers. Macoupin is the precedent: it has been
+   * served on precincts alone since pass 4.
+   *
+   * The polling attributes arrive with trailing CRLF and their fulladdr
+   * ALREADY ends in the municipality (29/29), so the loader trims and does not
+   * append the city a second time. */
+  var MACON_ELECTION_SERVICE =
+    "https://services1.arcgis.com/a3k0qIja5SolIRYR/arcgis/rest/services/" +
+    "ElectionGeography_public_e465746545b04d86ad93c78e731c292a/FeatureServer/";
+  var MACON_ORG_SERVICE =
+    "https://services1.arcgis.com/a3k0qIja5SolIRYR/arcgis/rest/services/";
+  function maconTrim(value) {
+    return value == null ? null : (String(value).replace(/\s+/g, " ").trim() || null);
+  }
+  function loadMaconLayer(url, where, outFields, label) {
+    var full = url + "/query?where=" + encodeURIComponent(where) +
+      "&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(full, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Macon County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadMaconPrecincts = makeCached(function () {
+    return Promise.all([
+      loadMaconLayer(MACON_ELECTION_SERVICE + "1", "1=1", "name,precinctid,facilityid", "precincts"),
+      loadMaconLayer(MACON_ELECTION_SERVICE + "0", "1=1", "facilityid,name,fulladdr", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byId = {};
+        (polling.features || []).forEach(function (f) {
+          var p = f.properties || {};
+          var id = maconTrim(findPropCI(p, ["facilityid"]));
+          if (id) byId[id] = p;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = maconTrim(findPropCI(props, ["facilityid"]));
+          var place = key ? byId[key] : null;
+          if (!place) return;
+          props.dxPollingPlace = maconTrim(findPropCI(place, ["name"]));
+          props.dxPollingAddress = maconTrim(findPropCI(place, ["fulladdr"]));
+        });
+      }
+      return precincts;
+    });
+  });
+  var loadMaconFire = makeCached(function () {
+    return loadMaconLayer(MACON_ORG_SERVICE + "Fire/FeatureServer/0", "1=1", "Fire", "fire districts");
+  });
+  var loadMaconLibrary = makeCached(function () {
+    return loadMaconLayer(MACON_ORG_SERVICE + "LibraryJoin_Dissolved/FeatureServer/0",
+                          "1=1", "Library", "library districts");
+  });
+  var loadMaconPark = makeCached(function () {
+    return loadMaconLayer(MACON_ORG_SERVICE + "ParkJoin_Dissolve/FeatureServer/0",
+                          "1=1", "Park", "park districts");
   });
 
   /* Henry (the 28th county, added 2026-08-02 — it closes the notch between
@@ -15591,6 +15676,51 @@ function initChiExplorer() {
           }
         }
       },
+      // Macon — 64 precincts joined 64/64 to the county's own 29 voting
+      // locations (see loadMaconPrecincts). NO county-board row: Macon's board
+      // shapes carry no district numbers at all, so there is nothing honest to
+      // put there — the gap macon-county-board-labels says so on the card list.
+      {
+        key: "macon",
+        coverage: maconCountyCoverage,
+        loadGeometry: loadMaconPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMaconPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Macon County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Macon County Clerk — Elections (official)",
+            url: "https://maconcountyil.gov/county-clerk/"
+          };
+        }
+      },
       // Stephenson — 36 precincts georeferenced from the County Clerk's own two
       // adopted maps (see loadStephensonPrecincts). The board district is a
       // spatial join rather than a membership table: the maps name each precinct
@@ -16623,6 +16753,15 @@ function initChiExplorer() {
           { name: "ambulance", label: "Ambulance", keys: ["ambulance"] },
           { label: "County", value: "Stark County" }
         ]
+      }),
+      polygonCountyEntry({
+        key: "macon",
+        coverage: maconCountyCoverage,
+        loader: loadMaconFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["Fire"], primary: true },
+          { label: "County", value: "Macon County" }
+        ]
       })
     ]
   });
@@ -16813,6 +16952,15 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["name"], primary: true },
           { label: "County", value: "Stark County" }
+        ]
+      }),
+      polygonCountyEntry({
+        key: "macon",
+        coverage: maconCountyCoverage,
+        loader: loadMaconPark,
+        fields: [
+          { name: "name", label: "Park District", keys: ["Park"], primary: true },
+          { label: "County", value: "Macon County" }
         ]
       })
     ]
@@ -17072,6 +17220,15 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["name"], primary: true },
           { label: "County", value: "Stark County" }
+        ]
+      }),
+      polygonCountyEntry({
+        key: "macon",
+        coverage: maconCountyCoverage,
+        loader: loadMaconLibrary,
+        fields: [
+          { name: "name", label: "Library District", keys: ["Library"], primary: true },
+          { label: "County", value: "Macon County" }
         ]
       })
     ]
