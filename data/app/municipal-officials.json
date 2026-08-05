@@ -1634,6 +1634,7 @@
         "termExpires": "2029"
       },
       {
+        "appointed": true,
         "name": "Roger Stacey",
         "role": "Trustee",
         "termExpires": "2027"
@@ -2434,11 +2435,6 @@
       },
       {
         "name": "Jeffrey A. Unland",
-        "role": "Commissioner",
-        "termExpires": "2027"
-      },
-      {
-        "name": "Vacant",
         "role": "Commissioner",
         "termExpires": "2027"
       },
@@ -3682,9 +3678,21 @@
         "termExpires": "2029"
       },
       {
+        "appointed": true,
+        "name": "Jim Rodgers",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
         "name": "Jules Harper",
         "role": "Trustee",
         "termExpires": "2027"
+      },
+      {
+        "appointed": true,
+        "name": "Laura Emling",
+        "role": "Trustee",
+        "termExpires": "2029"
       },
       {
         "name": "Lori Ryder-Togliatti",
@@ -3692,9 +3700,9 @@
         "termExpires": "2027"
       },
       {
-        "name": "Nicole Shain",
+        "name": "Waynette McTague",
         "role": "Trustee",
-        "termExpires": "2029"
+        "termExpires": "2027"
       }
     ],
     "county": "Grundy",
@@ -4854,6 +4862,11 @@
   "1715170": {
     "board": [
       {
+        "name": "Chris (CJ) Lauterbur",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
         "name": "Daniel J. Greggain",
         "role": "Trustee",
         "termExpires": "2027"
@@ -4862,11 +4875,6 @@
         "name": "David M. Togliatti",
         "role": "Trustee",
         "termExpires": "2027"
-      },
-      {
-        "name": "Lauterbur",
-        "role": "Trustee",
-        "termExpires": "2029"
       },
       {
         "name": "Pamela Noffsinger",
@@ -4898,7 +4906,8 @@
     },
     "officers": [
       {
-        "name": "Kayla Melvin - Appt.",
+        "appointed": true,
+        "name": "Kayla Melvin",
         "role": "Clerk"
       },
       {
@@ -5771,15 +5780,15 @@
         "role": "Trustee"
       },
       {
-        "name": "Jonathon Riley",
-        "role": "Trustee"
-      },
-      {
         "name": "Kenneth Vrazsity",
         "role": "Trustee"
       }
     ],
     "county": "Stephenson",
+    "head": {
+      "name": "Jonathon Riley",
+      "role": "Village President"
+    },
     "name": "Village of Dakota",
     "office": {
       "phone": "815-449-2218"
@@ -11406,6 +11415,7 @@
   "1735835": {
     "board": [
       {
+        "appointed": true,
         "name": "Bart Holzhauser",
         "role": "Trustee",
         "termExpires": "2027"
@@ -11426,6 +11436,7 @@
         "termExpires": "2029"
       },
       {
+        "appointed": true,
         "name": "Robert Schaller",
         "role": "Trustee",
         "termExpires": "2027"
@@ -16626,10 +16637,6 @@
       {
         "name": "Sarah Craig",
         "role": "Clerk"
-      },
-      {
-        "name": "Vacant",
-        "role": "Treasurer"
       }
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf"
@@ -16906,10 +16913,6 @@
       {
         "name": "Brooke Duffy",
         "role": "Clerk"
-      },
-      {
-        "name": "Vacant",
-        "role": "Treasurer"
       }
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
@@ -20022,11 +20025,6 @@
         "appointed": true,
         "name": "Stacey Hartwell",
         "role": "Clerk"
-      },
-      {
-        "appointed": true,
-        "name": "Vacant",
-        "role": "Treasurer"
       }
     ],
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
