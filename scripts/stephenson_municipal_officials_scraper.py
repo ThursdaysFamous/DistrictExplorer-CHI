@@ -68,6 +68,57 @@ STATUS_RE = re.compile(r"\((Elected|Appointed|Hired)\)", re.I)
 
 HEAD_TITLES = {"mayor", "president", "village president", "city president"}
 
+# ---------------------------------------------------------------------------
+# OFFICES THE ELECTION AUTHORITY STATED AND THE DIRECTORY CONTRADICTS.
+#
+# The county's directory is the source of record for every row it fills in, and
+# nothing here may touch a row it agrees with. This table exists for one narrow
+# case: the county's page and the county's ELECTION AUTHORITY, in writing, say
+# different things about the same seat. That is not a gap to infer across — it
+# is two sourced claims, and the honest handling is to ship the stronger one
+# and record the other, not to average them or to pick silently.
+#
+# THE ONE ENTRY, AND WHY THE CLERK WINS IT. The directory lists Dakota with six
+# trustees, a clerk, a treasurer, one row whose office cell is empty — and NO
+# PRESIDENT. Asked who Dakota's president is, Clerk & Recorder Jazmin Wingert
+# answered by name. An Illinois village board is a president plus six trustees,
+# so the directory's Dakota is not a lawful board as printed while the Clerk's
+# is: her answer resolves the missing head, and the blank cell is very likely
+# the sixth trustee. NOTE WHAT IS NOT DONE WITH THAT: the blank stays blank.
+# Reconstructing the seat that would make the arithmetic work is exactly the
+# inference this file refuses everywhere else, and one sourced correction does
+# not license a second unsourced one.
+#
+# KEYED BY THE NAME AS THE COUNTY PRINTS IT, deliberately. Wingert wrote
+# "Jonathan Riley"; the directory prints "Jonathon Riley". The published
+# spelling is what a reader sees at the card's own sourceUrl, so that spelling
+# ships and is the key here — an e-mail typed in a hurry does not overrule a
+# published document on orthography, and the discrepancy is recorded rather
+# than silently resolved.
+#
+# SELF-RETIRING. Each entry pins the office the county printed when it was
+# written. If that cell changes at all — corrected to President, emptied, or
+# the row removed — the entry stops matching and the run prints a RETIRE line,
+# the same shape as the clerk roster's bounce guard. An entry can therefore
+# never outlive the conflict it was written for.
+CLERK_STATED_OFFICES = {
+    ("Dakota", "Jonathon Riley"): {
+        "county_prints": "Trustee",
+        # "Village President" rather than the Clerk's bare "president": it is
+        # the statutory title, and it is the exact string this same directory
+        # prints for every other village head (Cedarville's Jeremy Monigold,
+        # and so on). Using the source's own vocabulary for the same office is
+        # normalisation, not invention — a card reading "President" for Dakota
+        # and "Village President" for its neighbours would imply a distinction
+        # that does not exist.
+        "office": "Village President",
+        "why": ("Stephenson County Clerk & Recorder Jazmin Wingert, by e-mail "
+                "2026-08-05: 'Jonathan Riley is the president for the Village "
+                "of Dakota.' The county's Cities & Villages directory prints "
+                "him as a Trustee and shows the village no president at all."),
+    },
+}
+
 # Bodies this page lists alongside the village's own officers that are NOT the
 # municipal government: Davis prints its zoning board of appeals, German Valley
 # its hired police. They are appointed members of a separate body, and shipping
@@ -127,6 +178,7 @@ def parse(page, warnings, dropped):
     # the markup nests them as siblings rather than as a container.
     heads = [(m.start(), m.end(), text_of(m.group(1))) for m in SUBHEAD_RE.finditer(page)]
     municipalities, officials, unmarked = [], [], []
+    stated_used = set()
     for i, (s0, e0, label) in enumerate(heads):
         hm = HEAD_LINE_RE.match(label)
         if not hm:
@@ -143,15 +195,25 @@ def parse(page, warnings, dropped):
                 continue
             office, appointed, marked = normalise_office(office_raw)
             if not office:
-                # A named person with a blank office cell. Dakota has one, and
-                # Dakota is also the one village whose page lists no president —
-                # so this is very likely the missing seat. It is NOT filled in:
-                # the county publishes no office for the row, and inferring one
-                # would be exactly the guess the honesty rules forbid.
+                # A named person with a blank office cell, shipped NOWHERE: the
+                # county published no title, and inferring one from the rows
+                # around it is exactly the guess the honesty rules forbid.
                 warnings.append("%s: '%s' is listed with no office — shipped "
                                 "nowhere; the county published no title"
                                 % (name, person))
                 continue
+            stated = CLERK_STATED_OFFICES.get((name, person))
+            if stated and office == stated["county_prints"]:
+                # The county's page and the county's election authority
+                # disagree about this seat. The authority's written answer
+                # ships; see CLERK_STATED_OFFICES for why, and for the guard
+                # that retires this the moment the page changes.
+                office, appointed, marked = stated["office"], False, False
+                stated_used.add((name, person))
+                warnings.append("%s: county page says '%s' for %s; shipped as "
+                                "'%s' — %s"
+                                % (name, stated["county_prints"], person,
+                                   office, stated["why"]))
             if office.lower() in NON_GOVERNING_OFFICES:
                 dropped.append("%s: %s (%s) — not a municipal office"
                                % (name, person, office))
@@ -182,6 +244,15 @@ def parse(page, warnings, dropped):
             if not marked:
                 unmarked.append("%s: %s (%s)" % (name, person, office))
             officials.append(rec)
+    # An entry that never applied is the loud case: the conflict it was
+    # written for is over. Either the county corrected the office (good — the
+    # county is the source of record and the entry should go) or the row moved
+    # and the table now describes somebody the page no longer prints that way.
+    for key in sorted(set(CLERK_STATED_OFFICES) - stated_used):
+        warnings.append("RETIRE CLERK_STATED_OFFICES[%r] — it did not apply this "
+                        "run, so the county no longer prints %r for that row; "
+                        "the conflict is over, delete the entry"
+                        % (key, CLERK_STATED_OFFICES[key]["county_prints"]))
     return municipalities, officials, unmarked
 
 

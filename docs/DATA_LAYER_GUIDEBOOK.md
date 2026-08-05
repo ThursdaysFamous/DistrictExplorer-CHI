@@ -469,8 +469,8 @@ in the researched-but-unbuilt backlog.
       "kind": "data-quality",
       "layer": "county-board",
       "summary": "Stephenson's four Freeport Township districts are traced from the county's printed map rather than built from published data. They are accurate to roughly 20 metres, and the card says so.",
-      "blocker": "ASKED AND ANSWERED, 3 Aug 2026 \u2014 and the answer changed what this gap says. It used to read 'Stephenson publishes no precinct boundaries'. The county does publish them: County Clerk Jazmin Wingert replied to a records request by pointing at her own Elections page, which carries the adopted 2022 precinct maps for Freeport Township and for the rural half. They are printed maps, not map data, so they are traced the same way these four districts are \u2014 and the county's 36 precincts now ship as their own layer, traced from exactly those documents. What is still missing is the same thing as before: precinct geometry as DATA. The four Freeport districts remain accurate to roughly 20 metres, and the card says so. As a check, the fit places the map's own rivers and creeks \u2014 features it was never fitted against \u2014 within 50 metres for 98.9% of their points, with a typical error of 16 metres; the county's four rural districts are whole townships and are exact. The Clerk directs requests for anything beyond her own maps to the county GIS office, which is the next ask.",
-      "wanted": "Freeport Township's 16 precincts as map data \u2014 a shapefile, GeoJSON or KML from the county GIS office. That one file would replace both the traced district lines and the traced precinct lines with published ones."
+      "blocker": "ASKED AND ANSWERED, 3 Aug 2026 \u2014 and the answer changed what this gap says. It used to read 'Stephenson publishes no precinct boundaries'. The county does publish them: County Clerk Jazmin Wingert replied to a records request by pointing at her own Elections page, which carries the adopted 2022 precinct maps for Freeport Township and for the rural half. They are printed maps, not map data, so they are traced the same way these four districts are \u2014 and the county's 36 precincts now ship as their own layer, traced from exactly those documents. What is still missing is the same thing as before: precinct geometry as DATA. The four Freeport districts remain accurate to roughly 20 metres, and the card says so. As a check, the fit places the map's own rivers and creeks \u2014 features it was never fitted against \u2014 within 50 metres for 98.9% of their points, with a typical error of 16 metres; the county's four rural districts are whole townships and are exact. THE SECOND DESK IS NOW NAMED AND MEASURED, 5 Aug 2026: asked who 'GIS' is, Clerk Wingert pointed at the county's Maps & GIS page, whose entire content is a link to WINGIS (wingis.org) \u2014 the regional consortium that holds Stephenson's parcel and layer data. WinGIS does not publish it. Its data page says digital data must be PURCHASED: submit a Data Request, receive a quote within 24 hours, and have a signed Data License Agreement on file; its subscription tier is open to 'non-profit organizations & commercial businesses only' and grants access 'through a custom mapping interface through the Internet only'. Measured rather than inferred from the terms: the Stephenson public viewer's own service, maps.wingis.org/public/rest/services/StephensonPublicPropertySearch/MapServer, answers an unauthenticated request with 'Token Required', while the neighbouring WardsAndDistricts and ElectedOfficials services on the same host are open (and are Winnebago-only). So the data demonstrably EXISTS and has a price \u2014 the same shape as the counties whose assessor sells parcels \u2014 rather than being missing. That is a different gap from 'nobody has it', and it is the one to record.",
+      "wanted": "Freeport Township's 16 precincts as map data. The holder is now known to be WinGIS, which sells rather than publishes it, so the routes are: a quote through WinGIS's Data Request process, the county releasing its own precinct file directly (it is the county's own election geography, not WinGIS's), or a public WinGIS service for Stephenson equivalent to the open Winnebago ones."
     },
     {
       "id": "jo-daviess-county-board-districts",
@@ -693,8 +693,8 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "park-district",
       "summary": "Stephenson's park and library districts exist only as shading inside pictures in the county's 2014 maps — unlike its fire map, which has real lines and is already shown.",
-      "blocker": "Checked 2 Aug 2026, when the fire map was traced: in the county's 2014 park and library district maps on the state's site, only the legend is drawn with real lines — the district shading itself is baked into sixteen image strips covering the map body. The fire map, from the same July 2014 series, draws its districts as real lines, which is why it could be traced. The district names still match the 2025 tax roll (park 4 of 4, library 4 of 4). Tracing the shading is possible in principle, but it would stack pixel-level error on top of the fitting error and land far coarser than any other boundary here. ASKED 1 Aug 2026, ANSWERED 3 Aug 2026: County Clerk Jazmin Wingert holds only the election maps and directed anything else to the county GIS office \u2014 so the ask is live but has moved to a second desk, which is the Tier-3 pattern in \"The ask ledger\".",
-      "wanted": "Park and library district boundaries as map data: a re-export of the county's own 2014 maps, files from the districts themselves, or a statewide taxing-district source."
+      "blocker": "Checked 2 Aug 2026, when the fire map was traced: in the county's 2014 park and library district maps on the state's site, only the legend is drawn with real lines — the district shading itself is baked into sixteen image strips covering the map body. The fire map, from the same July 2014 series, draws its districts as real lines, which is why it could be traced. The district names still match the 2025 tax roll (park 4 of 4, library 4 of 4). Tracing the shading is possible in principle, but it would stack pixel-level error on top of the fitting error and land far coarser than any other boundary here. ASKED 1 Aug 2026, ANSWERED 3 Aug 2026: County Clerk Jazmin Wingert holds only the election maps and directed anything else to the county GIS office \u2014 so the ask is live but has moved to a second desk, which is the Tier-3 pattern in \"The ask ledger\". THAT DESK IS NOW IDENTIFIED, 5 Aug 2026, and it is not a county office: asked who GIS is, the Clerk pointed at the county's Maps & GIS page, which contains nothing but a link to WINGIS (wingis.org), the regional consortium. WinGIS SELLS digital data \u2014 Data Request, quote within 24 hours, signed Data License Agreement \u2014 and its Stephenson viewer service is token-gated (see stephenson-freeport-precincts for the measurement). Two things follow for park and library specifically. First, whether WinGIS even holds these boundaries is unknown: its open services on the same host carry Winnebago wards, precincts and townships but nothing about park or library districts in any county, so a purchase might buy a file that does not exist. Second, and more usefully, the DISTRICTS THEMSELVES were never asked. Four park districts and four library districts are eight small public bodies that each hold their own boundary, and no one has written to them.",
+      "wanted": "Park and library district boundaries as map data. Three live routes, cheapest first: the eight districts themselves (never asked, and each holds its own boundary); a re-export of the county's own 2014 maps with the shading as lines rather than images; or a WinGIS quote, if WinGIS turns out to hold these layers at all."
     },
     {
       "id": "macoupin-special-districts",
@@ -2433,6 +2433,61 @@ precinct it SERVES**, and 0.3-mile instruments cannot bridge that. The ledger's
 existing phrasing — "containment on a page is not evidence" — was right, and is
 now measured rather than asserted.
 
+### 2026-08-05: "contact GIS" turned out to mean a consortium that sells it
+
+Stephenson's Clerk answered the follow-up, and the answer is the most useful
+kind of no this ledger collects: it names a holder and a price where two gap
+records had only a vague second desk.
+
+**Who "GIS" is.** Both `stephenson-freeport-precincts` and
+`stephenson-park-library-districts` ended with the same sentence — the Clerk
+holds only the election maps and directs everything else to the county GIS
+office. Asked who that is, Clerk Wingert sent the county's Maps & GIS page.
+Its entire content is a link to **WinGIS** (wingis.org), the regional
+consortium that holds the county's layers. So the second desk is not a county
+office at all, which is why no amount of probing county hostnames would have
+found it.
+
+**And what WinGIS's terms are, read rather than assumed.** Digital data must be
+*purchased*: submit a Data Request, get a quote within 24 hours, and have a
+signed Data License Agreement on file. Subscription membership is open to
+"non-profit organizations & commercial businesses only" and grants access
+"through a custom mapping interface through the Internet only." Measured, not
+inferred from that prose: the Stephenson public viewer's own backing service,
+`maps.wingis.org/public/rest/services/StephensonPublicPropertySearch/MapServer`,
+answers an unauthenticated request with **"Token Required."**
+
+**Why that is progress.** "Nobody has it" and "somebody has it and charges for
+it" are different gaps and deserve different records. Stephenson's precincts
+are not missing — they exist, in a consortium's hands, with a quoting process.
+The records now say so, and they name the routes that stay free: the county
+releasing its own election geography directly (it is the county's, not
+WinGIS's), or a public Stephenson service equivalent to the open Winnebago ones.
+
+**A free lead fell out of the same probe.** On the identical host, two services
+answer without a token and are wide open: `WardsAndDistricts` (Winnebago County
+Board, **WinCo Voting Precincts**, WinCo Political Townships, Rockford/Loves
+Park/Machesney Park wards) and `ElectedOfficials` (per-municipality officeholder
+layers plus board chairman and districts). Winnebago is already a served county
+and ships **no precinct layer** — `WardsAndDistricts` layer 7 is exactly that
+layer, free and public. Recorded here rather than built today, but it is a
+build, not a research question.
+
+**The reply also settled a seat, and the settlement had to be built carefully.**
+Asked who Dakota's village president is — the county directory shows the
+village none — Clerk Wingert named Jonathon Riley. The directory prints him as
+a **Trustee**. That is not a blank to fill but two sourced claims in conflict,
+so the scraper grew `CLERK_STATED_OFFICES`, which ships the election
+authority's answer, records the page's, and **pins the office the page printed
+when the entry was written** — change that cell in any direction and the entry
+stops applying and prints a RETIRE line. The corroboration is structural: an
+Illinois village board is a president plus six trustees, and the directory's
+Dakota is six trustees, a clerk, a treasurer, no president, and one row with an
+empty office cell. Riley as president makes it lawful. **What was deliberately
+NOT done:** that same arithmetic makes the blank row obviously the sixth
+trustee, and it stays blank. One sourced correction does not license a second
+unsourced one.
+
 ### The standing caution
 
 Four sources now ship from **archived files** rather than live fetches — Stark's map,
@@ -2459,6 +2514,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 >
 > | Open item | Blocker | Actionable? |
 > |---|---|---|
+> | **Winnebago voting precincts, free and public** (found 2026-08-05 while measuring what Stephenson's Clerk meant by "GIS" — see the ask ledger) — `maps.wingis.org/public/rest/services/WardsAndDistricts/MapServer`, no token, layer 7 **WinCo Voting Precincts**, alongside Winnebago County Board, political townships and the Rockford/Loves Park/Machesney Park ward layers. Winnebago is a served county that ships **no precinct layer**. The same host's `ElectedOfficials` service carries per-municipality officeholder layers (already the source behind Winnebago's municipal roster) | none found — the service is open and answers unauthenticated | **yes — a build, not a research question** |
 > | **The ISBE precinct-map collection** (found 2026-08-05 via Hamilton's Clerk — see the ask ledger) — `elections.il.gov/PrecinctMaps/<County>/`, **98 of 102 counties**, open directory listings. A 14-county sample measured **3 vector / 11 scan**, so the lead is the vector subset (Knox, Menard, Williamson confirmed so far). Knox's and Menard's files were checked and CONFIRM their existing gap records (2011 content; raster) rather than closing them | needs a per-county download-and-extract pass to find which counties' maps are vector AND current | **yes — a cheap research pass, unstarted** |
 > | ~~**Pass-14 first fruit — Hamilton**~~ **SHIPPED 2026-08-05, the forty-fifth dispatched county and SECOND island**, four hours after its Clerk's four-minute reply settled the at-large question and surfaced the county's vendor-hosted GIS org: precincts 17 (one unnamed — `hamilton-unnamed-precinct`, asked back) + fire 3 named as dispatch entries; the five-member board rides the County card from the weekly commissioners scrape of the county's own new site. STILL OPEN: `hamilton-precinct-polling`, `hamilton-municipal-officials` | nothing | done — two live asks recorded |
 > | ~~**The pass-13 build-ready ledger** — Effingham~~ **SHIPPED 2026-08-04, same day — the forty-fourth dispatched county and the FIRST ISLAND** (§2.5.1 checklist exercised: metro-outline.json is now a MultiPolygon, the island proven an OUTER ring by anchor, the Vandalia/Shelbyville corridor proven washed): board 9 districts A–I with the roster ON the features (no scraper — the county's own live service is the officeholder source), precincts 38 (polling 38/38), fire 17, park 4, library 1. The build's verification also caught findPropCI's lowercase-candidate contract being violated by six `keys:` entries — Macon's fire/park/library cards had shipped reading "Unknown" — fixed in the same change. STILL OPEN: `effingham-municipal-officials` (12 municipalities, no councils source) | nothing | done — municipal officials stay a recorded gap |
