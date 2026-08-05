@@ -2204,6 +2204,42 @@ refusals. The Tier-D form-first shape works exactly as designed — one
 memory-answerable question, and the at-large answer collapses the geometry
 ask to nothing.
 
+### 2026-08-05: the bounce guard, and what a check cannot see
+
+The mailbox reconciliation turned up a quiet honesty failure: the weekly clerk
+roster shipped **White County's published address, which had hard-bounced
+permanently on 31 Jul** after five days of retries. The County card was
+rendering it as a mailto link — telling a White County resident "write to your
+clerk here" when nothing they sent could arrive. Every existing gate was
+green, because the address parses, the roster count is right, and ISBE still
+publishes it.
+
+`build_county_clerk_roster.py` now carries a `KNOWN_UNDELIVERABLE` list: an
+address proven undeliverable by an actual bounce is dropped from the shipped
+file, while the clerk's NAME, PHONE and ADDRESS still ship — the card keeps
+every route that works and stops offering the one that doesn't. No app change
+was needed; the card already renders the e-mail row only when the field is
+present. When ISBE publishes a different address the list stops matching and
+the build prints a RETIRE line, so the entry cannot quietly outlive the fact
+it records.
+
+**The part worth remembering is what the cheap check could NOT do.** Before
+writing the list, the obvious guard — verify the domain's mail route in DNS —
+was measured against this exact failure: `whitecounty-il.gov` HAS a valid MX
+record, and that MX host resolves to a live A record. Every DNS-visible signal
+was healthy; the failure was at SMTP delivery time. A DNS check would have
+passed White and shipped the dead address anyway. It ships regardless
+(`--verify-mx`, run weekly, reported to the job summary and the PR body) —
+because it catches a DIFFERENT failure, a domain with no mail route at all —
+but it is explicitly not the guard for this class, and the code says so. Only
+a real send catches a real bounce, which is why every entry's evidence is a
+bounce and never an inference.
+
+Live measurement, same day: all 100 shipped clerk addresses' domains have live
+mail routes. Marshall's Clerk separately asked that her address be updated —
+the roster already carries the one she now sends from, so nothing to change,
+recorded here so the next reader does not go looking.
+
 ### The standing caution
 
 Four sources now ship from **archived files** rather than live fetches — Stark's map,
