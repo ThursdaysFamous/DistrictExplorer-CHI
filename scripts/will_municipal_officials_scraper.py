@@ -254,12 +254,34 @@ def parse_address(entry):
 
 # A personal name as the directory prints it. Three shapes the flattened text
 # forces us to absorb: an inline parenthetical nickname ("Teresa (Terry) A.
-# Kernc" — distinguishable from a party code because party codes are ALL-CAPS),
-# curly-quoted nicknames ("Sharon “Sherri” Reardon"), and a comma-separated
-# generational suffix ("Joseph E. Roudez, III").
+# Kernc"), curly-quoted nicknames ("Sharon “Sherri” Reardon"), and a
+# comma-separated generational suffix ("Joseph E. Roudez, III").
+#
+# A NICKNAME IS TOLD FROM A PARTY CODE BY WHAT FOLLOWS IT, NOT BY CASE. The old
+# test was "ALL-CAPS means party", and it cost Coal City's trustee his first
+# name: the directory prints "Chris (CJ) Lauterbur", "(CJ)" was read as a party
+# code, and the card got the bare surname "Lauterbur" — corroborated as wrong by
+# Grundy's own directory, which prints the same man (Coal City straddles the two
+# counties) as "Chris (CJ) Lauterbur".
+#
+# Case cannot do this job: a party code and an initials nickname are the same
+# shape. Position can. A parenthetical is part of the NAME only when more name
+# follows it; a party code is followed by the term year or by the appointment
+# note, never by another name word. Hence the lookahead: absorb the
+# parenthetical only if a capitalised word that is not "Appt" comes next.
+#
+#   "Teresa (Terry) A. Kernc 2029"        -> "(Terry)" then " A."   -> nickname
+#   "Chris (CJ) Lauterbur 2029"           -> "(CJ)"    then " Laut." -> nickname
+#   "Joe Smith (IND) 2029"                -> "(IND)"   then " 2029"  -> party
+#   "James Hanus (ACT) - Appt. 6/2025..." -> "(ACT)"   then " - App" -> party
+#
+# The party vocabulary is deliberately NOT hardcoded as the alternative: this
+# directory already prints fourteen distinct codes (IND, FPB, POL, LP, OPA, POP,
+# D, ROM, RF, ACT, BTS, TFP, OTP), local parties invent more every cycle, and a
+# list would rot silently.
 _CH = r"[A-Za-z\.\'‘’“”\-À-ɏ]"
 NAME_RE = (r"[A-Z]" + _CH + r"*"
-           r"(?:\s*\((?![A-Z]{1,6}\))[A-Za-z\.\'‘’“”\- ]+\))?"
+           r"(?:\s*\([A-Za-z\.\'‘’“”\- ]+\)(?=\s+(?!Appt)[A-Z]))?"
            r"(?:\s+" + _CH + r"+){0,4}?"
            r"(?:,\s*(?:Jr|Sr|II|III|IV|V)\.?)?")
 # Party codes are all-caps abbreviations (IND, OTP, DEM, D, R).
@@ -311,7 +333,19 @@ PERSON = re.compile(
     r"(?:(?P<kind>Ward|District)\s+(?P<num>\d+)\s*-\s*)?"
     r"(?:(?P<atlarge>At\s+Large)\s+)?"
     r"(?P<name>" + NAME_RE + r")"
-    r"(?:\s*-\s*Appt\.?[^0-9]*\d{1,2}/\d{4})?"
+    # "- Appt. 5/2025" after a name is a note about HOW the seat was filled,
+    # not part of what the person is called, so it never reaches the card. The
+    # DATE IS OPTIONAL because Coal City prints the bare "Kayla Melvin - Appt."
+    # — with the date required, that trailing "- Appt." fell inside NAME_RE and
+    # shipped as her name.
+    # THE PARTY CODE AND THE APPOINTMENT NOTE COME IN EITHER ORDER, so both
+    # slots are offered on both sides. Steger prints "James Hanus (ACT) -
+    # Appt. 6/2025 2027" — party first — and with only the trailing slot the
+    # whole run failed to match and HE WAS DROPPED: a sitting trustee absent
+    # from the roster, not merely mis-spelled. Every other village prints the
+    # note first, which is why one ordering had gone unnoticed.
+    r"(?:\s*\((?P<party_lead>" + PARTY_RE + r")\))?"
+    r"(?P<appt>\s*-\s*Appt\.?(?:[^0-9]*\d{1,2}/\d{4})?)?"
     r"\s*(?:\((?P<party>" + PARTY_RE + r")\))?"
     r"\s*(?P<year>20\d{2})")
 
@@ -348,9 +382,14 @@ def parse_members(text, office):
             "office": office,
             "district": district,
             "name": name,
-            "party": clean(m.group("party")),
+            # Either slot may hold it — see PERSON. Only one can ever fire,
+            # because a run carries one party code.
+            "party": clean(m.group("party") or m.group("party_lead")),
             "term_expires": clean(m.group("year")),
-            "appointed": False,
+            # The directory's "- Appt. M/YYYY" says the seat was filled by
+            # appointment; the flag carries that, so the card never implies an
+            # election that did not happen (the Grundy rule, same words).
+            "appointed": bool(m.group("appt")),
         })
     return members
 
@@ -367,6 +406,15 @@ def parse_officer(entry, label):
     # The directory prints this where an office has no named holder.
     if re.match(r"Contact Entity", name, flags=re.I):
         return None
+    # "Kayla Melvin - Appt." (Coal City's clerk): the same appointment note the
+    # board path strips, on a clerk/treasurer row instead. OFFICER_NAME_RE has
+    # no place to put it, so it had been shipping INSIDE her name. It is a fact
+    # about the seat, not the person — the flag carries it, the card does not.
+    appt_suffix = re.search(r"\s*-\s*Appt\.?(?:[^0-9]*\d{1,2}/\d{4})?\s*$", name, re.I)
+    appointed_by_suffix = False
+    if appt_suffix and name[:appt_suffix.start()].strip():
+        name = name[:appt_suffix.start()].strip()
+        appointed_by_suffix = True
     party = re.search(re.escape(name) + r"\s*\((" + PARTY_RE + r")\)", entry)
     year = re.search(re.escape(name) + r"[^0-9]{0,20}(20\d{2})", entry)
     return {
@@ -375,7 +423,7 @@ def parse_officer(entry, label):
         "name": name,
         "party": clean(party.group(1)) if party else None,
         "term_expires": clean(year.group(1)) if year else None,
-        "appointed": bool(m.group("appt")),
+        "appointed": bool(m.group("appt")) or appointed_by_suffix,
     }
 
 

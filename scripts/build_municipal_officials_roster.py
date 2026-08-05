@@ -215,6 +215,11 @@ COUNTY_FLOORS = {
 # ~140 more after cross-county dedupe.
 MIN_TOTAL_MUNICIPALITIES = 380
 
+# Placeholders county documents print where a seat has no holder. They are not
+# names and never reach a card — see the drop in the person loop below.
+VACANT_NAMES = {"vacant", "vacancy", "unassigned", "open", "tbd", "none",
+                "n/a", "na", "-"}
+
 # ---------------------------------------------------------------------------
 # Preserving a blocked source's last-good entries.
 #
@@ -553,6 +558,20 @@ def build_county(payload, by_county, statewide, legal, warnings, apply_floors=Tr
         for rec in records:
             name = rec.get("name")
             if not name:
+                continue
+            # A SEAT NOBODY HOLDS IS NOT A PERSON. Several county documents
+            # print "Vacant" in the name column, and a card that renders it
+            # verbatim tells a resident their trustee is a man called Vacant.
+            # Individual scrapers already drop these (Grundy, Stephenson); the
+            # guard lives HERE as well because it is true of every source, and
+            # four had slipped through — Braceville's and Peotone's commissioner
+            # and treasurer rows (Will), Monroe Center's and Mt. Morris's
+            # treasurers (Ogle). Counted, never silent: an empty seat is real
+            # information about the municipality, it is just not a name.
+            if name.strip().lower() in VACANT_NAMES:
+                warnings.append("%s: %s seat published as '%s' — dropped, a "
+                                "vacancy is not an officeholder"
+                                % (jurisdiction, rec.get("office") or "?", name.strip()))
                 continue
             kind = classify(rec.get("office"))
             person = {"name": name, "role": rec.get("office")}

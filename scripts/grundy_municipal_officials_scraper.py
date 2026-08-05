@@ -114,6 +114,46 @@ OFFICE_RE = re.compile(
 # "DIANE E. YATUNI 2027", "KELLY LEGNER 2027*" — or a bare name whose year
 # follows on the next line.
 NAME_YEAR_RE = re.compile(r"^(.*?)\s*(\d{4})(\*?)\s*$")
+# The same "(APPT. M/YYYY)" marker, GLUED TO THE NAME instead of standing on
+# its own line: "JIM RODGERS (APPT. 5/2025)", "WAYNETTE MCTAGUE(8/2026)"
+# (Carbon Hill, 2026-08 edition). Left alone it becomes part of the person's
+# name, and the card prints "Jim Rodgers (Appt. 5/2025)" as though that were
+# what he is called.
+#
+# THE DISCRIMINATOR MATTERS MORE THAN THE STRIP. Seventeen municipalities in
+# this roster carry a parenthetical inside a name, and all but these are
+# NICKNAMES — "Michele (Missy) Crawford", "Edward (Jake) Kindred",
+# "Alexis (Allie) Dawson". Those are part of the person's name and must
+# survive untouched. So this only matches a trailing parenthetical that is an
+# APPOINTMENT MARKER or a bare DATE, never a word.
+NAME_ANNOTATION_RE = re.compile(
+    r"\s*\(\s*(?:APPT\.?|APPOINTED)?\s*(\d{1,2}/\d{4}|\d{4})?\s*\)\s*$", re.I)
+
+
+def split_name_annotation(text, jurisdiction, warnings):
+    """('JIM RODGERS (APPT. 5/2025)') -> ('JIM RODGERS', True).
+
+    Returns the name with a trailing appointment/date marker removed and
+    whether that marker said the seat was filled by appointment. A BARE date
+    with no APPT wording is stripped too — it is plainly not part of a name —
+    but it does NOT set appointed, because nobody said it did, and it is
+    warned about so a dropped fact is never silent.
+    """
+    m = NAME_ANNOTATION_RE.search(text or "")
+    if not m or not m.group(0).strip():
+        return text, False
+    inner = m.group(0)
+    if not re.search(r"APPT|APPOINTED|\d", inner, re.I):
+        return text, False           # "(Missy)" and friends: a nickname, keep it
+    stripped = text[:m.start()].strip()
+    if not stripped:
+        return text, False           # the annotation IS the whole cell; leave it
+    if re.search(r"APPT|APPOINTED", inner, re.I):
+        return stripped, True
+    warnings.append("%s: dropped %s from the name '%s' — it is a date, not a "
+                    "name, and carries no appointment wording to act on"
+                    % (jurisdiction, inner.strip(), text))
+    return stripped, False
 # Diamond's vacancy fill: a name line, then "(APPT. 5/2025) 2027".
 APPT_YEAR_RE = re.compile(r"^\(APPT[^)]*\)\s*(\d{4})\*?\s*$", re.I)
 YEAR_ONLY_RE = re.compile(r"^(\d{4})\*?\s*$")
@@ -391,9 +431,11 @@ def parse(lines, warnings):
                 nm = NAME_YEAR_RE.match(rest)
                 person, year, starred = ((nm.group(1), nm.group(2), nm.group(3))
                                          if nm else (rest, None, ""))
+                person, glued_appt = split_name_annotation(person, jurisdiction, warnings)
                 pending = {"office": office, "district": district,
                            "name": clean(person), "year": year,
-                           "appointed": appointed, "starred": bool(starred)}
+                           "appointed": appointed or glued_appt,
+                           "starred": bool(starred)}
                 if year is not None:
                     flush_pending()
                 continue
@@ -404,9 +446,10 @@ def parse(lines, warnings):
             nm = NAME_YEAR_RE.match(text)
             person, year, starred = ((nm.group(1), nm.group(2), nm.group(3))
                                      if nm else (text, None, ""))
+            person, glued_appt = split_name_annotation(person, jurisdiction, warnings)
             pending = {"office": plural_office, "district": plural_ward,
                        "name": clean(person), "year": year,
-                       "appointed": False, "starred": bool(starred)}
+                       "appointed": glued_appt, "starred": bool(starred)}
             if year is not None:
                 flush_pending()
         flush_pending()
