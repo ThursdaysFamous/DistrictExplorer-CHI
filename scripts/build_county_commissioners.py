@@ -35,8 +35,9 @@ EXPECT_MEMBERS = {
     "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
     "SCHUYLER": 7,                   # pass-8; at-large proven from the canvass
+    "HAMILTON": 5,                   # pass-14; at-large stated by the Clerk, 2026-08-05
 }
-MIN_COUNTIES = 7
+MIN_COUNTIES = 8
 ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Vice-Chairman",
                  "Commissioner", "Board Member")
 

@@ -365,6 +365,48 @@ def parse_schuyler(page):
     return members, office
 
 
+
+# ---------------------------------------------------------------- Hamilton
+def parse_hamilton(page):
+    """Hamilton's board page (the county's NEW site — it went live the morning
+    of 2026-08-05, mid-migration by the Clerk's own description) renders each
+    member as a card whose name sits alone in a `font-semibold text-ink` div —
+    exactly five, and nothing else on the page uses that class. The cards
+    carry committee lists but no per-member contact, so what ships per member
+    is name and role, with the BOARD's shared departmental line hoisted to the
+    office block — a shared line is honest, an invented per-member number is
+    not.
+
+    AT-LARGE, STATED BY THE ELECTION AUTHORITY: County Clerk & Recorder
+    Heather Bowman, in writing, 2026-08-05, four minutes after being asked —
+    "Our County Board is elected at large." The members page corroborates:
+    no district appears anywhere on it.
+
+    CHAIR FROM THE HEADER, NOT THE CARDS: the member cards are role-less; the
+    department header reads "Kelly Woodrow / Board Chair". The parse takes the
+    chair from that adjacency (normalized to the fleet's "Chairman"
+    vocabulary) and applies Board Member to the rest. A header name that never
+    appears among the cards is dropped, never added."""
+    names = [clean(n) for n in
+             re.findall(r'<div class="font-semibold text-ink">([^<]+)</div>', page)]
+    names = [n for n in names if n]
+    m = re.search(r">([A-Z][A-Za-z.'\-]+(?:\s+[A-Z][A-Za-z.'\-]*){1,3})"
+                  r"(?:\s*</?[a-zA-Z][^>]*>\s*)*Board\s+Chair", page)
+    chair = clean(m.group(1)) if m else None
+    members, seen = [], set()
+    for n in names:
+        if n.lower() in seen:
+            continue
+        seen.add(n.lower())
+        members.append({"name": n,
+                        "role": "Chairman" if (chair and n == chair) else "Board Member"})
+    office = {"label": "Hamilton County Board",
+              "address": "Hamilton County Courthouse, 100 S. Jackson Street, Room 2, McLeansboro, IL 62859",
+              "phone": "618-643-2721",
+              "email": "board@hamiltoncountyil.gov"}
+    return members, office
+
+
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
     "MONROE": {
@@ -417,6 +459,15 @@ SITES = {
         "structure": "Commission form — 5 commissioners elected countywide",
         "expect": 5,
         "parse": parse_calhoun,
+    },
+    "HAMILTON": {
+        "name": "Hamilton County",
+        # The county's NEW site (live 2026-08-05). At-large per Clerk Bowman
+        # in writing the same day; see parse_hamilton's provenance note.
+        "url": "https://www.hamiltoncountyil.gov/departments/county-board/",
+        "structure": "5 members elected countywide — no districts",
+        "expect": 5,
+        "parse": parse_hamilton,
     },
 }
 
