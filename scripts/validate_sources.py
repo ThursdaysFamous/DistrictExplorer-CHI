@@ -663,6 +663,15 @@ ENDPOINTS = [
     {"layer": "Effingham County fire districts (Districts service) + park/library (TaxDistricts_public)",
      "url": ("https://services.arcgis.com/vj0V9Lal6oiz0YXp/arcgis/rest/services/"
              "Districts/FeatureServer?f=json")},
+    # Hamilton (the second island, 2026-08-05). The county's tilings sit on a
+    # vendor-hosted AGO org (Magnasoft) the Clerk pointed to in her reply; the
+    # at-large board roster is the weekly commissioners scrape, not this.
+    {"layer": "Hamilton County voter precincts (17, one unnamed — the county's own layer)",
+     "url": ("https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/"
+             "Voter_Precincts_Hamilton/FeatureServer?f=json")},
+    {"layer": "Hamilton County fire districts (3 named + an excluded unnamed sliver)",
+     "url": ("https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/"
+             "Fire_Districts_HamiltonIL/FeatureServer?f=json")},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

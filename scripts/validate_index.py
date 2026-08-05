@@ -220,7 +220,7 @@ GEOMETRY_FILES = {
     "effingham-county-outline.json": (1, 1),  # Effingham County outline — the coverage test for the county's five dispatch entries (board/precinct/fire/park/library), and the FIRST ISLAND: joined detached on 2026-08-04 under the retired-contiguity policy, so metro-outline.json is now a MultiPolygon. Shipped as a gap-location outline by pass 13 and promoted in the same week.
     "franklin-county-outline.json": (1, 1),  # Franklin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "gallatin-county-outline.json": (1, 1),  # Gallatin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
-    "hamilton-county-outline.json": (1, 1),  # Hamilton County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
+    "hamilton-county-outline.json": (1, 1),  # Hamilton County outline — the coverage test for the county's precinct and fire dispatch entries, and the SECOND island (pass 14, 2026-08-05): the ask campaign's first fruit, joined the day the Clerk answered. Shipped as a gap-location outline by pass 13 and promoted the next day.
     "hardin-county-outline.json": (1, 1),  # Hardin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "jasper-county-outline.json": (1, 1),  # Jasper County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
     "johnson-county-outline.json": (1, 1),  # Johnson County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.
@@ -333,7 +333,6 @@ DYNAMIC_REFERENCE = frozenset({
     "edwards-county-outline.json",
     "franklin-county-outline.json",
     "gallatin-county-outline.json",
-    "hamilton-county-outline.json",
     "hardin-county-outline.json",
     "jasper-county-outline.json",
     "johnson-county-outline.json",

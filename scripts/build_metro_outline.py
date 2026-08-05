@@ -159,6 +159,10 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # the served area, joined 2026-08-04 under the retired-
                      # contiguity policy, so the dissolve emits a MultiPolygon
                      "049",
+                     # Hamilton — the SECOND island (pass 14, 2026-08-05): the
+                     # ask campaign's first fruit, at-large board + precinct
+                     # and fire tilings from the county's own vendor-hosted org
+                     "065",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -193,6 +197,7 @@ DISPATCH_COUNTY_FIPS = {
     "fulton": "057",
     "macon": "115",
     "effingham": "049",
+    "hamilton": "065",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -285,6 +290,10 @@ INSIDE = {
     # mainland is held OUTSIDE by Vandalia (Fayette) and Shelbyville (Shelby),
     # which is what proves the gap between island and mainland stays washed.
     "Effingham (Effingham)": (39.1200, -88.5434),
+    # The SECOND island (pass 14, 2026-08-05): Hamilton, deep-south and five
+    # unserved neighbours around it — Fairfield (Wayne) holds the corridor
+    # toward Effingham OUTSIDE.
+    "McLeansboro (Hamilton)": (38.0902, -88.5387),
     # The at-large tier: served through the COUNTY card's board section rather
     # than a dispatch entry, because none of the four has district geometry to
     # dispatch on. They belong here for the same reason the judicial-subcircuit
@@ -361,6 +370,9 @@ OUTSIDE = {
     # 2021-12 raster. Schuyler now borders BOTH Mason and Brown; between them
     # these two hold the line the tranche-4 and tranche-5 counties moved.
     "Petersburg (Menard)": (40.0143, -89.8453),
+    # The Hamilton–Effingham corridor: Wayne is unserved between the two
+    # islands, and this anchor is what proves it stays washed.
+    "Fairfield (Wayne)": (38.3798, -88.3724),
     # (Putnam's anchor moved up to INSIDE in tranche 5, and Adams's Clayton in
     # pass 8, each joining exactly as its OUTSIDE comment said it would — Adams
     # on the strength of its own GIS, with only the roster left as a gap.)

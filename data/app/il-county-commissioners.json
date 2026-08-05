@@ -89,6 +89,39 @@
   "sourceUrl": "https://www.calhouncountyil.gov/government/county-board/members/",
   "structure": "Commission form — 5 commissioners elected countywide"
  },
+ "HAMILTON": {
+  "county": "Hamilton County",
+  "members": [
+   {
+    "name": "Kelly Woodrow",
+    "role": "Chairman"
+   },
+   {
+    "name": "John Mead",
+    "role": "Board Member"
+   },
+   {
+    "name": "Adam Little",
+    "role": "Board Member"
+   },
+   {
+    "name": "John Carrell",
+    "role": "Board Member"
+   },
+   {
+    "name": "Landon Vaughan",
+    "role": "Board Member"
+   }
+  ],
+  "office": {
+   "address": "Hamilton County Courthouse, 100 S. Jackson Street, Room 2, McLeansboro, IL 62859",
+   "email": "board@hamiltoncountyil.gov",
+   "label": "Hamilton County Board",
+   "phone": "618-643-2721"
+  },
+  "sourceUrl": "https://www.hamiltoncountyil.gov/departments/county-board/",
+  "structure": "5 members elected countywide — no districts"
+ },
  "MONROE": {
   "county": "Monroe County",
   "members": [

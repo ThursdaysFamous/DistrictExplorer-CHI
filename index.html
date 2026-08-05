@@ -8958,6 +8958,52 @@ function initChiExplorer() {
                               "1=1", "Name", "library districts");
   });
 
+  /* Hamilton (the 45th dispatched county, added 2026-08-05 — the SECOND
+   * island, and the pass-14 ask campaign's first fruit: County Clerk &
+   * Recorder Heather Bowman answered the form-and-boundaries question FOUR
+   * MINUTES after it was sent. Her reply settled the board — "Our County
+   * Board is elected at large", so its five members ride the COUNTY card
+   * via il-county-commissioners.json (§1.5), no dispatch entry, no geometry
+   * — and pointed at the county's GIS map, whose backing org the pass-13
+   * probe had missed for the same reason it missed Effingham's: a vendor-
+   * hosted AGO org (Magnasoft) whose item titles don't name the county.
+   * The org publishes the county's tilings as public FeatureServers.
+   *
+   * What ships as dispatch entries: Voter_Precincts_Hamilton (17 — sixteen
+   * named; OBJECTID 12 carries NO name in the county's own layer, rendered
+   * "Unknown" and recorded as hamilton-unnamed-precinct) and
+   * Fire_Districts_HamiltonIL (4 features, one an unnamed ~0.4 km² sliver
+   * EXCLUDED in the loader — three named districts tile part of the county;
+   * elsewhere the empty state is the honest answer). No polling data on the
+   * precinct layer (hamilton-precinct-polling). */
+  var HAMILTON_ORG_SERVICE =
+    "https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/";
+  function loadHamiltonLayer(url, where, outFields, label) {
+    var full = url + "/query?where=" + encodeURIComponent(where) +
+      "&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(full, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("Hamilton County " + label + " returned no usable geometry");
+        return geojson;
+      });
+  }
+  var loadHamiltonPrecincts = makeCached(function () {
+    return loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Voter_Precincts_Hamilton/FeatureServer/0",
+                             "1=1", "Precinct_Name", "precincts");
+  });
+  var loadHamiltonFire = makeCached(function () {
+    return loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Fire_Districts_HamiltonIL/FeatureServer/0",
+                             "NAME IS NOT NULL", "NAME", "fire districts");
+  });
+  var loadHamiltonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hamilton-county-outline.json", {}, 2);
+  });
+  function hamiltonCountyCoverage(point) {
+    return loadHamiltonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
   /* Henry (the 28th county, added 2026-08-02 — it closes the notch between
    * the served Rock Island/Whiteside block and the rest of the ring). Its
    * public GIS is Sidwell Portico (parcels + townships, no districts), so the
@@ -16939,6 +16985,18 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["zonedesc"], primary: true },
           { label: "County", value: "Effingham County" }
         ]
+      }),
+      // Hamilton — three named districts from the county's own layer (a
+      // fourth, unnamed ~0.4 km² sliver is excluded in the loader); most of
+      // the county sits in none, and the empty state says so
+      polygonCountyEntry({
+        key: "hamilton",
+        coverage: hamiltonCountyCoverage,
+        loader: loadHamiltonFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["name"], primary: true },
+          { label: "County", value: "Hamilton County" }
+        ]
       })
     ]
   });
@@ -19574,6 +19632,42 @@ function initChiExplorer() {
           return {
             label: "Effingham County Clerk — Elections (official)",
             url: "https://effinghamcountyil.gov/county-clerk/elections/"
+          };
+        }
+      },
+      // Hamilton — 17 precincts from the county's own layer, sixteen named;
+      // the seventeenth (OBJECTID 12) carries no name in the source and
+      // renders "Unknown" (recorded: hamilton-unnamed-precinct). No polling
+      // data on the layer (hamilton-precinct-polling).
+      {
+        key: "hamilton",
+        coverage: hamiltonCountyCoverage,
+        loadGeometry: loadHamiltonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinct_name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadHamiltonPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var name = findPropCI(feature.properties || {}, ["precinct_name"]);
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null
+            };
+          });
+        },
+        render: function (result) {
+          return renderFieldStack([{ label: "County", value: "Hamilton County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Hamilton County Clerk & Recorder (official)",
+            url: "https://www.hamiltoncountyil.gov/departments/county-clerk-recorder/"
           };
         }
       }

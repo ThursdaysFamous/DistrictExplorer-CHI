@@ -1067,7 +1067,8 @@ taught them.
   `galesburg-wards-outside-the-ring`). **First-island checklist** — EXERCISED by
   Effingham on 2026-08-04, the same day this rule landed (the pass-13 sweep found it
   build-ready; the shipped metro-outline.json is now a MultiPolygon whose second
-  polygon is the island's own outer ring). Kept as the recipe for every later island —
+  polygon is the island's own outer ring), and again by Hamilton on 2026-08-05 (the
+  second island — the pass-14 ask campaign's first answer, built the same day). Kept as the recipe for every later island —
   the first detached county had to, and each next one must: (1) rebuild `build_metro_outline.py`,
   run `--check`, and confirm the emitted geometry is a MultiPolygon with the island as
   its own OUTER ring — not a hole (the pass-4 nesting bug this machinery was written
