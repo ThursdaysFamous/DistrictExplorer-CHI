@@ -8969,9 +8969,14 @@ function initChiExplorer() {
    * hosted AGO org (Magnasoft) whose item titles don't name the county.
    * The org publishes the county's tilings as public FeatureServers.
    *
-   * What ships as dispatch entries: Voter_Precincts_Hamilton (17 — sixteen
-   * named; OBJECTID 12 carries NO name in the county's own layer, rendered
-   * "Unknown" and recorded as hamilton-unnamed-precinct) and
+   * What ships as dispatch entries: Voter_Precincts_Hamilton (17 rows, SIXTEEN
+   * precincts — the loader filters to named rows, because OBJECTID 12 carries a
+   * null Precinct_Name and its polygon is a byte-for-byte DUPLICATE of OBJECTID
+   * 13, DAHLGREN 1: same bounding box, same area, 3379 of 3379 sampled points
+   * inside both. It is a duplicate row, not a seventeenth precinct, and because
+   * it sorts FIRST the unfiltered layer made findFeatureContaining answer
+   * "Unknown" for every point in Dahlgren 1. Both the county's own FY 2017 map
+   * and its Clerk say Hamilton has sixteen precincts) and
    * Fire_Districts_HamiltonIL (4 features, one an unnamed ~0.4 km² sliver
    * EXCLUDED in the loader — three named districts tile part of the county;
    * elsewhere the empty state is the honest answer). No polling data on the
@@ -8989,7 +8994,7 @@ function initChiExplorer() {
   }
   var loadHamiltonPrecincts = makeCached(function () {
     return loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Voter_Precincts_Hamilton/FeatureServer/0",
-                             "1=1", "Precinct_Name", "precincts");
+                             "Precinct_Name IS NOT NULL", "Precinct_Name", "precincts");
   });
   var loadHamiltonFire = makeCached(function () {
     return loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Fire_Districts_HamiltonIL/FeatureServer/0",
@@ -19635,10 +19640,11 @@ function initChiExplorer() {
           };
         }
       },
-      // Hamilton — 17 precincts from the county's own layer, sixteen named;
-      // the seventeenth (OBJECTID 12) carries no name in the source and
-      // renders "Unknown" (recorded: hamilton-unnamed-precinct). No polling
-      // data on the layer (hamilton-precinct-polling).
+      // Hamilton — the county's sixteen precincts. The source layer has a
+      // seventeenth row with a null name that duplicates DAHLGREN 1's polygon
+      // exactly and sorts ahead of it; loadHamiltonPrecincts drops unnamed rows
+      // so Dahlgren 1 answers with its own name instead of "Unknown". No
+      // polling data on the layer (hamilton-precinct-polling).
       {
         key: "hamilton",
         coverage: hamiltonCountyCoverage,
