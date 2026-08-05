@@ -155,12 +155,16 @@ COUNTY_FLOORS = {
     # count — a seat published as "Vacant" and a trustee row duplicating the
     # village president.
     "DeKalb": {"municipalities": 12, "members": 100, "heads": 12},       # 14 / 118 / 14
-    # HEADS IS BELOW MUNICIPALITIES ON PURPOSE for Stephenson: the county's page
-    # lists no president for Dakota (one Dakota row carries a name and a blank
-    # office cell), so a floor of 10 heads would fail on correct data. Freeport
-    # is not counted here at all — the county page omits it and the city's own
+    # HEADS SITS BELOW MUNICIPALITIES for Stephenson because the county's page
+    # still shows Dakota no president: it prints Jonathon Riley as a Trustee,
+    # which the Clerk contradicted in writing on 2026-08-05, so the scraper
+    # ships him as Village President from CLERK_STATED_OFFICES and the live head
+    # count is 10, not 9. The floor stays at 7 rather than tracking that up —
+    # it guards against a source collapsing, and pinning it to a count that
+    # depends on one hand-kept correction would make the guard brittle. Freeport
+    # is not counted here at all: the county page omits it and the city's own
     # payload supplies it through --enrich.
-    "Stephenson": {"municipalities": 9, "members": 70, "heads": 7},      # 10 / 82 / 9
+    "Stephenson": {"municipalities": 9, "members": 70, "heads": 7},      # 10 / 82 / 10
     # Carroll's whole county is seven municipalities, so the floors sit only
     # one or two under the full set. Thomson's president is vacant, which is why
     # heads is two under the municipality count rather than one.
