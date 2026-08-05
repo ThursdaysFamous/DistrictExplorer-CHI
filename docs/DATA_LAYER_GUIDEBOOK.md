@@ -307,9 +307,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "The largest unserved county on the frontier. Its website was found by asking — it is vercounty.org, an abbreviation no hostname guess would reach — and the Clerk's office named the page carrying its voter maps.",
-      "blocker": "Checked 3 Aug 2026. Vermilion is about 74,000 people, the biggest county adjacent to the served area, and none of its geography is on the site. The state's election directory gives the clerk an address at vercountyil.gov. That domain exists, but it refuses secure connections and, over an ordinary one, forwards visitors to Google \u2014 it is parked, not a county website. Several likely alternatives were tried and none exists. This is the same trap McDonough set: an e-mail address at a domain that hosts nothing. McDonough was solved by asking its clerk, who named a website no amount of guessing would have found. SO WAS THIS ONE, and the record predicted its own solution: ASKED 5 Aug 2026, ANSWERED THE SAME DAY by Chief Deputy County Clerk and Supervisor of Elections Carrie Wilson — the county's website is vercounty.org, and the maps her office publishes are at vercounty.org/county-clerk/voter-maps/. (Seal permissions, separately, go to Jennifer Jenkins in the County Board office, jjenkins@vercounty.org.) THE METHOD LESSON IS IN THE HOSTNAME: \"ver\" is an ABBREVIATION of Vermilion, so no ladder built from the county slug — vermilioncountyil.gov, vermilioncounty.org, co.vermilion.il.us — could ever have reached it, which is why two passes of searching failed where one question succeeded. Neither the site nor the Archive is reachable from this project's network, so what the voter-maps page actually carries is still unmeasured: the address is recorded, the contents are not yet a finding.",
-      "wanted": "Whether the maps at vercounty.org/county-clerk/voter-maps/ include board districts and precincts AS DATA (shapefile or GIS layer) rather than as pictures — the address is now known, the format is not."
+      "summary": "The largest unserved county on the frontier. Asked twice and answered twice: the site is vercounty.org, and the election authority has now stated in writing that her office holds no shapefiles or GIS layers — the maps it publishes are the only maps there are.",
+      "blocker": "Checked 3 Aug 2026. Vermilion is about 74,000 people, the biggest county adjacent to the served area, and none of its geography is on the site. The state's election directory gives the clerk an address at vercountyil.gov. That domain exists, but it refuses secure connections and, over an ordinary one, forwards visitors to Google \u2014 it is parked, not a county website. Several likely alternatives were tried and none exists. This is the same trap McDonough set: an e-mail address at a domain that hosts nothing. McDonough was solved by asking its clerk, who named a website no amount of guessing would have found. SO WAS THIS ONE, and the record predicted its own solution: ASKED 5 Aug 2026, ANSWERED THE SAME DAY by Chief Deputy County Clerk and Supervisor of Elections Carrie Wilson — the county's website is vercounty.org, and the maps her office publishes are at vercounty.org/county-clerk/voter-maps/. (Seal permissions, separately, go to Jennifer Jenkins in the County Board office, jjenkins@vercounty.org.) THE METHOD LESSON IS IN THE HOSTNAME: \"ver\" is an ABBREVIATION of Vermilion, so no ladder built from the county slug — vermilioncountyil.gov, vermilioncounty.org, co.vermilion.il.us — could ever have reached it, which is why two passes of searching failed where one question succeeded. Neither the site nor the Archive is reachable from this project's network, so what the voter-maps page actually carries is still unmeasured. THE FORMAT QUESTION IS NOW ANSWERED, AND THE ANSWER IS NO: asked on 5 Aug whether those maps exist as data, Wilson replied the same evening — \"Those are the only maps we offer, our county does not have shapefiles or GIS layers for precinct look ups. There is a precinct finder on the Illinois State Board of Elections site voters may utilize or they may call our office.\" That is a refusal from the right desk, which this ledger treats as a finding rather than a dead end: it converts an inferred blocker into a stated one, and it means no amount of further searching of the county's own publications will produce geometry. Read exactly, her sentence is explicit for PRECINCTS and covers board districts by implication (\"the only maps we offer\"), so it settles what the CLERK holds; a county GIS or assessor's desk, if Vermilion has one, is a different office and was not asked. The lookup she named — ova.elections.il.gov/PollingPlaceLookup.aspx — was measured before being recorded and is NOT a data lead: it is a per-address form (zip, then a street from a fixed dropdown, then a house number) that answers one voter at a time, holds no boundary, and offers no download.",
+      "wanted": "A shapefile or GIS layer of Vermilion's board districts or precincts from some holder OTHER than the Clerk's office — a county GIS or assessor department, the regional planning commission, or whoever drew the current district map — because the election authority has now confirmed in writing that her office has none. The county's own published maps are pictures and no further ask of that desk will change it."
     },
     {
       "id": "perry-county-website-blocked",
@@ -2308,7 +2308,8 @@ Vermilion's `vercounty.org`).
 A caveat kept deliberately: neither vercounty.org nor the Internet Archive is
 reachable from this project's network, so the voter-maps page's CONTENTS remain
 unmeasured. The address is recorded as a fact; what it holds is not yet a
-finding, and the PDF lesson from earlier today applies to it in full.
+finding, and the PDF lesson from earlier today applies to it in full. *(That
+caveat was answered a few hours later — see "a refusal is a finding", below.)*
 
 ### The §2.5-step-2 document comes from the COUNTY, never the state
 
@@ -2353,6 +2354,47 @@ first established by measurement rather than testimony.
 The cheap discriminator, for the next sweep: a domain that resolves AND has MX
 AND refuses only HTTP is a county with e-mail and no website — which is a
 publishable fact about that county, not a failure of the probe.
+
+### 2026-08-05, evening: a refusal is a finding, and Vermilion supplied one
+
+The pass-14 campaign's fourth reply closed a question instead of opening a
+county, and that is the outcome this section exists to make respectable.
+
+Asked whether the voter maps her office publishes exist as data, Vermilion's
+Chief Deputy Clerk and Supervisor of Elections **Carrie Wilson** answered the
+same evening: *"Those are the only maps we offer, our county does not have
+shapefiles or GIS layers for precinct look ups. There is a precinct finder on
+the Illinois State Board of Elections site voters may utilize or they may call
+our office."*
+
+**Why that is worth as much as a shapefile would have been.** Before it,
+`vermilion-county-website` held an INFERRED blocker — the site is unreachable
+from here, so the format was unknown, so the record had to say "unmeasured" and
+the county stayed in the queue as something to go back to. After it, the
+blocker is STATED, by the office that would hold the file if it existed. The
+county's own publications are now a closed route, permanently, and the record
+says so instead of inviting a fifth pass over the same ground. **A stated no
+from the right desk retires a line of inquiry; an unmeasured maybe never
+does.** Johnson ("we don't have a website"), Wabash ("three commissioners
+elected at large") and now Vermilion are the same shape.
+
+**Read exactly, not generously.** Her sentence is explicit about PRECINCTS and
+covers board districts by implication — *"the only maps we offer"* is a claim
+about her office's inventory, not about every desk in the county. So the record
+was written to that boundary: the Clerk is closed, a county GIS or assessor's
+office (if Vermilion has one) is a different desk and was never asked, and that
+is what `wanted` now names. Over-reading a reply into "Vermilion has no GIS
+anywhere" would have been the easy version and would have been unsourced.
+
+**The lookup she named was measured before it was recorded.** Following the
+standing rule that a source is not data until someone opens it,
+`ova.elections.il.gov/PollingPlaceLookup.aspx` was fetched and driven: it is a
+per-address ASP.NET form — five-digit zip, then a street picked from that zip's
+fixed dropdown (616 streets for Danville's 61832), then a house number — that
+answers one voter at a time. No boundary, no download, no bulk anything. It is
+a good thing to hand a resident and worth nothing to a boundary layer, which is
+the same discriminator the ISBE PrecinctMaps pass applied this morning. Recorded
+as a non-lead **so that it is never re-investigated as a lead.**
 
 ### The standing caution
 
