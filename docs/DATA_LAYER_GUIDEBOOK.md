@@ -1407,7 +1407,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Hamilton County's precinct cards name the precinct but not its polling place — the county's own layer carries no polling data.",
-      "blocker": "Found 5 Aug 2026, when the county was built from the GIS its Clerk pointed to in a four-minute reply: Voter_Precincts_Hamilton carries exactly one attribute, the precinct name. No polling-place layer exists on the county's org. The Clerk is demonstrably responsive, so this is a live Tier-1 ask, not a dead end.",
+      "blocker": "Found 5 Aug 2026, when the county was built from the GIS its Clerk pointed to in a four-minute reply: Voter_Precincts_Hamilton carries exactly one attribute, the precinct name. No polling-place layer exists on the county's org. ASKED AND ANSWERED the same day: Clerk Bowman sent a county precinct map that DOES carry polling locations — 13 of them, name and street address, as a vector PDF with a real text layer (elections.il.gov/PrecinctMaps/Hamilton/). It is NOT shipped, for one reason stated plainly: the map is titled FY 2017. Polling places are exactly the class of fact that moves between elections, and sending a voter to a nine-year-old location is a worse failure than showing none. The currency question went back to the Clerk 5 Aug — the Stark shape ('is this still current?'), which is the cheapest question on the ledger. If she confirms, this closes: 13 locations for 16 precincts, and the arithmetic fits the obvious pattern (twelve rural precincts with their own township buildings and churches, plus one shared McLeansboro city location for the four city precincts) — but that pattern is a HYPOTHESIS about which precincts each location serves, and containment on a page is not evidence, so the per-precinct assignment needs her word too.",
       "wanted": "A polling place per precinct — even a plain list keyed by precinct name lets the card show where to vote."
     },
     {
@@ -1420,7 +1420,7 @@ in the researched-but-unbuilt backlog.
       "kind": "data-quality",
       "layer": "county-precinct",
       "summary": "One of Hamilton County's 17 precinct shapes carries no name in the county's own layer, so its card reads Unknown.",
-      "blocker": "Found 5 Aug 2026 at build time: OBJECTID 12 in Voter_Precincts_Hamilton has a null Precinct_Name — sixteen shapes are named, this one is not, and inventing a name from its neighbours (it sits among the DAHLGREN and township precincts) would be a guess. Rendered as Unknown until the county says which precinct it is. The follow-up question rides the thank-you reply to the Clerk.",
+      "blocker": "Found 5 Aug 2026 at build time: OBJECTID 12 in Voter_Precincts_Hamilton has a null Precinct_Name — sixteen shapes are named, this one is not, and inventing a name from its neighbours would be a guess. Rendered as Unknown until the county says which precinct it is. ASKED 5 Aug; the Clerk's reply sent the county's own precinct map, and it does NOT settle this: the map labels exactly SIXTEEN precincts, the same sixteen the GIS names, so the county's published map has no name for the seventeenth shape either. That is worth recording as a finding rather than a dead end — the shape is full-sized (comparable in area to its named neighbours), not a sliver, so either the county re-precincted after the FY 2017 map or the layer carries a shape its own map does not. The question stands with the Clerk, now sharper for having been checked against her own map.",
       "wanted": "The name of the precinct drawn as OBJECTID 12 in the county's Voter_Precincts_Hamilton layer."
     },
     {
@@ -2240,6 +2240,38 @@ mail routes. Marshall's Clerk separately asked that her address be updated —
 the roster already carries the one she now sends from, so nothing to change,
 recorded here so the next reader does not go looking.
 
+### 2026-08-05: the state has been hosting precinct maps all along
+
+Chasing Hamilton's polling places turned up something bigger than Hamilton.
+Clerk Bowman's second reply linked a precinct map — not on the county's site,
+but on the **State Board of Elections'** at
+`elections.il.gov/PrecinctMaps/<County>/`. That directory is not a Hamilton
+courtesy: probing all 102 county names found **98 with at least one map file**,
+served as open IIS directory listings, requiring nothing of anybody.
+
+**Sized before it was believed.** A fourteen-county sample (the frontier
+counties with open asks, plus controls) was downloaded and opened: **3 of 14
+are vector PDFs with an extractable text layer** — Knox, Menard and Williamson
+— and the rest are scans, which are pictures of maps and no more usable than
+the ones the gap records already describe. So this is a real lead worth a
+research pass, not a statewide unlock: on that rate perhaps twenty counties
+statewide carry a machine-readable map here.
+
+**And for the two counties whose asks are most specific, it CONFIRMS the gap
+records rather than closing them** — which is why it was checked before being
+celebrated. Knox's `PrecinctsByCountyBoard.pdf` is vector and readable, and its
+own title says **"Knox County Board Districts 2011"**: the pre-redistricting
+content `knox-county-board-districts` already records as provably stale, now
+verified from the file itself. Menard's `Menard County Commissioner Map.pdf`
+extracts ZERO words — the flat image `menard-commissioner-districts` describes.
+Both records were right, and the route is closed rather than opened; Menard's
+live route remains the Beacon shapefile its Assessor is pulling.
+
+The standing lesson for this ledger: **a source can be public, free, complete
+and STILL not be data.** The discriminator is one download and one text
+extraction, which is cheap enough that no future pass should record a PDF
+source without running it.
+
 ### The standing caution
 
 Four sources now ship from **archived files** rather than live fetches — Stark's map,
@@ -2266,6 +2298,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 >
 > | Open item | Blocker | Actionable? |
 > |---|---|---|
+> | **The ISBE precinct-map collection** (found 2026-08-05 via Hamilton's Clerk — see the ask ledger) — `elections.il.gov/PrecinctMaps/<County>/`, **98 of 102 counties**, open directory listings. A 14-county sample measured **3 vector / 11 scan**, so the lead is the vector subset (Knox, Menard, Williamson confirmed so far). Knox's and Menard's files were checked and CONFIRM their existing gap records (2011 content; raster) rather than closing them | needs a per-county download-and-extract pass to find which counties' maps are vector AND current | **yes — a cheap research pass, unstarted** |
 > | ~~**Pass-14 first fruit — Hamilton**~~ **SHIPPED 2026-08-05, the forty-fifth dispatched county and SECOND island**, four hours after its Clerk's four-minute reply settled the at-large question and surfaced the county's vendor-hosted GIS org: precincts 17 (one unnamed — `hamilton-unnamed-precinct`, asked back) + fire 3 named as dispatch entries; the five-member board rides the County card from the weekly commissioners scrape of the county's own new site. STILL OPEN: `hamilton-precinct-polling`, `hamilton-municipal-officials` | nothing | done — two live asks recorded |
 > | ~~**The pass-13 build-ready ledger** — Effingham~~ **SHIPPED 2026-08-04, same day — the forty-fourth dispatched county and the FIRST ISLAND** (§2.5.1 checklist exercised: metro-outline.json is now a MultiPolygon, the island proven an OUTER ring by anchor, the Vandalia/Shelbyville corridor proven washed): board 9 districts A–I with the roster ON the features (no scraper — the county's own live service is the officeholder source), precincts 38 (polling 38/38), fire 17, park 4, library 1. The build's verification also caught findPropCI's lowercase-candidate contract being violated by six `keys:` entries — Macon's fire/park/library cards had shipped reading "Unknown" — fixed in the same change. STILL OPEN: `effingham-municipal-officials` (12 municipalities, no councils source) | nothing | done — municipal officials stay a recorded gap |
 > | ~~LaSalle county-board rebuild~~ **SHIPPED 2026-08-01** — boundary derived from the county's precinct layer per its full 2024+2026 canvass record; weekly directory roster with the countywide Chairman; 11 split precincts drawn with their majority side and stated on the card | remaining: the split-precinct cut refinement, or the county publishing its adopted map as GIS | done — refinement recorded |
