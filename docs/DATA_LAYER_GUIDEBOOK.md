@@ -1407,21 +1407,8 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Hamilton County's precinct cards name the precinct but not its polling place — the county's own layer carries no polling data.",
-      "blocker": "Found 5 Aug 2026, when the county was built from the GIS its Clerk pointed to in a four-minute reply: Voter_Precincts_Hamilton carries exactly one attribute, the precinct name. No polling-place layer exists on the county's org. ASKED AND ANSWERED the same day: Clerk Bowman sent a county precinct map that DOES carry polling locations — 13 of them, name and street address, as a vector PDF with a real text layer (elections.il.gov/PrecinctMaps/Hamilton/). It is NOT shipped, for one reason stated plainly: the map is titled FY 2017. Polling places are exactly the class of fact that moves between elections, and sending a voter to a nine-year-old location is a worse failure than showing none. The currency question went back to the Clerk 5 Aug — the Stark shape ('is this still current?'), which is the cheapest question on the ledger. If she confirms, this closes: 13 locations for 16 precincts, and the arithmetic fits the obvious pattern (twelve rural precincts with their own township buildings and churches, plus one shared McLeansboro city location for the four city precincts) — but that pattern is a HYPOTHESIS about which precincts each location serves, and containment on a page is not evidence, so the per-precinct assignment needs her word too.",
-      "wanted": "A polling place per precinct — even a plain list keyed by precinct name lets the card show where to vote."
-    },
-    {
-      "id": "hamilton-unnamed-precinct",
-      "concept": "Voting precincts",
-      "area": "Hamilton County",
-      "counties": [
-        "hamilton"
-      ],
-      "kind": "data-quality",
-      "layer": "county-precinct",
-      "summary": "One of Hamilton County's 17 precinct shapes carries no name in the county's own layer, so its card reads Unknown.",
-      "blocker": "Found 5 Aug 2026 at build time: OBJECTID 12 in Voter_Precincts_Hamilton has a null Precinct_Name — sixteen shapes are named, this one is not, and inventing a name from its neighbours would be a guess. Rendered as Unknown until the county says which precinct it is. ASKED 5 Aug; the Clerk's reply sent the county's own precinct map, and it does NOT settle this: the map labels exactly SIXTEEN precincts, the same sixteen the GIS names, so the county's published map has no name for the seventeenth shape either. That is worth recording as a finding rather than a dead end — the shape is full-sized (comparable in area to its named neighbours), not a sliver, so either the county re-precincted after the FY 2017 map or the layer carries a shape its own map does not. The question stands with the Clerk, now sharper for having been checked against her own map.",
-      "wanted": "The name of the precinct drawn as OBJECTID 12 in the county's Voter_Precincts_Hamilton layer."
+      "blocker": "Found 5 Aug 2026, when the county was built from the GIS its Clerk pointed to in a four-minute reply: Voter_Precincts_Hamilton carries exactly one attribute, the precinct name. No polling-place layer exists on the county's org. ASKED AND ANSWERED the same day: Clerk Bowman sent a county precinct map that DOES carry polling locations — 13 of them, name and street address, as a vector PDF with a real text layer (elections.il.gov/PrecinctMaps/Hamilton/). TWO OF THE THREE THINGS THIS NEEDED ARE NOW SETTLED IN WRITING. Currency, which was the reason it did not ship on 5 Aug (the map is titled FY 2017, and polling places are exactly the class of fact that moves between elections): 'That is the most recent map and it has not changed.' Structure, asked as a yes/no: the twelve rural precincts each vote at their own township building or church and all four McLeansboro precincts vote at the Old High School Gym — 'You are exactly right about the 13 locations and the McLeansboro precincts voting at the old high school gym. It's a large polling place and each precinct has their own area of the gym.' WHAT IS STILL MISSING IS THE PAIRING, and the reason is worth keeping: a map shows where a polling place IS, not which precinct it SERVES. Georeferencing the PDF (affine fit, 14 precinct labels to their polygon centroids, median residual 0.35 mi) puts each of the 13 markers inside a precinct and gets 10 of the 12 rural assignments to agree with a 1:1 count — but both northwest markers land in DAHLGREN 2, which is exactly the pair that cannot be guessed, and geocoding the McLeansboro gym independently puts it in MCLEANSBORO 3 where the map's own placement said MCLEANSBORO 4. Two instruments, both ~0.3 mi coarse, neither able to settle a service assignment. So the last ask is a 13-row table for her to confirm rather than compose.",
+      "wanted": "Confirmation of which precinct votes at each of the 13 locations already extracted from the county's own map — the addresses are known, the precinct-to-location pairing is not."
     },
     {
       "id": "hamilton-municipal-officials",
@@ -2395,6 +2382,56 @@ answers one voter at a time. No boundary, no download, no bulk anything. It is
 a good thing to hand a resident and worth nothing to a boundary layer, which is
 the same discriminator the ISBE PrecinctMaps pass applied this morning. Recorded
 as a non-lead **so that it is never re-investigated as a lead.**
+
+### 2026-08-05, evening: the phantom precinct was a duplicate row, and it was shadowing a real one
+
+Hamilton's Clerk answered a third time, and the answer exposed a bug that had
+been live since the county shipped that morning. Worth recording in full,
+because the failure was mine and the instrument that caught it was a clerk
+reading her own county back to me.
+
+**What was shipped, and what was actually there.** The build recorded
+`Voter_Precincts_Hamilton` as "17 features, sixteen named; OBJECTID 12 carries
+no name, rendered Unknown" and opened `hamilton-unnamed-precinct` for it. That
+description was wrong in the way that matters. Measured 5 Aug: **OBJECTID 12 is
+a duplicate of OBJECTID 13, DAHLGREN 1** — same bounding box to five decimals,
+same area (25.3 sq mi), and of 4,000 points sampled in their shared box, 3,379
+fall inside both and **zero** inside only one. It is one polygon stored twice,
+the second copy nameless. And because it sorts first, `findFeatureContaining`
+returned it first: **every point in Dahlgren 1 answered "Unknown."** The county
+had a precinct whose voters were told the app didn't know where they were.
+
+The fix is one clause — the loader now takes `Precinct_Name IS NOT NULL`, the
+same shape already used for the county's unnamed fire sliver — and Hamilton
+ships sixteen precincts, which is what both the county's own FY 2017 map and
+its Clerk say it has. `hamilton-unnamed-precinct` is deleted rather than
+rewritten: there was never a seventeenth precinct to name.
+
+**A badly described ask gets a plausible wrong answer.** The question sent to
+Clerk Bowman called the unnamed shape "one full-sized area **in the middle of
+the county**." It is not in the middle; it is on the western edge, stacked on
+Dahlgren 1. Reasoning from that, she offered a reasonable hypothesis — *"It
+looks to me that the assessor has included the City Wards in the middle instead
+of the voting precincts... We have 3 City Wards"* — and it is wrong, but only
+because the premise was. The layer's middle carries MCLEANSBORO 1–4, four
+precincts, exactly matching her own description of how McLeansboro township is
+split. **The lesson is not "verify what clerks tell you."** It is that a
+question containing an unverified claim spends the answerer's time on the
+claim; describing the shape by its neighbour ("a nameless copy of Dahlgren 1")
+would have cost the same sentence and returned the actual answer.
+
+**What the map can and cannot settle.** The FY 2017 PDF is vector and yields all
+13 polling places with names and street addresses. Currency and structure came
+back confirmed. The pairing did not, and the attempt is recorded because the
+negative result is reusable: an affine fit from 14 precinct labels to their
+polygon centroids georeferences the sheet to a median 0.35 mi, which puts every
+marker inside a precinct and lands 10 of 12 rural assignments consistently — but
+both Dahlgren markers fall in DAHLGREN 2, and geocoding the McLeansboro gym
+independently puts it in MCLEANSBORO 3 where the sheet's placement said
+MCLEANSBORO 4. **A polling-place map shows where a location IS, not which
+precinct it SERVES**, and 0.3-mile instruments cannot bridge that. The ledger's
+existing phrasing — "containment on a page is not evidence" — was right, and is
+now measured rather than asserted.
 
 ### The standing caution
 
