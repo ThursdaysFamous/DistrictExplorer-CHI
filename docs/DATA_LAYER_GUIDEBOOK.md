@@ -307,9 +307,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "The largest unserved county on the frontier, and the address the state publishes for its clerk is not its website.",
-      "blocker": "Checked 3 Aug 2026. Vermilion is about 74,000 people, the biggest county adjacent to the served area, and none of its geography is on the site. The state's election directory gives the clerk an address at vercountyil.gov. That domain exists, but it refuses secure connections and, over an ordinary one, forwards visitors to Google \u2014 it is parked, not a county website. Several likely alternatives were tried and none exists. This is the same trap McDonough set: an e-mail address at a domain that hosts nothing. McDonough was solved by asking its clerk, who named a website no amount of guessing would have found.",
-      "wanted": "The county's actual website address, and whether its board districts and precincts exist as map data. Its clerk has a working e-mail and is the obvious person to ask."
+      "summary": "The largest unserved county on the frontier. Its website was found by asking — it is vercounty.org, an abbreviation no hostname guess would reach — and the Clerk's office named the page carrying its voter maps.",
+      "blocker": "Checked 3 Aug 2026. Vermilion is about 74,000 people, the biggest county adjacent to the served area, and none of its geography is on the site. The state's election directory gives the clerk an address at vercountyil.gov. That domain exists, but it refuses secure connections and, over an ordinary one, forwards visitors to Google \u2014 it is parked, not a county website. Several likely alternatives were tried and none exists. This is the same trap McDonough set: an e-mail address at a domain that hosts nothing. McDonough was solved by asking its clerk, who named a website no amount of guessing would have found. SO WAS THIS ONE, and the record predicted its own solution: ASKED 5 Aug 2026, ANSWERED THE SAME DAY by Chief Deputy County Clerk and Supervisor of Elections Carrie Wilson — the county's website is vercounty.org, and the maps her office publishes are at vercounty.org/county-clerk/voter-maps/. (Seal permissions, separately, go to Jennifer Jenkins in the County Board office, jjenkins@vercounty.org.) THE METHOD LESSON IS IN THE HOSTNAME: \"ver\" is an ABBREVIATION of Vermilion, so no ladder built from the county slug — vermilioncountyil.gov, vermilioncounty.org, co.vermilion.il.us — could ever have reached it, which is why two passes of searching failed where one question succeeded. Neither the site nor the Archive is reachable from this project's network, so what the voter-maps page actually carries is still unmeasured: the address is recorded, the contents are not yet a finding.",
+      "wanted": "Whether the maps at vercounty.org/county-clerk/voter-maps/ include board districts and precincts AS DATA (shapefile or GIS layer) rather than as pictures — the address is now known, the format is not."
     },
     {
       "id": "perry-county-website-blocked",
@@ -1601,9 +1601,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Wabash County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. ONE CLUE ARRIVED BEFORE THE ASK: the Clerk's 20 Jul 2026 reply (on the seal question) refers to attesting documents \"for the Wabash County Board of Commissioners\" — commission-form language, still to be confirmed from a certified document per §2.5 step 2; the pass-14 draft asks exactly that, quoting her own phrase back.",
-      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+      "summary": "Wabash County elects three commissioners at large — the Clerk confirmed it in writing — so it needs a roster, not a map; nobody publishes the three names in a form we can read.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. ONE CLUE ARRIVED BEFORE THE ASK: the Clerk's 20 Jul 2026 reply (on the seal question) refers to attesting documents \"for the Wabash County Board of Commissioners\" — commission-form language, still to be confirmed. ANSWERED 5 Aug 2026, and the clue was right: County Clerk & Recorder Janet L. Will, in writing — \"Wabash County is a commissioner form of government, not township. We have three commissioners elected at large. One commissioner is elected each General Election for a six year term.\" That is the election authority stating the form directly, which §2.5 step 2 accepts, so the geometry question is CLOSED: there are no districts to draw and none should ever be invented. What remains is smaller and different — the three commissioners' NAMES, which her reply did not include and which no reachable source publishes (the county's own domain refuses connections from this project's network, and the Internet Archive is likewise unreachable from it). Wabash becomes a County-card county the moment a roster arrives, exactly like Monroe and Randolph.",
+      "wanted": "Just the three commissioners' names (and contact, if published) — the form is settled and no map is needed. Asked of the Clerk 5 Aug 2026."
     },
     {
       "id": "wayne-county-board",
@@ -2271,6 +2271,40 @@ The standing lesson for this ledger: **a source can be public, free, complete
 and STILL not be data.** The discriminator is one download and one text
 extraction, which is cheap enough that no future pass should record a PDF
 source without running it.
+
+### 2026-08-05, later: two more answers, and the hostname blind spot
+
+The campaign's second and third replies landed within hours, and neither
+produced a build — both produced something this ledger values as much, which is
+a record that is now true.
+
+**Wabash: the form, from the election authority.** County Clerk & Recorder
+Janet L. Will wrote back: *"Wabash County is a commissioner form of government,
+not township. We have three commissioners elected at large. One commissioner is
+elected each General Election for a six year term."* That closes the geometry
+question permanently — there are no districts, and none should ever be drawn —
+and converts Wabash into a County-card county needing only three NAMES, which
+her reply did not include. The July seal-reply clue ("Board of Commissioners")
+was right, and was correctly recorded as a clue rather than a fact until she
+confirmed it.
+
+**Vermilion: the website, by asking — and the reason searching could not
+work.** Chief Deputy Clerk Carrie Wilson named the county's site:
+**vercounty.org**, with its voter maps at `/county-clerk/voter-maps/`. The gap
+record had predicted exactly this outcome, citing McDonough, and the reason
+both counties defeated the hostname ladder is worth stating as a rule:
+**"ver" is an ABBREVIATION of Vermilion.** Every pattern the probes generate is
+built from the county's own name — `vermilioncountyil.gov`,
+`vermilioncounty.org`, `co.vermilion.il.us` — and none can reach a site whose
+name is a contraction. That is a permanent blind spot in hostname probing, not
+a gap in the probing effort, and the only instrument that closes it is a
+question. Two counties have now proved it (McDonough's `mcg.mcdonough.il.us`,
+Vermilion's `vercounty.org`).
+
+A caveat kept deliberately: neither vercounty.org nor the Internet Archive is
+reachable from this project's network, so the voter-maps page's CONTENTS remain
+unmeasured. The address is recorded as a fact; what it holds is not yet a
+finding, and the PDF lesson from earlier today applies to it in full.
 
 ### The standing caution
 
