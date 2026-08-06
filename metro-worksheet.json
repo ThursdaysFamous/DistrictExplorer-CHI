@@ -987,6 +987,12 @@
         "note": "McDonough's 3 county board districts, seven members each. DERIVED by scripts/build_mcdonough_board_districts.py: the 27 precincts above dissolved per the composition the county board page prints under each district heading, verified to be a perfect partition (4+12+11) before anything is unioned. The county DOES publish a board-district layer, but its attribute table is corrupt — two districts share an identical population and acreage to eight decimals, the third has neither — so that layer is used only as a geometric cross-check, which the derivation passes at better than 0.999 IoU on all three."
       },
       {
+        "file": "henry-precincts.json",
+        "min_features": 52,
+        "max_features": 52,
+        "note": "Henry's 52 voting precincts, each with the county's own readable name (\"Geneseo 1\") and its four-digit code. Bounds are an EQUALITY because the export is the county's whole fabric, counted: nothing here is derived or sampled. The county publishes NOTHING usable — around 21 per-township picture maps from November 2021, no precincts in its mapping system, and no public ArcGIS under any henrycty.com hostname (re-probed 2026-08-06) — so this is a shapefile Henry County GIS (Bruce Lang) sent by e-mail 2026-08-06 after the Clerk forwarded the request internally, archived under data/source/raw/ and reprojected from EPSG:3436 by scripts/build_henry_precincts.py. That builder proves the reprojection rather than trusting it: the rebuilt extent must land within 0.01 deg of the county outline the app already ships (it lands within 0.00004), the precincts must tile at least 99.5% of the county (99.95) and no pair may overlap by more than 0.05% (0.0000). It also caught a real defect in the county's file: Geneseo 6 carries a ~0.01 m2 sliver ring that made the old \"inside another ring means hole\" test classify BOTH of that precinct's real rings as holes, building it empty — the rule now requires the containing ring to be strictly larger."
+      },
+      {
         "file": "ogle-precincts.json",
         "min_features": 51,
         "max_features": 51,

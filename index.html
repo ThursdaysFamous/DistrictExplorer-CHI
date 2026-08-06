@@ -9027,6 +9027,15 @@ function initChiExplorer() {
   var loadHenryBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/henry-county-board-members.json", {}, 2);
   });
+  /* Henry's 52 precincts, built by scripts/build_henry_precincts.py from the
+   * shapefile HENRY COUNTY GIS sent by e-mail on 2026-08-06 — the county
+   * publishes only per-township picture maps and has no public GIS service, so
+   * this is an archived file rather than a live fetch (the Ogle shape). Each
+   * feature carries the county's own readable name ("Geneseo 1") and its
+   * four-digit code. */
+  var loadHenryPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/henry-precincts.json", {}, 2);
+  });
 
   /* Woodford (the pass-6 next-county candidate, added 2026-08-02). Its GIS of
    * record is TCRPC's — the same regional org that serves Logan — but TCRPC
@@ -19183,6 +19192,61 @@ function initChiExplorer() {
           return {
             label: "Fulton County Clerk — Elections (official)",
             url: "https://fultoncountyil.gov/officials/elected/county-clerk-recorder/"
+          };
+        }
+      },
+      // Henry — 52 precincts from the county GIS office's own shapefile (see
+      // loadHenryPrecincts). The county's board district is a spatial join: the
+      // board's two districts are unions of whole townships and the precinct
+      // names carry their township, but joining on the geometry avoids parsing
+      // a name to derive a district. No polling place — the reply that sent the
+      // boundaries did not carry a precinct-to-polling-place table, and that
+      // question is still open with the county (henry-county-precincts).
+      {
+        key: "henry",
+        coverage: henryCountyCoverage,
+        loadGeometry: loadHenryPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadHenryPrecincts(),
+            loadHenryBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              code: findPropCI(props, ["code"]),
+              boardDistrict: district
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.code) fields.push({ label: "County precinct code", value: String(result.code) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Henry County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Henry County Clerk — Elections (official)",
+            url: "https://www.henrycty.com/211/Elections"
           };
         }
       },
