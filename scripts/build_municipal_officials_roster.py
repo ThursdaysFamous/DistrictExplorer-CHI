@@ -221,6 +221,57 @@ VACANT_NAMES = {"vacant", "vacancy", "unassigned", "open", "tbd", "none",
                 "n/a", "na", "-"}
 
 # ---------------------------------------------------------------------------
+# "Surname, Given" rows inside a directory that otherwise prints "Given Surname".
+#
+# WHY THIS IS NORMALISATION AND NOT INFERENCE, which is the only reason it is
+# allowed here at all: a comma in a roster name field is the universal index
+# convention for surname-first, and re-ordering around it invents nothing — the
+# same characters the source published, in the order the same source uses for
+# every other row. That is the argument the guidebook already makes for printing
+# "Village President" where a source writes "president". Producing a name the
+# source did not publish would be a different act, and this refuses it.
+#
+# FOUND 2026-08-06 in the shipped roster, not in a scraper: three rows across TWO
+# counties were being rendered backwards on live cards — Stephenson's Dakota gained
+# "Holste, McKenzie" when the county republished that village's table, and LaSalle's
+# Village of Dana has shipped "Centeno, Joseph L." and "Centeno, Rebecca" all along.
+# Two sources means this belongs where every roster funnels through, next to the
+# vacancy guard, rather than in one county's parser.
+#
+# THE GUARD IS THE WHOLE DESIGN. 24 of the 27 comma-carrying names in the roster
+# are suffixes — "Roy Williams, Jr.", "John W. Hamm, III" — and inverting one of
+# those would produce "Jr. Roy Williams", a worse defect than the one being fixed.
+# So an inversion applies only when every one of these holds: exactly one comma
+# (so "Williams, Jr., Roy" is left alone and stays visible), both sides non-empty,
+# the trailing side is not a known suffix, and both sides look like name text.
+# Anything else ships exactly as published.
+NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v", "vi",
+                 "md", "phd", "dds", "esq", "cpa", "ret"}
+# Letters, spaces, initials, hyphens and apostrophes (straight or curly). A digit
+# or a stray office word means this is not a name printed backwards.
+NAME_TEXT_RE = re.compile("^[A-Za-z][A-Za-z .'’‘-]*$")
+ONE_COMMA_RE = re.compile(r"^([^,]+),([^,]+)$")
+
+
+def uninvert_name(name):
+    """"Holste, McKenzie" -> "McKenzie Holste"; "Roy Williams, Jr." -> None.
+
+    None means "leave it exactly as the source printed it" — both for a name
+    that carries no comma and for one this refuses to touch.
+    """
+    m = ONE_COMMA_RE.match(str(name or "").strip())
+    if not m:
+        return None
+    surname, given = m.group(1).strip(), m.group(2).strip()
+    if not surname or not given:
+        return None
+    if given.replace(".", "").strip().lower() in NAME_SUFFIXES:
+        return None
+    if not NAME_TEXT_RE.match(surname) or not NAME_TEXT_RE.match(given):
+        return None
+    return "%s %s" % (given, surname)
+
+# ---------------------------------------------------------------------------
 # Preserving a blocked source's last-good entries.
 #
 # Several sources refuse GitHub's runner IPs outright — McHenry and Kendall
@@ -573,6 +624,24 @@ def build_county(payload, by_county, statewide, legal, warnings, apply_floors=Tr
                                 "vacancy is not an officeholder"
                                 % (jurisdiction, rec.get("office") or "?", name.strip()))
                 continue
+            # A NAME PRINTED BACKWARDS IS STILL THE SAME NAME. See the
+            # uninvert_name contract above for why this is re-ordering rather
+            # than inference, and for the suffix guard that makes it safe.
+            # Counted, never silent, in both directions: an applied inversion
+            # says so, and a comma-form name this refuses to touch — one that
+            # is neither a suffix nor invertible — says that too, because such
+            # a row is exactly where the next defect of this kind will surface.
+            flipped = uninvert_name(name)
+            if flipped:
+                warnings.append("%s: '%s' published surname-first — shipped as "
+                                "'%s'" % (jurisdiction, name.strip(), flipped))
+                name = flipped
+            elif ("," in name
+                  and name.rsplit(",", 1)[-1].replace(".", "").strip().lower()
+                      not in NAME_SUFFIXES):
+                warnings.append("%s: '%s' carries a comma that is neither a "
+                                "suffix nor a surname-first name — shipped "
+                                "verbatim" % (jurisdiction, name.strip()))
             kind = classify(rec.get("office"))
             person = {"name": name, "role": rec.get("office")}
             if rec.get("district"):

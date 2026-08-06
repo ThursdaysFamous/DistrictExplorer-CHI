@@ -75,49 +75,29 @@ HEAD_TITLES = {"mayor", "president", "village president", "city president"}
 # nothing here may touch a row it agrees with. This table exists for one narrow
 # case: the county's page and the county's ELECTION AUTHORITY, in writing, say
 # different things about the same seat. That is not a gap to infer across — it
-# is two sourced claims, and the honest handling is to ship the stronger one
-# and record the other, not to average them or to pick silently.
+# is two sourced claims, and the honest handling is to ship the stronger one and
+# record the other, not to average them or to pick silently.
 #
-# THE ONE ENTRY, AND WHY THE CLERK WINS IT. The directory lists Dakota with six
-# trustees, a clerk, a treasurer, one row whose office cell is empty — and NO
-# PRESIDENT. Asked who Dakota's president is, Clerk & Recorder Jazmin Wingert
-# answered by name. An Illinois village board is a president plus six trustees,
-# so the directory's Dakota is not a lawful board as printed while the Clerk's
-# is: her answer resolves the missing head, and the blank cell is very likely
-# the sixth trustee. NOTE WHAT IS NOT DONE WITH THAT: the blank stays blank.
-# Reconstructing the seat that would make the arithmetic work is exactly the
-# inference this file refuses everywhere else, and one sourced correction does
-# not license a second unsourced one.
+# SELF-RETIRING. An entry pins the office the county printed when it was
+# written. If that cell changes at all — corrected, emptied, or the row removed
+# — the entry stops matching and the run prints a RETIRE line, the same shape as
+# the clerk roster's bounce guard. An entry can never outlive its conflict.
 #
-# KEYED BY THE NAME AS THE COUNTY PRINTS IT, deliberately. Wingert wrote
-# "Jonathan Riley"; the directory prints "Jonathon Riley". The published
-# spelling is what a reader sees at the card's own sourceUrl, so that spelling
-# ships and is the key here — an e-mail typed in a hurry does not overrule a
-# published document on orthography, and the discrepancy is recorded rather
-# than silently resolved.
+# IT IS EMPTY, AND THAT IS THE POINT. The one entry it ever held — Dakota's
+# Jonathon Riley, whom this directory printed as a Trustee while Clerk & Recorder
+# Jazmin Wingert said in writing he was president — lasted about eighteen hours.
+# On 2026-08-06 STEPHENSON COUNTY UPDATED THE PAGE ITSELF: Riley now reads
+# "President (Appointed)", the entry stopped matching, the run printed its RETIRE
+# line, and the entry was deleted. The mechanism stays for the next conflict.
 #
-# SELF-RETIRING. Each entry pins the office the county printed when it was
-# written. If that cell changes at all — corrected to President, emptied, or
-# the row removed — the entry stops matching and the run prints a RETIRE line,
-# the same shape as the clerk roster's bounce guard. An entry can therefore
-# never outlive the conflict it was written for.
-CLERK_STATED_OFFICES = {
-    ("Dakota", "Jonathon Riley"): {
-        "county_prints": "Trustee",
-        # "Village President" rather than the Clerk's bare "president": it is
-        # the statutory title, and it is the exact string this same directory
-        # prints for every other village head (Cedarville's Jeremy Monigold,
-        # and so on). Using the source's own vocabulary for the same office is
-        # normalisation, not invention — a card reading "President" for Dakota
-        # and "Village President" for its neighbours would imply a distinction
-        # that does not exist.
-        "office": "Village President",
-        "why": ("Stephenson County Clerk & Recorder Jazmin Wingert, by e-mail "
-                "2026-08-05: 'Jonathan Riley is the president for the Village "
-                "of Dakota.' The county's Cities & Villages directory prints "
-                "him as a Trustee and shows the village no president at all."),
-    },
-}
+# The better record is what the update contained. The county did not just fix
+# one title — it republished the whole Dakota table, and three trustees and the
+# clerk this project had been shipping are no longer on it. ASKING FIXED THE
+# SOURCE rather than producing a correction for this map to carry privately,
+# which helps everyone who reads that directory. It also means the shipped
+# roster was stale in a way no gate here could have detected: every name parsed,
+# every count held, and the people had simply changed.
+CLERK_STATED_OFFICES = {}
 
 # Bodies this page lists alongside the village's own officers that are NOT the
 # municipal government: Davis prints its zoning board of appeals, German Valley

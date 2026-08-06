@@ -227,19 +227,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "A Loves Park mayor and a Machesney Park village president, from either city's own site or from the county's mapping if it adds them. The councils are already complete."
     },
     {
-      "id": "dakota-village-president",
-      "concept": "Municipal officials",
-      "area": "Village of Dakota",
-      "counties": [
-        "stephenson"
-      ],
-      "kind": "no-source",
-      "layer": "municipality",
-      "summary": "Dakota shows its full board, clerk and treasurer but no village president.",
-      "blocker": "The county's Cities & Villages directory lists no president for Dakota. One Dakota row carries a resident's name with the office left blank, which is very likely the missing seat — but the county publishes no title against it, and filling one in would be a guess. Every other village on the page names its president. Re-checked 31 Jul 2026: Dakota is still the only village without a named president, and the blank row persists.",
-      "wanted": "A Dakota village president from the county directory once it names one, or from any village-published list. The rest of the board is already complete."
-    },
-    {
       "id": "rockford-city-precincts",
       "concept": "Voting precincts",
       "area": "City of Rockford",
@@ -2500,6 +2487,11 @@ NOT done:** that same arithmetic makes the blank row obviously the sixth
 trustee, and it stays blank. One sourced correction does not license a second
 unsourced one.
 
+> **Superseded the next day, and by the best possible route** — the county
+> republished the Dakota table, the entry stopped matching, and the RETIRE line
+> fired. See "2026-08-06: the ask fixed the SOURCE" below. Everything above is
+> kept because the mechanism is still in the file for the next conflict.
+
 ### 2026-08-06: the campaign's best morning — a shapefile, and a county that will never need one
 
 Two replies, and between them they cover both ways an ask can succeed.
@@ -2731,6 +2723,75 @@ parsers, not the sources. If one of those counties changes something, nothing tu
 Every ask that returns a file adds one of these, so the cost of this strategy is a slowly
 growing set of things that must be re-asked rather than re-fetched. Worth it, and worth
 counting.
+
+### 2026-08-06: the ask fixed the SOURCE, and the override retired itself in a day
+
+The best outcome an ask can have is not a file. It is the publisher correcting the
+thing everybody reads.
+
+**The override lasted about eighteen hours.** `CLERK_STATED_OFFICES` was written on
+5 Aug because Stephenson's Cities & Villages directory printed Jonathon Riley as a
+Dakota *Trustee* while Clerk & Recorder Jazmin Wingert said in writing he was the
+village president. It was built to ship her answer, record the page's, pin the office
+the page printed, and print a RETIRE line the moment that cell changed in any
+direction. On 6 Aug the county changed it. The run printed the RETIRE line exactly as
+designed, and the entry was deleted. **The table is still there and still empty**, which
+is the correct end state for a mechanism of this shape: the next conflict gets the same
+handling, and no dead override sits in the file pretending to be load-bearing.
+
+**But the correction was not the interesting part of the update.** The county did not
+fix one title — it republished the whole Dakota table, and four of the eight people on
+the live card are not on the new one:
+
+| Live card before 6 Aug | The county's page now |
+|---|---|
+| Jonathon Riley, Village President *(shipped only because the override said so)* | **Jonathan Riley, President (Appointed)** — the page now says it itself, and settles the spelling |
+| Jessie Wenger, Clerk | **McKenzie Holste**, Clerk (Appointed) |
+| Melody Sweet, Treasurer | Melody Sweet, Treasurer (Appointed) — unchanged |
+| Trustees Alisha Lizer, Diane Clay, Eric Lizer | Trustees **Otis Holley, Thomas Long, Andrew Workinger** |
+| Trustees Jeremy Knox, Kenneth Vrazsity | Jeremy Knox, Kenneth Vrazsity — unchanged |
+| *(Kaytlyn Vrazsity's blank-office row was parsed and dropped, never shipped)* | *(row gone)* |
+
+So `dakota-village-president` is **CLOSED**, and the blank-office row that the 5 Aug
+entry deliberately refused to fill resolved itself by removal — which is the vindication
+of refusing. Had that blank been "obviously" filled in as the sixth trustee, this project
+would have invented a seat for someone who had already left the board, and then shipped
+it with confidence. Note also what the override got right for the wrong reason: it pinned
+the *published* spelling "Jonathon" on the principle that a document outranks a hurried
+e-mail on orthography, and the county has now settled it the other way, at the source,
+with no code change needed.
+
+**No gate here could have caught this, and that is the finding.** Every name parsed.
+Every count held. The scraper was doing its job perfectly against a page whose *contents*
+had gone stale — the one failure mode a parser guard is structurally blind to, because
+nothing about a wrong name is malformed. `validate_sources.py` catches a superseded
+dataset id; the roster builders catch a page that changes shape; nothing catches a page
+that changes people. The only thing that surfaced this was **asking a human about one
+seat**, and the answer came back as a rewrite of the whole village.
+
+That generalises past Dakota. Roughly forty asks are outstanding, and their value has
+been counted so far in files received. This one returned no file and closed a gap
+anyway, by changing the source. **An ask is worth sending to a county this project
+already scrapes**, not only to one it cannot read.
+
+**Three names were being rendered backwards, in two counties.** The republished table
+arrived with `Holste, McKenzie` — surname-first, the only such row on a page of eighty-two.
+Checking whether that was a Stephenson quirk found it was not: LaSalle's Village of Dana
+has shipped **`Centeno, Joseph L.`** and **`Centeno, Rebecca`** on live cards all along.
+Two sources means the fix belongs in `build_municipal_officials_roster.py` beside the
+vacancy guard rather than in one county's parser, and `uninvert_name()` now re-orders
+around the comma. **The guard is the whole design**: 24 of the roster's 27 comma-carrying
+names are suffixes — "Roy Williams, Jr.", "John W. Hamm, III" — and inverting one of
+those yields "Jr. Roy Williams", a worse defect than the one being fixed. An inversion
+therefore requires exactly one comma, both sides non-empty, a trailing side that is not
+a known suffix, and both sides matching name text; everything else ships verbatim and
+says so in the run's warnings.
+
+**One thing was deliberately NOT claimed.** The 5 Aug reply also pointed at a polling-place
+heading, reported here at the time as a 404. It resolves now, and it lists **five
+Freeport-area churches with no precinct keys** — which cannot serve thirty-six precincts
+and cannot be joined to any of them. `stephenson-freeport-precincts` and the county's
+polling gap stay open. A page existing is not a page answering.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
