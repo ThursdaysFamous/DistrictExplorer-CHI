@@ -5764,15 +5764,8 @@
   "1718342": {
     "board": [
       {
-        "name": "Alisha Lizer",
-        "role": "Trustee"
-      },
-      {
-        "name": "Diane Clay",
-        "role": "Trustee"
-      },
-      {
-        "name": "Eric Lizer",
+        "appointed": true,
+        "name": "Andrew Workinger",
         "role": "Trustee"
       },
       {
@@ -5782,12 +5775,22 @@
       {
         "name": "Kenneth Vrazsity",
         "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Otis Holley",
+        "role": "Trustee"
+      },
+      {
+        "name": "Thomas Long",
+        "role": "Trustee"
       }
     ],
     "county": "Stephenson",
     "head": {
-      "name": "Jonathon Riley",
-      "role": "Village President"
+      "appointed": true,
+      "name": "Jonathan Riley",
+      "role": "President"
     },
     "name": "Village of Dakota",
     "office": {
@@ -5796,7 +5799,7 @@
     "officers": [
       {
         "appointed": true,
-        "name": "Jessie Wenger",
+        "name": "McKenzie Holste",
         "role": "Clerk"
       },
       {
@@ -5841,14 +5844,14 @@
     ],
     "county": "LaSalle",
     "head": {
-      "name": "Centeno, Joseph L.",
+      "name": "Joseph L. Centeno",
       "phone": "815-822-5457",
       "role": "President"
     },
     "name": "Village of Dana",
     "officers": [
       {
-        "name": "Centeno, Rebecca",
+        "name": "Rebecca Centeno",
         "phone": "815-822-3010",
         "role": "Clerk"
       }
