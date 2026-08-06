@@ -227,19 +227,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "A Loves Park mayor and a Machesney Park village president, from either city's own site or from the county's mapping if it adds them. The councils are already complete."
     },
     {
-      "id": "dakota-village-president",
-      "concept": "Municipal officials",
-      "area": "Village of Dakota",
-      "counties": [
-        "stephenson"
-      ],
-      "kind": "no-source",
-      "layer": "municipality",
-      "summary": "Dakota shows its full board, clerk and treasurer but no village president.",
-      "blocker": "The county's Cities & Villages directory lists no president for Dakota. One Dakota row carries a resident's name with the office left blank, which is very likely the missing seat — but the county publishes no title against it, and filling one in would be a guess. Every other village on the page names its president. Re-checked 31 Jul 2026: Dakota is still the only village without a named president, and the blank row persists.",
-      "wanted": "A Dakota village president from the county directory once it names one, or from any village-published list. The rest of the board is already complete."
-    },
-    {
       "id": "rockford-city-precincts",
       "concept": "Voting precincts",
       "area": "City of Rockford",
@@ -340,19 +327,31 @@ in the researched-but-unbuilt backlog.
     {
       "id": "pass10-frontier-unasked",
       "concept": "County board districts",
-      "area": "Hancock, Jackson, Jefferson, Marion and Warren counties",
+      "area": "Hancock, Jackson, Marion and Warren counties",
       "counties": [
         "hancock",
         "jackson",
-        "jefferson",
         "marion",
         "warren"
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Five frontier counties have working websites but no map data anyone has found; none has been asked directly yet.",
-      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All five answer normally on the web \u2014 Warren's board page even numbers four districts, and Jefferson's lists sixteen member e-mail addresses \u2014 but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one of the five has a working e-mail address.",
-      "wanted": "For each: whether the county's board districts and voting precincts exist as map data, and where. Asking the five clerks is the next move, not more searching."
+      "summary": "Four frontier counties have working websites but no map data anyone has found; none has been asked directly yet.",
+      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All answer normally on the web \u2014 Warren's board page even numbers four districts \u2014 but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one has a working e-mail address. THIS RECORD USED TO NAME FIVE COUNTIES. Jefferson left it on 6 Aug 2026 by being asked: its Clerk replied with a precinct shapefile the next day and the county is now served. That is the record's own prescription working on the first try, and it is the reason the remaining four are worth writing to rather than probing again.",
+      "wanted": "For each: whether the county's board districts and voting precincts exist as map data, and where. Asking the four clerks is the next move, not more searching \u2014 Jefferson proved it takes one e-mail."
+    },
+    {
+      "id": "jefferson-county-board",
+      "concept": "County board districts",
+      "area": "Jefferson County",
+      "counties": [
+        "jefferson"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Jefferson's precincts are shown but its county board districts are not \u2014 the same request asked for both and only the precincts came back.",
+      "blocker": "Asked 5 Aug 2026 in one message: do the county board district AND voting precinct boundaries exist as shareable map data, and if not, would a paper map or a list of which precincts make up each district do? County Clerk Davis replied 6 Aug with 'Please see attached' and a precinct shapefile \u2014 no covering note, and nothing about the districts. That is an incomplete answer rather than a refusal, and the distinction matters: the same office holds both, one arrived by return e-mail, and the district half was simply not addressed. The county's own site publishes sixteen board-member e-mail addresses and no district geometry of any kind. WHAT MAKES THIS CHEAP TO CLOSE: the precincts are now in hand, so a plain LIST of which precincts make up each district would be enough to draw the boundaries exactly, with no new geometry needed from the county at all. Re-asked 6 Aug on that basis.",
+      "wanted": "Either Jefferson's board district boundaries as map data, or \u2014 easier for the county and equally good here \u2014 a list of which of the 33 precincts belongs to each district, which the shipped precinct geometry can be dissolved along."
     },
     {
       "id": "bureau-county-board-districts",
@@ -470,7 +469,7 @@ in the researched-but-unbuilt backlog.
       "layer": "county-board",
       "summary": "Stephenson's four Freeport Township districts are traced from the county's printed map rather than built from published data. They are accurate to roughly 20 metres, and the card says so.",
       "blocker": "ASKED AND ANSWERED, 3 Aug 2026 \u2014 and the answer changed what this gap says. It used to read 'Stephenson publishes no precinct boundaries'. The county does publish them: County Clerk Jazmin Wingert replied to a records request by pointing at her own Elections page, which carries the adopted 2022 precinct maps for Freeport Township and for the rural half. They are printed maps, not map data, so they are traced the same way these four districts are \u2014 and the county's 36 precincts now ship as their own layer, traced from exactly those documents. What is still missing is the same thing as before: precinct geometry as DATA. The four Freeport districts remain accurate to roughly 20 metres, and the card says so. As a check, the fit places the map's own rivers and creeks \u2014 features it was never fitted against \u2014 within 50 metres for 98.9% of their points, with a typical error of 16 metres; the county's four rural districts are whole townships and are exact. THE SECOND DESK IS NOW NAMED AND MEASURED, 5 Aug 2026: asked who 'GIS' is, Clerk Wingert pointed at the county's Maps & GIS page, whose entire content is a link to WINGIS (wingis.org) \u2014 the regional consortium that holds Stephenson's parcel and layer data. WinGIS does not publish it. Its data page says digital data must be PURCHASED: submit a Data Request, receive a quote within 24 hours, and have a signed Data License Agreement on file; its subscription tier is open to 'non-profit organizations & commercial businesses only' and grants access 'through a custom mapping interface through the Internet only'. Measured rather than inferred from the terms: the Stephenson public viewer's own service, maps.wingis.org/public/rest/services/StephensonPublicPropertySearch/MapServer, answers an unauthenticated request with 'Token Required', while the neighbouring WardsAndDistricts and ElectedOfficials services on the same host are open (and are Winnebago-only). So the data demonstrably EXISTS and has a price \u2014 the same shape as the counties whose assessor sells parcels \u2014 rather than being missing. That is a different gap from 'nobody has it', and it is the one to record.",
-      "wanted": "Freeport Township's 16 precincts as map data. The holder is now known to be WinGIS, which sells rather than publishes it, so the routes are: a quote through WinGIS's Data Request process, the county releasing its own precinct file directly (it is the county's own election geography, not WinGIS's), or a public WinGIS service for Stephenson equivalent to the open Winnebago ones."
+      "wanted": "Freeport Township's 16 precincts as map data. The holder is now known to be WinGIS, which sells rather than publishes it. ONE OF THE THREE ROUTES IS NOW CLOSED, by the Clerk herself: asked in writing on 5 Aug 2026 whether her office could release the county's own precinct file directly — with an offer to file a formal FOIA if that was the required form — County Clerk & Recorder Jazmin Wingert answered on 6 Aug, 'The only precinct maps I have are the ones that are accessible on the website.' So the election authority holds no digital precinct file at all; the published maps this project already traced ARE the county's copy, and no FOIA can produce a file that does not exist. That is a definitive answer and not a refusal, and it means the 20-metre tracing is very likely the best this concept gets in Stephenson until one of the two remaining routes opens: a quote through WinGIS's Data Request process, or a public WinGIS service for Stephenson equivalent to the open Winnebago ones."
     },
     {
       "id": "jo-daviess-county-board-districts",
@@ -694,7 +693,7 @@ in the researched-but-unbuilt backlog.
       "layer": "park-district",
       "summary": "Stephenson's park and library districts exist only as shading inside pictures in the county's 2014 maps — unlike its fire map, which has real lines and is already shown.",
       "blocker": "Checked 2 Aug 2026, when the fire map was traced: in the county's 2014 park and library district maps on the state's site, only the legend is drawn with real lines — the district shading itself is baked into sixteen image strips covering the map body. The fire map, from the same July 2014 series, draws its districts as real lines, which is why it could be traced. The district names still match the 2025 tax roll (park 4 of 4, library 4 of 4). Tracing the shading is possible in principle, but it would stack pixel-level error on top of the fitting error and land far coarser than any other boundary here. ASKED 1 Aug 2026, ANSWERED 3 Aug 2026: County Clerk Jazmin Wingert holds only the election maps and directed anything else to the county GIS office \u2014 so the ask is live but has moved to a second desk, which is the Tier-3 pattern in \"The ask ledger\". THAT DESK IS NOW IDENTIFIED, 5 Aug 2026, and it is not a county office: asked who GIS is, the Clerk pointed at the county's Maps & GIS page, which contains nothing but a link to WINGIS (wingis.org), the regional consortium. WinGIS SELLS digital data \u2014 Data Request, quote within 24 hours, signed Data License Agreement \u2014 and its Stephenson viewer service is token-gated (see stephenson-freeport-precincts for the measurement). Two things follow for park and library specifically. First, whether WinGIS even holds these boundaries is unknown: its open services on the same host carry Winnebago wards, precincts and townships but nothing about park or library districts in any county, so a purchase might buy a file that does not exist. Second, and more usefully, the DISTRICTS THEMSELVES were never asked. Four park districts and four library districts are eight small public bodies that each hold their own boundary, and no one has written to them.",
-      "wanted": "Park and library district boundaries as map data. Three live routes, cheapest first: the eight districts themselves (never asked, and each holds its own boundary); a re-export of the county's own 2014 maps with the shading as lines rather than images; or a WinGIS quote, if WinGIS turns out to hold these layers at all."
+      "wanted": "Park and library district boundaries as map data. Three live routes, cheapest first: the eight districts themselves (each holds its own boundary); a re-export of the county's own 2014 maps with the shading as lines rather than images; or a WinGIS quote, if WinGIS turns out to hold these layers at all. THE FIRST ROUTE IS NOW THE ONE TO WORK, and the county has said so: asked 5 Aug 2026 whether she happened to have contact information for any of the eight districts, County Clerk & Recorder Jazmin Wingert answered on 6 Aug that the county neither publishes it nor holds a report that generates it — and offered, unprompted, to help with any district this project cannot reach on its own. So the county is a named fallback for reaching the districts, not a source for their boundaries."
     },
     {
       "id": "macoupin-special-districts",
@@ -2488,6 +2487,11 @@ NOT done:** that same arithmetic makes the blank row obviously the sixth
 trustee, and it stays blank. One sourced correction does not license a second
 unsourced one.
 
+> **Superseded the next day, and by the best possible route** — the county
+> republished the Dakota table, the entry stopped matching, and the RETIRE line
+> fired. See "2026-08-06: the ask fixed the SOURCE" below. Everything above is
+> kept because the mechanism is still in the file for the next conflict.
+
 ### 2026-08-06: the campaign's best morning — a shapefile, and a county that will never need one
 
 Two replies, and between them they cover both ways an ask can succeed.
@@ -2656,7 +2660,62 @@ INSIDE, and **Carmi (White) was added OUTSIDE** — that anchor is what proves t
 two southern islands stayed two rather than quietly merging across an unserved
 county. All 56 inside and 13 outside anchors verify.
 
-### The standing caution
+### 2026-08-06: Jefferson, the county that ended an island — and the first source that had to be REPAIRED
+
+`pass10-frontier-unasked` named five counties and ended with a prescription:
+*"Asking the five clerks is the next move, not more searching."* Jefferson was
+asked on 5 Aug and its Clerk replied the next day with "Please see attached"
+and a precinct shapefile. It is the 46th dispatched county, and adding it
+**merged the Hamilton island back into the mainland** — Jefferson borders both
+Washington and Hamilton, so the outline drops from four polygons to three.
+Islands can un-island; the ring code handles it because the dissolve is
+recomputed rather than patched.
+
+**The file needed work no previous county's has, and that is the part worth
+recording.** Measured before a line of builder was written:
+
+  * The 33 precincts tile **99.212%** of the county, not ~100%.
+  * The missing 0.788% is not a hole and no precinct is absent. It is a single
+    **connected lattice of hairline cracks** running along nearly every shared
+    boundary — it touches all 33 precincts at once — because each polygon was
+    digitised independently and neighbours' edges were never snapped.
+  * Every uncovered sample point lies within **31 m** of a precinct edge.
+  * Left alone that is about **one click in 127** answering "this point isn't
+    inside any district", which is a lie: the point IS in a precinct.
+
+**Two repairs were tried and the obvious one is wrong.** "Give each gap piece
+to the neighbour it shares the most edge with" is the natural rule and it fails
+badly here, because the lattice is ONE connected piece spanning the county — the
+whole thing lands on a single precinct and moves a boundary **35 kilometres**.
+The connectedness of the defect is exactly what defeats the obvious fix, which
+is why it is written down rather than left for the next person to rediscover.
+
+What ships is **nearest-boundary assignment**: every point in a crack goes to
+the precinct whose boundary is nearest, computed as a Voronoi partition over
+densified boundaries. Correct ownership, but it draws the new edge down a
+zig-zagging medial line and cost 52,538 vertices — a 1.2 MB file for 33
+precincts, against Henry's 233 KB for 52. Simplifying at 10 m collapses that
+noise back onto the straight township lines the county actually drew: **89 KB,
+3,798 vertices, 99.975% coverage**, median boundary shift 35 m and worst 118 m.
+A shared edge survives simplification because both neighbours simplify the SAME
+linework at the same tolerance and Douglas-Peucker is deterministic.
+
+**The residue is asserted, not hoped for.** 0.025% of the county still falls in
+a crack — one click in 4,000, against one in 127 — and the builder fails if a
+future export needs a bigger correction than this one did.
+
+**What was deliberately NOT repaired.** The county's file also contains a small
+genuine OVERLAP between Dodds 1 and Dodds 2. It stays exactly as drawn: **a
+crack has no owner and can be assigned; two claims on the same ground cannot**,
+and picking a winner would be inventing an answer the county did not give. It
+goes back to the Clerk as a bug report instead.
+
+**The half that did not arrive.** The 5 Aug ask covered board districts AND
+precincts; only precincts came back, with no covering note. That is an
+incomplete answer, not a refusal, and `jefferson-county-board` records it with
+the cheap route named: now that the precincts are in hand, **a plain list of
+which precincts make up each district** would let the boundaries be dissolved
+exactly, with no new geometry needed from the county at all.
 
 Four sources now ship from **archived files** rather than live fetches — Stark's map,
 Ogle's shapefile, Marshall's table, Washington's Blue Book. Their weekly jobs guard the
@@ -2664,6 +2723,106 @@ parsers, not the sources. If one of those counties changes something, nothing tu
 Every ask that returns a file adds one of these, so the cost of this strategy is a slowly
 growing set of things that must be re-asked rather than re-fetched. Worth it, and worth
 counting.
+
+### 2026-08-06: the ask fixed the SOURCE, and the override retired itself in a day
+
+The best outcome an ask can have is not a file. It is the publisher correcting the
+thing everybody reads.
+
+**The override lasted about eighteen hours.** `CLERK_STATED_OFFICES` was written on
+5 Aug because Stephenson's Cities & Villages directory printed Jonathon Riley as a
+Dakota *Trustee* while Clerk & Recorder Jazmin Wingert said in writing he was the
+village president. It was built to ship her answer, record the page's, pin the office
+the page printed, and print a RETIRE line the moment that cell changed in any
+direction. On 6 Aug the county changed it. The run printed the RETIRE line exactly as
+designed, and the entry was deleted. **The table is still there and still empty**, which
+is the correct end state for a mechanism of this shape: the next conflict gets the same
+handling, and no dead override sits in the file pretending to be load-bearing.
+
+**But the correction was not the interesting part of the update.** The county did not
+fix one title — it republished the whole Dakota table, and four of the eight people on
+the live card are not on the new one:
+
+| Live card before 6 Aug | The county's page now |
+|---|---|
+| Jonathon Riley, Village President *(shipped only because the override said so)* | **Jonathan Riley, President (Appointed)** — the page now says it itself, and settles the spelling |
+| Jessie Wenger, Clerk | **McKenzie Holste**, Clerk (Appointed) |
+| Melody Sweet, Treasurer | Melody Sweet, Treasurer (Appointed) — unchanged |
+| Trustees Alisha Lizer, Diane Clay, Eric Lizer | Trustees **Otis Holley, Thomas Long, Andrew Workinger** |
+| Trustees Jeremy Knox, Kenneth Vrazsity | Jeremy Knox, Kenneth Vrazsity — unchanged |
+| *(Kaytlyn Vrazsity's blank-office row was parsed and dropped, never shipped)* | *(row gone)* |
+
+So `dakota-village-president` is **CLOSED**, and the blank-office row that the 5 Aug
+entry deliberately refused to fill resolved itself by removal — which is the vindication
+of refusing. Had that blank been "obviously" filled in as the sixth trustee, this project
+would have invented a seat for someone who had already left the board, and then shipped
+it with confidence. Note also what the override got right for the wrong reason: it pinned
+the *published* spelling "Jonathon" on the principle that a document outranks a hurried
+e-mail on orthography, and the county has now settled it the other way, at the source,
+with no code change needed.
+
+**The Clerk also explained the conflict, and neither source had been wrong.** Asked
+which of the two was right, she answered from the election records: *"Jonathan Riley was
+elected as a trustee and later appointed as President."* Both documents were accurate on
+the day each was written — the directory had simply not been updated across the
+appointment. That is worth holding onto the next time two sourced claims disagree: the
+`CLERK_STATED_OFFICES` design assumed one of them had to lose, and the real shape was a
+stale snapshot of a true fact. It is also why the republished page marks him
+"(Appointed)" rather than elected, which no amount of reading either source would have
+revealed.
+
+**No gate here could have caught this, and that is the finding.** Every name parsed.
+Every count held. The scraper was doing its job perfectly against a page whose *contents*
+had gone stale — the one failure mode a parser guard is structurally blind to, because
+nothing about a wrong name is malformed. `validate_sources.py` catches a superseded
+dataset id; the roster builders catch a page that changes shape; nothing catches a page
+that changes people. The only thing that surfaced this was **asking a human about one
+seat**, and the answer came back as a rewrite of the whole village.
+
+That generalises past Dakota. Roughly forty asks are outstanding, and their value has
+been counted so far in files received. This one returned no file and closed a gap
+anyway, by changing the source. **An ask is worth sending to a county this project
+already scrapes**, not only to one it cannot read.
+
+**Three names were being rendered backwards, in two counties.** The republished table
+arrived with `Holste, McKenzie` — surname-first, the only such row on a page of eighty-two.
+Checking whether that was a Stephenson quirk found it was not: LaSalle's Village of Dana
+has shipped **`Centeno, Joseph L.`** and **`Centeno, Rebecca`** on live cards all along.
+Two sources means the fix belongs in `build_municipal_officials_roster.py` beside the
+vacancy guard rather than in one county's parser, and `uninvert_name()` now re-orders
+around the comma. **The guard is the whole design**: 24 of the roster's 27 comma-carrying
+names are suffixes — "Roy Williams, Jr.", "John W. Hamm, III" — and inverting one of
+those yields "Jr. Roy Williams", a worse defect than the one being fixed. An inversion
+therefore requires exactly one comma, both sides non-empty, a trailing side that is not
+a known suffix, and both sides matching name text; everything else ships verbatim and
+says so in the run's warnings.
+
+**One thing was deliberately NOT claimed.** The 5 Aug reply also pointed at a polling-place
+heading, reported here at the time as a 404. It resolves now, and it lists **five
+Freeport-area churches with no precinct keys** — which cannot serve thirty-six precincts
+and cannot be joined to any of them. `stephenson-freeport-precincts` and the county's
+polling gap stay open. A page existing is not a page answering.
+
+**And the same reply closed a route rather than opening one, which is still worth having.**
+The 5 Aug follow-up asked the Clerk directly whether her office could release the county's
+own precinct file — offering to file a formal FOIA if that was the required form, since the
+precincts are election geography her office draws and adopts rather than WinGIS's product.
+Her answer: *"The only precinct maps I have are the ones that are accessible on the website."*
+So the election authority holds no digital precinct file at all, and the published maps this
+project traced at ~20 m ARE the county's copy. No FOIA produces a file that does not exist.
+That is a definitive answer, not a refusal, and both Stephenson gap records now say so —
+which matters more than it sounds, because "ask the county directly" is the route this
+ledger otherwise recommends on nearly every unbuilt precinct gap in the file, and here is
+the case where working it to the end returned nothing. **A route measured to its end and
+closed is a real return on an ask.** The remaining routes are a paid WinGIS quote or a
+public WinGIS service for Stephenson equivalent to the open Winnebago ones.
+
+The same reply answered the park/library sub-question the same way and better: the county
+publishes no contact information for its eight park and library districts and holds no
+report that would generate it, but the Clerk offered — unprompted — to help reach any
+district this project cannot find on its own. So `stephenson-park-library-districts` now
+names the districts-themselves route as the one to work, with the Clerk as a named fallback
+for reaching them.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
