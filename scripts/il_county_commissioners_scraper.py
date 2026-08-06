@@ -27,6 +27,7 @@ Usage:
     python3 il_county_commissioners_scraper.py [output.json]   # default: stdout
 """
 
+import datetime
 import html as html_mod
 import json
 import re
@@ -407,6 +408,59 @@ def parse_hamilton(page):
     return members, office
 
 
+# ---------------------------------------------------------------------------
+# COUNTIES WITH NO WEBSITE TO SCRAPE.
+#
+# Every SITES entry below fetches a page. This table is for the counties that
+# have no page to fetch — not blocked, not slow, ABSENT. Edwards is the first:
+# asked directly on 2026-08-06 whether the county uses some other web address,
+# County Clerk & Recorder Melanie Knight replied "The county does not currently
+# have a website", which matches the measurement (edwardscounty.illinois.gov
+# answers NOERROR with no A record; www. is NXDOMAIN — the domain carries mail
+# and hosts nothing). No scraper can ever exist for such a county, so the
+# roster comes from a document its Clerk sent and is carried here verbatim.
+#
+# THE HONESTY COST IS REAL AND IS PAID OUT LOUD. A weekly job that "refreshes"
+# a hand-carried roster refreshes nothing: the same names ship every run
+# whatever the county has done since. So each entry states the document and the
+# date it was verified, and main() prints a line every run naming the county,
+# the document and how old it is. It is never silently folded in with the
+# counties that really were re-read.
+#
+# WHAT IS DELIBERATELY NOT SHIPPED. Knight's letterhead gives each commissioner
+# a HOME address and a personal phone (two of them marked "(h)" and "(c)"). The
+# roster ships neither — the same call every municipal source in this project
+# makes, because a card must not publish a private home. What ships is the name,
+# the office, and the county e-mail address the county itself assigns
+# (commissioner1@…, commissioner2@…), which is a real contact route that belongs
+# to the seat rather than the person. The office block gets the courthouse
+# address only: the phone on the letterhead is the CLERK's line, and printing it
+# under "Board Office" would imply the board answers it.
+DOCUMENT_ROSTERS = {
+    "EDWARDS": {
+        "name": "Edwards County",
+        "structure": "Commission form — 3 commissioners elected countywide",
+        "document": "Commissioners names-addresses 2025.doc, sent by County Clerk "
+                    "& Recorder Melanie Knight, 2026-08-06",
+        "verified": "2026-08-06",
+        "expect": 3,
+        # Ordered as the county's own document orders them by seat number.
+        "members": [
+            {"name": "Duane Lear", "role": "Chairman",
+             "email": "commissioner1@edwardscounty.illinois.gov", "since": 2020},
+            {"name": "Davis Messman", "role": "Commissioner",
+             "email": "commissioner2@edwardscounty.illinois.gov", "since": 2022},
+            {"name": "Matthew R. St.Ledger", "role": "Commissioner",
+             "email": "commissioner3@edwardscounty.illinois.gov", "since": 2024},
+        ],
+        "office": {
+            "label": "Edwards County Courthouse",
+            "address": "50 East Main Street, Albion, IL 62806",
+        },
+    },
+}
+
+
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
     "MONROE": {
@@ -494,6 +548,38 @@ def main():
         }
         if office:
             out[key]["office"] = office
+
+    # The counties with no website. Emitted without a fetch, and never quietly:
+    # a hand-carried roster that ages is the failure mode this list invites, so
+    # every run says which county, from which document, and how stale.
+    for key, spec in DOCUMENT_ROSTERS.items():
+        if key in out:
+            print("county-commissioners: FAIL — %s is in both SITES and "
+                  "DOCUMENT_ROSTERS; a county has one source, not two" % key,
+                  file=sys.stderr)
+            sys.exit(1)
+        if len(spec["members"]) != spec["expect"]:
+            print("county-commissioners: FAIL — %s carries %d members, expected %d"
+                  % (key, len(spec["members"]), spec["expect"]), file=sys.stderr)
+            sys.exit(1)
+        age = ""
+        try:
+            verified = datetime.date.fromisoformat(spec["verified"])
+            age = ", %d days old" % (datetime.date.today() - verified).days
+        except Exception:
+            pass
+        print("county-commissioners: NOT RE-READ — %s has no website; its %d "
+              "members come from %s%s. Re-ask the Clerk to refresh."
+              % (key, len(spec["members"]), spec["document"], age), file=sys.stderr)
+        out[key] = {
+            "county": spec["name"],
+            "structure": spec["structure"],
+            "sourceDocument": spec["document"],
+            "verified": spec["verified"],
+            "members": spec["members"],
+        }
+        if spec.get("office"):
+            out[key]["office"] = spec["office"]
 
     if not out:
         print("county-commissioners: FAIL — no county parsed", file=sys.stderr)

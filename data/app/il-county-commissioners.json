@@ -89,6 +89,36 @@
   "sourceUrl": "https://www.calhouncountyil.gov/government/county-board/members/",
   "structure": "Commission form — 5 commissioners elected countywide"
  },
+ "EDWARDS": {
+  "county": "Edwards County",
+  "members": [
+   {
+    "email": "commissioner1@edwardscounty.illinois.gov",
+    "name": "Duane Lear",
+    "role": "Chairman",
+    "since": 2020
+   },
+   {
+    "email": "commissioner2@edwardscounty.illinois.gov",
+    "name": "Davis Messman",
+    "role": "Commissioner",
+    "since": 2022
+   },
+   {
+    "email": "commissioner3@edwardscounty.illinois.gov",
+    "name": "Matthew R. St.Ledger",
+    "role": "Commissioner",
+    "since": 2024
+   }
+  ],
+  "office": {
+   "address": "50 East Main Street, Albion, IL 62806",
+   "label": "Edwards County Courthouse"
+  },
+  "sourceDocument": "Commissioners names-addresses 2025.doc, sent by County Clerk & Recorder Melanie Knight, 2026-08-06",
+  "structure": "Commission form — 3 commissioners elected countywide",
+  "verified": "2026-08-06"
+ },
  "HAMILTON": {
   "county": "Hamilton County",
   "members": [
