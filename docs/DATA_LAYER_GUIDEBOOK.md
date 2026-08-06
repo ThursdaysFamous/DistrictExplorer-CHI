@@ -1346,17 +1346,17 @@ in the researched-but-unbuilt backlog.
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
-      "id": "edwards-county-board",
-      "concept": "County board",
+      "id": "edwards-county-precincts",
+      "concept": "Voting precincts",
       "area": "Edwards County",
       "counties": [
         "edwards"
       ],
       "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Edwards County elects its board countywide, so there is no geometry to draw and never will be — it needs three names, and the county has no website to take them from.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, nothing county-keyed in the ArcGIS Online catalogue, and no county website under the five domain patterns tried. THE FORM QUESTION IS NOW ANSWERED AND THE GEOMETRY QUESTION IS CLOSED PERMANENTLY. Asked 5 Aug 2026, answered the next morning by County Clerk & Recorder Melanie Knight: 'the county board is elected countywide (at large.) We are a commission county. Our voting district boundaries currently exist on paper.' Two facts, both from the right desk. An at-large commission county has NO board districts to draw — §1.5, the County-card tier — so this stops being a geometry ask and becomes a roster ask for three commissioners. And the precincts are paper, stated outright, so no precinct layer will come from this county either. WHY THE ROSTER IS STILL BLOCKED, MEASURED 6 Aug rather than assumed: edwardscounty.illinois.gov resolves NOERROR with NO A RECORD, and www.edwardscounty.illinois.gov is NXDOMAIN. The domain carries mail — the Clerk writes from it — and hosts no web. This is the WABASH SHAPE, not a block: nothing is refusing this project, there is simply no site, so no scraper can ever exist and the names must be asked for. Edwards is the third county in that state, and it is now the best-evidenced of the three: asked directly on 6 Aug whether the county uses some other web address, Clerk Knight replied 'The county does not currently have a website.' MEASURED AND THEN STATED, which is the strongest form a negative takes here — Johnson was stated only, Wabash measured only. THE NAMES HAVE BEEN SENT. The same reply carried 'Commissioners names-addresses 2025.doc' with the three commissioners' contact information. That file has not yet reached this repo, so nothing is built from it and no name is written down anywhere in this project until it has been read — the same answered-not-built discipline Henry's shapefile got. When it lands, Edwards ships as a County-card county via il-county-commissioners.json (§1.5): a roster row, no dispatch entry, no coverage function, no toggle, and no ring change, exactly like Pike, Brown, Calhoun, Putnam and Schuyler.",
-      "wanted": "Nothing further from the county — the commissioners' names and addresses were sent on 6 Aug 2026. What remains is internal: read the attachment, add the three to data/app/il-county-commissioners.json through the scraper/builder pair, and confirm whether the board designates a chairman (the ask raised it; the reply did not say)."
+      "layer": "county-precinct",
+      "summary": "Edwards County's voting precinct boundaries exist on paper only — its Clerk said so directly.",
+      "blocker": "Stated 6 Aug 2026 by County Clerk & Recorder Melanie Knight, unprompted, in the same reply that settled the board's form: 'Our voting district boundaries currently exist on paper.' No hedging and no qualification, from the office that draws them. That is a closed route rather than an unmeasured one, and it is recorded so nobody re-probes for a file the county has said does not exist. There is also nowhere else to look: Edwards has no county website (confirmed by the same Clerk on the same day), no self-hosted ArcGIS under ten hostname patterns, and nothing county-keyed in the ArcGIS Online catalogue.",
+      "wanted": "Either the county digitising its precincts, or a paper map good enough to georeference — the Stephenson route, where two adopted PDFs from the Clerk's own page became 36 precincts. Edwards publishes no such document today because it publishes nothing; a scan sent by the Clerk would be the equivalent."
     },
     {
       "id": "effingham-municipal-officials",
@@ -2620,6 +2620,41 @@ first reply left something ambiguous — a file name that might have been an
 effective date, a domain that might have been blocked rather than absent.
 Neither ambiguity would have been visible without asking, and neither answer
 could have been guessed.
+
+**And Edwards shipped the same afternoon — the 56th county, the THIRD island,
+and the first to join on the at-large tier alone.** The document held three
+commissioners: Duane Lear (Chairman, elected 2020), Davis Messman (2022) and
+Matthew R. St.Ledger (2024) — one seat per general election, which is the
+commission form's staggered six-year cycle showing in the dates. They ride the
+County card via `il-county-commissioners.json`: no dispatch entry, no coverage
+function, no toggle, no layer. `edwards-county-board` is retired.
+
+**What was left out of the roster, and why.** The Clerk's letterhead gives each
+commissioner a HOME address and a personal phone, two of them marked "(h)" and
+"(c)". None of that ships — the same call every municipal source here makes,
+because a card must not publish a private home. What ships is the name, the
+office, and the `commissioner1@…` address the COUNTY assigns, which belongs to
+the seat rather than the person. The office block carries the courthouse address
+and no phone: the number on the letterhead is the CLERK's line, and printing it
+under "Board Office" would imply the board answers it.
+
+**The mechanism this needed, and the honesty cost it carries.** Every other
+county in that roster is scraped from a page each week. Edwards has no page, so
+it became the first entry in a new `DOCUMENT_ROSTERS` table — names carried from
+the Clerk's document with the document named and a verification date attached.
+That is a real cost: **a weekly job that "refreshes" a hand-carried roster
+refreshes nothing**, and the same three names would ship every week whatever the
+county did. So the scraper prints a `NOT RE-READ` line on every run naming the
+county, the document and how many days old it is, the builder refuses any county
+carrying neither a `sourceUrl` nor a `sourceDocument`, and the worksheet note
+says all of it. The cost is paid out loud rather than hidden.
+
+**Ring work, per the §2.5.1 checklist.** Edwards is FIPS 047 and White County
+sits between it and Hamilton, so it lands DETACHED rather than extending the
+second island: `metro-outline.json` is now four polygons. Albion anchors it
+INSIDE, and **Carmi (White) was added OUTSIDE** — that anchor is what proves the
+two southern islands stayed two rather than quietly merging across an unserved
+county. All 56 inside and 13 outside anchors verify.
 
 ### The standing caution
 

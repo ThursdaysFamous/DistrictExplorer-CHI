@@ -163,6 +163,13 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # ask campaign's first fruit, at-large board + precinct
                      # and fire tilings from the county's own vendor-hosted org
                      "065",
+                     # Edwards — the THIRD island (pass 14, 2026-08-06), and the
+                     # first island that joins through the AT-LARGE tier alone:
+                     # no dispatch entry, no geometry, three commissioners on the
+                     # County card. Its Clerk settled the form and sent the names
+                     # in two replies; the county has no website at all, so its
+                     # roster is the one in DOCUMENT_ROSTERS rather than a scrape.
+                     "047",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -298,6 +305,11 @@ INSIDE = {
     # than a dispatch entry, because none of the four has district geometry to
     # dispatch on. They belong here for the same reason the judicial-subcircuit
     # secondary counties do — county-specific data answers there.
+    # Albion (Edwards) — the THIRD island, 2026-08-06, and the first to join on
+    # the at-large tier alone. White County sits between it and Hamilton, which
+    # is why it lands detached rather than extending the second island; Carmi
+    # (White) holds that corridor OUTSIDE below.
+    "Albion (Edwards)": (38.3781, -88.0578),
     "Griggsville (Pike)": (39.7078, -90.7276),
     "Hennepin (Putnam)": (41.2589, -89.3216),
     "Mount Sterling (Brown)": (39.9854, -90.7641),
@@ -316,6 +328,10 @@ OUTSIDE = {
     # swallowed a neighbour. (Waterloo moved to INSIDE when Monroe shipped as a
     # commission county in pass-7 tranche 3; Sparta stands in for the southern
     # frontier now that Randolph is served.)
+    # White separates Edwards (third island, 2026-08-06) from Hamilton (second),
+    # so Carmi is what proves the two islands stayed two rather than merging
+    # across an unserved county.
+    "Carmi (White)": (38.0906, -88.1589),
     "Carlyle (Clinton)": (38.6103, -89.3726),
     "Ava (Jackson)": (37.8886, -89.4964),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so

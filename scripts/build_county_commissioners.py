@@ -36,8 +36,14 @@ EXPECT_MEMBERS = {
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
     "SCHUYLER": 7,                   # pass-8; at-large proven from the canvass
     "HAMILTON": 5,                   # pass-14; at-large stated by the Clerk, 2026-08-05
+    "EDWARDS": 3,                    # pass-14; commission form stated by the Clerk,
+                                     # 2026-08-06. The ONLY county here whose roster is
+                                     # not scraped from a page — Edwards has no website at
+                                     # all, so its three come from a document the Clerk
+                                     # sent (DOCUMENT_ROSTERS in the scraper), and the
+                                     # scraper says so on every run.
 }
-MIN_COUNTIES = 8
+MIN_COUNTIES = 9
 ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Vice-Chairman",
                  "Commissioner", "Board Member")
 
@@ -99,9 +105,22 @@ def main():
         out = {
             "county": block.get("county"),
             "structure": block.get("structure"),
-            "sourceUrl": block.get("sourceUrl"),
             "members": clean_members,
         }
+        # Provenance, and exactly one kind of it. Eight counties are scraped
+        # from a page and carry sourceUrl; Edwards has no website at all and
+        # carries the document its Clerk sent plus the date it was verified.
+        # A county with neither would be a roster nobody can trace, so it fails
+        # rather than shipping anonymous names.
+        if block.get("sourceUrl"):
+            out["sourceUrl"] = block["sourceUrl"]
+        elif block.get("sourceDocument"):
+            out["sourceDocument"] = block["sourceDocument"]
+            if block.get("verified"):
+                out["verified"] = block["verified"]
+        else:
+            fail("%s has neither a sourceUrl nor a sourceDocument — a shipped "
+                 "roster must say where its names came from" % key)
         office = block.get("office") or {}
         office = {k: v for k, v in office.items() if v}
         if office:
