@@ -377,7 +377,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Henry County's precinct cards name the precinct and its county board district, but not where that precinct votes.",
-      "blocker": "Opened 6 Aug 2026 when the boundaries shipped, and it is the REMAINDER of a gap that otherwise closed. The 1 Aug request asked two things — precinct boundaries as data, and a polling-place assignment per precinct. Henry County GIS answered the first completely (Bruce Lang, shapefile by e-mail, 52 precincts now live) and did not address the second, which is not a refusal: the question went to a mapping office and a polling list is a Clerk's record. The county's shapefile carries a precinct name and a four-digit code and nothing else, so there is nothing on the geometry to join a polling place to. ASKED AGAIN 6 Aug, of the same thread and copied to the Clerk.",
+      "blocker": "Opened 6 Aug 2026 when the boundaries shipped, and it is the REMAINDER of a gap that otherwise closed. The 1 Aug request asked two things — precinct boundaries as data, and a polling-place assignment per precinct. Henry County GIS answered the first completely (Bruce Lang, shapefile by e-mail, 52 precincts now live) and did not address the second, which is not a refusal: the question went to a mapping office and a polling list is a Clerk's record. The county's shapefile carries a precinct name and a four-digit code and nothing else, so there is nothing on the geometry to join a polling place to. ASKED AGAIN 6 Aug, of the same thread and copied to the Clerk — and Bruce Lang answered within the hour by drawing the line himself: 'The other questions are for Barb to answer/supply.' So the polling table is confirmed to be the Clerk's record and not the GIS office's, which is what this gap assumed and now knows. TWO THINGS SIT WITH CLERK LINK, not one: the polling assignment, and PERMISSION TO PUBLISH. The boundaries went out the same day they arrived because the data is a public record supplied on request and the app redistributes no raw file — but the attribution question was asked and Lang explicitly declined to answer it, so it is pending rather than granted, and this record is where that is written down rather than being quietly assumed.",
       "wanted": "A table pairing each of Henry County's 52 precincts with its polling place — the precinct code the county's own shapefile carries (0801, 1901, …) is the natural key, and any list using it can be joined directly."
     },
     {
@@ -1355,8 +1355,8 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Edwards County elects its board countywide, so there is no geometry to draw and never will be — it needs three names, and the county has no website to take them from.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, nothing county-keyed in the ArcGIS Online catalogue, and no county website under the five domain patterns tried. THE FORM QUESTION IS NOW ANSWERED AND THE GEOMETRY QUESTION IS CLOSED PERMANENTLY. Asked 5 Aug 2026, answered the next morning by County Clerk & Recorder Melanie Knight: 'the county board is elected countywide (at large.) We are a commission county. Our voting district boundaries currently exist on paper.' Two facts, both from the right desk. An at-large commission county has NO board districts to draw — §1.5, the County-card tier — so this stops being a geometry ask and becomes a roster ask for three commissioners. And the precincts are paper, stated outright, so no precinct layer will come from this county either. WHY THE ROSTER IS STILL BLOCKED, MEASURED 6 Aug rather than assumed: edwardscounty.illinois.gov resolves NOERROR with NO A RECORD, and www.edwardscounty.illinois.gov is NXDOMAIN. The domain carries mail — the Clerk writes from it — and hosts no web. This is the WABASH SHAPE, not a block: nothing is refusing this project, there is simply no site, so no scraper can ever exist and the names must be asked for. Edwards is the third county measured into that state (Johnson said so in words, Wabash and Edwards by measurement).",
-      "wanted": "The three commissioners' names, from the Clerk directly — there is no county website to read them from, and the at-large answer means names are the ONLY thing this county needs. Identical to the outstanding Wabash ask."
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, nothing county-keyed in the ArcGIS Online catalogue, and no county website under the five domain patterns tried. THE FORM QUESTION IS NOW ANSWERED AND THE GEOMETRY QUESTION IS CLOSED PERMANENTLY. Asked 5 Aug 2026, answered the next morning by County Clerk & Recorder Melanie Knight: 'the county board is elected countywide (at large.) We are a commission county. Our voting district boundaries currently exist on paper.' Two facts, both from the right desk. An at-large commission county has NO board districts to draw — §1.5, the County-card tier — so this stops being a geometry ask and becomes a roster ask for three commissioners. And the precincts are paper, stated outright, so no precinct layer will come from this county either. WHY THE ROSTER IS STILL BLOCKED, MEASURED 6 Aug rather than assumed: edwardscounty.illinois.gov resolves NOERROR with NO A RECORD, and www.edwardscounty.illinois.gov is NXDOMAIN. The domain carries mail — the Clerk writes from it — and hosts no web. This is the WABASH SHAPE, not a block: nothing is refusing this project, there is simply no site, so no scraper can ever exist and the names must be asked for. Edwards is the third county in that state, and it is now the best-evidenced of the three: asked directly on 6 Aug whether the county uses some other web address, Clerk Knight replied 'The county does not currently have a website.' MEASURED AND THEN STATED, which is the strongest form a negative takes here — Johnson was stated only, Wabash measured only. THE NAMES HAVE BEEN SENT. The same reply carried 'Commissioners names-addresses 2025.doc' with the three commissioners' contact information. That file has not yet reached this repo, so nothing is built from it and no name is written down anywhere in this project until it has been read — the same answered-not-built discipline Henry's shapefile got. When it lands, Edwards ships as a County-card county via il-county-commissioners.json (§1.5): a roster row, no dispatch entry, no coverage function, no toggle, and no ring change, exactly like Pike, Brown, Calhoun, Putnam and Schuyler.",
+      "wanted": "Nothing further from the county — the commissioners' names and addresses were sent on 6 Aug 2026. What remains is internal: read the attachment, add the three to data/app/il-county-commissioners.json through the scraper/builder pair, and confirm whether the board designates a chairman (the ask raised it; the reply did not say)."
     },
     {
       "id": "effingham-municipal-officials",
@@ -2581,6 +2581,45 @@ the third county measured into this state** — Johnson said it in words, Wabash
 and Edwards were measured — and the pattern is now common enough to expect: a
 small Illinois county may have e-mail and no website at all, and the pass-13
 probe's `conn-fail` bucket cannot tell that apart from a block.
+
+### 2026-08-06, afternoon: both counties answered the follow-up, and one drew a line
+
+**Henry: the currency question, answered by the person who could answer it —
+and only that one.** Asked whether the file's 2026-08-13 name is an effective
+date, Bruce Lang: *"I can only speak to the 2026-08-13 date. This is the date
+as to how it currently stands. No changes have been made to the data for a long
+time - over a year."* So the date is an as-of stamp on stable data, not a
+future redistricting boundary, which is what the shipped layer needed to know.
+
+Then the sentence worth keeping: *"The other questions are for Barb to
+answer/supply."* He declined the attribution and polling-table questions rather
+than guessing at them — a GIS office saying where its authority ends. That is
+the same instinct this ledger tries to hold itself to, and it means **two**
+things now sit with Clerk Link, not one: the polling assignment, and permission
+to publish. The boundaries shipped the day they arrived because the data is a
+public record supplied on request and the app redistributes no raw file — but
+permission was ASKED and explicitly not answered, so it is pending, and
+`henry-precinct-polling` now says so rather than letting it be assumed.
+
+**Edwards: the negative got stated as well as measured, and the names were
+sent.** Asked whether the county uses some other web address, Clerk Knight:
+*"The county does not currently have a website."* Edwards is now the
+best-evidenced of the three counties in this state — Johnson was stated only,
+Wabash measured only, Edwards is both.
+
+The same reply attached `Commissioners names-addresses 2025.doc`. **Nothing is
+built from it yet and no name from it appears anywhere in this project**, for
+the same reason Henry's shapefile sat unread for a few hours: a file in an
+inbox is not a source until someone opens it. When it lands, Edwards ships as a
+County-card county — a roster row in `il-county-commissioners.json`, no dispatch
+entry, no coverage function, no toggle, no ring change.
+
+**One pattern across the two.** Both counties answered a follow-up within the
+hour, and in both cases the follow-up was worth sending precisely because the
+first reply left something ambiguous — a file name that might have been an
+effective date, a domain that might have been blocked rather than absent.
+Neither ambiguity would have been visible without asking, and neither answer
+could have been guessed.
 
 ### The standing caution
 
