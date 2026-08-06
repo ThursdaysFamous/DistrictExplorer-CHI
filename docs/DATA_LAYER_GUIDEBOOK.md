@@ -368,7 +368,7 @@ in the researched-but-unbuilt backlog.
       "wanted": "The 18 districts as map data — or a written description of which precincts and streets make up each one, plus precinct boundaries to rebuild them from. The map in the 2021 packet is the authority to check any submission against."
     },
     {
-      "id": "henry-county-precincts",
+      "id": "henry-precinct-polling",
       "concept": "Voting precincts",
       "area": "Henry County",
       "counties": [
@@ -376,9 +376,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-precinct",
-      "summary": "ANSWERED — Henry County GIS has sent the countywide precinct boundaries as shapefiles. Nothing is published, and nothing needed to be: the county sent the file on request.",
-      "blocker": "Checked 1 Aug 2026 at both ends: the county's elections page lists around 21 per-township precinct maps from November 2021, and the state holds the same pictures. No precinct boundaries exist in the county's mapping system, which carries parcels and townships only, or in its online map account. The board districts were added anyway because the county's 2021 ordinance builds them from whole townships, which the census publishes as usable map data — precincts have no such shortcut. ASKED 1 Aug 2026 AND ANSWERED 6 Aug: the request went to Clerk & Recorder Barbara Link, who forwarded it internally the following Monday, and Bruce Lang of HENRY COUNTY GIS replied with 'HenryCountyIL_VR_2026-08-13.zip' attached — 'The data is attached in shapefile formats. The file names should be self-explanatory, but I'll answer any questions.' NOTHING ABOUT THE PUBLISHED POSITION CHANGED: the county still publishes only pictures, its mapping system still carries no precincts, and a re-probe on 6 Aug found no public ArcGIS under any henrycty.com hostname. The file exists because somebody asked, which is the whole thesis of this ledger — and it is the Ogle shape exactly (a gap that read 'no usable boundaries are published anywhere', closed by return e-mail). PENDING ONLY THE HANDOFF: the attachment has not yet reached the build pipeline, so nothing is verified, counted or shipped, and this record stays open until the shapefile has been read and its precinct count checked against the county's own maps.",
-      "wanted": "Nothing further from the county for the boundaries — they have been sent. The remaining unknowns are internal (read the shapefile, verify its coverage and precinct count) and one small open question for the county: whether a polling-place assignment per precinct is available, which the original ask raised and this reply did not address."
+      "summary": "Henry County's precinct cards name the precinct and its county board district, but not where that precinct votes.",
+      "blocker": "Opened 6 Aug 2026 when the boundaries shipped, and it is the REMAINDER of a gap that otherwise closed. The 1 Aug request asked two things — precinct boundaries as data, and a polling-place assignment per precinct. Henry County GIS answered the first completely (Bruce Lang, shapefile by e-mail, 52 precincts now live) and did not address the second, which is not a refusal: the question went to a mapping office and a polling list is a Clerk's record. The county's shapefile carries a precinct name and a four-digit code and nothing else, so there is nothing on the geometry to join a polling place to. ASKED AGAIN 6 Aug, of the same thread and copied to the Clerk.",
+      "wanted": "A table pairing each of Henry County's 52 precincts with its polling place — the precinct code the county's own shapefile carries (0801, 1901, …) is the natural key, and any list using it can be joined directly."
     },
     {
       "id": "lee-municipal-officials",
@@ -2509,10 +2509,56 @@ had said *"no usable boundaries are published anywhere"*, and that sentence is
 STILL TRUE. The boundaries exist anyway, because somebody asked. That is the
 Ogle shape exactly, and it is the reason this ledger exists.
 
-**The record stays open until the file has been read.** A shapefile in an inbox
-is not a shipped layer: nothing is verified, counted, or drawn yet, and the
-precinct count has to be checked against the county's own maps before any of it
-reaches a card. Recorded as answered-not-built, deliberately.
+**The record stayed open until the file had been read — and then it shipped the
+same day.** A shapefile in an inbox is not a layer, so the record sat at
+answered-not-built until the archive was opened. What it held: five shapefiles
+— `Precincts`, `Wards`, and the 2022 Congressional / House / Senate districts.
+**52 precincts**, each carrying the county's own readable name ("Geneseo 1")
+alongside a four-digit code, which is the difference between a card a resident
+recognises and DeKalb's bare "SG 01".
+
+Four checks before anything drew, because a file from an inbox has no publisher
+to blame if it is wrong:
+
+  * **The reprojection proved itself.** NAD83 / Illinois West in survey feet
+    (EPSG:3436), reprojected to degrees — and the rebuilt extent lands within
+    **0.00004°** of the county outline the app already ships. A wrong EPSG
+    misses by hundreds of miles, so this is a check and not a coincidence.
+  * **The tiling holds.** 3,000 random points inside the county outline:
+    **2,999 in exactly one precinct, zero in two.** The single miss sits
+    **4.4 m** from a precinct edge — the TIGER outline and the county's own
+    StatePlane linework disagreeing at the border, not a hole.
+  * **99.95% coverage, 0.0000% worst pair overlap**, both asserted in the
+    builder rather than eyeballed.
+  * **And the county's data had one real defect, which the build caught.**
+    Geneseo 6 carries three rings, one of them a 4-point sliver of ~0.01 m².
+    The hole-nesting rule this project has used since McDonough — "a ring
+    inside another ring is a hole" — answered YES BOTH WAYS on the real pair,
+    because the outer ring's own representative point falls inside its hole. So
+    both were classified as holes, no outer survived, and the precinct built as
+    EMPTY. The rule now also compares area — a ring is a hole only when a
+    strictly LARGER ring contains it, which cannot be mutual — and the sliver
+    is dropped with a printed note. Ogle's data never triggered it; Henry's did.
+
+Live in the browser at two points in different townships: Geneseo → "Precinct
+Geneseo 4", code 0804, County Board District 1; Kewanee → "Precinct Burns 1",
+code 1901, District 2. The board district is a spatial join, so it is the
+geometry answering rather than a name being parsed.
+
+**What did NOT ship, deliberately.** The archive's `Wards` layer is real and
+verified — Galva 3, Colona 4, Geneseo 4 — and **no gap record asks for it**.
+Recorded here as available rather than shipped blind, so the decision to add
+Henry's city wards is made against the ward layer's own conventions instead of
+being smuggled in on a precinct build. The 2022 legislative three are already
+shipped statewide from TIGERweb; a county-local copy would be a second answer
+to a question that already has one.
+
+**The half that is still open** is the half the reply did not address: which
+precinct votes where. That was in the original ask, it went to a mapping office
+rather than to the Clerk, and a polling list is a Clerk's record — so it is not
+a refusal. `henry-county-precincts` is retired and replaced by the narrower
+`henry-precinct-polling`, and the county's own four-digit precinct code is the
+key any list can be joined on.
 
 **Edwards: the answer that closes a county rather than opening one.** County
 Clerk & Recorder Melanie Knight, the next morning: *"the county board is
