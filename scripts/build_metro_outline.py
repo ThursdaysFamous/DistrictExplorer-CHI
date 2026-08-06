@@ -163,6 +163,13 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # ask campaign's first fruit, at-large board + precinct
                      # and fire tilings from the county's own vendor-hosted org
                      "065",
+                     # Jefferson — the 46th dispatched county (2026-08-06), and
+                     # the one that ENDED an island: it borders Washington on the
+                     # mainland AND Hamilton, so adding it merges the second
+                     # island back in and the outline drops from four polygons to
+                     # three. Its Clerk sent a precinct shapefile on request; the
+                     # county publishes no boundary of any kind itself.
+                     "081",
                      # Edwards — the THIRD island (pass 14, 2026-08-06), and the
                      # first island that joins through the AT-LARGE tier alone:
                      # no dispatch entry, no geometry, three commissioners on the
@@ -204,7 +211,7 @@ DISPATCH_COUNTY_FIPS = {
     "fulton": "057",
     "macon": "115",
     "effingham": "049",
-    "hamilton": "065",
+    "hamilton": "065", "jefferson": "081",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -305,6 +312,10 @@ INSIDE = {
     # than a dispatch entry, because none of the four has district geometry to
     # dispatch on. They belong here for the same reason the judicial-subcircuit
     # secondary counties do — county-specific data answers there.
+    # Mount Vernon (Jefferson) — the county seat, 2026-08-06. Jefferson touches
+    # both the mainland (Washington) and the Hamilton island, so this anchor is
+    # also what proves the merge: the second island stops being one.
+    "Mount Vernon (Jefferson)": (38.3173, -88.9031),
     # Albion (Edwards) — the THIRD island, 2026-08-06, and the first to join on
     # the at-large tier alone. White County sits between it and Hamilton, which
     # is why it lands detached rather than extending the second island; Carmi

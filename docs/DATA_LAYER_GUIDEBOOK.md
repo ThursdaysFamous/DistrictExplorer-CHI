@@ -340,19 +340,31 @@ in the researched-but-unbuilt backlog.
     {
       "id": "pass10-frontier-unasked",
       "concept": "County board districts",
-      "area": "Hancock, Jackson, Jefferson, Marion and Warren counties",
+      "area": "Hancock, Jackson, Marion and Warren counties",
       "counties": [
         "hancock",
         "jackson",
-        "jefferson",
         "marion",
         "warren"
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Five frontier counties have working websites but no map data anyone has found; none has been asked directly yet.",
-      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All five answer normally on the web \u2014 Warren's board page even numbers four districts, and Jefferson's lists sixteen member e-mail addresses \u2014 but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one of the five has a working e-mail address.",
-      "wanted": "For each: whether the county's board districts and voting precincts exist as map data, and where. Asking the five clerks is the next move, not more searching."
+      "summary": "Four frontier counties have working websites but no map data anyone has found; none has been asked directly yet.",
+      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All answer normally on the web \u2014 Warren's board page even numbers four districts \u2014 but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one has a working e-mail address. THIS RECORD USED TO NAME FIVE COUNTIES. Jefferson left it on 6 Aug 2026 by being asked: its Clerk replied with a precinct shapefile the next day and the county is now served. That is the record's own prescription working on the first try, and it is the reason the remaining four are worth writing to rather than probing again.",
+      "wanted": "For each: whether the county's board districts and voting precincts exist as map data, and where. Asking the four clerks is the next move, not more searching \u2014 Jefferson proved it takes one e-mail."
+    },
+    {
+      "id": "jefferson-county-board",
+      "concept": "County board districts",
+      "area": "Jefferson County",
+      "counties": [
+        "jefferson"
+      ],
+      "kind": "no-source",
+      "layer": "county-board",
+      "summary": "Jefferson's precincts are shown but its county board districts are not \u2014 the same request asked for both and only the precincts came back.",
+      "blocker": "Asked 5 Aug 2026 in one message: do the county board district AND voting precinct boundaries exist as shareable map data, and if not, would a paper map or a list of which precincts make up each district do? County Clerk Davis replied 6 Aug with 'Please see attached' and a precinct shapefile \u2014 no covering note, and nothing about the districts. That is an incomplete answer rather than a refusal, and the distinction matters: the same office holds both, one arrived by return e-mail, and the district half was simply not addressed. The county's own site publishes sixteen board-member e-mail addresses and no district geometry of any kind. WHAT MAKES THIS CHEAP TO CLOSE: the precincts are now in hand, so a plain LIST of which precincts make up each district would be enough to draw the boundaries exactly, with no new geometry needed from the county at all. Re-asked 6 Aug on that basis.",
+      "wanted": "Either Jefferson's board district boundaries as map data, or \u2014 easier for the county and equally good here \u2014 a list of which of the 33 precincts belongs to each district, which the shipped precinct geometry can be dissolved along."
     },
     {
       "id": "bureau-county-board-districts",
@@ -2656,7 +2668,62 @@ INSIDE, and **Carmi (White) was added OUTSIDE** — that anchor is what proves t
 two southern islands stayed two rather than quietly merging across an unserved
 county. All 56 inside and 13 outside anchors verify.
 
-### The standing caution
+### 2026-08-06: Jefferson, the county that ended an island — and the first source that had to be REPAIRED
+
+`pass10-frontier-unasked` named five counties and ended with a prescription:
+*"Asking the five clerks is the next move, not more searching."* Jefferson was
+asked on 5 Aug and its Clerk replied the next day with "Please see attached"
+and a precinct shapefile. It is the 46th dispatched county, and adding it
+**merged the Hamilton island back into the mainland** — Jefferson borders both
+Washington and Hamilton, so the outline drops from four polygons to three.
+Islands can un-island; the ring code handles it because the dissolve is
+recomputed rather than patched.
+
+**The file needed work no previous county's has, and that is the part worth
+recording.** Measured before a line of builder was written:
+
+  * The 33 precincts tile **99.212%** of the county, not ~100%.
+  * The missing 0.788% is not a hole and no precinct is absent. It is a single
+    **connected lattice of hairline cracks** running along nearly every shared
+    boundary — it touches all 33 precincts at once — because each polygon was
+    digitised independently and neighbours' edges were never snapped.
+  * Every uncovered sample point lies within **31 m** of a precinct edge.
+  * Left alone that is about **one click in 127** answering "this point isn't
+    inside any district", which is a lie: the point IS in a precinct.
+
+**Two repairs were tried and the obvious one is wrong.** "Give each gap piece
+to the neighbour it shares the most edge with" is the natural rule and it fails
+badly here, because the lattice is ONE connected piece spanning the county — the
+whole thing lands on a single precinct and moves a boundary **35 kilometres**.
+The connectedness of the defect is exactly what defeats the obvious fix, which
+is why it is written down rather than left for the next person to rediscover.
+
+What ships is **nearest-boundary assignment**: every point in a crack goes to
+the precinct whose boundary is nearest, computed as a Voronoi partition over
+densified boundaries. Correct ownership, but it draws the new edge down a
+zig-zagging medial line and cost 52,538 vertices — a 1.2 MB file for 33
+precincts, against Henry's 233 KB for 52. Simplifying at 10 m collapses that
+noise back onto the straight township lines the county actually drew: **89 KB,
+3,798 vertices, 99.975% coverage**, median boundary shift 35 m and worst 118 m.
+A shared edge survives simplification because both neighbours simplify the SAME
+linework at the same tolerance and Douglas-Peucker is deterministic.
+
+**The residue is asserted, not hoped for.** 0.025% of the county still falls in
+a crack — one click in 4,000, against one in 127 — and the builder fails if a
+future export needs a bigger correction than this one did.
+
+**What was deliberately NOT repaired.** The county's file also contains a small
+genuine OVERLAP between Dodds 1 and Dodds 2. It stays exactly as drawn: **a
+crack has no owner and can be assigned; two claims on the same ground cannot**,
+and picking a winner would be inventing an answer the county did not give. It
+goes back to the Clerk as a bug report instead.
+
+**The half that did not arrive.** The 5 Aug ask covered board districts AND
+precincts; only precincts came back, with no covering note. That is an
+incomplete answer, not a refusal, and `jefferson-county-board` records it with
+the cheap route named: now that the precincts are in hand, **a plain list of
+which precincts make up each district** would let the boundaries be dissolved
+exactly, with no new geometry needed from the county at all.
 
 Four sources now ship from **archived files** rather than live fetches — Stark's map,
 Ogle's shapefile, Marshall's table, Washington's Blue Book. Their weekly jobs guard the

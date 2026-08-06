@@ -8026,6 +8026,27 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  /* Jefferson (the 46th dispatched county, added 2026-08-06 — and the county
+   * that MERGED THE HAMILTON ISLAND back into the mainland, because it borders
+   * both Washington and Hamilton). It publishes nothing: its site is up and its
+   * board page lists sixteen member e-mail addresses, but no boundary of any
+   * kind is online. The precincts come from a shapefile County Clerk Davis sent
+   * on request, repaired for edge-matching and built by
+   * scripts/build_jefferson_precincts.py. Its BOARD districts are still
+   * unanswered — the same ask covered both and only precincts came back
+   * (jefferson-county-board). */
+  var loadJeffersonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jefferson-county-outline.json", {}, 2);
+  });
+  function jeffersonCountyCoverage(point) {
+    return loadJeffersonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadJeffersonPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jefferson-precincts.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -19192,6 +19213,43 @@ function initChiExplorer() {
           return {
             label: "Fulton County Clerk — Elections (official)",
             url: "https://fultoncountyil.gov/officials/elected/county-clerk-recorder/"
+          };
+        }
+      },
+      // Jefferson — 33 precincts from the County Clerk's own shapefile (see
+      // loadJeffersonPrecincts). Name only: the export's other columns are a
+      // blank registered-voter field and a rough "36 sq mi" size note, neither
+      // of which is worth a card row. No board district to join — Jefferson's
+      // districts were asked for in the same message and did not come back
+      // (jefferson-county-board) — and no polling place is published.
+      {
+        key: "jefferson",
+        coverage: jeffersonCountyCoverage,
+        loadGeometry: loadJeffersonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadJeffersonPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function (result) {
+          return renderFieldStack([{ label: "County", value: "Jefferson County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Jefferson County Clerk & Recorder — Elections (official)",
+            url: "https://jeffersoncounty.illinois.gov/services/county_clerk___recorder/elections/index.php"
           };
         }
       },
