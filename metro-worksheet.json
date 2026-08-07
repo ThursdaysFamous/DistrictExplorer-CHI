@@ -724,6 +724,12 @@
         "note": "Jefferson County Board districts, DISSOLVED from the county's own precincts per the county's own approved list. Jefferson publishes no boundary of any kind; asked for districts AND precincts, County Clerk Joe Davis sent the precinct shapefile on 2026-08-06 and, re-asked on the cheaper basis the gap record had named, sent \"County Board Districts (Approved by County Board November 22, 2021)\" on 2026-08-07 \u2014 one line per district naming its precincts. scripts/build_jefferson_board_districts.py applies that list and asserts it accounts for all 33 precincts exactly once, that the 13 districts reproduce the county's own extent (0.0000%), and that no district dissolves with more than 0.05% of its area in slivers. ONE PRECINCT IS SPLIT: Shiloh 4, west/east of 34th Street, between Districts 10 and 11. The cut longitude comes from TIGER/Line (public domain) and is corroborated by OSM rather than taken from it, because a shipped civic boundary derived from ODbL data would carry share-alike obligations this project has not taken on. 34th Street stops about three quarters of the way up the precinct; north of that the cut is the street's alignment projected, which is the one inference in the file, and Districts 10 and 11 carry a boundaryNote saying so."
       },
       {
+        "file": "menard-commissioner-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Menard County's 5 commissioner districts, the COUNTY'S OWN BEACON EXPORT and the cleanest county file this campaign has received: zero invalid geometries, zero self-overlap, and ZERO internal cracks \u2014 properly edge-matched, which neither Jefferson's nor Montgomery's file was. Menard publishes no boundary (its only map is a 2021-12 raster on the state's site) and its district lines follow SECTION-LINE ROADS rather than precinct edges, so the dissolve route that built Jefferson was unavailable here \u2014 the export was the only way. Obtained through three offices in four days: asked County Clerk & Recorder Martha Gum 3 Aug, who looped in Supervisor of Assessments Dawn Kelton, who requested it from Beacon and forwarded it 7 Aug. scripts/build_menard_commissioner_districts.py proves it against the Census on every run: the districts' POP20 values sum to 12,297, exactly Menard's 2020 count. The .prj is GEOGRAPHIC NAD83 (EPSG:4269), not a state plane like every other county file here, so the transform is a datum shift rather than a projection. Districts carry the county's own names \u2014 Rock Creek, East Menard, Northwest Menard, Southwest Menard, South Petersburg."
+      },
+      {
         "file": "montgomery-county-board-districts.json",
         "min_features": 7,
         "max_features": 7,
@@ -1475,6 +1481,16 @@
         "note": "Jefferson County Board members keyed by district (13 SINGLE-member districts; 13/13 with a phone and a per-district e-mail, district1@\u2026 \u2014 a role address rather than a personal one, which is what the county publishes) \u2014 scraped weekly from the county's own board page. THE PAGE IS AT THE SITE ROOT: /county_board/index.php, not the /government/county_board/index.php the site's own navigation links, which 404s while rendering a full-looking page. Names arrive SURNAME-FIRST and are read forward by uninvert_name() imported from build_municipal_officials_roster.py \u2014 the third source in the fleet to need that guard in one week. Chairman and Vice Chair hold district seats and are badged on their own rows."
       },
       {
+        "file": "menard-commissioner-members.json",
+        "min_keys": 5,
+        "note": "Menard County commissioners keyed by district (5 SINGLE-member districts; 5/5 with a phone and a county e-mail, plus the year each was elected or appointed) \u2014 scraped weekly from the county's own board page. District comes from the COLUMN POSITION in a one-row, five-column table, so the scraper reads the header rather than assuming order: shuffled columns would still look like a valid board. DISTRICT 1'S E-MAIL LINK AND ITS LABEL DISAGREE \u2014 the page links djwhitley@ and displays dwhitley@ \u2014 and the HREF ships, because that is where the county's own page actually sends mail; the run prints a NOTE rather than resolving it silently. District 5's \"Ed Whitcomb, Jr.\" is the first name in the fleet to exercise uninvert_name()'s REFUSAL path in production, and the builder asserts it came through unreordered."
+      },
+      {
+        "file": "montgomery-precinct-polling.json",
+        "min_keys": 3,
+        "note": "Montgomery's precinct -> polling place table, all 38 precincts across 24 buildings (12 precincts share a site with another). THE SOURCE IS THE CLERK'S PUBLISHED LIST, NOT THE GIS LAYER THAT ARRIVED WITH IT. Asked on 2026-08-07 whether a precinct-to-polling-place mapping existed, Montgomery County GIS sent a PollingPlaces point layer; cross-checking it against the Clerk's own \"38 Precincts / 24 Polling Places\" document found the layer omits ROUNTREE entirely (it votes at Nokomis Memorial Park House with Nokomis 2) and still names the National Guard Armory for North Litchfield 1 and 4 where the Clerk has First Presbyterian Church \u2014 two different buildings, not a wording difference \u2014 plus a superseded name for Hillsboro 5 and 6. A polling place is the one field on this card where being stale sends a resident to the wrong building on election day, so the election authority's list wins. scripts/build_montgomery_precinct_polling.py keeps the GIS layer as a self-retiring cross-check: it names those disagreements and FAILS if the layer's answer changes, so a county refresh that fixes them is noticed rather than hidden."
+      },
+      {
         "file": "montgomery-county-board-members.json",
         "min_keys": 7,
         "note": "Montgomery County Board members keyed by district (7 districts electing TWO members each; 14/14 with a direct phone AND a county e-mail, four with a second published number) \u2014 scraped weekly from the county's own board page. The page rather than the Clerk's members PDF: checked 2026-08-06 the PDF still named two members who had been replaced, so the two county documents are trusted for different things \u2014 the PDF for district COMPOSITION, the page for names. The Board Chairman is badged on his own district row; he holds a district seat, so there is no countywide section. One published e-mail (District 5's, at cody.gudel@) does not match the member's surname and is carried exactly as the county publishes it \u2014 correcting it would mean inventing an address."
@@ -1705,6 +1721,11 @@
       "file": "update-jefferson-county-board-roster.yml",
       "purpose": "Jefferson County Board roster (jeffersoncounty.illinois.gov board-table scrape)",
       "schedule": "Thu 19:00 UTC"
+    },
+    {
+      "file": "update-menard-commissioners-roster.yml",
+      "purpose": "Menard County commissioners roster (menardcountyil.gov board-table scrape)",
+      "schedule": "Thu 20:00 UTC"
     },
     {
       "file": "update-montgomery-county-board-roster.yml",

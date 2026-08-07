@@ -185,6 +185,16 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # makes it one of the few counties this size where neither
                      # half is derived or traced.
                      "135",
+                     # Menard — the 48th dispatched county (2026-08-07), a
+                     # mainland join between Sangamon, Logan, Mason and Cass.
+                     # A COMMISSION county whose five commissioners are elected
+                     # BY DISTRICT, so unlike Monroe/Randolph/Edwards it has
+                     # geometry and rides a layer rather than the County card.
+                     # Its lines follow section-line roads rather than precinct
+                     # edges, so no dissolve could have produced them — the
+                     # Beacon export its Clerk and Assessor obtained was the
+                     # only route.
+                     "129",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -220,7 +230,7 @@ DISPATCH_COUNTY_FIPS = {
     "macon": "115",
     "effingham": "049",
     "hamilton": "065", "jefferson": "081",
-    "montgomery": "135",
+    "montgomery": "135", "menard": "129",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -339,6 +349,10 @@ INSIDE = {
     # fill rather than a frontier move; Vandalia (Fayette) on its south-east
     # border is the OUTSIDE anchor that keeps the fill from over-running.
     "Hillsboro (Montgomery)": (39.1614, -89.4954),
+    # Petersburg (Menard) — the county seat, 2026-08-07. Menard fills the last
+    # interior notch between Sangamon, Logan, Mason and Cass, so like Montgomery
+    # this anchor tests a fill rather than a frontier move.
+    "Petersburg (Menard)": (40.0114, -89.8523),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -405,12 +419,15 @@ OUTSIDE = {
     "Princeton (Bureau)": (41.3853, -89.4695),
     "Aledo (Mercer)": (41.2008, -90.7460),
     "Galena (Jo Daviess)": (42.4185, -90.4253),
-    # Menard and Schuyler are RECORDED GAPS, not gaps in the research: Menard's
-    # five commissioner districts run section-line roads rather than precinct or
-    # township unions, so no composition route exists and its only map is a
-    # 2021-12 raster. Schuyler now borders BOTH Mason and Brown; between them
-    # these two hold the line the tranche-4 and tranche-5 counties moved.
-    "Petersburg (Menard)": (40.0143, -89.8453),
+    # Schuyler is a RECORDED GAP, not a gap in the research, and it now borders
+    # BOTH Mason and Brown. (Menard stood beside it here until 2026-08-07, on
+    # the reasoning that its five commissioner districts run section-line roads
+    # rather than precinct or township unions, so no composition route existed
+    # and its only map was a 2021-12 raster. Every word of that was true and
+    # none of it mattered: asked, its Clerk and Supervisor of Assessments
+    # obtained the Beacon export and Menard moved up to INSIDE. The reasoning
+    # this list records is about what can be DERIVED, which was never the same
+    # question as what a county will send.)
     # The Hamilton–Effingham corridor: Wayne is unserved between the two
     # islands, and this anchor is what proves it stays washed.
     "Fairfield (Wayne)": (38.3798, -88.3724),

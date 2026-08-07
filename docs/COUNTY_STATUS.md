@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**58 of 102 Illinois counties are served** — 47 through their own dispatch entries, 5 through a shipped judicial circuit, and 6 through the County card alone. 44 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**59 of 102 Illinois counties are served** — 48 through their own dispatch entries, 5 through a shipped judicial circuit, and 6 through the County card alone. 43 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook.
 
-## Served counties (58)
+## Served counties (59)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -60,6 +60,7 @@
 | McDonough | 17109 | dispatch | districted | `county-board`, `county-precinct` | none |
 | McHenry | 17111 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district` | 4 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `mchenry-park-district` (no-source); `mchenry-ward-cities` (blocked) |
 | McLean | 17113 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `mclean-special-districts` (no-source) |
+| Menard | 17129 | dispatch | districted | `county-board` | none |
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Morgan | 17137 | judicial circuit | no board layer — see gaps | — | none |
@@ -82,7 +83,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source); `winnebago-village-heads` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (44) — gap-recorded, not yet served
+## Researched frontier (43) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -115,7 +116,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Lawrence | 17101 | 1 — `lawrence-county-board` (no-source) |
 | Marion | 17121 | 1 — `pass10-frontier-unasked` (no-source) |
 | Massac | 17127 | 1 — `massac-county-board` (no-source) |
-| Menard | 17129 | 1 — `menard-commissioner-districts` (no-source) |
 | Mercer | 17131 | 1 — `mercer-county-board-districts` (no-source) |
 | Moultrie | 17139 | 1 — `moultrie-county-board` (no-source) |
 | Perry | 17145 | 1 — `perry-county-website-blocked` (blocked) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 117 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 116 records in the Data gaps panel: `chicago-amenity-phones`.
