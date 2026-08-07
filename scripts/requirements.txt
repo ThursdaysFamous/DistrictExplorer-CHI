@@ -65,3 +65,11 @@ olefile==0.47
 # (the county publishes no boundary service), so the builder reads .shp/.dbf
 # directly out of the archived zip.
 pyshp==2.3.1
+
+# Montgomery County's GIS office sent its board districts and precincts as an
+# ESRI FILE GEODATABASE rather than a shapefile — a first in this fleet. pyogrio
+# reads it through GDAL's /vsizip/ handler straight out of the archived zip, so
+# what ships is built from the bytes the county sent with no hand conversion in
+# between. pyshp (above) cannot read a .gdb at all; it is a directory of binary
+# tables, not a .shp/.dbf pair. See scripts/build_montgomery_boundaries.py.
+pyogrio==0.13.0

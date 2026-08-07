@@ -8026,6 +8026,22 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  /* Montgomery (the 47th dispatched county, added 2026-08-07). It publishes no
+   * boundaries — its GIS page links a commercial parcel viewer — but its GIS
+   * office sent BOTH the board districts and the precincts on request, as an
+   * ESRI file geodatabase (the fleet's first). Built by
+   * scripts/build_montgomery_boundaries.py, which asserts the geometry against
+   * the county's own published "after redistricting 2020-2030" composition
+   * chart on every run: the district layer is named _2010 because its
+   * POPULATION data is the 2010 census, not because the map is superseded. */
+  var loadMontgomeryCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/montgomery-county-outline.json", {}, 2);
+  });
+  function montgomeryCountyCoverage(point) {
+    return loadMontgomeryCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
   /* Jefferson (the 46th dispatched county, added 2026-08-06 — and the county
    * that MERGED THE HAMILTON ISLAND back into the mainland, because it borders
    * both Washington and Hamilton). It publishes nothing: its site is up and its
@@ -9056,6 +9072,25 @@ function initChiExplorer() {
    * four-digit code. */
   var loadHenryPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/henry-precincts.json", {}, 2);
+  });
+
+  /* Montgomery's 7 board districts and 38 precincts — BOTH from the county's
+   * own geodatabase, which puts it in the better tier: nothing here is derived
+   * or traced. The roster is scraped weekly from the county's board page and is
+   * the richest per-seat set in the fleet's smaller counties — all 14 members
+   * carry a direct phone and a county e-mail, and four carry a second number.
+   * The board page is used rather than the Clerk's members PDF because the PDF
+   * lags: checked 2026-08-06 it still named two members who had been replaced.
+   * The PDF is still the source for the district COMPOSITION the boundary
+   * builder asserts — the two documents are trusted for different things. */
+  var loadMontgomeryBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/montgomery-county-board-districts.json", {}, 2);
+  });
+  var loadMontgomeryBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/montgomery-county-board-members.json", {}, 2);
+  });
+  var loadMontgomeryPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/montgomery-precincts.json", {}, 2);
   });
 
   /* Woodford (the pass-6 next-county candidate, added 2026-08-02). Its GIS of
@@ -13544,6 +13579,22 @@ function initChiExplorer() {
       person.badge = party;
     }
     if (m.city) noteBits.push(String(m.city));
+    // A SECOND PUBLISHED NUMBER, where a county prints one. The engine's
+    // contact line renders exactly one phone, and card-helpers is inside an
+    // ENGINE fence — widening it would have to be ported to every sibling fork
+    // and released, which four members in one county do not justify. So the
+    // extras ride the note line rather than being dropped, which is the whole
+    // point: the county published them. Montgomery is currently the only source
+    // that sets this, and it is never labelled home/cell because the county
+    // does not label them either.
+    if (m.phonesExtra && m.phonesExtra.length) {
+      // Labelled "2nd number", not "also": the note renders on the NAME line
+      // while the contact line with the primary number renders below it, so a
+      // bare "also 217-820-3588" sitting above a different number reads as if
+      // the extra were the main one.
+      noteBits.push((m.phonesExtra.length === 1 ? "2nd number " : "other numbers ")
+                    + m.phonesExtra.map(String).join(", "));
+    }
     if (noteBits.length) person.note = noteBits.join(" · ");
     if (m.phone) person.phone = String(m.phone);
     if (m.email) person.email = String(m.email);
@@ -15667,6 +15718,68 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadHenryBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Montgomery (7 districts electing TWO members each) — added 2026-08-07
+      // with the county. Both halves come from Montgomery itself: the boundary
+      // is the GIS office's own geodatabase export (no derivation, no tracing),
+      // and the roster is scraped weekly from the county's board page, 14/14
+      // with a direct phone AND a county e-mail. The Board Chairman is a
+      // district member holding his own seat, so he is badged on that row
+      // rather than shown as a countywide officer.
+      {
+        key: "montgomery",
+        coverage: montgomeryCountyCoverage,
+        loadGeometry: loadMontgomeryBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMontgomeryBoardDistricts(),
+            loadMontgomeryBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Montgomery County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Montgomery County Board (official)",
+            url: "https://montgomerycountyil.gov/county-board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadMontgomeryBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);
@@ -19305,6 +19418,64 @@ function initChiExplorer() {
           return {
             label: "Henry County Clerk — Elections (official)",
             url: "https://www.henrycty.com/211/Elections"
+          };
+        }
+      },
+      // Montgomery — 38 precincts from the county GIS office's own geodatabase
+      // (see loadMontgomeryPrecincts). The board district is a spatial join
+      // rather than a table lookup, and here that is not merely convenient: the
+      // county SPLITS five of its precincts between two board districts (Butler
+      // Grove, East Fork 1, Hillsboro 5, North Litchfield 1 and Raymond), so a
+      // precinct name does not determine a district and only the clicked point
+      // can. build_montgomery_boundaries.py asserts that the geometry keeps
+      // reproducing the county's own published composition, splits included.
+      // No polling place: the county publishes a polling-place list, but it is
+      // a separate PDF with no precinct key this could join on.
+      {
+        key: "montgomery",
+        coverage: montgomeryCountyCoverage,
+        loadGeometry: loadMontgomeryPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMontgomeryPrecincts(),
+            loadMontgomeryBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              code: findPropCI(props, ["code"]),
+              boardDistrict: district
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.code) fields.push({ label: "County precinct code", value: String(result.code) });
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Montgomery County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Montgomery County Clerk & Recorder — Elections (official)",
+            url: "https://montgomerycountyil.gov/county-clerk-recorder/elections-voting/"
           };
         }
       },
