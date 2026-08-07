@@ -1048,19 +1048,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "The four districts adopted in 2021 as map data, plus a member list with district assignments. The county's own map account could carry both."
     },
     {
-      "id": "menard-commissioner-districts",
-      "concept": "County board districts",
-      "area": "Menard County",
-      "counties": [
-        "menard"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Menard's 5 commissioner districts are drawn only on a picture map, and their lines follow section-line roads rather than precinct edges — so they cannot be rebuilt from anything published.",
-      "blocker": "Checked 2 Aug 2026: the only map is on the state's site, dated 8 Dec 2021 (after the census, with district populations of 2,436 to 2,486 printed on it) and flattened to a single image. The boundaries do not follow the county's 14 precincts, which rules out the combine-the-precincts approach that rescued several other counties. The county runs no mapping system — its viewer is a commercial parcel product — and neighbouring Sangamon's 203 datasets carry nothing for Menard. The member list is fine: all 5 commissioners with county emails and phones. ASKED 3 Aug 2026, ANSWERED 4 Aug: Clerk Gum looped in Supervisor of Assessments Dawn Kelton, who has requested the district shapefile from Beacon (the county's GIS vendor) and will forward it — the boundary this record says cannot be rebuilt is INBOUND, and the record closes when the file lands.",
-      "wanted": "Commissioner district boundaries as map data, or the legal descriptions from the adopting ordinance in the December 2021 board minutes. The 2020 Census already matches the county's 14 precinct names exactly, so precincts would be ready the day the district lines could be tied to them."
-    },
-    {
       "id": "macon-district-name-formatting",
       "concept": "Fire, library and park districts",
       "area": "Macon County",
@@ -2955,6 +2942,103 @@ chrome** — it looks like a working page with no roster on it. The live page is
 `/county_board/index.php` at the root. The scraper's zero-row guard says so in
 its failure message, because "the layout changed" is the wrong conclusion to
 reach here.
+
+### 2026-08-07, afternoon: two follow-ups landed, and both corrected THIS project
+
+Neither reply was a new ask. Both were answers to notes sent that morning, and
+between them they fixed one thing on the map and one thing in the method.
+
+**Montgomery: the polling places arrived, and the GIS layer was the wrong source
+for them.** Asked whether a precinct-to-polling-place mapping existed, County GIS
+sent a second geodatabase with a `PollingPlaces` point layer — 24 points with
+names and addresses. Cross-checking it against the Clerk's own published
+"38 Precincts / 24 Polling Places" list found the point layer is behind:
+
+| | GIS point layer | Clerk's published list |
+|---|---|---|
+| **Rountree** | absent entirely | votes at Nokomis Memorial Park House with Nokomis 2 |
+| **N. Litchfield 1 & 4** | National Guard Armory | **First Presbyterian Church, 1908 N. State St.** |
+| **Hillsboro 5 & 6** | "K C Hall" | The Event Center of Montgomery County (former Hillsboro KC Hall) |
+
+So the shipped table is transcribed from the **Clerk's** document, not from the
+file that arrived in answer to the question. **A polling place is the one field
+on these cards where being out of date sends a person to the wrong building on
+election day**, and the election authority's own list outranks a GIS office's
+point layer for that. The GIS layer stays as a *named* cross-check: the builder
+records those three findings and FAILS if the layer's answer changes, so a
+county refresh that fixes them is noticed rather than silently absorbed.
+
+**That cross-check had to be rewritten before it was worth having.** The first
+version fuzzy-matched the two sources' place names and reported a dozen
+"disagreements" that were pure wording — "United Methodist Church E. Ent."
+against "Methodist Church (North Entrance)". A check that cries wolf on wording
+buries the two findings that matter, which is worse than no check at all. Naming
+the real disagreements and verifying they persist is both quieter and stricter.
+
+**Kevin Brink confirmed the `_2010` reading at the source.** The two-way proof
+that Montgomery's oddly-named layer was current — the Graham CC arithmetic and
+the composition chart — is now corroborated by the county's own GIS tech: *"I had
+not been notified of any update to it that would have changed the year given, and
+the '_2010' name predates my employment. Please feel free to truncate the layer
+name."* He also confirmed the `cody.gudel@` typo is real and sent it to IT, which
+is the vindication of publishing it as-listed: **the fix comes from the source and
+arrives through the weekly scrape with no code change here.**
+
+### 2026-08-07: Menard ships as the 48th county, and the OUTSIDE list was wrong about it in a useful way
+
+Asked 3 Aug. Clerk & Recorder **Martha "Marty" Gum** replied the next morning,
+looped in **Supervisor of Assessments Dawn Kelton**, who requested the file from
+**Beacon** — the county's GIS vendor — and forwarded it on 7 Aug. Three offices
+and one vendor, four days, for a county that publishes no boundary at all.
+
+**It is the cleanest county file this campaign has received.** Zero invalid
+geometries, zero self-overlap, and — unlike both Jefferson's and Montgomery's —
+**zero internal cracks**. The five polygons are properly edge-matched. Nothing
+needed repairing and nothing was repaired. It proves itself against the Census
+too: the districts' POP20 values sum to **12,297**, exactly Menard's 2020 count,
+asserted on every build.
+
+**The ring's OUTSIDE list had recorded exactly why this was impossible**, and
+every word of it was true:
+
+> *"Menard's five commissioner districts run section-line roads rather than
+> precinct or township unions, so no composition route exists and its only map is
+> a 2021-12 raster."*
+
+All correct — and none of it mattered. **That list records what can be DERIVED,
+which was never the same question as what a county will send.** The reasoning
+stays in the file as a correction rather than being deleted, because the next
+"this one is genuinely impossible" entry deserves the same scepticism.
+
+**A mistake worth keeping, this project's own.** The e-mail that produced this
+file asked for *"the three district polygons"*. Menard has **five**. The gap
+record had it right the whole time — it says five, and it quotes the population
+range printed on the state's map, 2,436 to 2,486, which is exactly this file's
+five values. The error was in the ask, not the record: a district count asserted
+from a picture that could not properly be read. The county ignored the wrong
+premise and sent the real thing. **Read your own gap record before writing the
+ask** — the same lesson as the Vermilion "middle of the county" slip, and the
+second time this campaign has sent a county a premise it had already disproved.
+
+**A commission county that is NOT a County-card county.** Menard elects five
+commissioners, but **by district** — so unlike Monroe, Randolph and Edwards,
+which ride the County card at large, it has geometry and takes a layer. The
+§1.5 at-large tier turns on *how* a commission is elected, not on the word
+"commissioner", and Menard is the first county to make that distinction load-
+bearing.
+
+**"Ed Whitcomb, Jr." exercised the suffix guard in production.** District 5's
+chair is the first shipped name to hit `uninvert_name()`'s **refusal** path — the
+branch that exists so a suffix never becomes "Jr. Ed Whitcomb". Written for
+Stephenson, needed by LaSalle and Jefferson, and now proven by the case it was
+built to protect. The builder asserts the name came through unreordered rather
+than trusting it.
+
+**One published e-mail disagrees with its own label.** District 1's link points
+at `djwhitley@` while the text beside it reads `dwhitley@`. The **href** ships —
+that is where the county's own page sends mail when a resident clicks it — and
+the run prints a NOTE. Same rule as Montgomery's `cody.gudel@`, two counties
+apart on the same day.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 

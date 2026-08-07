@@ -1,0 +1,106 @@
+name: Update Menard County commissioners roster
+
+# Weekly refresh of the Menard County commissioner card's roster
+# (data/app/menard-commissioner-members.json, fetched by index.html).
+# Re-scrapes the county's board page (district, name, phone, county e-mail,
+# Chair/Vice-Chair role, and the year each was elected or appointed) and, if
+# anything changed, opens a PR rather than committing directly to main —
+# officeholder data should get a human look before it ships.
+#
+# Only the ROSTER is on a cron. The other half of this county's card —
+# data/app/menard-commissioner-districts.json — is the Beacon export the
+# county's Clerk and Supervisor of Assessments obtained on request, so
+# refreshing it means asking again rather than re-fetching, exactly as Ogle's
+# and Henry's do. scripts/build_menard_commissioner_districts.py --check guards
+# the shipped copy against the archived source on every pull request; it reads
+# no network, so it sits in the per-PR gate rather than the monthly one.
+#
+# DISTRICT COMES FROM THE COLUMN, NOT FROM TEXT BESIDE THE NAME. The page is one
+# five-column table with a single body row: the header names the districts and
+# each cell holds that district's commissioner. So the scraper reads the header
+# rather than assuming order — shuffled columns would otherwise still parse as a
+# perfectly valid board, just with every commissioner on the wrong district.
+#
+# ONE PUBLISHED E-MAIL DISAGREES WITH ITS OWN LABEL. District 1's link points at
+# djwhitley@ while the text beside it reads dwhitley@. The scraper ships the
+# HREF — that is where the county's own page sends mail when a resident clicks
+# it — and prints a NOTE naming the discrepancy rather than resolving it
+# silently. Same rule as Montgomery's cody.gudel@: publish what the source
+# publishes, report the conflict, invent nothing.
+
+on:
+  schedule:
+    - cron: "0 20 * * 4" # Thursday 20:00 UTC (county-board day, after Jefferson at 19:00)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the workflow still runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # A static, server-rendered WPBakery page — no JS and no challenge — so
+        # requests alone, parsed with the stdlib re module.
+        run: pip install -c scripts/requirements.txt requests
+
+      - name: Scrape Menard County commissioners roster
+        run: python3 scripts/menard_commissioners_scraper.py /tmp/menard_commissioners_raw.json
+
+      - name: Rebuild roster data file
+        run: python3 scripts/build_menard_commissioners_roster.py /tmp/menard_commissioners_raw.json
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present and
+      # well formed.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/menard-commissioners-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/menard-commissioner-members.json
+          git commit -m "Update Menard County commissioners roster from menardcountyil.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Menard County commissioners roster from menardcountyil.gov" \
+              --body "Automated weekly refresh of the Menard County commissioner card's roster (district, name, phone, county e-mail, Chair/Vice-Chair role, and the year each was elected or appointed), generated by \`scripts/menard_commissioners_scraper.py\` + \`scripts/build_menard_commissioners_roster.py\`. Please review the diff before merging — this changes data about real officeholders. Menard runs a commission form of government but elects its five commissioners BY DISTRICT, so it carries a board layer rather than riding the County card. District comes from the column position in a one-row table, so the scraper reads the header rather than assuming order. Floors are the full board of five: on single-member districts a lost commissioner leaves a card with no name and no count would look wrong. District 1's published e-mail link (djwhitley@) disagrees with the label beside it (dwhitley@); the href ships and the run prints a NOTE."  \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

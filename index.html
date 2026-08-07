@@ -8042,6 +8042,27 @@ function initChiExplorer() {
       return !!findFeatureContaining(geojson, point);
     });
   }
+  /* Menard (the 48th dispatched county, added 2026-08-07). A COMMISSION county
+   * whose five commissioners are elected BY DISTRICT — so unlike Monroe,
+   * Randolph and Edwards, which ride the County card at large, Menard has
+   * geometry and gets a layer. Its district lines follow section-line roads
+   * rather than precinct edges, so no dissolve could have produced them; the
+   * boundary is a Beacon export its Clerk and Supervisor of Assessments
+   * obtained on request (scripts/build_menard_commissioner_districts.py). */
+  var loadMenardCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/menard-county-outline.json", {}, 2);
+  });
+  function menardCountyCoverage(point) {
+    return loadMenardCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMenardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/menard-commissioner-districts.json", {}, 2);
+  });
+  var loadMenardCommissioners = makeCached(function () {
+    return fetchJSONWithRetry("data/app/menard-commissioner-members.json", {}, 2);
+  });
   /* Jefferson (the 46th dispatched county, added 2026-08-06 — and the county
    * that MERGED THE HAMILTON ISLAND back into the mainland, because it borders
    * both Washington and Hamilton). It publishes nothing: its site is up and its
@@ -9106,6 +9127,17 @@ function initChiExplorer() {
   });
   var loadMontgomeryPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/montgomery-precincts.json", {}, 2);
+  });
+  /* Montgomery's precinct -> polling place table, added 2026-08-07 after the
+   * county GIS office answered the follow-up. The source is the CLERK'S own
+   * published list, not the point layer that arrived with it: cross-checking
+   * the two found the GIS layer omits Rountree entirely and still names the
+   * National Guard Armory where the Clerk's list has First Presbyterian Church.
+   * A polling place is the one field here where being stale sends someone to
+   * the wrong building, so the election authority's list wins
+   * (scripts/build_montgomery_precinct_polling.py records both findings). */
+  var loadMontgomeryPolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/montgomery-precinct-polling.json", {}, 2);
   });
 
   /* Woodford (the pass-6 next-county candidate, added 2026-08-02). Its GIS of
@@ -15819,6 +15851,76 @@ function initChiExplorer() {
           }
         }
       },
+      // Menard (5 SINGLE-member commissioner districts) — added 2026-08-07 with
+      // the county. Menard runs a COMMISSION form of government, but unlike the
+      // at-large commission counties on the County card its commissioners are
+      // elected by district, so it belongs here. The districts carry the names
+      // the county gives them (Rock Creek, East Menard, …) rather than bare
+      // numbers, so the card leads with the name and keeps the number in the
+      // pill. Chair and Vice Chair hold district seats and are badged on their
+      // own rows.
+      {
+        key: "menard",
+        coverage: menardCountyCoverage,
+        loadGeometry: loadMenardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMenardDistricts(),
+            loadMenardCommissioners().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return {
+              seq: seq,
+              district: district,
+              label: findPropCI(props, ["name"]),
+              population: findPropCI(props, ["population"]),
+              entry: entry
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Menard County Board of Commissioners",
+            note: result.label ? String(result.label) : null
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Menard County Board of Commissioners (official)",
+            url: "https://www.menardcountyil.gov/elected-officials/board-commissioners/"
+          };
+        },
+        hoverOfficial: {
+          load: loadMenardCommissioners,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Montgomery (7 districts electing TWO members each) — added 2026-08-07
       // with the county. Both halves come from Montgomery itself: the boundary
       // is the GIS office's own geodatabase export (no derivation, no tracing),
@@ -19553,7 +19655,8 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadMontgomeryPrecincts(),
-            loadMontgomeryBoardDistricts().catch(function () { return null; })
+            loadMontgomeryBoardDistricts().catch(function () { return null; }),
+            loadMontgomeryPolling().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -19563,11 +19666,18 @@ function initChiExplorer() {
               var bf = findFeatureContaining(results[1], point);
               if (bf) district = findPropCI(bf.properties || {}, ["district"]);
             }
+            var name = findPropCI(props, ["name"]);
+            var polling = null;
+            if (results[2] && results[2].precincts && name != null) {
+              polling = results[2].precincts[String(name)] || null;
+            }
             return {
               seq: seq,
-              name: findPropCI(props, ["name"]),
+              name: name,
               code: findPropCI(props, ["code"]),
-              boardDistrict: district
+              boardDistrict: district,
+              pollingPlace: polling && polling.place,
+              pollingAddress: polling && polling.address
             };
           });
         },
@@ -19576,6 +19686,10 @@ function initChiExplorer() {
           if (result.code) fields.push({ label: "County precinct code", value: String(result.code) });
           if (result.boardDistrict != null && result.boardDistrict !== "") {
             fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
           }
           fields.push({ label: "County", value: "Montgomery County" });
           return renderFieldStack(fields);
