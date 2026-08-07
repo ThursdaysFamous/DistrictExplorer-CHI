@@ -177,6 +177,14 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # in two replies; the county has no website at all, so its
                      # roster is the one in DOCUMENT_ROSTERS rather than a scrape.
                      "047",
+                     # Montgomery — the 47th dispatched county (2026-08-07),
+                     # and a plain mainland join: it borders Macoupin and
+                     # Sangamon, both already served, so nothing about the
+                     # islands changes. Its GIS office sent BOTH the board
+                     # districts and the precincts as a file geodatabase, which
+                     # makes it one of the few counties this size where neither
+                     # half is derived or traced.
+                     "135",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -212,6 +220,7 @@ DISPATCH_COUNTY_FIPS = {
     "macon": "115",
     "effingham": "049",
     "hamilton": "065", "jefferson": "081",
+    "montgomery": "135",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -325,6 +334,11 @@ INSIDE = {
     "Hennepin (Putnam)": (41.2589, -89.3216),
     "Mount Sterling (Brown)": (39.9854, -90.7641),
     "Hardin (Calhoun)": (39.1591, -90.6248),
+    # Hillsboro (Montgomery) — the county seat, 2026-08-07. Montgomery joins the
+    # mainland between Macoupin and Sangamon, so this anchor tests an interior
+    # fill rather than a frontier move; Vandalia (Fayette) on its south-east
+    # border is the OUTSIDE anchor that keeps the fill from over-running.
+    "Hillsboro (Montgomery)": (39.1614, -89.4954),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
