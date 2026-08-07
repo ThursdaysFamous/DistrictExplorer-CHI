@@ -42,7 +42,7 @@
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 2 — `hamilton-municipal-officials` (no-source); `hamilton-precinct-polling` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `henry-precinct-polling` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | none |
-| Jefferson | 17081 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `jefferson-county-board` (no-source) |
+| Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jersey | 17083 | judicial circuit | no board layer — see gaps | — | none |
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 118 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 117 records in the Data gaps panel: `chicago-amenity-phones`.

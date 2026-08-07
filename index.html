@@ -8062,6 +8062,21 @@ function initChiExplorer() {
   var loadJeffersonPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/jefferson-precincts.json", {}, 2);
   });
+  /* Jefferson's 13 board districts, added 2026-08-07 and DISSOLVED from the
+   * precincts above rather than fetched: the county publishes no boundary at
+   * all, but its Clerk sent the approved list of which precincts make up each
+   * district, which is the same answer in cheaper form (see
+   * scripts/build_jefferson_board_districts.py). One precinct, Shiloh 4, is
+   * split between Districts 10 and 11 at 34th Street; those two carry a
+   * boundaryNote because north of where that street ends the line is the
+   * street's alignment projected. The roster is scraped weekly from the
+   * county's board page — 13/13 with a phone and a per-district e-mail. */
+  var loadJeffersonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jefferson-county-board-districts.json", {}, 2);
+  });
+  var loadJeffersonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jefferson-county-board-members.json", {}, 2);
+  });
 
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
@@ -15727,6 +15742,83 @@ function initChiExplorer() {
           }
         }
       },
+      // Jefferson (13 SINGLE-member districts) — added 2026-08-07, a day after
+      // the county's precincts. The boundary is DERIVED, but from the county's
+      // own two halves: its precinct geometry, combined per the approved
+      // "County Board Districts (11/22/2021)" list its Clerk sent on request.
+      // Roster scraped weekly, 13/13 with a phone and a per-district e-mail
+      // (district1@…, a role address rather than a personal one, which is what
+      // the county publishes). Chairman and Vice Chair hold district seats and
+      // are badged on their own rows.
+      {
+        key: "jefferson",
+        coverage: jeffersonCountyCoverage,
+        loadGeometry: loadJeffersonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadJeffersonBoardDistricts(),
+            loadJeffersonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              boundaryNote: findPropCI(props, ["boundarynote"])
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Jefferson County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          // Only Districts 10 and 11 carry this: they are the two that share
+          // the split precinct, and a reader is owed the same caveat the
+          // builder records rather than a false certainty.
+          if (result.boundaryNote) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Boundary note", value: String(result.boundaryNote) }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Jefferson County Board (official)",
+            url: "https://jeffersoncounty.illinois.gov/county_board/index.php"
+          };
+        },
+        hoverOfficial: {
+          load: loadJeffersonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Montgomery (7 districts electing TWO members each) — added 2026-08-07
       // with the county. Both halves come from Montgomery itself: the boundary
       // is the GIS office's own geodatabase export (no derivation, no tracing),
@@ -19344,17 +19436,36 @@ function initChiExplorer() {
           return (v == null || String(v).trim() === "") ? null : String(v).trim();
         },
         query: function (point, seq) {
-          return loadJeffersonPrecincts().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
+          return Promise.all([
+            loadJeffersonPrecincts(),
+            loadJeffersonBoardDistricts().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
+            // The board district MUST come from the point, not the precinct
+            // name: Shiloh 4 straddles Districts 10 and 11, so the same
+            // precinct has two answers depending on which side of 34th Street
+            // the click lands. Added 2026-08-07, when the board shipped.
+            var district = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) district = findPropCI(bf.properties || {}, ["district"]);
+            }
             return {
               seq: seq,
-              name: findPropCI(feature.properties || {}, ["name"])
+              name: findPropCI(feature.properties || {}, ["name"]),
+              boardDistrict: district
             };
           });
         },
         render: function (result) {
-          return renderFieldStack([{ label: "County", value: "Jefferson County" }]);
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Jefferson County" });
+          return renderFieldStack(fields);
         },
         cardIdentifier: function (result) {
           return result.name ? "Precinct " + String(result.name) : "Unknown";

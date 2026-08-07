@@ -341,19 +341,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "For each: whether the county's board districts and voting precincts exist as map data, and where. Asking the four clerks is the next move, not more searching \u2014 Jefferson proved it takes one e-mail."
     },
     {
-      "id": "jefferson-county-board",
-      "concept": "County board districts",
-      "area": "Jefferson County",
-      "counties": [
-        "jefferson"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Jefferson's precincts are shown but its county board districts are not \u2014 the same request asked for both and only the precincts came back.",
-      "blocker": "Asked 5 Aug 2026 in one message: do the county board district AND voting precinct boundaries exist as shareable map data, and if not, would a paper map or a list of which precincts make up each district do? County Clerk Davis replied 6 Aug with 'Please see attached' and a precinct shapefile \u2014 no covering note, and nothing about the districts. That is an incomplete answer rather than a refusal, and the distinction matters: the same office holds both, one arrived by return e-mail, and the district half was simply not addressed. The county's own site publishes sixteen board-member e-mail addresses and no district geometry of any kind. WHAT MAKES THIS CHEAP TO CLOSE: the precincts are now in hand, so a plain LIST of which precincts make up each district would be enough to draw the boundaries exactly, with no new geometry needed from the county at all. Re-asked 6 Aug on that basis.",
-      "wanted": "Either Jefferson's board district boundaries as map data, or \u2014 easier for the county and equally good here \u2014 a list of which of the 33 precincts belongs to each district, which the shipped precinct geometry can be dissolved along."
-    },
-    {
       "id": "bureau-county-board-districts",
       "concept": "County board districts",
       "area": "Bureau County",
@@ -2897,6 +2884,77 @@ the county as a bug report. **Compare the Stephenson comma, which WAS normalised
 the same week** — reordering "Holste, McKenzie" around a comma invents nothing,
 while changing "gudel" to "gudgel" invents a string. That is the line, and these
 two cases sit on either side of it.
+
+### 2026-08-07: the gap record wrote its own closing instructions, and they worked
+
+`jefferson-county-board` was opened on 6 Aug when an ask for both halves of a
+county returned only one. Rather than record that as a refusal, it named the
+cheap route back:
+
+> "the precincts are now in hand, so a plain LIST of which precincts make up
+> each district would be enough to draw the boundaries exactly, with no new
+> geometry needed from the county at all."
+
+Re-asked on exactly that basis. On 7 Aug County Clerk Joe Davis sent **"County
+Board Districts (Approved by County Board November 22, 2021)"** — one line per
+district naming its precincts — and the gap is **CLOSED** the same day. **A gap
+record that states what would close it is worth more than one that states what
+is missing**, because the second time you write to a county you can ask for the
+cheap thing instead of the expensive one. Three asks total to this office, and
+Jefferson now ships both its precincts and its board.
+
+**The list is self-proving, and the builder makes it prove itself every run.**
+All 33 shipped precincts are named, none is named that does not exist, and the
+13 dissolved districts reproduce the county's own extent to **0.0000%**. A future
+list that drops or invents a precinct fails the build.
+
+**One precinct is split, and it is where the only inference in the file lives.**
+The chart puts "Shiloh 4 west of 34th Street" in District 10 and "east" in
+District 11. Three things were decided here rather than assumed:
+
+- **The cut longitude comes from TIGER/Line, not OpenStreetMap.** OSM has the
+  street mapped in more detail and was used to *corroborate* the number — but
+  OSM is **ODbL**, and a shipped civic boundary derived from it would carry
+  share-alike obligations this project has not taken on. The Census
+  Transportation layer is public domain and puts 34th St at −88.93327; OSM's
+  "North 34th Street" runs −88.93334..−88.93327, so they agree to about 6 m.
+  **Reading one coordinate to check a number is not the same act as building a
+  boundary from a database**, and the distinction is worth stating before the
+  next county needs a road.
+- **34th Street does not reach the top of the precinct.** It stops about three
+  quarters of the way up; north of that the cut is the street's alignment
+  projected. That zone is 25% of Shiloh 4 and 0.05% of the county — and it is
+  *not* empty ground: it holds the Chesterfield Village, Webster Hill and
+  Kingsridge subdivisions. So the caveat is real and it ships on the card, on
+  Districts 10 and 11 only. The county has been asked to confirm where the line
+  runs up there.
+- **This is still strictly better than the precedent.** LaSalle's split precincts
+  ship wholly on their majority side with the card saying so. Here three quarters
+  of the boundary is exact and the rest is a straight projection.
+
+**The Dodds overlap has an explanation now, and it changes nothing about the
+board.** Asked about the one genuine defect in the precinct file, Davis replied
+that the two are divided by the **Casey Fork river**, "Dodds 2 being left or west
+of and Dodds 1 being on the right or east of it" — prefaced with "I believe". It
+stays unrepaired for two reasons: the answer is hedged, and it does not matter
+here anyway, because **Dodds 1 and Dodds 2 are both District 6**, so the overlap
+is interior to a single board district and cannot change anyone's answer. A
+defect that can't reach the reader is not worth a repair built on "I believe".
+
+**The names arrived surname-first — the third source in one week.** After
+Stephenson's Dakota clerk and LaSalle's Village of Dana, Jefferson's board table
+prints every one of its thirteen as "Draege, Steve". The builder imports
+`uninvert_name()` from `build_municipal_officials_roster.py` rather than carrying
+a third copy, and refuses to write if any name still holds a comma. Three
+independent counties in seven days is enough to call this a *format*, not an
+anomaly, and the next county that does it should cost nothing.
+
+**One trap for whoever maintains this.** The county's own navigation links
+`/government/county_board/index.php`, which **404s while rendering the full site
+chrome** — it looks like a working page with no roster on it. The live page is
+`/county_board/index.php` at the root. The scraper's zero-row guard says so in
+its failure message, because "the layout changed" is the wrong conclusion to
+reach here.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
