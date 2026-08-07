@@ -718,6 +718,12 @@
         "note": "Henry County Board districts, DERIVED: TIGER townships dissolved per adopted Ordinance 21-33 (scripts/build_henry_board_districts.py; --check is the drift gate). The county publishes no board GIS — its viewer is Sidwell Portico, parcels + townships only. The 12+12 composition is proven by the adopted map's own two-census population table (all four printed district totals to the person) and by live Census POP100 on every run."
       },
       {
+        "file": "jefferson-county-board-districts.json",
+        "min_features": 13,
+        "max_features": 13,
+        "note": "Jefferson County Board districts, DISSOLVED from the county's own precincts per the county's own approved list. Jefferson publishes no boundary of any kind; asked for districts AND precincts, County Clerk Joe Davis sent the precinct shapefile on 2026-08-06 and, re-asked on the cheaper basis the gap record had named, sent \"County Board Districts (Approved by County Board November 22, 2021)\" on 2026-08-07 \u2014 one line per district naming its precincts. scripts/build_jefferson_board_districts.py applies that list and asserts it accounts for all 33 precincts exactly once, that the 13 districts reproduce the county's own extent (0.0000%), and that no district dissolves with more than 0.05% of its area in slivers. ONE PRECINCT IS SPLIT: Shiloh 4, west/east of 34th Street, between Districts 10 and 11. The cut longitude comes from TIGER/Line (public domain) and is corroborated by OSM rather than taken from it, because a shipped civic boundary derived from ODbL data would carry share-alike obligations this project has not taken on. 34th Street stops about three quarters of the way up the precinct; north of that the cut is the street's alignment projected, which is the one inference in the file, and Districts 10 and 11 carry a boundaryNote saying so."
+      },
+      {
         "file": "montgomery-county-board-districts.json",
         "min_features": 7,
         "max_features": 7,
@@ -1464,6 +1470,11 @@
         "note": "Henry County Board members keyed by district (2 ten-member districts — the fleet's widest; 20/20 with e-mail, 15 with phone) — scraped weekly from the county's own CivicPlus directory, which the county itself keys by district (DID=39/40), so the assignment is the county's own. No chair key: the chair is elected from within the body and the directory does not mark who holds it."
       },
       {
+        "file": "jefferson-county-board-members.json",
+        "min_keys": 13,
+        "note": "Jefferson County Board members keyed by district (13 SINGLE-member districts; 13/13 with a phone and a per-district e-mail, district1@\u2026 \u2014 a role address rather than a personal one, which is what the county publishes) \u2014 scraped weekly from the county's own board page. THE PAGE IS AT THE SITE ROOT: /county_board/index.php, not the /government/county_board/index.php the site's own navigation links, which 404s while rendering a full-looking page. Names arrive SURNAME-FIRST and are read forward by uninvert_name() imported from build_municipal_officials_roster.py \u2014 the third source in the fleet to need that guard in one week. Chairman and Vice Chair hold district seats and are badged on their own rows."
+      },
+      {
         "file": "montgomery-county-board-members.json",
         "min_keys": 7,
         "note": "Montgomery County Board members keyed by district (7 districts electing TWO members each; 14/14 with a direct phone AND a county e-mail, four with a second published number) \u2014 scraped weekly from the county's own board page. The page rather than the Clerk's members PDF: checked 2026-08-06 the PDF still named two members who had been replaced, so the two county documents are trusted for different things \u2014 the PDF for district COMPOSITION, the page for names. The Board Chairman is badged on his own district row; he holds a district seat, so there is no countywide section. One published e-mail (District 5's, at cody.gudel@) does not match the member's surname and is carried exactly as the county publishes it \u2014 correcting it would mean inventing an address."
@@ -1689,6 +1700,11 @@
       "file": "update-grundy-county-board-roster.yml",
       "purpose": "Grundy County Board roster (grundycountyil.gov board-page scrape)",
       "schedule": "Wed 17:00 UTC"
+    },
+    {
+      "file": "update-jefferson-county-board-roster.yml",
+      "purpose": "Jefferson County Board roster (jeffersoncounty.illinois.gov board-table scrape)",
+      "schedule": "Thu 19:00 UTC"
     },
     {
       "file": "update-montgomery-county-board-roster.yml",
