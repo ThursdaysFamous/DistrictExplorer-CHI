@@ -18536,7 +18536,7 @@ function initChiExplorer() {
           return result.name ? "Precinct " + String(result.name) : "Unknown";
         },
         primaryLink: function () {
-          return { label: "Boone County Clerk — Elections (official)", url: "https://www.boonecountyil.gov/departments/county-clerk-recorder/elections/" };
+          return { label: "Boone County Clerk — Elections (official)", url: "https://www.boonecountyil.gov/government/departments/clerk___recorder/voting_options/index.php" };
         }
       },
       // Grundy (40). Polling places are a sibling layer joined on POLLINGID and
@@ -18593,7 +18593,10 @@ function initChiExplorer() {
           return result.name ? "Precinct " + String(result.name) : "Unknown";
         },
         primaryLink: function () {
-          return { label: "Grundy County Clerk — Elections (official)", url: "https://www.grundyco.org/countyclerk" };
+          // grundycountyil.gov, not grundyco.org: the county moved its public
+          // site and the old paths 404. maps.grundyco.org (the GIS host the
+          // precinct layer reads) did NOT move and is unchanged.
+          return { label: "Grundy County Clerk — Elections (official)", url: "https://www.grundycountyil.gov/services/elections/index.php" };
         }
       },
       // Macoupin — the last link in the bridge to the Metro East, and the only
@@ -19460,7 +19463,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Tazewell County Clerk — Elections (official)",
-            url: "https://tazewell-il.gov/county-clerk/"
+            url: "https://tazewell-il.gov/countyclerkrecorder/countyclerkelections/"
           };
         }
       },
@@ -19637,7 +19640,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Fulton County Clerk — Elections (official)",
-            url: "https://fultoncountyil.gov/officials/elected/county-clerk-recorder/"
+            url: "https://fultoncountyil.gov/officials/elected/county-clerk/elections/"
           };
         }
       },
@@ -19871,7 +19874,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Ogle County Clerk — Elections (official)",
-            url: "https://www.oglecountyil.gov/departments/county_clerk_and_recorder/elections.php"
+            url: "https://www.oglecountyil.gov/departments/county_clerk/elections.php"
           };
         }
       },
@@ -20100,7 +20103,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Iroquois County Clerk — Elections (official)",
-            url: "https://iroquoiscountyil.gov/offices/county-clerk"
+            url: "https://iroquoiscountyil.gov/elections"
           };
         }
       },
@@ -20233,7 +20236,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "De Witt County Clerk — Elections (official)",
-            url: "https://www.dewittcountyil.gov/government/county_clerk.php"
+            url: "https://www.dewittcountyil.gov/community/voting.php"
           };
         }
       },
@@ -20276,8 +20279,14 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return {
-            label: "Effingham County Clerk — Elections (official)",
-            url: "https://effinghamcountyil.gov/county-clerk/elections/"
+            // The clerk's landing page, NOT its elections section: every
+            // /elections/ path under effinghamcountyil.gov returns a server
+            // error ("Requirements Not Met") — both the /county-clerk/ and
+            // /clerk-recorder/ spellings the county's own menu links to. The
+            // label drops "Elections" to match where the link actually goes;
+            // restore both when the county's elections pages come back.
+            label: "Effingham County Clerk (official)",
+            url: "https://effinghamcountyil.gov/county-clerk/"
           };
         }
       },

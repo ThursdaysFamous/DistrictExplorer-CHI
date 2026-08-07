@@ -6,12 +6,16 @@ name: Validate layer sources
 # one — Chicago Data Portal (Socrata) datasets are re-published under a NEW id
 # every year, so a hardcoded id keeps serving last year's data with no error.
 #
-# scripts/validate_sources.py never edits the app (swapping a dataset id is a
-# schema-sensitive judgement call). When it finds drift it exits with a WARN/FAIL
-# status; this workflow then opens — or updates in place — a single tracking
-# issue so a human reviews it. The job itself stays green: the issue is the
-# signal, matching the roster pattern of "officeholder/source changes get a
-# human look before they ship."
+# It also runs scripts/validate_card_links.py, which checks the other surface a
+# publisher can break silently: the ~1,100 URLs the cards and rosters actually
+# render. Those have no scraper watching them at all.
+#
+# Neither script ever edits the app (swapping a dataset id is a schema-sensitive
+# judgement call; replacing a dead link means finding where the page moved to).
+# When either finds drift it exits with a WARN/FAIL status; this workflow then
+# opens — or updates in place — a single tracking issue so a human reviews it.
+# The job itself stays green: the issue is the signal, matching the roster
+# pattern of "officeholder/source changes get a human look before they ship."
 
 on:
   schedule:
@@ -94,17 +98,40 @@ jobs:
             --status-file status.txt
           echo "status=$(cat status.txt)" >> "$GITHUB_OUTPUT"
 
+      # The OTHER half of every result card: the link a reader clicks, and each
+      # roster's sourceUrl. validate_sources.py watches the DATA endpoints and
+      # says nothing about these, so Macon's card shipped a hostname with no DNS
+      # record for three days — nothing looked. Same posture as every check
+      # above: report, never edit, and fold the result into the one issue below.
+      - name: Validate card + roster links
+        id: cardlinks
+        continue-on-error: true
+        run: |
+          python3 scripts/validate_card_links.py \
+            --report card-link-report.md \
+            --status-file card-status.txt
+          echo "status=$(cat card-status.txt)" >> "$GITHUB_OUTPUT"
+
       - name: Open or update tracking issue
-        if: steps.validate.outputs.status != 'ok'
+        if: steps.validate.outputs.status != 'ok' || steps.cardlinks.outputs.status != 'ok'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # Title unchanged even though the issue now carries link findings too:
+          # it is matched by title to update in place, so renaming it would
+          # orphan the open issue and start a duplicate.
           title="Layer source drift detected — review needed"
-          # Prepend a short header so the issue explains itself, then the report.
+          # Prepend a short header so the issue explains itself, then the reports.
+          # Each is included only if its step got far enough to write one — a
+          # crashed checker must not take out the other's findings.
           {
-            echo "_Automated by \`.github/workflows/validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`index.html\` (dataset ids) or re-download the boundary shapefile as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
+            echo "_Automated by \`.github/workflows/validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`index.html\` (dataset ids, card links) or re-download the boundary shapefile as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
             echo
-            cat source-report.md
+            if [ -f source-report.md ]; then cat source-report.md; else
+              echo "> \`validate_sources.py\` produced no report this run — check the job log."; fi
+            echo
+            if [ -f card-link-report.md ]; then cat card-link-report.md; else
+              echo "> \`validate_card_links.py\` produced no report this run — check the job log."; fi
           } > issue-body.md
 
           existing="$(gh issue list --state open --search "in:title $title" --json number --jq '.[0].number')"
