@@ -8888,6 +8888,62 @@ function initChiExplorer() {
         return geojson;
       });
   }
+  /* Macon's five board districts, added 2026-08-07. The county's Electoral
+   * Districts layer is live and correct — and carries NO district number on any
+   * of its five shapes, every attribute null, which is why the board card was
+   * held back from 2026-08-02 (macon-county-board-labels). County Clerk Josh
+   * Tanner sent a colour-coded map with a numbered legend, so the numbers now
+   * come from data/app/macon-board-district-labels.json: five anchor points,
+   * one per district, each inside a precinct the map colours unambiguously.
+   *
+   * The geometry stays LIVE so a county redraw still reaches the app; only the
+   * labels are shipped. Labelling is a runtime bijection — every shape must
+   * contain exactly one anchor and every anchor exactly one shape — and if that
+   * fails the layer serves NO features rather than guessing, which puts the
+   * county back in the state the gap record describes rather than shipping a
+   * wrong commissioner. The county's own `district` field is preferred the day
+   * it is ever populated. */
+  var loadMaconBoardDistricts = makeCached(function () {
+    return Promise.all([
+      loadMaconLayer(MACON_ELECTION_SERVICE + "2", "1=1", "OBJECTID,district", "board districts"),
+      fetchJSONWithRetry("data/app/macon-board-district-labels.json", {}, 2)
+    ]).then(function (results) {
+      var geojson = results[0], labels = (results[1] || {}).districts || {};
+      var features = (geojson.features || []).slice();
+      var anchors = Object.keys(labels).map(function (d) {
+        return { district: d, lat: labels[d].lat, lng: labels[d].lon };
+      });
+      var used = {}, labelled = [];
+      features.forEach(function (f) {
+        var own = findPropCI(f.properties || {}, ["district"]);
+        var hits = anchors.filter(function (a) {
+          return pointInGeometry({ lat: a.lat, lng: a.lng }, f.geometry);
+        });
+        var num = (own != null && own !== "") ? String(own)
+          : (hits.length === 1 ? hits[0].district : null);
+        if (num == null || used[num]) return;   // ambiguous or duplicated — drop it
+        used[num] = true;
+        var props = {};
+        Object.keys(f.properties || {}).forEach(function (k) { props[k] = f.properties[k]; });
+        props.district = num;
+        labelled.push({ type: "Feature", properties: props, geometry: f.geometry });
+      });
+      // All five, or none: a partial labelling would leave part of the county
+      // answering and part silently blank, which reads as "you have no
+      // commissioner" rather than "we could not tell".
+      if (labelled.length !== features.length || labelled.length !== anchors.length) {
+        throw new Error("Macon County board districts could not be labelled " +
+          "one-to-one (" + labelled.length + " of " + features.length + " shapes, " +
+          anchors.length + " anchors) — the county's geometry moved and " +
+          "data/app/macon-board-district-labels.json must be re-read from the " +
+          "Clerk's map");
+      }
+      return { type: "FeatureCollection", features: labelled };
+    });
+  });
+  var loadMaconBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/macon-county-board-members.json", {}, 2);
+  });
   var loadMaconPrecincts = makeCached(function () {
     return Promise.all([
       loadMaconLayer(MACON_ELECTION_SERVICE + "1", "1=1", "name,precinctid,facilityid", "precincts"),
@@ -15851,6 +15907,68 @@ function initChiExplorer() {
           }
         }
       },
+      // Macon (5 districts electing THREE members each) — added 2026-08-07,
+      // five days after the county's precincts, and the last of the four layers
+      // Macon was held back from. The county's five board shapes are live and
+      // carry no district number, so the numbers come from the Clerk's own
+      // colour-coded map via loadMaconBoardDistricts; the roster is scraped
+      // weekly and is district-keyed, 15/15 with party and e-mail. That even
+      // 3-3-3-3-3 split is itself a check on the labelling.
+      {
+        key: "macon",
+        coverage: maconCountyCoverage,
+        loadGeometry: loadMaconBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMaconBoardDistricts(),
+            loadMaconBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Macon County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Macon County Board (official)",
+            url: "https://maconcounty.illinois.gov/departments/county-board/macon-county-board-members/"
+          };
+        },
+        hoverOfficial: {
+          load: loadMaconBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Menard (5 SINGLE-member commissioner districts) — added 2026-08-07 with
       // the county. Menard runs a COMMISSION form of government, but unlike the
       // at-large commission counties on the County card its commissioners are
@@ -19873,9 +19991,14 @@ function initChiExplorer() {
           return result.name ? "Precinct " + String(result.name) : "Unknown";
         },
         primaryLink: function () {
+          // maconcountyil.gov has NO DNS RECORD — not a redirect, no address at
+          // all — and shipped here as a dead link from 2026-08-04 until it was
+          // caught on 08-07 while reading the county's board page. The county is
+          // at maconcounty.illinois.gov, the same illinois.gov pattern Jefferson
+          // uses. Both replacements verified 200.
           return {
-            label: "Macon County Clerk — Elections (official)",
-            url: "https://maconcountyil.gov/county-clerk/"
+            label: "Macon County Clerk (official)",
+            url: "https://maconcounty.illinois.gov/departments/county-clerk/"
           };
         }
       },

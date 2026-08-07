@@ -1481,6 +1481,16 @@
         "note": "Jefferson County Board members keyed by district (13 SINGLE-member districts; 13/13 with a phone and a per-district e-mail, district1@\u2026 \u2014 a role address rather than a personal one, which is what the county publishes) \u2014 scraped weekly from the county's own board page. THE PAGE IS AT THE SITE ROOT: /county_board/index.php, not the /government/county_board/index.php the site's own navigation links, which 404s while rendering a full-looking page. Names arrive SURNAME-FIRST and are read forward by uninvert_name() imported from build_municipal_officials_roster.py \u2014 the third source in the fleet to need that guard in one week. Chairman and Vice Chair hold district seats and are badged on their own rows."
       },
       {
+        "file": "macon-board-district-labels.json",
+        "min_keys": 3,
+        "note": "Five ANCHOR POINTS that label Macon County's five board district shapes, which the county publishes live with EVERY ATTRIBUTE NULL \u2014 no district number, no representative, no contact. macon-county-board-labels held the board card back from 2026-08-02 for exactly that reason, and named its own cure: \"a labelled clerk's map\". County Clerk Josh Tanner sent one on 2026-08-07, colour-coded with a numbered legend, archived under data/source/raw/. This ships the five labels rather than the geometry, so the county's own shapes stay live and authoritative; index.html assigns each shape the district whose anchor it contains and refuses to serve ANY feature unless that is one-to-one, which puts Macon back in the held-back state rather than showing a wrong commissioner. The assignment was verified precinct by precinct, not by position: each shape's membership across the county's own 64 precincts reproduces the map's colour regions exactly, outliers included (Decatur 24 alone in the northern district, Decatur 4/7/28 in the eastern, Decatur 22/25 in the western). The 15-member roster falling 3-3-3-3-3 is a third independent check."
+      },
+      {
+        "file": "macon-county-board-members.json",
+        "min_keys": 5,
+        "note": "Macon County Board members keyed by district (5 districts electing THREE members each, 15 seats; 15/15 with party and a county e-mail, 14 with a phone, 13 with a term-expiry date) \u2014 scraped weekly from the county's own board-members page, which is the ONLY place Macon publishes which district a member sits for. Party and district arrive as one token (\"D-1\", \"R-4\"). PHONES SHIP AS SEVEN DIGITS, as the county publishes them: Macon is entirely area code 217, but a member's mobile can be from anywhere and prefixing would reach a stranger rather than fail visibly \u2014 the county's own home/cell labels are kept instead. THE DOMAIN IS maconcounty.illinois.gov; maconcountyil.gov has no DNS record at all and shipped as a dead card link from 2026-08-04 until this change."
+      },
+      {
         "file": "menard-commissioner-members.json",
         "min_keys": 5,
         "note": "Menard County commissioners keyed by district (5 SINGLE-member districts; 5/5 with a phone and a county e-mail, plus the year each was elected or appointed) \u2014 scraped weekly from the county's own board page. District comes from the COLUMN POSITION in a one-row, five-column table, so the scraper reads the header rather than assuming order: shuffled columns would still look like a valid board. DISTRICT 1'S E-MAIL LINK AND ITS LABEL DISAGREE \u2014 the page links djwhitley@ and displays dwhitley@ \u2014 and the HREF ships, because that is where the county's own page actually sends mail; the run prints a NOTE rather than resolving it silently. District 5's \"Ed Whitcomb, Jr.\" is the first name in the fleet to exercise uninvert_name()'s REFUSAL path in production, and the builder asserts it came through unreordered."
@@ -1721,6 +1731,11 @@
       "file": "update-jefferson-county-board-roster.yml",
       "purpose": "Jefferson County Board roster (jeffersoncounty.illinois.gov board-table scrape)",
       "schedule": "Thu 19:00 UTC"
+    },
+    {
+      "file": "update-macon-county-board-roster.yml",
+      "purpose": "Macon County Board roster (maconcounty.illinois.gov board-members scrape)",
+      "schedule": "Fri 17:00 UTC"
     },
     {
       "file": "update-menard-commissioners-roster.yml",

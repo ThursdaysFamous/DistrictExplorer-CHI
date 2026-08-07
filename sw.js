@@ -240,6 +240,8 @@ const ROSTER_URLS = [
   "./data/app/grundy-county-board-members.json",
   "./data/app/henry-county-board-members.json",
   "./data/app/jefferson-county-board-members.json",
+  "./data/app/macon-board-district-labels.json",
+  "./data/app/macon-county-board-members.json",
   "./data/app/menard-commissioner-members.json",
   "./data/app/montgomery-precinct-polling.json",
   "./data/app/montgomery-county-board-members.json",

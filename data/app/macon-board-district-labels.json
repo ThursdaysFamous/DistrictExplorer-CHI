@@ -1,0 +1,36 @@
+{
+ "districts": {
+  "1": {
+   "colour": "pink",
+   "lat": 39.85122,
+   "lon": -88.96016,
+   "precinct": "DECATUR 15"
+  },
+  "2": {
+   "colour": "tan",
+   "lat": 39.69752,
+   "lon": -88.97441,
+   "precinct": "SOUTH MACON"
+  },
+  "3": {
+   "colour": "teal",
+   "lat": 40.00802,
+   "lon": -88.97373,
+   "precinct": "MAROA"
+  },
+  "4": {
+   "colour": "yellow-green",
+   "lat": 39.90138,
+   "lon": -88.8028,
+   "precinct": "OAKLEY"
+  },
+  "5": {
+   "colour": "blue",
+   "lat": 39.85972,
+   "lon": -89.18021,
+   "precinct": "NIANTIC"
+  }
+ },
+ "note": "Anchor points that label the county's five UNNUMBERED board district shapes. The app fetches the county's live geometry and assigns each shape the district whose anchor it contains; if that is not a one-to-one match the layer refuses to label rather than guessing.",
+ "source": "Macon County Clerk Josh Tanner, \"Macon County Board Districts 2022\" (colour-coded, legend numbering districts 1-5), supplied by e-mail 2026-08-07 and archived as data/source/raw/Macon County Board Districts 2022.pdf"
+}
