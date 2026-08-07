@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**57 of 102 Illinois counties are served** — 46 through their own dispatch entries, 5 through a shipped judicial circuit, and 6 through the County card alone. 45 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**58 of 102 Illinois counties are served** — 47 through their own dispatch entries, 5 through a shipped judicial circuit, and 6 through the County card alone. 44 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook.
 
-## Served counties (57)
+## Served counties (58)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -61,6 +61,7 @@
 | McHenry | 17111 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district` | 4 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `mchenry-park-district` (no-source); `mchenry-ward-cities` (blocked) |
 | McLean | 17113 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `mclean-special-districts` (no-source) |
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
+| Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Morgan | 17137 | judicial circuit | no board layer — see gaps | — | none |
 | Ogle | 17141 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `ogle-lasalle-special-districts` (no-source); `ogle-municipal-wards` (no-source) |
 | Peoria | 17143 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `pass9-ward-seats-without-maps` (no-source); `peoria-fire-park-library-contact` (data-quality) |
@@ -81,7 +82,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source); `winnebago-village-heads` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (45) — gap-recorded, not yet served
+## Researched frontier (44) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -116,7 +117,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Massac | 17127 | 1 — `massac-county-board` (no-source) |
 | Menard | 17129 | 1 — `menard-commissioner-districts` (no-source) |
 | Mercer | 17131 | 1 — `mercer-county-board-districts` (no-source) |
-| Montgomery | 17135 | 1 — `montgomery-county-board-geometry` (no-source) |
 | Moultrie | 17139 | 1 — `moultrie-county-board` (no-source) |
 | Perry | 17145 | 1 — `perry-county-website-blocked` (blocked) |
 | Piatt | 17147 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 119 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 118 records in the Data gaps panel: `chicago-amenity-phones`.

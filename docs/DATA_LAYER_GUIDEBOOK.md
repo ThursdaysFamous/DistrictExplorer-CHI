@@ -1100,19 +1100,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "District numbers for the five shapes — a labelled clerk's map, the adopted redistricting ordinance, or simply the county filling in the district field its own data already has. Any one of those turns the board on the same day."
     },
     {
-      "id": "montgomery-county-board-geometry",
-      "concept": "County board districts",
-      "area": "Montgomery County",
-      "counties": [
-        "montgomery"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Montgomery has one of the best board member lists we have found and no district boundaries at all — and its districts split precincts, so they cannot be rebuilt from published pieces.",
-      "blocker": "Checked 2 Aug 2026: the county publishes a readable map of its 7 districts, a plain-text chart of what each contains, and a member list (revised December 2024) carrying party, district, term and full composition for all 14 members. But that composition splits precincts down to fractions — “N 1/2 & NW of Butler Grove Twp”, “NE Territory E of I-55 of North Litchfield #1 Precinct” — so the combine-the-townships approach that built several other counties cannot be exact here. The county's map account carries cemeteries, tornado history and school districts only, and its parcels sit on a commercial site that blocks automated access.",
-      "wanted": "A published board district dataset, or precinct boundaries the sub-precinct splits could be cut against. Failing either, tracing the county's own readable map is the recorded fallback."
-    },
-    {
       "id": "clinton-county-board-geometry",
       "concept": "County board districts",
       "area": "Clinton County",
@@ -2823,6 +2810,93 @@ report that would generate it, but the Clerk offered — unprompted — to help 
 district this project cannot find on its own. So `stephenson-park-library-districts` now
 names the districts-themselves route as the one to work, with the Clerk as a named fallback
 for reaching them.
+
+### 2026-08-07: Montgomery answered with BOTH halves, and the file's own name was a trap
+
+Asked 5 Aug. On 6 Aug **Kevin Brink, GIS Tech / Plat Act Officer**, replied
+"Please see attached" with a file geodatabase holding **the board districts AND
+the precincts** — the first ask in this campaign to return both halves of a
+county at once. Montgomery ships as the **47th dispatched county** with nothing
+derived and nothing traced, which for a county of 28,000 is the better tier.
+
+**The gap record had it exactly backwards, and that is worth keeping.** It read:
+"Montgomery has one of the best board member lists we have found and no district
+boundaries at all", and prescribed tracing the county's readable map as the
+fallback. What it was measuring was the county's WEBSITE, which publishes a
+Beacon/Schneider parcel viewer and no geometry. The GIS office had the shapes the
+whole time. That is the Ogle finding for the fifth or sixth time — *"publishes no
+X" is not "cannot obtain X"* — and it is now the single most repeated lesson in
+this ledger.
+
+**A file geodatabase, which is a first here.** Every previous county sent a
+shapefile. A .gdb is a directory of binary tables, and pyshp cannot read one at
+all; `pyogrio` reads it through GDAL's `/vsizip/` handler straight out of the
+archived zip, so what ships is built from the bytes the county sent with no hand
+conversion in between — which is what keeps "ask again" a real refresh path
+rather than a re-do of somebody's manual export.
+
+**The trap: the layer is named `CountyBoardDistricts_2010`.** An Illinois county
+must reapportion after each census, so a 2010-cycle map would be five years
+superseded and shipping it would tell residents the wrong commissioner. Two
+independent things say it is current, and the builder now asserts both on every
+run rather than having checked once:
+
+| Check | Result |
+|---|---|
+| Districts' `Pop100` sum | 28,210 |
+| District 4's own comment | `5949-1894 (Graham CC) = 4055` — Graham Correctional Center backed out |
+| So the raw sum is | **30,104 = Montgomery's 2010 census count exactly** (2020 was 28,288) |
+| The county's published **"Districts After Redistricting 2020-2030"** chart | geometry reproduces it for **all 38 precincts**, including **all five it splits** |
+
+So `_2010` names the **population vintage**, not the map: Montgomery
+reapportioned after 2020 and kept its lines. **The composition assertion is the
+real gate**, and it is a much sharper one than any count or area threshold
+because it compares geometry against something the county says *in words* —
+"N 1/2 & NW of Butler Grove Twp-1 / SE Territory... including Village of
+Butler-6" lands as Butler Grove 81.9% in District 1 and 18.1% in District 6. A
+future export that moves a boundary enough to change a precinct's district fails
+the build and points the next person back at the chart.
+
+**Those five splits are also why the precinct card joins its board district
+spatially rather than by table.** A precinct name does not determine a district
+in Montgomery — only the clicked point can.
+
+**Shipped as drawn, and this time that is the finding.** Both tilings have the
+same unsnapped-neighbour cracks Jefferson had, at a completely different scale:
+
+| | in a crack | ≈ 1 click in |
+|---|---|---|
+| Jefferson, as sent | 0.788% | 127 — **repaired** |
+| Jefferson, after its Voronoi repair | 0.025% | 4,000 |
+| Montgomery districts, as sent | 0.0064% | 15,600 |
+| Montgomery precincts, as sent | 0.0034% | 29,400 |
+
+Montgomery as sent is several times cleaner than Jefferson ended up *after*
+repair, so repairing here would move real boundaries to buy nothing. Jefferson
+established that a county's file can need fixing; Montgomery establishes the
+other half of that rule — **measure before repairing, and usually don't.** The
+ceiling is asserted so a genuinely broken future export cannot ship quietly.
+
+**Two county documents, trusted for two different things.** The Clerk's "County
+Board Districts/Members" PDF (revised 12/2024) is the source for the district
+COMPOSITION above. It is deliberately NOT the source for the roster: checked
+6 Aug it still named Bill Bergen (District 5) and Andy Ritchie (District 7) where
+the county's board page has Cody Gudgel and Roy Schieferdecker. Same county, same
+office, one stale document — the Dakota lesson from the day before, arriving
+again before the ink was dry. The roster is scraped weekly from the page, and it
+is the richest per-seat set in the fleet's smaller counties: **14 of 14 with a
+direct phone and a county e-mail**, four with a second published number.
+
+**One published e-mail is wrong and ships anyway.** District 5's Cody Gudgel is
+listed at `cody.gudel@montgomerycountyil.gov` — "gudel", where every other
+address on the page is firstname.lastname. Almost certainly the county's typo.
+It is carried exactly as published: correcting it would mean inventing an address
+string, which could belong to nobody or to somebody else. The scraper prints a
+NOTE naming it on every run so the discrepancy stays visible, and it goes back to
+the county as a bug report. **Compare the Stephenson comma, which WAS normalised
+the same week** — reordering "Holste, McKenzie" around a comma invents nothing,
+while changing "gudel" to "gudgel" invents a string. That is the line, and these
+two cases sit on either side of it.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 

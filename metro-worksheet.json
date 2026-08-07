@@ -718,6 +718,12 @@
         "note": "Henry County Board districts, DERIVED: TIGER townships dissolved per adopted Ordinance 21-33 (scripts/build_henry_board_districts.py; --check is the drift gate). The county publishes no board GIS — its viewer is Sidwell Portico, parcels + townships only. The 12+12 composition is proven by the adopted map's own two-census population table (all four printed district totals to the person) and by live Census POP100 on every run."
       },
       {
+        "file": "montgomery-county-board-districts.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "Montgomery County Board districts, the COUNTY'S OWN GIS EXPORT — nothing derived and nothing traced, which is rare for a county this size. Montgomery publishes no boundaries (its GIS page links a Beacon/Schneider parcel viewer), so this is an ESRI FILE GEODATABASE that Kevin Brink of Montgomery County GIS sent by e-mail 2026-08-06, archived under data/source/raw/ and reprojected from EPSG:3436 by scripts/build_montgomery_boundaries.py. The .gdb is the fleet's first — read through GDAL's /vsizip/ handler with pyogrio, straight out of the archived zip. THE LAYER IS NAMED CountyBoardDistricts_2010 AND IS NOT STALE, which the builder proves two ways on every run: the districts' Pop100 values sum to 28,210 and District 4's own comment backs out 1,894 for Graham Correctional Center, so the raw sum is 30,104 — exactly Montgomery's 2010 census count, meaning _2010 names the POPULATION vintage; and the geometry reproduces the county's published 'Districts After Redistricting 2020-2030' chart exactly, all 38 precincts including the five it splits between two districts. That composition assertion is the real gate: a future export that moves a boundary enough to change a precinct's district fails the build."
+      },
+      {
         "file": "stephenson-fire-districts.json",
         "min_features": 15,
         "max_features": 15,
@@ -991,6 +997,12 @@
         "min_features": 33,
         "max_features": 33,
         "note": "Jefferson's 33 voting precincts, named as the county names them (Grand Prairie, Rome 1/2, Mt V 1-10, Shiloh 1-5, …). Bounds are an EQUALITY because the export is the county's whole fabric. Jefferson publishes NO boundary of any kind — its site is up and its board page lists sixteen member e-mail addresses, but nothing geographic — so this is a shapefile County Clerk Davis sent on request 2026-08-06, archived under data/source/raw/ and reprojected from EPSG:3435 (Illinois EAST, where Henry's is WEST) by scripts/build_jefferson_precincts.py. THAT BUILDER ALSO REPAIRS THE FILE, which is unusual and is why its docstring is long: the county's polygons are not edge-matched, so they tile only 99.212% of the county, the shortfall being one CONNECTED LATTICE of sub-31 m cracks running along nearly every shared boundary. Each crack is given to the precinct whose boundary is nearest (Voronoi over densified boundaries), then simplified at 10 m to undo the vertex explosion that assignment causes — 99.975% coverage, median boundary shift 35 m, worst 118 m, all asserted. The county's own small Dodds 1 / Dodds 2 OVERLAP is deliberately left alone: a crack has no owner and can be assigned, two claims on the same ground cannot."
+      },
+      {
+        "file": "montgomery-precincts.json",
+        "min_features": 38,
+        "max_features": 38,
+        "note": "Montgomery's 38 voting precincts, named as the county names them (Audubon, Bois D'Arc, Hillsboro 1-6, North Litchfield 1-6, ...) and each carrying the county's five-digit VOTE00 code. Bounds are an EQUALITY because the export is the county's whole fabric. Same source and same builder as the board districts above — one geodatabase, one ask, one script, because the two layers CROSS-CHECK each other against the county's published composition chart. SHIPPED AS DRAWN, no repair: like Jefferson's, the polygons are not edge-matched, but at a completely different scale — 184 hairline cracks totalling 0.0034% of the county (about one click in 29,000) against Jefferson's 0.788% (one in 127), which is several times cleaner than Jefferson ended up AFTER its Voronoi repair. Repairing here would move real boundaries to buy nothing; MAX_INTERNAL_HOLES_PCT fails the build if a future export is genuinely broken."
       },
       {
         "file": "henry-precincts.json",
@@ -1452,6 +1464,11 @@
         "note": "Henry County Board members keyed by district (2 ten-member districts — the fleet's widest; 20/20 with e-mail, 15 with phone) — scraped weekly from the county's own CivicPlus directory, which the county itself keys by district (DID=39/40), so the assignment is the county's own. No chair key: the chair is elected from within the body and the directory does not mark who holds it."
       },
       {
+        "file": "montgomery-county-board-members.json",
+        "min_keys": 7,
+        "note": "Montgomery County Board members keyed by district (7 districts electing TWO members each; 14/14 with a direct phone AND a county e-mail, four with a second published number) \u2014 scraped weekly from the county's own board page. The page rather than the Clerk's members PDF: checked 2026-08-06 the PDF still named two members who had been replaced, so the two county documents are trusted for different things \u2014 the PDF for district COMPOSITION, the page for names. The Board Chairman is badged on his own district row; he holds a district seat, so there is no countywide section. One published e-mail (District 5's, at cody.gudel@) does not match the member's surname and is carried exactly as the county publishes it \u2014 correcting it would mean inventing an address."
+      },
+      {
         "file": "peoria-county-board-members.json",
         "min_keys": 18,
         "note": "Peoria County Board members keyed by district (18 SINGLE-member districts — the app's largest single-member board; 18/18 with party and e-mail, 12 with phone). Scraped weekly: the county's own ElectoralDistricts GIS layer is the machine-readable spine (district -> name, party, member-page URL) and each member page supplies the contact. The Chairperson and Vice-Chairperson are badged on their own district rows — both hold district seats — and only where the county's index page states the role."
@@ -1672,6 +1689,11 @@
       "file": "update-grundy-county-board-roster.yml",
       "purpose": "Grundy County Board roster (grundycountyil.gov board-page scrape)",
       "schedule": "Wed 17:00 UTC"
+    },
+    {
+      "file": "update-montgomery-county-board-roster.yml",
+      "purpose": "Montgomery County Board roster (montgomerycountyil.gov board-page scrape)",
+      "schedule": "Wed 18:00 UTC"
     },
     {
       "file": "update-henry-county-board-roster.yml",
