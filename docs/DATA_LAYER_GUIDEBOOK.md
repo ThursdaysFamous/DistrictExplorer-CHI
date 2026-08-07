@@ -1061,7 +1061,7 @@ in the researched-but-unbuilt backlog.
       "wanted": "The districts' names as the county actually spells them \u2014 a list from the clerk or the GIS office, or the same layers republished with the spaces intact. Nine of the 33 names across the three layers are affected."
     },
     {
-      "id": "macon-county-board-labels",
+      "id": "macon-board-phone-area-code",
       "concept": "County board districts",
       "area": "Macon County",
       "counties": [
@@ -1069,9 +1069,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "data-quality",
       "layer": "county-board",
-      "summary": "Macon County is on the map, but its county board is not: the county publishes the five board district shapes with no district numbers on them.",
-      "blocker": "Checked 2 Aug 2026 and re-checked 4 Aug 2026, when Macon was added. The county's election map data holds exactly five district shapes created on 14 Sep 2022, so this is the current map — and every field on every one of them is empty: the district number, the representative's name, party, phone and e-mail are all null on all five. The county's other board map holds only draft plans and the superseded seven-district version. Nothing else is missing: the member list is published (15 members with party, district, phone and term), and the county's 64 precincts and its fire, library and park district boundaries were all added on 4 Aug 2026 — Macon is served on those four layers and only its board is held back. Numbering the five shapes by their position on the map would be a guess about who represents whom, which is the one thing this project will not do, so the board card does not ship. Macoupin is the precedent for a county served on precincts with no board layer.",
-      "wanted": "District numbers for the five shapes — a labelled clerk's map, the adopted redistricting ordinance, or simply the county filling in the district field its own data already has. Any one of those turns the board on the same day."
+      "summary": "Macon's board members are shown with seven-digit phone numbers, because that is how the county publishes them.",
+      "blocker": "Found 7 Aug 2026, when the board card shipped. The county's board-members page lists each member's number without an area code — \"C 521-4688\", \"H 864-2349\" — and labels them home or cell. Macon County is entirely in area code 217, so prefixing it is the obvious fix and it is the same class of mistake this project refuses elsewhere: a member's MOBILE can be issued anywhere, and a wrong prefix does not fail visibly, it reaches a stranger. So the numbers ship as seven digits with the county's own home/cell labels, which is less useful to someone dialling from outside Decatur and claims only what the source says. 14 of the 15 members are affected; the fifteenth publishes no number at all.",
+      "wanted": "The members' numbers with area codes, from the county's own page or a clerk's list. Nothing else about this roster is missing — party, district, e-mail and term-expiry are all published and all shipped."
     },
     {
       "id": "clinton-county-board-geometry",
@@ -3039,6 +3039,80 @@ at `djwhitley@` while the text beside it reads `dwhitley@`. The **href** ships �
 that is where the county's own page sends mail when a resident clicks it — and
 the run prints a NOTE. Same rule as Montgomery's `cody.gudel@`, two counties
 apart on the same day.
+
+### 2026-08-07, evening: Macon's board ships, and the missing thing was five numbers
+
+`macon-county-board-labels` was the most precisely-specified gap in the file. The
+county publishes its five board districts as **live GIS with every attribute
+null** — no district number, no representative, no contact — and the record
+refused to number them by position, because that is a guess about who represents
+whom. It named three cures and said any one would work "on the same day":
+
+> "District numbers for the five shapes — a labelled clerk's map, the adopted
+> redistricting ordinance, or simply the county filling in the district field its
+> own data already has."
+
+County Clerk **Josh Tanner** sent the first: *"Macon County Board Districts
+2022"*, colour-coded, with a legend numbering 1 to 5. **Five numbers, and a
+county that had been held back for five days ships its board.**
+
+**What was actually missing was tiny, and that is the point.** The geometry was
+always there and always correct. This gap was never about data the county
+lacked — it was about five integers that existed only in a picture. It is the
+cheapest close in the campaign and it took the same thing every other close took:
+writing to somebody.
+
+**How the labelling was verified, because "look at the map" is not a method.**
+The map is a raster — no text layer, ~50 image tiles — so nothing could be
+extracted from it programmatically. It was read by eye. That makes verification
+the whole job, and it was done three independent ways:
+
+1. **Membership, precinct by precinct.** Each of the county's five shapes was
+   intersected with the county's own 64 precincts to get its member list, and
+   those lists were matched against the map's colour regions. Every outlier lands
+   correctly — **Decatur 24** alone in the northern district, **Decatur 4, 7 and
+   28** in the eastern, **Decatur 22 and 25** in the western. A position-based
+   guess reproduces none of that.
+2. **The bijection.** Five anchor points, one per district, each inside a
+   precinct the map colours unambiguously. Each falls in exactly one shape and
+   the five are distinct.
+3. **The roster.** The county publishes 15 members keyed by district. They come
+   out **3-3-3-3-3** across the five shapes. There is no reason for that to hold
+   if the labels were wrong.
+
+**What ships is the labels, not the geometry.** Five anchor points in a 1 KB
+file; the county's shapes stay live, so a redraw still reaches the app. The
+labelling happens at runtime and **must be one-to-one or the layer serves
+nothing** — which returns Macon to exactly the held-back state this gap
+describes, rather than showing somebody the wrong commissioner. The county's own
+`district` field is preferred the day it is ever filled in, and the builder says
+so out loud when that happens.
+
+**Anchors rather than OBJECTIDs, deliberately.** OBJECTID is the only other
+handle the service offers and it is precisely the key that changes when a layer
+is republished — silently reassigning every district. An anchor survives a
+republish and a boundary nudge, and it states the finding in the form it was
+read: *the district containing Maroa is District 3*. (The OBJECTIDs happen to run
+16–20 in district order. That is a coincidence, and relying on it would have been
+the guess the gap record refused to make.)
+
+**A dead link, found while looking for the roster.** Macon's precinct card has
+been linking `maconcountyil.gov` since 2026-08-04. That domain **has no DNS
+record at all** — not a redirect, not a 404, no address associated with the
+hostname. The county is at `maconcounty.illinois.gov`, the same `illinois.gov`
+pattern Jefferson uses and the same trap: a plausible-looking domain that was
+never checked because nothing checks a link that is only ever rendered. Both
+replacements verified 200. Worth a standing lesson — **`validate_sources.py`
+checks dataset endpoints but nothing checks the `primaryLink` URLs the cards
+render**, and this is the second county this week whose real domain turned out to
+be the `illinois.gov` form.
+
+**The phones ship at seven digits.** The county lists "C 521-4688" with no area
+code. Macon is entirely 217, and prefixing it is the obvious improvement and the
+same class of mistake refused all week: a member's mobile can be issued anywhere,
+and a wrong prefix does not fail visibly — it reaches a stranger. The county's
+own home/cell labels are kept, which helps without inventing. Recorded as
+`macon-board-phone-area-code`.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 

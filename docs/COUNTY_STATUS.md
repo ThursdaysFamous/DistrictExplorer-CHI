@@ -52,7 +52,7 @@
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
 | Livingston | 17105 | dispatch | districted | `county-board` | 3 — `county-board-office-addresses` (no-source); `livingston-precincts` (no-source); `livingston-special-districts` (no-source) |
 | Logan | 17107 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `logan-fire-districts` (no-source) |
-| Macon | 17115 | dispatch | no board layer — see gaps | `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `macon-county-board-labels` (data-quality); `macon-district-name-formatting` (data-quality) |
+| Macon | 17115 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `macon-board-phone-area-code` (data-quality); `macon-district-name-formatting` (data-quality) |
 | Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 4 — `macoupin-county-board-districts` (no-source); `macoupin-municipal-officials` (blocked); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
 | Madison | 17119 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `madison-ward-officials` (no-source) |
 | Marshall | 17123 | dispatch | districted | `county-board` | 2 — `marshall-precinct-geometry` (no-source); `wenona-two-clerks-disagree` (data-quality) |
