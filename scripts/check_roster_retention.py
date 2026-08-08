@@ -40,6 +40,11 @@ WHAT IT DELIBERATELY IGNORES
     world changing, not the pipeline breaking.
   * Files absent from the base ref.
 
+It also refuses to PASS having compared fewer than MIN_FILES_COMPARED files. A
+gate that silently checks nothing reports success forever, which is the very
+shape of failure it was written to catch — so a bad base ref or a shallow
+checkout fails loudly instead of going quietly green.
+
 ACCEPTING A REAL DROP. A consolidated election can legitimately empty a column
 for a while. Record it in ACCEPTED_DROPS with a reason and a date rather than
 loosening a threshold for everyone — same posture as validate_sources.py's
@@ -70,6 +75,8 @@ MIN_PRESENT = 2
 # tiny board does not cry wolf.
 MIN_ABSOLUTE_DROP = 3
 RECORD_COLLAPSE_RATIO = 0.5
+# Refuse to report success having compared almost nothing — see main().
+MIN_FILES_COMPARED = 40
 
 # ---------------------------------------------------------------------------
 # Measured, dated exceptions. Key: "<file>:<field>". Value: why, and when it was
@@ -245,6 +252,21 @@ def main():
         rows, old_recs, new_recs = compare(path, old, new)
         for sev, msg in rows:
             findings.append((sev, path, msg))
+
+    # A gate that compares NOTHING passes every time, which is the exact shape
+    # of failure this whole check exists to catch — so it refuses to be vacuous.
+    # Reached by a bad --base, a wrong working directory, or a shallow checkout
+    # where `git show <base>:<path>` finds nothing; all three look like success
+    # otherwise. The floor is deliberately well under the ~160 rosters that
+    # exist, so it fires on "the comparison broke" rather than on normal growth.
+    if checked < MIN_FILES_COMPARED:
+        print("check-roster-retention: FAIL — compared only %d roster files against "
+              "%s (expected at least %d). Nothing was verified. Usually a base ref "
+              "the checkout does not have: this needs real history, not a shallow "
+              "clone. %s" % (checked, args.base, MIN_FILES_COMPARED,
+                             "%d file(s) had no counterpart at that ref." % len(skipped)
+                             if skipped else ""), file=sys.stderr)
+        sys.exit(1)
 
     fails = [f for f in findings if f[0] == "FAIL"]
     accepted = [f for f in findings if f[0] == "OK-accepted"]
