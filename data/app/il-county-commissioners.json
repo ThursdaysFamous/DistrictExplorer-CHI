@@ -119,6 +119,48 @@
   "structure": "Commission form — 3 commissioners elected countywide",
   "verified": "2026-08-06"
  },
+ "GREENE": {
+  "county": "Greene County",
+  "members": [
+   {
+    "email": "ecastleberry@greenecountyil.org",
+    "name": "Earlene Castleberry",
+    "phone": "217-248-9900",
+    "role": "Chairwoman"
+   },
+   {
+    "name": "Mark Strang",
+    "phone": "217-370-6830",
+    "role": "Vice Chair"
+   },
+   {
+    "email": "rhall@greenecountyil.org",
+    "name": "Robert Hall"
+   },
+   {
+    "email": "chelton@greenecountyil.org",
+    "name": "Charlie Helton"
+   },
+   {
+    "email": "dhicks@greenecountyil.org",
+    "name": "David Hicks"
+   },
+   {
+    "email": "cknox@greenecountyil.org",
+    "name": "Cary Knox"
+   },
+   {
+    "email": "jlawson@greenecountyil.org",
+    "name": "Joshua Lawson"
+   }
+  ],
+  "office": {
+   "address": "519 N. Main St., Carrollton, IL 62016",
+   "label": "Greene County Board"
+  },
+  "sourceUrl": "https://greenecountyil.org/county-board/",
+  "structure": "7 members elected countywide — no districts"
+ },
  "HAMILTON": {
   "county": "Hamilton County",
   "members": [

@@ -35,6 +35,12 @@ EXPECT_MEMBERS = {
     "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
     "SCHUYLER": 7,                   # pass-8; at-large proven from the canvass
+    "GREENE": 7,                     # 2026-08-08; at-large proven from the county's
+                                     # own OFFICIAL canvasses — "FOR COUNTY BOARD FOUR
+                                     # YEAR TERM / 22 of 22 precincts / Vote for (4)".
+                                     # The first County-card county that was ALREADY
+                                     # served (7th-Circuit subcircuit) before its board
+                                     # arrived, so it changes no ring and no anchor.
     "HAMILTON": 5,                   # pass-14; at-large stated by the Clerk, 2026-08-05
     "EDWARDS": 3,                    # pass-14; commission form stated by the Clerk,
                                      # 2026-08-06. The ONLY county here whose roster is
@@ -43,9 +49,17 @@ EXPECT_MEMBERS = {
                                      # sent (DOCUMENT_ROSTERS in the scraper), and the
                                      # scraper says so on every run.
 }
-MIN_COUNTIES = 9
-ALLOWED_ROLES = ("Chairman", "Vice Chairman", "Vice-Chairman",
-                 "Commissioner", "Board Member")
+MIN_COUNTIES = 10
+# Greene styles its chair "Chairwoman" and its deputy "Vice Chair". Both are
+# the county's own words for real people and are kept verbatim rather than
+# normalised to the -man forms, which would be a one-word misstatement.
+ALLOWED_ROLES = ("Chairman", "Chairwoman", "Vice Chairman", "Vice-Chairman",
+                 "Vice Chair", "Commissioner", "Board Member")
+# Any of these means "this person chairs the board" for the one-chair guard.
+# Matching the literal "Chairman" alone would have let Greene seat two chairs
+# without a word, which is exactly the kind of silent hole widening
+# ALLOWED_ROLES can open.
+CHAIR_ROLES = ("Chairman", "Chairwoman")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -81,7 +95,7 @@ def main():
         names = [m.get("name") for m in members]
         if len(set(names)) != len(names):
             fail("%s has duplicate member names (%s)" % (key, ", ".join(sorted(names))))
-        chairs = [m["name"] for m in members if m.get("role") == "Chairman"]
+        chairs = [m["name"] for m in members if m.get("role") in CHAIR_ROLES]
         if len(chairs) > 1:
             fail("%s marks %d chairmen (%s) — a board has one" % (key, len(chairs), ", ".join(chairs)))
         clean_members = []
