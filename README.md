@@ -16,7 +16,7 @@ Pick a point. The app runs a point-in-district lookup across every layer you hav
 
 Coverage started as the seven Chicago-metro counties and has grown to **59 counties** (as of 8 August 2026) — north to the Wisconsin line, west to the Mississippi, and south through the Metro East to the Missouri border. Growth followed county adjacency until August 2026 and now follows published data wherever it surfaces: Effingham County, the first detached addition, joined on the strength of its own GIS; Hamilton County followed a day later when its Clerk answered one email in four minutes, and stopped being detached once Jefferson County — which borders both it and the mainland — shipped. Two islands stand today (Effingham and Edwards), and one unserved county, Bureau, sits entirely surrounded by served ones. Six consolidated layers (County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct) span every county that publishes the data and pick the right county's source automatically; where a county elects its board countywide instead of by district, its commissioners appear on the County card, because there is no district to draw.
 
-Where a county publishes nothing, the app says so rather than guessing: the **Data gaps** panel lists every recorded absence — currently 116 — each naming the specific artifact its publisher would have to release.
+Where a county publishes nothing, the app says so rather than guessing: the **Data gaps** panel lists every recorded absence — currently 121 — each naming the specific artifact its publisher would have to release.
 
 | Group | Layer | What you get |
 |---|---|---|

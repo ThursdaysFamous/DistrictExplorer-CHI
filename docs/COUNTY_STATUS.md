@@ -21,12 +21,10 @@
 
 ## Served counties (59)
 
-> **5 served counties have no board layer and no gap record explaining it:** Bond, Greene, Jersey, Morgan, Scott. Every one is a judicial-circuit secondary — the subcircuit is its only county-specific card — so a reader who clicks there sees no board and no note saying why. Recording those gaps needs each county's actual board-publishing posture checked; a record written to clear this line would be the guess the gap system exists to prevent.
-
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
 | Adams | 17001 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district` | 2 — `adams-county-board-roster` (no-source); `quincy-ward-officeholders` (no-source) |
-| Bond | 17005 | judicial circuit | no board layer — **no gap record** | — | none |
+| Bond | 17005 | judicial circuit | no board layer — see gaps | — | 1 — `bond-county-board-districts` (no-source) |
 | Boone | 17007 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `boone-fire-names` (data-quality); `boone-municipal-officials` (no-source); `boone-park-library-districts` (no-source) |
 | Brown | 17009 | County card | at-large — County card | — | 1 — `brown-precinct-geometry` (no-source) |
 | Calhoun | 17013 | County card | at-large — County card | — | 1 — `calhoun-precinct-geometry` (no-source) |
@@ -39,13 +37,13 @@
 | Edwards | 17047 | County card | at-large — County card | — | 1 — `edwards-county-precincts` (no-source) |
 | Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `effingham-municipal-officials` (no-source) |
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | none |
-| Greene | 17061 | judicial circuit | no board layer — **no gap record** | — | none |
+| Greene | 17061 | judicial circuit | no board layer — see gaps | — | 1 — `greene-county-board-roster` (no-source) |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 2 — `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 2 — `hamilton-municipal-officials` (no-source); `hamilton-precinct-polling` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `henry-precinct-polling` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | none |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
-| Jersey | 17083 | judicial circuit | no board layer — **no gap record** | — | none |
+| Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 1 — `jersey-county-board-districts` (no-source) |
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
 | Kendall | 17093 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `plano-ward-officials` (no-source) |
@@ -65,7 +63,7 @@
 | Menard | 17129 | dispatch | districted | `county-board` | none |
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | none |
-| Morgan | 17137 | judicial circuit | no board layer — **no gap record** | — | none |
+| Morgan | 17137 | judicial circuit | no board layer — see gaps | — | 1 — `morgan-county-commissioners` (no-source) |
 | Ogle | 17141 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `ogle-lasalle-special-districts` (no-source); `ogle-municipal-wards` (no-source) |
 | Peoria | 17143 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `pass9-ward-seats-without-maps` (no-source); `peoria-fire-park-library-contact` (data-quality) |
 | Pike | 17149 | County card | at-large — County card | — | 1 — `pike-precinct-geometry` (no-source) |
@@ -74,7 +72,7 @@
 | Rock Island | 17161 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 2 — `county-board-office-addresses` (no-source); `sangamon-park-library-districts` (no-source) |
 | Schuyler | 17169 | County card | at-large — County card | — | none |
-| Scott | 17171 | judicial circuit | no board layer — **no gap record** | — | none |
+| Scott | 17171 | judicial circuit | no board layer — see gaps | — | 1 — `scott-county-commissioners` (no-source) |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | none |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
@@ -141,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 116 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 121 records in the Data gaps panel: `chicago-amenity-phones`.

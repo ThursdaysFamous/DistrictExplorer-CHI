@@ -470,6 +470,112 @@ COUNTIES = {
             (42.5006, -90.6646, "Dubuque — Iowa"),
         ],
     },
+    # The five judicial-circuit secondaries, added 2026-08-08 when their board
+    # research finally gave them gap records and the gaps panel needed an
+    # outline to locate each one. Every anchor below is DERIVED, not recalled:
+    # inside points are Census incorporated-place centroids tested against the
+    # county's own TIGER rings, and each outside point is the nearest place in a
+    # neighbouring county with that county resolved by point-in-polygon rather
+    # than by its name. Jersey carries four rather than six because it has four
+    # Illinois neighbours — the Mississippi and Missouri are the rest of its line.
+    "bond": {
+        "fips": "005",
+        "name": "Bond County",
+        "inside": [
+            (38.8866, -89.3895, "Greenville (county seat)"),
+            (38.8927, -89.5721, "Old Ripley"),
+            (38.7772, -89.5645, "Pierron"),
+            (38.7460, -89.2737, "Keyesport"),
+            (39.0008, -89.5748, "Sorento"),
+            (38.8234, -89.5394, "Pocahontas"),
+        ],
+        "outside": [
+            (39.0291, -89.5246, "Panama — Montgomery County"),
+            (38.9698, -89.6665, "New Douglas — Madison County"),
+            (38.6826, -89.5536, "St. Rose — Clinton County"),
+            (39.1122, -89.2137, "Bingham — Fayette County"),
+            (39.0727, -89.7278, "Mount Olive — Macoupin County"),
+            (38.7541, -89.0958, "Patoka — Marion County"),
+        ],
+    },
+    "greene": {
+        "fips": "061",
+        "name": "Greene County",
+        "inside": [
+            (39.2948, -90.4062, "Carrollton (county seat)"),
+            (39.2862, -90.5540, "Eldred"),
+            (39.1905, -90.3512, "Kane"),
+            (39.2693, -90.2066, "Rockbridge"),
+            (39.4496, -90.5386, "Hillview"),
+            (39.4807, -90.4868, "Wilmington"),
+        ],
+        "outside": [
+            (39.2971, -90.6127, "Kampsville — Calhoun County"),
+            (39.4597, -90.6237, "Pearl — Pike County"),
+            (39.5423, -90.3303, "Manchester — Scott County"),
+            (39.4777, -90.1038, "Scottville — Macoupin County"),
+            (39.1087, -90.4996, "Fieldon — Jersey County"),
+            (39.5818, -90.2518, "Murrayville — Morgan County"),
+        ],
+    },
+    "jersey": {
+        "fips": "083",
+        "name": "Jersey County",
+        "inside": [
+            (39.1175, -90.3271, "Jerseyville (county seat)"),
+            (39.1546, -90.1645, "Fidelity"),
+            (39.1087, -90.4996, "Fieldon"),
+            (39.0508, -90.3984, "Otterville"),
+            (38.9541, -90.3553, "Elsah"),
+            (38.9765, -90.4257, "Grafton"),
+        ],
+        "outside": [
+            (39.0405, -90.1409, "Brighton — Macoupin County"),
+            (39.2693, -90.2066, "Rockbridge — Greene County"),
+            (39.1591, -90.6248, "Hardin — Calhoun County"),
+            (38.9577, -90.2156, "Godfrey — Madison County"),
+        ],
+    },
+    "morgan": {
+        "fips": "137",
+        "name": "Morgan County",
+        "inside": [
+            (39.7292, -90.2317, "Jacksonville (county seat)"),
+            (39.6858, -90.3460, "Lynnville"),
+            (39.8156, -90.3704, "Concord"),
+            (39.6274, -90.2256, "Woodson"),
+            (39.5818, -90.2518, "Murrayville"),
+            (39.6205, -90.0477, "Franklin"),
+        ],
+        "outside": [
+            (39.8805, -90.3705, "Arenzville — Cass County"),
+            (39.5423, -90.3303, "Manchester — Scott County"),
+            (39.4789, -89.9803, "Modesto — Macoupin County"),
+            (39.7261, -89.9144, "New Berlin — Sangamon County"),
+            (39.8842, -90.6587, "Versailles — Brown County"),
+            (39.4841, -90.3740, "Roodhouse — Greene County"),
+        ],
+    },
+    "scott": {
+        "fips": "171",
+        "name": "Scott County",
+        "inside": [
+            (39.6298, -90.4560, "Winchester (county seat)"),
+            (39.5593, -90.4328, "Alsey"),
+            (39.7535, -90.6069, "Naples"),
+            (39.7191, -90.4960, "Exeter"),
+            (39.7493, -90.5353, "Bluffs"),
+            (39.5487, -90.4800, "Glasgow"),
+        ],
+        "outside": [
+            (39.6288, -90.6108, "Florence — Pike County"),
+            (39.7669, -90.4027, "Chapin — Morgan County"),
+            (39.4841, -90.3740, "Roodhouse — Greene County"),
+            (39.8842, -90.6587, "Versailles — Brown County"),
+            (39.8805, -90.3705, "Arenzville — Cass County"),
+            (39.4777, -90.1038, "Scottville — Macoupin County"),
+        ],
+    },
     "bureau": {
         "fips": "011",
         "name": "Bureau County",
