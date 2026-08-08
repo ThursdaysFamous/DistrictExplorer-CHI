@@ -3278,6 +3278,52 @@ roster in the fleet is guarded by row counts. None of them would notice a field 
 empty across the board. Worth a pass sometime over which fields a builder should
 refuse to lose, not merely how many rows it should refuse to lose.
 
+### 2026-08-08: the due-diligence pass over the roster builders
+
+Prompted by the Brown near-miss the same day. The question was simple — how many
+other rosters could lose a field without anything failing — and the answer was all
+of them, in the general case.
+
+**The audit.** 43 roster builders. Every one floors a COUNT. Thirty additionally
+floor one or two named fields (`MIN_EMAILS`, `MIN_PHONES`); thirteen floor none at
+all, including `build_county_commissioners.py`, which is precisely where Brown lives.
+But even the thirty are only as good as the fields someone thought to name: each
+floor is hand-set per county, and a field added next month ships unguarded by
+construction. Adding thirteen more constants would have been the obvious move and
+the wrong one.
+
+**What shipped instead: `scripts/check_roster_retention.py`.** It lives outside the
+builders and compares every `data/app` roster against the same file at the change's
+base, asking one question of each field — does it still appear on about as many
+records as before? The shipped file is the baseline, so a field is protected the
+moment it first ships, with nothing to configure and no per-county number to drift.
+161 files, every field, zero maintenance.
+
+**The subtlety that cost the first draft its first test, and the reason to write the
+test first.** The check passed the actual Brown case. Pooled across
+`il-county-commissioners.json`, seven vanished e-mails read as 40 -> 33 — an 18% dip,
+under every threshold. Ten counties share that file and each breaks on its own, so
+coverage is now measured PER TOP-LEVEL KEY as well as per file. Files pooling more
+than 200 sources (`municipal-officials.json`, ~1,500 municipalities) stay file-level,
+where per-group thresholds would fire on every village that reshuffles a page.
+A guard that has never been shown to fail is not a guard; this one now has six
+recorded cases — the real Brown shape, a per-district phone loss, a whole-file field
+loss, a record collapse, single-member turnover that must NOT fire, and a brand-new
+file that must skip.
+
+**The second question, and a clean answer.** If Cloudflare quietly emptied Brown,
+how many others were already in that state? Twenty-five scrapers read `mailto:` with
+no obfuscation awareness. Every one of their sources was fetched and counted:
+**none serves `data-cfemail`.** Brown was the only one, and it is fixed. That is a
+measurement rather than a reassurance, and it is worth re-running whenever a county's
+e-mails go missing for no visible reason.
+
+**The general shape to carry forward.** A count guard answers "did this break?" It
+cannot answer "does this still say what it said?" Any pipeline whose output is
+copied from a source it does not control needs the second question asked separately,
+and the cheapest way to ask it is to diff against the last known-good copy —
+which, in a repo, is free.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
