@@ -123,10 +123,14 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # Livingston -> McLean -> Logan -> Sangamon -> Macoupin bridge carried the
 # served area to the Metro East one contiguous county at a time precisely so
 # Madison and St. Clair were never an island. Two facts ended the rule. First,
-# the map had already stopped honouring its premise: Menard and Bureau sit fully
+# the map had already stopped honouring its premise: Menard and Bureau sat fully
 # enclosed by served counties as HOLES in this outline, because serveability
 # follows published data and data availability is not spatially contiguous — a
-# connected ring never bought a hole-free region. Second, pass 11 measured the
+# connected ring never bought a hole-free region. (Menard shipped 2026-08-07, so
+# BUREAU IS NOW THE ONLY HOLE — one interior ring, hence four rings across three
+# polygons. It is also the only unserved county with no unserved neighbour, which
+# is why its absence reads as a doughnut in the wash rather than as frontier.)
+# Second, pass 11 measured the
 # frontier as ASK-gated, not search-gated (docs/DATA_LAYER_GUIDEBOOK.md, "the
 # search lever is spent"): once the lever is a records request, restricting
 # growth to ring-adjacent counties stopped being an ordering preference and
