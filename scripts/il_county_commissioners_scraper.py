@@ -32,6 +32,7 @@ import html as html_mod
 import json
 import re
 import sys
+import time
 
 import requests
 
@@ -51,6 +52,45 @@ def text_lines(page):
     body = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", page)
     text = html_mod.unescape(re.sub(r"(?s)<[^>]+>", "\n", body))
     return [l.strip() for l in text.splitlines() if l.strip()]
+
+
+def email_in(fragment):
+    """The e-mail a fragment publishes, whether or not Cloudflare has hidden it.
+
+    Two encodings, both meaning "this address is on the page":
+
+      1. `mailto:someone@county.gov` — the plain case.
+      2. `<span class="__cf_email__" data-cfemail="79...">` — Cloudflare's
+         Email Address Obfuscation, a spam-harvester deterrent the CDN applies
+         automatically. The page's own JavaScript decodes it for every visitor,
+         so the address is published exactly as before; only its wire format
+         changed. The scheme is a one-byte XOR: the first hex byte is the key.
+
+    WHY THIS EXISTS, on the day it was added (2026-08-08): browncoil.org turned
+    the setting on at some point after Brown's roster was first built, and the
+    mailto-only reader silently returned SEVEN MEMBERS WITH NO E-MAIL. Nothing
+    would have failed — the member count guard still passed at 7 — so a
+    regenerate would have quietly deleted seven published addresses from a tool
+    whose whole job is telling people how to reach their representatives.
+    The decoder was verified before being trusted: it reproduces all seven
+    addresses already in data/app/il-county-commissioners.json exactly, which is
+    what makes this the SAME data rather than a new claim about it.
+    """
+    m = re.search(r"mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})",
+                  fragment or "")
+    if m:
+        return m.group(1).strip().lower()
+    m = re.search(r'data-cfemail="([0-9a-fA-F]{4,})"', fragment or "")
+    if not m:
+        return None
+    try:
+        raw = bytes.fromhex(m.group(1))
+    except ValueError:
+        return None
+    key, decoded = raw[0], ""
+    for byte in raw[1:]:
+        decoded += chr(byte ^ key)
+    return decoded.strip().lower() or None
 
 
 def normalize_phone(raw, keep_ext=True):
@@ -223,7 +263,12 @@ def parse_brown(page):
     ONE SOURCE TYPO TO SURVIVE: the Vice-Chairman's phone is marked up as
     `<a href="mail:2176538827">` — "mail:" where every other row has "tel:".
     Reading phones out of the href would silently drop his; the visible text is
-    read instead."""
+    read instead.
+
+    E-MAILS ARE CLOUDFLARE-OBFUSCATED as of 2026-08-08 — no mailto: survives on
+    the page — so they are read through email_in(), which handles both forms.
+    See that helper for why a plain mailto reader would have silently emptied
+    all seven rows without failing anything."""
     members = []
     for heading, body in re.findall(
             r'(?is)<span class="title-text[^"]*">(.*?)</span>.*?'
@@ -245,9 +290,9 @@ def parse_brown(page):
             phone = normalize_phone(clean(para), keep_ext=False)
             if phone:
                 entry["phone"] = phone
-            em = re.search(r"mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})", para)
+            em = email_in(para)
             if em:
-                entry["email"] = em.group(1).strip().lower()
+                entry["email"] = em
             if not any(x["name"] == name for x in members):
                 members.append(entry)
     return members, None
@@ -408,6 +453,67 @@ def parse_hamilton(page):
     return members, office
 
 
+# ------------------------------------------------------------------ Greene
+def parse_greene(page):
+    """Greene prints the whole board as ONE three-column table — Name, Email,
+    Phone — so this is the simplest parse in the file: read the rows, drop the
+    header.
+
+    THE ROLE IS APPENDED TO THE NAME, after an en dash: "Earlene Castleberry –
+    Chairwoman", "Mark Strang – Vice Chair". Split there; a row with no dash is
+    a plain member.
+
+    "CHAIRWOMAN" IS KEPT VERBATIM. Normalising it to "Chairman" would be a
+    one-word change that misstates a real person's own county's wording, and
+    this file has no business doing that — ALLOWED_ROLES was widened instead.
+    The same goes for "Vice Chair", which Greene writes without the -man.
+
+    CONTACT IS PARTIAL AND SHIPS THAT WAY: six of the seven publish a county
+    e-mail and only the two officers publish a phone — Mark Strang has a phone
+    and NO e-mail, which is why neither field may be treated as required. What
+    the county publishes is what the card shows.
+
+    AT-LARGE, PROVEN — the whole reason Greene rides the County card and has no
+    geometry. The county's own results portal (results.gbsvote.com, which names
+    Clerk Melissa Carter as Election Authority) carries the 17 Mar 2026 GENERAL
+    PRIMARY marked ** OFFICIAL RESULTS ** with the contest "FOR COUNTY BOARD
+    FOUR YEAR TERM / 22 of 22 precincts reporting / Vote for ( 4 )", and the 19
+    Mar 2024 PRIMARY, also OFFICIAL, with "FOR MEMBER OF THE COUNTY BOARD / 22
+    of 22 precincts reporting / Vote for ( 1 )". The whole county votes on every
+    seat and the word "District" appears in neither canvass. Seven seats,
+    elected in staggered groups of four and three."""
+    body = page[page.find("<body"):] or page
+    m = re.search(r"(?is)<table.*?</table>", body)
+    if not m:
+        return [], None
+    members = []
+    for row in re.findall(r"(?is)<tr[^>]*>(.*?)</tr>", m.group(0)):
+        cells = [clean(re.sub(r"<[^>]+>", " ", c))
+                 for c in re.findall(r"(?is)<t[dh][^>]*>(.*?)</t[dh]>", row)]
+        if len(cells) < 3 or cells[0].lower() == "name":
+            continue
+        # en dash, em dash or hyphen — the page uses en, the others are cheap
+        # insurance against an editor retyping the line.
+        parts = re.split(r"\s[–—-]\s", cells[0], 1)
+        name = parts[0].strip()
+        role = parts[1].strip() if len(parts) > 1 else ""
+        if not name:
+            continue
+        entry = {"name": name}
+        if role:
+            entry["role"] = role
+        email = re.search(r"[\w.+-]+@[\w.-]+\.\w+", cells[1])
+        phone = re.search(r"\b(\d{3}-\d{3}-\d{4})\b", cells[2])
+        if email:
+            entry["email"] = email.group(0).lower()
+        if phone:
+            entry["phone"] = phone.group(1)
+        members.append(entry)
+    office = {"label": "Greene County Board",
+              "address": "519 N. Main St., Carrollton, IL 62016"}
+    return members, office
+
+
 # ---------------------------------------------------------------------------
 # COUNTIES WITH NO WEBSITE TO SCRAPE.
 #
@@ -477,6 +583,13 @@ SITES = {
         "expect": 3,
         "parse": parse_randolph,
     },
+    "GREENE": {
+        "name": "Greene County",
+        "url": "https://greenecountyil.org/county-board/",
+        "structure": "7 members elected countywide — no districts",
+        "expect": 7,
+        "parse": parse_greene,
+    },
     "SCHUYLER": {
         "name": "Schuyler County",
         "url": "https://www.schuylercounty.org/county-board/county-board-members/",
@@ -526,17 +639,57 @@ SITES = {
 }
 
 
+FETCH_ATTEMPTS = 3
+
+
+def fetch(session, url):
+    """GET with a bounded retry. Returns (response, error_or_None).
+
+    WHY A RETRY EXISTS HERE (added 2026-08-08). There was none, and a single
+    flaky response zeroed a county: several of these sites sit behind
+    Cloudflare, and one bad fetch out of ten made that county parse 0 members,
+    which the builder correctly refuses to write — so the WHOLE weekly refresh
+    failed on one county's bad afternoon. Consecutive runs failed on Brown,
+    then on Calhoun, then on neither, which is the signature of flake rather
+    than of a page that changed.
+    """
+    last = None
+    for attempt in range(FETCH_ATTEMPTS):
+        try:
+            resp = session.get(url, headers=UA, timeout=60)
+            resp.raise_for_status()
+            return resp, None
+        except requests.RequestException as exc:
+            last = exc
+            if attempt + 1 < FETCH_ATTEMPTS:
+                time.sleep(2 * (attempt + 1))
+    return None, last
+
+
 def main():
     out = {}
     session = requests.Session()
     for key, spec in SITES.items():
-        try:
-            resp = session.get(spec["url"], headers=UA, timeout=60)
-            resp.raise_for_status()
-        except requests.RequestException as exc:
-            print("county-commissioners: WARN — %s unreadable (%s)" % (key, exc), file=sys.stderr)
+        resp, err = fetch(session, spec["url"])
+        if resp is None:
+            print("county-commissioners: WARN — %s unreadable after %d attempts (%s)"
+                  % (key, FETCH_ATTEMPTS, err), file=sys.stderr)
             continue
         members, office = spec["parse"](resp.text)
+        # ZERO is the flake signature, so it earns one more look: a page whose
+        # SHAPE changed usually still yields some rows, while a challenge page
+        # or a truncated response yields none. Re-fetching cannot hide a real
+        # break — if it is still zero the WARN below fires and the builder
+        # refuses to write, exactly as before.
+        if not members and spec["expect"]:
+            time.sleep(3)
+            retry, _ = fetch(session, spec["url"])
+            if retry is not None:
+                members, office = spec["parse"](retry.text)
+                if members:
+                    print("county-commissioners: %s parsed 0 on the first fetch and %d "
+                          "on a re-fetch — transient, not a page change"
+                          % (key, len(members)), file=sys.stderr)
         if len(members) != spec["expect"]:
             print("county-commissioners: WARN — %s parsed %d members, expected %d"
                   % (key, len(members), spec["expect"]), file=sys.stderr)

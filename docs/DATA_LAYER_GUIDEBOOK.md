@@ -545,19 +545,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
-      "id": "greene-county-board-roster",
-      "kind": "no-source",
-      "concept": "County board (at-large)",
-      "area": "Greene County",
-      "layer": "county-board",
-      "counties": [
-        "greene"
-      ],
-      "summary": "Greene elects its whole seven-member board countywide, so there are no districts to draw — its members simply are not on the County card yet.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN to the Schuyler standard, from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 17 Mar 2026 GENERAL PRIMARY, marked ** OFFICIAL RESULTS **, carries \"R FOR COUNTY BOARD FOUR YEAR TERM / 22 of 22 precincts reporting / Vote for ( 4 )\", and the 19 Mar 2024 PRIMARY, also OFFICIAL, carries \"FOR MEMBER OF THE COUNTY BOARD / 22 of 22 precincts reporting / Vote for ( 1 )\". The whole county votes on every seat and the word \"District\" appears nowhere in either canvass. So NO GEOMETRY SHOULD EVER BE INVENTED for Greene — this is the tranche-5 County-card path (EXPANSION_GUIDE §2.5.1), and what is missing is only the roster wiring. The roster itself is already published and easy: greenecountyil.org/county-board/ lists all seven with county e-mails and two phones — Earlene Castleberry (Chairwoman), Mark Strang (Vice Chair), Robert Hall, Charlie Helton, David Hicks, Cary Knox, Joshua Lawson.",
-      "wanted": "Nothing from the county — this one is ours to build: a SITES entry and parser in scripts/il_county_commissioners_scraper.py plus a seat count in build_county_commissioners.py, exactly as Schuyler was done, which puts all seven on the County card."
-    },
-    {
       "id": "grundy-special-districts",
       "concept": "Fire, park and library districts",
       "area": "Grundy County",
@@ -3235,12 +3222,61 @@ by point-in-polygon for outside — Jersey carries four because it has four Illi
 neighbours). The gaps panel now locates every one: a click in Carrollton or Greenville
 leads with that county's own record. Gaps 116 → 121.
 
-**What each now needs is small and different.** Greene is ours to build, not to ask —
-its seven members are already published with county e-mails, so it is a SITES entry and
-a parser away from the County card, exactly as Schuyler was. Morgan and Scott need three
+**What each now needs is small and different. GREENE IS ALREADY DONE — it shipped the
+same day**, since it needed no ask: its seven members were already published with county
+e-mails, so a SITES entry and a parser put them on the County card exactly as Schuyler's
+were. It is the first County-card county that was ALREADY SERVED before its board
+arrived, so it moved tier (judicial 5 -> 4, card 6 -> 7) without touching the ring.
+Its chair is styled **Chairwoman** and its deputy **Vice Chair**; both are kept verbatim
+and `ALLOWED_ROLES` was widened rather than normalising a real person's own county's
+wording to the -man forms — with `CHAIR_ROLES` added in the same change, because the
+one-chair guard matched the literal "Chairman" and would otherwise have let a board
+seat two chairs silently. Morgan and Scott need three
 names each from a clerk, the one-e-mail shape that closed Wabash. Bond and Jersey need
 boundaries, and both publish the member-by-district list that any submission can be
 checked against.
+
+### 2026-08-08: shipping Greene found two ways the at-large roster was failing quietly
+
+Greene itself was twenty minutes of work. Regenerating the shared roster to include
+it surfaced two faults that had nothing to do with Greene, and both were the silent
+kind.
+
+**A single flaky fetch failed the whole weekly refresh, and the county it failed on
+moved.** `il_county_commissioners_scraper.py` fetched each county once, with no retry.
+One bad response — several of these sites are Cloudflare-fronted — made that county
+parse 0 members, and `build_county_commissioners.py` then correctly refused to write
+the file, so ALL ten counties' refresh failed on one county's bad afternoon.
+Consecutive runs failed on Brown, then on Calhoun, then on neither, which is the
+signature of flake rather than of a page that changed. Now: three attempts with
+backoff, plus one extra re-fetch when a parse yields ZERO where the county expects
+members. Re-fetching cannot hide a real break — a shape change usually still yields
+some rows, and a genuine zero still WARNs and still stops the build — it only removes
+the coin-flip.
+
+**Cloudflare's e-mail obfuscation would have deleted seven published addresses with
+nothing failing.** browncoil.org turned on Email Address Obfuscation at some point
+after Brown was built: every `mailto:` became
+`<span class="__cf_email__" data-cfemail="79…">`. The parser read `mailto:` only, so
+it returned seven members and zero e-mails — and the seat-count guard, which checks
+that Brown seats SEVEN, passed happily. A regenerate would have silently dropped
+seven addresses from a tool whose entire purpose is telling residents how to reach
+their board. THE GUARD MEASURED THE WRONG THING: counting rows says nothing about
+whether the rows still carry what they carried yesterday.
+
+The fix is a shared `email_in()` that reads both encodings — the obfuscation is a
+one-byte XOR that the page's own JavaScript undoes for every visitor, so the address
+is published exactly as before and only its wire format changed. It was VERIFIED
+BEFORE IT WAS TRUSTED: the decoder reproduces all seven addresses already sitting in
+`data/app/il-county-commissioners.json`, exactly. That is what makes it the same data
+rather than a new claim about it, and it is the check to repeat if this is ever
+extended to another county.
+
+**The general lesson, worth more than either fix: a count guard protects against a
+page that BREAKS, not against a page that quietly stops saying something.** Every
+roster in the fleet is guarded by row counts. None of them would notice a field going
+empty across the board. Worth a pass sometime over which fields a builder should
+refuse to lose, not merely how many rows it should refuse to lose.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
