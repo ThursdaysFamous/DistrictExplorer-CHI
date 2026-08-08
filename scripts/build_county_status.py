@@ -240,6 +240,22 @@ def derive(consts, dispatch_tables, gaps, commissioners):
     }
 
 
+def unexplained_boards(d):
+    """Served counties with no board layer AND no gap record saying why.
+
+    The project's standing rule is that every absence is recorded; this is the
+    set that breaks it. Reported, never fatal — turning it into a CI failure
+    would block every unrelated change until someone has researched each
+    county's board-publishing posture, and a gap record invented to clear a
+    build is exactly the guess the rule exists to forbid.
+    """
+    return sorted(
+        s for s in d["served"]
+        if s not in d["atlarge"]
+        and "county-board" not in d["layers_by_county"].get(s, [])
+        and not d["gaps_by_county"].get(s))
+
+
 def render(d):
     name, fips = d["name_by_slug"], d["fips_by_slug"]
 
@@ -255,7 +271,15 @@ def render(d):
             return "at-large — County card"
         if "county-board" in d["layers_by_county"].get(slug, []):
             return "districted"
-        return "no board layer — see gaps"
+        # "see gaps" used to be the unconditional fallback, which pointed five
+        # served counties at a record that does not exist: the judicial-circuit
+        # secondaries ship a subcircuit and no board, and nothing anywhere says
+        # why. An absence with no record is the one thing this project does not
+        # allow itself, so the cell now NAMES the omission instead of implying a
+        # record is there to read.
+        if d["gaps_by_county"].get(slug):
+            return "no board layer — see gaps"
+        return "no board layer — **no gap record**"
 
     lines = [
         "# Illinois county completion status",
@@ -287,8 +311,12 @@ def render(d):
         " (`docs/EXPANSION_GUIDE.md` §2.5.1).",
         "- **Board** — how the county board surfaces: `districted` (own"
         " `county-board` dispatch entry), `at-large — County card`"
-        " (data/app/il-county-commissioners.json), or a pointer to the gap"
-        " record that says why neither ships.",
+        " (data/app/il-county-commissioners.json), or `no board layer`"
+        " for a served county whose board does not surface at all. That"
+        " last one comes in two kinds, and the difference is the point:"
+        " `see gaps` means a record says why, **`no gap record`** means"
+        " nothing does — an unexplained absence, and a debt against this"
+        " project's own rule that every absence is recorded.",
         "- **County-keyed dispatch entries** — read from index.html itself,"
         " the same scan `validate_index.py` check 8 gates on.",
         "- **Open gaps** — records from the guidebook's gaps block"
@@ -296,10 +324,30 @@ def render(d):
         " record naming several counties appears in each of their rows.",
         "- **\"Complete\"** here means: served, and `none` in the gaps column."
         " A served county with open gaps is honest-but-unfinished; what each"
-        " gap needs is the record's `wanted` line in the guidebook.",
+        " gap needs is the record's `wanted` line in the guidebook. One"
+        " exception worth naming: a row reading **`no gap record`** in the"
+        " Board column is NOT complete even though its gaps column says"
+        " `none` — nobody has measured what it is missing, which is a weaker"
+        " claim than having nothing missing.",
         "",
         "## Served counties (%d)" % len(d["served"]),
         "",
+    ]
+    unexplained = unexplained_boards(d)
+    if unexplained:
+        lines += [
+            "> **%d served counties have no board layer and no gap record"
+            " explaining it:** %s. Every one is a judicial-circuit secondary"
+            " — the subcircuit is its only county-specific card — so a reader"
+            " who clicks there sees no board and no note saying why."
+            " Recording those gaps needs each county's actual"
+            " board-publishing posture checked; a record written to clear this"
+            " line would be the guess the gap system exists to prevent."
+            % (len(unexplained),
+               ", ".join(name[s] for s in unexplained)),
+            "",
+        ]
+    lines += [
         "| County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |",
         "|---|---|---|---|---|---|",
     ]
@@ -358,11 +406,19 @@ def main():
 
     d = derive(*load_inputs())
     payload = render(d)
+    # Counted here rather than left to a reader scanning 59 table rows: a served
+    # county whose board is absent AND unexplained is a debt, and a number in
+    # every run's output is how it stays visible until it reaches zero.
+    unexplained = unexplained_boards(d)
     summary = ("%d served (%d dispatch, %d judicial, %d card), %d frontier, "
                "%d unresearched, %d gap records" % (
                    len(d["served"]), len(d["dispatch"]), len(d["judicial"]),
                    len(d["card_only"]), len(d["frontier"]),
                    len(d["unresearched"]), len(d["gaps"])))
+    if unexplained:
+        summary += ("; %d served with NO board layer and NO gap record (%s)"
+                    % (len(unexplained),
+                       ", ".join(d["name_by_slug"][s] for s in unexplained)))
 
     if args.check:
         if not os.path.exists(OUT_PATH):
