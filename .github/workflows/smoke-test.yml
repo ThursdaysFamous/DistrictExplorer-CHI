@@ -19,6 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The retention gate below reads each roster file as it stands at
+          # the base of this change, so it needs history, not a shallow tip.
+          fetch-depth: 0
 
       # Conversion 2 drift gate (docs/MECHANIZATION_PLAYBOOK.md): every
       # GENERATED region must match what metro-worksheet.json generates.
@@ -54,6 +58,23 @@ jobs:
       # runs before anything is installed.
       - name: Workflow scripts import under their declared dependencies
         run: python3 scripts/validate_workflow_deps.py
+
+      # A roster's count guard proves it still has twelve members; it proves
+      # nothing about whether those twelve still carry an e-mail. On 2026-08-08
+      # Cloudflare's e-mail obfuscation quietly emptied all seven of Brown
+      # County's addresses and every existing guard passed, because seven rows
+      # went in and seven came out. This compares each roster field against the
+      # same file at the base of the change and fails when one stops being
+      # published — including per county inside a shared file, which is where
+      # that near-miss actually lived. Stdlib only.
+      - name: Roster fields still published
+        run: |
+          BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE="$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)"
+          fi
+          echo "comparing roster fields against $BASE"
+          python3 scripts/check_roster_retention.py --base "$BASE"
 
       - uses: actions/setup-node@v4
         with:
