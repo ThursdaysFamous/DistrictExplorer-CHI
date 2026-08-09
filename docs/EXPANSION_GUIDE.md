@@ -817,9 +817,34 @@ other hosts it knows about (Morgan's named the .com), and search for the artifac
 than the county ("<county> Illinois county board district map"), which is what surfaced
 Jersey's PDF.
 
+**AND BEFORE EVEN SEARCHING, READ THE CLERK'S E-MAIL ADDRESS.** The 2026-08-09 resweep
+of the fourteen counties recorded as having no website found NINE of them, and for nine
+counties **the Clerk's e-mail domain IS the county's web domain** — a fact sitting in
+`data/app/il-county-clerks.json`, scraped weekly from ISBE, for the whole time those
+records claimed no site existed. This project was e-mailing those counties at those very
+domains on 2026-08-05 while telling readers they had none. So step zero has a step
+minus-one, and it costs one line:
+
+    domain = clerk_email.split("@")[-1]      # try https://<domain> and https://www.<domain>
+
+The name-permutation sweep failed because it permuted the COUNTY'S NAME. Counties do not
+name their domains predictably — the resweep found `gallatinCO.illinois.gov` and
+`colesCO.illinois.gov` (abbreviated), `clarkcountyil.ORG` (a TLD never tried),
+`shelbycounty-il.gov`, `whitecounty-il.gov` and `popecountyil.com` — but their CLERKS'
+addresses are already known, correct, and maintained by someone else.
+
 Verify every hit before recording it — search results carry the same decoys the rest of
-this guide warns about, and a query for Scott County's commissioners returned a Scott
-County TENNESSEE address on the first page.
+this guide warns about. The resweep alone turned up a Scott County TENNESSEE address, a
+Cumberland County MAINE site, a Crawford County *Development Association*, a Shelby
+County *real-estate agency* and a Gallatin *weather* page. Confirm a hit is the county
+government — look for the clerk, board, sheriff and treasurer — before it goes in a
+record.
+
+**"Unreachable from here" is not "does not exist."** Coles publishes two sites and both
+refuse this network; Pope's answers 503. Search engines index all three. Record the
+distinction the way the Wabash entry does — it is the one of the fourteen that was
+exactly right, because it was written from a Clerk's reply and a measurement rather than
+from a failed guess.
 
 **Never write "the county publishes no X" into a gap record, and above all never write
 it to the person who maintains the source, without having searched.** It is a claim
