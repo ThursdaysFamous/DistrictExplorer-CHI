@@ -218,6 +218,36 @@
   "sourceUrl": "https://monroecountyil.gov/departments/board-of-commissioners/",
   "structure": "Commission form — 3 commissioners elected countywide"
  },
+ "MORGAN": {
+  "county": "Morgan County",
+  "members": [
+   {
+    "email": "mwankel@morgancounty-il.com",
+    "name": "Michael Wankel",
+    "role": "Chairman",
+    "since": "December 1, 2022"
+   },
+   {
+    "email": "rwood@morgancounty-il.com",
+    "name": "Racer Wood",
+    "role": "Commissioner",
+    "since": "December 4, 2024"
+   },
+   {
+    "email": "mwoods@morgancounty-il.com",
+    "name": "Michael D. Woods",
+    "role": "Vice Chairman",
+    "since": "October 1, 2024"
+   }
+  ],
+  "office": {
+   "address": "300 West State Street, Jacksonville, IL 62650",
+   "label": "Morgan County Commissioners",
+   "phone": "217-245-4619"
+  },
+  "sourceUrl": "https://morgancounty-il.com/wp/departments/county-commissioners/",
+  "structure": "Commission form — 3 commissioners elected countywide"
+ },
  "PIKE": {
   "county": "Pike County",
   "members": [

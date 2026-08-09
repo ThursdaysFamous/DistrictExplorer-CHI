@@ -793,6 +793,63 @@ suburbs join as further `ward` entries when a polygon source appears.
 
 ## 2.5 The county-N+1 checklist (one change-set)
 
+**STEP ZERO, ADDED 2026-08-08 AFTER GETTING IT WRONG TWICE IN ONE DAY: SEARCH THE WEB
+FOR THE COUNTY BEFORE PROBING ANYTHING.** Not a hostname sweep, not the ArcGIS Online
+catalogue — an ordinary search engine query, the thing any member of the public would
+type. Both failures below were found by the operator in seconds that way, after this
+project had spent hours on careful measurement of the wrong server:
+
+- **Morgan** was recorded as publishing its commissioners "nowhere a machine can read",
+  on the strength of a thorough teardown of morgancounty-il.GOV — a client-rendered
+  React shell with an empty backend. morgancounty-il.**COM** is the county's real site
+  and publishes all three with role, party, term dates and personal e-mails. A search
+  returns it first.
+- **Jersey** was recorded as having no district boundaries at all. jerseycountyclerk-il.
+  **gov** — the CLERK's own domain, distinct from the county's — has a MAPS section
+  with a vector County Board Districts map. A search returns the PDF directly.
+
+The rule the two share: **a county is not a domain.** The clerk roster gives you where
+the CLERK is; the county may run a second site, the clerk may run their own, and `.gov`
+and `.com` can coexist with entirely different content. Enumerate the county's WEBSITES
+before concluding anything about what the county publishes. Cheap follow-ons worth
+doing in the same minute: read the strings inside a site's own JavaScript bundle for
+other hosts it knows about (Morgan's named the .com), and search for the artifact rather
+than the county ("<county> Illinois county board district map"), which is what surfaced
+Jersey's PDF.
+
+**AND BEFORE EVEN SEARCHING, READ THE CLERK'S E-MAIL ADDRESS.** The 2026-08-09 resweep
+of the fourteen counties recorded as having no website found NINE of them, and for nine
+counties **the Clerk's e-mail domain IS the county's web domain** — a fact sitting in
+`data/app/il-county-clerks.json`, scraped weekly from ISBE, for the whole time those
+records claimed no site existed. This project was e-mailing those counties at those very
+domains on 2026-08-05 while telling readers they had none. So step zero has a step
+minus-one, and it costs one line:
+
+    domain = clerk_email.split("@")[-1]      # try https://<domain> and https://www.<domain>
+
+The name-permutation sweep failed because it permuted the COUNTY'S NAME. Counties do not
+name their domains predictably — the resweep found `gallatinCO.illinois.gov` and
+`colesCO.illinois.gov` (abbreviated), `clarkcountyil.ORG` (a TLD never tried),
+`shelbycounty-il.gov`, `whitecounty-il.gov` and `popecountyil.com` — but their CLERKS'
+addresses are already known, correct, and maintained by someone else.
+
+Verify every hit before recording it — search results carry the same decoys the rest of
+this guide warns about. The resweep alone turned up a Scott County TENNESSEE address, a
+Cumberland County MAINE site, a Crawford County *Development Association*, a Shelby
+County *real-estate agency* and a Gallatin *weather* page. Confirm a hit is the county
+government — look for the clerk, board, sheriff and treasurer — before it goes in a
+record.
+
+**"Unreachable from here" is not "does not exist."** Coles publishes two sites and both
+refuse this network; Pope's answers 503. Search engines index all three. Record the
+distinction the way the Wabash entry does — it is the one of the fourteen that was
+exactly right, because it was written from a Clerk's reply and a measurement rather than
+from a failed guess.
+
+**Never write "the county publishes no X" into a gap record, and above all never write
+it to the person who maintains the source, without having searched.** It is a claim
+about the world that is very often a claim about the search.
+
 1. Coverage outline (TIGER county boundary → pre-built outline file) **and the scope
    mask in the same step**: add the county to `DISPATCH_COUNTY_FIPS` (slug → Census
    FIPS) and its FIPS to `METRO_COUNTY_FIPS` in `scripts/build_metro_outline.py`, give

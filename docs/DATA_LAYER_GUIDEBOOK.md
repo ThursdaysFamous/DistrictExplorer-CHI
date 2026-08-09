@@ -74,8 +74,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Alexander County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Alexander County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. alexandercounty.illinois.gov answers 200 and is the county's own site, with a County Board page naming Chairman Joe Griggs and Vice Chairman Bruce Sims; alexandercountyil.org, the Clerk's e-mail domain, also resolves. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -273,8 +273,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Clark County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Clark County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. clarkcountyil.org — 'The Official Website of Clark County, IL' — answers 200 with a County Board department page and a full directory. A .ORG, a TLD the probe never tried. The Clerk's own domain is a third address, clarkcounty.illinois.gov. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -312,8 +312,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Coles County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Coles County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. Coles has TWO sites, colesco.illinois.gov and www.co.coles.il.us, the second carrying a board member CONTACT page (/Board/memberContact.html) and minutes back to 2012. Both are indexed by search engines and BOTH REFUSE THIS NETWORK — a TLS reset and a 503 — so this is the blocked-not-absent distinction, and the earlier record conflated them. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -358,8 +358,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Crawford County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Crawford County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. crawfordcounty.illinois.gov answers 200 with a County Board page and a 'Board Members 2024' document; crawfordcountyil.org is a second county site. crawfordcountyil.com is a DECOY — the Crawford County Development Association, not the county. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -372,7 +372,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Cumberland County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed — cumberlandcounty.org is Cumberland County MAINE's, a decoy of the browncountyil.org kind. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed — cumberlandcounty.org is Cumberland County MAINE's, a decoy of the browncountyil.org kind. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". Re-searched 2026-08-09 and CONFIRMED: no Cumberland County Illinois site was found under any pattern, and cumberlandcounty.org is Cumberland County MAINE exactly as this record already warned. One of only two in the sweep that held up.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -540,8 +540,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Gallatin County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Gallatin County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. gallatinco.illinois.gov answers 200 and is the county's own site. Note the abbreviation: gallatinCO, not gallatincounty — the same shape as colesco.illinois.gov. gallatincounty.org is a decoy (a weather site). The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -644,9 +644,9 @@ in the researched-but-unbuilt backlog.
       "counties": [
         "jersey"
       ],
-      "summary": "Jersey publishes all twelve board members with their districts and biographies, but no district boundaries and no GIS at all.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all: Jersey is served as a 7th-Circuit secondary and its board did not surface. FORM SETTLED — DISTRICTED: jerseycounty-il.gov/county-board/ gives each member a \"Jersey County Board District N\" line, three members per district across Districts 1-4 (Crone, Grizzle, Hayes 1; Heitzig, Mills, Ward 2; Wagner as Chairman, Ontis as Vice Chair, Beasley 3; Figge, Beers, Keonig 4), with committee assignments and biographies. That is a geometry ask, not the County-card path. NO GIS EXISTS TO CHECK: gis.jerseycounty-il.gov and maps.jerseycounty-il.gov have NO DNS RECORD (resolved directly rather than inferred from a failed fetch — an egress proxy can manufacture a connection error, and DNS is the honest test), and the ArcGIS Online catalogue returns nothing county-keyed for Jersey County Illinois. NOT YET ASKED.",
-      "wanted": "The four board districts as map data, or the precincts making up each district plus precinct boundaries. The twelve-member roster with its district labels is the authority to check any submission against."
+      "summary": "Jersey publishes all twelve board members with their districts, and its Clerk publishes a district MAP — but as a PDF dated 2016, with no data behind it and no post-redistricting edition found.",
+      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all: Jersey is served as a 7th-Circuit secondary and its board did not surface. FORM SETTLED — DISTRICTED: jerseycounty-il.gov/county-board/ gives each member a \"Jersey County Board District N\" line, three members per district across Districts 1-4 (Crone, Grizzle, Hayes 1; Heitzig, Mills, Ward 2; Wagner as Chairman, Ontis as Vice Chair, Beasley 3; Figge, Beers, Keonig 4), with committee assignments and biographies. That is a geometry ask, not the County-card path. No GIS SERVICE exists: gis.jerseycounty-il.gov and maps.jerseycounty-il.gov have no DNS record (resolved directly rather than inferred from a failed fetch), and the ArcGIS Online catalogue returns nothing county-keyed. CORRECTED 2026-08-08, and the correction is the point: this record originally said Jersey publishes no district boundaries at all, which was FALSE and was written without ever running a web search. THE COUNTY CLERK HAS A SEPARATE DOMAIN — jerseycountyclerk-il.gov, never probed because the clerk roster carries jerseycounty-il.gov — with a MAPS section publishing County Board Districts, Precincts/Polling Places and School Districts. The board-districts file (/media/pdf/County_Board_Districts___County__Roads2016.pdf, 792 KB) is a genuine VECTOR map, 5,117 paths, whose legend names District 1 through District 4, matching the twelve members three-per-district. TWO THINGS STILL STAND BETWEEN THAT AND A BUILD, and neither is 'nothing exists'. Its filename and content date it to 2016 — BEFORE the post-2020 redistricting every Illinois county did in 2021 — so it may describe superseded lines, and no newer edition was found. And a first pass found no large filled paths to lift the district polygons from, so the fills may be among the page's 14 raster images rather than vectors; the Stephenson georeferencing precedent applies if they are recoverable at all.",
+      "wanted": "Whether the 2016 map on jerseycountyclerk-il.gov is still the operative one after the 2021 redistricting, and if so the GIS or CAD file behind it — the map exists, so this is a request for its data and its currency rather than for a boundary nobody has drawn. Failing that, the precincts making up each district, which the Clerk also maps."
     },
     {
       "id": "jo-daviess-county-board-districts",
@@ -670,8 +670,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Johnson County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. PARTLY ANSWERED BEFORE IT WAS ASKED: the Clerk herself wrote on 21 Jul 2026 — \"We don't have a website to point back to\" — so the probe's no-website finding is now the county's own statement. The board-form and boundary questions remain open; the pass-14 draft asks them and thanks her for the earlier reply.",
+      "summary": "Johnson County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. PARTLY ANSWERED BEFORE IT WAS ASKED: the Clerk herself wrote on 21 Jul 2026 — \"We don't have a website to point back to\" — so the probe's no-website finding is now the county's own statement. The board-form and boundary questions remain open; the pass-14 draft asks them and thanks her for the earlier reply. CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. johnsonco.illinois.gov RESOLVES, though it refuses this network (TLS reset). That sits in tension with the Clerk's written statement that the county has no website, which stands as the authority until re-asked — but the domain is live and should be re-checked from an ordinary browser before this record is trusted again. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -787,8 +787,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Lawrence County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Lawrence County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. lawrencecounty.illinois.gov answers 200 with a /boards section. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1065,19 +1065,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "A key matching Monroe's fire abbreviations to district names, or boundaries that carry the names. The shapes are already published and would be shown the day the names exist."
     },
     {
-      "id": "morgan-county-commissioners",
-      "kind": "no-source",
-      "concept": "County commissioners (at-large)",
-      "area": "Morgan County",
-      "layer": "county-board",
-      "counties": [
-        "morgan"
-      ],
-      "summary": "Morgan is a commission county — three commissioners elected countywide, no districts — and it publishes their names nowhere a machine can read.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 19 Mar 2024 PRIMARY, marked ** OFFICIAL RESULTS **, carries \"R FOR COUNTY COMMISSIONER / 27 of 27 precincts reporting / Vote for ( 1 )\" and the matching Democratic contest, and the Nov 2022 and Nov 2024 generals repeat it verbatim. Every one of the four canvasses reports ALL 27 precincts for a single seat; the only \"DISTRICT\" strings anywhere on those pages are congressional, legislative, judicial and the Waverly Fire Protection District — none attached to the commissioner contest. THE COUNTY'S OWN WEBSITE CONTRADICTS ITS OWN CANVASS, and that is the trap to record: morgancounty-il.gov ships boilerplate reading \"the county is governed by a board of commissioners elected by district\". It is CMS filler text sitting in the site's JavaScript bundle as a default template, and a certified canvass outranks it — but a future researcher reading only the website would build districts that do not exist. THE ROSTER IS THE REAL BLOCKER: the site is a client-rendered React SPA marked noindex, its Supabase backend (gcbexxxfhwixiopgudzm.supabase.co) exposes ZERO tables to the anonymous key its own app ships, and this sandbox's Chromium cannot reach the host to render it. NOT YET ASKED.",
-      "wanted": "The three commissioners' names, and ideally office phone and e-mail, from the County Clerk — the same one-e-mail ask that closed Wabash's identical shape. No geometry: the canvass has settled that there are no districts."
-    },
-    {
       "id": "morris-ward-geometry",
       "concept": "City council district",
       "area": "Morris",
@@ -1235,8 +1222,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Pope County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Pope County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. popecountyil.com resolves and answers 503 to this network; the Clerk's domain is popeco.illinois.gov. Unverified from here, but 'no website' is not the finding. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1313,8 +1300,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Richland County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Richland County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. richlandcounty.illinois.gov answers 200 with a /county-board/ page. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1339,8 +1326,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Saline County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed — salinecounty.org is Saline County ARKANSAS's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Saline County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed — salinecounty.org is Saline County ARKANSAS's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. salinecounty.illinois.gov answers 200 with a /county-board/ page. salinecountyil.com is a separate site and should be checked before use. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1365,9 +1352,9 @@ in the researched-but-unbuilt backlog.
       "counties": [
         "scott"
       ],
-      "summary": "Scott is a commission county — three commissioners elected countywide — and its own commissioners page renders their names only inside a script.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 8 Nov 2022 GENERAL ELECTION, marked ** OFFICIAL RESULTS **, carries \"FOR COUNTY COMMISSIONER / 10 of 10 precincts reporting / Vote for ( 1 )\" (John D. Simmons), and the 19 Mar 2024 PRIMARY, also OFFICIAL, repeats it for both parties (Thomas L. Peterson, Republican). The whole county votes for one seat at a time; the only \"DISTRICT\" strings on the 2022 canvass are the Fifteenth Congressional, One Hundredth Representative and Fiftieth Legislative districts. So there is no geometry to seek and none should be invented. THE ROSTER IS THE BLOCKER: scottcoil.gov/commissioners publishes the office phone (217-742-5532) and commissioners@scottcoil.gov but renders the members themselves through a Munibit \"People\" widget — its /api/public/mwjsPeople endpoint returns HTTP 500 without the parameters the page's script supplies, and the Internet Archive's 31 Mar 2026 capture preserved only the same empty shell. NOT YET ASKED.",
-      "wanted": "The three commissioners' names, and ideally which is chairman, from the County Clerk or the commissioners' office — both are published on the page that hides the names. No geometry."
+      "summary": "Scott is a commission county — three commissioners elected countywide — and while its own results name every winner, nothing confirms those three still hold the seats.",
+      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 8 Nov 2022 GENERAL ELECTION, marked ** OFFICIAL RESULTS **, carries \"FOR COUNTY COMMISSIONER / 10 of 10 precincts reporting / Vote for ( 1 )\" (John D. Simmons), and the 19 Mar 2024 PRIMARY, also OFFICIAL, repeats it for both parties (Thomas L. Peterson, Republican). The whole county votes for one seat at a time; the only \"DISTRICT\" strings on the 2022 canvass are the Fifteenth Congressional, One Hundredth Representative and Fiftieth Legislative districts. So there is no geometry to seek and none should be invented. scottcoil.gov/commissioners publishes the office phone (217-742-5532) and commissioners@scottcoil.gov but renders the members themselves through a Munibit \"People\" widget whose /api/public/mwjsPeople endpoint returns HTTP 500 without the page's own parameters, and the Internet Archive preserved the same empty shell. CORRECTED 2026-08-08, hours after this record first shipped: the claim above that the names are unreachable was WRONG, and the source that disproves it is the very one cited for the board form. The county's results portal names the winner of every commissioner contest in plain HTML — Robert L. Schafer (R) in Nov 2020 and John D. Simmons (R) in Nov 2022, both on OFFICIAL canvasses; Thomas L. Peterson (R) in Nov 2024. Three separate patterns of mine missed them, not the data: the office is headed \"FOR COUNTY COMMISSIONER\" in recent years but plain \"COUNTY COMMISSIONER\" in 2020 and abbreviated \"COUNTY COMM\" on Morgan's 2020 page, and each time the fix was in the reader. WHAT IS ACTUALLY MISSING is narrower and does not go away with better parsing: election returns record who WON a contest, never who holds the seat today. A mid-term vacancy filled by APPOINTMENT appears in no return anywhere, and the staggered six-year, one-per-general structure that turns three contests into three sitting members is an INFERENCE from the pattern, not something the county states. Publishing these three unconfirmed would be precisely the guess the honesty rules forbid, so the ask became a confirmation rather than a request for a roster. ASKED 2026-08-08: confirm those three, name the chairman, correct the term assumption.",
+      "wanted": "Confirmation that Schafer, Simmons and Peterson are the three currently serving, and which is chairman. Not a roster from scratch: a yes/no on three names the county itself published. No geometry."
     },
     {
       "id": "shelby-county-board",
@@ -1378,8 +1365,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Shelby County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Shelby was one of the two counties pass 12 pushed the frontier onto when Macon shipped; it is now researched. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
+      "summary": "Shelby County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Shelby was one of the two counties pass 12 pushed the frontier onto when Macon shipped; it is now researched. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. shelbycounty-il.gov answers 200 — 'Shelby County, Illinois - Official Website' — with /coboard.aspx (County Board Members) and /contacts.aspx (an e-mail directory for board members). shelbycountyil.com is a DECOY: a real-estate agency. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -1496,7 +1483,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Wabash County elects three commissioners at large — the Clerk confirmed it in writing — so it needs a roster, not a map; nobody publishes the three names in a form we can read.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. ONE CLUE ARRIVED BEFORE THE ASK: the Clerk's 20 Jul 2026 reply (on the seal question) refers to attesting documents \"for the Wabash County Board of Commissioners\" — commission-form language, still to be confirmed. ANSWERED 5 Aug 2026, and the clue was right: County Clerk & Recorder Janet L. Will, in writing — \"Wabash County is a commissioner form of government, not township. We have three commissioners elected at large. One commissioner is elected each General Election for a six year term.\" That is the election authority stating the form directly, which §2.5 step 2 accepts, so the geometry question is CLOSED: there are no districts to draw and none should ever be invented. What remains is smaller and different — the three commissioners' NAMES, which her reply did not include and which nothing publishes — because WABASH COUNTY HAS NO WEBSITE. That was first written here as \"the county's domain refuses connections from this project's network\", which was wrong and is corrected on measurement (5 Aug 2026): wabashcounty.illinois.gov DOES resolve — A record 157.185.73.189, reverse-DNS 157-185-73-189.clearwave.com, a southern-Illinois ISP — and it DOES carry mail (Rackspace MX, which is why the Clerk's e-mail arrives), but port 80 answers HTTP 503 Service Unavailable on every attempt, 443 resets, and www.wabashcounty.illinois.gov is NXDOMAIN. A mail domain without a web server. The distinction matters to whoever reads this next: a network-specific block (the Adams/Knox/DeKalb pattern) is worth retrying from a browser or the Archive, whereas nothing served to anyone is not — this is the JOHNSON COUNTY pattern, whose Clerk stated the same thing in her own words on 21 Jul 2026, and Wabash is now the second such county measured in this campaign. Wabash becomes a County-card county the moment a roster arrives, exactly like Monroe and Randolph. A DECOY TO NAME BEFORE IT COSTS SOMEONE THE ROSTER: searching for \"Wabash County commissioners\" surfaces www.in.gov/counties/wabash/departments/commissioners/ — which is Wabash County INDIANA, an official State of Indiana site (checked 5 Aug 2026: six mentions of Indiana, zero of Illinois). Both states have a Wabash County, named for the river that forms their shared border, so this is the easiest decoy in the file to walk into — and this record is the one place it would do real damage, because Indiana's county IS commissioner-governed with three commissioners, so its roster would look exactly right on an Illinois card. Illinois's Wabash County seats at Mount Carmel; the names must come from Clerk Will or a Mount Carmel source, never from in.gov. TWO OTHER ROUTES CHECKED AND CLOSED, 5 Aug 2026: the Secretary of State's IRAD page for Wabash (ilsos.gov/departments/archives/irad/wabash.html) is a HISTORICAL archives summary — county founded 1824, most records lost to an 1857 courthouse fire, plus statewide genealogy indexes — with nothing post-2000 and no officeholder lists; and ISBE, the source of this project's own clerk roster, publishes election results only for \"federal, statewide, legislative and judicial offices\", stating on its results page that local results are NOT reported to it. So the county clerk is not merely the easiest source for these three names, she is the only one.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. ONE CLUE ARRIVED BEFORE THE ASK: the Clerk's 20 Jul 2026 reply (on the seal question) refers to attesting documents \"for the Wabash County Board of Commissioners\" — commission-form language, still to be confirmed. ANSWERED 5 Aug 2026, and the clue was right: County Clerk & Recorder Janet L. Will, in writing — \"Wabash County is a commissioner form of government, not township. We have three commissioners elected at large. One commissioner is elected each General Election for a six year term.\" That is the election authority stating the form directly, which §2.5 step 2 accepts, so the geometry question is CLOSED: there are no districts to draw and none should ever be invented. What remains is smaller and different — the three commissioners' NAMES, which her reply did not include and which nothing publishes — because WABASH COUNTY HAS NO WEBSITE. That was first written here as \"the county's domain refuses connections from this project's network\", which was wrong and is corrected on measurement (5 Aug 2026): wabashcounty.illinois.gov DOES resolve — A record 157.185.73.189, reverse-DNS 157-185-73-189.clearwave.com, a southern-Illinois ISP — and it DOES carry mail (Rackspace MX, which is why the Clerk's e-mail arrives), but port 80 answers HTTP 503 Service Unavailable on every attempt, 443 resets, and www.wabashcounty.illinois.gov is NXDOMAIN. A mail domain without a web server. The distinction matters to whoever reads this next: a network-specific block (the Adams/Knox/DeKalb pattern) is worth retrying from a browser or the Archive, whereas nothing served to anyone is not — this is the JOHNSON COUNTY pattern, whose Clerk stated the same thing in her own words on 21 Jul 2026, and Wabash is now the second such county measured in this campaign. Wabash becomes a County-card county the moment a roster arrives, exactly like Monroe and Randolph. A DECOY TO NAME BEFORE IT COSTS SOMEONE THE ROSTER: searching for \"Wabash County commissioners\" surfaces www.in.gov/counties/wabash/departments/commissioners/ — which is Wabash County INDIANA, an official State of Indiana site (checked 5 Aug 2026: six mentions of Indiana, zero of Illinois). Both states have a Wabash County, named for the river that forms their shared border, so this is the easiest decoy in the file to walk into — and this record is the one place it would do real damage, because Indiana's county IS commissioner-governed with three commissioners, so its roster would look exactly right on an Illinois card. Illinois's Wabash County seats at Mount Carmel; the names must come from Clerk Will or a Mount Carmel source, never from in.gov. TWO OTHER ROUTES CHECKED AND CLOSED, 5 Aug 2026: the Secretary of State's IRAD page for Wabash (ilsos.gov/departments/archives/irad/wabash.html) is a HISTORICAL archives summary — county founded 1824, most records lost to an 1857 courthouse fire, plus statewide genealogy indexes — with nothing post-2000 and no officeholder lists; and ISBE, the source of this project's own clerk roster, publishes election results only for \"federal, statewide, legislative and judicial offices\", stating on its results page that local results are NOT reported to it. So the county clerk is not merely the easiest source for these three names, she is the only one. Re-checked 2026-08-09 and CONFIRMED PRECISELY: wabashcounty.illinois.gov resolves and answers HTTP 503, a mail domain with no web server, exactly as recorded. The most accurate of the fourteen — because it was measured after a Clerk's reply rather than by pattern-guessing.",
       "wanted": "Just the three commissioners' names (and contact, if published) — the form is settled and no map is needed. Asked of the Clerk 5 Aug 2026."
     },
     {
@@ -1548,8 +1535,8 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "White County's board is not shown — the pass-13 probe found no county GIS, no catalogued map data, and no county website.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. AND THE ASK CANNOT REACH THE ROSTER ADDRESS: clerk@whitecounty-il.gov — the address the weekly clerk roster ships — hard-bounced on 31 Jul 2026 after five days of retries (permanent failure). The pass-14 draft is phone-first for that reason, and the roster address needs a human check.",
+      "summary": "White County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. AND THE ASK CANNOT REACH THE ROSTER ADDRESS: clerk@whitecounty-il.gov — the address the weekly clerk roster ships — hard-bounced on 31 Jul 2026 after five days of retries (permanent failure). The pass-14 draft is phone-first for that reason, and the roster address needs a human check. CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. whitecounty-il.gov answers 200 with a /county-board page. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
@@ -3323,6 +3310,158 @@ cannot answer "does this still say what it said?" Any pipeline whose output is
 copied from a source it does not control needs the second question asked separately,
 and the cheapest way to ask it is to diff against the last known-good copy —
 which, in a repo, is free.
+
+### 2026-08-09: the resweep — nine of fourteen "no website" records were false, and the repo already held the answer
+
+Ordered after the Morgan miss: re-examine every gap record whose claim a search could
+test. Fifty-two records across 48 counties make a "publishes no X" claim; fourteen say
+flatly that no county website answered. **Nine of those fourteen have a live county
+website. A tenth and eleventh have sites that refuse this network. Two were right.**
+
+| verdict | counties |
+|---|---|
+| site found, county government confirmed | Alexander, Clark, Crawford, Gallatin, Lawrence, Richland, Saline, Shelby, White |
+| site exists, unreachable from here | Coles (two sites), Pope, Johnson |
+| correct as recorded | Cumberland (nothing found), Wabash (503, mail domain, no web server) |
+
+**The answer was in this repository the whole time.** `data/app/il-county-clerks.json`,
+scraped weekly from ISBE, carries every Clerk's e-mail — and for NINE of the fourteen the
+clerk's e-mail domain IS the county's web domain. On 2026-08-05 this project e-mailed
+these counties at `clerk@crawfordcounty.illinois.gov`, `CountyClerk@gallatinco.illinois.gov`,
+`acc@alexandercountyil.org` and eleven more, and on the same data recorded that those
+counties had no website. The probe permuted the county's NAME; the clerk's address was
+sitting one field away, correct and maintained by somebody else.
+
+Why name-permutation could never have worked: counties do not name domains predictably.
+The live set includes `gallatinCO.illinois.gov` and `colesCO.illinois.gov` (abbreviated),
+`clarkcountyil.ORG` (a TLD never tried at all), `shelbycounty-il.gov`, `whitecounty-il.gov`
+and `popecountyil.com`. Six shapes across nine counties.
+
+**It had already been caught once and not generalised.** On 2026-08-05 the Vermilion
+County Clerk replied "Yes, Vermilion County does have a website and the link is..." and
+the answer sent back said "My automated search tool looks for variations of the full
+county name, so I missed it." That was the whole diagnosis, in writing, four days before
+the resweep — applied to one county and never turned into a rule. A correction that
+stays local to the county that prompted it is a correction that will be needed again.
+
+**Decoys the resweep had to reject**, all on first pages: Scott County TENNESSEE,
+Cumberland County MAINE, a Crawford County *Development Association*, a Shelby County
+*real-estate agency*, a Gallatin *weather* site. Searching does not lower the bar for
+verifying; it raises the volume of things to verify.
+
+**And Wabash is the model.** Its record predicted the exact behaviour re-measured today —
+resolves, answers 503, mail domain with no web server — because it was written from a
+Clerk's reply plus a measurement instead of from a failed guess. The two records that
+survived the resweep are the two that were never guesses.
+
+### 2026-08-08: the county had a SECOND website, and it had everything
+
+The sequel to the record below, and the sharper version of the same lesson. Told that
+the Morgan draft claimed the names were unreachable, the reply was a URL:
+`morgancounty-il.com/wp/departments/county-commissioners/`. Plain WordPress on Apache,
+37 KB, no obfuscation, publishing all three commissioners with ROLE, PARTY, FULL TERM
+DATES, NEXT ELECTION and a personal e-mail apiece — richer than most counties in this
+fleet.
+
+**The county has two sites and this project read the wrong one.** `morgancounty-il.GOV`,
+the domain carried in the ISBE-derived clerk roster, is a client-rendered React shell
+marked noindex whose Supabase backend serves no tables. Everything written about
+Morgan — the gap record, the ask, the "publishes their names nowhere a machine can
+read" — came from measuring that shell carefully and never asking whether it was the
+whole county. **The .com host was listed in the .gov bundle's own strings**, alongside
+morgancountyil.gov, and went unfollowed.
+
+**The correction is not cosmetic: the derived roster would have named the wrong person.**
+Working from election returns gave Zeller (2020), Wankel (2022), Wood (2024). The real
+third member is **Michael D. Woods, whose term starts 1 October 2024** — a mid-term
+start, i.e. an appointment filling the 2020 seat's vacancy. That is precisely the
+failure mode the draft e-mail warned about in the abstract, and it had already happened
+in the very county being written to. Returns are a record of contests, not of who holds
+the seat; here the gap between those two things is one whole commissioner.
+
+So Morgan SHIPPED instead of being asked: gap closed, three members on the County card
+with role, term start and e-mail, no clerk's time spent. Scott was checked for the same
+trap under eight domain patterns and has none — `scottcoil.gov` really is its only site
+and its Munibit widget really is the only place its names appear, so that ask stands.
+
+**The rule this earns, stronger than the last one:** before recording that a county
+publishes nothing, enumerate the county's WEBSITES, not just its pages. A clerk-roster
+domain is where the CLERK is, not necessarily where the county is; `.gov` and `.com`
+can both exist with entirely different content; and the strings inside a site's own
+JavaScript are a free list of the other places it knows about.
+
+### 2026-08-08: "I can't read the names" was false, and the draft e-mail said it out loud
+
+Caught in review, on the Morgan and Scott asks. Both drafts cited the counties' own
+election results to prove the board form in one paragraph, then claimed two paragraphs
+later that the names were unreachable. A clerk reading that would have been entitled
+to reply with the link.
+
+**The results name every winner.** Morgan: Bradley A. Zeller (2020, OFFICIAL), Michael
+Wankel (2022), Donny "Racer" Wood (2024). Scott: Robert L. Schafer (2020, OFFICIAL),
+John D. Simmons (2022, OFFICIAL), Thomas L. Peterson (2024). Complete sets for both,
+from the same portal already cited.
+
+**Three patterns of mine missed them, and the data never moved.** The office is headed
+`FOR COUNTY COMMISSIONER` in recent cycles, plain `COUNTY COMMISSIONER` in 2020, and
+abbreviated `COUNTY COMM` on Morgan's 2020 page. Each time the first read produced
+"no contest here", and each time the fix was in the reader. A probe that reports
+absence should be suspected before the source is.
+
+**What is actually missing survives the correction, and is narrower.** Election returns
+record who WON a contest, never who holds the seat now. A mid-term vacancy filled by
+APPOINTMENT appears in no return anywhere. And the staggered six-year, one-per-general
+structure that turns three contests into three sitting members is an inference from the
+pattern, not a thing either county states. Publishing the six names on that chain would
+be exactly the guess the honesty rules forbid.
+
+So the ask changed shape rather than disappearing: from "please send me your roster" to
+"here are three names from your own results — confirm, correct, and say which chairs."
+That is a far smaller favour to ask, it shows the homework, and it is the true statement.
+Both gap records carried the same false claim and were corrected in the same change;
+they had been live for a matter of hours.
+
+**The transferable bit:** the sentence "the source doesn't publish X" is a claim about
+the source that is very often a claim about the parser. Before writing it into a gap
+record — or worse, into an e-mail to the person who maintains the source — try the
+thing a human would try, which here was reading the page.
+
+### 2026-08-09: the resweep tranche — opening state of the nine recovered counties
+
+The nine counties whose websites the resweep recovered, triaged by the only question
+that decides their path (EXPANSION_GUIDE §2.5 step 2). **None of this is proof yet** —
+every "candidate" below is the page's silence or the page's labels, and this project
+does not accept either as the form. A certified canvass or a Clerk's written statement
+settles it, and eight of the nine already have an unanswered ask sitting in the mailbox
+from 2026-08-05 asking exactly that.
+
+| county | board page shows | reading | path if confirmed |
+|---|---|---|---|
+| Crawford | Districts 1-5, 11 e-mails | DISTRICTED | geometry ask — stays a gap |
+| Richland | Districts 1-7 | DISTRICTED | geometry ask — stays a gap |
+| Shelby | Districts 1-7+, 24 e-mails, plus a board e-mail directory | DISTRICTED | geometry ask — stays a gap |
+| Lawrence | flat list, Chairman + Vice Chairman, no districts | at-large candidate | **County card — ships** |
+| Saline | flat list of 12, Chairman + Vice-Chairman, no districts | at-large candidate | **County card — ships** |
+| White | 5 members with party, Chair + Vice, no districts | at-large candidate | **County card — ships** |
+| Alexander | department pages for Chairman / Vice Chairman / Member | roster exists, structure unread | TBD |
+| Clark | landing page only; roster on a sub-page | TBD | TBD |
+| Gallatin | site flaky from here (200 once, TLS reset once) | TBD | TBD |
+
+**The important asymmetry, and the reason this tranche is smaller than it looks.** A
+recovered website does not make a county shippable. These nine are all UNSERVED, so a
+county joins only when a county-keyed layer answers in it — and for a DISTRICTED board
+with no published geometry, there is still nothing to draw. Crawford, Richland and
+Shelby therefore stay gaps; what changed is that their gaps are now well-specified
+(board page known, member counts known, contacts known) instead of "no website found".
+
+The three at-large candidates are the actual prize: an at-large board needs no geometry
+at all, so Lawrence, Saline and White could ship as County-card counties the moment
+their form is confirmed — the Greene path, which took twenty minutes.
+
+**Do not confirm the form from these pages.** Greene looked exactly like Lawrence does
+here and was only shipped after two OFFICIAL canvasses were read; Morgan's own website
+asserted a form its canvasses contradict. The 2026-08-05 asks are the cheapest route and
+are already sent; results.gbsvote.com covers some counties and is the second.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
