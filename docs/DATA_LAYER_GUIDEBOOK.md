@@ -1073,9 +1073,9 @@ in the researched-but-unbuilt backlog.
       "counties": [
         "morgan"
       ],
-      "summary": "Morgan is a commission county — three commissioners elected countywide, no districts — and it publishes their names nowhere a machine can read.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 19 Mar 2024 PRIMARY, marked ** OFFICIAL RESULTS **, carries \"R FOR COUNTY COMMISSIONER / 27 of 27 precincts reporting / Vote for ( 1 )\" and the matching Democratic contest, and the Nov 2022 and Nov 2024 generals repeat it verbatim. Every one of the four canvasses reports ALL 27 precincts for a single seat; the only \"DISTRICT\" strings anywhere on those pages are congressional, legislative, judicial and the Waverly Fire Protection District — none attached to the commissioner contest. THE COUNTY'S OWN WEBSITE CONTRADICTS ITS OWN CANVASS, and that is the trap to record: morgancounty-il.gov ships boilerplate reading \"the county is governed by a board of commissioners elected by district\". It is CMS filler text sitting in the site's JavaScript bundle as a default template, and a certified canvass outranks it — but a future researcher reading only the website would build districts that do not exist. THE ROSTER IS THE REAL BLOCKER: the site is a client-rendered React SPA marked noindex, its Supabase backend (gcbexxxfhwixiopgudzm.supabase.co) exposes ZERO tables to the anonymous key its own app ships, and this sandbox's Chromium cannot reach the host to render it. NOT YET ASKED.",
-      "wanted": "The three commissioners' names, and ideally office phone and e-mail, from the County Clerk — the same one-e-mail ask that closed Wabash's identical shape. No geometry: the canvass has settled that there are no districts."
+      "summary": "Morgan is a commission county — three commissioners elected countywide, no districts — and while its own results name every winner, nothing confirms those three still hold the seats.",
+      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 19 Mar 2024 PRIMARY, marked ** OFFICIAL RESULTS **, carries \"R FOR COUNTY COMMISSIONER / 27 of 27 precincts reporting / Vote for ( 1 )\" and the matching Democratic contest, and the Nov 2022 and Nov 2024 generals repeat it verbatim. Every one of the four canvasses reports ALL 27 precincts for a single seat; the only \"DISTRICT\" strings anywhere on those pages are congressional, legislative, judicial and the Waverly Fire Protection District — none attached to the commissioner contest. THE COUNTY'S OWN WEBSITE CONTRADICTS ITS OWN CANVASS, and that is the trap to record: morgancounty-il.gov ships boilerplate reading \"the county is governed by a board of commissioners elected by district\". It is CMS filler text sitting in the site's JavaScript bundle as a default template, and a certified canvass outranks it — but a future researcher reading only the website would build districts that do not exist. The county's own website is a client-rendered React SPA marked noindex whose Supabase backend exposes ZERO tables to the anonymous key its own app ships, so the site is not a roster source. CORRECTED 2026-08-08, hours after this record first shipped: the claim above that the names are unreachable was WRONG, and the source that disproves it is the very one cited for the board form. The county's results portal names the winner of every commissioner contest in plain HTML — Bradley A. Zeller (D) in Nov 2020, on an OFFICIAL canvass; Michael Wankel (R) in Nov 2022; Donny 'Racer' Wood (R) in Nov 2024. Three separate patterns of mine missed them, not the data: the office is headed \"FOR COUNTY COMMISSIONER\" in recent years but plain \"COUNTY COMMISSIONER\" in 2020 and abbreviated \"COUNTY COMM\" on Morgan's 2020 page, and each time the fix was in the reader. WHAT IS ACTUALLY MISSING is narrower and does not go away with better parsing: election returns record who WON a contest, never who holds the seat today. A mid-term vacancy filled by APPOINTMENT appears in no return anywhere, and the staggered six-year, one-per-general structure that turns three contests into three sitting members is an INFERENCE from the pattern, not something the county states. Publishing these three unconfirmed would be precisely the guess the honesty rules forbid, so the ask became a confirmation rather than a request for a roster. ASKED 2026-08-08: confirm those three, name the chairman, correct the term assumption.",
+      "wanted": "Confirmation that Zeller, Wankel and Wood are the three currently serving — plus which is chairman, and a correction if the six-year staggered assumption is wrong. Not a roster from scratch: a yes/no on three names the county itself published. No geometry."
     },
     {
       "id": "morris-ward-geometry",
@@ -1365,9 +1365,9 @@ in the researched-but-unbuilt backlog.
       "counties": [
         "scott"
       ],
-      "summary": "Scott is a commission county — three commissioners elected countywide — and its own commissioners page renders their names only inside a script.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 8 Nov 2022 GENERAL ELECTION, marked ** OFFICIAL RESULTS **, carries \"FOR COUNTY COMMISSIONER / 10 of 10 precincts reporting / Vote for ( 1 )\" (John D. Simmons), and the 19 Mar 2024 PRIMARY, also OFFICIAL, repeats it for both parties (Thomas L. Peterson, Republican). The whole county votes for one seat at a time; the only \"DISTRICT\" strings on the 2022 canvass are the Fifteenth Congressional, One Hundredth Representative and Fiftieth Legislative districts. So there is no geometry to seek and none should be invented. THE ROSTER IS THE BLOCKER: scottcoil.gov/commissioners publishes the office phone (217-742-5532) and commissioners@scottcoil.gov but renders the members themselves through a Munibit \"People\" widget — its /api/public/mwjsPeople endpoint returns HTTP 500 without the parameters the page's script supplies, and the Internet Archive's 31 Mar 2026 capture preserved only the same empty shell. NOT YET ASKED.",
-      "wanted": "The three commissioners' names, and ideally which is chairman, from the County Clerk or the commissioners' office — both are published on the page that hides the names. No geometry."
+      "summary": "Scott is a commission county — three commissioners elected countywide — and while its own results name every winner, nothing confirms those three still hold the seats.",
+      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 8 Nov 2022 GENERAL ELECTION, marked ** OFFICIAL RESULTS **, carries \"FOR COUNTY COMMISSIONER / 10 of 10 precincts reporting / Vote for ( 1 )\" (John D. Simmons), and the 19 Mar 2024 PRIMARY, also OFFICIAL, repeats it for both parties (Thomas L. Peterson, Republican). The whole county votes for one seat at a time; the only \"DISTRICT\" strings on the 2022 canvass are the Fifteenth Congressional, One Hundredth Representative and Fiftieth Legislative districts. So there is no geometry to seek and none should be invented. scottcoil.gov/commissioners publishes the office phone (217-742-5532) and commissioners@scottcoil.gov but renders the members themselves through a Munibit \"People\" widget whose /api/public/mwjsPeople endpoint returns HTTP 500 without the page's own parameters, and the Internet Archive preserved the same empty shell. CORRECTED 2026-08-08, hours after this record first shipped: the claim above that the names are unreachable was WRONG, and the source that disproves it is the very one cited for the board form. The county's results portal names the winner of every commissioner contest in plain HTML — Robert L. Schafer (R) in Nov 2020 and John D. Simmons (R) in Nov 2022, both on OFFICIAL canvasses; Thomas L. Peterson (R) in Nov 2024. Three separate patterns of mine missed them, not the data: the office is headed \"FOR COUNTY COMMISSIONER\" in recent years but plain \"COUNTY COMMISSIONER\" in 2020 and abbreviated \"COUNTY COMM\" on Morgan's 2020 page, and each time the fix was in the reader. WHAT IS ACTUALLY MISSING is narrower and does not go away with better parsing: election returns record who WON a contest, never who holds the seat today. A mid-term vacancy filled by APPOINTMENT appears in no return anywhere, and the staggered six-year, one-per-general structure that turns three contests into three sitting members is an INFERENCE from the pattern, not something the county states. Publishing these three unconfirmed would be precisely the guess the honesty rules forbid, so the ask became a confirmation rather than a request for a roster. ASKED 2026-08-08: confirm those three, name the chairman, correct the term assumption.",
+      "wanted": "Confirmation that Schafer, Simmons and Peterson are the three currently serving, and which is chairman. Not a roster from scratch: a yes/no on three names the county itself published. No geometry."
     },
     {
       "id": "shelby-county-board",
@@ -3323,6 +3323,42 @@ cannot answer "does this still say what it said?" Any pipeline whose output is
 copied from a source it does not control needs the second question asked separately,
 and the cheapest way to ask it is to diff against the last known-good copy —
 which, in a repo, is free.
+
+### 2026-08-08: "I can't read the names" was false, and the draft e-mail said it out loud
+
+Caught in review, on the Morgan and Scott asks. Both drafts cited the counties' own
+election results to prove the board form in one paragraph, then claimed two paragraphs
+later that the names were unreachable. A clerk reading that would have been entitled
+to reply with the link.
+
+**The results name every winner.** Morgan: Bradley A. Zeller (2020, OFFICIAL), Michael
+Wankel (2022), Donny "Racer" Wood (2024). Scott: Robert L. Schafer (2020, OFFICIAL),
+John D. Simmons (2022, OFFICIAL), Thomas L. Peterson (2024). Complete sets for both,
+from the same portal already cited.
+
+**Three patterns of mine missed them, and the data never moved.** The office is headed
+`FOR COUNTY COMMISSIONER` in recent cycles, plain `COUNTY COMMISSIONER` in 2020, and
+abbreviated `COUNTY COMM` on Morgan's 2020 page. Each time the first read produced
+"no contest here", and each time the fix was in the reader. A probe that reports
+absence should be suspected before the source is.
+
+**What is actually missing survives the correction, and is narrower.** Election returns
+record who WON a contest, never who holds the seat now. A mid-term vacancy filled by
+APPOINTMENT appears in no return anywhere. And the staggered six-year, one-per-general
+structure that turns three contests into three sitting members is an inference from the
+pattern, not a thing either county states. Publishing the six names on that chain would
+be exactly the guess the honesty rules forbid.
+
+So the ask changed shape rather than disappearing: from "please send me your roster" to
+"here are three names from your own results — confirm, correct, and say which chairs."
+That is a far smaller favour to ask, it shows the homework, and it is the true statement.
+Both gap records carried the same false claim and were corrected in the same change;
+they had been live for a matter of hours.
+
+**The transferable bit:** the sentence "the source doesn't publish X" is a claim about
+the source that is very often a claim about the parser. Before writing it into a gap
+record — or worse, into an e-mail to the person who maintains the source — try the
+thing a human would try, which here was reading the page.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
