@@ -3426,6 +3426,43 @@ the source that is very often a claim about the parser. Before writing it into a
 record — or worse, into an e-mail to the person who maintains the source — try the
 thing a human would try, which here was reading the page.
 
+### 2026-08-09: the resweep tranche — opening state of the nine recovered counties
+
+The nine counties whose websites the resweep recovered, triaged by the only question
+that decides their path (EXPANSION_GUIDE §2.5 step 2). **None of this is proof yet** —
+every "candidate" below is the page's silence or the page's labels, and this project
+does not accept either as the form. A certified canvass or a Clerk's written statement
+settles it, and eight of the nine already have an unanswered ask sitting in the mailbox
+from 2026-08-05 asking exactly that.
+
+| county | board page shows | reading | path if confirmed |
+|---|---|---|---|
+| Crawford | Districts 1-5, 11 e-mails | DISTRICTED | geometry ask — stays a gap |
+| Richland | Districts 1-7 | DISTRICTED | geometry ask — stays a gap |
+| Shelby | Districts 1-7+, 24 e-mails, plus a board e-mail directory | DISTRICTED | geometry ask — stays a gap |
+| Lawrence | flat list, Chairman + Vice Chairman, no districts | at-large candidate | **County card — ships** |
+| Saline | flat list of 12, Chairman + Vice-Chairman, no districts | at-large candidate | **County card — ships** |
+| White | 5 members with party, Chair + Vice, no districts | at-large candidate | **County card — ships** |
+| Alexander | department pages for Chairman / Vice Chairman / Member | roster exists, structure unread | TBD |
+| Clark | landing page only; roster on a sub-page | TBD | TBD |
+| Gallatin | site flaky from here (200 once, TLS reset once) | TBD | TBD |
+
+**The important asymmetry, and the reason this tranche is smaller than it looks.** A
+recovered website does not make a county shippable. These nine are all UNSERVED, so a
+county joins only when a county-keyed layer answers in it — and for a DISTRICTED board
+with no published geometry, there is still nothing to draw. Crawford, Richland and
+Shelby therefore stay gaps; what changed is that their gaps are now well-specified
+(board page known, member counts known, contacts known) instead of "no website found".
+
+The three at-large candidates are the actual prize: an at-large board needs no geometry
+at all, so Lawrence, Saline and White could ship as County-card counties the moment
+their form is confirmed — the Greene path, which took twenty minutes.
+
+**Do not confirm the form from these pages.** Greene looked exactly like Lawrence does
+here and was only shipped after two OFFICIAL canvasses were read; Morgan's own website
+asserted a form its canvasses contradict. The 2026-08-05 asks are the cheapest route and
+are already sent; results.gbsvote.com covers some counties and is the second.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
