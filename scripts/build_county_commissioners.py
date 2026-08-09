@@ -42,6 +42,12 @@ EXPECT_MEMBERS = {
                                      # served (7th-Circuit subcircuit) before its board
                                      # arrived, so it changes no ring and no anchor.
     "HAMILTON": 5,                   # pass-14; at-large stated by the Clerk, 2026-08-05
+    "MORGAN": 3,                     # 2026-08-08; commission form proven from the
+                                     # county's OFFICIAL canvasses. Its roster comes from
+                                     # morgancounty-il.COM — the .GOV is a content-free
+                                     # React shell, and mistaking one for the other cost
+                                     # this project a wrong gap record and nearly a wrong
+                                     # e-mail to the Clerk.
     "EDWARDS": 3,                    # pass-14; commission form stated by the Clerk,
                                      # 2026-08-06. The ONLY county here whose roster is
                                      # not scraped from a page — Edwards has no website at
@@ -49,7 +55,7 @@ EXPECT_MEMBERS = {
                                      # sent (DOCUMENT_ROSTERS in the scraper), and the
                                      # scraper says so on every run.
 }
-MIN_COUNTIES = 10
+MIN_COUNTIES = 11
 # Greene styles its chair "Chairwoman" and its deputy "Vice Chair". Both are
 # the county's own words for real people and are kept verbatim rather than
 # normalised to the -man forms, which would be a one-word misstatement.

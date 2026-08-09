@@ -54,10 +54,15 @@ def text_lines(page):
     return [l.strip() for l in text.splitlines() if l.strip()]
 
 
-def email_in(fragment):
+def email_in(fragment, allow_bare=False):
     """The e-mail a fragment publishes, whether or not Cloudflare has hidden it.
 
-    Two encodings, both meaning "this address is on the page":
+    Three encodings, all meaning "this address is on the page". The third is
+    OPT-IN (`allow_bare`) because a naked address pattern will happily match a
+    webmaster or vendor address sitting in a footer; a caller passes it only
+    when the fragment is already narrowed to one person's block. Morgan is the
+    first county to need it — it prints "Email: mwankel@morgancounty-il.com" as
+    text, with no link at all.
 
       1. `mailto:someone@county.gov` — the plain case.
       2. `<span class="__cf_email__" data-cfemail="79...">` — Cloudflare's
@@ -82,6 +87,10 @@ def email_in(fragment):
         return m.group(1).strip().lower()
     m = re.search(r'data-cfemail="([0-9a-fA-F]{4,})"', fragment or "")
     if not m:
+        if allow_bare:
+            bare = re.search(r"(?<![\w.+-])([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})",
+                             clean(fragment or ""))
+            return bare.group(1).strip().lower() if bare else None
         return None
     try:
         raw = bytes.fromhex(m.group(1))
@@ -453,6 +462,81 @@ def parse_hamilton(page):
     return members, office
 
 
+# ------------------------------------------------------------------ Morgan
+def parse_morgan(page):
+    """Morgan's commissioners page is plain server-rendered WordPress, one
+    paragraph per member:
+
+        <p><p>Chairman &#8211; Michael Wankel, <i>Republican</i><br />
+        Current Term: December 1, 2022 to November 30, 2028<br />
+        Next election: November, 2028</p>
+         Email: mwankel@morgancounty-il.com</p>
+
+    THE COUNTY HAS TWO WEBSITES, and this project spent a day on the wrong one.
+    morgancounty-il.GOV is a client-rendered React SPA marked noindex whose
+    Supabase backend serves no tables — from which it was concluded, and
+    written into a gap record and very nearly into an e-mail to the County
+    Clerk, that Morgan "publishes their names nowhere a machine can read".
+    morgancounty-il.COM, the county's real content site, publishes all three
+    with role, party, full term dates, next election and a personal e-mail
+    apiece — more than most counties in this fleet manage. The .com host was
+    even listed in the .gov bundle's own strings and went unfollowed. When a
+    county's site looks impossible, look for the other one.
+
+    THE TERM START IS WHY THIS MATTERS BEYOND CONVENIENCE. Michael D. Woods's
+    term runs from OCTOBER 1, 2024 — a mid-term start, i.e. an appointment
+    filling the vacancy left by the commissioner elected in 2020. Election
+    returns show that 2020 contest going to Bradley A. Zeller, and an
+    appointment appears in no return anywhere, so a roster derived from
+    canvasses would have named the wrong person with perfect arithmetic. The
+    start date ships as `since` for exactly that reason.
+
+    AT-LARGE, PROVEN independently of this page: the county's own results
+    portal (results.gbsvote.com, l_id=16) carries "FOR COUNTY COMMISSIONER /
+    27 of 27 precincts reporting / Vote for ( 1 )" on the 19 Mar 2024 primary
+    marked ** OFFICIAL RESULTS **, repeated in the 2022 and 2024 generals.
+    Three commissioners, whole county, no districts."""
+    entry = re.search(r"(?is)<section class=\"entry\">(.*?)</section>", page)
+    body = entry.group(1) if entry else page
+    members = []
+    for block in re.split(r"(?i)<hr\s*/?>", body):
+        m = re.search(r"(?is)<p>\s*(?:<p>)?\s*([A-Za-z ]{4,20}?)\s*(?:&#8211;|&ndash;|[-\u2013\u2014])\s*"
+                      r"([^,<]{3,60}?)\s*,\s*<i>\s*([A-Za-z]+)\s*</i>", block)
+        if not m:
+            continue
+        role, name = clean(m.group(1)), clean(m.group(2))
+        if not name:
+            continue
+        entry_obj = {"name": name}
+        canonical = role_of(role)
+        # role_of maps "Vice Chairman" and "Chairman"; a plain "Commissioner"
+        # row keeps that word, which is what the county calls the seat.
+        if canonical:
+            entry_obj["role"] = canonical
+        flat = clean(block)
+        since = re.search(r"Current Term:\s*([A-Z][a-z]+ \d{1,2}, \d{4})", flat)
+        if since:
+            entry_obj["since"] = since.group(1)
+        # allow_bare: the address is printed as text, not linked, and `block`
+        # is already one member's paragraph.
+        email = email_in(block, allow_bare=True)
+        if email:
+            entry_obj["email"] = email
+        if not any(x["name"] == name for x in members):
+            members.append(entry_obj)
+
+    office = None
+    side = re.search(r"(?is)<div class=\"text-block commissioners-contact\">(.*?)</div>", page)
+    if side:
+        lines = [clean(l) for l in re.split(r"(?i)<br\s*/?>|</p>", side.group(1))]
+        lines = [l for l in lines if l]
+        addr = [l for l in lines if re.search(r"\d+\s+\w|,\s*IL\s*\d{5}", l)]
+        office = {"label": "Morgan County Commissioners",
+                  "address": ", ".join(addr[:2]) if addr else None,
+                  "phone": normalize_phone(" ".join(lines))}
+    return members, office
+
+
 # ------------------------------------------------------------------ Greene
 def parse_greene(page):
     """Greene prints the whole board as ONE three-column table — Name, Email,
@@ -589,6 +673,15 @@ SITES = {
         "structure": "7 members elected countywide — no districts",
         "expect": 7,
         "parse": parse_greene,
+    },
+    "MORGAN": {
+        "name": "Morgan County",
+        # The .COM is the county's real content site; the .GOV is a
+        # client-rendered shell that publishes no roster. See parse_morgan.
+        "url": "https://morgancounty-il.com/wp/departments/county-commissioners/",
+        "structure": "Commission form — 3 commissioners elected countywide",
+        "expect": 3,
+        "parse": parse_morgan,
     },
     "SCHUYLER": {
         "name": "Schuyler County",

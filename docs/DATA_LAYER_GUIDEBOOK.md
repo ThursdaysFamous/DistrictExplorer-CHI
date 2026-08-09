@@ -644,9 +644,9 @@ in the researched-but-unbuilt backlog.
       "counties": [
         "jersey"
       ],
-      "summary": "Jersey publishes all twelve board members with their districts and biographies, but no district boundaries and no GIS at all.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all: Jersey is served as a 7th-Circuit secondary and its board did not surface. FORM SETTLED — DISTRICTED: jerseycounty-il.gov/county-board/ gives each member a \"Jersey County Board District N\" line, three members per district across Districts 1-4 (Crone, Grizzle, Hayes 1; Heitzig, Mills, Ward 2; Wagner as Chairman, Ontis as Vice Chair, Beasley 3; Figge, Beers, Keonig 4), with committee assignments and biographies. That is a geometry ask, not the County-card path. NO GIS EXISTS TO CHECK: gis.jerseycounty-il.gov and maps.jerseycounty-il.gov have NO DNS RECORD (resolved directly rather than inferred from a failed fetch — an egress proxy can manufacture a connection error, and DNS is the honest test), and the ArcGIS Online catalogue returns nothing county-keyed for Jersey County Illinois. NOT YET ASKED.",
-      "wanted": "The four board districts as map data, or the precincts making up each district plus precinct boundaries. The twelve-member roster with its district labels is the authority to check any submission against."
+      "summary": "Jersey publishes all twelve board members with their districts, and its Clerk publishes a district MAP — but as a PDF dated 2016, with no data behind it and no post-redistricting edition found.",
+      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all: Jersey is served as a 7th-Circuit secondary and its board did not surface. FORM SETTLED — DISTRICTED: jerseycounty-il.gov/county-board/ gives each member a \"Jersey County Board District N\" line, three members per district across Districts 1-4 (Crone, Grizzle, Hayes 1; Heitzig, Mills, Ward 2; Wagner as Chairman, Ontis as Vice Chair, Beasley 3; Figge, Beers, Keonig 4), with committee assignments and biographies. That is a geometry ask, not the County-card path. No GIS SERVICE exists: gis.jerseycounty-il.gov and maps.jerseycounty-il.gov have no DNS record (resolved directly rather than inferred from a failed fetch), and the ArcGIS Online catalogue returns nothing county-keyed. CORRECTED 2026-08-08, and the correction is the point: this record originally said Jersey publishes no district boundaries at all, which was FALSE and was written without ever running a web search. THE COUNTY CLERK HAS A SEPARATE DOMAIN — jerseycountyclerk-il.gov, never probed because the clerk roster carries jerseycounty-il.gov — with a MAPS section publishing County Board Districts, Precincts/Polling Places and School Districts. The board-districts file (/media/pdf/County_Board_Districts___County__Roads2016.pdf, 792 KB) is a genuine VECTOR map, 5,117 paths, whose legend names District 1 through District 4, matching the twelve members three-per-district. TWO THINGS STILL STAND BETWEEN THAT AND A BUILD, and neither is 'nothing exists'. Its filename and content date it to 2016 — BEFORE the post-2020 redistricting every Illinois county did in 2021 — so it may describe superseded lines, and no newer edition was found. And a first pass found no large filled paths to lift the district polygons from, so the fills may be among the page's 14 raster images rather than vectors; the Stephenson georeferencing precedent applies if they are recoverable at all.",
+      "wanted": "Whether the 2016 map on jerseycountyclerk-il.gov is still the operative one after the 2021 redistricting, and if so the GIS or CAD file behind it — the map exists, so this is a request for its data and its currency rather than for a boundary nobody has drawn. Failing that, the precincts making up each district, which the Clerk also maps."
     },
     {
       "id": "jo-daviess-county-board-districts",
@@ -1063,19 +1063,6 @@ in the researched-but-unbuilt backlog.
       "summary": "Monroe's fire districts are labelled only by abbreviation — NAVFD, MVFD, PDRVFD — and nothing published spells them out.",
       "blocker": "Checked 2 Aug 2026, when the county was added: the county's fire data carries 26 shapes labelled with a three-to-six letter abbreviation plus a zone number, so the 26 are zone fragments of a smaller number of departments. No key exists on the county's mapping, its website or the fire districts' own pages, and the “VFD” ending plus the zone column suggest these are response areas rather than the taxing districts. A card reading “MVFD” tells a reader nothing they can act on, and guessing which of several similarly-initialled districts it is would be worse.",
       "wanted": "A key matching Monroe's fire abbreviations to district names, or boundaries that carry the names. The shapes are already published and would be shown the day the names exist."
-    },
-    {
-      "id": "morgan-county-commissioners",
-      "kind": "no-source",
-      "concept": "County commissioners (at-large)",
-      "area": "Morgan County",
-      "layer": "county-board",
-      "counties": [
-        "morgan"
-      ],
-      "summary": "Morgan is a commission county — three commissioners elected countywide, no districts — and while its own results name every winner, nothing confirms those three still hold the seats.",
-      "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 19 Mar 2024 PRIMARY, marked ** OFFICIAL RESULTS **, carries \"R FOR COUNTY COMMISSIONER / 27 of 27 precincts reporting / Vote for ( 1 )\" and the matching Democratic contest, and the Nov 2022 and Nov 2024 generals repeat it verbatim. Every one of the four canvasses reports ALL 27 precincts for a single seat; the only \"DISTRICT\" strings anywhere on those pages are congressional, legislative, judicial and the Waverly Fire Protection District — none attached to the commissioner contest. THE COUNTY'S OWN WEBSITE CONTRADICTS ITS OWN CANVASS, and that is the trap to record: morgancounty-il.gov ships boilerplate reading \"the county is governed by a board of commissioners elected by district\". It is CMS filler text sitting in the site's JavaScript bundle as a default template, and a certified canvass outranks it — but a future researcher reading only the website would build districts that do not exist. The county's own website is a client-rendered React SPA marked noindex whose Supabase backend exposes ZERO tables to the anonymous key its own app ships, so the site is not a roster source. CORRECTED 2026-08-08, hours after this record first shipped: the claim above that the names are unreachable was WRONG, and the source that disproves it is the very one cited for the board form. The county's results portal names the winner of every commissioner contest in plain HTML — Bradley A. Zeller (D) in Nov 2020, on an OFFICIAL canvass; Michael Wankel (R) in Nov 2022; Donny 'Racer' Wood (R) in Nov 2024. Three separate patterns of mine missed them, not the data: the office is headed \"FOR COUNTY COMMISSIONER\" in recent years but plain \"COUNTY COMMISSIONER\" in 2020 and abbreviated \"COUNTY COMM\" on Morgan's 2020 page, and each time the fix was in the reader. WHAT IS ACTUALLY MISSING is narrower and does not go away with better parsing: election returns record who WON a contest, never who holds the seat today. A mid-term vacancy filled by APPOINTMENT appears in no return anywhere, and the staggered six-year, one-per-general structure that turns three contests into three sitting members is an INFERENCE from the pattern, not something the county states. Publishing these three unconfirmed would be precisely the guess the honesty rules forbid, so the ask became a confirmation rather than a request for a roster. ASKED 2026-08-08: confirm those three, name the chairman, correct the term assumption.",
-      "wanted": "Confirmation that Zeller, Wankel and Wood are the three currently serving — plus which is chairman, and a correction if the six-year staggered assumption is wrong. Not a roster from scratch: a yes/no on three names the county itself published. No geometry."
     },
     {
       "id": "morris-ward-geometry",
@@ -3323,6 +3310,42 @@ cannot answer "does this still say what it said?" Any pipeline whose output is
 copied from a source it does not control needs the second question asked separately,
 and the cheapest way to ask it is to diff against the last known-good copy —
 which, in a repo, is free.
+
+### 2026-08-08: the county had a SECOND website, and it had everything
+
+The sequel to the record below, and the sharper version of the same lesson. Told that
+the Morgan draft claimed the names were unreachable, the reply was a URL:
+`morgancounty-il.com/wp/departments/county-commissioners/`. Plain WordPress on Apache,
+37 KB, no obfuscation, publishing all three commissioners with ROLE, PARTY, FULL TERM
+DATES, NEXT ELECTION and a personal e-mail apiece — richer than most counties in this
+fleet.
+
+**The county has two sites and this project read the wrong one.** `morgancounty-il.GOV`,
+the domain carried in the ISBE-derived clerk roster, is a client-rendered React shell
+marked noindex whose Supabase backend serves no tables. Everything written about
+Morgan — the gap record, the ask, the "publishes their names nowhere a machine can
+read" — came from measuring that shell carefully and never asking whether it was the
+whole county. **The .com host was listed in the .gov bundle's own strings**, alongside
+morgancountyil.gov, and went unfollowed.
+
+**The correction is not cosmetic: the derived roster would have named the wrong person.**
+Working from election returns gave Zeller (2020), Wankel (2022), Wood (2024). The real
+third member is **Michael D. Woods, whose term starts 1 October 2024** — a mid-term
+start, i.e. an appointment filling the 2020 seat's vacancy. That is precisely the
+failure mode the draft e-mail warned about in the abstract, and it had already happened
+in the very county being written to. Returns are a record of contests, not of who holds
+the seat; here the gap between those two things is one whole commissioner.
+
+So Morgan SHIPPED instead of being asked: gap closed, three members on the County card
+with role, term start and e-mail, no clerk's time spent. Scott was checked for the same
+trap under eight domain patterns and has none — `scottcoil.gov` really is its only site
+and its Munibit widget really is the only place its names appear, so that ask stands.
+
+**The rule this earns, stronger than the last one:** before recording that a county
+publishes nothing, enumerate the county's WEBSITES, not just its pages. A clerk-roster
+domain is where the CLERK is, not necessarily where the county is; `.gov` and `.com`
+can both exist with entirely different content; and the strings inside a site's own
+JavaScript are a free list of the other places it knows about.
 
 ### 2026-08-08: "I can't read the names" was false, and the draft e-mail said it out loud
 

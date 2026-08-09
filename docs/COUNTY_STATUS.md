@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**59 of 102 Illinois counties are served** — 48 through their own dispatch entries, 4 through a shipped judicial circuit, and 7 through the County card alone. 43 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**59 of 102 Illinois counties are served** — 48 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 43 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -63,7 +63,7 @@
 | Menard | 17129 | dispatch | districted | `county-board` | none |
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | none |
-| Morgan | 17137 | judicial circuit | no board layer — see gaps | — | 1 — `morgan-county-commissioners` (no-source) |
+| Morgan | 17137 | County card | at-large — County card | — | none |
 | Ogle | 17141 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `ogle-lasalle-special-districts` (no-source); `ogle-municipal-wards` (no-source) |
 | Peoria | 17143 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `pass9-ward-seats-without-maps` (no-source); `peoria-fire-park-library-contact` (data-quality) |
 | Pike | 17149 | County card | at-large — County card | — | 1 — `pike-precinct-geometry` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 120 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 119 records in the Data gaps panel: `chicago-amenity-phones`.

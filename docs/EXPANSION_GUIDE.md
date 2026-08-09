@@ -793,6 +793,38 @@ suburbs join as further `ward` entries when a polygon source appears.
 
 ## 2.5 The county-N+1 checklist (one change-set)
 
+**STEP ZERO, ADDED 2026-08-08 AFTER GETTING IT WRONG TWICE IN ONE DAY: SEARCH THE WEB
+FOR THE COUNTY BEFORE PROBING ANYTHING.** Not a hostname sweep, not the ArcGIS Online
+catalogue — an ordinary search engine query, the thing any member of the public would
+type. Both failures below were found by the operator in seconds that way, after this
+project had spent hours on careful measurement of the wrong server:
+
+- **Morgan** was recorded as publishing its commissioners "nowhere a machine can read",
+  on the strength of a thorough teardown of morgancounty-il.GOV — a client-rendered
+  React shell with an empty backend. morgancounty-il.**COM** is the county's real site
+  and publishes all three with role, party, term dates and personal e-mails. A search
+  returns it first.
+- **Jersey** was recorded as having no district boundaries at all. jerseycountyclerk-il.
+  **gov** — the CLERK's own domain, distinct from the county's — has a MAPS section
+  with a vector County Board Districts map. A search returns the PDF directly.
+
+The rule the two share: **a county is not a domain.** The clerk roster gives you where
+the CLERK is; the county may run a second site, the clerk may run their own, and `.gov`
+and `.com` can coexist with entirely different content. Enumerate the county's WEBSITES
+before concluding anything about what the county publishes. Cheap follow-ons worth
+doing in the same minute: read the strings inside a site's own JavaScript bundle for
+other hosts it knows about (Morgan's named the .com), and search for the artifact rather
+than the county ("<county> Illinois county board district map"), which is what surfaced
+Jersey's PDF.
+
+Verify every hit before recording it — search results carry the same decoys the rest of
+this guide warns about, and a query for Scott County's commissioners returned a Scott
+County TENNESSEE address on the first page.
+
+**Never write "the county publishes no X" into a gap record, and above all never write
+it to the person who maintains the source, without having searched.** It is a claim
+about the world that is very often a claim about the search.
+
 1. Coverage outline (TIGER county boundary → pre-built outline file) **and the scope
    mask in the same step**: add the county to `DISPATCH_COUNTY_FIPS` (slug → Census
    FIPS) and its FIPS to `METRO_COUNTY_FIPS` in `scripts/build_metro_outline.py`, give
