@@ -229,6 +229,20 @@ MIN_COVERAGE_REPAIRED = 99.9       # what the repair must achieve (99.975)
 # simplify the SAME linework with the same tolerance and Douglas-Peucker is
 # deterministic. It reopens 0.025% of the county — one click in 4,000, against
 # one in 127 before any of this — and that residue is asserted, not hoped for.
+# THAT CLAIM ABOUT SHARED EDGES IS WRONG, corrected 2026-08-10. Douglas-Peucker
+# is deterministic on identical INPUT, and two neighbouring rings are not
+# identical input: they share a sub-path but differ everywhere else, and which
+# vertices DP keeps along the shared part depends on the whole ring. So shared
+# edges DO diverge here, by up to a tolerance or two, and that — not some
+# unavoidable rounding — is what the 0.025% below actually is. It is invisible in
+# this layer, because a hairline between two precincts draws as nothing, and it
+# was invisible in review for four days; it became glaring when these precincts
+# were dissolved into board districts, where a reopened crack is an interior ring
+# and an interior ring is stroked. See "WHY THE DISSOLVE IS REPAIRED" in
+# build_jefferson_board_districts.py, which repairs it there rather than here:
+# this file's residue is measured, asserted, byte-stable and now checked against
+# the county's published legal descriptions, and re-cutting it to fix a rendering
+# problem one layer downstream would trade a verified file for an unverified one.
 SIMPLIFY_TOLERANCE_M = 10.0
 MAX_PAIR_OVERLAP = 0.05            # percent of county area
 # The repair's own ceiling. Jefferson needs 118 m; a future export needing much
