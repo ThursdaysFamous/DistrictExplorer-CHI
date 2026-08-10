@@ -70,6 +70,42 @@ the cut is made at its longitude:
     the coarser alternative — its split precincts ship wholly on their majority
     side with the card saying so — and this is strictly better than that.
 
+WHY THE DISSOLVE IS REPAIRED, added 2026-08-10 after a reader reported "strange
+artifacts" in these boundaries. They were real, and a plain unary_union of the
+precincts could not have avoided them:
+
+  * 108 SLIVER HOLES. The worst was 7,545 m long and 124 m wide, sitting inside
+    District 8; District 7 had 64 of them along one township line. A hole is
+    STROKED, so each one drew a dark line across the middle of a filled
+    district — which is exactly what the reader saw.
+  * FIVE SPURIOUS PARTS. District 7 rendered as two disconnected blocks and
+    District 5 as two more, because a crack ran the full width between two of
+    their own precincts. Four others carried 20–1,850 m2 specks of dust that
+    drew as detached dots.
+  * 28 OVERLAPPING PAIRS, the worst 33,126 m2, because the county's own
+    precincts overlap each other and dissolving pooled those overlaps.
+
+THE CAUSE IS ONE STEP UPSTREAM, and it is worth naming because the docstring of
+build_jefferson_precincts.py gets it wrong. That builder repairs the county's
+unmatched precinct edges and then simplifies each precinct at 10 m, claiming "a
+shared edge stays shared because both neighbours simplify the SAME linework with
+the same tolerance and Douglas-Peucker is deterministic". DP is deterministic on
+identical INPUT, and two neighbouring rings are not identical input: they share a
+sub-path but differ everywhere else, and which vertices DP keeps on that shared
+sub-path depends on the whole ring. So shared edges diverge by up to a tolerance
+or two, which is precisely the 0.025% of the county that file reports as
+reopened. Invisible in the precinct layer — a hairline between two precincts
+draws as nothing — and glaring once precincts are merged into districts.
+
+The precinct file is NOT re-cut to fix this. Its residue is measured, asserted
+and byte-stable, and it is now the file the county's published legal
+descriptions are checked against; re-cutting it to fix a rendering problem one
+layer downstream would trade a verified file for an unverified one. resolve_tiling()
+repairs the dissolve instead, and its three passes are documented there. Jefferson
+is also the only dissolve in the fleet that needs this: every other county-board
+file built the same way has holes of at most 191 m2, because their source
+precincts arrived edge-matched and never went through a repair-then-simplify.
+
 Usage:
     python3 scripts/build_jefferson_board_districts.py            # write data/app/
     python3 scripts/build_jefferson_board_districts.py --check    # drift gate
@@ -77,17 +113,19 @@ Usage:
 
 import argparse
 import json
+import math
 import os
 import sys
 
 try:
-    from shapely.geometry import box, shape, mapping
+    from shapely.geometry import box, shape, mapping, MultiPolygon, Polygon
     from shapely.ops import unary_union
 except ImportError:  # pragma: no cover
     sys.exit("shapely is required: pip install -c scripts/requirements.txt shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "jefferson-precincts.json")
+OUTLINE = os.path.join(REPO_ROOT, "data", "app", "jefferson-county-outline.json")
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
                         "jefferson-county-board-districts.json")
 
@@ -133,8 +171,189 @@ SPLIT_DISTRICTS = (10, 11)
 # Two districts holding one precinct each would be a transcription slip, not a
 # board. The real minimum is District 4 and several others at 2.
 MIN_PRECINCTS_PER_DISTRICT = 2
-# A dissolve must not leave slivers between precincts that were already adjacent.
-MAX_DISTRICT_HOLES_PCT = 0.05
+
+# --- making the districts a partition of the county -------------------------
+# See "WHY THE DISSOLVE IS REPAIRED" in the module docstring. These are the
+# knobs of that repair, and every one of them has a ceiling asserted below it so
+# a future export that needs MORE repair fails the build instead of being
+# quietly patched.
+LAT = 38.3                              # county mid-latitude, for metre maths
+# How far a district may reach into unowned ground. Only ground with exactly ONE
+# district within this distance is claimed, so the number is a reach and not a
+# tolerance: it has to exceed the widest crack (124 m as shipped) without being
+# so wide that a district could stretch across a neighbour — which it cannot do
+# in any case, because a second district in reach leaves the ground unowned.
+GAP_REACH_M = 150.0
+# A detached fragment smaller than this is drafting dust, not territory: the
+# largest is 43 m across. Dropped, and the total dropped is asserted.
+DUST_M2 = 5000.0
+# Ceilings. The repair is meant to be a hairline correction; if it ever has real
+# work to do, that is a changed export and a human should look at it.
+MAX_OVERLAP_RESOLVED_PCT = 0.02         # of the county
+MAX_HOLES_FILLED_PCT = 0.02
+MAX_DUST_DROPPED_PCT = 0.005
+MIN_COUNTY_COVERED_PCT = 99.98
+# The repair's whole footprint against the unrepaired dissolve, and the finished
+# districts' agreement with the county outline itself.
+MAX_REPAIR_FOOTPRINT_PCT = 0.05
+# The county's own precincts sit ~0.08% of the county's area outside the TIGER
+# county outline; the districts inherit that and are not trimmed to it.
+MAX_OUTLINE_OVERSHOOT_PCT = 0.15
+# What rounding to COORD_PRECISION can re-create along a shared edge. The
+# shipped worst is 74 m2, against 33,126 m2 before the repair existed.
+MAX_ROUNDED_OVERLAP_M2 = 500.0
+
+
+def parts_of(geom):
+    if geom.is_empty:
+        return []
+    return list(geom.geoms) if geom.geom_type == "MultiPolygon" else [geom]
+
+
+def resolve_tiling(raw, outline):
+    """Turn 13 overlapping, cracked dissolves into 13 disjoint districts.
+
+    Three passes, each conservative in a different direction, and none of them
+    invents a boundary the county did not draw:
+
+    1. DOUBLE-CLAIMED GROUND goes to the lower-numbered district. The county's
+       own precincts overlap each other in 28 places, so their dissolves do
+       too. Any tie-break here is arbitrary — the ground is claimed twice in the
+       source — so this one is chosen for being deterministic and states itself
+       plainly rather than for being clever.
+    2. UNOWNED CRACKS go to the district that is the ONLY one within reach. This
+       is the pass that does the visible work, and it is provably safe: ground
+       with a single district within GAP_REACH_M cannot belong to any other. A
+       crack between two DIFFERENT districts has two districts in reach, so it
+       stays unowned and stays a hairline — invisible, because only one district
+       is ever drawn filled at a time.
+    3. WHAT IS LEFT is tidied: an interior ring that contains no other
+       district's ground is unowned land this district encloses, so it is
+       filled; a detached fragment under DUST_M2 is dropped. A ring that DOES
+       contain another district — a real enclave — is kept, so the rule survives
+       a future map where one district surrounds another.
+
+    Returns (districts, report).
+    """
+    metres = 111320.0 * math.cos(math.radians(LAT))
+    reach = GAP_REACH_M / metres
+    weld = 1e-7          # ~1 cm, so a claimed crack OVERLAPS rather than merely
+                         # abuts; abutting rings do not merge under unary_union
+    county = outline.area
+
+    def make_disjoint(geoms):
+        out, taken, lost = {}, None, 0.0
+        for key in sorted(geoms):
+            geom = geoms[key]
+            if taken is not None:
+                clipped = geom.difference(taken)
+                lost += geom.area - clipped.area
+                geom = clipped
+            if not geom.is_valid:
+                geom = geom.buffer(0)
+            out[key] = geom
+            taken = geom if taken is None else unary_union([taken, geom])
+        return out, lost
+
+    # 1 — disjointness.
+    disjoint, overlap_area = make_disjoint(raw)
+
+    # 2 — unowned cracks.
+    residue = outline.difference(unary_union(list(disjoint.values())))
+    grown = {}
+    for district, geom in disjoint.items():
+        others = unary_union([g.buffer(reach) for d, g in disjoint.items()
+                              if d != district])
+        own = residue.intersection(geom.buffer(reach)).difference(others)
+        if own.is_empty:
+            grown[district] = geom
+            continue
+        # The weld is what makes the claimed crack MERGE with the district
+        # rather than sit against it — abutting rings do not merge under
+        # unary_union. It grows the claim by a centimetre, which can graze the
+        # neighbouring claim where two districts' cracks meet, so disjointness
+        # is re-imposed below rather than argued about here.
+        grown[district] = unary_union([geom, own.buffer(weld)])
+
+    # The welds are centimetres wide, so this second pass moves nothing worth
+    # reporting; only the first pass's overlap is the county's own double claim.
+    grown, _weld_overlap = make_disjoint(grown)
+
+    # 3 — tidy.
+    out, filled_area, dust_area, kept_holes = {}, 0.0, 0.0, 0
+    for district, geom in grown.items():
+        elsewhere = unary_union([g for d, g in grown.items() if d != district])
+        kept = []
+        for part in parts_of(geom):
+            if part.area * metres * 111320.0 < DUST_M2:
+                dust_area += part.area
+                continue
+            rings = []
+            for ring in part.interiors:
+                hole = Polygon(ring)
+                # A hole's rim always grazes its neighbours, so "another district
+                # is in here" has to mean real ground, not a rim: one square
+                # metre, the same floor the overlap check uses. Anything above it
+                # keeps its ring, which is also what keeps this pass from
+                # swallowing a neighbour and undoing the disjointness above.
+                shared = (hole.intersection(elsewhere).area * metres * 111320.0
+                          if hole.is_valid else 0.0)
+                if shared > 1.0:
+                    rings.append(ring)      # a real enclave: another district lives there
+                    kept_holes += 1
+                else:
+                    filled_area += hole.area
+            kept.append(Polygon(part.exterior, rings))
+        if not kept:
+            sys.exit("District %d has no part left after dropping dust — that is "
+                     "not dust, that is the district" % district)
+        out[district] = kept[0] if len(kept) == 1 else MultiPolygon(kept)
+
+    # No third disjointness pass, deliberately: one after the tidy would clip
+    # the filled rings back open as 5-metre specks, which is how the first
+    # version of this function ended up shipping four of them. The tidy cannot
+    # break disjointness on its own, because a ring holding another district's
+    # ground is kept rather than filled.
+    covered = unary_union(list(out.values()))
+    report = {
+        "overlap_pct": overlap_area / county * 100.0,
+        "filled_pct": filled_area / county * 100.0,
+        "dust_pct": dust_area / county * 100.0,
+        "covered_pct": covered.intersection(outline).area / county * 100.0,
+        "kept_holes": kept_holes,
+        "parts": sum(len(parts_of(g)) for g in out.values()),
+        "holes": sum(len(p.interiors) for g in out.values() for p in parts_of(g)),
+    }
+    if report["overlap_pct"] > MAX_OVERLAP_RESOLVED_PCT:
+        sys.exit("the districts claim %.4f%% of the county twice (max %.2f%%) — "
+                 "that is more than drafting overlap, so the composition list "
+                 "or the precinct file needs re-reading" % (report["overlap_pct"],
+                                                            MAX_OVERLAP_RESOLVED_PCT))
+    if report["filled_pct"] > MAX_HOLES_FILLED_PCT:
+        sys.exit("filling enclosed cracks moved %.4f%% of the county (max %.2f%%)"
+                 % (report["filled_pct"], MAX_HOLES_FILLED_PCT))
+    if report["dust_pct"] > MAX_DUST_DROPPED_PCT:
+        sys.exit("dropping detached fragments would lose %.4f%% of the county "
+                 "(max %.3f%%) — those fragments are territory, not dust"
+                 % (report["dust_pct"], MAX_DUST_DROPPED_PCT))
+    if report["covered_pct"] < MIN_COUNTY_COVERED_PCT:
+        sys.exit("the 13 districts tile only %.4f%% of Jefferson (need >= %.2f%%)"
+                 % (report["covered_pct"], MIN_COUNTY_COVERED_PCT))
+    # Pairwise disjointness is by construction, so this is checking arithmetic,
+    # not policy: GEOS leaves specks of ~1e-20 deg2 behind a difference, and the
+    # honest question is whether any pair still shares GROUND. One square metre
+    # is four orders of magnitude below the smallest thing anyone can click.
+    keys, worst, worst_pair = sorted(out), 0.0, None
+    for i in range(len(keys)):
+        for j in range(i + 1, len(keys)):
+            shared = out[keys[i]].intersection(out[keys[j]]).area * metres * 111320.0
+            if shared > worst:
+                worst, worst_pair = shared, (keys[i], keys[j])
+    if worst > 1.0:
+        sys.exit("Districts %d and %d still share %.1f m2 after the repair"
+                 % (worst_pair[0], worst_pair[1], worst))
+    report["worst_overlap_m2"] = worst
+    return out, report
 
 
 def round_geom(geom):
@@ -210,7 +429,7 @@ def main():
                      "which is good news worth re-reading the geometry for" % name)
 
     # --- dissolve -----------------------------------------------------------
-    features, notes = [], []
+    raw, labels_of = {}, {}
     for district in sorted(COMPOSITION):
         parts, labels = [], []
         for member in COMPOSITION[district]:
@@ -220,22 +439,20 @@ def main():
         if len(parts) < MIN_PRECINCTS_PER_DISTRICT:
             sys.exit("District %d has only %d precinct(s)" % (district, len(parts)))
         geom = unary_union(parts)
-        if not geom.is_valid:
-            geom = geom.buffer(0)
-        rings = list(geom.geoms) if geom.geom_type == "MultiPolygon" else [geom]
-        holes = sum(len(r.interiors) for r in rings)
-        if holes:
-            from shapely.geometry import Polygon
-            hole_area = sum(Polygon(r).area for part in rings for r in part.interiors)
-            pct = 100.0 * hole_area / geom.area
-            if pct > MAX_DISTRICT_HOLES_PCT:
-                sys.exit("District %d dissolved with %.4f%% of its area in holes "
-                         "(max %.2f%%) — its precincts are not edge-matched to "
-                         "each other" % (district, pct, MAX_DISTRICT_HOLES_PCT))
-            notes.append("District %d: %d sliver hole(s), %.4f%% of the district"
-                         % (district, holes, pct))
+        raw[district] = geom if geom.is_valid else geom.buffer(0)
+        labels_of[district] = labels
+
+    # --- repair the tiling --------------------------------------------------
+    with open(OUTLINE) as handle:
+        outline = shape(json.load(handle)["features"][0]["geometry"])
+    if not outline.is_valid:
+        outline = outline.buffer(0)
+    resolved, repair = resolve_tiling(raw, outline)
+
+    features = []
+    for district in sorted(resolved):
         props = {"district": district, "name": "District %d" % district,
-                 "precincts": labels}
+                 "precincts": labels_of[district]}
         if district in SPLIT_DISTRICTS:
             props["boundaryNote"] = (
                 "Within Shiloh 4 this district's edge follows 34th Street. North "
@@ -244,15 +461,52 @@ def main():
                 "precinct descriptions use 34th Street as a boundary but do not "
                 "say where it runs past the pavement.")
         features.append({"type": "Feature", "properties": props,
-                         "geometry": round_geom(geom)})
+                         "geometry": round_geom(resolved[district])})
 
-    # The dissolve must reproduce the county exactly — same ground, no more.
+    # The districts must be the same ground as the precincts, give or take the
+    # repair. Before the repair existed this was an equality at 0.01%; it cannot
+    # be one now, because closing the cracks deliberately ADDS ground the
+    # precincts left unowned. So it becomes a ceiling on the repair's footprint,
+    # and the equality moves to the county outline, which is what the districts
+    # are now supposed to tile.
     whole_county = unary_union(list(precincts.values()))
     dissolved = unary_union([shape(f["geometry"]) for f in features])
     drift = whole_county.symmetric_difference(dissolved).area / whole_county.area * 100
-    if drift > 0.01:
-        sys.exit("the 13 districts and the 33 precincts do not cover the same "
-                 "ground (%.4f%% differs)" % drift)
+    if drift > MAX_REPAIR_FOOTPRINT_PCT:
+        sys.exit("the 13 districts differ from the 33 precincts by %.4f%% (max "
+                 "%.2f%%) — the repair is meant to close hairline cracks, so "
+                 "that much movement is a changed export" % (drift,
+                                                             MAX_REPAIR_FOOTPRINT_PCT))
+    # The districts' agreement with the OUTLINE is asserted one way only, as
+    # coverage, inside resolve_tiling. A symmetric difference would be the wrong
+    # test and would never pass: the county's own precincts sit 0.08% of the
+    # county OUTSIDE the TIGER outline, because the two are different vintages
+    # of the same border. Where they disagree the county's file is the county's,
+    # so the districts follow it out there rather than being trimmed to TIGER.
+    # resolve_tiling proved the districts disjoint to within a square metre, but
+    # what SHIPS is rounded to COORD_PRECISION — about 10 cm — and rounding two
+    # sides of a kilometre-long shared edge in opposite directions re-creates a
+    # little overlap. This is the check on the file rather than on the algebra.
+    shipped = [(f["properties"]["district"], shape(f["geometry"])) for f in features]
+    metres = 111320.0 * math.cos(math.radians(LAT))
+    worst, worst_pair = 0.0, None
+    for i in range(len(shipped)):
+        for j in range(i + 1, len(shipped)):
+            area = shipped[i][1].intersection(shipped[j][1]).area * metres * 111320.0
+            if area > worst:
+                worst, worst_pair = area, (shipped[i][0], shipped[j][0])
+    if worst > MAX_ROUNDED_OVERLAP_M2:
+        sys.exit("after rounding to %d decimals Districts %d and %d overlap by "
+                 "%.0f m2 (max %.0f) — more than rounding can explain"
+                 % (COORD_PRECISION, worst_pair[0], worst_pair[1], worst,
+                    MAX_ROUNDED_OVERLAP_M2))
+
+    overshoot = dissolved.difference(outline).area / outline.area * 100
+    if overshoot > MAX_OUTLINE_OVERSHOOT_PCT:
+        sys.exit("the districts extend %.4f%% of the county's area beyond the "
+                 "county outline (max %.2f%%) — that is more than the two "
+                 "borders' vintages differ by, so check SOURCE_EPSG and the "
+                 "outline before shipping" % (overshoot, MAX_OUTLINE_OVERSHOOT_PCT))
 
     payload = json.dumps({"type": "FeatureCollection", "features": features},
                          sort_keys=True, separators=(",", ":")) + "\n"
@@ -261,9 +515,18 @@ def main():
           % (len(features), len(precincts)))
     print("  every precinct used exactly once; 1 split (%s) cut at lon %.5f"
           % (", ".join(sorted(split_names)), SHILOH_4_CUT_LON))
-    print("  districts reproduce the county's own extent to within %.4f%%" % drift)
-    for note in notes:
-        print("  note: %s" % note)
+    print("  districts differ from the raw precinct union by %.4f%% (that is the "
+          "repair) and sit %.4f%% outside the TIGER outline (that is the source)"
+          % (drift, overshoot))
+    print("  worst overlap between two districts as shipped: %.0f m2 (rounding)" % worst)
+    print("  repair: %d part(s) for %d districts, %d interior ring(s) left, "
+          "%d real enclave(s)"
+          % (repair["parts"], len(features), repair["holes"], repair["kept_holes"]))
+    print("          double-claimed %.4f%% of the county resolved to the lower "
+          "district; enclosed cracks filled %.4f%%; dust dropped %.5f%%"
+          % (repair["overlap_pct"], repair["filled_pct"], repair["dust_pct"]))
+    print("          the 13 districts now tile %.4f%% of Jefferson"
+          % repair["covered_pct"])
     print("  source: %s" % SOURCE_NOTE)
     print("  cut:    %s" % CUT_SOURCE)
 
