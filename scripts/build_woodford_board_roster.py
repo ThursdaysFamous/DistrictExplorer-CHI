@@ -22,7 +22,7 @@ import json
 import os
 import sys
 
-SOURCE_URL = "https://www.woodford-county.org/Directory.aspx?DID=22"
+SOURCE_URL = "https://www.woodford-county.org/m/directory/department?did=22"
 
 # Three districts, five members each, and the directory publishes a full
 # 10-digit phone and an e-mail on every row; refuse to overwrite good data

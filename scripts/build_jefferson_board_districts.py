@@ -35,14 +35,35 @@ the cut is made at its longitude:
     carry share-alike obligations this project has not taken on. One coordinate
     read from TIGER carries none.
 
+  * AND THE COUNTY'S OWN LINE AGREES, established 2026-08-10. The county's
+    published precinct legal descriptions define Shiloh 3 as "south of Broadway
+    and east of 34th Street", so the county itself uses this street as a
+    boundary — and the Shiloh 3 edge in the county's shapefile runs from
+    (-88.933129, 38.299878) up to (-88.933578, 38.314337), a straight line whose
+    midpoint sits about SEVEN METRES from the TIGER longitude used here. Two
+    independent sources and the county's own geometry all put the cut in the
+    same place, so it is not moved: the county's two-point edge leans 39 m west
+    over its length, which is digitising noise in a file whose median boundary
+    error is 35 m, and chasing that lean would be fitting the noise.
+
   * WHERE IT IS EXACT, AND WHERE IT IS NOT. 34th Street is mapped from the south
     edge of Shiloh 4 up to about latitude 38.3211, which is roughly three
     quarters of the way up the precinct. North of that the street stops and this
     cut CONTINUES ITS ALIGNMENT as a meridian. That extension covers about a
     quarter of Shiloh 4 — 0.05% of the county — and it is not empty ground: it
     holds the Chesterfield Village, Webster Hill and Kingsridge subdivisions.
-    Only Districts 10 and 11 are affected, both say so on the card, and the
-    county has been asked to confirm where the line runs up there.
+    Only Districts 10 and 11 are affected and both say so on the card.
+
+    THE COUNTY WAS ASKED AND ANSWERED, AND THE ANSWER DOES NOT REACH THIS FAR.
+    Clerk Davis was asked on 2026-08-07 where the line runs north of the
+    pavement, and on 2026-08-10 replied by pointing at the precinct legal
+    descriptions above — a page this project had not found, and a real gain:
+    it is the first PUBLIC source for anything geographic in Jefferson County,
+    it is what scripts/build_jefferson_precincts.py now checks all 33 precincts
+    against, and it settles that "34th Street" is a line the county draws. What
+    it does not do is say where that line goes once the street stops. So the
+    projection stands, the boundaryNote stands, and nothing here is presented
+    as more settled than it is.
 
     This is the honest shape of the uncertainty: exact for three quarters of the
     boundary, a straight projection for the rest. LaSalle is the precedent for
@@ -219,8 +240,9 @@ def main():
             props["boundaryNote"] = (
                 "Within Shiloh 4 this district's edge follows 34th Street. North "
                 "of where 34th Street ends the line follows the street's "
-                "alignment projected north; the county has been asked to confirm "
-                "it.")
+                "alignment projected north — the County Clerk's published "
+                "precinct descriptions use 34th Street as a boundary but do not "
+                "say where it runs past the pavement.")
         features.append({"type": "Feature", "properties": props,
                          "geometry": round_geom(geom)})
 

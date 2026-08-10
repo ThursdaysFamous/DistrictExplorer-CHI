@@ -5,34 +5,34 @@
         "email": "rbarth@woodfordcountyil.gov",
         "name": "Randy Barth",
         "phone": "309-275-9414",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=161"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=161"
       },
       {
         "email": "jbaumann@woodfordcountyil.gov",
         "name": "James Baumann",
         "phone": "309-303-3862",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=160"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=160"
       },
       {
         "email": "jkrug@woodford-county.org",
         "name": "John Krug",
         "phone": "309-310-3107",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=52"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=52"
       },
       {
         "email": "jschertz@woodford-county.org",
         "name": "Nathan Schertz",
         "phone": "309-310-7541",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=128"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=128"
       },
       {
         "email": "twilcoxen@woodfordcountyil.gov",
         "name": "Timothy Wilcoxen",
         "phone": "309-830-4754",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=79"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=79"
       }
     ],
-    "sourceUrl": "https://www.woodford-county.org/Directory.aspx?DID=22"
+    "sourceUrl": "https://www.woodford-county.org/m/directory/department?did=22"
   },
   "2": {
     "members": [
@@ -40,34 +40,34 @@
         "email": "ddurst@woodfordcountyil.gov",
         "name": "Denise Durst",
         "phone": "309-370-0406",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=130"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=130"
       },
       {
         "email": "zferris@woodfordcountyil.gov",
         "name": "Zachary Ferris",
         "phone": "309-232-9531",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=162"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=162"
       },
       {
         "email": "dmeinhold@woodford-county.org",
         "name": "David Meinhold",
         "phone": "309-696-5462",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=129"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=129"
       },
       {
         "email": "WoodfordCoNagel@gmail.com",
         "name": "Chuck Nagel",
         "phone": "309-846-2295",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=118"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=118"
       },
       {
         "email": "tworner@woodfordcountyil.gov",
         "name": "Tmothy Worner",
         "phone": "309-645-8717",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=163"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=163"
       }
     ],
-    "sourceUrl": "https://www.woodford-county.org/Directory.aspx?DID=22"
+    "sourceUrl": "https://www.woodford-county.org/m/directory/department?did=22"
   },
   "3": {
     "members": [
@@ -75,33 +75,33 @@
         "email": "ajones@woodford-county.org",
         "name": "Autum Jones",
         "phone": "309-839-7196",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=131"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=131"
       },
       {
         "email": "nmiller@woodfordcountyil.gov",
         "name": "Nick Miller",
         "phone": "309-417-7329",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=158"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=158"
       },
       {
         "email": "bparsons@woodford-county.org",
         "name": "Blake Parsons",
         "phone": "309-256-9662",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=102"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=102"
       },
       {
         "email": "rreeb@woodfordcountyil.gov",
         "name": "Richard Reeb",
         "phone": "309-303-9327",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=119"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=119"
       },
       {
         "email": "drood@woodfordcountyil.gov",
         "name": "Don Rood",
         "phone": "562-646-8058",
-        "url": "https://www.woodford-county.org/directory.aspx?EID=63"
+        "url": "https://www.woodford-county.org/m/directory/employee?eid=63"
       }
     ],
-    "sourceUrl": "https://www.woodford-county.org/Directory.aspx?DID=22"
+    "sourceUrl": "https://www.woodford-county.org/m/directory/department?did=22"
   }
 }

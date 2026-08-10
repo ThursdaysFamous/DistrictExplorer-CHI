@@ -8090,8 +8090,11 @@ function initChiExplorer() {
    * scripts/build_jefferson_board_districts.py). One precinct, Shiloh 4, is
    * split between Districts 10 and 11 at 34th Street; those two carry a
    * boundaryNote because north of where that street ends the line is the
-   * street's alignment projected. The roster is scraped weekly from the
-   * county's board page — 13/13 with a phone and a per-district e-mail. */
+   * street's alignment projected, and the county's published precinct
+   * descriptions (2026-08-10) confirm 34th Street is a boundary it draws
+   * without saying where the line runs past the pavement. The roster is
+   * scraped weekly from the county's board page — 13/13 with a phone and a
+   * per-district e-mail. */
   var loadJeffersonBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/jefferson-county-board-districts.json", {}, 2);
   });
@@ -14932,7 +14935,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Official directory",
-            url: "https://www.woodford-county.org/Directory.aspx?DID=22"
+            url: "https://www.woodford-county.org/m/directory/department?did=22"
           };
         },
         hoverOfficial: {
@@ -19647,9 +19650,13 @@ function initChiExplorer() {
       // Jefferson — 33 precincts from the County Clerk's own shapefile (see
       // loadJeffersonPrecincts). Name only: the export's other columns are a
       // blank registered-voter field and a rough "36 sq mi" size note, neither
-      // of which is worth a card row. No board district to join — Jefferson's
-      // districts were asked for in the same message and did not come back
-      // (jefferson-county-board) — and no polling place is published.
+      // of which is worth a card row. The board district IS joined, from the
+      // approved precinct list the Clerk sent a day later. No polling place is
+      // published. The card links the county's PRECINCT LEGAL DESCRIPTIONS
+      // rather than the elections index: that page names this precinct in the
+      // county's own words, which is what a reader looking at a precinct card
+      // wants next, and it is the source build_jefferson_precincts.py checks
+      // all 33 shapes against.
       {
         key: "jefferson",
         coverage: jeffersonCountyCoverage,
@@ -19695,8 +19702,8 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return {
-            label: "Jefferson County Clerk & Recorder — Elections (official)",
-            url: "https://jeffersoncounty.illinois.gov/services/county_clerk___recorder/elections/index.php"
+            label: "Jefferson County Clerk & Recorder — precinct descriptions (official)",
+            url: "https://jeffersoncounty.illinois.gov/services/county_clerk___recorder/elections/precincts.php"
           };
         }
       },

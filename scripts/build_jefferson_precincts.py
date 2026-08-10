@@ -10,6 +10,31 @@ which is writing to the clerk and asking." Asked 2026-08-05; County Clerk
 Davis replied on 2026-08-06 with "Please see attached" and this shapefile,
 archived under data/source/raw/. Refreshing it means asking again.
 
+THE GEOMETRY IS NOW CHECKED AGAINST A PUBLISHED SOURCE, added 2026-08-10.
+The shapefile arrived by e-mail, so for four days the only thing corroborating
+it was that it looked right. On 2026-08-10 Clerk Davis pointed at a page this
+project had not found — the county's PRECINCT LEGAL DESCRIPTIONS, one paragraph
+per precinct, at LEGAL_DESCRIPTIONS_URL. That page is a public document a
+reader can check, and it says where each precinct is in words:
+
+  * twenty-two precincts are "all 36 sections of land located in Township N
+    South Range M East", which places them in a 4x4 congressional-township grid
+    (T1S..T4S north to south, R1E..R4E west to east);
+  * the rest name their side of a township — Rome 1 "the east 18 sections",
+    Spring Garden 1 "the south 18 sections", Webber 1 an explicit list of 18
+    whole sections plus the east half of six more, Dodds 1 "east of Casey Fork
+    creek", Shiloh 3 "south of Broadway and east of 34th Street", and so on.
+
+check_legal_descriptions() asserts the shipped geometry against all of that:
+every precinct's centroid must land in the township cell its description
+declares, every side-of-township claim must hold, and the three described
+half-township splits must divide their township's area in the published
+proportion (Rome and Spring Garden 18/18, Webber 21/15 — that last one is
+58.3%, and the county's file gives 58.7%). Nothing here is cosmetic: the ONE
+failure mode a count guard cannot see is a re-supplied export with the same 33
+rows and shuffled Precinct_N values, which would put voters in the wrong board
+district while every other assertion in this file passed.
+
 PROJECTION. NAD83 / StatePlane Illinois EAST FIPS 1201 in US survey feet
 (EPSG:3435) — note EAST, where Henry's file is WEST; the .prj is the authority
 and is read, never assumed. Verified rather than trusted: the rebuilt extent
@@ -104,6 +129,88 @@ SHAPE_STEM = "precinct_shape_files"
 
 SOURCE_NOTE = ("Jefferson County Clerk (Davis), voting-precinct shapefile "
                "supplied by e-mail 2026-08-06")
+# The county's own published wording for the same 33 precincts (see the
+# docstring). Everything below is transcribed from this page.
+LEGAL_DESCRIPTIONS_URL = ("https://jeffersoncounty.illinois.gov/services/"
+                          "county_clerk___recorder/elections/precincts.php")
+
+# "all 36 sections of land located in Township N South Range M East" — the
+# whole-township precincts, which are what fixes the grid the rest are checked
+# against. Keys are (township south, range east).
+WHOLE_TOWNSHIP = {
+    "Grand Prairie": (1, 1), "Field": (1, 3), "Farrington": (1, 4),
+    "Casner": (2, 1),
+    "Blissville": (3, 1), "McClellan": (3, 2), "Pendleton": (3, 4),
+    "Bald Hill": (4, 1), "Elk Prairie": (4, 2), "Moores Prairie": (4, 4),
+}
+# Every precinct's township, whole or shared, from the same page.
+TOWNSHIP_OF = dict(WHOLE_TOWNSHIP)
+TOWNSHIP_OF.update({
+    "Rome 1": (1, 2), "Rome 2": (1, 2),
+    "Shiloh 1": (2, 2), "Shiloh 2": (2, 2), "Shiloh 3": (2, 2),
+    "Shiloh 4": (2, 2), "Shiloh 5": (2, 2),
+    "Webber 1": (2, 4), "Webber 2": (2, 4),
+    "Dodds 1": (3, 3), "Dodds 2": (3, 3),
+    "Spring Garden 1": (4, 3), "Spring Garden 2": (4, 3),
+})
+for _n in ("Mt V 1", "Mt V 2", "Mt V 3", "Mt V 4", "Mt V 5",
+           "Mt V 6", "Mt V 7", "Mt V 8", "Mt V 9", "Mt V 10"):
+    TOWNSHIP_OF[_n] = (2, 3)   # all ten are "(Mount Vernon Township)", T2S R3E
+
+# A precinct is allowed to sit this far outside its township's band before the
+# placement counts as wrong. Township lines are read off the whole-township
+# precincts themselves, so this only absorbs their own digitising noise.
+TOWNSHIP_BAND_SLACK_DEG = 0.004
+
+# Descriptions that also fix which SIDE of its township a precinct is on. Every
+# pair here is two descriptions naming the SAME line — a street, a railroad, a
+# creek, a section line — with one precinct on each side of it, so the ordering
+# follows from the county's words and nothing is inferred from the map.
+# (precinct, other precinct, axis, which side of `other` it must be, wording)
+ORIENTED = (
+    ("Rome 1", "Rome 2", "x", "east", "the east 18 sections"),
+    ("Spring Garden 1", "Spring Garden 2", "y", "south", "the south 18 sections"),
+    ("Webber 1", "Webber 2", "x", "east", "sections 1, 2, 3, 10, … plus the east 1/2 of 4, 9, 16, 21, 28, 33"),
+    ("Dodds 1", "Dodds 2", "x", "east", "east of Casey Fork creek"),
+    # Shiloh Township: the CSX railroad, 42nd Street, 34th Street, Sandburg Lane.
+    ("Shiloh 2", "Shiloh 4", "y", "north", "north of the CSX railroad"),
+    ("Shiloh 2", "Shiloh 5", "y", "north", "north of the CSX railroad"),
+    ("Shiloh 1", "Shiloh 5", "x", "west", "south along North Sandburg Lane"),
+    ("Shiloh 4", "Shiloh 5", "x", "east", "east of 42nd Street"),
+    ("Shiloh 3", "Shiloh 4", "x", "east", "east of 34th Street"),
+    ("Shiloh 3", "Shiloh 5", "x", "east", "south of Broadway and east of 34th Street"),
+    # Mount Vernon Township: Route 37 (10th St), the Union Pacific, Gaskin Ave,
+    # Richview Rd, Logan St, 20th St, 7th St, and the section 28/33 west line.
+    ("Mt V 7", "Mt V 8", "y", "north", "north of Richview Road/Oakland Avenue"),
+    ("Mt V 7", "Mt V 5", "x", "west", "west of Illinois Route 37 (AKA Salem Road)"),
+    ("Mt V 8", "Mt V 5", "x", "west", "west of Illinois Route 37 (AKA Salem Road)"),
+    ("Mt V 7", "Mt V 3", "x", "west", "west of Illinois Route 37 (AKA Salem Road)"),
+    ("Mt V 8", "Mt V 3", "x", "west", "west of Illinois Route 37 (AKA Salem Road)"),
+    ("Mt V 5", "Mt V 3", "y", "north", "north of Gaskin Avenue"),
+    ("Mt V 2", "Mt V 5", "x", "east", "east along Broadway … then south along the centerline of the Union Pacific"),
+    ("Mt V 2", "Mt V 1", "y", "north", "north along the Mount Vernon Township line to the northeast corner"),
+    ("Mt V 1", "Mt V 4", "x", "east", "north along the west section line for section 33 … to East Broadway"),
+    ("Mt V 4", "Mt V 9", "x", "east", "starting at the intersection of Broadway and 7th Street, then east"),
+    ("Mt V 4", "Mt V 6", "x", "east", "then north along South 10th Street to the intersection with Newby Avenue"),
+    ("Mt V 9", "Mt V 10", "y", "north", "then west along Logan Street to the township line"),
+    ("Mt V 6", "Mt V 10", "x", "east", "west along the township line to the intersection with 20th Street"),
+    ("Mt V 3", "Mt V 4", "y", "north", "at the intersection of Tenth Street and Broadway, then east along Broadway"),
+    ("Mt V 3", "Mt V 9", "y", "north", "at the intersection of Tenth Street and Broadway, then east along Broadway"),
+    ("Mt V 8", "Mt V 9", "y", "north", "North of Illinois Route 15 (AKA Broadway)"),
+    ("Mt V 9", "Mt V 6", "y", "north", "then west along Logan Street to the township line"),
+    ("Mt V 6", "Mt V 3", "x", "west", "then South along South 10th Street (aka Illinois Route 37)"),
+)
+# Splits whose description states how many of the township's 36 sections each
+# side gets, so the areas are checkable and not merely the ordering.
+SECTION_SHARES = (
+    ("Rome 1", "Rome 2", 18, 36),
+    ("Spring Garden 1", "Spring Garden 2", 18, 36),
+    ("Webber 1", "Webber 2", 21, 36),      # 18 whole + the east half of 6
+)
+# Sections in a PLSS township are not equal — correction lines make the tiers
+# differ by a percent or two — so the share is checked to a few points, which is
+# still far tighter than any mis-assignment of a section could hide in.
+SECTION_SHARE_SLACK_PCT = 4.0
 
 SOURCE_EPSG = "EPSG:3435"          # Illinois EAST (ftUS) — see the .prj
 COORD_PRECISION = 6
@@ -224,6 +331,70 @@ def close_gaps(geoms, outline):
     return repaired, gap.area / outline.area * 100.0, len(pieces)
 
 
+def check_legal_descriptions(geoms, outline):
+    """Assert the shipped precincts against the county's published descriptions.
+
+    Run on what SHIPS, not on the raw export, so it covers both questions at
+    once: that the county's file agrees with the county's page, and that the
+    gap repair did not move a precinct out of the township it belongs to.
+
+    The township grid is quartered off the COUNTY OUTLINE, not read off the
+    whole-township precincts. That distinction is the difference between a real
+    check and a tautology: derived from the precincts, a swap between two of the
+    ten whole-township precincts merely redefines the grid and passes, which is
+    exactly what the first draft of this function did.
+    """
+    missing = sorted(set(TOWNSHIP_OF) - set(geoms))
+    unknown = sorted(set(geoms) - set(TOWNSHIP_OF))
+    if missing or unknown:
+        sys.exit("the export's precinct names no longer match the county's "
+                 "published legal descriptions — described but absent: %s; "
+                 "present but undescribed: %s (%s)"
+                 % (missing, unknown, LEGAL_DESCRIPTIONS_URL))
+
+    # Jefferson is a 4x4 block of congressional townships and nothing else, so
+    # quartering its bounding box IS the T1S..T4S / R1E..R4E grid.
+    minx, miny, maxx, maxy = outline.bounds
+    lat_step, lon_step = (maxy - miny) / 4.0, (maxx - minx) / 4.0
+    bands = {
+        "row": {t: (maxy - t * lat_step, maxy - (t - 1) * lat_step) for t in (1, 2, 3, 4)},
+        "col": {r: (minx + (r - 1) * lon_step, minx + r * lon_step) for r in (1, 2, 3, 4)},
+    }
+
+    wrong = []
+    for name, (township, rng) in sorted(TOWNSHIP_OF.items()):
+        centre = geoms[name].centroid
+        lo, hi = bands["row"][township]
+        in_row = lo - TOWNSHIP_BAND_SLACK_DEG <= centre.y <= hi + TOWNSHIP_BAND_SLACK_DEG
+        lo, hi = bands["col"][rng]
+        in_col = lo - TOWNSHIP_BAND_SLACK_DEG <= centre.x <= hi + TOWNSHIP_BAND_SLACK_DEG
+        if not (in_row and in_col):
+            wrong.append("%s is at %.4f,%.4f but its description puts it in "
+                         "T%dS R%dE" % (name, centre.y, centre.x, township, rng))
+    for name, other, axis, side, wording in ORIENTED:
+        a, b = geoms[name].centroid, geoms[other].centroid
+        got = ((a.x - b.x) if axis == "x" else (a.y - b.y))
+        want_positive = side in ("east", "north")
+        if (got > 0) != want_positive:
+            wrong.append("%s is described as \"%s\" but sits %s of %s"
+                         % (name, wording,
+                            {"east": "west", "west": "east",
+                             "north": "south", "south": "north"}[side], other))
+    for name, other, sections, total in SECTION_SHARES:
+        pair = geoms[name].area + geoms[other].area
+        got = geoms[name].area / pair * 100.0
+        want = sections / float(total) * 100.0
+        if abs(got - want) > SECTION_SHARE_SLACK_PCT:
+            wrong.append("%s takes %.1f%% of its township but its description "
+                         "claims %d of %d sections (%.1f%%)"
+                         % (name, got, sections, total, want))
+    if wrong:
+        sys.exit("the geometry disagrees with the county's published legal "
+                 "descriptions (%s):\n  - %s"
+                 % (LEGAL_DESCRIPTIONS_URL, "\n  - ".join(wrong)))
+    return len(TOWNSHIP_OF), len(ORIENTED), len(SECTION_SHARES)
+
+
 def round_geom(geom):
     def fix(coords):
         if isinstance(coords[0], (float, int)):
@@ -311,6 +482,8 @@ def main():
         sys.exit("%s and %s overlap by %.4f%% of the county (max %.2f%%)"
                  % (worst_pair[0], worst_pair[1], worst_pct, MAX_PAIR_OVERLAP))
 
+    placed, oriented, shares = check_legal_descriptions(repaired, outline)
+
     features = [{"type": "Feature", "properties": {"name": n},
                  "geometry": round_geom(repaired[n])} for n in names]
     features.sort(key=lambda f: f["properties"]["name"])
@@ -325,7 +498,10 @@ def main():
           % (coverage, SIMPLIFY_TOLERANCE_M, med, shifts[0][0], shifts[0][1]))
     print("worst pair overlap %.6f%% (%s) — left as the county drew it"
           % (worst_pct, " / ".join(worst_pair) if worst_pair else "none"))
+    print("legal descriptions agree: %d precincts in their declared township, "
+          "%d side-of-township claims, %d section shares" % (placed, oriented, shares))
     print("source: %s" % SOURCE_NOTE)
+    print("checked against: %s" % LEGAL_DESCRIPTIONS_URL)
 
     existing = None
     if os.path.exists(OUT_PATH):
