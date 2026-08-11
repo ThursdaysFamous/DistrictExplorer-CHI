@@ -92,6 +92,14 @@ builder is longer than Henry's:
     "this point isn't inside any district", which is a lie: the point IS in a
     precinct, the county's file merely has a crack there.
 
+    THAT SENTENCE CAME BACK, on 2026-08-10. close_gaps() closes every crack the
+    county left, but simplifying and despiking afterwards reopens about 0.05% of
+    the county along shared edges, and for four days that residue shipped. A
+    reader found four of the reopened cracks by clicking near borders in the
+    board districts these dissolve into and got exactly that lie back.
+    close_reopened() runs last and closes them, so the shipped file tiles
+    100.0000% and the sentence is retired at both layers.
+
 THE REPAIR, AND WHY THIS ONE. Every point in a gap is given to the precinct
 whose BOUNDARY IS NEAREST TO IT. That is the only defensible reading of what
 the county meant in a crack it never intended to draw, and it is computed, not
@@ -306,6 +314,15 @@ SIMPLIFY_TOLERANCE_M = 15.0
 SPIKE_DEVIATION_M = 12.0
 SPIKE_CHORD_M = 150.0
 MAX_DESPIKE_MOVED_PCT = 0.02
+# close_reopened(): a crack at or under this size goes whole to the precinct
+# holding most of its outline; larger ones are split, because the big pieces are
+# lattices and handing one to a single precinct moves a boundary kilometres.
+WHOLE_CRACK_MAX_M2 = 20000.0
+CRACK_HALF_WIDTH_M = 40.0
+# ~1 cm, so a claimed crack OVERLAPS its precinct rather than merely abutting it;
+# abutting rings do not merge under unary_union.
+WELD_DEG = 1e-7
+MIN_COVERAGE_CLOSED = 99.99
 MAX_PAIR_OVERLAP = 0.05            # percent of county area
 # The repair's own ceiling. Jefferson needs 118 m; a future export needing much
 # more is a differently-broken file and must be looked at, not silently fixed.
@@ -478,6 +495,64 @@ def despike(geoms):
     return out, dropped, moved
 
 
+def close_reopened(geoms, outline):
+    """Give the cracks simplification reopened back to the precincts around them.
+
+    close_gaps() closes every crack the county left; simplifying and despiking
+    reopens about 0.05% of the county along shared edges, and that residue used
+    to ship. It is invisible — a hairline between two precincts draws as
+    nothing — but it is not harmless: a click inside one answers "this point
+    isn't inside any district", which is false. The point IS in a precinct; the
+    county's file merely has a crack there, which is the same sentence that
+    justifies close_gaps() in the first place. A reader found four of them in
+    the board districts these dissolve into before this pass existed.
+
+    A crack goes WHOLE to the precinct holding the largest share of its outline,
+    which costs a boundary shift of at most the crack's width and adds almost no
+    vertices, because the new edge is the neighbour's existing line rather than a
+    medial line drawn between them. Above WHOLE_CRACK_MAX_M2 it is split instead:
+    the big pieces are lattices spanning kilometres and touching many precincts,
+    and handing one of those to a single precinct is the 35-kilometre failure the
+    module docstring warns about. There each bordering precinct takes what lies
+    within CRACK_HALF_WIDTH_M of itself — buffering a straight edge gives a
+    straight parallel line, so this adds no zig-zag either.
+    """
+    residue = outline.difference(unary_union(list(geoms.values())))
+    if residue.is_empty:
+        return dict(geoms), 0, 0.0
+    mpd = metres_per_degree()
+    half = CRACK_HALF_WIDTH_M / mpd
+    touch = 3e-6                      # ~0.3 m, for "does this edge touch that one"
+    out = dict(geoms)
+    closed, moved = 0, 0.0
+    pieces = [p for p in getattr(residue, "geoms", [residue]) if p.area > 0]
+    for piece in pieces:
+        perimeter = piece.exterior.length
+        if perimeter <= 0:
+            continue
+        shares = sorted(
+            ((piece.exterior.intersection(g.buffer(touch)).length / perimeter, n)
+             for n, g in out.items() if piece.exterior.intersects(g.buffer(touch))),
+            reverse=True)
+        if not shares:
+            continue
+        moved += piece.area
+        closed += 1
+        if piece.area * mpd * 111320.0 <= WHOLE_CRACK_MAX_M2:
+            name = shares[0][1]
+            out[name] = unary_union([out[name], piece.buffer(WELD_DEG)])
+            continue
+        for _, name in shares:
+            part = piece.intersection(out[name].buffer(half, join_style=2, quad_segs=1))
+            if part.is_empty:
+                continue
+            out[name] = unary_union([out[name], part.buffer(WELD_DEG)])
+            piece = piece.difference(part)
+            if piece.is_empty:
+                break
+    return out, closed, moved / outline.area * 100.0
+
+
 def check_legal_descriptions(geoms, outline):
     """Assert the shipped precincts against the county's published descriptions.
 
@@ -617,11 +692,13 @@ def main():
                  "written for; look at it rather than auto-fixing"
                  % (shifts[0][1], shifts[0][0], MAX_REPAIR_SHIFT_M))
 
+    repaired, closed_pieces, closed_pct = close_reopened(repaired, outline)
+
     union = unary_union(list(repaired.values()))
     coverage = union.intersection(outline).area / outline.area * 100.0
-    if coverage < MIN_COVERAGE_REPAIRED:
+    if coverage < MIN_COVERAGE_CLOSED:
         sys.exit("after repair the precincts still tile only %.4f%% of the county "
-                 "(need >= %.2f%%)" % (coverage, MIN_COVERAGE_REPAIRED))
+                 "(need >= %.2f%%)" % (coverage, MIN_COVERAGE_CLOSED))
 
     names = list(repaired)
     worst, worst_pair = 0.0, None
@@ -653,6 +730,8 @@ def main():
           % (worst_pct, " / ".join(worst_pair) if worst_pair else "none"))
     print("despiked %d vertex(es) off short chords, moving %.4f%% of the county"
           % (spikes, spike_pct))
+    print("closed %d reopened crack(s), %.4f%% of the county, to the precinct "
+          "around them" % (closed_pieces, closed_pct))
     print("legal descriptions agree: %d precincts in their declared township, "
           "%d side-of-township claims, %d section shares" % (placed, oriented, shares))
     print("source: %s" % SOURCE_NOTE)

@@ -135,6 +135,18 @@ both fixed here:
 
 District 10 ended at 14 vertices, from 129 before any of this.
 
+ROUND FOUR — four clicks near district borders, each answering "This point
+isn't inside any district in this layer." All four landed in inter-district
+hairlines: the reach rule claims only ground no other district could want, so
+cracks BETWEEN two districts stayed unowned. On the numbers that looked
+defensible — 0.0235% of the county, one click in four thousand — and on the
+screen it is simply a false answer, because the point IS in a district and the
+county's file merely has a crack there. That is the same sentence
+build_jefferson_precincts.py uses to justify closing these one layer down, so
+they are closed at both layers now: close_reopened() there, pass 2b here.
+Jefferson tiles 100.0000% at precinct and district level, and every one of the
+four points answers.
+
 Usage:
     python3 scripts/build_jefferson_board_districts.py            # write data/app/
     python3 scripts/build_jefferson_board_districts.py --check    # drift gate
@@ -221,19 +233,27 @@ GAP_REACH_M = 150.0
 # A detached fragment smaller than this is drafting dust, not territory: the
 # largest is 43 m across. Dropped, and the total dropped is asserted.
 DUST_M2 = 5000.0
-# How much of a crack's outline one district must hold before that crack counts
-# as surrounded by it rather than shared with a neighbour. Inter-district cracks
-# in this county score 50-58%, surrounded ones 87% or more.
-GAP_PERIMETER_SHARE = 0.90
+# A crack at or under this size goes WHOLE to the district holding the most of
+# its outline; anything larger is split between its neighbours instead, because
+# the two biggest are lattices spanning 9 and 14 km and handing one of those to
+# a single district would run a ribbon of it along other districts' borders.
+WHOLE_CRACK_MAX_M2 = 20000.0
+# How far into a split crack each bordering district reaches. Comfortably more
+# than half the widest crack, so nothing is left over.
+CRACK_HALF_WIDTH_M = 40.0
 # Ceilings. The repair is meant to be a hairline correction; if it ever has real
 # work to do, that is a changed export and a human should look at it.
 MAX_OVERLAP_RESOLVED_PCT = 0.05         # of the county
 MAX_HOLES_FILLED_PCT = 0.02
 MAX_DUST_DROPPED_PCT = 0.005
-MIN_COUNTY_COVERED_PCT = 99.97
+MIN_COUNTY_COVERED_PCT = 99.99
 # The repair's whole footprint against the unrepaired dissolve, and the finished
 # districts' agreement with the county outline itself.
-MAX_REPAIR_FOOTPRINT_PCT = 0.05
+# The repair's whole footprint against the raw dissolve. It rose to 0.051% when
+# pass 2b started closing the inter-district cracks as well: that ground is
+# exactly the residue the precinct file reports as reopened, so the two numbers
+# are the same fact seen from either end.
+MAX_REPAIR_FOOTPRINT_PCT = 0.10
 # The county's own precincts sit ~0.08% of the county's area outside the TIGER
 # county outline; the districts inherit that and are not trimmed to it.
 MAX_OUTLINE_OVERSHOOT_PCT = 0.15
@@ -313,32 +333,57 @@ def resolve_tiling(raw, outline):
         # is re-imposed below rather than argued about here.
         grown[district] = unary_union([geom, own.buffer(weld)])
 
-    # 2b — a crack that one district SURROUNDS, which the reach rule declines.
-    # The reach rule is deliberately blind to shape: it asks only whether a
-    # second district is nearby, so a slot running INTO a district from its own
-    # border stays unowned merely because it opens onto that border. One did,
-    # between Shiloh 3 and Shiloh 4 west of 34th Street — 7 m wide, 190 m deep,
-    # both walls District 10, its mouth on the District 5 township line — and it
-    # drew as a line standing inside District 10.
+    # 2b — EVERY REMAINING CRACK, because "no district" is the wrong answer.
     #
-    # Perimeter share is the shape test the reach rule lacks, and it separates
-    # the two cases cleanly: a hairline between two different districts has each
-    # of them along about half its outline, while a crack one district surrounds
-    # has that district along nearly all of it. Measured on this county, every
-    # inter-district crack scores 50-58% and every surrounded one 87% or more,
-    # so the threshold is nowhere near anything.
-    surrounded = outline.difference(unary_union(list(grown.values())))
-    for piece in parts_of(surrounded):
+    # The reach rule above is exact and conservative: it claims only ground no
+    # other district could want. What it leaves is the hairlines BETWEEN two
+    # different districts, and leaving those unowned looked defensible on the
+    # numbers — 0.0235% of the county, one click in four thousand — right up
+    # until a reader found three of them by clicking near borders and got "This
+    # point isn't inside any district in this layer." That answer is false. The
+    # point IS in a district; the county's file merely has a crack there, which
+    # is the same sentence build_jefferson_precincts.py uses to justify closing
+    # these one layer down. Closing them here is the same call, made again.
+    #
+    # A crack goes to the district holding the largest share of its outline.
+    # That is nearest-boundary in the form this geometry allows, and it costs a
+    # boundary shift of at most the crack's width — tens of metres, inside the
+    # 34 m median the precinct repair already discloses — against a wrong answer
+    # for anyone who clicks there.
+    #
+    # BIG PIECES ARE SPLIT INSTEAD OF GIVEN AWAY. Two of the cracks are lattices
+    # spanning 9 and 14 km and touching four districts and three; handing either
+    # wholly to one district would run a 12 m ribbon of it along boundaries two
+    # OTHER districts share, which is a wrong answer of a worse kind than the
+    # one being fixed. Above WHOLE_CRACK_MAX_M2 each bordering district instead
+    # takes the part within CRACK_HALF_WIDTH_M of itself, in order of how much
+    # of the outline it holds. Buffering a straight edge gives a straight
+    # parallel line, so this adds no zig-zag.
+    remaining = outline.difference(unary_union(list(grown.values())))
+    for piece in parts_of(remaining):
         perimeter = piece.exterior.length
         if perimeter <= 0:
             continue
-        best, owner = 0.0, None
-        for district, geom in grown.items():
-            share = piece.exterior.intersection(geom.buffer(weld * 30)).length / perimeter
-            if share > best:
-                best, owner = share, district
-        if owner is not None and best >= GAP_PERIMETER_SHARE:
+        shares = sorted(
+            ((piece.exterior.intersection(geom.buffer(weld * 30)).length / perimeter, district)
+             for district, geom in grown.items()
+             if piece.exterior.intersects(geom.buffer(weld * 30))), reverse=True)
+        if not shares:
+            continue
+        if piece.area * metres * 111320.0 <= WHOLE_CRACK_MAX_M2:
+            owner = shares[0][1]
             grown[owner] = unary_union([grown[owner], piece.buffer(weld)])
+            continue
+        half = CRACK_HALF_WIDTH_M / metres
+        for _, district in shares:
+            part = piece.intersection(
+                grown[district].buffer(half, join_style=2, quad_segs=1))
+            if part.is_empty:
+                continue
+            grown[district] = unary_union([grown[district], part.buffer(weld)])
+            piece = piece.difference(part)
+            if piece.is_empty:
+                break
 
     # The welds are centimetres wide, so this second pass moves nothing worth
     # reporting; only the first pass's overlap is the county's own double claim.
