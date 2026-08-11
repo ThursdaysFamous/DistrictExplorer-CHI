@@ -34,12 +34,20 @@ narrow and asserted — a bare directory name maps to "<name> 1" ONLY when the
 shapefile has exactly one precinct in that township and no bare form of its own.
 Anything else fails the build rather than being matched approximately.
 
-POLLING ASSIGNMENTS ARE PER-ELECTION, and this is an OPERATOR STEP, the same
-as Carroll's, Logan's and Montgomery's — no polling builder in the fleet runs on
-a schedule. Re-run it when the Clerk republishes; --check fetches the directory
-and fails if it no longer matches the shipped file, which is what to run before
-an election rather than trusting the date. The shipped file carries its fetch
-date and the card links the Clerk's Elections page as the authority.
+POLLING ASSIGNMENTS ARE PER-ELECTION, AND THIS ONE RUNS WEEKLY — the fleet's
+first scheduled polling job (.github/workflows/update-henry-precinct-polling.yml,
+Fri 18:00 UTC). Carroll's, Logan's and Montgomery's are operator steps, re-run
+when the clerk republishes, which is fine for a table nobody reads between
+elections. A polling place is not that: it is the one row on any card in this
+app where being a cycle out of date sends a resident to the wrong building on
+election day. Six page fetches a week turns "we will remember to re-run it" into
+a PR. The job opens one only when a polling place actually MOVED — the shipped
+file carries a fetch date that changes every run, and a PR that is nothing but a
+new date teaches a reviewer to stop reading them.
+
+--check does the same comparison without writing, which is the thing to run by
+hand before an election rather than trusting the date. The card links the
+Clerk's Elections page as the authority.
 
 Usage:
     python3 build_henry_precinct_polling.py            # fetch + write

@@ -2945,6 +2945,17 @@ The gap record is retired. What it also held — that permission to publish was
 asked twice and never answered — moved to `henry-precincts.json`'s own note,
 where the file's provenance lives, rather than disappearing with the record.
 
+**And it is the fleet's first SCHEDULED polling job**, which is a departure worth
+stating. Carroll's, Logan's and Montgomery's polling tables are operator steps —
+re-run when the clerk republishes — and that is fine for a table nobody reads
+between elections. A polling place is not that table. It is the one row on any
+card in this app where being a cycle out of date sends a resident to the wrong
+building on election day, and six page fetches a week turn "we will remember to
+re-run it" into a pull request. The job opens one **only when a polling place
+actually moved**: the shipped file carries a fetch date that changes every run,
+and a weekly PR that is nothing but a new date teaches a reviewer to stop
+reading them, which costs more than the job saves.
+
 ### 2026-08-07: the gap record wrote its own closing instructions, and they worked
 
 `jefferson-county-board` was opened on 6 Aug when an ask for both halves of a

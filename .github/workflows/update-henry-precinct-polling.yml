@@ -1,0 +1,114 @@
+name: Update Henry County precinct polling places
+
+# Weekly refresh of the Henry County precinct card's polling-place row
+# (data/app/henry-precinct-polling.json, fetched by index.html).
+#
+# THIS IS THE FLEET'S FIRST SCHEDULED POLLING JOB, and the reason is the field
+# itself. Carroll's, Logan's and Montgomery's polling tables are operator steps
+# — re-run when the clerk republishes — which is fine for a table nobody is
+# looking at between elections. A polling place is not that: it is the one row
+# on any card in this app where being a cycle out of date sends a resident to
+# the wrong building on election day. A weekly read costs six page fetches and
+# turns "we will remember to re-run it" into a PR.
+#
+# THE SOURCE IS THE CLERK'S OWN DIRECTORY, and finding it is worth remembering:
+# Henry County GIS sent the precinct shapefile on 2026-08-06 with no polling
+# assignment and said plainly that a polling list is the Clerk's record, not
+# theirs. Clerk Barbara Link answered on 2026-08-11 by pointing at her own
+# Polling Places page — a page reachable for the entire life of this project
+# that nobody had opened. See docs/DATA_LAYER_GUIDEBOOK.md, 2026-08-11.
+#
+# WHAT TO WATCH IN THE LOG RATHER THAN THE DIFF. The builder refuses rather
+# than shipping short, so a red run is a real signal in one of three shapes:
+#   * "the directory says N listings and M parsed" — the row markup moved. One
+#     row of 52 already has no "View Map" link where every other row does, and
+#     a parser keyed to that link drops it and reports 51 happy successes; this
+#     count check is what catches that class of miss.
+#   * "N of 52 precincts have no polling place" — the county renamed a precinct
+#     or added one, and the join needs re-reading rather than loosening.
+#   * "henry-precincts.json holds N precincts, expected 52" — the county
+#     re-precincted, which is a bigger change than this job can absorb.
+
+on:
+  schedule:
+    - cron: "0 18 * * 5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-polling:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI (a PR opened with the default GITHUB_TOKEN fires no workflows).
+      # Falls back to github.token when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        run: pip install -c scripts/requirements.txt requests
+
+      - name: Rebuild polling-place table
+        run: python3 scripts/build_henry_precinct_polling.py
+
+      # Gate the regenerated data before it can reach a PR.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          # The file carries a fetch date, so it differs every week whether or
+          # not a polling place moved. Compare the precincts payload only —
+          # otherwise this opens a no-op PR every Friday and the real ones stop
+          # being read.
+          if git diff --quiet -- data/app/henry-precinct-polling.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          elif python3 - <<'PY'
+          import json, subprocess, sys
+          path = "data/app/henry-precinct-polling.json"
+          old = json.loads(subprocess.run(["git", "show", "HEAD:" + path],
+                                          capture_output=True, text=True, check=True).stdout)
+          with open(path, encoding="utf-8") as handle:
+              new = json.load(handle)
+          sys.exit(0 if old.get("precincts") == new.get("precincts") else 1)
+          PY
+          then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Only the fetch date moved; no polling place changed."
+            git checkout -- data/app/henry-precinct-polling.json
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged polling PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR.
+          branch="bot/henry-precinct-polling-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/henry-precinct-polling.json
+          git commit -m "Update Henry County precinct polling places from henrycty.com"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Henry County precinct polling places from henrycty.com" \
+              --body "Automated weekly refresh of the Henry County precinct card's polling-place row — all 52 precincts paired with their location and street address, read from the County Clerk's own Polling Places directory by \`scripts/build_henry_precinct_polling.py\`. Opened only when a polling place actually changed; a run where nothing moved but the fetch date opens nothing. Please review the diff before merging — this changes where the site tells residents to vote." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
