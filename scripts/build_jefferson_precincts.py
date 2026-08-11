@@ -35,6 +35,39 @@ failure mode a count guard cannot see is a re-supplied export with the same 33
 rows and shuffled Precinct_N values, which would put voters in the wrong board
 district while every other assertion in this file passed.
 
+NO OTHER COUNTY HAS THIS FAULT — checked 2026-08-10, two ways, so nobody has to
+re-do the sweep. The tolerance cliff below is not a general hazard of
+simplifying; it needs a repair that RESAMPLES boundaries at a fixed step, which
+is what puts a fixed-amplitude zig-zag into the geometry for a smaller tolerance
+to preserve.
+
+  * STRUCTURALLY, this is the only builder in the fleet that does one. Nothing
+    else imports voronoi_diagram or segmentize or carries a BOUNDARY_STEP, so no
+    other file can acquire the defect by this route.
+  * EMPIRICALLY, every shipped polygon file was measured for zig-zag vertices —
+    more than 8 m off the chord between their neighbours with those neighbours
+    within 120 m — and the eight above 5% were then swept for a CLIFF, which is
+    the actual tell. Jefferson had one: 82% zig-zag to 1% between 10 m and 15 m
+    with the median AND worst boundary shift unchanged. Nothing else does. Every
+    other file smooths in proportion to the tolerance and moves in proportion to
+    it too, which is what a genuinely detailed boundary does:
+
+        file                                shipped     15 m      25 m      40 m
+        stephenson-fire-districts             42.3%    12.6%      7.8%      3.3%
+        stephenson-precincts                  19.1%    11.7%      7.4%      3.9%
+        stephenson-county-board-districts     17.4%    14.3%      9.5%      3.3%
+        school-board-districts (Chicago)      10.5%     5.5%      2.5%      0.4%
+        municipal-ward-coverage               11.0%    12.5%     12.2%     10.2%
+
+    The Stephenson files score highest and are the ones worth naming, because
+    they are the fleet's other hand-derived geometry — traced from raster PDFs.
+    Their wobble is the tracing itself, at the ±20 m their cards already
+    disclose, and every metre of extra tolerance buys smoothing at the cost of
+    exactly that much displacement. Raising it there would be trading disclosed
+    accuracy for looks, which is a different decision from fixing a bug, and is
+    not made here. municipal-ward-coverage barely responds to simplification at
+    all, which is the clearest possible statement that its complexity is real.
+
 PROJECTION. NAD83 / StatePlane Illinois EAST FIPS 1201 in US survey feet
 (EPSG:3435) — note EAST, where Henry's file is WEST; the .prj is the authority
 and is read, never assumed. Verified rather than trusted: the rebuilt extent
