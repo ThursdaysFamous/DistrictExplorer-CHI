@@ -74,11 +74,11 @@ county, so the whole thing lands on a single precinct and moves a boundary
 obvious fix.
 
 WHAT THE REPAIR COSTS, stated because a card should never imply more precision
-than it has: median boundary movement 34.7 m, 90th percentile 43.6 m, worst
-case 118 m (Dodds 2). That is the same order as Stephenson's traced ±20 m
-boundaries, which ship with their caveat stated, and it is asserted below so a
-future export that needs a bigger correction fails instead of quietly getting
-one.
+than it has: median boundary movement 34.4 m, worst case 153 m (Dodds 2, whose
+number is dominated by the county's own Dodds 1/2 overlap). That is the same
+order as Stephenson's traced ±20 m boundaries, which ship with their caveat
+stated, and it is asserted below so a future export that needs a bigger
+correction fails instead of quietly getting one.
 
 WHAT IS NOT REPAIRED. The county's file also contains a small genuine OVERLAP
 between Dodds 1 and Dodds 2 (0.000467% of the county, ~7,000 m²). It is left
@@ -218,17 +218,36 @@ COORD_PRECISION = 6
 EXPECTED_PRECINCTS = 33
 EXTENT_TOLERANCE_DEG = 0.01
 MIN_COVERAGE_RAW = 99.0            # what the county's own file achieves (99.212)
-MIN_COVERAGE_REPAIRED = 99.9       # what the repair must achieve (99.975)
-# The repaired boundary is SIMPLIFIED before shipping, and the tolerance is the
-# whole reason this number is 99.975 and not 100. Nearest-boundary assignment
-# closes the cracks perfectly but draws the new edge down a Voronoi medial line,
-# which zig-zags at the sampling step and cost 52,538 vertices — a 1.2 MB file
-# for 33 precincts, against Henry's 233 KB for 52. Simplifying at 10 m collapses
-# that noise back onto the straight township lines the county actually drew:
-# 3,798 vertices, and a shared edge stays shared because both neighbours
-# simplify the SAME linework with the same tolerance and Douglas-Peucker is
-# deterministic. It reopens 0.025% of the county — one click in 4,000, against
-# one in 127 before any of this — and that residue is asserted, not hoped for.
+MIN_COVERAGE_REPAIRED = 99.9       # what the repair must achieve (99.949)
+# The repaired boundary is SIMPLIFIED before shipping. Nearest-boundary
+# assignment closes the cracks perfectly but draws the new edge down a Voronoi
+# medial line, which zig-zags at BOUNDARY_STEP_M and cost 52,489 vertices — a
+# 1.2 MB file for 33 precincts, against Henry's 233 KB for 52.
+#
+# THE TOLERANCE WAS 10 m UNTIL 2026-08-10, AND 10 m WAS THE WRONG SIDE OF A
+# CLIFF. It was chosen on the belief that it "collapses that noise back onto the
+# straight township lines the county actually drew". It collapses the COUNT, not
+# the noise: a 10 m tolerance cannot remove a zig-zag whose amplitude is the
+# 30 m sampling step, so all of it survived, and a reader looking at the board
+# districts these precincts dissolve into reported exactly that — jagged lines
+# and a 33 m spike on District 10's southern edge, on ground the county's own
+# file never drew (its raw Shiloh 3 stops at latitude 38.299908; the shipped one
+# reached 38.299619). Measured across the whole file at 8 m deviation from the
+# chord between a vertex's neighbours:
+#
+#     tolerance   vertices   zig-zag vertices   tiling    median shift   worst
+#         10 m       3,749             3,057   99.9753%        34.6 m   118.0 m
+#         15 m         601                31   99.9504%        33.9 m   118.0 m
+#         20 m         516                21   99.9237%        33.9 m   122.1 m
+#
+# 15 m is not a compromise, it is the correct side of the cliff: 99% less
+# zig-zag, a sixth of the vertices, the same median shift and the SAME worst
+# shift. Accuracy is unchanged; only the drafting noise goes.
+#
+# It reopens 0.051% of the county rather than 0.025%, against one click in 127
+# before any of this, and that residue is asserted rather than hoped for. It is
+# also no longer inherited downstream: build_jefferson_board_districts.py closes
+# the reopened cracks when it dissolves these precincts into board districts.
 # THAT CLAIM ABOUT SHARED EDGES IS WRONG, corrected 2026-08-10. Douglas-Peucker
 # is deterministic on identical INPUT, and two neighbouring rings are not
 # identical input: they share a sub-path but differ everywhere else, and which
@@ -243,10 +262,23 @@ MIN_COVERAGE_REPAIRED = 99.9       # what the repair must achieve (99.975)
 # this file's residue is measured, asserted, byte-stable and now checked against
 # the county's published legal descriptions, and re-cutting it to fix a rendering
 # problem one layer downstream would trade a verified file for an unverified one.
-SIMPLIFY_TOLERANCE_M = 10.0
+SIMPLIFY_TOLERANCE_M = 15.0
+# Simplification cannot reach an isolated spike — DP keeps whatever deviates by
+# more than the tolerance — so despike() removes them afterwards. A vertex is a
+# spike when it sits more than SPIKE_DEVIATION_M off the chord between its
+# neighbours AND those neighbours are closer together than SPIKE_CHORD_M. The
+# chord limit is what separates a spike from a real corner, which is just as far
+# off its chord but has its neighbours far apart. Shipped: 50 vertices removed,
+# 0.008% of the county moved, and the file's spiky-vertex count drops 31 -> 8.
+SPIKE_DEVIATION_M = 12.0
+SPIKE_CHORD_M = 150.0
+MAX_DESPIKE_MOVED_PCT = 0.02
 MAX_PAIR_OVERLAP = 0.05            # percent of county area
 # The repair's own ceiling. Jefferson needs 118 m; a future export needing much
 # more is a differently-broken file and must be looked at, not silently fixed.
+# Dodds 2 needs 153 m, and that number is the county's own Dodds 1/2 overlap
+# rather than the crack repair; despiking added 35 m to it by removing the one
+# vertex that was tracking the overlap's edge.
 MAX_REPAIR_SHIFT_M = 200.0
 BOUNDARY_STEP_M = 30.0
 LAT = 38.3                         # county mid-latitude, for metre conversions
@@ -343,6 +375,74 @@ def close_gaps(geoms, outline):
             claim[owner[inside[0]]].append(piece)
     repaired = {n: unary_union([geoms[n]] + claim[n]) for n in geoms}
     return repaired, gap.area / outline.area * 100.0, len(pieces)
+
+
+def _deviation_m(prev, cur, nxt, mpd_lon):
+    """Perpendicular distance of `cur` from the prev->nxt chord, in metres."""
+    ax, ay = prev[0] * mpd_lon, prev[1] * 111320.0
+    bx, by = nxt[0] * mpd_lon, nxt[1] * 111320.0
+    px, py = cur[0] * mpd_lon, cur[1] * 111320.0
+    length = math.hypot(bx - ax, by - ay)
+    if length == 0:
+        return math.hypot(px - ax, py - ay)
+    return abs((bx - ax) * (ay - py) - (ax - px) * (by - ay)) / length
+
+
+def _chord_m(prev, nxt, mpd_lon):
+    return math.hypot((prev[0] - nxt[0]) * mpd_lon, (prev[1] - nxt[1]) * 111320.0)
+
+
+def despike(geoms):
+    """Drop the isolated spikes simplification cannot reach.
+
+    Douglas-Peucker keeps any vertex that deviates from its neighbours by MORE
+    than the tolerance, so raising SIMPLIFY_TOLERANCE_M to 15 m flattened the
+    30 m zig-zag but left the tall thin spikes standing — including the one a
+    reader reported on District 10's southern edge, a single vertex 33 m south
+    of a straight township line, on ground the county's own file never drew
+    (its raw Shiloh 3 stops at latitude 38.299908; this one reached 38.299619).
+    Those come from the Voronoi crack repair claiming one sample point's cell
+    where its neighbours' cells went to the precinct on the other side.
+
+    A spike is a vertex far off the chord between its neighbours WHEN those
+    neighbours are close together — a tall thin triangle. Both conditions
+    matter: without the chord limit this would flatten real corners, which are
+    exactly as far off the chord but have their neighbours far apart.
+    """
+    mpd_lon = metres_per_degree()
+
+    def clean_ring(coords):
+        ring, removed = list(coords[:-1]), 0
+        changed = True
+        while changed and len(ring) > 4:
+            changed = False
+            for i in range(len(ring)):
+                prev, cur, nxt = ring[i - 1], ring[i], ring[(i + 1) % len(ring)]
+                if (_deviation_m(prev, cur, nxt, mpd_lon) > SPIKE_DEVIATION_M
+                        and _chord_m(prev, nxt, mpd_lon) < SPIKE_CHORD_M):
+                    del ring[i]
+                    removed += 1
+                    changed = True
+                    break
+        return ring + [ring[0]], removed
+
+    out, dropped = {}, 0
+    for name, geom in geoms.items():
+        polys = []
+        for poly in (geom.geoms if geom.geom_type == "MultiPolygon" else [geom]):
+            exterior, count = clean_ring(list(poly.exterior.coords))
+            dropped += count
+            interiors = []
+            for ring in poly.interiors:
+                cleaned, count = clean_ring(list(ring.coords))
+                dropped += count
+                if len(cleaned) >= 4:
+                    interiors.append(cleaned)
+            fixed = Polygon(exterior, interiors)
+            polys.append(fixed if fixed.is_valid else fixed.buffer(0))
+        out[name] = unary_union(polys)
+    moved = sum(out[n].symmetric_difference(geoms[n]).area for n in geoms)
+    return out, dropped, moved
 
 
 def check_legal_descriptions(geoms, outline):
@@ -469,6 +569,12 @@ def main():
     repaired, gap_pct, pieces = close_gaps(geoms, outline)
     tol = SIMPLIFY_TOLERANCE_M / metres_per_degree()
     repaired = {n: g.simplify(tol, preserve_topology=True) for n, g in repaired.items()}
+    repaired, spikes, spike_area = despike(repaired)
+    spike_pct = spike_area / outline.area * 100.0
+    if spike_pct > MAX_DESPIKE_MOVED_PCT:
+        sys.exit("removing %d spike(s) would move %.4f%% of the county (max "
+                 "%.2f%%) — at that size they are not spikes, they are the "
+                 "boundary" % (spikes, spike_pct, MAX_DESPIKE_MOVED_PCT))
 
     shifts = sorted(((repaired[n].hausdorff_distance(geoms[n]) * metres_per_degree(), n)
                      for n in geoms), reverse=True)
@@ -512,6 +618,8 @@ def main():
           % (coverage, SIMPLIFY_TOLERANCE_M, med, shifts[0][0], shifts[0][1]))
     print("worst pair overlap %.6f%% (%s) — left as the county drew it"
           % (worst_pct, " / ".join(worst_pair) if worst_pair else "none"))
+    print("despiked %d vertex(es) off short chords, moving %.4f%% of the county"
+          % (spikes, spike_pct))
     print("legal descriptions agree: %d precincts in their declared township, "
           "%d side-of-township claims, %d section shares" % (placed, oriented, shares))
     print("source: %s" % SOURCE_NOTE)
