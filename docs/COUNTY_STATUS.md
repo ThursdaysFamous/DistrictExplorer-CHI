@@ -39,7 +39,7 @@
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Greene | 17061 | County card | at-large — County card | — | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 2 — `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source) |
-| Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 2 — `hamilton-municipal-officials` (no-source); `hamilton-precinct-polling` (no-source) |
+| Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 1 — `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | none |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 118 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 117 records in the Data gaps panel: `chicago-amenity-phones`.

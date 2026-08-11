@@ -1486,6 +1486,11 @@
         "note": "The TWO voting locations Whiteside County references but does not publish. Its precinct layer points at facility ids 22 and 26, which are absent from the 29 locations its own polling layer publishes, leaving Sterling 9/14/18 and Prophetstown 1 with no polling place on the card. County Clerk Karen Stralow named both buildings by e-mail on 2026-08-03 — facility 22 is Self Help Enterprises, 2300 W. LeFevre Rd., Sterling; facility 26 is Winning Wheels, 701 E. 3rd St., Prophetstown — and this file exists only to fill those two ids. The loader consults it ONLY when the county's own layer has no match, so publishing those facilities upstream retires it silently. Names AND addresses, both from the Clerk on request — nothing here is looked up elsewhere. Unlike Logan's and Carroll's this is NOT a whole-county polling table and has no builder — it is two hand-entered records from a named source."
       },
       {
+        "file": "hamilton-precinct-polling.json",
+        "min_keys": 3,
+        "note": "Hamilton County precinct polling places, parsed from the Clerk's statutory notice for the March 17, 2026 General Primary — published on the county's post-migration website — by scripts/build_hamilton_precinct_polling.py (16 precincts, 13 locations, the shared McLeansboro gym and the Clerk's 13-location count asserted; --check compares against the live notice). The notice settled the Dahlgren #1/#2 pairing that two ~0.3 mi-coarse georeferencing instruments could not, exactly as the 2026-08-05 gap record predicted only the election authority could. Per-election, like Logan's and Carroll's — the card labels the row with the election the notice names."
+      },
+      {
         "file": "woodford-county-board-members.json",
         "min_keys": 3,
         "note": "Woodford County Board members keyed by district (3 multi-member districts, five seats each, 15/15 with phone and e-mail) — scraped weekly from the county's own CivicPlus directory. No chair key: the chair is elected from within the body and the directory does not mark who holds it."
@@ -1608,7 +1613,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v38",
+    "cache_name": "district-explorer-shell-v39",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v38";
+const CACHE_NAME = "district-explorer-shell-v39";
 
 const SHELL_URLS = [
   "./",
@@ -239,6 +239,7 @@ const ROSTER_URLS = [
   "./data/app/logan-precinct-polling.json",
   "./data/app/carroll-precinct-polling.json",
   "./data/app/whiteside-precinct-polling.json",
+  "./data/app/hamilton-precinct-polling.json",
   "./data/app/woodford-county-board-members.json",
   "./data/app/logan-county-board-members.json",
   "./data/app/boone-county-board-members.json",

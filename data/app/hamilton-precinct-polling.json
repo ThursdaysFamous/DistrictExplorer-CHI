@@ -1,0 +1,72 @@
+{
+  "election": "March 17, 2026 General Primary",
+  "fetched": "2026-08-11",
+  "precincts": {
+    "BEAVER CREEK": {
+      "address": "15257 Blairsville Rd, Springerton, IL 62887",
+      "place": "Township Building"
+    },
+    "CROOK": {
+      "address": "11975 Army Navy Store Rd, McLeansboro, IL 62859",
+      "place": "Crook Town Building"
+    },
+    "CROUCH": {
+      "address": "8121 Belle Prairie Rd, Dahlgren, IL 62828",
+      "place": "Township Building"
+    },
+    "DAHLGREN 1": {
+      "address": "19283 County Road 200 E, Dahlgren, IL 62828",
+      "place": "Township Building"
+    },
+    "DAHLGREN 2": {
+      "address": "402 W Main St, Dahlgren, IL 62828",
+      "place": "Dahlgren Baptist Church"
+    },
+    "FLANNIGAN": {
+      "address": "7770 Ten Mile Rd, McLeansboro, IL 62859",
+      "place": "Old Cartwright Church"
+    },
+    "KNIGHTS PRAIRIE": {
+      "address": "3523 State Route 14, McLeansboro, IL 62859",
+      "place": "Township Building"
+    },
+    "MAYBERRY": {
+      "address": "407 S Second St, Broughton, IL 62817",
+      "place": "Community Hall Building"
+    },
+    "MCLEANSBORO 1": {
+      "address": "204 S Pearl St, McLeansboro, IL 62859",
+      "place": "Old Highschool Gym"
+    },
+    "MCLEANSBORO 2": {
+      "address": "204 S Pearl St, McLeansboro, IL 62859",
+      "place": "Old Highschool Gym"
+    },
+    "MCLEANSBORO 3": {
+      "address": "204 S Pearl St, McLeansboro, IL 62859",
+      "place": "Old Highschool Gym"
+    },
+    "MCLEANSBORO 4": {
+      "address": "204 S Pearl St, McLeansboro, IL 62859",
+      "place": "Old Highschool Gym"
+    },
+    "SOUTH CROUCH": {
+      "address": "16022 State Route 242, McLeansboro, IL 62859",
+      "place": "Township Building"
+    },
+    "SOUTH FLANNIGAN": {
+      "address": "3122 Walpole Rd, Thompsonville, IL 62890",
+      "place": "Township Building"
+    },
+    "SOUTH TWIGG": {
+      "address": "8135 Walpole Rd, Broughton, IL 62817",
+      "place": "Township Building"
+    },
+    "TWIGG": {
+      "address": "11580 Dale Rd, McLeansboro, IL 62859",
+      "place": "Township Building"
+    }
+  },
+  "source": "https://cms.hamiltoncountyil.gov/app/uploads/2026/02/03-17-2026-GPE-Polling-Places-Addresses.pdf",
+  "sourcePage": "https://www.hamiltoncountyil.gov/election-notices/polling-places-and-addresses-03-17-2026-general-primary-election/"
+}
