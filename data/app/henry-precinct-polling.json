@@ -1,0 +1,214 @@
+{
+ "fetched": "2026-08-11",
+ "precincts": {
+  "Alba 1": {
+   "address": "21634 S Wilsey, Annawan, IL 61234",
+   "place": "Township Hall"
+  },
+  "Andover 1": {
+   "address": "342 5th St, Andover, IL 61233",
+   "place": "Andover Village Hall"
+  },
+  "Annawan 1": {
+   "address": "314 N State Street, Annawan, IL 61234",
+   "place": "Annawan Community Center"
+  },
+  "Atkinson 1": {
+   "address": "101 E Henry Street, Atkinson, IL 61235",
+   "place": "Atkinson Fire Station"
+  },
+  "Burns 1": {
+   "address": "23530 IL Highway 81, Kewanee, IL 61443",
+   "place": "Burns Township Building"
+  },
+  "Cambridge 1": {
+   "address": "125 N East Street, Cambridge, IL 61238",
+   "place": "Community Hall North Side"
+  },
+  "Cambridge 2": {
+   "address": "125 N East St, Cambridge, IL 61238",
+   "place": "Community Hall North Side"
+  },
+  "Clover 1": {
+   "address": "150 N Division, Woodhull, IL 61490",
+   "place": "Woodhull Village / Township Hall"
+  },
+  "Colona 1": {
+   "address": "5401 U.S. Highway 6, Colona, IL 61241",
+   "place": "Lavender Crest Winery"
+  },
+  "Colona 2": {
+   "address": "305 1st Street, Colona, IL 61241",
+   "place": "First Southern Baptist Church"
+  },
+  "Colona 3": {
+   "address": "617 8th Street, Colona, IL 61241",
+   "place": "Colona Activity Center"
+  },
+  "Colona 4": {
+   "address": "617 8th St, Colona, IL 61241",
+   "place": "Colona Activity Center"
+  },
+  "Colona 5": {
+   "address": "100 E 9th Avenue, Colona, IL 61241",
+   "place": "Colona City Hall"
+  },
+  "Cornwall 1": {
+   "address": "13542 E 1900 Street, Atkinson, IL 61235",
+   "place": "Cornwall Township Hall"
+  },
+  "Edford 1": {
+   "address": "10191 U.S. Highway 6, Geneseo, IL 61254",
+   "place": "Edford Township Building"
+  },
+  "Galva 1": {
+   "address": "45 Wallace Street, Galva, IL 61434",
+   "place": "Galva American Legion"
+  },
+  "Galva 2": {
+   "address": "45 Wallace St, Galva, IL 61434",
+   "place": "Galva American Legion"
+  },
+  "Galva 3": {
+   "address": "106 Front St (North Entrance), Galva, IL 61434",
+   "place": "Galva Senior Citizens Center"
+  },
+  "Geneseo 1": {
+   "address": "805 N Chicago Street, Geneseo, IL 61254",
+   "place": "Geneseo Public Library"
+  },
+  "Geneseo 2": {
+   "address": "224 N State, Geneseo, IL 61254",
+   "place": "First Methodist Church - South Campus"
+  },
+  "Geneseo 3": {
+   "address": "501 E North, Geneseo, IL 61254",
+   "place": "Geneseo Aquatic Center"
+  },
+  "Geneseo 4": {
+   "address": "1025 S State Street, Geneseo, IL 61254",
+   "place": "Moose Lodge"
+  },
+  "Geneseo 5": {
+   "address": "218 S State Street, Geneseo, IL 61254",
+   "place": "FCA Building (Former Library)"
+  },
+  "Geneseo 6": {
+   "address": "690 S Chicago Street, Geneseo, IL 61254",
+   "place": "Township Hall"
+  },
+  "Hanna 1": {
+   "address": "9489 Wolf Road, Geneseo, IL 61254",
+   "place": "Hanna - 1 Hanna Township Hall"
+  },
+  "Hanna 2": {
+   "address": "9489 Wolf Road, Geneseo, IL 61254",
+   "place": "Hanna Township Hall"
+  },
+  "Kewanee 1": {
+   "address": "404 E 3rd Street, Kewanee, IL 61443",
+   "place": "BHC Outreach Center"
+  },
+  "Kewanee 10": {
+   "address": "108 E Central Boulevard, Kewanee, IL 61443",
+   "place": "First United Methodist Church"
+  },
+  "Kewanee 11": {
+   "address": "404 E 3rd Street, Kewanee, IL 61443",
+   "place": "BHC Outreach Center"
+  },
+  "Kewanee 2": {
+   "address": "712 N Tremont Street, Kewanee, IL 61443",
+   "place": "Holy Trinity Polish Cath Church"
+  },
+  "Kewanee 3": {
+   "address": "712 N Tremont Street, Kewanee, IL 61443",
+   "place": "Holy Trinity Polish Cath Church"
+  },
+  "Kewanee 4": {
+   "address": "113 1/2 N Tremont Street, Kewanee, IL 61443",
+   "place": "Elks Lodge"
+  },
+  "Kewanee 5": {
+   "address": "313 N Burr Boulevard, Kewanee, IL 61443",
+   "place": "Flemish American Club"
+  },
+  "Kewanee 6": {
+   "address": "238 Community Square, Kewanee, IL 61443",
+   "place": "Fairview Community Building"
+  },
+  "Kewanee 7": {
+   "address": "113 1/2 N Tremont Street, Kewanee, IL 61443",
+   "place": "Elks Lodge"
+  },
+  "Kewanee 8": {
+   "address": "108 E Central Boulevard, Kewanee, IL 61443",
+   "place": "First United Methodist Church"
+  },
+  "Kewanee 9": {
+   "address": "238 Community Square, Kewanee, IL 61443",
+   "place": "Fairview Community Building"
+  },
+  "Loraine 1": {
+   "address": "21288 Town Hall Road, Prophetstown, IL 61277",
+   "place": "Township Hall"
+  },
+  "Lynn 1": {
+   "address": "305 East Street, Lynn Center, IL 61262",
+   "place": "Lynn Town Hall"
+  },
+  "Munson 1": {
+   "address": "14688 IL Highway 82, Geneseo, IL 61254",
+   "place": "Hillcrest Nursing Home Maintenance Building"
+  },
+  "Osco 1": {
+   "address": "129 N Railroad Street, Osco, IL 61274",
+   "place": "Township Hall"
+  },
+  "Oxford 1": {
+   "address": "111 West D Street, Alpha, IL 61413",
+   "place": "Alpha Town Hall"
+  },
+  "Phenix 1": {
+   "address": "14850 N 2550 Avenue, Geneseo, IL 61254",
+   "place": "Phenix Township Hall"
+  },
+  "Weller 1": {
+   "address": "307 N Bishop Hill St, Bishop Hill, IL 61419",
+   "place": "Fire Station"
+  },
+  "Western 1": {
+   "address": "501 11th Avenue, Orion, IL 61273",
+   "place": "Orion Fire Station"
+  },
+  "Western 2": {
+   "address": "1410 10th Street, Orion, IL 61273",
+   "place": "Mary Our Lady of Peace Church"
+  },
+  "Western 3": {
+   "address": "1410 10th Street, Orion, IL 61273",
+   "place": "Mary Our Lady of Peace Church"
+  },
+  "Wethersfield 1": {
+   "address": "105 Dwight Street, Kewanee, IL 61443",
+   "place": "First Christian Church"
+  },
+  "Wethersfield 2": {
+   "address": "105 Dwight Street, Kewanee, IL 61443",
+   "place": "First Christian Church"
+  },
+  "Wethersfield 3": {
+   "address": "338 Tenney Street, Kewanee, IL 61443",
+   "place": "Township Hall"
+  },
+  "Wethersfield 4": {
+   "address": "105 Dwight Street, Kewanee, IL 61443",
+   "place": "First Christian Church"
+  },
+  "Yorktown 1": {
+   "address": "1404 Hooppole Washington Street, Prophetstown, IL 61277",
+   "place": "Hooppole Community Center"
+  }
+ },
+ "source": "https://www.henrycty.com/BusinessDirectoryii.aspx?lngBusinessCategoryID=25&lngNewPage=1"
+}

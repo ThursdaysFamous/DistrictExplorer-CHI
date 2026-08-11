@@ -9168,6 +9168,14 @@ function initChiExplorer() {
   var loadHenryPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/henry-precincts.json", {}, 2);
   });
+  /* Henry's polling assignment, added 2026-08-11 from the Clerk's own Polling
+   * Places directory (scripts/build_henry_precinct_polling.py). Joins on the
+   * precinct name the shapefile already carries — the builder resolves the
+   * county's two spellings of a single-precinct township ("Alba" there,
+   * "Alba 1" here) and refuses to write unless all 52 match. */
+  var loadHenryPolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/henry-precinct-polling.json", {}, 2);
+  });
 
   /* Montgomery's 7 board districts and 38 precincts — BOTH from the county's
    * own geodatabase, which puts it in the better tier: nothing here is derived
@@ -19711,9 +19719,10 @@ function initChiExplorer() {
       // loadHenryPrecincts). The county's board district is a spatial join: the
       // board's two districts are unions of whole townships and the precinct
       // names carry their township, but joining on the geometry avoids parsing
-      // a name to derive a district. No polling place — the reply that sent the
-      // boundaries did not carry a precinct-to-polling-place table, and that
-      // question is still open with the county (henry-county-precincts).
+      // a name to derive a district. The polling place joins 52/52 from the
+      // Clerk's own directory (see loadHenryPolling) — it arrived five days
+      // after the boundaries, because the GIS office that sent the geometry
+      // said plainly that a polling list is the Clerk's record, not theirs.
       {
         key: "henry",
         coverage: henryCountyCoverage,
@@ -19725,7 +19734,8 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadHenryPrecincts(),
-            loadHenryBoardDistricts().catch(function () { return null; })
+            loadHenryBoardDistricts().catch(function () { return null; }),
+            loadHenryPolling().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -19735,11 +19745,18 @@ function initChiExplorer() {
               var bf = findFeatureContaining(results[1], point);
               if (bf) district = findPropCI(bf.properties || {}, ["district"]);
             }
+            var name = findPropCI(props, ["name"]);
+            var polling = null;
+            if (results[2] && results[2].precincts && name != null) {
+              polling = results[2].precincts[String(name)] || null;
+            }
             return {
               seq: seq,
-              name: findPropCI(props, ["name"]),
+              name: name,
               code: findPropCI(props, ["code"]),
-              boardDistrict: district
+              boardDistrict: district,
+              pollingPlace: polling && polling.place,
+              pollingAddress: polling && polling.address
             };
           });
         },
@@ -19748,6 +19765,10 @@ function initChiExplorer() {
           if (result.code) fields.push({ label: "County precinct code", value: String(result.code) });
           if (result.boardDistrict != null && result.boardDistrict !== "") {
             fields.push({ label: "County Board District", value: "District " + String(result.boardDistrict) });
+          }
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
           }
           fields.push({ label: "County", value: "Henry County" });
           return renderFieldStack(fields);

@@ -609,19 +609,7 @@ in the researched-but-unbuilt backlog.
       "blocker": "Checked 3 Aug 2026. hendersoncountyil.gov, the domain in the state's clerk directory, returns a 114-byte page whose only content forwards the visitor to a generic parking screen. At roughly 6,000 people Henderson is the smallest county on the frontier, and it became one only because neighbouring McDonough was added the same day. Nothing for it appears in the state map catalogue.",
       "wanted": "Whether the county has a website at all, and whether its board districts and precincts exist as map data. Its clerk has a working e-mail."
     },
-    {
-      "id": "henry-precinct-polling",
-      "concept": "Voting precincts",
-      "area": "Henry County",
-      "counties": [
-        "henry"
-      ],
-      "kind": "no-source",
-      "layer": "county-precinct",
-      "summary": "Henry County's precinct cards name the precinct and its county board district, but not where that precinct votes.",
-      "blocker": "Opened 6 Aug 2026 when the boundaries shipped, and it is the REMAINDER of a gap that otherwise closed. The 1 Aug request asked two things — precinct boundaries as data, and a polling-place assignment per precinct. Henry County GIS answered the first completely (Bruce Lang, shapefile by e-mail, 52 precincts now live) and did not address the second, which is not a refusal: the question went to a mapping office and a polling list is a Clerk's record. The county's shapefile carries a precinct name and a four-digit code and nothing else, so there is nothing on the geometry to join a polling place to. ASKED AGAIN 6 Aug, of the same thread and copied to the Clerk — and Bruce Lang answered within the hour by drawing the line himself: 'The other questions are for Barb to answer/supply.' So the polling table is confirmed to be the Clerk's record and not the GIS office's, which is what this gap assumed and now knows. TWO THINGS SIT WITH CLERK LINK, not one: the polling assignment, and PERMISSION TO PUBLISH. The boundaries went out the same day they arrived because the data is a public record supplied on request and the app redistributes no raw file — but the attribution question was asked and Lang explicitly declined to answer it, so it is pending rather than granted, and this record is where that is written down rather than being quietly assumed. SHE ANSWERED 11 AUG, AND THE ANSWER IS THE STEPHENSON LESSON AGAIN: 'I have pdf precinct maps on my webpage for all precinct boundaries so I feel that my webpage is sufficient for what is needed. Also, I have polling place locations as well.' That is a pointer, not a refusal, and it is correct — henrycty.com/BusinessDirectoryII.aspx?lngBusinessCategoryID=25 lists FIFTY-TWO polling places, one per precinct, each titled '<Precinct> - <Location>' with a street address and the precinct repeated in its own field. Every precinct this layer already ships is keyed there by the name it already carries. The page has been reachable for the life of this project and was never opened, which is exactly how Stephenson's precinct maps were missed on 3 Aug: the miss is in which page was looked at, and only the clerk enumerating her own holdings catches it. THE PERMISSION QUESTION SHE DID NOT ANSWER, twice asked and twice sidestepped. She was told in writing that the 52 precincts were live and offered immediate removal, and replied without asking for removal. That is NO OBJECTION STATED, which is what this record says; it is not consent and is not recorded as consent. A third ask would be badgering, so the position stands on what it is: a public record obtained on request, no raw file redistributed, credit shown, and an open offer to remove.",
-      "wanted": "NOTHING FURTHER FROM THE COUNTY as of 11 Aug — what is wanted is a build. The Clerk's own Polling Places directory pairs all 52 precincts with their location and street address, keyed by the precinct NAME rather than the four-digit code the shapefile carries, which is the join this record had assumed would need the code. A scraper and builder over that page closes this gap with no further ask."
-    },
+    
     {
       "id": "jasper-county-board",
       "concept": "County board",
@@ -2910,6 +2898,52 @@ the county as a bug report. **Compare the Stephenson comma, which WAS normalised
 the same week** — reordering "Holste, McKenzie" around a comma invents nothing,
 while changing "gudel" to "gudgel" invents a string. That is the line, and these
 two cases sit on either side of it.
+
+### 2026-08-11: the Stephenson lesson, a second time — Henry's polling list
+
+`henry-precinct-polling` opened on 6 Aug as the REMAINDER of a gap that
+otherwise closed. The 1 Aug ask wanted two things; Henry County GIS answered the
+geometry half completely — a shapefile by return e-mail, the cleanest precinct
+data any county has sent this project — and drew the line on the other half
+itself: *"The other questions are for Barb to answer/supply."* So the polling
+assignment sat with Clerk Barbara Link for five days.
+
+Her whole reply, on 11 Aug:
+
+> "I have pdf precinct maps on my webpage for all precinct boundaries so I feel
+> that my webpage is sufficient for what is needed. Also, I have polling place
+> locations as well."
+
+**That reads as a brush-off and is a pointer, and the pointer is correct.** Her
+Polling Places directory lists all 52 locations, one per precinct, each with a
+street address and the precinct repeated in a field of its own. It had been
+reachable for the entire life of this project. Nobody opened it.
+
+This is Stephenson on 3 Aug arriving a second time, and the repeat is the
+finding. Jazmin Wingert's one line — *"Here is a link to the maps I have record
+of"* — pointed at a page carrying two vector precinct PDFs, one navigation step
+from maps this repo already used, while two gap records said flatly that the
+county published no current precinct boundaries. **The failure mode is not "the
+county has nothing" and not "the county never posted it" — it is that the file
+is posted, on a page nobody looked at, and no amount of re-checking the pages
+already known will ever surface it.** The only thing that does is asking a clerk
+to enumerate her own holdings, which costs her a sentence and audits the search
+from the inside.
+
+Two mechanical notes from the build, both of the kind that ship silently wrong:
+
+- **The listing title is not the key.** Every row reads "`<Precinct> - <Location>`"
+  until it doesn't — Henry writes "Colona 3- Colona Activity Center" without the
+  space and "Andover Village Hall" with no precinct at all. The precinct is also
+  in a field of its own, and that is what the builder joins on.
+- **One row of 52 has no "View Map" link.** A parser keyed to that link drops
+  Colona 4 and reports 51 successes. The builder now reads the directory's own
+  stated listing count and refuses if what it parsed does not equal it, because
+  a polling place silently missing is a resident sent nowhere.
+
+The gap record is retired. What it also held — that permission to publish was
+asked twice and never answered — moved to `henry-precincts.json`'s own note,
+where the file's provenance lives, rather than disappearing with the record.
 
 ### 2026-08-07: the gap record wrote its own closing instructions, and they worked
 
