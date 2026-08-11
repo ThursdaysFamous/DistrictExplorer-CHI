@@ -9111,8 +9111,20 @@ function initChiExplorer() {
    * and its Clerk say Hamilton has sixteen precincts) and
    * Fire_Districts_HamiltonIL (4 features, one an unnamed ~0.4 km² sliver
    * EXCLUDED in the loader — three named districts tile part of the county;
-   * elsewhere the empty state is the honest answer). No polling data on the
-   * precinct layer (hamilton-precinct-polling). */
+   * elsewhere the empty state is the honest answer).
+   *
+   * The precinct layer carries NO polling data — that pairing closed on
+   * 2026-08-11 from the county's own post-migration website, which publishes
+   * the Clerk's statutory notice for the March 17, 2026 General Primary: all
+   * sixteen precincts with their polling place and address, shipped as
+   * data/app/hamilton-precinct-polling.json (rebuilt per election by
+   * scripts/build_hamilton_precinct_polling.py) and joined on Precinct_Name
+   * below. The notice settled the one pairing two ~0.3 mi-coarse instruments
+   * could not — Dahlgren #1 votes at the Township Building on County Road
+   * 200 E, #2 at Dahlgren Baptist Church in the village — and re-confirmed
+   * all four McLeansboro precincts at the Old Highschool Gym, exactly as
+   * Clerk Bowman had put it in writing on 5 Aug. A polling failure costs the
+   * polling rows, never the precinct. */
   var HAMILTON_ORG_SERVICE =
     "https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/";
   function loadHamiltonLayer(url, where, outFields, label) {
@@ -9125,8 +9137,29 @@ function initChiExplorer() {
       });
   }
   var loadHamiltonPrecincts = makeCached(function () {
-    return loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Voter_Precincts_Hamilton/FeatureServer/0",
-                             "Precinct_Name IS NOT NULL", "Precinct_Name", "precincts");
+    return Promise.all([
+      loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Voter_Precincts_Hamilton/FeatureServer/0",
+                        "Precinct_Name IS NOT NULL", "Precinct_Name", "precincts"),
+      fetchJSONWithRetry("data/app/hamilton-precinct-polling.json", {}, 2)
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling && polling.precincts) {
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          // The GIS writes "MCLEANSBORO 4 " with a trailing space — the
+          // normalization here is the same trim the card identifier does.
+          var name = String(findPropCI(props, ["precinct_name"]) || "")
+            .replace(/\s+/g, " ").trim().toUpperCase();
+          var entry = polling.precincts[name];
+          if (!entry) return;
+          props.dxPollingPlace = entry.place || null;
+          props.dxPollingAddress = entry.address || null;
+          props.dxPollingElection = polling.election || null;
+        });
+      }
+      return precincts;
+    });
   });
   var loadHamiltonFire = makeCached(function () {
     return loadHamiltonLayer(HAMILTON_ORG_SERVICE + "Fire_Districts_HamiltonIL/FeatureServer/0",
@@ -20321,8 +20354,11 @@ function initChiExplorer() {
       // Hamilton — the county's sixteen precincts. The source layer has a
       // seventeenth row with a null name that duplicates DAHLGREN 1's polygon
       // exactly and sorts ahead of it; loadHamiltonPrecincts drops unnamed rows
-      // so Dahlgren 1 answers with its own name instead of "Unknown". No
-      // polling data on the layer (hamilton-precinct-polling).
+      // so Dahlgren 1 answers with its own name instead of "Unknown". The
+      // layer carries no polling data; the polling place joins from the
+      // Clerk's published election notice (data/app/hamilton-precinct-polling
+      // .json), and the row is labelled with the election the notice names —
+      // a polling assignment is per-election, not a standing fact.
       {
         key: "hamilton",
         coverage: hamiltonCountyCoverage,
@@ -20335,15 +20371,29 @@ function initChiExplorer() {
           return loadHamiltonPrecincts().then(function (geojson) {
             var feature = findFeatureContaining(geojson, point);
             if (!feature) return null;
-            var name = findPropCI(feature.properties || {}, ["precinct_name"]);
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["precinct_name"]);
             return {
               seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null,
+              pollingElection: props.dxPollingElection || null
             };
           });
         },
         render: function (result) {
-          return renderFieldStack([{ label: "County", value: "Hamilton County" }]);
+          var fields = [{ label: "County", value: "Hamilton County" }];
+          if (result.pollingPlace) {
+            fields.push({
+              label: result.pollingElection
+                ? "Polling place (" + String(result.pollingElection) + ")"
+                : "Polling place",
+              value: String(result.pollingPlace) +
+                (result.pollingAddress ? " — " + String(result.pollingAddress) : "")
+            });
+          }
+          return renderFieldStack(fields);
         },
         cardIdentifier: function (result) {
           return result.name ? "Precinct " + String(result.name) : "Unknown";
