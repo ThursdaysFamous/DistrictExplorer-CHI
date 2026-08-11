@@ -12,7 +12,7 @@ exists only as a non-free "fair use" upload, or only on a county's own
 website with no free license, is _not_ shippable without permission and is
 listed below rather than used.**
 
-Counts: **9 shipped** · **4 free-flag (awaiting your OK)** · **15 non-free seal exists** · **74 no image found** (= 102 total).
+Counts: **9 shipped** · **4 free-flag (awaiting your OK)** · **15 non-free seal exists** · **73 no image found** · **1 permission denied** (= 102 total).
 
 Search method: Wikimedia Commons (title + full-text) plus each county's
 English Wikipedia infobox, with license metadata pulled per file. Non-free
@@ -102,18 +102,37 @@ license (ideally a public-domain release from the county) before they can ship:
 | Bureau County | Greene County | Macoupin County | Richland County |
 | Calhoun County | Hancock County | Madison County | Schuyler County |
 | Carroll County | Hardin County | Marshall County | Scott County |
-| Cass County | Henderson County | Mason County | Shelby County |
-| Champaign County | Henry County | Massac County | Stark County |
-| Christian County | Iroquois County | McLean County | Stephenson County |
-| Clark County | Jackson County | Menard County | Union County |
-| Clay County | Jefferson County | Mercer County | Wabash County |
-| Clinton County | Jersey County | Montgomery County | Warren County |
-| Coles County | Jo Daviess County | Morgan County | Wayne County |
-| Crawford County | Johnson County | Moultrie County | White County |
-| Cumberland County | Kankakee County | Ogle County | Williamson County |
-| De Witt County | Kendall County | Perry County | Woodford County |
+| Cass County | Henderson County | Mason County | Stark County |
+| Champaign County | Henry County | Massac County | Stephenson County |
+| Christian County | Iroquois County | McLean County | Union County |
+| Clark County | Jackson County | Menard County | Wabash County |
+| Clay County | Jefferson County | Mercer County | Warren County |
+| Clinton County | Jersey County | Montgomery County | Wayne County |
+| Coles County | Jo Daviess County | Morgan County | White County |
+| Crawford County | Johnson County | Moultrie County | Williamson County |
+| Cumberland County | Kankakee County | Ogle County | Woodford County |
+| De Witt County | Kendall County | Perry County |  |
 | Douglas County | Knox County | Piatt County |  |
 | Edwards County | LaSalle County | Pike County |  |
+
+---
+
+## ⛔ Permission denied (1 county — never ship, in any form)
+
+| County | Date | Record |
+|---|---|---|
+| Shelby County | 2026-08-11 | County Clerk/Recorder Jessica Fox, in writing: "I am not giving authority for use of the Shelby County seal on your site. We have had too many issues as of late regarding use of the county seal." |
+
+This is the campaign's first outright denial, and it is a different state from
+every other row in this file: "no image found" and "non-free" are obstacles a
+future free release can clear, while a denial is the county's decision and
+stands until the county itself reverses it. Shelby ships the name badge
+permanently. Do not add a `COUNTY_SEAL_URLS` entry for Shelby County even if a
+cleanly-licensed image later surfaces on Commons — the license question and the
+permission question are separate, and the county has answered the second.
+(Denied on the same reply that settled the county's board form and pointed at
+its adopted district map — the denial costs the map marker only, and has no
+bearing on showing the county's public district data.)
 
 ---
 
