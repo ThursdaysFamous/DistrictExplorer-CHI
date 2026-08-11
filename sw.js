@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v39";
+const CACHE_NAME = "district-explorer-shell-v40";
 
 const SHELL_URLS = [
   "./",
@@ -175,6 +175,7 @@ const GEOMETRY_URLS = [
   "./data/app/sangamon-judicial-subcircuits.json",
   "./data/app/school-board-districts.json",
   "./data/app/scott-county-outline.json",
+  "./data/app/shelby-county-board-districts.json",
   "./data/app/shelby-county-outline.json",
   "./data/app/st-clair-county-outline.json",
   "./data/app/stark-county-board-districts.json",
@@ -264,6 +265,7 @@ const ROSTER_URLS = [
   "./data/app/fulton-county-board-members.json",
   "./data/app/stark-county-board-members.json",
   "./data/app/mason-county-board-members.json",
+  "./data/app/shelby-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

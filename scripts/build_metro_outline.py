@@ -56,9 +56,12 @@ closed rings. Doing it here means the browser ships one feature with no interior
 edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
 Effingham exercised that path on 2026-08-04 (the first island, §2.5.1 checklist):
-the shipped file is now a MultiPolygon whose second polygon is the island's own
+the shipped file became a MultiPolygon whose second polygon was the island's own
 OUTER ring — verified by anchor, not by eye, because an island mis-nested as a
 hole renders identically and answers False to every containment test inside it.
+(Effingham merged back into the mainland on 2026-08-11 when Shelby — bordering
+it AND Macon/Montgomery — shipped as the 49th dispatched county; Edwards keeps
+the file a MultiPolygon, exercising the same nesting.)
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json
@@ -126,10 +129,14 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # the map had already stopped honouring its premise: Menard and Bureau sat fully
 # enclosed by served counties as HOLES in this outline, because serveability
 # follows published data and data availability is not spatially contiguous — a
-# connected ring never bought a hole-free region. (Menard shipped 2026-08-07, so
-# BUREAU IS NOW THE ONLY HOLE — one interior ring, hence four rings across three
-# polygons. It is also the only unserved county with no unserved neighbour, which
-# is why its absence reads as a doughnut in the wash rather than as frontier.)
+# connected ring never bought a hole-free region. (Menard shipped 2026-08-07,
+# leaving BUREAU as the only hole. Shelby's join on 2026-08-11 then re-proved
+# the point in both directions at once: it merged the Effingham island back
+# into the mainland AND enclosed CHRISTIAN — whose neighbours Sangamon, Macon,
+# Shelby and Montgomery are now all served — as the second hole. FOUR RINGS
+# ACROSS TWO POLYGONS. Bureau and Christian are the two unserved counties with
+# no unserved neighbour, which is why each reads as a doughnut in the wash
+# rather than as frontier.)
 # Second, pass 11 measured the
 # frontier as ASK-gated, not search-gated (docs/DATA_LAYER_GUIDEBOOK.md, "the
 # search lever is spent"): once the lever is a records request, restricting
@@ -199,6 +206,18 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # Beacon export its Clerk and Assessor obtained was the
                      # only route.
                      "129",
+                     # Shelby — the 49th dispatched county (2026-08-11), and
+                     # the one that ENDED the first island: it borders Macon
+                     # and Montgomery on the mainland AND Effingham, so adding
+                     # it merges the Effingham island back in and the outline
+                     # drops from three polygons to two (Edwards stays out on
+                     # its own). The same join ENCLOSES CHRISTIAN as a second
+                     # hole beside Bureau — four rings across the two
+                     # polygons. Its board districts are dissolved from Census
+                     # VTDs per the composition the county publishes, one
+                     # precinct split three ways along Rt 16 and Lake
+                     # Shelbyville.
+                     "173",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -235,6 +254,7 @@ DISPATCH_COUNTY_FIPS = {
     "effingham": "049",
     "hamilton": "065", "jefferson": "081",
     "montgomery": "135", "menard": "129",
+    "shelby": "173",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -322,11 +342,19 @@ INSIDE = {
     "Havana (Mason)": (40.2950, -90.0566),
     "Toulon (Stark)": (41.0937, -89.8651),
     "Canton (Fulton)": (40.5570, -90.0393),
-    # The FIRST ISLAND (pass 13, 2026-08-04): Effingham joins detached — its
-    # ring is the outline's second polygon. The corridor between it and the
-    # mainland is held OUTSIDE by Vandalia (Fayette) and Shelbyville (Shelby),
-    # which is what proves the gap between island and mainland stays washed.
+    # The FIRST ISLAND (pass 13, 2026-08-04): Effingham joined detached, its
+    # ring the outline's second polygon, the corridor to the mainland held
+    # OUTSIDE by Vandalia (Fayette) and Shelbyville (Shelby). Shelby's own
+    # join on 2026-08-11 closed that corridor and merged the island back in;
+    # Vandalia still holds Fayette, the corridor's other flank, OUTSIDE.
     "Effingham (Effingham)": (39.1200, -88.5434),
+    # Shelbyville (Shelby) — the county seat, 2026-08-11, moved up from the
+    # OUTSIDE list where it had held the island corridor since Macon's
+    # arrival pushed the frontier onto it. The 49th dispatched county and the
+    # first-island merge: with Shelby served, the mainland and Effingham are
+    # one polygon and Edwards is the only island left. The same join encloses
+    # Christian as the wash's second hole — see Taylorville, OUTSIDE.
+    "Shelbyville (Shelby)": (39.4130, -88.7940),
     # The SECOND island (pass 14, 2026-08-05): Hamilton, deep-south and five
     # unserved neighbours around it — Fairfield (Wayne) holds the corridor
     # toward Effingham OUTSIDE.
@@ -396,11 +424,21 @@ OUTSIDE = {
     # the OUTSIDE list doing exactly its job. Knox is the honest frontier: it
     # borders Fulton, is served by nothing, and carries its own recorded gap.
     "Galesburg (Knox)": (40.9478, -90.3712),
-    # Macon's arrival (pass 12) pushes the line south-east onto two counties this
-    # project had never researched — they were a second ring out until Macon
-    # closed the distance. Both are named here so neither can be quietly served.
+    # Macon's arrival (pass 12) pushed the line south-east onto two counties
+    # this project had never researched. Shelbyville sat beside Sullivan here
+    # until 2026-08-11, when Clerk Jessica Fox's four-answer reply de-risked
+    # the build and Shelby moved up to INSIDE as the 49th dispatched county —
+    # the list failed the build until it was moved, exactly as designed.
+    # Sullivan stays: Moultrie is still unserved, and it now borders the
+    # served area on two sides (Macon and Shelby).
     "Sullivan (Moultrie)": (39.5868, -88.6069),
-    "Shelbyville (Shelby)": (39.4130, -88.7940),
+    # Christian — ENCLOSED 2026-08-11 by Shelby's join: with Sangamon, Macon,
+    # Shelby and Montgomery all served, Christian is the second enclave after
+    # Bureau, an interior ring rather than frontier. This anchor is what
+    # proves the hole IS a hole: mis-nested, the ring would render
+    # identically under the wash and Taylorville would answer True here,
+    # failing the build.
+    "Taylorville (Christian)": (39.5490, -89.2945),
     "Milwaukee (WI)": (43.0389, -87.9065),
     # DeKalb used to sit here, described as "enclosed on three sides by served
     # counties and the one border-ring county with no locatable GIS". The second

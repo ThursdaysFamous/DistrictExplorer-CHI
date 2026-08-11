@@ -8102,6 +8102,37 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/jefferson-county-board-members.json", {}, 2);
   });
 
+  /* Shelby (the 49th dispatched county, added 2026-08-11 — and the county
+   * that MERGED THE EFFINGHAM ISLAND into the mainland, because it borders
+   * Effingham on one side and Macon/Montgomery on the other). Its board
+   * districts are DERIVED, the DeWitt shape at its most verified: Census 2020
+   * voting districts — which match the county's adopted 2021 plan 33/33 by
+   * precinct name — dissolved per the composition the county prints on its
+   * own County Board page, with ONE precinct (Shelbyville 5) cut three ways
+   * along the two landmarks the county names, Rt 16 and Lake Shelbyville
+   * (scripts/build_shelby_board_districts.py; verified at census-block level
+   * against the plan's printed populations, nine of eleven to the person).
+   * Districts 8/9/10/11 carry boundaryNotes: the split approximations on
+   * 8/9/10, and on 8/11 the ~16-person Shelbyville 4/5 sliver by which the
+   * plan differs from the census snapshot. The roster is scraped weekly from
+   * the same page — 22 seats, two per district, vacancies shipped as the
+   * county prints them — and cross-checked against the county's e-mail
+   * directory. */
+  var loadShelbyCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/shelby-county-outline.json", {}, 2);
+  });
+  function shelbyCountyCoverage(point) {
+    return loadShelbyCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadShelbyBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/shelby-county-board-districts.json", {}, 2);
+  });
+  var loadShelbyBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/shelby-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -16142,6 +16173,99 @@ function initChiExplorer() {
             var e = d != null ? roster[String(d)] : null;
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Shelby (11 districts electing TWO members each) — added 2026-08-11.
+      // Boundary DERIVED, the DeWitt shape at its most verified: Census 2020
+      // voting districts dissolved per the composition the county prints on
+      // its own board page, with Shelbyville 5 cut three ways along Rt 16 and
+      // Lake Shelbyville as the county describes; nine of eleven district
+      // populations match the adopted plan to the person and the other two
+      // carry the disclosed 16-person sliver (build_shelby_board_districts).
+      // Roster scraped weekly from the same page and cross-checked against
+      // the county's e-mail directory. The Chair and Vice Chair hold District
+      // 3's two seats and are badged on their own rows with the role alias
+      // e-mail the county publishes beside each district address. A vacant
+      // seat renders exactly as the county prints it — "Currently Vacant"
+      // with the seat's e-mail — and drops out of the member count.
+      {
+        key: "shelby",
+        coverage: shelbyCountyCoverage,
+        loadGeometry: loadShelbyBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadShelbyBoardDistricts(),
+            loadShelbyBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              boundaryNote: findPropCI(props, ["boundarynote"])
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var filled = members.filter(function (m) { return !m.vacant; });
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Shelby County Board",
+            note: boardCountNote(filled.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m, m.role ? { badge: "Board " + m.role } : null);
+              var extra = [];
+              if (m.term) extra.push("Term " + String(m.term));
+              // The role alias is a second published e-mail; the contact
+              // line renders one, so the alias rides the note line (the
+              // Montgomery phonesExtra precedent).
+              if (m.roleEmail) extra.push("board office e-mail " + String(m.roleEmail));
+              if (extra.length) p.note = p.note ? p.note + " · " + extra.join(" · ") : extra.join(" · ");
+              return p;
+            })));
+          }
+          // Districts 8, 9 and 10 share the split precinct and 8/11 the
+          // census-vs-plan sliver; a reader is owed the same caveats the
+          // builder records rather than a false certainty.
+          if (result.boundaryNote) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Boundary note", value: String(result.boundaryNote) }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Shelby County Board (official)",
+            url: "https://www.shelbycounty-il.gov/coboard.aspx"
+          };
+        },
+        hoverOfficial: {
+          load: loadShelbyBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            var named = e.members.filter(function (m) { return !m.vacant; });
+            if (!named.length) return null;
+            return named.map(function (m) { return m.name; }).join(", ");
           }
         }
       },

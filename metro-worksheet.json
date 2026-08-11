@@ -1165,11 +1165,16 @@
         "dynamic_reference": true
       },
       {
+        "file": "shelby-county-board-districts.json",
+        "min_features": 11,
+        "max_features": 11,
+        "note": "Shelby County Board districts, DISSOLVED from Census 2020 voting districts per the composition the county publishes — the DeWitt shape at its most verified, and the build that ended the shelby-county-board gap Clerk Jessica Fox's 2026-08-11 reply de-risked. Shelby publishes no board GIS; its adopted plan is a vector PDF (Bruce Harris & Associates, November 2021) whose 33 precincts TIGER's VTD layer carries EXACTLY — 33/33 by name, 31/33 by population to the person, the two exceptions being each other's inverse (a ~16-person sliver the plan moved across the Shelbyville 4/5 edge relative to the census snapshot). ONE PRECINCT IS SPLIT THREE WAYS: Shelbyville 5, which wraps the county seat, goes to District 8 south of Rt 16, District 9 north of it east of Lake Shelbyville, District 10 north-west of the lake — the county's own wording on coboard.aspx. The cut instruments are public geometry: the Rt 16 corridor from TIGER secondary roads (its in-town Main Street names included; through downtown the median of the route's twin strands), and the lake from TIGER areal hydrography with the Kaskaskia River carrying the divider below the lake's tip, bridged straight through the ~1.4 km dam reach TIGER maps no linear river for. scripts/build_shelby_board_districts.py verifies the cut at CENSUS-BLOCK level — the three pieces' block sums are asserted EXACTLY (605/158/55; the one populated dam-reach block must land west, because the county's own 55 = 54 + 1) — and the eleven districts against the plan's printed populations: nine match to the person, Districts 8/11 carry the sliver at its exact ±16, the total is the county's exact 20,990, and the file tiles the VTD union to within 2.4 m2 of rounding hairline. Districts 8/9/10/11 carry boundaryNotes disclosing the split approximations and the sliver. The weekly roster job re-parses the composition — split pieces included — so a redistricting fails CI (the DeWitt pattern)."
+      },
+      {
         "file": "shelby-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Shelby County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Shelby County coverage outline — gates the county's dispatch entries. Shipped 2026-08-04 by the pass-13 research sweep as gap-location geometry; promoted 2026-08-11 to the dispatched county's coverage test when Shelby joined as the 49th, referenced by loadShelbyCountyOutline in index.html."
       },
       {
         "file": "st-clair-county-outline.json",
@@ -1609,11 +1614,16 @@
         "file": "mason-county-board-members.json",
         "min_keys": 2,
         "note": "Mason County Board members keyed by district (2 districts, four members each; 8/8 with party, phone, e-mail and a term year, Chairman and Vice-Chairman badged). HAND-TRANSCRIBED 2026-08-02, not scraped: the county's roster PDF is a scan whose text layer extracts as line noise rather than failing, so a scraper would ship confident garbage. scripts/mason_roster_watch.py runs weekly instead and opens a tracking issue when the board page stops linking that PDF or its bytes change. No residence data ships at all — not even the home town — because one member's address is legally protected and a town-for-seven-blank-for-one roster would single her out."
+      },
+      {
+        "file": "shelby-county-board-members.json",
+        "min_keys": 11,
+        "note": "Shelby County Board members keyed by district (11 districts electing TWO members each = 22 seats; currently 20 filled + District 7's two shipped AS VACANCIES exactly as the county prints them, 'Currently Vacant' with the seat's e-mail — dropping them would misstate the board's size). Scraped weekly from coboard.aspx and CROSS-CHECKED against the county's second published roster, the contacts.aspx e-mail directory: every directory row must match a card seat by e-mail and name, so a half-updated site fails instead of shipping whichever page the scraper read. Every filled seat carries party, a term string as printed ('2024–2028', 'through 2026') and an e-mail; 20/20 with a phone. The Chair and Vice Chair hold District 3's two seats, badged on their own rows with the role alias e-mail (shcoboardchair@/shcovicechair@) the county publishes beside each district address. Home addresses are printed on every card and NEVER shipped (the Mason/Marshall precedent) — the scraper does not capture them, so nothing downstream can leak them. The same scrape re-parses each card's precinct composition, split pieces included, against the boundary compiled into build_shelby_board_districts.py."
       }
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v39",
+    "cache_name": "district-explorer-shell-v40",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1861,6 +1871,11 @@
       "file": "watch-mason-roster-source.yml",
       "purpose": "Mason County Board roster SOURCE watch (scan — transcribed by hand, never scraped)",
       "schedule": "Tue 18:00 UTC"
+    },
+    {
+      "file": "update-shelby-county-board-roster.yml",
+      "purpose": "Shelby County Board roster (shelbycounty-il.gov coboard.aspx scrape, cross-checked against contacts.aspx) + drift check on the composition the derived boundary is dissolved from",
+      "schedule": "Wed 19:00 UTC"
     }
   ],
   "geocoder": {

@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**59 of 102 Illinois counties are served** — 48 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 43 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**60 of 102 Illinois counties are served** — 49 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 42 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (59)
+## Served counties (60)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -73,6 +73,7 @@
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 2 — `county-board-office-addresses` (no-source); `sangamon-park-library-districts` (no-source) |
 | Schuyler | 17169 | County card | at-large — County card | — | none |
 | Scott | 17171 | judicial circuit | no board layer — see gaps | — | 1 — `scott-county-commissioners` (no-source) |
+| Shelby | 17173 | dispatch | districted | `county-board` | none |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | none |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
@@ -83,7 +84,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source); `winnebago-village-heads` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (43) — gap-recorded, not yet served
+## Researched frontier (42) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -124,7 +125,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Pulaski | 17153 | 1 — `pulaski-county-board` (no-source) |
 | Richland | 17159 | 1 — `richland-county-board` (no-source) |
 | Saline | 17165 | 1 — `saline-county-board` (no-source) |
-| Shelby | 17173 | 1 — `shelby-county-board` (no-source) |
 | Union | 17181 | 1 — `union-county-board` (no-source) |
 | Vermilion | 17183 | 1 — `vermilion-county-website` (no-source) |
 | Wabash | 17185 | 1 — `wabash-county-board` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 117 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 116 records in the Data gaps panel: `chicago-amenity-phones`.

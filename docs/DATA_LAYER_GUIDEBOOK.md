@@ -261,7 +261,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Christian County's current board map is a picture, and the readable file sitting beside it on the same page is the previous decade's plan.",
-      "blocker": "Checked 2 Aug 2026: “County-Board-Districts-2022.pdf” has no readable text or lines at all, and the state's copy of the adopted plan is a scan. The trap is the file next to it: “County-Board-Districts-with-Rep.pdf” IS readable, but the populations printed on it are from the 2010 census, so it is the pre-2021 map and using it would draw superseded lines. The county has an online map account but publishes only assessment data on it. The member list is missing too — the county site names the Chairman and Vice-Chairman only, not the 16 members or their districts.",
+      "blocker": "Checked 2 Aug 2026: “County-Board-Districts-2022.pdf” has no readable text or lines at all, and the state's copy of the adopted plan is a scan. The trap is the file next to it: “County-Board-Districts-with-Rep.pdf” IS readable, but the populations printed on it are from the 2010 census, so it is the pre-2021 map and using it would draw superseded lines. The county has an online map account but publishes only assessment data on it. The member list is missing too — the county site names the Chairman and Vice-Chairman only, not the 16 members or their districts. ENCLOSED 2026-08-11: Shelby's join made Christian the coverage wash's second enclave after Bureau — Sangamon, Macon, Shelby and Montgomery are all served, so this county now reads as a doughnut on the map rather than as frontier, which makes its absence the visible kind.",
       "wanted": "The four districts adopted in 2021 as map data, plus a member list with district assignments. The county's own map account could carry both."
     },
     {
@@ -1330,19 +1330,6 @@ in the researched-but-unbuilt backlog.
       "summary": "Scott is a commission county — three commissioners elected countywide — and while its own results name every winner, nothing confirms those three still hold the seats.",
       "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all. AT-LARGE PROVEN from the county's own results portal at results.gbsvote.com, which names the county clerk as Election Authority (Greene l_id=11, Morgan l_id=16, Scott l_id=19): the 8 Nov 2022 GENERAL ELECTION, marked ** OFFICIAL RESULTS **, carries \"FOR COUNTY COMMISSIONER / 10 of 10 precincts reporting / Vote for ( 1 )\" (John D. Simmons), and the 19 Mar 2024 PRIMARY, also OFFICIAL, repeats it for both parties (Thomas L. Peterson, Republican). The whole county votes for one seat at a time; the only \"DISTRICT\" strings on the 2022 canvass are the Fifteenth Congressional, One Hundredth Representative and Fiftieth Legislative districts. So there is no geometry to seek and none should be invented. scottcoil.gov/commissioners publishes the office phone (217-742-5532) and commissioners@scottcoil.gov but renders the members themselves through a Munibit \"People\" widget whose /api/public/mwjsPeople endpoint returns HTTP 500 without the page's own parameters, and the Internet Archive preserved the same empty shell. CORRECTED 2026-08-08, hours after this record first shipped: the claim above that the names are unreachable was WRONG, and the source that disproves it is the very one cited for the board form. The county's results portal names the winner of every commissioner contest in plain HTML — Robert L. Schafer (R) in Nov 2020 and John D. Simmons (R) in Nov 2022, both on OFFICIAL canvasses; Thomas L. Peterson (R) in Nov 2024. Three separate patterns of mine missed them, not the data: the office is headed \"FOR COUNTY COMMISSIONER\" in recent years but plain \"COUNTY COMMISSIONER\" in 2020 and abbreviated \"COUNTY COMM\" on Morgan's 2020 page, and each time the fix was in the reader. WHAT IS ACTUALLY MISSING is narrower and does not go away with better parsing: election returns record who WON a contest, never who holds the seat today. A mid-term vacancy filled by APPOINTMENT appears in no return anywhere, and the staggered six-year, one-per-general structure that turns three contests into three sitting members is an INFERENCE from the pattern, not something the county states. Publishing these three unconfirmed would be precisely the guess the honesty rules forbid, so the ask became a confirmation rather than a request for a roster. ASKED 2026-08-08: confirm those three, name the chairman, correct the term assumption.",
       "wanted": "Confirmation that Schafer, Simmons and Peterson are the three currently serving, and which is chairman. Not a roster from scratch: a yes/no on three names the county itself published. No geometry."
-    },
-    {
-      "id": "shelby-county-board",
-      "concept": "County board",
-      "area": "Shelby County",
-      "counties": [
-        "shelby"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Shelby County's board is not shown yet — but as of 11 Aug 2026 its form (11 districts), its adopted map (vector, on the county's own site) and its precinct fabric (TIGER 2020 VTDs, proven 33/33) are all in hand.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Shelby was one of the two counties pass 12 pushed the frontier onto when Macon shipped; it is now researched. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. shelbycounty-il.gov answers 200 — 'Shelby County, Illinois - Official Website' — with /coboard.aspx (County Board Members) and /contacts.aspx (an e-mail directory for board members). shelbycountyil.com is a DECOY: a real-estate agency. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. ASKED 5 Aug AND ANSWERED 11 Aug BY CLERK JESSICA FOX, four answers in five sentences. (1) THE BOARD FORM IS SETTLED: 'Board members are elected from districts' — the election authority stating the form in writing, which §2.5 step 2 accepts — and the county's own site carries the adopted plan: ELEVEN districts. (2) HER POINTER WAS CORRECT, the fourth clerk-enumerates-her-holdings instance in one week (Stephenson, Henry, Hamilton, now Shelby): 'under county clerk, election information' on shelbycounty-il.gov holds ShelbyCoIL_CountyBoardDistricts.pdf — a county-wide VECTOR PDF (4,996 drawing paths, 1,029 chars of text; produced by Bruce Harris & Associates, dated November 2021, '6.7% Total Deviation') carrying all 11 districts AND all 33 precincts with names and populations, plus a street-level Shelbyville inset for the city's seven-precinct splits. Two raster companions (County Board District Map 2022; a 33-page Township Precinct Maps 2022) add nothing the vector sheet lacks. (3) THE SEAL IS DENIED, in writing — the campaign's first outright denial, recorded in docs/COUNTY_SEALS_REVIEW.md's new permission-denied class; Shelby keeps the name badge permanently and the denial costs nothing else. (4) Shapefiles are PURCHASABLE from the county's GIS provider (Bruce Harris) — recorded as an option and unnecessary, because the free adopted map plus public geometry suffice. MEASURED THE SAME DAY: TIGER's Census 2020 voting districts for Shelby (tigerWMS_Census2020 layer 58, GEOID 17173*) carry EXACTLY the map's 33 precincts — 33/33 names, 31/33 populations to the person, and the two exceptions are each other's inverse (Shelbyville 4 is +16 where Shelbyville 5 is -16 against the map's printed figures), meaning the county's 2021 plan moved one ~16-person sliver on that single shared edge relative to the census snapshot. The map's eleven printed district totals sum to 20,990, the county's 2020 census population, giving any transcription of the composition an exact checksum.",
-      "wanted": "A BUILD, not another ask — the DeWitt shape, fully de-risked. Geometry: TIGER 2020 VTDs (the county's own fabric, proven 33/33 by name and 31/33 by population). Composition: the 11 districts transcribed from the county's own adopted vector map, with each district's precinct-sum asserted against the map's printed total (the totals sum to the county's exact 2020 population, so a mis-transcription cannot balance). The one caveat to carry honestly: the Shelbyville 4/5 shared edge differs from the census snapshot by a ~16-person sliver — if the two land in different districts, both carry a boundaryNote; if the same district, it is moot. The roster half reads coboard.aspx (County Board Members) joined to contacts.aspx (member e-mail directory)."
     },
     {
       "id": "st-clair-board-contact",
@@ -3573,6 +3560,65 @@ rule: the public record answers, so a fourth message to a four-minute-reply
 office would have asked her to hand-confirm what her own notice already
 states. Nothing is outstanding with Hamilton County but
 `hamilton-municipal-officials`.
+
+### 2026-08-11: Shelby ships as the 49th county — one island merged, one enclave created, and the fleet's first three-way precinct split
+
+`shelby-county-board`'s "wanted" line asked for *"a BUILD, not another ask —
+the DeWitt shape, fully de-risked,"* and that is what shipped, to its exact
+spec. `scripts/build_shelby_board_districts.py` dissolves TIGER's Census 2020
+VTDs — proven 33/33 by name against the county's adopted 2021 plan — per the
+composition the county prints on coboard.aspx, asserts each district against
+the plan's printed populations (nine of eleven to the person; the map's
+totals sum to the county's exact 20,990, so a mis-transcription cannot
+balance), and carries the Shelbyville 4/5 sliver exactly as the record
+prescribed: the two edges land in different districts, so **both D8 and D11
+carry a boundaryNote** naming the ±16.
+
+**The new machinery is the split.** Shelbyville 5 wraps the county seat and
+goes three ways — D8 south of Rt 16, D9 north-east of Lake Shelbyville, D10
+north-west — the first precinct in the fleet cut into three pieces, and cut
+by LANDMARKS the county names rather than by a meridian (Jefferson's 34th
+Street was two pieces, one longitude). Both instruments are public geometry:
+the Rt 16 corridor from TIGER secondary roads (through downtown the route is
+"W Main St"/"E Main St", so the corridor is three names merged, sampled as
+the median of the twin strands), and the lake from TIGER areal hydrography
+with the Kaskaskia River carrying the divider below the lake's southern tip.
+TIGER maps no linear river through the ~1.4 km dam reach, so the divider is
+bridged straight — an approximation that crosses **zero populated census
+blocks**, disclosed on both cards. The cut is adjudicated at census-block
+level, not by eye: Shelby's 2,605 blocks sum to the county's exact
+population, the 86 inside S5 to its exact 818, and the three pieces to
+**605/158/55 exactly** — the values that reproduce the plan's printed 1,948
+(D9) and 1,833 (D10) to the person. The sharpest single check is one block:
+the only populated block in the dam reach (pop 1) must land west of the
+divider, because the county's own arithmetic says 55 = 54 + 1. It does.
+
+The roster (22 seats, two per district) ships with a cross-check no other
+county needed because no other county publishes its roster twice: every
+contacts.aspx directory row must match a coboard.aspx card seat by e-mail
+and name, both role aliases must land on the members the cards tag Chair and
+Vice Chair, so a mid-edit site fails the weekly job instead of shipping
+whichever page the scraper read. District 7's two seats are **"Currently
+Vacant" and ship that way** (the Bureau rule); home addresses are printed on
+every card and are not even captured by the scraper (the Mason/Marshall
+rule). The weekly job re-parses the composition, split pieces included — a
+redistricting fails CI, the DeWitt pattern.
+
+**The ring event is a double.** Shelby borders Macon and Montgomery on the
+mainland AND Effingham, so the first island (2026-08-04) merged back in —
+and the same join enclosed CHRISTIAN, whose neighbours (Sangamon, Macon,
+Shelby, Montgomery) are now all served: the wash's second doughnut beside
+Bureau, held OUTSIDE by a new Taylorville anchor. Four rings across two
+polygons — the same four rings as before Shelby, differently distributed.
+Islands can un-island and enclaves can appear in the same stroke; the
+dissolve is recomputed, never patched.
+
+One process lesson repeated itself with a new layer id: the census-blocks
+fetch was first pointed at tigerWMS_Census2020 **layer 12** on a guess and
+returned three features — the same false-negative shape as the layer-58 VTD
+guess and the FULLNAME field guess before it. The service's own layer list
+says blocks are **layer 10**; one metadata request before concluding remains
+cheaper than any amount of debugging a wrong assumption.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
