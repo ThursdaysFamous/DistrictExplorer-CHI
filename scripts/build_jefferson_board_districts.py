@@ -103,18 +103,37 @@ county-board file built the same way has holes of at most 191 m2, because their
 source precincts arrived edge-matched and never went through a repair-then-
 simplify.
 
-AND THEN THE SAME READER LOOKED CLOSER. With the holes gone, what was left on
-District 10's southern edge was "jagged lines and a spike" — also real, also not
-fixable here, and the reason the precinct file WAS re-cut after all (this
-docstring said it would not be; that was written before the second report). Two
-faults, both in build_jefferson_precincts.py and both documented there:
+AND THEN THE SAME READER LOOKED CLOSER, TWICE MORE. Each round left something
+smaller standing, and each thing standing had a different cause, so all three
+are recorded rather than folded together.
+
+ROUND TWO — "jagged lines and a spike" on District 10's southern edge. Also
+real, also not fixable here, and the reason the precinct file WAS re-cut after
+all (this docstring said it would not be; that was written before the report).
+Two faults, both in build_jefferson_precincts.py and both documented there:
 SIMPLIFY_TOLERANCE_M was 10 m, on the wrong side of a cliff — it cannot remove a
 zig-zag whose amplitude is the 30 m Voronoi sampling step, so all 3,057 zig-zag
-vertices survived — and simplification of any tolerance keeps an isolated spike
+vertices survived — and simplification at any tolerance keeps an isolated spike
 by construction, including one 33 m south of a straight township line on ground
 the county never drew. 15 m plus an explicit despike pass fixed both, and these
-districts inherited the fix: 2,458 vertices to 688, 1,521 zig-zag vertices to 16,
-District 10 alone from 129 vertices to 20.
+districts inherited the fix: 2,458 vertices to 688, 1,521 zig-zag vertices to 16.
+
+ROUND THREE — a line standing INSIDE District 10, rising out of its southern
+edge. Two separate causes, both in this file, both at the 34th Street cut, and
+both fixed here:
+
+  * A 9 m wide, 408 m tall slice of Shiloh 4 fell east of the TIGER meridian but
+    SOUTH OF BROADWAY, where the county's own description says there is no
+    Shiloh 4 east of 34th Street at all — that ground is Shiloh 3. It was
+    District 11 territory standing inside District 10. The split block now
+    returns any part stranded below Shiloh 3's northern edge to the west side.
+  * A 7 m wide, 190 m deep SLOT between Shiloh 3 and Shiloh 4, both walls
+    District 10, which resolve_tiling's reach rule declined because the slot's
+    mouth opens onto the District 5 township line and the reach rule is blind to
+    shape. Pass 2b adds the shape test: a crack whose outline one district holds
+    90% of is surrounded by it, not shared with a neighbour.
+
+District 10 ended at 14 vertices, from 129 before any of this.
 
 Usage:
     python3 scripts/build_jefferson_board_districts.py            # write data/app/
@@ -177,6 +196,11 @@ COMPOSITION = {
 # Districts whose geometry depends on the projected part of the cut. Their cards
 # carry the caveat; nothing else in the county does.
 SPLIT_DISTRICTS = (10, 11)
+# The precinct that holds the ground east of 34th Street south of Broadway, per
+# the county's published description. It is what the split is checked against so
+# the cut cannot strand a slice of Shiloh 4 down there; see the split block.
+SPLIT_NEIGHBOUR = "Shiloh 3"
+MAX_STRANDED_M2 = 20000.0
 
 # Two districts holding one precinct each would be a transcription slip, not a
 # board. The real minimum is District 4 and several others at 2.
@@ -197,6 +221,10 @@ GAP_REACH_M = 150.0
 # A detached fragment smaller than this is drafting dust, not territory: the
 # largest is 43 m across. Dropped, and the total dropped is asserted.
 DUST_M2 = 5000.0
+# How much of a crack's outline one district must hold before that crack counts
+# as surrounded by it rather than shared with a neighbour. Inter-district cracks
+# in this county score 50-58%, surrounded ones 87% or more.
+GAP_PERIMETER_SHARE = 0.90
 # Ceilings. The repair is meant to be a hairline correction; if it ever has real
 # work to do, that is a changed export and a human should look at it.
 MAX_OVERLAP_RESOLVED_PCT = 0.05         # of the county
@@ -284,6 +312,33 @@ def resolve_tiling(raw, outline):
         # neighbouring claim where two districts' cracks meet, so disjointness
         # is re-imposed below rather than argued about here.
         grown[district] = unary_union([geom, own.buffer(weld)])
+
+    # 2b — a crack that one district SURROUNDS, which the reach rule declines.
+    # The reach rule is deliberately blind to shape: it asks only whether a
+    # second district is nearby, so a slot running INTO a district from its own
+    # border stays unowned merely because it opens onto that border. One did,
+    # between Shiloh 3 and Shiloh 4 west of 34th Street — 7 m wide, 190 m deep,
+    # both walls District 10, its mouth on the District 5 township line — and it
+    # drew as a line standing inside District 10.
+    #
+    # Perimeter share is the shape test the reach rule lacks, and it separates
+    # the two cases cleanly: a hairline between two different districts has each
+    # of them along about half its outline, while a crack one district surrounds
+    # has that district along nearly all of it. Measured on this county, every
+    # inter-district crack scores 50-58% and every surrounded one 87% or more,
+    # so the threshold is nowhere near anything.
+    surrounded = outline.difference(unary_union(list(grown.values())))
+    for piece in parts_of(surrounded):
+        perimeter = piece.exterior.length
+        if perimeter <= 0:
+            continue
+        best, owner = 0.0, None
+        for district, geom in grown.items():
+            share = piece.exterior.intersection(geom.buffer(weld * 30)).length / perimeter
+            if share > best:
+                best, owner = share, district
+        if owner is not None and best >= GAP_PERIMETER_SHARE:
+            grown[owner] = unary_union([grown[owner], piece.buffer(weld)])
 
     # The welds are centimetres wide, so this second pass moves nothing worth
     # reporting; only the first pass's overlap is the county's own double claim.
@@ -432,6 +487,39 @@ def main():
         lost = abs((west.area + east.area) - whole.area) / whole.area
         if lost > 1e-9:
             sys.exit("%s: cutting lost %.3g of the precinct's area" % (name, lost))
+
+        # SOUTH OF BROADWAY THERE IS NO SHILOH 4 EAST OF 34th STREET. That ground
+        # is Shiloh 3, by the county's own published description — "south of
+        # Broadway (aka Illinois Route 15) and east of 34th Street". So anything
+        # the cut strands down there is not territory, it is the few metres by
+        # which the TIGER meridian and the county's own Shiloh 3 edge disagree,
+        # and it belongs on the west side, which is the district Shiloh 3 is in.
+        #
+        # Left alone it shipped as a 9 m wide, 408 m tall slice of District 11
+        # standing inside District 10, which drew as a line rising out of
+        # District 10's southern edge — reported by a reader on 2026-08-10, and
+        # the third and last of that report's artifacts.
+        #
+        # The test is per connected PART and uses the neighbour's own northern
+        # extent, so it cannot touch the real east lobe (which reaches 1.1 km
+        # further north) and needs no latitude hardcoded.
+        broadway = precincts[SPLIT_NEIGHBOUR].bounds[3]
+        stranded = [p for p in parts_of(east) if p.bounds[3] < broadway]
+        if stranded:
+            strays = unary_union(stranded)
+            metres = 111320.0 * math.cos(math.radians(LAT))
+            strand_m2 = strays.area * metres * 111320.0
+            if strand_m2 > MAX_STRANDED_M2:
+                sys.exit("%s: the cut strands %.0f m2 east of 34th Street but south "
+                         "of %s's northern edge (max %.0f m2). At that size it is "
+                         "not a datum mismatch and the split needs re-reading.\n  %s"
+                         % (name, strand_m2, SPLIT_NEIGHBOUR, MAX_STRANDED_M2, CUT_SOURCE))
+            east = east.difference(strays)
+            west = unary_union([west, strays])
+            print("  note: %d stranded piece(s) east of the cut but south of %s "
+                  "(%.0f m2) returned to the west side"
+                  % (len(stranded), SPLIT_NEIGHBOUR, strand_m2))
+
         pieces[(name, "west")], pieces[(name, "east")] = west, east
         if whole.bounds[3] <= SPLIT_STREET_TOP_LAT:
             sys.exit("%s no longer extends north of 34th Street's mapped end — "
