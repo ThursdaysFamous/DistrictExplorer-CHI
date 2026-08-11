@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v37";
+const CACHE_NAME = "district-explorer-shell-v38";
 
 const SHELL_URLS = [
   "./",
@@ -248,6 +248,7 @@ const ROSTER_URLS = [
   "./data/app/macon-board-district-labels.json",
   "./data/app/macon-county-board-members.json",
   "./data/app/menard-commissioner-members.json",
+  "./data/app/henry-precinct-polling.json",
   "./data/app/montgomery-precinct-polling.json",
   "./data/app/montgomery-county-board-members.json",
   "./data/app/peoria-county-board-members.json",
