@@ -65,6 +65,15 @@ the cut is made at its longitude:
     projection stands, the boundaryNote stands, and nothing here is presented
     as more settled than it is.
 
+    THE THREAD IS CLOSED, 2026-08-11, by decision rather than by an answer.
+    The shipped geometry was reviewed and accepted as accurate, so the yes/no
+    that was drafted back to Clerk Davis was withdrawn unsent and nothing is
+    outstanding with that office. The boundaryNote is NOT retired with it: it
+    describes how this stretch of line was drawn, which is still true, and a
+    reader deciding whether to trust it is owed that whether or not anyone is
+    still asking the county. Closing an ask and deleting a caveat are different
+    acts, and only the first one happened.
+
     This is the honest shape of the uncertainty: exact for three quarters of the
     boundary, a straight projection for the rest. LaSalle is the precedent for
     the coarser alternative — its split precincts ship wholly on their majority
