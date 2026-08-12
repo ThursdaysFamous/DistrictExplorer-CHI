@@ -242,19 +242,19 @@
   "14": {
     "members": [
       {
-        "name": "Christopher Laurent",
-        "role": "Chair",
-        "profileUrl": "https://ccpsa.chicago.gov/member/christopher-laurent/"
-      },
-      {
         "name": "Ashley Vargas",
-        "role": "Nominating Committee",
+        "role": "Chair",
         "profileUrl": "https://ccpsa.chicago.gov/member/ashley-vargas/"
       },
       {
         "name": "David Orlikoff",
-        "role": "Community Engagement",
+        "role": "Nominating Committee",
         "profileUrl": "https://ccpsa.chicago.gov/member/david-orlikoff/"
+      },
+      {
+        "name": "Christopher Laurent",
+        "role": "Community Engagement",
+        "profileUrl": "https://ccpsa.chicago.gov/member/christopher-laurent/"
       }
     ],
     "sourceUrl": "https://ccpsa.chicago.gov/district-council/14th-district-council/"
