@@ -21,6 +21,21 @@ Scope is the four Will ward/district cities, not the county:
   Wilmington  — FULL roster + per-alderperson e-mail; also omitted by the Clerk
   Joliet      — NOT BUILT, see below
 
+CREST HILL'S PHONES MOVED ON 2026-08-12, and the move nearly shipped as a
+deletion. The city rethemed its CivicPlus site: the Elected Officials page
+stopped linking the /directory.aspx?eid=N entries this scraper walked, the
+per-person pages moved to /m/directory/employee?eid=N and LOST their phone
+lines — and the numbers now appear only on the staff-directory INDEX, one
+<li> per person with name, title and a tel: link. The old parser followed
+the (now absent) links, found nobody, and the weekly refresh opened a PR
+silently dropping all eight published numbers — caught in review (#338), not
+by any guard, because the seat floor skipped a city with ZERO records and no
+floor counted phones at all. Hence the shape below: the index is the primary
+source, the old entry walk survives as a fallback in case the theme reverts,
+and a run that cannot produce MIN_CREST_HILL_PHONES phone-bearing officials
+FAILS — a failed run is preserved by the workflow (the shipped contact
+carries forward), which is the honest degradation; an empty success is not.
+
 Lockport and Wilmington are missing from `municipal-officials.json` because the
 Clerk's flipbook directory omits their entry HEADERS from its text layer
 (Wilmington's alderpersons appear orphaned after Naperville's entry; Lockport's
@@ -59,6 +74,7 @@ Notes on data honesty (per project conventions):
 """
 
 import argparse
+import html as html_mod
 import json
 import re
 import sys
@@ -79,6 +95,10 @@ REQUEST_TIMEOUT = 60
 
 CREST_HILL_OFFICIALS = "https://www.cityofcresthill.com/201/Elected-Officials"
 CREST_HILL_DIRECTORY = "https://www.cityofcresthill.com/directory.aspx?eid=%s"
+CREST_HILL_DIRECTORY_INDEX = "https://www.cityofcresthill.com/directory.aspx"
+# The city's main line. A directory row carrying it means "reach them via the
+# hall", not a direct line, and the hall number already rides the hall fields.
+CREST_HILL_HALL_PHONE = "815-741-5100"
 LOCKPORT_OFFICIALS = "https://www.cityoflockport.net/153/Meet-the-Elected-Officials"
 WILMINGTON_OFFICIALS = "https://www.wilmington-il.com/city-officials"
 
@@ -91,6 +111,12 @@ PHONE_RE = re.compile(r"\(?\d{3}\)?[\s.\-]\d{3}[\s.\-]\d{4}")
 
 # Floors: each city's published seat count. A shrink means the page changed.
 MIN_SEATS = {"City of Crest Hill": 6, "City of Lockport": 8, "City of Wilmington": 8}
+# Crest Hill contributes CONTACT only, so its floor must count records that
+# CARRY contact: nine of the eleven elected publish a number today (eight
+# direct lines + the Clerk's hall line, which the dedupe nulls), and six
+# phoneless records would satisfy MIN_SEATS while shipping the same deletion
+# the 2026-08-12 retheme nearly did.
+MIN_CREST_HILL_PHONES = 6
 
 
 def fetch(url):
@@ -153,8 +179,71 @@ def record(jurisdiction, office, name, source_url, scraped_at, district=None,
     return rec
 
 
+def _crest_hill_office(title):
+    """The elected offices only — the index lists department staff too, and
+    a loose 'clerk' match would sweep in the Deputy City Clerk and three
+    Administrative Clerks."""
+    text = " ".join((title or "").split())
+    if re.fullmatch(r"Mayor", text, re.I):
+        return "Mayor"
+    if re.search(r"\balder(?:man|woman|person)\b", text, re.I):
+        return "Alderperson"
+    if re.fullmatch(r"City Clerk", text, re.I):
+        return "Clerk"
+    if re.fullmatch(r"City Treasurer", text, re.I):
+        return "Treasurer"
+    return None
+
+
 def scrape_crest_hill(scraped_at):
-    """Per-person phone from the CivicPlus staff-directory entry behind each name."""
+    """Per-person phone from the staff-directory INDEX (see the module header:
+    the 2026-08 retheme removed the phones from the per-person pages)."""
+    records = _crest_hill_from_index(scraped_at)
+    with_phone = [r for r in records if r.get("person_phone")]
+    if len(with_phone) < MIN_CREST_HILL_PHONES:
+        # The theme may have reverted; the old entry walk knows that shape.
+        legacy = _crest_hill_legacy(scraped_at)
+        legacy_with_phone = [r for r in legacy if r.get("person_phone")]
+        if len(legacy_with_phone) > len(with_phone):
+            records, with_phone = legacy, legacy_with_phone
+    if len(with_phone) < MIN_CREST_HILL_PHONES:
+        raise RuntimeError(
+            "Crest Hill parsed %d phone-bearing officials (floor %d) — the city "
+            "restructured its directory again; failing so the workflow preserves "
+            "the shipped contact instead of shipping a deletion"
+            % (len(with_phone), MIN_CREST_HILL_PHONES))
+    return records
+
+
+def _crest_hill_from_index(scraped_at):
+    """One <li class="list-group-item"> per person: bold name link, a title
+    div rendered twice (desktop + mobile), and a tel: link when the city
+    publishes a number for them."""
+    raw = fetch(CREST_HILL_DIRECTORY_INDEX)
+    records = []
+    for chunk in re.split(r'<li class="list-group-item', raw)[1:]:
+        name_m = re.search(r'class="fw-bold no-underline-link"[^>]*>\s*([^<]+?)\s*</a>', chunk)
+        title_m = re.search(r'<div class="d-sm-block d-none">\s*([^<]+?)\s*</div>', chunk)
+        if not name_m or not title_m:
+            continue
+        name = clean(html_mod.unescape(name_m.group(1)))
+        title = clean(html_mod.unescape(title_m.group(1)))
+        office = _crest_hill_office(title)
+        if not office or not name:
+            continue
+        tel_m = re.search(r'href="tel:([^"]+)"', chunk)
+        phone = normalize_phone(tel_m.group(1)) if tel_m else None
+        if phone == CREST_HILL_HALL_PHONE:
+            phone = None
+        records.append(record("City of Crest Hill", office, name,
+                              CREST_HILL_DIRECTORY_INDEX, scraped_at,
+                              district=ward_label(title), person_phone=phone))
+    return records
+
+
+def _crest_hill_legacy(scraped_at):
+    """The pre-2026-08 shape: the Elected Officials page links each person's
+    /directory.aspx?eid=N entry, and the entry carries the phone."""
     html_text = fetch(CREST_HILL_OFFICIALS)
     # The index links each person's staff-directory entry; the entry itself
     # carries the authoritative name, title, and phone, so the link ids are all
@@ -324,14 +413,15 @@ def main():
     counts = {}
     for rec in records:
         counts[rec["jurisdiction"]] = counts.get(rec["jurisdiction"], 0) + 1
+    # counts.get, not `in counts`: a city yielding ZERO records used to skip
+    # its own floor entirely — five seats failed while none passed, which is
+    # how the 2026-08-12 Crest Hill retheme reached a PR as a silent deletion.
+    # A failed exit here means the workflow preserves the shipped contact.
     for jurisdiction, floor in MIN_SEATS.items():
-        if jurisdiction in counts and counts[jurisdiction] < floor:
+        if counts.get(jurisdiction, 0) < floor:
             print("FATAL: %s produced %d officials (floor %d) — page layout changed"
-                  % (jurisdiction, counts[jurisdiction], floor), file=sys.stderr)
+                  % (jurisdiction, counts.get(jurisdiction, 0), floor), file=sys.stderr)
             sys.exit(1)
-    if not counts:
-        print("FATAL: no city produced any officials", file=sys.stderr)
-        sys.exit(1)
 
     payload = {
         "county": "Will",
