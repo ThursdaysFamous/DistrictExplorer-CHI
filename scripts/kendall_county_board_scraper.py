@@ -564,6 +564,18 @@ def main():
     coverage = "  ".join("%s=%d/%d" % (f, sum(1 for r in ok if r.get(f)), len(ok)) for f in fields)
     print("Scraped %d members (%d without error)" % (len(records), len(ok)), file=sys.stderr)
     print("field coverage: %s" % coverage, file=sys.stderr)
+    if not ok:
+        # A listing recovered from a Wayback snapshot with every member page
+        # errored is not a successful scrape — exiting 0 here sends the
+        # workflow past its standing-issue report step and into the builder,
+        # which refuses the empty data and turns the job red with no issue
+        # update (McHenry hit exactly this on 2026-08-13, the standing block
+        # plus an archive.org SPN2 outage). Failing makes the workflow's own
+        # taxonomy do the work: the report step fires, the builder is
+        # skipped, the job stays green.
+        print("FATAL: no member page yielded data — the all-blocked shape",
+              file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
