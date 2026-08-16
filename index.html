@@ -10335,11 +10335,18 @@ function initChiExplorer() {
   var loadRockIslandFireDistricts = makeCached(function () {
     return loadRockIslandTaxLayer(2, "FirePD", "Rock Island County fire districts");
   });
-  /* One of the ten library polygons carries a BLANK name — the county's
-   * un-districted remainder, not a library. Dropped here rather than rendered:
-   * polygonCountyEntry would print "Unknown" for it, which reads as "there is a
-   * district and we don't know it" when the truth is there is none, and the
-   * card's honest answer for that ground is no result at all. */
+  /* One of the ten library polygons carries a BLANK name. It is NOT the
+   * county's un-districted remainder (the guess this comment first shipped
+   * with): it is a byte-identical copy of the UNITED TWP HIGH 30 polygon from
+   * the same service's school layer — symmetric difference 0.0000 sq mi,
+   * measured 2026-08-16 — a stray school-district row in the library tiling.
+   * (The county drew this layer from school/township shapes: Sherrard IS
+   * Sherrard CUSD 200 exactly, Western is Orion CUSD 223 within 3%.) It
+   * overlaps Rock River and River Valley and fully contains Hampton, so
+   * rendering it would double-answer points that already have a real library
+   * district. Dropped here rather than rendered — for territory it alone
+   * covers, "no result" is closer to the truth than a school district's
+   * outline wearing a blank library name. */
   var loadRockIslandLibraryDistricts = makeCached(function () {
     return loadRockIslandTaxLayer(5, "library_di", "Rock Island County library districts")
       .then(function (geojson) {
@@ -10356,6 +10363,15 @@ function initChiExplorer() {
   var loadRockIslandParkDistricts = makeCached(function () {
     return loadRockIslandTaxLayer(8, "park_distr", "Rock Island County park districts");
   });
+  /* The TaxDistricts tilings are dissolved from the county's PARCEL fabric,
+   * and road right-of-way carries no parcel — so every district is a lattice
+   * of blocks separated by 37–107 ft voids (measured 2026-08-16 across the
+   * fire, library and park layers), and a click on any road inside a district
+   * honestly-but-wrongly answered "no district". The three entries snap such
+   * a point to the lone district within this range; a point between TWO
+   * different districts (a boundary road) stays unanswered, because there the
+   * ambiguity is real. 60 ft reaches across every void from its midpoint. */
+  var ROCK_ISLAND_ROW_SNAP_FT = 60;
   // The layer stores districts zero-padded ("01".."19"); the roster is keyed on
   // the plain number, so the pad is stripped once here rather than in each call.
   function rockIslandDistrictNumber(feature) {
@@ -14041,6 +14057,54 @@ function initChiExplorer() {
     registerLayer(spec);
   }
 
+  /* ---------- right-of-way snap for parcel-fabric tilings. A tax tiling
+   * dissolved from parcels excludes road right-of-way, so a point on a road
+   * INSIDE a district sits in no polygon and the containment test honestly
+   * finds nothing. When an entry declares snapFeet, a missed point is given
+   * to the nearest feature's boundary IF exactly one feature lies within
+   * that many feet — two candidates means a boundary road between different
+   * districts, where the data genuinely doesn't say which side you're on,
+   * so the miss stands. The card notes when an answer came from the snap.
+   * Distance is true ground feet: longitudes are scaled into a local flat
+   * frame by cos(lat) before the segment math, so the threshold measures
+   * the same on both axes. ---------- */
+  var FEET_PER_DEG_LAT = 364000; // ~69 mi per degree of latitude
+  function distanceFeetToGeometry(point, geometry) {
+    var cosLat = Math.cos(point.lat * Math.PI / 180);
+    var min = Infinity;
+    eachRing(geometry, function (ring) {
+      for (var i = 0; i < ring.length - 1; i++) {
+        var d = distPointToSegment(point.lng * cosLat, point.lat,
+          ring[i][0] * cosLat, ring[i][1],
+          ring[i + 1][0] * cosLat, ring[i + 1][1]);
+        if (d < min) min = d;
+      }
+    });
+    return min * FEET_PER_DEG_LAT;
+  }
+  function findLoneFeatureWithinFeet(geojson, point, maxFeet) {
+    var latEps = maxFeet / FEET_PER_DEG_LAT;
+    var lngEps = latEps / Math.cos(point.lat * Math.PI / 180);
+    var features = (geojson && geojson.features) || [];
+    var best = null, bestFt = Infinity, candidates = 0;
+    for (var i = 0; i < features.length; i++) {
+      var f = features[i];
+      if (!f.geometry) continue;
+      // cheap bbox reject (threshold-expanded) before the vertex walk — the
+      // fabric layers run to tens of thousands of vertices per feature
+      var b = featureBBox(f);
+      if (point.lng < b[0] - lngEps || point.lng > b[2] + lngEps ||
+          point.lat < b[1] - latEps || point.lat > b[3] + latEps) continue;
+      var ft = distanceFeetToGeometry(point, f.geometry);
+      if (ft > maxFeet) continue;
+      candidates++;
+      if (candidates > 1) return null; // between two districts: truly ambiguous
+      best = f;
+      bestFt = ft;
+    }
+    return best ? { feature: best, feet: bestFt } : null;
+  }
+
   // Adapter: a registerPolygonLayer-style spec (loader + declarative fields)
   // as a county dispatch entry — the same query/render/hoverName semantics the
   // factory would generate (primary row always shown with "Unknown" fallback,
@@ -14065,10 +14129,19 @@ function initChiExplorer() {
       query: function (point, seq) {
         return opts.loader().then(function (geojson) {
           var feature = findFeatureContaining(geojson, point);
+          var snappedFt = null;
+          if (!feature && opts.snapFeet) {
+            var near = findLoneFeatureWithinFeet(geojson, point, opts.snapFeet);
+            if (near) {
+              feature = near.feature;
+              snappedFt = Math.max(1, Math.round(near.feet));
+            }
+          }
           if (!feature) return null;
           var props = feature.properties || {};
           var result = { seq: seq };
           keyedFields.forEach(function (f) { result[f.name] = findPropCI(props, f.keys); });
+          if (snappedFt != null) result.snappedFt = snappedFt;
           return result;
         });
       },
@@ -14091,6 +14164,13 @@ function initChiExplorer() {
             rows.push({ label: f.label, value: f.value });
           }
         });
+        if (result.snappedFt != null) {
+          rows.push({
+            label: "Note",
+            value: "This point sits on a road or other right-of-way the county's tax map assigns to no district; the district shown surrounds it, about " +
+              result.snappedFt + " ft away."
+          });
+        }
         return renderFieldStack(rows);
       },
       cardIdentifier: (opts.pill === true && primaryField) ? function (result) {
@@ -17452,6 +17532,7 @@ function initChiExplorer() {
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
         loader: loadRockIslandFireDistricts,
+        snapFeet: ROCK_ISLAND_ROW_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["firepd"], primary: true },
           { label: "County", value: "Rock Island County" }
@@ -17777,6 +17858,7 @@ function initChiExplorer() {
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
         loader: loadRockIslandParkDistricts,
+        snapFeet: ROCK_ISLAND_ROW_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["park_distr"], primary: true },
           { label: "County", value: "Rock Island County" }
@@ -18053,12 +18135,14 @@ function initChiExplorer() {
           { label: "County", value: "DeKalb County" }
         ]
       }),
-      // Rock Island's 9 named library districts (the tenth polygon is the
-      // county's un-districted remainder and is dropped in the loader).
+      // Rock Island's 9 named library districts (the blank-named tenth polygon
+      // is a stray copy of a school district — see the loader's comment — and
+      // is dropped there).
       polygonCountyEntry({
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
         loader: loadRockIslandLibraryDistricts,
+        snapFeet: ROCK_ISLAND_ROW_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["library_di"], primary: true },
           { label: "County", value: "Rock Island County" }
