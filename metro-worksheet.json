@@ -563,6 +563,12 @@
         "note": "17 IL U.S. House districts + a ZZ water pseudo-district; pre-built from TIGERweb by scripts/build_legislative_boundaries.py (R2-2)"
       },
       {
+        "file": "cook-fire-districts.json",
+        "min_features": 40,
+        "max_features": 40,
+        "note": "Cook's 40 suburban Fire Protection Districts, pre-built from the Clerk's L17 tax-agency tiling by scripts/build_parcel_fabric_districts.py — the 2026-08-16 fabric survey measured 102 empty road-band voids in the live layer. Road voids closed at 75 ft; the seven district pairs the Clerk's own tiling double-claims (Orland-Mokena is 57 acres) ship in both districts exactly as the live layer answers; a Loop click stays outside every FPD because Chicago runs its own fire department. No upstream edit stamp exists (the Clerk refreshes in place), so the builder pins count and names and validate_sources watches the service monthly."
+      },
+      {
         "file": "crawford-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -825,6 +831,24 @@
         "max_features": 1
       },
       {
+        "file": "kendall-fire-districts.json",
+        "min_features": 10,
+        "max_features": 10,
+        "note": "Kendall's 10 FPDs, pre-built from the county's parcel-derived tax-code tiling (170 rows dissolved by name; scripts/build_parcel_fabric_districts.py). The 2026-08-16 fabric survey measured 977 empty road-band voids in the raw fabric - the 'hairline no-result gaps' the old note admitted, quantified. Voids closed at 75 ft; the municipal CITY OF JOLIET FIRE DISTRICT rows the old runtime loader filtered are excluded at build time."
+      },
+      {
+        "file": "kendall-library-districts.json",
+        "min_features": 9,
+        "max_features": 9,
+        "note": "Kendall's 9 library taxing bodies (145 tax-code rows dissolved by name), pre-built with road voids closed - 1158 empty voids measured in the raw fabric. The municipal Joliet/Yorkville city-library funds STAY, the Cook-style complete shape the guidebook records."
+      },
+      {
+        "file": "kendall-park-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Kendall's 5 park districts (65 tax-code rows dissolved by name), pre-built with road voids closed - 578 empty voids measured in the raw fabric."
+      },
+      {
         "file": "knox-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -885,6 +909,24 @@
         "max_features": 1,
         "dynamic_reference": true,
         "note": "Gap-location outline for Macon County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it."
+      },
+      {
+        "file": "macon-fire-districts.json",
+        "min_features": 17,
+        "max_features": 17,
+        "note": "Macon's 17 fire districts, pre-built from the county's AGOL Fire layer by scripts/build_parcel_fabric_districts.py. Upstream is parcel-join-derived and kept every road void - 1318 empty road-band voids measured 2026-08-16 at full precision, the fleet's worst. Names ship EXACTLY as the county writes them (the macon-district-name-formatting posture); the upstream edit date is pinned in the builder."
+      },
+      {
+        "file": "macon-library-districts.json",
+        "min_features": 10,
+        "max_features": 10,
+        "note": "Macon's 10 library districts, pre-built with road voids closed - 960 empty voids measured in the raw LibraryJoin_Dissolved layer (dissolved by name upstream, but from a parcel join that kept the voids). Names verbatim (HopeWelty, MtZion); edit date pinned."
+      },
+      {
+        "file": "macon-park-districts.json",
+        "min_features": 6,
+        "max_features": 6,
+        "note": "Macon's 6 park districts, pre-built with road voids closed - 556 empty voids measured in the raw ParkJoin_Dissolve layer. Names verbatim; edit date pinned."
       },
       {
         "file": "macoupin-county-outline.json",
@@ -1137,7 +1179,7 @@
         "file": "rock-island-fire-districts.json",
         "min_features": 17,
         "max_features": 17,
-        "note": "Rock Island's 17 fire protection districts, pre-built from the county's TaxDistricts tax-agency tiling by scripts/build_rock_island_tax_districts.py. The tiling is dissolved from the PARCEL fabric and road right-of-way carries no parcel, so served raw every district was a lattice of fragments split by 37-107 ft voids; the builder closes those voids at 75 ft (nothing farther than 75 ft from county-published ground is ever claimed), ships ground both neighbours' closings reach in NEITHER district, and re-verifies road-void and unserved-ground probes before writing. Bounds are an EQUALITY: the county levies exactly these 17."
+        "note": "Rock Island's 17 fire protection districts, pre-built from the county's TaxDistricts tax-agency tiling by scripts/build_parcel_fabric_districts.py. The tiling is dissolved from the PARCEL fabric and road right-of-way carries no parcel, so served raw every district was a lattice of fragments split by 37-107 ft voids; the builder closes those voids at 75 ft (nothing farther than 75 ft from county-published ground is ever claimed), ships ground both neighbours' closings reach in NEITHER district, and re-verifies road-void and unserved-ground probes before writing. Bounds are an EQUALITY: the county levies exactly these 17."
       },
       {
         "file": "rock-island-library-districts.json",
@@ -1641,7 +1683,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v41",
+    "cache_name": "district-explorer-shell-v42",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
