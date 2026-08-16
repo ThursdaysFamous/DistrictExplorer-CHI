@@ -112,6 +112,12 @@ SOCRATA = [
 # The first three are shapefile-derived; the three legislative layers are
 # pre-built from Census TIGERweb by scripts/build_legislative_boundaries.py
 # (R2-2 — they used to query TIGERweb live at ~5.7 s per first toggle).
+# Rock Island's TaxDistricts service root — the provenance of three pre-built
+# files below and deliberately absent from ENDPOINTS (nothing fetches it at
+# runtime any more).
+SERVICE_RI_TAX = ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/"
+                  "services/TaxDistricts/FeatureServer?f=json")
+
 PROVENANCE = [
     {"layer": "School Board (ERSB) districts",
      "app_file": "school-board-districts.json",
@@ -190,6 +196,32 @@ PROVENANCE = [
      "note": "Same PA 102-0693 archive. 7th Circuit = Sangamon + Greene, "
              "Jersey, Macoupin, Morgan and Scott — the widest of the three, so "
              "this one file answers for six counties. Redrawn ~once a decade."},
+    # Rock Island's three TaxDistricts concept layers are PRE-BUILT rather than
+    # fetched live (the only county here whose live-API layers were retired for
+    # a same-origin build): the service's tilings are dissolved from the parcel
+    # fabric, which excludes road right-of-way, so raw they render as void-split
+    # lattices and road clicks landed in no district. The builder closes the
+    # road voids at 75 ft and pins each layer's dataLastEditDate (all
+    # 2022-01-14), so a county re-edit fails the rebuild loudly — this monthly
+    # probe watches that the source itself stays reachable. The board/precinct
+    # layers (Other_Layers service, below) are clean polygons and stay live.
+    {"layer": "Rock Island County fire districts (pre-built, road voids closed)",
+     "app_file": "rock-island-fire-districts.json",
+     "source_url": SERVICE_RI_TAX,
+     "note": "17 fire protection districts from TaxDistricts layer 2 "
+             "(build_rock_island_tax_districts.py). Rebuild only after "
+             "re-verifying the script's pinned edit dates and measurements."},
+    {"layer": "Rock Island County library districts (pre-built, road voids closed)",
+     "app_file": "rock-island-library-districts.json",
+     "source_url": SERVICE_RI_TAX,
+     "note": "9 named library districts from TaxDistricts layer 5; the "
+             "blank-named tenth row (a stray UNITED TWP HIGH 30 school-polygon "
+             "copy) is asserted and excluded at build time."},
+    {"layer": "Rock Island County park district (pre-built, road voids closed)",
+     "app_file": "rock-island-park-districts.json",
+     "source_url": SERVICE_RI_TAX,
+     "note": "The county's single levied park district (Cordova), TaxDistricts "
+             "layer 8."},
     {"layer": "Kane County Board members (roster)",
      "app_file": "kane-county-board-members.json",
      "source_url": "https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx",
@@ -613,19 +645,13 @@ ENDPOINTS = [
     # dataLastEditDate is 2019-01-08, and only 11 of its 27 names appear on the
     # county's current board page — where this layer matches 27/27. Two services,
     # seven years apart, no naming cue; the edit date is the only tell.
-    # Rock Island — the first served county on the Mississippi. Both layers sit
-    # on one hosted service, reached the usual way (county site -> parcel viewer
-    # -> web map -> operationalLayers). The board layer declares a NAME column
-    # and populates it on 0 of 19 districts, which is why a roster scrape exists.
-    # Rock Island's TaxDistricts service — a Cook-shaped tax-agency tiling, one
-    # layer per levying body. Three of its ten are fleet concepts: fire (2, 17
-    # districts), library (5, 10 polygons of which 9 are named — the tenth is the
-    # un-districted remainder and the loader drops it) and park (8, a single
-    # Cordova district). Incorporated cities correctly sit in NO fire or library
-    # district: they run their own departments on a city levy.
-    {"layer": "Rock Island County fire + library + park districts (tax-agency tiling)",
-     "url": ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
-             "TaxDistricts/FeatureServer?f=json")},
+    # Rock Island — the first served county on the Mississippi. The board and
+    # precinct layers sit on one hosted service, reached the usual way (county
+    # site -> parcel viewer -> web map -> operationalLayers). The board layer
+    # declares a NAME column and populates it on 0 of 19 districts, which is
+    # why a roster scrape exists. The county's TaxDistricts tilings (fire,
+    # library, park) are NOT probed here: they were retired from live fetch for
+    # pre-built files — see their PROVENANCE entries above.
     # Moline (7 wards) and Silvis (4) publish their own layers on the county's
     # hosted org, both edited in 2022 — after the redraw. Whiteside's ward layer
     # covers six MORE municipalities and is deliberately unused: last edited

@@ -10319,58 +10319,43 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/rock-island-county-board-members.json", {}, 2);
   });
   /* The county's TaxDistricts service is a Cook-style tax-agency tiling: one
-   * layer per levying body. Three of its ten are fleet concepts — fire (17),
-   * library (10) and a single park district — and the rest are school, township
-   * or special-purpose bodies the app answers statewide or not at all. All
-   * edited 2022-01-14, which is after the reapportionment cycle these follow. */
-  function loadRockIslandTaxLayer(layerIndex, outFields, label) {
-    var url = ROCK_ISLAND_GIS + "TaxDistricts/FeatureServer/" + layerIndex +
-      "/query?where=1%3D1&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
-    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
-      .then(function (geojson) {
-        if (!hasUsableGeometry(geojson)) throw new Error(label + " returned no usable geometry");
-        return geojson;
-      });
-  }
+   * layer per levying body — fire (17), library (10 rows) and a single park
+   * district are fleet concepts; the rest are school, township or
+   * special-purpose bodies the app answers statewide or not at all. All edited
+   * 2022-01-14. Those tilings are dissolved from the county's PARCEL fabric,
+   * and road right-of-way carries no parcel — served raw, every district was
+   * a lattice of fragments separated by 37–107 ft voids (Milan-Blackhawk:
+   * 280 parts), the overlay drew the county's road grid as a dark mesh, and a
+   * click on any road inside a district landed in no polygon. So the three
+   * concept layers ship PRE-BUILT from that service (the Stark / legislative-
+   * boundaries pattern) by scripts/build_rock_island_tax_districts.py:
+   * dissolved per district with road voids closed at 75 ft — nothing farther
+   * than 75 ft from county-published ground is ever claimed — while ground
+   * BOTH neighbours' closings reach (a boundary road between districts) ships
+   * in NEITHER, so between-district seams stay visibly, honestly unassigned.
+   * The blank-named tenth library row — a byte-identical stray copy of the
+   * UNITED TWP HIGH 30 school polygon (measured 2026-08-16), which overlaps
+   * Rock River and River Valley and fully contains Hampton — is asserted and
+   * excluded at build time: rendering it would double-answer points that
+   * already have a real library district. The builder re-verifies the road-
+   * void and unserved-ground probes before it will write, and pins the
+   * service's per-layer edit dates so a county redraw fails the rebuild
+   * loudly instead of re-basing silently. */
   var loadRockIslandFireDistricts = makeCached(function () {
-    return loadRockIslandTaxLayer(2, "FirePD", "Rock Island County fire districts");
+    return fetchJSONWithRetry("data/app/rock-island-fire-districts.json", {}, 2);
   });
-  /* One of the ten library polygons carries a BLANK name. It is NOT the
-   * county's un-districted remainder (the guess this comment first shipped
-   * with): it is a byte-identical copy of the UNITED TWP HIGH 30 polygon from
-   * the same service's school layer — symmetric difference 0.0000 sq mi,
-   * measured 2026-08-16 — a stray school-district row in the library tiling.
-   * (The county drew this layer from school/township shapes: Sherrard IS
-   * Sherrard CUSD 200 exactly, Western is Orion CUSD 223 within 3%.) It
-   * overlaps Rock River and River Valley and fully contains Hampton, so
-   * rendering it would double-answer points that already have a real library
-   * district. Dropped here rather than rendered — for territory it alone
-   * covers, "no result" is closer to the truth than a school district's
-   * outline wearing a blank library name. */
   var loadRockIslandLibraryDistricts = makeCached(function () {
-    return loadRockIslandTaxLayer(5, "library_di", "Rock Island County library districts")
-      .then(function (geojson) {
-        var features = (geojson.features || []).filter(function (f) {
-          var v = findPropCI(f.properties || {}, ["library_di"]);
-          return v != null && String(v).trim() !== "";
-        });
-        if (!features.length) {
-          throw new Error("Rock Island library districts carry no names — the layer changed");
-        }
-        return { type: "FeatureCollection", features: features };
-      });
+    return fetchJSONWithRetry("data/app/rock-island-library-districts.json", {}, 2);
   });
   var loadRockIslandParkDistricts = makeCached(function () {
-    return loadRockIslandTaxLayer(8, "park_distr", "Rock Island County park districts");
+    return fetchJSONWithRetry("data/app/rock-island-park-districts.json", {}, 2);
   });
-  /* The TaxDistricts tilings are dissolved from the county's PARCEL fabric,
-   * and road right-of-way carries no parcel — so every district is a lattice
-   * of blocks separated by 37–107 ft voids (measured 2026-08-16 across the
-   * fire, library and park layers), and a click on any road inside a district
-   * honestly-but-wrongly answered "no district". The three entries snap such
-   * a point to the lone district within this range; a point between TWO
-   * different districts (a boundary road) stays unanswered, because there the
-   * ambiguity is real. 60 ft reaches across every void from its midpoint. */
+  /* What the pre-build leaves honestly unanswered is exactly where the snap
+   * still earns its keep: boundary roads between two districts (shipped in
+   * neither — see above) and the outer half of a district's perimeter roads.
+   * A missed point goes to the lone district within this range; a point
+   * within range of TWO different districts stays unanswered, because there
+   * the ambiguity is real. The card notes when an answer came from the snap. */
   var ROCK_ISLAND_ROW_SNAP_FT = 60;
   // The layer stores districts zero-padded ("01".."19"); the roster is keyed on
   // the plain number, so the pad is stripped once here rather than in each call.
@@ -17527,7 +17512,8 @@ function initChiExplorer() {
           { label: "County", value: "Lee County" }
         ]
       }),
-      // Rock Island's 17, from the county's tax-agency tiling (the Cook shape).
+      // Rock Island's 17, pre-built from the county's tax-agency tiling (the
+      // Cook shape) with parcel-fabric road voids closed — see the loaders.
       polygonCountyEntry({
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
@@ -18135,9 +18121,9 @@ function initChiExplorer() {
           { label: "County", value: "DeKalb County" }
         ]
       }),
-      // Rock Island's 9 named library districts (the blank-named tenth polygon
-      // is a stray copy of a school district — see the loader's comment — and
-      // is dropped there).
+      // Rock Island's 9 named library districts, pre-built with road voids
+      // closed (the blank-named tenth source row is a stray copy of a school
+      // district, excluded at build time — see the loaders' comment).
       polygonCountyEntry({
         key: "rock-island",
         coverage: rockIslandCountyCoverage,

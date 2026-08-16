@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v40";
+const CACHE_NAME = "district-explorer-shell-v41";
 
 const SHELL_URLS = [
   "./",
@@ -170,6 +170,9 @@ const GEOMETRY_URLS = [
   "./data/app/randolph-county-outline.json",
   "./data/app/richland-county-outline.json",
   "./data/app/rock-island-county-outline.json",
+  "./data/app/rock-island-fire-districts.json",
+  "./data/app/rock-island-library-districts.json",
+  "./data/app/rock-island-park-districts.json",
   "./data/app/saline-county-outline.json",
   "./data/app/sangamon-county-outline.json",
   "./data/app/sangamon-judicial-subcircuits.json",
