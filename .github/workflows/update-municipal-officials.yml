@@ -40,6 +40,10 @@ name: Update municipal officials roster
 #                legally protected, see build_mason_board_roster.py)
 #   Whiteside  — Clerk's County Yearbook PDF                (head + clerk; the
 #                yearbook publishes no trustees, and its clerk said so)
+#   De Witt    — the Clerk's "Village/City Officials" Word document, sent by
+#                e-mail 2026-08-17 and archived under data/source/raw/
+#                (full body; all seven municipalities, appointed/acting
+#                officers marked)
 #   DuPage     — DMMC Membership Directory PDF                   (head only)
 #   Kane       — Clerk's Government Guide PDF                    (head + clerk)
 #   McHenry    — Clerk's County Yearbook page                    (head + clerk)
@@ -292,6 +296,16 @@ jobs:
         continue-on-error: true
         run: python3 scripts/washington_municipal_officials_scraper.py --out /tmp/washington_municipal_officials.json
 
+      # De Witt is the third archived-document source, same pattern as Marshall
+      # and Washington: its Clerk's "Village/City Officials" Word document
+      # (last updated 7/28/2025) came by e-mail on 2026-08-17 and is committed
+      # under data/source/raw/, so this step is a parser regression guard, not
+      # a freshness check — refreshing means asking the Clerk again.
+      - name: Re-parse the De Witt County city and village officials document
+        id: scrape_dewitt
+        continue-on-error: true
+        run: python3 scripts/dewitt_municipal_officials_scraper.py --out /tmp/dewitt_municipal_officials.json
+
       - name: Read the Mason County Clerk's published directory
         id: scrape_mason
         continue-on-error: true
@@ -361,6 +375,7 @@ jobs:
           steps.scrape_peoria.outcome == 'failure' ||
           steps.scrape_marshall.outcome == 'failure' ||
           steps.scrape_washington.outcome == 'failure' ||
+          steps.scrape_dewitt.outcome == 'failure' ||
           steps.scrape_mason.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
@@ -398,6 +413,7 @@ jobs:
           PEORIA_OUTCOME: ${{ steps.scrape_peoria.outcome }}
           MARSHALL_OUTCOME: ${{ steps.scrape_marshall.outcome }}
           WASHINGTON_OUTCOME: ${{ steps.scrape_washington.outcome }}
+          DEWITT_OUTCOME: ${{ steps.scrape_dewitt.outcome }}
           MASON_OUTCOME: ${{ steps.scrape_mason.outcome }}
         run: |
           raise_issue() {
@@ -422,6 +438,7 @@ jobs:
           if [ "$LAKE_OUTCOME" = "failure" ]; then raise_issue "Lake"; fi
           if [ "$MARSHALL_OUTCOME" = "failure" ]; then raise_issue "Marshall"; fi
           if [ "$WASHINGTON_OUTCOME" = "failure" ]; then raise_issue "Washington"; fi
+          if [ "$DEWITT_OUTCOME" = "failure" ]; then raise_issue "De Witt"; fi
           if [ "$WILL_CITIES_OUTCOME" = "failure" ]; then raise_issue "Will ward-city"; fi
           if [ "$SKOKIE_OUTCOME" = "failure" ]; then raise_issue "Skokie trustee-district"; fi
           if [ "$JOLIET_OUTCOME" = "failure" ]; then raise_issue "Joliet council-contact"; fi
@@ -495,6 +512,7 @@ jobs:
           add "${{ steps.scrape_peoria.outcome }}"      peoria      county /tmp/peoria_municipal_officials.json
           add "${{ steps.scrape_marshall.outcome }}"    marshall    county /tmp/marshall_municipal_officials.json
           add "${{ steps.scrape_washington.outcome }}"  washington  county /tmp/washington_municipal_officials.json
+          add "${{ steps.scrape_dewitt.outcome }}"      dewitt      county /tmp/dewitt_municipal_officials.json
           add "${{ steps.scrape_mason.outcome }}"        mason       county /tmp/mason_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
