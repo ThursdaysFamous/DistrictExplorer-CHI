@@ -218,6 +218,15 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # precinct split three ways along Rt 16 and Lake
                      # Shelbyville.
                      "173",
+                     # Wabash — 2026-08-17, the second county on the at-large
+                     # tier alone whose roster is DOCUMENT_ROSTERS rather than
+                     # a scrape (a mail domain with no web server; Clerk Will
+                     # sent the three names by e-mail). It borders Edwards and
+                     # nothing else served — Lawrence and White are frontier —
+                     # so it EXTENDS the one remaining island to two counties
+                     # rather than starting another: the outline stays two
+                     # polygons, and the island's outer ring grows.
+                     "185",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -372,6 +381,13 @@ INSIDE = {
     # is why it lands detached rather than extending the second island; Carmi
     # (White) holds that corridor OUTSIDE below.
     "Albion (Edwards)": (38.3781, -88.0578),
+    # Mt. Carmel (Wabash) — 2026-08-17: Wabash borders Edwards and joins its
+    # island, growing it to two counties while the outline stays two polygons.
+    # The county seat the wabash-county-board record insisted the roster must
+    # come from (never Wabash County INDIANA, across the river); Clerk Will's
+    # e-mail was exactly that source. Carmi (White) below still holds the
+    # island's southern flank OUTSIDE.
+    "Mt. Carmel (Wabash)": (38.4109, -87.7614),
     "Griggsville (Pike)": (39.7078, -90.7276),
     "Hennepin (Putnam)": (41.2589, -89.3216),
     "Mount Sterling (Brown)": (39.9854, -90.7641),

@@ -409,5 +409,25 @@
   },
   "sourceUrl": "https://www.schuylercounty.org/county-board/county-board-members/",
   "structure": "7 members elected countywide"
+ },
+ "WABASH": {
+  "county": "Wabash County",
+  "members": [
+   {
+    "name": "Timothy R. Hocking",
+    "role": "Commissioner"
+   },
+   {
+    "name": "Robert G. Dean",
+    "role": "Commissioner"
+   },
+   {
+    "name": "Scott C. West",
+    "role": "Commissioner"
+   }
+  ],
+  "sourceDocument": "Commissioners' names and addresses, sent by e-mail by County Clerk & Recorder Janet L. Will, 2026-08-16",
+  "structure": "Commission form — 3 commissioners elected countywide",
+  "verified": "2026-08-16"
  }
 }

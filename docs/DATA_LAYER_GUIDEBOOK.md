@@ -1449,17 +1449,17 @@ in the researched-but-unbuilt backlog.
       "wanted": "A shapefile or GIS layer of Vermilion's board districts or precincts from some holder OTHER than the Clerk's office — a county GIS or assessor department, the regional planning commission, or whoever drew the current district map — because the election authority has now confirmed in writing that her office has none. The county's own published maps are pictures and no further ask of that desk will change it."
     },
     {
-      "id": "wabash-county-board",
-      "concept": "County board",
+      "id": "wabash-precinct-geometry",
+      "concept": "Voting precincts",
       "area": "Wabash County",
       "counties": [
         "wabash"
       ],
       "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Wabash County elects three commissioners at large — the Clerk confirmed it in writing — so it needs a roster, not a map; nobody publishes the three names in a form we can read.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. ONE CLUE ARRIVED BEFORE THE ASK: the Clerk's 20 Jul 2026 reply (on the seal question) refers to attesting documents \"for the Wabash County Board of Commissioners\" — commission-form language, still to be confirmed. ANSWERED 5 Aug 2026, and the clue was right: County Clerk & Recorder Janet L. Will, in writing — \"Wabash County is a commissioner form of government, not township. We have three commissioners elected at large. One commissioner is elected each General Election for a six year term.\" That is the election authority stating the form directly, which §2.5 step 2 accepts, so the geometry question is CLOSED: there are no districts to draw and none should ever be invented. What remains is smaller and different — the three commissioners' NAMES, which her reply did not include and which nothing publishes — because WABASH COUNTY HAS NO WEBSITE. That was first written here as \"the county's domain refuses connections from this project's network\", which was wrong and is corrected on measurement (5 Aug 2026): wabashcounty.illinois.gov DOES resolve — A record 157.185.73.189, reverse-DNS 157-185-73-189.clearwave.com, a southern-Illinois ISP — and it DOES carry mail (Rackspace MX, which is why the Clerk's e-mail arrives), but port 80 answers HTTP 503 Service Unavailable on every attempt, 443 resets, and www.wabashcounty.illinois.gov is NXDOMAIN. A mail domain without a web server. The distinction matters to whoever reads this next: a network-specific block (the Adams/Knox/DeKalb pattern) is worth retrying from a browser or the Archive, whereas nothing served to anyone is not — this is the JOHNSON COUNTY pattern, whose Clerk stated the same thing in her own words on 21 Jul 2026, and Wabash is now the second such county measured in this campaign. Wabash becomes a County-card county the moment a roster arrives, exactly like Monroe and Randolph. A DECOY TO NAME BEFORE IT COSTS SOMEONE THE ROSTER: searching for \"Wabash County commissioners\" surfaces www.in.gov/counties/wabash/departments/commissioners/ — which is Wabash County INDIANA, an official State of Indiana site (checked 5 Aug 2026: six mentions of Indiana, zero of Illinois). Both states have a Wabash County, named for the river that forms their shared border, so this is the easiest decoy in the file to walk into — and this record is the one place it would do real damage, because Indiana's county IS commissioner-governed with three commissioners, so its roster would look exactly right on an Illinois card. Illinois's Wabash County seats at Mount Carmel; the names must come from Clerk Will or a Mount Carmel source, never from in.gov. TWO OTHER ROUTES CHECKED AND CLOSED, 5 Aug 2026: the Secretary of State's IRAD page for Wabash (ilsos.gov/departments/archives/irad/wabash.html) is a HISTORICAL archives summary — county founded 1824, most records lost to an 1857 courthouse fire, plus statewide genealogy indexes — with nothing post-2000 and no officeholder lists; and ISBE, the source of this project's own clerk roster, publishes election results only for \"federal, statewide, legislative and judicial offices\", stating on its results page that local results are NOT reported to it. So the county clerk is not merely the easiest source for these three names, she is the only one. Re-checked 2026-08-09 and CONFIRMED PRECISELY: wabashcounty.illinois.gov resolves and answers HTTP 503, a mail domain with no web server, exactly as recorded. The most accurate of the fourteen — because it was measured after a Clerk's reply rather than by pattern-guessing.",
-      "wanted": "Just the three commissioners' names (and contact, if published) — the form is settled and no map is needed. Asked of the Clerk 5 Aug 2026."
+      "layer": "county-precinct",
+      "summary": "Wabash is served through the County card — three at-large commissioners, from the Clerk's own e-mail — but its voting precincts are not shown: the county has no website to publish boundaries on, and the precinct half of the question its Clerk answered about the board is still unanswered.",
+      "blocker": "Successor to wabash-county-board, RETIRED 2026-08-17: Clerk Will's e-mail of 16 Aug 2026 carried the three commissioners' names — Timothy R. Hocking, Robert G. Dean, Scott C. West — answering that record's wanted line six hours after the follow-up, and Wabash shipped on the County card the next day as the second DOCUMENT_ROSTERS county (her e-mail lists a HOME address per commissioner and no county contact; per the Edwards rule none of that ships, so each row is a name alone, and the chairman question is asked but unanswered — nobody is marked Chairman until she says). What the retired record established still stands and moves here. The BOARD question is CLOSED: commission form, three commissioners at large, one elected each General Election for a six-year term — the election authority in writing, 5 Aug 2026; there are no districts to draw and none should ever be invented. WABASH COUNTY HAS NO WEBSITE: wabashcounty.illinois.gov resolves (A record 157.185.73.189, a southern-Illinois ISP), carries mail (Rackspace MX — why the Clerk's e-mail arrives), and serves nothing — port 80 answers HTTP 503 on every attempt, 443 resets, www is NXDOMAIN; measured 5 Aug 2026, re-checked 9 Aug, the JOHNSON COUNTY pattern. What is NOT settled is this record's subject: the same 5 Aug e-mail that asked the board question also asked whether voting precinct boundaries exist as map data, and none of the Clerk's replies has addressed that half. So whether Wabash's precincts exist as a file, on paper, or only in a vendor's system is UNMEASURED — unlike Edwards, whose Clerk stated \"on paper\" outright. THE DECOY THE RETIRED RECORD NAMED STILL APPLIES to any future search from this record: in.gov/counties/wabash is Wabash County INDIANA, across the river; Illinois's seats at Mount Carmel, and anything built here must come from Clerk Will or a Mount Carmel source.",
+      "wanted": "The precinct boundaries in any form — a shapefile from whoever draws them, or a paper map scanned into a reply (the Stephenson route) — or failing both, the Clerk's word that they exist only on paper, which would convert this to a closed route the way Edwards' record closed. The precinct half of the 5 Aug 2026 question is still open with the Clerk."
     },
     {
       "id": "washington-precinct-geometry",
@@ -3632,6 +3632,44 @@ returned three features — the same false-negative shape as the layer-58 VTD
 guess and the FULLNAME field guess before it. The service's own layer list
 says blocks are **layer 10**; one metadata request before concluding remains
 cheaper than any amount of debugging a wrong assumption.
+
+### 2026-08-17: Wabash ships as the 61st county — the island grows, and the names only the Clerk could send, she sent
+
+`wabash-county-board`'s wanted line asked for *"just the three commissioners'
+names"* and its blocker established that the county clerk was not merely the
+easiest source but the only one. That is exactly how it closed: six hours
+after a follow-up, County Clerk & Recorder Janet L. Will's e-mail carried
+Timothy R. Hocking, Robert G. Dean and Scott C. West. Wabash ships on the
+County card as the SECOND `DOCUMENT_ROSTERS` county — a mail domain with no
+web server can never be scraped, so the roster is carried from her e-mail with
+the source named, a verification date attached, and the weekly NOT RE-READ
+line saying so out loud. The Edwards mechanism, second use, exactly as that
+entry predicted it would be reused.
+
+**What ships is less than what arrived, by rule.** Her e-mail gives each
+commissioner a HOME address and nothing else; the Edwards rule (a card must
+not publish a private home) withholds all three, and unlike Edwards this
+county assigns no per-seat e-mail, so each row is a name alone. Nobody is
+marked Chairman: the e-mail does not say, the question has been asked, and a
+guessed chair is exactly the invented fact the honesty rules exist to prevent.
+
+**Ring work.** Wabash borders Edwards and nothing else served — Lawrence and
+White are frontier — so the one remaining island GROWS to two counties rather
+than a second island forming: `metro-outline.json` stays two polygons and four
+rings (the Bureau and Christian enclaves unchanged), Mt. Carmel anchors
+INSIDE, and Carmi (White) still holds the southern corridor OUTSIDE. Counts:
+61 served — 49 dispatch, 3 judicial, 9 County card.
+
+**A drift found in passing.** Rebuilding the roster re-read every scraped
+county: ten parsed byte-identical to the shipped file, and PIKE parsed 0 of 9
+from a live 200-status page — pikecountyil.gov's board page has changed shape
+since it was last read. Pike ships unchanged in this build (carried forward
+from the shipped file, not re-read), and the weekly run will fail loudly on
+it; the parser repair is its own change, not smuggled into this one.
+
+`wabash-county-board` is retired; `wabash-precinct-geometry` succeeds it,
+carrying forward the no-website measurement and the Indiana-decoy warning,
+because the precinct half of the 5 Aug question is still open with the Clerk.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 
