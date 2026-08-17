@@ -252,6 +252,7 @@ const ROSTER_URLS = [
   "./data/app/lasalle-county-board-members.json",
   "./data/app/logan-precinct-polling.json",
   "./data/app/carroll-precinct-polling.json",
+  "./data/app/tazewell-precinct-polling.json",
   "./data/app/whiteside-precinct-polling.json",
   "./data/app/hamilton-precinct-polling.json",
   "./data/app/woodford-county-board-members.json",

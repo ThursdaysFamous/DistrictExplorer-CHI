@@ -1,0 +1,37 @@
+{
+ "fetched": "2026-08-17",
+ "source": "Tazewell County Deputy Clerk & Election Supervisor Vanessa L. Reynolds, by e-mail",
+ "note": "The county publishes 49 voting locations, and its precinct layer points six precincts at three facility ids that are not among them — 43, 50 and 54 — leaving those six with no polling place on the card. Deputy Clerk Reynolds sent the Clerk's own countywide polling listing (19 townships, 82 precincts, 49 polling places) on 2026-08-17 in reply to the question, and it names all six. KEYED BY PRECINCT, NOT BY FACILITY ID, and that is forced by the county's data rather than chosen: id 50 is referenced by Cincinnati 02 and 05 (Pekin Bible Church) AND by Elm Grove 02 (Grace Baptist Church), and id 54 by Pekin 01 (First Christian Church) AND Pekin 06 (Miller Center) — precincts that vote at DIFFERENT buildings share one id, so no facility-keyed file (the Whiteside shape) could express the answer. The loader consults this file only where the county's own layer has no match, so publishing those buildings upstream retires it silently. Nothing here overrides a polling place the county does publish: five precincts where the county's live layer and this listing name different buildings are recorded as an open question in docs/DATA_LAYER_GUIDEBOOK.md and asked of the Clerk rather than resolved here — the county's layer was itself edited 2026-08-14 and is not stale.",
+ "precincts": {
+  "Cincinnati 02": {
+   "place": "Pekin Bible Church",
+   "address": "2405 Court Street",
+   "city": "Pekin"
+  },
+  "Cincinnati 05": {
+   "place": "Pekin Bible Church",
+   "address": "2405 Court Street",
+   "city": "Pekin"
+  },
+  "Elm Grove 02": {
+   "place": "Grace Baptist Church",
+   "address": "20231 Il State Rt 9",
+   "city": "Pekin"
+  },
+  "Morton 01": {
+   "place": "Eastside Bible Church",
+   "address": "1310 W. Jefferson St.",
+   "city": "Morton"
+  },
+  "Pekin 01": {
+   "place": "First Christian Church",
+   "address": "1201 Chestnut St.",
+   "city": "Pekin"
+  },
+  "Pekin 06": {
+   "place": "Miller Center",
+   "address": "551 S 14th St.",
+   "city": "Pekin"
+  }
+ }
+}
