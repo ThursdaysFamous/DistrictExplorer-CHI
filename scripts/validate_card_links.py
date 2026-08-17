@@ -54,6 +54,11 @@ Severities (a PUBLISHED link's worst severity is WARN):
     village site refusing a datacenter client says nothing about the link and
     there is nothing to do about it; ~50 of them would drown the report.
   * blocked, expected — 403 from a listed host                             [OK]
+  * unreachable, expected — a listed host that cannot be reached at all     [OK]
+    Not every permanent unreachability is a refusal: a host that serves an
+    INCOMPLETE certificate chain fails verification for every plain client
+    while loading fine in a browser. Listing it stops the report advising that
+    a healthy link be treated as dead.
   * REACHABLE again — a listed host that now answers                     [WARN]
   * rate-limited — 429 twice, eight seconds apart                        [WARN]
     Said softly on purpose: this probe is a plausible cause of a 429, so the
@@ -171,6 +176,21 @@ EXPECTED_UNREACHABLE = {
     "chicagoelections.gov":
         "Cloudflare managed challenge — the Board of Election Commissioners' site "
         "refuses non-browser clients; the early-voting file is hand-transcribed",
+    # THE ONE ENTRY HERE THAT IS NOT A REFUSAL. Read the reason before treating
+    # it as one: this county is not blocking anybody. Its server sends only its
+    # leaf certificate and never the GoDaddy intermediate that signed it, so
+    # requests/curl/urllib all stop at "unable to get local issuer certificate"
+    # while a browser fetches the missing issuer from the leaf's AIA extension
+    # and loads the page normally. Verified 2026-08-17 by counting the
+    # certificates the host sends (one, against three from control hosts) and
+    # by completing the fetch with the AIA-supplied intermediate — HTTP 200,
+    # 43 KB. Listed so the monthly report does not advise treating a healthy
+    # link as dead; it becomes a WARN the day the county fixes its chain, which
+    # is when scripts/coles_county_board_scraper.py's AIA machinery could go.
+    "colesco.illinois.gov":
+        "incomplete TLS chain (leaf only, no intermediate) — NOT a block: the site "
+        "answers HTTP 200 to a client that supplies the missing issuer, which the "
+        "roster scraper does by AIA with a pinned hash",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map
@@ -484,6 +504,17 @@ def evaluate(cites, origin, results):
                 "redirects to the site root (%s) — the usual sign a deep link was "
                 "retired and the CMS forwards it to the homepage. Verify the page still "
                 "exists at some address, then cite that one. Cited at %s" % (detail, where))
+        elif expected:
+            # Same inversion as the `blocked` case above, and it exists because
+            # a host can be permanently unreachable to this client WITHOUT
+            # refusing it: colesco.illinois.gov serves an incomplete
+            # certificate chain (leaf only, no intermediate), so every plain
+            # client fails verification while the site answers HTTP 200 to a
+            # browser. That is not transient and never will be until the county
+            # fixes its server, so the default message below — "if it persists
+            # next month, treat it as dead" — is exactly the wrong advice for
+            # a link that is perfectly good.
+            row(OK, "unreachable AS EXPECTED (%s) — %s" % (detail, expected))
         else:
             row(WARN,
                 "not reachable (%s) — may be transient; if it persists next month, treat "
@@ -569,8 +600,13 @@ def render(rows, cites, origin, prefixes):
                   % (n[OK], len(ok_hosts)), ""]
         blocked_seen = sorted(h for h in ok_hosts if expected_block(h))
         if blocked_seen:
-            lines.append("Refused as recorded in `EXPECTED_UNREACHABLE` (still earning "
-                         "their entries): %s."
+            # "Unreachable", not "refused": most of these hosts do refuse this
+            # client, but not all of them — colesco.illinois.gov merely serves
+            # an incomplete certificate chain — and this summary line is
+            # exactly where a reader would pick up the wrong word for it.
+            lines.append("Unreachable as recorded in `EXPECTED_UNREACHABLE` (still "
+                         "earning their entries; each row above says whether it is a "
+                         "refusal or something else): %s."
                          % ", ".join("%s (%d)" % (h, ok_hosts[h]) for h in blocked_seen))
             lines.append("")
     if prefixes:
