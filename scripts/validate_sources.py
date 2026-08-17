@@ -639,6 +639,40 @@ PROVENANCE = [
              "desk surfaces here. A REDISTRICTING will not: the weekly roster "
              "run is that tripwire, failing when the board page's district "
              "count leaves 17."},
+    {"layer": "Coles County Board members (roster)",
+     "app_file": "coles-county-board-members.json",
+     "source_url": "https://www.colesco.illinois.gov/board/",
+     # NOT A REFUSAL, and the flag is used for its MECHANICS rather than its
+     # name — read the reason, not the key. This host serves an incomplete TLS
+     # chain (leaf only, no intermediate), so every plain client fails
+     # verification while the site itself answers HTTP 200 with a complete
+     # page. That is permanent and measured, exactly the shape the inversion
+     # exists for: unreachable-to-a-plain-probe is the expected steady state,
+     # and REACHABLE is the news, because it means the county fixed its chain
+     # and the scraper's AIA machinery could be retired. Without this flag the
+     # monthly issue would reopen forever on a certificate error that is not a
+     # source change — the no-op-WARN problem the flag was introduced to end.
+     "blocked": "the county's server sends no intermediate certificate, so a "
+                "plain client cannot build the chain — the page itself is "
+                "healthy (HTTP 200) and the scraper supplies the intermediate "
+                "by AIA with a pinned hash. Reachable here would mean the "
+                "county FIXED its chain: re-test, then drop this flag",
+     "note": "The county's own board page (coles_county_board_scraper.py) — "
+             "12 single-member districts with an e-mail each, 9 phones, and "
+             "the board office's own address and phone. THIS IS A SEPARATE "
+             "SOURCE FROM THE BOUNDARY ON PURPOSE: the county's board-district "
+             "GIS layer carries its own member column and it is a 2022-04-23 "
+             "snapshot getting six of twelve names wrong, so geometry comes "
+             "from the service and people come from here. NOTE FOR ANYONE "
+             "PROBING THIS HOST: it serves an INCOMPLETE certificate chain "
+             "(leaf only, no GoDaddy intermediate), so a plain requests/curl "
+             "fetch fails verification while the site is perfectly healthy — "
+             "that error is what got this county recorded as blocked for a "
+             "year. The scraper supplies the intermediate by AIA with a "
+             "pinned hash; this validator's own probe may still report the "
+             "host unreachable for that reason, which is NOT a source change. "
+             "The county's older www.co.coles.il.us is a genuine refusal and "
+             "bare co.coles.il.us has no DNS record; neither is cited."},
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",
@@ -800,6 +834,28 @@ ENDPOINTS = [
     {"layer": "Hamilton County fire districts (3 named + an excluded unnamed sliver)",
      "url": ("https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/"
              "Fire_Districts_HamiltonIL/FeatureServer?f=json")},
+    # Coles (the 52nd dispatched county, 2026-08-17). Board districts and
+    # precincts both live on the county's own PUBLIC ArcGIS Online org — the
+    # one no name-permutation probe ever reached, while the county's website
+    # was being recorded as blocked over what turned out to be an incomplete
+    # TLS chain.
+    #
+    # UNLIKE EFFINGHAM'S ENTRY ABOVE, THIS ENDPOINT IS NOT AN OFFICEHOLDER
+    # SOURCE, and the difference is the point: County_Board_District_View
+    # carries Official/party/term/phone/e-mail columns that are a 2022-04-23
+    # snapshot getting six of twelve names wrong. The app reads `District` and
+    # nothing else here; the roster is the colesco.illinois.gov entry in
+    # PROVENANCE. Probing this service therefore tells you the GEOMETRY is
+    # alive and says nothing about the people.
+    {"layer": "Coles County Board districts (12 — GEOMETRY ONLY, the layer's roster columns are stale)",
+     "url": ("https://services2.arcgis.com/MgTN1xrZnaahv1AF/arcgis/rest/services/"
+             "County_Board_District_View/FeatureServer?f=json")},
+    # Layer 1 is the 44 precinct POLYGONS; layer 0 is 24 polling-place POINTS
+    # whose comma-separated Precinct column expands to the same 44 names. Both
+    # are needed — the card's polling row is the join between them.
+    {"layer": "Coles County voter precincts (layer 1, 44) + polling places (layer 0, 24 points)",
+     "url": ("https://services2.arcgis.com/MgTN1xrZnaahv1AF/arcgis/rest/services/"
+             "2022_Voter_Precincts_WFL1/FeatureServer?f=json")},
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

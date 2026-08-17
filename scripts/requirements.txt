@@ -13,6 +13,16 @@ requests==2.33.1
 beautifulsoup4==4.15.0
 playwright==1.61.0
 
+# Pinned EXPLICITLY, though requests already depends on it, because one scraper
+# uses it directly rather than through requests: colesco.illinois.gov serves an
+# incomplete certificate chain (leaf only, no intermediate), so
+# scripts/coles_county_board_scraper.py builds a verification bundle out of
+# certifi's roots plus the intermediate it fetches from the leaf's AIA URI and
+# checks against a pinned hash. A direct import belongs on a direct pin —
+# scripts/validate_workflow_deps.py fails the build otherwise, which is the
+# check working.
+certifi==2026.7.22
+
 # PDF text extraction for the municipal-officials scrapers whose county source
 # is a published document rather than a page or an API (DuPage's DMMC
 # directory, Kane's and Kendall's clerk yearbooks). Layout mode is required,

@@ -1262,6 +1262,54 @@ taught them.
   that flag inverts the check, and it is for permanent ones where unreachable is the
   expected state. Where a source answers sometimes, both states are worth reporting.
 
+- **A TLS ERROR IS NOT AN HTTP STATUS, and recording one as a block costs a county.**
+  `coles-county-board` sat as a no-source gap for a year reading "BOTH REFUSE THIS
+  NETWORK", and on 2026-08-17 that one phrase turned out to cover three different
+  facts: `co.coles.il.us` has no DNS record, `www.co.coles.il.us` really does reset the
+  connection, and `colesco.illinois.gov` **answers HTTP 200 with a complete page**. What
+  failed on the third was certificate *verification* — the county's server sends only its
+  leaf and never the intermediate that signed it, so `requests`, `curl` and `urllib` all
+  stop at "unable to get local issuer certificate" while browsers and search crawlers
+  sail through by fetching the missing issuer from the leaf's own AIA extension. A server
+  misconfiguration had been written into a gap record, and into a drafted reply telling
+  the Clerk her site was blocking us.
+  **So: get a host to the point of ANSWERING before recording what it does.** Count the
+  certificates it sends (`openssl s_client -connect <host>:443 -showcerts | grep -c
+  'BEGIN CERTIFICATE'`) and compare against a control host — one certificate where a
+  control sends three is an incomplete chain, not a refusal. Then separate "refused me"
+  (a status, a challenge page, a reset) from "handed me something I could not verify".
+  The remedy for the latter is standard and disables nothing: fetch the intermediate from
+  the AIA URI the certificate publishes, pin its SHA-256, and verify the full chain
+  (`scripts/coles_county_board_scraper.py`). **Never `verify=False`** — that trades a
+  fixable annoyance for an unauthenticated source of officeholder data. Two corollaries:
+  a probe run from an unusual environment may report unreachable for reasons of its own
+  (a trimmed CA store, an egress gateway's own 503), so name WHO answered before
+  believing it; and a source blocked this way is permanent until the county fixes its
+  server, which is what the `validate_sources.py` `blocked` inversion is for — but write
+  the reason so the next reader does not re-file it as a refusal.
+
+- **A ROSTER COLUMN ON A BOUNDARY LAYER IS A SNAPSHOT OF ITS PUBLICATION DATE, and the
+  Effingham/McLean shape is not self-identifying.** Rule 4's happy path — "the member
+  rides the boundary layer, so no scraper and no weekly workflow" — is real, and Coles
+  looks exactly like it: 12 districts on a live county service, with `Official`, `party`,
+  `term`, `phone`, `email` and `Population` columns sitting right there. Every one of
+  those columns was frozen the day the layer was published (2022-04-23). Six of the
+  twelve names had since left the board; District 11's `term` still read "2022"; the
+  `Population` column summed to the county's **2010** census count to the person. A build
+  that took the layer at face value would have printed six wrong officeholders under six
+  real districts — the worst output this pipeline can produce — and nothing would have
+  failed.
+  **So before choosing the no-scraper path, spend one fetch: open the county's own roster
+  page and compare the names.** Two cheap staleness tells cost nothing to check and both
+  fired here — the item's `created`/`modified` timestamps in the ArcGIS item JSON, and
+  a population column that sums to the *previous* decennial count rather than the current
+  one (compare against TIGERweb `POP100`; it also tells you which map you are looking at).
+  A county that republishes a boundary rarely republishes its people. Note the opposite
+  finding held too and is worth stating separately: Coles's *polygons* were current —
+  proven as exact unions of the county's own precincts and matched 12/12 against the
+  composition its board page publishes today — so the answer was geometry-from-the-service
+  and people-from-the-page, not "distrust the layer".
+
 ## 2.6 Verification
 
 The standard gates (Part 6.5) plus: the Playwright smoke test's coverage-hide, permalink

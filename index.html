@@ -8211,6 +8211,116 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/jo-daviess-county-board-members.json", {}, 2);
   });
 
+  /* Coles (the 52nd dispatched county, added 2026-08-17). A plain mainland
+   * join through Shelby, which it borders for 6.2 km at its south-west corner.
+   *
+   * THE DISCOVERY: this county's gap read "no source" for a year because both
+   * its web hosts fail an automated fetch, and a failed fetch was read as a
+   * refusal. It is not one. colesco.illinois.gov serves ONLY its leaf
+   * certificate — the GoDaddy intermediate that signed it is never sent — so
+   * requests, curl and urllib all stop at "unable to get local issuer
+   * certificate" while browsers and search crawlers sail through by fetching
+   * the missing issuer from the leaf's own AIA extension. The site answers
+   * HTTP 200 with a complete page to anyone who supplies that intermediate,
+   * which the roster scraper now does. (www.co.coles.il.us, the county's older
+   * site, IS a genuine refusal — it resets the connection — and bare
+   * co.coles.il.us has no DNS record at all. Three hosts, three different
+   * failure modes, one of them not a failure.) The county's GIS is a PUBLIC
+   * ArcGIS Online org, keyed `coles` (org MgTN1xrZnaahv1AF, 172 public items),
+   * that no name-permutation probe had reached.
+   *
+   * BOARD: 12 single-member districts, live from the county's own service.
+   * GEOMETRY ONLY — the layer's attribute table also carries Official, phone,
+   * email, party, term and Population, and every one of those columns is a
+   * 2022-04-23 SNAPSHOT: six of its twelve names have since left the board,
+   * its District 11 term still reads "2022", and its populations sum to
+   * 53,873, which is Coles's 2010 census count to the person (2020 is
+   * 46,863). So nothing here reads a single attribute but `District`, and the
+   * roster comes from the county's board page weekly
+   * (scripts/coles_county_board_scraper.py, which carries the six-name diff).
+   * The polygons themselves are current: they are exact unions of the
+   * county's 2022 precincts and match, 12/12, the precinct composition the
+   * county's own board page publishes today.
+   *
+   * PRECINCTS: 44, live from the same org — and note the layer id, because
+   * layer 0 of that service is NOT the precincts. Layer 0 is "Polling Places",
+   * 24 POINT features whose `Precinct` column lists the precincts each
+   * building serves ("CH 1, 12"); the precinct polygons are layer 1. Expanding
+   * those 24 comma-separated lists yields exactly the 44 precinct names, once
+   * each, and every precinct polygon's own `PollingLocation` names its
+   * building — two surfaces agreeing 44/44 — so the polling place and its
+   * address join in the loader (the Effingham shape). */
+  var COLES_ORG_SERVICE =
+    "https://services2.arcgis.com/MgTN1xrZnaahv1AF/arcgis/rest/services/";
+  function colesTrim(value) {
+    return value == null ? null : (String(value).replace(/\s+/g, " ").trim() || null);
+  }
+  function loadColesLayer(url, outFields, label) {
+    var full = url + "/query?where=1%3D1&outFields=" + outFields +
+      "&outSR=4326&f=geojson&geometryPrecision=5";
+    return fetchJSONWithRetry(full, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) {
+          throw new Error("Coles County " + label + " returned no usable geometry");
+        }
+        return geojson;
+      });
+  }
+  var loadColesCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/coles-county-outline.json", {}, 2);
+  });
+  function colesCountyCoverage(point) {
+    return loadColesCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  /* The county writes its districts as "DISTRICT 1".."DISTRICT 12"; the roster
+   * is keyed "1".."12", so the number is what the two join on. Anything that
+   * is not a district label answers null rather than an empty string, so a
+   * card can never read "District ". */
+  function colesDistrictNumber(feature) {
+    var raw = findPropCI((feature && feature.properties) || {}, ["district"]);
+    var match = raw == null ? null : String(raw).match(/(\d+)/);
+    return match ? String(parseInt(match[1], 10)) : null;
+  }
+  /* `District` and nothing else — see the block comment above for the six
+   * officeholders the rest of this table would get wrong. */
+  var loadColesCountyBoard = makeCached(function () {
+    return loadColesLayer(COLES_ORG_SERVICE +
+      "County_Board_District_View/FeatureServer/0", "District", "board districts");
+  });
+  var loadColesBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/coles-county-board-members.json", {}, 2);
+  });
+  var loadColesPrecincts = makeCached(function () {
+    return Promise.all([
+      loadColesLayer(COLES_ORG_SERVICE + "2022_Voter_Precincts_WFL1/FeatureServer/1",
+                     "Precinct,PollingLocation", "precincts"),
+      loadColesLayer(COLES_ORG_SERVICE + "2022_Voter_Precincts_WFL1/FeatureServer/0",
+                     "Name,Address", "polling places")
+        .catch(function () { return null; })
+    ]).then(function (results) {
+      var precincts = results[0], polling = results[1];
+      if (polling) {
+        var byName = {};
+        (polling.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var name = colesTrim(findPropCI(props, ["name"]));
+          if (name) byName[name] = props;
+        });
+        (precincts.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var key = colesTrim(findPropCI(props, ["pollinglocation"]));
+          var place = key ? byName[key] : null;
+          if (!place) return;
+          props.dxPollingPlace = key;
+          props.dxPollingAddress = colesTrim(findPropCI(place, ["address"]));
+        });
+      }
+      return precincts;
+    });
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -16638,6 +16748,84 @@ function initChiExplorer() {
           }
         }
       },
+      // Coles (12 SINGLE-member districts) — added 2026-08-17. Boundary live
+      // from the county's own public ArcGIS org; roster from the county's
+      // board page, scraped weekly, because the SAME boundary layer carries a
+      // member column that is a 2022 snapshot and gets six of the twelve
+      // names wrong (loadColesCountyBoard's comment; the diff is in
+      // scripts/coles_county_board_scraper.py). Nothing on this card comes
+      // off the boundary feature except the district number. The page
+      // publishes no party, no term and no chair, so none is shown; it
+      // publishes an office address and a phone for the BOARD, which ship
+      // once at board level rather than under twelve names (measured against
+      // the Treasurer's and Sheriff's pages, which carry different ones, so
+      // it is the board's office and not a switchboard).
+      {
+        key: "coles",
+        coverage: colesCountyCoverage,
+        loadGeometry: loadColesCountyBoard,
+        hoverName: function (feature) {
+          return colesDistrictNumber(feature);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadColesCountyBoard(),
+            loadColesBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = colesDistrictNumber(feature);
+            var entry = district ? results[1][district] : null;
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              board: results[1] && results[1].board
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Coles County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              return boardMemberPerson(m);
+            })));
+          }
+          var fields = [];
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board office", value: String(result.board.address) });
+          }
+          if (result.board && result.board.phone) {
+            fields.push({ label: "Board office phone", value: String(result.board.phone) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + result.district : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Coles County Board (official)",
+            url: "https://www.colesco.illinois.gov/board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadColesBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = colesDistrictNumber(feature);
+            var e = d ? roster[d] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -21070,6 +21258,78 @@ function initChiExplorer() {
           return {
             label: "White County Clerk — Elections (official)",
             url: "https://www.whitecounty-il.gov/elections925f89e8"
+          };
+        }
+      },
+      // Coles — 44 precincts, live from the county's own public ArcGIS org.
+      // READ THE LAYER ID: layer 0 of 2022_Voter_Precincts_WFL1 is "Polling
+      // Places", 24 POINT features, and only layer 1 is the precinct
+      // polygons. The 24 points carry a comma-separated `Precinct` column
+      // ("CH 1, 12") which expands to exactly the 44 precinct names, once
+      // each; each polygon separately names its own building in
+      // `PollingLocation`, and the two agree 44/44, so loadColesPrecincts
+      // joins the building's address on by name. The county board district
+      // is a spatial join rather than a column — the composition is
+      // whole-precinct (all 44 nest, worst share 99.85%), but joining at the
+      // point costs nothing and cannot drift from the board layer. Its
+      // failure costs that one row and never the precinct.
+      {
+        key: "coles",
+        coverage: colesCountyCoverage,
+        loadGeometry: loadColesPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["precinct"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadColesPrecincts(),
+            loadColesCountyBoard().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["precinct"]);
+            var boardDistrict = null;
+            if (results[1]) {
+              var bf = findFeatureContaining(results[1], point);
+              if (bf) boardDistrict = colesDistrictNumber(bf);
+            }
+            return {
+              seq: seq,
+              name: name != null && String(name).trim() ? String(name).trim() : null,
+              boardDistrict: boardDistrict,
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict) {
+            fields.push({ label: "County Board District",
+                          value: "District " + result.boardDistrict });
+          }
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          fields.push({ label: "County", value: "Coles County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            // /coclerk/elections/, NOT /county-clerk/ — the county's Clerk
+            // lives under an abbreviated path and the guessable one is a SOFT
+            // 404 (HTTP 200 with a "404 Page" body, so a link checker reads it
+            // as alive). This page is also where the county points the public
+            // at the very data this card draws: it links the "Polling Location
+            // Map" web app backed by the same 2022_Voter_Precincts service.
+            label: "Coles County Clerk — Elections (official)",
+            url: "https://www.colesco.illinois.gov/coclerk/elections/"
           };
         }
       }

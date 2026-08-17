@@ -553,8 +553,7 @@
         "file": "coles-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Coles County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Coles County outline — the coverage test for the county's board and precinct dispatch entries (colesCountyCoverage). Shipped 2026-08-04 as gap-location geometry when Coles read as source-less; promoted to a coverage outline on 2026-08-17 when the county joined as the 52nd dispatched county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
         "file": "congress-districts.json",
@@ -1717,6 +1716,11 @@
         "note": "White County's polling places keyed by shipped precinct name — the County Clerk's own POLLING PLACES list on her Elections page, eleven buildings covering all 18 precincts (Carmi's seven vote at one building; the builder refuses to write on any coverage short of 18/18). Place and address ship as the ONE string the county prints, because splitting 'Fire House 912 Loy St.' into place/address would be a guess. The page's 'Gray #24' is normalised to the GREY 24 spelling the county's own map, the census and the canvasses share, recorded in the builder. Scraped weekly by the same run as the board roster; that run also fails if the Elections page stops linking the adopted district & precinct map the county's boundaries were traced from (the Mason watcher rule)."
       },
       {
+        "file": "coles-county-board-members.json",
+        "min_keys": 13,
+        "note": "Coles County Board members keyed by district (12 single-member districts) plus a top-level 'board' entry carrying the County Board office's own address and phone — one office for twelve members is the board's, not each member's (the Calhoun switchboard rule), and it is the BOARD's rather than a county switchboard by measurement: the same navbar block reads Room 124 / (217) 348-0511 on the Treasurer's page and 701 7th St / (217) 348-0585 on the Sheriff's. Scraped weekly from the county's own board page. THE COUNTY'S BOARD-DISTRICT GIS LAYER ALSO CARRIES A MEMBER COLUMN AND IT IS NOT USED: that table is a 2022-04-23 snapshot which names six members who have since left the board, still reads term '2022' for District 11, and carries 2010 populations — so the app reads geometry from the service and people from here (scripts/coles_county_board_scraper.py has the six-name diff). No party, term or chair ships because the page publishes none; home addresses are printed under most members and are never parsed (the scraper keys on the contact row's ICON, not its href, because the address anchor is itself a tel: link). The county's committees page is the cross-check and a disagreement in either direction fails the weekly run."
+      },
+      {
         "file": "jo-daviess-county-board-members.json",
         "min_keys": 17,
         "note": "Jo Daviess County Board members keyed by district (17 single-member districts — the seat count the boundary module exports, so the roster and the purchased geometry cannot drift apart silently). Scraped weekly from the county's own board page at jodaviesscountyil.gov (NEVER the old jodaviess.org, which answers every URL with its home page): name, party and term on every seat, Chair/Vice-Chair badged, plus a direct phone and an e-mail per member from each member's own directory page — 16 distinct numbers at first ship, so no switchboard hoist, and personal gmail/icloud addresses carried exactly as published. A seat the county prints as VACANT ships as a counted, never named vacancy (District 16 at first ship, the Livingston posture). The directory pages also print members' HOME ADDRESSES, which the scraper never parses (the Madison/Peoria precedent). The count guard counts SEATS (named + vacant = exactly 17, districts 1..17 each once), so a vacancy is distinguishable from a parse regression — and a changed district count reads as a reapportionment, which would need the purchased boundary re-licensed."
@@ -1987,6 +1991,11 @@
       "file": "update-jodaviess-county-board-roster.yml",
       "purpose": "Jo Daviess County Board roster (jodaviesscountyil.gov board page + 16 member directory pages, paced; seats counted named+vacant = 17, districts 1..17 asserted against the purchased boundary's constant, home addresses never parsed)",
       "schedule": "Sat 18:00 UTC"
+    },
+    {
+      "file": "update-coles-county-board-roster.yml",
+      "purpose": "Coles County Board roster (colesco.illinois.gov board page + committees page cross-check; the fetch supplies the intermediate certificate the county's server omits, pinned by hash. Exists because the county's own board-district GIS layer carries a 2022 member column that gets six of twelve names wrong — the app takes geometry from the service and people from here)",
+      "schedule": "Sun 18:00 UTC"
     }
   ],
   "geocoder": {
