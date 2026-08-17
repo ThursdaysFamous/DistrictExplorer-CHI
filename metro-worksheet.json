@@ -475,7 +475,7 @@
         "file": "bureau-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Bureau County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so bureau-county-board-districts attaches to its ground.",
+        "note": "Bureau County outline — gap-location geometry only, not a dispatched county: no layer answers here, but the gaps panel tests the pin against <slug>-county-outline.json, and without this file a pin in the gray-washed county was told 'nothing missing where you clicked'. Ships so bureau-county-board-districts attaches to its ground. (This note used to point at jo-daviess-county-outline.json as the pattern's exemplar; Jo Daviess was promoted to a dispatched county on 2026-08-17, so the explanation lives here now.)",
         "dynamic_reference": true
       },
       {
@@ -789,11 +789,16 @@
         "dynamic_reference": true
       },
       {
+        "file": "jo-daviess-county-board-districts.json",
+        "min_features": 17,
+        "max_features": 17,
+        "note": "Jo Daviess County's 17 single-member County Board districts — the county's OWN shapefile, and the fleet's first PURCHASED boundary: 14 of the 17 districts cut across precincts along roads (the county's 2 Dec 2021 mapping memo), so no dissolve or tracing could draw them, and the export was bought under Jo Daviess County GIS Digital Data License Agreement #008382 ($33.50, 2026-08-17) with display on chidistricts.com authorized in writing by IT/GIS Director Joe Kratcha the same day. The licence's redistribution clause is why the RAW shapefile is NOT in data/source/raw — it is retained offline, and scripts/build_jodaviess_board_districts.py records each component's byte size and sha256 so a re-supplied copy can be authenticated. Bounds are an EQUALITY (CtyBrdDist DISTRICT 01..17 each exactly once, guarded; the dbf's CtyBrdMemb column is declared-and-empty and read NOWHERE — the builder fails if it ever fills, because members come from the county's board page weekly). Reprojected from the .prj's EPSG:3436 and simplified topology-aware (pinned mapshaper, -clean either side): the full-precision export tiles TIGER's county at 99.93% with 0.3 m2 worst pairwise overlap, the shipped file at 99.93% with zero overlap, median boundary movement ~0.6 m (max ~54 m), 2000/2000 sample points classifying identically. The licence's Credits clause is why the card names Jo Daviess County GIS on every render."
+      },
+      {
         "file": "jo-daviess-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Jo Daviess County outline — GAP-LOCATION geometry only, not a dispatched county: no layer answers here, but the gaps panel tests the pin against <slug>-county-outline.json, and without this file a pin in the gray-washed county was told 'nothing missing where you clicked'. Ships so jo-daviess-county-board-districts attaches to its ground.",
-        "dynamic_reference": true
+        "note": "Jo Daviess County coverage outline — gates the county's dispatch entry. Shipped 2026-08-02 as gap-location geometry (the gaps panel tests pins against <slug>-county-outline.json); promoted 2026-08-17 to the dispatched county's coverage test when Jo Daviess joined as the 51st, referenced by loadJoDaviessCountyOutline in index.html. The board-district builder asserts its district union stays within 0.25% of this outline, so the coverage test and the card cannot disagree about where the county is."
       },
       {
         "file": "johnson-county-outline.json",
@@ -994,7 +999,7 @@
         "file": "mercer-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Mercer County outline — gap-location geometry only, not a dispatched county (see jo-daviess-county-outline.json). Ships so mercer-county-board-districts attaches to its ground.",
+        "note": "Mercer County outline — gap-location geometry only, not a dispatched county (see bureau-county-outline.json for the pattern). Ships so mercer-county-board-districts attaches to its ground.",
         "dynamic_reference": true
       },
       {
@@ -1658,6 +1663,11 @@
         "file": "white-precinct-polling.json",
         "min_keys": 18,
         "note": "White County's polling places keyed by shipped precinct name — the County Clerk's own POLLING PLACES list on her Elections page, eleven buildings covering all 18 precincts (Carmi's seven vote at one building; the builder refuses to write on any coverage short of 18/18). Place and address ship as the ONE string the county prints, because splitting 'Fire House 912 Loy St.' into place/address would be a guess. The page's 'Gray #24' is normalised to the GREY 24 spelling the county's own map, the census and the canvasses share, recorded in the builder. Scraped weekly by the same run as the board roster; that run also fails if the Elections page stops linking the adopted district & precinct map the county's boundaries were traced from (the Mason watcher rule)."
+      },
+      {
+        "file": "jo-daviess-county-board-members.json",
+        "min_keys": 17,
+        "note": "Jo Daviess County Board members keyed by district (17 single-member districts — the seat count the boundary module exports, so the roster and the purchased geometry cannot drift apart silently). Scraped weekly from the county's own board page at jodaviesscountyil.gov (NEVER the old jodaviess.org, which answers every URL with its home page): name, party and term on every seat, Chair/Vice-Chair badged, plus a direct phone and an e-mail per member from each member's own directory page — 16 distinct numbers at first ship, so no switchboard hoist, and personal gmail/icloud addresses carried exactly as published. A seat the county prints as VACANT ships as a counted, never named vacancy (District 16 at first ship, the Livingston posture). The directory pages also print members' HOME ADDRESSES, which the scraper never parses (the Madison/Peoria precedent). The count guard counts SEATS (named + vacant = exactly 17, districts 1..17 each once), so a vacancy is distinguishable from a parse regression — and a changed district count reads as a reapportionment, which would need the purchased boundary re-licensed."
       }
     ]
   },
@@ -1920,6 +1930,11 @@
       "file": "update-white-county-board-roster.yml",
       "purpose": "White County Board roster + precinct polling (whitecounty-il.gov board + elections pages; district join from the certified-canvass table, any unplaceable name fails) + watch on the Elections page's adopted-map link",
       "schedule": "Sat 17:00 UTC"
+    },
+    {
+      "file": "update-jodaviess-county-board-roster.yml",
+      "purpose": "Jo Daviess County Board roster (jodaviesscountyil.gov board page + 16 member directory pages, paced; seats counted named+vacant = 17, districts 1..17 asserted against the purchased boundary's constant, home addresses never parsed)",
+      "schedule": "Sat 18:00 UTC"
     }
   ],
   "geocoder": {

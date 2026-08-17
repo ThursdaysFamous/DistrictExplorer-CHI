@@ -924,6 +924,18 @@ taught them.
   election authority, whatever a consortium licenses commercially). Never "solve" it by
   supplying the header. The same instinct applies to a county GIS office that runs a paid
   data-order form (the Jo Daviess shape) — same block, same route out.
+  **And the route out WORKS — Jo Daviess proved it on 2026-08-17, the first
+  licence-gated county ever cleared.** Its licence's redistribution clause was
+  the Bureau clause with a valve ("without permission from JoDavGIS"), the
+  permission was asked for BEFORE anything was signed or paid, the IT/GIS
+  Director authorized display on chidistricts.com in writing, and only then
+  did the operator sign and pay ($33.50, licence #008382). Two knock-ons for
+  any county cleared this way: the RAW dataset stays OUT of data/source/raw
+  (retained offline; the builder records byte sizes + sha256 per component —
+  a deliberate, documented deviation from the archive convention), and the
+  licence's Credits clause is honoured ON THE CARD, not just in the builder.
+  The order of operations is the whole lesson: Bureau's $150 quote is still a
+  block because its permission e-mail does not exist yet.
 
 - **An AT-LARGE board is county-card rows, and the mechanism now exists — use it.** §1.5
   called this shape long before anything implemented it. Monroe and Randolph (2026-08-02)

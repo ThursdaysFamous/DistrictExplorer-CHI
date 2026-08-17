@@ -115,6 +115,7 @@ const GEOMETRY_URLS = [
   "./data/app/jefferson-county-outline.json",
   "./data/app/jefferson-precincts.json",
   "./data/app/jersey-county-outline.json",
+  "./data/app/jo-daviess-county-board-districts.json",
   "./data/app/jo-daviess-county-outline.json",
   "./data/app/johnson-county-outline.json",
   "./data/app/kane-county-outline.json",
@@ -273,6 +274,7 @@ const ROSTER_URLS = [
   "./data/app/shelby-county-board-members.json",
   "./data/app/white-county-board-members.json",
   "./data/app/white-precinct-polling.json",
+  "./data/app/jo-daviess-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

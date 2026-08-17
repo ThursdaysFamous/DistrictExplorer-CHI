@@ -1,0 +1,108 @@
+name: Update Jo Daviess County Board roster
+
+# Weekly refresh of the Jo Daviess County Board District card's member roster
+# (data/app/jo-daviess-county-board-members.json), fetched by index.html.
+# Re-scrapes the county's board page and each member's own directory page
+# (17 seats: 16 named members + District 16 vacant at first ship, party and
+# term on every seat, a direct phone and e-mail per member) and, if anything
+# changed, opens a PR rather than committing directly to main — officeholder
+# data should get a human look before it ships.
+#
+# THE RIGHT DOMAIN. jodaviesscountyil.gov. The county's OLD jodaviess.org
+# answers every URL with its home page — a dead-link trap that looks live —
+# so no step here may ever cite it.
+#
+# SEATS ARE COUNTED, NAMES ARE NOT GUESSED. The builder counts seats (named +
+# vacant) against the boundary module's EXPECTED_DISTRICTS constant — exactly
+# 17, districts 1..17 each once — so a vacancy reads as a vacancy and a parse
+# regression still goes red (the Lee rule). A CHANGED district count is the
+# earliest visible sign of a reapportionment, and it fails this run on
+# purpose: the boundary is the county's own PURCHASED shapefile (GIS data
+# licence #008382, display authorized in writing 2026-08-17 —
+# scripts/build_jodaviess_board_districts.py), so new lines mean a new
+# licensed export, an operator step no scraper may improvise.
+#
+# HOME ADDRESSES NEVER SHIP. The county prints each member's residence on
+# their directory page; the scraper reads only the e-mail/phone blocks and
+# never parses the address lines (the Madison/Peoria precedent), so nothing
+# downstream can leak what was never collected.
+
+on:
+  schedule:
+    - cron: "0 18 * * 6" # Saturday 18:00 UTC (after county-clerk 13:00, county-commissioners 16:00, White 17:00)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the workflow still runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # Static server-rendered CivicPlus pages — no JS and no challenge — so
+        # requests alone, parsed with the stdlib re module. The builder imports
+        # only CONSTANTS from build_jodaviess_board_districts.py, whose
+        # geometry stack (pyshp/pyproj/shapely + mapshaper) is function-local
+        # (the De Witt seam), so none of it installs here.
+        run: pip install -c scripts/requirements.txt requests
+
+      - name: Scrape Jo Daviess County board + member directory pages
+        run: python3 scripts/jodaviess_county_board_scraper.py /tmp/jodaviess_county_board_raw.json
+
+      - name: Rebuild roster data file
+        run: python3 scripts/build_jodaviess_board_roster.py /tmp/jodaviess_county_board_raw.json
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present and
+      # well formed.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/jodaviess-county-board-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/jo-daviess-county-board-members.json
+          git commit -m "Update Jo Daviess County Board roster from jodaviesscountyil.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Jo Daviess County Board roster from jodaviesscountyil.gov" \
+              --body "Automated weekly refresh of the Jo Daviess County Board District card's member roster, generated by \`scripts/jodaviess_county_board_scraper.py\` + \`scripts/build_jodaviess_board_roster.py\`. Please review the diff before merging — this changes data about real officeholders. Seats are counted named + vacant and must equal exactly 17 with districts 1..17 each once (a vacancy ships as a counted, never named \`vacancies\` entry, the Livingston posture); every named member must carry a party letter, and the e-mail/phone floors sit just under the published 16/16. Home addresses printed on the county's directory pages are never parsed. If this run went red on a district-count change, that is a REAPPORTIONMENT: the boundary is the county's licensed shapefile (licence #008382) and needs a fresh licensed export — an operator step, not a scraper fix." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
