@@ -624,19 +624,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "Whether the 2016 map on jerseycountyclerk-il.gov is still the operative one after the 2021 redistricting, and if so the GIS or CAD file behind it — the map exists, so this is a request for its data and its currency rather than for a boundary nobody has drawn. Failing that, the precincts making up each district, which the Clerk also maps."
     },
     {
-      "id": "jo-daviess-county-board-districts",
-      "concept": "County board districts",
-      "area": "Jo Daviess County",
-      "counties": [
-        "jo-daviess"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Jo Daviess County's 17 board districts cut across precincts along roads, and nobody publishes those lines.",
-      "blocker": "The county describes all 17 districts in writing on its County Board page, member by member — but 14 of the 17 are made of PARTS of precincts, and District 10 is a fraction of a single one (“Part of West Galena I precinct”). Its own mapping memo of 2 Dec 2021 explains why: “If one of those boundaries needed to be split I used roads.” Only districts 1, 3 and 16 are whole precincts, so even precinct boundaries would not finish the county. Re-checked 31 Jul 2026 and all of it still holds: the county's map viewer has no usable data behind it, and the countywide district map is a picture — 32 embedded images and 261 characters of text, which is just the title and legend — so the tracing route that worked for Stephenson does not apply. One warning for anyone checking: the county has moved to jodaviesscountyil.gov, and the old jodaviess.org answers every address with its home page, which makes a dead link look like a live one. QUOTED 17 Aug 2026: GIS Technician/Website Administrator Diane LaScala priced the export — labor \u00bd hour $25.00, 17 district polygons at $0.50 each, TOTAL $33.50 — with an invoice and a SIGNED LICENSE AGREEMENT required before release, and \"the fees are minimal and will not be waived.\" Her reply also references an answer she sent 3 Aug 2026 that never arrived: no message from her address exists in this mailbox before 17 Aug, and the spam folder cannot be audited from this tooling, so where it went is unknowable from here. The price is trivial; THE LICENCE IS THE WHOLE QUESTION — the Bureau lesson, where a quote came under terms forbidding redistribution of anything derived, which no payment cures. Nothing should be paid or signed until the agreement's redistribution terms are read. READ AND CURED THE SAME DAY IT ARRIVED, 17 Aug 2026: LaScala sent licence #008382 with the $33.50 invoice, and its Protection of Proprietary Rights clause is the Bureau clause — redistribution of derived products expressly forbidden — but with the five words that change everything: ‘without permission from JoDavGIS’. Twenty minutes later IT/GIS Director Joe Kratcha supplied exactly that permission in writing: ‘Please let this email serve as official authorization, in addition to the signed license agreement, granting you permission to display the requested Jo Daviess County Board District boundaries … on your website: chidistricts.com for public viewing.’ The operator signed and paid the same day (online, order 008382). The invoice's Ship Via is EMAIL. This is the first licence-gated county the project has ever cleared, and it cleared because the question was asked BEFORE signing — the Bureau block is a licence without that e-mail.",
-      "wanted": "The shapefiles themselves — paid for and due by e-mail. On arrival this builds directly: 17 districts, the card crediting Jo Daviess County GIS per the licence's Credits clause, and Kratcha's authorization e-mail of 17 Aug 2026 preserved as the permission instrument alongside licence #008382. The member list is already published, with all 17 members' party and term."
-    },
-    {
       "id": "johnson-county-board",
       "concept": "County board",
       "area": "Johnson County",
@@ -1733,7 +1720,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16** layers.
 | State lower chamber | SHIPPED `il-house` | SHIPPED `state-assembly` | SHIPPED `ca-assembly` |
 | City council district | SHIPPED `ward` — consolidated CountyDispatch keyed by MUNICIPALITY (the dispatcher's first non-county key): Chicago 50 (Socrata wards + alderman roster) + suburban Cook 21 municipalities (county GIS layer 22) + Evanston 9 (city GIS, which also carries each alderperson's email/phone/ward page) + Will 4 cities incl. Joliet's council DISTRICTS (county GIS) + Aurora 10 (city GIS) + Rockford 14 (WinGIS `ElectedOfficials` L20 — alderperson + e-mail ride the boundary) + Rock Island's Moline 7 and Silvis 4 (county-hosted city layers, both edited 2022 — Whiteside's six-municipality layer is a recorded gap at a 2019 vintage) + DeKalb's DeKalb 7 / Sycamore 4 / Genoa 4 / Sandwich 4 (four county-hosted city layers, all edited 2023) + Mendota 4 (the city's own org, edited 2022 — the only one of LaSalle's four ward cities that publishes geometry; La Salle's ward map is a raster PNG, Peru's and Earlville's do not exist, and Ogle's Byron and Polo are the same gap) **+ the pass-6 ward tranche (2026-08-02): thirteen sources / twenty-two cities** — Berwyn 8 (city org; roster seats) + Waukegan 9 (city 2025 locator — alderman + per-seat phone AND e-mail on the polygon) + North Chicago 7 (city 2026 layer, honestly seat-only) + Belvidere 5 (Boone county GIS — BOTH aldermen + phones per ward) + St. Charles 5 and Geneva 5 (city orgs — both aldermen w/ per-seat contact; St. Charles' literal 'Unknown' phone strings dropped) + Batavia 7 (city server '2027/2025' map — both aldermen's names; its contact columns are declared-and-empty) + West Chicago 7 (city 2025 service — both aldermen + per-ward page URL) + McHenry 7 (city org, seat-only) + Yorkville 4 and Plano 4 (Kendall Hosted/Wards filtered to the two — the Aurora/Joliet sliver rows are dropped; seat-only, Plano's missing roster a recorded gap) + Pontiac 5 (city org; roster seats 2/ward) + Bloomington 9, Le Roy 4 and Lexington 3 (ONE McLean clerk layer parsed by name; its REPNAME column measured stale on two cities is read nowhere — all three join the roster) + Lincoln 4 (city org; roster + current GIS names as fallback) + Springfield 10 (SPI 2022 map at layer 4; roster) + Freeport 7 (city org; roster — the layer's stale Alderperson column is read nowhere) + East Moline 7 (city org, joined the rock-island entry; alderman + contact on the polygon) + Belleville 8 (St. Clair county L13 — the duplicate-id sliver dropped by largest-ring-per-id) and O'Fallon 7 (L14), both joining the roster 2/ward. Suburban seat-holders join `municipal-officials.json` by municipality + seat number, so a ward card names the same person the Municipality card lists for that seat | SHIPPED `council` (51) | SHIPPED `supervisor-district` (11; doubles as the county board — consolidated city-county) |
 | Electoral precinct / ballot sub-unit | SHIPPED `ward-precinct` + `county-precinct` (consolidated CountyDispatch: suburban Cook current map 1,430 — Cook-outside-Chicago only, city precincts are the BOE ward-precinct layer — + Will 2022 map 310 + DuPage 2024 map 600 + Lake current map 431 + Kane current map 292 + McHenry current map 223 + Kendall current map 78 w/ the county's own polling-place assignment per precinct — every metro county covered — plus the sixteen expansion counties: LaSalle 119 (polling joined 119/119) + Kankakee 59 + Boone 37 (polling on the feature) + Grundy 40 (polling joined 38/40) + Macoupin 45 (the county's own Socrata portal — the 2022-2032 fabric ab79-cnsh; polling joined 45/45 from its sibling polling dataset by deterministic label expansion, 2026-08-02 — the pass-4 note of 105 was the superseded map) + Madison 191 (polling joined 191/191, the fleet's cleanest) + St. Clair 150 (polling is a recorded gap) + Winnebago 94 (county-clerk jurisdiction only — Rockford runs its own election commission, a recorded gap) + DeKalb 69 + Ogle 51 (the county GIS Coordinator's shapefile, sent on request; the Clerk supplied the other half of the answer — how retired Forreston 3 was absorbed — without which the 2020 fabric would have shipped a precinct that no longer exists) + Lee 46 + Whiteside 60 (polling joined 56/60 from the county's layer; the last four filled from two locations the Clerk supplied with addresses, which the county does not publish — all 60 now show a polling place and an address) + Rock Island 120 + McLean 141 (polling joined 141/141) + Logan 29 (the clerk's HTML polling table shipped as a same-origin file, joined 29/29) + Sangamon 166 (polling joined 165/166) + Carroll 22 (TIGERweb Census-2020 VTDs live — the county did not re-precinct; the clerk's polling notice shipped as a same-origin file, 22/22) + Woodford 37 (TCRPC's election service, polling joined 37/37 on the numeric polling reference, 2026-08-02) + Macon 64 (polling joined 64/64 to 29 locations — recorded here 2026-08-04 with the matrix row it was omitted from at ship time) + Effingham 38 (the first island — polling joined 38/38 to 24 locations by facilityid, every location with a full address) + Hamilton 16 (the second island, from the GIS the Clerk pointed to in a four-minute reply; the layer's 17th row is a null-named byte-for-byte duplicate of Dahlgren 1, dropped in the loader; polling joined 16/16 to 13 locations from the Clerk's statutory 3/17/2026 General Primary notice on the county's post-migration website, shipped as a same-origin file with the card row election-labelled — the notice settled the Dahlgren #1/#2 pairing two ~0.3 mi-coarse georeferencing instruments could not, 2026-08-11); Kane's card also gained the township name from the clerk's own prefix pairing and the election-labelled polling row, 292/292 — the pass-6 precinct tranche, 2026-08-02) | SHIPPED `election-district` (~4,200) | SHIPPED `election-precinct` (`jg6x-23ig`, 2022 map; subOf `supervisor-district`, polling-place lookup link) |
-| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 (DERIVED — see below) + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 + Rock Island 19 + Woodford 3 (DERIVED — TIGER townships per adopted Ordinance 2020/21 #005; five members per district from a weekly directory scrape, 15/15 with phone and e-mail; no chair marked — elected from within the body, the directory doesn't say) + Boone 3 (RUNTIME-MERGED — the county GIS's three per-district layers, each pre-dissolved, merged and district-tagged at load time; four members per district from a weekly board-page scrape, 12/12 with phone, e-mail and term-expiry year; one Vice-Chairman tagged verbatim, no Chairman named) + Grundy 3 (DERIVED — the county's own precinct layer dissolved per the adopted 10/12/2021 map, the transcription proven by the map's printed populations to the person; six members per district from a weekly board-page scrape, 18/18 with party, since-year, committees, phone and e-mail; Chairman tagged from his own row) + Henry 2 (DERIVED — TIGER townships per adopted Ordinance 21-33, twelve whole townships per district, the composition proven by the adopted map's own two-census population table AND live Census POP100, all to the person; TEN members per district — the fleet's widest — from a weekly scrape of the county's own district-keyed directory, 20/20 with e-mail; no chair marked, so none is tagged) + Stark 2 (2 districts of FOUR, the smallest board here — boundary from the County Clerk's own Google My Maps, which is the county's entire GIS and which she confirmed current by e-mail; per-SEAT e-mail addresses, Chair and Vice-Chair badged) + Effingham 9 (the FIRST ISLAND, 2026-08-04 — single-member districts lettered A-I with the roster ON the district features: name, party, phone and e-mail read straight off the county's own live service, the McLean pattern with one seat and no scraper between the card and the county) districts — LaSalle REBUILT 2026-08-01 on derived geometry (its own board GIS is the superseded 2011-2021 map): the county's precinct layer dissolved per its 2024+2026 election canvasses, 11 split precincts drawn with their majority side and stated on the card, roster scraped weekly from the county directory with the countywide-elected Chairman (gap lasalle-board-districts-stale records what remains); absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
+| County legislature / commissioner | SHIPPED `county-board` (consolidated CountyDispatch layer: Cook Commissioner 17 + Will 11 + DuPage 6 + Lake 19 + Kane 24 + McHenry 9 + Kendall 2 + LaSalle 29 (DERIVED — see below) + Kankakee 28 + Winnebago 20 + Livingston 3 + McLean 10 + Logan 6 + Sangamon 29 + Madison 26 + St. Clair 28 + DeKalb 12 + Ogle 8 + Stephenson 8 + Carroll 3 + Lee 4 + Whiteside 3 + Rock Island 19 + Woodford 3 (DERIVED — TIGER townships per adopted Ordinance 2020/21 #005; five members per district from a weekly directory scrape, 15/15 with phone and e-mail; no chair marked — elected from within the body, the directory doesn't say) + Boone 3 (RUNTIME-MERGED — the county GIS's three per-district layers, each pre-dissolved, merged and district-tagged at load time; four members per district from a weekly board-page scrape, 12/12 with phone, e-mail and term-expiry year; one Vice-Chairman tagged verbatim, no Chairman named) + Grundy 3 (DERIVED — the county's own precinct layer dissolved per the adopted 10/12/2021 map, the transcription proven by the map's printed populations to the person; six members per district from a weekly board-page scrape, 18/18 with party, since-year, committees, phone and e-mail; Chairman tagged from his own row) + Henry 2 (DERIVED — TIGER townships per adopted Ordinance 21-33, twelve whole townships per district, the composition proven by the adopted map's own two-census population table AND live Census POP100, all to the person; TEN members per district — the fleet's widest — from a weekly scrape of the county's own district-keyed directory, 20/20 with e-mail; no chair marked, so none is tagged) + Stark 2 (2 districts of FOUR, the smallest board here — boundary from the County Clerk's own Google My Maps, which is the county's entire GIS and which she confirmed current by e-mail; per-SEAT e-mail addresses, Chair and Vice-Chair badged) + Effingham 9 (the FIRST ISLAND, 2026-08-04 — single-member districts lettered A-I with the roster ON the district features: name, party, phone and e-mail read straight off the county's own live service, the McLean pattern with one seat and no scraper between the card and the county) + Jo Daviess 17 (PURCHASED, 2026-08-17 — the fleet's first bought boundary: 14 of the 17 single-member districts cut across precincts along roads, so no dissolve or tracing could draw them, and the county SELLS its GIS data; the county's own shapefile under Jo Daviess County GIS Digital Data License Agreement #008382, displayed under the county's written authorization, the raw file retained offline per the licence, the card crediting Jo Daviess County GIS per its Credits clause; roster weekly from the county's own board page — party and term on every seat, a direct phone and e-mail per member, one counted-never-named vacancy) districts — LaSalle REBUILT 2026-08-01 on derived geometry (its own board GIS is the superseded 2011-2021 map): the county's precinct layer dissolved per its 2024+2026 election canvasses, 11 split precincts drawn with their majority side and stated on the card, roster scraped weekly from the county directory with the countywide-elected Chairman (gap lasalle-board-districts-stale records what remains); absorbed the former `commissioner` / `will-county-board` / `dupage-county-board` layers, old permalink ids aliased; Lake's members + contact + office address ride live on the county's own boundary GIS, with Chair/Vice-Chair tags from a weekly directory scrape (name-match guarded); Kane's GIS carries member names while a weekly scrape of the county's SharePoint directory list adds party/office phone/email + the countywide-elected Chair; Kendall's members + Chairman and McHenry's members + countywide-elected Chairman — each with contact + profile links — join from hand-verified rosters of each county's own directory — those two counties block all automated fetch incl. the Archive's crawler, so their weekly scrape attempts feed standing tracking issues until the block lifts) | NO HONEST ANALOG¹ | NO HONEST ANALOG (folded into `supervisor-district`) |
 | County property-tax appeals board (elected) | SHIPPED `ccbr` (commissioner roster scraped weekly from the Board's own site) | NO HONEST ANALOG² | NO HONEST ANALOG⁵ |
 | State high-court electoral district | SHIPPED `il-supreme-court` | SHIPPED `judicial-district` (NY Supreme is trial-level, elected by district) | NO HONEST ANALOG⁶ |
 | Trial/civil-court sub-district | SHIPPED `judicial-subcircuit` (consolidated CountyDispatch: Cook 20 — live from the county GIS, cross-validated against the enacted ilsenateredistricting.com shapefile, with the Circuit Court's 6 municipal districts + courthouses as a card row — + Will 12th-Circuit 5 + DuPage 18th-Circuit 7 + Lake 19th-Circuit 12 + Kane 16th-Circuit 4 (pre-built from the enacted shapefile — the county's services are permission-locked) + McHenry 22nd-Circuit 4 (pre-built — the county publishes no subcircuit service) + Winnebago 17th-Circuit 2 + Madison 3rd-Circuit 4 + Sangamon 7th-Circuit 7 (the three 2026-07-28 entries, pre-built from the same enacted archive; their coverage is the subcircuit geometry itself, so each circuit's secondary counties — Boone; Bond; Greene/Jersey/Macoupin/Morgan/Scott — answer too), all PA 102-0693; the app ships all nine circuits the act covers, and Macoupin — a 7th-Circuit secondary county — is answered by the Sangamon entry; every other served county's circuit (Kendall + DeKalb's 23rd, LaSalle + Grundy's 13th, Kankakee's 21st, Livingston/McLean/Logan/Woodford's 11th, St. Clair's 20th, Ogle/Lee/Stephenson/Carroll's 15th, Whiteside + Rock Island + Henry's 14th) received NO subcircuits under the act — structurally n/a, the layer hides there) | SHIPPED `municipal-court` (28) | NO HONEST ANALOG⁶ |
@@ -3757,6 +3744,103 @@ future work, recorded here rather than implied).
 
 `white-county-board` is retired; `white-special-districts` succeeds it,
 carrying forward the fragile-mail note and the "one map file" measurement.
+
+### 2026-08-17, night: Jo Daviess ships as the 63rd county — the first boundary this project ever BOUGHT, and the first licence-gated county cleared
+
+`jo-daviess-county-board-districts` was the gap no free route could close, and
+its own record said so precisely: 14 of the 17 districts are made of PARTS of
+precincts, District 10 is a fraction of a single one, the county's 2021 mapping
+memo split along ROADS, every published map is a raster export, and the GIS
+viewer has no REST surface. So when GIS Technician/Website Administrator Diane
+LaScala priced the export on 17 Aug — labor ½ hour $25.00, 17 polygons at
+$0.50 each, **$33.50 total**, invoice and SIGNED LICENSE AGREEMENT required —
+the price was never the question. **The licence was**, because Bureau had
+already taught what a quote under redistribution-forbidding terms is worth: a
+block, at any price. Licence #008382's Protection of Proprietary Rights clause
+IS the Bureau clause — redistribution of the dataset and derived products
+forbidden — with five words that change everything: *"without permission from
+JoDavGIS."* Asked BEFORE anything was signed or paid, IT/GIS Director Joe
+Kratcha put the permission in writing the same morning: *"Please let this
+email serve as official authorization, in addition to the signed license
+agreement, granting you permission to display the requested Jo Daviess County
+Board District boundaries to be provided in shapefile format on your website:
+chidistricts.com for public viewing."* The operator signed and paid online the
+same day; LaScala delivered the five shapefile components by e-mail at 15:34Z
+("Thank you Adam. Attached are your files"); Jo Daviess shipped that night.
+
+**The licence shapes the artifact, and the deviation is deliberate.** The
+authorization covers DISPLAY on chidistricts.com — which the simplified
+`data/app/jo-daviess-county-board-districts.json` is — not republication of
+the raw dataset. So, for the first time, a county's source file is NOT in
+`data/source/raw/`: the originals are retained offline (the operator's Drive
+and the session archive), and `scripts/build_jodaviess_board_districts.py`
+records each component's byte size and sha256 (shp 4,813,436 / shx 236 /
+dbf 2,017 / prj 508 / csf 10,240 bytes) so a re-supplied copy can be
+authenticated against the licensed delivery. Rebuilding therefore needs the
+offline directory (`--source`), and the builder refuses a component that
+hashes differently. The Credits clause is honoured where a reader can see it:
+the card names Jo Daviess County GIS on every render.
+
+**The build proves the purchase was what it claimed.** The dbf carries
+`CtyBrdDist` "DISTRICT 01".."DISTRICT 17" each exactly once — and `CtyBrdMemb`
+DECLARED AND EMPTY on all 17 rows, which the builder asserts and reads
+nowhere: members come from the county's board page weekly, never a static
+column. Reprojected from the .prj's NAD83 / Illinois West ftUS (EPSG:3436)
+with pyproj, the full-precision districts tile TIGER's Jo Daviess County at
+**99.9327%** with a worst pairwise overlap of **0.3 m²** — edge-matched as
+delivered, the Menard class. Simplification is the repo's own tool (pinned
+mapshaper, Visvalingam keep-shapes at 25 m) with a `-clean` pass either side —
+without the first, the source's 280 hairline slivers pin the vertices and
+4.8 MB of shapefile refuses to shrink below ~1 MB; with it, 49.5 KB — at a
+measured cost of **0.6 m median / 54 m max** boundary movement, 2,000/2,000
+seeded sample points classifying identically to full precision, zero
+overlap left, coverage 99.9335%, and 0.125% symmetric difference against the
+county outline the coverage test uses. Deterministic: `--check` byte-compares
+a fresh rebuild from the licensed bytes.
+
+**The roster came free where the boundary cost $33.50.** The county's board
+page (on jodaviesscountyil.gov — NEVER the old jodaviess.org, which answers
+every URL with its home page) lists all 17 seats with party, term and a
+precinct-parts description, and links 16 member directory pages carrying a
+direct phone and an e-mail each — 16 DISTINCT numbers, so the Calhoun
+switchboard test was run and does not apply, and personal gmail/icloud
+addresses ship exactly as published. District 16 is printed VACANT and ships
+as a counted, never named vacancy (the Livingston posture). The weekly
+scraper cross-checks each directory page against the board page on district
+number and surname + first initial (unique, asserted), paces its seventeen
+fetches, and never parses the home addresses the directory pages print (the
+Madison/Peoria rule). The count guard counts SEATS — named + vacant = exactly
+17, districts 1..17 each once, the district set asserted against the boundary
+module's constant — so the weekly run doubles as the reapportionment
+tripwire: new lines would need a NEW licensed export, an operator step the
+workflow's PR body says out loud.
+
+**The ring event: a corner completes.** Jo Daviess borders served Stephenson
+and Carroll, so this is a plain mainland join — 3 rings before, 3 rings after
+(the outer plus the Bureau and Christian enclaves) — and Galena moved up from
+OUTSIDE, where it had held the north-west corner since the Lee/Whiteside/
+Rock Island/Henry tranche, failing the build until it moved, exactly as
+designed. For the first time a newly served county leaves NO unserved
+Illinois neighbour behind: everything Jo Daviess touches is Stephenson,
+Carroll, Wisconsin or the Mississippi, so no successor OUTSIDE anchor exists
+for its corner and none was invented. Counts: 63 served — 51 dispatch, 3
+judicial, 9 County card.
+
+**Deliberately not shipped, stated rather than implied (no successor gap
+records were invented for surfaces this change did not research):** the
+county's PRECINCTS (pass 5e measured the county's GIS as a vendor viewer with
+no REST surface and every published map raster; whether the county would sell
+a precinct export under the same licence machinery was NOT asked this change
+— the board thread is the obvious place to ask next); fire/park/library
+tilings (never researched for this county); municipal officials (the §2.4
+ladder, unresearched); and the board page's precinct-parts district
+descriptions (the scraper reads them only for the district NUMBER and ships
+no prose — the purchased polygons are the authoritative geometry, and a
+prose composition beside them would invite the reader to reconcile two
+surfaces this project already has).
+The retired record's full licence story survives verbatim in this entry and
+in the builder's header; `jo-daviess-county-board-districts` itself is
+retired outright.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 

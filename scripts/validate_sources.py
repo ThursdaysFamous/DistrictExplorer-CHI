@@ -614,6 +614,31 @@ PROVENANCE = [
              "from, and the polling list behind white-precinct-polling.json. "
              "The weekly roster run separately fails if the map link leaves "
              "this page (the Mason watcher rule)."},
+    {"layer": "Jo Daviess County Board members (roster)",
+     "app_file": "jo-daviess-county-board-members.json",
+     "source_url": "https://www.jodaviesscountyil.gov/1199/County-Board",
+     "note": "The county's own board page (jodaviess_county_board_scraper.py) "
+             "— 17 seats with party, term and district, enriched with each "
+             "member's phone and e-mail from their directory page. On the "
+             "county's CURRENT domain: the old jodaviess.org answers every "
+             "URL with its home page, so a probe of it would read alive while "
+             "being a dead link — never swap this URL to that domain."},
+    {"layer": "Jo Daviess County Board districts (purchased, licence #008382)",
+     "app_file": "jo-daviess-county-board-districts.json",
+     "source_url": "https://www.jodaviesscountyil.gov/1226/GIS-IT",
+     "note": "THE GEOMETRY'S SOURCE HAS NO URL TO PROBE: it is the county's "
+             "own shapefile, SOLD under Jo Daviess County GIS Digital Data "
+             "License Agreement #008382 and delivered by the GIS office's "
+             "e-mail of 2026-08-17; display on chidistricts.com is authorized "
+             "in writing by IT/GIS Director Joe Kratcha (same date), and the "
+             "raw file is retained OFFLINE because the licence forbids "
+             "redistributing it (build_jodaviess_board_districts.py records "
+             "the component hashes). What this entry probes instead is the "
+             "county's GIS-IT page — the office the licence came from — so a "
+             "domain move (the jodaviess.org trap, again) or a vanished GIS "
+             "desk surfaces here. A REDISTRICTING will not: the weekly roster "
+             "run is that tripwire, failing when the board page's district "
+             "count leaves 17."},
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",

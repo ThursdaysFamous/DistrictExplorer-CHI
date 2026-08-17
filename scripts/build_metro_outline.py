@@ -241,6 +241,20 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # VTDs composed per that map and the county's own
                      # certified canvasses (build_white_boundaries.py).
                      "193",
+                     # Jo Daviess — the 51st dispatched county (2026-08-17),
+                     # and the first whose boundary was PURCHASED: its board
+                     # districts cut across precincts along roads, its GIS
+                     # data is sold under a signed licence, and the export
+                     # shipped only after the county's IT/GIS Director
+                     # authorized display in writing (licence #008382;
+                     # build_jodaviess_board_districts.py). A plain mainland
+                     # join in the state's north-west corner — it borders
+                     # served Stephenson and Carroll, so the ring count is
+                     # unchanged, and for the first time a newly served
+                     # county leaves NO unserved Illinois neighbour behind:
+                     # everything it touches is Stephenson, Carroll,
+                     # Wisconsin or the Mississippi.
+                     "085",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -279,6 +293,7 @@ DISPATCH_COUNTY_FIPS = {
     "montgomery": "135", "menard": "129",
     "shelby": "173",
     "white": "193",
+    "jo-daviess": "085",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -426,6 +441,19 @@ INSIDE = {
     # interior notch between Sangamon, Logan, Mason and Cass, so like Montgomery
     # this anchor tests a fill rather than a frontier move.
     "Petersburg (Menard)": (40.0114, -89.8523),
+    # Galena (Jo Daviess) — the county seat, 2026-08-17, moved up from the
+    # OUTSIDE list where it had held the state's north-west corner since Lee/
+    # Whiteside/Rock Island/Henry pushed the frontier onto it. The 51st
+    # dispatched county and the first PURCHASED boundary (licence #008382 +
+    # the county's written display authorization — the first licence-gated
+    # county ever cleared, because the redistribution question was asked
+    # BEFORE signing). A mainland join between served Stephenson and Carroll;
+    # no OUTSIDE successor exists for this corner, because every neighbour
+    # Jo Daviess has is served, Wisconsin, or across the Mississippi —
+    # Milwaukee (WI) keeps proving the state line. Coordinates verified
+    # against TIGER's county rings in build_county_outline.py's jo-daviess
+    # entry, where this point has been an inside anchor since 2026-08-02.
+    "Galena (Jo Daviess)": (42.4185, -90.4253),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -496,15 +524,18 @@ OUTSIDE = {
     # the build until each was moved up to INSIDE (Henry's "Alternate Two
     # Board" raster turned out to BE the adopted plan — Ord 21-33, and its
     # 12+12 township composition is proven by the map's own two-census
-    # population table). The frontier is now Bureau to the east, Mercer to the
-    # south, and Jo Daviess in the state's north-west corner. All three are
-    # RECORDED GAPS rather than un-researched: Jo Daviess cuts its districts
-    # below the precinct, Bureau's adopted 18-district map exists only as
-    # street-split JPEG scans, and Mercer's document section is empty — see
-    # docs/DATA_LAYER_GUIDEBOOK.md.
+    # population table). Jo Daviess held the state's north-west corner here
+    # until 2026-08-17, when its licence-gated shapefile was bought and
+    # cleared for display and Galena moved up to INSIDE — the guard failed
+    # the build until it moved, exactly as designed, and no successor anchor
+    # replaces it because the corner has no unserved Illinois county left.
+    # The remaining frontier here is Bureau to the east and Mercer to the
+    # south, both RECORDED GAPS rather than un-researched: Bureau's adopted
+    # 18-district map exists only as street-split JPEG scans (and its GIS
+    # licence, unlike Jo Daviess's, still lacks a display permission), and
+    # Mercer's document section is empty — see docs/DATA_LAYER_GUIDEBOOK.md.
     "Princeton (Bureau)": (41.3853, -89.4695),
     "Aledo (Mercer)": (41.2008, -90.7460),
-    "Galena (Jo Daviess)": (42.4185, -90.4253),
     # Schuyler is a RECORDED GAP, not a gap in the research, and it now borders
     # BOTH Mason and Brown. (Menard stood beside it here until 2026-08-07, on
     # the reasoning that its five commissioner districts run section-line roads

@@ -8182,6 +8182,35 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/white-precinct-polling.json", {}, 2);
   });
 
+  /* Jo Daviess (the 51st dispatched county, added 2026-08-17 — the first
+   * whose boundary was PURCHASED). The county cuts 14 of its 17 board
+   * districts across precincts along roads (its own 2021 mapping memo), so
+   * no dissolve or tracing could draw them; the county sells its GIS data,
+   * and the export was bought under Jo Daviess County GIS Digital Data
+   * License Agreement #008382 and is displayed under IT/GIS Director Joe
+   * Kratcha's written authorization of 2026-08-17. The licence's Credits
+   * clause is why the card names Jo Daviess County GIS on every render,
+   * and its redistribution clause is why the raw shapefile stays out of
+   * the repo (scripts/build_jodaviess_board_districts.py records the
+   * component hashes; the originals are retained offline). The roster is
+   * scraped weekly from the county's own board page at
+   * jodaviesscountyil.gov — never the old jodaviess.org, which answers
+   * every URL with its home page and makes a dead link look live. */
+  var loadJoDaviessCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jo-daviess-county-outline.json", {}, 2);
+  });
+  function joDaviessCountyCoverage(point) {
+    return loadJoDaviessCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadJoDaviessBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jo-daviess-county-board-districts.json", {}, 2);
+  });
+  var loadJoDaviessBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jo-daviess-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -16475,6 +16504,94 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadWhiteBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Jo Daviess (17 SINGLE-member districts) — added 2026-08-17, the
+      // first PURCHASED boundary in the fleet: 14 of the 17 districts cut
+      // across precincts along roads (the county's own 2 Dec 2021 mapping
+      // memo), so only the county's own shapefile could draw them — bought
+      // under Jo Daviess County GIS Digital Data License Agreement #008382
+      // and displayed under the county's written authorization
+      // (build_jodaviess_board_districts.py has the whole story). The
+      // licence's Credits clause requires indicating the source, so every
+      // render carries the Jo Daviess County GIS credit line below the
+      // members. Roster scraped weekly from the county's board page —
+      // party and term on every seat, a direct phone and e-mail per member
+      // (16 distinct numbers, so no switchboard hoist); a seat the county
+      // prints as VACANT is counted, never named (the Livingston posture:
+      // District 16 at first ship).
+      {
+        key: "jo-daviess",
+        coverage: joDaviessCountyCoverage,
+        loadGeometry: loadJoDaviessBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadJoDaviessBoardDistricts(),
+            loadJoDaviessBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return { seq: seq, district: district, entry: entry };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var vacancies = (result.entry && result.entry.vacancies) || 0;
+          var wrap = cardEl("div", "card-flush");
+          var note = boardCountNote(members.length, null);
+          if (vacancies) {
+            note = (note ? note + " · " : "") + vacancies +
+              " vacant seat" + (vacancies === 1 ? "" : "s");
+          }
+          wrap.appendChild(renderBodyIntro({
+            title: "Jo Daviess County Board",
+            note: note
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              if (m.term) {
+                p.note = p.note ? p.note + " · Term " + String(m.term)
+                  : "Term " + String(m.term);
+              }
+              return p;
+            })));
+          }
+          // The licence's Credits clause requires indicating the source, so
+          // the boundary credit renders on every card rather than living
+          // only in the data file (licence #008382; display authorized in
+          // writing by the county's IT/GIS Director, 2026-08-17).
+          wrap.appendChild(renderFieldStack([
+            { label: "Boundary source",
+              value: "Jo Daviess County GIS (licensed county data, displayed with permission)" }
+          ]));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Jo Daviess County Board (official)",
+            url: "https://www.jodaviesscountyil.gov/1199/County-Board"
+          };
+        },
+        hoverOfficial: {
+          load: loadJoDaviessBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);
