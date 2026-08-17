@@ -193,18 +193,29 @@ def parse_pike(page):
     AT-LARGE, PROVEN: the county's own certified summary report for the
     2024 General Election names the contest "FOR COUNTY BOARD - AT LARGE",
     counted across all 31 precincts. Not inferred from the page's silence about
-    districts — silence is not evidence (see the module header)."""
+    districts — silence is not evidence (see the module header).
+
+    E-MAILS ARE CLOUDFLARE-OBFUSCATED as of 2026-08-17 — the county switched
+    the CDN setting on at some point after this parser was written, so every
+    address became `<a class="__cf_email__" data-cfemail="...">[email protected]</a>`
+    and the visible text no longer contains one. This parser used to require a
+    literal address at the END of the line, so it matched NOTHING at all and
+    returned zero members — which is why it failed loudly (the count guard)
+    rather than silently emptying nine addresses the way Brown's nearly did.
+    The name and role are now read from the paragraph's text and the address
+    through email_in(), which handles both wire formats."""
     members = []
     for para in re.findall(r"(?is)<p[^>]*>(.*?)</p>", page):
-        line = clean(para)
+        line = clean(re.sub(r"(?is)<a\b.*?</a>", " ", para))
         m = re.match(r"^([A-Z][A-Za-z.'\-]+(?:\s+[A-Z][A-Za-z.'\-]*){1,3})"
-                     r"(?:\s*\((.*?)\))?\s+"
-                     r"([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})\s*$", line)
+                     r"(?:\s*\((.*?)\))?\s*$", line)
         if not m:
             continue
         entry = {"name": m.group(1).strip(),
-                 "role": role_of(m.group(2)) or "Board Member",
-                 "email": m.group(3).lower()}
+                 "role": role_of(m.group(2)) or "Board Member"}
+        em = email_in(para)
+        if em:
+            entry["email"] = em
         if not any(x["name"] == entry["name"] for x in members):
             members.append(entry)
     return members, None
@@ -652,8 +663,9 @@ DOCUMENT_ROSTERS = {
         "name": "Wabash County",
         "structure": "Commission form — 3 commissioners elected countywide",
         "document": "Commissioners' names and addresses, sent by e-mail by "
-                    "County Clerk & Recorder Janet L. Will, 2026-08-16",
-        "verified": "2026-08-16",
+                    "County Clerk & Recorder Janet L. Will, 2026-08-16; the "
+                    "chairmanship confirmed by her e-mail of 2026-08-17",
+        "verified": "2026-08-17",
         "expect": 3,
         # The second ABSENT county: wabashcounty.illinois.gov carries mail and
         # serves no web page (measured 5 Aug 2026, re-checked 9 Aug — the
@@ -663,11 +675,13 @@ DOCUMENT_ROSTERS = {
         # that ships, and unlike Edwards this county assigns no per-seat
         # e-mail this project can cite, so each row is a name alone. Her Aug 5
         # reply settled the form (one commissioner elected each General
-        # Election, six-year terms). Which of the three chairs the board was
-        # not in the e-mail and has been asked; until she answers, nobody is
-        # marked Chairman.
+        # Election, six-year terms). WHICH OF THE THREE CHAIRS was not in that
+        # e-mail and was asked separately; she answered on 2026-08-17, in full:
+        # "Yes, Tim Hocking is the current chairman". That one line is the only
+        # source for the Chairman tag below — the county publishes no page to
+        # check it against, so the weekly NOT RE-READ line names it too.
         "members": [
-            {"name": "Timothy R. Hocking", "role": "Commissioner"},
+            {"name": "Timothy R. Hocking", "role": "Chairman"},
             {"name": "Robert G. Dean", "role": "Commissioner"},
             {"name": "Scott C. West", "role": "Commissioner"},
         ],
