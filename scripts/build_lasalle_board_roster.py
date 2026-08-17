@@ -22,7 +22,7 @@ import json
 import os
 import sys
 
-SOURCE_URL = "https://lasallecountyil.gov/Directory.aspx?DID=39"
+SOURCE_URL = "https://lasallecountyil.gov/m/directory/department?did=39"
 
 # 29 single-member districts plus the countywide Chairman. The directory
 # publishes a full 10-digit phone and a district-office e-mail on every row;

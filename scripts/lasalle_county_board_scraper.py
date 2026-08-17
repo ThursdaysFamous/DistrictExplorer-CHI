@@ -3,16 +3,17 @@
 Scrape LaSalle County's own board directory into raw roster records.
 
 Stage 1 of the two-stage pipeline (scripts/build_lasalle_board_roster.py is
-stage 2), mirroring the DuPage pair. The county's CivicPlus staff directory
-(Directory.aspx?DID=39) is plain server-rendered HTML that answers a plain
-requests client — no challenge, no JS rendering needed for the DATA: each row
-is a <tr> carrying the member's name link (/directory.aspx?EID=n), a title
-cell ("District N, Board Member" / "Chairman of the Board"), a phone cell with
-a full 10-digit number, and an e-mail cell whose CivicPlus spam-wrapper script
-carries the address VERBATIM in its own source (var w = "district22";
-var x = "lasallecountyil.gov") — read, not de-obfuscated, the same call as
-Winnebago's base64 Joomla wrapper. The e-mails are district-office addresses
-(district<N>@lasallecountyil.gov), not personal inboxes.
+stage 2), mirroring the DuPage pair. REWRITTEN 2026-08-17: the county migrated
+off CivicPlus — Directory.aspx?DID=39 now 302-redirects to the new platform's
+/m/directory/department?did=39, which is still plain server-rendered HTML that
+answers a plain requests client. Each member is a <li class="list-group-item">
+block carrying the member's name link (/m/directory/employee?eid=n), a title
+div ("District N, Board Member" — one row says "Board Members", so the plural
+is accepted — or "Chairman of the Board"), a plain mailto: with the
+district-office address (district<N>@lasallecountyil.gov — the old CivicPlus
+spam-wrapper is gone), and a per-member phone. NAMES ARE NOW DISPLAY-ORDER
+("Stephen Aubry", not "Aubry, Stephen"), so the old comma-flip is gone too —
+it would mangle "William J. Brown, Jr.".
 
 WHY THIS SCRAPER EXISTS — the county's board-boundary GIS is the SUPERSEDED
 2011-2021 map, frozen 2015-08-25, and its officeholder columns disagree with
@@ -36,17 +37,15 @@ import sys
 import requests
 
 BASE = "https://lasallecountyil.gov"
-LIST_URL = BASE + "/Directory.aspx?DID=39"
+LIST_URL = BASE + "/m/directory/department?did=39"
 UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
 
-ROW_RE = re.compile(
-    r'href="/directory\.aspx\?EID=(?P<eid>\d+)">(?P<name>[^<]+)</a>\s*</span>'
-    r'(?:\s*<span>\s*\((?P<tag>[^)]+)\)\s*</span>)?'
-    r'.*?<span>(?P<title>[^<]*(?:Board Member|Chairman of the Board)[^<]*)</span>'
-    r'(?P<rest>.*?)</tr>',
-    re.S | re.I,
-)
-EMAIL_RE = re.compile(r'var w = "([^"]+)";\s*var x = "([^"]+)";')
+BLOCK_SPLIT = '<li class="list-group-item'
+NAME_RE = re.compile(
+    r'href="(?P<path>/m/directory/employee\?eid=(?P<eid>\d+))"[^>]*>\s*(?P<name>[^<]+?)\s*</a>')
+TITLE_RE = re.compile(r'<div class="d-sm-block d-none">\s*(?P<title>[^<]+?)\s*</div>')
+TAG_RE = re.compile(r'\((?P<tag>[^)]*(?:Vice|Chair)[^)]*)\)', re.I)
+EMAIL_RE = re.compile(r'href="mailto:(?P<email>[^"?]+)"')
 PHONE_RE = re.compile(r'(\d{3})[.\- ](\d{3})[.\- ](\d{4})')
 DISTRICT_RE = re.compile(r'District\s+(\d+)', re.I)
 
@@ -61,50 +60,44 @@ def clean(s):
     return re.sub(r"\s+", " ", (s or "")).strip()
 
 
-def display_name(directory_name):
-    """'Aubry, Stephen' -> 'Stephen Aubry' (the card renders given-name-first)."""
-    parts = [p.strip() for p in directory_name.split(",", 1)]
-    if len(parts) == 2 and parts[1]:
-        return "%s %s" % (parts[1], parts[0])
-    return directory_name.strip()
-
-
 def main():
     html = fetch(LIST_URL)
     records = []
-    for m in ROW_RE.finditer(html):
-        name = clean(m.group("name"))
-        if not name:
+    for block in html.split(BLOCK_SPLIT)[1:]:
+        nm = NAME_RE.search(block)
+        tm = TITLE_RE.search(block)
+        if not nm or not tm:
             continue
-        title = clean(m.group("title"))
-        rest = m.group("rest") or ""
+        name = clean(nm.group("name"))
+        title = clean(tm.group("title"))
         district = None
         role = "Member"
         if "chairman of the board" in title.lower():
             role = "Chair"
         else:
             dm = DISTRICT_RE.search(title)
-            if not dm:
+            if not dm or "board member" not in title.lower():
                 continue  # a staff row that merely mentions the board
             district = int(dm.group(1))
-        tag = clean(m.group("tag") or "")
+        tag_m = TAG_RE.search(block)
+        tag = clean(tag_m.group("tag")) if tag_m else ""
         if role == "Member" and "vice" in tag.lower():
             role = "Vice Chair"
         email = None
-        em = EMAIL_RE.search(rest)
+        em = EMAIL_RE.search(block)
         if em:
-            email = "%s@%s" % (em.group(1), em.group(2))
+            email = em.group("email").strip()
         phone = None
-        pm = PHONE_RE.search(re.sub(r"<[^>]+>", " ", rest))
+        pm = PHONE_RE.search(re.sub(r"<[^>]+>", " ", block))
         if pm:
             phone = "%s-%s-%s" % pm.groups()
         records.append({
-            "name": display_name(name),
+            "name": name,
             "district": district,
             "role": role,
             "phone": phone,
             "email": email,
-            "url": BASE + "/directory.aspx?EID=" + m.group("eid"),
+            "url": BASE + nm.group("path"),
         })
 
     if not records:
