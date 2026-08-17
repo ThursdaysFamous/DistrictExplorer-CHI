@@ -200,6 +200,8 @@ const GEOMETRY_URLS = [
   "./data/app/washington-county-outline.json",
   "./data/app/wayne-county-outline.json",
   "./data/app/white-county-outline.json",
+  "./data/app/white-precincts.json",
+  "./data/app/white-county-board-districts.json",
   "./data/app/whiteside-county-outline.json",
   "./data/app/will-county-outline.json",
   "./data/app/williamson-county-outline.json",
@@ -269,6 +271,8 @@ const ROSTER_URLS = [
   "./data/app/stark-county-board-members.json",
   "./data/app/mason-county-board-members.json",
   "./data/app/shelby-county-board-members.json",
+  "./data/app/white-county-board-members.json",
+  "./data/app/white-precinct-polling.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

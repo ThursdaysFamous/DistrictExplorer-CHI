@@ -1502,17 +1502,17 @@ in the researched-but-unbuilt backlog.
       "wanted": "LaSalle's clerk saying where her Wenona list comes from, or the city itself publishing its council. Either would confirm the choice already made or overturn it — and the three people currently not shown are why it still matters."
     },
     {
-      "id": "white-county-board",
-      "concept": "County board",
+      "id": "white-special-districts",
+      "concept": "Fire, park and library districts",
       "area": "White County",
       "counties": [
         "white"
       ],
       "kind": "no-source",
-      "layer": "county-board",
-      "summary": "White County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask. AND THE ASK CANNOT REACH THE ROSTER ADDRESS: clerk@whitecounty-il.gov — the address the weekly clerk roster ships — hard-bounced on 31 Jul 2026 after five days of retries (permanent failure). The pass-14 draft is phone-first for that reason, and the roster address needs a human check. CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. whitecounty-il.gov answers 200 with a /county-board page. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. ANSWERED 17 Aug 2026 — Clerk Kayci Heil, after returning from leave: \"The County Board is elected by district,\" with a link to the one file the county has: \"White County, IL voting districts & precincts map.pdf\" on the county site's CDN (irp.cdn-website.com). MEASURED THE SAME HOUR: the PDF is 1.5 MB, single page, and carries REAL VECTOR LINEWORK — 18,600+ path operators under a raster base — so the Stephenson route applies: both the board districts and the precincts can be traced from the county's own authoritative drawing rather than guessed. The form question is CLOSED (districted, stated in writing by the election authority, §2.5 step 2), and the geometry is IN HAND; what remains is the tracing build itself, queued behind the De Witt and Winnebago reply-builds. Note the mail history: the county's clerk@ address bounced a July message permanently (5-day retry, dead MX) and later recovered — delivery to this county has been fragile, so anything unanswered deserves a delivery check before a re-ask.",
-      "wanted": "A BUILD, not another ask: trace the board districts and precincts from the county's own vector PDF (archived the day it was linked), name the districts from its labels, and ship White per the Stephenson recipe — the form is settled and the file is in hand."
+      "layer": "fire-district",
+      "summary": "White County's board districts, precincts, roster and polling places all shipped 2026-08-17; its fire, park and library districts have no known boundary source.",
+      "blocker": "Successor to white-county-board, RETIRED 2026-08-17 when White shipped as the 50th dispatched county — and the record closed better than its own wanted line asked. That record wanted a Stephenson-style tracing; the build (scripts/build_white_boundaries.py) did the tracing and then did not ship it, because the tracing PROVED something better was available: TIGER's Census 2020 voting districts carry the county's 18 precincts exactly (18/18 by name; the map's Carmi inset traces the census edges to a measured ~2 m median), so the shipped geometry is exact census fabric and the county's own vector map decided only the COMPOSITION — confirmed 18/18 against the certified 2022/2024 General Election canvasses on the Clerk's Elections page, which also yielded every member's district (the board page names none) and the polling list (11 buildings, 18/18 precincts). What the retired record established still stands: the county's map data is the ONE FILE Clerk Kayci Heil linked on 2026-08-17 (\"White County, IL voting districts & precincts map.pdf\", archived in data/source/raw/), and the county runs no GIS beyond a parcel-search page. So no fire, park or library tiling has any known source — the 2026-08-04 hostname sweep found no self-hosted ArcGIS and nothing county-keyed in the ArcGIS Online catalogue, and nothing on the county's site names special-district boundaries. Mail-history note carried forward: clerk@whitecounty-il.gov hard-bounced a July 2026 message permanently (5-day retry, dead MX) and later recovered — delivery to this county is fragile, so an unanswered ask deserves a delivery check before a re-ask.",
+      "wanted": "Any adopted boundary source for the county's fire protection, park or library districts — a map from the Clerk (who answered the board ask), the 911/ETSB office, or a district's own filing. Several such districts likely cross county lines, so a neighbouring county's GIS could answer for White's edge too."
     },
     {
       "id": "whiteside-municipal-officials",
@@ -3700,6 +3700,63 @@ weekly run prints a NOT RE-READ line per head naming the e-mail and its age,
 and the reply's home addresses ship nowhere. The roster diff was two entries,
 each gaining exactly its head. The record is retired outright — nothing
 succeeds it, because nothing about Winnebago is now missing.
+
+### 2026-08-17, evening: White ships as the 62nd county — the last island merges, and the tracing that proved it didn't need to ship
+
+`white-county-board`'s wanted line asked for a Stephenson-style tracing —
+"trace the board districts and precincts from the county's own vector PDF" —
+and the build did exactly that tracing, then shipped something stronger. The
+map's only vector linework is its DISTRICT lines (the precinct fills are
+burned into the raster base; most of the record's "18,600+ path operators"
+are text halos), but the county panel's red network polygonizes into exactly
+5 faces, one district numeral each, and TIGER's Census 2020 voting districts
+carry the county's 18 precincts EXACTLY — 18/18 by name, populations summing
+to the county's 13,877 to the person. The Carmi inset settled which fabric
+the county drew from: anchored by its own scale bar, every one of its 1,104
+sampled line points sits within 35 m of the census district edges, median
+1.9 m. So `scripts/build_white_boundaries.py` ships exact census fabric, and
+the traced map decides only the COMPOSITION — the Shelby shape, reached by
+doing the Stephenson work and measuring that it wasn't needed.
+
+**The composition is proven three independent ways, and the roster fell out
+of the proof.** The traced faces assign all 18 VTDs (worst share 99.06%,
+county-panel fit median 15.8 m / RMS 33.6 m); the county's certified 2022
+General Election canvass — the first on the 2021 map — tabulates all five
+COUNTY BOARD MEMBER DISTRICT contests by whole precinct and agrees 18/18;
+the inset agrees at ~2 m. The same canvasses answered what the board page
+never says: WHICH district each member represents. All five 2022 winners
+(South D1, Cannon D2, Usery D3, Pigg D4, Spencer D5) are the five names on
+today's board page, parties matching, districts 3-4 re-confirmed by the 2024
+canvass. The weekly scrape (`build_white_county_board.py`) joins page names
+to that certified table, surname + first initial, unique match required —
+any unplaceable name fails the run, because a new member's district is a
+fact only a new certified document can supply. Polling shipped the same day:
+the Clerk's own Elections-page list, 11 buildings covering 18/18 precincts,
+place-and-address as the one string the county prints. Board contact ships
+ONCE at board level (one PO Box, one clerk e-mail for five members — the
+Calhoun switchboard rule). Balance closes the loop: five "Vote for one"
+contests, populations within 2.33% of the one-member ideal.
+
+**The ring event: the last island is gone.** White borders Hamilton on the
+mainland side and Edwards AND Wabash on the island's — the same island
+Wabash had grown that morning — so the dissolve was recomputed (never
+patched) and `metro-outline.json` dropped from two polygons to ONE: three
+rings, the outer plus the Bureau and Christian enclave holes. Carmi moved
+from OUTSIDE (where it had proven the islands stayed two since 2026-08-06)
+to INSIDE, failing the build until it moved, exactly as designed;
+Shawneetown (Gallatin) inherits the southern-frontier watch and Fairfield
+(Wayne) now proves a NOTCH rather than a corridor. Counts: 62 served — 50
+dispatch, 3 judicial, 9 County card.
+
+**Deliberately not shipped:** the tracing itself (census fabric is exact
+where a georeference is ~16-34 m; the tracing survives as the builder's
+composition proof), any fire/park/library tiling (no known source — the
+successor record `white-special-districts` carries the measurement), and
+White's municipal officials (unresearched this change; the §2.4 ladder is
+future work, recorded here rather than implied).
+
+`white-county-board` is retired; `white-special-districts` succeeds it,
+carrying forward the fragile-mail note and the "one map file" measurement.
 
 ## Backlog — researched candidates, deliberately not (yet) built
 

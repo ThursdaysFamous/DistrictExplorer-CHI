@@ -25,3 +25,6 @@ docs/perf-app-screenshot.png
 dist/
 /engine.bundle.js
 /engine.manifest.json
+
+# Claude Code agent worktrees — transient, harness-managed
+.claude/worktrees/

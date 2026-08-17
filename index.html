@@ -8133,6 +8133,41 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/shelby-county-board-members.json", {}, 2);
   });
 
+  /* White (the 50th dispatched county, added 2026-08-17 — and the county that
+   * MERGED THE EDWARDS–WABASH ISLAND back into the mainland, because it
+   * borders Hamilton on the mainland side and Edwards AND Wabash on the
+   * island's). Its 18 precincts are the Census 2020 voting districts, which
+   * match the county's own adopted map 18/18 by name; its 5 single-member
+   * board districts are dissolved from them per a composition PROVEN TWICE —
+   * a machine tracing of the county's own vector map (supplied by County
+   * Clerk & Recorder Kayci Heil, 2026-08-17) and the county's certified
+   * 2022/2024 General Election canvasses, which agree 18/18
+   * (scripts/build_white_boundaries.py; the map's Carmi inset traces the
+   * census edges to a measured ~2 m median). The roster is scraped weekly
+   * from the county's board page; the board page names NO districts, so each
+   * member's district is joined from the certified canvasses and any name the
+   * canvass table cannot place fails the weekly build instead of guessing. */
+  var loadWhiteCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/white-county-outline.json", {}, 2);
+  });
+  function whiteCountyCoverage(point) {
+    return loadWhiteCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadWhitePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/white-precincts.json", {}, 2);
+  });
+  var loadWhiteBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/white-county-board-districts.json", {}, 2);
+  });
+  var loadWhiteBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/white-county-board-members.json", {}, 2);
+  });
+  var loadWhitePolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/white-precinct-polling.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -16334,6 +16369,96 @@ function initChiExplorer() {
           }
         }
       },
+      // White (5 SINGLE-member districts) — added 2026-08-17, the county that
+      // merged the Edwards–Wabash island back into the mainland. Boundary
+      // DERIVED, the Shelby shape with a second proof: Census 2020 voting
+      // districts (18/18 the county's own precinct names) dissolved per a
+      // composition read TWICE from the county's own record — a machine
+      // tracing of its adopted vector map, and its certified 2022/2024
+      // canvasses — which agree 18/18. No precinct is split. The roster is
+      // scraped weekly from the county's board page; that page names NO
+      // districts, so each member's district is joined from the certified
+      // canvasses (any unplaceable name fails the weekly build). The county
+      // publishes ONE board mailing address and ONE e-mail (the Clerk's) for
+      // all five members, so contact renders once at board level rather than
+      // being repeated per member (the Calhoun switchboard rule).
+      {
+        key: "white",
+        coverage: whiteCountyCoverage,
+        loadGeometry: loadWhiteBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWhiteBoardDistricts(),
+            loadWhiteBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var district = findPropCI(feature.properties || {}, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              board: results[1] && results[1].board
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "White County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The canvass provenance is the reason a card may name this
+              // member's district at all — the county's own page does not —
+              // so it rides the note line rather than being dropped.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.board && result.board.email) {
+            fields.push({ label: "Board e-mail (via County Clerk)",
+                          value: String(result.board.email) });
+          }
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board mail", value: String(result.board.address) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "White County Board (official)",
+            url: "https://www.whitecounty-il.gov/county-board"
+          };
+        },
+        hoverOfficial: {
+          load: loadWhiteBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -20596,6 +20721,72 @@ function initChiExplorer() {
           return {
             label: "Hamilton County Clerk & Recorder (official)",
             url: "https://www.hamiltoncountyil.gov/departments/county-clerk-recorder/"
+          };
+        }
+      },
+      // White — 18 precincts, the Census 2020 voting districts the county's
+      // own adopted map matches 18/18 by name (build_white_boundaries.py; the
+      // map's Carmi inset traces the census edges to a measured ~2 m median).
+      // Names use the county's spelling — Heralds Prairie 22, which the
+      // census spells Harolds; the shipped feature carries both. The board
+      // district rides ON the feature: the composition is whole-precinct
+      // (proven by the county's certified canvasses — no split, so no spatial
+      // join is needed, unlike Jefferson's Shiloh 4). Polling joins 18/18
+      // from the Clerk's own Elections-page list, scraped weekly — eleven
+      // buildings, place and address shipped as the one string the county
+      // prints (splitting "Fire House 912 Loy St." would be a guess).
+      {
+        key: "white",
+        coverage: whiteCountyCoverage,
+        loadGeometry: loadWhitePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWhitePrecincts(),
+            loadWhitePolling().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var name = findPropCI(props, ["name"]);
+            var polling = null;
+            if (results[1] && name != null) {
+              polling = results[1][String(name)] || null;
+            }
+            return {
+              seq: seq,
+              name: name,
+              censusName: findPropCI(props, ["censusname"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              pollingLocation: polling && polling.location
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          if (result.pollingLocation) {
+            fields.push({ label: "Polling place", value: String(result.pollingLocation) });
+          }
+          if (result.censusName) {
+            fields.push({ label: "Census spelling", value: String(result.censusName) });
+          }
+          fields.push({ label: "County", value: "White County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "White County Clerk — Elections (official)",
+            url: "https://www.whitecounty-il.gov/elections925f89e8"
           };
         }
       }

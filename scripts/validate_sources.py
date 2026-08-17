@@ -537,6 +537,28 @@ PROVENANCE = [
      "app_file": "il-house-districts.json",
      "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2?f=json",
      "note": "TIGERweb Legislative layer 2 (2024 Lower, STATE=17), pre-built. Redrawn ~once a decade."},
+    {"layer": "White County Board members (roster)",
+     "app_file": "white-county-board-members.json",
+     "source_url": "https://www.whitecounty-il.gov/county-board",
+     "note": "The county's own board page (white_county_board_scraper.py) — "
+             "five members, party, Chair/Vice, and the board's one PO Box and "
+             "one e-mail. The page names NO districts: the join lives in "
+             "build_white_county_board.py's certified-canvass table, and any "
+             "page name that table cannot place fails the weekly run on "
+             "purpose."},
+    {"layer": "White County boundaries + polling (Clerk's Elections page)",
+     "app_file": "white-county-board-districts.json",
+     "source_url": "https://www.whitecounty-il.gov/elections925f89e8",
+     "note": "The Clerk's Elections page carries all three of this county's "
+             "sources: the adopted 'White County, IL voting districts & "
+             "precincts map.pdf' (archived in data/source/raw/; the traced "
+             "composition behind white-county-board-districts.json and "
+             "white-precincts.json, verified against Census 2020 VTDs by "
+             "build_white_boundaries.py), the certified 2022/2024 canvass "
+             "PDFs the composition and the member-district join were proven "
+             "from, and the polling list behind white-precinct-polling.json. "
+             "The weekly roster run separately fails if the map link leaves "
+             "this page (the Mason watcher rule)."},
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",
