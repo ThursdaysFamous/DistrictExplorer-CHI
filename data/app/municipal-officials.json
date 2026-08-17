@@ -4859,6 +4859,48 @@
     ],
     "sourceUrl": "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
   },
+  "1715001": {
+    "board": [
+      {
+        "name": "Dan Ballenger",
+        "role": "Commissioner"
+      },
+      {
+        "name": "John Wise",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Kenneth Buchanan",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Thomas Edmunds",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "Helen Michelassi",
+      "role": "Mayor"
+    },
+    "name": "City of Clinton",
+    "office": {
+      "phone": "217-935-9438"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Cheryl Vanvaley",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Clint Lichtenwalter",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
+  },
   "1715170": {
     "board": [
       {
@@ -6398,6 +6440,48 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://desplaines.gov"
+  },
+  "1719798": {
+    "board": [
+      {
+        "name": "Cleo Newman",
+        "role": "Trustee"
+      },
+      {
+        "name": "Marlena Cahall",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rodney McNutt",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ted Nichols",
+        "role": "Trustee"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "William Cahall",
+      "role": "President"
+    },
+    "name": "Village of DeWitt",
+    "office": {
+      "phone": "309-824-3553"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Nicole Lehr",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Connie McNutt",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
   },
   "1719837": {
     "board": [
@@ -8287,6 +8371,44 @@
     },
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.cofh.org"
+  },
+  "1725414": {
+    "board": [
+      {
+        "name": "Chad Jacobs",
+        "role": "Commissioner"
+      },
+      {
+        "name": "David Walsh",
+        "role": "Commissioner"
+      },
+      {
+        "name": "Kurtis Bozarth",
+        "role": "Commissioner"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "Scott Testory",
+      "role": "Mayor"
+    },
+    "name": "City of Farmer City",
+    "office": {
+      "phone": "309-928-3412"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Angie Wanserski",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Kara Butler",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
   },
   "1725713": {
     "board": [
@@ -12495,6 +12617,46 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vok.org"
+  },
+  "1739532": {
+    "board": [
+      {
+        "name": "Bill Irvin",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brad Brown",
+        "role": "Trustee"
+      },
+      {
+        "name": "Carolyn Follis",
+        "role": "Trustee"
+      },
+      {
+        "name": "Matthew Willham",
+        "role": "Trustee"
+      },
+      {
+        "name": "Tonya Allen",
+        "role": "Trustee"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "David Levesque",
+      "role": "President"
+    },
+    "name": "Village of Kenney",
+    "office": {
+      "phone": "217-871-2214"
+    },
+    "officers": [
+      {
+        "name": "Penny Henson-Dunning",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
   },
   "1739727": {
     "board": [
@@ -26096,6 +26258,51 @@
     ],
     "sourceUrl": "https://washingtonco.illinois.gov/"
   },
+  "1778773": {
+    "board": [
+      {
+        "name": "Jane Buraglio",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Goergen",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Miller",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sara Goergen",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sean Holland",
+        "role": "Trustee"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "Dennis Boyce",
+      "role": "President"
+    },
+    "name": "Village of Wapella",
+    "office": {
+      "phone": "217-935-3259"
+    },
+    "officers": [
+      {
+        "name": "Robin Morrow",
+        "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Pat Good",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
+  },
   "1778929": {
     "county": "DuPage",
     "head": {
@@ -26356,6 +26563,102 @@
     },
     "sourceUrl": "https://dmmc-cog.org/wp-content/uploads/2026/05/Membership-Directory-25-26-5.12.2026.pdf",
     "url": "https://www.villageofwayne.org"
+  },
+  "1779449": {
+    "board": [
+      {
+        "name": "Bryson Bristow",
+        "role": "Trustee"
+      },
+      {
+        "name": "Channen Settles",
+        "role": "Trustee"
+      },
+      {
+        "name": "David Lowery",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jamie Cummings",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jenna Brown",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah Shaffer",
+        "role": "Trustee"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "Tim Furman",
+      "role": "President"
+    },
+    "name": "Village of Waynesville",
+    "office": {
+      "phone": "309-242-8002"
+    },
+    "officers": [
+      {
+        "name": "Angela West",
+        "role": "Clerk/Collector"
+      },
+      {
+        "appointed": true,
+        "name": "Tabitha Miller",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
+  },
+  "1779683": {
+    "board": [
+      {
+        "appointed": true,
+        "name": "Gregory Blacker",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jamie Russell",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Jeff Burton",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mary Johnston",
+        "role": "Trustee"
+      },
+      {
+        "name": "Terry Followell",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Tyler Yokley",
+        "role": "Trustee"
+      }
+    ],
+    "county": "De Witt",
+    "head": {
+      "name": "Steven Followell",
+      "role": "President"
+    },
+    "name": "Village of Weldon",
+    "office": {
+      "phone": "217-871-2314"
+    },
+    "officers": [
+      {
+        "name": "Josh Shofner",
+        "role": "Clerk/Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.dewittcountyil.gov/"
   },
   "1779813": {
     "board": [

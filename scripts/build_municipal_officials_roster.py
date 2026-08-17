@@ -88,6 +88,10 @@ COUNTY_FIPS = {
     # and exportable as CSV. That is what made a scraper possible where the
     # county's board roster still needs a hand transcription from a scan.
     "Mason": "125",
+    # De Witt (the Census's spacing) is the third archived-document county:
+    # its Clerk's "Village/City Officials" Word document, sent by e-mail on
+    # 2026-08-17 and committed under data/source/raw/.
+    "De Witt": "039",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -110,6 +114,8 @@ OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
                    "comptroller",
                    # Oak Grove (Rock Island) elects one officer to both
                    "clerk/treasurer",
+                   # Waynesville (De Witt) fills both with one officer too
+                   "clerk/collector",
                    # appointed staff LaSalle prints beside the elected officers;
                    # the record carries appointed=True so a card never implies
                    # these were elected
@@ -207,6 +213,12 @@ COUNTY_FLOORS = {
     # with its whole body — president or mayor, clerk, treasurer and every
     # trustee or alderman — and Havana's eight aldermen carry their ward.
     "Mason": {"municipalities": 8, "members": 70, "heads": 8},           # 9 / 82 / 9
+    # De Witt (2026-08-17 live: 7 / 52 / 7). The Clerk's archived document
+    # covers all seven of the county's incorporated places in full — two
+    # commission-form cities (mayor + commissioners) and five villages — so the
+    # municipality and head floors sit at the true value: this source cannot
+    # lose a municipality and still be right.
+    "De Witt": {"municipalities": 7, "members": 44, "heads": 7},         # 7 / 52 / 7
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -324,12 +336,14 @@ PRESERVABLE = {
     "whiteside": {"kind": "county", "county": "Whiteside"},
     "peoria": {"kind": "county", "county": "Peoria"},
     "mason": {"kind": "county", "county": "Mason"},
-    # Both are archived DOCUMENTS rather than fetched pages, so their "scrape"
-    # cannot fail on a network blip — but they are preservable anyway, so that a
-    # parser regression carries last-good entries forward instead of dropping a
-    # county's whole governing body.
+    # All three are archived DOCUMENTS rather than fetched pages, so their
+    # "scrape" cannot fail on a network blip — but they are preservable anyway,
+    # so that a parser regression carries last-good entries forward instead of
+    # dropping a county's whole governing body. De Witt's is the Clerk's
+    # "Village/City Officials" Word document, sent by e-mail on 2026-08-17.
     "marshall": {"kind": "county", "county": "Marshall"},
     "washington": {"kind": "county", "county": "Washington"},
+    "dewitt": {"kind": "county", "county": "De Witt"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -363,11 +377,17 @@ PRESERVABLE = {
 # provenance call rather than a freshness one — and Henry's own handbook makes
 # it, printing Coal Valley's clerk as "(R.I. Co.)". The village hall is in Rock
 # Island County; Henry lists the village because it extends across the line.
+# De Witt's position is untested by construction: all seven of its
+# municipalities' halls are in De Witt County, Census lists each under FIPS 039
+# alone, and no other shipped source (McLean's three ward cities included)
+# claims any of them — verified at its 2026-08-17 build, which printed no
+# both-counties NOTE for it.
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
                      "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
                      "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
-                     "Carroll", "Whiteside", "Marshall", "Washington", "Lake"]
+                     "Carroll", "Whiteside", "Marshall", "Washington", "De Witt",
+                     "Lake"]
 
 # ONE municipality at a time, where evidence settles a cross-county tie that
 # the general rules above get wrong. Keyed by Census GEOID -> (county, reason).
