@@ -32,7 +32,7 @@
 | Cass | 17017 | dispatch | districted | `county-board` | 1 — `pass9-ward-seats-without-maps` (no-source) |
 | Cook | 17031 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | none |
 | De Witt | 17039 | dispatch | districted | `county-board`, `county-precinct` | none |
-| DeKalb | 17037 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `dekalb-hinckley-board` (data-quality) |
+| DeKalb | 17037 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source) |
 | DuPage | 17043 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source); `dupage-municipal-phones` (data-quality); `dupage-ward-cities` (no-source) |
 | Edwards | 17047 | County card | at-large — County card | — | 1 — `edwards-county-precincts` (no-source) |
 | Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `effingham-municipal-officials` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 114 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 113 records in the Data gaps panel: `chicago-amenity-phones`.
