@@ -9,7 +9,11 @@
       "Bash(python3 scripts/validate_index.py *)",
       "mcp__Google_Drive__search_files",
       "mcp__Google_Drive__read_file_content",
-      "mcp__Google_Drive__download_file_content"
+      "mcp__Google_Drive__download_file_content",
+      "mcp__Gmail__create_draft",
+      "mcp__Claude_Code_Remote__update_trigger",
+      "mcp__github__create_pull_request",
+      "mcp__github__merge_pull_request"
     ]
   },
   "hooks": {
