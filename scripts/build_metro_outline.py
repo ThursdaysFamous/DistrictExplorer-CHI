@@ -255,6 +255,22 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # everything it touches is Stephenson, Carroll,
                      # Wisconsin or the Mississippi.
                      "085",
+                     # Coles — the 52nd dispatched county (2026-08-17), a plain
+                     # mainland join: it borders served Shelby for 6.2 km at its
+                     # south-west corner, so the ring count is unchanged (three:
+                     # the outer plus the Bureau and Christian enclaves). Its
+                     # gap had read "no source" for a year on a misread error —
+                     # colesco.illinois.gov serves an INCOMPLETE certificate
+                     # chain, which every automated client reports as a failure
+                     # and no browser notices, so a server misconfiguration was
+                     # recorded as a refusal. The county's GIS is a public
+                     # ArcGIS Online org keyed `coles`; board districts and
+                     # precincts both come from it live. Leaves five unserved
+                     # neighbours behind (Douglas, Edgar, Clark, Cumberland,
+                     # Moultrie) and encloses none of them — Cumberland is the
+                     # closest, now bordering three served counties, which is
+                     # what its new OUTSIDE anchor at Toledo proves.
+                     "029",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -294,6 +310,7 @@ DISPATCH_COUNTY_FIPS = {
     "shelby": "173",
     "white": "193",
     "jo-daviess": "085",
+    "coles": "029",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -454,6 +471,18 @@ INSIDE = {
     # against TIGER's county rings in build_county_outline.py's jo-daviess
     # entry, where this point has been an inside anchor since 2026-08-02.
     "Galena (Jo Daviess)": (42.4185, -90.4253),
+    # Charleston (Coles) — the county seat, 2026-08-17. The 52nd dispatched
+    # county, joining through its south-western 6.2 km border with served
+    # Shelby. Coles was never an OUTSIDE anchor, so nothing moved up; what
+    # moved was the reading of its gap, which had recorded the county as
+    # refusing this project's network when what its web server actually does
+    # is serve an INCOMPLETE certificate chain (leaf only, no intermediate) —
+    # invisible in a browser, fatal to every automated client, and not a
+    # refusal at all. Board districts and precincts both come live from the
+    # county's public ArcGIS Online org. Coordinates verified against TIGER's
+    # county rings in build_county_outline.py's coles entry, where this point
+    # has been an inside anchor since 2026-08-04.
+    "Charleston (Coles)": (39.4844, -88.1778),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -502,8 +531,18 @@ OUTSIDE = {
     # the build and Shelby moved up to INSIDE as the 49th dispatched county —
     # the list failed the build until it was moved, exactly as designed.
     # Sullivan stays: Moultrie is still unserved, and it now borders the
-    # served area on two sides (Macon and Shelby).
+    # served area on THREE sides (Macon, Shelby and, from 2026-08-17, Coles).
     "Sullivan (Moultrie)": (39.5868, -88.6069),
+    # Cumberland — the successor anchor Coles's join called for (2026-08-17).
+    # Coles left five unserved neighbours behind and this is the one nearest
+    # to being swallowed: Cumberland now borders served Coles, Shelby AND
+    # Effingham, with only Jasper and Clark keeping it off the enclave list.
+    # An anchor here is what proves the fill stopped at the county line rather
+    # than running one county further, which is the exact failure the OUTSIDE
+    # list exists to catch. Toledo is the county seat; the coordinates are
+    # build_county_outline.py's own cumberland inside anchor, re-round-tripped
+    # through a point-in-county query on 2026-08-17.
+    "Toledo (Cumberland)": (39.2728, -88.2422),
     # Christian — ENCLOSED 2026-08-11 by Shelby's join: with Sangamon, Macon,
     # Shelby and Montgomery all served, Christian is the second enclave after
     # Bureau, an interior ring rather than frontier. This anchor is what

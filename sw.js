@@ -283,6 +283,7 @@ const ROSTER_URLS = [
   "./data/app/shelby-county-board-members.json",
   "./data/app/white-county-board-members.json",
   "./data/app/white-precinct-polling.json",
+  "./data/app/coles-county-board-members.json",
   "./data/app/jo-daviess-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
