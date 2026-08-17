@@ -1714,7 +1714,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v42",
+    "cache_name": "district-explorer-shell-v43",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
