@@ -14705,6 +14705,10 @@
       }
     ],
     "county": "Winnebago",
+    "head": {
+      "name": "Greg Jury",
+      "role": "Mayor"
+    },
     "name": "City of Loves Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },
@@ -14973,6 +14977,10 @@
       }
     ],
     "county": "Winnebago",
+    "head": {
+      "name": "Steve Johnson",
+      "role": "Mayor"
+    },
     "name": "Village of Machesney Park",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
   },

@@ -27,8 +27,10 @@ THREE LAYER SHAPES, because the county did not normalise them:
             another, each with a published city e-mail.
 
 Two municipalities (Loves Park, Machesney Park) have NO head-of-government layer
-— WinGIS publishes their council seats only. They ship council-only; a mayor is
-never inferred from the fact that cities have one.
+— WinGIS publishes their council seats only. Their mayors ship anyway, carried
+from the County Clerk's elections office, which named both in writing when
+asked (EMAIL_CARRIED_HEADS below) — still never inferred, and re-read never
+pretended: every run prints how old that e-mail is.
 
 Nothing is inferred from column ORDER: a seat is emitted only when its column
 holds a name, so a village that leaves Trustee6 empty ships five trustees
@@ -100,17 +102,32 @@ LAYERS = [
 # floors would be eleven separate guards over bodies of five to fifteen people,
 # where one retirement reads as a collapse.
 #
-# HEADS IS 9, NOT 11, AND THAT IS THE SOURCE, NOT A PARSE FAILURE: WinGIS
+# HEADS IS 11 SINCE 2026-08-17, AND TWO OF THEM ARE NOT SCRAPED: WinGIS
 # publishes no mayor/president layer for Loves Park or Machesney Park, only
-# their council seats. Those two ship council-only rather than having a head
-# invented for them.
+# their council seats. Asked directly, the County Clerk's elections office
+# (KHockison@clerk.wincoil.gov) named both heads by e-mail on 2026-08-17, and
+# titled the Machesney Park seat MAYOR — its own word, which is what ships.
+# Her e-mail lists each mayor's home address; neither ships (the Washington
+# rule). The two ride EMAIL_CARRIED_HEADS below rather than a layer, so a
+# weekly run refreshes ten layers and re-reads no e-mail — the NOT RE-READ
+# line in main() pays that honesty cost out loud, the Edwards convention.
 #
 # The floors sit just under the live values rather than well under, because a
 # failed layer is now fatal (see main) — so these guard a COLUMN rename, which
 # shows up as a quiet shortfall, not a fetch failure, which stops the run.
 MIN_MUNICIPALITIES = 11
-MIN_HEADS = 9
+MIN_HEADS = 11
 MIN_SEATS = 70
+
+# The two heads WinGIS does not publish, carried from the county's own
+# election authority. Names only — the e-mail's home addresses never ship.
+EMAIL_CARRIED_HEADS = {
+    "Loves Park": {"name": "Greg Jury", "office": "Mayor"},
+    "Machesney Park": {"name": "Steve Johnson", "office": "Mayor"},
+}
+EMAIL_HEADS_SOURCE = ("Winnebago County Clerk's elections office, by e-mail "
+                      "2026-08-17")
+EMAIL_HEADS_VERIFIED = "2026-08-17"
 
 
 def get_json(url, params):
@@ -236,6 +253,28 @@ def main():
             person["jurisdiction"] = spec["name"]
             officials.append(person)
 
+    # The two e-mail-carried heads join here, and never silently: each run
+    # names the source and its age, because a scrape that "refreshes" a
+    # hand-carried row refreshes nothing.
+    try:
+        _v = datetime.date.fromisoformat(EMAIL_HEADS_VERIFIED)
+        _age = ", %d days old" % (datetime.date.today() - _v).days
+    except Exception:
+        _age = ""
+    for _place, _spec in EMAIL_CARRIED_HEADS.items():
+        if _place not in municipalities:
+            print("winnebago-municipal: FATAL — %s is not among the scraped "
+                  "municipalities; the e-mail-carried head has nothing to attach to"
+                  % _place, file=sys.stderr)
+            sys.exit(1)
+        print("winnebago-municipal: NOT RE-READ — %s's %s (%s) comes from %s%s. "
+              "Re-ask the office to refresh."
+              % (_place, _spec["office"], _spec["name"], EMAIL_HEADS_SOURCE, _age),
+              file=sys.stderr)
+        officials.append({"name": _spec["name"], "office": _spec["office"],
+                          "jurisdiction": _place,
+                          "source_note": EMAIL_HEADS_SOURCE})
+
     heads = sum(1 for p in officials if p["office"].lower() in ("mayor", "president"))
     seats = len(officials) - heads
     problems = []
@@ -252,6 +291,8 @@ def main():
 
     scraped_at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     for person in officials:
+        if person.get("source_note"):
+            continue  # e-mail-carried: its provenance is its own, not the directory's
         person["source_url"] = DIRECTORY_URL
         person["scraped_at"] = scraped_at
     payload = {
