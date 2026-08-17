@@ -376,6 +376,91 @@ def parse(lines, warnings):
     return municipalities, officials
 
 
+# ---------------------------------------------------------------------------
+# HINCKLEY, carried by e-mail rather than by the yearbook.
+#
+# The yearbook is a point-in-time document and this village outran it. Its
+# Hinckley entry prints Sarah Quirk twice — as President and again as a Trustee
+# — which the parser resolves by keeping the head row (see the module header),
+# leaving five trustees where an Illinois village board seats six. That was the
+# recorded gap dekalb-hinckley-board.
+#
+# On 2026-08-17 County Clerk & Recorder Tasha Sims answered it directly, and
+# the answer is bigger than the missing seat: "You are correct that the Hinckley
+# information in the current County Yearbook is outdated. We are currently
+# between editions, and the new Yearbook has not yet been published. The updated
+# list I am providing reflects the current information we have received from the
+# Village." Four officers changed. THE SAME OFFICE THAT PUBLISHES THE YEARBOOK
+# is saying the yearbook is stale and supplying the correction, so this is not a
+# document contradicting a published source — it is the publisher superseding
+# its own edition, and it wins for this one municipality until the next one
+# ships.
+#
+# WHAT IS DELIBERATELY NOT CARRIED: her list gives TERMS ("2023-2027",
+# "2025-2029", and for two appointed trustees a bare "2029"), while the
+# yearbook's column — and this payload's next_election field — is the date the
+# seat is NEXT ON THE BALLOT. Those are different facts, and mapping a term's
+# end year onto a next-election field would assert something neither document
+# says, so these rows carry no next_election at all. The appointed/elected flag
+# she does state is carried, because it is the same fact the yearbook's column
+# records. Her list prints "Hinckley, IL 60520" for every officer and no street
+# address; nothing per-person ships from it either way.
+EMAIL_CARRIED_BOARDS = {
+    "Village of Hinckley": {
+        "source": "DeKalb County Clerk & Recorder Tasha Sims, by e-mail, "
+                  "2026-08-17, superseding the 2025-2026 yearbook edition",
+        "verified": "2026-08-17",
+        "officials": [
+            {"office": "President", "name": "Sarah Quirk", "appointed": False},
+            {"office": "Clerk", "name": "Jennifer Klambauer", "appointed": True},
+            {"office": "Treasurer", "name": "Dave Maroo", "appointed": True},
+            {"office": "Trustee", "name": "Russell Kula", "appointed": False},
+            {"office": "Trustee", "name": "Ryan Jernigan", "appointed": False},
+            {"office": "Trustee", "name": "Jamie Whitlock", "appointed": True},
+            {"office": "Trustee", "name": "Brian Siwicki", "appointed": False},
+            {"office": "Trustee", "name": "Steve Gayhart", "appointed": True},
+            {"office": "Trustee", "name": "Eddie Cullins", "appointed": True},
+        ],
+    },
+}
+
+
+def apply_email_carried(municipalities, officials, warnings):
+    """Replace a municipality's whole roster with an e-mail-carried one.
+
+    Whole-roster, not seat-by-seat: the Clerk sent the village's current board,
+    so mixing her rows with the stale edition's would produce a body that never
+    existed. The municipality record itself (hall address, phone, website) still
+    comes from the yearbook — she corrected the people, not the building.
+    """
+    for name, spec in EMAIL_CARRIED_BOARDS.items():
+        # Officers carry the jurisdiction string the yearbook block built
+        # ("Village of Hinckley"); `municipalities` holds the bare name
+        # ("Hinckley"), so membership is tested against the officers themselves.
+        existing = [o for o in officials if o.get("jurisdiction") == name]
+        if not existing:
+            warnings.append("%s is in EMAIL_CARRIED_BOARDS but the yearbook "
+                            "published no officers under that jurisdiction — the "
+                            "override was NOT applied and the card keeps whatever "
+                            "the yearbook says" % name)
+            continue
+        # The hall address, phone and website are the yearbook's and stay; she
+        # corrected the people, not the building.
+        shared = {k: v for k, v in existing[0].items()
+                  if k not in ("office", "district", "name", "appointed", "next_election")}
+        kept = [o for o in officials if o.get("jurisdiction") != name]
+        for row in spec["officials"]:
+            record = dict(shared, office=row["office"], district=None, name=row["name"])
+            if row.get("appointed"):
+                record["appointed"] = True
+            kept.append(record)
+        officials[:] = kept
+        print("  NOT RE-READ — %s's board comes from %s; the yearbook edition on "
+              "the county's site still prints the superseded list."
+              % (name, spec["source"]), file=sys.stderr)
+    return municipalities, officials
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", required=True)
@@ -390,6 +475,8 @@ def main():
             source_url = discover_pdf_url(warnings)
             pdf_bytes = fetch_pdf(source_url)
         municipalities, officials = parse(section_lines(pdf_bytes), warnings)
+        municipalities, officials = apply_email_carried(
+            municipalities, officials, warnings)
     except Exception as exc:  # noqa: BLE001
         print("FATAL: %s" % exc, file=sys.stderr)
         sys.exit(1)

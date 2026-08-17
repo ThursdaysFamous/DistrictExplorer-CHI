@@ -1,0 +1,31 @@
+{
+ "fetched": "2026-08-17",
+ "source": "DeKalb County Clerk & Recorder Tasha Sims, by e-mail",
+ "note": "DeKalb prints its precincts as a two-letter township code plus a number — 'AF 01', 'DK 15', 'SG 01' — on its precinct layer, its board-district listings and its committeeperson lists alike, and nothing the county publishes spells the prefixes out. Five townships start with S (Sandwich, Shabbona, Somonauk, South Grove, Sycamore), so the expansions could not be worked out without guessing. County Clerk Tasha Sims sent this key by e-mail on 2026-08-17, in reply to the question, and it pairs all nineteen codes with their townships. TWO THINGS RECORDED RATHER THAN SMOOTHED OVER. (1) Her list spells the MI township 'MILAND'; the Census Bureau, the county's own township roster and the township itself spell it MILAN, and MI is the only M township left once MA (Malta) and MF (Mayfield) are taken, so the pairing is unambiguous and the name here is the spelling everyone else uses. (2) She annotates three codes with the village inside the township — CLINTON (WATERMAN), FRANKLIN (KIRKLAND), SQUAW GROVE (HINCKLEY) — which is why a resident in Waterman sees a precinct named Clinton; those notes are kept below rather than dropped, because they answer the question a confused reader would actually ask.",
+ "townships": {
+  "AF": "Afton",
+  "CL": "Clinton",
+  "CO": "Cortland",
+  "DK": "DeKalb",
+  "FR": "Franklin",
+  "GE": "Genoa",
+  "KI": "Kingston",
+  "MA": "Malta",
+  "MF": "Mayfield",
+  "MI": "Milan",
+  "PI": "Pierce",
+  "PP": "Paw Paw",
+  "SA": "Sandwich",
+  "SG": "South Grove",
+  "SH": "Shabbona",
+  "SO": "Somonauk",
+  "SQ": "Squaw Grove",
+  "SY": "Sycamore",
+  "VI": "Victor"
+ },
+ "villageNotes": {
+  "CL": "Waterman",
+  "FR": "Kirkland",
+  "SQ": "Hinckley"
+ }
+}
