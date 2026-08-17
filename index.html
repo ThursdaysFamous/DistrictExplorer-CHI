@@ -8929,6 +8929,22 @@ function initChiExplorer() {
   var loadTazewellBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/tazewell-county-board-members.json", {}, 2);
   });
+  /* The six precincts the county's own polling layer cannot answer. Its
+   * precinct layer points them at facility ids 43, 50 and 54, none of which
+   * appear among the 49 locations it publishes. Deputy Clerk & Election
+   * Supervisor Vanessa Reynolds sent the Clerk's own countywide polling
+   * listing on 2026-08-17 and it names all six buildings.
+   *
+   * KEYED BY PRECINCT NAME rather than by facility id — the county's data
+   * forces it. Ids 50 and 54 are each shared by precincts that vote at
+   * DIFFERENT buildings (50: Cincinnati 02/05 at Pekin Bible Church AND Elm
+   * Grove 02 at Grace Baptist; 54: Pekin 01 at First Christian AND Pekin 06 at
+   * the Miller Center), so the Whiteside facility-keyed shape could not say
+   * what is true here. Consulted ONLY where the county's own layer has no
+   * match, so publishing those buildings upstream retires the file silently. */
+  var loadTazewellClerkPolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/tazewell-precinct-polling.json", {}, 2);
+  });
   /* Precincts (82) with the polling place joined on facilityid against layer
    * 0's 49 voting locations — many-to-one, as the county runs fewer sites than
    * precincts. Polling failure costs the polling rows only. */
@@ -19996,7 +20012,8 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadTazewellPrecincts(),
-            loadTazewellCountyBoard().catch(function () { return null; })
+            loadTazewellCountyBoard().catch(function () { return null; }),
+            loadTazewellClerkPolling().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -20010,12 +20027,25 @@ function initChiExplorer() {
               }
             }
             var name = findPropCI(props, ["name"]);
+            name = name != null && String(name).trim() ? String(name).trim() : null;
+            var place = props.dxPollingPlace || null;
+            var address = props.dxPollingAddress || null;
+            var fromClerk = false;
+            // Only when the county's own layer has nothing for this precinct.
+            if (!place && name && results[2] && results[2].precincts &&
+                results[2].precincts[name]) {
+              var sup = results[2].precincts[name];
+              place = sup.place || null;
+              address = [sup.address, sup.city].filter(Boolean).join(", ") || null;
+              fromClerk = !!place;
+            }
             return {
               seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null,
+              name: name,
               boardDistrict: boardDistrict,
-              pollingPlace: props.dxPollingPlace || null,
-              pollingAddress: props.dxPollingAddress || null
+              pollingPlace: place,
+              pollingAddress: address,
+              pollingFromClerk: fromClerk
             };
           });
         },
@@ -20025,6 +20055,12 @@ function initChiExplorer() {
           if (result.pollingPlace) {
             fields.push({ label: "Polling place", value: String(result.pollingPlace) +
               (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+            if (result.pollingFromClerk) {
+              fields.push({
+                label: "Note",
+                value: "This polling place is not in the county's published list of voting locations — the County Clerk's office supplied it directly."
+              });
+            }
           }
           fields.push({ label: "County", value: "Tazewell County" });
           return renderFieldStack(fields);
