@@ -304,18 +304,18 @@ in the researched-but-unbuilt backlog.
       "wanted": "A board district dataset on the county's mapping system — the townships and precincts it would be built from are already there — or the map file behind the 2022 PDF."
     },
     {
-      "id": "coles-county-board",
-      "concept": "County board",
-      "area": "Coles County",
-      "counties": [
-        "coles"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Coles County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. Coles has TWO sites, colesco.illinois.gov and www.co.coles.il.us, the second carrying a board member CONTACT page (/Board/memberContact.html) and minutes back to 2012. Both are indexed by search engines and BOTH REFUSE THIS NETWORK — a TLS reset and a 503 — so this is the blocked-not-absent distinction, and the earlier record conflated them. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
-      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
-    },
+            "id": "coles-county-board",
+            "concept": "County board",
+            "area": "Coles County",
+            "counties": [
+                  "coles"
+            ],
+            "kind": "no-source",
+            "layer": "county-board",
+            "summary": "Coles County's board IS districted — the Clerk said so on 17 Aug 2026; the maps are on a county site that refuses this project's network.",
+            "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. Coles has TWO sites, colesco.illinois.gov and www.co.coles.il.us, the second carrying a board member CONTACT page (/Board/memberContact.html) and minutes back to 2012. Both are indexed by search engines and BOTH REFUSE THIS NETWORK — a TLS reset and a 503 — so this is the blocked-not-absent distinction, and the earlier record conflated them. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. FORM SETTLED 17 Aug 2026 — County Clerk & Recorder Julie Coe, in writing: “Our County Board is elected by district and you can find those maps on our website.” That satisfies §2.5 step 2 from the election authority herself, so this is a geometry ask, not the County-card path. She also named the route to the data: the county's GIS office, by telephone at 217-348-7356 — no e-mail address given, and no shapefile attached. THE BLOCK IS UNCHANGED AND IS THE WHOLE PROBLEM: both county hosts still refuse this network (colesco.illinois.gov resets the connection, co.coles.il.us answers 503), so the maps she points to cannot be read from here even though they exist and are public. That is the blocked-not-absent distinction at its sharpest — the county publishes the thing, and the publisher cannot be reached. A reply asking for a GIS e-mail address, and flagging the refusal in case it affects other readers, is drafted for the operator.",
+            "wanted": "An e-mail address for the Coles County GIS office (the Clerk gave a phone number only), then the board-district shapefile from them — or, failing that, the district map from a network the county's sites will answer. The board's form is settled: districted, per the Clerk."
+      },
     {
       "id": "county-board-office-addresses",
       "concept": "County board office location",
