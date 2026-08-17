@@ -569,7 +569,7 @@
         "name": "Johnnie G. Wood",
         "phone": "217-997-2292",
         "role": "Trustee",
-        "termExpires": "2027"
+        "termExpires": "2029"
       },
       {
         "name": "Karmen Kruse",
@@ -610,7 +610,7 @@
         "termExpires": "2029"
       }
     ],
-    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+    "sourceUrl": "https://www.co.cass.il.us/download_file/view/9bcd6e59-247a-4be9-b21f-382171668e01/1"
   },
   "1702154": {
     "board": [
@@ -778,7 +778,7 @@
         "termExpires": "2029"
       }
     ],
-    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+    "sourceUrl": "https://www.co.cass.il.us/download_file/view/9bcd6e59-247a-4be9-b21f-382171668e01/1"
   },
   "1702531": {
     "board": [
@@ -1561,7 +1561,7 @@
         "termExpires": "2029"
       }
     ],
-    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+    "sourceUrl": "https://www.co.cass.il.us/download_file/view/9bcd6e59-247a-4be9-b21f-382171668e01/1"
   },
   "1704572": {
     "board": [
@@ -4045,7 +4045,7 @@
         "termExpires": "2029"
       }
     ],
-    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+    "sourceUrl": "https://www.co.cass.il.us/download_file/view/9bcd6e59-247a-4be9-b21f-382171668e01/1"
   },
   "1712476": {
     "board": [
@@ -11312,35 +11312,36 @@
   "1735268": {
     "board": [
       {
-        "name": "Alyssa Prickett",
-        "nextElection": "2027",
-        "role": "Trustee"
-      },
-      {
         "name": "Brian Siwicki",
-        "nextElection": "2029",
         "role": "Trustee"
       },
       {
-        "name": "Jennifer Klambauer",
-        "nextElection": "2027",
+        "appointed": true,
+        "name": "Eddie Cullins",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Jamie Whitlock",
         "role": "Trustee"
       },
       {
         "name": "Russell Kula",
-        "nextElection": "2027",
         "role": "Trustee"
       },
       {
+        "name": "Ryan Jernigan",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
         "name": "Steve Gayhart",
-        "nextElection": "2027",
         "role": "Trustee"
       }
     ],
     "county": "DeKalb",
     "head": {
       "name": "Sarah Quirk",
-      "nextElection": "2029",
       "role": "President"
     },
     "name": "Village of Hinckley",
@@ -11351,8 +11352,13 @@
     "officers": [
       {
         "appointed": true,
-        "name": "Elizabeth Losiniecki",
+        "name": "Jennifer Klambauer",
         "role": "Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "Dave Maroo",
+        "role": "Treasurer"
       }
     ],
     "sourceUrl": "https://dekalbcountyclerkil.gov/wp-content/uploads/2025/11/2025-2026_Yearbook_Web.pdf",
@@ -26188,7 +26194,7 @@
         "termExpires": "2029"
       }
     ],
-    "sourceUrl": "https://co.cass.il.us/download_file/view/6b66614e-1d1e-4422-a9b6-6f528b7fa689/1"
+    "sourceUrl": "https://www.co.cass.il.us/download_file/view/9bcd6e59-247a-4be9-b21f-382171668e01/1"
   },
   "1778227": {
     "county": "Lake",
