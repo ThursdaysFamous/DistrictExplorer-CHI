@@ -363,19 +363,6 @@ in the researched-but-unbuilt backlog.
       "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
     },
     {
-      "id": "dekalb-hinckley-board",
-      "concept": "Municipal officials",
-      "area": "Hinckley",
-      "counties": [
-        "dekalb"
-      ],
-      "kind": "data-quality",
-      "layer": "municipality",
-      "summary": "Hinckley's missing sixth trustee is answered \u2014 the County Clerk supplied the village's current board, which ships on the next roster build.",
-      "blocker": "The county yearbook prints Sarah Quirk twice for Hinckley — once as Village President and again as a Trustee. In Illinois a village president is elected to that office separately and cannot also hold a trustee seat, so one of the two entries is out of date. We keep the president row, which is the more specific claim. Who actually holds the sixth seat is not published by the county or the village. ANSWERED 17 Aug 2026, and by the yearbook's own publisher: County Clerk & Recorder Tasha Sims wrote that the Hinckley information in the current County Yearbook is outdated, that the county is between editions and the new Yearbook has not yet been published, and sent the village's current list. It is not one seat but FOUR changes — Jennifer Klambauer moved from Trustee to Clerk, Elizabeth Losiniecki and Alyssa Prickett are gone, and Ryan Jernigan, Jamie Whitlock and Eddie Cullins join, with Dave Maroo as Treasurer — so the body is six trustees plus president, clerk and treasurer. This is the publisher superseding its own edition rather than a document contradicting a published source, which is why it is carried rather than asked about (contrast the Tazewell rule). It ships through EMAIL_CARRIED_BOARDS in scripts/dekalb_municipal_officials_scraper.py, whole-roster rather than seat-by-seat because mixing her rows with the stale edition's would produce a body that never existed, and the weekly run prints a NOT RE-READ line naming her e-mail. HER LIST GIVES TERMS (2023-2027, and for two appointed trustees a bare 2029) WHERE THIS PAYLOAD'S FIELD IS THE NEXT BALLOT DATE — different facts, so those rows carry no next-election date rather than asserting one. The record stays open only until the next municipal-roster build lands the data.",
-      "wanted": "Nothing further from the county \u2014 the Clerk has answered. This record retires when the weekly municipal-officials build ships her list; what would close it upstream for every other reader is the next yearbook edition carrying the corrected Hinckley entry."
-    },
-    {
       "id": "douglas-county-board-districts",
       "concept": "County board districts",
       "area": "Douglas County",
