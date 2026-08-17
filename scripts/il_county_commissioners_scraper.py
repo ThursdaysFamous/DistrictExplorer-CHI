@@ -648,6 +648,30 @@ DOCUMENT_ROSTERS = {
             "address": "50 East Main Street, Albion, IL 62806",
         },
     },
+    "WABASH": {
+        "name": "Wabash County",
+        "structure": "Commission form — 3 commissioners elected countywide",
+        "document": "Commissioners' names and addresses, sent by e-mail by "
+                    "County Clerk & Recorder Janet L. Will, 2026-08-16",
+        "verified": "2026-08-16",
+        "expect": 3,
+        # The second ABSENT county: wabashcounty.illinois.gov carries mail and
+        # serves no web page (measured 5 Aug 2026, re-checked 9 Aug — the
+        # wabash-county-board record has the full measurement). Ordered as the
+        # Clerk's e-mail orders them. Her e-mail lists each commissioner with a
+        # HOME address and nothing else; per the Edwards rule above none of
+        # that ships, and unlike Edwards this county assigns no per-seat
+        # e-mail this project can cite, so each row is a name alone. Her Aug 5
+        # reply settled the form (one commissioner elected each General
+        # Election, six-year terms). Which of the three chairs the board was
+        # not in the e-mail and has been asked; until she answers, nobody is
+        # marked Chairman.
+        "members": [
+            {"name": "Timothy R. Hocking", "role": "Commissioner"},
+            {"name": "Robert G. Dean", "role": "Commissioner"},
+            {"name": "Scott C. West", "role": "Commissioner"},
+        ],
+    },
 }
 
 

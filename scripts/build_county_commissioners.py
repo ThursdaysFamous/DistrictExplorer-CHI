@@ -49,13 +49,18 @@ EXPECT_MEMBERS = {
                                      # this project a wrong gap record and nearly a wrong
                                      # e-mail to the Clerk.
     "EDWARDS": 3,                    # pass-14; commission form stated by the Clerk,
-                                     # 2026-08-06. The ONLY county here whose roster is
+                                     # 2026-08-06. The first county whose roster is
                                      # not scraped from a page — Edwards has no website at
                                      # all, so its three come from a document the Clerk
                                      # sent (DOCUMENT_ROSTERS in the scraper), and the
                                      # scraper says so on every run.
+    "WABASH": 3,                     # 2026-08-16; commission form stated in writing by
+                                     # Clerk Will 2026-08-05, the three names sent by her
+                                     # e-mail 2026-08-16. The SECOND no-website county
+                                     # (DOCUMENT_ROSTERS): a mail domain with no web
+                                     # server, measured 5 Aug and re-checked 9 Aug.
 }
-MIN_COUNTIES = 11
+MIN_COUNTIES = 12
 # Greene styles its chair "Chairwoman" and its deputy "Vice Chair". Both are
 # the county's own words for real people and are kept verbatim rather than
 # normalised to the -man forms, which would be a one-word misstatement.
