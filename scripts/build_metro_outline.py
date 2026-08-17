@@ -223,10 +223,24 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # a scrape (a mail domain with no web server; Clerk Will
                      # sent the three names by e-mail). It borders Edwards and
                      # nothing else served — Lawrence and White are frontier —
-                     # so it EXTENDS the one remaining island to two counties
-                     # rather than starting another: the outline stays two
-                     # polygons, and the island's outer ring grows.
+                     # so it EXTENDED the one remaining island to two counties
+                     # rather than starting another (until White, hours later,
+                     # merged that island back in — see below).
                      "185",
+                     # White — the 50th dispatched county (2026-08-17, the same
+                     # day as Wabash), and the county that ENDED the last
+                     # island: it borders Hamilton on the mainland side and
+                     # Edwards AND Wabash on the island's, so adding it merges
+                     # the Edwards–Wabash island back in and the outline drops
+                     # from two polygons to ONE (three rings: the outer plus
+                     # the Bureau and Christian enclave holes). The dissolve is
+                     # recomputed, never patched — the Jefferson/Shelby
+                     # precedents. Its Clerk supplied the county's one map file
+                     # (the adopted district & precinct PDF) and stated the
+                     # board is elected by district; the boundaries are census
+                     # VTDs composed per that map and the county's own
+                     # certified canvasses (build_white_boundaries.py).
+                     "193",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -264,6 +278,7 @@ DISPATCH_COUNTY_FIPS = {
     "hamilton": "065", "jefferson": "081",
     "montgomery": "135", "menard": "129",
     "shelby": "173",
+    "white": "193",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -381,13 +396,23 @@ INSIDE = {
     # is why it lands detached rather than extending the second island; Carmi
     # (White) holds that corridor OUTSIDE below.
     "Albion (Edwards)": (38.3781, -88.0578),
-    # Mt. Carmel (Wabash) — 2026-08-17: Wabash borders Edwards and joins its
-    # island, growing it to two counties while the outline stays two polygons.
-    # The county seat the wabash-county-board record insisted the roster must
+    # Mt. Carmel (Wabash) — 2026-08-17: Wabash borders Edwards and joined its
+    # island, growing it to two counties. Hours later White merged that island
+    # back into the mainland, so this anchor now tests interior fill. The
+    # county seat the wabash-county-board record insisted the roster must
     # come from (never Wabash County INDIANA, across the river); Clerk Will's
-    # e-mail was exactly that source. Carmi (White) below still holds the
-    # island's southern flank OUTSIDE.
+    # e-mail was exactly that source.
     "Mt. Carmel (Wabash)": (38.4109, -87.7614),
+    # Carmi (White) — the county seat, 2026-08-17, moved up from the OUTSIDE
+    # list where it had proven the Edwards island and the Hamilton island
+    # stayed two since 2026-08-06. The 50th dispatched county and the
+    # last-island merge: White borders Hamilton (mainland via Jefferson) AND
+    # Edwards AND Wabash (the island), so with White served the outline drops
+    # from two polygons to ONE — three rings, the outer plus the Bureau and
+    # Christian enclave holes. Islands can un-island and the dissolve is
+    # recomputed, never patched (the Jefferson/Shelby precedents); the list
+    # failed the build until this anchor moved, exactly as designed.
+    "Carmi (White)": (38.0906, -88.1589),
     "Griggsville (Pike)": (39.7078, -90.7276),
     "Hennepin (Putnam)": (41.2589, -89.3216),
     "Mount Sterling (Brown)": (39.9854, -90.7641),
@@ -415,10 +440,13 @@ OUTSIDE = {
     # swallowed a neighbour. (Waterloo moved to INSIDE when Monroe shipped as a
     # commission county in pass-7 tranche 3; Sparta stands in for the southern
     # frontier now that Randolph is served.)
-    # White separates Edwards (third island, 2026-08-06) from Hamilton (second),
-    # so Carmi is what proves the two islands stayed two rather than merging
-    # across an unserved county.
-    "Carmi (White)": (38.0906, -88.1589),
+    # (Carmi held this spot from 2026-08-06 — proving the Edwards island and
+    # the Hamilton mainland stayed separate — until White shipped on
+    # 2026-08-17 and merged the last island in; it moved up to INSIDE exactly
+    # as the guard is designed to force. The southern frontier White leaves
+    # behind is Gallatin, served by nothing and bordering White, Hamilton and
+    # Saline; Shawneetown is its seat.)
+    "Shawneetown (Gallatin)": (37.7131, -88.1867),
     "Carlyle (Clinton)": (38.6103, -89.3726),
     "Ava (Jackson)": (37.8886, -89.4964),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so
@@ -486,8 +514,12 @@ OUTSIDE = {
     # obtained the Beacon export and Menard moved up to INSIDE. The reasoning
     # this list records is about what can be DERIVED, which was never the same
     # question as what a county will send.)
-    # The Hamilton–Effingham corridor: Wayne is unserved between the two
-    # islands, and this anchor is what proves it stays washed.
+    # Wayne held the Hamilton–Effingham corridor open while those were
+    # islands; both have since merged in (Shelby 2026-08-11, White
+    # 2026-08-17), and Wayne is now a deep NOTCH in the mainland's southern
+    # edge — bordered by served Jefferson, Hamilton, White and Edwards, with
+    # only Clay and Richland keeping it off the enclave list. This anchor is
+    # what proves the notch stays washed.
     "Fairfield (Wayne)": (38.3798, -88.3724),
     # (Putnam's anchor moved up to INSIDE in tranche 5, and Adams's Clayton in
     # pass 8, each joining exactly as its OUTSIDE comment said it would — Adams

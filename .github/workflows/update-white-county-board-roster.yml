@@ -1,0 +1,105 @@
+name: Update White County Board roster
+
+# Weekly refresh of the White County Board District card's member roster
+# (data/app/white-county-board-members.json) and the precinct card's polling
+# join (data/app/white-precinct-polling.json), both fetched by index.html.
+# Re-scrapes the county's board page (five members, party, Chair/Vice) and its
+# Elections page (eleven polling lines covering all 18 precincts) and, if
+# anything changed, opens a PR rather than committing directly to main —
+# officeholder data should get a human look before it ships.
+#
+# THE DISTRICT JOIN IS NOT SCRAPED. White's board page names no districts; each
+# member's district was proven from the county's own certified 2022/2024
+# General Election canvasses and lives in build_white_county_board.py's
+# CANVASS_SEATS table. Any name on the page that table cannot place FAILS the
+# run on purpose: a membership change means an appointment or an election, and
+# the new member's district is a fact only a new certified document (or the
+# Clerk) can supply. A red run here is the drift alarm working, not breakage.
+#
+# THE SAME RUN WATCHES THE BOUNDARY'S SOURCE. The county's boundaries were
+# traced from the adopted map PDF the Elections page links
+# (build_white_boundaries.py); the builder fails if that exact link leaves the
+# page — a replaced map lands at a new CDN path while the old URL serves the
+# old bytes forever (the Mason watcher rule), and a link change is the earliest
+# visible sign of a re-precincting. It cannot catch a redraw that keeps the
+# filename; scripts/build_white_boundaries.py --check (an operator step — it
+# needs pymupdf/numpy/shapely) is the full re-verification.
+
+on:
+  schedule:
+    - cron: "0 17 * * 6" # Saturday 17:00 UTC (after county-clerk 13:00, county-commissioners 16:00)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the workflow still runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # Static server-rendered pages — no JS and no challenge — so requests
+        # alone, parsed with the stdlib re module. The builder imports only
+        # CONSTANTS from build_white_boundaries.py, whose geometry stack is
+        # function-local (the De Witt seam), so no shapely here.
+        run: pip install -c scripts/requirements.txt requests
+
+      - name: Scrape White County board + elections pages
+        run: python3 scripts/white_county_board_scraper.py /tmp/white_county_board_raw.json
+
+      - name: Rebuild roster + polling data files
+        run: python3 scripts/build_white_county_board.py /tmp/white_county_board_raw.json
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present and
+      # well formed.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/white-county-board-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/white-county-board-members.json data/app/white-precinct-polling.json
+          git commit -m "Update White County Board roster + polling from whitecounty-il.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update White County Board roster + polling from whitecounty-il.gov" \
+              --body "Automated weekly refresh of the White County Board District card's member roster and the precinct card's polling join, generated by \`scripts/white_county_board_scraper.py\` + \`scripts/build_white_county_board.py\`. Please review the diff before merging — this changes data about real officeholders. The board page names NO districts: each member's district is joined from the certified-canvass table in the builder, and any page name that table cannot place fails the run instead of shipping a guess. Board contact ships once at board level (the county prints one PO Box and one clerk e-mail for all five members). Polling covers 18/18 precincts or the build refuses to write; the page's 'Gray #24' is normalised to the map/census GREY 24 spelling, recorded in the builder." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
