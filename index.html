@@ -10090,6 +10090,27 @@ function initChiExplorer() {
    * so they are rendered verbatim rather than guessed into township names; the
    * separate township layer already answers which township a point is in.
    * Recorded as a gap. */
+  /* The county prints precincts as a two-letter township code plus a number
+   * ("SG 01"), and publishes no key anywhere — five townships start with S, so
+   * the expansions could not be worked out without guessing. County Clerk
+   * Tasha Sims sent the key by e-mail on 2026-08-17; it ships as
+   * dekalb-precinct-townships.json and turns "SG 01" into "South Grove 01" on
+   * the card while the county's own code stays visible beside it. */
+  var loadDekalbPrecinctTownships = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dekalb-precinct-townships.json", {}, 2);
+  });
+
+  // "SG 01" -> {township: "South Grove", code: "SG", number: "01"}. Returns
+  // null for anything that is not the county's code-plus-number shape, so an
+  // unrecognised name renders exactly as the county publishes it.
+  function dekalbPrecinctParts(name, key) {
+    var m = /^([A-Za-z]{2})\s*(\d+)$/.exec(String(name || "").trim());
+    if (!m || !key || !key.townships) return null;
+    var township = key.townships[m[1].toUpperCase()];
+    if (!township) return null;
+    return { township: township, code: m[1].toUpperCase(), number: m[2],
+             village: (key.villageNotes || {})[m[1].toUpperCase()] || null };
+  }
   var loadDekalbPrecincts = makeCached(function () {
     return loadDekalbLayer("Precincts", 1, "name", "precincts");
   });
@@ -19412,7 +19433,8 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadDekalbPrecincts(),
-            loadDekalbCountyBoard().catch(function () { return null; })
+            loadDekalbCountyBoard().catch(function () { return null; }),
+            loadDekalbPrecinctTownships().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -19425,9 +19447,11 @@ function initChiExplorer() {
               }
             }
             var name = findPropCI(feature.properties || {}, ["name"]);
+            name = name != null && String(name).trim() ? String(name).trim() : null;
             return {
               seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null,
+              name: name,
+              parts: dekalbPrecinctParts(name, results[2]),
               boardDistrict: boardDistrict
             };
           });
@@ -19435,10 +19459,24 @@ function initChiExplorer() {
         render: function (result) {
           var fields = [];
           if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.parts) {
+            fields.push({ label: "Township", value: result.parts.township });
+            if (result.parts.village) {
+              fields.push({
+                label: "Note",
+                value: "The county names this precinct for " + result.parts.township +
+                       " Township, which contains the village of " + result.parts.village + "."
+              });
+            }
+            fields.push({ label: "County's precinct code", value: result.name });
+          }
           fields.push({ label: "County", value: "DeKalb County" });
           return renderFieldStack(fields);
         },
         cardIdentifier: function (result) {
+          if (result.parts) {
+            return result.parts.township + " Precinct " + String(Number(result.parts.number));
+          }
           return result.name ? "Precinct " + String(result.name) : "Unknown";
         },
         primaryLink: function () {
