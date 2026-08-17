@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v41";
+const CACHE_NAME = "district-explorer-shell-v42";
 
 const SHELL_URLS = [
   "./",
@@ -80,6 +80,7 @@ const GEOMETRY_URLS = [
   "./data/app/clinton-county-outline.json",
   "./data/app/coles-county-outline.json",
   "./data/app/congress-districts.json",
+  "./data/app/cook-fire-districts.json",
   "./data/app/crawford-county-outline.json",
   "./data/app/cumberland-county-outline.json",
   "./data/app/dekalb-county-outline.json",
@@ -121,6 +122,9 @@ const GEOMETRY_URLS = [
   "./data/app/kane-judicial-subcircuits.json",
   "./data/app/kankakee-county-outline.json",
   "./data/app/kendall-county-outline.json",
+  "./data/app/kendall-fire-districts.json",
+  "./data/app/kendall-library-districts.json",
+  "./data/app/kendall-park-districts.json",
   "./data/app/knox-county-outline.json",
   "./data/app/lake-county-outline.json",
   "./data/app/lasalle-county-board-districts.json",
@@ -131,6 +135,9 @@ const GEOMETRY_URLS = [
   "./data/app/livingston-county-outline.json",
   "./data/app/logan-county-outline.json",
   "./data/app/macon-county-outline.json",
+  "./data/app/macon-fire-districts.json",
+  "./data/app/macon-library-districts.json",
+  "./data/app/macon-park-districts.json",
   "./data/app/macoupin-county-outline.json",
   "./data/app/madison-county-outline.json",
   "./data/app/madison-judicial-subcircuits.json",

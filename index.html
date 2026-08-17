@@ -7215,6 +7215,9 @@ function initChiExplorer() {
     if (contact.addrLines && contact.addrLines.length) {
       wrap.appendChild(renderOfficeGroup({ offices: [{ label: "Office", lines: contact.addrLines }] }));
     }
+    if (contact.note) {
+      wrap.appendChild(renderFieldStack([{ label: "Note", value: contact.note }]));
+    }
     return wrap;
   }
   // Lake's GIS carries each district's own office contact on the feature
@@ -7224,7 +7227,8 @@ function initChiExplorer() {
       addrLines: [val(result.addr), [val(result.city), val(result.zip)].filter(Boolean).join(" ")].filter(Boolean),
       phone: val(result.phone) || null,
       email: val(result.email) || null,
-      url: safeHttpUrl(val(result.url))
+      url: safeHttpUrl(val(result.url)),
+      note: result.snappedFt != null ? rowSnapNoteText(result.snappedFt) : null
     });
   }
 
@@ -7413,18 +7417,19 @@ function initChiExplorer() {
         .filter(Boolean),
       phone: val(result.phone) || null,
       email: val(result.email) || null,
-      url: site
+      url: site,
+      note: result.snappedFt != null ? rowSnapNoteText(result.snappedFt) : null
     });
   }
 
   // query helper shared by the three Kane tax-district entries — same result
   // shape kaneRepContactRows reads
-  function kaneOrgQuery(loader) {
+  function kaneOrgQuery(loader, snapFeet) {
     return function (point, seq) {
       return loader().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var props = feature.properties || {};
+        var hit = findFeatureContainingOrNear(geojson, point, snapFeet);
+        if (!hit) return null;
+        var props = hit.feature.properties || {};
         return {
           seq: seq,
           name: findPropCI(props, ["districtname"]),
@@ -7436,7 +7441,8 @@ function initChiExplorer() {
           addr: findPropCI(props, ["addr1"]),
           city: findPropCI(props, ["addr1_city"]),
           st: findPropCI(props, ["addr1_st"]),
-          zip: findPropCI(props, ["addr1_zip"])
+          zip: findPropCI(props, ["addr1_zip"]),
+          snappedFt: hit.snappedFt
         };
       });
     };
@@ -7589,15 +7595,23 @@ function initChiExplorer() {
   // Kendall's tiling systematically records EVERY library taxing body,
   // city library funds included — the same complete fund+district shape as
   // Cook's Clerk tilings — so dropping them would hide real taxing bodies.
+  /* Kendall's three concept tilings ship PRE-BUILT from the county's
+   * parcel-derived tax-code fabric (scripts/build_parcel_fabric_districts.py)
+   * — the guidebook's old "hairline no-result gaps at unparceled slivers"
+   * measured as 977/578/1158 EMPTY road-band voids in the 2026-08-16 fabric
+   * survey, the fleet's worst alongside Macon. Dissolved by name (170 fire /
+   * 65 park / 145 library tax-code rows collapse to 10/5/9 districts), road
+   * voids closed at 75 ft, and the municipal 'CITY OF JOLIET FIRE DISTRICT'
+   * rows the old loader filtered are excluded at build time; the library's
+   * municipal city-library funds stay, the Cook-style complete shape. */
   var loadKendallFire = makeCached(function () {
-    return loadKendallLayer("Fire_Protection_Districts", 0,
-      "fire <> 'CITY OF JOLIET FIRE DISTRICT'", "fire", "fire districts");
+    return fetchJSONWithRetry("data/app/kendall-fire-districts.json", {}, 2);
   });
   var loadKendallParks = makeCached(function () {
-    return loadKendallLayer("Park_Districts", 0, "1=1", "park", "park districts");
+    return fetchJSONWithRetry("data/app/kendall-park-districts.json", {}, 2);
   });
   var loadKendallLibraries = makeCached(function () {
-    return loadKendallLayer("Library_Districts", 0, "1=1", "library", "library districts");
+    return fetchJSONWithRetry("data/app/kendall-library-districts.json", {}, 2);
   });
   var loadKendallPollingPlaces = makeCached(function () {
     return loadKendallLayer("Voting_Precincts_and_Polling_Places", 0, "1=1",
@@ -9039,16 +9053,22 @@ function initChiExplorer() {
       return precincts;
     });
   });
+  /* Macon's three concept tilings ship PRE-BUILT from the county's AGOL
+   * layers (scripts/build_parcel_fabric_districts.py). The upstream names
+   * say "Join_Dissolved" but the dissolve was run on a parcel join and kept
+   * every road void — the 2026-08-16 fabric survey measured 1318/960/556
+   * EMPTY road-band voids at full precision, the fleet's worst. Voids
+   * closed at 75 ft; district names ship EXACTLY as the county writes them
+   * (MtZion, HopeWelty — the macon-district-name-formatting posture);
+   * upstream edit dates are pinned in the builder. */
   var loadMaconFire = makeCached(function () {
-    return loadMaconLayer(MACON_ORG_SERVICE + "Fire/FeatureServer/0", "1=1", "Fire", "fire districts");
+    return fetchJSONWithRetry("data/app/macon-fire-districts.json", {}, 2);
   });
   var loadMaconLibrary = makeCached(function () {
-    return loadMaconLayer(MACON_ORG_SERVICE + "LibraryJoin_Dissolved/FeatureServer/0",
-                          "1=1", "Library", "library districts");
+    return fetchJSONWithRetry("data/app/macon-library-districts.json", {}, 2);
   });
   var loadMaconPark = makeCached(function () {
-    return loadMaconLayer(MACON_ORG_SERVICE + "ParkJoin_Dissolve/FeatureServer/0",
-                          "1=1", "Park", "park districts");
+    return fetchJSONWithRetry("data/app/macon-park-districts.json", {}, 2);
   });
 
   /* Effingham (the 44th dispatched county, added 2026-08-04 — and the FIRST
@@ -10363,7 +10383,7 @@ function initChiExplorer() {
    * 280 parts), the overlay drew the county's road grid as a dark mesh, and a
    * click on any road inside a district landed in no polygon. So the three
    * concept layers ship PRE-BUILT from that service (the Stark / legislative-
-   * boundaries pattern) by scripts/build_rock_island_tax_districts.py:
+   * boundaries pattern) by scripts/build_parcel_fabric_districts.py:
    * dissolved per district with road voids closed at 75 ft — nothing farther
    * than 75 ft from county-published ground is ever claimed — while ground
    * BOTH neighbours' closings reach (a boundary road between districts) ships
@@ -10385,13 +10405,6 @@ function initChiExplorer() {
   var loadRockIslandParkDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/rock-island-park-districts.json", {}, 2);
   });
-  /* What the pre-build leaves honestly unanswered is exactly where the snap
-   * still earns its keep: boundary roads between two districts (shipped in
-   * neither — see above) and the outer half of a district's perimeter roads.
-   * A missed point goes to the lone district within this range; a point
-   * within range of TWO different districts stays unanswered, because there
-   * the ambiguity is real. The card notes when an answer came from the snap. */
-  var ROCK_ISLAND_ROW_SNAP_FT = 60;
   // The layer stores districts zero-padded ("01".."19"); the roster is keyed on
   // the plain number, so the pad is stripped once here rather than in each call.
   function rockIslandDistrictNumber(feature) {
@@ -14124,6 +14137,30 @@ function initChiExplorer() {
     }
     return best ? { feature: best, feet: bestFt } : null;
   }
+  /* One threshold for the whole fleet: 60 ft reaches across every measured
+   * road void from its midpoint (the 2026-08-16 fabric survey measured 15–
+   * 200 ft voids with medians 39–107 across the parcel-derived tilings).
+   * Wired per entry — only onto sources the survey measured EMPTY voids in;
+   * an interleaved fabric whose gaps are a neighbour's territory answers by
+   * plain containment and needs no snap. On the pre-built severe-tier files
+   * the voids inside a district are closed at build time, so the snap fires
+   * only on boundary roads between districts (shipped in neither, refused as
+   * genuinely ambiguous) and on the outer half of perimeter roads. */
+  var PARCEL_FABRIC_SNAP_FT = 60;
+  function findFeatureContainingOrNear(geojson, point, snapFeet) {
+    var feature = findFeatureContaining(geojson, point);
+    if (feature) return { feature: feature, snappedFt: null };
+    if (snapFeet) {
+      var near = findLoneFeatureWithinFeet(geojson, point, snapFeet);
+      if (near) return { feature: near.feature, snappedFt: Math.max(1, Math.round(near.feet)) };
+    }
+    return null;
+  }
+  function rowSnapNoteText(ft) {
+    return "This point sits on a road or other right-of-way the county's tax map " +
+      "assigns to no district; the nearest edge of the district shown is about " +
+      ft + " ft away.";
+  }
 
   // Adapter: a registerPolygonLayer-style spec (loader + declarative fields)
   // as a county dispatch entry — the same query/render/hoverName semantics the
@@ -14148,20 +14185,12 @@ function initChiExplorer() {
       } : undefined),
       query: function (point, seq) {
         return opts.loader().then(function (geojson) {
-          var feature = findFeatureContaining(geojson, point);
-          var snappedFt = null;
-          if (!feature && opts.snapFeet) {
-            var near = findLoneFeatureWithinFeet(geojson, point, opts.snapFeet);
-            if (near) {
-              feature = near.feature;
-              snappedFt = Math.max(1, Math.round(near.feet));
-            }
-          }
-          if (!feature) return null;
-          var props = feature.properties || {};
+          var hit = findFeatureContainingOrNear(geojson, point, opts.snapFeet);
+          if (!hit) return null;
+          var props = hit.feature.properties || {};
           var result = { seq: seq };
           keyedFields.forEach(function (f) { result[f.name] = findPropCI(props, f.keys); });
-          if (snappedFt != null) result.snappedFt = snappedFt;
+          if (hit.snappedFt != null) result.snappedFt = hit.snappedFt;
           return result;
         });
       },
@@ -14185,11 +14214,7 @@ function initChiExplorer() {
           }
         });
         if (result.snappedFt != null) {
-          rows.push({
-            label: "Note",
-            value: "This point sits on a road or other right-of-way the county's tax map assigns to no district; the district shown surrounds it, about " +
-              result.snappedFt + " ft away."
-          });
+          rows.push({ label: "Note", value: rowSnapNoteText(result.snappedFt) });
         }
         return renderFieldStack(rows);
       },
@@ -17467,7 +17492,18 @@ function initChiExplorer() {
    * an in-county point with none — the Loop included (CFD is a city
    * department) — honestly reports "No result for this point." A County row
    * keeps each card's origin legible under the generic label. ---------- */
-  var loadCookFireDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(17); });
+  // Cook's suburban FPDs ship PRE-BUILT from the Clerk's L17 tax-agency
+  // tiling (scripts/build_parcel_fabric_districts.py): the 2026-08-16 fabric
+  // survey measured 102 empty road-band voids in the live layer, the worst
+  // outside Kendall/Macon. Road voids closed at 75 ft; the seven pairs the
+  // Clerk's own tiling DOUBLE-CLAIMS (Orland∩Mokena is 57 acres) ship in
+  // both districts exactly as the live layer answers; the Loop stays outside
+  // every FPD (Chicago runs CFD). No upstream edit stamp exists — the Clerk
+  // refreshes in place — so the build pins count + names and validate_sources
+  // watches the service monthly.
+  var loadCookFireDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cook-fire-districts.json", {}, 2);
+  });
   registerCountyLayer({
     id: "fire-district",
     group: "safety",
@@ -17478,6 +17514,7 @@ function initChiExplorer() {
         key: "cook",
         coverage: cookCountyCoverage,
         loader: loadCookFireDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["agency_description"], primary: true },
           { label: "County", value: "Cook County" }
@@ -17487,6 +17524,7 @@ function initChiExplorer() {
         key: "will",
         coverage: willCountyCoverage,
         loader: loadWillFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["districtname", "fullname"], primary: true },
           { label: "County", value: "Will County" },
@@ -17501,6 +17539,7 @@ function initChiExplorer() {
         key: "dupage",
         coverage: dupageCountyCoverage,
         loader: loadDupageFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["fire"], primary: true },
           { label: "County", value: "DuPage County" }
@@ -17518,9 +17557,9 @@ function initChiExplorer() {
         },
         query: function (point, seq) {
           return loadLakeFire().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
-            if (!feature) return null;
-            var props = feature.properties || {};
+            var hit = findFeatureContainingOrNear(geojson, point, PARCEL_FABRIC_SNAP_FT);
+            if (!hit) return null;
+            var props = hit.feature.properties || {};
             return {
               seq: seq,
               name: findPropCI(props, ["org_name"]),
@@ -17529,7 +17568,8 @@ function initChiExplorer() {
               zip: findPropCI(props, ["zip"]),
               phone: findPropCI(props, ["phone"]),
               email: findPropCI(props, ["email"]),
-              url: findPropCI(props, ["url"])
+              url: findPropCI(props, ["url"]),
+              snappedFt: hit.snappedFt
             };
           });
         },
@@ -17544,7 +17584,7 @@ function initChiExplorer() {
         coverage: kaneCountyCoverage,
         loadGeometry: loadKaneFire,
         hoverName: kaneOrgHoverName,
-        query: kaneOrgQuery(loadKaneFire),
+        query: kaneOrgQuery(loadKaneFire, PARCEL_FABRIC_SNAP_FT),
         render: function (result) {
           return kaneOrgCard(result.name ? String(result.name) : null, "Kane County", result);
         }
@@ -17565,6 +17605,7 @@ function initChiExplorer() {
         key: "kendall",
         coverage: kendallCountyCoverage,
         loader: loadKendallFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["fire"], primary: true },
           { label: "County", value: "Kendall County" }
@@ -17578,6 +17619,7 @@ function initChiExplorer() {
         key: "kankakee",
         coverage: kankakeeCountyCoverage,
         loader: loadKankakeeFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["unit_name"], primary: true },
           { label: "County", value: "Kankakee County" }
@@ -17593,6 +17635,7 @@ function initChiExplorer() {
         key: "madison",
         coverage: madisonCountyCoverage,
         loader: loadMadisonFireDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["name"], primary: true },
           { name: "head", label: "Fire Chief", keys: ["depthead"] },
@@ -17617,6 +17660,7 @@ function initChiExplorer() {
         key: "dekalb",
         coverage: dekalbCountyCoverage,
         loader: loadDekalbFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["fire_district"], primary: true },
           { label: "County", value: "DeKalb County" }
@@ -17643,7 +17687,7 @@ function initChiExplorer() {
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
         loader: loadRockIslandFireDistricts,
-        snapFeet: ROCK_ISLAND_ROW_SNAP_FT,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["firepd"], primary: true },
           { label: "County", value: "Rock Island County" }
@@ -17696,6 +17740,7 @@ function initChiExplorer() {
         key: "peoria",
         coverage: peoriaCountyCoverage,
         loader: loadPeoriaFireDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["district_name"], primary: true },
           { name: "website", keys: ["website"], hidden: true },
@@ -17710,6 +17755,7 @@ function initChiExplorer() {
         key: "sangamon",
         coverage: sangamonCountyCoverage,
         loader: loadSangamonFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["district"], primary: true },
           { label: "Note", value: "Springfield's corporate area is served by the city's own Fire Department rather than a fire protection district.",
@@ -17789,6 +17835,7 @@ function initChiExplorer() {
         key: "macon",
         coverage: maconCountyCoverage,
         loader: loadMaconFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["fire"], primary: true },
           { label: "County", value: "Macon County" }
@@ -17801,6 +17848,7 @@ function initChiExplorer() {
         key: "effingham",
         coverage: effinghamCountyCoverage,
         loader: loadEffinghamFire,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Fire District", keys: ["zonedesc"], primary: true },
           { label: "County", value: "Effingham County" }
@@ -17844,6 +17892,7 @@ function initChiExplorer() {
         key: "cook",
         coverage: cookCountyCoverage,
         loader: loadCookParkDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["agency_description"], primary: true },
           { label: "County", value: "Cook County" }
@@ -17853,6 +17902,7 @@ function initChiExplorer() {
         key: "will",
         coverage: willCountyCoverage,
         loader: loadWillParks,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["districtname", "name"], primary: true },
           { label: "County", value: "Will County" },
@@ -17866,6 +17916,7 @@ function initChiExplorer() {
         key: "dupage",
         coverage: dupageCountyCoverage,
         loader: loadDupageParks,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "DuPage County" }
@@ -17883,9 +17934,9 @@ function initChiExplorer() {
         },
         query: function (point, seq) {
           return loadLakeParks().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
-            if (!feature) return null;
-            var props = feature.properties || {};
+            var hit = findFeatureContainingOrNear(geojson, point, PARCEL_FABRIC_SNAP_FT);
+            if (!hit) return null;
+            var props = hit.feature.properties || {};
             return {
               seq: seq,
               name: findPropCI(props, ["org_name"]),
@@ -17894,7 +17945,8 @@ function initChiExplorer() {
               zip: findPropCI(props, ["zip"]),
               phone: findPropCI(props, ["phone"]),
               email: findPropCI(props, ["email"]),
-              url: findPropCI(props, ["url"])
+              url: findPropCI(props, ["url"]),
+              snappedFt: hit.snappedFt
             };
           });
         },
@@ -17908,7 +17960,7 @@ function initChiExplorer() {
         coverage: kaneCountyCoverage,
         loadGeometry: loadKaneParks,
         hoverName: kaneOrgHoverName,
-        query: kaneOrgQuery(loadKaneParks),
+        query: kaneOrgQuery(loadKaneParks, PARCEL_FABRIC_SNAP_FT),
         render: function (result) {
           return kaneOrgCard(result.name ? String(result.name) : null, "Kane County", result);
         }
@@ -17922,6 +17974,7 @@ function initChiExplorer() {
         key: "kendall",
         coverage: kendallCountyCoverage,
         loader: loadKendallParks,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "Kendall County" }
@@ -17944,6 +17997,7 @@ function initChiExplorer() {
         key: "madison",
         coverage: madisonCountyCoverage,
         loader: loadMadisonParkDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "Madison County" }
@@ -17956,6 +18010,7 @@ function initChiExplorer() {
         key: "dekalb",
         coverage: dekalbCountyCoverage,
         loader: loadDekalbParkDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["district"], primary: true },
           { label: "County", value: "DeKalb County" }
@@ -17969,7 +18024,7 @@ function initChiExplorer() {
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
         loader: loadRockIslandParkDistricts,
-        snapFeet: ROCK_ISLAND_ROW_SNAP_FT,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["park_distr"], primary: true },
           { label: "County", value: "Rock Island County" }
@@ -18014,6 +18069,7 @@ function initChiExplorer() {
         key: "macon",
         coverage: maconCountyCoverage,
         loader: loadMaconPark,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["park"], primary: true },
           { label: "County", value: "Macon County" }
@@ -18087,6 +18143,12 @@ function initChiExplorer() {
         // municipal Library Fund tiling — the two never legitimately overlap,
         // and the fund fallback is best-effort: its failure never breaks a
         // district hit, and a fund-only point surfaces the fund's own error.
+        // When BOTH containments miss, the right-of-way snap runs across the
+        // two tilings AT ONCE: a road between a district and a fund area has
+        // two candidates and stays unanswered — the same refusal every
+        // single-tiling entry makes. If the funds tiling is down, the snap
+        // degrades to districts-only, and the fund error still surfaces
+        // when nothing snaps.
         query: function (point, seq) {
           return loadCookLibraryDistricts().then(function (districts) {
             var feature = findFeatureContaining(districts, point);
@@ -18094,11 +18156,30 @@ function initChiExplorer() {
               return { seq: seq, kind: "district",
                        name: findPropCI(feature.properties || {}, ["max_agency_desc"]) };
             }
+            function snapAcross(features, kinds) {
+              var near = findLoneFeatureWithinFeet({ features: features }, point, PARCEL_FABRIC_SNAP_FT);
+              if (!near) return null;
+              var kind = kinds[features.indexOf(near.feature)];
+              return { seq: seq, kind: kind,
+                       name: findPropCI(near.feature.properties || {},
+                         kind === "fund" ? ["agency_description"] : ["max_agency_desc"]),
+                       snappedFt: Math.max(1, Math.round(near.feet)) };
+            }
             return loadCookLibraryFunds().then(function (funds) {
               var ff = findFeatureContaining(funds, point);
-              if (!ff) return null;
-              return { seq: seq, kind: "fund",
-                       name: findPropCI(ff.properties || {}, ["agency_description"]) };
+              if (ff) {
+                return { seq: seq, kind: "fund",
+                         name: findPropCI(ff.properties || {}, ["agency_description"]) };
+              }
+              var features = (districts.features || []).concat(funds.features || []);
+              var kinds = (districts.features || []).map(function () { return "district"; })
+                .concat((funds.features || []).map(function () { return "fund"; }));
+              return snapAcross(features, kinds);
+            }, function (err) {
+              var features = districts.features || [];
+              var hit = snapAcross(features, features.map(function () { return "district"; }));
+              if (hit) return hit;
+              throw err;
             });
           });
         },
@@ -18111,6 +18192,9 @@ function initChiExplorer() {
                 ? "Municipal library fund — a city/village library financed by its municipality's levy"
                 : "Independent public library district with its own elected board" }
           ];
+          if (result.snappedFt != null) {
+            fields.push({ label: "Note", value: rowSnapNoteText(result.snappedFt) });
+          }
           return renderFieldStack(fields);
         }
       },
@@ -18118,6 +18202,7 @@ function initChiExplorer() {
         key: "will",
         coverage: willCountyCoverage,
         loader: loadWillLibraries,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["distname2", "districtname"], primary: true },
           { label: "County", value: "Will County" },
@@ -18134,6 +18219,7 @@ function initChiExplorer() {
         key: "dupage",
         coverage: dupageCountyCoverage,
         loader: loadDupageLibraries,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "DuPage County" }
@@ -18149,9 +18235,9 @@ function initChiExplorer() {
         },
         query: function (point, seq) {
           return loadLakeLibraries().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
-            if (!feature) return null;
-            var props = feature.properties || {};
+            var hit = findFeatureContainingOrNear(geojson, point, PARCEL_FABRIC_SNAP_FT);
+            if (!hit) return null;
+            var props = hit.feature.properties || {};
             return {
               seq: seq,
               name: findPropCI(props, ["org_name"]),
@@ -18160,7 +18246,8 @@ function initChiExplorer() {
               zip: findPropCI(props, ["zip"]),
               phone: findPropCI(props, ["phone"]),
               email: findPropCI(props, ["email"]),
-              url: findPropCI(props, ["url"])
+              url: findPropCI(props, ["url"]),
+              snappedFt: hit.snappedFt
             };
           });
         },
@@ -18174,7 +18261,7 @@ function initChiExplorer() {
         coverage: kaneCountyCoverage,
         loadGeometry: loadKaneLibraries,
         hoverName: kaneOrgHoverName,
-        query: kaneOrgQuery(loadKaneLibraries),
+        query: kaneOrgQuery(loadKaneLibraries, PARCEL_FABRIC_SNAP_FT),
         render: function (result) {
           return kaneOrgCard(result.name ? String(result.name) : null, "Kane County", result);
         }
@@ -18183,6 +18270,7 @@ function initChiExplorer() {
         key: "mchenry",
         coverage: mchenryCountyCoverage,
         loader: loadMchenryLibraries,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["librarydistrict"], primary: true },
           { label: "County", value: "McHenry County" }
@@ -18195,6 +18283,7 @@ function initChiExplorer() {
         key: "kendall",
         coverage: kendallCountyCoverage,
         loader: loadKendallLibraries,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "Kendall County" }
@@ -18241,6 +18330,7 @@ function initChiExplorer() {
         key: "dekalb",
         coverage: dekalbCountyCoverage,
         loader: loadDekalbLibraryDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["librarydistrict"], primary: true },
           { label: "County", value: "DeKalb County" }
@@ -18253,7 +18343,7 @@ function initChiExplorer() {
         key: "rock-island",
         coverage: rockIslandCountyCoverage,
         loader: loadRockIslandLibraryDistricts,
-        snapFeet: ROCK_ISLAND_ROW_SNAP_FT,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["library_di"], primary: true },
           { label: "County", value: "Rock Island County" }
@@ -18266,6 +18356,7 @@ function initChiExplorer() {
         key: "peoria",
         coverage: peoriaCountyCoverage,
         loader: loadPeoriaLibraryDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["district_name"], primary: true },
           { name: "website", keys: ["website"], hidden: true },
@@ -18293,6 +18384,7 @@ function initChiExplorer() {
         key: "macon",
         coverage: maconCountyCoverage,
         loader: loadMaconLibrary,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["library"], primary: true },
           { label: "County", value: "Macon County" }

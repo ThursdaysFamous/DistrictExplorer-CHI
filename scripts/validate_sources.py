@@ -117,6 +117,12 @@ SOCRATA = [
 # runtime any more).
 SERVICE_RI_TAX = ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/"
                   "services/TaxDistricts/FeatureServer?f=json")
+# Kendall's Hosted root also serves live layers (board, polling); this URL is
+# provenance for its three pre-built tax tilings specifically.
+SERVICE_KENDALL_TAX = ("https://maps.co.kendall.il.us/server/rest/services/"
+                       "Hosted?f=json")
+SERVICE_MACON_ORG = ("https://services1.arcgis.com/a3k0qIja5SolIRYR/arcgis/"
+                     "rest/services?f=json")
 
 PROVENANCE = [
     {"layer": "School Board (ERSB) districts",
@@ -209,7 +215,7 @@ PROVENANCE = [
      "app_file": "rock-island-fire-districts.json",
      "source_url": SERVICE_RI_TAX,
      "note": "17 fire protection districts from TaxDistricts layer 2 "
-             "(build_rock_island_tax_districts.py). Rebuild only after "
+             "(build_parcel_fabric_districts.py). Rebuild only after "
              "re-verifying the script's pinned edit dates and measurements."},
     {"layer": "Rock Island County library districts (pre-built, road voids closed)",
      "app_file": "rock-island-library-districts.json",
@@ -222,6 +228,55 @@ PROVENANCE = [
      "source_url": SERVICE_RI_TAX,
      "note": "The county's single levied park district (Cordova), TaxDistricts "
              "layer 8."},
+    # The 2026-08-16 fabric survey measured every fire/library/park source for
+    # EMPTY road-band voids (a parcel-derived tiling excludes right-of-way, so
+    # roads render as dead lattice). The severe tier below ships pre-built by
+    # scripts/build_parcel_fabric_districts.py — same transform and guards as
+    # Rock Island's three above; the moderate tier keeps live fetch plus the
+    # 60 ft runtime snap in index.html.
+    {"layer": "Kendall County fire districts (pre-built, road voids closed)",
+     "app_file": "kendall-fire-districts.json",
+     "source_url": SERVICE_KENDALL_TAX,
+     "note": "10 FPDs dissolved from 170 tax-code rows (977 empty voids "
+             "measured raw); the municipal Joliet row excluded at build time. "
+             "No upstream edit stamp — count+names pinned in the builder."},
+    {"layer": "Kendall County park districts (pre-built, road voids closed)",
+     "app_file": "kendall-park-districts.json",
+     "source_url": SERVICE_KENDALL_TAX,
+     "note": "5 park districts dissolved from 65 tax-code rows (578 empty "
+             "voids measured raw)."},
+    {"layer": "Kendall County library districts (pre-built, road voids closed)",
+     "app_file": "kendall-library-districts.json",
+     "source_url": SERVICE_KENDALL_TAX,
+     "note": "9 library taxing bodies dissolved from 145 tax-code rows (1,158 "
+             "empty voids measured raw); municipal city-library funds stay, "
+             "the Cook-style complete shape."},
+    {"layer": "Macon County fire districts (pre-built, road voids closed)",
+     "app_file": "macon-fire-districts.json",
+     "source_url": SERVICE_MACON_ORG,
+     "note": "17 districts (1,318 empty voids measured raw — the fleet's "
+             "worst); names verbatim as the county writes them; upstream edit "
+             "date pinned in the builder."},
+    {"layer": "Macon County library districts (pre-built, road voids closed)",
+     "app_file": "macon-library-districts.json",
+     "source_url": SERVICE_MACON_ORG,
+     "note": "10 districts (960 empty voids measured raw despite the "
+             "'Join_Dissolved' upstream name — the dissolve kept the parcel "
+             "voids); edit date pinned."},
+    {"layer": "Macon County park districts (pre-built, road voids closed)",
+     "app_file": "macon-park-districts.json",
+     "source_url": SERVICE_MACON_ORG,
+     "note": "6 districts (556 empty voids measured raw); edit date pinned."},
+    {"layer": "Cook County suburban fire protection districts (pre-built, road voids closed)",
+     "app_file": "cook-fire-districts.json",
+     "source_url": ("https://gis.cookcountyil.gov/traditional/rest/services/"
+                    "politicalBoundary/MapServer/17?f=json"),
+     "note": "40 FPDs from the Clerk's L17 tax-agency tiling (102 empty voids "
+             "measured raw). Seven district pairs the Clerk's own tiling "
+             "DOUBLE-CLAIMS (Orland∩Mokena, 57 acres) ship in both, exactly "
+             "as the live layer answers. The Clerk refreshes tilings in "
+             "place with no edit stamp, so the builder pins count+names and "
+             "this monthly probe is the freshness watch."},
     {"layer": "Kane County Board members (roster)",
      "app_file": "kane-county-board-members.json",
      "source_url": "https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx",
