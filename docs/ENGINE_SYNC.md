@@ -69,19 +69,21 @@ Multiply that by every engine change and the forks stop being the same app.
   shipped the "Explore another metro" row on opposite sides of the bug-report
   row before this rule was written down).
 
-  **`gaps-html` moved out of that footer row and into the masthead** (CHI,
-  2026-08-18): it now sits in a `.masthead-actions` row directly under the
-  `h1.title`, alongside the fork's own link to its sources page. The reason is
-  the same one the panel exists for — it is the standing caveat on every answer
-  the app gives, and at the bottom of a long page a reader concluded the app was
+  **`gaps-html` moved out of that footer row and into the masthead**
+  (2026-08-18). It sits in a `.masthead-actions` row directly under the
+  `h1.title`, pinned right of the wordmark, in all three forks. The reason is
+  the one the panel exists for — it is the standing caveat on every answer the
+  app gives, and at the bottom of a long page a reader concluded the app was
   wrong before ever finding it. **This cost no engine release, and that is the
   pattern worth copying:** the fence and its body moved *verbatim*, so the
   block's bytes are unchanged, the deploy-time splice is a no-op, and the
   masthead treatment is applied from OUTSIDE the fence by a fork-owned
   `.masthead-actions .footer-link-btn` rule. Restyling the button by editing
-  the fence would have owed a release and a fan-out; wrapping it did not.
-  Siblings owe the placement move by hand (fences are placed by hand there
-  too), and their own outside-the-fence styling for it.
+  the fence would have owed a release and a fan-out; wrapping it did not. Born
+  in CHI (#367/#368), ported to NYC (#84) and SF (#47) the same day. Each
+  fork's `smoke_test.mjs` now pins the placement, because nothing else can:
+  the fences pin a block's bytes, never its position, and every other check
+  clicks the button by id.
 
 ## The porting workflow (superseded 2026-07-13 — see banner above)
 
@@ -233,16 +235,17 @@ rather than re-running the failed sibling run.
 > in the changelog. A changelog that promises a clean adoption and doesn't
 > deliver one costs every sibling a red CI run and a manual repair.
 
-## Current ENGINE block inventory (50 in index.html + 2 in sw.js)
+## Current ENGINE block inventory (53 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
-`cached-loaders`, `card-helpers`, `chamber-factory`, `cps-network-factory`,
-`exports`, `extract-district-number`, `feedback`, `fetch-retry`,
-`find-prop-ci`, `geocoder-search`, `geocoder-shell`, `geolocation`,
-`groups`, `haversine`, `hover-explorer`, `int-field`, `layer-registry`,
-`map-chrome-classes`, `map-pan-filter`, `metro-links`, `metro-links-html`,
-`metro-portal`, `nearest-point-factory`, `office-helpers`, `overlay-cards`,
-`permalink`, `poi-geocode`, `point-in-polygon`, `polygon-containment`,
+`cached-loaders`, `card-helpers`, `chamber-factory`, `coverage-gaps`,
+`cps-network-factory`, `exports`, `extract-district-number`, `feedback`,
+`fetch-retry`, `find-prop-ci`, `gaps-html`, `gaps-modal-html`,
+`geocoder-search`, `geocoder-shell`, `geolocation`, `groups`, `haversine`,
+`hover-explorer`, `int-field`, `layer-registry`, `map-chrome-classes`,
+`map-pan-filter`, `metro-links`, `metro-links-html`, `metro-portal`,
+`nearest-point-factory`, `office-helpers`, `overlay-cards`, `permalink`,
+`poi-geocode`, `point-in-polygon`, `polygon-containment`,
 `polygon-factory`, `probe-geometry-column`, `relationship-pinning`,
 `render-helper`, `sanitize`, `school-zone-factory`, `scope-mask`,
 `selection-controls`, `socrata-loader`, `socrata-point-loader`, `state`,
@@ -461,3 +464,24 @@ directions, so reconciling means merging features, not overwriting:
    tombstone comment, never delete the fence. Recorded in
    `docs/engine-changelog/v1.0.13.md`. Fanned out to NYC/SF and merged clean;
    block count unchanged at **52 (50 index.html + 2 sw.js)**.
+14. **This file itself had drifted — 164 lines (2026-08-18).** The doc that
+   opens "the SAME copy ships in every fork; never edit it in one fork only"
+   was 463 lines in CHI and 299 in both siblings, which were byte-identical to
+   each other: they had simply stopped receiving updates after item 9, so
+   items 10–13 were missing and items 5–6 still said the marker/region-highlight
+   class-namespace drift "remains open" — a statement item 10 had made false in
+   the code months earlier. **Nothing was lost by adopting CHI's copy**, checked
+   line by line rather than assumed: the only sibling-exclusive lines were that
+   stale wording. Two things were wrong in CHI's copy too, and were fixed in the
+   same pass rather than propagated: the block inventory said **50 index.html
+   blocks when the fences held 53** (`coverage-gaps`, `gaps-html`,
+   `gaps-modal-html` — the Data gaps panel, shipped by engine-v1.0.19 and never
+   added to the list), and the `gaps-html` placement note was written from
+   Chicago's point of view before the ports landed. The inventory is now
+   **generated from the real fences**, not hand-maintained — regenerate it
+   rather than editing it by hand, which is how it went stale.
+   **The lesson is that nothing enforces this file.** `check_engine_parity.py`
+   compares fenced *code*; no gate compares this document across forks, so it
+   drifts silently and is discovered only when somebody reads two copies side
+   by side. Until a gate exists, a change here is only done when it has landed
+   in all three repos.
