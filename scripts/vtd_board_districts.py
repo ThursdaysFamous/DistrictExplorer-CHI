@@ -100,6 +100,33 @@ def fetch_county(county_fips, shape_fn, fail):
     return shape_fn(feats[0]["geometry"]), int((feats[0].get("properties") or {}).get("POP100") or 0)
 
 
+def apply_aliases(vtds, aliases, fail):
+    """Re-key census VTDs onto the COUNTY'S spelling where the two publishers
+    differ. `aliases` maps county name -> census BASENAME.
+
+    This is a rename, never a merge, and the guards say so: each alias must
+    name a census feature that exists and a county name that does not already
+    have one, and no two aliases may point at the same feature. Edgar is the
+    case it was written for — the census writes EMBARRASS 1 and KANSAS 1 where
+    the county writes Embarrass and Kansas, 29 of its 31 names match exactly,
+    and the remaining two therefore pair uniquely with nothing to choose
+    between. A county needing an alias for a name that is genuinely ambiguous
+    is a county this route cannot serve."""
+    for county_name, census_name in (aliases or {}).items():
+        ck, xk = norm(county_name), norm(census_name)
+        if xk not in vtds:
+            fail("alias %r -> %r names a census feature that does not exist"
+                 % (county_name, census_name))
+        if ck in vtds:
+            fail("alias %r -> %r would overwrite a census feature that already "
+                 "carries the county's spelling" % (county_name, census_name))
+        rec = vtds.pop(xk)
+        rec["censusName"] = rec["basename"]
+        rec["basename"] = " ".join(str(county_name).upper().split())
+        vtds[ck] = rec
+    return vtds
+
+
 def check_fabric(vtds, county_precincts, county_pop, fail):
     """THE JASPER TEST. `county_precincts` is the county's own current precinct
     list, as its election authority publishes it."""
