@@ -195,8 +195,16 @@ header.masthead {
   color: #fff;
   padding: 18px 20px 22px;
 }
-.masthead-inner { max-width: 1400px; margin: 0 auto; }
-h1.title { margin: 0; }
+.masthead-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 28px;
+}
+h1.title { margin: 0; min-width: 0; }
 .title-row { display: flex; align-items: center; gap: 14px; }
 .masthead-star { width: 34px; height: 34px; flex: none; }
 .title-text {
@@ -217,36 +225,71 @@ h1.title small {
   color: #C9D4DB;
   margin-top: 6px;
 }
+/* Pinned right of the wordmark, matching index.html's masthead exactly: one
+   pill spec, the gaps control carrying the primary weight on both pages so the
+   same affordance looks the same wherever a reader meets it. */
 .masthead-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 14px;
-  margin-top: 14px;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+  padding-top: 5px;
 }
 .masthead-actions a {
+  display: inline-flex;
+  align-items: center;
   font-size: 13px;
   font-weight: 600;
-  color: var(--accent);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  color: #C9D4DB;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(217,225,231,0.16);
+  border-radius: 10px;
+  padding: 9px 15px;
   text-decoration: none;
-  border: 1px solid rgba(65,182,230,0.55);
-  border-radius: 999px;
-  padding: 6px 14px;
-  transition: color .12s, border-color .12s, background .12s;
+  transition: background .14s ease, border-color .14s ease, color .14s ease, transform .14s ease;
 }
 .masthead-actions a:hover,
 .masthead-actions a:focus-visible {
   color: #fff;
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(217,225,231,0.38);
+  transform: translateY(-1px);
+}
+.masthead-actions a.is-primary {
+  color: #EAF4FA;
+  background: rgba(65,182,230,0.16);
+  border-color: rgba(65,182,230,0.42);
+}
+.masthead-actions a.is-primary:hover,
+.masthead-actions a.is-primary:focus-visible {
+  color: #fff;
+  background: rgba(65,182,230,0.28);
   border-color: var(--accent);
-  background: rgba(65,182,230,0.18);
+}
+.masthead-actions a:active { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .masthead-actions a { transition: none; }
+  .masthead-actions a:hover { transform: none; }
 }
 @media (max-width: 900px) {
   header.masthead { padding: 12px 16px 14px; }
   .masthead-star { width: 24px; height: 24px; }
   .title-text { font-size: 22px; }
   h1.title small { font-size: 12px; margin-top: 3px; }
-  .masthead-actions { margin-top: 10px; gap: 6px 10px; }
-  .masthead-actions a { font-size: 12px; padding: 5px 12px; }
+  .masthead-inner { gap: 10px; }
+  .masthead-actions {
+    justify-content: flex-start;
+    margin-left: 0;
+    padding-top: 2px;
+    width: 100%;
+    gap: 6px;
+  }
+  .masthead-actions a { font-size: 12px; padding: 8px 13px; border-radius: 9px; }
 }
 
 /* ---- page body ---- */
@@ -478,7 +521,7 @@ footer.site-footer a { color: var(--accent); }
     </h1>
     <div class="masthead-actions">
       <a href="./">← Back to the map</a>
-      <a href="./#gaps">🧩 What data is missing?</a>
+      <a class="is-primary" href="./#gaps">🧩 What data is missing?</a>
     </div>
   </div>
 </header>
