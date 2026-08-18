@@ -62,6 +62,19 @@ env:
 jobs:
   assemble:
     runs-on: ubuntu-latest
+    # A CEILING ON THE WHOLE JOB, added 2026-08-18 after three runs in two days
+    # sat "in_progress" long enough to look hung — 57 minutes, then 35, then 16,
+    # every one of them on the Playwright install below. THEY WERE NOT UNBOUNDED
+    # HANGS, which is the thing worth knowing: that step's try3 ladder already
+    # caps each attempt at 300s, but it runs up to three attempts against each of
+    # TWO commands, so its own worst case is ~30 minutes of grinding that reports
+    # nothing and, on deploy-pages, holds the Pages concurrency slot so every
+    # later deploy queues behind it. A bounded-but-half-hour step is
+    # indistinguishable from a hang to anyone watching, and the only thing that
+    # caught all three was comparing the live site against the repo by hand.
+    # This makes that state VISIBLE — a red run a human can act on — instead of
+    # silent.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -140,6 +153,9 @@ jobs:
           key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}-${{ runner.os }}
 
       - name: Install Playwright + Chromium
+        # The ladder's realistic recovery is one retry per command (~11 min);
+        # anything past that is not flakiness this job should keep absorbing.
+        timeout-minutes: 15
         run: |
           try3() {
             for i in 1 2 3; do
