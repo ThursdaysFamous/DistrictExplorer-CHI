@@ -15660,6 +15660,10 @@ function initChiExplorer() {
       // GIS publishes the district and a per-district MEMBER URL but no name, so
       // the weekly scraper walks exactly those 29 URLs — the join key comes from
       // the county on both sides rather than being inferred from a URL pattern.
+      // A district the county prints as vacant keeps its key and carries
+      // `vacancies` (the Livingston posture: counted, never named), because a
+      // district that simply loses its key renders a card headed "District 2"
+      // with nothing under it — indistinguishable from a layer that broke.
       {
         key: "sangamon",
         coverage: sangamonCountyCoverage,
@@ -15682,10 +15686,16 @@ function initChiExplorer() {
         },
         render: function (result) {
           var members = (result.entry && result.entry.members) || [];
+          var vacancies = (result.entry && result.entry.vacancies) || 0;
           var wrap = cardEl("div", "card-flush");
+          var note = boardCountNote(members.length, null);
+          if (vacancies) {
+            note = (note ? note + " · " : "") + vacancies +
+              " vacant seat" + (vacancies === 1 ? "" : "s");
+          }
           wrap.appendChild(renderBodyIntro({
             title: "Sangamon County Board",
-            note: boardCountNote(members.length, null)
+            note: note
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) {

@@ -4226,6 +4226,61 @@ is unknown and only its Clerk can settle it. Edgar's fire, park, library,
 municipal and judicial layers were not looked at.
 
 
+### 2026-08-18, night: Sangamon district 2 went vacant, and the roster answered by deleting the district
+
+The weekly Sangamon refresh (PR #373) came back one district short. It was
+right about the fact and wrong about the shape, and the gap between those two
+is the whole lesson.
+
+**The fact.** Sangamon's per-district page for district 2 now reads
+`<h3>&nbsp;(R)</h3>` — the name, the address, the phone and the e-mail all
+deleted, the term "2022 - 2026" and a stranded party marker left behind. The
+county's own members index says why in one word: **"District 2 - vacant"**.
+Casey Constant is gone from the board. Nothing was scraped wrong.
+
+**The shape.** The scraper skips a district whose page yields no name, so the
+district lost its KEY, not just its member — and a district with no key renders
+a card headed "District 2" with nothing under it. `boardCountNote(0, null)`
+returns null, the member list is empty, and the reader gets a blank card. That
+is indistinguishable from a layer whose data source broke, which is precisely
+the state this project promises never to ship silently.
+
+**What every guard did.** The builder's floor is 27 districts and its comment
+already said, in as many words, that "a vacancy between scrapes is normal and
+must not block a refresh" — 28 passed. `check_roster_retention.py` passed too,
+correctly: it measures whether FIELDS stop being published, and 29 records
+falling to 28 is a 3% drop that no threshold should fire on. Every gate was
+working as designed. **The failure had no owner because nothing was measuring
+the difference between a district that is empty and a district that is absent.**
+
+**The fix, and why it needed a thirtieth fetch.** On the per-district page
+alone, "the county emptied this seat" and "our parse broke" are the same bytes.
+The members index is the thing that tells them apart, so the scraper now reads
+it once per run and records a vacancy only when BOTH sources agree — the index
+prints the word and the district page yields no name. A disagreement leaves the
+district out the old way rather than inventing an empty seat, and an index that
+cannot be fetched or parsed degrades to exactly the previous behaviour. The
+party marker stranded on the emptied page is NOT carried: it belonged to the
+member who left, not to the seat.
+
+The district then ships with `vacancies: 1` and an empty member list — the
+Livingston posture, counted but never named — and the card says **"Sangamon
+County Board · 1 vacant seat"**. Verified in a real browser against the county's
+own geometry: district 20 renders Linda Douglas-Williams unchanged, district 2
+renders the vacancy line. The builder's two floors were also split to say what
+they each mean: `MIN_DISTRICTS` counts vacant districts (does the walk still
+cover the board?), `MIN_MEMBERS` counts only named people (are names still being
+published?). A seat going vacant moves the second and not the first, because the
+board did not get smaller — one of its seats got emptier.
+
+**The general shape, for the other 42 roster builders.** A count floor that
+tolerates vacancies is not the same as a pipeline that REPORTS them. Any builder
+keyed by district, where the key is created from a parsed member, has this hole:
+lose the member, lose the district, and the card goes quiet instead of going
+honest. Livingston's `vacancies` field is the fleet's answer and it predates
+this; what was missing was anyone applying it to a single-member board, where a
+vacancy takes the whole key with it rather than one row out of six.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
