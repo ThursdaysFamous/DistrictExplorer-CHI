@@ -1,0 +1,96 @@
+name: Roster refresh health
+
+# Daily watchdog over the ~53 weekly roster refreshes, and the answer to a gap
+# the sweep of 2026-08-18 named: a roster builder that REFUSES THE WRITE has no
+# owner. Refusing is the correct behaviour — about a dozen counties deliberately
+# floor at their exact board size so any vacancy stops the write rather than
+# shipping a short roster — but the consequence is a red run in the Actions tab
+# and nothing else. No pull request opens (there is no data change to open one
+# with), no issue is filed, and the shipped data/app/ file goes on naming
+# whoever it named on the last good run. So the counties that handle a vacancy
+# most conservatively are exactly the ones whose vacancy is least likely to be
+# noticed.
+#
+# scripts/check_roster_workflow_health.py discovers the refresh workflows from
+# this directory rather than a list, so a new county is watched the day it ships
+# with nothing here to update — the argument validate_card_links.py makes for
+# extracting its URL surface instead of keeping a manifest of it.
+#
+# Same posture as validate-sources.yml: report, never edit, fold everything into
+# ONE tracking issue, and keep the job green — the issue is the signal.
+
+on:
+  schedule:
+    - cron: "0 23 * * *" # daily, 23:00 UTC — after the last roster cron (21:00)
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  actions: read # reading each workflow's run history is the whole job
+  issues: write
+
+jobs:
+  roster-health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Check roster refresh health
+        id: health
+        # continue-on-error for the same reason every checker here carries it:
+        # a FAIL exit must surface as an issue a human reads, not as a second
+        # red run alongside the ones it is reporting. Stdlib only — no install.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/check_roster_workflow_health.py \
+            --report roster-health.md \
+            --status-file roster-status.txt
+          echo "status=$(cat roster-status.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update tracking issue
+        if: steps.health.outputs.status != 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Matched by title to update in place; renaming it orphans the open
+          # issue and starts a duplicate.
+          title="Roster refreshes failing — review needed"
+          {
+            echo "_Automated by \`.github/workflows/roster-health.yml\` on $(date -u +%Y-%m-%d). Nothing was changed — each entry is a weekly refresh that is not refreshing, so the shipped roster is frozen at its last successful run. Close this issue once the listed workflows are green; it reopens on the next run if any are still failing._"
+            echo
+            if [ -f roster-health.md ]; then cat roster-health.md; else
+              echo "> \`check_roster_workflow_health.py\` produced no report this run — check the job log."; fi
+          } > issue-body.md
+
+          existing="$(gh issue list --state open --search "in:title $title" --json number --jq '.[0].number')"
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file issue-body.md
+            gh issue comment "$existing" --body "Refreshed by the daily roster-health run — see the updated issue body for the current status."
+            echo "Updated existing issue #$existing."
+          else
+            gh issue create --title "$title" --body-file issue-body.md
+            echo "Opened a new tracking issue."
+          fi
+
+      - name: Close the issue when everything is green
+        if: steps.health.outputs.status == 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The inversion this file needs to stay trustworthy: an issue that
+          # never closes itself becomes wallpaper, and the next real failure
+          # lands on a page everyone has stopped reading.
+          title="Roster refreshes failing — review needed"
+          existing="$(gh issue list --state open --search "in:title $title" --json number --jq '.[0].number')"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "All watched roster refreshes have succeeded within their own cadence as of $(date -u +%F). Closing automatically; this reopens if any starts failing again."
+            gh issue close "$existing"
+            echo "Closed #$existing."
+          fi

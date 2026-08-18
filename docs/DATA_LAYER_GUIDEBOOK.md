@@ -4425,6 +4425,71 @@ the check that the two paths agree. It also preserves each file's existing
 indentation, because normalising Kendall's and McHenry's `indent=2` would have
 shown as a whole-file diff now and been silently undone by their next build.
 
+### 2026-08-18, night: the watchdog over the roster refreshes — and the four failures it found in its first run
+
+The sweep's second finding was that a builder which REFUSES THE WRITE has no
+owner. Refusing is correct — a dozen counties floor at their exact board size so
+that any vacancy stops the write rather than shipping a short roster — but the
+consequence is a red run in the Actions tab and nothing else: no pull request
+opens, no issue is filed, and the shipped file goes on naming whoever it named
+last week. `roster-health.yml` and `scripts/check_roster_workflow_health.py` are
+the thing that looks. Daily, 53 refresh workflows, one standing issue, same
+posture as `validate-sources.yml`: report, never edit, keep the job green.
+
+**Discovered, not listed.** The script reads `.github/workflows/` and treats
+everything that is not on a short not-a-refresh list as a refresh, so a new
+county is watched the day it ships — the argument `validate_card_links.py` makes
+for extracting its URL surface rather than keeping a manifest of it. Fifty-three
+copies of a failure-reporting step, one per workflow and one more with every
+county, was the alternative.
+
+**Staleness is the half that matters.** A red run is often nothing — a county's
+site was down for an hour. A roster that has not refreshed successfully in three
+weeks is a roster frozen three weeks ago. Each workflow is measured against its
+OWN cron cadence and reported as FAILING, STALE, SILENT, DISABLED, NEW or OK.
+
+**Two false-alarm shapes were designed out, one of them by the first live run.**
+Clark, Edgar and Mercer shipped that same afternoon and their weekly crons had
+not come round once, so all three read SILENT on a report whose entire value is
+being actionable. The workflows API carries `created_at`, so anything younger
+than one of its own intervals now reads NEW and is never counted. The same call
+carries `state`, which catches the other silent death: GitHub disables scheduled
+workflows after 60 days of repository inactivity, and a disabled workflow is not
+failing, not stale, and not running. There is deliberately NO expected-failure
+list yet — the two counties known to block every automated client, Kendall and
+McHenry, do not red their runs by design — and if one is ever needed it earns
+its place by measurement, with the same inversion `validate_sources.py`'s
+`blocked` flag uses, so that RECOVERING becomes the reportable event.
+
+**It found four failures on its first run, none of which anyone knew about.**
+
+- **`update-county-commissioners-roster.yml` — failing 16 days.** "CALHOUN
+  parsed 0 members, outside the 3-9 an at-large board should have." This is the
+  builder for `il-county-commissioners.json`, which carries ALL THIRTEEN
+  at-large counties on the County card. Every one of them has been frozen since
+  2 August — including Moultrie, whose commissioners were added on the 18th and
+  have never been refreshed since.
+- **`update-cpd-roster.yml` — failing 14 days.** "resolved only 0/20+ expected
+  districts". The Chicago Police district scrape returns nothing; that scraper
+  is the one that needs Playwright for a Cloudflare managed challenge.
+- **`update-lasalle-county-board-roster.yml` — failing 16 days.** "zero rows
+  parsed from lasallecountyil.gov/Directory.aspx?DID=39 (markup change?)".
+- **`update-mchenry-county-board-roster.yml` — failing 19 days, AND ITS
+  BLOCKED-SOURCE HANDLER HAS A HOLE.** McHenry is supposed to stay green: its
+  scrape step carries `continue-on-error` and feeds a standing issue. But the
+  scraper no longer FAILS — it exits 0 having "Scraped 19 members" with `field
+  coverage: district=0/0 email=0/0 phone=0/0`, nineteen empty shells. So the
+  handler, which fires on `steps.scrape.outcome == 'failure'`, never fires; the
+  builder then refuses on 0 e-mails and reds the run with nothing filed. **A
+  guard keyed on a step failing is blind to a step that succeeds at nothing** —
+  the same shape as the count floor that passed while Brown County's seven
+  e-mails emptied, and the same shape as the district key that vanished with its
+  member. Worth stating as the general rule: guard the OUTPUT, not the exit code.
+
+None of the four is fixed here; each is a different source and a different
+repair, and this change is the thing that makes them visible. They are the
+watchdog's first report rather than its backlog.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
