@@ -27,6 +27,12 @@ permissions:
   contents: write
   pull-requests: write
 
+# One pin, two consumers: the npm install and the browser-cache key below must
+# name the same Playwright version, or a bump re-downloads Chromium forever
+# against a stale cache key. Defined once so they cannot drift.
+env:
+  PLAYWRIGHT_VERSION: "1.56.1"
+
 jobs:
   bump:
     runs-on: ubuntu-latest
@@ -86,10 +92,32 @@ jobs:
       # Same pinned toolchain as smoke-test.yml. The behaviour gate runs here
       # because the bumped tree (new engine blocks) is what the PR proposes to
       # ship; the PR's own smoke-test run then re-confirms it.
+      # The cache + timeout/retry pair mirrors smoke-test.yml, which carries
+      # the full story (the 2026-08-18 CDN hangs in the Chicago fork).
+      - name: Cache Playwright Chromium
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}-${{ runner.os }}
+
       - name: Install Playwright + Chromium
         run: |
-          npm install playwright@1.56.1
-          npx playwright install --with-deps chromium
+          try3() {
+            for i in 1 2 3; do
+              timeout 300 "$@" && return 0
+              echo "::warning::attempt $i/3 of '$*' hung or failed — retrying"
+              sleep 5
+            done
+            echo "::error::'$*' failed three times (five-minute timeout each)"
+            return 1
+          }
+          try3 npm install "playwright@${PLAYWRIGHT_VERSION}"
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
+            try3 npx playwright install-deps chromium
+          else
+            try3 npx playwright install --with-deps chromium
+          fi
 
       - name: Serve bumped app and run smoke test
         env:

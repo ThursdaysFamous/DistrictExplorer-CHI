@@ -13,6 +13,12 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+# One pin, two consumers: the npm install and the browser-cache key below must
+# name the same Playwright version, or a bump re-downloads Chromium forever
+# against a stale cache key. Defined once so they cannot drift.
+env:
+  PLAYWRIGHT_VERSION: "1.56.1"
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
@@ -35,10 +41,42 @@ jobs:
       # Pinned to the version the test was authored against. Installs into the
       # ephemeral workspace only (node_modules is never committed — this repo
       # has no build step).
+      #
+      # Chromium (~170 MB) used to be re-fetched from Playwright's CDN on
+      # every run, and on 2026-08-18 that fetch hung twice in the Chicago fork
+      # — 28 and 14 minutes against a normal ~23 s step — each needing a
+      # manual cancel + re-run (ported from DistrictExplorer-CHI#378). Two
+      # guards, either sufficient alone: the browser build is CACHED keyed on
+      # the pinned version (a hit skips the CDN entirely; only the apt-side
+      # install-deps still runs, and the runner image pre-satisfies most of
+      # it), and every install runs under timeout+retry so a hang on a cache
+      # miss dies at five minutes and retries instead of eating the job's
+      # whole budget. The other workflows running this toolchain carry the
+      # same pair and point here for the story.
+      - name: Cache Playwright Chromium
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}-${{ runner.os }}
+
       - name: Install Playwright + Chromium
         run: |
-          npm install playwright@1.56.1
-          npx playwright install --with-deps chromium
+          try3() {
+            for i in 1 2 3; do
+              timeout 300 "$@" && return 0
+              echo "::warning::attempt $i/3 of '$*' hung or failed — retrying"
+              sleep 5
+            done
+            echo "::error::'$*' failed three times (five-minute timeout each)"
+            return 1
+          }
+          try3 npm install "playwright@${PLAYWRIGHT_VERSION}"
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
+            try3 npx playwright install-deps chromium
+          else
+            try3 npx playwright install --with-deps chromium
+          fi
 
       - name: Serve app and run smoke test
         env:
