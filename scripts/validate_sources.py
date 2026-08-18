@@ -673,6 +673,29 @@ PROVENANCE = [
              "host unreachable for that reason, which is NOT a source change. "
              "The county's older www.co.coles.il.us is a genuine refusal and "
              "bare co.coles.il.us has no DNS record; neither is cited."},
+    {"layer": "Clark County Board (boundaries AND roster — the Clerk's certified canvasses)",
+     "app_file": "clark-county-board-members.json",
+     "source_url": "https://il-clark.accessliberty.com/pastelections.aspx",
+     "note": "ONE SOURCE FOR BOTH HALVES OF THIS COUNTY, which is unique in "
+             "the fleet. Clark's Clerk stated in writing on 2026-08-18 that "
+             "the board is elected by districts and that the county has no "
+             "map to supply, and the county's only board document is a "
+             "SCANNED IMAGE with no text layer. So the boundaries are the "
+             "Census 2020 voting districts dissolved per the composition its "
+             "certified canvasses state (2022 General for all seven, 2024 "
+             "General for 3/4/7, 2026 General Primary for 1/2/5/6 — "
+             "build_clark_boundaries.py), and the roster is the winners those "
+             "same canvasses certify (clark_county_board_scraper.py). This "
+             "page is the Clerk's own archive of one text-layer canvass PDF "
+             "per election back to 2006; the live feed is the sibling host "
+             "il-clark.pollresults.net, an AngularJS shell whose entire "
+             "result set is embedded in the page as JSON. The county's own "
+             "site is clarkcountyil.ORG — a TLD an earlier name-permutation "
+             "probe never tried, which is why this county read as having no "
+             "website for five days. The weekly roster run re-reads each "
+             "district's tabulated precinct list against the shipped "
+             "dissolve, so a re-precincting or redistricting fails there "
+             "rather than shipping silently."},
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",

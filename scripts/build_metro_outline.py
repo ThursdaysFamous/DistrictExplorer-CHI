@@ -271,6 +271,23 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # closest, now bordering three served counties, which is
                      # what its new OUTSIDE anchor at Toledo proves.
                      "029",
+                     # Clark — the 53rd dispatched county (2026-08-18), and the
+                     # first county built entirely out of ELECTION RETURNS. Its
+                     # Clerk answered the standing ask in one sentence — "The
+                     # County Board is elected by districts. I do not have maps
+                     # available" — which settles the form and refuses the
+                     # geometry in the same breath; the districts are unions of
+                     # whole precincts, so the county's own certified canvasses
+                     # describe them completely and the Census 2020 voting
+                     # districts (23/23 by name, exact population sum) supply
+                     # the polygons. A plain mainland join: it borders served
+                     # Coles for ~16 km along its north-west edge, so the ring
+                     # count is unchanged (three: the outer plus the Bureau and
+                     # Christian enclaves). Leaves four unserved neighbours
+                     # behind (Edgar, Cumberland, Crawford, Jasper) and encloses
+                     # none — Edgar now borders two served counties, which is
+                     # what its new OUTSIDE anchor at Paris proves.
+                     "023",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -311,6 +328,7 @@ DISPATCH_COUNTY_FIPS = {
     "white": "193",
     "jo-daviess": "085",
     "coles": "029",
+    "clark": "023",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -483,6 +501,16 @@ INSIDE = {
     # county rings in build_county_outline.py's coles entry, where this point
     # has been an inside anchor since 2026-08-04.
     "Charleston (Coles)": (39.4844, -88.1778),
+    # Marshall (Clark) — the county seat, 2026-08-18. The 53rd dispatched
+    # county, joining through its ~16 km north-western border with served
+    # Coles, which shipped the day before. Clark was never an OUTSIDE anchor;
+    # what changed was not a probe but a REPLY — County Clerk & Recorder
+    # Laura H. Lee's one-sentence answer that the board is elected by
+    # districts, which turned a no-source gap into a composition problem the
+    # county's own certified canvasses already solve. Coordinates verified
+    # against TIGER's county rings in build_county_outline.py's clark entry,
+    # where this point has been an inside anchor since 2026-08-04.
+    "Marshall (Clark)": (39.3986, -87.6900),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -543,6 +571,14 @@ OUTSIDE = {
     # build_county_outline.py's own cumberland inside anchor, re-round-tripped
     # through a point-in-county query on 2026-08-17.
     "Toledo (Cumberland)": (39.2728, -88.2422),
+    # Edgar — the successor anchor Clark's join calls for (2026-08-18). Clark
+    # leaves four unserved neighbours behind and Edgar is the one now most
+    # boxed in: it borders served Coles AND served Clark, with Vermilion,
+    # Douglas and Indiana keeping it off the enclave list. Paris is the county
+    # seat; the coordinates are build_county_outline.py's own edgar inside
+    # anchor, which is also the "Paris — Edgar County" outside anchor its
+    # clark and coles entries have used since 2026-08-04.
+    "Paris (Edgar)": (39.6148, -87.6909),
     # Christian — ENCLOSED 2026-08-11 by Shelby's join: with Sangamon, Macon,
     # Shelby and Montgomery all served, Christian is the second enclave after
     # Bureau, an interior ring rather than frontier. This anchor is what

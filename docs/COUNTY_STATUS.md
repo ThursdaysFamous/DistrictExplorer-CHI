@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**64 of 102 Illinois counties are served** — 52 through their own dispatch entries, 3 through a shipped judicial circuit, and 9 through the County card alone. 38 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**65 of 102 Illinois counties are served** — 53 through their own dispatch entries, 3 through a shipped judicial circuit, and 9 through the County card alone. 37 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (64)
+## Served counties (65)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -30,6 +30,7 @@
 | Calhoun | 17013 | County card | at-large — County card | — | 1 — `calhoun-precinct-geometry` (no-source) |
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Cass | 17017 | dispatch | districted | `county-board` | 1 — `pass9-ward-seats-without-maps` (no-source) |
+| Clark | 17023 | dispatch | districted | `county-board`, `county-precinct` | 2 — `clark-board-contact` (data-quality); `clark-precinct-polling` (data-quality) |
 | Coles | 17029 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Cook | 17031 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | none |
 | De Witt | 17039 | dispatch | districted | `county-board`, `county-precinct` | none |
@@ -88,7 +89,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
-## Researched frontier (38) — gap-recorded, not yet served
+## Researched frontier (37) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -98,7 +99,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Bureau | 17011 | 1 — `bureau-county-board-districts` (no-source) |
 | Champaign | 17019 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Christian | 17021 | 1 — `christian-county-board-districts` (no-source) |
-| Clark | 17023 | 1 — `clark-county-board` (no-source) |
 | Clay | 17025 | 1 — `clay-county-board` (no-source) |
 | Clinton | 17027 | 1 — `clinton-county-board-geometry` (no-source) |
 | Crawford | 17033 | 1 — `crawford-county-board` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 112 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 113 records in the Data gaps panel: `chicago-amenity-phones`.

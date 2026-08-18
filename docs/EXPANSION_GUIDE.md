@@ -1310,6 +1310,56 @@ taught them.
   composition its board page publishes today — so the answer was geometry-from-the-service
   and people-from-the-page, not "distrust the layer".
 
+- **"I DO NOT HAVE MAPS AVAILABLE" IS NOT THE END OF A COUNTY. If the districts are
+  unions of whole precincts, the county's certified canvasses ARE the boundary
+  description — and the Census 2020 voting districts are the polygons, IF they still
+  match the county's current precincts.** Clark's Clerk answered the standing ask on
+  2026-08-18 with one sentence: *"The County Board is elected by districts. I do not
+  have maps available."* That settles §2.5 step 2 and refuses the geometry ask in the
+  same breath, and the county shipped four hours later as the 65th, with **no map
+  involved at any stage** — a first for this fleet. The route, in order, and it is
+  cheap enough to try on any districted county whose Clerk says no:
+  1. **Find the election authority's results archive**, which is usually NOT the county
+     website. Clark's is `il-clark.accessliberty.com` (the Clerk's own site, one
+     text-layer canvass PDF per election back to 2006) with a live feed at
+     `il-clark.pollresults.net`. The county site merely links them from an Election
+     Results page.
+  2. **Read the "COUNTY BOARD n DISTRICT MEMBER" contests.** A canvass tabulates each
+     contest precinct by precinct, so the contest's precinct list IS the district's
+     composition — and the header ("Vote for one") gives the seat count. Walk the
+     GENERAL elections newest-first; the first one carrying a district is the one that
+     seated its current member, which handles staggered terms with no schedule
+     hard-coded. **Primaries never seat anybody and must never be read as a roster.**
+  3. **Require a second witness per district.** Clark's 2022 General carries all seven
+     contests; the 2024 General re-tabulates 3/4/7 and the 2026 General Primary
+     re-tabulates 1/2/5/6 — so no district rests on one document, and a transcription
+     slip cannot survive. (The 2022-2024 board list the county publishes agreed too,
+     and could not be relied on: it is a scan whose District column renders a 6 as a 5.
+     The canvass settled the digit.)
+  4. **Apply THE JASPER TEST before dissolving anything.** The census VTD fabric is the
+     county's precincts *as of January 2020*, not necessarily today. Clark passes: 23
+     census features, 23 county precinct names, 23/23 by name, POP100 summing to the
+     county's exact population, and all three canvasses tabulating the same 23 names.
+     Jasper FAILS the same test — five census Wade voting districts against four
+     current county precincts, and no assignment of the fifth reproduces a lawful plan
+     — which is why Jasper is still unbuilt while Clark shipped on the identical
+     technique. **The test is the whole difference between the two, so run it first.**
+  5. **The roster comes free**, and is a stronger claim than a board page makes: each
+     member is whoever the county CERTIFIED as elected, per district. State it that way
+     on the card (`districtSource`: "elected 2024 (District 3, certified canvass)"),
+     because a canvass cannot show a mid-term appointment and the card must not imply
+     one. Do not badge a chair — a chairmanship is elected from within the body and no
+     certified document shows it.
+  6. **Wire the composition check into the weekly roster run.** The dissolve is only
+     correct while the canvasses keep tabulating the same precincts in the same
+     districts, so re-read that list every week and FAIL when it moves. That is the
+     re-precincting/redistricting tripwire, and it is free once step 2 is written.
+  **The fleet-scale corollary, recorded in the guidebook backlog:** Clark's results
+  vendor serves **34 Illinois counties** under `il-<county>.accessliberty.com` /
+  `il-<county>.pollresults.net`, fourteen of them unserved — including both coverage
+  enclaves. Precinct-level certified returns answer §2.5 step 2 *and* supply the
+  composition, without waiting for a reply.
+
 ## 2.6 Verification
 
 The standard gates (Part 6.5) plus: the Playwright smoke test's coverage-hide, permalink
