@@ -14289,6 +14289,22 @@ function initChiExplorer() {
     return parts.length ? parts.join(" · ") : null;
   }
 
+  // A district the roster has nothing for. Some county directories are lists of
+  // PEOPLE — Rock Island's person-cards and Kane's SharePoint list both carry the
+  // district as a field ON the member — so a district with nobody in it is simply
+  // ABSENT from the source, and nothing in the source says whether the seat is
+  // vacant or the page broke. Sangamon has a members index that prints the word
+  // "vacant" and can therefore ship `vacancies`; these have no second surface, so
+  // the card states only what is known — the directory loaded and lists no member
+  // for this district — and leaves the reader at the link. It is used ONLY when
+  // the roster actually loaded: a failed fetch must not read as an empty seat.
+  function boardDirectorySilentNote(entry, rosterLoaded) {
+    if (!rosterLoaded) return null;
+    if (entry && (entry.members || []).length) return null;
+    if (entry && entry.vacancies) return null;  // the county said vacant; that wins
+    return "No member listed in the county's directory";
+  }
+
   function registerCountyLayer(opts) {
     // opts.entries is the general form; opts.counties is the original name and
     // still the one every county-dispatched concept uses. The dispatch itself
@@ -16249,9 +16265,13 @@ function initChiExplorer() {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var district = rockIslandDistrictNumber(feature);
+            var roster = results[1];
             return {
               seq: seq, district: district,
-              entry: district != null ? results[1][String(district)] : null
+              entry: district != null ? roster[String(district)] : null,
+              // Whether the ROSTER loaded, not whether this district is in it —
+              // the note below must never fire on a failed fetch.
+              rosterLoaded: !!(roster && Object.keys(roster).length)
             };
           });
         },
@@ -16260,7 +16280,8 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Rock Island County Board",
-            note: boardCountNote(members.length, null)
+            note: boardCountNote(members.length, null) ||
+              boardDirectorySilentNote(result.entry, result.rosterLoaded)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) {

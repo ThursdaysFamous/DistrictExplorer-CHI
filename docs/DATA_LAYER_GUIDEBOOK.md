@@ -4281,6 +4281,78 @@ honest. Livingston's `vacancies` field is the fleet's answer and it predates
 this; what was missing was anyone applying it to a single-member board, where a
 vacancy takes the whole key with it rather than one row out of six.
 
+### 2026-08-18, night: the sweep for Sangamon's hole — one more county had it, and the rest fail loudly instead
+
+Sangamon's vacancy showed that a district key created from a parsed member
+disappears when the member does. This is the sweep of every other board builder
+for the same shape: 44 district-keyed rosters, classified by what ONE vacancy
+actually does to each. Nothing here is a guess — the seats-per-district figure
+is measured off the shipped file, and each verdict is read off the builder's own
+guard.
+
+**Six counties already answer it.** Livingston, Lee, Stephenson, Shelby, Jo
+Daviess and now Sangamon carry an explicit vacancy path; Jo Daviess ships
+`vacancies: 1` on district 16 today. The vocabulary was never missing — its
+application to single-member boards was.
+
+**Ten counties elect single-member districts, where a vacancy takes the whole
+key.** Eight of them REFUSE THE WRITE rather than ship a short roster, because
+their guards are equalities rather than floors: Clark (`len(records) != 7`),
+Coles (`sorted(districts) != 1..12`), Edgar (`len(roster) != 7`), LaSalle
+(`!= 29`), Peoria (`!= 1..18`), White (`!= sorted(CANVASS)`), Jefferson (MIN
+13 of 13) and Menard (MIN 5 of 5). Two write:
+
+- **Rock Island** — 19 districts, floors 18/18/17. A vacancy leaves 18/18/18,
+  every floor satisfied, the key gone, and the card blank. **This is Sangamon
+  exactly**, and it is fixed here.
+- **Kane** — 24 districts, floors 22/22/20. The builder behaves the same way,
+  but the card does NOT go blank: Kane's boundary GIS carries `cbname`, so the
+  render falls back to the sitting member's name off the county's own geometry.
+  That is a deliberate "never blank" fallback and it holds. Its residual risk is
+  a different one and worth naming: the GIS attribute is the county's, not ours,
+  and a departed member stays in it until the county updates it — so Kane would
+  keep NAMING someone who left, and would silently lose their phone and e-mail,
+  with no note either way. Left as it stands; changing it is a judgement about
+  how far to trust that attribute, not a bug fix.
+
+**What Rock Island could NOT do, and why the fix is a sentence rather than a
+count.** Sangamon has two surfaces — a per-district page and a members index —
+and the index prints the word "vacant", which is what licenses `vacancies: 1`.
+Rock Island's directory is a list of PERSON CARDS with "Member - District N" as
+a job title, and Kane's is a SharePoint list with District as a field on the
+member. In both, the district rides the person: a seat with nobody in it is
+simply ABSENT, and nothing in the source says whether it is vacant or whether
+the parse broke. So the card claims neither. It says the one thing that is
+known — **"No member listed in the county's directory"** — and leaves the reader
+at the link. `boardDirectorySilentNote()` is shared, so any entry can adopt it.
+
+**The guard that keeps it honest.** The note fires only when the roster ACTUALLY
+LOADED. Every county-board query swallows a roster failure with
+`.catch(function () { return {}; })`, and without that check a failed fetch would
+have printed "the directory lists no member" for all 19 districts — inventing a
+county-wide vacancy out of our own network error. Verified three ways in a
+browser: roster loaded with district 7 removed renders the note; roster intact
+renders Richard Morthland; roster fetch aborted renders neither.
+
+**Five multi-member counties carry the milder version.** DeKalb, Kendall,
+McHenry, Ogle and Will all have member floors below their full board, so a
+vacancy keeps the district key and quietly drops one row — the card then shows a
+smaller delegation than the county elects, with nothing saying so. Not fixed
+here, because the fix is a policy choice rather than a bug: tightening the floor
+to an equality (the posture Carroll, DuPage, Macon, Montgomery and Lee already
+chose) trades a blank row for a frozen file.
+
+**Which is the sweep's second finding, and it has no owner yet.** A builder that
+refuses the write leaves the weekly workflow RED and the shipped file naming a
+member who has left. That is the deliberate design in at least five counties —
+"a genuine vacancy is expected to need a human to lower it" — but the only
+signal it produces is a red run in the Actions tab. The roster workflows open a
+PR when data changes and nothing at all when the build fails; `validate-sources`
+opens a tracking issue on a WARN and the roster jobs have no equivalent. So the
+counties that handle a vacancy most conservatively are also the ones whose
+vacancy is least likely to be NOTICED. Worth a standing issue on builder
+failure, in the same shape as the source-drift issue.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
