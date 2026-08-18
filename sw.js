@@ -75,7 +75,9 @@ const GEOMETRY_URLS = [
   "./data/app/ccbr-districts.json",
   "./data/app/champaign-county-outline.json",
   "./data/app/christian-county-outline.json",
+  "./data/app/clark-county-board-districts.json",
   "./data/app/clark-county-outline.json",
+  "./data/app/clark-precincts.json",
   "./data/app/clay-county-outline.json",
   "./data/app/clinton-county-outline.json",
   "./data/app/coles-county-outline.json",
@@ -223,6 +225,7 @@ const GEOMETRY_URLS = [
 // and must never be served stale — network-first, with the cached copy only
 // as an offline fallback. Same freshness rule as the shell.
 const ROSTER_URLS = [
+  "./data/app/clark-county-board-members.json",
   "./data/app/il-senate-members.json",
   "./data/app/il-house-members.json",
   "./data/app/school-board-members.json",

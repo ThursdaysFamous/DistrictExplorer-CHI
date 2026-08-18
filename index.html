@@ -8321,6 +8321,48 @@ function initChiExplorer() {
     });
   });
 
+  /* Clark (the 53rd dispatched county, added 2026-08-18 — the first county in
+   * the fleet built entirely out of ELECTION RETURNS). County Clerk &
+   * Recorder Laura H. Lee answered this project's standing ask in one
+   * sentence on 2026-08-18: "The County Board is elected by districts. I do
+   * not have maps available." That settles the board's form and closes the
+   * map route in the same breath, and it is not the end of the county,
+   * because the districts are unions of WHOLE PRECINCTS — so the county's own
+   * certified canvasses describe them completely. Its 23 precincts are the
+   * Census 2020 voting districts, which carry the county's own 23 precinct
+   * names 23/23 and sum to its exact 2020 population; the 7 single-member
+   * board districts are their dissolve, per a composition certified three
+   * times over (2022 General for all seven, 2024 General for 3/4/7, 2026
+   * General Primary for 1/2/5/6 — scripts/build_clark_boundaries.py). This is
+   * the test JASPER FAILS (five census Wade voting districts against four
+   * current county precincts), which is why that county is still unbuilt and
+   * this one ships. The roster is the same canvasses, scraped weekly: each
+   * member is whoever the county certified as elected in the most recent
+   * general election that seated their district, so the card names that
+   * election rather than claiming a currency the returns cannot show. No
+   * per-member contact is shipped — the county publishes it only inside a
+   * SCANNED board list where one of the seven e-mail addresses is
+   * unresolvable from the image, so the county's switchboard stands for the
+   * board and the current list is an open ask. Polling places are not shown
+   * either: the only list the county publishes is dated November 2018. */
+  var loadClarkCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clark-county-outline.json", {}, 2);
+  });
+  function clarkCountyCoverage(point) {
+    return loadClarkCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadClarkPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clark-precincts.json", {}, 2);
+  });
+  var loadClarkBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clark-county-board-districts.json", {}, 2);
+  });
+  var loadClarkBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clark-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -16826,6 +16868,103 @@ function initChiExplorer() {
           }
         }
       },
+      // Clark — 7 SINGLE-member districts, dissolved from the Census 2020
+      // voting districts per a composition the county's own certified
+      // canvasses state three times over (build_clark_boundaries.py). The
+      // county has NO board map — its Clerk said so in writing on 2026-08-18
+      // — and no machine-readable roster page; its only board document is a
+      // scan. So both halves of this card come from election returns: the
+      // boundary from the dissolve, the member from whoever the county
+      // certified as elected in the most recent general election that seated
+      // the district. The card names that election on every member, because
+      // a canvass cannot show a mid-term appointment and this card must not
+      // imply otherwise. Contact renders once at board level (the county's
+      // switchboard and courthouse, the Calhoun rule): the county publishes
+      // per-member phones and e-mails only inside that scan, where one
+      // address is unresolvable from the image, and six read-by-eye personal
+      // addresses plus a guess is not a roster.
+      {
+        key: "clark",
+        coverage: clarkCountyCoverage,
+        loadGeometry: loadClarkBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadClarkBoardDistricts(),
+            loadClarkBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var entry = district != null ? results[1][String(district)] : null;
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: entry,
+              board: results[1] && results[1].board
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Clark County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The certified canvass is the ONLY thing that places this
+              // member in this district — the county publishes no roster a
+              // machine can read — so its provenance rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts",
+                          value: result.precincts.join(", ") });
+          }
+          if (result.board && result.board.phone) {
+            fields.push({ label: "County offices", value: String(result.board.phone) });
+          }
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board mail", value: String(result.board.address) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Clark County Board (official)",
+            url: "https://www.clarkcountyil.org/board"
+          };
+        },
+        hoverOfficial: {
+          load: loadClarkBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -21330,6 +21469,57 @@ function initChiExplorer() {
             // Map" web app backed by the same 2022_Voter_Precincts service.
             label: "Coles County Clerk — Elections (official)",
             url: "https://www.colesco.illinois.gov/coclerk/elections/"
+          };
+        }
+      },
+      // Clark — 23 precincts, the Census 2020 voting districts. They are the
+      // county's OWN fabric and that is measured, not assumed: the names
+      // match the county's 23/23, their populations sum to its exact 2020
+      // count, and its 2022 General, 2024 General and 2026 General Primary
+      // returns all tabulate the same 23 names, so nothing moved either side
+      // of the census. The board district rides ON the feature — the
+      // composition is whole-precinct, certified three times over, so no
+      // spatial join is needed. NO POLLING PLACE: the only list the county
+      // publishes is titled "Polling places and addresses 11-18" — the
+      // November 2018 election — and sending a voter to an eight-year-old
+      // address is the harm these rules exist to prevent. Asked of the Clerk
+      // instead; recorded as clark-precinct-polling.
+      {
+        key: "clark",
+        coverage: clarkCountyCoverage,
+        loadGeometry: loadClarkPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadClarkPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Clark County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Clark County Clerk — election results (official)",
+            url: "https://il-clark.accessliberty.com/pastelections.aspx"
           };
         }
       }

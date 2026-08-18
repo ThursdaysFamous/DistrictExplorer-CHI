@@ -1,0 +1,79 @@
+{
+  "1": {
+    "members": [
+      {
+        "districtSource": "elected 2022 (District 1, certified canvass)",
+        "name": "Rex E. Goble",
+        "party": "R"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13842"
+  },
+  "2": {
+    "members": [
+      {
+        "districtSource": "elected 2022 (District 2, certified canvass)",
+        "name": "Brandon Burkybile",
+        "party": "R"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13842"
+  },
+  "3": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 3, certified canvass)",
+        "name": "Jim Bolin",
+        "party": "R"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13922"
+  },
+  "4": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 4, certified canvass)",
+        "name": "Randal A Stephens",
+        "party": "R"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13922"
+  },
+  "5": {
+    "members": [
+      {
+        "districtSource": "elected 2022 (District 5, certified canvass)",
+        "name": "Susan M. Guinnip",
+        "party": "R"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13842"
+  },
+  "6": {
+    "members": [
+      {
+        "districtSource": "elected 2022 (District 6, certified canvass)",
+        "name": "Todd Kuhn",
+        "party": "D"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13842"
+  },
+  "7": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 7, certified canvass)",
+        "name": "Michael E Parsons",
+        "party": "R"
+      }
+    ],
+    "sourceUrl": "https://il-clark.accessliberty.com/SharedFiles/Download.aspx?pageid=58&mid=188&fileid=13922"
+  },
+  "board": {
+    "address": "Clark County Courthouse, 501 Archer Ave., Marshall, IL 62441",
+    "note": "Names and districts come from Clark County's certified election canvasses; the county publishes no per-member contact a machine can read, so the county's own switchboard stands for the board.",
+    "phone": "217-826-8311",
+    "resultsUrl": "https://il-clark.accessliberty.com/pastelections.aspx",
+    "sourceUrl": "https://www.clarkcountyil.org/board"
+  }
+}

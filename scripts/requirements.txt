@@ -83,3 +83,15 @@ pyshp==2.3.1
 # between. pyshp (above) cannot read a .gdb at all; it is a directory of binary
 # tables, not a .shp/.dbf pair. See scripts/build_montgomery_boundaries.py.
 pyogrio==0.13.0
+
+# TEXT-BLOCK and word-POSITION extraction for Clark County's certified election
+# canvasses (scripts/clark_county_board_scraper.py). Clark publishes no
+# machine-readable board page — its only board document is a scan — so the
+# roster is read out of the Clerk's "Statement of Votes Cast" PDFs, where a
+# contest owns an x-range and each candidate is one multi-line text BLOCK
+# ("REX E. GOBLE  (REP)") inside it. pypdf flattens the page and loses the
+# columns; pdfplumber gives words with positions but no block grouping, and
+# re-deriving the cells by clustering x was measured to split "REX E." from
+# "GOBLE". PyMuPDF's get_text("dict") returns the county's own cells directly,
+# which is the difference between a parsed name and half of one.
+pymupdf==1.28.2
