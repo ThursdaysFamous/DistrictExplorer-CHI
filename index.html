@@ -2169,6 +2169,56 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .map-panning .region-highlight { filter: none; transition: none; }
   .poi-pin { background: none; border: none; }
   /* ==== ENGINE:END styles-markers ==== */
+  /* Chicago-specific: the masthead action row holding the Data-gaps button and
+     the sources-page link. Both controls are dark-background chrome, so they
+     ride the same --ink surface the footer gave them; only the pill treatment
+     and sizing are new. The gaps button's markup is shared engine (the
+     gaps-html fence), which is exactly why its masthead styling is applied
+     from out here by descendant selector rather than by editing the fence. */
+  .masthead-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 14px;
+  }
+  .masthead-actions .footer-link-btn {
+    font-size: 13px;
+    line-height: 1.25;
+    color: var(--accent);
+    border: 1px solid rgba(65,182,230,0.55);
+    border-radius: 999px;
+    padding: 6px 14px;
+    transition: color .12s, border-color .12s, background .12s;
+  }
+  /* Beats the engine rule's `.footer-link-btn:hover { text-decoration: underline }`
+     on specificity — a pill underlines badly. */
+  .masthead-actions .footer-link-btn:hover,
+  .masthead-actions .footer-link-btn:focus-visible {
+    color: #fff;
+    border-color: var(--accent);
+    background: rgba(65,182,230,0.18);
+    text-decoration: none;
+  }
+  .masthead-action-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #C9D4DB;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(217,225,231,0.3);
+    padding-bottom: 1px;
+    transition: color .12s, border-color .12s;
+  }
+  .masthead-action-link:hover,
+  .masthead-action-link:focus-visible { color: #fff; border-color: var(--accent); }
+  /* The masthead is already competing with the map for the first screenful on
+     phones (see the branding shrink above), so the new row shrinks with it. */
+  @media (max-width: 900px) {
+    .masthead-actions { margin-top: 10px; gap: 6px 10px; }
+    .masthead-actions .footer-link-btn { font-size: 12px; padding: 5px 12px; }
+    .masthead-action-link { font-size: 12px; }
+  }
+
   /* Chicago-specific: the SEO/orientation lede under the empty-state prompt —
      the district vocabulary a first-time (or crawling) visitor reads before a
      point is picked. Styled a step down from the primary prompt above it. */
@@ -2360,6 +2410,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </span>
       <small>Click the map or search an address to see every district that covers it, and who represents it.</small>
     </h1>
+    <!-- Chicago-owned masthead action row: the two "about the data" doors, in
+         the one place every visitor passes. "What data is missing?" moved up
+         from the footer-links row — it is the standing caveat on every answer
+         this app gives, and at the bottom of a long page nobody read it before
+         concluding the app was simply wrong. The gaps-html ENGINE fence below
+         is moved VERBATIM: the button's markup is byte-identical to the footer
+         version it replaces, so the deploy-time engine splice stays a no-op and
+         no engine release is owed — only its placement changed, and placement
+         is the one thing the fences deliberately do not pin (siblings owe the
+         same move by hand; docs/ENGINE_SYNC.md records the new slot). The
+         masthead treatment is applied from OUTSIDE the fence by this fork's
+         own CSS, so the fenced bytes stay portable. -->
+    <div class="masthead-actions">
+      <!-- ==== ENGINE:BEGIN gaps-html ==== -->
+      <button type="button" id="gaps-btn" class="footer-link-btn">🧩 What data is missing?</button>
+      <!-- ==== ENGINE:END gaps-html ==== -->
+      <a class="masthead-action-link" href="./sources.html">📚 Sources &amp; data layers</a>
+    </div>
   </div>
 </header>
 <div class="flag-stripe" aria-hidden="true"></div>
@@ -2459,18 +2527,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="footer-meta" id="footer-meta">
       <span>Data last verified: <strong id="verified-date"></strong></span>
     </div>
+    <!-- The ten-link credit row this used to be is now sources.html, where the
+         same credits sit alongside a per-layer matrix naming the exact source
+         behind every one of the app's layers. A flat list of publishers could
+         never answer "where did THIS answer come from?", which is the question
+         a reader actually has. The row itself stays: OSM's licence asks for its
+         attribution next to the map, and the metro-links block below documents
+         its slot as "between .footer-sources and .footer-links". -->
     <div class="footer-sources" id="footer-sources">
       <span class="footer-sources-label">Sources</span>
+      <a href="./sources.html">Every layer, and where its data comes from →</a>
       <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim &amp; Photon/Komoot)</a>
-      <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">Chicago Data Portal</a>
-      <a href="https://tigerweb.geo.census.gov" target="_blank" rel="noopener">U.S. Census TIGERweb</a>
-      <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener">unitedstates/congress-legislators</a>
-      <a href="https://www.ilga.gov" target="_blank" rel="noopener">Illinois General Assembly</a>
-      <a href="https://www.ilsenateredistricting.com" target="_blank" rel="noopener">School board district map (ilsenateredistricting.com)</a>
-      <a href="https://www.illinoiscourts.gov" target="_blank" rel="noopener">IL Supreme Court districts (PA 102-0011 shapefile)</a>
-      <a href="https://www.cookcountyboardofreview.com" target="_blank" rel="noopener">Cook County Board of Review districts (PA 102-0012 shapefile)</a>
-      <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map (post offices)</a>
-      <a href="https://chicagoelections.gov" target="_blank" rel="noopener">Chicago Board of Elections (early-voting sites)</a>
     </div>
     <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
     <div class="footer-metros" id="footer-metros" hidden>
@@ -2480,9 +2547,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <!-- ==== ENGINE:END metro-links-html ==== -->
     <div class="footer-links">
       <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
-      <!-- ==== ENGINE:BEGIN gaps-html ==== -->
-      <button type="button" id="gaps-btn" class="footer-link-btn">🧩 What data is missing?</button>
-      <!-- ==== ENGINE:END gaps-html ==== -->
+      <!-- The gaps-html ENGINE fence moved to the masthead action row; see the
+           comment there for why the move costs no engine release. -->
       <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">View source on GitHub</a>
       <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
@@ -22018,7 +22084,24 @@ function initChiExplorer() {
   whenIdle(function () { drawOutOfScopeMask(loadMetroOutline); });
 
   var verifiedEl = document.getElementById("verified-date");
+  // sources.html prints the same date at the top of the layer matrix. Two
+  // hand-kept copies of one fact is how they drift, so the date now lives in
+  // metro-worksheet.json and both surfaces are generated from it.
+  /* ==== GENERATED:BEGIN verified-date ==== */
   verifiedEl.textContent = "August 3, 2026";
+  /* ==== GENERATED:END verified-date ==== */
+
+  // sources.html sends readers back here with "#gaps" to open the Data gaps
+  // panel directly, so the cross-link lands on the panel instead of on a page
+  // with a button somewhere on it. Chicago-owned and additive: the permalink
+  // parser only reads "key=value" pairs, so a bare #gaps is invisible to it,
+  // and wireCoverageGaps() attached this button's handler at script-eval time,
+  // well before this boot-tail line runs. A fork without the panel has no
+  // button and this is a no-op.
+  if (location.hash === "#gaps") {
+    var gapsDeepLink = document.getElementById("gaps-btn");
+    if (gapsDeepLink) gapsDeepLink.click();
+  }
 
   /* ==== ENGINE:BEGIN metro-links ==== */
   (function renderMetroLinks() {

@@ -22,6 +22,15 @@ Targets (region name -> file):
     metro-facts       -> CLAUDE.md    (city / geocoder / ground-truth / workflows)
     metro-header      -> README.md    (title + tagline)
 
+Opt-in targets, emitted only when the worksheet carries the key that turns them
+on (a fork without the key sees a byte-identical file and an untouched gate):
+    verified-date     -> index.html   (the one line the footer's date is set from;
+                                       key: verified_date)
+    sources-verified  \
+    source-credits     >  the public sources page (key: sources_page)
+    layer-matrix      /   — the credits row that used to live in the footer, and
+                            one matrix row per registered layer
+
 Modes:
     python3 scripts/generate_metro_files.py           # splice regions in place
     python3 scripts/generate_metro_files.py --check   # regenerate + diff; exit 1
@@ -329,6 +338,141 @@ def render_metro_header(w):
     ])
 
 
+# ------------------------------------------------------ the public sources page
+
+def html_esc(s):
+    """Escape for HTML text and double-quoted attribute values alike."""
+    return (s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+             .replace('"', "&quot;"))
+
+
+def render_verified_date(w):
+    return '  verifiedEl.textContent = %s;' % js_str(w["verified_date"])
+
+
+def render_sources_verified(w):
+    return ('        <p class="verified">Data last verified: <strong>%s</strong></p>'
+            % html_esc(w["verified_date"]))
+
+
+def render_source_credits(w):
+    """The upstream publishers the app credits as a whole — the list that was
+    the footer's source row before this page existed."""
+    L = []
+    a = L.append
+    a('      <ul class="credit-list">')
+    for c in w["sources_page"]["credits"]:
+        a('        <li>')
+        a('          <a href="%s" target="_blank" rel="noopener">%s</a>'
+          % (html_esc(c["url"]), html_esc(c["label"])))
+        if c.get("note"):
+            a('          <span class="credit-note">%s</span>' % html_esc(c["note"]))
+        a('        </li>')
+    a('      </ul>')
+    return "\n".join(L)
+
+
+# Group id -> (heading, one-line orientation). The four groups are the layer
+# registry's own `group` values, so the page can never grow a fifth section the
+# app doesn't have.
+GROUP_HEADINGS = [
+    ("political", "Political &amp; legislative",
+     "Districts that elect somebody — from your ward to your seat in Congress."),
+    ("safety", "Public safety",
+     "Who answers a call at this address, and where they answer it from."),
+    ("schools", "Schools",
+     "The district, the attendance zone, and the schools nearest the point."),
+    ("geography", "Geography &amp; amenities",
+     "The boundaries that place an address without electing anyone, plus the nearest public services."),
+]
+
+MATRIX_COLUMNS = ["Layer", "What it answers", "Boundary source", "Who it names", "Where it applies"]
+
+
+def render_layer_matrix(w):
+    """Every registered layer, grouped, with the provenance of each.
+
+    Generated from the SAME layers[] list that drives EXPECT_LAYER_IDS and the
+    smoke test's layer count, which is the point: a layer cannot ship without a
+    row here, and a row here cannot outlive its layer.
+    """
+    by_group = {}
+    for l in sorted(w["layers"], key=lambda x: x["area_rank"]):
+        by_group.setdefault(l["group"], []).append(l)
+    unknown = set(by_group) - {g for g, _, _ in GROUP_HEADINGS}
+    if unknown:
+        fail("layers use group(s) the sources page has no section for: %s"
+             % ", ".join(sorted(unknown)))
+
+    L = []
+    a = L.append
+    a('      <p class="matrix-lede">%d layers — %s. Each row names the publisher '
+      'the boundary comes from, where the names on the card come from, and the '
+      'ground the layer actually answers on — outside that ground the layer '
+      'hides itself rather than guessing.</p>'
+      % (len(w["layers"]),
+         ", ".join("%d %s" % (len(by_group[g]), t.lower().replace("&amp;", "and"))
+                   for g, t, _ in GROUP_HEADINGS if g in by_group)))
+    a('      <nav class="matrix-nav" aria-label="Jump to a layer group">')
+    for gid, title, _ in GROUP_HEADINGS:
+        if gid in by_group:
+            a('        <a href="#%s">%s</a>' % (gid, title))
+    a('      </nav>')
+
+    for gid, title, blurb in GROUP_HEADINGS:
+        if gid not in by_group:
+            continue
+        rows = by_group[gid]
+        a('')
+        a('      <section class="matrix-group" id="%s">' % gid)
+        a('        <h2>%s <span class="matrix-count">%d layer%s</span></h2>'
+          % (title, len(rows), "" if len(rows) == 1 else "s"))
+        a('        <p class="matrix-blurb">%s</p>' % blurb)
+        a('        <div class="matrix-wrap">')
+        a('          <table class="matrix">')
+        a('            <thead>')
+        a('              <tr>%s</tr>'
+          % "".join('<th scope="col">%s</th>' % html_esc(c) for c in MATRIX_COLUMNS))
+        a('            </thead>')
+        a('            <tbody>')
+        for l in rows:
+            src = l.get("source")
+            if not src:
+                fail('layer %r has no source block — a fork that sets sources_page '
+                     'must give every layer one (see the schema)' % l["id"])
+            a('              <tr id="layer-%s">' % l["id"])
+            a('                <th scope="row"><span class="layer-name">%s</span>'
+              '<code>%s</code></th>' % (html_esc(l["label"]), html_esc(l["id"])))
+            a('                <td data-label="%s">%s</td>'
+              % (MATRIX_COLUMNS[1], html_esc(src["answers"])))
+            a('                <td data-label="%s">' % MATRIX_COLUMNS[2])
+            a('                  <ul class="src-list">')
+            for b in src["boundary"]:
+                if b.get("url"):
+                    a('                    <li><a href="%s" target="_blank" rel="noopener">%s</a></li>'
+                      % (html_esc(b["url"]), html_esc(b["label"])))
+                else:
+                    a('                    <li>%s</li>' % html_esc(b["label"]))
+            a('                  </ul>')
+            a('                </td>')
+            a('                <td data-label="%s">%s</td>'
+              % (MATRIX_COLUMNS[3],
+                 html_esc(src["people"]) if src.get("people") else '<span class="matrix-none">—</span>'))
+            a('                <td data-label="%s">%s</td>'
+              % (MATRIX_COLUMNS[4],
+                 html_esc(src["applies"]) if src.get("applies") else '<span class="matrix-none">—</span>'))
+            a('              </tr>')
+        a('            </tbody>')
+        a('          </table>')
+        a('        </div>')
+        a('      </section>')
+    return "\n".join(L)
+
+
+# Regions every fork has. Optional regions are appended by targets_for() only
+# when the worksheet opts in, so a fork that has not sees a byte-identical file
+# and an untouched CI gate (docs/ENGINE_SYNC.md, "a shared-script change must be
+# inert in a fork that hasn't opted in").
 TARGETS = [
     ("index.html", "metro-config", render_metro_config),
     ("index.html", "layer-area-rank", render_layer_area_rank),
@@ -338,6 +482,24 @@ TARGETS = [
     ("CLAUDE.md", "metro-facts", render_metro_facts),
     ("README.md", "metro-header", render_metro_header),
 ]
+
+
+def targets_for(w):
+    """TARGETS plus whatever this worksheet has opted into.
+
+    Opt-in is keyed on the worksheet, never on "does the file happen to exist":
+    a missing file or fence in a fork that DID opt in is a hard failure, which
+    is what a silently-skipped region would have hidden.
+    """
+    targets = list(TARGETS)
+    if "verified_date" in w:
+        targets.append(("index.html", "verified-date", render_verified_date))
+    if "sources_page" in w:
+        page = w["sources_page"]["file"]
+        targets.append((page, "sources-verified", render_sources_verified))
+        targets.append((page, "source-credits", render_source_credits))
+        targets.append((page, "layer-matrix", render_layer_matrix))
+    return targets
 
 
 # ---------------------------------------------------------------- splicing
@@ -476,9 +638,18 @@ def main():
     layer_ids = {l["id"] for l in worksheet["layers"]}
     if not anchor_ids <= layer_ids:
         fail("anchors reference unknown layer id(s): %s" % ", ".join(sorted(anchor_ids - layer_ids)))
+    if "sources_page" in worksheet:
+        if "verified_date" not in worksheet:
+            fail("sources_page is set but verified_date is not — the page prints "
+                 "that date, and hand-writing it there is the drift this key exists to stop")
+        missing = [l["id"] for l in worksheet["layers"] if "source" not in l]
+        if missing:
+            fail("sources_page is set, so every layer needs a source block; %d "
+                 "lack one: %s" % (len(missing), ", ".join(missing)))
 
+    targets = targets_for(worksheet)
     drift = []
-    for rel_path, name, render in TARGETS:
+    for rel_path, name, render in targets:
         path = os.path.join(args.root, rel_path)
         try:
             with open(path, encoding="utf-8", newline="") as f:
@@ -513,9 +684,9 @@ def main():
                   "Edit metro-worksheet.json and regenerate; never hand-edit a GENERATED region."
                   % len(drift), file=sys.stderr)
             sys.exit(1)
-        print("generate-metro-files: OK — all %d GENERATED regions match the worksheet" % len(TARGETS))
+        print("generate-metro-files: OK — all %d GENERATED regions match the worksheet" % len(targets))
     else:
-        print("generate-metro-files: OK — %d regions processed" % len(TARGETS))
+        print("generate-metro-files: OK — %d regions processed" % len(targets))
 
 
 if __name__ == "__main__":

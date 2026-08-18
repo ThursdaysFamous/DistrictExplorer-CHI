@@ -216,6 +216,75 @@ try {
     await context.close();
   }
 
+  // 1a-ii. The two "about the data" doors, which are chrome nothing else
+  //     asserts. The gaps button moved out of the footer into the masthead so a
+  //     reader meets the caveat before the answers; the sources page took over
+  //     the footer's credit row and expanded it to one row per layer. Both are
+  //     load-bearing honesty surfaces: a matrix silently missing a layer reads
+  //     as "that layer has no source", and a gaps button nobody scrolls to is a
+  //     caveat nobody reads. Static markup, so no network.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, BASE);
+
+    const chrome = await page.evaluate(() => ({
+      gapsInMasthead: !!document.querySelector("header.masthead #gaps-btn"),
+      sourcesLinks: Array.from(document.querySelectorAll('a[href$="sources.html"]')).length,
+    }));
+    check("gaps button sits in the masthead, not the footer",
+      chrome.gapsInMasthead, `inMasthead=${chrome.gapsInMasthead}`);
+    check("the app points readers at the sources page",
+      chrome.sourcesLinks >= 1, `${chrome.sourcesLinks} link(s)`);
+
+    // The matrix must account for EVERY registered layer. Asked of the live
+    // page rather than the file, so a broken fence or a half-written region
+    // fails here too.
+    const ids = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('input[type=checkbox][id^="toggle-"]'))
+        .map((el) => el.id.replace(/^toggle-/, "")));
+    const sources = await context.newPage();
+    await sources.goto(new URL("sources.html", BASE).href, { waitUntil: "domcontentloaded" });
+    const rows = await sources.evaluate((layerIds) => ({
+      total: document.querySelectorAll("table.matrix tbody tr").length,
+      missing: layerIds.filter((id) => !document.getElementById("layer-" + id)),
+      deadInternal: Array.from(document.querySelectorAll("a[href]"))
+        .map((a) => a.getAttribute("href"))
+        .filter((h) => h && !/^https?:|^#|^mailto:/.test(h)),
+    }), ids);
+    check("sources page carries a matrix row for every registered layer",
+      rows.missing.length === 0 && rows.total === ids.length,
+      `${rows.total} rows for ${ids.length} layers${rows.missing.length ? `, missing ${rows.missing.join(",")}` : ""}`);
+
+    // Every relative link on the page must resolve — the page's whole value is
+    // that its links work, and "./" vs "/" is exactly the kind of thing that
+    // breaks only once deployed under a path.
+    const resolved = [];
+    for (const href of new Set(rows.deadInternal)) {
+      const r = await context.request.get(new URL(href, new URL("sources.html", BASE).href).href);
+      resolved.push(`${href}=${r.status()}`);
+    }
+    check("sources page's relative links resolve",
+      resolved.every((r) => r.endsWith("=200")), resolved.join(" "));
+    await sources.close();
+
+    // sources.html sends readers back with #gaps; that must land ON the panel.
+    // Through booted(), not a bare newPage: the panel's handler is attached by
+    // the app script, so a page that never boots would fail this for the wrong
+    // reason (and does, in the sandbox where the Leaflet CDN is unreachable).
+    const deep = await booted(context, new URL("#gaps", BASE).href);
+    await deep.waitForFunction(() => {
+      const m = document.getElementById("gaps-modal");
+      return m && !m.hidden;
+    }, null, { timeout: QUERY_TIMEOUT }).catch(() => {});
+    const opened = await deep.evaluate(() => {
+      const m = document.getElementById("gaps-modal");
+      return !!m && !m.hidden;
+    });
+    check("#gaps deep link opens the gaps panel", opened, `open=${opened}`);
+    await deep.close();
+    await context.close();
+  }
+
   // 1b. The search box retries a zero-result query with the unit fragment
   //     stripped. Stubbed geocoder, so this is deterministic and needs no
   //     external network: the stub answers ONLY the cleaned form, which is what

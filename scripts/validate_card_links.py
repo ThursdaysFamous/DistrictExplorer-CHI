@@ -21,7 +21,9 @@ than listed by hand — a hand-kept manifest of ~1,100 URLs across ~500 hosts
 would be one more thing to update per county, and would drift the week it was
 written:
 
-  1. index.html — `url: "…"` (card links) and `href="…"` (footer/credits).
+  1. the authored HTML pages (index.html, sources.html) — `url: "…"` (card
+     links) and `href="…"` (footer, credits, and the sources page's per-layer
+     boundary links).
   2. data/app/*.json — every string value that starts with http, wherever it
      sits. That covers sourceUrl/profileUrl/mapUrl/rosterPdf/compositionPdf and
      whatever the next builder invents.
@@ -114,6 +116,13 @@ except ImportError:  # pragma: no cover - requests is pinned in requirements.txt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
+# Every authored HTML page the app serves, not just the app itself. sources.html
+# now carries the credit row that used to live in index.html's footer plus one
+# boundary link per layer, so scanning index.html alone would have quietly
+# dropped ~50 authored URLs off this gate's surface the day that page shipped.
+# A page listed here but absent is skipped, not fatal: a fork without the page
+# is not a broken fork.
+AUTHORED_PAGES = ["index.html", "sources.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
@@ -221,8 +230,8 @@ AUTHORED, PUBLISHED = "authored", "published"
 PUBLISHED_KEYS = {"url", "profileUrl"}
 
 
-def from_index(path):
-    """URLs cited in index.html, with the line each sits on.
+def from_pages(names):
+    """URLs cited in the repo's authored HTML pages, with the line each sits on.
 
     Returns (citations, template_prefixes).
 
@@ -234,14 +243,18 @@ def from_index(path):
     """
     out = collections.defaultdict(list)
     prefixes = {}
-    with open(path, encoding="utf-8") as f:
-        for n, line in enumerate(f, 1):
-            for rx, kind in ((INDEX_URL_RE, "card link"), (INDEX_HREF_RE, "href")):
-                for m in rx.finditer(line):
-                    if re.match(r"\s*\+", line[m.end():]):
-                        prefixes.setdefault(m.group(1), "index.html:%d" % n)
-                        continue
-                    out[m.group(1)].append("index.html:%d (%s)" % (n, kind))
+    for name in names:
+        path = os.path.join(REPO_ROOT, name)
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            for n, line in enumerate(f, 1):
+                for rx, kind in ((INDEX_URL_RE, "card link"), (INDEX_HREF_RE, "href")):
+                    for m in rx.finditer(line):
+                        if re.match(r"\s*\+", line[m.end():]):
+                            prefixes.setdefault(m.group(1), "%s:%d" % (name, n))
+                            continue
+                        out[m.group(1)].append("%s:%d (%s)" % (name, n, kind))
     return out, prefixes
 
 
@@ -289,7 +302,7 @@ def collect():
     chose, this repo can fix it, so it should not hide in the published group.
     """
     cites = collections.defaultdict(list)
-    index_urls, prefixes = from_index(INDEX_HTML)
+    index_urls, prefixes = from_pages(AUTHORED_PAGES)
     app_urls, authored = from_app_data(APP_DATA_DIR)
     authored |= set(index_urls)
     for source in (index_urls, app_urls):
@@ -637,7 +650,7 @@ def main():
     cites, origin, prefixes = collect()
     if not cites:
         print("validate_card_links: FAIL — extracted 0 URLs, which cannot be right. "
-              "The extraction patterns have drifted from index.html.", file=sys.stderr)
+              "The extraction patterns have drifted from the authored pages.", file=sys.stderr)
         sys.exit(1)
 
     if args.offline:
