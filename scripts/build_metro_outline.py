@@ -309,6 +309,20 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # moved up to INSIDE, exactly as that list is designed to
                      # force.
                      "033", "131", "139",
+                     # Edgar — the 56th dispatched county (2026-08-18), and the
+                     # first the vendor sweep reached whose composition rests on
+                     # a FULL SET of certified canvasses rather than one
+                     # election: its 2022 General carries all seven districts
+                     # over all 31 precincts, the 2024 General re-tabulates
+                     # 1/6/7 and the 2026 General Primary 2/3/4/5/6, so every
+                     # district is witnessed twice — the Clark standard, met in
+                     # full. It had been an OUTSIDE anchor for a matter of
+                     # hours: Clark's join that morning left Edgar bordering two
+                     # served counties and made Paris the frontier, and this
+                     # join moved Paris up to INSIDE. Leaves Douglas and
+                     # Vermilion behind and encloses neither; Tuscola already
+                     # holds Douglas OUTSIDE and Danville takes Vermilion.
+                     "045",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -352,6 +366,7 @@ DISPATCH_COUNTY_FIPS = {
     "clark": "023",
     "crawford": "033",
     "mercer": "131",
+    "edgar": "045",
     # Moultrie is deliberately ABSENT: its board is elected at large, so it has
     # no district geometry, no dispatch entry and no toggle — its members ride
     # the County card via data/app/il-county-commissioners.json. It appears in
@@ -558,6 +573,13 @@ INSIDE = {
     # belongs in the ring: a resident here gets a named board, which is a
     # county-specific answer.
     "Sullivan (Moultrie)": (39.5951, -88.6085),
+    # Paris (Edgar) — the county seat, 2026-08-18, the 56th dispatched county.
+    # MOVED UP FROM THE OUTSIDE LIST THE SAME DAY IT WAS ADDED THERE: Clark's
+    # join that morning left Edgar bordering two served counties, and this
+    # anchor was written to prove the fill stopped at its line. It stopped for
+    # about four hours. The guard failed the build until the point was moved,
+    # which is the whole of its job.
+    "Paris (Edgar)": (39.6148, -87.6909),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -631,14 +653,15 @@ OUTSIDE = {
     # build_county_outline.py's own cumberland inside anchor, re-round-tripped
     # through a point-in-county query on 2026-08-17.
     "Toledo (Cumberland)": (39.2728, -88.2422),
-    # Edgar — the successor anchor Clark's join calls for (2026-08-18). Clark
-    # leaves four unserved neighbours behind and Edgar is the one now most
-    # boxed in: it borders served Coles AND served Clark, with Vermilion,
-    # Douglas and Indiana keeping it off the enclave list. Paris is the county
-    # seat; the coordinates are build_county_outline.py's own edgar inside
-    # anchor, which is also the "Paris — Edgar County" outside anchor its
-    # clark and coles entries have used since 2026-08-04.
-    "Paris (Edgar)": (39.6148, -87.6909),
+    # Danville (Vermilion) — the successor Edgar's join calls for, hours after
+    # Paris was written into this list and moved straight out of it again.
+    # Edgar leaves Douglas and Vermilion behind; Tuscola already holds Douglas,
+    # and Vermilion is the larger frontier — the biggest unserved county left,
+    # and a RECORDED GAP rather than an unexamined one: the 2026 vendor sweep
+    # measured its 38 current precincts against EIGHTY-FOUR census 2020 voting
+    # districts, so it consolidated wholesale after the census and no dissolve
+    # of census geometry can answer there.
+    "Danville (Vermilion)": (40.1245, -87.6300),
     # Christian — ENCLOSED 2026-08-11 by Shelby's join: with Sangamon, Macon,
     # Shelby and Montgomery all served, Christian is the second enclave after
     # Bureau, an interior ring rather than frontier. This anchor is what

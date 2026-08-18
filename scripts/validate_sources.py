@@ -723,6 +723,25 @@ PROVENANCE = [
              "would ever show the districts moving. NOTE FOR ANYONE PROBING "
              "THIS COUNTY: il-mercer.accessliberty.com answers 200 and is EMPTY, "
              "carrying no past-election archive at all."},
+    {"layer": "Edgar County Board (roster + the composition tripwire)",
+     "app_file": "edgar-county-board-members.json",
+     "source_url": "https://edgarcountyillinois.com/county-board/",
+     "note": "The county's own board page (edgar_county_board_scraper.py) — "
+             "name, district and party for all seven, and nothing else. READ "
+             "THE DOMAIN: this is edgarcountyillinois.COM. The county also runs "
+             "edgarcountyillinois.GOV, which links ACROSS to this page and does "
+             "not carry the board itself, so probing the .gov would report a "
+             "county with no roster. THE BOUNDARY HAS A SECOND SOURCE that this "
+             "entry does not cover: the composition was proven from three "
+             "certified canvasses at il-edgar.accessliberty.com (2022 General, "
+             "all seven districts; 2024 General, 1/6/7; 2026 General Primary, "
+             "2/3/4/5/6), and the weekly run re-reads it from the live feed and "
+             "fails if it stops matching the shipped dissolve "
+             "(build_edgar_boundaries.py). NOTE ON THAT ARCHIVE: its download "
+             "handler is keyed pageid=59&mid=189, NOT the 58/188 Clark uses — "
+             "guessing Clark's parameters returns the vendor's LOGIN PAGE "
+             "rendered as a PDF, which is a 200 with a plausible size and no "
+             "canvass in it."},
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",
