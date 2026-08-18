@@ -480,8 +480,29 @@ directions, so reconciling means merging features, not overwriting:
    Chicago's point of view before the ports landed. The inventory is now
    **generated from the real fences**, not hand-maintained — regenerate it
    rather than editing it by hand, which is how it went stale.
-   **The lesson is that nothing enforces this file.** `check_engine_parity.py`
-   compares fenced *code*; no gate compares this document across forks, so it
-   drifts silently and is discovered only when somebody reads two copies side
-   by side. Until a gate exists, a change here is only done when it has landed
-   in all three repos.
+   **The lesson was that nothing enforced this file** — `check_engine_parity.py`
+   compares fenced *code*, so the document describing the fence system drifted
+   silently and was discovered only when somebody read two copies side by side.
+   **That gap is now closed** (2026-08-18): the weekly `fleet-status.yml` run in
+   the CHI repo carries two checks, reported as **SYNC WARN** on the standing
+   fleet-status issue.
+   - **Cross-fork identity** — every fork's copy of this file is fetched and
+     compared against CHI's. Drift is reported in BOTH directions, deliberately:
+     a fork behind CHI reads "CHI's copy supersedes it", but a fork holding
+     lines CHI lacks reads "**reconcile both ways** — the fork may hold content
+     CHI needs", because this file's own rule is that reconciling means merging,
+     not overwriting. A raw line count cannot tell those two cases apart, and
+     "just copy CHI's over" is the wrong instinct to automate.
+   - **Inventory vs the live fences** — the block list above is compared against
+     the fences actually present in CHI's `index.html` and `sw.js`, using the
+     parity checker's own parser rather than a second copy of it. This is what
+     catches a release that adds blocks and never updates the list, which is how
+     the count sat at 50 while the fences held 53.
+   The checks are CHI-only, like the guidebook ones: identity guarantees every
+   fork carries the same file, and the release pipeline guarantees every fork
+   carries the same fences, so re-reading each sibling's fences would add
+   network for no new signal — and would fire a spurious WARN during a bump
+   window where a fork is legitimately one release behind (already its own
+   WARN). **The standing rule survives the automation:** a change here is done
+   only when it has landed in all three repos. The gate now says so out loud
+   instead of waiting for someone to notice.
