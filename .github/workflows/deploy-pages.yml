@@ -157,6 +157,15 @@ jobs:
         # anything past that is not flakiness this job should keep absorbing.
         timeout-minutes: 15
         run: |
+          # try3 guards the retry-SAFE fetches: npm and the browser CDN (the
+          # fetch that actually hung). The apt phase is deliberately OUTSIDE
+          # it — proven live in SF's first cached run: the timeout fired
+          # mid-apt on a slow mirror, killed npx but orphaned apt-get still
+          # holding /var/lib/dpkg/lock-frontend, and both retries died
+          # instantly on the corpse's lock. A slow mirror makes progress and
+          # finishes; a killed apt can never be retried in-job. So apt gets
+          # ONE attempt under a generous timeout: wedged fails loudly at 15
+          # minutes, slow just finishes.
           try3() {
             for i in 1 2 3; do
               timeout 300 "$@" && return 0
@@ -167,10 +176,9 @@ jobs:
             return 1
           }
           try3 npm install "playwright@${PLAYWRIGHT_VERSION}"
-          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
-            try3 npx playwright install-deps chromium
-          else
-            try3 npx playwright install --with-deps chromium
+          timeout 900 npx playwright install-deps chromium
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" ]; then
+            try3 npx playwright install chromium
           fi
 
       - name: Behaviour gate on the assembled tree (serve + smoke test)

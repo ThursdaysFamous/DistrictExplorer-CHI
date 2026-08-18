@@ -109,9 +109,11 @@ jobs:
       # Two guards, either sufficient alone: the browser build is CACHED keyed
       # on the pinned version (a hit skips the CDN entirely; only the apt-side
       # install-deps still runs, and the runner image pre-satisfies most of
-      # it), and every install runs under timeout+retry so a hang on a cache
-      # miss dies at five minutes and retries instead of eating the job's
-      # whole budget. deploy-pages.yml and release-engine.yml run this same
+      # it), and the retry-safe fetches run under timeout+retry so a CDN hang
+      # dies at five minutes and retries instead of eating the job's budget —
+      # while apt sits outside the retry with one 15-minute attempt, because a
+      # timeout-killed apt orphans the dpkg lock and poisons every retry
+      # (observed live in the SF fork's first cached run). deploy-pages.yml and release-engine.yml run this same
       # toolchain and carry the same pair, pointing here for the story.
       - name: Cache Playwright Chromium
         id: pw-cache
@@ -125,6 +127,15 @@ jobs:
         # anything past that is not flakiness this job should keep absorbing.
         timeout-minutes: 15
         run: |
+          # try3 guards the retry-SAFE fetches: npm and the browser CDN (the
+          # fetch that actually hung). The apt phase is deliberately OUTSIDE
+          # it — proven live in SF's first cached run: the timeout fired
+          # mid-apt on a slow mirror, killed npx but orphaned apt-get still
+          # holding /var/lib/dpkg/lock-frontend, and both retries died
+          # instantly on the corpse's lock. A slow mirror makes progress and
+          # finishes; a killed apt can never be retried in-job. So apt gets
+          # ONE attempt under a generous timeout: wedged fails loudly at 15
+          # minutes, slow just finishes.
           try3() {
             for i in 1 2 3; do
               timeout 300 "$@" && return 0
@@ -135,10 +146,9 @@ jobs:
             return 1
           }
           try3 npm install "playwright@${PLAYWRIGHT_VERSION}"
-          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
-            try3 npx playwright install-deps chromium
-          else
-            try3 npx playwright install --with-deps chromium
+          timeout 900 npx playwright install-deps chromium
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" ]; then
+            try3 npx playwright install chromium
           fi
 
       - name: Serve app and run smoke test
