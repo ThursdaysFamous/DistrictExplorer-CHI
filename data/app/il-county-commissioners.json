@@ -248,6 +248,60 @@
   "sourceUrl": "https://morgancounty-il.com/wp/departments/county-commissioners/",
   "structure": "Commission form — 3 commissioners elected countywide"
  },
+ "MOULTRIE": {
+  "county": "Moultrie County",
+  "members": [
+   {
+    "email": "travis.phelps@moultriecountyil.gov",
+    "name": "Travis Phelps",
+    "phone": "217-246-1319",
+    "role": "Chairperson"
+   },
+   {
+    "email": "tyler.graven@moultriecountyil.gov",
+    "name": "Tyler Graven",
+    "phone": "217-294-0532",
+    "role": "Vice Chairperson"
+   },
+   {
+    "email": "kenneth.graven@moultriecountyil.gov",
+    "name": "Kenneth Graven",
+    "phone": "217-962-1313"
+   },
+   {
+    "email": "joshua.roe@moultriecountyil.gov",
+    "name": "Joshua Roe",
+    "phone": "217-292-3952"
+   },
+   {
+    "email": "aaron.wilhelm@moultriecountyil.gov",
+    "name": "Aaron Wilhelm",
+    "phone": "217-292-5077"
+   },
+   {
+    "email": "lisa.florey@moultriecountyil.gov",
+    "name": "Lisa Florey",
+    "phone": "217-521-1088"
+   },
+   {
+    "email": "arlon.long@moultriecountyil.gov",
+    "name": "Arlon Long",
+    "phone": "217-454-5625"
+   },
+   {
+    "email": "ralph.zancha@moultriecountyil.gov",
+    "name": "Ralph Zancha",
+    "phone": "217-254-7574"
+   },
+   {
+    "email": "joe.wallis@moultriecountyil.gov",
+    "name": "Joe Wallis",
+    "phone": "217-520-3552"
+   }
+  ],
+  "sourceUrl": "https://www.moultriecountyil.gov/moultrie_county_board/board_members.php",
+  "structure": "9 members elected countywide — no districts"
+ },
  "PIKE": {
   "county": "Pike County",
   "members": [

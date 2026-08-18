@@ -1,0 +1,89 @@
+{
+  "1": {
+    "members": [
+      {
+        "name": "Becky Hawn",
+        "note": "Keithsburg",
+        "party": "R",
+        "termEnds": "2026-12"
+      },
+      {
+        "name": "Todd Line",
+        "note": "Seaton",
+        "party": "R",
+        "termEnds": "2028-12"
+      }
+    ],
+    "sourceUrl": "https://www.mercercountyil.org/county_board/index.php"
+  },
+  "2": {
+    "members": [
+      {
+        "name": "Bill Henry",
+        "note": "Viola",
+        "party": "D",
+        "termEnds": "2026-12"
+      },
+      {
+        "name": "Chris Demink",
+        "note": "Sherrard",
+        "party": "D",
+        "termEnds": "2028-12"
+      }
+    ],
+    "sourceUrl": "https://www.mercercountyil.org/county_board/index.php"
+  },
+  "3": {
+    "members": [
+      {
+        "name": "Linda Koepke",
+        "note": "Sherrard",
+        "party": "R",
+        "termEnds": "2028-12"
+      },
+      {
+        "name": "Tim Arbet",
+        "note": "Sherrard",
+        "party": "R",
+        "termEnds": "2026-12"
+      }
+    ],
+    "sourceUrl": "https://www.mercercountyil.org/county_board/index.php"
+  },
+  "4": {
+    "members": [
+      {
+        "name": "Josh Frieden",
+        "note": "New Boston",
+        "party": "R",
+        "phone": "309-537-3443",
+        "role": "Chairman",
+        "termEnds": "2026-12"
+      },
+      {
+        "name": "Meredith Morrison",
+        "note": "Joy",
+        "party": "R",
+        "termEnds": "2028-12"
+      }
+    ],
+    "sourceUrl": "https://www.mercercountyil.org/county_board/index.php"
+  },
+  "5": {
+    "members": [
+      {
+        "name": "Gary Anderson",
+        "note": "Aledo",
+        "party": "R",
+        "termEnds": "2028-12"
+      },
+      {
+        "name": "Steve Moreland",
+        "note": "Aledo",
+        "party": "R",
+        "termEnds": "2026-12"
+      }
+    ],
+    "sourceUrl": "https://www.mercercountyil.org/county_board/index.php"
+  }
+}

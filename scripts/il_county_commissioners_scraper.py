@@ -637,6 +637,78 @@ def parse_greene(page):
 # to the seat rather than the person. The office block gets the courthouse
 # address only: the phone on the letterhead is the CLERK's line, and printing it
 # under "Board Office" would imply the board answers it.
+def parse_moultrie(page):
+    """Moultrie publishes its board as a staff-directory TABLE with a column
+    per field — County Board Position, First Name, Last Name, Term Length,
+    Email, Phone — plus a hidden sort column the county uses to order the page.
+    That hidden first cell is why this parser indexes from the RIGHT of the
+    header row rather than assuming column 0 is the position: a display:none
+    cell is still a <td>, and counting from the left silently shifts every
+    field by one.
+
+    THE NAME IS TWO COLUMNS. First and last ship joined with a single space;
+    nothing is inferred about middle names or suffixes the county does not
+    print.
+
+    ROLES ARE KEPT VERBATIM, the Greene rule. Moultrie writes "Chairperson"
+    and "Vice Chairperson"; normalising either to the -man form would misstate
+    a real person's own county's wording, so ALLOWED_ROLES was widened instead.
+    Its plain rows read "Member", which is the county's word for no office and
+    ships as no role at all.
+
+    TERM LENGTH IS A RANGE ("12/1/22-11/30/26"), not an expiry, and it ships as
+    the county prints it. One row reads "08/14/25 - 11/30/26" — a seat filled
+    mid-term by appointment, which is exactly the fact a card should show and a
+    canvass never could.
+
+    AT-LARGE, PROVEN — the whole reason Moultrie rides the County card and has
+    no geometry. The Clerk's own results system (il-moultrie.pollresults.net)
+    carries the certified 17 Mar 2026 General Primary with the contest "COUNTY
+    BOARD DISTRICT AT LARGE MEMBER", 16 of 16 precincts, Vote For 5 — the whole
+    county voting on every seat up that cycle, and the word "District" used
+    only in the vendor's own label for "at large". Nine seats, elected in
+    staggered groups (five terms run 12/1/22-11/30/26, four 12/1/24-11/30/28)."""
+    body = page[page.find("<body"):] or page
+    tables = re.findall(r"(?is)<table[^>]*>.*?</table>", body)
+    for table in tables:
+        header = re.search(r"(?is)<thead.*?</thead>", table)
+        if not header or "County Board Position" not in header.group(0):
+            continue
+        cols = [clean(re.sub(r"<[^>]+>", " ", c))
+                for c in re.findall(r"(?is)<th[^>]*>(.*?)</th>", header.group(0))]
+        try:
+            base = cols.index("County Board Position")
+        except ValueError:
+            return [], None
+        members = []
+        for row in re.findall(r"(?is)<tr[^>]*>(.*?)</tr>", table):
+            cells = [clean(re.sub(r"<[^>]+>", " ", c))
+                     for c in re.findall(r"(?is)<td[^>]*>(.*?)</td>", row)]
+            if len(cells) < base + 4:
+                continue
+            role = cells[base]
+            name = " ".join(p for p in (cells[base + 1], cells[base + 2]) if p).strip()
+            if not name:
+                continue
+            entry = {"name": name}
+            if role and role.lower() != "member":
+                entry["role"] = role
+            term = cells[base + 3] if len(cells) > base + 3 else ""
+            if term:
+                entry["term"] = re.sub(r"\s*-\s*", "–", term)
+            email = re.search(r"[\w.+-]+@[\w.-]+\.\w+", row)
+            if email:
+                entry["email"] = email.group(0)
+            phone = re.search(r"\(?\d{3}\)?[\s.-]*\d{3}[\s.-]*\d{4}",
+                              cells[base + 5] if len(cells) > base + 5 else "")
+            if phone:
+                digits = re.sub(r"\D", "", phone.group(0))
+                entry["phone"] = "%s-%s-%s" % (digits[:3], digits[3:6], digits[6:10])
+            members.append(entry)
+        return members, None
+    return [], None
+
+
 DOCUMENT_ROSTERS = {
     "EDWARDS": {
         "name": "Edwards County",
@@ -704,6 +776,13 @@ SITES = {
         "structure": "Commission form — 3 commissioners elected countywide",
         "expect": 3,
         "parse": parse_randolph,
+    },
+    "MOULTRIE": {
+        "name": "Moultrie County",
+        "url": "https://www.moultriecountyil.gov/moultrie_county_board/board_members.php",
+        "structure": "9 members elected countywide — no districts",
+        "expect": 9,
+        "parse": parse_moultrie,
     },
     "GREENE": {
         "name": "Greene County",
