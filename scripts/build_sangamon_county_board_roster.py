@@ -19,6 +19,15 @@ material; the members' street addresses are residences and are not collected at
 all. The published phone IS carried: the county prints it as the way to reach
 that member.
 
+A DISTRICT THE COUNTY CALLS VACANT STILL SHIPS, carrying `vacancies: 1` and an
+empty member list — the Livingston posture, counted but never named. The floor
+below anticipated vacancies from the first day; what it did not anticipate is
+that a vacant district would simply STOP HAVING A KEY, and a district with no
+key renders a card headed "District 2" and nothing else, which reads as a broken
+layer rather than an empty seat. The scraper now marks the district instead of
+dropping it (see its docstring for how an empty seat is told apart from a broken
+parse), and the count below is what turns that mark into the card's one line.
+
 Usage:
     python3 build_sangamon_county_board_roster.py <raw-scraper-output.json> [output_dir]
 """
@@ -34,8 +43,15 @@ SOURCE_URL = "https://sangamonil.gov/departments/a-c/county-board/districts"
 # changed and the shipped file should stand. Measured at build time: 29/29 names
 # and parties, 27 e-mails, 22 phones — the contact floors sit below those because
 # the county genuinely does not publish an e-mail for every member.
+#
+# The two counts differ in what a vacancy does to them, which is the point:
+# MIN_DISTRICTS counts every district the file carries INCLUDING the vacant ones,
+# so it measures whether the walk still covers the board; MIN_MEMBERS counts only
+# named people, so it measures whether names are still being published. A seat
+# going vacant moves the second and not the first, and that is the honest split —
+# the board did not get smaller, one of its seats got emptier.
 MIN_DISTRICTS = 27
-MIN_MEMBERS = 27
+MIN_MEMBERS = 26
 MIN_EMAILS = 24
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -54,10 +70,15 @@ def resolve_roster(records):
     roster = {}
     for rec in records:
         district = str(rec.get("district") or "").strip()
-        if not district or not rec.get("name"):
+        if not district:
+            continue
+        if not rec.get("name") and not rec.get("vacant"):
             continue
         slot = roster.setdefault(district, {"members": [], "sourceUrl": SOURCE_URL})
-        slot["members"].append(member_obj(rec))
+        if rec.get("name"):
+            slot["members"].append(member_obj(rec))
+        else:
+            slot["vacancies"] = slot.get("vacancies", 0) + 1
     return roster
 
 
@@ -71,6 +92,7 @@ def main():
     roster = resolve_roster(records or [])
 
     members = sum(len(v["members"]) for v in roster.values())
+    vacancies = sum(v.get("vacancies", 0) for v in roster.values())
     emails = sum(1 for v in roster.values() for m in v["members"] if m.get("email"))
     problems = []
     if len(roster) < MIN_DISTRICTS:
@@ -89,8 +111,9 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(roster, f, ensure_ascii=False)
     phones = sum(1 for v in roster.values() for m in v["members"] if m.get("phone"))
-    print("build-sangamon-board: wrote %s — %d districts, %d members, %d e-mails, %d phones"
-          % (out_path, len(roster), members, emails, phones))
+    print("build-sangamon-board: wrote %s — %d districts, %d members, %d vacant, "
+          "%d e-mails, %d phones"
+          % (out_path, len(roster), members, vacancies, emails, phones))
 
 
 if __name__ == "__main__":
