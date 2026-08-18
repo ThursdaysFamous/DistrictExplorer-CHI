@@ -25,6 +25,14 @@ manifest (metros.json) and, for every fork, aggregates:
     sibling has NO local drift gate (its build_coverage_gaps.py --check does not
     exist), and its Data gaps panel could quietly disagree with the document of
     record. A mismatch is a **GAPS WARN**;
+  - ENGINE_SYNC drift: every fork's docs/ENGINE_SYNC.md compared against CHI's,
+    and CHI's own block inventory compared against the live fences. That file
+    opens "the SAME copy ships in every fork; never edit it in one fork only",
+    and until this check existed **nothing enforced it**:
+    check_engine_parity.py compares fenced CODE, so the document describing the
+    fence system drifted silently and was found only when somebody read two
+    copies side by side — 164 lines apart, with a block inventory naming 50
+    blocks when the fences held 53 (ENGINE_SYNC backlog item 14);
   - open bot PRs (roster + engine-bump branches awaiting human review).
 
 Emits a markdown report and a status word (ok|warn). It never edits anything —
@@ -59,6 +67,28 @@ GAPS_RE = re.compile(
     r"<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->\s*```json\s*(.*?)\s*```",
     re.DOTALL)
 GAPS_PATH = "data/app/coverage-gaps.json"
+ENGINE_SYNC_PATH = os.path.join("docs", "ENGINE_SYNC.md")
+# "## Current ENGINE block inventory (53 in index.html + 2 in sw.js)" followed
+# by the backticked block list on the "index.html: ..." line(s).
+INVENTORY_COUNTS_RE = re.compile(
+    r"## Current ENGINE block inventory \((\d+) in index\.html \+ (\d+) in sw\.js\)")
+# The two labelled lists, each running from its "<file>: " label to the first
+# period that ends it. Anchored per list rather than over the whole section:
+# the prose after the lists is full of backticked block names in passing
+# ("it sits between the `feedback` fence and the geocoder"), and a section-wide
+# scrape reads those as inventory entries.
+# Each list runs from its "<file>: " label to the first thing that ends it — a
+# period at end of line, or an em-dash beginning the trailing commentary the
+# sw.js entry carries ("`sw-header`, `sw-handlers` — the config between them…").
+# Anchored per list rather than scraped section-wide: the prose after the lists
+# is full of backticked block names in passing ("it sits between the `feedback`
+# fence and the geocoder"), and a section-wide scrape reads those as entries —
+# which is exactly what the first draft of this check did, warning on a
+# perfectly in-sync repo.
+INVENTORY_LIST_RE = {
+    "index.html": re.compile(r"^index\.html: (.*?)(?:\.$| —)", re.DOTALL | re.MULTILINE),
+    "sw.js": re.compile(r"^sw\.js: (.*?)(?:\.$| —)", re.DOTALL | re.MULTILINE),
+}
 
 # The expected payload is produced by the BUILDER's own render(), imported rather
 # than reimplemented: a second copy of that serialization would be exactly the
@@ -68,6 +98,14 @@ try:
     from build_coverage_gaps import render as render_gaps  # noqa: E402
 except ImportError:  # pragma: no cover — reported as a WARN by the caller
     render_gaps = None
+
+# Same rule for the fence parser: the inventory check must read fences with the
+# SAME parser the parity gate uses, or the two could disagree about what a block
+# even is — which is the class of drift this whole file exists to catch.
+try:
+    from check_engine_parity import extract_blocks  # noqa: E402
+except ImportError:  # pragma: no cover — reported as a WARN by the caller
+    extract_blocks = None
 
 
 def api_get(path, raw=False):
@@ -208,6 +246,117 @@ def gaps_diff(gaps_map, metro_id, shipped_text):
     return ("- Data gaps: **GAPS WARN** — %s" % detail, [w])
 
 
+def parse_inventory(doc_text):
+    """(counts, {file: [block names]}) from the doc's inventory section, or None
+    if the heading or either labelled list is missing."""
+    m = INVENTORY_COUNTS_RE.search(doc_text or "")
+    if not m:
+        return None
+    listed = {}
+    for fname, rx in INVENTORY_LIST_RE.items():
+        lm = rx.search(doc_text)
+        if not lm:
+            return None
+        listed[fname] = re.findall(r"`([a-z0-9][a-z0-9-]*)`", lm.group(1))
+    return ((int(m.group(1)), int(m.group(2))), listed)
+
+
+def inventory_diff(repo_root):
+    """(report_line, warn_list) for CHI's ENGINE_SYNC inventory vs its real fences.
+
+    CHI-only on purpose. The doc-identity check below already guarantees every
+    fork carries the same file, and the release pipeline guarantees every fork
+    carries the same fences — so re-reading each sibling's fences would add
+    network for no new signal, and would fire a spurious WARN during a bump
+    window where a fork is legitimately one release behind (already its own
+    WARN). Checking the canonical copy against the canonical fences is what
+    catches the real failure: a release that adds blocks and never updates the
+    list, which is how the count sat at 50 while the fences held 53.
+    """
+    try:
+        with open(os.path.join(repo_root, ENGINE_SYNC_PATH), encoding="utf-8") as f:
+            doc = f.read()
+    except OSError:
+        return ("- ENGINE_SYNC inventory: **SYNC WARN** — %s unreadable" % ENGINE_SYNC_PATH,
+                ["engine-sync: %s is unreadable in CHI" % ENGINE_SYNC_PATH])
+    if extract_blocks is None:
+        return ("- ENGINE_SYNC inventory: parser import failed — unchecked",
+                ["engine-sync: could not import check_engine_parity.extract_blocks"])
+
+    parsed = parse_inventory(doc)
+    if parsed is None:
+        return ("- ENGINE_SYNC inventory: **SYNC WARN** — inventory section missing or unparseable",
+                ["engine-sync: the ENGINE block inventory section in %s could not be parsed"
+                 % ENGINE_SYNC_PATH])
+    (said_idx, said_sw), listed = parsed
+
+    actual = {}
+    for fname in ("index.html", "sw.js"):
+        try:
+            with open(os.path.join(repo_root, fname), encoding="utf-8") as f:
+                actual[fname] = sorted(extract_blocks(f.read(), fname))
+        except (OSError, ValueError) as e:
+            return ("- ENGINE_SYNC inventory: **SYNC WARN** — cannot read fences from %s" % fname,
+                    ["engine-sync: cannot read ENGINE fences from %s (%s)" % (fname, e)])
+    idx, sw = actual["index.html"], actual["sw.js"]
+
+    missing, phantom = [], []
+    for fname, fenced in (("index.html", idx), ("sw.js", sw)):
+        have = listed[fname]
+        missing += ["%s (%s)" % (b, fname) for b in fenced if b not in have]
+        phantom += ["%s (%s)" % (b, fname) for b in have if b not in fenced]
+    counts_ok = (said_idx == len(idx) and said_sw == len(sw))
+    if counts_ok and not missing and not phantom:
+        return ("- ENGINE_SYNC inventory: in sync (%d in index.html + %d in sw.js)"
+                % (len(idx), len(sw)), [])
+
+    bits = []
+    if not counts_ok:
+        bits.append("heading says %d+%d, fences hold %d+%d" % (said_idx, said_sw, len(idx), len(sw)))
+    if missing:
+        bits.append("fenced but not listed: %s" % ", ".join(missing))
+    if phantom:
+        bits.append("listed but not fenced: %s" % ", ".join(phantom))
+    detail = "; ".join(bits)
+    return ("- ENGINE_SYNC inventory: **SYNC WARN** — %s" % detail,
+            ["engine-sync: %s's block inventory is stale (%s). Regenerate it from the "
+             "fences rather than editing the list by hand — hand-maintenance is how it "
+             "went stale before." % (ENGINE_SYNC_PATH, detail)])
+
+
+def engine_sync_diff(chi_doc, repo, metro_id):
+    """(report_line, warn_list) for one fork's ENGINE_SYNC.md vs CHI's copy.
+
+    Reports drift in BOTH directions, and says so, because the file's own rule
+    is that reconciling means merging rather than overwriting: a fork can hold
+    a paragraph CHI needs. The 2026-08 reconciliation found the opposite (the
+    siblings were purely behind), but a raw line count could not tell those two
+    cases apart, and "just copy CHI's over" is the wrong instinct to encode.
+    """
+    if metro_id == "chicago":
+        return ("- ENGINE_SYNC doc: the reference copy (%d lines)" % len(chi_doc.splitlines()), [])
+    fork_doc = fetch_file(repo, ENGINE_SYNC_PATH)
+    if fork_doc is None:
+        return ("- ENGINE_SYNC doc: **SYNC WARN** — fork carries no %s" % ENGINE_SYNC_PATH,
+                ["%s: SYNC — fork carries no %s, but every fork must ship the same copy"
+                 % (metro_id, ENGINE_SYNC_PATH)])
+    if fork_doc == chi_doc:
+        return ("- ENGINE_SYNC doc: identical to CHI (%d lines)" % len(chi_doc.splitlines()), [])
+
+    chi_lines, fork_lines = chi_doc.splitlines(), fork_doc.splitlines()
+    only_fork = [l for l in fork_lines if l.strip() and l not in chi_lines]
+    only_chi = [l for l in chi_lines if l.strip() and l not in fork_lines]
+    if only_fork:
+        detail = ("%d line(s) only in the fork, %d only in CHI — **reconcile both ways**, "
+                  "the fork may hold content CHI needs" % (len(only_fork), len(only_chi)))
+    else:
+        detail = "fork is behind by %d line(s); CHI's copy supersedes it" % len(only_chi)
+    return ("- ENGINE_SYNC doc: **SYNC WARN** — %s" % detail,
+            ["%s: SYNC — %s differs from CHI's (%s). That file ships the same in every "
+             "fork; land the reconciled copy in all three repos, since nothing else "
+             "compares them." % (metro_id, ENGINE_SYNC_PATH, detail)])
+
+
 def latest_engine_release(chi_repo):
     try:
         rels = api_get("/repos/%s/releases?per_page=10" % chi_repo)
@@ -282,6 +431,24 @@ def main():
         lines.append("**GAPS WARN:** the guidebook's gaps block is missing or unparseable — "
                      "data-gaps drift unchecked in every fork.")
         lines.append("")
+
+    # The canonical ENGINE_SYNC copy, read once: the per-fork check below diffs
+    # against it, and the inventory check validates it against CHI's own fences
+    # before it is used as the reference for anything.
+    try:
+        with open(os.path.join(repo_root, ENGINE_SYNC_PATH), encoding="utf-8") as f:
+            chi_engine_sync = f.read()
+    except OSError:
+        chi_engine_sync = None
+        warns.append("engine-sync: CHI's %s is unreadable — cross-fork doc drift unchecked"
+                     % ENGINE_SYNC_PATH)
+        lines.append("**SYNC WARN:** CHI's `%s` is unreadable — cross-fork doc drift "
+                     "unchecked in every fork." % ENGINE_SYNC_PATH)
+        lines.append("")
+    inv_line, inv_warns = inventory_diff(repo_root)
+    lines.append(inv_line)
+    lines.append("")
+    warns.extend(inv_warns)
 
     for m in metros:
         repo = m["repo"]
@@ -359,6 +526,14 @@ def main():
                 lines.append("  - %s `%s` %s %s" % (mark, wf["file"], concl, date))
                 for c in cov:
                     lines.append("    - coverage: `%s`" % c)
+
+        # Deliberately outside the worksheet/guidebook nesting above: this file
+        # is prose, not generated from the worksheet, so an unreadable worksheet
+        # must not take the doc check down with it.
+        if chi_engine_sync is not None:
+            es_line, es_warns = engine_sync_diff(chi_engine_sync, repo, m["id"])
+            lines.append(es_line)
+            warns.extend(es_warns)
 
         bots = open_bot_prs(repo)
         lines.append("- Open bot PRs: %s" % (", ".join(bots) if bots else "none"))
