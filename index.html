@@ -14289,20 +14289,49 @@ function initChiExplorer() {
     return parts.length ? parts.join(" · ") : null;
   }
 
-  // A district the roster has nothing for. Some county directories are lists of
-  // PEOPLE — Rock Island's person-cards and Kane's SharePoint list both carry the
-  // district as a field ON the member — so a district with nobody in it is simply
-  // ABSENT from the source, and nothing in the source says whether the seat is
-  // vacant or the page broke. Sangamon has a members index that prints the word
-  // "vacant" and can therefore ship `vacancies`; these have no second surface, so
-  // the card states only what is known — the directory loaded and lists no member
-  // for this district — and leaves the reader at the link. It is used ONLY when
-  // the roster actually loaded: a failed fetch must not read as an empty seat.
-  function boardDirectorySilentNote(entry, rosterLoaded) {
+  // What to say when a county's directory lists FEWER PEOPLE THAN THE COUNTY
+  // ELECTS. Two shapes of the same silence, and neither used to say anything.
+  //
+  // Whole district missing: some directories are lists of PEOPLE — Rock Island's
+  // person-cards and Kane's SharePoint list both carry the district as a field ON
+  // the member — so a district with nobody in it is simply ABSENT from the source.
+  //
+  // District short by a seat: on a multi-member board the key survives and one row
+  // just stops appearing, so the card shows a smaller delegation than the county
+  // elects. That is the quieter half and needs the county's seat count to detect
+  // at all, which is why the five multi-member builders now emit `seats`.
+  //
+  // In both, the card states WHAT THE SOURCE SHOWS AND NEVER WHY. A row can be
+  // missing because a seat is empty or because the parse dropped it, and these
+  // counties publish nothing that tells the two apart — Sangamon's members index,
+  // which prints the word "vacant" and licenses `vacancies`, has no counterpart
+  // here. A county that DOES say so wins outright: an entry carrying `vacancies`
+  // returns null and its own note is rendered instead.
+  //
+  // Used ONLY when the roster actually loaded. Every county-board query swallows a
+  // roster failure with `.catch(function () { return {}; })`, so without that
+  // check a failed fetch would print "the directory lists no member" across every
+  // district in the county — inventing a countywide vacancy out of our own
+  // network error.
+  // Appends the shortfall to whatever count note the card already had, the same
+  // way Livingston appends its vacancy count: "2 district members · 1 of 3 seats
+  // not listed in the county's directory".
+  function withShortfall(note, result) {
+    var extra = boardDirectoryShortfallNote(result.entry, result.rosterLoaded);
+    if (!extra) return note;
+    return note ? note + " · " + extra : extra;
+  }
+
+  function boardDirectoryShortfallNote(entry, rosterLoaded) {
     if (!rosterLoaded) return null;
-    if (entry && (entry.members || []).length) return null;
     if (entry && entry.vacancies) return null;  // the county said vacant; that wins
-    return "No member listed in the county's directory";
+    var filled = (entry && entry.members || []).length;
+    var seats = entry && entry.seats;
+    if (!seats) return filled ? null : "No member listed in the county's directory";
+    var missing = seats - filled;
+    if (missing <= 0) return null;
+    if (!filled) return "No member listed in the county's directory";
+    return missing + " of " + seats + " seats not listed in the county's directory";
   }
 
   function registerCountyLayer(opts) {
@@ -14824,7 +14853,8 @@ function initChiExplorer() {
             var props = feature.properties || {};
             var district = findPropCI(props, ["cty_brd_number"]);
             var entry = district != null ? roster[String(district)] : null;
-            return { seq: seq, district: district, entry: entry, props: props };
+            return { seq: seq, district: district, entry: entry, props: props,
+                     rosterLoaded: !!(roster && Object.keys(roster).length) };
           });
         },
         render: function (result) {
@@ -14842,7 +14872,13 @@ function initChiExplorer() {
             if (r2) people.push({ name: String(r2) });
           }
           var wrap = cardEl("div", "card-flush");
-          wrap.appendChild(renderBodyIntro({ title: "Will County Board", note: boardCountNote(people.length, null) }));
+          // Only when the ROSTER supplied the rows. With an empty entry the GIS
+          // fallback above has already filled the card from the county's own
+          // boundary attributes, and "no member listed" beside two visible names
+          // would be false.
+          var willNote = boardCountNote(people.length, null);
+          if (members && members.length) willNote = withShortfall(willNote, result);
+          wrap.appendChild(renderBodyIntro({ title: "Will County Board", note: willNote }));
           if (people.length) wrap.appendChild(renderPersonRows(people));
           return wrap;
         },
@@ -15113,7 +15149,8 @@ function initChiExplorer() {
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
             var entry = district != null ? roster[String(district)] : null;
-            return { seq: seq, district: district, entry: entry, chair: roster.chair || null };
+            return { seq: seq, district: district, entry: entry, chair: roster.chair || null,
+                     rosterLoaded: !!(roster && Object.keys(roster).length) };
           });
         },
         render: function (result) {
@@ -15122,7 +15159,7 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "McHenry County Board",
-            note: boardCountNote(members.length, chair ? "chairman" : null)
+            note: withShortfall(boardCountNote(members.length, chair ? "chairman" : null), result)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) { return boardMemberPerson(m); })));
@@ -15175,7 +15212,8 @@ function initChiExplorer() {
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
             var entry = district != null ? roster[String(district)] : null;
-            return { seq: seq, district: district, entry: entry };
+            return { seq: seq, district: district, entry: entry,
+                     rosterLoaded: !!(roster && Object.keys(roster).length) };
           });
         },
         render: function (result) {
@@ -15183,7 +15221,7 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Kendall County Board",
-            note: boardCountNote(members.length, null)
+            note: withShortfall(boardCountNote(members.length, null), result)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) { return boardMemberPerson(m); })));
@@ -15896,8 +15934,10 @@ function initChiExplorer() {
             // silently misses.
             var raw = findPropCI(feature.properties || {}, ["district_number"]);
             var district = (raw == null || raw === "") ? null : String(Number(raw));
-            var entry = district ? results[1][district] : null;
-            return { seq: seq, district: district, entry: entry };
+            var roster = results[1];
+            var entry = district ? roster[district] : null;
+            return { seq: seq, district: district, entry: entry,
+                     rosterLoaded: !!(roster && Object.keys(roster).length) };
           });
         },
         render: function (result) {
@@ -15905,7 +15945,7 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "DeKalb County Board",
-            note: boardCountNote(members.length, null)
+            note: withShortfall(boardCountNote(members.length, null), result)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) {
@@ -15956,8 +15996,10 @@ function initChiExplorer() {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
-            var entry = district != null ? results[1][String(district)] : null;
-            return { seq: seq, district: district, entry: entry };
+            var roster = results[1];
+            var entry = district != null ? roster[String(district)] : null;
+            return { seq: seq, district: district, entry: entry,
+                     rosterLoaded: !!(roster && Object.keys(roster).length) };
           });
         },
         render: function (result) {
@@ -15965,7 +16007,7 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Ogle County Board",
-            note: boardCountNote(members.length, null)
+            note: withShortfall(boardCountNote(members.length, null), result)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) {
@@ -16281,7 +16323,7 @@ function initChiExplorer() {
           wrap.appendChild(renderBodyIntro({
             title: "Rock Island County Board",
             note: boardCountNote(members.length, null) ||
-              boardDirectorySilentNote(result.entry, result.rosterLoaded)
+              boardDirectoryShortfallNote(result.entry, result.rosterLoaded)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) {

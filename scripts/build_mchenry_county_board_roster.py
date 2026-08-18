@@ -24,6 +24,21 @@ import sys
 
 SOURCE_URL = "https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members"
 
+# THE SEAT COUNT IS CARRIED INTO THE DATA, not just asserted in this docstring,
+# because the card has no other way to know a district is SHORT. The floors
+# below are deliberately permissive — a resignation between scrapes must not
+# block a refresh — and that permissiveness had a silent side: the district
+# keeps its key, one row simply stops appearing, and the card shows a smaller
+# delegation than the county elects with nothing saying so. Emitting `seats`
+# lets the card say "1 of 2 seats not listed in the county's directory"
+# instead. It states what the source shows, never why: a row can be missing
+# because a seat is empty or because the parse dropped it, and this county
+# publishes nothing that tells the two apart (the Sangamon members-index
+# distinction does not exist here). Making the shortfall VISIBLE is what avoids
+# the false trade between a silently short card and a floor tightened to an
+# equality, which would freeze the file with a departed member still named.
+SEATS_PER_DISTRICT = 2
+
 # 9 districts x 2 members + the countywide Chairman. Refuse to overwrite the
 # file with a suspiciously partial scrape rather than silently wiping good
 # data — the same safety net as the sibling board builders.
@@ -61,7 +76,8 @@ def resolve_roster(records):
         district = rec.get("district")
         if district is None:
             continue
-        roster.setdefault(str(district), {"members": [], "sourceUrl": SOURCE_URL})
+        roster.setdefault(str(district), {"members": [], "seats": SEATS_PER_DISTRICT,
+                                          "sourceUrl": SOURCE_URL})
         roster[str(district)]["members"].append(member_obj(rec))
     if chair:
         roster["chair"] = chair

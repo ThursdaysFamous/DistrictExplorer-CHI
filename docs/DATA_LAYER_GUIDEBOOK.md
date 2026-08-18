@@ -4370,6 +4370,61 @@ counties that handle a vacancy most conservatively are also the ones whose
 vacancy is least likely to be NOTICED. Worth a standing issue on builder
 failure, in the same shape as the source-drift issue.
 
+### 2026-08-18, night: the five multi-member counties — the trade between a short card and a frozen file was false
+
+The sweep left DeKalb, Kendall, McHenry, Ogle and Will carrying the quieter half
+of Sangamon's hole: their member floors sit below their full boards, so a
+vacancy keeps the district key and one row simply stops appearing. The card then
+shows a smaller delegation than the county elects with nothing saying so. That
+entry recorded the fix as a POLICY CHOICE — tighten the floor to an equality
+(the Carroll/DuPage/Macon/Montgomery/Lee posture) and trade a silently short
+card for a frozen file naming a departed member. **That framing was wrong, and
+the third option is the one that was missing: make the shortfall VISIBLE and
+leave the floors exactly where they are.**
+
+**What the card was never told.** Every one of the five states its composition in
+its own builder's docstring, in the county's own terms — DeKalb 12 districts of
+two, Kendall 2 of five, McHenry 9 of two plus a countywide Chairman, Ogle 8 of
+three, Will 11 of two — and every one of those figures matches the shipped file
+exactly today. The number existed; it just never left the docstring. Promoting it
+to `SEATS_PER_DISTRICT` and emitting `seats` on each district entry is all the
+card needed to tell "this district has two members" from "this district has one
+of its two listed".
+
+**The note says what the source shows and never why**, which is the same line the
+Rock Island fix drew and for the same reason: a row can be missing because a seat
+is empty or because the parse dropped it, and none of these five publishes
+anything that tells the two apart — Sangamon's members index, which prints the
+word "vacant" and is what licenses `vacancies`, has no counterpart here. So the
+card reads **"2 district members · 1 of 3 seats not listed in the county's
+directory"**, and a county that DOES say a seat is vacant still wins outright: an
+entry carrying `vacancies` suppresses this note in favour of its own.
+`boardDirectorySilentNote` was generalised into `boardDirectoryShortfallNote`
+rather than joined by a second overlapping helper, so the whole-district and
+short-by-a-seat cases are one piece of code.
+
+**The roster-loaded guard earns itself twice.** Every county-board query swallows
+a roster failure with `.catch(function () { return {}; })`. Without the check,
+five counties would now print "not listed in the county's directory" across every
+district on any failed fetch. Verified in a browser on Ogle: roster intact renders
+three members; a roster short one member renders "2 district members · 1 of 3
+seats not listed"; an aborted roster fetch renders neither.
+
+**Two of the five could not be rebuilt, and that is recorded rather than worked
+around.** Ogle and Will re-scraped and rebuilt cleanly, and their rosters came
+back byte-identical apart from the new key. DeKalb, Kendall and McHenry cannot:
+dekalbcounty.org is behind a captcha and its Archive rung now answers 429,
+Kendall and McHenry block every automated client including the Archive's crawler.
+Rather than ship the concept half-converted, `scripts/backfill_board_seats.py`
+reads `SEATS_PER_DISTRICT` from the county's OWN BUILDER and stamps it onto the
+shipped file — one source for the number, different delivery. It is idempotent,
+it refuses a file whose districts hold more members than the constant allows
+(that would mean the constant is wrong, not the file), and running it after a
+normal rebuild is a no-op — which is exactly what Ogle and Will report, and is
+the check that the two paths agree. It also preserves each file's existing
+indentation, because normalising Kendall's and McHenry's `indent=2` would have
+shown as a whole-file diff now and been silently undone by their next build.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
