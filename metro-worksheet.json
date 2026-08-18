@@ -2577,6 +2577,11 @@
       "file": "update-edgar-county-board-roster.yml",
       "purpose": "Edgar County Board roster (edgarcountyillinois.COM board page — the .gov does not carry it) + the redistricting tripwire: the same run re-reads the district composition from the Clerk's results feed at il-edgar.pollresults.net and fails if it stops matching the shipped dissolve",
       "schedule": "Thu 21:00 UTC"
+    },
+    {
+      "file": "roster-health.yml",
+      "purpose": "Daily watchdog over every roster refresh: reports the ones that are FAILING or have gone longer than their own cadence without a successful run, on one standing issue. Exists because a builder that refuses the write opens no PR and files nothing — the shipped roster silently freezes at its last good run",
+      "schedule": "daily 23:00 UTC"
     }
   ],
   "geocoder": {
