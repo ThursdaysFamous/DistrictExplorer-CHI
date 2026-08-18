@@ -169,6 +169,14 @@ try {
     await page.waitForFunction(() => !!window.SFExplorer, null, { timeout: BOOT_TIMEOUT });
     const shipped = JSON.parse(readFileSync("data/app/coverage-gaps.json", "utf8"));
     const expected = Object.keys(shipped).length;
+
+    // The button lives in the masthead, not the footer (ported from the CHI
+    // reference fork). Pinned here because nothing else can see it: the fence
+    // system pins the block's BYTES, never its placement, so an engine bump or
+    // a refactor could quietly drag it back to the footer and every existing
+    // check — which clicks it by id — would still pass.
+    check("gaps button sits in the masthead, not the footer",
+      await page.evaluate(() => !!document.querySelector("header.masthead #gaps-btn")));
     // The submission link is built from REPO_ISSUES, which is METRO config — so a
     // copy-paste of Chicago's value would quietly send this fork's readers to the
     // wrong issue tracker. Assert the host, not just the template.

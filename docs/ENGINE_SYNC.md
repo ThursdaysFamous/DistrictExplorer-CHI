@@ -69,6 +69,20 @@ Multiply that by every engine change and the forks stop being the same app.
   shipped the "Explore another metro" row on opposite sides of the bug-report
   row before this rule was written down).
 
+  **`gaps-html` moved out of that footer row and into the masthead** (CHI,
+  2026-08-18; ported here from DistrictExplorer-CHI#367/#368). It now sits in a
+  `.masthead-actions` row directly under the `h1.title`, pinned right of the
+  wordmark. The reason is the same one the panel exists for — it is the standing
+  caveat on every answer the app gives, and at the bottom of a long page a
+  reader concluded the app was wrong before ever finding it. **This cost no
+  engine release, and that is the pattern worth copying:** the fence and its
+  body moved *verbatim*, so the block's bytes are unchanged, the deploy-time
+  splice is a no-op, and the masthead treatment is applied from OUTSIDE the
+  fence by a fork-owned `.masthead-actions .footer-link-btn` rule. Restyling the
+  button by editing the fence would have owed a release and a fan-out; wrapping
+  it did not. The placement is now pinned by this fork's smoke test, because
+  nothing else can see it.
+
 ## The porting workflow (superseded 2026-07-13 — see banner above)
 
 The release workflow that replaces this loop: an engine change lands in
