@@ -1075,11 +1075,22 @@
         "note": "Cook's 40 suburban Fire Protection Districts, pre-built from the Clerk's L17 tax-agency tiling by scripts/build_parcel_fabric_districts.py — the 2026-08-16 fabric survey measured 102 empty road-band voids in the live layer. Road voids closed at 75 ft; the seven district pairs the Clerk's own tiling double-claims (Orland-Mokena is 57 acres) ship in both districts exactly as the live layer answers; a Loop click stays outside every FPD because Chicago runs its own fire department. No upstream edit stamp exists (the Clerk refreshes in place), so the builder pins count and names and validate_sources watches the service monthly."
       },
       {
+        "file": "crawford-county-board-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Crawford County's 5 County Board districts, each electing TWO members in staggered years, DISSOLVED from the county's own precinct fabric (Census 2020 VTDs) per the composition its certified 17 March 2026 General Primary results publish as STRUCTURED DATA: every district had a contest, and their precinct lists partition the county's 24 precincts exactly once each. A single certified election is accepted here and said so plainly — unlike Clark, nothing is transcribed, because the precincts listed in a contest are the precincts it was ON THE BALLOT in. Populations sum to the county's exact 18,679; worst deviation +20.2% from the per-district ideal, which is the COUNTY'S apportionment and is recorded rather than smoothed. The weekly roster run re-reads the composition from the Clerk's feed and fails if it moves; full re-verification is scripts/build_crawford_boundaries.py --check (operator step: requests/shapely)."
+      },
+      {
         "file": "crawford-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Crawford County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Crawford County outline — the coverage test for the county's board and precinct dispatch entries (crawfordCountyCoverage). Built 2026-08-18 when the county joined as the 54th dispatched county."
+      },
+      {
+        "file": "crawford-precincts.json",
+        "min_features": 24,
+        "max_features": 24,
+        "note": "Crawford County's 24 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be: the names match its 24 precinct names 24/24 and their POP100 sums to its exact 2020 population (18,679). Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct — no precinct is split. NO POLLING PLACE ships: nothing the county publishes pairs precincts with buildings as data (scripts/build_crawford_boundaries.py)."
       },
       {
         "file": "cumberland-county-outline.json",
@@ -1544,11 +1555,22 @@
         "note": "Gap-location outline for Menard County — NOT a dispatched county. The pass-7 sweep measured its board geometry as blocked/partial; this outline exists solely so its recorded gap attaches to its ground in the data-gaps panel (scripts/build_county_outline.py). Referenced by slug-built URL, so the validator's literal-reference check skips it."
       },
       {
+        "file": "mercer-county-board-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Mercer County's 5 County Board districts, each electing TWO members in staggered years, DISSOLVED from the county's own precinct fabric (Census 2020 VTDs) per the composition its certified 17 March 2026 General Primary results publish as STRUCTURED DATA: every district had a contest, and their precinct lists partition the county's 24 precincts exactly once each. A single certified election is accepted here and said so plainly — unlike Clark, nothing is transcribed, because the precincts listed in a contest are the precincts it was ON THE BALLOT in. Populations sum to the county's exact 15,699; worst deviation -14.6% from the per-district ideal, which is the COUNTY'S apportionment and is recorded rather than smoothed. The weekly roster run re-reads the composition from the Clerk's feed and fails if it moves; full re-verification is scripts/build_mercer_boundaries.py --check (operator step: requests/shapely)."
+      },
+      {
         "file": "mercer-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Mercer County outline — gap-location geometry only, not a dispatched county (see bureau-county-outline.json for the pattern). Ships so mercer-county-board-districts attaches to its ground.",
-        "dynamic_reference": true
+        "note": "Mercer County outline — the coverage test for the county's board and precinct dispatch entries (mercerCountyCoverage). Built 2026-08-18 when the county joined as the 55th dispatched county."
+      },
+      {
+        "file": "mercer-precincts.json",
+        "min_features": 24,
+        "max_features": 24,
+        "note": "Mercer County's 24 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be: the names match its 24 precinct names 24/24 and their POP100 sums to its exact 2020 population (15,699). Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct — no precinct is split. NO POLLING PLACE ships: nothing the county publishes pairs precincts with buildings as data (scripts/build_mercer_boundaries.py)."
       },
       {
         "file": "metro-outline.json",
@@ -1592,7 +1614,7 @@
         "file": "moultrie-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Moultrie County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "note": "Moultrie County outline — NOT a dispatched county: its board is elected AT LARGE, so it has no district geometry and its members ride the County card via il-county-commissioners.json. The outline exists so the county's recorded gaps attach to ground in the data-gaps panel; referenced by slug-built URL, so the validator's literal-reference check skips it (scripts/build_county_outline.py).",
         "dynamic_reference": true
       },
       {
@@ -1935,12 +1957,22 @@
         "note": "Clark County Board members keyed by district (7 single-member districts) plus a top-level 'board' entry carrying the COUNTY's switchboard and courthouse address — the county publishes no per-member contact a machine can read, so one number stands for the board (the Calhoun switchboard rule). THE ROSTER IS THE COUNTY'S CERTIFIED ELECTION RETURNS, not a board page: the county's only board document is a SCANNED IMAGE with no text layer, so each member is whoever the county certified as elected in the most recent general election that seated their district (districts 3, 4 and 7 in 2024; 1, 2, 5 and 6 in 2022), and every row renders that election in districtSource because a canvass cannot show a mid-term appointment. Party ships; no term or chair does, because the returns publish neither. Per-member phones and e-mails are DELIBERATELY ABSENT — they exist only in that scan, where one of the seven addresses is unresolvable from the image, and six read-by-eye personal addresses plus a guess is not a roster; the current list is an open ask with the Clerk. The scan also prints every member's HOME ADDRESS, which never ships under any sourcing (the Madison/Peoria rule). The weekly run re-reads the canvasses and fails if a district's tabulated precincts stop matching the shipped boundaries (scripts/clark_county_board_scraper.py + build_clark_county_board.py)."
       },
       {
+        "file": "crawford-county-board-members.json",
+        "min_keys": 5,
+        "note": "Crawford County Board members keyed by district (5 districts electing TWO members each = 10 seats). Scraped weekly from the county's own board page, which publishes each member as a linked personnel entry with a county e-mail — 10/10 carry one — and badges the Chairman. No party, term or phone ships because the page publishes none. THE SAME WEEKLY RUN IS THE REDISTRICTING TRIPWIRE: it re-reads the district composition from the Clerk's live results feed and fails if it stops matching the shipped dissolve, which is this county's only automatic warning — the check is partial by construction (the feed carries one election) and the run says which districts it could not cover."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
       {
         "file": "il-house-members.json",
         "min_keys": 118
+      },
+      {
+        "file": "mercer-county-board-members.json",
+        "min_keys": 5,
+        "note": "Mercer County Board members keyed by district (5 districts electing TWO members each = 10 seats). Scraped weekly from the county's own board table, which prints party and a term-expiry on every row (10/10 each), the member's home TOWN — how the county identifies who represents where, and not a street address; the scraper FAILS if that column ever starts printing one — and badges the Chairman with his phone. THE SAME WEEKLY RUN IS THE REDISTRICTING TRIPWIRE: it re-reads the district composition from the Clerk's live results feed and fails if it stops matching the shipped dissolve. That matters more here than most: the only map the county has sent is a 2021 scan, so nothing else would ever show the districts moving."
       },
       {
         "file": "school-board-members.json",
@@ -2514,6 +2546,16 @@
       "file": "update-clark-county-board-roster.yml",
       "purpose": "Clark County Board roster (the Clerk's own certified canvasses at il-clark.accessliberty.com — the county's only board document is a scan, so the roster is the election returns; the run also re-checks each district's tabulated precinct list against the shipped dissolve, which is the re-precincting/redistricting tripwire)",
       "schedule": "Mon 20:00 UTC"
+    },
+    {
+      "file": "update-crawford-county-board-roster.yml",
+      "purpose": "Crawford County Board roster (the county's own board page) + the redistricting tripwire: the same run re-reads the district composition from the Clerk's results feed at il-crawford.pollresults.net and fails if it stops matching the shipped dissolve",
+      "schedule": "Tue 21:00 UTC"
+    },
+    {
+      "file": "update-mercer-county-board-roster.yml",
+      "purpose": "Mercer County Board roster (the county's own board table — party, term, home town, chairman) + the redistricting tripwire: the same run re-reads the district composition from the Clerk's results feed at il-mercer.pollresults.net and fails if it stops matching the shipped dissolve",
+      "schedule": "Wed 20:00 UTC"
     }
   ],
   "geocoder": {

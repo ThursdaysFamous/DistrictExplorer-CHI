@@ -288,6 +288,27 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # none — Edgar now borders two served counties, which is
                      # what its new OUTSIDE anchor at Paris proves.
                      "023",
+                     # Crawford (54th dispatched), Mercer (55th) and MOULTRIE
+                     # (County-card only — at large, so no dispatch entry),
+                     # all three added 2026-08-18 by the 34-county sweep of the
+                     # `pollresults.net` / `accessliberty.com` election-results
+                     # vendor rather than by an e-mail. Each county's own
+                     # certified results name which precincts vote in which
+                     # board contest, which answers §2.5 step 2 and, where the
+                     # districts are unions of whole precincts, supplies the
+                     # composition outright. Crawford and Mercer are dissolves
+                     # of their Census 2020 voting districts on that basis;
+                     # Moultrie's board is elected AT LARGE ("COUNTY BOARD
+                     # DISTRICT AT LARGE MEMBER / 16 of 16 precincts / Vote For
+                     # 5"), so it has no geometry and rides the County card.
+                     # All three are plain mainland joins — Crawford borders
+                     # served Clark, Mercer borders served Rock Island and
+                     # Henry, Moultrie borders served Macon, Shelby and Coles —
+                     # so the ring count is unchanged. Moultrie's own seat,
+                     # Sullivan, held an OUTSIDE anchor until this change and
+                     # moved up to INSIDE, exactly as that list is designed to
+                     # force.
+                     "033", "131", "139",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -329,6 +350,12 @@ DISPATCH_COUNTY_FIPS = {
     "jo-daviess": "085",
     "coles": "029",
     "clark": "023",
+    "crawford": "033",
+    "mercer": "131",
+    # Moultrie is deliberately ABSENT: its board is elected at large, so it has
+    # no district geometry, no dispatch entry and no toggle — its members ride
+    # the County card via data/app/il-county-commissioners.json. It appears in
+    # METRO_COUNTY_FIPS above and must not appear here (§1.5).
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -511,6 +538,26 @@ INSIDE = {
     # against TIGER's county rings in build_county_outline.py's clark entry,
     # where this point has been an inside anchor since 2026-08-04.
     "Marshall (Clark)": (39.3986, -87.6900),
+    # Robinson (Crawford) — the county seat, 2026-08-18, the 54th dispatched
+    # county. Its Clerk confirmed a districted board in writing on 2026-08-17
+    # and its Assessor confirmed she maintains the layers, but releasing them
+    # needs the county's Mapping Committee; the county's own certified results
+    # made the committee moot. Joins through its western border with served
+    # Clark.
+    "Robinson (Crawford)": (39.0089, -87.7333),
+    # Aledo (Mercer) — the county seat, 2026-08-18, the 55th dispatched county.
+    # The only map the county sent is a 2021 scan that evidences the district
+    # lines and supplies no data; its certified results supplied the
+    # composition instead. Borders served Rock Island and Henry.
+    "Aledo (Mercer)": (41.2008, -90.7460),
+    # Sullivan (Moultrie) — the county seat, 2026-08-18. MOVED UP FROM THE
+    # OUTSIDE LIST, where it had held the line since Macon's join in pass 12
+    # and where Coles's arrival on 2026-08-17 left it bordering the served area
+    # on three sides. Moultrie is a County-card county — its board is elected
+    # at large, so it has no dispatch entry — and this anchor is why it still
+    # belongs in the ring: a resident here gets a named board, which is a
+    # county-specific answer.
+    "Sullivan (Moultrie)": (39.5951, -88.6085),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -558,9 +605,22 @@ OUTSIDE = {
     # until 2026-08-11, when Clerk Jessica Fox's four-answer reply de-risked
     # the build and Shelby moved up to INSIDE as the 49th dispatched county —
     # the list failed the build until it was moved, exactly as designed.
-    # Sullivan stays: Moultrie is still unserved, and it now borders the
-    # served area on THREE sides (Macon, Shelby and, from 2026-08-17, Coles).
-    "Sullivan (Moultrie)": (39.5868, -88.6069),
+    # Sullivan sat here until 2026-08-18, when the vendor sweep found Moultrie's
+    # board is elected AT LARGE and it shipped as a County-card county — the
+    # guard failed the build until it was moved up to INSIDE, exactly as
+    # designed. The frontier it leaves is Douglas and Piatt, and TUSCOLA takes
+    # the anchor: Douglas now borders served Coles and Moultrie, with Champaign,
+    # Edgar and Piatt keeping it off the enclave list.
+    "Tuscola (Douglas)": (39.7967, -88.2748),
+    # Olney (Richland) — the successor Crawford's join calls for. Crawford
+    # leaves Jasper, Lawrence and Richland behind, and Richland is the one that
+    # borders the most served ground; Jasper and Lawrence keep it off the
+    # enclave list.
+    "Olney (Richland)": (38.7285, -88.0839),
+    # Monmouth (Warren) — the successor Mercer's join calls for. Mercer leaves
+    # Warren and Henderson, and Warren borders served McDonough and now Mercer,
+    # with Hancock, Henderson and Knox keeping it off the enclave list.
+    "Monmouth (Warren)": (40.9114, -90.6473),
     # Cumberland — the successor anchor Coles's join called for (2026-08-17).
     # Coles left five unserved neighbours behind and this is the one nearest
     # to being swallowed: Cumberland now borders served Coles, Shelby AND
@@ -604,13 +664,20 @@ OUTSIDE = {
     # cleared for display and Galena moved up to INSIDE — the guard failed
     # the build until it moved, exactly as designed, and no successor anchor
     # replaces it because the corner has no unserved Illinois county left.
-    # The remaining frontier here is Bureau to the east and Mercer to the
-    # south, both RECORDED GAPS rather than un-researched: Bureau's adopted
-    # 18-district map exists only as street-split JPEG scans (and its GIS
-    # licence, unlike Jo Daviess's, still lacks a display permission), and
-    # Mercer's document section is empty — see docs/DATA_LAYER_GUIDEBOOK.md.
+    # The remaining frontier here is BUREAU, a RECORDED GAP rather than an
+    # un-researched one and now the coverage wash's first enclave: its adopted
+    # 18-district map exists only as street-split JPEG scans, its GIS licence
+    # (unlike Jo Daviess's) still lacks a display permission, and the 2026
+    # vendor sweep confirmed the last remaining route is closed too — its
+    # certified results tabulate SIXTEEN of its precincts in more than one
+    # district's contest apiece (Princeton 2 in districts 6 and 7, Hall 1 in
+    # 10 and 11, and so on), so Bureau SPLITS precincts and no dissolve of
+    # whole ones can draw it — the Jasper/Wade shape at scale.
+    # (Aledo sat beside it until 2026-08-18, when Mercer's own certified
+    # results supplied the composition its 2021 scan could not and Mercer
+    # moved up to INSIDE — the guard failed the build until it moved.
+    # Monmouth (Warren) takes the frontier Mercer leaves behind.)
     "Princeton (Bureau)": (41.3853, -89.4695),
-    "Aledo (Mercer)": (41.2008, -90.7460),
     # Schuyler is a RECORDED GAP, not a gap in the research, and it now borders
     # BOTH Mason and Brown. (Menard stood beside it here until 2026-08-07, on
     # the reasoning that its five commissioner districts run section-line roads

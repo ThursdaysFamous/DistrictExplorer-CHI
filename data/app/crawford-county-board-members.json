@@ -1,0 +1,78 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "charlescampbellccb@gmail.com",
+        "name": "Charles Campbell",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/charles-campbell/"
+      },
+      {
+        "email": "michaeldelaneyccb@gmail.com",
+        "name": "Michael Delaney",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/michael-delaney/"
+      }
+    ],
+    "sourceUrl": "https://crawfordcounty.illinois.gov/department/county-board/"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "joecampanellaccb@gmail.com",
+        "name": "Joe Campanella",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/joe-campanella/"
+      },
+      {
+        "email": "timbennettccb@gmail.com",
+        "name": "Tim Bennett",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/tim-bennett/"
+      }
+    ],
+    "sourceUrl": "https://crawfordcounty.illinois.gov/department/county-board/"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "jonathongoffccb@gmail.com",
+        "name": "Jonathon Goff",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/jonathon-goff/"
+      },
+      {
+        "email": "billburkeccb@gmail.com",
+        "name": "William Burke Jr",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/william-burke-jr/",
+        "role": "Chairman"
+      }
+    ],
+    "sourceUrl": "https://crawfordcounty.illinois.gov/department/county-board/"
+  },
+  "4": {
+    "members": [
+      {
+        "email": "cyndiboyceccb@gmail.com",
+        "name": "Cyndi Richards",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/cyndi-boyce/"
+      },
+      {
+        "email": "davidrainsccb@gmail.com",
+        "name": "David Rains",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/david-rains/"
+      }
+    ],
+    "sourceUrl": "https://crawfordcounty.illinois.gov/department/county-board/"
+  },
+  "5": {
+    "members": [
+      {
+        "email": "kimwadedeckerccb@gmail.com",
+        "name": "Kim Wade-Decker",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/kim-wade-decker/"
+      },
+      {
+        "email": "scottsparksccb@gmail.com",
+        "name": "Scott Sparks",
+        "profileUrl": "https://crawfordcounty.illinois.gov/personnel/scott-sparks/"
+      }
+    ],
+    "sourceUrl": "https://crawfordcounty.illinois.gov/department/county-board/"
+  }
+}

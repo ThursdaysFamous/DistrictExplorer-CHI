@@ -696,6 +696,33 @@ PROVENANCE = [
              "district's tabulated precinct list against the shipped "
              "dissolve, so a re-precincting or redistricting fails there "
              "rather than shipping silently."},
+    {"layer": "Crawford County Board (roster + the composition tripwire)",
+     "app_file": "crawford-county-board-members.json",
+     "source_url": "https://crawfordcounty.illinois.gov/department/county-board/",
+     "note": "The county's own board page (crawford_county_board_scraper.py) — "
+             "ten members, two per district, a county e-mail each and the "
+             "Chairman titled. THE BOUNDARY HAS A SECOND SOURCE that this entry "
+             "does not cover: the district composition comes from the Clerk's "
+             "certified results at il-crawford.pollresults.net, and the same "
+             "weekly run re-reads it and fails if it stops matching the shipped "
+             "dissolve (build_crawford_boundaries.py). The county's own district "
+             "layers exist — its Assessor maintains them — but their release is "
+             "with the county's Mapping Committee, so nothing here reads them."},
+    {"layer": "Mercer County Board (roster + the composition tripwire)",
+     "app_file": "mercer-county-board-members.json",
+     "source_url": "https://www.mercercountyil.org/county_board/index.php",
+     "note": "The county's own board table (mercer_county_board_scraper.py) — "
+             "ten members, two per district, party and term-expiry on every row, "
+             "home town, and the Chairman badged with his phone. THE BOUNDARY "
+             "HAS A SECOND SOURCE that this entry does not cover: the district "
+             "composition comes from the Clerk's certified results at "
+             "il-mercer.pollresults.net, and the same weekly run re-reads it and "
+             "fails if it stops matching the shipped dissolve "
+             "(build_mercer_boundaries.py). That matters more here than most — "
+             "the only map the county has sent is a 2021 scan, so nothing else "
+             "would ever show the districts moving. NOTE FOR ANYONE PROBING "
+             "THIS COUNTY: il-mercer.accessliberty.com answers 200 and is EMPTY, "
+             "carrying no past-election archive at all."},
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",

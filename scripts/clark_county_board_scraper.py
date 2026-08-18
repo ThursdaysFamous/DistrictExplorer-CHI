@@ -106,7 +106,13 @@ def list_general_canvasses():
     return [seen[y] for y in sorted(seen, reverse=True)]
 
 
-def parse_canvass(pdf_bytes):
+def _vkey(name):
+    """Collapse spacing and punctuation so a canvass's "PARIS  1" matches a
+    feed's "PARIS 1" without either spelling being rewritten."""
+    return re.sub(r"[^A-Z0-9]", "", (name or "").upper())
+
+
+def parse_canvass(pdf_bytes, known_precincts=None):
     """{district: {"precincts": [...], "candidates": [{name, party, votes}]}}
 
     The page anatomy this relies on, measured on the 2022 and 2024 files:
@@ -116,10 +122,25 @@ def parse_canvass(pdf_bytes):
     "Jurisdiction Wide" divide the headers from the precinct rows; precinct
     labels sit in the far-left column below that divider; and the final "Total"
     row carries every candidate's countywide vote total in cell order.
+
+    PRECINCT NAMES ARE MATCHED AGAINST A KNOWN VOCABULARY when one is supplied,
+    and that is not a nicety. Reading a label as "one capitalised word plus an
+    optional digit" works for Clark, whose 23 precincts all have that shape, and
+    silently mangles counties that do not: measured on Edgar's 2022 canvass, it
+    split BROUILLETTS CREEK into two precincts, turned YOUNG AMERICA 1 into
+    "YOUNG" plus "AMERICA 1", and collapsed PARIS 10, 11, 12, 14 and 15 into one
+    bare "PARIS" because the digit pattern matched a single character. Pass the
+    county's own precinct list — the Clerk's results feed publishes it — and each
+    row is matched LONGEST-NAME-FIRST against that list instead, so a multi-word
+    or multi-digit name cannot be shortened into a different precinct. Without a
+    vocabulary the old heuristic still applies, and the builder's composition
+    check is what stops a bad parse from shipping.
     """
     import pymupdf  # heavy; function-local so the builder can import constants
 
     doc = pymupdf.open(stream=io.BytesIO(pdf_bytes), filetype="pdf")
+    vocab = sorted(((_vkey(x), len(x.split())) for x in (known_precincts or ())),
+                   key=lambda t: -t[1])
     out = {}
     for page in doc:
         words = page.get_text("words")   # (x0, y0, x1, y1, word, block, line, n)
@@ -179,9 +200,19 @@ def parse_canvass(pdf_bytes):
                 if not re.fullmatch(r"[A-Z][A-Z]+", w[4] or ""):
                     continue
                 label, end_w = w[4], w
-                nxt = words[i + 1] if i + 1 < len(words) else None
-                if nxt and re.fullmatch(r"\d", nxt[4] or "") and nxt[0] - w[2] < 12:
-                    label, end_w = "%s %s" % (w[4], nxt[4]), nxt
+                if vocab:
+                    for cand, ntok in vocab:      # longest first: PARIS 10 beats PARIS
+                        toks = [words[i + k][4] for k in range(ntok)
+                                if i + k < len(words)]
+                        if len(toks) == ntok and _vkey(" ".join(toks)) == cand:
+                            label, end_w = " ".join(toks), words[i + ntok - 1]
+                            break
+                    else:
+                        continue
+                else:
+                    nxt = words[i + 1] if i + 1 < len(words) else None
+                    if nxt and re.fullmatch(r"\d+", nxt[4] or "") and nxt[0] - w[2] < 12:
+                        label, end_w = "%s %s" % (w[4], nxt[4]), nxt
                 y = (w[1] + w[3]) / 2.0
                 row = [t for t in words if abs((t[1] + t[3]) / 2.0 - y) < 3.5
                        and t[0] >= end_w[2]]

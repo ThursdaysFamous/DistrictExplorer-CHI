@@ -42,6 +42,15 @@ EXPECT_MEMBERS = {
                                      # served (7th-Circuit subcircuit) before its board
                                      # arrived, so it changes no ring and no anchor.
     "HAMILTON": 5,                   # pass-14; at-large stated by the Clerk, 2026-08-05
+    "MOULTRIE": 9,                   # 2026-08-18; at-large proven from the Clerk's own
+                                     # certified results — "COUNTY BOARD DISTRICT AT
+                                     # LARGE MEMBER / 16 of 16 precincts / Vote For 5".
+                                     # Found by the 34-county sweep of the
+                                     # pollresults.net vendor, not by an e-mail: the
+                                     # feed answers §2.5 step 2 without anyone replying.
+                                     # Nine seats in staggered groups of five and four;
+                                     # Sullivan moved from the OUTSIDE anchor list to
+                                     # INSIDE in the same change.
     "MORGAN": 3,                     # 2026-08-08; commission form proven from the
                                      # county's OFFICIAL canvasses. Its roster comes from
                                      # morgancounty-il.COM — the .GOV is a content-free
@@ -64,13 +73,20 @@ MIN_COUNTIES = 12
 # Greene styles its chair "Chairwoman" and its deputy "Vice Chair". Both are
 # the county's own words for real people and are kept verbatim rather than
 # normalised to the -man forms, which would be a one-word misstatement.
-ALLOWED_ROLES = ("Chairman", "Chairwoman", "Vice Chairman", "Vice-Chairman",
-                 "Vice Chair", "Commissioner", "Board Member")
+# Moultrie writes "Chairperson" / "Vice Chairperson"; like Greene's
+# "Chairwoman", those are the county's own words for real people and are kept
+# verbatim rather than normalised, so the list widens instead.
+ALLOWED_ROLES = ("Chairman", "Chairwoman", "Chairperson", "Vice Chairman",
+                 "Vice-Chairman", "Vice Chair", "Vice Chairperson",
+                 "Commissioner", "Board Member")
 # Any of these means "this person chairs the board" for the one-chair guard.
 # Matching the literal "Chairman" alone would have let Greene seat two chairs
 # without a word, which is exactly the kind of silent hole widening
 # ALLOWED_ROLES can open.
-CHAIR_ROLES = ("Chairman", "Chairwoman")
+CHAIR_ROLES = ("Chairman", "Chairwoman", "Chairperson")
+# Widening ALLOWED_ROLES without widening THIS is the hole the comment above
+# warns about: Moultrie styles its chair "Chairperson", and had it landed only
+# in ALLOWED_ROLES the one-chair guard would have stopped counting it.
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")

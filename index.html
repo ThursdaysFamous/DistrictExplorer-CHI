@@ -8479,6 +8479,70 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/clark-county-board-members.json", {}, 2);
   });
 
+  /* Crawford (the 54th dispatched county) and Mercer (the 55th), both added
+   * 2026-08-18 by the same finding and built the same way. Neither came from a
+   * reply: a sweep of the `il-<county>.pollresults.net` / `.accessliberty.com`
+   * election-results vendor — 34 Illinois counties on one platform — found
+   * that each county's own certified results publish, as structured data,
+   * exactly which precincts vote in each board district's contest. Where the
+   * districts are unions of WHOLE precincts, that is the composition outright,
+   * and where the Census 2020 voting districts still match the county's
+   * current precinct names (the Jasper test), those VTDs are the polygons.
+   * Both counties pass: Crawford 24/24 and Mercer 24/24 by name, each summing
+   * to its county's exact 2020 population, each partitioning cleanly across
+   * five districts with no precinct claimed twice.
+   *
+   * WHAT THIS ROUTE WALKED PAST, in both counties. Crawford's Clerk confirmed
+   * a districted board in writing and its Assessor confirmed she maintains the
+   * district layers — but their release needs the county's MAPPING COMMITTEE,
+   * and that ask has been open since 2026-08-17. Mercer sent the only map it
+   * has, a 2021 SCAN showing the districts as overlays, which evidences the
+   * lines and supplies no data. Neither obstacle mattered in the end.
+   *
+   * Both boards elect TWO members per district in staggered years, so a card
+   * here names two people. Rosters are scraped weekly from each county's own
+   * board page — Crawford's publishes a county e-mail per member and badges
+   * its Chairman; Mercer's publishes party, home town and term-expiry, badges
+   * its Chairman and prints his phone. The same weekly run RE-READS the
+   * composition from the Clerk's results feed and fails if it stops matching
+   * the shipped dissolve, which is these counties' only automatic
+   * redistricting warning. Polling places ship for neither: nothing either
+   * county publishes pairs its precincts with buildings as data. */
+  var loadCrawfordCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/crawford-county-outline.json", {}, 2);
+  });
+  function crawfordCountyCoverage(point) {
+    return loadCrawfordCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadCrawfordPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/crawford-precincts.json", {}, 2);
+  });
+  var loadCrawfordBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/crawford-county-board-districts.json", {}, 2);
+  });
+  var loadCrawfordBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/crawford-county-board-members.json", {}, 2);
+  });
+  var loadMercerCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mercer-county-outline.json", {}, 2);
+  });
+  function mercerCountyCoverage(point) {
+    return loadMercerCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMercerPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mercer-precincts.json", {}, 2);
+  });
+  var loadMercerBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mercer-county-board-districts.json", {}, 2);
+  });
+  var loadMercerBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mercer-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -17081,6 +17145,140 @@ function initChiExplorer() {
           }
         }
       },
+      // Crawford County — 5 districts electing TWO members each (10 seats),
+      // dissolved from the Census 2020 voting districts per the composition
+      // the county's own certified results publish as structured data
+      // (build_crawford_boundaries.py). The county HAS district layers — its Assessor maintains them and said so — but their release sits with the county's Mapping Committee, so nothing here reads them. The roster is scraped weekly
+      // from the county's own board page, and that same run re-reads the
+      // composition from the Clerk's results feed and fails if it stops
+      // matching this dissolve.
+      {
+        key: "crawford",
+        coverage: crawfordCountyCoverage,
+        loadGeometry: loadCrawfordBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadCrawfordBoardDistricts(),
+            loadCrawfordBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Crawford County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Crawford County Board (official)", url: "https://crawfordcounty.illinois.gov/department/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadCrawfordBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Mercer County — 5 districts electing TWO members each (10 seats),
+      // dissolved from the Census 2020 voting districts per the composition
+      // the county's own certified results publish as structured data
+      // (build_mercer_boundaries.py). The only map the county has sent is a 2021 SCAN showing the districts as overlays: it evidences the lines and supplies no data. The roster is scraped weekly
+      // from the county's own board page, and that same run re-reads the
+      // composition from the Clerk's results feed and fails if it stops
+      // matching this dissolve.
+      {
+        key: "mercer",
+        coverage: mercerCountyCoverage,
+        loadGeometry: loadMercerBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadMercerBoardDistricts(),
+            loadMercerBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Mercer County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Mercer County Board (official)", url: "https://www.mercercountyil.org/county_board/index.php" };
+        },
+        hoverOfficial: {
+          load: loadMercerBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -21638,7 +21836,89 @@ function initChiExplorer() {
             url: "https://il-clark.accessliberty.com/pastelections.aspx"
           };
         }
-      }
+      },
+      // Crawford County — 24 precincts, the Census 2020 voting districts, which are
+      // the county's own fabric by measurement: names match 24/24 and POP100
+      // sums to its exact 2020 population. The board district rides ON the
+      // feature — the composition is whole-precinct, so no spatial join is
+      // needed. NO POLLING PLACE: the county's Elections page publishes a polling list, and it is a scan — as are both of its archived Statements of Votes Cast.
+      {
+        key: "crawford",
+        coverage: crawfordCountyCoverage,
+        loadGeometry: loadCrawfordPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCrawfordPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Crawford County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Crawford County Clerk — Elections (official)", url: "https://crawfordcounty.illinois.gov/department/clerk-recorder/elections-voting/" };
+        }
+      },
+      // Mercer County — 24 precincts, the Census 2020 voting districts, which are
+      // the county's own fabric by measurement: names match 24/24 and POP100
+      // sums to its exact 2020 population. The board district rides ON the
+      // feature — the composition is whole-precinct, so no spatial join is
+      // needed. NO POLLING PLACE: nothing the county publishes pairs its precincts with buildings as data, and its AccessLiberty site carries no past-election archive at all.
+      {
+        key: "mercer",
+        coverage: mercerCountyCoverage,
+        loadGeometry: loadMercerPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMercerPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Mercer County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Mercer County Clerk — elections documents (official)", url: "https://www.mercercountyil.org/documents/elections.php" };
+        }
+      },
     ],
     // Precinct sits at the bottom of the County > Township > Precinct nest:
     // turning it on brings Township on (which itself brings County on), and
