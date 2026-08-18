@@ -2169,56 +2169,106 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .map-panning .region-highlight { filter: none; transition: none; }
   .poi-pin { background: none; border: none; }
   /* ==== ENGINE:END styles-markers ==== */
-  /* Chicago-specific: the masthead action row holding the Data-gaps button and
-     the sources-page link. Both controls are dark-background chrome, so they
-     ride the same --ink surface the footer gave them; only the pill treatment
-     and sizing are new. The gaps button's markup is shared engine (the
-     gaps-html fence), which is exactly why its masthead styling is applied
-     from out here by descendant selector rather than by editing the fence. */
+  /* Chicago-specific: the masthead action row — the Data-gaps button and the
+     sources-page link, pinned to the RIGHT of the wordmark so the masthead
+     reads as one bar (brand left, actions right) instead of a title with a
+     row of chrome stacked underneath it.
+
+     .masthead-inner is styled inside the styles-core ENGINE fence, which this
+     fork must not edit — the deploy-time splice would overwrite it. So the
+     flex row is declared out here at higher specificity (`header.masthead`
+     prefix) and simply wins. Same reason the gaps button's own treatment is a
+     descendant rule: its markup is the shared gaps-html fence, and restyling
+     it in place would owe an engine release. */
+  header.masthead .masthead-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px 28px;
+  }
+  header.masthead h1.title { min-width: 0; }
   .masthead-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 14px;
-    margin-top: 14px;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-left: auto;   /* holds the right edge even when the title is short */
+    padding-top: 5px;    /* optically level with the wordmark, not its line box */
+  }
+  /* One pill spec, two weights: the gaps button is the primary (it is the
+     caveat every answer carries), the sources link the quiet companion. Both
+     are inline-flex so the label centers against the icon at any font size. */
+  .masthead-actions .footer-link-btn,
+  .masthead-action-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+    padding: 9px 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .14s ease, border-color .14s ease, color .14s ease, transform .14s ease;
   }
   .masthead-actions .footer-link-btn {
-    font-size: 13px;
-    line-height: 1.25;
-    color: var(--accent);
-    border: 1px solid rgba(65,182,230,0.55);
-    border-radius: 999px;
-    padding: 6px 14px;
-    transition: color .12s, border-color .12s, background .12s;
+    color: #EAF4FA;
+    background: rgba(65,182,230,0.16);
+    border: 1px solid rgba(65,182,230,0.42);
   }
-  /* Beats the engine rule's `.footer-link-btn:hover { text-decoration: underline }`
-     on specificity — a pill underlines badly. */
+  /* The :hover pair beats the engine rule's
+     `.footer-link-btn:hover { text-decoration: underline }` on specificity —
+     a pill underlines badly. */
   .masthead-actions .footer-link-btn:hover,
   .masthead-actions .footer-link-btn:focus-visible {
     color: #fff;
+    background: rgba(65,182,230,0.28);
     border-color: var(--accent);
-    background: rgba(65,182,230,0.18);
     text-decoration: none;
+    transform: translateY(-1px);
   }
   .masthead-action-link {
-    font-size: 13px;
-    font-weight: 600;
     color: #C9D4DB;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(217,225,231,0.3);
-    padding-bottom: 1px;
-    transition: color .12s, border-color .12s;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(217,225,231,0.16);
   }
   .masthead-action-link:hover,
-  .masthead-action-link:focus-visible { color: #fff; border-color: var(--accent); }
-  /* The masthead is already competing with the map for the first screenful on
-     phones (see the branding shrink above), so the new row shrinks with it. */
-  @media (max-width: 900px) {
-    .masthead-actions { margin-top: 10px; gap: 6px 10px; }
-    .masthead-actions .footer-link-btn { font-size: 12px; padding: 5px 12px; }
-    .masthead-action-link { font-size: 12px; }
+  .masthead-action-link:focus-visible {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(217,225,231,0.38);
+    transform: translateY(-1px);
   }
-
+  .masthead-actions .footer-link-btn:active,
+  .masthead-action-link:active { transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .masthead-actions .footer-link-btn,
+    .masthead-action-link { transition: none; }
+    .masthead-actions .footer-link-btn:hover,
+    .masthead-action-link:hover { transform: none; }
+  }
+  /* Below the branding breakpoint the title already owns the full width, so the
+     actions wrap to their own line and align left under it — a right-aligned
+     orphan row under a left-aligned title reads as a mistake. The masthead is
+     also competing with the map for the first screenful here (see the branding
+     shrink above), so the pills shrink with it. */
+  @media (max-width: 900px) {
+    header.masthead .masthead-inner { gap: 10px; }
+    .masthead-actions {
+      justify-content: flex-start;
+      margin-left: 0;
+      padding-top: 2px;
+      width: 100%;
+      gap: 6px;
+    }
+    .masthead-actions .footer-link-btn,
+    .masthead-action-link { font-size: 12px; padding: 8px 13px; border-radius: 9px; }
+  }
   /* Chicago-specific: the SEO/orientation lede under the empty-state prompt —
      the district vocabulary a first-time (or crawling) visitor reads before a
      point is picked. Styled a step down from the primary prompt above it. */
