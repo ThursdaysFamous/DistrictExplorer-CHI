@@ -8543,6 +8543,48 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/mercer-county-board-members.json", {}, 2);
   });
 
+  /* Edgar (the 56th dispatched county, added 2026-08-18) — the same canvass
+   * route as Crawford and Mercer, and the first county it reached whose
+   * composition rests on a FULL SET of certified documents rather than one
+   * election. The Clerk's results archive carries text-layer canvasses: the
+   * 2022 General tabulates all SEVEN districts over all 31 precincts, each
+   * claimed exactly once; the 2024 General re-tabulates 1, 6 and 7; and the
+   * 2026 General Primary re-tabulates 2, 3, 4, 5 and 6. Every district is
+   * witnessed twice, which is the standard Clark set. The polygons are the
+   * Census 2020 voting districts — 31 of them, summing to the county's exact
+   * 16,866, with 29 names matching the county's own character for character
+   * and the remaining two (EMBARRASS 1, KANSAS 1 against Embarrass and Kansas)
+   * pairing uniquely, recorded as a rename rather than smoothed away.
+   *
+   * THE ROSTER IS THE COUNTY'S PAGE, NOT THE RETURNS, and this county is the
+   * clearest argument for that split anywhere in the fleet: the 2022 and 2024
+   * canvasses elected Phillip Ludington in District 6, while the county's
+   * board page names SAMANTHA McCARTY and the Clerk's 2026 primary confirms
+   * her by carrying a "2-year unexpired term" contest for that seat. A seat
+   * filled mid-term is what no completed canvass can show. Read the domain
+   * twice as well — the roster lives on edgarcountyillinois.COM; the county's
+   * .GOV links across to it and does not carry the board itself.
+   *
+   * No e-mail, phone, term or chairman ships: the page publishes none, and its
+   * committees table's CHAIRMAN column names the chair of each COMMITTEE. */
+  var loadEdgarCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/edgar-county-outline.json", {}, 2);
+  });
+  function edgarCountyCoverage(point) {
+    return loadEdgarCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadEdgarPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/edgar-precincts.json", {}, 2);
+  });
+  var loadEdgarBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/edgar-county-board-districts.json", {}, 2);
+  });
+  var loadEdgarBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/edgar-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -17279,6 +17321,78 @@ function initChiExplorer() {
           }
         }
       },
+      // Edgar — 7 SINGLE-member districts, dissolved from the Census 2020
+      // voting districts per a composition three certified documents agree on
+      // (build_edgar_boundaries.py): the 2022 General carries all seven, the
+      // 2024 General re-tabulates 1/6/7 and the 2026 General Primary
+      // 2/3/4/5/6. The roster is the COUNTY'S OWN PAGE and not the returns —
+      // District 6 turned over mid-term, so the canvasses name a member who
+      // has left. Party ships; nothing else does, because the page publishes
+      // nothing else and its committees table's CHAIRMAN column is per
+      // committee.
+      {
+        key: "edgar",
+        coverage: edgarCountyCoverage,
+        loadGeometry: loadEdgarBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadEdgarBoardDistricts(),
+            loadEdgarBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Edgar County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          // The .COM, not the county's .GOV — the .gov links across to this
+          // page and does not carry the board itself.
+          return { label: "Edgar County Board (official)",
+                   url: "https://edgarcountyillinois.com/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadEdgarBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -21917,6 +22031,54 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Mercer County Clerk — elections documents (official)", url: "https://www.mercercountyil.org/documents/elections.php" };
+        }
+      },
+      // Edgar — 31 precincts, the Census 2020 voting districts. 29 of the 31
+      // names match the county's own spelling exactly; the two that differ
+      // (EMBARRASS 1, KANSAS 1 where the county writes Embarrass and Kansas)
+      // pair uniquely at 31 against 31, and each feature carries BOTH names so
+      // a reader searching either finds it. The board district rides ON the
+      // feature — the composition is whole-precinct. No polling place: the
+      // county publishes none as data.
+      {
+        key: "edgar",
+        coverage: edgarCountyCoverage,
+        loadGeometry: loadEdgarPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadEdgarPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              censusName: findPropCI(props, ["censusname"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          if (result.censusName) {
+            fields.push({ label: "Census spelling", value: String(result.censusName) });
+          }
+          fields.push({ label: "County", value: "Edgar County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Edgar County Clerk — election results (official)",
+                   url: "https://il-edgar.accessliberty.com/pastelections.aspx" };
         }
       },
     ],

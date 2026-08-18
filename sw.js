@@ -93,7 +93,9 @@ const GEOMETRY_URLS = [
   "./data/app/dewitt-county-outline.json",
   "./data/app/douglas-county-outline.json",
   "./data/app/dupage-county-outline.json",
+  "./data/app/edgar-county-board-districts.json",
   "./data/app/edgar-county-outline.json",
+  "./data/app/edgar-precincts.json",
   "./data/app/edwards-county-outline.json",
   "./data/app/effingham-county-outline.json",
   "./data/app/fayette-county-outline.json",
@@ -232,6 +234,7 @@ const GEOMETRY_URLS = [
 const ROSTER_URLS = [
   "./data/app/clark-county-board-members.json",
   "./data/app/crawford-county-board-members.json",
+  "./data/app/edgar-county-board-members.json",
   "./data/app/il-senate-members.json",
   "./data/app/il-house-members.json",
   "./data/app/mercer-county-board-members.json",

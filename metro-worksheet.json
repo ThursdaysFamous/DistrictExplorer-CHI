@@ -1130,11 +1130,22 @@
         "max_features": 1
       },
       {
+        "file": "edgar-county-board-districts.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "Edgar County's 7 single-member County Board districts, DISSOLVED from the county's own precinct fabric (Census 2020 VTDs) per a composition THREE certified documents agree on — the first county the vendor sweep reached that meets Clark's two-witnesses-per-district standard in full. The 2022 General canvass tabulates all seven districts over all 31 precincts, each claimed exactly once; the 2024 General re-tabulates 1, 6 and 7; the 2026 General Primary re-tabulates 2, 3, 4, 5 and 6. Populations sum to the county's exact 16,866 and run 2,235-2,694 against a 2,409 ideal — worst deviation +11.8%, the tightest this route has produced, and still the COUNTY'S apportionment rather than a certification of it. The weekly roster run re-reads the composition from the Clerk's feed and fails if it moves; full re-verification is scripts/build_edgar_boundaries.py --check (operator step: requests/shapely)."
+      },
+      {
         "file": "edgar-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Edgar County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Edgar County outline — the coverage test for the county's board and precinct dispatch entries (edgarCountyCoverage). Built 2026-08-18 when the county joined as the 56th dispatched county, hours after Paris had been written into the coverage ring's OUTSIDE anchor list by Clark's join."
+      },
+      {
+        "file": "edgar-precincts.json",
+        "min_features": 31,
+        "max_features": 31,
+        "note": "Edgar County's 31 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric: 29 of the 31 names match its own spelling character for character, their POP100 sums to its exact 2020 population (16,866), and the two that differ (the census writes EMBARRASS 1 and KANSAS 1 where the county writes Embarrass and Kansas) PAIR UNIQUELY at 31 against 31 — recorded as a rename in the builder's CENSUS_SPELLING, with both names shipped on the feature so a reader searching either finds it. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct. NO POLLING PLACE ships: the county publishes none as data (scripts/build_edgar_boundaries.py)."
       },
       {
         "file": "edwards-county-outline.json",
@@ -1962,6 +1973,11 @@
         "note": "Crawford County Board members keyed by district (5 districts electing TWO members each = 10 seats). Scraped weekly from the county's own board page, which publishes each member as a linked personnel entry with a county e-mail — 10/10 carry one — and badges the Chairman. No party, term or phone ships because the page publishes none. THE SAME WEEKLY RUN IS THE REDISTRICTING TRIPWIRE: it re-reads the district composition from the Clerk's live results feed and fails if it stops matching the shipped dissolve, which is this county's only automatic warning — the check is partial by construction (the feed carries one election) and the run says which districts it could not cover."
       },
       {
+        "file": "edgar-county-board-members.json",
+        "min_keys": 7,
+        "note": "Edgar County Board members keyed by district (7 single-member districts). Scraped weekly from the county's own board page, which publishes name, district and party for all seven — 7/7 with a party — AND NOTHING ELSE: no e-mail, phone, term or board chairman ships, because none is published and the committees table's CHAIRMAN column names the chair of each COMMITTEE. READ THE DOMAIN: the roster is on edgarcountyillinois.COM; the county's .GOV links across to it and does not carry the board. THIS ROSTER IS THE PAGE AND NOT THE RETURNS, and Edgar is the fleet's clearest case for that split — its 2022 and 2024 canvasses elected Phillip Ludington in District 6, the page names Samantha McCarty, and the Clerk's 2026 primary confirms her with a '2-year unexpired term' contest for the seat. A mid-term appointment is exactly what a completed canvass cannot show. The same weekly run re-reads the district composition from the Clerk's feed as the redistricting tripwire, covering whichever districts were on the last ballot and naming the rest as unchecked."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
@@ -2556,6 +2572,11 @@
       "file": "update-mercer-county-board-roster.yml",
       "purpose": "Mercer County Board roster (the county's own board table — party, term, home town, chairman) + the redistricting tripwire: the same run re-reads the district composition from the Clerk's results feed at il-mercer.pollresults.net and fails if it stops matching the shipped dissolve",
       "schedule": "Wed 20:00 UTC"
+    },
+    {
+      "file": "update-edgar-county-board-roster.yml",
+      "purpose": "Edgar County Board roster (edgarcountyillinois.COM board page — the .gov does not carry it) + the redistricting tripwire: the same run re-reads the district composition from the Clerk's results feed at il-edgar.pollresults.net and fails if it stops matching the shipped dissolve",
+      "schedule": "Thu 21:00 UTC"
     }
   ],
   "geocoder": {
