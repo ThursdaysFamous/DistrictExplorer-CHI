@@ -4082,6 +4082,23 @@ the County card, and **Sullivan moved from the OUTSIDE anchor list to INSIDE**
 in the same change — the guard failing the build until it was moved, exactly
 as designed.
 
+**THE CLERK CONFIRMED MOULTRIE'S FORM IN WRITING THE SAME DAY, hours after it
+shipped.** County Clerk Linda S. Qualls answered the standing ask at 17:14Z on
+2026-08-18 with one sentence — "Our county board members are elected at large"
+— against a question first put on 5 August and followed up on the 16th. The
+build did not wait for it and did not need to: the county's own certified
+returns had already said the same thing in machine-readable form. Recording it
+anyway matters for a reason worth stating plainly, because this is the ONE
+county where the two witnesses arrived in that order. A Clerk's answer is this
+project's authority on a board's FORM — it is what settles at-large versus
+districted, and Clark shipped on exactly such a sentence ("The County Board is
+elected by districts. I do not have maps available"). Here the returns got
+there first and the Clerk's sentence is the corroboration rather than the
+premise. Both point the same way, so nothing about the shipped data changes;
+what changes is that Moultrie's at-large posture now rests on the county's
+returns AND its Clerk, and a future reader asking "who says this board is at
+large?" has two answers instead of an inference.
+
 **ONE CERTIFIED ELECTION IS ACCEPTED HERE, AND SAID SO.** Clark's build
 required a second witness per district because its composition was transcribed
 out of PDF text by column geometry, and a transcription can slip. There is no
