@@ -160,6 +160,51 @@
               "type": "string"
             },
             "description": "Full-line // comment block emitted immediately before the entry (ordering rationale)."
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "answers",
+              "boundary"
+            ],
+            "description": "Reader-facing provenance for this layer, rendered as one row of the public sources page's layer matrix. Optional per layer, but a fork that sets sources_page must supply it for EVERY layer — a matrix with a blank row is worse than no matrix, because a reader reads the blank as 'no source'.",
+            "properties": {
+              "answers": {
+                "type": "string",
+                "description": "One sentence, in a reader's words, naming what question this layer answers."
+              },
+              "boundary": {
+                "type": "array",
+                "minItems": 1,
+                "description": "Where the geometry comes from. Several entries when a layer dispatches across publishers (the county concept layers).",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "pattern": "^https?://",
+                      "description": "The publisher's own page for this dataset. Omit when the source has no citable public page (a licensed file, a pre-built derivation); the label then stands alone."
+                    }
+                  }
+                }
+              },
+              "people": {
+                "type": "string",
+                "description": "Where the officeholder names on this layer's card come from, or an honest statement that the layer names nobody. Omitted only when the concept has no officeholder at all."
+              },
+              "applies": {
+                "type": "string",
+                "description": "Where the layer answers at all, in plain words — the reader-facing form of the layer's coverage() test."
+              }
+            }
           }
         }
       }
@@ -434,6 +479,51 @@
       "type": "string",
       "pattern": "^[A-Za-z][A-Za-z0-9]*$",
       "description": "window.<name> debug namespace, twinned with the smoke test."
+    },
+    "verified_date": {
+      "type": "string",
+      "description": "The date the app claims its data was last verified, in the prose form both surfaces print (e.g. \"August 3, 2026\"). Optional: a fork that omits it keeps its hand-written date in index.html and generates nothing. Setting it takes over the verified-date region in index.html AND the sources page's header, so one bump moves both."
+    },
+    "sources_page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "credits"
+      ],
+      "description": "Opts this fork into a public sources page. Present = the generator owns the page's GENERATED regions and every layer must carry a source block; absent = the page and its regions are skipped entirely, which is what keeps this key inert in a fork that has not opted in.",
+      "properties": {
+        "file": {
+          "type": "string",
+          "description": "Repo-relative path of the page carrying the GENERATED regions (e.g. \"sources.html\")."
+        },
+        "credits": {
+          "type": "array",
+          "minItems": 1,
+          "description": "The upstream publishers the app credits as a whole — the list that used to be the footer's source row. Per-layer provenance belongs in layers[].source, not here.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "url"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "pattern": "^https?://"
+              },
+              "note": {
+                "type": "string",
+                "description": "Optional half-sentence on what this publisher supplies."
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

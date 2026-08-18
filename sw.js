@@ -41,10 +41,11 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v43";
+const CACHE_NAME = "district-explorer-shell-v44";
 
 const SHELL_URLS = [
   "./",
+  "./sources.html",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",

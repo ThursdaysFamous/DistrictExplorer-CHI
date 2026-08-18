@@ -37,6 +37,16 @@ in the researched-but-unbuilt backlog.
    drop. (This rule exists because SF's BART-districts candidate silently evaporated
    between worksheet and launch; the debt is since paid — `bart-director` shipped
    July 2026 — but the rule stays.)
+5. **The per-fork inventory below now has a PUBLIC twin, and a layer needs a row in
+   both.** Chicago's `sources.html` renders one provenance row per registered layer —
+   what it answers, the publisher its boundary comes from, where the names on its card
+   come from, the ground it answers on — generated from `metro-worksheet.json`'s
+   `layers[].source`. The two are deliberately not the same document: this inventory is
+   for whoever maintains the fleet (factory pattern, coverage function names, per-county
+   entry counts), the page is for a reader deciding whether to trust an answer. But a
+   layer that ships without a `source` block now fails `generate_metro_files.py`
+   outright, and a page missing a row fails `validate_index.py` — so "add the layer,
+   write the row" is enforced on the public side and remains a review rule here.
 
 <!-- ==== GUIDEBOOK:BEGIN coverage-map ==== -->
 ```json

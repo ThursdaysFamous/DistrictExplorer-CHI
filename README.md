@@ -84,6 +84,8 @@ Stable core + pluggable layer modules, all inside `index.html`. The full contrac
 
 ### Data sources
 
+The reader-facing version of this is **[chidistricts.com/sources.html](https://chidistricts.com/sources.html)** (`sources.html`): the same credits, plus a **layer matrix** giving each of the app's layers its own row — what it answers, the publisher its boundary comes from, where the names on its card come from, and the ground it answers on. It is generated from `metro-worksheet.json`'s `layers[].source`, off the same list that drives the layer registry, so it cannot fall behind the app. The table below stays as the maintainer's summary, grouped by publisher rather than by layer.
+
 | Source | Used for |
 |---|---|
 | [Chicago Data Portal](https://data.cityofchicago.org) (Socrata) | Wards + aldermen roster, ward precincts, library locations, CPS zones + networks, community areas |
@@ -131,7 +133,9 @@ scripts/ccpsa_scraper.py + build_ccpsa_roster.py      CCPSA District Council ros
 scripts/will_county_board_scraper.py + build_will_county_board_roster.py   Will County Board roster pair
 scripts/build_legislative_boundaries.py               pre-builds the IL-clipped chamber geometry from TIGERweb
 scripts/build_embedded_boundaries.py                  simplifies data/*.geojson into data/app/*.json (occasional operator step)
-scripts/validate_index.py           static merge gate: app parses, all layers registered, all data/app files complete
+sources.html                        the public sources page — credits + one provenance row per layer (GENERATED)
+scripts/validate_index.py           static merge gate: app parses, all layers registered, all data/app files complete,
+                                    sources page covers every layer and is linked from the app
 scripts/validate_sources.py         source-freshness gate (dataset ids resolve, newer editions flagged)
 scripts/check_engine_parity.py      engine-fence lint (byte-identical engine across forks)
 scripts/build_engine_artifact.py + apply_engine.py    engine release producer / consumer splice
