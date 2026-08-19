@@ -4577,7 +4577,13 @@ function initChiExplorer() {
       // true forever. relevanceSeq/relevancePromise memoize the async coverage
       // test per selection so the block-visibility pass and the query dispatch
       // share one evaluation (see layerRelevance in the overlay-cards block).
-      relevant: true, relevanceSeq: 0, relevancePromise: null
+      relevant: true, relevanceSeq: 0, relevancePromise: null,
+      // the selection whose RESULT this layer's card currently shows (null
+      // otherwise). A point-first query (queryFeatureAt) can answer the card
+      // while the full boundary download is still in flight — this is how
+      // the overlay-load failure path knows a verified answer is on display
+      // and must not be replaced by a boundaries error (see onLayerToggled).
+      resultSeq: null
     };
   }
 
@@ -5319,6 +5325,17 @@ function initChiExplorer() {
           if (state.layersOn[mod.id] && rt.relevant !== false) rt.overlayLayer.addTo(map);
           refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
           reorderActiveLayers();
+          // A point-first query (queryFeatureAt) may already have answered the
+          // card before this full geometry arrived — the query-resolve
+          // highlight pass then found no rt.geojson and cleared. Re-run it now
+          // the boundaries exist, so the selected district lights up the
+          // moment its layer finishes drawing — the same catch-up the county
+          // dispatcher does when a late county lands
+          // (drawAppendedCountyFeatures).
+          if (state.selectedPoint && state.layersOn[mod.id] && rt.relevant !== false) {
+            updateLayerHighlight(mod);
+            refreshRelationshipOutlines();
+          }
         })
         .catch(function (err) {
           rt.overlayLoaded = false;
@@ -5332,8 +5349,14 @@ function initChiExplorer() {
           // layer still being on: the user may have toggled it off mid-download,
           // and the off-branch already owns the card in that case. If a point is
           // selected, runLayerQuery reports the same failure in the same card —
-          // both paths say the same thing, last writer wins.
-          if (state.layersOn[mod.id]) {
+          // both paths say the same thing, last writer wins — UNLESS a
+          // point-first query already put a verified RESULT on the card for
+          // the current selection (rt.resultSeq): the user's answer must not
+          // be replaced by a boundaries error. The drawing just stays absent
+          // until a re-toggle or the next selection's Retry — the same
+          // recorded tradeoff the county dispatcher makes for a failed
+          // county (card/query keeps working, overlay waits for a reload).
+          if (state.layersOn[mod.id] && rt.resultSeq !== state.sequence) {
             setCardError(mod, "Couldn't load this layer's boundaries. It won't affect other layers.");
           }
         });
@@ -5649,7 +5672,11 @@ function initChiExplorer() {
         if (!state.layersOn[mod.id]) return; // toggled off while in flight
         updateLayerHighlight(mod);
         reorderActiveLayers(); // re-assert area-size stacking now this layer has painted (queries resolve in arbitrary order)
-        if (!result) { setCardEmpty(mod); clearLayerPoi(mod); refreshRelationshipOutlines(); return; }
+        if (!result) { layerRuntime[mod.id].resultSeq = null; setCardEmpty(mod); clearLayerPoi(mod); refreshRelationshipOutlines(); return; }
+        // a verified result is now on display for this selection — the
+        // overlay-load failure path must not replace it with an error card
+        // (a point-first query can resolve before the full boundary download)
+        layerRuntime[mod.id].resultSeq = seq;
         if (mod.compact) {
           // 4b name-only card: the header carries the result (setCardExtras
           // below); render() is skipped and the body hides until a non-result
@@ -5670,6 +5697,7 @@ function initChiExplorer() {
         if (seq !== state.sequence) return;
         if (!state.layersOn[mod.id]) return;
         console.error("[" + mod.id + "] query failed:", err);
+        layerRuntime[mod.id].resultSeq = null; // no result on display — the overlay error may own the card again
         clearLayerHighlight(mod);
         clearLayerPoi(mod);
         setCardError(mod, "This layer's data source didn't respond. It won't affect other layers.", seq);
@@ -6002,25 +6030,62 @@ function initChiExplorer() {
     return tryRoutes(socrataRouteUrls(datasetId), hasUsableGeometry, datasetId + " geometry");
   }
 
+  /* ---------- point-first Socrata fetch: only the feature(s) containing one
+   * point, via SoQL intersects on the dataset's probed geometry column. A
+   * single district's geometry against the full boundary set, so a first
+   * click can answer before the whole download lands (see queryFeatureAt).
+   * Only the primary /resource/ route takes $where; a legacy dataset that
+   * nulls geometry on that route fails hasUsableGeometry here exactly as it
+   * does in the route walk, the caller falls back to the full-set load, and
+   * the fallback-route machinery keeps owning that failure mode. An empty
+   * result rejects too — deliberately: "nothing intersects" from the server
+   * is indistinguishable from those null-geometry lies, so the full set
+   * (whose routes are validated) stays the only authority for "no district
+   * here". ---------- */
+  function loadSocrataPointGeoJSON(datasetId, point) {
+    return probeGeometryColumn(datasetId).then(function (col) {
+      var wkt = "POINT (" + point.lng + " " + point.lat + ")";
+      var url = SOCRATA_HOST + "/resource/" + datasetId + ".geojson?$where=" +
+        encodeURIComponent("intersects(" + col + ", '" + wkt + "')") + "&$limit=8";
+      return fetchJSONWithRetry(withAppToken(url), {}, 1).then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("point query for " + datasetId + " returned no usable geometry");
+        return geojson;
+      });
+    });
+  }
+
   /* ==== ENGINE:END socrata-loader ==== */
   /* ==== ENGINE:BEGIN cached-loaders ==== */
   /* ---------- one shared in-flight/cached promise per loader fn, so overlay.load()
    * and query() never trigger two separate downloads of the same boundaries ---------- */
   function makeCached(loadFn) {
-    var pending = null;
-    return function () {
+    var pending = null, value = null;
+    function load() {
       if (!pending) {
-        pending = loadFn().catch(function (err) {
+        pending = loadFn().then(function (result) {
+          value = result; // sync-readable via load.cached() from here on
+          return result;
+        }, function (err) {
           pending = null; // let the next call (e.g. a Retry click) try again
           throw err;
         });
       }
       return pending;
-    };
+    }
+    // Synchronous cache introspection for the point-first query path
+    // (queryFeatureAt): the resolved value, or null while unloaded/in
+    // flight. Without this a query could not tell "cached, answer locally
+    // for free" from "still downloading, worth a small point query".
+    load.cached = function () { return value; };
+    return load;
   }
 
   function makeCachedLoader(datasetId) {
-    return makeCached(function () { return loadSocrataGeoJSON(datasetId); });
+    var load = makeCached(function () { return loadSocrataGeoJSON(datasetId); });
+    // Point-first companion (queryFeatureAt): the same dataset can say which
+    // feature holds a point server-side long before the full set downloads.
+    load.atPoint = function (point) { return loadSocrataPointGeoJSON(datasetId, point); };
+    return load;
   }
 
   /* ==== ENGINE:END cached-loaders ==== */
@@ -6041,6 +6106,29 @@ function initChiExplorer() {
     return fetchJSONWithRetry(url, {}, 2)
       .then(function (geojson) {
         if (!hasUsableGeometry(geojson)) throw new Error("no usable geometry from " + serviceUrl);
+        return geojson;
+      });
+  }
+
+  /* ---------- point-first ArcGIS fetch: only the feature(s) intersecting one
+   * point, from any FeatureServer/MapServer layer the full loaders read (a
+   * hosted org, a county GIS, TIGERweb). One district's geometry instead of
+   * the whole set, so a heavy layer's card can answer while the full
+   * download is still in flight (see queryFeatureAt). `where` is optional —
+   * a point filter already narrows harder than any attribute clause, but a
+   * caller whose full load filters (e.g. STATE='17') may pass the same
+   * clause for exact parity. An empty result rejects like a null-geometry
+   * one, so "no district here" is only ever concluded from the validated
+   * full set, never from a server quirk on the spatial query. ---------- */
+  function loadArcGISPointGeoJSON(serviceUrl, point, outFields, where) {
+    var url = serviceUrl + "/query?where=" + encodeURIComponent(where || "1=1") +
+      "&geometry=" + encodeURIComponent(point.lng + "," + point.lat) +
+      "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=" + encodeURIComponent(outFields || "*") +
+      "&outSR=4326&f=geojson&geometryPrecision=6";
+    return fetchJSONWithRetry(url, {}, 1)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("point query returned no usable geometry: " + serviceUrl);
         return geojson;
       });
   }
@@ -6132,11 +6220,15 @@ function initChiExplorer() {
     // state.selectedPoint object (a fresh object per selection — see
     // setSelectedPoint), so the second call is a free cache hit instead of a
     // second full point-in-polygon sweep (P7). Keyed by point-object identity,
-    // so a new selection (new point object) always rescans; the cache is purely
-    // an optimization and never changes the answer.
-    var cache = geojson.__pointQueryCache;
-    if (cache && cache.point === point) return cache.feature;
+    // so a new selection (new point object) always rescans — AND by feature
+    // count, because an incrementally-drawn layer (the county union, a future
+    // paged loader) APPENDS into this same live object: a no-match memoized
+    // before a late area landed must not veto the rescan that would find the
+    // point's own district in the appended features. The cache is purely an
+    // optimization and never changes the answer.
     var features = geojson.features || [];
+    var cache = geojson.__pointQueryCache;
+    if (cache && cache.point === point && cache.count === features.length) return cache.feature;
     var found = null;
     for (var i = 0; i < features.length; i++) {
       // Cheap bounding-box reject before the full even-odd ray-cast: most
@@ -6149,8 +6241,45 @@ function initChiExplorer() {
       if (point.lng < bb[0] || point.lng > bb[2] || point.lat < bb[1] || point.lat > bb[3]) continue;
       if (pointInGeometry(point, features[i].geometry)) { found = features[i]; break; }
     }
-    geojson.__pointQueryCache = { point: point, feature: found };
+    geojson.__pointQueryCache = { point: point, feature: found, count: features.length };
     return found;
+  }
+
+  /* ---------- point-first feature resolution — the county dispatcher's
+   * "load from the selected point outward" pattern, generalized to every
+   * layer: resolve the feature containing `point`, sourcing geometry the
+   * fastest honest way available. With the full set already cached
+   * (load.cached — makeCached loaders) the answer is local, exactly as
+   * before. While the full set is still downloading, a loader that declares
+   * .atPoint(point) — a small remote "which feature holds this point"
+   * spatial query — answers from that, so a multi-MB boundary download (the
+   * rest of the state, the rest of the city) never delays the selected
+   * location's card; the full set keeps loading behind it for the overlay,
+   * the highlight, and every later click. The point query is advisory only:
+   * its features still pass the same local pointInGeometry test, and a
+   * failed OR empty point query defers to the full set — so a card answer
+   * can never disagree with what the drawn boundaries would say, and "no
+   * district here" is only ever concluded from the full set. A loader with
+   * neither hook takes exactly the pre-existing path (load, then contain),
+   * which is what keeps this default-on safe for every layer. ---------- */
+  function queryFeatureAt(load, point) {
+    var cached = load.cached ? load.cached() : null;
+    if (cached) return Promise.resolve(findFeatureContaining(cached, point));
+    // fire (or join) the shared full download either way — the overlay and
+    // every subsequent query ride this same cached promise
+    var full = load();
+    function fromFull() {
+      return full.then(function (geojson) { return findFeatureContaining(geojson, point); });
+    }
+    if (!load.atPoint) return fromFull();
+    // the full set is opportunistic on this path: its own consumers (the
+    // overlay load, later queries) surface its failure — don't let an
+    // unconsumed rejection escape as console noise when the point query wins
+    full.then(null, function () {});
+    return load.atPoint(point).then(function (geojson) {
+      var feature = findFeatureContaining(geojson, point);
+      return feature || fromFull();
+    }, fromFull);
   }
 
   /* ==== ENGINE:END find-prop-ci ==== */
@@ -6191,9 +6320,11 @@ function initChiExplorer() {
         return (v == null || v === "") ? null : String(v);
       } : undefined,
       overlay: { load: load, style: opts.style },
+      // point-first by default (queryFeatureAt): a loader that can answer a
+      // spatial point query does, while the full set downloads for the
+      // overlay; every other loader takes the load-then-contain path verbatim
       query: function (point, seq) {
-        return load().then(function (geojson) {
-          var feature = findFeatureContaining(geojson, point);
+        return queryFeatureAt(load, point).then(function (feature) {
           if (!feature) return null;
           var props = feature.properties || {};
           var result = { seq: seq };
@@ -6329,6 +6460,10 @@ function initChiExplorer() {
    * 14.5 MB at geometryPrecision=5, measured 2026-07); they lazy-load on
    * first toggle and cache for the session, matching every other layer.
    * ======================================================================= */
+  function tigerLayerUrl(service, layerIndex) {
+    return "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/" + service +
+      "/MapServer/" + layerIndex;
+  }
   function loadTigerStatewide(service, layerIndex, outFields, label) {
     // Mirrors the legislative TIGER loader: trimmed outFields (statewide sets
     // are an order of magnitude larger than the 118-district SLDL payload,
@@ -6336,33 +6471,35 @@ function initChiExplorer() {
     // same no-usable-geometry guard so an Esri 200-with-error-envelope never
     // gets pinned in the session cache.
     var where = encodeURIComponent("STATE='17'");
-    var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/" + service +
-      "/MapServer/" + layerIndex + "/query?where=" + where + "&outFields=" + outFields +
-      "&outSR=4326&f=geojson&geometryPrecision=5";
+    var url = tigerLayerUrl(service, layerIndex) + "/query?where=" + where +
+      "&outFields=" + outFields + "&outSR=4326&f=geojson&geometryPrecision=5";
     return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
       .then(function (geojson) {
         if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb " + label + " returned no usable geometry");
         return geojson;
       });
   }
-  var loadIlCounties = makeCached(function () {
-    return loadTigerStatewide("State_County", 1, "GEOID,NAME,BASENAME,STATE,LSADC", "counties");
-  });
-  var loadIlTownships = makeCached(function () {
-    return loadTigerStatewide("Places_CouSub_ConCity_SubMCD", 1, "GEOID,NAME,BASENAME,STATE,COUNTY,LSADC", "county subdivisions");
-  });
-  var loadIlPlaces = makeCached(function () {
-    return loadTigerStatewide("Places_CouSub_ConCity_SubMCD", 4, "GEOID,NAME,BASENAME,STATE,LSADC", "incorporated places");
-  });
-  var loadIlSchoolUnified = makeCached(function () {
-    return loadTigerStatewide("School", 0, "GEOID,NAME,STATE", "unified school districts");
-  });
-  var loadIlSchoolSecondary = makeCached(function () {
-    return loadTigerStatewide("School", 1, "GEOID,NAME,STATE", "secondary school districts");
-  });
-  var loadIlSchoolElementary = makeCached(function () {
-    return loadTigerStatewide("School", 2, "GEOID,NAME,STATE", "elementary school districts");
-  });
+  // Every statewide loader carries the point-first hook (queryFeatureAt):
+  // TIGERweb answers "which feature holds this point" in one ~100 KB spatial
+  // query (live-verified: Loop point → 1 feature, <1 s), so a first click
+  // stops waiting on the 3.5–14.5 MB statewide downloads those payloads
+  // measured at. Same layer, same outFields, same STATE filter — the card
+  // reads the same properties either way.
+  function tigerStatewideLoader(service, layerIndex, outFields, label) {
+    var load = makeCached(function () {
+      return loadTigerStatewide(service, layerIndex, outFields, label);
+    });
+    load.atPoint = function (point) {
+      return loadArcGISPointGeoJSON(tigerLayerUrl(service, layerIndex), point, outFields, "STATE='17'");
+    };
+    return load;
+  }
+  var loadIlCounties = tigerStatewideLoader("State_County", 1, "GEOID,NAME,BASENAME,STATE,LSADC", "counties");
+  var loadIlTownships = tigerStatewideLoader("Places_CouSub_ConCity_SubMCD", 1, "GEOID,NAME,BASENAME,STATE,COUNTY,LSADC", "county subdivisions");
+  var loadIlPlaces = tigerStatewideLoader("Places_CouSub_ConCity_SubMCD", 4, "GEOID,NAME,BASENAME,STATE,LSADC", "incorporated places");
+  var loadIlSchoolUnified = tigerStatewideLoader("School", 0, "GEOID,NAME,STATE", "unified school districts");
+  var loadIlSchoolSecondary = tigerStatewideLoader("School", 1, "GEOID,NAME,STATE", "secondary school districts");
+  var loadIlSchoolElementary = tigerStatewideLoader("School", 2, "GEOID,NAME,STATE", "elementary school districts");
 
   /* ---------- geometry for the location-aware selection marker
    * (selectPointMarker): a Lake Michigan hydrography polygon (so the Water Taxi
@@ -6451,13 +6588,15 @@ function initChiExplorer() {
       return name != null ? String(name) : null;
     },
     query: function (point, seq) {
+      // boundary resolution is point-first (queryFeatureAt) — the 3.5 MB
+      // statewide county download never gates naming the county under the
+      // pin; the same-origin rosters are the small half of the join
       return Promise.all([
-        loadIlCounties(),
+        queryFeatureAt(loadIlCounties, point),
         loadIlCountyClerks().catch(function () { return {}; }),
         loadIlCountyCommissioners().catch(function () { return {}; })
       ]).then(function (results) {
-        var geojson = results[0], roster = results[1], commissioners = results[2];
-        var feature = findFeatureContaining(geojson, point);
+        var feature = results[0], roster = results[1], commissioners = results[2];
         if (!feature) return null;
         var props = feature.properties || {};
         var base = findPropCI(props, ["basename"]) || findPropCI(props, ["name"]);
@@ -6767,16 +6906,17 @@ function initChiExplorer() {
       return name != null ? String(name) : null;
     },
     query: function (point, seq) {
+      // boundary resolution is point-first (queryFeatureAt) — one place
+      // polygon instead of the statewide incorporated-places download
       return Promise.all([
-        loadIlPlaces(),
+        queryFeatureAt(loadIlPlaces, point),
         loadMunicipalOfficials().catch(function () { return {}; }),
         // Which municipalities the City Ward layer can actually answer for.
         // Failing to load it degrades to listing the whole council — the safe
         // direction, since suppressing seats we can't redirect would lose them.
         loadMunicipalWardCoverage().catch(function () { return null; })
       ]).then(function (results) {
-        var geojson = results[0], roster = results[1], wardCoverage = results[2];
-        var feature = findFeatureContaining(geojson, point);
+        var feature = results[0], roster = results[1], wardCoverage = results[2];
         if (!feature) return null;
         var props = feature.properties || {};
         var geoid = findPropCI(props, ["geoid"]);
@@ -11106,7 +11246,7 @@ function initChiExplorer() {
   // themselves — the same caveat every ZCTA-based tool carries.
   var IL_BBOX_ENVELOPE = { xmin: -91.6, ymin: 36.9, xmax: -87.0, ymax: 42.6 };
   var loadZipCodes = makeCached(function () {
-    var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query" +
+    var url = tigerLayerUrl("PUMA_TAD_TAZ_UGA_ZCTA", 11) + "/query" +
       "?where=" + encodeURIComponent("1=1") +
       "&geometry=" + encodeURIComponent(JSON.stringify(IL_BBOX_ENVELOPE)) +
       "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
@@ -11118,6 +11258,12 @@ function initChiExplorer() {
         return geojson;
       });
   });
+  // point-first hook (queryFeatureAt): one ZCTA instead of the ~4 MB envelope
+  // set. No STATE filter here for the same reason the full load can't use
+  // one — the point filter narrows harder than the envelope anyway.
+  loadZipCodes.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(tigerLayerUrl("PUMA_TAD_TAZ_UGA_ZCTA", 11), point, "ZCTA5");
+  };
 
   registerPolygonLayer({
     id: "zip-code",
@@ -11196,6 +11342,12 @@ function initChiExplorer() {
   // if either guess is wrong; still worth an operator spot-check.
   var POLICE_DISTRICT_BOUNDARY_SERVICE = arcgisServiceUrl("Police_District_Boundary_View");
   var loadPoliceDistricts = makeCached(function () { return loadArcGISGeoJSON(POLICE_DISTRICT_BOUNDARY_SERVICE); });
+  // point-first hook (queryFeatureAt): CPD's hosted org answers a point
+  // intersects on the same layer, so the district card (and CCPSA's, which
+  // shares this loader) never waits on the citywide boundary download
+  loadPoliceDistricts.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(POLICE_DISTRICT_BOUNDARY_SERVICE, point);
+  };
 
   // Police_District_Stations_View (CPD's ArcGIS org) carries station address +
   // phone per district straight from source, CORS-enabled. Shared by two
@@ -11268,15 +11420,16 @@ function initChiExplorer() {
       style: { color: "#9C0B24", weight: 1.5, fillColor: "#C8102E", fillOpacity: 0.06, dashArray: "2 6" }
     },
     query: function (point, seq) {
+      // boundary resolution is point-first (queryFeatureAt); the roster and
+      // station joins stay whole-file — they're the small half of the card
       return Promise.all([
-        loadPoliceDistricts(),
+        queryFeatureAt(loadPoliceDistricts, point),
         loadCpdDistrictInfo().catch(function () { return {}; }),
         // Address/phone have a CORS-native source independent of the commander
         // scrape; best-effort so a station-fetch failure never blocks the card.
         loadPoliceStations().catch(function () { return null; })
       ]).then(function (results) {
-        var geojson = results[0], cpdInfo = results[1], stationGeo = results[2];
-        var feature = findFeatureContaining(geojson, point);
+        var feature = results[0], cpdInfo = results[1], stationGeo = results[2];
         if (!feature) return null;
         var props = feature.properties || {};
         // ArcGIS district views zero-pad ("008"); extractDistrictNumber strips
@@ -11391,6 +11544,10 @@ function initChiExplorer() {
    * and it degrades gracefully if a guess is wrong. ---------- */
   var POLICE_BEAT_BOUNDARY_SERVICE = arcgisServiceUrl("Police_Beat_Boundary");
   var loadPoliceBeats = makeCached(function () { return loadArcGISGeoJSON(POLICE_BEAT_BOUNDARY_SERVICE); });
+  // point-first hook (queryFeatureAt): one beat polygon instead of all 277
+  loadPoliceBeats.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(POLICE_BEAT_BOUNDARY_SERVICE, point);
+  };
   // Prefer the canonical 4-digit CPD beat number (BEAT_NUMBE, e.g. "2423").
   // "beat_num" is listed first for other possible schemas but does NOT match
   // the live "BEAT_NUMBE" field; the truncated "beat" digit ("3") is a
@@ -11418,8 +11575,8 @@ function initChiExplorer() {
       style: { color: "#7A0A1C", weight: 1, fillColor: "#E4572E", fillOpacity: 0.14, dashArray: null }
     },
     query: function (point, seq) {
-      return loadPoliceBeats().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
+      // point-first (queryFeatureAt) — same properties either way
+      return queryFeatureAt(loadPoliceBeats, point).then(function (feature) {
         if (!feature) return null;
         var props = feature.properties || {};
         var beat = findPropCI(props, BEAT_NUMBER_KEYS);
@@ -11489,12 +11646,13 @@ function initChiExplorer() {
       style: { color: "#0B7A6B", weight: 1.5, fillColor: "#14B8A6", fillOpacity: 0.06, dashArray: "6 3" }
     },
     query: function (point, seq) {
+      // boundary resolution is point-first (queryFeatureAt), riding the same
+      // shared police-district loader — the council roster stays whole-file
       return Promise.all([
-        loadPoliceDistricts(),
+        queryFeatureAt(loadPoliceDistricts, point),
         loadCcpsaDistrictCouncils().catch(function () { return {}; })
       ]).then(function (results) {
-        var geojson = results[0], councils = results[1];
-        var feature = findFeatureContaining(geojson, point);
+        var feature = results[0], councils = results[1];
         if (!feature) return null;
         var props = feature.properties || {};
         // Same zero-pad-stripping district key as the Police District card, so
@@ -11946,9 +12104,10 @@ function initChiExplorer() {
         return name ? String(name) : null;
       },
       overlay: { load: loadZones, style: opts.style },
+      // point-first by default (queryFeatureAt) — makeCachedLoader zones
+      // answer a first click from one small intersects query
       query: function (point, seq) {
-        return loadZones().then(function (geojson) {
-          var feature = findFeatureContaining(geojson, point);
+        return queryFeatureAt(loadZones, point).then(function (feature) {
           var props = feature ? (feature.properties || {}) : null;
           var schoolId = zoneField(props, opts.idKeys);
           var district = intField(zoneField(props, opts.districtKeys));
@@ -12069,9 +12228,9 @@ function initChiExplorer() {
       label: opts.label,
       coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
       overlay: { load: loadNetworks, style: opts.style },
+      // point-first by default (queryFeatureAt) — same pattern as the other factories
       query: function (point, seq) {
-        return loadNetworks().then(function (geojson) {
-          var feature = findFeatureContaining(geojson, point);
+        return queryFeatureAt(loadNetworks, point).then(function (feature) {
           if (!feature) return null;
           var props = feature.properties || {};
           var network = findPropCI(props, ["network", "networknum", "k12_networ"]);
@@ -12505,7 +12664,10 @@ function initChiExplorer() {
   /* ==== ENGINE:END extract-district-number ==== */
 
   /* ---------- Ward + Alderman ---------- */
-  var loadWards = makeCached(function () { return loadSocrataGeoJSON("p293-wvbd"); });
+  // makeCachedLoader (not bare makeCached) so the ward boundary carries the
+  // Socrata point-first hook — a first city click names its ward from one
+  // intersects query while the 50-ward set downloads (queryFeatureAt)
+  var loadWards = makeCachedLoader("p293-wvbd");
   var loadAldermen = makeCached(function () { return loadSocrataJSON("htai-wnw4"); });
 
   // The aldermen roster stores names "Last, First" (e.g. "La Spata, Daniel").
@@ -13357,9 +13519,10 @@ function initChiExplorer() {
       // verified answer to "when is this seat next on the ballot?". Swallowed
       // like the roster above — without it the card just loses that one line.
       var municipal = loadMunicipalOfficials().catch(function () { return {}; });
-      return Promise.all([loadWards(), aldermen, municipal]).then(function (results) {
-        var geojson = results[0], roster = results[1], municipalRoster = results[2];
-        var feature = findFeatureContaining(geojson, point);
+      // ward boundary resolution is point-first (queryFeatureAt); the two
+      // rosters stay whole-file — they're the small half of the join
+      return Promise.all([queryFeatureAt(loadWards, point), aldermen, municipal]).then(function (results) {
+        var feature = results[0], roster = results[1], municipalRoster = results[2];
         if (!feature) return null;
         var props = feature.properties || {};
         var wardRaw = findPropCI(props, ["ward", "ward_num", "ward_number", "ward_id"]);
@@ -13514,8 +13677,8 @@ function initChiExplorer() {
       style: { color: "#06375E", weight: 1, fillColor: "#2B8CC4", fillOpacity: 0.14, dashArray: null }
     },
     query: function (point, seq) {
-      return loadWardPrecincts().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
+      // point-first (queryFeatureAt) — one precinct instead of all ~1,290
+      return queryFeatureAt(loadWardPrecincts, point).then(function (feature) {
         if (!feature) return null;
         var props = feature.properties || {};
         var precinctRaw = findPropCI(props, ["precinct", "precinct_num", "precinct_number", "precinct_no"]);
@@ -13674,13 +13837,14 @@ function initChiExplorer() {
         return extractDistrictNumber(feature.properties || {}, opts.districtFields);
       },
       overlay: { load: loadChamber, style: opts.style },
+      // boundary resolution is point-first by default (queryFeatureAt); the
+      // roster stays a whole-file fetch — it's the small half of the join
       query: function (point, seq) {
         return Promise.all([
-          loadChamber(),
+          queryFeatureAt(loadChamber, point),
           opts.loadRoster().catch(function () { return {}; })
         ]).then(function (results) {
-          var geojson = results[0], roster = results[1];
-          var feature = findFeatureContaining(geojson, point);
+          var feature = results[0], roster = results[1];
           if (!feature) return null;
           var props = feature.properties || {};
           var district = extractDistrictNumber(props, opts.districtFields);
@@ -13862,12 +14026,13 @@ function initChiExplorer() {
       style: { color: "#2E8C6A", weight: 2, fillColor: "#2E8C6A", fillOpacity: 0.05, dashArray: "2 2" }
     },
     query: function (point, seq) {
+      // same point-first shape as every other join card (queryFeatureAt) —
+      // a same-origin loader has no point query, so this path is unchanged
       return Promise.all([
-        loadSchoolBoardDistricts(),
+        queryFeatureAt(loadSchoolBoardDistricts, point),
         loadSchoolBoardMembers().catch(function () { return {}; })
       ]).then(function (results) {
-        var geojson = results[0], members = results[1];
-        var feature = findFeatureContaining(geojson, point);
+        var feature = results[0], members = results[1];
         if (!feature) return null;
         var props = feature.properties || {};
         var district = findPropCI(props, ["district"]);
@@ -13986,12 +14151,13 @@ function initChiExplorer() {
       return d != null ? "District " + String(d) : null;
     },
     query: function (point, seq) {
+      // same point-first shape as every other join card (queryFeatureAt) —
+      // a same-origin loader has no point query, so this path is unchanged
       return Promise.all([
-        loadCcbrDistricts(),
+        queryFeatureAt(loadCcbrDistricts, point),
         loadCcbrRoster().catch(function () { return {}; })
       ]).then(function (results) {
-        var geojson = results[0], roster = results[1];
-        var feature = findFeatureContaining(geojson, point);
+        var feature = results[0], roster = results[1];
         if (!feature) return null;
         var props = feature.properties || {};
         var district = findPropCI(props, ["districtn", "district"]);
@@ -14081,6 +14247,12 @@ function initChiExplorer() {
   }
 
   var loadCommissionerDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(9); });
+  // point-first hook (queryFeatureAt): the county GIS answers a point
+  // intersects on the same layer (live-verified: Loop point → district 2),
+  // so a Cook click's board card stops waiting on the 17-district download
+  loadCommissionerDistricts.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(COOK_COUNTY_POLITICAL_BOUNDARY + "/9", point);
+  };
   var loadCommissionerOffices = makeCached(function () { return loadCookCountyLayerRows(26, "office='Commissioner'"); });
 
   // Suburban Cook voting precincts — the Cook County Clerk's CURRENT
@@ -14752,9 +14924,10 @@ function initChiExplorer() {
           return extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS) || null;
         },
         query: function (point, seq) {
-          return Promise.all([loadCommissionerDistricts(), loadCommissionerOffices()]).then(function (results) {
-            var geojson = results[0], offices = results[1];
-            var feature = findFeatureContaining(geojson, point);
+          // district resolution is point-first (queryFeatureAt) — the
+          // office-rows fetch stays whole-table, it's the small half
+          return Promise.all([queryFeatureAt(loadCommissionerDistricts, point), loadCommissionerOffices()]).then(function (results) {
+            var feature = results[0], offices = results[1];
             if (!feature) return null;
             var district = extractDistrictNumber(feature.properties || {}, COMMISSIONER_DISTRICT_FIELDS);
 
