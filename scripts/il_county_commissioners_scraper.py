@@ -900,6 +900,27 @@ def main():
                     print("county-commissioners: %s parsed 0 on the first fetch and %d "
                           "on a re-fetch — transient, not a page change"
                           % (key, len(members)), file=sys.stderr)
+        if not members and spec["expect"]:
+            # A ZERO PARSE IS NOT AN EMPTY BOARD, and writing it as one is what
+            # broke this refresh for sixteen days. None of these counties seats
+            # zero commissioners, so zero means the response was not the page:
+            # a challenge screen, an error, a truncation. Until 2026-08-18 an
+            # unreadable county was SKIPPED (carried forward, below) while a
+            # county that answered 200 with nothing usable was WRITTEN EMPTY —
+            # the two opposite treatments for the same practical outcome, with
+            # the worse one going to the case that looks fine. Calhoun parsed
+            # five members by hand on the day this was written, from the same
+            # URL and the same parser, which is what proves the page was never
+            # the problem. Skipped now, and the diagnostic says WHAT ARRIVED
+            # rather than guessing why.
+            title = re.search(r"(?is)<title[^>]*>(.*?)</title>", resp.text)
+            print("county-commissioners: WARN — %s answered HTTP %s with %d bytes "
+                  "titled %r but yielded no members; treating it as unread and "
+                  "carrying its last-good roster forward."
+                  % (key, resp.status_code, len(resp.text),
+                     clean(title.group(1))[:80] if title else "(no <title>)"),
+                  file=sys.stderr)
+            continue
         if len(members) != spec["expect"]:
             print("county-commissioners: WARN — %s parsed %d members, expected %d"
                   % (key, len(members), spec["expect"]), file=sys.stderr)

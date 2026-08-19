@@ -32,6 +32,7 @@ Usage:
 
 import json
 import re
+import time
 import sys
 
 import requests
@@ -50,10 +51,33 @@ PHONE_RE = re.compile(r'(\d{3})[.\- ](\d{3})[.\- ](\d{4})')
 DISTRICT_RE = re.compile(r'District\s+(\d+)', re.I)
 
 
+FETCH_ATTEMPTS = 3
+RETRY_PAUSE_SECONDS = 4
+
+
 def fetch(url):
-    r = requests.get(url, headers=UA, timeout=60)
-    r.raise_for_status()
-    return r.text
+    """GET with a bounded retry.
+
+    THERE WAS NO RETRY HERE, and a single bad response failed the whole weekly
+    run for sixteen days (2026-08-02 to 08-18) while the page itself was fine:
+    re-running the same scraper by hand on 08-18 parsed all 30 rows on the first
+    try. The county's site answers this project differently from different
+    callers — the same posture measured on Brown, Pike and Greene in
+    il_county_commissioners_scraper.py, whose fetch() carries this retry and
+    documents why. One flaky afternoon must not freeze a roster.
+    """
+    last = None
+    for attempt in range(FETCH_ATTEMPTS):
+        try:
+            r = requests.get(url, headers=UA, timeout=60)
+            r.raise_for_status()
+            return r.text
+        except requests.RequestException as exc:
+            last = exc
+            if attempt + 1 < FETCH_ATTEMPTS:
+                time.sleep(RETRY_PAUSE_SECONDS)
+    raise SystemExit("lasalle-board-scraper: FAIL — %s unreachable after %d "
+                     "attempts (%s)" % (url, FETCH_ATTEMPTS, last))
 
 
 def clean(s):
@@ -101,8 +125,21 @@ def main():
         })
 
     if not records:
-        print("lasalle-board-scraper: FAIL — zero rows parsed from %s (markup change?)"
-              % LIST_URL, file=sys.stderr)
+        # SAY WHAT ARRIVED, DO NOT GUESS WHY. This message used to read
+        # "(markup change?)" and that guess cost real time on 2026-08-18: the
+        # markup had not changed at all, and the guess sent the reader to the
+        # parser instead of to the response. Status, size and title are what
+        # distinguish a redesigned page from a challenge screen or an error
+        # page, and they cost nothing to print.
+        title = re.search(r"(?is)<title[^>]*>(.*?)</title>", html)
+        print("lasalle-board-scraper: FAIL — zero rows parsed from %s. The "
+              "response was %d bytes, titled %r. A full page with a new title "
+              "means the markup moved; a short one, or a title naming a "
+              "challenge or an error, means this caller was refused rather "
+              "than the page changed."
+              % (LIST_URL, len(html),
+                 clean(title.group(1))[:80] if title else "(no <title>)"),
+              file=sys.stderr)
         sys.exit(1)
 
     out = json.dumps({"source": LIST_URL, "records": records}, indent=2, ensure_ascii=False)
