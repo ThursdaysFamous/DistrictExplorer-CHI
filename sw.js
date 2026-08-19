@@ -298,6 +298,7 @@ const ROSTER_URLS = [
   "./data/app/white-precinct-polling.json",
   "./data/app/coles-county-board-members.json",
   "./data/app/jo-daviess-county-board-members.json",
+  "./data/app/cook-library-trustees.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

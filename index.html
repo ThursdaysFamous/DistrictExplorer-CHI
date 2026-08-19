@@ -19492,6 +19492,16 @@ function initChiExplorer() {
    * districts don't tile a county. ---------- */
   var loadCookLibraryDistricts = makeCached(function () { return loadCookCountyLayerGeoJSON(20); });
   var loadCookLibraryFunds = makeCached(function () { return loadCookCountyLayerGeoJSON(19); });
+  /* The one Cook library body whose BOARD the county publishes: the Cicero
+   * Public Library's seven elected trustees, filed in the Clerk's directory
+   * beside the Town of Cicero's government (the TWNSP quirk — see
+   * scripts/build_cicero_library_trustees.py). Keyed by the Clerk's own tax
+   * AGENCY id, the same id the fund tiling carries on its features, so both
+   * sides of the join are the Clerk's. Every other Cook agency stays
+   * name-only, honestly: no officeholder source exists for them. */
+  var loadCookLibraryTrustees = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cook-library-trustees.json", {}, 2);
+  });
   var loadWillLibraries = makeCached(function () {
     return loadWillFeatureServer("Library_District", 1,
       "DISTRICTNAME,DistName2,Turstee,Turstee2,Turstee3,Turstee4,Turstee5,Turstee6,Turstee7", "library districts");
@@ -19534,6 +19544,17 @@ function initChiExplorer() {
         // degrades to districts-only, and the fund error still surfaces
         // when nothing snaps.
         query: function (point, seq) {
+          // A fund hit whose agency id has a published board (Cicero today)
+          // gets the trustees joined on; a roster fetch failure degrades to
+          // the name-only card rather than failing the layer.
+          function withBoard(result) {
+            if (!result || result.kind !== "fund" || result.agency == null) return result;
+            return loadCookLibraryTrustees().then(function (roster) {
+              var entry = roster ? roster[String(result.agency)] : null;
+              if (entry) result.board = entry;
+              return result;
+            }, function () { return result; });
+          }
           return loadCookLibraryDistricts().then(function (districts) {
             var feature = findFeatureContaining(districts, point);
             if (feature) {
@@ -19547,18 +19568,21 @@ function initChiExplorer() {
               return { seq: seq, kind: kind,
                        name: findPropCI(near.feature.properties || {},
                          kind === "fund" ? ["agency_description"] : ["max_agency_desc"]),
+                       agency: kind === "fund"
+                         ? findPropCI(near.feature.properties || {}, ["agency"]) : null,
                        snappedFt: Math.max(1, Math.round(near.feet)) };
             }
             return loadCookLibraryFunds().then(function (funds) {
               var ff = findFeatureContaining(funds, point);
               if (ff) {
-                return { seq: seq, kind: "fund",
-                         name: findPropCI(ff.properties || {}, ["agency_description"]) };
+                return withBoard({ seq: seq, kind: "fund",
+                         name: findPropCI(ff.properties || {}, ["agency_description"]),
+                         agency: findPropCI(ff.properties || {}, ["agency"]) });
               }
               var features = (districts.features || []).concat(funds.features || []);
               var kinds = (districts.features || []).map(function () { return "district"; })
                 .concat((funds.features || []).map(function () { return "fund"; }));
-              return snapAcross(features, kinds);
+              return withBoard(snapAcross(features, kinds));
             }, function (err) {
               var features = districts.features || [];
               var hit = snapAcross(features, features.map(function () { return "district"; }));
@@ -19579,7 +19603,37 @@ function initChiExplorer() {
           if (result.snappedFt != null) {
             fields.push({ label: "Note", value: rowSnapNoteText(result.snappedFt) });
           }
-          return renderFieldStack(fields);
+          var stack = renderFieldStack(fields);
+          var entry = result.board;
+          if (!entry || !entry.trustees || !entry.trustees.length) return stack;
+          // The Cicero join (see loadCookLibraryTrustees): trustees, then the
+          // library's own contact — the fleet's card order.
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(stack);
+          wrap.appendChild(renderSectionLabel("Board of Library Trustees"));
+          wrap.appendChild(renderPersonRows(entry.trustees.map(function (t) {
+            var person = { name: String(t.name) };
+            var notes = [];
+            if (t.appointed) notes.push("Appointed");
+            if (t.nextElection) notes.push("Next election " + String(t.nextElection));
+            if (notes.length) person.note = notes.join(" · ");
+            return person;
+          })));
+          var office = entry.office || {};
+          var raw = office.url ? String(office.url).trim() : "";
+          var site = safeHttpUrl(raw) ||
+            (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(raw) ? safeHttpUrl("https://" + raw) : null);
+          wrap.appendChild(renderLinkRow({
+            title: String(entry.name || "Library"),
+            phone: office.phone, email: office.email,
+            links: site ? [{ label: "Website", url: site }] : []
+          }));
+          if (office.address) {
+            wrap.appendChild(renderOfficeGroup({
+              offices: [{ label: "Library", lines: [String(office.address)] }]
+            }));
+          }
+          return wrap;
         }
       },
       polygonCountyEntry({

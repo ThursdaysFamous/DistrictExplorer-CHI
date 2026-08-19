@@ -544,6 +544,15 @@ jobs:
             echo "PRESERVED_EOF"
           } >> "$GITHUB_OUTPUT"
 
+      # The Cicero Public Library's elected board, from the same Cook payload
+      # (the Clerk's TWNSP read carries it — see the builder's docstring).
+      # Gated on the Cook scrape rather than the roster build: this file's
+      # only input is Cook's, and a failed Cook scrape carries BOTH files
+      # forward together.
+      - name: Rebuild the Cicero library trustees file
+        if: steps.scrape_cook.outcome == 'success'
+        run: python3 scripts/build_cicero_library_trustees.py /tmp/cook_municipal_officials.json
+
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
@@ -573,7 +582,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/municipal-officials.json
+          git add data/app/municipal-officials.json data/app/cook-library-trustees.json
           git commit -m "Update municipal officials roster from the county clerk directories"
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
