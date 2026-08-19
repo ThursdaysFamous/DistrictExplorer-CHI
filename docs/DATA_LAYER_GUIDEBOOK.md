@@ -4490,6 +4490,72 @@ None of the four is fixed here; each is a different source and a different
 repair, and this change is the thing that makes them visible. They are the
 watchdog's first report rather than its backlog.
 
+### 2026-08-18, night: Calhoun and LaSalle — two failing refreshes, neither of them broken
+
+The watchdog's first report named four failing roster workflows. Two were taken
+first, and both turned out to be the same non-bug wearing two different wrong
+error messages. **Neither county's page had changed, and neither parser needed a
+line altered.** Re-running both scrapers by hand, against the same URLs, on the
+day the report landed: LaSalle parsed all 30 rows on the first try, Calhoun
+parsed its five commissioners with every name, role, term and e-mail. Both
+rebuilt to a BYTE-IDENTICAL shipped file, which is what proves the data was
+never the issue.
+
+**What the messages said, and why that cost time.** LaSalle's read `zero rows
+parsed from …Directory.aspx?DID=39 (markup change?)`. The markup had not
+changed; the parenthetical was a guess, and it sent the reader to the parser
+instead of to the response. Both scrapers now print WHAT ARRIVED — status, byte
+count, `<title>` — because those three facts separate a redesigned page from a
+challenge screen or an error page, and they cost nothing. A guessed cause in an
+error message is worse than no cause at all: it is a confident pointer in a
+direction nobody checked.
+
+**LaSalle had no retry at all.** One `requests.get`, one chance. The sibling
+commissioners scraper has carried a three-attempt `fetch` since 2026-08-08 with
+a docstring explaining precisely this — "several of these sites sit behind
+Cloudflare, and one bad fetch out of ten made that county parse 0 members" — and
+the lesson had simply never been ported. Sixteen days of red runs for want of a
+retry that was already written next door.
+
+**Calhoun's was the more interesting shape, and it is the sweep's lesson again.**
+The commissioners scraper SKIPS a county it cannot fetch — carried forward, WARN
+logged — but WROTE an empty member list for a county that answered 200 with
+nothing usable. Two opposite treatments for the same practical outcome, with the
+worse one going to the case that looks fine from the outside. None of these
+counties seats zero commissioners, so zero never means an empty board; it means
+the response was not the page. It is now skipped like any other unread county.
+
+**And the real reason the job had been dead for sixteen days was neither of
+those.** `MIN_COUNTIES` equals the number of counties the file actually ships,
+so ANY single unreachable county failed the entire refresh. The 15 August run
+lost Greene to a 429, Pike and Brown to 403s, and Calhoun to the empty 200 —
+four at once — and eleven counties that answered perfectly well went unrefreshed
+for over two weeks because a handful of small county sites do not like GitHub's
+runners. The builder now CARRIES FORWARD any county it could not read, printing
+a NOT RE-READ line per county in the same idiom Edwards and Wabash already use,
+and refuses only when at least HALF the roster would be last week's — below that
+line some sites were grumpy; at or above it, something changed about how this
+project reaches them. Exercised rather than assumed: 2 carried succeeds, 5
+carried succeeds, 6 of 12 fails, the actual 15 August combination now ships all
+twelve with four disclosed as carried, and a fresh clone with no shipped file
+behaves exactly as before.
+
+**The general rule, stated once.** A guard that fires on a request FAILING is
+blind to a request that succeeds at nothing — the McHenry handler, the Brown
+e-mail floor, the vanished district key, and now Calhoun's empty 200 are four
+instances of it in one week. And a pipeline whose floor equals its exact content
+cannot survive its own dependencies having a bad day; it needs somewhere to put
+partial success, or it converts every wobble into a total outage.
+
+**A footnote that is really about this session's own process.** All of the above
+was first written against a working tree four commits stale, because a
+`git fetch origin --prune` with its output redirected to `/dev/null` had not
+updated `origin/main` and nothing said so. The tell was `build_coverage_gaps.py
+--check` reporting 113 gaps where the live site served 109 — a generated-file
+gate disagreeing with production is the cheapest stale-checkout detector there
+is, and it is worth reading that number rather than skimming past an OK. Never
+silence a fetch.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the

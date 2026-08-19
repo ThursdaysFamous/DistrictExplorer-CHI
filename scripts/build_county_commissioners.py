@@ -70,6 +70,26 @@ EXPECT_MEMBERS = {
                                      # server, measured 5 Aug and re-checked 9 Aug.
 }
 MIN_COUNTIES = 12
+# How many counties may be CARRIED FORWARD from the shipped file in one run
+# before the build refuses. Expressed as a fraction of the expected roster
+# rather than a hand-set count, so it stays meaningful as counties are added.
+#
+# WHY CARRY FORWARD AT ALL. MIN_COUNTIES equals the number of counties this file
+# actually ships, which means that before 2026-08-18 a SINGLE unreachable county
+# failed the entire refresh and froze all twelve. That is not hypothetical: the
+# 15 August run lost Greene to a 429, Pike and Brown to 403s, and Calhoun to a
+# 200 that carried no members, and the whole job died — so eleven counties that
+# answered perfectly well went unrefreshed for sixteen days because a handful of
+# county websites do not like GitHub's runners. These are small county sites
+# behind assorted edges; one of them having a bad afternoon is the normal case,
+# not the alarming one.
+#
+# WHY A CEILING ON IT ANYWAY. Carrying forward is how the roster stays whole,
+# but a run that carries most of the file is not a refresh at all — it is a
+# systemic block wearing a green tick, and that is the state a human needs to
+# see. Half is the line: below it, some sites were grumpy; at or above it,
+# something changed about how this project reaches them.
+MAX_CARRIED_FRACTION = 0.5
 # Greene styles its chair "Chairwoman" and its deputy "Vice Chair". Both are
 # the county's own words for real people and are kept verbatim rather than
 # normalised to the -man forms, which would be a one-word misstatement.
@@ -101,12 +121,38 @@ def norm_key(name):
     return re.sub(r"[^A-Z]", "", re.sub(r"\s*COUNTY\s*$", "", (name or "").upper()))
 
 
+def load_shipped(out_dir):
+    """The roster as it currently ships, for counties this run could not read."""
+    path = os.path.join(out_dir, "il-county-commissioners.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
 def main():
     if len(sys.argv) < 2:
         fail("usage: build_county_commissioners.py <raw-scraper-output.json> [output_dir]")
     with open(sys.argv[1], encoding="utf-8") as f:
         counties = json.load(f)["counties"]
     out_dir = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_OUT_DIR
+
+    # Counties the scraper could not read this run keep their last shipped entry
+    # rather than vanishing or failing the job. The scraper has already said why
+    # each one was skipped; this says, per county, that what ships is not fresh.
+    shipped = load_shipped(out_dir)
+    carried = sorted(set(shipped) - set(counties))
+    for key in carried:
+        counties[key] = shipped[key]
+        print("county-commissioners-roster: NOT RE-READ — %s was not readable this "
+              "run; carrying its %d shipped members forward unchanged."
+              % (key, len(shipped[key].get("members") or [])), file=sys.stderr)
+    if carried and len(carried) >= max(1, int(len(counties) * MAX_CARRIED_FRACTION)):
+        fail("%d of %d counties were unreadable this run (%s) — that is not a few "
+             "grumpy sites, it is a change in how this project reaches them. "
+             "Refusing to ship a roster that is mostly last week's."
+             % (len(carried), len(counties), ", ".join(carried)))
 
     roster = {}
     for key, block in counties.items():
