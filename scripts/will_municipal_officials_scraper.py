@@ -92,6 +92,64 @@ MIN_ENTRIES = 30
 MIN_HEADS = 30
 MIN_BOARD_MEMBERS = 180
 
+# ---------------------------------------------------------------------------
+# CRETE — the entry the text layer mangles worst, recovered rather than lost.
+#
+# The directory COVERS the Village of Crete (its own table of contents lists
+# it, section 5.13), but PDF-text extraction into the /basic layer loses the
+# entry's whole head: the "VILLAGE OF CRETE" header, the hall address/phone,
+# the President line, and the Clerk's name — the same defect class the
+# docstring records for Lockport and Wilmington. What SURVIVES, verbatim and
+# machine-readable, is the entry's tail: the clerk note's ending ("...Will
+# need to run in 2027 as an unexpired 2-year term"), "Treasurer (Appointed
+# Position)Gary Paape", the six trustees with (IND) parties and years, and
+# "Attorney Spesia & Taylor". Because the header is gone, split_entries never
+# creates a Crete part — the orphan rides the tail of the PRECEDING entry
+# (Coal City), where that entry's own Attorney cut silently discards it. So
+# Crete shipped nothing at all until 2026-08-19, and nothing said so.
+#
+# recover_crete() below parses that surviving tail. The two facts the text
+# layer cannot supply come from other publications of record, each named:
+#
+# PRESIDENT — from the county's own CERTIFIED RESULTS, not from any directory:
+# Will County Clerk, Consolidated Election April 1, 2025, Official Results
+# (310/310 precincts, run 04/16/2025): "VILLAGE OF CRETE For President" —
+# Mark S. Wiater (IND), 720 votes, unopposed. Canvass Book:
+# https://assets01.aws.connect.clarityelections.com/Assets/Connect/RootPublish/
+# will-il.connect.clarityelections.com/Elections/2025ConsolidatedElection/CanvassBook.pdf
+# (pp. 11 cumulative / 45 canvass). A four-year term -> expires 2029. This row
+# is named by the election that seated him (the Clark posture); the weekly run
+# prints a NOT RE-READ line naming this document and its age.
+#
+# CLERK — DELIBERATELY ABSENT, and the reasons are measured: the same
+# certified 2025 contest, "VILLAGE OF CRETE For Clerk", reads "No Candidate"
+# with 0 votes cast, so the office was filled by appointment afterward; the
+# directory names the appointee only in the text the extraction lost; and the
+# village's own site (villageofcrete.org) serves an SG-captcha challenge to
+# every automated client, so it cannot be read from here. The surviving
+# fragment "Will need to run in 2027 as an unexpired 2-year term" is the tail
+# of that clerk note. Shipping no clerk beats guessing one.
+#
+# WEBSITE + HALL EMAIL — the directory itself publishes both, as clickable
+# link annotations on Crete's page (the flipbook's config layer, annotype
+# TAnnoLink: http://villageofcrete.org and mailto:ktellef@villageofcrete.org,
+# read 2026-08-19). The annotations survive precisely where the text did not.
+# Hall street address and phone did not survive anywhere -> shipped as null.
+CRETE_JURISDICTION = "Village of Crete"
+CRETE_PRESIDENT = {
+    "office": "President", "district": None, "name": "Mark S. Wiater",
+    "party": "IND", "term_expires": "2029", "appointed": False,
+}
+CRETE_PRESIDENT_PROVENANCE = (
+    "Will County certified Official Results, Consolidated Election 2025-04-01 "
+    "(Canvass Book run 2025-04-16): unopposed, 720 votes")
+CRETE_PRESIDENT_CERTIFIED = "2025-04-16"
+CRETE_WEBSITE = "villageofcrete.org"
+CRETE_EMAIL = "ktellef@villageofcrete.org"
+# The orphan carries exactly these six today; one short is a vacancy, fewer
+# means the extraction changed shape again and a human should look.
+MIN_CRETE_TRUSTEES = 4
+
 
 def decode_cfemail(enc):
     """Cloudflare email obfuscation: hex string, first byte is the XOR key."""
@@ -482,6 +540,72 @@ def parse_entry(entry):
     return jurisdiction, people
 
 
+def recover_crete(entries, parsed_jurisdictions):
+    """The Village of Crete, from the orphaned tail its lost header strands.
+
+    Returns (records, note) — records empty when there is nothing to do.
+    Self-disabling: if a future edition's text layer carries the "VILLAGE OF
+    CRETE" header again, the normal path parses the entry and this recovery
+    stands down rather than double-shipping. See the CRETE_* block above for
+    why each recovered fact is trustworthy and which two are not recoverable.
+    """
+    if CRETE_JURISDICTION in parsed_jurisdictions:
+        return [], ("crete: the directory's text layer carries the entry header "
+                    "again — parsed normally; the orphan recovery stood down. "
+                    "If this persists, retire recover_crete() and its constants.")
+
+    # The orphan rides whichever entry precedes Crete alphabetically in the
+    # book. Anchor on its CONTENT, not on that neighbour's name: the host part
+    # is the one whose text AFTER its own Attorney block still contains a
+    # second full member block ending in another Attorney line — the shape a
+    # swallowed entry leaves and nothing else does.
+    for entry in entries:
+        segments = re.split(r"\bAttorney\b", entry)
+        if len(segments) < 3:
+            continue
+        orphan = segments[1]
+        if "Trustees" not in orphan or "(Appointed Position)" not in orphan:
+            continue
+        host_people = parse_entry(entry)[1]
+        host_names = {p["name"] for p in host_people}
+        tail = orphan.split("Trustees", 1)[1]
+        trustees = parse_members(tail, "Trustee")
+        # A trustee already claimed by the host entry means this is not the
+        # orphan shape but a parsing accident — refuse loudly, ship nothing.
+        overlap = [t["name"] for t in trustees if t["name"] in host_names]
+        if overlap:
+            print("FATAL: crete recovery matched a block sharing members with "
+                  "its host entry (%s) — refusing to guess whose they are"
+                  % ", ".join(overlap), file=sys.stderr)
+            sys.exit(1)
+        if len(trustees) < MIN_CRETE_TRUSTEES:
+            continue
+        records = [dict(CRETE_PRESIDENT)]
+        treasurer = parse_officer(orphan, "Treasurer")
+        if treasurer:
+            records.append(treasurer)
+        records.extend(trustees)
+        for person in records:
+            person["jurisdiction"] = CRETE_JURISDICTION
+            person["office_address"] = None
+            person["office_city"] = None
+            person["office_state"] = None
+            person["office_zip"] = None
+            person["office_phone"] = None
+            person["office_email"] = CRETE_EMAIL
+            person["website"] = CRETE_WEBSITE
+        note = ("crete: recovered %d trustees + %s from the orphaned block; "
+                "president NOT RE-READ — %s, certified %s; clerk deliberately "
+                "absent (2025 contest: No Candidate; appointee's name lost with "
+                "the header; villageofcrete.org is captcha-gated)"
+                % (len(trustees),
+                   "treasurer" if treasurer else "no treasurer",
+                   CRETE_PRESIDENT_PROVENANCE, CRETE_PRESIDENT_CERTIFIED))
+        return records, note
+
+    return [], None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     parser.add_argument("--out", default="will_municipal_officials.json")
@@ -513,6 +637,31 @@ def main():
             person["source_url"] = directory_url
             person["scraped_at"] = scraped_at
             officials.append(person)
+
+    # Crete: the one entry whose header the text layer loses (see CRETE_*).
+    crete_records, crete_note = recover_crete(entries, {m["name"] for m in municipalities})
+    if crete_note:
+        print(crete_note, file=sys.stderr)
+    if crete_records:
+        municipalities.append({
+            "name": CRETE_JURISDICTION,
+            "source_url": directory_url,
+            "scraped_at": scraped_at,
+        })
+        for person in crete_records:
+            person["source_url"] = directory_url
+            person["scraped_at"] = scraped_at
+            officials.append(person)
+    # THE ABSENCE GUARD (the Sangamon lesson: a lost key renders as a broken
+    # card, and every floor can pass while it happens). The directory's own
+    # table of contents lists Crete, so a run where NEITHER path produced it
+    # means the recovery broke, not that the village left the county — fail
+    # loudly rather than shipping a roster quietly one municipality short.
+    if not any(m["name"] == CRETE_JURISDICTION for m in municipalities):
+        print("FATAL: no path yielded the Village of Crete — the directory "
+              "covers it (ToC section 5.13), so its absence is a parse break; "
+              "the shipped roster should stand", file=sys.stderr)
+        sys.exit(1)
 
     heads = sum(1 for p in officials if p["office"] in HEAD_OFFICES)
     board = sum(1 for p in officials

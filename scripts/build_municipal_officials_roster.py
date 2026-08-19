@@ -108,6 +108,11 @@ BOARD_OFFICES = {"trustee", "alderperson", "alderman", "alderwoman",
                  "council member", "commissioner", "councilman", "councilwoman",
                  "councilperson"}
 OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
+                   # The Town of Cicero elects a municipal Assessor (and a
+                   # Collector, already below) — the coterminous-town officer
+                   # set. Same class as comptroller: a finance officer of the
+                   # corporate authorities, not a board seat.
+                   "assessor",
                    "taxpayer advocate", "collector", "supervisor",
                    # Ashley (Washington County) elects one; a municipal finance
                    # officer like the treasurer beside it, not hired staff
@@ -124,7 +129,8 @@ OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
                    "manager", "superintendent", "superintendent of public works"}
 
 # Per-county floors: deliberate under-tolerances against the verified 2026-07
-# live values (Cook 128 municipalities / 1,035 governing records / 128 heads;
+# live values (Cook 129 municipalities incl. the TWNSP-filed Town of Cicero
+# / ~1,097 governing records / 130 heads incl. Chicago;
 # Will 34 / 303 / 34). A real coverage loss fails the build and leaves the last
 # good file in place; ordinary turnover does not.
 COUNTY_FLOORS = {

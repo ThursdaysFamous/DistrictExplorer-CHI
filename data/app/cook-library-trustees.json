@@ -1,0 +1,42 @@
+{
+ "20060001": {
+  "name": "Cicero Public Library",
+  "office": {
+   "address": "5225 W. Cermak Rd., Cicero IL 60804",
+   "email": "mhernandez@cicerolibrary.org",
+   "phone": "708-652-8084",
+   "url": "cicerolibrary.org"
+  },
+  "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
+  "trustees": [
+   {
+    "name": "Alfonso Vega",
+    "nextElection": "2029"
+   },
+   {
+    "name": "Anthony Grazzini",
+    "nextElection": "2031"
+   },
+   {
+    "name": "Mario Castaneda",
+    "nextElection": "2029"
+   },
+   {
+    "name": "Mary M. Hernandez",
+    "nextElection": "2027"
+   },
+   {
+    "name": "Omar B. Manouzi",
+    "nextElection": "2031"
+   },
+   {
+    "name": "Rosalba Raygoza",
+    "nextElection": "2027"
+   },
+   {
+    "name": "Rose Marie Esposito",
+    "nextElection": "2029"
+   }
+  ]
+ }
+}

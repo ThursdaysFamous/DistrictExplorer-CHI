@@ -89,7 +89,7 @@
 | Washington | 17189 | dispatch | districted | `county-board` | 1 — `washington-precinct-geometry` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
-| Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 3 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source); `joliet-municipal-contact` (blocked) |
+| Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source); `crete-municipal-clerk` (no-source); `joliet-municipal-contact` (blocked) |
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 1 — `woodford-special-districts` (no-source) |
 
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 109 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 110 records in the Data gaps panel: `chicago-amenity-phones`.

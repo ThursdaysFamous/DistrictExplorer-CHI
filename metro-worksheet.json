@@ -489,7 +489,7 @@
             "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
-        "people": "Name-only in most counties; where a county's GIS carries trustees or a district office, the card shows them.",
+        "people": "Name-only in most counties; where a county's GIS carries trustees or a district office, the card shows them. Cicero's library board comes from the Cook County Clerk's directory of elected officials (cook-library-trustees.json, rebuilt weekly by CI).",
         "applies": "The counties that publish a library-district layer."
       }
     },
@@ -2103,7 +2103,7 @@
       {
         "file": "municipal-officials.json",
         "min_keys": 500,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell) and the three counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table, Washington's 40-page Blue Book and De Witt's \"Village/City Officials\" Word list (e-mailed 2026-08-17; all seven municipalities, appointed/acting officers marked), all archived under data/source/raw/ and parsed from there — shipped: 590 municipalities — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell) and the three counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table, Washington's 40-page Blue Book and De Witt's \"Village/City Officials\" Word list (e-mailed 2026-08-17; all seven municipalities, appointed/acting officers marked), all archived under data/source/raw/ and parsed from there — shipped: 592 municipalities — incl. the Town of Cicero, which the Cook Clerk files under the TWNSP township type as 'Cicero Township' (one coterminous town/township government; absent from MUNIS entirely), and the Village of Crete, whose Will-flipbook entry loses its header to PDF-text extraction and is recovered from the orphaned block + the county's certified 2025 canvass (will_municipal_officials_scraper.py recover_crete) — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
       },
       {
         "file": "lasalle-county-board-members.json",
@@ -2284,6 +2284,11 @@
         "file": "jo-daviess-county-board-members.json",
         "min_keys": 17,
         "note": "Jo Daviess County Board members keyed by district (17 single-member districts — the seat count the boundary module exports, so the roster and the purchased geometry cannot drift apart silently). Scraped weekly from the county's own board page at jodaviesscountyil.gov (NEVER the old jodaviess.org, which answers every URL with its home page): name, party and term on every seat, Chair/Vice-Chair badged, plus a direct phone and an e-mail per member from each member's own directory page — 16 distinct numbers at first ship, so no switchboard hoist, and personal gmail/icloud addresses carried exactly as published. A seat the county prints as VACANT ships as a counted, never named vacancy (District 16 at first ship, the Livingston posture). The directory pages also print members' HOME ADDRESSES, which the scraper never parses (the Madison/Peoria precedent). The count guard counts SEATS (named + vacant = exactly 17, districts 1..17 each once), so a vacancy is distinguishable from a parse regression — and a changed district count reads as a reapportionment, which would need the purchased boundary re-licensed."
+      },
+      {
+        "file": "cook-library-trustees.json",
+        "min_keys": 1,
+        "note": "Cicero Public Library's seven elected trustees + the library's own contact, keyed by the Cook Clerk's tax AGENCY id (20060001, the fund tiling's own key) — the one Cook library body whose board the county publishes, filed in the Clerk's directory beside the Town of Cicero's government (build_cicero_library_trustees.py). Joined onto the library-district layer's Cook card; every other Cook agency stays name-only because no officeholder source exists for it."
       }
     ]
   },

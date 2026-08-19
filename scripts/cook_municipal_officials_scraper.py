@@ -16,12 +16,17 @@ the app's separate `ward` layer, and the county's Socrata copies of this
 directory (vw2r-zys4 / jsup-zs8y) have been frozen since 2014, so they are
 deliberately NOT used.
 
-Five endpoints, all of them bulk:
-  /api/Jurisdiction/GetByJurisdictionType?id=MUNIS      -> the 128 municipalities
+Six endpoints, all of them bulk:
+  /api/Jurisdiction/GetByJurisdictionType?id=MUNIS      -> 128 of the 129 municipalities
   /api/ElectedOfficial/GetByJurisdictionType?id=MUNIS   -> municipality-wide officers
   /api/ElectedOfficial/GetByJurisdictionType?id=MUNIW   -> ward/district seats
   /api/ElectedOfficial/GetByJurisdictionType?id=CHIWD   -> City of Chicago citywide
   /api/ElectedOfficial/GetByJurisdictionType?id=CHICA   -> Chicago's 50 ward seats
+  /api/ElectedOfficial/GetByJurisdictionType?id=TWNSP   -> the 129th: the Town of
+     Cicero, which the Clerk files as "Cicero Township" because town and township
+     are one coterminous government (see CICERO_JURISDICTION). MUNIS's 128 are
+     107 Villages + 21 Cities and not one Town — Cicero was silently absent from
+     this roster until 2026-08-19 because nothing read the township type.
 MUNIW's `Jurisdiction` carries the seat's district inline ("City of Berwyn,
 Ward 1"), which is parsed out here so the ward-boundary layer can join later
 without a re-scrape.
@@ -85,10 +90,47 @@ OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=MUNIS&language
 WARD_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=MUNIW&language=en"
 CHICAGO_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=CHIWD&language=en"
 CHICAGO_WARD_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=CHICA&language=en"
+TOWNSHIP_OFFICIALS_URL = BASE + "/ElectedOfficial/GetByJurisdictionType?id=TWNSP&language=en"
 # CHICA names the jurisdiction per seat ("Chicago, 1st Ward"); the citywide
 # type spells out the legal form ("City of Chicago"). Group them under the
 # latter so both land in one roster entry, on the GEOID the app joins.
 CHICAGO_JURISDICTION = "City of Chicago"
+# THE ONE MUNICIPALITY THE CLERK FILES AS A TOWNSHIP. The Town of Cicero
+# (~85,000 residents, Cook's sixth-largest municipality) appears NOWHERE in
+# MUNIS — the Clerk's directory files it under jurisdiction type TWNSP as
+# "Cicero Township", because Cicero is an incorporated TOWN coterminous with
+# its township: one government, whose President, Clerk and Trustees the
+# directory lists beside the township offices (Supervisor, Assessor,
+# Collector) under a single jurisdiction (code CICTW). Verified 2026-08-19
+# three ways: MUNIS's 128 entries are 107 Villages + 21 Cities and no Towns;
+# TWNSP's Cicero records match the town's own officials page
+# (thetownofcicero.com/government/town-officials/) name for name, office for
+# office, exactly 4 trustees on both; and Cicero is the ONLY township in the
+# feed carrying a President — everywhere else the executive is a Supervisor.
+# The override renames the jurisdiction to the legal form the Census and the
+# town itself use, which is what the builder's GEOID join (-> 1714351)
+# resolves; jurisdiction_override exists for exactly this normalization (see
+# its comment), and "Town of Cicero" is the government's own published name,
+# not an invention.
+CICERO_API_JURISDICTION = "Cicero Township"
+CICERO_JURISDICTION = "Town of Cicero"
+# The offices that ARE the town's government, in card order (head first).
+# An include list rather than an exclude list, deliberately: the other TWNSP
+# offices are either party posts or another body's board (below), and a new
+# office appearing on Cicero should get a human look before it ships — it is
+# WARNED about, never silently carried or silently dropped.
+CICERO_OFFICES = ("President", "Trustee", "Clerk", "Supervisor", "Assessor",
+                  "Collector", "Treasurer")
+# Democratic/Republican Township Committeeperson are PARTY offices, not the
+# governing body — and their directory records are the one place this API
+# carries personal contact (a gmail/yahoo in Addresses[0].Email where every
+# government record carries the town hall block), so excluding them is a
+# privacy guard as well as a scope call. Library Trustees sit on the library
+# board, not the corporate authorities — they ship on the library-district
+# card via build_cicero_library_trustees.py, from this same fetch.
+CICERO_EXCLUDED_OFFICES = {"Democratic Township Committeeperson",
+                           "Republican Township Committeeperson",
+                           "Library Trustee"}
 DIRECTORY_URL = "https://www.cookcountyclerkil.gov/elections/directory-elected-officials"
 
 HEADERS = {
@@ -122,6 +164,13 @@ MIN_CHICAGO_OFFICIALS = 3
 # catch a loss here — 50 seats out of ~1,085 stays above it — so this is the
 # guard that does.
 MIN_CHICAGO_WARD_OFFICIALS = 45
+# Cicero's government is President + Clerk + Supervisor + Assessor +
+# Collector + 4 Trustees = 9 records (live 2026-08-19). One vacancy must not
+# freeze the whole Cook refresh (this floor failing fails the entire scrape,
+# which the workflow turns into the standing Cook issue), so it sits one
+# under — but a collapse to a couple of records means the TWNSP feed or the
+# filter broke, and the shipped roster should stand.
+MIN_CICERO_OFFICIALS = 8
 
 
 def fetch_json_requests(url):
@@ -306,6 +355,8 @@ def main():
                                       CHICAGO_OFFICIALS_URL)
     chicago_ward_officials = envelope_data(fetch_json(CHICAGO_WARD_OFFICIALS_URL, args.engine),
                                            CHICAGO_WARD_OFFICIALS_URL)
+    township_officials = envelope_data(fetch_json(TOWNSHIP_OFFICIALS_URL, args.engine),
+                                       TOWNSHIP_OFFICIALS_URL)
 
     if len(jurisdictions) < MIN_JURISDICTIONS:
         print("FATAL: only %d municipalities returned (expected >= %d) — partial response"
@@ -326,6 +377,36 @@ def main():
     if len(chicago_ward_officials) < MIN_CHICAGO_WARD_OFFICIALS:
         print("FATAL: only %d Chicago ward seats returned (expected >= %d)"
               % (len(chicago_ward_officials), MIN_CHICAGO_WARD_OFFICIALS), file=sys.stderr)
+        sys.exit(1)
+
+    # Cicero, out of the township feed — see CICERO_JURISDICTION above. The
+    # governing records go FIRST President, then the rest in CICERO_OFFICES
+    # order, so the builder's records[0] hall-contact read lands on the head
+    # (all nine carry the same town-hall block today; the ordering is
+    # determinism, not correctness). Library trustees are carved off for
+    # build_cicero_library_trustees.py; anything neither included nor excluded
+    # is a new office on the town's ballot and earns a WARN for a human look.
+    cicero_all = [rec for rec in township_officials
+                  if clean(rec.get("Jurisdiction")) == CICERO_API_JURISDICTION]
+    cicero_gov, cicero_library = [], []
+    for rec in cicero_all:
+        office = clean(rec.get("Office"))
+        if office in CICERO_EXCLUDED_OFFICES:
+            if office == "Library Trustee":
+                cicero_library.append(rec)
+            continue
+        if office not in CICERO_OFFICES:
+            print("WARN: Cicero carries unrecognized office %r (%s) — neither "
+                  "included nor excluded; skipped pending a human look"
+                  % (office, clean(rec.get("LastName"))), file=sys.stderr)
+            continue
+        cicero_gov.append(rec)
+    cicero_gov.sort(key=lambda r: CICERO_OFFICES.index(clean(r.get("Office"))))
+    if len(cicero_gov) < MIN_CICERO_OFFICIALS:
+        print("FATAL: only %d Town of Cicero governing records in the TWNSP feed "
+              "(expected >= %d) — the township type changed shape, or Cicero "
+              "moved; the shipped roster should stand"
+              % (len(cicero_gov), MIN_CICERO_OFFICIALS), file=sys.stderr)
         sys.exit(1)
 
     municipalities = [{
@@ -359,6 +440,9 @@ def main():
         records.append(official_record(rec, scraped_at, CHICAGO_WARD_OFFICIALS_URL,
                                        ward_seat=True, ward_seats_elsewhere=True,
                                        jurisdiction_override=CHICAGO_JURISDICTION))
+    for rec in cicero_gov:
+        records.append(official_record(rec, scraped_at, TOWNSHIP_OFFICIALS_URL,
+                                       jurisdiction_override=CICERO_JURISDICTION))
 
     payload = {
         "county": "Cook",
@@ -366,6 +450,9 @@ def main():
         "scraped_at": scraped_at,
         "municipalities": municipalities,
         "officials": records,
+        # Raw API records, deliberately: build_cicero_library_trustees.py is
+        # their only consumer and does its own field selection + guards there.
+        "cicero_library_trustees": cicero_library,
     }
     with open(args.out, "w") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
@@ -375,11 +462,13 @@ def main():
     chicago = sum(1 for r in records if r["ward_seats_elsewhere"])
     chicago_wards = sum(1 for r in records
                         if r["ward_seats_elsewhere"] and r["district"])
-    print("scraped %d municipalities, %d governing-body officials "
-          "(%d heads of government, %d ward/district seats, "
-          "%d Chicago records of which %d ward seats) -> %s"
+    print("scraped %d municipalities + the Town of Cicero, %d governing-body "
+          "officials (%d heads of government, %d ward/district seats, "
+          "%d Chicago records of which %d ward seats, %d Cicero + %d library "
+          "trustees) -> %s"
           % (len(municipalities), len(records), heads, seats,
-             chicago, chicago_wards, args.out),
+             chicago, chicago_wards, len(cicero_gov), len(cicero_library),
+             args.out),
           file=sys.stderr)
 
 

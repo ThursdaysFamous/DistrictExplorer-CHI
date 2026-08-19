@@ -4793,6 +4793,66 @@
     "sourceUrl": "https://www.peoriacounty.gov/DocumentCenter/View/295",
     "url": "https://www.cityofchillicotheil.org"
   },
+  "1714351": {
+    "board": [
+      {
+        "name": "Blanca Vargas",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Cava",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert \"Bob\" F. Porod",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Victor Garcia",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Cook",
+    "head": {
+      "name": "Larry Dominick",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Town of Cicero",
+    "office": {
+      "address": "4949 W. Cermak Rd., Cicero IL 60804",
+      "email": "marias@thetownofcicero.com",
+      "phone": "708-656-3600"
+    },
+    "officers": [
+      {
+        "name": "Emilio \"Emo\" Cundari",
+        "nextElection": "2029",
+        "role": "Assessor"
+      },
+      {
+        "name": "Maria Punzo-Arias",
+        "nextElection": "2029",
+        "role": "Clerk"
+      },
+      {
+        "name": "Frances \"Fran\" F. Reitz",
+        "nextElection": "2029",
+        "role": "Collector"
+      },
+      {
+        "name": "Joe Virruso",
+        "nextElection": "2029",
+        "role": "Supervisor"
+      }
+    ],
+    "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
+    "url": "https://thetownofcicero.com"
+  },
   "1714572": {
     "county": "DuPage",
     "head": {
@@ -5621,6 +5681,59 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://crestwood.illinois.gov"
+  },
+  "1717523": {
+    "board": [
+      {
+        "name": "Holly A. Milburn",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Jamie L. Healy",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Katrina Seifert",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Keith Miller",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Stephen E. Johnson",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Steven P. Bruns",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Will",
+    "head": {
+      "name": "Mark S. Wiater",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Crete",
+    "office": {
+      "email": "ktellef@villageofcrete.org"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Gary Paape",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
+    "url": "https://villageofcrete.org"
   },
   "1717549": {
     "board": [
