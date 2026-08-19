@@ -35,6 +35,13 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The UNPROVEN verdict compares each workflow's latest run against the
+          # last commit touching the scripts it runs, so this needs history
+          # rather than a shallow tip. Without it the git log returns nothing,
+          # the comparison is skipped, and every red reads as FAILING — safe,
+          # but it would put McHenry-shaped already-fixed runs back on the issue.
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
