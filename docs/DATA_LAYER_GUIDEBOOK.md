@@ -3641,9 +3641,12 @@ names in several townships — shipping it would mean guessing attributions, and
 a new concept is a Part 5 decision, not an improvisation. **That Part 5
 decision was made on 2026-08-19** (Cook shipped the concept from its Clerk's
 directory API — see that build-log entry), and this PDF was re-measured the
-same day: it is a page-per-image scan with no text layer at all, so any read
-is OCR, the role/name decoupling stands, and every address on it is a home
-address. The concept existing does not make this document buildable — gap
+same day: it is a page-per-image scan with NO text layer at all — pypdf
+extracts zero characters from every page, so the "text extraction" the
+sentence above described can only have been an OCR-class read, and the
+role/name decoupling it saw is a property of the PRINTED two-column layout
+(one "Trustees" label spanning four name rows on a different line spacing),
+which any OCR read inherits. Every address on it is a home address. The concept existing does not make this document buildable — gap
 `dewitt-township-officials` carries the ask for a text-bearing form.
 
 **A plumbing fact worth naming, because it will recur:** the Gmail connector

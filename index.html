@@ -6988,9 +6988,10 @@ function initChiExplorer() {
       }
       var board = (gov.board || []).filter(function (m) { return m && m.name; });
       if (board.length) {
-        // Every Illinois township board is a Board of Trustees by statute,
-        // and the builder guards that board roles are Trustee only — a
-        // constant, not a derivation.
+        // The label follows the seats' own roles, the same rule
+        // municipalBodyLabel applies one layer down: the builder guards that
+        // every board role in this file is Trustee, so the derivation is a
+        // constant here.
         wrap.appendChild(renderSectionLabel("Board of Trustees"));
         wrap.appendChild(renderPersonRows(board.map(municipalPerson)));
       }
@@ -7043,7 +7044,7 @@ function initChiExplorer() {
         countyRt.outlineOnly = true;
       } else {
         countyRt.outlineOnly = false;
-        var pbox = document.getElementById("toggle-will-county-precinct");
+        var pbox = document.getElementById("toggle-county-precinct");
         if (pbox && pbox.checked) pbox.click();
       }
       var countyMod = getLayerById("county");

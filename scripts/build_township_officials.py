@@ -49,9 +49,14 @@ EVANSTON is the feed's one non-township: its township government dissolved
 into the city in 2014, TIGER 2020 carries no township polygon for it, and
 its only TWNSP records are the two party committeepersons. After the
 exclusions it holds zero governing records and is skipped BY NAME
-(EXPECTED_OFFICELESS); any other township going officeless is FATAL — the
-Sangamon lesson, a guard keyed on requests succeeding is blind to a feed
-that succeeds at nothing.
+(EXPECTED_OFFICELESS). Any other township going officeless is FATAL — and so
+is a township MISSING from the feed entirely: the township set of a served
+county is closed (the county's own cousub table names all 29), so the
+builder requires every township in that table to resolve to a roster entry.
+A truncated response that drops whole jurisdictions cannot pass the floors
+quietly — the Sangamon lesson, a guard keyed on requests succeeding is
+blind to a feed that succeeds at nothing, and floors alone left a
+two-township window.
 
 CICERO ships here TOO, on purpose. The Town of Cicero and Cicero Township
 are one consolidated government (Census FUNCSTAT C); the Clerk answers
@@ -94,8 +99,10 @@ TOWNSHIP_CLASSES = {"T1", "T5"}
 # exist only on Cicero's consolidated government.
 HEAD_OFFICES = ("President", "Supervisor")  # priority order — Cicero has both
 BOARD_OFFICES = {"Trustee"}
+# No township elects a Treasurer today (measured 2026-08-19: zero records);
+# one appearing should get the WARN-and-a-human-look, not a silent carry.
 OFFICER_OFFICES = {"Supervisor", "Clerk", "Assessor", "Collector",
-                   "Treasurer", "Highway Commissioner"}
+                   "Highway Commissioner"}
 # See the module docstring for why each of these is excluded.
 EXCLUDED_OFFICES = {"Democratic Township Committeeperson",
                     "Republican Township Committeeperson",
@@ -105,6 +112,20 @@ EXCLUDED_OFFICES = {"Democratic Township Committeeperson",
 # means the Clerk changed what the directory publishes — re-read it before
 # shipping; a residence must never ride this file.
 HALL_ADDRESS_TYPE = 3
+
+# The one contact surface this file ships is the hall block, and the feed's
+# OWN committeeperson records prove the Email field CAN carry a personal
+# mailbox (gmail/yahoo/aol on 31 of 57 of them, live 2026-08-19). Every
+# governing record carries an organizational domain today; if one ever turns
+# personal — a small township re-pointing "contact" at the supervisor's own
+# gmail — publishing it under the Township Hall label would be both a
+# privacy leak and a misattribution, so the build REFUSES and a human looks.
+PERSONAL_EMAIL_DOMAINS = {
+    "gmail.com", "googlemail.com", "yahoo.com", "aol.com", "hotmail.com",
+    "outlook.com", "live.com", "msn.com", "icloud.com", "me.com",
+    "comcast.net", "sbcglobal.net", "att.net", "ameritech.net",
+    "protonmail.com", "proton.me",
+}
 
 # Jurisdictions expected to hold ZERO governing records after the
 # exclusions. Evanston Township dissolved into the City of Evanston in 2014;
@@ -200,6 +221,13 @@ def person_of(rec):
     if not person["name"]:
         fail("a %s record in %s has no name"
              % (clean(rec.get("Office")), clean(rec.get("Jurisdiction"))))
+    # Every township office is elected on one consolidated cycle, so all
+    # current appointed flags resolve together at the April 2029 election —
+    # that refresh will legitimately drop the field to zero and trip the
+    # retention gate's VANISH rule (per-group on Lemont and River Forest, at
+    # minimum). That is the gate's designed escape hatch: record it in
+    # check_roster_retention.py's ACCEPTED_DROPS with the election date,
+    # don't loosen a threshold.
     if rec.get("Appointed"):
         person["appointed"] = True
     next_election = year_of(clean(rec.get("NextElection")))
@@ -223,10 +251,17 @@ def hall_of(rec, jurisdiction):
     if addr.get("City"):
         city_zip = "%s IL %s" % (clean(addr.get("City")), clean(addr.get("Zip")) or "")
         city_zip = city_zip.strip()
+    email = clean(addr.get("Email"))
+    if email and email.rsplit("@", 1)[-1].lower() in PERSONAL_EMAIL_DOMAINS:
+        fail("%s's hall e-mail is a personal mailbox (%s) — a personal "
+             "address must never ship as the Township Hall; re-read the "
+             "directory before shipping" % (jurisdiction, email))
     office = {
         "address": ", ".join(p for p in (street, city_zip) if p) or None,
-        "phone": phone_of(addr.get("Phone") or rec.get("Phone")),
-        "email": clean(addr.get("Email")),
+        # The hall block's phone ONLY — the record-level Phone sits outside
+        # the address-type gate and is never read.
+        "phone": phone_of(addr.get("Phone")),
+        "email": email,
     }
     return {k: v for k, v in office.items() if v}, normalize_website(addr.get("URL"))
 
@@ -298,11 +333,29 @@ def build_county(payload, cousubs_by_county):
         board = [r for r in gov if clean(r.get("Office")) in BOARD_OFFICES]
         officers = [r for r in gov
                     if r is not head and r not in board]
+        # One seat per non-Trustee office: every one of these is a single
+        # office, and the feed carrying two (an outgoing and an incoming
+        # assessor mid-transition, say) is a state a human should read, not
+        # a card that quietly lists both. The head loop's own duplicate
+        # check stops at the office it picks, so this covers the rest.
+        per_office = {}
+        for r in gov:
+            office = clean(r.get("Office"))
+            if office not in BOARD_OFFICES:
+                per_office[office] = per_office.get(office, 0) + 1
+        for office, n in sorted(per_office.items()):
+            if n > 1:
+                fail("%s carries %d %s records — one seat per office"
+                     % (jurisdiction, n, office))
         if len(board) < MIN_TRUSTEES_PER_TOWNSHIP:
-            fail("%s resolves only %d trustees — every Illinois township "
-                 "board seats four; below %d reads as a parse or feed "
-                 "failure, not turnover"
+            fail("%s resolves only %d trustees — every board in this feed "
+                 "seats exactly four (measured 2026-08-19); below %d reads "
+                 "as a parse or feed failure, not turnover"
                  % (jurisdiction, len(board), MIN_TRUSTEES_PER_TOWNSHIP))
+        if len(board) > 4:
+            fail("%s resolves %d trustees — every board in this feed seats "
+                 "exactly four (measured 2026-08-19); more reads as a feed "
+                 "change worth a human look" % (jurisdiction, len(board)))
 
         office, url = hall_of(head, jurisdiction)
         for rec in gov:
@@ -327,6 +380,18 @@ def build_county(payload, cousubs_by_county):
                  % (geoid, roster[geoid]["name"], jurisdiction))
         roster[geoid] = entry
         members += 1 + len(board) + len(entry["officers"])
+
+    # The county's township set is CLOSED — the cousub table names every
+    # township that exists, so any table row missing from the roster means
+    # the feed dropped a whole jurisdiction (a truncation the floors alone
+    # could tolerate two of). A township that truly dissolves leaves the
+    # Census table at the next vintage, which is when this list changes.
+    missing = {g: base for base, g in cousubs.items() if g not in roster}
+    if missing:
+        fail("%s County townships absent from the feed entirely: %s — a "
+             "township does not vanish between elections; the feed truncated "
+             "or the type changed shape"
+             % (county, ", ".join(sorted(missing.values()))))
 
     return roster, members
 

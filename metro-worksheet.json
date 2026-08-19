@@ -906,7 +906,7 @@
       }
     }
   ],
-  "min_register_layer": 15,
+  "min_register_layer": 17,
   "layer_count_note": "17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 — TIGERweb) + 6 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, library-district, county-precinct — Cook/Will/DuPage/Lake/Kane/McHenry/Kendall entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 2 Cook-only tax-agency layers (tif-district, mwrd — dedicated until a second county ships the concept) + 3 amenity nearest-point layers (post-office, library, early-voting) = 39 — live-verified 2026-07",
   "anchor_point": {
     "lat": 41.8825,

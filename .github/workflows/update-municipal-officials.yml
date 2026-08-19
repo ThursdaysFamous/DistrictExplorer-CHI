@@ -557,9 +557,31 @@ jobs:
       # TWNSP feed rides it as `township_officials`). Same gate and for the
       # same reason: a failed Cook scrape carries all three Cook-fed files
       # forward together, and the builder refuses partial input on its own.
+      # continue-on-error, deliberately: this builder's FATALs are strict on
+      # purpose (completeness, one-seat-per-office, personal-domain refusals)
+      # and each one means THIS file stands while a human looks — never that
+      # the whole ~30-county municipal refresh should miss its week. The
+      # refusal is surfaced on a standing issue below, because a green run
+      # is invisible to the roster-health watchdog.
       - name: Rebuild the township officials file
+        id: build_townships
         if: steps.scrape_cook.outcome == 'success'
+        continue-on-error: true
         run: python3 scripts/build_township_officials.py /tmp/cook_municipal_officials.json
+
+      - name: Track a township build refusal
+        if: steps.scrape_cook.outcome == 'success' && steps.build_townships.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Township officials: the Cook build refused the write"
+          existing="$(gh issue list --search "$title in:title" --state open --json number --jq '.[0].number')"
+          body="build_township_officials.py exited non-zero on $(date -u +%Y-%m-%d) — its guards read the TWNSP feed as changed (a township missing, a duplicated seat, a personal-domain hall contact, or an address-type change). The shipped township-officials.json is unchanged and still serves its last verified values. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
@@ -591,11 +613,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
           git add data/app/municipal-officials.json data/app/cook-library-trustees.json data/app/township-officials.json
-          git commit -m "Update municipal officials roster from the county clerk directories"
+          git commit -m "Update municipal and township officials rosters from the county clerk directories"
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
           # the force-push above already updated it.
-          body="Automated weekly refresh of the Municipality card's governing-body roster, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication (the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, and the three McLean ward cities' own pages), plus the four city-level payloads.
+          body="Automated weekly refresh of three rosters from the county clerk directories: the Municipality card's governing bodies (\`municipal-officials.json\`, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication — the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, and the three McLean ward cities' own pages — plus the four city-level payloads), the Township card's governing bodies (\`township-officials.json\`, \`scripts/build_township_officials.py\`, Cook's 29 townships from the same Clerk directory's TWNSP type), and the Cicero library board (\`cook-library-trustees.json\`, \`scripts/build_cicero_library_trustees.py\`, same fetch).
 
           Please review the diff before merging — this changes data about real officeholders.
 
@@ -604,9 +626,14 @@ jobs:
           \`\`\`
           ${{ steps.build.outputs.preserved }}
           \`\`\`"
+          if [ "${{ steps.build_townships.outcome }}" = "failure" ]; then
+            body="$body
+
+          **township-officials.json carried forward**: its build refused the write this run — the standing issue \"Township officials: the Cook build refused the write\" has the reason."
+          fi
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
             gh pr create \
-              --title "Update municipal officials roster from the county clerk directories" \
+              --title "Update municipal and township officials rosters from the county clerk directories" \
               --body "$body" \
               --base main \
               --head "$branch"

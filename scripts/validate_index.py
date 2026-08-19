@@ -80,13 +80,15 @@ CAPABILITIES = [
 # The constants below are GENERATED from metro-worksheet.json (Conversion 2 —
 # edit the worksheet, run scripts/generate_metro_files.py). Fork history worth
 # keeping by hand: this fork's registerLayer floor arithmetic is 1 function
-# definition + 9 direct registerLayer() calls + 5 factory bodies; it was
+# definition + 11 direct registerLayer() calls + 5 factory bodies; it was
 # lowered 16 -> 15 when police-station/fire-station moved onto the
-# registerNearestPointLayer factory (-2 direct calls, +1 body).
+# registerNearestPointLayer factory (-2 direct calls, +1 body), and raised
+# 15 -> 17 when the municipality (2026-07) and township (2026-08-19)
+# identity layers became bespoke roster-joined blocks (+1 direct call each).
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 15
+MIN_REGISTER_LAYER = 17
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
