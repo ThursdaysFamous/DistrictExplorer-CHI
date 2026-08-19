@@ -8,7 +8,10 @@ document the De Witt County Clerk & Recorder keeps of every municipality's
 governing body — last updated 7/28/2025, after the consolidated election.
 It is not on the county's website. County Clerk Kari Harris sent the file by
 e-mail on 2026-08-17, alongside a township-officials PDF that is archived for
-provenance only (township officials are not a concept this builder carries).
+provenance only. Township officials became a concept on 2026-08-19 (Cook,
+build_township_officials.py), but that PDF still cannot build: it is an
+image-only scan whose two-column layout decouples roles from names, and its
+addresses are all home addresses — gap `dewitt-township-officials`.
 The copy read here is archived at data/source/raw/, so refreshing it means
 asking again; that is why this reads the archive rather than a URL — the
 Marshall/Washington archived-document pattern.

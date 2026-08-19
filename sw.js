@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v44";
+const CACHE_NAME = "district-explorer-shell-v45";
 
 const SHELL_URLS = [
   "./",
@@ -299,6 +299,7 @@ const ROSTER_URLS = [
   "./data/app/coles-county-board-members.json",
   "./data/app/jo-daviess-county-board-members.json",
   "./data/app/cook-library-trustees.json",
+  "./data/app/township-officials.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

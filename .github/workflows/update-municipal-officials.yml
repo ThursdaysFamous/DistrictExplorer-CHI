@@ -553,6 +553,14 @@ jobs:
         if: steps.scrape_cook.outcome == 'success'
         run: python3 scripts/build_cicero_library_trustees.py /tmp/cook_municipal_officials.json
 
+      # The township card's roster, from the same Cook payload again (the raw
+      # TWNSP feed rides it as `township_officials`). Same gate and for the
+      # same reason: a failed Cook scrape carries all three Cook-fed files
+      # forward together, and the builder refuses partial input on its own.
+      - name: Rebuild the township officials file
+        if: steps.scrape_cook.outcome == 'success'
+        run: python3 scripts/build_township_officials.py /tmp/cook_municipal_officials.json
+
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
@@ -582,7 +590,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/municipal-officials.json data/app/cook-library-trustees.json
+          git add data/app/municipal-officials.json data/app/cook-library-trustees.json data/app/township-officials.json
           git commit -m "Update municipal officials roster from the county clerk directories"
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
