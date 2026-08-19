@@ -29,7 +29,9 @@ the number a human can act on. So every workflow is measured against its own
 cron cadence (weekly crons expect a run every 7 days, monthly every 31) and
 reported as:
 
-    FAILING  — its most recent completed run failed
+    FAILING  — its most recent completed run failed, and nothing has changed since
+    UNPROVEN — it failed, but the code it runs has been EDITED since that run,
+               so the red predates the fix and the next run is the first test
     STALE    — no successful run within roughly two of its own intervals
     SILENT   — old enough to have run, and never has
     DISABLED — switched off, so it is not refreshing anything
@@ -38,6 +40,18 @@ reported as:
 
 FAILING and STALE overlap constantly and that is intentional: failing once is a
 blip, failing for three weeks is a frozen roster, and the report says which.
+
+A RED RUN THAT PREDATES ITS OWN FIX IS NOT A LIVE FAILURE, and McHenry is why
+this distinction exists. Its 13 August run failed; ninety-one minutes later a
+commit fixed exactly that failure, and its weekly cron will not come round again
+until the 20th. For six days the report said FAILING about a bug that no longer
+existed, and someone acted on it — read the run, diagnosed the shape, and went
+looking for a fix already in the tree. So each workflow's latest run is compared
+against the last commit touching the workflow file or any script it invokes: if
+the code moved after the run, the verdict is UNPROVEN rather than FAILING, which
+says the thing a reader needs — do not chase this, but do not forget it either.
+It costs a `git log` per workflow and needs history, so the job checks out with
+fetch-depth 0.
 
 A WORKFLOW TOO YOUNG TO HAVE RUN IS NOT SILENT, and the first live run of this
 script is what taught it so: Clark, Edgar and Mercer shipped that same afternoon
@@ -69,6 +83,7 @@ import datetime
 import json
 import os
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -87,6 +102,10 @@ NOT_A_REFRESH = {
 
 CRON_RE = re.compile(r"^\s*-\s*cron:\s*[\"']([^\"']+)[\"']", re.M)
 NAME_RE = re.compile(r"^name:\s*(.+)$", re.M)
+# Only scripts the workflow actually RUNS. The `python3 ` prefix is what keeps
+# this from matching script names mentioned in prose — several workflows name a
+# builder inside the body of the issue they file, which is not code they run.
+RUNS_RE = re.compile(r"python3\s+(scripts/[\w./-]+\.py)")
 
 
 def cadence_days(cron):
@@ -111,18 +130,63 @@ def cadence_days(cron):
 
 
 def discover():
-    """Refresh workflows on disk: (filename, display name, cadence in days)."""
+    """Refresh workflows on disk: (filename, display name, cadence, scripts)."""
     out = []
     for fn in sorted(os.listdir(WORKFLOW_DIR)):
         if not fn.endswith((".yml", ".yaml")) or fn in NOT_A_REFRESH:
             continue
-        with open(os.path.join(WORKFLOW_DIR, fn), encoding="utf-8") as f:
+        path = os.path.join(WORKFLOW_DIR, fn)
+        with open(path, encoding="utf-8") as f:
             src = f.read()
         name = NAME_RE.search(src)
         crons = CRON_RE.findall(src)
         out.append((fn, name.group(1).strip() if name else fn,
-                    cadence_days(crons[0] if crons else None)))
+                    cadence_days(crons[0] if crons else None),
+                    sorted(set(RUNS_RE.findall(src)))))
     return out
+
+
+def own_scripts(watched):
+    """Per workflow, the scripts that belong to IT rather than to everyone.
+
+    A script run by many workflows is a shared GATE, not this county's logic:
+    `validate_index.py` is invoked by 54 of these, so counting it would mark
+    every workflow UNPROVEN the moment anyone touched it — turning the whole
+    check off in one commit, which is precisely the failure mode this file
+    exists to catch. Only scripts unique to a single workflow count.
+    """
+    uses = {}
+    for _fn, _name, _cad, scripts in watched:
+        for sc in scripts:
+            uses[sc] = uses.get(sc, 0) + 1
+    return {fn: [sc for sc in scripts if uses.get(sc) == 1]
+            for fn, _name, _cad, scripts in watched}
+
+
+def code_changed_at(workflow_file, scripts):
+    """When the workflow file or any script it runs was last committed.
+
+    Returns None when git cannot answer — a shallow checkout, or a path that
+    does not exist — in which case the caller simply does not apply the
+    UNPROVEN downgrade rather than guessing either way.
+    """
+    paths = [os.path.join(".github", "workflows", workflow_file)] + list(scripts)
+    paths = [p for p in paths if os.path.exists(os.path.join(REPO_ROOT, p))]
+    if not paths:
+        return None
+    try:
+        proc = subprocess.run(
+            ["git", "log", "-1", "--format=%cI", "--"] + paths,
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    out = (proc.stdout or "").strip()
+    if proc.returncode != 0 or not out:
+        return None
+    try:
+        return parse_ts(out)
+    except ValueError:
+        return None
 
 
 def api_get(path, token):
@@ -142,7 +206,7 @@ def parse_ts(s):
     return datetime.datetime.fromisoformat(s).astimezone(datetime.timezone.utc)
 
 
-def classify(runs, cadence, now, created=None, state=None):
+def classify(runs, cadence, now, created=None, state=None, code_at=None):
     """(verdict, detail) for one workflow's recent runs, newest first."""
     if state and state != "active":
         return ("DISABLED", "workflow state is %r — it is not running at all" % state)
@@ -166,13 +230,18 @@ def classify(runs, cadence, now, created=None, state=None):
     limit = (cadence or 7) * 2 + 2
     stale = age is None or age > limit
 
-    if failing and stale:
-        return ("FAILING", "latest run %s; last success %s"
-                % (latest.get("conclusion"),
-                   "never" if age is None else "%d days ago" % age))
     if failing:
-        return ("FAILING", "latest run %s; last success %d days ago"
-                % (latest.get("conclusion"), age))
+        when = parse_ts(latest["created_at"])
+        detail = "latest run %s on %s; last success %s" % (
+            latest.get("conclusion"), when.date().isoformat(),
+            "never" if age is None else "%d days ago" % age)
+        # The red predates its own fix: the code has been edited since it ran,
+        # so nothing has yet tested whether the failure survives.
+        if code_at is not None and code_at > when:
+            return ("UNPROVEN", detail + "; but its code changed on %s, after "
+                    "that run — the next scheduled run is the first to test it"
+                    % code_at.date().isoformat())
+        return ("FAILING", detail)
     if stale and young:
         return ("NEW", "added %d day(s) ago; not enough history to judge"
                 % (now - created).days)
@@ -194,7 +263,7 @@ def main():
 
     watched = discover()
     if args.list:
-        for fn, name, cad in watched:
+        for fn, name, cad, scripts in watched:
             print("%-46s every ~%s days   %s" % (fn, cad, name))
         print("\n%d refresh workflow(s) watched" % len(watched))
         return
@@ -220,8 +289,9 @@ def main():
         print("check-roster-health: could not list workflows (%s) — ages and "
               "disabled state unavailable this run" % exc, file=sys.stderr)
 
+    own = own_scripts(watched)
     rows, unreadable = [], []
-    for fn, name, cad in watched:
+    for fn, name, cad, scripts in watched:
         wf = meta.get(fn) or {}
         created = parse_ts(wf["created_at"]) if wf.get("created_at") else None
         state = wf.get("state")
@@ -235,24 +305,29 @@ def main():
         except Exception as exc:                                  # noqa: BLE001
             unreadable.append((fn, name, str(exc)))
             continue
-        verdict, detail = classify(runs, cad, now, created, state)
+        verdict, detail = classify(runs, cad, now, created, state,
+                                   code_changed_at(fn, own.get(fn, [])))
         url = runs[0]["html_url"] if runs else None
         rows.append((verdict, fn, name, detail, url))
 
-    order = {"FAILING": 0, "DISABLED": 1, "STALE": 2, "SILENT": 3, "NEW": 4, "OK": 5}
+    order = {"FAILING": 0, "DISABLED": 1, "STALE": 2, "SILENT": 3,
+             "UNPROVEN": 4, "NEW": 5, "OK": 6}
     rows.sort(key=lambda r: (order[r[0]], r[1]))
     # NEW is reported for context but never counts as something to act on — a
     # county that shipped this week has done nothing wrong.
     bad = [r for r in rows if r[0] not in ("OK", "NEW")]
+    # UNPROVEN is shown but never fails the check: the fix is already in the
+    # tree and the next scheduled run is what settles it.
     status = "fail" if any(r[0] in ("FAILING", "DISABLED") for r in rows) else (
         "warn" if bad or unreadable else "ok")
 
     lines = ["## Roster refresh health", ""]
     tally = lambda v: sum(1 for r in rows if r[0] == v)                # noqa: E731
     lines.append("Watched %d refresh workflow(s): %d OK, %d failing, %d disabled, "
-                 "%d stale, %d never run, %d too new to judge.%s" % (
+                 "%d stale, %d never run, %d awaiting a first run after a fix, "
+                 "%d too new to judge.%s" % (
                      len(rows), tally("OK"), tally("FAILING"), tally("DISABLED"),
-                     tally("STALE"), tally("SILENT"), tally("NEW"),
+                     tally("STALE"), tally("SILENT"), tally("UNPROVEN"), tally("NEW"),
                      " %d unreadable." % len(unreadable) if unreadable else ""))
     lines.append("")
     if bad:
@@ -262,6 +337,15 @@ def main():
             lines.append("| **%s** | `%s` | %s | %s |" % (
                 verdict, fn, detail, "[run](%s)" % url if url else "—"))
         lines.append("")
+        if any(r[0] == "UNPROVEN" for r in bad):
+            lines.append("An **UNPROVEN** workflow failed, but its own code has been "
+                         "edited since that run — the fix is already in the tree and "
+                         "its next scheduled run is the first thing to test it. Do not "
+                         "chase it; if it is still red after that run it will say "
+                         "FAILING. Shared gates every workflow runs (`validate_index.py` "
+                         "and the like) are deliberately not counted as \"its code\", "
+                         "or one commit would mark all 53 unproven at once.")
+            lines.append("")
         lines.append("A **FAILING** roster workflow opens no pull request, so the "
                      "shipped `data/app/` file keeps naming whoever it named on "
                      "its last successful run. Read the linked run: a builder "

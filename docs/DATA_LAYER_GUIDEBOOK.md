@@ -4556,6 +4556,46 @@ gate disagreeing with production is the cheapest stale-checkout detector there
 is, and it is worth reading that number rather than skimming past an OK. Never
 silence a fetch.
 
+### 2026-08-19: McHenry needed no fix, and finding that out fixed the watchdog
+
+McHenry was the third of the watchdog's four findings and the one with the
+sharpest diagnosis: its scraper "Scraped 19 members" with `field coverage:
+district=0/0 email=0/0`, nineteen empty shells, so the workflow's blocked-source
+handler — which fires on `steps.scrape.outcome == 'failure'` — never fired, and
+the builder's refusal turned the run red with nothing filed. That was all true.
+It was also **already fixed**: commit 02442cc (#342) added `if not ok:
+sys.exit(1)` to the scraper at 17:33 UTC on 13 August, NINETY-ONE MINUTES after
+the 16:02 run the watchdog was reporting, and its comment describes that exact
+shape. Running the scraper today, it exits 1 at the fetch ladder, so the handler
+does fire. McHenry's weekly cron simply had not come round again.
+
+**Six days of a report saying FAILING about a bug that no longer existed, and
+someone acted on it** — read the run, diagnosed the shape, went looking for a
+fix already in the tree. The watchdog was right that the last run failed and
+wrong about what a reader should do, which is the same class of error as
+LaSalle's "(markup change?)": a true statement arranged so that it points the
+wrong way.
+
+**So the fix went into the watchdog.** Each workflow's latest run is now compared
+against the last commit touching the workflow file or the scripts it runs; if the
+code moved after the run, the verdict is UNPROVEN rather than FAILING — do not
+chase this, but do not forget it either. UNPROVEN never fails the check, because
+the fix is in the tree and the next scheduled run is what settles it.
+
+**And the first draft of that would have switched the whole watchdog off.**
+Counting every script a workflow runs marked ALL FOUR findings UNPROVEN,
+including CPD, which nothing had touched. The reason: `validate_index.py` is
+invoked by 54 of the 53 watched workflows plus itself and had changed that day,
+so one commit to a shared gate would have excused every red run in the fleet —
+a guard that stops guarding the moment anyone edits a common file. Only scripts
+run by exactly ONE workflow now count as that workflow's own. With that in
+place the report reads correctly: CPD FAILING, and the commissioners, LaSalle
+and McHenry runs UNPROVEN pending their next crons.
+
+The check needs history for that `git log`, so `roster-health.yml` checks out
+with `fetch-depth: 0`; where git cannot answer, the comparison is skipped and
+the verdict falls back to FAILING rather than guessing in either direction.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the
