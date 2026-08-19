@@ -4596,6 +4596,67 @@ The check needs history for that `git log`, so `roster-health.yml` checks out
 with `fetch-depth: 0`; where git cannot answer, the comparison is skipped and
 the verdict falls back to FAILING rather than guessing in either direction.
 
+### 2026-08-19: CPD — the last of the four, and the one that is genuinely blocked
+
+CPD was the only finding of the four the watchdog raised that was still failing
+for its own reasons. The run log says exactly what happened, and it says it
+twelve lines before the message anyone reads:
+
+    requests engine blocked (HTTP 403); falling back to Playwright
+    finder fetch failed: Cloudflare challenge did not clear within 60s
+    sitemap index fetch failed: Cloudflare challenge did not clear within 60s
+    WARNING: discovered 0/22 districts
+    Wrote 0 records to /tmp/cpd_district_info.json (0 without error)
+    build-cpd-roster: resolved only 0/20+ expected districts   <- the red
+
+**Both rungs were refused and the scraper returned success anyway**, so the
+workflow walked past its own diagnosis into the builder, and the failure that
+reddened the run announced itself as a roster problem. It was a fetch problem
+throughout. That is the same shape as McHenry's scraper before #342, as Brown's
+e-mail floor, as Calhoun's empty 200 — **a guard keyed on a request failing is
+blind to a request that succeeds at nothing** — and it is the fourth instance in
+one week. The scraper now exits non-zero when no district resolves.
+
+**What is NOT fixed, stated plainly: the block itself.** Cloudflare's managed
+challenge stopped clearing from GitHub's runners around 4 August. This is a
+genuine JS challenge rather than a hard deny — something a browser CAN pass,
+given a residential-looking address — and the per-attempt wait has already been
+raised once for exactly this reason, 20s to 60s on 2026-07-28, which bought
+about three weeks. It is now 120s AND an env knob (`CPD_CHALLENGE_WAIT_S`), so
+the next attempt costs a workflow edit rather than a code change. **If runs still
+fail at 120s the wait is not the problem and nobody should keep doubling it** —
+that sentence is in the standing issue as well as here, because the obvious next
+move is the wrong one.
+
+Nothing was verifiable from the authoring environment, and that is worth
+recording rather than hiding: its Chromium cannot egress at all
+(`ERR_CONNECTION_RESET`, the same limitation CLAUDE.md documents for the Leaflet
+CDN), and archive.org is refused by egress policy, so neither a longer wait nor
+an Archive rung could be tested here. What COULD be checked was re-checked: a
+sweep of ArcGIS Online for CPD-published commander or CAPS contact found other
+cities' police-district layers and nothing of Chicago's, which agrees with the
+2026-07-09 sweep the scraper's docstring records. Station address, phone and
+boundaries remain the only CPD data available without the challenge; commander
+name, status and CAPS contact exist solely as rendered HTML behind it.
+
+**So CPD joins Kendall and McHenry in the measured-block posture**, which is what
+this repo does with a source it cannot reach: the scrape step carries
+`continue-on-error`, a standing issue records the block and is commented on by
+each blocked run, the builder is skipped, `data/app/cpd-district-info.json`
+keeps its last good values, and the job stays GREEN with the state tracked
+instead of red with it hidden. The issue names what to try next in order, and
+rules out the one thing that must not be tried: no evasion, no fingerprint
+spoofing. The scraper drives a real browser on purpose, and a project that
+publishes other people's contact details does not get to start pretending to be
+someone else to collect them.
+
+One consequence to watch: a green run now means "either refreshed or knowingly
+blocked", so the roster-health watchdog will stop reporting CPD. The standing
+issue becomes the only freshness signal, which is the same trade Kendall and
+McHenry already carry — acceptable because the issue is commented weekly, and
+the data it guards changes on the order of a commander reassignment rather than
+an election.
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker. When one ships, move it into the

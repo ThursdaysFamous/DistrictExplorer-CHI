@@ -141,7 +141,19 @@ class PlaywrightFetcher:
     # one, and 20s no longer covers it. The cost is bounded: the context is
     # reused across all 22 district pages, so only the first fetch (and any
     # re-challenge) pays this wait, not every page.
-    def __init__(self, timeout=45000, challenge_wait_s=60):
+    # 2026-08-19: 60 is no longer enough either — every run since 2026-08-04 has
+    # failed with "challenge did not clear within 60s" from GitHub's runners.
+    # The wait is now an env knob (CPD_CHALLENGE_WAIT_S) rather than a literal,
+    # because the honest position is that nobody here can test which number
+    # works: Cloudflare hands a datacenter IP a harder challenge than a
+    # residential one, the previous raise bought about three weeks, and this
+    # environment cannot reach the site with a browser at all. Raising the
+    # default to 120 is a bounded guess whose only cost when wrong is a slower
+    # failure that now says plainly what it is. If the next runs still fail,
+    # the number is not the problem and the standing issue is the place to say
+    # so — do not keep doubling it.
+    def __init__(self, timeout=45000,
+                 challenge_wait_s=int(os.environ.get("CPD_CHALLENGE_WAIT_S", "120"))):
         from playwright.sync_api import sync_playwright
 
         self.timeout = timeout
@@ -529,6 +541,26 @@ def main():
     coverage = "  ".join(f"{f}={sum(1 for r in ok if r.get(f))}/{len(ok)}" for f in fields)
     print(f"Wrote {len(results)} records to {args.out} ({len(ok)} without error)", file=sys.stderr)
     print(f"field coverage: {coverage}", file=sys.stderr)
+
+    if not ok:
+        # A SCRAPE THAT RESOLVED NOTHING IS A FAILED SCRAPE, and exiting 0 here
+        # is what made this job unreadable for two weeks. On 2026-08-18 both
+        # rungs were refused — requests 403, then "Cloudflare challenge did not
+        # clear within 60s" on Playwright — and the scraper still wrote an empty
+        # file and returned success, so the workflow walked past it into the
+        # builder, which refused the empty data and reddened the run with the
+        # message "resolved only 0/20+ expected districts". That reads as a
+        # roster problem. It was a fetch problem, and the two rungs had already
+        # said so twelve lines earlier.
+        #
+        # Failing here lets the workflow's own taxonomy do the work, the same
+        # way McHenry's does (its scraper learned this on 2026-08-13): the
+        # standing-issue step fires, the builder is skipped, the shipped roster
+        # carries forward, and the job stays green with the block tracked.
+        print("FATAL: no district page yielded data — every fetch rung was "
+              "refused, so this is a blocked scrape, not an empty roster",
+              file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
