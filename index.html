@@ -1413,6 +1413,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-color: var(--accent-deep, #08406e);
   }
   .selected-point-chip {
+    position: relative; /* anchors the share popover (engine share-controls) */
     background: var(--ink);
     color: #fff;
     font-family: var(--font-mono);
@@ -1433,6 +1434,78 @@ svg.leaflet-image-layer.leaflet-interactive path {
     cursor: pointer;
   }
   .selected-point-chip .copy-link-btn:hover { background: rgba(65,182,230,0.15); }
+
+  /* ---- Share popover (engine share-controls; opens upward off the chip).
+   * White card over the dark chip, body font — it reads as UI, while the
+   * link/embed/coords values inside stay mono like the chip itself. ---- */
+  .share-popover {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 10px);
+    width: min(340px, calc(100vw - 28px));
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 13px;
+    text-align: left;
+    border: 1px solid rgba(20, 24, 28, 0.14);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 12px 14px;
+    cursor: default;
+    z-index: 1100;
+  }
+  .share-popover-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .share-popover-title { font-size: 13px; }
+  .share-popover-close {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--slate);
+    font-size: 14px;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 4px;
+  }
+  .share-popover-close:hover { background: #EEF4F7; color: var(--ink); }
+  .share-popover-note { margin: 0 0 10px; color: var(--slate); font-size: 12px; line-height: 1.45; }
+  .share-popover-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 10px 0 4px;
+  }
+  .share-popover-row { display: flex; align-items: center; gap: 6px; }
+  .share-popover-row-end { justify-content: flex-end; margin-top: 6px; }
+  .share-popover-url,
+  .share-popover-embed {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink);
+    background: #F6F9FB;
+    border: 1px solid #CFD9E0;
+    border-radius: 5px;
+    padding: 6px 7px;
+  }
+  .share-popover-embed { display: block; resize: none; box-sizing: border-box; }
+  .share-popover-coords { flex: 1 1 auto; font-family: var(--font-mono); font-size: 12px; color: var(--ink); }
+  .share-copy-btn {
+    flex: 0 0 auto;
+    background: transparent;
+    color: var(--accent-deep, #0B5394);
+    border: 1px solid var(--accent-deep, #0B5394);
+    border-radius: 5px;
+    font-size: 12px;
+    padding: 6px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .share-copy-btn:hover { background: rgba(11, 83, 148, 0.08); }
 
   /* ---- Layer toggle drawer ---- */
   main.layout.rail-hidden { grid-template-columns: 1fr; }
@@ -3410,39 +3483,6 @@ function initChiExplorer() {
     }).catch(function () { /* coverage test failed — keep the star */ });
   }
 
-  /* ---------- "Embed this Explorer" snippet (fork feature) ------------------
-   * Builds an <iframe> that loads this same app at the current point + layers,
-   * so any view can be dropped into another site. It reuses syncUrlHash() — the
-   * one source of truth for the #point=…&layers=… permalink format — and points
-   * at the fork's canonical URL (from METRO_EXPLORERS), so a snippet grabbed
-   * from a preview/localhost still embeds production. Same-origin, our own
-   * content: nothing external enters the markup (coords are numeric, layer ids
-   * come from our own registry, the title is the configured metro name), so the
-   * code is safe to hand out verbatim. Kept OUT of the ENGINE permalink fence so
-   * it can ship Chicago-first; promotable to the shared engine later (that would
-   * need an engine release to stay byte-identical across the NYC/SF forks).
-   * Surfaced via the point chip's "Embed" button below. */
-  function embedBaseUrl() {
-    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
-      if (METRO_EXPLORERS[i].id === THIS_METRO) return METRO_EXPLORERS[i].url;
-    }
-    return location.origin + location.pathname; // preview/localhost fallback
-  }
-
-  function buildEmbedCode() {
-    syncUrlHash(); // reflect the very latest point/layers in location.hash first
-    var url = embedBaseUrl().replace(/#.*$/, "") + location.hash;
-    // Every attribute value is trusted (canonical URL + numeric-coord/registry-id
-    // hash + configured METRO_NAME); nothing external is interpolated, so this
-    // string is safe as-is. width:100% + max-width keeps it responsive;
-    // loading=lazy so it never blocks the host page; allow=geolocation keeps the
-    // "locate me" button working inside the embed.
-    return '<iframe src="' + url + '" width="100%" height="600" ' +
-      'style="border:0;max-width:100%" loading="lazy" ' +
-      'title="' + METRO_NAME + ' District Explorer" ' +
-      'allow="geolocation" referrerpolicy="no-referrer-when-downgrade"></iframe>';
-  }
-
   function setSelectedPoint(lat, lng, opts) {
     opts = opts || {};
     state.selectedPoint = { lat: lat, lng: lng };
@@ -3464,45 +3504,11 @@ function initChiExplorer() {
     var chipCoords = document.createElement("span");
     chipCoords.textContent = lat.toFixed(5) + ", " + lng.toFixed(5);
     pointChip.appendChild(chipCoords);
-    var copyBtn = document.createElement("button");
-    copyBtn.type = "button";
-    copyBtn.className = "copy-link-btn";
-    copyBtn.textContent = "Copy link";
-    copyBtn.title = "Copy a shareable link to this point and the layers currently on";
-    copyBtn.addEventListener("click", function () {
-      syncUrlHash(); // make sure the URL reflects the very latest state
-      trackEvent("share-permalink");
-      function done(ok) {
-        copyBtn.textContent = ok ? "Copied!" : "Copy failed";
-        setTimeout(function () { copyBtn.textContent = "Copy link"; }, 1600);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(location.href).then(function () { done(true); }, function () { done(false); });
-      } else {
-        done(false); // clipboard API unavailable (e.g. some file:// contexts) — the URL bar still has the link
-      }
-    });
-    pointChip.appendChild(copyBtn);
-
-    var embedBtn = document.createElement("button");
-    embedBtn.type = "button";
-    embedBtn.className = "copy-link-btn"; // same pill style as Copy link
-    embedBtn.textContent = "Embed";
-    embedBtn.title = "Copy an <iframe> embed of this view for your own site";
-    embedBtn.addEventListener("click", function () {
-      trackEvent("embed-iframe");
-      var code = buildEmbedCode();
-      function done(ok) {
-        embedBtn.textContent = ok ? "Copied!" : "Copy failed";
-        setTimeout(function () { embedBtn.textContent = "Embed"; }, 1600);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).then(function () { done(true); }, function () { done(false); });
-      } else {
-        done(false); // clipboard API unavailable (e.g. some file:// contexts) — no auto-copy here
-      }
-    });
-    pointChip.appendChild(embedBtn);
+    // One "Share" surface (engine share-controls, permalink block) replaces
+    // the old Copy link / Embed pill pair: native sheet on touch, popover
+    // with the campaign-tagged link + embed snippet + coordinates elsewhere.
+    // Rebuilt with the chip per selection, like everything else on it.
+    pointChip.appendChild(buildShareControl());
 
     document.getElementById("empty-state").hidden = true;
     document.getElementById("groups-root").hidden = false;
@@ -3599,6 +3605,222 @@ function initChiExplorer() {
       }
     }
     if (zoom !== null && !framed) map.setView(map.getCenter(), zoom, { animate: false });
+  }
+
+  /* ---------- share controls — the point chip's single "Share" surface -----
+   * One button replaces the old Copy-link / Embed pill pair: "Share" names
+   * the INTENT, and the popover behind it names each mechanism's OUTCOME
+   * ("the link opens the map at this exact point, with the layers you have
+   * on") — which two words on a pill next to a lat,lng readout never could;
+   * the old label read as "copy these coordinates" as easily as "share this
+   * view". Touch-first devices get the platform's native share sheet when
+   * the browser offers one; hover-capable devices get the popover with the
+   * permalink, the <iframe> snippet (visible BEFORE it is copied — no more
+   * blind clipboard write), and the coordinates as their own copyable row.
+   *
+   * Every URL handed out carries CAMPAIGN TAGS (?utm_source=share|embed
+   * before the #hash, so the hash router never sees them). gtag reads utm_*
+   * natively; GoatCounter's count.js sends location.search with every hit
+   * and uses utm_source as the referrer, while its canonical-link path
+   * normalization keeps the recorded path clean — so shared/embedded
+   * arrivals attribute in both stacks and the path stats pay nothing.
+   * Organic traffic stays untagged, and a re-share from a tagged page
+   * rebuilds from origin+pathname, so an inbound tag is never copied
+   * forward as the next reader's source.
+   *
+   * Everything interpolated is our own trusted content — canonical fork URL
+   * (METRO_EXPLORERS), numeric coords, registry layer ids, configured
+   * METRO_NAME — so the strings are safe verbatim, the same argument the
+   * embed snippet carried as fork code. Values are built at OPEN/COPY time
+   * from live state, never cached in the DOM, so the popover cannot hand
+   * out a stale view. Forks wire it with one line in their setSelectedPoint:
+   * pointChip.appendChild(buildShareControl()). ---------- */
+
+  function shareCanonicalBase() {
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      if (METRO_EXPLORERS[i].id === THIS_METRO) return METRO_EXPLORERS[i].url;
+    }
+    return location.origin + location.pathname; // preview/localhost fallback
+  }
+
+  // The shareable link: CURRENT origin (a preview shares the preview, exactly
+  // like the old Copy-link did) + campaign tags + the live hash. Any inbound
+  // search — including someone else's utm tags — is deliberately dropped.
+  function shareLinkUrl() {
+    syncUrlHash(); // reflect the very latest point/layers/zoom first
+    return location.origin + location.pathname +
+      "?utm_source=share&utm_medium=link" + location.hash;
+  }
+
+  function buildEmbedSnippet() {
+    syncUrlHash();
+    // Canonical base, not location: a snippet grabbed on a preview/localhost
+    // must still embed production. width:100% + max-width keeps it
+    // responsive; loading=lazy so it never blocks the host page;
+    // allow=geolocation keeps the "locate me" button working inside.
+    var url = shareCanonicalBase().replace(/[?#].*$/, "") +
+      "?utm_source=embed&utm_medium=iframe" + location.hash;
+    return '<iframe src="' + url + '" width="100%" height="600" ' +
+      'style="border:0;max-width:100%" loading="lazy" ' +
+      'title="' + METRO_NAME + ' District Explorer" ' +
+      'allow="geolocation" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+  }
+
+  function copyTextToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return false; });
+    }
+    return Promise.resolve(false); // clipboard API unavailable (e.g. some file:// contexts)
+  }
+
+  // A copy button that reports its outcome in place ("Copied!" / "Copy
+  // failed") and reverts — the same feedback contract the old pills had.
+  function shareCopyButton(label, getText, eventName) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "share-copy-btn";
+    btn.textContent = label;
+    btn.addEventListener("click", function () {
+      trackEvent(eventName);
+      copyTextToClipboard(getText()).then(function (ok) {
+        btn.textContent = ok ? "Copied!" : "Copy failed";
+        setTimeout(function () { btn.textContent = label; }, 1600);
+      });
+    });
+    return btn;
+  }
+
+  function shareCoordsText() {
+    if (!state.selectedPoint) return "";
+    return state.selectedPoint.lat.toFixed(5) + ", " + state.selectedPoint.lng.toFixed(5);
+  }
+
+  // The chip's share control (button + popover). Rebuilt with the rest of
+  // the chip on every selection, so an open popover never outlives the
+  // point it described; the document-level listeners self-clean on the next
+  // keydown/pointerdown even when the chip is torn down mid-open.
+  function buildShareControl() {
+    var wrap = document.createElement("span");
+    wrap.className = "share-control";
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy-link-btn share-btn";
+    btn.textContent = "Share";
+    btn.title = "Share this view — link, embed code, or coordinates";
+    btn.setAttribute("aria-haspopup", "dialog");
+    btn.setAttribute("aria-expanded", "false");
+    wrap.appendChild(btn);
+
+    var popover = null;
+    function closePopover(refocus) {
+      if (!popover) return;
+      document.removeEventListener("keydown", onKeydown, true);
+      document.removeEventListener("pointerdown", onOutside, true);
+      if (popover.parentNode) popover.parentNode.removeChild(popover);
+      popover = null;
+      btn.setAttribute("aria-expanded", "false");
+      if (refocus) btn.focus();
+    }
+    function onKeydown(e) {
+      if (e.key === "Escape") closePopover(true);
+    }
+    function onOutside(e) {
+      if (popover && !popover.contains(e.target) && !wrap.contains(e.target)) closePopover(false);
+    }
+    function selectOnFocus() { this.select(); }
+
+    function openPopover() {
+      popover = document.createElement("div");
+      popover.className = "share-popover";
+      popover.setAttribute("role", "dialog");
+      popover.setAttribute("aria-label", "Share this view");
+
+      var head = document.createElement("div");
+      head.className = "share-popover-head";
+      var title = document.createElement("strong");
+      title.className = "share-popover-title";
+      title.textContent = "Share this view";
+      var close = document.createElement("button");
+      close.type = "button";
+      close.className = "share-popover-close";
+      close.textContent = "✕";
+      close.setAttribute("aria-label", "Close share panel");
+      close.addEventListener("click", function () { closePopover(true); });
+      head.appendChild(title);
+      head.appendChild(close);
+      popover.appendChild(head);
+
+      var note = document.createElement("p");
+      note.className = "share-popover-note";
+      note.textContent = "The link opens the map at this exact point, with the layers you have on.";
+      popover.appendChild(note);
+
+      var linkRow = document.createElement("div");
+      linkRow.className = "share-popover-row";
+      var linkInput = document.createElement("input");
+      linkInput.type = "text";
+      linkInput.readOnly = true;
+      linkInput.className = "share-popover-url";
+      linkInput.value = shareLinkUrl();
+      linkInput.setAttribute("aria-label", "Shareable link");
+      linkInput.addEventListener("focus", selectOnFocus);
+      linkRow.appendChild(linkInput);
+      linkRow.appendChild(shareCopyButton("Copy link", shareLinkUrl, "share-permalink"));
+      popover.appendChild(linkRow);
+
+      var embedLabel = document.createElement("div");
+      embedLabel.className = "share-popover-label";
+      embedLabel.textContent = "Embed on your site";
+      popover.appendChild(embedLabel);
+      var embedBox = document.createElement("textarea");
+      embedBox.readOnly = true;
+      embedBox.rows = 3;
+      embedBox.className = "share-popover-embed";
+      embedBox.value = buildEmbedSnippet();
+      embedBox.setAttribute("aria-label", "Embed code");
+      embedBox.addEventListener("focus", selectOnFocus);
+      popover.appendChild(embedBox);
+      var embedRow = document.createElement("div");
+      embedRow.className = "share-popover-row share-popover-row-end";
+      embedRow.appendChild(shareCopyButton("Copy embed code", buildEmbedSnippet, "embed-iframe"));
+      popover.appendChild(embedRow);
+
+      var coordsLabel = document.createElement("div");
+      coordsLabel.className = "share-popover-label";
+      coordsLabel.textContent = "Coordinates";
+      popover.appendChild(coordsLabel);
+      var coordsRow = document.createElement("div");
+      coordsRow.className = "share-popover-row";
+      var coordsVal = document.createElement("code");
+      coordsVal.className = "share-popover-coords";
+      coordsVal.textContent = shareCoordsText();
+      coordsRow.appendChild(coordsVal);
+      coordsRow.appendChild(shareCopyButton("Copy", shareCoordsText, "copy-coordinates"));
+      popover.appendChild(coordsRow);
+
+      wrap.appendChild(popover);
+      btn.setAttribute("aria-expanded", "true");
+      document.addEventListener("keydown", onKeydown, true);
+      document.addEventListener("pointerdown", onOutside, true);
+      linkInput.focus();
+      trackEvent("share-open");
+    }
+
+    btn.addEventListener("click", function () {
+      // Touch-first devices with a native share sheet get the platform
+      // surface (the expected mobile pattern); hover-capable devices get
+      // the popover. A dismissed sheet needs no cleanup.
+      if (!hoverCapable && navigator.share) {
+        trackEvent("share-native");
+        navigator.share({ title: METRO_NAME + " District Explorer", url: shareLinkUrl() })
+          .catch(function () { /* user dismissed, or the platform refused — nothing to undo */ });
+        return;
+      }
+      if (popover) closePopover(true); else openPopover();
+    });
+
+    return wrap;
   }
 
   /* ==== ENGINE:END permalink ==== */

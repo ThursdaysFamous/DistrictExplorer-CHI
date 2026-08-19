@@ -558,6 +558,49 @@ try {
     await context.close();
   }
 
+  // 2e. Share control: the point chip carries ONE "Share" button whose popover
+  //     serves the live campaign-tagged permalink, the embed snippet (tagged
+  //     with its own source and pointed at the canonical deployment), and the
+  //     coordinates — replacing the old Copy link / Embed pill pair. Headless
+  //     desktop Chromium has no navigator.share, so this always exercises the
+  //     popover path; Escape must close it.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, `${BASE}#point=${POINT}&layers=school-board`);
+    await page.waitForFunction(() => !!document.querySelector("#point-chip .share-btn"), null, { timeout: QUERY_TIMEOUT });
+    const res = await page.evaluate(() => {
+      const btn = document.querySelector("#point-chip .share-btn");
+      btn.click();
+      const pop = document.querySelector("#point-chip .share-popover");
+      if (!pop) return { opened: false };
+      const url = pop.querySelector(".share-popover-url").value;
+      const embed = pop.querySelector(".share-popover-embed").value;
+      const coords = pop.querySelector(".share-popover-coords").textContent;
+      // the values are built at open time, AFTER the click's syncUrlHash —
+      // so location.hash here is exactly the hash both strings must carry
+      const wantUrl = location.origin + location.pathname +
+        "?utm_source=share&utm_medium=link" + location.hash;
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      return {
+        opened: true,
+        urlOk: url === wantUrl,
+        linkTagged: url.indexOf("?utm_source=share&utm_medium=link#") !== -1,
+        embedTagged: embed.indexOf("?utm_source=embed&utm_medium=iframe") !== -1,
+        embedShape: embed.indexOf('<iframe src="') === 0 && embed.indexOf(location.hash) !== -1,
+        embedCanonical: embed.indexOf(location.origin) === -1 || location.hostname !== "localhost",
+        coordsOk: /^-?\d+\.\d{5}, -?\d+\.\d{5}$/.test(coords),
+        closedOnEscape: !document.querySelector("#point-chip .share-popover"),
+      };
+    });
+    check(
+      "share popover serves tagged permalink + embed + coordinates",
+      res.opened && res.urlOk && res.linkTagged && res.embedTagged &&
+        res.embedShape && res.embedCanonical && res.coordsOk && res.closedOnEscape,
+      JSON.stringify(res)
+    );
+    await context.close();
+  }
+
   // 3. A failing data source degrades to that layer's error card + Retry, in
   //    isolation — the app's per-layer failure-isolation rule.
   {
