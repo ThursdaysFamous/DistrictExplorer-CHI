@@ -54,8 +54,16 @@ MIN_PHONES = 18   # 20 of the 22 seats carry one today; vacants carry none
 MIN_EMAILS = 20   # every seat carries one today, vacant or not
 ALLOWED_ROLES = ("Chair", "Vice Chair")
 ALLOWED_PARTIES = ("Republican", "Democrat", "Democratic", "Independent")
-TERM_RE = re.compile(r"^(\d{4}–\d{4}|through \d{4})$")
+# A bare year is a format the county actually publishes, not a parse
+# accident: on 2026-08-19 a new appointee (Shawn Conlin) appeared as
+# "Term 2026" — no start year, no "through" — alongside the usual
+# "2022–2026" spans and one "through 2026". The card renders the value
+# verbatim behind a "Term " prefix, so accepting it ships the county's
+# own words; rejecting it froze the whole roster over one member's
+# formatting and left his predecessor on the card.
+TERM_RE = re.compile(r"^(\d{4}–\d{4}|\d{4}|through \d{4})$")
 VACANT_NAMES = ("currently vacant",)
+MAX_DIRECTORY_DRIFT = 2  # tolerated per-direction directory/card row drift mid-edit
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -219,7 +227,16 @@ def main():
                 member = {"name": m["name"], "party": m["party"], "term": m["term"],
                           "email": m["emails"][0]}
                 if m.get("phone"):
-                    member["phone"] = m["phone"]
+                    # A new appointee's card can carry "TBD" where the phone
+                    # goes (Shawn Conlin, 2026-08-19). A placeholder is an
+                    # honest "none yet", not a number — ship no phone rather
+                    # than a card row reading TBD.
+                    if len(re.sub(r"\D", "", m["phone"])) >= 7:
+                        member["phone"] = m["phone"]
+                    else:
+                        print("shelby-board-roster: %s's phone reads %r — a "
+                              "placeholder, not a number; not shipped"
+                              % (m["name"], m["phone"]))
                 if m.get("role"):
                     if m["role"] not in ALLOWED_ROLES:
                         fail("%s carries unrecognized role %r" % (m["name"], m["role"]))
@@ -255,13 +272,33 @@ def main():
     # --- the contacts cross-check (see the module header)
     role_rows = [c for c in contacts if not c["office"].startswith("District")]
     seat_rows = [c for c in contacts if c["office"].startswith("District")]
-    if len(seat_rows) != len(all_members):
-        fail("contacts.aspx lists %d seats, coboard.aspx %d"
-             % (len(seat_rows), len(all_members)))
+    # The two pages are hand-edited at different times, and a member swap
+    # reaches the cards first: on 2026-08-19 Shawn Conlin was seated on the
+    # cards while the directory still carried his predecessor, and the old
+    # strict equality froze the whole roster on the stale name. The
+    # transition has an exact shape — a directory row naming somebody the
+    # cards no longer seat at all, or a card member the directory has not
+    # caught up with — and ONLY that shape is tolerated, WARNed by name,
+    # capped at MAX_DIRECTORY_DRIFT rows each way (a directory page that
+    # collapses or a parser that loses the table blows past the cap and
+    # still fails). A row whose e-mail does hit a card seat must agree with
+    # it exactly, and a row whose NAME is a current member under an unknown
+    # e-mail still fails: that is a live disagreement about a sitting
+    # member, not a leftover.
+    matched_emails = set()
+    leftovers = 0
     for row in seat_rows:
         hit = seat_by_email.get(row["email"])
         if hit is None:
-            fail("contacts.aspx row %r carries an e-mail no card seat has" % row)
+            if any(norm(row["name"]) == norm(m["name"]) for m in all_members):
+                fail("contacts.aspx row %r carries an e-mail no card seat has" % row)
+            leftovers += 1
+            print("shelby-board-roster: WARN — contacts.aspx still lists %r "
+                  "(%s) on %s, whom the cards no longer seat; skipped as a "
+                  "departed member's leftover row"
+                  % (row["name"], row["email"], row["office"]))
+            continue
+        matched_emails.add(row["email"])
         district, m = hit
         if row["office"] != "District %s" % district:
             fail("contacts.aspx puts %s in %r, the cards in District %s"
@@ -270,6 +307,15 @@ def main():
             fail("contacts.aspx names %r on the seat the cards give %r (%s) — "
                  "the two pages disagree; the county is mid-edit"
                  % (row["name"], m["name"], row["email"]))
+    behind = [m["name"] for m in all_members if m["email"] not in matched_emails]
+    for name in behind:
+        print("shelby-board-roster: WARN — %s has no contacts.aspx row yet"
+              % name)
+    if leftovers > MAX_DIRECTORY_DRIFT or len(behind) > MAX_DIRECTORY_DRIFT:
+        fail("contacts.aspx and coboard.aspx disagree on %d leftover + %d "
+             "missing rows — more than a member swap in flight (max %d each); "
+             "one of the two pages changed shape"
+             % (leftovers, len(behind), MAX_DIRECTORY_DRIFT))
     expect_role_offices = {"Board Chair": "Chair", "Board Vice Chair": "Vice Chair"}
     if sorted(c["office"] for c in role_rows) != sorted(expect_role_offices):
         fail("contacts.aspx role rows are %s, expected %s"
