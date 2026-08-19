@@ -14,10 +14,14 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write # the standing block issue below
 
 jobs:
   update-roster:
     runs-on: ubuntu-latest
+    # Two Cloudflare challenge waits plus 22 page fetches; bounded so a job that
+    # sits behind an unclearable challenge dies visibly rather than grinding.
+    timeout-minutes: 30
     steps:
       # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
       # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
@@ -42,20 +46,54 @@ jobs:
       - name: Install Chromium for Playwright
         run: python3 -m playwright install --with-deps chromium
 
+      # A REFUSED SCRAPE IS A TRACKED STATE, NOT A RED RUN — the posture McHenry
+      # and Kendall already use. CPD's managed challenge stopped clearing from
+      # GitHub's runners around 2026-08-04, and for two weeks this job went red
+      # every Tuesday with the builder's "resolved only 0/20+ expected
+      # districts", which reads as a roster problem and was always a fetch one.
+      # The scraper now exits non-zero when no district resolves, so that state
+      # lands here instead: the issue below records it, the builder is skipped,
+      # and data/app/cpd-district-info.json keeps its last good values.
       - name: Scrape CPD district commander/contact pages
+        id: scrape
+        continue-on-error: true
         run: python3 scripts/cpd_district_scraper.py --out /tmp/cpd_district_info.json
 
+      - name: Report blocked source on the standing issue
+        if: steps.scrape.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          title="CPD district roster: Cloudflare challenge no longer clears from CI"
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          body="The weekly CPD scrape was refused on every rung: plain requests gets HTTP 403, and the headless-Chromium rung reports "Cloudflare challenge did not clear". The shipped data/app/cpd-district-info.json keeps its last good values and stays correct until CPD changes a commander or a CAPS contact.
+
+          What is known: the challenge is a genuine managed (JS) one rather than a hard block, and Cloudflare hands a datacenter IP a harder challenge than a residential one. The per-attempt wait was raised 20s -> 60s on 2026-07-28, which held for about three weeks, and 60s -> 120s on 2026-08-19. **If runs still fail at 120s, the wait is not the problem — do not keep doubling it.** Override without editing code by setting CPD_CHALLENGE_WAIT_S on the scrape step.
+
+          Worth trying instead, in rough order: re-check whether CPD has begun publishing commander/CAPS contact through its ArcGIS org (swept 2026-07-09 and again 2026-08-19 — station address/phone and boundaries only); run the scraper from a non-datacenter address and commit the result; or ask CPD for the data directly. No evasion or fingerprint-spoofing — the scraper drives a real browser on purpose and that stays true.
+
+          This issue is updated by each blocked weekly run; close it if a run goes green. Latest blocked run: $run_url"
+          num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' || true)
+          if [ -z "$num" ]; then
+            gh issue create --title "$title" --body "$body"
+          else
+            gh issue comment "$num" --body "Still blocked as of $(date -u +%F) — $run_url"
+          fi
+
       - name: Rebuild roster data file
+        if: steps.scrape.outcome == 'success'
         run: python3 scripts/build_cpd_roster.py /tmp/cpd_district_info.json
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
+        if: steps.scrape.outcome == 'success'
         run: python3 scripts/validate_index.py index.html
 
       - name: Check for changes
         id: diff
+        if: steps.scrape.outcome == 'success'
         run: |
           if git diff --quiet -- data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
