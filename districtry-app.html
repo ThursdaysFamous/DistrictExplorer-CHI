@@ -2341,6 +2341,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --card-sep: #c9c5d4;
     --card-section-bg: #f8f7fc;
   }
+  /* the Chicago flag-stripe motif is that fork's signature device — recolored
+     by the token swap it reads as meaningless violet bands, and the Districtry
+     design carries no stripe, so the preview hides it */
+  .flag-stripe { display: none; }
   /* masthead goes light (the approved app-shell direction) */
   header.masthead { background: var(--panel); color: var(--ink); border-bottom: 1px solid var(--line); }
   .masthead-star { display: none; }
@@ -2368,6 +2372,53 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .footer-disclaimer { background: rgba(176, 49, 110, 0.14); }
   .footer-sources a:hover,
   .footer-metros a:hover { background: rgba(109, 63, 209, 0.2); }
+  /* ==== footer elimination (operator-directed, 2026-08-20) ====
+     The redesign gives the map the left and bottom viewport bounds: no
+     document footer, no in-page FAQ (it moves to districtry-faq.html).
+     Both sections are HIDDEN, never removed — the boot script fills
+     #verified-date and binds #feedback-btn / #footer-metros by id, so the
+     load-bearing elements are RELOCATED into the results-panel foot by the
+     transforms and only the husks stay hidden here. */
+  .faq-section, footer.site-footer { display: none; }
+  @media (min-width: 901px) {
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    header.masthead { flex: none; }
+    main.layout { flex: 1 1 auto; min-height: 0; max-width: none; margin: 0; width: 100%; }
+    .map-col { height: 100%; min-height: 0; }
+    #map { height: 100%; min-height: 0; }
+    .results-col { max-height: none; height: 100%; }
+  }
+  /* the panel foot — the footer's surviving content, per the app-shell canvas
+     (disclaimer as a small line at the panel's bottom edge) */
+  .results-col { display: flex; flex-direction: column; }
+  .results-col > * { flex: none; }
+  .districtry-panel-foot {
+    margin-top: auto;
+    padding: 10px 2px 0;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--slate-soft);
+  }
+  .districtry-panel-foot p { margin: 0 0 6px; }
+  .districtry-panel-foot .footer-meta { font-size: 11px; color: var(--slate-soft); margin: 0 0 6px; }
+  .dpf-links { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 8px; }
+  .dpf-links a { color: var(--accent-deep); text-decoration: none; }
+  .dpf-links a:hover { text-decoration: underline; }
+  .districtry-panel-foot .footer-link-btn {
+    font-size: 11.5px;
+    padding: 4px 10px;
+    margin: 0 0 6px;
+    color: var(--accent-deep);
+    background: transparent;
+    border: 1px solid rgba(109, 63, 209, 0.35);
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .districtry-panel-foot .footer-link-btn:hover { background: rgba(109, 63, 209, 0.08); }
+  .districtry-panel-foot .footer-metros { font-size: 11px; }
+  .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
 </style>
 </head>
 <body>
@@ -2384,7 +2435,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ illinois</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 0959178 on 2026-08-20</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 098b564 on 2026-08-20</span></small>
     </h1>
     <!-- Chicago-owned masthead action row: the two "about the data" doors, in
          the one place every visitor passes. "What data is missing?" moved up
@@ -2465,6 +2516,29 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <p class="empty-state-lede">See your ward, police district and beat, community area, congressional and Illinois legislative districts, Cook County commissioner, elected school board district, and CPS school zones — plus who represents you.</p>
     </div>
     <div id="groups-root" hidden></div>
+    <div class="districtry-panel-foot" id="districtry-panel-foot">
+      <p><strong>Not for legal or official use.</strong> Boundary and roster data come from public
+      sources that disclaim legal precision — confirm with the relevant government office before
+      relying on them for anything official.</p>
+      <div class="footer-meta" id="footer-meta">
+      <span>Data last verified: <strong id="verified-date"></strong></span>
+    </div>
+      <div class="dpf-links">
+        <a href="./sources.html">Sources &amp; data layers</a>
+        <a href="./districtry-faq.html">Common questions</a>
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>
+        <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
+        <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
+      </div>
+      <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
+      <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
+    <div class="footer-metros" id="footer-metros" hidden>
+      <span class="footer-metros-label">Explore another metro</span>
+      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
+    </div>
+    <!-- ==== ENGINE:END metro-links-html ==== -->
+    </div>
   </section>
 </main>
 
@@ -2532,9 +2606,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       explicitly disclaim legal precision. Always confirm district assignments and officeholders with the
       relevant government office before relying on them for anything official.
     </div>
-    <div class="footer-meta" id="footer-meta">
-      <span>Data last verified: <strong id="verified-date"></strong></span>
-    </div>
     <!-- The ten-link credit row this used to be is now sources.html, where the
          same credits sit alongside a per-layer matrix naming the exact source
          behind every one of the app's layers. A flat list of publishers could
@@ -2547,14 +2618,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <a href="./sources.html">Every layer, and where its data comes from →</a>
       <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim &amp; Photon/Komoot)</a>
     </div>
-    <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
-    <div class="footer-metros" id="footer-metros" hidden>
-      <span class="footer-metros-label">Explore another metro</span>
-      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
-    </div>
-    <!-- ==== ENGINE:END metro-links-html ==== -->
     <div class="footer-links">
-      <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
       <!-- The gaps-html ENGINE fence moved to the masthead action row; see the
            comment there for why the move costs no engine release. -->
       <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">View source on GitHub</a>
@@ -8886,6 +8950,66 @@ function initChiExplorer() {
   });
   var loadMercerBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/mercer-county-board-members.json", {}, 2);
+  });
+
+  /* Calhoun and Morgan, added 2026-08-20 — the first two counties to gain a
+   * dispatch entry for PRECINCTS ALONE. Both elect their commissioners
+   * county-wide, so neither has board geometry and neither ever will; what
+   * each gains here is the answer to "which precinct am I in", which an audit
+   * found neither county could give despite both publishing everything needed
+   * to say so.
+   *
+   * MORGAN'S PRECINCTS ARE THE COUNTY'S OWN, LIVE. Its GIS Coordinator
+   * maintains a public feature service — copyright "Morgan County GIS", 27
+   * polygons, each carrying its polling place AND street address — which is
+   * why this is the one county here with no data file: nothing needs building.
+   * Its currency was proven against the county's own certified returns rather
+   * than assumed (the Coles rule): the 2026 primary reports 27 of 27 precincts
+   * and 25 of the 27 names match the layer exactly, the two differences being
+   * the county's own short forms for hyphenated precincts. Note the census
+   * route would have FAILED here — 27 current precincts against 40 Census 2020
+   * voting districts, Jacksonville alone having gone from eighteen to twelve —
+   * so the published layer is not a convenience, it is the only route.
+   *
+   * CALHOUN'S ARE DISSOLVED FROM CENSUS GEOMETRY, because the county runs no
+   * mapping system at all. Its five precincts are unions of WHOLE Census 2020
+   * voting districts and it wrote the composition into their names
+   * (Belleview-Hamburg, Hardin-Gilead), with its certified returns either side
+   * of the 2022-2024 merge showing each merged precinct's registration equal
+   * to the sum of its parts. See build_calhoun_precincts.py, which needed a
+   * new gate in the shared module: the Jasper test compares precinct names to
+   * voting-district names one-for-one, which is right for Clark and wrong for
+   * a county whose five precincts sit over seven voting districts without its
+   * fabric having moved.
+   *
+   * NEITHER CARRIES A BOARD DISTRICT, and that is permanent rather than
+   * pending — an at-large county has no district for a precinct to belong to.
+   * Morgan's card carries a polling place because its own layer does; Calhoun's
+   * does not, because that fact belongs with a roster guard and a date rather
+   * than inside a geometry file. */
+  var loadCalhounCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/calhoun-county-outline.json", {}, 2);
+  });
+  function calhounCountyCoverage(point) {
+    return loadCalhounCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadCalhounPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/calhoun-precincts.json", {}, 2);
+  });
+  var loadMorganCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
+  });
+  function morganCountyCoverage(point) {
+    return loadMorganCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var MORGAN_PRECINCT_SERVICE = "https://services3.arcgis.com/95PFahBF8eyGEfuc/" +
+    "arcgis/rest/services/VotingPrecincts/FeatureServer/0";
+  var loadMorganPrecincts = makeCached(function () {
+    return loadArcGISGeoJSON(MORGAN_PRECINCT_SERVICE);
   });
 
   /* Edgar (the 56th dispatched county, added 2026-08-18) — the same canvass
@@ -22584,6 +22708,90 @@ function initChiExplorer() {
         primaryLink: function () {
           return { label: "Edgar County Clerk — election results (official)",
                    url: "https://il-edgar.accessliberty.com/pastelections.aspx" };
+        }
+      },
+      // Calhoun — five precincts dissolved from the seven Census 2020 voting
+      // districts, whose composition the county names in the precincts' own
+      // titles (Belleview-Hamburg, Hardin-Gilead). NO BOARD DISTRICT: the
+      // county elects its five commissioners county-wide, so there is none to
+      // carry, and its members ride the County card. NO POLLING PLACE: the
+      // county publishes one, but it belongs with a roster guard and a date
+      // rather than inside a geometry file.
+      {
+        key: "calhoun",
+        coverage: calhounCountyCoverage,
+        loadGeometry: loadCalhounPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCalhounPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Calhoun County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Calhoun County Clerk — elections",
+            url: "https://www.calhouncountyil.gov/government/county-clerk/elections/"
+          };
+        }
+      },
+      // Morgan — the county's OWN live layer, maintained by its GIS
+      // Coordinator, carrying a polling place and street address on every
+      // precinct. No board district here either: Morgan elects its
+      // commissioners county-wide.
+      {
+        key: "morgan",
+        coverage: morganCountyCoverage,
+        loadGeometry: loadMorganPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMorganPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              pollingPlace: findPropCI(props, ["pollingplace"]),
+              pollingAddress: findPropCI(props, ["address"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) });
+          }
+          if (result.pollingAddress) {
+            fields.push({ label: "Polling address", value: String(result.pollingAddress) });
+          }
+          fields.push({ label: "County", value: "Morgan County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Morgan County GIS — voting precincts",
+            url: "https://morganmaps.maps.arcgis.com/"
+          };
         }
       },
     ],
