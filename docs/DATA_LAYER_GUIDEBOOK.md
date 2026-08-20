@@ -232,9 +232,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "fire-district",
-      "summary": "Carroll's fire, park and library districts exist as names and tax rates only — no boundary is published in any form.",
-      "blocker": "Checked 31 Jul 2026: the county runs no mapping system, and the GIS page on its site links a parcel-search portal with no usable data behind it. The clerk's 2025 tax report names nine fire districts, three park districts and seven library tax lines, but gives rates only and no maps; the yearbook adds library opening hours.",
-      "wanted": "Boundaries for the districts as map data. Several cross county lines — the Polo, Hanover and Shannon fire districts, and Pearl City's park and library — so their full extents matter."
+      "summary": "Carroll's fire and park districts have no boundary published anywhere \u2014 the county SELLS its GIS rather than publishing it. Its seven library districts are a different story: a statewide layer carries them.",
+      "blocker": "Checked 31 Jul 2026: the county runs no mapping system, its GIS page links a parcel-search portal with no usable data behind it, and the clerk's 2025 tax report names nine fire districts, three park districts and seven library tax lines with rates only. RE-MEASURED 2026-08-20 AND THE FIRST CLAUSE IS WRONG IN A WAY THAT CHANGES THE ASK. Carroll DOES run a mapping operation: an ArcGIS Online organisation (83 public items, 26 hosted services \u2014 all of it highway capital-improvement machinery, no parcel, fire, park, library, precinct or tax-code layer among them) AND a staffed GIS department with a named director, a published fee schedule and a 2017 cost study that says in its own words that the department maintains boundary layers including FIRE districts and that it SELLS digital data. So the blocker is not absence, it is the JO DAVIESS POSTURE \u2014 the data exists inside a county that treats it as a product, and the assessor portal the earlier note called empty is a paywalled search rather than a hollow one. The tax report is unchanged (2025 is still newest, posted May 2026), but the same page carries a Tax Code by District Listing that the earlier pass missed: it gives every district's exact tax-code composition, confirms the 9 fire / 3 park / 7 library counts precisely, and pins the two cross-line fire districts to one Carroll tax code each (Hanover 09001, Polo 02002). FIRE AND PARK ARE NOW MEASURED SHUT RATHER THAN UNSEARCHED, and the neighbouring-county idea was tested and failed on its merits: Stephenson publishes a fire-district map but it is CLIPPED AT THE COUNTY LINE \u2014 Shannon village sits provably outside Stephenson's own Shannon Fire polygon \u2014 Whiteside's 227-item GIS carries zero fire layers, Ogle exposes one public service unrelated to fire, Jo Daviess exposes no REST directory at all, and no statewide Illinois fire or park district layer exists. THE LIBRARY HALF IS BUILDABLE TODAY, from a statewide layer this project had not found: the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service carries 642 Library Districts polygons for the whole state, and over Carroll it returns exactly the clerk's seven tax lines name for name \u2014 Savanna, Mount Carroll, Chadwick, Milledgeville, York Township, Lanark and Pearl City. It is right on the negatives too, which is the check that matters: Shannon village and Lake Carroll land in NO library district, and the clerk's own tax codes agree that Shannon's code carries no library line. Its extents are true rather than county-clipped, so Pearl City's Carroll-side reach is present \u2014 the thing this record asked for. THE PROVENANCE CAVEAT IS REAL AND MUST RIDE ANY BUILD: the publisher is a broadband contractor, not the county and not the districts; the layer is undocumented in its own item description; copyrightText is empty; and every attribute besides the name is a broadband service metric, which means these are library SERVICE AREAS compiled for broadband planning. That is a real published boundary with a weak provenance line, and a card would have to say whose boundary it is.",
+      "wanted": "Fire and park district boundaries as map data \u2014 which for Carroll means a price and a licence rather than a search, since the county sells what it maintains, so the question to put to its GIS director is whether a free civic reuse is possible and on what terms (the Jo Daviess precedent says ask). The library half needs no publisher: it needs a decision on whether a broadband contractor's compiled service areas are provenance enough to name on a card."
     },
     {
       "id": "carroll-ward-geometry",
@@ -245,9 +245,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "ward",
-      "summary": "All three Carroll cities elect aldermen by ward. None publishes ward boundaries, and the one dataset we found is private and predates redistricting.",
-      "blocker": "Savanna (4 wards, 2 seats each), Mount Carroll (3 wards, 2 seats each) and Lanark (3 wards) were confirmed ward-electing from city sources on 31 Jul 2026. Savanna's own map account holds exactly one ward item, titled “Ward Districts (Pre-Redistricting)” and set to private. Lanark and Mount Carroll publish no ward map, and the county has no mapping system to carry them.",
-      "wanted": "Current post-2020-census ward boundaries for any of the three. Savanna's public works department runs a 102-item map account, so making a current version public is the most plausible single unlock."
+      "summary": "All three Carroll cities elect aldermen by ward. Savanna publishes its wards \u2014 as a 1977-code text description and a scanned map \u2014 while the only digital copy is withheld inside the city's own map account, and Lanark's site now refuses automated visits.",
+      "blocker": "Savanna (4 wards, 2 seats each), Mount Carroll (3 wards, 2 seats each) and Lanark (3 wards) were confirmed ward-electing from city sources on 31 Jul 2026. RE-MEASURED 2026-08-20, and three things changed. FIRST, THE HEADLINE CLAIM THAT NONE PUBLISHES WARD BOUNDARIES IS FALSE FOR SAVANNA: its council page links an \"Election Wards\" PDF carrying City Code chapter 1-17 in full \u2014 a street-centerline legal description of all four wards, the composable kind this project already builds from elsewhere \u2014 plus a hand-coloured ward map and a separate precinct map confirming the city's 6 precincts are not its 4 wards. What it is not is CURRENT: the description ends \"(1977 Code)\" and every page is a pure raster scan with no text layer and no georeference, so it answers \"does anyone publish?\" without answering \"post-2020-census?\". SECOND, THE PRIVATE THING IS NOT WHAT THE RECORD SAID: the city's map account still holds exactly one ward item among 102, but the WEB MAP is public and anonymously readable \u2014 it is the feature collection it points at that is withheld, and that was proved rather than inferred, since ArcGIS answers a withheld item with a 403 permissions error and a non-existent one with a 400, and a fabricated control id returns the 400. So the polygons exist inside the city's account and are being kept back; whether the public shell was already visible in July cannot be established here, because the platform exposes no sharing history and archive.org is blocked by this environment. THIRD, LANARK MOVED FROM SILENT TO UNREACHABLE: lanarkil.gov now answers HTTP 202 behind a SiteGround captcha, and 202 counts as unreachable here, so \"Lanark publishes no ward map\" is no longer a measurement anyone can make from outside. Mount Carroll is unchanged and genuinely publishes nothing \u2014 its council page names all six aldermen by ward and its site carries no ward map or ordinance. All three cities' codes live on American Legal, which refuses this client with a Cloudflare challenge: published, unreadable from here, which is a different fact from unpublished. No current post-2020 ward layer for any of the three exists anywhere public \u2014 searched across the city org, the whole ArcGIS catalogue and ArcGIS Hub.",
+      "wanted": "Current post-2020-census ward boundaries for any of the three. For Savanna the cheapest unlock is unchanged and now precisely located: the city sharing the feature collection behind its own public web map, or confirming whether the 1977 code description it already publishes is still the operative one \u2014 if it is, the text alone builds the wards. Mount Carroll and Lanark still need a first publication."
     },
     {
       "id": "champaign-piatt-ccgisc-license",
@@ -1116,9 +1116,9 @@ in the researched-but-unbuilt backlog.
       ],
       "kind": "no-source",
       "layer": "ward",
-      "summary": "Eight cities now name their council members by ward, but publish no ward map, so the site can say who represents each ward without saying where the wards are.",
-      "blocker": "Created by our own progress on 3 Aug 2026. The Henry, Cass and Peoria county clerk directories added this pass all give each alderman a ward number, so the Municipality card can say “Alderman, Ward 2” for these eight cities — but the ward layer cannot answer which ward a reader is standing in, because none of the eight publishes boundaries. All eight were searched in the public map catalogue on 3 Aug 2026 and none returned a ward or district layer of any kind. The City of Peoria was the ninth city in the same position and is the exception that shipped: it publishes its five council districts on its own map account.",
-      "wanted": "Ward boundaries as map data from any of the eight — a city map account, a county layer, or a shapefile on request. The members are already in hand, ward by ward, so each card would name its seats the day the geometry arrives."
+      "summary": "Eight cities name their council members by ward. Six of them DO have ward boundaries \u2014 on a county server nobody searched, in a shapefile already sitting in this repo, or published since \u2014 and only Beardstown and Virginia have nothing.",
+      "blocker": "Created by our own progress on 3 Aug 2026: the Henry, Cass and Peoria county clerk directories gave each alderman a ward number, so the Municipality card can say \"Alderman, Ward 2\" for these eight cities while the ward layer cannot say where the wards are. All eight were searched in the public map catalogue that day and none returned a ward layer. RE-MEASURED 2026-08-20, AND THE RECORD IS WRONG FOR SIX OF THE EIGHT \u2014 for a reason worth keeping: the 3 Aug pass searched ONE SURFACE, the ArcGIS Online catalogue, and generalised the miss to \"nobody publishes\". That catalogue does not index self-hosted county servers. PEORIA COUNTY PUBLISHES A WARDS LAYER ON ITS OWN SERVER \u2014 gis.peoriacounty.gov, the DP/Elections map service, layer 13 \u2014 carrying 13 polygons for exactly the record's three Peoria cities (Chillicothe 5, Elmwood 3, West Peoria 5, two of them wards drawn in two pieces), public, token-free, CORS-enabled to this site's own origin and serving GeoJSON. GALVA HAS BEEN PUBLISHED SINCE 2025-09-22, three weeks after this record was written, as a public ArcGIS Online feature service \u2014 owned by the city's consulting firm rather than the city, which is a provenance line a card would have to carry. AND COLONA, GENESEO AND GALVA'S WARD POLYGONS HAVE BEEN INSIDE THIS REPOSITORY SINCE 13 AUG: Henry County GIS e-mailed a voter-registration archive that contains a Wards shapefile (11 features, Galva 3 / Colona 4 / Geneseo 4), committed under data/source/raw/. The build log recorded that archive as \"available rather than shipped blind\" and added that no gap record asked for it \u2014 while THIS record had been asking for those three cities for ten days. Two documents in one repository, each describing the other's subject as absent; both corrected in the same change. BEARDSTOWN AND VIRGINIA ARE STILL EXACTLY AS RECORDED, and their blocker is sharper than a search miss: Cass County has no public GIS surface at all \u2014 its only mapping is a parcel viewer behind a Cloudflare challenge, the clerk's polling-place links point at a hostname with no DNS record, and there is no county map account \u2014 while neither city publishes a ward map in any format, not data, not PDF, not a picture. TWO CAVEATS FOR WHOEVER BUILDS THE SIX, because neither is hidden by shipping. NOTHING FOUND IS POST-2020-CENSUS: Peoria's layer is stamped Feb 2021 and its precinct column cites a precinct set the county has since retired, Henry's linework is 2012, Geneseo's own map cites Henry County GIS 2015 and 2010 census population, Colona's is the plan adopted in 2011, Chillicothe's own map is 2017 and West Peoria's 2006. No city publishes anything later, so the evidence says none of the six redrew \u2014 but that is an ABSENCE, and this project's own precedent (Rock Island's clerk writing \"the existing ward boundaries were retained after the 2020 census\") says one e-mail settles it properly. AND COVERAGE IS CLOSE BUT NOT EXACT, measured against each city's Census place polygon: West Peoria leaves about 8% of the city in no ward at all and Elmwood puts about 12% of its ward area outside the city limits \u2014 the two that need resolving before a card claims to answer everywhere in those cities.",
+      "wanted": "For BEARDSTOWN and VIRGINIA: ward boundaries in any form, from the cities or from a Cass County that currently publishes no map surface at all. For the other six the geometry is in hand and what is missing is a date \u2014 each city's clerk confirming whether the wards were redrawn after the 2020 census or retained, which is the same one-sentence answer that settled Rock Island \u2014 plus a look at West Peoria's uncovered eighth and Elmwood's overhang before either ships."
     },
     {
       "id": "peoria-fire-park-library-contact",
@@ -2494,7 +2494,12 @@ code 1901, District 2. The board district is a spatial join, so it is the
 geometry answering rather than a name being parsed.
 
 **What did NOT ship, deliberately.** The archive's `Wards` layer is real and
-verified — Galva 3, Colona 4, Geneseo 4 — and **no gap record asks for it**.
+verified — Galva 3, Colona 4, Geneseo 4. **CORRECTION, 2026-08-20: the claim that
+no gap record asked for it was wrong when written.** `pass9-ward-seats-without-maps`
+had asked for exactly these three cities' wards since 3 Aug, ten days before this
+archive arrived, and the two records sat contradicting each other until a sweep of
+that gap read them side by side — the file says "nobody wants this" while the gap
+says "nobody publishes this", about the same three cities. Both are now corrected.
 Recorded here as available rather than shipped blind, so the decision to add
 Henry's city wards is made against the ward layer's own conventions instead of
 being smuggled in on a precinct build. The 2022 legislative three are already
@@ -4885,6 +4890,39 @@ scrapers promised.
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker.
+
+### A statewide library-district layer — 642 polygons, weak provenance (found 2026-08-20)
+
+Found while re-measuring Carroll's special districts, and it reaches much further than
+Carroll. `services.arcgis.com/R0IGaIgf2sox9aCY/…/IL_Boundary_Layers/FeatureServer` **layer
+11, "Library Districts", carries 642 polygons for the whole state**, public and
+token-free, with a `Library` name field. Verified directly: 642 features, and over Carroll
+it returns exactly the seven library tax lines the county clerk's own report names, one
+for one.
+
+**Why it matters beyond one county.** Eight gap records across seven counties — Boone,
+Lee, Peoria, Randolph, Rock Island, Sangamon, St. Clair, Stephenson, plus Carroll — record
+a missing library-district boundary, and the app's `library-district` layer today
+dispatches only Cook, DuPage, Kane, Lake and Will. One public statewide layer bears on all
+of them at once, which is a different kind of find from a county-by-county unlock.
+
+**What makes it trustworthy, measured on Carroll.** It is right on the NEGATIVES, which is
+the check a wrong layer fails: Shannon village and Lake Carroll land in no library district
+at all, and the clerk's tax codes independently agree that Shannon's code carries no
+library line. Its extents are true rather than county-clipped, so a district that straddles
+a county line (Pearl City, into Stephenson) keeps its full reach — the thing several of
+these gap records explicitly ask for.
+
+**Why it is recorded rather than shipped.** The publisher is the Illinois Broadband Office
+/ Connected Nation — **a broadband contractor, not the county and not the districts**. The
+layer is not mentioned in its own item description, `copyrightText` is empty, and every
+attribute besides the name is a broadband service metric, which means these are library
+**service areas compiled for broadband planning** rather than districts filed by the bodies
+themselves. That is a real published boundary with a weak provenance line. Under this
+project's rules that is a judgement call, not a default: a card carrying it would have to
+say whose boundary it is, and the alternative — leaving seven counties' library cards
+name-only — is also a cost. Worth deciding deliberately, and the same service's other ten
+layers (village boundaries, township/precinct, school districts) deserve the same look.
 
 ### ISBE's precinct-level results archive — a statewide superset of the vendor route (found 2026-08-20)
 
