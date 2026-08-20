@@ -518,6 +518,129 @@ app down a pixel. Matched, so adding a control to that row now costs no layout a
 themes were driven against synthesised flat tiles at CARTO's own ground colours — good enough to
 judge overlay readability, not a substitute for looking at the deployed page.
 
+## Per-layer dark map colours (2026-08-20, second dark-mode round)
+
+Dark mode shipped with a **stopgap on the map**: a `brightness(1.45) saturate(1.06)`
+filter over the whole overlay pane, with a note that near-black layer colours would
+survive it and that the honest fix was per-layer dark colours. This is that fix. The
+filter is retired.
+
+### The problem, measured
+
+The layer palette is 59 colour literals chosen against a light basemap. Measured against
+CARTO `dark_all`'s ground (`#1a1a1a`, which the app's own tile filter lifts to about
+`#232323`):
+
+- **28 of 37 stroke colours fall below 3:1**, the ratio WCAG 1.4.11 asks of a non-text
+  boundary.
+- **Four sit under 1.5:1** — `#14181C` (1.14), `#06375E` (1.28), `#7A0A1C` (1.41),
+  `#7A0B1E` (1.42). That is not "dim", that is gone.
+- On the *light* ground the same palette's worst case is 3.38:1. It was never a bad
+  palette; it simply does not transfer.
+
+A brightness multiply cannot fix the bottom of that list — `#14181C × 1.45` is still
+near-black — which is exactly why the stopgap was labelled one.
+
+### Why the obvious fix was rejected
+
+The first attempt lifted each colour by the **minimum needed to clear 3:1**, preserving
+hue. Every colour passed. The palette broke anyway:
+
+- **314 of 703 pairs moved closer together**, and **66 landed inside dE 0.05** — close
+  enough to read as the same colour.
+- U.S. House District and County both became the same grey. City Ward and County Board
+  District became the same blue. Post Office and Judicial Subcircuit the same violet.
+
+The reason is worth writing down, because it is not obvious: **in the light palette a
+great deal of the categorical separation IS lightness.** Navy vs mid-blue vs sky are one
+hue family distinguished by how dark they are. Push them all to one contrast target and
+the encoding collapses, hue preserved or not.
+
+### What shipped instead
+
+One **order-preserving affine remap** of OKLCH lightness across the whole palette, hue
+untouched, chroma lifted ×1.25 to buy back the separation that compressing lightness
+costs. Parameters `L 0.54–0.92, chroma ×1.25`, chosen by sweeping for the fewest
+collisions subject to every stroke clearing 3:1.
+
+Monotonic matters twice over: relative order between layers survives, and every
+**within-layer** relationship survives by construction — a stroke darker than its fill
+stays darker than its fill (measured: 0 flips).
+
+**The bar is a measurement, not a taste call.** The dark palette is held against the light
+palette's own record:
+
+| | worst contrast | pairs inside dE 0.05 | p5 dE |
+|---|---|---|---|
+| light palette, light ground | 3.38 | 25 | 0.056 |
+| light palette, **dark** ground | **1.14** | 25 | 0.056 |
+| derived dark palette, dark ground | **3.10** | **24** | 0.052 |
+
+It is *no more* collision-prone than the palette it derives from — marginally less — and
+it fixes all 28 contrast failures. Derivation lives in `dark_map_palette()` in
+`scripts/build_districtry_preview.py`; the 59-entry table is emitted into the preview so
+it is inspectable and hand-adjustable.
+
+### How it reaches the map without an engine edit
+
+`baseStyleFor()` is the engine's single funnel for every path it paints, and
+`moduleColor()` is the single source for the card accent, the sidebar dot and the hover
+swatch. Both read `mod.overlay.style` directly. So the palette is installed as **getters on
+the layer style objects** — `Object.defineProperty` with a getter that returns light or
+dark, and a setter so any assignment degrades to plain data rather than throwing on a
+read-only property. Every downstream read becomes theme-correct with no engine edit and no
+second copy of the state to keep in sync. One install pass at the end of the script covers
+all 43 polygon layers, the two nearest-N point layers' `mod.color`, and the School Location
+type table.
+
+The getter is on the **paint path**, so the theme is cached in a variable rather than read
+off the DOM: `baseStyleFor()` reads two colours per path and a full repaint runs over every
+path of every active layer. A `getAttribute` in there would put a document access inside
+the loop this repo has already optimised twice (P7, P8).
+
+Repainting on a flip goes through the engine's own `updateLayerHighlight()`, which already
+handles all three cases (a matched region, no selection, a per-feature-styled layer) and
+re-derives each from `baseStyleFor()`. `highlightApplied` is cleared first to force the full
+sweep — the P7 fast path repaints only the two paths whose match role changed, and here
+every path's colour moved.
+
+### The highlight was pointing the wrong way
+
+`highlightStyleFor()` builds the selected region's outline as
+`darkenHexColor(moduleColor(mod), …)` — "the layer's own colour, shifted away from it so
+the match pops". **Darken is right on light paper and exactly backwards on a dark map**,
+where a darker outline recedes into the ground instead of standing out. This is the same
+error as `--accent-deep`, one layer down.
+
+`darkenHexColor` is a *fenced* engine function, but a function declaration's binding is
+writable, so fork-local code rebinds it to shift toward white in dark mode — no fence edit.
+Measured on the shipped build: U.S. House paints `#696F76` with its highlight at `#9EA1A6`
+(3.10 → 6.06:1); IL Senate `#9B7CFD` with `#BEAAFE` (5.01 → 7.76:1). At adoption the honest
+fix is for the engine to shift away from the *ground* rather than toward black.
+
+### Verification
+
+Driven in Chromium: flipping the theme repaints every stroke and all 37 card accents, with
+**no colour surviving the flip** in either direction, and no page errors. Light mode was
+pixel-diffed against the shipped build and differs in **one band of 687 pixels — the
+generation stamp, because the source SHA changed.** Nothing else in light mode moved, which
+is what the getter design is for: in light the getter returns the original literal.
+
+Gates: `build_districtry_preview.py --check`, `validate_index.py`,
+`generate_metro_files.py --check`, `check_engine_parity.py` and the full smoke test all
+pass; `index.html`, `sw.js`, `sources.html` and `data/` untouched.
+
+**Still not verified here:** the real CARTO tiles, for the same sandbox reason as before —
+the `#232323` ground the whole derivation targets is CARTO's published dark_all land colour
+with the app's own tile filter applied, not a sampled pixel.
+
+**Left alone, deliberately:** the two nearest-N point layers paint `circleMarker`s from
+colours captured in the factory closure, so their pins keep the light colours; their fills
+(`#41B6E6`, and the fire red) are bright enough on dark that this reads as a non-problem
+rather than a debt. The hover popup's `hoverDotIsInvisible()` fallback still assumes a
+too-LIGHT dot is the failure case; in dark that assumption inverts, but the dot ring keeps
+it legible.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
