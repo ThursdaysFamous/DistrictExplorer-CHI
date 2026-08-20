@@ -338,14 +338,30 @@ PROVENANCE = [
              "(suburban ward/district seats), CHIWD (Chicago citywide), "
              "CHICA (Chicago's 50 ward seats, the only verified source of their "
              "term data — the City's own roster htai-wnw4 publishes none) and "
-             "TWNSP, for exactly one jurisdiction: the Town of Cicero, which "
-             "the Clerk files as 'Cicero Township' because town and township "
+             "TWNSP, whose Cicero jurisdiction is the Town of Cicero — the "
+             "Clerk files it as 'Cicero Township' because town and township "
              "are one coterminous government — MUNIS carries no Town at all, "
              "which is how Cook's sixth-largest municipality shipped nothing "
              "until 2026-08-19. The same TWNSP read carries the Cicero Public "
-             "Library's elected trustees (cook-library-trustees.json). "
+             "Library's elected trustees (cook-library-trustees.json) and, "
+             "since 2026-08-19, every other Cook township's governing "
+             "officials (township-officials.json, its own entry below). "
              "The county's Socrata copies of this directory (vw2r-zys4, "
              "jsup-zs8y) are frozen at 2014 and deliberately unused."},
+    {"layer": "Cook township governing bodies (roster)",
+     "app_file": "township-officials.json",
+     "source_url": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
+     "note": "The same Cook Clerk directory API, TWNSP jurisdiction type: 29 "
+             "township governments (supervisor, four trustees, clerk/assessor/"
+             "collector/highway commissioner, hall contact) keyed by Census "
+             "county-subdivision GEOID — cook_municipal_officials_scraper.py "
+             "fetches, build_township_officials.py selects and guards. Party "
+             "committeeperson records are excluded (party posts, and the "
+             "feed's one personal-e-mail surface); per-person contact never "
+             "ships because the hall mailbox is shared township-wide. "
+             "Evanston Township dissolved into its city in 2014 and is "
+             "skipped by name. Same Cloudflare front as the row above — a "
+             "reachability WARN can be a bot filter rather than drift."},
     {"layer": "Will County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": "https://www.willcountyclerk.gov/local-election-officials/",

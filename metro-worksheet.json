@@ -288,15 +288,15 @@
       "area_rank": 10,
       "rank_note": "IL county subdivision (1,695 statewide: townships + city/precinct MCDs)",
       "source": {
-        "answers": "The township or county subdivision containing the point.",
+        "answers": "The township or county subdivision containing the point \u2014 and, in covered counties, the township's elected officers.",
         "boundary": [
           {
             "label": "U.S. Census TIGERweb — Places / county subdivisions, layer 1",
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1"
           }
         ],
-        "people": "No roster is joined; the card names the township.",
-        "applies": "Illinois — statewide."
+        "people": "township-officials.json, rebuilt weekly by CI from the Cook County Clerk's directory (29 townships \u2014 supervisor, trustees, clerk/assessor/collector/highway commissioner, hall contact), joined by county-subdivision GEOID. Townships in other counties keep the identity-only card.",
+        "applies": "Illinois \u2014 statewide for the boundary; officials are carried for Cook County."
       }
     },
     {
@@ -906,7 +906,7 @@
       }
     }
   ],
-  "min_register_layer": 15,
+  "min_register_layer": 17,
   "layer_count_note": "17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 — TIGERweb) + 6 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, library-district, county-precinct — Cook/Will/DuPage/Lake/Kane/McHenry/Kendall entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 2 Cook-only tax-agency layers (tif-district, mwrd — dedicated until a second county ships the concept) + 3 amenity nearest-point layers (post-office, library, early-voting) = 39 — live-verified 2026-07",
   "anchor_point": {
     "lat": 41.8825,
@@ -2289,11 +2289,16 @@
         "file": "cook-library-trustees.json",
         "min_keys": 1,
         "note": "Cicero Public Library's seven elected trustees + the library's own contact, keyed by the Cook Clerk's tax AGENCY id (20060001, the fund tiling's own key) — the one Cook library body whose board the county publishes, filed in the Clerk's directory beside the Town of Cicero's government (build_cicero_library_trustees.py). Joined onto the library-district layer's Cook card; every other Cook agency stays name-only because no officeholder source exists for it."
+      },
+      {
+        "file": "township-officials.json",
+        "min_keys": 25,
+        "note": "Township governing bodies keyed by Census county-subdivision GEOID \u2014 supervisor (or Cicero's president), four trustees, clerk/assessor/collector/highway commissioner, township-hall contact \u2014 from the Cook County Clerk's directory TWNSP type (build_township_officials.py, 29 townships live; Evanston Township dissolved 2014 and is skipped by name). Party committeepersons and per-person contact never ship: the committeeperson records are the feed's one personal-e-mail surface, and the hall mailbox is shared township-wide. Townships in uncovered counties keep the identity-only card."
       }
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v44",
+    "cache_name": "district-explorer-shell-v45",
     "shell_urls": [
       "./",
       "./sources.html",

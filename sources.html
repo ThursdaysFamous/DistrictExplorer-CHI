@@ -1008,14 +1008,14 @@ footer.site-footer a { color: var(--accent); }
               </tr>
               <tr id="layer-township">
                 <th scope="row"><span class="layer-name">Township / County Subdivision</span><code>township</code></th>
-                <td data-label="What it answers">The township or county subdivision containing the point.</td>
+                <td data-label="What it answers">The township or county subdivision containing the point — and, in covered counties, the township's elected officers.</td>
                 <td data-label="Boundary source">
                   <ul class="src-list">
                     <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — Places / county subdivisions, layer 1</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">No roster is joined; the card names the township.</td>
-                <td data-label="Where it applies">Illinois — statewide.</td>
+                <td data-label="Who it names">township-officials.json, rebuilt weekly by CI from the Cook County Clerk's directory (29 townships — supervisor, trustees, clerk/assessor/collector/highway commissioner, hall contact), joined by county-subdivision GEOID. Townships in other counties keep the identity-only card.</td>
+                <td data-label="Where it applies">Illinois — statewide for the boundary; officials are carried for Cook County.</td>
               </tr>
               <tr id="layer-municipality">
                 <th scope="row"><span class="layer-name">Municipality</span><code>municipality</code></th>

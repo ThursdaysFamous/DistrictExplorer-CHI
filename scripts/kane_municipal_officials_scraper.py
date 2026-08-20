@@ -26,9 +26,10 @@ line-flattened extraction glues the right-hand column onto the left and is
 NOT usable here (docs/EXPANSION_GUIDE.md Part 2.4, PDF-parse lessons).
 
 Scope note: the same guide prints Township, Park/Library District, and School
-District sections. Only the municipal section is parsed here — the app has no
-township-officer roster yet (a recorded candidate, Appendix A) — and the
-section is bounded explicitly so a future township scrape is additive.
+District sections. Only the municipal section is parsed here — the township
+roster exists since 2026-08-19 (township-officials.json; Cook ships, Kane is
+a recorded candidate via this same guide) — and the section stays bounded
+explicitly so the township scrape, when Kane joins it, is additive.
 
 Usage:
     python3 kane_municipal_officials_scraper.py --out kane_municipal_officials.json

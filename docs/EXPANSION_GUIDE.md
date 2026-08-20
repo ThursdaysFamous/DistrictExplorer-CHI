@@ -128,7 +128,7 @@ concept, different election geometry, zero new layers. Worked example:
 ## 1.4 The three surfacing patterns
 
 - **Pattern A — identity layer + whole-unit officers on its card** (`county` + clerk;
-  `municipality` + mayor/board/officers; `township` — officers are a recorded candidate).
+  `municipality` + mayor/board/officers; `township` + officers — shipped 2026-08-19, Cook first).
 - **Pattern B — districted-body concept layer**, dispatched per source (`ward`,
   `county-board`, `school-board`, `judicial-subcircuit`, `ccbr`, the service/taxing
   district layers).
@@ -157,8 +157,10 @@ concept, different election geometry, zero new layers. Worked example:
   ships (the MWRD *body* is unique; the *class* isn't — Cook's Clerk catalog carries an
   unwired Sanitary tiling L12). `dupage-county-special-police` has no analog sighted.
 - **Whole-unit officer rosters recur** and often share sources: county officers beyond the
-  clerk (per county, rule 4), township officers (the same clerk yearbooks as the municipal
-  scrape — capture both sections in one pass; verify depth at build time; TOI link floor).
+  clerk (per county, rule 4), township officers (a SHIPPED concept since 2026-08-19 —
+  township-officials.json, Cook's Clerk directory first; new counties ride the same clerk
+  yearbooks as the municipal scrape — capture both sections in one pass; verify depth at
+  build time; TOI link floor).
 - **"Who polices this point"** generalizes as card rows (municipal PD candidate row +
   Sheriff among county officers) + the metro-wide `police-station` layer — never invented
   geography. `ccpsa-district-council` stays Chicago-unique.
@@ -2008,7 +2010,7 @@ different concept/card · UNIQUE = recorded Chicago/Cook-only.
 | id | Answers | Level | Elected by | Statewide story |
 |---|---|---|---|---|
 | `county` | your county + clerk | County | clerk county-wide | DONE · officer-roster enrichment per rule 4; at-large boards land here |
-| `township` | your township / county subdivision | Township | officers township-wide | DONE (identity) · officer candidate via clerk yearbooks; Chicago structural empty |
+| `township` | your township / county subdivision | Township | officers township-wide | DONE (identity statewide + officers for Cook 2026-08-19, township-officials.json; further counties via clerk yearbooks/GIS — Tazewell next recorded); Chicago structural empty |
 | `municipality` | your municipality + its government | Municipal | head municipal-wide; board at-large or by ward | DONE (identity) · ROSTER per county (Part 2.4) · Chicago head + citywide officers SHIPPED |
 | `county-precinct` | your voting precinct (+ polling place) | Election administration | n/a | ENTRY per authority · Kendall polling-place join is the model |
 | `park-district` | which park district serves you | Special district | elected commissioners | ENTRY · McHenry recorded gap |

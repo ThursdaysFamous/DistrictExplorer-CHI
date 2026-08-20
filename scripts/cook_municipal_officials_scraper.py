@@ -26,7 +26,11 @@ Six endpoints, all of them bulk:
      Cicero, which the Clerk files as "Cicero Township" because town and township
      are one coterminous government (see CICERO_JURISDICTION). MUNIS's 128 are
      107 Villages + 21 Cities and not one Town — Cicero was silently absent from
-     this roster until 2026-08-19 because nothing read the township type.
+     this roster until 2026-08-19 because nothing read the township type. The
+     same feed carries every OTHER Cook township's governing officials
+     (Supervisor/Clerk/Assessor/Trustees/Highway Commissioner), which ride the
+     payload raw as `township_officials` for build_township_officials.py — the
+     township-card roster (a Part 5 concept, 2026-08-19).
 MUNIW's `Jurisdiction` carries the seat's district inline ("City of Berwyn,
 Ward 1"), which is parsed out here so the ward-boundary layer can join later
 without a re-scrape.
@@ -171,6 +175,12 @@ MIN_CHICAGO_WARD_OFFICIALS = 45
 # under — but a collapse to a couple of records means the TWNSP feed or the
 # filter broke, and the shipped roster should stand.
 MIN_CICERO_OFFICIALS = 8
+# The whole TWNSP feed: 30 jurisdictions x (governing offices + 2 party
+# committeepersons) + Cicero's library board = 284 records live 2026-08-19.
+# build_township_officials.py consumes it raw and carries its own per-office
+# and per-township guards; this floor only proves the fetch returned the
+# whole type rather than a truncated response.
+MIN_TOWNSHIP_RECORDS = 250
 
 
 def fetch_json_requests(url):
@@ -378,6 +388,10 @@ def main():
         print("FATAL: only %d Chicago ward seats returned (expected >= %d)"
               % (len(chicago_ward_officials), MIN_CHICAGO_WARD_OFFICIALS), file=sys.stderr)
         sys.exit(1)
+    if len(township_officials) < MIN_TOWNSHIP_RECORDS:
+        print("FATAL: only %d township records returned (expected >= %d) — partial response"
+              % (len(township_officials), MIN_TOWNSHIP_RECORDS), file=sys.stderr)
+        sys.exit(1)
 
     # Cicero, out of the township feed — see CICERO_JURISDICTION above. The
     # governing records go FIRST President, then the rest in CICERO_OFFICES
@@ -453,6 +467,11 @@ def main():
         # Raw API records, deliberately: build_cicero_library_trustees.py is
         # their only consumer and does its own field selection + guards there.
         "cicero_library_trustees": cicero_library,
+        # The whole TWNSP feed, also raw and for the same reason:
+        # build_township_officials.py is its only consumer and carries the
+        # office include-list, the committeeperson/privacy exclusions, the
+        # AddressTypeId assertion and the GEOID join itself.
+        "township_officials": township_officials,
     }
     with open(args.out, "w") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)

@@ -80,13 +80,15 @@ CAPABILITIES = [
 # The constants below are GENERATED from metro-worksheet.json (Conversion 2 —
 # edit the worksheet, run scripts/generate_metro_files.py). Fork history worth
 # keeping by hand: this fork's registerLayer floor arithmetic is 1 function
-# definition + 9 direct registerLayer() calls + 5 factory bodies; it was
+# definition + 11 direct registerLayer() calls + 5 factory bodies; it was
 # lowered 16 -> 15 when police-station/fire-station moved onto the
-# registerNearestPointLayer factory (-2 direct calls, +1 body).
+# registerNearestPointLayer factory (-2 direct calls, +1 body), and raised
+# 15 -> 17 when the municipality (2026-07) and township (2026-08-19)
+# identity layers became bespoke roster-joined blocks (+1 direct call each).
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 15
+MIN_REGISTER_LAYER = 17
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -342,6 +344,7 @@ ROSTER_FILES = {
     "coles-county-board-members.json": 13,  # Coles County Board members keyed by district (12 single-member districts) plus a top-level 'board' entry carrying the County Board office's own address and phone — one office for twelve members is the board's, not each member's (the Calhoun switchboard rule), and it is the BOARD's rather than a county switchboard by measurement: the same navbar block reads Room 124 / (217) 348-0511 on the Treasurer's page and 701 7th St / (217) 348-0585 on the Sheriff's. Scraped weekly from the county's own board page. THE COUNTY'S BOARD-DISTRICT GIS LAYER ALSO CARRIES A MEMBER COLUMN AND IT IS NOT USED: that table is a 2022-04-23 snapshot which names six members who have since left the board, still reads term '2022' for District 11, and carries 2010 populations — so the app reads geometry from the service and people from here (scripts/coles_county_board_scraper.py has the six-name diff). No party, term or chair ships because the page publishes none; home addresses are printed under most members and are never parsed (the scraper keys on the contact row's ICON, not its href, because the address anchor is itself a tel: link). The county's committees page is the cross-check and a disagreement in either direction fails the weekly run.
     "jo-daviess-county-board-members.json": 17,  # Jo Daviess County Board members keyed by district (17 single-member districts — the seat count the boundary module exports, so the roster and the purchased geometry cannot drift apart silently). Scraped weekly from the county's own board page at jodaviesscountyil.gov (NEVER the old jodaviess.org, which answers every URL with its home page): name, party and term on every seat, Chair/Vice-Chair badged, plus a direct phone and an e-mail per member from each member's own directory page — 16 distinct numbers at first ship, so no switchboard hoist, and personal gmail/icloud addresses carried exactly as published. A seat the county prints as VACANT ships as a counted, never named vacancy (District 16 at first ship, the Livingston posture). The directory pages also print members' HOME ADDRESSES, which the scraper never parses (the Madison/Peoria precedent). The count guard counts SEATS (named + vacant = exactly 17, districts 1..17 each once), so a vacancy is distinguishable from a parse regression — and a changed district count reads as a reapportionment, which would need the purchased boundary re-licensed.
     "cook-library-trustees.json": 1,  # Cicero Public Library's seven elected trustees + the library's own contact, keyed by the Cook Clerk's tax AGENCY id (20060001, the fund tiling's own key) — the one Cook library body whose board the county publishes, filed in the Clerk's directory beside the Town of Cicero's government (build_cicero_library_trustees.py). Joined onto the library-district layer's Cook card; every other Cook agency stays name-only because no officeholder source exists for it.
+    "township-officials.json": 25,  # Township governing bodies keyed by Census county-subdivision GEOID — supervisor (or Cicero's president), four trustees, clerk/assessor/collector/highway commissioner, township-hall contact — from the Cook County Clerk's directory TWNSP type (build_township_officials.py, 29 townships live; Evanston Township dissolved 2014 and is skipped by name). Party committeepersons and per-person contact never ship: the committeeperson records are the feed's one personal-e-mail surface, and the hall mailbox is shared township-wide. Townships in uncovered counties keep the identity-only card.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at

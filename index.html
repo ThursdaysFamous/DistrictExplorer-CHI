@@ -6672,8 +6672,11 @@ function initChiExplorer() {
    * layers use. Live-verified 2026-07 (layer indices, field names, feature
    * counts, and a Homer Glen / Will County ground truth: Will County, Homer
    * township, Homer Glen village, Lockport Twp HSD 205, Homer CCSD 33C, no
-   * unified district). Identity + geometry only — officeholder joins need a
-   * verifiable statewide roster, which none of these bodies publish; per the
+   * unified district). Identity and geometry resolve statewide; officeholder
+   * joins ride per-county roster files where a county publishes one — the
+   * municipality card since 2026-07 (municipal-officials.json) and the
+   * township card since 2026-08-19 (township-officials.json, Cook) — and a
+   * body with no sourced roster keeps the identity-only card; per the
    * honesty rules the cards name the district, never a guessed official.
    * These layers declare NO coverage (statewide is this app's whole map), so
    * outside Illinois they report the honest "No result for this point." —
@@ -6915,23 +6918,118 @@ function initChiExplorer() {
     }
   });
 
-  registerPolygonLayer({
+  /* ---------- Township officials, keyed by the 10-digit Census county-
+   * subdivision GEOID ("17" + county FIPS + COUSUBFP) — the same GEOID
+   * loadIlTownships already carries on every feature, so the join needs no
+   * name normalization (the municipal-officials pattern one layer down).
+   * Sourced per county (Cook: the County Clerk's directory API TWNSP type —
+   * cook_municipal_officials_scraper.py + build_township_officials.py,
+   * refreshed weekly by CI); a township with no entry keeps the identity-only
+   * card — coverage is deliberately per-county, and an absent entry names
+   * nobody rather than guessing. Contact on this card is the TOWNSHIP
+   * HALL's: the source publishes one shared mailbox and line per township
+   * (often a staffer's, not the officeholder's), so it renders once on the
+   * hall row and never on a person. ---------- */
+  var loadTownshipOfficials = makeCached(function () {
+    return fetchJSONWithRetry("data/app/township-officials.json", {}, 2);
+  });
+
+  function townshipGovFor(feature, roster) {
+    if (!roster) return null;
+    var geoid = findPropCI(feature.properties || {}, ["geoid"]);
+    return geoid != null ? roster[String(geoid)] || null : null;
+  }
+
+  registerLayer({
     id: "township",
     group: "geography",
     subOf: "county",
     label: "Township / County Subdivision",
-    loader: loadIlTownships,
-    // long-dash brown — reads apart from Community Area's short green dash
-    style: { color: "#7A5C3E", weight: 1.5, fillColor: "#A98B6C", fillOpacity: 0.05, dashArray: "7 3" },
-    fields: [
-      // TIGER NAME already carries the honest civil-division type suffix
-      // ("Homer township", "Chicago city") — 17 of 102 counties have no
-      // township government and subdivide as precincts/cities instead,
-      // which is why the layer label says "County Subdivision" too.
-      { name: "name", label: "Subdivision", keys: ["name"], primary: true },
-      { name: "geoid", label: "GEOID", keys: ["geoid"] }
-    ],
-    compact: true, compactMetaField: "geoid", // 4b name-only card
+    overlay: {
+      load: loadIlTownships,
+      // long-dash brown — reads apart from Community Area's short green dash
+      style: { color: "#7A5C3E", weight: 1.5, fillColor: "#A98B6C", fillOpacity: 0.05, dashArray: "7 3" }
+    },
+    // TIGER NAME already carries the honest civil-division type suffix
+    // ("Homer township", "Chicago city") — 17 of 102 counties have no
+    // township government and subdivide as precincts/cities instead,
+    // which is why the layer label says "County Subdivision" too.
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      return Promise.all([
+        queryFeatureAt(loadIlTownships, point),
+        loadTownshipOfficials().catch(function () { return {}; })
+      ]).then(function (results) {
+        var feature = results[0], roster = results[1];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        return {
+          seq: seq,
+          name: findPropCI(props, ["name"]),
+          geoid: findPropCI(props, ["geoid"]),
+          gov: townshipGovFor(feature, roster)
+        };
+      });
+    },
+    render: function (result) {
+      // Card convention: identifier → representative → location → contact → link.
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown subdivision",
+        note: result.geoid != null ? "GEOID " + String(result.geoid) : null
+      }));
+      var gov = result.gov;
+      if (!gov) return wrap; // identity-only: no sourced roster for this subdivision
+      if (gov.head && gov.head.name) {
+        wrap.appendChild(renderPersonRows([municipalPerson(gov.head)]));
+      }
+      var board = (gov.board || []).filter(function (m) { return m && m.name; });
+      if (board.length) {
+        // The label follows the seats' own roles, the same rule
+        // municipalBodyLabel applies one layer down: the builder guards that
+        // every board role in this file is Trustee, so the derivation is a
+        // constant here.
+        wrap.appendChild(renderSectionLabel("Board of Trustees"));
+        wrap.appendChild(renderPersonRows(board.map(municipalPerson)));
+      }
+      var officers = (gov.officers || []).filter(function (m) { return m && m.name; });
+      if (officers.length) {
+        wrap.appendChild(renderSectionLabel(municipalOfficersLabel(officers)));
+        wrap.appendChild(renderPersonRows(officers.map(municipalPerson)));
+      }
+      var office = gov.office || {};
+      if (office.address || office.phone || office.email) {
+        wrap.appendChild(renderLinkRow({
+          title: "Township Hall",
+          note: office.address ? String(office.address) : null,
+          phone: office.phone ? String(office.phone) : null,
+          email: office.email ? String(office.email) : null
+        }));
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var gov = result.gov;
+      if (gov && gov.url) return { label: "Official website", url: String(gov.url) };
+      return null;
+    },
+    pointOfInterest: function (result) {
+      var gov = result.gov;
+      if (!gov || !gov.office || !gov.office.address) return null;
+      return { label: "Township Hall", address: String(gov.office.address) };
+    },
+    // hover popup: name the township executive from the prefetched roster
+    // (same GEOID join as the query, run synchronously against the cache).
+    hoverOfficial: {
+      load: loadTownshipOfficials,
+      name: function (feature, roster) {
+        var gov = townshipGovFor(feature, roster);
+        return gov && gov.head && gov.head.name ? String(gov.head.name) : null;
+      }
+    },
     // Townships are the county's subdivisions, so this nests under County (as
     // Precinct nests under Township below). Turning it on brings County on as
     // the outline frame; turning it off un-frames County and, since Township is
@@ -6946,7 +7044,7 @@ function initChiExplorer() {
         countyRt.outlineOnly = true;
       } else {
         countyRt.outlineOnly = false;
-        var pbox = document.getElementById("toggle-will-county-precinct");
+        var pbox = document.getElementById("toggle-county-precinct");
         if (pbox && pbox.checked) pbox.click();
       }
       var countyMod = getLayerById("county");
