@@ -1,0 +1,1557 @@
+{
+ "adams": {
+  "asOf": "2025-12-15",
+  "county": "Adams",
+  "crossCheck": "unchecked",
+  "documentPage": 1,
+  "email": "ksnider@adamscountyil.gov",
+  "name": "Kent Snider",
+  "office": {
+   "address": "507 Vermont Street, Quincy, IL 62301",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-257-6830",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "alexander": {
+  "asOf": "2025-12-15",
+  "county": "Alexander",
+  "crossCheck": "unchecked",
+  "documentPage": 2,
+  "email": "pdgriggsje601@gmail.com",
+  "name": "Joe E. Griggs",
+  "office": {
+   "address": "2000 Washington Avenue, Cairo, IL 62914",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "618-534-0712",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "bond": {
+  "asOf": "2025-12-15",
+  "county": "Bond",
+  "crossCheck": "unchecked",
+  "documentPage": 3,
+  "email": "bernard.myers@bondcountyil.gov",
+  "name": "Bernard Myers",
+  "office": {
+   "address": "200 West College Avenue, Greenville, IL 62246",
+   "confirmedBy": "Circuit Clerk"
+  },
+  "party": "D",
+  "phone": "618-664-0571",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "boone": {
+  "asOf": "2025-12-15",
+  "county": "Boone",
+  "crossCheck": "agrees",
+  "crossCheckSource": "boone-county-board-members.json",
+  "documentPage": 4,
+  "email": "rriley@boonecountyil.gov",
+  "name": "Rodney Riley",
+  "party": "R",
+  "phone": "815-519-3387",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "brown": {
+  "asOf": "2025-12-15",
+  "county": "Brown",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[BROWN]",
+  "documentPage": 5,
+  "email": "d.ferrill@browncoil.org",
+  "name": "David E. Ferrill",
+  "office": {
+   "address": "200 Court St Rm 4, Mt. Sterling, IL 62353",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-257-7508",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "bureau": {
+  "asOf": "2025-12-15",
+  "county": "Bureau",
+  "crossCheck": "unchecked",
+  "documentPage": 6,
+  "email": "mentwhistle@bureaucounty-il.gov",
+  "name": "Marshann Entwhistle",
+  "party": "R",
+  "phone": "815-875-1160",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "calhoun": {
+  "asOf": "2025-12-15",
+  "county": "Calhoun",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[CALHOUN]",
+  "documentPage": 7,
+  "email": "phil.robeen@calhouncountyil.gov",
+  "name": "Phil Robeen",
+  "office": {
+   "address": "301 South County Road, P.O. Box 187, Hardin, IL 62047",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-576-2881",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "carroll": {
+  "asOf": "2025-12-15",
+  "county": "Carroll",
+  "crossCheck": "differs",
+  "crossCheckSource": "carroll-county-board-members.json",
+  "documentPage": 8,
+  "email": "jjcarrollcounty@gmail.com",
+  "name": "Joseph Payette",
+  "party": "R",
+  "phone": "815-864-2879",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "cass": {
+  "asOf": "2025-12-15",
+  "county": "Cass",
+  "crossCheck": "agrees",
+  "crossCheckSource": "cass-county-board-members.json",
+  "documentPage": 9,
+  "email": "cassboardchair@casscomm.com",
+  "name": "Bill Merriman",
+  "office": {
+   "address": "100 East Springfield Street, Virginia, IL 62691",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "217-452-7135",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "champaign": {
+  "asOf": "2025-12-15",
+  "county": "Champaign",
+  "crossCheck": "unchecked",
+  "documentPage": 10,
+  "email": "kylepatterson@co.champaign.il.us",
+  "name": "Kyle Patterson",
+  "office": {
+   "address": "1776 East Washington Street, Urbana, IL 61802",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "217-840-2317",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "christian": {
+  "asOf": "2025-12-15",
+  "county": "Christian",
+  "crossCheck": "unchecked",
+  "documentPage": 11,
+  "email": "ccboard@christiancountyil.com",
+  "name": "Bryan Sharp",
+  "office": {
+   "address": "101 South Main Street, P.O. Box 647, Taylorville, IL 62568",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-824-4011",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "clark": {
+  "asOf": "2025-12-15",
+  "county": "Clark",
+  "crossCheck": "agrees",
+  "crossCheckSource": "clark-county-board-members.json",
+  "documentPage": 12,
+  "email": "lionrex1958@yahoo.com",
+  "name": "Rex Goble",
+  "party": "R",
+  "phone": "217-218-5686",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "clay": {
+  "asOf": "2025-12-15",
+  "county": "Clay",
+  "crossCheck": "unchecked",
+  "documentPage": 13,
+  "email": "joe-goodman@hotmail.com",
+  "name": "Joe Goodman",
+  "office": {
+   "address": "111 Chestnut Street, Louisville, IL 62858",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-508-2489",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "clinton": {
+  "asOf": "2025-12-15",
+  "county": "Clinton",
+  "crossCheck": "unchecked",
+  "documentPage": 14,
+  "email": "brad.knolhoff@clintonco.us",
+  "name": "Brad Knolhoff",
+  "party": "R",
+  "phone": "618-292-9669",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "coles": {
+  "asOf": "2025-12-15",
+  "county": "Coles",
+  "crossCheck": "agrees",
+  "crossCheckSource": "coles-county-board-members.json",
+  "documentPage": 15,
+  "email": "cbdistrict01@gmail.com",
+  "name": "Darrell Cox",
+  "party": "R",
+  "phone": "217-549-5855",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "cook": {
+  "asOf": "2025-12-15",
+  "county": "Cook",
+  "crossCheck": "unchecked",
+  "documentPage": 16,
+  "name": "Toni Preckwinkle",
+  "office": {
+   "address": "118 North Clark Street, Room 537, Chicago, IL 60602",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "312-603-6400",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "County Board President"
+ },
+ "crawford": {
+  "asOf": "2025-12-15",
+  "county": "Crawford",
+  "crossCheck": "agrees",
+  "crossCheckSource": "crawford-county-board-members.json",
+  "documentPage": 17,
+  "email": "billburkeccb@gmail.com",
+  "name": "Bill Burke Jr.",
+  "party": "R",
+  "phone": "618-553-4613",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "cumberland": {
+  "asOf": "2025-12-15",
+  "county": "Cumberland",
+  "crossCheck": "unchecked",
+  "documentPage": 18,
+  "email": "fdholkenbrink@gmail.com",
+  "name": "Floyd Holkenbrink",
+  "party": "R",
+  "phone": "217-844-3666",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "dekalb": {
+  "asOf": "2025-12-15",
+  "county": "DeKalb",
+  "crossCheck": "differs",
+  "crossCheckSource": "dekalb-county-board-members.json",
+  "documentPage": 19,
+  "email": "swillis@dekalbcounty.org",
+  "name": "Suzanne Willis",
+  "party": "D",
+  "phone": "815-501-3448",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "dewitt": {
+  "asOf": "2025-12-15",
+  "county": "De Witt",
+  "crossCheck": "differs",
+  "crossCheckSource": "dewitt-county-board-members.json",
+  "documentPage": 20,
+  "email": "dmatthew@dewittcountyil.gov",
+  "name": "Dan Matthews",
+  "office": {
+   "address": "201 West Washington, Clinton, IL 61727",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-935-7770",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "douglas": {
+  "asOf": "2025-12-15",
+  "county": "Douglas",
+  "crossCheck": "unchecked",
+  "documentPage": 21,
+  "email": "tom.hettinger@douglascountyil.gov",
+  "name": "Tom Hettinger",
+  "office": {
+   "address": "401 South Center Street, Tuscola, IL 61953",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-253-2411",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "dupage": {
+  "asOf": "2025-12-15",
+  "county": "DuPage",
+  "crossCheck": "agrees",
+  "crossCheckSource": "dupage-county-board-members.json",
+  "documentPage": 22,
+  "email": "chair@dupagecounty.gov",
+  "name": "Deborah Conroy",
+  "office": {
+   "address": "421 North County Farm Road, Wheaton, IL 60187",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "630-407-6060",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "edgar": {
+  "asOf": "2025-12-15",
+  "county": "Edgar",
+  "crossCheck": "agrees",
+  "crossCheckSource": "edgar-county-board-members.json",
+  "documentPage": 23,
+  "email": "jeffvoigt3@gmail.com",
+  "name": "Jeff Voigt",
+  "office": {
+   "address": "115 West Court Street, Room J, Paris, IL 61944",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-822-3956",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "edwards": {
+  "asOf": "2025-12-15",
+  "county": "Edwards",
+  "crossCheck": "differs",
+  "crossCheckSource": "il-county-commissioners.json[EDWARDS]",
+  "documentPage": 24,
+  "email": "Commissioner3@edwardscounty.illinois.gov",
+  "name": "Matthew St. Ledger",
+  "office": {
+   "address": "50 East Main Street, Suite 12, Albion, IL 62806",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-445-2115",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "effingham": {
+  "asOf": "2025-12-15",
+  "county": "Effingham",
+  "crossCheck": "unchecked",
+  "documentPage": 25,
+  "email": "countyboard@effinghamcountyil.gov",
+  "name": "Joshua Douthit",
+  "office": {
+   "address": "101 North 4th Street, Suite 301, Effingham, IL 62401",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-342-4990",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "fayette": {
+  "asOf": "2025-12-15",
+  "county": "Fayette",
+  "crossCheck": "unchecked",
+  "documentPage": 26,
+  "email": "jharris@fayettecountyillinois.gov",
+  "name": "Jacob D. Harris",
+  "office": {
+   "address": "221 South 7th Street, Vandalia, IL 62471",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-283-5000",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "ford": {
+  "asOf": "2025-12-15",
+  "county": "Ford",
+  "crossCheck": "unchecked",
+  "documentPage": 27,
+  "email": "dsmith@fordcounty.illinois.gov",
+  "name": "Debbie Smith",
+  "office": {
+   "address": "200 West State Street, Paxton, IL 60957",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-379-2082",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "franklin": {
+  "asOf": "2025-12-15",
+  "county": "Franklin",
+  "crossCheck": "unchecked",
+  "documentPage": 28,
+  "email": "millerfarm1972@yahoo.com",
+  "name": "J. Larry Miller",
+  "party": "R",
+  "phone": "618-923-0112",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "fulton": {
+  "asOf": "2025-12-15",
+  "county": "Fulton",
+  "crossCheck": "agrees",
+  "crossCheckSource": "fulton-county-board-members.json",
+  "documentPage": 29,
+  "email": "jspangler@fultonco.org",
+  "name": "John Spangler",
+  "party": "R",
+  "phone": "309-547-0901",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "gallatin": {
+  "asOf": "2025-12-15",
+  "county": "Gallatin",
+  "crossCheck": "unchecked",
+  "documentPage": 30,
+  "name": "Andrew Lunsford",
+  "party": "D",
+  "phone": "618-269-3025",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "greene": {
+  "asOf": "2025-12-15",
+  "county": "Greene",
+  "crossCheck": "differs",
+  "crossCheckSource": "il-county-commissioners.json[GREENE]",
+  "documentPage": 31,
+  "email": "aschnelten@greenecountyil.org",
+  "name": "Andrea Schnelten",
+  "office": {
+   "address": "519 North Main, Carrollton, IL 62016",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "grundy": {
+  "asOf": "2025-12-15",
+  "county": "Grundy",
+  "crossCheck": "differs",
+  "crossCheckSource": "grundy-county-board-members.json",
+  "documentPage": 32,
+  "email": "cbalkema@grundycountyil.gov",
+  "name": "Chris Balkema",
+  "party": "R",
+  "phone": "815-641-0086",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "hamilton": {
+  "asOf": "2025-12-15",
+  "county": "Hamilton",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[HAMILTON]",
+  "documentPage": 33,
+  "name": "Kelly Woodrow",
+  "office": {
+   "address": "100 South Jackson Street, Room 2, McLeansboro, IL 62859",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "hancock": {
+  "asOf": "2025-12-15",
+  "county": "Hancock",
+  "crossCheck": "unchecked",
+  "documentPage": 34,
+  "email": "mmenn@hancockcounty-il.gov",
+  "name": "Mark Menn",
+  "party": "R",
+  "phone": "217-847-2290",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "hardin": {
+  "asOf": "2025-12-15",
+  "county": "Hardin",
+  "crossCheck": "unchecked",
+  "documentPage": 35,
+  "name": "David Robinson",
+  "party": "R",
+  "phone": "618-264-5931",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "henderson": {
+  "asOf": "2025-12-15",
+  "county": "Henderson",
+  "crossCheck": "unchecked",
+  "documentPage": 36,
+  "email": "flattbrad12@yahoo.com",
+  "name": "Brad Flatt",
+  "party": "R",
+  "phone": "309-867-2911",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "henry": {
+  "asOf": "2025-12-15",
+  "county": "Henry",
+  "crossCheck": "agrees",
+  "crossCheckSource": "henry-county-board-members.json",
+  "documentPage": 37,
+  "email": "countyboardchairman@henrycty.com",
+  "name": "Kippy Breeden",
+  "office": {
+   "address": "307 West Center Street, Cambridge, IL 61238",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-945-6478",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "iroquois": {
+  "asOf": "2025-12-15",
+  "county": "Iroquois",
+  "crossCheck": "differs",
+  "crossCheckSource": "iroquois-county-board-members.json",
+  "documentPage": 38,
+  "email": "eldadhannah@gmail.com",
+  "name": "John Shure",
+  "office": {
+   "address": "1001 East Grant, Room 101, Watseka, IL 60970",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-432-6955",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "jackson": {
+  "asOf": "2025-12-15",
+  "county": "Jackson",
+  "crossCheck": "unchecked",
+  "documentPage": 39,
+  "email": "cj.calandro@jacksoncounty-il.gov",
+  "name": "C.J. Calandro",
+  "office": {
+   "address": "1001 Walnut Street, Murphysboro, IL 62966",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "618-687-7240",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "jasper": {
+  "asOf": "2025-12-15",
+  "county": "Jasper",
+  "crossCheck": "unchecked",
+  "documentPage": 40,
+  "email": "jwarfel@jaspercounty.illinois.gov",
+  "name": "Jason Warfel",
+  "office": {
+   "address": "204 West Washington Street, Suite 2, Newton, IL 62448",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "618-783-3124",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "jefferson": {
+  "asOf": "2025-12-15",
+  "county": "Jefferson",
+  "crossCheck": "agrees",
+  "crossCheckSource": "jefferson-county-board-members.json",
+  "documentPage": 41,
+  "email": "jeffcoboard@jeffersoncounty.illinois.gov",
+  "name": "Cliff Lindemann",
+  "office": {
+   "address": "100 South 10th, Room 106, Mt. Vernon, IL 62864",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-244-8000 x2",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "jersey": {
+  "asOf": "2025-12-15",
+  "county": "Jersey",
+  "crossCheck": "unchecked",
+  "documentPage": 42,
+  "email": "boardsecretary@jerseycounty-il.gov",
+  "name": "Gary Krueger",
+  "office": {
+   "address": "200 North Lafayette Street, Suite 3, Jerseyville, IL 62052",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-498-5571 x101",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "jo-daviess": {
+  "asOf": "2025-12-15",
+  "county": "Jo Daviess",
+  "crossCheck": "agrees",
+  "crossCheckSource": "jo-daviess-county-board-members.json",
+  "documentPage": 43,
+  "email": "ltrost@jodaviesscountyil.gov",
+  "name": "LaDon Trost",
+  "office": {
+   "address": "330 North Bench Street, Galena, IL 61036",
+   "confirmedBy": "Circuit Clerk"
+  },
+  "party": "R",
+  "phone": "815-777-6557",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "johnson": {
+  "asOf": "2025-12-15",
+  "county": "Johnson",
+  "crossCheck": "unchecked",
+  "documentPage": 44,
+  "email": "garybrumley@johnsonco.illinois.gov",
+  "name": "Gary Brumley",
+  "office": {
+   "address": "400 Court Street, Vienna, IL 62995",
+   "confirmedBy": "State's Attorney"
+  },
+  "party": "R",
+  "phone": "618-658-3611",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "kane": {
+  "asOf": "2025-12-15",
+  "county": "Kane",
+  "crossCheck": "agrees",
+  "crossCheckSource": "kane-county-board-members.json",
+  "documentPage": 45,
+  "email": "cpierog@kanecoboard.org",
+  "name": "Corinne Pierog",
+  "office": {
+   "address": "719 South Batavia Avenue, Building A, Geneva, IL 60134",
+   "confirmedBy": "Treasurer"
+  },
+  "party": "D",
+  "phone": "630-232-5930",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "kankakee": {
+  "asOf": "2025-12-15",
+  "county": "Kankakee",
+  "crossCheck": "unchecked",
+  "documentPage": 46,
+  "email": "awheeler@k3county.net",
+  "name": "Andrew Wheeler",
+  "office": {
+   "address": "189 East Court Street, Kankakee, IL 60901",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-954-5085",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "kendall": {
+  "asOf": "2025-12-15",
+  "county": "Kendall",
+  "crossCheck": "agrees",
+  "crossCheckSource": "kendall-county-board-members.json",
+  "documentPage": 47,
+  "email": "mkellogg@kendallcountyil.gov",
+  "name": "Matt Kellogg",
+  "party": "R",
+  "phone": "630-553-4171",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "knox": {
+  "asOf": "2025-12-15",
+  "county": "Knox",
+  "crossCheck": "unchecked",
+  "documentPage": 48,
+  "email": "jhawkinson@knoxcountyil.gov",
+  "name": "Jared Hawkinson",
+  "office": {
+   "address": "200 South Cherry, Galesburg, IL 61401",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-343-3815",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "lake": {
+  "asOf": "2025-12-15",
+  "county": "Lake",
+  "crossCheck": "agrees",
+  "crossCheckSource": "lake-county-board-roles.json",
+  "documentPage": 49,
+  "email": "smhart@lakecountyil.gov",
+  "name": "Sandy Hart",
+  "office": {
+   "address": "18 North County Street, 10th Floor, Waukegan, IL 60085",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "847-377-2000",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "lasalle": {
+  "asOf": "2025-12-15",
+  "county": "LaSalle",
+  "crossCheck": "agrees",
+  "crossCheckSource": "lasalle-county-board-members.json",
+  "documentPage": 50,
+  "email": "djensen@lasallecounty.org",
+  "name": "Don Jensen",
+  "office": {
+   "address": "707 East Etna Road, Ottawa, IL 61350",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-434-8241",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "lawrence": {
+  "asOf": "2025-12-15",
+  "county": "Lawrence",
+  "crossCheck": "unchecked",
+  "documentPage": 51,
+  "email": "jabrewer25@outlook.com",
+  "name": "James Brewer",
+  "office": {
+   "address": "1100 State Street, Lawrenceville, IL 62439",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-943-2346",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "lee": {
+  "asOf": "2025-12-15",
+  "county": "Lee",
+  "crossCheck": "agrees",
+  "crossCheckSource": "lee-county-board-members.json",
+  "documentPage": 52,
+  "email": "leecochair@countyoflee.org",
+  "name": "Robert Olson",
+  "office": {
+   "address": "112 East Second Street, Dixon, IL 61021",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-288-5676",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "livingston": {
+  "asOf": "2025-12-15",
+  "county": "Livingston",
+  "crossCheck": "agrees",
+  "crossCheckSource": "livingston-county-board-members.json",
+  "documentPage": 53,
+  "email": "jcarley@livingstoncountyil.gov",
+  "name": "James Carley",
+  "office": {
+   "address": "112 West Madison Street, Pontiac, IL 61764",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-844-6378",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "logan": {
+  "asOf": "2025-12-15",
+  "county": "Logan",
+  "crossCheck": "differs",
+  "crossCheckSource": "logan-county-board-members.json",
+  "documentPage": 54,
+  "email": "edavenport@logancountyil.gov",
+  "name": "Emily Davenport",
+  "office": {
+   "address": "601 Broadway Street, P.O. Box 39, Lincoln, IL 62656",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-732-6400",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "macon": {
+  "asOf": "2025-12-15",
+  "county": "Macon",
+  "crossCheck": "agrees",
+  "crossCheckSource": "macon-county-board-members.json",
+  "documentPage": 55,
+  "email": "chairman@maconcounty.illinois.gov",
+  "name": "Kevin Greenfield",
+  "office": {
+   "address": "141 South Main Street, Room 501, Decatur, IL 62523",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-424-1472",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "macoupin": {
+  "asOf": "2025-12-15",
+  "county": "Macoupin",
+  "crossCheck": "unchecked",
+  "documentPage": 56,
+  "email": "lschmidtsos@yahoo.com",
+  "name": "Larry Schmidt",
+  "office": {
+   "address": "215 South East Street, Carlinville, IL 62626",
+   "confirmedBy": "Sheriff"
+  },
+  "party": "R",
+  "phone": "217-854-3341",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "madison": {
+  "asOf": "2025-12-15",
+  "county": "Madison",
+  "crossCheck": "unchecked",
+  "documentPage": 57,
+  "email": "coboard@madisoncountyil.gov",
+  "name": "Chris Slusser",
+  "office": {
+   "address": "157 North Main Street, Suite 165, Edwardsville, IL 62025",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-296-4341",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "marion": {
+  "asOf": "2025-12-15",
+  "county": "Marion",
+  "crossCheck": "unchecked",
+  "documentPage": 58,
+  "email": "dsmith@marionco.illinois.gov",
+  "name": "Debbie Smith",
+  "office": {
+   "address": "100 East Main, Rm 201, Salem, IL 62881",
+   "confirmedBy": "State's Attorney"
+  },
+  "party": "R",
+  "phone": "618-548-3852",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "marshall": {
+  "asOf": "2025-12-15",
+  "county": "Marshall",
+  "crossCheck": "differs",
+  "crossCheckSource": "marshall-county-board-members.json",
+  "documentPage": 59,
+  "email": "hgauwitz@marshallcountyillinois.gov",
+  "name": "Henry Gauwitz Jr.",
+  "party": "D",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "mason": {
+  "asOf": "2025-12-15",
+  "county": "Mason",
+  "crossCheck": "agrees",
+  "crossCheckSource": "mason-county-board-members.json",
+  "documentPage": 60,
+  "email": "kr44walker@gmail.com",
+  "name": "Kenneth Walker",
+  "party": "D",
+  "phone": "309-543-4201",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "massac": {
+  "asOf": "2025-12-15",
+  "county": "Massac",
+  "crossCheck": "unchecked",
+  "documentPage": 61,
+  "name": "Jimmy Burnham",
+  "party": "R",
+  "phone": "270-331-0810",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "mcdonough": {
+  "asOf": "2025-12-15",
+  "county": "McDonough",
+  "crossCheck": "differs",
+  "crossCheckSource": "mcdonough-county-board-members.json",
+  "documentPage": 62,
+  "email": "schwerer5@mtcnow.net",
+  "name": "Scott Schwerer",
+  "office": {
+   "address": "1 Courthouse Square, Macomb, IL 61455",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-652-3830",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "mchenry": {
+  "asOf": "2025-12-15",
+  "county": "McHenry",
+  "crossCheck": "agrees",
+  "crossCheckSource": "mchenry-county-board-members.json",
+  "documentPage": 63,
+  "email": "mjbuehler@mchenrycountyil.gov",
+  "name": "Mike Buehler",
+  "party": "R",
+  "phone": "815-334-4224",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "mclean": {
+  "asOf": "2025-12-15",
+  "county": "McLean",
+  "crossCheck": "unchecked",
+  "documentPage": 64,
+  "email": "catherine.metsker@mcleancountyil.gov",
+  "name": "Catherine Metsker",
+  "office": {
+   "address": "115 East Washington Street, Bloomington, IL 61701",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-824-7638",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "menard": {
+  "asOf": "2025-12-15",
+  "county": "Menard",
+  "crossCheck": "differs",
+  "crossCheckSource": "menard-commissioner-members.json",
+  "documentPage": 65,
+  "email": "lottbob13@gmail.com",
+  "name": "Robert Lott",
+  "office": {
+   "address": "102 South 7th Street, Petersburg, IL 62675",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-971-8147",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "mercer": {
+  "asOf": "2025-12-15",
+  "county": "Mercer",
+  "crossCheck": "agrees",
+  "crossCheckSource": "mercer-county-board-members.json",
+  "documentPage": 66,
+  "email": "joshk.frieden@gmail.com",
+  "name": "Josh Frieden",
+  "party": "R",
+  "phone": "309-537-3443",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "monroe": {
+  "asOf": "2025-12-15",
+  "county": "Monroe",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[MONROE]",
+  "documentPage": 67,
+  "email": "ggreen@monroecountyil.gov",
+  "name": "George E. Green",
+  "office": {
+   "address": "100 South Main Street, Waterloo, IL 62298",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-939-8681 x214",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "montgomery": {
+  "asOf": "2025-12-15",
+  "county": "Montgomery",
+  "crossCheck": "agrees",
+  "crossCheckSource": "montgomery-county-board-members.json",
+  "documentPage": 68,
+  "email": "doug.donaldson@montgomerycountyil.gov",
+  "name": "Doug Donaldson",
+  "party": "R",
+  "phone": "217-710-0775",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "morgan": {
+  "asOf": "2025-12-15",
+  "county": "Morgan",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[MORGAN]",
+  "documentPage": 69,
+  "email": "mwankel@morgancounty-il.com",
+  "name": "Michael Wankel",
+  "office": {
+   "address": "300 West State Street, Jacksonville, IL 62650",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-245-4619",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "moultrie": {
+  "asOf": "2025-12-15",
+  "county": "Moultrie",
+  "crossCheck": "differs",
+  "crossCheckSource": "il-county-commissioners.json[MOULTRIE]",
+  "documentPage": 70,
+  "email": "billy.voyles@moultriecountyil.gov",
+  "name": "Billy Voyles",
+  "office": {
+   "address": "10 South Main, Sullivan, IL 61951",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-254-6562",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "ogle": {
+  "asOf": "2025-12-15",
+  "county": "Ogle",
+  "crossCheck": "differs",
+  "crossCheckSource": "ogle-county-board-members.json",
+  "documentPage": 71,
+  "email": "jfinfrock@oglecountyil.gov",
+  "name": "John Finfrock",
+  "office": {
+   "address": "105 South 5th Street, Suite 321, Oregon, IL 61061",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-732-1111",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "peoria": {
+  "asOf": "2025-12-15",
+  "county": "Peoria",
+  "crossCheck": "agrees",
+  "crossCheckSource": "peoria-county-board-members.json",
+  "documentPage": 72,
+  "email": "jdillon@peoriacounty.org",
+  "name": "James Dillon",
+  "office": {
+   "address": "324 Main St., Rm. 502, Peoria, IL 61602",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "309-637-7721",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "perry": {
+  "asOf": "2025-12-15",
+  "county": "Perry",
+  "crossCheck": "unchecked",
+  "documentPage": 73,
+  "name": "Bruce Morgenstern",
+  "office": {
+   "address": "3764 State Routes 13-127, Pinckneyville, IL 62274",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-357-5116",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "piatt": {
+  "asOf": "2025-12-15",
+  "county": "Piatt",
+  "crossCheck": "unchecked",
+  "documentPage": 74,
+  "email": "t.henricks@piattcounty.org",
+  "name": "Todd Hendricks",
+  "office": {
+   "address": "101 West Washington, Room 105, Monticello, IL 61856",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-762-3111",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "pike": {
+  "asOf": "2025-12-15",
+  "county": "Pike",
+  "crossCheck": "differs",
+  "crossCheckSource": "il-county-commissioners.json[PIKE]",
+  "documentPage": 75,
+  "email": "aborrowman@pikecountyil.org",
+  "name": "Andy Borrowman",
+  "office": {
+   "address": "121 East Washington, Pittsfield, IL 62363",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-473-1032",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "pope": {
+  "asOf": "2025-12-15",
+  "county": "Pope",
+  "crossCheck": "unchecked",
+  "documentPage": 76,
+  "name": "Tim Wallace",
+  "office": {
+   "address": "310 East Main Street, P.O. Box 219, Golconda, IL 62938",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-683-8101",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "pulaski": {
+  "asOf": "2025-12-15",
+  "county": "Pulaski",
+  "crossCheck": "unchecked",
+  "documentPage": 77,
+  "email": "rhelman@pulaskicountyil.gov",
+  "name": "Robert Helman",
+  "party": "R",
+  "phone": "618-748-9360",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "putnam": {
+  "asOf": "2025-12-15",
+  "county": "Putnam",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[PUTNAM]",
+  "documentPage": 78,
+  "email": "clenkaitis@putnamil.gov",
+  "name": "Charlie Lenkaitis",
+  "party": "D",
+  "phone": "815-600-2266",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "randolph": {
+  "asOf": "2025-12-15",
+  "county": "Randolph",
+  "crossCheck": "differs",
+  "crossCheckSource": "il-county-commissioners.json[RANDOLPH]",
+  "documentPage": 79,
+  "email": "countyboard@randolphcountyil.gov",
+  "name": "Andy Gerlach",
+  "office": {
+   "address": "1 Taylor Street, Room 206, Chester, IL 62233",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-826-5000 x142",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "richland": {
+  "asOf": "2025-12-15",
+  "county": "Richland",
+  "crossCheck": "unchecked",
+  "documentPage": 80,
+  "email": "dgraves@richlandcounty.illinois.gov",
+  "name": "Dennis R. Graves",
+  "party": "R",
+  "phone": "618-395-4843",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "rock-island": {
+  "asOf": "2025-12-15",
+  "county": "Rock Island",
+  "crossCheck": "agrees",
+  "crossCheckSource": "rock-island-county-board-members.json",
+  "documentPage": 81,
+  "email": "rbrunk@rockislandcountyil.gov",
+  "name": "Richard Brunk",
+  "office": {
+   "address": "1504 3rd Avenue, Rock Island, IL 61201",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "309-558-3605",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "saline": {
+  "asOf": "2025-12-15",
+  "county": "Saline",
+  "crossCheck": "unchecked",
+  "documentPage": 82,
+  "email": "ryanlambert78@yahoo.com",
+  "name": "Ryan Lambert",
+  "office": {
+   "address": "10 East Poplar Street, Harrisburg, IL 62946",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-252-6905",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "sangamon": {
+  "asOf": "2025-12-15",
+  "county": "Sangamon",
+  "crossCheck": "agrees",
+  "crossCheckSource": "sangamon-county-board-members.json",
+  "documentPage": 83,
+  "email": "andy.vanmeter@sangamonil.gov",
+  "name": "Andy Van Meter",
+  "office": {
+   "address": "200 South Ninth Street, Room 201, Springfield, IL 62701",
+   "confirmedBy": "Circuit Clerk"
+  },
+  "party": "R",
+  "phone": "217-753-6650",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "schuyler": {
+  "asOf": "2025-12-15",
+  "county": "Schuyler",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[SCHUYLER]",
+  "documentPage": 84,
+  "email": "c.esther@schuylercounty.org",
+  "name": "Chet Ester",
+  "party": "R",
+  "phone": "217-248-0864",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "scott": {
+  "asOf": "2025-12-15",
+  "county": "Scott",
+  "crossCheck": "unchecked",
+  "documentPage": 85,
+  "name": "Thomas L. Peterson",
+  "office": {
+   "address": "35 East Market Street, Winchester, IL 62694",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-742-5532",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "shelby": {
+  "asOf": "2025-12-15",
+  "county": "Shelby",
+  "crossCheck": "differs",
+  "crossCheckSource": "shelby-county-board-members.json",
+  "documentPage": 86,
+  "email": "shcoboardchair@shelbycounty-il.gov",
+  "name": "Robert Orman",
+  "party": "R",
+  "phone": "217-273-2774",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "st-clair": {
+  "asOf": "2025-12-15",
+  "county": "St. Clair",
+  "crossCheck": "unchecked",
+  "documentPage": 87,
+  "email": "mkern@co.st-clair.il.us",
+  "name": "Mark Kern",
+  "office": {
+   "address": "#10 Public Square, Belleville, IL 62220",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "D",
+  "phone": "618-825-2203",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "stark": {
+  "asOf": "2025-12-15",
+  "county": "Stark",
+  "crossCheck": "agrees",
+  "crossCheckSource": "stark-county-board-members.json",
+  "documentPage": 88,
+  "email": "kbush@starkco.illinois.gov",
+  "name": "Kari Bush",
+  "office": {
+   "address": "130 West Main Street, Toulon, IL 61483",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "stephenson": {
+  "asOf": "2025-12-15",
+  "county": "Stephenson",
+  "crossCheck": "agrees",
+  "crossCheckSource": "stephenson-county-board-members.json",
+  "documentPage": 89,
+  "email": "scotthhelms@stephensoncountyil.gov",
+  "name": "Scott Helms",
+  "office": {
+   "address": "50 West Douglas, Suite 1001, Freeport, IL 61032",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-235-8389",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "tazewell": {
+  "asOf": "2025-12-15",
+  "county": "Tazewell",
+  "crossCheck": "agrees",
+  "crossCheckSource": "tazewell-county-board-members.json",
+  "documentPage": 90,
+  "email": "bgrimm@tazewell-il.gov",
+  "name": "Brett Grimm",
+  "office": {
+   "address": "11 South 4th Street, Suite 432, Pekin, IL 61554",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-477-2272",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "union": {
+  "asOf": "2025-12-15",
+  "county": "Union",
+  "crossCheck": "unchecked",
+  "documentPage": 91,
+  "email": "mmiller@unioncountyil.gov",
+  "name": "Max Miller",
+  "office": {
+   "address": "309 West Market Street, Room 110, Jonesboro, IL 62952",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-833-8276",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "vermilion": {
+  "asOf": "2025-12-15",
+  "county": "Vermilion",
+  "crossCheck": "unchecked",
+  "documentPage": 92,
+  "email": "lbaughn@vercounty.org",
+  "name": "Larry Baughn, Jr.",
+  "office": {
+   "address": "201 North Vermilion Street, 2nd Floor, Danville, IL 61832",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "217-554-6000",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "wabash": {
+  "asOf": "2025-12-15",
+  "county": "Wabash",
+  "crossCheck": "agrees",
+  "crossCheckSource": "il-county-commissioners.json[WABASH]",
+  "documentPage": 93,
+  "email": "thocking83@gmail.com",
+  "name": "Timothy R. Hocking",
+  "party": "R",
+  "phone": "618-253-5581",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "warren": {
+  "asOf": "2025-12-15",
+  "county": "Warren",
+  "crossCheck": "unchecked",
+  "documentPage": 94,
+  "email": "mbpearson@mtcnow.net",
+  "name": "Michael Pearson",
+  "office": {
+   "address": "100 West Broadway, Monmouth, IL 61462",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-734-8592",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "washington": {
+  "asOf": "2025-12-15",
+  "county": "Washington",
+  "crossCheck": "agrees",
+  "crossCheckSource": "washington-county-board-members.json",
+  "documentPage": 95,
+  "email": "ddmeyerfarms@att.net",
+  "name": "David Meyer",
+  "office": {
+   "address": "101 East St. Louis Street, Nashville, IL 62263",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-534-5921",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "wayne": {
+  "asOf": "2025-12-15",
+  "county": "Wayne",
+  "crossCheck": "unchecked",
+  "documentPage": 96,
+  "email": "dhargrave@waynecountyil.gov",
+  "name": "Daryl Hargrave",
+  "party": "R",
+  "phone": "618-599-9960",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "white": {
+  "asOf": "2025-12-15",
+  "county": "White",
+  "crossCheck": "agrees",
+  "crossCheckSource": "white-county-board-members.json",
+  "documentPage": 97,
+  "email": "chughes.1987@gmail.com",
+  "name": "Cassie Pigg",
+  "office": {
+   "address": "301 East Main Street, P.O. Box 339, Carmi, IL 62821",
+   "confirmedBy": "Circuit Clerk"
+  },
+  "party": "R",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "whiteside": {
+  "asOf": "2025-12-15",
+  "county": "Whiteside",
+  "crossCheck": "unchecked",
+  "documentPage": 98,
+  "email": "mkoster@whiteside.org",
+  "name": "Martin Koster",
+  "office": {
+   "address": "200 East Knox Street, Morrison, IL 61270",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "630-672-3029",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "will": {
+  "asOf": "2025-12-15",
+  "county": "Will",
+  "crossCheck": "agrees",
+  "crossCheckSource": "will-county-board-members.json",
+  "documentPage": 99,
+  "email": "jvandoyne@willcounty.gov",
+  "name": "Joe VanDoyne",
+  "office": {
+   "address": "302 North Chicago Street, Joliet, IL 60432",
+   "confirmedBy": "County Clerk"
+  },
+  "phone": "815-530-4388",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "williamson": {
+  "asOf": "2025-12-15",
+  "county": "Williamson",
+  "crossCheck": "unchecked",
+  "documentPage": 101,
+  "email": "tatkisson@williamsoncountyil.gov",
+  "name": "Tim Atkisson",
+  "office": {
+   "address": "407 North Monroe Street, Suite 220, Marion, IL 62959",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "618-998-2137",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Comm."
+ },
+ "winnebago": {
+  "asOf": "2025-12-15",
+  "county": "Winnebago",
+  "crossCheck": "unchecked",
+  "crossCheckSource": "winnebago-county-board-members.json",
+  "documentPage": 102,
+  "email": "jchiarelli@admin.wincoil.gov",
+  "name": "Joseph Chiarelli",
+  "office": {
+   "address": "404 Elm Street, Room 553, Rockford, IL 61101",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "815-319-4234",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ },
+ "woodford": {
+  "asOf": "2025-12-15",
+  "county": "Woodford",
+  "crossCheck": "agrees",
+  "crossCheckSource": "woodford-county-board-members.json",
+  "documentPage": 103,
+  "email": "woodfordconagel@gmail.com",
+  "name": "Chuck Nagel",
+  "office": {
+   "address": "115 North Main Street, Room 103, Eureka, IL 61530",
+   "confirmedBy": "County Clerk"
+  },
+  "party": "R",
+  "phone": "309-467-7343",
+  "sourceUrl": "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf",
+  "title": "Chair, County Board"
+ }
+}

@@ -11,8 +11,8 @@ WHY THIS SOURCE EXISTS IN THIS REPO. The app already answers "which county am
 I in" everywhere in Illinois and names that county's CLERK on the card, from
 ISBE's election-authority directory (scripts/il_county_clerk_scraper.py). It
 cannot name that county's BOARD CHAIR unless the county has been researched
-one at a time, which is the whole expansion programme: 65-odd counties in,
-and each one's chair arrived with its own scraper. This document names a chair
+one at a time, which is the whole expansion programme — every chair the app
+names today arrived with its own county's scraper. This document names a chair
 in all 102 in one fetch. That is the only thing it is good for, and the two
 paragraphs below are the limits that make it safe to use at all.
 
@@ -29,12 +29,12 @@ WHAT THIS DOCUMENT IS NOT — MEASURED, NOT ASSUMED.
      footer carries the document's own "Last Updated" stamp (Monday, December
      15, 2025 in the edition this parser was written against) and the builder
      ships that date on every record so a card can say when it was true. It
-     matters because it is measurably behind several counties: on 2026-08-20,
-     eight of the counties whose boards this app already ships from the
-     county's OWN page named a different chair, and in every one checked live
-     — Ogle, Grundy, Marshall, Iroquois, Logan, Shelby, Greene, Moultrie — the
-     person ISBE names does not appear anywhere on the county's current board
-     page. So this file is a FALLBACK for counties the app has not researched,
+     matters because it is measurably behind: on 2026-08-20, 16 of the 56
+     counties whose boards this app already ships from the county's own source
+     named a DIFFERENT chair, and in all eight checked live that day — Ogle,
+     Grundy, Marshall, Iroquois, Logan, Shelby, Greene, Moultrie — the person
+     ISBE names does not appear anywhere on the county's current board page,
+     while the app's does. So this file is a FALLBACK for unresearched counties,
      never an override of a county's own publication. build_county_board_chairs
      cross-checks every record against the rosters already shipped and marks
      the disagreements rather than hiding them.
@@ -279,8 +279,15 @@ def parse_page(page, index):
 
 
 def parse_document(doc):
-    """{county name: {page, officers}}, and the index the county pages end at."""
-    counties, order, last_page = {}, [], doc.page_count
+    """{county name: {page, officers}}, and the index the county pages end at.
+
+    A county is usually one page and sometimes two: Will has more offices than
+    fit (a Chief Executive Officer and an Auditor besides the usual eleven) and
+    runs onto a second page under a repeated heading. A repeat on the NEXT page
+    is that continuation and is merged; a repeat anywhere else means the pages
+    are out of order, which is a broken document rather than a long county.
+    """
+    counties, seen_on, last_page = {}, {}, doc.page_count
     for index in range(FIRST_COUNTY_PAGE, doc.page_count):
         text = doc[index].get_text()
         if END_SECTION_MARKER in text:
@@ -293,20 +300,28 @@ def parse_document(doc):
         county, records = parse_page(doc[index], index)
         if not county:
             fail("page %d names no county" % (index + 1))
-        if county in counties:
-            fail("county %r appears on pages %d and %d — a county is one page"
-                 % (county, counties[county]["page"], index + 1))
-        if len(records) < MIN_RECORDS_PER_COUNTY:
-            fail("%s yielded %d officer rows (floor %d) — the column geometry "
-                 "has moved" % (county, len(records), MIN_RECORDS_PER_COUNTY))
         for record in records:
             if not record["name"]:
                 fail("%s has an officer row with no name" % county)
-        counties[county] = {"page": records[0]["page"], "officers": records}
-        order.append(county)
+        if county in counties:
+            if seen_on[county] != index - 1:
+                fail("county %r appears on pages %d and %d, which do not "
+                     "adjoin — the document's page order changed"
+                     % (county, seen_on[county] + 1, index + 1))
+            counties[county]["officers"].extend(records)
+        else:
+            counties[county] = {"page": records[0]["page"] if records else None,
+                                "officers": records}
+        seen_on[county] = index
+    for county, entry in counties.items():
+        if len(entry["officers"]) < MIN_RECORDS_PER_COUNTY:
+            fail("%s yielded %d officer rows (floor %d) — the column geometry "
+                 "has moved" % (county, len(entry["officers"]),
+                                MIN_RECORDS_PER_COUNTY))
     if len(counties) != EXPECTED_COUNTIES:
         fail("parsed %d counties, expected %d — Illinois has 102 and the "
-             "document publishes one page each" % (len(counties), EXPECTED_COUNTIES))
+             "document publishes them one page each, Will County over two"
+             % (len(counties), EXPECTED_COUNTIES))
     return counties, last_page
 
 
