@@ -154,8 +154,13 @@ SKIN_ISLAND = """<style id="districtry-skin">
     .results-col { max-height: none; height: 100%; }
   }
   /* the panel foot — the footer's surviving content, per the app-shell canvas
-     (disclaimer as a small line at the panel's bottom edge) */
-  .results-col { display: flex; flex-direction: column; }
+     (disclaimer as a small line at the panel's bottom edge).
+     :not([hidden]) is LOAD-BEARING, not decoration: a bare `.results-col
+     { display: flex }` outranks the UA's `[hidden] { display: none }`, so
+     the Layers button set the hidden attribute and the panel stayed put
+     while the grid collapsed to one column — the map appeared to close
+     instead of the panel. */
+  .results-col:not([hidden]) { display: flex; flex-direction: column; }
   .results-col > * { flex: none; }
   .districtry-panel-foot {
     margin-top: auto;
@@ -185,9 +190,27 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
   /* ==== canvas app-shell layout (operator-directed: "Implement Districtry
      App.dc.html", 2026-08-20) ==== */
-  /* search moves from floating-over-map into the masthead */
+  /* search moves from floating-over-map into the masthead. The shell's own
+     surface (panel fill + drop shadow) was drawn to float over a basemap; in
+     a header it reads as a grey box around the field, so the shell goes
+     invisible and the INPUT carries the affordance. */
   .masthead .map-toolbar { position: static; transform: none; flex: 1 1 320px; max-width: 560px; }
-  .masthead .search-shell { position: relative; box-shadow: none; background: var(--paper); border-color: var(--line); }
+  .masthead .search-shell { position: relative; box-shadow: none; background: transparent; border-color: transparent; padding: 0; }
+  .masthead .search-row input[type="text"] {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 14px;
+  }
+  .masthead .search-row input[type="text"]:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(109, 63, 209, 0.14);
+  }
+  .masthead .search-row input[type="text"]::placeholder { color: var(--slate-soft); }
+  .masthead .search-row button { background: var(--accent); border-radius: 8px; }
+  .masthead .search-row button:hover { background: var(--accent-deep); }
   .masthead .search-extra {
     position: absolute;
     top: calc(100% + 6px);
@@ -201,8 +224,50 @@ SKIN_ISLAND = """<style id="districtry-skin">
     z-index: 900;
   }
   .masthead .search-shell:not(:hover):not(:focus-within):not(.expanded) .search-extra { padding: 0; border-width: 0; }
-  /* header stat row */
-  .districtry-stats { font-size: 12.5px; color: var(--slate); align-self: center; white-space: nowrap; }
+  /* The three "about the data" doors: emoji dropped (operator-directed) and
+     the row rebuilt as one segmented group — a single hairline container with
+     rules between items instead of three separately-outlined pills. */
+  .masthead-actions {
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    overflow: hidden;
+    background: var(--panel);
+    gap: 0;
+  }
+  .masthead-actions .footer-link-btn,
+  .masthead-action-link {
+    border: none;
+    border-radius: 0;
+    border-left: 1px solid var(--line);
+    background: transparent;
+    color: var(--slate);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0;
+    padding: 8px 14px;
+    transform: none;
+  }
+  .masthead-actions > :first-child { border-left: none; }
+  .masthead-actions .footer-link-btn:hover,
+  .masthead-actions .footer-link-btn:focus-visible,
+  .masthead-action-link:hover,
+  .masthead-action-link:focus-visible {
+    background: rgba(109, 63, 209, 0.08);
+    color: var(--accent-deep);
+    border-color: var(--line);
+    transform: none;
+    text-decoration: none;
+  }
+  /* header right cluster: the stat row and the actions group ride one line */
+  .districtry-header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .districtry-stats { font-size: 12.5px; color: var(--slate); white-space: nowrap; }
   .districtry-stats a { color: var(--accent-deep); text-decoration: none; }
   .districtry-stats a:hover { text-decoration: underline; }
   /* the selected-point chip becomes the results panel's header row (keep
@@ -217,6 +282,18 @@ SKIN_ISLAND = """<style id="districtry-skin">
     margin: 0 0 12px;
   }
   .results-col > .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: rgba(109, 63, 209, 0.35); }
+  /* The share popover opens UPWARD off the chip because the chip used to sit
+     at the map's bottom-left. Anchored at the panel's TOP that put the card
+     above the viewport — open, unreachable, invisible. In the panel it opens
+     downward and is clamped to the panel's width. */
+  .results-col > .selected-point-chip .share-popover {
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+  }
   /* three-zone coverage treatment */
   .dst-glow { filter: blur(7px); }
   .districtry-map-legend {
@@ -312,9 +389,9 @@ COVERAGE_JS = """  function drawDistrictryCoverage() {
       if (host && !document.querySelector(".districtry-map-legend")) {
         var legend = document.createElement("div");
         legend.className = "districtry-map-legend";
-        legend.innerHTML = '<span class="dml-glow"></span><span>Illinois</span>' +
+        legend.innerHTML = '<span class="dml-glow"></span><span>IL</span>' +
           '<span class="dml-sw dml-pending"></span><span>Data coming — not yet sourced</span>' +
-          '<span class="dml-sw dml-out"></span><span>Outside Illinois</span>' +
+          '<span class="dml-sw dml-out"></span><span>Outside IL</span>' +
           '<span class="dml-dot"></span><span>Selected point</span>';
         host.insertBefore(legend, host.firstChild);
       }
@@ -375,6 +452,30 @@ FAQ_PAGE_TEMPLATE = """<!DOCTYPE html>
 </div>
 </body>
 </html>
+"""
+
+
+# Geocoder labels carry the state in full; the preview abbreviates to the USPS
+# code. Unknown values pass through unchanged — a geocoder that answers with
+# something unexpected should print what it said, not swallow it.
+STATE_CODE_JS = """  var US_STATE_CODES = {
+    "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA",
+    "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC",
+    "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL",
+    "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA",
+    "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN",
+    "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV",
+    "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
+    "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR",
+    "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD",
+    "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA",
+    "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
+    "Puerto Rico": "PR"
+  };
+  function stateCode(name) {
+    if (!name) return name;
+    return US_STATE_CODES[name] || name;
+  }
 """
 
 
@@ -628,13 +729,25 @@ def build(stamp_text):
         layer_count = str(len(worksheet.get("layers", []))) or layer_count
     except (OSError, ValueError):
         pass
-    html = sub_once(
-        html,
-        '<div class="masthead-actions">',
-        '<div class="masthead-actions">\n      <span class="districtry-stats">'
+    #    The stats sit BESIDE the actions group, never inside it: the group is
+    #    a segmented control with overflow:hidden, which clipped the trailing
+    #    "Sources" link when the span was its first child. Both are wrapped in
+    #    one right-aligned cluster so they share a line instead of orphaning
+    #    onto separate rows when the header wraps.
+    actions_re = re.compile(r'([ ]*)(<div class="masthead-actions">.*?\n\1</div>)', re.S)
+    actions = actions_re.findall(html)
+    if len(actions) != 1:
+        sys.exit("build-districtry-preview: FAIL — masthead-actions block matched %d times" % len(actions))
+    indent, actions_block = actions[0]
+    html = actions_re.sub(
+        lambda _m: indent + '<div class="districtry-header-right">\n'
+        + indent + '  <span class="districtry-stats">'
         + county_count + " counties · " + layer_count
-        + ' layers · <a href="./sources.html">Sources</a></span>',
-        "header stat row",
+        + ' layers · <a href="./sources.html">Sources</a></span>\n'
+        + indent + "  " + actions_block.replace("\n", "\n  ") + "\n"
+        + indent + "</div>",
+        html,
+        count=1,
     )
 
     #    (c) The selected-point chip becomes the results panel's header row
@@ -646,6 +759,42 @@ def build(stamp_text):
         '<div id="main-content" tabindex="-1"></div>',
         chip + '\n    <div id="main-content" tabindex="-1"></div>',
         "point chip into panel",
+    )
+
+    #    (b2) Search field: Illinois-wide prompt (the app is no longer a
+    #    Chicago-only tool), and the three "about the data" pills lose their
+    #    emoji. NOTE for adoption: the gaps label lives INSIDE the gaps-html
+    #    ENGINE fence. Editing it is safe here only because this copy is never
+    #    deploy-spliced — in production that same edit is an engine release
+    #    (or the label becomes a config string).
+    html = sub_once(
+        html,
+        'placeholder="Search a Chicago address…"',
+        'placeholder="Search an Illinois address"',
+        "search placeholder",
+    )
+    for emoji_label, plain in (
+        ("🧩 What data is missing?", "What data is missing?"),
+        ("📚 Sources &amp; data layers", "Sources &amp; data layers"),
+        ("💡 Why this exists", "Why this exists"),
+    ):
+        html = sub_once(html, ">" + emoji_label + "<", ">" + plain + "<", "pill label " + plain)
+
+    #    (b3) Geocoder results name the state in full ("…, Springfield,
+    #    Illinois, 62701"). The app answers statewide and will answer in more
+    #    states, so the label carries the USPS code instead. photonLabel sits
+    #    outside every ENGINE fence, so this is a fork-local edit.
+    html = sub_once(
+        html,
+        "    if (p.state) parts.push(p.state);\n",
+        "    if (p.state) parts.push(stateCode(p.state));\n",
+        "photon state code",
+    )
+    html = sub_once(
+        html,
+        "  function photonLabel(p) {\n",
+        STATE_CODE_JS + "  function photonLabel(p) {\n",
+        "state code helper",
     )
 
     #    (d) The three-zone coverage treatment replaces the engine wash at its
