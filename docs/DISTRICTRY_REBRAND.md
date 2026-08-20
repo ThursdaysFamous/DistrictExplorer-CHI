@@ -272,6 +272,35 @@ active tab; these four open a modal, two pages and an external site); condensed 
 on-brand, but four shouted phrases for secondary links, and 130px wider than any alternative);
 fully quiet text for all four (lightest, but under-signals the one item the project wants seen).
 
+## Map legend rebuild (operator-directed, 2026-08-20)
+
+The corner legend was a flat wrapping run of **loose** swatches and labels — nothing bound a
+swatch to the label it defines — so at the 340px cap the wrap fell between the blue dot and
+"Selected point", stranding a swatch from its own text. Seven treatments were rendered over the
+live map and compared (artifact `58ce7ef8-c196-4ae2-86d9-ca854c426cfa`); the operator chose the
+titled vertical list. Each row is now a grid whose swatch and label cannot be separated, so the
+defect is gone **by construction** rather than by picking a lucky width; the row-gap is 2px, not
+the shorthand 8px, because a why-line spaced as far from its own label as from the next row
+belongs to neither. The legend also gained a `COVERAGE` kicker — nothing previously named what
+the colours were a legend *of* — and a rule separating the three coverage zones from the point
+marker, which are two different kinds of fact.
+
+**The copy fix matters more than the layout.** "Data coming — not yet sourced" implied the violet
+counties hold no data at all. They are not empty: measured empirically by selecting a point in
+the Bureau County enclave, **the great majority of layers still answer there** — U.S. House, both
+Illinois chambers, IL Supreme Court, county, municipality, ZIP, school districts and zones, and
+the nearest-N station layers. What actually hides is that county's **own** local districts:
+county board, board of review, judicial subcircuit, fire protection, park, library, precinct,
+township and TIF. The swatch now reads **"Statewide layers only"** over a why-line — **"County
+board and local districts not sourced yet"** — which is the honest distinction and the one a
+reader in an unserved county actually needs. Deliberately **no count is printed**: which layers
+answer varies by county, and a sandboxed measurement is no basis for a live figure.
+
+**Adoption note (Phase 3):** this legend is created by the preview's own coverage script, so it
+is preview-local today. If the three-zone treatment is adopted into production, the legend and
+this copy travel with it, and the wording becomes a fork-owned string — worth a worksheet key so
+NYC/SF can say "Statewide layers only" about their own states without an engine release.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
