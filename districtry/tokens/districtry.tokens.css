@@ -1,0 +1,92 @@
+/* Districtry — design tokens (rebuilt 2026-08-19)
+   Three tiers: BRAND (violet — chrome accents, never map data),
+   CHROME (neutral paper + inks), DATA (blue ramp + per-layer colors — map only).
+   Type + spacing adopted from the Industry design system (Barlow Condensed / Barlow). */
+
+:root {
+  /* — tier 1: brand (violet) — */
+  --brand-100: #f4effe;
+  --brand-200: #e7dcfc;
+  --brand-300: #cfb8f7;
+  --brand-400: #ad8cee;
+  --brand-500: #8a62e0;
+  --brand-600: #6d3fd1; /* base */
+  --brand-700: #5730ab;
+  --brand-800: #402383;
+  --brand-900: #2b175c;
+  --brand: var(--brand-600);
+  --brand-tint: #efe9fc;      /* pills, checked-tint */
+  --brand-chip: #e7defa;      /* role chips */
+  --brand-border: #d4c4f4;    /* outlined buttons */
+
+  /* — tier 2: chrome (neutral paper + inks) — */
+  --paper: #f4f2ee;           /* app ground */
+  --surface: #ffffff;         /* cards, panels */
+  --surface-2: #f8f7fc;       /* tinted sections (was #f8fafc) */
+  --ink: #17161c;
+  --ink-2: #374151;
+  --ink-3: #4b5563;
+  --muted: #6b7280;
+  --faint: #9aa3b2;
+  --border: #e8e7ef;          /* card header rules (was #e8eaef) */
+  --border-soft: #f1f0f6;     /* row rules (was #f1f3f7) */
+  --border-dot: #c9c5d4;      /* separators (was #c3c9d4) */
+  --error: #c2410c;
+  --error-ink: #7c2d12;
+  --empty: #d1d5db;
+
+  /* — tier 3: data (map only — blue ramp + layer encoding) — */
+  --data-500: #1d5fd6;        /* selected boundary, point marker */
+  --data-600: #1a56c4;
+  --data-tint: #eef4fd;
+  --layer-county: #1e3a5f;
+  --layer-township: #7a5c3e;
+  --layer-muni: #b0316e;
+  --layer-zip: #0b5394;
+  --layer-fire: #a33b2c;
+  --layer-police: #9c0b24;
+  --layer-school: #0f6f6f;
+  --layer-special: #5c6bc0;
+
+  /* — type (Industry) — */
+  --font-heading: "Barlow Condensed", system-ui, sans-serif;
+  --font-heading-weight: 600;
+  --font-body: "Barlow", system-ui, sans-serif;
+
+  /* — spacing (Industry) — */
+  --space-1: 3.4px;
+  --space-2: 6.8px;
+  --space-3: 10.2px;
+  --space-4: 13.6px;
+  --space-6: 20.4px;
+  --space-8: 27.2px;
+
+  --radius-card: 10px;
+  --radius-btn: 8px;
+  --shadow-card: 0 1px 3px rgba(23, 22, 28, 0.06);
+}
+
+[data-theme="dark"] {
+  --brand: #a78bfa;
+  --brand-tint: rgba(167, 139, 250, 0.16);
+  --brand-chip: rgba(167, 139, 250, 0.22);
+  --brand-border: rgba(167, 139, 250, 0.38);
+  --paper: #15131b;
+  --surface: #201d29;
+  --surface-2: #262331;
+  --ink: #ece9f4;
+  --ink-2: #d4d0e0;
+  --ink-3: #b6b1c4;
+  --muted: #9a94ab;
+  --faint: #746e86;
+  --border: rgba(236, 233, 244, 0.1);
+  --border-soft: rgba(236, 233, 244, 0.06);
+  --border-dot: rgba(236, 233, 244, 0.22);
+  --error: #f97316;
+  --error-ink: #fdba74;
+  --empty: #4b4757;
+  --data-500: #6ea8ff;
+  --data-600: #8db9ff;
+  --data-tint: rgba(110, 168, 255, 0.14);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+}

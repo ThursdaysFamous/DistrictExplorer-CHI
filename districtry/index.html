@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>districtry — unlisted design preview</title>
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="tokens/districtry.tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Unlisted design-review page for the Districtry rebrand (Stage A).
+     Deliberately: no manifest link (not installable), no analytics, no
+     canonical, no OG tags — a leaked URL should unfurl as nothing.
+     Fonts ride Google Fonts here as a preview-only shortcut; production
+     adoption self-hosts Barlow via scripts/build_fonts.py (see
+     docs/DISTRICTRY_REBRAND.md in the repo — docs/ never deploys). -->
+<style>
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+  a { color: var(--brand); }
+  a:hover { color: var(--brand-700); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 72px; }
+  header.mast { display: flex; align-items: center; gap: 14px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .wordmark { font: var(--font-heading-weight) 38px/1 var(--font-heading); letter-spacing: .005em; }
+  .wordtag { font: 400 30px/1 var(--font-heading); color: var(--faint); }
+  h2 { font: var(--font-heading-weight) 24px/1.2 var(--font-heading); margin: 36px 0 12px; }
+  .banner { margin-top: 24px; background: var(--brand-tint); border: 1px solid var(--brand-border); border-radius: var(--radius-card); padding: 14px 18px; font-size: 14px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+  .card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 16px 18px; text-decoration: none; color: var(--ink); }
+  .card:hover { border-color: var(--brand-border); color: var(--ink); }
+  .card b { display: block; font: var(--font-heading-weight) 18px/1.2 var(--font-heading); margin-bottom: 4px; }
+  .card span { font-size: 13px; color: var(--ink-3); }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 14px; }
+  .sw { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); }
+  .sw .tile { width: 96px; height: 96px; border-radius: 10px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; background: var(--surface); }
+  .sw .tile.dark { background: #15131b; border: none; }
+  .sw img { max-width: 64px; max-height: 64px; }
+  .og { max-width: 100%; border: 1px solid var(--border); border-radius: var(--radius-card); }
+  table { border-collapse: collapse; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; font-size: 14px; }
+  th { font: var(--font-heading-weight) 13px var(--font-heading); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: left; }
+  th, td { padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
+  tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: 99px; }
+  .pill.live { color: var(--brand); background: var(--brand-tint); }
+  .pill.next { color: var(--muted); background: var(--border-soft); }
+  ul.assets { padding-left: 20px; font-size: 14px; line-height: 1.9; }
+  footer { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <svg width="44" height="44" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="var(--ink)" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="var(--ink)" stroke-width="11"></line></svg>
+    <span class="wordmark">districtry</span>
+    <span class="wordtag">/ design preview</span>
+  </header>
+
+  <div class="banner">
+    <strong>Unlisted design review.</strong> This page is not linked from the app, not indexed, and not in the
+    sitemap. Everything here is mockup and sample data — the live product is
+    <a href="/">Chicago District Explorer</a>. Nothing on the live site changes until each adoption
+    step is approved.
+  </div>
+
+  <h2>Design canvases</h2>
+  <div class="cards">
+    <a class="card" href="Districtry%20App.dc.html"><b>App shell</b><span>The rebranded app in every card state — light/dark, live 69-county coverage geometry, layer toggles, loading / empty / error cards.</span></a>
+    <a class="card" href="Districtry%20Brand%20Spec.dc.html"><b>Brand spec</b><span>Mark 5c, wordmark rules, the three-tier color architecture, type &amp; spacing, fleet naming, icon asset table.</span></a>
+    <a class="card" href="Districtry%20Logo%20Wireframes.dc.html"><b>Logo wireframes</b><span>Five directions and the record of why 5c carried — with a tweakable polygon construction playground.</span></a>
+    <a class="card" href="Design%20Direction%20Review.dc.html"><b>Direction review</b><span>Decisions of record: the name, fleet-by-state scope, the mark, the color split, deliverables index.</span></a>
+    <a class="card" href="OG%20Card.dc.html"><b>OG card</b><span>The 1200×630 social card at real size.</span></a>
+  </div>
+  <p class="note">The canvases are interactive design documents — they load React from unpkg at view
+  time, so a network-restricted browser shows a blank page. Stats in the mockups are hand-set
+  snapshots; the coverage map itself is fetched live from the app's data.</p>
+
+  <h2>Icons</h2>
+  <div class="swatches">
+    <div class="sw"><div class="tile"><img src="icons/districtry-192.png" alt="districtry icon, light"></div>districtry-192</div>
+    <div class="sw"><div class="tile dark"><img src="icons/districtry-192-dark.png" alt="districtry icon, dark"></div>districtry-192-dark</div>
+    <div class="sw"><div class="tile"><img src="icons/districtry-maskable-512.png" alt="maskable icon"></div>maskable-512</div>
+    <div class="sw"><div class="tile"><img src="icons/apple-touch-icon.png" alt="apple touch icon"></div>apple-touch-icon</div>
+    <div class="sw"><div class="tile"><img src="icons/favicon.svg" alt="favicon"></div>favicon.svg</div>
+    <div class="sw"><div class="tile"><img src="icons/pinned-tab.svg" alt="pinned tab silhouette"></div>pinned-tab.svg</div>
+  </div>
+
+  <h2>Social card</h2>
+  <img class="og" src="og-districtry.png" alt="districtry / illinois — They're your Districts. Now in one place. — districtry.com" width="600">
+
+  <h2>Files</h2>
+  <ul class="assets">
+    <li><a href="tokens/districtry.tokens.css">tokens/districtry.tokens.css</a> — the design tokens: brand / chrome / data tiers, light + dark</li>
+    <li><a href="manifest.webmanifest">manifest.webmanifest</a> — PWA manifest (for adoption; this preview is deliberately not installable)</li>
+    <li><a href="pwa/head-snippet.html">pwa/head-snippet.html</a> — head wiring for adoption (og:image must become absolute before production use)</li>
+    <li><a href="_ds/industry-3d977086-2813-4a82-9d39-e8ca0b304c26/readme.md">Industry design system readme</a> — where the type &amp; spacing come from</li>
+  </ul>
+
+  <h2>Rollout stages</h2>
+  <table>
+    <tr><th>Stage</th><th>What</th><th>Status</th></tr>
+    <tr><td>A</td><td>This microsite — the rebrand package, reviewable in place</td><td><span class="pill live">live</span></td></tr>
+    <tr><td>B</td><td>Working re-skinned copy of the real app (all current functionality, new skin) — will be linked here</td><td><span class="pill next">planned</span></td></tr>
+    <tr><td>3</td><td>Production adoption across the fleet, step by step — roadmap in <code>docs/DISTRICTRY_REBRAND.md</code> (repo only, not served)</td><td><span class="pill next">roadmap</span></td></tr>
+  </table>
+
+  <footer>Rebrand package of 2026-08-19 · served from the DistrictExplorer-CHI repo · dark-mode mockups are a design proposal — dark mode is not an approved product change yet.</footer>
+
+</div>
+</body>
+</html>
