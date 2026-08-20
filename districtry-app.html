@@ -2942,7 +2942,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 7e5d91f on 2026-08-20</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 1f16eba on 2026-08-20</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3017,7 +3017,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
     <div class="districtry-panel-head">
       <div class="selected-point-chip" id="point-chip" hidden></div>
-      <span class="districtry-stats">69 counties · 39 layers</span>
+      <span class="districtry-stats">71 counties · 39 layers</span>
     </div>
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
@@ -9658,6 +9658,84 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/edgar-county-board-members.json", {}, 2);
   });
 
+  /* Franklin — the 70th county, and the first reached through a THIRD results
+   * vendor: its Clerk publishes on platinumelectionresults.com rather than the
+   * accessliberty/pollresults pair Clark, Crawford, Mercer and Edgar came from.
+   * That vendor serves eight Illinois counties, two of which are still
+   * unserved (Marion, Wayne).
+   *
+   * THREE CERTIFIED ELECTIONS COMPOSE THESE DISTRICTS AND ALL THREE AGREE —
+   * one better than the two-witness standard §2.5.1 asks for. The 2024 and
+   * 2022 Generals tabulate a board contest in every one of the county's 35
+   * precincts, partitioning them 13/13/9 with each precinct claimed exactly
+   * once; the 2026 General Primary reproduces the same three sets and NAMES
+   * the districts in its contest headers, which turns the county's members
+   * page from the only district key into a corroborated one.
+   *
+   * A SHORTCUT THAT LOOKED RIGHT AND WAS NOT: the vendor's precinct ids group
+   * 51xx/61xx/71xx, which reads like a district key. Browning 1 and Browning 3
+   * sit in District 1 while Browning 2 sits in District 2, and the prefixes
+   * interleave across all three — tested against the ballots, and it failed.
+   *
+   * THE ROSTER IS THE COUNTY'S PAGE, not the returns: three members per
+   * district on staggered terms, so any one canvass shows a third of the
+   * board. The page prints a role beside four of the nine, distinguishing the
+   * board's own officers ("Chairman", "Vice Chairman") from committee chairs
+   * by naming the committee — both ship as printed. Its Address column is
+   * every member's HOME address and is never read. */
+  var loadFranklinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-county-outline.json", {}, 2);
+  });
+  function franklinCountyCoverage(point) {
+    return loadFranklinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadFranklinPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-precincts.json", {}, 2);
+  });
+  var loadFranklinBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-county-board-districts.json", {}, 2);
+  });
+  var loadFranklinBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-county-board-members.json", {}, 2);
+  });
+
+  /* Clinton — the 71st county, and the SECOND from the platinum results vendor,
+   * found the same day as Franklin. Its five districts are dissolved from the
+   * Census 2020 voting districts per a composition three certified elections
+   * agree on: the 2024 General and 2026 General Primary each carry a numbered
+   * "FOR COUNTY BOARD DISTRICT n" contest in all 34 precincts (7/9/6/5/7), and
+   * the 2022 General names candidates whose districts key onto the county's own
+   * board page — so the oldest election corroborates the two numbered ones from
+   * a different direction.
+   *
+   * A COMPOSED FABRIC, NOT A ONE-TO-ONE ONE. Census 2020 carries 39 Clinton
+   * voting districts against the 34 precincts the county runs today: Irishtown,
+   * Lake and St Rose each merged a numbered pair, and Brookside went from five
+   * to three. The first three merges are nameable and the fourth is not — but
+   * all five Brookside voting districts sit in District 1, so no merge can move
+   * a district line. NO PRECINCT LAYER SHIPS for exactly that reason: a precinct
+   * card would have to say which Brookside is which, and nothing published does.
+   *
+   * The population spread is 7.3% worst — the tightest this route has produced,
+   * and the strongest available evidence that the composition is the county's
+   * current map rather than a stale one. */
+  var loadClintonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clinton-county-outline.json", {}, 2);
+  });
+  function clintonCountyCoverage(point) {
+    return loadClintonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadClintonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clinton-county-board-districts.json", {}, 2);
+  });
+  var loadClintonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clinton-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -10376,29 +10454,37 @@ function initChiExplorer() {
   var loadTazewellBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/tazewell-county-board-members.json", {}, 2);
   });
-  /* The six precincts the county's own polling layer cannot answer. Its
-   * precinct layer points them at facility ids 43, 50 and 54, none of which
-   * appear among the 49 locations it publishes. Deputy Clerk & Election
-   * Supervisor Vanessa Reynolds sent the Clerk's own countywide polling
-   * listing on 2026-08-17 and it names all six buildings.
+  /* Precincts (82) with the polling place joined on POLLINGID against layer
+   * 0's globalid — many-to-one, as the county runs 49 sites for 82 precincts.
+   * Polling failure costs the polling rows only.
    *
-   * KEYED BY PRECINCT NAME rather than by facility id — the county's data
-   * forces it. Ids 50 and 54 are each shared by precincts that vote at
-   * DIFFERENT buildings (50: Cincinnati 02/05 at Pekin Bible Church AND Elm
-   * Grove 02 at Grace Baptist; 54: Pekin 01 at First Christian AND Pekin 06 at
-   * the Miller Center), so the Whiteside facility-keyed shape could not say
-   * what is true here. Consulted ONLY where the county's own layer has no
-   * match, so publishing those buildings upstream retires the file silently. */
-  var loadTazewellClerkPolling = makeCached(function () {
-    return fetchJSONWithRetry("data/app/tazewell-precinct-polling.json", {}, 2);
-  });
-  /* Precincts (82) with the polling place joined on facilityid against layer
-   * 0's 49 voting locations — many-to-one, as the county runs fewer sites than
-   * precincts. Polling failure costs the polling rows only. */
+   * THE KEY WAS WRONG UNTIL 2026-08-20, AND THE COUNTY WAS RIGHT ALL ALONG.
+   * This joined on `facilityid` from 2026-08-02, which produced the six
+   * "orphan" precincts and the three "disagreements" this app spent three
+   * weeks reporting to the Clerk's office. Deputy Clerk Reynolds' reply that
+   * day — "we went through the link below and are not seeing the issues you
+   * are listing" — was correct, and re-measuring the service settled why:
+   *
+   *   facilityid  75/82 resolve, 3 of them to the WRONG building, and the id
+   *               is not even unique on the locations layer (48 names both
+   *               Cincinnati Fire Station and Pekin Bible Church)
+   *   pollingid   82/82 resolve against globalid, which IS unique 49/49, and
+   *               every answer matches the Clerk's own countywide listing
+   *
+   * That includes the two this app had been getting dangerously wrong:
+   * Washington 05 and 12 resolve to John L Hensey Elementary School in
+   * Washington, not to Spring Lake Town Hall in Manito, twenty miles away in
+   * another township. There is NO facilityid fallback, deliberately — falling
+   * back would reinstate exactly those three wrong buildings. A precinct whose
+   * pollingid does not resolve shows no polling row, which is the honest
+   * answer and has not happened for any of the 82.
+   *
+   * This is the sibling shape Iroquois already uses, and the fleet lesson is
+   * to prefer the county's own GlobalID join over a human-facing id column. */
   var loadTazewellPrecincts = makeCached(function () {
     return Promise.all([
-      loadTazewellLayer(1, "1=1", "name,precinctid,facilityid", "precincts"),
-      loadTazewellLayer(0, "1=1", "facilityid,name,fulladdr,municipality", "polling places")
+      loadTazewellLayer(1, "1=1", "name,precinctid,pollingid", "precincts"),
+      loadTazewellLayer(0, "1=1", "globalid,name,fulladdr,municipality", "polling places")
         .catch(function () { return null; })
     ]).then(function (results) {
       var precincts = results[0], polling = results[1];
@@ -10406,13 +10492,16 @@ function initChiExplorer() {
         var byId = {};
         (polling.features || []).forEach(function (f) {
           var p = f.properties || {};
-          var id = findPropCI(p, ["facilityid"]);
-          if (id != null && String(id).trim()) byId[String(id).trim()] = p;
+          var id = findPropCI(p, ["globalid"]);
+          if (id != null && String(id).trim()) {
+            byId[String(id).trim().replace(/[{}]/g, "").toLowerCase()] = p;
+          }
         });
         (precincts.features || []).forEach(function (f) {
           var props = f.properties || {};
-          var key = findPropCI(props, ["facilityid"]);
-          var place = key != null ? byId[String(key).trim()] : null;
+          var key = findPropCI(props, ["pollingid"]);
+          var place = key != null
+            ? byId[String(key).trim().replace(/[{}]/g, "").toLowerCase()] : null;
           if (!place) return;
           props.dxPollingPlace = findPropCI(place, ["name"]);
           var addr = findPropCI(place, ["fulladdr"]);
@@ -18572,6 +18661,146 @@ function initChiExplorer() {
           }
         }
       },
+      // Franklin — 3 districts of THREE members each, staggered, dissolved
+      // from the Census 2020 voting districts per a composition three
+      // certified elections agree on exactly (build_franklin_boundaries.py):
+      // the 2024 and 2022 Generals partition all 35 precincts 13/13/9, and the
+      // 2026 General Primary reproduces the same sets while naming the
+      // districts outright. The roster is the county's own members page —
+      // three seats per district on staggered terms means no single canvass
+      // shows the whole board. Role, phone and e-mail ship where the page
+      // prints them; its Address column is every member's home and is never
+      // read.
+      {
+        key: "franklin",
+        coverage: franklinCountyCoverage,
+        loadGeometry: loadFranklinBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadFranklinBoardDistricts(),
+            loadFranklinBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Franklin County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Franklin County Board (official)",
+                   url: "https://franklincountyil.gov/county-board-members/" };
+        },
+        hoverOfficial: {
+          load: loadFranklinBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Clinton — 5 districts of THREE members each, dissolved from the
+      // Census 2020 voting districts per a composition three certified
+      // elections agree on (build_clinton_boundaries.py). The roster is the
+      // county's own board page and is the richest this route has met: phone,
+      // e-mail and term-expiry year on all fifteen, with the Chairman and
+      // Vice Chairman named above the grid and badged onto their own rows.
+      // The card names the county's own 34 current precincts, not the 39
+      // census units the geometry is dissolved from.
+      {
+        key: "clinton",
+        coverage: clintonCountyCoverage,
+        loadGeometry: loadClintonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadClintonBoardDistricts(),
+            loadClintonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Clinton County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Clinton County Board (official)",
+                   url: "https://clintonco.illinois.gov/county-offices/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadClintonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -22024,9 +22253,11 @@ function initChiExplorer() {
         }
       },
       // Tazewell — 82 precincts from the county's Esri election service, with
-      // the polling place joined on facilityid against its 49 voting
-      // locations. Board district via spatial join against the deduped board
-      // boundary from the same service.
+      // the polling place joined on POLLINGID against the globalid of its 49
+      // voting locations, 82/82. Board district via spatial join against the
+      // deduped board boundary from the same service. See the loader for why
+      // the facilityid key it used until 2026-08-20 was wrong, and why there
+      // is deliberately no fallback to it.
       {
         key: "tazewell",
         coverage: tazewellCountyCoverage,
@@ -22038,8 +22269,7 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadTazewellPrecincts(),
-            loadTazewellCountyBoard().catch(function () { return null; }),
-            loadTazewellClerkPolling().catch(function () { return null; })
+            loadTazewellCountyBoard().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -22054,24 +22284,12 @@ function initChiExplorer() {
             }
             var name = findPropCI(props, ["name"]);
             name = name != null && String(name).trim() ? String(name).trim() : null;
-            var place = props.dxPollingPlace || null;
-            var address = props.dxPollingAddress || null;
-            var fromClerk = false;
-            // Only when the county's own layer has nothing for this precinct.
-            if (!place && name && results[2] && results[2].precincts &&
-                results[2].precincts[name]) {
-              var sup = results[2].precincts[name];
-              place = sup.place || null;
-              address = [sup.address, sup.city].filter(Boolean).join(", ") || null;
-              fromClerk = !!place;
-            }
             return {
               seq: seq,
               name: name,
               boardDistrict: boardDistrict,
-              pollingPlace: place,
-              pollingAddress: address,
-              pollingFromClerk: fromClerk
+              pollingPlace: props.dxPollingPlace || null,
+              pollingAddress: props.dxPollingAddress || null
             };
           });
         },
@@ -22081,12 +22299,6 @@ function initChiExplorer() {
           if (result.pollingPlace) {
             fields.push({ label: "Polling place", value: String(result.pollingPlace) +
               (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
-            if (result.pollingFromClerk) {
-              fields.push({
-                label: "Note",
-                value: "This polling place is not in the county's published list of voting locations — the County Clerk's office supplied it directly."
-              });
-            }
           }
           fields.push({ label: "County", value: "Tazewell County" });
           return renderFieldStack(fields);
@@ -23312,6 +23524,54 @@ function initChiExplorer() {
         primaryLink: function () {
           return { label: "Edgar County Clerk — election results (official)",
                    url: "https://il-edgar.accessliberty.com/pastelections.aspx" };
+        }
+      },
+      // Franklin — 35 precincts, the Census 2020 voting districts. 34 of the
+      // 35 names match the county's own spelling character for character; the
+      // one that differs (CAVE 1, where the county writes Cave) pairs uniquely
+      // at 35 against 35, and the feature carries both spellings so a reader
+      // searching either finds it. The board district rides ON the feature —
+      // the composition is whole-precinct. No polling place: the county
+      // publishes no precinct-to-building pairing as data.
+      {
+        key: "franklin",
+        coverage: franklinCountyCoverage,
+        loadGeometry: loadFranklinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadFranklinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              censusName: findPropCI(props, ["censusname"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          if (result.censusName) {
+            fields.push({ label: "Census spelling", value: String(result.censusName) });
+          }
+          fields.push({ label: "County", value: "Franklin County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Franklin County Clerk — election results (official)",
+                   url: "https://platinumelectionresults.com/turnouts/county/21" };
         }
       },
       // Calhoun — five precincts dissolved from the seven Census 2020 voting
