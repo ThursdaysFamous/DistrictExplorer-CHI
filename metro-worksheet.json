@@ -1037,6 +1037,12 @@
         "note": "Clark County outline — the coverage test for the county's board and precinct dispatch entries (clarkCountyCoverage). Shipped 2026-08-04 as gap-location geometry when Clark read as source-less; promoted to a coverage outline on 2026-08-18 when the county joined as the 53rd dispatched county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
+        "file": "calhoun-precincts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Calhoun County's five voting precincts \u2014 the seven Census 2020 voting districts DISSOLVED into the five the county runs today, which is a different shape from Clark's and needed a different gate. The county names the composition in the precincts' own titles (Belleview-Hamburg = BELLEVIEW + HAMBURG, Hardin-Gilead = HARDIN + GILEAD), and its certified returns either side of the 2022-2024 merge show each merged precinct's registration equal to the sum of its two named parts. Bounds are an EQUALITY because five is the county's whole precinct list. The Jasper test's name-for-name comparison is NOT the right gate here and would reject a fabric that has not moved; check_fabric_composed keeps the population identity while check_partition proves every voting district is claimed exactly once. NO BOARD DISTRICT ships and none ever will \u2014 Calhoun elects its five commissioners county-wide, so there is no district for a precinct to belong to. NO POLLING PLACE ships: the county publishes one, and it belongs with a roster guard and a date rather than inside a geometry file (scripts/build_calhoun_precincts.py)."
+      },
+      {
         "file": "clark-precincts.json",
         "min_features": 23,
         "max_features": 23,
@@ -2103,7 +2109,7 @@
       {
         "file": "municipal-officials.json",
         "min_keys": 500,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell) and the three counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table, Washington's 40-page Blue Book and De Witt's \"Village/City Officials\" Word list (e-mailed 2026-08-17; all seven municipalities, appointed/acting officers marked), all archived under data/source/raw/ and parsed from there — shipped: 592 municipalities — incl. the Town of Cicero, which the Cook Clerk files under the TWNSP township type as 'Cicero Township' (one coterminous town/township government; absent from MUNIS entirely), and the Village of Crete, whose Will-flipbook entry loses its header to PDF-text extraction and is recovered from the orphaned block + the county's certified 2025 canvass (will_municipal_officials_scraper.py recover_crete) — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID."
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell), Boone and the three counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table, Washington's 40-page Blue Book and De Witt's \"Village/City Officials\" Word list (e-mailed 2026-08-17; all seven municipalities, appointed/acting officers marked), all archived under data/source/raw/ and parsed from there — shipped: 597 municipalities — incl. the Town of Cicero, which the Cook Clerk files under the TWNSP township type as 'Cicero Township' (one coterminous town/township government; absent from MUNIS entirely), and the Village of Crete, whose Will-flipbook entry loses its header to PDF-text extraction and is recovered from the orphaned block + the county's certified 2025 canvass (will_municipal_officials_scraper.py recover_crete) — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID. Boone's yearbook prints a RESIDENCE under almost every official, so boone_municipal_officials_scraper.py refuses address lines by construction and proves on the built payload that none survived; its edition is discovered from the link TEXT ('2026 Yearbook') because the Clerk's page slug still reads 2019."
       },
       {
         "file": "lasalle-county-board-members.json",
@@ -2298,7 +2304,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v45",
+    "cache_name": "district-explorer-shell-v46",
     "shell_urls": [
       "./",
       "./sources.html",

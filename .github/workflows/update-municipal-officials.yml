@@ -198,6 +198,16 @@ jobs:
         continue-on-error: true
         run: python3 scripts/dekalb_municipal_officials_scraper.py --out /tmp/dekalb_municipal_officials.json
 
+      # Boone: a full-governing-body yearbook, and the one whose PDF prints a
+      # RESIDENCE under almost every official. The scraper refuses those lines
+      # by construction and proves it on the built payload — see its docstring.
+      # Belvidere's ten ward seats are cross-checked against the county's own
+      # ward service before the payload is written.
+      - name: Scrape the Boone County Clerk yearbook
+        id: scrape_boone
+        continue-on-error: true
+        run: python3 scripts/boone_municipal_officials_scraper.py --out /tmp/boone_municipal_officials.json
+
       # The pass-6 tranche (2026-08-01): eight counties whose sources the
       # validation pass verified publishable. All preservable — nothing
       # already shipped degrades if one is missing.
@@ -377,6 +387,7 @@ jobs:
           steps.scrape_washington.outcome == 'failure' ||
           steps.scrape_dewitt.outcome == 'failure' ||
           steps.scrape_mason.outcome == 'failure' ||
+          steps.scrape_boone.outcome == 'failure' ||
           steps.scrape_ewg.outcome == 'failure' || steps.scrape_rock_island.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -415,6 +426,7 @@ jobs:
           WASHINGTON_OUTCOME: ${{ steps.scrape_washington.outcome }}
           DEWITT_OUTCOME: ${{ steps.scrape_dewitt.outcome }}
           MASON_OUTCOME: ${{ steps.scrape_mason.outcome }}
+          BOONE_OUTCOME: ${{ steps.scrape_boone.outcome }}
         run: |
           raise_issue() {
             title="Municipal officials: $1 County source unavailable"
@@ -459,6 +471,11 @@ jobs:
           if [ "$CASS_OUTCOME" = "failure" ]; then raise_issue "Cass"; fi
           if [ "$WHITESIDE_OUTCOME" = "failure" ]; then raise_issue "Whiteside"; fi
           if [ "$PEORIA_OUTCOME" = "failure" ]; then raise_issue "Peoria"; fi
+          if [ "$BOONE_OUTCOME" = "failure" ]; then raise_issue "Boone"; fi
+          # Mason was in the failure condition and had an outcome env but no
+          # raise_issue line, so a Mason-only failure ran this step and raised
+          # nothing — a guard that fires into silence. Added with Boone's.
+          if [ "$MASON_OUTCOME" = "failure" ]; then raise_issue "Mason"; fi
 
       # Build on what came back. Cook and Will are required — they are the only
       # two full-governing-body sources, so building without either would ship
@@ -514,6 +531,7 @@ jobs:
           add "${{ steps.scrape_washington.outcome }}"  washington  county /tmp/washington_municipal_officials.json
           add "${{ steps.scrape_dewitt.outcome }}"      dewitt      county /tmp/dewitt_municipal_officials.json
           add "${{ steps.scrape_mason.outcome }}"        mason       county /tmp/mason_municipal_officials.json
+          add "${{ steps.scrape_boone.outcome }}"       boone       county /tmp/boone_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
@@ -617,7 +635,7 @@ jobs:
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
           # the force-push above already updated it.
-          body="Automated weekly refresh of three rosters from the county clerk directories: the Municipality card's governing bodies (\`municipal-officials.json\`, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication — the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, and the three McLean ward cities' own pages — plus the four city-level payloads), the Township card's governing bodies (\`township-officials.json\`, \`scripts/build_township_officials.py\`, Cook's 29 townships from the same Clerk directory's TWNSP type), and the Cicero library board (\`cook-library-trustees.json\`, \`scripts/build_cicero_library_trustees.py\`, same fetch).
+          body="Automated weekly refresh of three rosters from the county clerk directories: the Municipality card's governing bodies (\`municipal-officials.json\`, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication — the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll/Boone clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, and the three McLean ward cities' own pages — plus the four city-level payloads), the Township card's governing bodies (\`township-officials.json\`, \`scripts/build_township_officials.py\`, Cook's 29 townships from the same Clerk directory's TWNSP type), and the Cicero library board (\`cook-library-trustees.json\`, \`scripts/build_cicero_library_trustees.py\`, same fetch).
 
           Please review the diff before merging — this changes data about real officeholders.
 

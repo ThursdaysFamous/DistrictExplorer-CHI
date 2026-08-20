@@ -1882,6 +1882,117 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vil.bellwood.il.us"
   },
+  "1705092": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "email": "cstevens@belvidereil.gov",
+        "name": "Clayton Stevens",
+        "phone": "815-218-4335",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 1",
+        "email": "jalbertini@belvidereil.gov",
+        "name": "John Albertini",
+        "phone": "630-306-7967",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 2",
+        "email": "jhoiness@belvidereil.gov",
+        "name": "Jerry Hoiness",
+        "phone": "815-289-3022",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 2",
+        "email": "rpeterson@belvidereil.gov",
+        "name": "Rory Peterson",
+        "phone": "815-544-3006",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 3",
+        "email": "sgramkowski@belvidereil.gov",
+        "name": "Sandra Gramkowski",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 3",
+        "email": "wfrank@belvidereil.gov",
+        "name": "Wendy Frank",
+        "phone": "815-543-5161",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 4",
+        "email": "mfleury@belvidereil.gov",
+        "name": "Matt Fleury",
+        "phone": "910-358-8694",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 4",
+        "email": "mmcgee@belvidereil.gov",
+        "name": "Mike McGee",
+        "phone": "815-298-1284",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      },
+      {
+        "district": "Ward 5",
+        "email": "cmontalbano@belvidereil.gov",
+        "name": "Chris Montalbano",
+        "phone": "815-315-2381",
+        "role": "Alderperson",
+        "termExpires": "2029"
+      },
+      {
+        "district": "Ward 5",
+        "email": "rbrereton@belvidereil.gov",
+        "name": "Ric Brereton",
+        "phone": "815-544-2055",
+        "role": "Alderperson",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Boone",
+    "head": {
+      "email": "mayor@belvidereil.gov",
+      "name": "Clinton Morris",
+      "role": "Mayor",
+      "termExpires": "2029"
+    },
+    "name": "City of Belvidere",
+    "office": {
+      "address": "401 Whitney Blvd.",
+      "phone": "815-544-2612"
+    },
+    "officers": [
+      {
+        "email": "cityclerk@belvidereil.gov",
+        "name": "Erica Bluege",
+        "role": "Clerk/Collector",
+        "termExpires": "2029"
+      },
+      {
+        "email": "treasurer@belvidereil.gov",
+        "name": "Mary Volkey",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf",
+    "url": "https://www.belvidereil.gov"
+  },
   "1705248": {
     "county": "DuPage",
     "head": {
@@ -3301,6 +3412,79 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf"
   },
+  "1710422": {
+    "board": [
+      {
+        "email": "carrieann0716@gmail.com",
+        "name": "Carrie Dovenmuehle",
+        "phone": "815-312-7273",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "jamieharnish10@gmail.com",
+        "name": "Jamie Harnish",
+        "phone": "815-985-8663",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "email": "jacknich217@gmail.com",
+        "name": "Joanne Nicholson",
+        "phone": "815-543-6945",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "l.jozefiak61011@gmail.com",
+        "name": "Lindsey Jozefiak",
+        "phone": "312-371-2064",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "axtelllori@gmail.com",
+        "name": "Lori Axtell",
+        "phone": "815-543-6058",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "email": "rhondam796@hotmail.com",
+        "name": "Rhonda Moore",
+        "phone": "815-979-5958",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Boone",
+    "head": {
+      "email": "presvofc61011@gmail.com",
+      "name": "Michael Gillett",
+      "phone": "815-519-7010",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Caledonia",
+    "officers": [
+      {
+        "email": "clerkvofc61011@gmail.com",
+        "name": "Betsy Komerska",
+        "phone": "815-955-3001",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "email": "treasurer61011@gmail.com",
+        "name": "Mary Ryan",
+        "phone": "815-988-5354",
+        "role": "Treasurer",
+        "termExpires": "2029"
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf",
+    "url": "https://www.villageofcaledonia.com"
+  },
   "1710487": {
     "board": [
       {
@@ -3614,6 +3798,56 @@
       }
     ],
     "sourceUrl": "https://sangamonil.gov/departments/a-c/county-clerk/elected-officials/local-officials/city-village-officials"
+  },
+  "1711124": {
+    "board": [
+      {
+        "name": "Glenn Pinnau",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Kim McMahon",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Linda Wohlfarth",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "name": "Melissa Hirsch",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "name": "Rachael Agee",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Boone",
+    "head": {
+      "email": "vcapronpresident@gmail.com",
+      "name": "Steven Bank",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Capron",
+    "office": {
+      "address": "250 W. Main Street, Capron IL 61012",
+      "phone": "815-569-2351"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "email": "vcapronclerk@gmail.com",
+        "name": "Crystal Maxwell",
+        "role": "Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf"
   },
   "1711150": {
     "board": [
@@ -20853,6 +21087,82 @@
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.pontoonbeachil.com"
   },
+  "1761145": {
+    "board": [
+      {
+        "email": "dcheek@villageofpoplargrove.com",
+        "name": "Dan Cheek",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "email": "dallgood@villageofpoplargrove.com",
+        "name": "Dave Allgood",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "jgoings@villageofpoplargrove.com",
+        "name": "Jeff Goings",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "mvance@villageofpoplargrove.com",
+        "name": "Mark Vance",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "email": "ocostanza@villageofpoplargrove.com",
+        "name": "Owen Costanza",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "shubbard@villageofpoplargrove.com",
+        "name": "Sinae Hubbard",
+        "role": "Trustee",
+        "termExpires": "2029"
+      }
+    ],
+    "county": "Boone",
+    "head": {
+      "email": "krichardson@villageofpoplargrove.com",
+      "name": "Kristi Richardson",
+      "phone": "304-707-5301",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Poplar Grove",
+    "office": {
+      "address": "200 N. Hill St., Poplar Grove IL 61065",
+      "phone": "815-765-3201"
+    },
+    "officers": [
+      {
+        "email": "clerk@villageofpoplargrove.com",
+        "name": "Karri Miller",
+        "phone": "815-543-4635",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "email": "kjaster@villageofpoplargrove.com",
+        "name": "Katie Jaster",
+        "role": "Deputy Clerk"
+      },
+      {
+        "appointed": true,
+        "email": "treasurer@villageofpoplargrove.com",
+        "name": "Sikich",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf",
+    "url": "https://www.poplargrove-il.gov"
+  },
   "1761216": {
     "county": "McHenry",
     "head": {
@@ -25368,6 +25678,76 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://thorntonil.us"
+  },
+  "1775360": {
+    "board": [
+      {
+        "email": "dhills@villageoftimberlane.org",
+        "name": "Darcy Hills",
+        "phone": "951-582-1106",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "email": "donnal@villageoftimberlane.org",
+        "name": "Donna Leone",
+        "phone": "815-262-5546",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "ghills@villageoftimberlane.org",
+        "name": "Greg Hills",
+        "phone": "951-454-2917",
+        "role": "Trustee",
+        "termExpires": "2027"
+      },
+      {
+        "email": "ploner@villageoftimberlane.org",
+        "name": "Paul Loner",
+        "phone": "851-621-5129",
+        "role": "Trustee",
+        "termExpires": "2029"
+      },
+      {
+        "email": "rdesimone@villageoftimberlane.org",
+        "name": "Rick DeSimone",
+        "phone": "815-703-2528",
+        "role": "Trustee",
+        "termExpires": "2027"
+      }
+    ],
+    "county": "Boone",
+    "head": {
+      "email": "president@villageoftimberlane.org",
+      "name": "Stephen M. Rapp",
+      "phone": "815-547-4275",
+      "role": "President",
+      "termExpires": "2029"
+    },
+    "name": "Village of Timberlane",
+    "office": {
+      "address": "2940 Charleston Ct., Caledonia IL 61011",
+      "email": "village@villageoftimberlane.org"
+    },
+    "officers": [
+      {
+        "email": "clerk@villageoftimberlane.org",
+        "name": "Debra K. Marner",
+        "phone": "815-765-3916",
+        "role": "Clerk",
+        "termExpires": "2029"
+      },
+      {
+        "appointed": true,
+        "email": "treasurer@villageoftimberlane.org",
+        "name": "Stacy Kleyn",
+        "phone": "815-703-0777",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf",
+    "url": "https://www.villageoftimberlane.org"
   },
   "1775484": {
     "board": [
