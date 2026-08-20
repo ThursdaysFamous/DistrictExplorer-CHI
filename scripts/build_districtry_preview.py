@@ -224,39 +224,64 @@ SKIN_ISLAND = """<style id="districtry-skin">
     z-index: 900;
   }
   .masthead .search-shell:not(:hover):not(:focus-within):not(.expanded) .search-extra { padding: 0; border-width: 0; }
-  /* The three "about the data" doors: emoji dropped (operator-directed) and
-     the row rebuilt as one segmented group — a single hairline container with
-     rules between items instead of three separately-outlined pills. */
+  /* The four "about the data" doors (operator-directed, two rounds): emoji
+     dropped, and the row is no longer a bordered segmented box — that put a
+     second hard rectangle beside the search field and gave four secondary
+     links a toolbar's weight.
+
+     The pill is the shape of an action here. "What data is missing?" wears
+     one permanently and inverts to a solid fill on hover, because the repo's
+     own note records that this button was promoted into the masthead as the
+     standing caveat on every answer the app gives; its three peers are bare
+     text that earn the same pill shape on approach. Hierarchy that matches
+     the stated priority instead of flattening it. */
   .masthead-actions {
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    overflow: hidden;
-    background: var(--panel);
-    gap: 0;
-  }
-  .masthead-actions .footer-link-btn,
-  .masthead-action-link {
     border: none;
-    border-radius: 0;
-    border-left: 1px solid var(--line);
+    background: none;
+    overflow: visible;
+    gap: 6px;
+    align-items: center;
+  }
+  .masthead-action-link {
+    border: 1px solid transparent;
     background: transparent;
     color: var(--slate);
+    font-weight: 500;
     font-size: 12.5px;
-    font-weight: 600;
+    padding: 7px 13px;
+    border-radius: 999px;
     letter-spacing: 0;
-    padding: 8px 14px;
     transform: none;
+    transition: background .15s ease, color .15s ease;
   }
-  .masthead-actions > :first-child { border-left: none; }
-  .masthead-actions .footer-link-btn:hover,
-  .masthead-actions .footer-link-btn:focus-visible,
   .masthead-action-link:hover,
   .masthead-action-link:focus-visible {
-    background: rgba(109, 63, 209, 0.08);
+    background: rgba(109, 63, 209, 0.10);
     color: var(--accent-deep);
-    border-color: var(--line);
-    transform: none;
+    border-color: transparent;
     text-decoration: none;
+    transform: none;
+  }
+  .masthead-actions .footer-link-btn {
+    border: 1px solid rgba(109, 63, 209, 0.30);
+    background: rgba(109, 63, 209, 0.07);
+    color: var(--accent-deep);
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    margin-right: 6px;
+    letter-spacing: 0;
+    transform: none;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .masthead-actions .footer-link-btn:hover,
+  .masthead-actions .footer-link-btn:focus-visible {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    text-decoration: none;
+    transform: none;
   }
   /* panel header bar: coords + Share on the left, the counts flush right —
      across from the Share button, at the page's own right edge. */

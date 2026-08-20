@@ -252,6 +252,26 @@ chip's light restyle and the share-popover reposition (the popover would have go
 opening off-screen). Re-scoped to `.districtry-panel-head .selected-point-chip`. A child
 combinator is a promise about depth, and moving markup breaks it quietly.
 
+## Header nav treatment (design review, 2026-08-20)
+
+The segmented bordered group was retired after an options review — seven treatments rendered
+live in the real masthead and compared side by side (artifact
+`ec042cef-798d-477d-ae86-da05b8a03469`). The complaint that started it was correct: a bordered
+container put a second hard rectangle beside the search field and gave four secondary links a
+toolbar's weight.
+
+**Shipped: emphasis matched to stated priority.** `index.html`'s own comment records that the
+gaps button was moved into the masthead *because it is the standing caveat on every answer this
+app gives* — so flattening all four to equal weight contradicted the project's own doctrine.
+The pill is now the shape of an action in this row: **"What data is missing?" wears one
+permanently and inverts to a solid violet fill on hover/focus**; its three peers are bare text
+that earn the same pill shape as a soft tint on approach. One family, two ranks.
+
+Rejected, with reasons worth keeping: a tab rail (form would promise view-switching with an
+active tab; these four open a modal, two pages and an external site); condensed uppercase (most
+on-brand, but four shouted phrases for secondary links, and 130px wider than any alternative);
+fully quiet text for all four (lightest, but under-signals the one item the project wants seen).
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
