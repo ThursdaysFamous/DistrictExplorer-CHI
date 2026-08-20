@@ -47,8 +47,8 @@
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
-| Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 1 — `jersey-county-board-districts` (no-source) |
-| Jo Daviess | 17085 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
+| Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 2 — `jersey-county-board-districts` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
+| Jo Daviess | 17085 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
 | Kendall | 17093 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `plano-ward-officials` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 112 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 113 records in the Data gaps panel: `chicago-amenity-phones`.

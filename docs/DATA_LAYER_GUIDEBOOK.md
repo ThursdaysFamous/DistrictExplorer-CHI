@@ -630,7 +630,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Jasper's three districts are now fully composed from certified canvasses — every township but one is whole; only Wade Township's four current precinct boundaries are missing.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county's web presence is a SHARED site with the City of Newton (jaspercountyillinois.gov) — one site, two governments. It carries a County Board page and a Maps page, but the maps are reference PDFs (county map, city limits, TIF areas), not election geometry, and no district or precinct boundary appears. jaspercounty.org is Jasper County MISSOURI's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". ANSWERED 17 Aug 2026 — Clerk Tarr, in writing: ‘board members are elected from districts. Please see the attached map.’ FORM SETTLED — DISTRICTED (§2.5 step 2 satisfied by the election authority's own statement plus the county's adopted map, ‘County Board Redistricting Effective 2022’, archived from her e-mail). The map's linework is RASTER inside the PDF (13 vector paths on the county page, all decoration), so nothing polygonizes and the labels this record originally transcribed from it were unreliable. MEASURED 17 Aug 2026, and the map turned out not to be needed: THE COMPOSITION IS SETTLED FROM CERTIFIED CANVASSES, the White route. The county publishes precinct-level results, and its 2024 General and 2026 General Primary reports each tabulate the three 'FOR MEMBERS OF THE COUNTY BOARD DISTRICT n' contests precinct by precinct — the two canvasses agree on all 15 precincts, independently. DISTRICT 1: Crooked Creek, Grandville, Hunt City and Willow Hill townships + Wade 4. DISTRICT 2: Grove, North Muddy and South Muddy townships + Wade 2. DISTRICT 3: Fox, Smallwood and Ste. Marie townships (BOTH its precincts, so the township is whole) + Wade 1 and Wade 3. Ten of the eleven townships are undivided; only WADE TOWNSHIP, which contains Newton the county seat, is split — four ways, across all three districts. THE ONE REMAINING OBSTACLE IS WADE'S GEOMETRY, and it is measured rather than assumed: Census 2020's VTD fabric carries FIVE Wade voting districts (WADE 1-5, populations 756/1098/924/707/895) where the county currently runs FOUR precincts, and no assignment of the fifth to a district reproduces a lawful plan — the best case leaves a 22.0% spread between the largest and smallest district (3462/2780/3045 against an ideal of 3096), against roughly 10% for an adopted map. So the county re-precincted Wade after 2020 and the census Wade fabric is NOT the county's current one. Everything outside Wade builds from TIGER townships today; nothing was built, because a board layer that cannot answer the county seat is not a county.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county's web presence is a SHARED site with the City of Newton (jaspercountyillinois.gov) \u2014 one site, two governments. It carries a County Board page and a Maps page, but the maps are reference PDFs (county map, city limits, TIF areas), not election geometry, and no district or precinct boundary appears. jaspercounty.org is Jasper County MISSOURI's, a decoy. Whether the board is districted or elected county-wide was not determinable in this pass \u2014 determine it from a certified election document (EXPANSION_GUIDE \u00a72.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request \u2014 its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". ANSWERED 17 Aug 2026 \u2014 Clerk Tarr, in writing: \u2018board members are elected from districts. Please see the attached map.\u2019 FORM SETTLED \u2014 DISTRICTED (\u00a72.5 step 2 satisfied by the election authority's own statement plus the county's adopted map, \u2018County Board Redistricting Effective 2022\u2019, archived from her e-mail). The map's linework is RASTER inside the PDF (13 vector paths on the county page, all decoration), so nothing polygonizes and the labels this record originally transcribed from it were unreliable. MEASURED 17 Aug 2026, and the map turned out not to be needed: THE COMPOSITION IS SETTLED FROM CERTIFIED CANVASSES, the White route. The county publishes precinct-level results, and its 2024 General and 2026 General Primary reports each tabulate the three 'FOR MEMBERS OF THE COUNTY BOARD DISTRICT n' contests precinct by precinct \u2014 the two canvasses agree on all 15 precincts, independently. DISTRICT 1: Crooked Creek, Grandville, Hunt City and Willow Hill townships + Wade 4. DISTRICT 2: Grove, North Muddy and South Muddy townships + Wade 2. DISTRICT 3: Fox, Smallwood and Ste. Marie townships (BOTH its precincts, so the township is whole) + Wade 1 and Wade 3. Ten of the eleven townships are undivided; only WADE TOWNSHIP, which contains Newton the county seat, is split \u2014 four ways, across all three districts. THE ONE REMAINING OBSTACLE IS WADE'S GEOMETRY, and it is measured rather than assumed: Census 2020's VTD fabric carries FIVE Wade voting districts (WADE 1-5, populations 756/1098/924/707/895) where the county currently runs FOUR precincts, and no assignment of the fifth to a district reproduces a lawful plan \u2014 the best case leaves a 22.0% spread between the largest and smallest district (3462/2780/3045 against an ideal of 3096), against roughly 10% for an adopted map. So the county re-precincted Wade after 2020 and the census Wade fabric is NOT the county's current one. Everything outside Wade builds from TIGER townships today; nothing was built, because a board layer that cannot answer the county seat is not a county. ONE SURFACE FOUND 2026-08-20 THAT DOES NOT CLOSE THIS, recorded so nobody re-finds it hopefully: Jasper is carried by a SECOND statewide results vendor (results.gbsvote.com, thirteen Illinois counties) that this project had not previously recorded. It publishes the county's current precinct list and per-precinct committeeperson contests, so it can corroborate that Wade runs four precincts today \u2014 but it carries no geometry of any kind, and geometry for those four lines is the entire remaining ask here.",
       "wanted": "WADE TOWNSHIP'S FOUR CURRENT PRECINCT BOUNDARIES — as GIS data, or as the streets/wards dividing Newton between Wade 1, 2, 3 and 4. That is the whole remaining ask: the districts' composition is settled from two certified canvasses and the other ten townships are whole, so Wade is the only geometry this county still needs. ASKED 17 Aug 2026 in general terms on the Clerk's own thread; the narrowed Wade-only question is drafted for the operator to send."
     },
     {
@@ -645,6 +645,20 @@ in the researched-but-unbuilt backlog.
       "summary": "Jersey publishes all twelve board members with their districts, and its Clerk publishes a district MAP — but as a PDF dated 2016, with no data behind it and no post-redistricting edition found.",
       "blocker": "Researched 8 Aug 2026, closing an absence that had NO record at all: Jersey is served as a 7th-Circuit secondary and its board did not surface. FORM SETTLED — DISTRICTED: jerseycounty-il.gov/county-board/ gives each member a \"Jersey County Board District N\" line, three members per district across Districts 1-4 (Crone, Grizzle, Hayes 1; Heitzig, Mills, Ward 2; Wagner as Chairman, Ontis as Vice Chair, Beasley 3; Figge, Beers, Keonig 4), with committee assignments and biographies. That is a geometry ask, not the County-card path. No GIS SERVICE exists: gis.jerseycounty-il.gov and maps.jerseycounty-il.gov have no DNS record (resolved directly rather than inferred from a failed fetch), and the ArcGIS Online catalogue returns nothing county-keyed. CORRECTED 2026-08-08, and the correction is the point: this record originally said Jersey publishes no district boundaries at all, which was FALSE and was written without ever running a web search. THE COUNTY CLERK HAS A SEPARATE DOMAIN — jerseycountyclerk-il.gov, never probed because the clerk roster carries jerseycounty-il.gov — with a MAPS section publishing County Board Districts, Precincts/Polling Places and School Districts. The board-districts file (/media/pdf/County_Board_Districts___County__Roads2016.pdf, 792 KB) is a genuine VECTOR map, 5,117 paths, whose legend names District 1 through District 4, matching the twelve members three-per-district. TWO THINGS STILL STAND BETWEEN THAT AND A BUILD, and neither is 'nothing exists'. Its filename and content date it to 2016 — BEFORE the post-2020 redistricting every Illinois county did in 2021 — so it may describe superseded lines, and no newer edition was found. And a first pass found no large filled paths to lift the district polygons from, so the fills may be among the page's 14 raster images rather than vectors; the Stephenson georeferencing precedent applies if they are recoverable at all.",
       "wanted": "Whether the 2016 map on jerseycountyclerk-il.gov is still the operative one after the 2021 redistricting, and if so the GIS or CAD file behind it — the map exists, so this is a request for its data and its currency rather than for a boundary nobody has drawn. Failing that, the precincts making up each district, which the Clerk also maps."
+    },
+    {
+      "id": "jodaviess-jersey-precinct-geometry",
+      "concept": "Voting precincts",
+      "area": "Jo Daviess and Jersey counties",
+      "counties": [
+        "jo-daviess",
+        "jersey"
+      ],
+      "kind": "no-source",
+      "layer": "county-precinct",
+      "summary": "Neither county publishes precinct boundaries, and neither can be built from census geometry \u2014 each merged precincts after 2020, so the census fabric is one merge out of date in both.",
+      "blocker": "Measured 2026-08-20, in a sweep of ten served counties that had no precinct layer and \u2014 until this record and its backlog sibling \u2014 nothing saying why. Both counties turned out to be the hard case, and for the same reason. JO DAVIESS runs 28 precincts against the census's 29: it merged WARREN I and WARREN II into a single Warren, which the county's own two surfaces both confirm (its results page lists the 28 in prose, and its GIS department's polling map, revised 12 Aug 2026, groups shared sites explicitly while writing Warren singular). JERSEY runs 22 against the census's 25: Jersey Township went from ten precincts to eight and Quarry 1 and Quarry 2 became one Quarry, read from the Clerk's own precinct-level Statement of Votes Cast. IN BOTH COUNTIES THE POPULATION CHECK PASSES EXACTLY (22,035 and 21,512 against each county's own Census 2020 count), which is precisely the trap this project has now hit three times: a census fabric that tiles the county perfectly is still not the county's CURRENT fabric, and only the name comparison catches it. NEITHER PUBLISHES THE GEOMETRY. Jo Daviess runs a GeoMedia mapping portal rather than ArcGIS \u2014 reached only through a hostname its own GIS page names, not through the usual slug ladder, the Vermilion lesson repeating \u2014 whose free public tier carries township and road layers and the word \"precinct\" nowhere; its countywide precinct map is a raster with 81 characters of text on it. Jersey's county ArcGIS carries township, section, subdivision and parcel layers and no precinct layer, which is pointed: the same vendor org publishes precinct layers for its other clients, including one for a neighbouring Illinois county. Jersey's precinct map is a vector PDF with the precinct names drawn as labels rather than attributed geometry. Note Jo Daviess is also the county that sells its GIS data under a signed licence (the boundary this project bought), so its precinct geometry may exist behind that same counter rather than not at all.",
+      "wanted": "The current precinct boundaries as map data from either county \u2014 or, for Jo Daviess, the single fact of how the old Warren I/Warren II line was dissolved, and for Jersey how Jersey Township's ten precincts became eight and where Quarry's internal line went. Each county is exactly one merge away from being buildable from census geometry, so a short written answer would do as well as a shapefile. Neither has been asked."
     },
     {
       "id": "johnson-county-board",
@@ -4890,6 +4904,61 @@ scrapers promised.
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker.
+
+### Eight precinct layers that are buildable today, and a SECOND results vendor (found 2026-08-20)
+
+An audit asked which served counties have no `county-precinct` layer and no gap record
+saying why. Eleven did. Ten were measured county by county (Bond, the eleventh, is covered
+by its own board record), and the result is lopsided: **not one of the ten lacks a
+readable current precinct list** — every one publishes it, most in two or three places —
+and **eight of the ten are buildable now**. Only Jo Daviess and Jersey are genuinely
+blocked, and they have their own gap record (`jodaviess-jersey-precinct-geometry`).
+
+**MORGAN IS PUBLISHED — build it first.** The county's GIS Coordinator maintains a public,
+anonymous, county-owned feature service:
+`services3.arcgis.com/95PFahBF8eyGEfuc/…/VotingPrecincts/FeatureServer/0` — **27 polygons,
+`copyrightText: "Morgan County GIS"`, Illinois State Plane West**, each carrying its
+polling place AND street address, with a companion PollingPlaces service. Currency was
+proven against the county's own certified returns rather than assumed (the Coles lesson):
+the 2026 primary reports 27 of 27 precincts and 25 of the 27 names match the layer exactly,
+the two differences being the county's own short forms. Morgan would ship a precinct card
+WITH polling place in one build. Note the census route would have been dead here (27
+current against 40 census VTDs) — the published layer is the only route, which is the
+argument for looking for one before reaching for the fabric.
+
+**SEVEN PASS THE JASPER TEST**, populations exact in every case:
+
+| county | precincts | census VTDs | names | alias needed |
+|---|---|---|---|---|
+| Cass | 21 | 21 | 21/21 exact | none |
+| Menard | 14 | 14 | 14/14 exact | none |
+| Moultrie | 16 | 16 | 16/16 exact | none |
+| Greene | 22 | 22 | 21/22 | `WRIGHTS 2` ↔ `WRIGHTS` |
+| Schuyler | 17 | 17 | 16/17 | `Frederick` ↔ `FREDRICK` |
+| Scott | 10 | 10 | 9/10 | `MERRIT` ↔ `MERRITT` |
+| Shelby | 33 | 33 | 32/33 | `PRAIRIE` ↔ `PRAIRIE 1` — **already adjudicated in this repo** by `build_shelby_board_roster.py` |
+
+Carroll is the shipped precedent for exactly this shape. Five of the seven also publish a
+per-precinct polling table that would join cleanly (Moultrie, Menard, Schuyler, Greene, and
+Jo Daviess among the blocked pair); Cass and Scott do not appear to.
+
+**AND A SECOND STATEWIDE RESULTS VENDOR, previously unrecorded here.**
+`results.gbsvote.com` (GBS, of Lisle/Sycamore) is structurally the twin of the
+`accessliberty` / `pollresults` pair and names **thirteen Illinois counties** — Cass,
+Cumberland, Fulton, Greene, Grundy, **Jasper**, Johnson, Knox, Morgan, Perry, Scott,
+Warren, Washington. It publishes each county's precinct COUNT on a profile page and its
+full current precinct NAME list through one committeeperson contest per precinct per party,
+back to 2016, with no login. **Six of its thirteen are counties this app does not serve**
+(Cumberland, Jasper, Johnson, Knox, Perry, Warren), so this is a research pass of its own,
+and it partially overlaps the 34-county sweep rather than duplicating it. What it does NOT
+publish is geometry — which is why it corroborates Jasper's precinct list without touching
+Jasper's actual blocker.
+
+**The recurring trap, now seen three times in one day** (Bond, Jo Daviess, Jersey): the VTD
+population sum passing EXACTLY says only that the census fabric tiled the county in 2020.
+It is silent about whether the county has re-precincted since, and only the name comparison
+catches that. Any future builder that checks the sum without the names will ship a stale
+fabric and pass its own gate.
 
 ### A statewide library-district layer — 642 polygons, weak provenance (found 2026-08-20)
 
