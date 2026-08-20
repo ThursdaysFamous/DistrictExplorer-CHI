@@ -96,8 +96,11 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
   2. Engine release: parameterize the seven fenced `" District Explorer"` composition sites
      (index.html:3665, 3816, 3871, 3877, 4346, 4350, 4579); engine-v* + fan-out PRs to NYC/SF.
   3. Fork-local branding rows per `EXPANSION_GUIDE.md` §4.2 (head meta/OG/JSON-LD/theme-color/
-     favicon, masthead mark/wordmark, `:root` palette values, analytics).
-  4. `sources.html` hand-mirrored palette (lines 140–154) re-pointed.
+     favicon, masthead mark/wordmark, `:root` palette values, analytics) — **including the three
+     SEO landing pages** (`police-district.html`, `school-board.html`, `county-board.html`),
+     whose titles, JSON-LD, and footer copy carry the product name.
+  4. `sources.html` hand-mirrored palette (lines 140–154) re-pointed — the same restated token
+     block is now also cloned by the three SEO landing pages, so this is a **four-page** sweep.
   5. Assets + SW: replace root manifest/icons/og-image in place (SHELL_URLS-pinned filenames),
      bump `sw.cache_name` via the worksheet; head-snippet og:image made absolute.
   6. Tooling: `build_fonts.py` → self-hosted Barlow woff2s (no font CDN in production);
@@ -107,7 +110,33 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
      domains/DNS, `metros.json` URLs + `--sync-fleet` regen everywhere, GA hostname gate,
      GoatCounter site code, canonicals/og:url/JSON-LD, sitemap, search re-verification, redirect
      story for chidistricts.com, subdomain scheme (il./chicago.districtry.com — operator call
-     for CHI-as-statewide).
+     for CHI-as-statewide). The three SEO landing pages add three more canonical/og:url/sitemap
+     rows, and they exist to accumulate search equity — the 301 map must cover each of them
+     individually, not just `/`.
+
+## SEO surface (PR #401, 2026-08-20) — what the rename must carry
+
+Search Console data drove a copy-only change that lands alongside this rebrand and interacts
+with three of its steps. What shipped: `index.html`'s title is now **question-led** ("What
+district am I in? Find your district — Chicago District Explorer") with the brand *trailing*;
+the FAQ gained three query-matched entries (lead "What district am I in?", school board, county
+commissioner — HTML + FAQPage JSON-LD kept in sync); and three landing pages
+(`police-district.html`, `school-board.html`, `county-board.html`) were added, cloned from
+`sources.html`'s standalone shell — hand-authored evergreen content, **no GENERATED regions,
+deliberately outside SHELL_URLS**, listed in `sitemap.xml`.
+
+Rules the rename inherits:
+
+- **Keep the title composition "question — {brand}"**, never "{brand} — tagline". The question
+  phrasing is what Search Console shows ranking (page 1 for "find my district" / "what district
+  am i in" before any text said those words); the brand is deliberately the swappable suffix.
+  When Phase-3 step 1 makes titles worksheet-emitted, emit that composition.
+- **Stage B's retitle pattern matches the `<title>` literally** and drifts whenever the title
+  changes — `build_districtry_preview.py --check` catches it (it did exactly that in PR #401,
+  fixed there). Expect the same one-line fix at the rename.
+- **At the domain step, the landing pages are ranked URLs.** Their per-URL 301s preserve the
+  equity they were built to accumulate; "search re-verification" includes re-requesting indexing
+  for all of them, not just the homepage.
 
 ## Known package flaws / adoption fix-list
 
