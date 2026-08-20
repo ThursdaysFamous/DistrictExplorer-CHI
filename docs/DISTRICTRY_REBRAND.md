@@ -325,6 +325,9 @@ without questioning it.**
    design canvas had already answered this: a circle with a white ring. It is now
    `<circle r="17" fill="#1d5fd6" stroke="#fff">`. One transform owns shape **and** colour; the
    earlier fill-only swap was deleted so two transforms cannot disagree about what the marker is.
+   *(This is the BASE marker. The hierarchy that overrides it was settled separately — see*
+   *"Marker hierarchy" below, which supersedes the badge bullet and the open question in this*
+   *section.)*
 
 **The marker is a hierarchy, and only its first branch was re-skinned.** `selectPointMarker()`
 walks four cases: inside Chicago → the base marker (now the circle); on Lake Michigan → the Water
@@ -336,13 +339,15 @@ by reading that chain:
   where no token swap could reach it. Exactly the same class of survival as the flag stripe and
   the star: a city colour outliving the re-skin because it was written as a literal, not a token.
   Moved to the data-tier `#1d5fd6` so it matches the circle the legend describes, and its
-  system-font stack moved to Barlow.
+  system-font stack moved to Barlow. **SUPERSEDED the same day** — the badge is retired
+  outright, so both of those transforms were deleted; see "Marker hierarchy" below.
 - **Two relationship-legend swatches (`.rel-sw-in`, `.rel-sw-cross`) carried the same literal.**
   These are illustrative — the outlines the map actually draws take each layer's own colour,
   darkened — so as Chicago blue they demonstrated a hue this app never draws. Now the data-tier
   blue, sampling the tier they illustrate.
 
-**The county seals themselves are KEPT, and the open question is the operator's.** They are each
+**The county seals themselves are KEPT, and the open question is the operator's.** *(Answered —*
+*see "Marker hierarchy" below. The paragraph is kept for the reasoning that framed the question.)* They are each
 county's own emblem, not Chicago branding, and for a state-then-national product showing the seal
 of the county under your point is arguably an asset — they also carry researched licensing
 (`icons/source/README.md`, `docs/COUNTY_SEALS_REVIEW.md`). But note the tension the new legend
@@ -360,6 +365,49 @@ The Districtry token set itself retains `#0b5394` as `--layer-zip`.
 point lands on Lake Michigan) is a third Chicago motif — the Chicago Water Taxi seal. It is a
 deliberate easter egg rather than chrome, so retiring or replacing it is a product call, not a
 re-skin one. Flagged here rather than silently changed.
+
+## Marker hierarchy — operator decision (2026-08-20)
+
+The question flagged above came back answered in three parts: **retire the county-name badge in
+favour of the default circle, restore the Chicago flag star for the city in its original colour,
+and leave the seal counties alone.** The re-skin had been treating the four branches as one
+question with one answer; the decision splits them by what each actually says.
+
+The shipped hierarchy in `selectPointMarker()`, in the order the function walks it:
+
+| Where the point lands | Marker | Why |
+|---|---|---|
+| Inside Chicago | **Six-pointed flag star, `#C8102E`** | The city's own emblem, for the city. What was wrong was using it as the default for all of Illinois — not using it at all. |
+| Lake Michigan | Water Taxi seal | Unchanged; still the flagged easter egg (below). |
+| An Illinois county **with** a shipped seal (9) | That county's seal | Unchanged. Each county's own emblem, licence-researched. |
+| Anywhere else — an Illinois county with no seal, or outside Illinois | **Circle, `#1d5fd6`** | The canvas's own answer, and now the genuine default. |
+
+Three consequences worth recording:
+
+- **`makeCountyBadgeDivIcon` is now dead code in the preview** — the definition survives (it is
+  engine text the transform script does not delete) but **zero call sites remain**. Both branches
+  that reached it are gone: the seal branch sets an icon only `if (ok)`, and the no-seal branch is
+  deleted entirely. The two transforms that had recoloured the badge went with it — a colour fix
+  on a shape that can no longer render is drift waiting to happen.
+- **The engine's early return had to be split.** `if (!live() || inCity) return;` conflated "the
+  selection is stale" with "Chicago needs no override", which is precisely why the base icon was
+  doing double duty as both *Chicago's marker* and *everywhere else's*. It is now
+  `if (!live()) return;` followed by `if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }`,
+  so the two facts are separate. `chiFlagStarDivIcon` is defined beside the base icon and reuses
+  the engine's `starPath()`, already in scope.
+- **The legend's "● Selected point" is now a simplification rather than a near-falsehood.** It is
+  literally true for the great majority of Illinois — every county without a seal, which is 60 of
+  the 69 served — and the two exceptions (Chicago's star, the nine seals) are self-evident on
+  sight. Before this change the pill rendered across most of the state, so the legend disagreed
+  with the map nearly everywhere it was read.
+
+Verified in Chromium against the built preview: Chicago Loop → `STAR` fill `#C8102E`;
+Bureau, Madison and Champaign (no seal) → `CIRCLE` fill `#1d5fd6`; a point in Indiana → `CIRCLE`.
+The seal branch is **not reachable in this sandbox** — `chicagoCoverage` awaits
+`loadCommunityAreas()` against Socrata, which is blocked here and never settles, so branches 2–4
+never run locally. That is pre-existing and unrelated to the change (identical before it), so
+correctness on the seal path was established by diffing the hierarchy instead: the seal call site
+is byte-identical apart from losing its `: makeCountyBadgeDivIcon(name)` alternative.
 
 ## Known package flaws / adoption fix-list
 

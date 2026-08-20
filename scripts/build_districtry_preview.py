@@ -919,10 +919,11 @@ def build(stamp_text):
         "empty-state mark",
     )
 
-    # -- selection marker: the six-pointed Chicago star becomes the canvas's
-    #    own answer — a data-tier circle with a white ring. One transform now
-    #    owns shape AND colour; the earlier fill-only swap was removed so the
-    #    two cannot disagree about what the marker is.
+    # -- the BASE selection marker becomes the canvas's own answer: a
+    #    data-tier circle with a white ring. This is what a point gets
+    #    everywhere the hierarchy does not override it — every Illinois county
+    #    without a shipped seal, and anywhere outside Illinois. The city and
+    #    the seal counties override it below.
     html = sub_once(
         html,
         '\'<path d="\' + starPath(50, 50, 46, 19) + \'" fill="#C8102E" stroke="#ffffff" stroke-width="4"/>\' +',
@@ -930,25 +931,58 @@ def build(stamp_text):
         "selection marker",
     )
 
-    # -- county name badge: the marker hierarchy's third branch. A point in an
-    #    Illinois county with no shipped seal gets a name pill, and that pill
-    #    hardcodes #0B5394 — the CHICAGO FLAG deep blue — inside a JS string,
-    #    where no token swap can reach it. Same class of survival as the flag
-    #    stripe and the star: a city colour outliving the re-skin because it
-    #    was written as a literal, not a token. Moved to the data tier so it
-    #    matches the circle marker the legend describes; the system font stack
-    #    goes to Barlow so the pill speaks the app's typeface.
+    # -- ...and keep the Chicago flag star for Chicago itself, in flag red.
+    #    The city's own emblem is right for the city; what was wrong was using
+    #    it as the DEFAULT for the whole state. Defined next to the base icon so
+    #    both read as one decision, and it reuses starPath(), already in scope.
     html = sub_once(
         html,
-        "background:#0B5394;color:#ffffff;border:2px solid #ffffff;",
-        "background:#1d5fd6;color:#ffffff;border:2px solid #ffffff;",
-        "county badge colour",
+        "    iconSize: [34, 34],\n    iconAnchor: [17, 17]\n  });\n",
+        "    iconSize: [34, 34],\n    iconAnchor: [17, 17]\n  });\n\n"
+        "  // Chicago keeps its flag star, in flag red — the city's emblem for\n"
+        "  // the city, rather than for every point in Illinois.\n"
+        "  var chiFlagStarDivIcon = L.divIcon({\n"
+        '    className: "chi-star-marker",\n'
+        "    html: '<svg viewBox=\"0 0 100 100\" width=\"34\" height=\"34\" style=\"filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))\">' +\n"
+        "          '<path d=\"' + starPath(50, 50, 46, 19) + '\" fill=\"#C8102E\" stroke=\"#ffffff\" stroke-width=\"4\"/>' +\n"
+        '          "</svg>",\n'
+        "    iconSize: [34, 34],\n"
+        "    iconAnchor: [17, 17]\n"
+        "  });\n",
+        "chicago flag star icon",
     )
+
+    # -- branch 1 of the hierarchy: inside the city, set the flag star. The
+    #    engine returned early here (keeping whatever the default was), which
+    #    is why the base icon had been doing double duty as both "Chicago" and
+    #    "everywhere else".
     html = sub_once(
         html,
-        "font:600 11px/1.3 -apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;",
-        "font:600 11px/1.3 Barlow,-apple-system,BlinkMacSystemFont,sans-serif;",
-        "county badge font",
+        "      if (!live() || inCity) return;",
+        "      if (!live()) return;\n"
+        "      if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }",
+        "chicago star branch",
+    )
+
+    # -- branch 3: a county WITH a shipped seal keeps its seal; a county
+    #    without one now keeps the default circle instead of a name badge.
+    html = sub_once(
+        html,
+        "          if (sealUrl) {\n"
+        "            whenSealImgReady(sealUrl, function (ok) {\n"
+        "              if (!live()) return;\n"
+        "              marker.setIcon(ok ? makeCountySealDivIcon(sealUrl, name) : makeCountyBadgeDivIcon(name));\n"
+        "            });\n"
+        "          } else {\n"
+        "            marker.setIcon(makeCountyBadgeDivIcon(name));\n"
+        "          }",
+        "          if (sealUrl) {\n"
+        "            whenSealImgReady(sealUrl, function (ok) {\n"
+        "              if (!live()) return;\n"
+        "              if (ok) marker.setIcon(makeCountySealDivIcon(sealUrl, name));\n"
+        "            });\n"
+        "          }",
+        "county badge retired",
     )
 
     # -- relationship-legend swatches: two more Chicago-flag-blue literals.
