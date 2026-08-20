@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="_ds/industry-3d977086-2813-4a82-9d39-e8ca0b304c26/styles.css"><script src="_ds/industry-3d977086-2813-4a82-9d39-e8ca0b304c26/_ds_bundle.js"></script><link rel="stylesheet" href="tokens/districtry.tokens.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script><style>body{margin:0;font-family:var(--font-body);background:var(--paper);color:var(--ink)}a{color:var(--brand)}a:hover{color:var(--brand-700)}@keyframes dst-spin{to{transform:rotate(360deg)}}summary::-webkit-details-marker{display:none}[data-theme="dark"] .dst-mark g{mix-blend-mode:screen!important}[data-theme="dark"] .dst-mark g:nth-of-type(1) polygon{fill:#a78bfa}[data-theme="dark"] .dst-mark g:nth-of-type(2) polygon{fill:#6ea8ff}[data-theme="dark"] .dst-mark g:nth-of-type(3) polygon{fill:#e879b9}[data-theme="dark"] .dst-dot{box-shadow:0 0 0 1.5px var(--border-dot)}.dst-glow{filter:blur(7px)}[data-theme="dark"] .leaflet-tile{filter:brightness(1.35) saturate(.92)}.leaflet-container{font-family:var(--font-body)}</style></helmet>
+<div style="height:100vh;display:flex;flex-direction:column;background:var(--paper);color:var(--ink)">
+
+  <header data-screen-label="Header" style="display:flex;align-items:center;gap:20.4px;padding:10.2px 20.4px;background:var(--surface);border-bottom:1px solid var(--border);flex:none;z-index:600;position:relative">
+    <div style="display:flex;align-items:center;gap:10.2px;flex:none">
+      <svg class="dst-mark" width="30" height="30" viewBox="0 0 96 96"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="var(--ink)" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="var(--ink)" stroke-width="11"></line></svg>
+      <div style="display:flex;align-items:baseline;gap:6.8px">
+        <span style="font:600 24px/1 var(--font-heading);letter-spacing:.005em">districtry</span>
+        <span style="font:400 19px/1 var(--font-heading);color:var(--faint)">/ illinois</span>
+      </div>
+    </div>
+    <input placeholder="Search an address — geocoding placeholder" style="flex:1;max-width:440px;box-sizing:border-box;font:400 13.5px var(--font-body);color:var(--ink);background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:8px 12px;outline:none" style-focus="border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-tint)">
+    <div style="margin-left:auto;display:flex;align-items:center;gap:13.6px">
+      <span style="font-size:12px;color:var(--muted)">69 counties · 39 layers · <a href="#" style="text-decoration:none">Sources</a></span>
+      <button onClick="{{ toggleTheme }}" style="font:600 12.5px var(--font-body);color:var(--brand);background:var(--surface);border:1px solid var(--brand-border);border-radius:8px;padding:6px 12px;cursor:pointer" style-hover="background:var(--brand-tint)">{{ themeLabel }}</button>
+    </div>
+  </header>
+
+  <div style="flex:1;display:flex;min-height:0">
+
+    <div data-screen-label="Map" style="flex:1;position:relative;min-width:0">
+      <div id="dst-map" style="position:absolute;inset:0;background:var(--paper)"></div>
+      <div style="position:absolute;left:13.6px;bottom:24px;z-index:500;display:flex;align-items:center;gap:6.8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 10px;box-shadow:var(--shadow-card)">
+        <span style="width:9px;height:9px;border-radius:50%;box-shadow:0 0 5px 2.5px #ad8cee;flex:none"></span>
+        <span style="font-size:11.5px;color:var(--muted)">Illinois</span>
+        <span style="width:9px;height:9px;border-radius:2px;background:#8a62e0;opacity:.22;margin-left:6px;flex:none"></span>
+        <span style="font-size:11.5px;color:var(--muted)">Data coming — not yet sourced</span>
+        <span style="width:9px;height:9px;border-radius:2px;background:#8d8a97;opacity:.55;margin-left:6px;flex:none"></span>
+        <span style="font-size:11.5px;color:var(--muted)">Outside Illinois</span>
+        <span style="width:9px;height:9px;border-radius:50%;background:var(--data-500);margin-left:6px;flex:none"></span>
+        <span style="font-size:11.5px;color:var(--muted)">Selected point</span>
+      </div>
+    </div>
+
+    <aside data-screen-label="Results panel" style="width:416px;flex:none;display:flex;flex-direction:column;background:var(--paper);border-left:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10.2px;padding:10.2px 13.6px;border-bottom:1px solid var(--border);background:var(--surface)">
+        <span style="width:10px;height:10px;border-radius:50%;background:var(--data-500);flex:none"></span>
+        <span style="font-size:12.5px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums">41.75080, −88.15350</span>
+        <span style="font-size:11.5px;color:var(--faint)">{{ onCount }} of 39 layers on</span>
+        <button onClick="{{ copyLink }}" style="margin-left:auto;font:600 12px var(--font-body);color:var(--brand);background:var(--surface);border:1px solid var(--brand-border);border-radius:8px;padding:4px 10px;cursor:pointer" style-hover="background:var(--brand-tint)">{{ copyLabel }}</button>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10.2px;padding:13.6px">
+
+        <div style="font:600 11px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 3.4px">Political</div>
+
+        <div data-screen-label="Card: U.S. House" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ usBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ usToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ usBox }};border:1px solid {{ usBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ usChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#1e3a5f;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ usT }}">U.S. House District</div>
+            <sc-if value="{{ usOn }}" hint-placeholder-val="{{ true }}"><div style="margin-left:auto;font-size:13px;font-weight:600;color:var(--brand);background:var(--brand-tint);padding:3px 10px;border-radius:99px">IL‑14</div></sc-if>
+          </div>
+          <sc-if value="{{ usOn }}" hint-placeholder-val="{{ true }}">
+          <div style="border-top:1px solid var(--border)">
+            <div style="display:flex;flex-direction:column;gap:2px;padding:12px 18px;border-bottom:1px solid var(--border-soft)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:14.5px;font-weight:700;color:var(--ink)">Lauren Underwood</span><span style="font-size:11px;font-weight:700;color:var(--brand);background:var(--brand-chip);padding:2px 8px;border-radius:99px">Democrat</span></div>
+              <div style="display:flex;flex-wrap:wrap;gap:3px 9px;font-size:12.5px;color:var(--ink-3)"><a href="#" style="text-decoration:none">underwood.house.gov</a></div>
+            </div>
+            <details style="border-bottom:1px solid var(--border-soft)">
+              <summary style="display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;list-style:none">
+                <span style="font-size:12.5px;font-weight:600;color:var(--ink-2)">Offices</span>
+                <span style="margin-left:auto;font-size:11px;color:var(--faint)">details ▾</span>
+              </summary>
+              <div style="display:flex;flex-direction:column;gap:8px;padding:0 18px 12px">
+                <div style="display:flex;flex-direction:column;gap:1px">
+                  <div style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">District Office</div>
+                  <div style="font-size:12.5px;line-height:1.5;color:var(--ink-3)">116 N. Chicago Street, Suite 201, Joliet, IL 60432</div>
+                  <div style="font-size:12.5px;color:var(--ink-3)"><span style="font-variant-numeric:tabular-nums">630‑549‑2190</span></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1px">
+                  <div style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">D.C. Office</div>
+                  <div style="font-size:12.5px;line-height:1.5;color:var(--ink-3)">2228 Rayburn House Office Building, Washington, DC 20515</div>
+                  <div style="font-size:12.5px;color:var(--ink-3)"><span style="font-variant-numeric:tabular-nums">202‑225‑2976</span></div>
+                </div>
+              </div>
+            </details>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 18px">
+              <button style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--brand);background:var(--surface);border:1px solid var(--brand-border);border-radius:8px;padding:6px 12px;cursor:pointer" style-hover="background:var(--brand-tint)">☆ Pin as parent</button>
+              <a href="#" style="margin-left:auto;font-size:13px;font-weight:600;text-decoration:none">Official website ↗</a>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div data-screen-label="Card: County Board" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ cbBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ cbToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ cbBox }};border:1px solid {{ cbBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ cbChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#1e3a5f;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ cbT }}">County Board District</div>
+          </div>
+          <sc-if value="{{ cbOn }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 18px;border-top:1px solid var(--border)">
+            <div style="width:16px;height:16px;border:2px solid var(--brand-border);border-top-color:var(--brand);border-radius:50%;animation:dst-spin .8s linear infinite;flex:none"></div>
+            <div style="font-size:13px;color:var(--muted)">Loading district data…</div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div data-screen-label="Card: IL Senate" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ senBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ senToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ senBox }};border:1px solid {{ senBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ senChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#1e3a5f;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ senT }}">IL State Senate District</div>
+          </div>
+          <sc-if value="{{ senOn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 18px;border-top:1px solid var(--border)">
+            <div style="width:16px;height:16px;border:2px solid var(--brand-border);border-top-color:var(--brand);border-radius:50%;animation:dst-spin .8s linear infinite;flex:none"></div>
+            <div style="font-size:13px;color:var(--muted)">Loading district data…</div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div style="font:600 11px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:3.4px 3.4px 0">Public safety</div>
+
+        <div data-screen-label="Card: Police Station nearest 3" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ polBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ polToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ polBox }};border:1px solid {{ polBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ polChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#9c0b24;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ polT }}">Police Station <span style="font-weight:600;color:var(--muted);font-size:13px">(nearest 3)</span></div>
+          </div>
+          <sc-if value="{{ polOn }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--border)">
+            <div style="display:flex;align-items:baseline;gap:10px;padding:10px 18px;border-bottom:1px solid var(--border-soft)">
+              <div style="min-width:0;flex:1">
+                <div style="font-size:14px;font-weight:700;color:var(--ink)">Naperville PD — Main Station</div>
+                <div style="font-size:12.5px;color:var(--ink-3)">1350 Aurora Ave, Naperville</div>
+              </div>
+              <div style="font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-tint);padding:2px 8px;border-radius:99px;white-space:nowrap">1.8 mi</div>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:10px;padding:10px 18px;border-bottom:1px solid var(--border-soft)">
+              <div style="min-width:0;flex:1">
+                <div style="font-size:14px;font-weight:700;color:var(--ink)">Plainfield PD</div>
+                <div style="font-size:12.5px;color:var(--ink-3)">14300 Coil Plus Dr, Plainfield</div>
+              </div>
+              <div style="font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-tint);padding:2px 8px;border-radius:99px;white-space:nowrap">4.2 mi</div>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:10px;padding:10px 18px">
+              <div style="min-width:0;flex:1">
+                <div style="font-size:14px;font-weight:700;color:var(--ink)">Will County Sheriff — District 2</div>
+                <div style="font-size:12.5px;color:var(--ink-3)">2134 Essington Rd, Joliet</div>
+              </div>
+              <div style="font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-tint);padding:2px 8px;border-radius:99px;white-space:nowrap">6.9 mi</div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div data-screen-label="Card: Fire Protection" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ fireBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ fireToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ fireBox }};border:1px solid {{ fireBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ fireChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#a33b2c;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ fireT }}">Fire Protection District</div>
+          </div>
+          <sc-if value="{{ fireOn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 18px;border-top:1px solid var(--border)">
+            <div style="width:16px;height:16px;border:2px solid var(--brand-border);border-top-color:var(--brand);border-radius:50%;animation:dst-spin .8s linear infinite;flex:none"></div>
+            <div style="font-size:13px;color:var(--muted)">Loading district data…</div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div data-screen-label="Card: DuPage Special" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ spcBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ spcToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ spcBox }};border:1px solid {{ spcBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ spcChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#5c6bc0;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ spcT }}">DuPage Special Police District</div>
+          </div>
+          <sc-if value="{{ spcOn }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:14px 18px;font-size:13px;color:var(--muted);border-top:1px solid var(--border)">This point isn't inside any district in this layer.</div>
+          </sc-if>
+        </div>
+
+        <div style="font:600 11px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:3.4px 3.4px 0">Schools</div>
+
+        <div data-screen-label="Card: School Location" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ schBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ schToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ schBox }};border:1px solid {{ schBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ schChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#0f6f6f;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ schT }}">School Location <span style="font-weight:600;color:var(--muted);font-size:13px">(nearest 3)</span></div>
+          </div>
+          <sc-if value="{{ schOn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 18px;border-top:1px solid var(--border)">
+            <div style="width:16px;height:16px;border:2px solid var(--brand-border);border-top-color:var(--brand);border-radius:50%;animation:dst-spin .8s linear infinite;flex:none"></div>
+            <div style="font-size:13px;color:var(--muted)">Loading school data…</div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div style="font:600 11px var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:3.4px 3.4px 0">Geography</div>
+
+        <div data-screen-label="Card: Township" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ twpBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 18px">
+            <div onClick="{{ twpToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ twpBox }};border:1px solid {{ twpBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ twpChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#7a5c3e;flex:none"></div>
+            <div style="min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--muted)">Township / County Subdivision</div>
+              <sc-if value="{{ twpOn }}" hint-placeholder-val="{{ true }}"><div style="font-size:15px;font-weight:700;color:var(--ink)">Wheatland Township</div></sc-if>
+            </div>
+            <sc-if value="{{ twpOn }}" hint-placeholder-val="{{ true }}"><div style="margin-left:auto;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums">GEOID 17197‑80445</div></sc-if>
+          </div>
+        </div>
+
+        <div data-screen-label="Card: Municipality" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ muniBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 18px">
+            <div onClick="{{ muniToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ muniBox }};border:1px solid {{ muniBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ muniChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#b0316e;flex:none"></div>
+            <div style="min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--muted)">Municipality</div>
+              <sc-if value="{{ muniOn }}" hint-placeholder-val="{{ true }}"><div style="font-size:15px;font-weight:700;color:var(--ink)">Naperville</div></sc-if>
+            </div>
+            <sc-if value="{{ muniOn }}" hint-placeholder-val="{{ true }}"><div style="margin-left:auto;font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums">GEOID 17‑51622</div></sc-if>
+          </div>
+        </div>
+
+        <div data-screen-label="Card: ZIP" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ zipBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 18px">
+            <div onClick="{{ zipToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ zipBox }};border:1px solid {{ zipBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ zipChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#0b5394;flex:none"></div>
+            <div style="min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--muted)">ZIP Code</div>
+              <sc-if value="{{ zipOn }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;font-weight:700;color:var(--ink)">60564</div></sc-if>
+            </div>
+          </div>
+        </div>
+
+        <div data-screen-label="Card: TIF (error)" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid {{ tifBl }};border-radius:10px;box-shadow:var(--shadow-card);overflow:hidden;flex:none">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px">
+            <div onClick="{{ tifToggle }}" style="width:20px;height:20px;border-radius:5px;background:{{ tifBox }};border:1px solid {{ tifBoxBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex:none;cursor:pointer">{{ tifChk }}</div>
+            <div class="dst-dot" style="width:10px;height:10px;border-radius:50%;background:#1e3a5f;flex:none"></div>
+            <div style="font-size:16px;font-weight:700;color:{{ tifT }}">TIF District</div>
+          </div>
+          <sc-if value="{{ tifSpin }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:10px;padding:16px 18px;border-top:1px solid var(--border)">
+              <div style="width:16px;height:16px;border:2px solid var(--brand-border);border-top-color:var(--brand);border-radius:50%;animation:dst-spin .8s linear infinite;flex:none"></div>
+              <div style="font-size:13px;color:var(--muted)">Retrying…</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ tifErr }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 18px;border-top:1px solid var(--border)">
+              <div style="font-size:13px;color:var(--error-ink);flex:1">Couldn't reach this layer's data source.</div>
+              <button onClick="{{ retryTif }}" style="font-size:12.5px;font-weight:600;color:var(--brand);background:var(--surface);border:1px solid var(--brand-border);border-radius:8px;padding:5px 12px;cursor:pointer" style-hover="background:var(--brand-tint)">Retry</button>
+            </div>
+          </sc-if>
+        </div>
+
+      </div>
+      <div style="padding:8px 13.6px;border-top:1px solid var(--border);font-size:10.5px;line-height:1.5;color:var(--faint)">Boundary and roster data come from public sources that disclaim legal precision. Not for legal or official use.</div>
+    </aside>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;basemapMood&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;auto&quot;, &quot;options&quot;: [&quot;auto&quot;, &quot;paper&quot;, &quot;mono&quot;, &quot;dusk&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Map&quot;}, &quot;appAccent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#6d3fd1&quot;, &quot;options&quot;: [&quot;#6d3fd1&quot;, &quot;#5f2ec7&quot;, &quot;#7e4fe0&quot;, &quot;#4c1d95&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Chrome&quot;}}">
+class Component extends DCLogic {
+  state = {
+    theme: (typeof localStorage !== 'undefined' && localStorage.getItem('districtry-theme')) || 'light',
+    on: { us: true, cb: true, sen: false, pol: true, fire: false, spc: true, sch: false, twp: true, muni: true, zip: false, tif: true },
+    tifPhase: 'error',
+    copyLabel: 'Copy link'
+  };
+  cardVals(id, opts) {
+    const on = !!this.state.on[id];
+    const o = {};
+    o[id + 'On'] = on;
+    o[id + 'Box'] = on ? 'var(--brand)' : 'transparent';
+    o[id + 'BoxBorder'] = on ? 'var(--brand)' : 'var(--border-dot)';
+    o[id + 'Chk'] = on ? '✓' : '';
+    o[id + 'T'] = on ? 'var(--ink)' : 'var(--muted)';
+    o[id + 'Bl'] = on ? ((opts && opts.bl) || 'var(--brand)') : 'var(--border)';
+    o[id + 'Toggle'] = () => this.setState((s) => ({ on: Object.assign({}, s.on, { [id]: !s.on[id] }) }));
+    return o;
+  }
+  renderVals() {
+    const onCount = Object.values(this.state.on).filter(Boolean).length;
+    return Object.assign(
+      {
+        themeLabel: this.state.theme === 'dark' ? '☀ Light' : '☾ Dark',
+        toggleTheme: () => this.setTheme(this.state.theme === 'dark' ? 'light' : 'dark'),
+        copyLabel: this.state.copyLabel,
+        copyLink: () => this.doCopy(),
+        onCount,
+        tifSpin: this.state.on.tif && this.state.tifPhase === 'loading',
+        tifErr: this.state.on.tif && this.state.tifPhase === 'error',
+        retryTif: () => {
+          this.setState({ tifPhase: 'loading' });
+          clearTimeout(this._tifT);
+          this._tifT = setTimeout(() => this.setState({ tifPhase: 'error' }), 1400);
+        }
+      },
+      this.cardVals('us'), this.cardVals('cb'), this.cardVals('sen'),
+      this.cardVals('pol'), this.cardVals('fire'), this.cardVals('spc'), this.cardVals('sch'),
+      this.cardVals('twp'), this.cardVals('muni'), this.cardVals('zip'),
+      this.cardVals('tif', { bl: 'var(--error)' })
+    );
+  }
+  setTheme(t) {
+    this.setState({ theme: t });
+    try { localStorage.setItem('districtry-theme', t); } catch (e) {}
+    document.documentElement.setAttribute('data-theme', t);
+    this.applyBasemap(t);
+    this.styleOverlays(t);
+  }
+  doCopy() {
+    const url = location.origin + location.pathname + '#point=41.75080,-88.15350&layers=' + Object.keys(this.state.on).filter((k) => this.state.on[k]).join(',');
+    try { navigator.clipboard.writeText(url); } catch (e) {}
+    this.setState({ copyLabel: 'Copied ✓' });
+    clearTimeout(this._copyT);
+    this._copyT = setTimeout(() => this.setState({ copyLabel: 'Copy link' }), 1600);
+  }
+  applyAccent() {
+    const a = this.props.appAccent;
+    if (!a) return;
+    const root = document.documentElement;
+    const hex = a.replace('#', '');
+    const r = parseInt(hex.slice(0, 2), 16), g = parseInt(hex.slice(2, 4), 16), b = parseInt(hex.slice(4, 6), 16);
+    root.style.setProperty('--brand', a);
+    root.style.setProperty('--brand-tint', 'rgba(' + r + ',' + g + ',' + b + ',0.13)');
+    root.style.setProperty('--brand-chip', 'rgba(' + r + ',' + g + ',' + b + ',0.18)');
+    root.style.setProperty('--brand-border', 'rgba(' + r + ',' + g + ',' + b + ',0.42)');
+  }
+  moodUrl(theme) {
+    const mood = this.props.basemapMood ?? 'auto';
+    const kind = mood === 'auto' ? (theme === 'dark' ? 'dark_all' : 'light_all') : mood === 'paper' ? 'light_all' : mood === 'mono' ? 'light_nolabels' : 'dark_all';
+    return 'https://{s}.basemaps.cartocdn.com/' + kind + '/{z}/{x}/{y}{r}.png';
+  }
+  applyBasemap(theme) {
+    if (!this._map || !window.L) return;
+    const url = this.moodUrl(theme);
+    if (this._tiles) { this._tiles.setUrl(url); return; }
+    this._tiles = window.L.tileLayer(url, { maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(this._map);
+  }
+  styleOverlays(theme) {
+    const dark = theme === 'dark';
+    if (this._outMask) this._outMask.setStyle({ fillColor: dark ? '#08070c' : '#8d8a97', fillOpacity: dark ? 0.38 : 0.42 });
+    if (this._pending) this._pending.setStyle({ fillColor: dark ? '#a78bfa' : '#8a62e0', fillOpacity: dark ? 0.1 : 0.08 });
+    if (this._glow) this._glow.setStyle({ color: dark ? '#a78bfa' : '#ad8cee', opacity: dark ? 0.55 : 0.6 });
+    if (this._stateLine) this._stateLine.setStyle({ color: dark ? '#a78bfa' : '#ad8cee', opacity: 0.9 });
+    if (this._boundary) this._boundary.setStyle({ color: dark ? '#6ea8ff' : '#1d5fd6', fillColor: dark ? '#6ea8ff' : '#1d5fd6' });
+    if (this._pt) this._pt.setStyle({ fillColor: dark ? '#6ea8ff' : '#1d5fd6' });
+  }
+  componentDidMount() {
+    document.documentElement.setAttribute('data-theme', this.state.theme);
+    this.applyAccent();
+    this._boot = setInterval(() => { if (window.L && document.getElementById('dst-map')) { clearInterval(this._boot); this.initMap(); } }, 120);
+  }
+  componentDidUpdate() { this.applyAccent(); if (this._map) this.applyBasemap(this.state.theme); }
+  initMap() {
+    const L = window.L;
+    const map = L.map('dst-map', { zoomControl: true, attributionControl: true }).setView([41.55, -88.5], 7);
+    this._map = map;
+    this.applyBasemap(this.state.theme);
+    const p = [41.7508, -88.1535];
+    const ring = [[41.98, -88.55], [42.02, -88.1], [41.86, -87.92], [41.62, -87.98], [41.5, -88.28], [41.58, -88.62], [41.8, -88.7]];
+    this._boundary = L.polygon(ring, { color: '#1d5fd6', weight: 2.5, fillColor: '#1d5fd6', fillOpacity: 0.07 }).addTo(map).bindTooltip('IL‑14 boundary — placeholder geometry', { sticky: true });
+    this._pt = L.circleMarker(p, { radius: 7, color: '#ffffff', weight: 2.5, fillColor: '#1d5fd6', fillOpacity: 1 }).addTo(map);
+    map.on('click', (e) => { this._pt.setLatLng(e.latlng); });
+    const stateUrl = 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/0/query?where=' + encodeURIComponent("STUSAB='IL'") + '&outFields=NAME&returnGeometry=true&geometryPrecision=3&outSR=4326&f=geojson';
+    const covP = fetch('../data/app/metro-outline.json').then((r) => r.json()).catch(() => null);
+    const stP = fetch(stateUrl).then((r) => r.json()).catch(() => null);
+    Promise.all([covP, stP]).then(([cov, st]) => {
+      const world = [[85, -180], [85, 180], [-85, 180], [-85, -180]];
+      const covRing = cov && cov.features ? cov.features[0].geometry.coordinates[0].map((c) => [c[1], c[0]]) : null;
+      let stateRing = null;
+      if (st && st.features && st.features[0]) {
+        const g = st.features[0].geometry;
+        const ring = g.type === 'Polygon' ? g.coordinates[0] : g.coordinates.map((p) => p[0]).sort((a, b) => b.length - a.length)[0];
+        stateRing = ring.map((c) => [c[1], c[0]]);
+      }
+      if (stateRing) {
+        this._outMask = L.polygon([world, stateRing], { stroke: false, fillColor: '#8d8a97', fillOpacity: 0.42, interactive: false }).addTo(map);
+        if (covRing) this._pending = L.polygon([stateRing, covRing], { stroke: false, fillColor: '#8a62e0', fillOpacity: 0.08, interactive: false }).addTo(map);
+        const closed = stateRing.concat([stateRing[0]]);
+        this._glow = L.polyline(closed, { className: 'dst-glow', color: '#ad8cee', weight: 9, opacity: 0.6, interactive: false }).addTo(map);
+        this._stateLine = L.polyline(closed, { color: '#ad8cee', weight: 1.5, opacity: 0.9, interactive: false }).addTo(map);
+      } else if (covRing) {
+        this._outMask = L.polygon([world, covRing], { stroke: false, fillColor: '#8d8a97', fillOpacity: 0.35, interactive: false }).addTo(map);
+      }
+      this.styleOverlays(this.state.theme);
+    });
+    this.styleOverlays(this.state.theme);
+  }
+  componentWillUnmount() { clearInterval(this._boot); clearTimeout(this._tifT); clearTimeout(this._copyT); if (this._map) this._map.remove(); }
+}
+</script>
+</body>
+</html>

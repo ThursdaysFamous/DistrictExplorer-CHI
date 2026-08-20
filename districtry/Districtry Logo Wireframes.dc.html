@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600&amp;family=Barlow:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#f4f2ee;font-family:Barlow,system-ui,sans-serif}a{color:#6d3fd1}a:hover{color:#5730ab}</style></helmet>
+<section style="padding:40px 44px 32px;border-bottom:1px solid rgba(23,22,28,.08)">
+  <div style="display:flex;align-items:baseline;gap:10px;margin:0 0 6px"><a href="#t5" style="font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#17161c;color:#fff;border-radius:4px;text-decoration:none" id="t5">5</a><span style="font:600 15px 'Barlow Condensed',sans-serif;color:#17161c;letter-spacing:.01em">Refinement of direction <a href="#1e" style="text-decoration:none">1e</a> — translucent layers · <a href="#5c" style="text-decoration:none">5c</a> chosen</span></div>
+  <div style="font:400 12px Barlow,sans-serif;color:#6b7280;margin:0 0 20px">Rebuilt record — the original turns 2–4 are condensed. Polygon spacing and vertex count are tweakable; the layered marks below regenerate live.</div>
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+
+    <div id="5a" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#5a" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">5a</a>Two layers — reads as overlap, not stack</div>
+      <div style="width:200px;height:200px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="128" height="128" viewBox="0 0 96 96">
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyA }}" fill="#6d3fd1" fill-opacity="0.55"></polygon></g>
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyB }}" fill="#1d5fd6" fill-opacity="0.5"></polygon></g>
+          <circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle>
+          <line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div id="5b" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#5b" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">5b</a>Three layers, violet monochrome — quiet, loses the map story</div>
+      <div style="width:200px;height:200px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="128" height="128" viewBox="0 0 96 96">
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyA }}" fill="#6d3fd1" fill-opacity="0.32"></polygon></g>
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyB }}" fill="#6d3fd1" fill-opacity="0.4"></polygon></g>
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyC }}" fill="#6d3fd1" fill-opacity="0.34"></polygon></g>
+          <circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle>
+          <line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div id="5c" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#5c" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:#6d3fd1;color:#fff;border-radius:5px;text-decoration:none">5c</a><span style="font-weight:600;color:#17161c">CHOSEN</span> — multicolor echoes the map's layer encoding</div>
+      <div style="display:flex;gap:10px">
+        <div style="width:200px;height:200px;background:#fff;border:2px solid #6d3fd1;border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <svg width="128" height="128" viewBox="0 0 96 96">
+            <g style="mix-blend-mode:multiply"><polygon points="{{ polyA }}" fill="#6d3fd1" fill-opacity="0.55"></polygon></g>
+            <g style="mix-blend-mode:multiply"><polygon points="{{ polyB }}" fill="#1d5fd6" fill-opacity="0.5"></polygon></g>
+            <g style="mix-blend-mode:multiply"><polygon points="{{ polyC }}" fill="#b0316e" fill-opacity="0.45"></polygon></g>
+            <circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle>
+            <line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line>
+          </svg>
+        </div>
+        <div style="width:200px;height:200px;background:#15131b;border:1px solid rgba(236,233,244,.12);border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <svg width="128" height="128" viewBox="0 0 96 96">
+            <g style="mix-blend-mode:screen"><polygon points="{{ polyA }}" fill="#a78bfa" fill-opacity="0.5"></polygon></g>
+            <g style="mix-blend-mode:screen"><polygon points="{{ polyB }}" fill="#6ea8ff" fill-opacity="0.42"></polygon></g>
+            <g style="mix-blend-mode:screen"><polygon points="{{ polyC }}" fill="#e879b9" fill-opacity="0.38"></polygon></g>
+            <circle cx="42" cy="60" r="17" fill="none" stroke="#ece9f4" stroke-width="11"></circle>
+            <line x1="59" y1="16" x2="59" y2="82.5" stroke="#ece9f4" stroke-width="11"></line>
+          </svg>
+        </div>
+      </div>
+      <div style="font:400 11px Barlow,sans-serif;color:#6b7280;max-width:410px">Light: multiply blends on paper. Dark: screen blends, tint set lifted one step. The d is geometric — ring + ascender — never typeset.</div>
+    </div>
+
+    <div id="5d" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#5d" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">5d</a>Flat fallback — one violet layer, for 16px favicons</div>
+      <div style="width:200px;height:200px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:14px">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <polygon points="16,20 60,8 90,34 84,74 46,90 12,64" fill="#6d3fd1"></polygon>
+          <circle cx="42" cy="58" r="15" fill="none" stroke="#fff" stroke-width="10"></circle>
+          <line x1="57" y1="20" x2="57" y2="77.5" stroke="#fff" stroke-width="10"></line>
+        </svg>
+        <svg width="24" height="24" viewBox="0 0 96 96">
+          <polygon points="16,20 60,8 90,34 84,74 46,90 12,64" fill="#6d3fd1"></polygon>
+          <circle cx="42" cy="58" r="15" fill="none" stroke="#fff" stroke-width="10"></circle>
+          <line x1="57" y1="20" x2="57" y2="77.5" stroke="#fff" stroke-width="10"></line>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+  <div style="margin:26px 0 0;display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 12px 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">Wordmark lockups — one indivisible lowercase word, optional / state tag</div>
+    <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:center">
+      <div style="background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;padding:18px 26px;display:flex;align-items:center;gap:12px">
+        <svg width="34" height="34" viewBox="0 0 96 96"><g style="mix-blend-mode:multiply"><polygon points="{{ polyA }}" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="{{ polyB }}" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="{{ polyC }}" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
+        <span style="font:600 30px/1 'Barlow Condensed',sans-serif;color:#17161c;letter-spacing:.005em">districtry</span>
+      </div>
+      <div style="background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;padding:18px 26px;display:flex;align-items:baseline;gap:8px">
+        <span style="font:600 30px/1 'Barlow Condensed',sans-serif;color:#17161c;letter-spacing:.005em">districtry</span>
+        <span style="font:400 24px/1 'Barlow Condensed',sans-serif;color:#9aa3b2">/ illinois</span>
+      </div>
+      <div style="background:#15131b;border-radius:8px;padding:18px 26px;display:flex;align-items:baseline;gap:8px">
+        <span style="font:600 30px/1 'Barlow Condensed',sans-serif;color:#ece9f4;letter-spacing:.005em">districtry</span>
+        <span style="font:400 24px/1 'Barlow Condensed',sans-serif;color:#746e86">/ chicago</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:40px 44px 32px;border-bottom:1px solid rgba(23,22,28,.08)">
+  <div style="display:flex;align-items:baseline;gap:10px;margin:0 0 20px"><a href="#t1" style="font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#17161c;color:#fff;border-radius:4px;text-decoration:none" id="t1">1</a><span style="font:600 15px 'Barlow Condensed',sans-serif;color:#17161c;letter-spacing:.01em">Five mark directions — district + directory</span></div>
+  <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+
+    <div id="1a" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#1a" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">1a</a>Point-in-polygon — the lookup itself</div>
+      <div style="width:170px;height:170px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="104" height="104" viewBox="0 0 96 96">
+          <polygon points="14,28 48,10 86,26 88,60 60,88 20,78 8,50" fill="none" stroke="#6d3fd1" stroke-width="6"></polygon>
+          <circle cx="50" cy="52" r="9" fill="#6d3fd1"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <div id="1b" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#1b" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">1b</a>Layer stack — the 39-layer panel</div>
+      <div style="width:170px;height:170px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="104" height="104" viewBox="0 0 96 96">
+          <polygon points="48,12 84,30 48,48 12,30" fill="#6d3fd1"></polygon>
+          <polygon points="48,34 84,52 48,70 12,52" fill="#6d3fd1" fill-opacity="0.55"></polygon>
+          <polygon points="48,56 84,74 48,92 12,74" fill="#6d3fd1" fill-opacity="0.28"></polygon>
+        </svg>
+      </div>
+    </div>
+
+    <div id="1c" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#1c" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">1c</a>Monogram d, boundary cut</div>
+      <div style="width:170px;height:170px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="104" height="104" viewBox="0 0 96 96">
+          <circle cx="42" cy="58" r="20" fill="none" stroke="#6d3fd1" stroke-width="12"></circle>
+          <line x1="62" y1="12" x2="62" y2="84" stroke="#6d3fd1" stroke-width="12"></line>
+          <line x1="6" y1="70" x2="92" y2="34" stroke="#f4f2ee" stroke-width="5" stroke-dasharray="9 6"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div id="1d" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#1d" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">1d</a>Partition — one square, four wards</div>
+      <div style="width:170px;height:170px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="104" height="104" viewBox="0 0 96 96">
+          <polygon points="12,12 56,12 56,44 12,44" fill="#6d3fd1"></polygon>
+          <polygon points="60,12 84,12 84,60 60,60" fill="#6d3fd1" fill-opacity="0.55"></polygon>
+          <polygon points="12,48 56,48 56,84 12,84" fill="#6d3fd1" fill-opacity="0.4"></polygon>
+          <polygon points="60,64 84,64 84,84 60,84" fill="#6d3fd1" fill-opacity="0.75"></polygon>
+        </svg>
+      </div>
+    </div>
+
+    <div id="1e" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font:400 11px Barlow,sans-serif;color:#6b7280"><a href="#1e" style="font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(23,22,28,.08);color:#17161c;border-radius:5px;text-decoration:none">1e</a>Translucent layers — carried to round <a href="#t5" style="text-decoration:none">5</a></div>
+      <div style="width:170px;height:170px;background:#fff;border:1px solid rgba(23,22,28,.08);border-radius:8px;display:flex;align-items:center;justify-content:center">
+        <svg width="104" height="104" viewBox="0 0 96 96">
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyA }}" fill="#6d3fd1" fill-opacity="0.5"></polygon></g>
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyB }}" fill="#1d5fd6" fill-opacity="0.45"></polygon></g>
+          <g style="mix-blend-mode:multiply"><polygon points="{{ polyC }}" fill="#b0316e" fill-opacity="0.4"></polygon></g>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;polySpacing&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 0.6, &quot;min&quot;: 0, &quot;max&quot;: 1, &quot;step&quot;: 0.05, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Mark geometry&quot;}, &quot;polyVertices&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 5, &quot;min&quot;: 5, &quot;max&quot;: 10, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Mark geometry&quot;}, &quot;polyRotation&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 100, &quot;min&quot;: -180, &quot;max&quot;: 180, &quot;step&quot;: 5, &quot;unit&quot;: &quot;°&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Mark geometry&quot;}, &quot;groupRotation&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 35, &quot;min&quot;: -180, &quot;max&quot;: 180, &quot;step&quot;: 5, &quot;unit&quot;: &quot;°&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Mark geometry&quot;}}">
+class Component extends DCLogic {
+  rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  poly(seed, cx, cy, r0, phase, n, rotG) {
+    const r = this.rng(seed); const irr = 0.55; const pts = [];
+    const clamp = (v) => Math.max(1.5, Math.min(94.5, v));
+    const cg = Math.cos(rotG), sg = Math.sin(rotG);
+    for (let i = 0; i < n; i++) {
+      const ang = phase + (i * Math.PI * 2) / n + (r() - 0.5) * 0.7 * irr;
+      const rad = r0 * (1 - 0.34 * irr * r());
+      const x = cx + rad * Math.cos(ang), y = cy + rad * Math.sin(ang);
+      const xr = 48 + (x - 48) * cg - (y - 48) * sg;
+      const yr = 48 + (x - 48) * sg + (y - 48) * cg;
+      pts.push(clamp(xr).toFixed(1) + ',' + clamp(yr).toFixed(1));
+    }
+    return pts.join(' ');
+  }
+  renderVals() {
+    const s = this.props.polySpacing ?? 0.3;
+    const n = this.props.polyVertices ?? 7;
+    const rI = (this.props.polyRotation ?? 0) * Math.PI / 180;
+    const rG = (this.props.groupRotation ?? 0) * Math.PI / 180;
+    const off = 26 * s, shrink = 10 * s;
+    return {
+      polyA: this.poly(31, 48 - off * 0.85, 48 - off * 0.45, 42 - shrink, -1.2 + rI, n, rG),
+      polyB: this.poly(52, 48 + off * 0.85, 48 - off * 0.5, 40 - shrink, -0.4 + rI, n, rG),
+      polyC: this.poly(73, 48, 48 + off * 0.9, 38 - shrink, 0.5 + rI, n, rG)
+    };
+  }
+}
+</script>
+</body>
+</html>
