@@ -93,6 +93,11 @@ COUNTY_FIPS = {
     # its Clerk's "Village/City Officials" Word document, sent by e-mail on
     # 2026-08-17 and committed under data/source/raw/.
     "De Witt": "039",
+    # Macoupin's directory is a page that arrives EMPTY and fills itself from a
+    # REST service beside the CMS. The service's address was recorded from a
+    # browser capture on 2026-08-20 — the one step the sandbox could not take —
+    # and needs no browser now that it is known.
+    "Macoupin": "117",
 }
 
 # Office classification. HEAD is the single head of government; BOARD is the
@@ -233,6 +238,11 @@ COUNTY_FLOORS = {
     # municipality and head floors sit at the true value: this source cannot
     # lose a municipality and still be right.
     "De Witt": {"municipalities": 7, "members": 44, "heads": 7},         # 7 / 52 / 7
+    # Macoupin (2026-08-20 live: 27 / 232 / 26). All twenty-seven of the
+    # county's incorporated places with their whole bodies, and all 28 wards of
+    # its eight ward cities carry their number. `heads` is one under the
+    # municipality count because Hettick's presidency is published vacant.
+    "Macoupin": {"municipalities": 24, "members": 190, "heads": 22},     # 27 / 232 / 26
 }
 # Merged floor across all counties supplied. Cook + Will resolve to 156 unique
 # municipalities (6 of Will's 34 are shared with Cook); the pre-tranche
@@ -359,6 +369,7 @@ PRESERVABLE = {
     "marshall": {"kind": "county", "county": "Marshall"},
     "washington": {"kind": "county", "county": "Washington"},
     "dewitt": {"kind": "county", "county": "De Witt"},
+    "macoupin": {"kind": "county", "county": "Macoupin"},
     # City payloads name the municipalities they cover, because the payload
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
@@ -397,12 +408,26 @@ PRESERVABLE = {
 # alone, and no other shipped source (McLean's three ward cities included)
 # claims any of them — verified at its 2026-08-17 build, which printed no
 # both-counties NOTE for it.
+# Macoupin sits BEHIND Sangamon, and one municipality is what that decides:
+# Virden, whose city hall stands in Macoupin but whose plat crosses into
+# Sangamon, so both clerks publish it. This is the rare tie where the hall-county
+# rule that settled Coal Valley and Somonauk points the OTHER way from the
+# reader's interest, and it is not a correctness call at all — the two
+# directories name the same mayor, the same eight aldermen and the same hall,
+# and disagree about nothing. What separates them is what each carries beside
+# the names: Sangamon publishes a direct e-mail AND phone for all nine
+# officeholders, eighteen fields Macoupin's directory does not have, while
+# Macoupin adds two rows Sangamon omits (the city clerk and treasurer). Keeping
+# Sangamon trades two rows for eighteen contacts, which is the better card for
+# somebody trying to reach their alderman. Macoupin's other twenty-six
+# municipalities are its alone.
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
                      "Boone",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
                      "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
                      "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",
                      "Carroll", "Whiteside", "Marshall", "Washington", "De Witt",
+                     "Macoupin",
                      "Lake"]
 
 # ONE municipality at a time, where evidence settles a cross-county tie that
