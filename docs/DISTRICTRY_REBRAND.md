@@ -326,6 +326,36 @@ without questioning it.**
    `<circle r="17" fill="#1d5fd6" stroke="#fff">`. One transform owns shape **and** colour; the
    earlier fill-only swap was deleted so two transforms cannot disagree about what the marker is.
 
+**The marker is a hierarchy, and only its first branch was re-skinned.** `selectPointMarker()`
+walks four cases: inside Chicago → the base marker (now the circle); on Lake Michigan → the Water
+Taxi seal; inside an Illinois county → **that county's seal** where one ships (9 counties) or a
+**county-name badge** otherwise; outside Illinois → the base marker. Two consequences were found
+by reading that chain:
+
+- **The county name badge hardcoded `#0B5394` — the Chicago flag deep blue — inside a JS string**,
+  where no token swap could reach it. Exactly the same class of survival as the flag stripe and
+  the star: a city colour outliving the re-skin because it was written as a literal, not a token.
+  Moved to the data-tier `#1d5fd6` so it matches the circle the legend describes, and its
+  system-font stack moved to Barlow.
+- **Two relationship-legend swatches (`.rel-sw-in`, `.rel-sw-cross`) carried the same literal.**
+  These are illustrative — the outlines the map actually draws take each layer's own colour,
+  darkened — so as Chicago blue they demonstrated a hue this app never draws. Now the data-tier
+  blue, sampling the tier they illustrate.
+
+**The county seals themselves are KEPT, and the open question is the operator's.** They are each
+county's own emblem, not Chicago branding, and for a state-then-national product showing the seal
+of the county under your point is arguably an asset — they also carry researched licensing
+(`icons/source/README.md`, `docs/COUNTY_SEALS_REVIEW.md`). But note the tension the new legend
+makes visible: it says "● Selected point", which is true inside Chicago and outside Illinois,
+while in the rest of Illinois the marker is a seal or a name pill. The design canvas's own answer
+was a single circle everywhere. Retiring or keeping the seal/badge branch is a **product** call,
+not a re-skin one, so it is flagged rather than taken.
+
+Three `#0B5394` uses remain in the preview and are correctly out of scope: the `:root` definition
+(overridden by the skin), a `var(--accent-deep, #0B5394)` fallback that never applies, and the
+police-district / early-voting **map layer** colours — data tier, which the three-tier rule keeps.
+The Districtry token set itself retains `#0b5394` as `--layer-zip`.
+
 **Related finding, NOT changed:** the water-taxi marker (`icons/water-taxi.png`, swapped in when a
 point lands on Lake Michigan) is a third Chicago motif — the Chicago Water Taxi seal. It is a
 deliberate easter egg rather than chrome, so retiring or replacing it is a product call, not a

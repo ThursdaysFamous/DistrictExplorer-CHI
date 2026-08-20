@@ -930,6 +930,46 @@ def build(stamp_text):
         "selection marker",
     )
 
+    # -- county name badge: the marker hierarchy's third branch. A point in an
+    #    Illinois county with no shipped seal gets a name pill, and that pill
+    #    hardcodes #0B5394 — the CHICAGO FLAG deep blue — inside a JS string,
+    #    where no token swap can reach it. Same class of survival as the flag
+    #    stripe and the star: a city colour outliving the re-skin because it
+    #    was written as a literal, not a token. Moved to the data tier so it
+    #    matches the circle marker the legend describes; the system font stack
+    #    goes to Barlow so the pill speaks the app's typeface.
+    html = sub_once(
+        html,
+        "background:#0B5394;color:#ffffff;border:2px solid #ffffff;",
+        "background:#1d5fd6;color:#ffffff;border:2px solid #ffffff;",
+        "county badge colour",
+    )
+    html = sub_once(
+        html,
+        "font:600 11px/1.3 -apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;",
+        "font:600 11px/1.3 Barlow,-apple-system,BlinkMacSystemFont,sans-serif;",
+        "county badge font",
+    )
+
+    # -- relationship-legend swatches: two more Chicago-flag-blue literals.
+    #    These are ILLUSTRATIVE — the outlines the map actually draws take each
+    #    layer's own colour, darkened (see the pin-relationship block), so the
+    #    swatch only demonstrates solid=inside vs dashed=crossing. Left as
+    #    Chicago blue they showed a hue this app never draws; moved to the
+    #    data-tier blue they at least sample the tier they illustrate.
+    html = sub_once(
+        html,
+        ".rel-sw-in { border-top: 3px solid #0B5394; }",
+        ".rel-sw-in { border-top: 3px solid #1d5fd6; }",
+        "rel swatch (inside)",
+    )
+    html = sub_once(
+        html,
+        ".rel-sw-cross { border-top: 3px dashed #0B5394; }",
+        ".rel-sw-cross { border-top: 3px dashed #1d5fd6; }",
+        "rel swatch (crossing)",
+    )
+
     # -- the skin island, last in <head> so it wins the cascade.
     html = sub_once(html, "</head>", SKIN_ISLAND + "</head>", "skin island")
 
