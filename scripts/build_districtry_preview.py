@@ -42,6 +42,7 @@ import sys
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(REPO_ROOT, "index.html")
 OUT = os.path.join(REPO_ROOT, "districtry-app.html")
+FAQ_OUT = os.path.join(REPO_ROOT, "districtry-faq.html")
 
 STAMP_RE = re.compile(r'<span class="preview-stamp">([^<]*)</span>')
 
@@ -103,6 +104,10 @@ SKIN_ISLAND = """<style id="districtry-skin">
     --card-sep: #c9c5d4;
     --card-section-bg: #f8f7fc;
   }
+  /* the Chicago flag-stripe motif is that fork's signature device — recolored
+     by the token swap it reads as meaningless violet bands, and the Districtry
+     design carries no stripe, so the preview hides it */
+  .flag-stripe { display: none; }
   /* masthead goes light (the approved app-shell direction) */
   header.masthead { background: var(--panel); color: var(--ink); border-bottom: 1px solid var(--line); }
   .masthead-star { display: none; }
@@ -130,7 +135,100 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .footer-disclaimer { background: rgba(176, 49, 110, 0.14); }
   .footer-sources a:hover,
   .footer-metros a:hover { background: rgba(109, 63, 209, 0.2); }
+  /* ==== footer elimination (operator-directed, 2026-08-20) ====
+     The redesign gives the map the left and bottom viewport bounds: no
+     document footer, no in-page FAQ (it moves to districtry-faq.html).
+     Both sections are HIDDEN, never removed — the boot script fills
+     #verified-date and binds #feedback-btn / #footer-metros by id, so the
+     load-bearing elements are RELOCATED into the results-panel foot by the
+     transforms and only the husks stay hidden here. */
+  .faq-section, footer.site-footer { display: none; }
+  @media (min-width: 901px) {
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    header.masthead { flex: none; }
+    main.layout { flex: 1 1 auto; min-height: 0; max-width: none; margin: 0; width: 100%; }
+    .map-col { height: 100%; min-height: 0; }
+    #map { height: 100%; min-height: 0; }
+    .results-col { max-height: none; height: 100%; }
+  }
+  /* the panel foot — the footer's surviving content, per the app-shell canvas
+     (disclaimer as a small line at the panel's bottom edge) */
+  .results-col { display: flex; flex-direction: column; }
+  .results-col > * { flex: none; }
+  .districtry-panel-foot {
+    margin-top: auto;
+    padding: 10px 2px 0;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--slate-soft);
+  }
+  .districtry-panel-foot p { margin: 0 0 6px; }
+  .districtry-panel-foot .footer-meta { font-size: 11px; color: var(--slate-soft); margin: 0 0 6px; }
+  .dpf-links { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 8px; }
+  .dpf-links a { color: var(--accent-deep); text-decoration: none; }
+  .dpf-links a:hover { text-decoration: underline; }
+  .districtry-panel-foot .footer-link-btn {
+    font-size: 11.5px;
+    padding: 4px 10px;
+    margin: 0 0 6px;
+    color: var(--accent-deep);
+    background: transparent;
+    border: 1px solid rgba(109, 63, 209, 0.35);
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .districtry-panel-foot .footer-link-btn:hover { background: rgba(109, 63, 209, 0.08); }
+  .districtry-panel-foot .footer-metros { font-size: 11px; }
+  .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
 </style>
+"""
+
+# The FAQ's new standalone home. The extracted .faq-section markup is spliced
+# in verbatim so the two copies (hidden husk in the app page, live page here)
+# can never say different things within one generation.
+FAQ_PAGE_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>districtry / illinois — common questions (unlisted preview)</title>
+<link rel="icon" type="image/svg+xml" href="districtry/icons/favicon.svg">
+<link rel="stylesheet" href="districtry/tokens/districtry.tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--font-body); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 64px; }
+  .mast { display: flex; align-items: baseline; gap: 8px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  .mast .wordmark { font: var(--font-heading-weight) 28px/1 var(--font-heading); letter-spacing: .005em; color: var(--ink); text-decoration: none; }
+  .mast .tag { font: 400 22px/1 var(--font-heading); color: var(--faint); }
+  .back { font-size: 13px; }
+  .back a { color: var(--brand); text-decoration: none; }
+  .faq-section h2 { font: var(--font-heading-weight) 26px/1.2 var(--font-heading); margin: 22px 0 10px; }
+  .faq-section details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow-card); margin: 0 0 10px; padding: 0 16px; }
+  .faq-section summary { cursor: pointer; font-weight: 600; padding: 12px 0; list-style-position: inside; }
+  .faq-section p { margin: 0 0 14px; color: var(--ink-3); }
+  footer { margin-top: 28px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 11.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <a class="wordmark" href="districtry-app.html">districtry</a>
+    <span class="tag">/ illinois</span>
+    <span class="tag">/ faq</span>
+  </div>
+  <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
+  __FAQ_SECTION__
+  <footer>Unlisted re-skin preview. <strong>Not for legal or official use.</strong> Boundary and roster
+  data come from public sources that disclaim legal precision. __STAMP__</footer>
+</div>
+</body>
+</html>
 """
 
 
@@ -176,9 +274,10 @@ def build(stamp_text):
     #    and a leaked URL should unfurl as nothing.
     html = sub_once(
         html,
-        "<title>What district am I in? Find your district — Chicago District Explorer</title>",
+        re.compile(r"<title>[^<]*</title>"),
         "<title>districtry / illinois — working preview (unlisted)</title>",
         "title",
+        regex=True,
     )
     html = sub_once(
         html,
@@ -303,28 +402,90 @@ def build(stamp_text):
         "SW registration",
     )
 
+    # -- footer elimination. The document footer and in-page FAQ are hidden by
+    #    the skin island; their load-bearing elements are CUT from the hidden
+    #    footer and relocated into a new results-panel foot, so the boot
+    #    script's getElementById targets (#verified-date via #footer-meta,
+    #    #feedback-btn, #footer-metros) each still exist exactly once, live.
+    meta_re = re.compile(r'[ ]*<div class="footer-meta" id="footer-meta">.*?</div>\n', re.S)
+    metas = meta_re.findall(html)
+    if len(metas) != 1:
+        sys.exit("build-districtry-preview: FAIL — #footer-meta matched %d times" % len(metas))
+    footer_meta = metas[0].strip()
+    html = meta_re.sub("", html, count=1)
+
+    feedback_btn = '<button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>'
+    html = sub_once(html, "      " + feedback_btn + "\n", "", "feedback button cut")
+
+    metros_re = re.compile(
+        r"[ ]*<!-- ==== ENGINE:BEGIN metro-links-html ==== -->\n.*?<!-- ==== ENGINE:END metro-links-html ==== -->\n",
+        re.S,
+    )
+    metros = metros_re.findall(html)
+    if len(metros) != 1:
+        sys.exit("build-districtry-preview: FAIL — metro-links-html fence matched %d times" % len(metros))
+    # Fences pin content, not placement — the repo's own gaps-html masthead
+    # move is the precedent for relocating a fence block verbatim.
+    metro_links = metros[0].strip()
+    html = metros_re.sub("", html, count=1)
+
+    panel_foot = (
+        '<div class="districtry-panel-foot" id="districtry-panel-foot">\n'
+        "      <p><strong>Not for legal or official use.</strong> Boundary and roster data come from public\n"
+        "      sources that disclaim legal precision — confirm with the relevant government office before\n"
+        "      relying on them for anything official.</p>\n"
+        "      " + footer_meta + "\n"
+        '      <div class="dpf-links">\n'
+        '        <a href="./sources.html">Sources &amp; data layers</a>\n'
+        '        <a href="./districtry-faq.html">Common questions</a>\n'
+        '        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>\n'
+        '        <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">GitHub</a>\n'
+        '        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>\n'
+        '        <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>\n'
+        "      </div>\n"
+        "      " + feedback_btn + "\n"
+        "      " + metro_links + "\n"
+        "    </div>"
+    )
+    html = sub_once(
+        html,
+        '<div id="groups-root" hidden></div>\n  </section>',
+        '<div id="groups-root" hidden></div>\n    ' + panel_foot + "\n  </section>",
+        "panel foot insert",
+    )
+
+    # -- the FAQ moves to its own page; the in-page section stays as a hidden
+    #    husk (CSS) and its markup is extracted verbatim for the new page.
+    faq_re = re.compile(r'<section class="faq-section" aria-labelledby="faq-heading">.*?</section>', re.S)
+    faqs = faq_re.findall(html)
+    if len(faqs) != 1:
+        sys.exit("build-districtry-preview: FAIL — faq-section matched %d times" % len(faqs))
+    faq_html = FAQ_PAGE_TEMPLATE.replace("__FAQ_SECTION__", faqs[0]).replace("__STAMP__", stamp_text)
+
     # -- the skin island, last in <head> so it wins the cascade.
     html = sub_once(html, "</head>", SKIN_ISLAND + "</head>", "skin island")
 
-    return html
+    return html, faq_html
 
 
 def main():
     check = "--check" in sys.argv[1:]
     if check:
-        if not os.path.exists(OUT):
-            sys.exit("build-districtry-preview: FAIL — --check but %s does not exist" % OUT)
+        if not os.path.exists(OUT) or not os.path.exists(FAQ_OUT):
+            sys.exit("build-districtry-preview: FAIL — --check but a committed output is missing")
         committed = io.open(OUT, encoding="utf-8").read()
+        committed_faq = io.open(FAQ_OUT, encoding="utf-8").read()
         m = STAMP_RE.search(committed)
         if not m:
             sys.exit("build-districtry-preview: FAIL — committed preview has no generation stamp")
-        regenerated = build(m.group(1))
-        if regenerated != committed:
+        regenerated, regenerated_faq = build(m.group(1))
+        if regenerated != committed or regenerated_faq != committed_faq:
             sys.exit(
                 "build-districtry-preview: STALE — regenerating from the current index.html "
-                "differs from the committed districtry-app.html. Re-run without --check and commit."
+                "differs from the committed districtry-app.html/districtry-faq.html. "
+                "Re-run without --check and commit."
             )
-        print("build-districtry-preview: OK — committed preview matches a fresh build")
+        print("build-districtry-preview: OK — committed preview + FAQ page match a fresh build")
         return
 
     sha = subprocess.check_output(
@@ -332,11 +493,18 @@ def main():
     ).strip()
     date = subprocess.check_output(["date", "-u", "+%Y-%m-%d"], text=True).strip()
     stamp = "districtry re-skin preview (unlisted) — generated from index.html @ %s on %s" % (sha, date)
-    html = build(stamp)
+    html, faq_html = build(stamp)
     io.open(OUT, "w", encoding="utf-8").write(html)
+    io.open(FAQ_OUT, "w", encoding="utf-8").write(faq_html)
     print(
-        "build-districtry-preview: OK — wrote %s (%d bytes, stamp: %s)"
-        % (os.path.relpath(OUT, REPO_ROOT), len(html.encode("utf-8")), stamp)
+        "build-districtry-preview: OK — wrote %s (%d bytes) + %s (%d bytes, stamp: %s)"
+        % (
+            os.path.relpath(OUT, REPO_ROOT),
+            len(html.encode("utf-8")),
+            os.path.relpath(FAQ_OUT, REPO_ROOT),
+            len(faq_html.encode("utf-8")),
+            stamp,
+        )
     )
 
 
