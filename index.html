@@ -9140,6 +9140,49 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/edgar-county-board-members.json", {}, 2);
   });
 
+  /* Franklin — the 70th county, and the first reached through a THIRD results
+   * vendor: its Clerk publishes on platinumelectionresults.com rather than the
+   * accessliberty/pollresults pair Clark, Crawford, Mercer and Edgar came from.
+   * That vendor serves eight Illinois counties, two of which are still
+   * unserved (Marion, Wayne).
+   *
+   * THREE CERTIFIED ELECTIONS COMPOSE THESE DISTRICTS AND ALL THREE AGREE —
+   * one better than the two-witness standard §2.5.1 asks for. The 2024 and
+   * 2022 Generals tabulate a board contest in every one of the county's 35
+   * precincts, partitioning them 13/13/9 with each precinct claimed exactly
+   * once; the 2026 General Primary reproduces the same three sets and NAMES
+   * the districts in its contest headers, which turns the county's members
+   * page from the only district key into a corroborated one.
+   *
+   * A SHORTCUT THAT LOOKED RIGHT AND WAS NOT: the vendor's precinct ids group
+   * 51xx/61xx/71xx, which reads like a district key. Browning 1 and Browning 3
+   * sit in District 1 while Browning 2 sits in District 2, and the prefixes
+   * interleave across all three — tested against the ballots, and it failed.
+   *
+   * THE ROSTER IS THE COUNTY'S PAGE, not the returns: three members per
+   * district on staggered terms, so any one canvass shows a third of the
+   * board. The page prints a role beside four of the nine, distinguishing the
+   * board's own officers ("Chairman", "Vice Chairman") from committee chairs
+   * by naming the committee — both ship as printed. Its Address column is
+   * every member's HOME address and is never read. */
+  var loadFranklinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-county-outline.json", {}, 2);
+  });
+  function franklinCountyCoverage(point) {
+    return loadFranklinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadFranklinPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-precincts.json", {}, 2);
+  });
+  var loadFranklinBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-county-board-districts.json", {}, 2);
+  });
+  var loadFranklinBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/franklin-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -18054,6 +18097,77 @@ function initChiExplorer() {
           }
         }
       },
+      // Franklin — 3 districts of THREE members each, staggered, dissolved
+      // from the Census 2020 voting districts per a composition three
+      // certified elections agree on exactly (build_franklin_boundaries.py):
+      // the 2024 and 2022 Generals partition all 35 precincts 13/13/9, and the
+      // 2026 General Primary reproduces the same sets while naming the
+      // districts outright. The roster is the county's own members page —
+      // three seats per district on staggered terms means no single canvass
+      // shows the whole board. Role, phone and e-mail ship where the page
+      // prints them; its Address column is every member's home and is never
+      // read.
+      {
+        key: "franklin",
+        coverage: franklinCountyCoverage,
+        loadGeometry: loadFranklinBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadFranklinBoardDistricts(),
+            loadFranklinBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Franklin County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Franklin County Board (official)",
+                   url: "https://franklincountyil.gov/county-board-members/" };
+        },
+        hoverOfficial: {
+          load: loadFranklinBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Peoria — 18 SINGLE-member districts, the largest single-member county
       // board in the app. Boundary live from the county's own open-data org
       // (the adopted 2021-11-30 map, ~10,100 residents per district); roster
@@ -22794,6 +22908,54 @@ function initChiExplorer() {
         primaryLink: function () {
           return { label: "Edgar County Clerk — election results (official)",
                    url: "https://il-edgar.accessliberty.com/pastelections.aspx" };
+        }
+      },
+      // Franklin — 35 precincts, the Census 2020 voting districts. 34 of the
+      // 35 names match the county's own spelling character for character; the
+      // one that differs (CAVE 1, where the county writes Cave) pairs uniquely
+      // at 35 against 35, and the feature carries both spellings so a reader
+      // searching either finds it. The board district rides ON the feature —
+      // the composition is whole-precinct. No polling place: the county
+      // publishes no precinct-to-building pairing as data.
+      {
+        key: "franklin",
+        coverage: franklinCountyCoverage,
+        loadGeometry: loadFranklinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadFranklinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              censusName: findPropCI(props, ["censusname"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          if (result.censusName) {
+            fields.push({ label: "Census spelling", value: String(result.censusName) });
+          }
+          fields.push({ label: "County", value: "Franklin County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Franklin County Clerk — election results (official)",
+                   url: "https://platinumelectionresults.com/turnouts/county/21" };
         }
       },
       // Calhoun — five precincts dissolved from the seven Census 2020 voting

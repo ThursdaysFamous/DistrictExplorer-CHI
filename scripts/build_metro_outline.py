@@ -323,6 +323,15 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # Vermilion behind and encloses neither; Tuscola already
                      # holds Douglas OUTSIDE and Danville takes Vermilion.
                      "045",
+                     # Franklin (2026-08-20), the 70th county and the first
+                     # reached through a THIRD results vendor
+                     # (platinumelectionresults.com, eight Illinois counties).
+                     # It borders Jefferson and Hamilton, both already served,
+                     # so it joins the mainland — no island, and it encloses
+                     # nothing: every one of its unserved neighbours
+                     # (Williamson, Saline, Perry, Jackson) still has unserved
+                     # neighbours of its own.
+                     "055",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -367,6 +376,7 @@ DISPATCH_COUNTY_FIPS = {
     "crawford": "033",
     "mercer": "131",
     "edgar": "045",
+    "franklin": "055",
     # Moultrie is deliberately ABSENT: its board is elected at large, so it has
     # no district geometry, no dispatch entry and no toggle — its members ride
     # the County card via data/app/il-county-commissioners.json. It appears in
@@ -584,6 +594,14 @@ INSIDE = {
     # about four hours. The guard failed the build until the point was moved,
     # which is the whole of its job.
     "Paris (Edgar)": (39.6148, -87.6909),
+    # Benton (Franklin) — the county seat, 2026-08-20, the 57th dispatched
+    # county and the deepest south the mainland has reached. Franklin borders
+    # Jefferson and Hamilton, both already served, so it needs no island
+    # checklist; it encloses nothing either, because each of its unserved
+    # neighbours (Williamson, Saline, Perry, Jackson) still borders unserved
+    # counties of its own. Ava (Jackson) and Shawneetown (Gallatin) stay
+    # OUTSIDE and now sit one county from the line rather than two.
+    "Benton (Franklin)": (37.9967, -88.9203),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),

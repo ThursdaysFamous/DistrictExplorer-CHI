@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**69 of 102 Illinois counties are served** — 58 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 33 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**70 of 102 Illinois counties are served** — 59 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 32 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (69)
+## Served counties (70)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -40,6 +40,7 @@
 | Edgar | 17045 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Edwards | 17047 | County card | at-large — County card | — | 1 — `edwards-county-precincts` (no-source) |
 | Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `effingham-municipal-officials` (no-source) |
+| Franklin | 17055 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Greene | 17061 | County card | at-large — County card | — | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
@@ -93,7 +94,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (33) — gap-recorded, not yet served
+## Researched frontier (32) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -109,7 +110,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Douglas | 17041 | 1 — `douglas-county-board-districts` (no-source) |
 | Fayette | 17051 | 1 — `fayette-county-board-geometry` (no-source) |
 | Ford | 17053 | 1 — `ford-county-board-vintage` (no-source) |
-| Franklin | 17055 | 1 — `franklin-county-board-districts` (no-source) |
 | Gallatin | 17059 | 1 — `gallatin-county-board` (no-source) |
 | Hancock | 17067 | 1 — `pass10-frontier-unasked` (no-source) |
 | Hardin | 17069 | 1 — `hardin-county-board` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 111 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 110 records in the Data gaps panel: `chicago-amenity-phones`.
