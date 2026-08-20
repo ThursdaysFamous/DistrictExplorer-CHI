@@ -66,6 +66,18 @@ Severities (a PUBLISHED link's worst severity is WARN):
     Said softly on purpose: this probe is a plausible cause of a 429, so the
     finding names itself as a suspect. Only a repeat across months means
     anything.
+  * answers nothing — HTTP 200 whose body is empty, a parking page, or a
+    default web-server placeholder                                       [FAIL]
+    The one failure a status check cannot see, and the reason this state
+    exists: on 2026-08-20 four municipality cards linked sites that answered
+    200 perfectly and showed a reader nothing — a GoDaddy domain-for-sale
+    lander (Morris), a completely empty body (Calumet Park), and the stock
+    "IIS Windows Server" placeholder (Chatham and Rochester). A sweep of all
+    406 municipal URLs surfaced exactly those four, every one under 1,200
+    bytes against real front pages of tens of thousands, so the false-positive
+    cost of the size test is close to nothing. Size alone is the trigger; a
+    named marker in the body upgrades the message from "suspiciously small" to
+    naming what it actually is.
   * redirected to site root — a deep path that lands on `/`              [WARN]
     The common soft-404: a CMS forwards a retired deep link to the homepage
     with a 200. Only this subset is detectable; a dead link that lands on a
@@ -150,6 +162,28 @@ GONE_STATUSES = {404, 410, 451}
 # instead, and says plainly that the probe may have provoked it.
 BLOCK_STATUSES = {401, 403}
 RATE_LIMIT_STATUS = 429
+
+# A 200 that shows a reader nothing. Only HTML-ish answers are measured — a
+# small PDF or image is a document, not a hollow page — and only the first
+# few KB are read, so this costs one streamed request per OK link.
+HOLLOW_MAX_BYTES = 1200
+HOLLOW_PEEK_BYTES = 4096
+# Markers that say WHAT the hollow page is. Absence of a marker does not make a
+# tiny page fine; presence just lets the report name it instead of guessing.
+HOLLOW_MARKERS = (
+    ("iis windows server", "the stock IIS placeholder page"),
+    ("welcome to nginx", "the stock nginx placeholder page"),
+    ("apache2 ubuntu default page", "the stock Apache placeholder page"),
+    ("forsale.godaddy", "a GoDaddy domain-for-sale lander"),
+    ("domain is for sale", "a domain-for-sale lander"),
+    ("buy this domain", "a domain-for-sale lander"),
+    ("future home of", "an unconfigured hosting placeholder"),
+    # Checked LAST of the markers, because a parking service usually answers
+    # the first hop with nothing but a script that sends the browser onward —
+    # requests does not follow that, so the body this sees is the redirect
+    # itself. Morris's domain is exactly this shape.
+    ("window.location", "a script-only redirect, not a page"),
+)
 RATE_LIMIT_PAUSE = 8
 
 # ---------------------------------------------------------------------------
@@ -340,6 +374,46 @@ def resolves(host, attempts=3):
     return False, last
 
 
+def hollow_body(url):
+    """Does this 200 actually carry a page? Returns a detail string, or None.
+
+    Reads at most HOLLOW_PEEK_BYTES so a megabyte PDF costs nothing, and
+    measures only HTML-ish answers — a 400-byte SVG or a small PDF is a
+    document doing its job. Content-Length is trusted when the server sends
+    one; otherwise the peeked length is the measurement, which is exact for
+    anything this small.
+    """
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=HTTP_TIMEOUT,
+                            allow_redirects=True, stream=True)
+    except Exception:
+        return None  # the probe's own retry ladder owns transport failures
+    try:
+        ctype = (resp.headers.get("Content-Type") or "").lower()
+        if ctype and "html" not in ctype and "text/plain" not in ctype:
+            return None
+        head = resp.raw.read(HOLLOW_PEEK_BYTES, decode_content=True) or b""
+    except Exception:
+        return None
+    finally:
+        resp.close()
+    declared = resp.headers.get("Content-Length")
+    try:
+        size = int(declared) if declared is not None else len(head)
+    except ValueError:
+        size = len(head)
+    if size > HOLLOW_MAX_BYTES:
+        return None
+    text = head.decode("utf-8", "replace").lower()
+    for marker, what in HOLLOW_MARKERS:
+        if marker in text:
+            return "HTTP 200, %d bytes — %s" % (size, what)
+    if size == 0:
+        return "HTTP 200 with a COMPLETELY EMPTY body"
+    return ("HTTP 200, only %d bytes — too small to be a page, and it carries no "
+            "marker naming what it is" % size)
+
+
 def probe(url, resolved=None):
     """Fetch one URL. Returns a dict; never raises.
 
@@ -422,6 +496,13 @@ def probe(url, resolved=None):
             result = {"state": "root-redirect",
                       "detail": "%s → %s" % (result["detail"], result.get("final")),
                       "final": result.get("final")}
+
+    # Last, because it is the only test that needs the BODY: a link can answer
+    # 200 and still show a reader nothing at all (see the docstring).
+    if result and result["state"] == "ok":
+        hollow = hollow_body(url)
+        if hollow:
+            result = {"state": "hollow", "detail": hollow, "final": result.get("final")}
     return result or {"state": "unreachable", "detail": "no response"}
 
 
@@ -506,6 +587,19 @@ def evaluate(cites, origin, results):
                    if who == AUTHORED
                    else "Fixing it means the publisher correcting their directory, or "
                         "the field being dropped — do NOT guess a replacement.",
+                   where))
+        elif state == "hollow":
+            row(FAIL,
+                "ANSWERS NOTHING (%s). The link is not broken — it is worse than "
+                "broken, because every status check passes while a reader who "
+                "clicks it sees a blank page, a parking lander or a default server "
+                "screen. %s Cited at %s"
+                % (detail,
+                   "Find the real address and update every citation."
+                   if who == AUTHORED
+                   else "Published this way by its own source, so the fix is the "
+                        "publisher correcting their directory — do NOT guess a "
+                        "replacement address.",
                    where))
         elif state == "rate-limited":
             row(WARN,
