@@ -590,7 +590,7 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Henderson County's published web address leads to a holding page, not a county site.",
-      "blocker": "Checked 3 Aug 2026. hendersoncountyil.gov, the domain in the state's clerk directory, returns a 114-byte page whose only content forwards the visitor to a generic parking screen. At roughly 6,000 people Henderson is the smallest county on the frontier, and it became one only because neighbouring McDonough was added the same day. Nothing for it appears in the state map catalogue.",
+      "blocker": "Checked 3 Aug 2026. hendersoncountyil.gov, the domain in the state's clerk directory, returns a 114-byte page whose only content forwards the visitor to a generic parking screen. At roughly 6,000 people Henderson is the smallest county on the frontier, and it became one only because neighbouring McDonough was added the same day. Nothing for it appears in the state map catalogue. RE-MEASURED 2026-08-20 AND THE MECHANISM IS NOW NAMED: hendersoncountyil.gov is not a holding page the county controls, it is a PARKED DOMAIN. It answers 200 with a 114-byte body whose entire content is window.location.href=\"/lander\", and /lander identifies itself as parking (LANDER_SYSTEM=\"PW\", _trfd.push({ap:\"parking\"})), on A record 15.197.148.33. That 114-byte script-only redirect is the exact `hollow` state validate_card_links.py learned to catch this week, and byte-for-byte the same shape as Morris's. Three alternate patterns were tried and none resolves at all (henderson-county-il.gov, hendersoncounty.illinois.gov, hendersoncountyillinois.gov), so there is no county website anywhere to find. WHAT THIS APP SHIPS ON THAT DOMAIN: the Clerk's e-mail, avanarsdale.coclerk@hendersoncountyil.gov, carried in il-county-clerks.json from ISBE. The domain DOES have MX records, so that address plausibly still receives mail even though the web side is parked — the Wabash pattern, where a domain carries mail and serves no page. That was checked rather than assumed, and it is the reason this record does not claim the Clerk is unreachable.",
       "wanted": "Whether the county has a website at all, and whether its board districts and precincts exist as map data. Its clerk has a working e-mail."
     },
     
@@ -5205,6 +5205,53 @@ members page groups Districts 1-3.
 **The rule to carry forward:** a name mismatch is a hypothesis, not a verdict. Before recording a
 county as re-precincted, check it against these four causes — and record which one you ruled out,
 because "the names differ" turned out to be wrong ten times in one sweep.
+
+### The app ships 1,602 e-mail addresses and no gate checks one of them (found 2026-08-20)
+
+Found while re-measuring Henderson, whose published web address turns out to be a PARKED DOMAIN —
+`hendersoncountyil.gov` answers 200 with a 114-byte body that is nothing but
+`window.location.href="/lander"`, and `/lander` identifies itself as parking (`LANDER_SYSTEM="PW"`,
+`_trfd.push({ap:"parking"})`). That is the `hollow` state `validate_card_links.py` learned to catch this
+week, and the same 114-byte script-only-redirect shape as Morris. The county's clerk e-mail that this app
+SHIPS — `avanarsdale.coclerk@hendersoncountyil.gov`, from `il-county-clerks.json` — sits on that domain.
+
+**Which raised the general question, and the answer is a surface nothing guards.** `validate_card_links.py`
+extracts exactly two things: `url: "http…"` and `href="http…"`. The app also ships **1,602 e-mail addresses
+across 480 domains** in `data/app/` — more addresses than the ~1,230 URLs the gate does check — and not one
+of them is verified by anything.
+
+**Measured, and the measurement's first answer was wrong in a way worth recording.** Resolving all 480
+domains by A record leaves 33 that do not resolve, including `kanecoboard.org` (25 Kane board addresses) and
+`board.wincoil.gov` (20 Winnebago board addresses). Reporting those as dead would have been a false alarm on
+45 officials: **an A record is the wrong test for a mail domain.** Re-tested for MX over DNS-over-HTTPS,
+**23 of the 33 route mail perfectly well and simply have no website** — a mail-only domain is normal, not
+broken. Only **10 have no MX at all**, and those 10 addresses genuinely cannot receive mail:
+`cityofalton.il.gov`, `offallon.org`, `sugargroveil.org`, `southerview.us`, `gmail.org`, `hormil.xom`,
+`vilageofjerome.com`, `villaegofgrandview.gov`, `villageofgrandvew.gov` (nine in `municipal-officials.json`)
+and `washingtonco.illnois.gov` (one in `washington-county-board-members.json`). Six are plainly transcription
+slips — `gmail.org` for gmail.com, `.xom` for `.com`, `vilage`/`villaeg` for village, `grandvew` for
+grandview, `illnois` for illinois.
+
+**Whose slips, checked rather than assumed — and the first check pointed the wrong way.** Washington's
+archived Blue Book contains `illnois` zero times and `illinois` 71, with `doug.bening@washingtonco.illinois.gov`
+spelled correctly, which reads as proof the parser corrupted it. It is not: the Blue Book feeds the MUNICIPAL
+roster, while the board roster is scraped from the county's own `/county-board/` page — and that page carries
+`doug.bening@washingtonco.illnois.gov`, once, against 175 correct spellings of illinois elsewhere on it. So
+the app is faithfully shipping the county's own typo, which is the Shelby `distric1-2@` precedent and correct
+behaviour under the honesty rules.
+
+**The judgement this leaves, which is a decision rather than a fix.** Shelby's typo was in the LOCAL PART of a
+real domain, so mail bounces to a real server. These ten are typos in the DOMAIN, so mail cannot be attempted
+at all — a reader who clicks gets silence. Shipping a contact that provably cannot receive mail is faithful to
+the source and useless to the reader, and the repo already has a precedent for exactly that tension: Boone's
+Gramkowski phone, where two publishers disagreed and the build shipped NEITHER, discovering it by comparison
+at build time so it retires itself when either side fixes it.
+
+**Proposed guard, matching the `hollow` addition.** Extract e-mail domains alongside URLs, resolve MX once per
+domain with retries (never A — that is the false-alarm trap above, and it would have condemned Kane and
+Winnebago), and fail on a domain with no MX. It is ~10 findings against 480 domains today, so the signal is
+small and specific rather than a monthly wall. It also cannot calcify: a county fixing its page clears the
+finding by itself.
 
 ### ISBE's County Officers Book — a statewide chair source nothing here reads (found 2026-08-20)
 
