@@ -258,35 +258,39 @@ SKIN_ISLAND = """<style id="districtry-skin">
     transform: none;
     text-decoration: none;
   }
-  /* header right cluster: the stat row and the actions group ride one line */
-  .districtry-header-right {
+  /* panel header bar: coords + Share on the left, the counts flush right —
+     across from the Share button, at the page's own right edge. */
+  .districtry-panel-head {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-left: auto;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    gap: 12px;
+    padding: 4px 0 12px;
+    margin: 0 0 12px;
+    border-bottom: 1px solid var(--line);
+    min-height: 30px;
   }
-  .districtry-stats { font-size: 12.5px; color: var(--slate); white-space: nowrap; }
-  .districtry-stats a { color: var(--accent-deep); text-decoration: none; }
-  .districtry-stats a:hover { text-decoration: underline; }
+  .districtry-stats {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--slate-soft);
+    white-space: nowrap;
+  }
   /* the selected-point chip becomes the results panel's header row (keep
      position:relative — it anchors the engine's share popover) */
-  .results-col > .selected-point-chip {
+  .districtry-panel-head .selected-point-chip {
     background: var(--panel);
     color: var(--ink);
     box-shadow: none;
     border-radius: 0;
-    border-bottom: 1px solid var(--line);
-    padding: 4px 0 12px;
-    margin: 0 0 12px;
+    padding: 0;
+    margin: 0;
   }
-  .results-col > .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: rgba(109, 63, 209, 0.35); }
+  .districtry-panel-head .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: rgba(109, 63, 209, 0.35); }
   /* The share popover opens UPWARD off the chip because the chip used to sit
      at the map's bottom-left. Anchored at the panel's TOP that put the card
      above the viewport — open, unreachable, invisible. In the panel it opens
      downward and is clamped to the panel's width. */
-  .results-col > .selected-point-chip .share-popover {
+  .districtry-panel-head .selected-point-chip .share-popover {
     top: calc(100% + 8px);
     bottom: auto;
     left: 0;
@@ -417,7 +421,7 @@ FAQ_PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>districtry / illinois — common questions (unlisted preview)</title>
+<title>districtry / il — common questions (unlisted preview)</title>
 <link rel="icon" type="image/svg+xml" href="districtry/icons/favicon.svg">
 <link rel="stylesheet" href="districtry/tokens/districtry.tokens.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -442,7 +446,7 @@ FAQ_PAGE_TEMPLATE = """<!DOCTYPE html>
 <div class="wrap">
   <div class="mast">
     <a class="wordmark" href="districtry-app.html">districtry</a>
-    <span class="tag">/ illinois</span>
+    <span class="tag">/ il</span>
     <span class="tag">/ faq</span>
   </div>
   <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
@@ -522,7 +526,7 @@ def build(stamp_text):
     html = sub_once(
         html,
         re.compile(r"<title>[^<]*</title>"),
-        "<title>districtry / illinois — working preview (unlisted)</title>",
+        "<title>districtry / il — working preview (unlisted)</title>",
         "title",
         regex=True,
     )
@@ -623,7 +627,7 @@ def build(stamp_text):
     html = sub_once(
         html,
         '<span class="title-text">Chicago District Explorer</span>',
-        '<span class="title-text">districtry <span class="title-metro">/ illinois</span></span>',
+        '<span class="title-text">districtry <span class="title-metro">/ il</span></span>',
         "wordmark",
     )
     html = sub_once(
@@ -682,9 +686,9 @@ def build(stamp_text):
         "      sources that disclaim legal precision — confirm with the relevant government office before\n"
         "      relying on them for anything official.</p>\n"
         "      " + footer_meta + "\n"
+        # No Sources link here: the masthead pill already carries that door,
+        # and the OSM attribution below is a licence obligation, not a repeat.
         '      <div class="dpf-links">\n'
-        '        <a href="./sources.html">Sources &amp; data layers</a>\n'
-        '        <a href="./districtry-faq.html">Common questions</a>\n'
         '        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>\n'
         '        <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">GitHub</a>\n'
         '        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>\n'
@@ -729,36 +733,34 @@ def build(stamp_text):
         layer_count = str(len(worksheet.get("layers", []))) or layer_count
     except (OSError, ValueError):
         pass
-    #    The stats sit BESIDE the actions group, never inside it: the group is
-    #    a segmented control with overflow:hidden, which clipped the trailing
-    #    "Sources" link when the span was its first child. Both are wrapped in
-    #    one right-aligned cluster so they share a line instead of orphaning
-    #    onto separate rows when the header wraps.
-    actions_re = re.compile(r'([ ]*)(<div class="masthead-actions">.*?\n\1</div>)', re.S)
-    actions = actions_re.findall(html)
-    if len(actions) != 1:
-        sys.exit("build-districtry-preview: FAIL — masthead-actions block matched %d times" % len(actions))
-    indent, actions_block = actions[0]
-    html = actions_re.sub(
-        lambda _m: indent + '<div class="districtry-header-right">\n'
-        + indent + '  <span class="districtry-stats">'
-        + county_count + " counties · " + layer_count
-        + ' layers · <a href="./sources.html">Sources</a></span>\n'
-        + indent + "  " + actions_block.replace("\n", "\n  ") + "\n"
-        + indent + "</div>",
+    #    The FAQ joins the masthead pills (operator-directed) — it was a link
+    #    buried in the panel foot, which is no place for one of the four
+    #    "about the data" doors.
+    html = sub_once(
         html,
-        count=1,
+        '<a class="masthead-action-link" href="https://overberg.co/why/"',
+        '<a class="masthead-action-link" href="./districtry-faq.html">Common questions</a>\n'
+        '      <a class="masthead-action-link" href="https://overberg.co/why/"',
+        "FAQ pill",
     )
 
-    #    (c) The selected-point chip becomes the results panel's header row
-    #    (relocated — #point-chip is filled and un-hidden by the boot script).
+    #    (c) The selected-point chip and the stat row become the results
+    #    panel's header bar: coords + Share on the left, counts flush to the
+    #    page's right edge across from them. The stats live OUTSIDE the chip
+    #    because the chip is hidden until a point is selected and the counts
+    #    are true either way.
     chip = '<div class="selected-point-chip" id="point-chip" hidden></div>'
     html = sub_once(html, "      " + chip + "\n", "", "point chip cut")
     html = sub_once(
         html,
         '<div id="main-content" tabindex="-1"></div>',
-        chip + '\n    <div id="main-content" tabindex="-1"></div>',
-        "point chip into panel",
+        '<div class="districtry-panel-head">\n      '
+        + chip
+        + '\n      <span class="districtry-stats">'
+        + county_count + " counties · " + layer_count + " layers</span>\n"
+        + "    </div>\n"
+        + '    <div id="main-content" tabindex="-1"></div>',
+        "panel head (chip + stats)",
     )
 
     #    (b2) Search field: Illinois-wide prompt (the app is no longer a
