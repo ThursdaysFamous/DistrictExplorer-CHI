@@ -116,6 +116,31 @@ SKIN_ISLAND = """<style id="districtry-skin">
     --panel: #ffffff;
     --line: #e8e7ef;
     --line-strong: #c9c5d4;
+    /* --faint was referenced by the map legend from the day it shipped and
+       never defined, so the kicker and the why-line silently fell back to
+       inheriting --slate. Defining it is the fix; the dark block below needs
+       a counterpart for it anyway. */
+    --faint: #9aa3b2;
+    /* Tints, as tokens rather than the fifteen rgba() literals they replace at
+       their WINNING call sites. Light values are the ones already in force, so
+       light mode is unchanged; dark needs violet lifted off a dark ground, and
+       a literal cannot do that. */
+    --dst-brand-tint: rgba(109, 63, 209, 0.10);
+    --dst-brand-tint-soft: rgba(109, 63, 209, 0.07);
+    --dst-brand-line: rgba(109, 63, 209, 0.30);
+    --dst-focus-tint: rgba(109, 63, 209, 0.14);
+    --dst-ink-tint: rgba(23, 22, 28, 0.03);
+    --dst-ink-tint-strong: rgba(23, 22, 28, 0.06);
+    --dst-shadow: rgba(23, 22, 28, 0.14);
+    --dst-shadow-soft: rgba(23, 22, 28, 0.06);
+    --dst-sunken: #ffffff;
+    --dst-raised: #ffffff;
+    --dst-raised-hover: #EEF4F7;
+    /* The UA paints checkboxes, scrollbars and text-field interiors itself and
+       will not read a token to do it. Without this the 39 layer checkboxes
+       stayed bright white squares on the dark cards — the single most visible
+       thing wrong with the first dark build. */
+    color-scheme: light;
     --font-display: 'Barlow Condensed', sans-serif;
     --font-body: 'Barlow', 'Inter Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
     /* --font-mono unchanged: IBM Plex Mono stays self-hosted */
@@ -158,11 +183,11 @@ SKIN_ISLAND = """<style id="districtry-skin">
     background: rgba(109, 63, 209, 0.16);
     border-color: var(--accent);
   }
-  .masthead-action-link { color: var(--slate); background: rgba(23, 22, 28, 0.03); border-color: var(--line); }
+  .masthead-action-link { color: var(--slate); background: var(--dst-ink-tint); border-color: var(--line); }
   .masthead-action-link:hover,
-  .masthead-action-link:focus-visible { color: var(--ink); background: rgba(23, 22, 28, 0.06); border-color: var(--line-strong); }
+  .masthead-action-link:focus-visible { color: var(--ink); background: var(--dst-ink-tint-strong); border-color: var(--line-strong); }
   /* chrome tints the engine hardcodes as Chicago-flag rgba()s */
-  .selected-point-chip .copy-link-btn:hover { background: rgba(109, 63, 209, 0.12); }
+  .selected-point-chip .copy-link-btn:hover { background: var(--dst-brand-tint); }
   .footer-disclaimer { background: rgba(176, 49, 110, 0.14); }
   .footer-sources a:hover,
   .footer-metros a:hover { background: rgba(109, 63, 209, 0.2); }
@@ -211,11 +236,11 @@ SKIN_ISLAND = """<style id="districtry-skin">
     margin: 0 0 6px;
     color: var(--accent-deep);
     background: transparent;
-    border: 1px solid rgba(109, 63, 209, 0.35);
+    border: 1px solid var(--dst-brand-line);
     border-radius: 7px;
     cursor: pointer;
   }
-  .districtry-panel-foot .footer-link-btn:hover { background: rgba(109, 63, 209, 0.08); }
+  .districtry-panel-foot .footer-link-btn:hover { background: var(--dst-brand-tint-soft); }
   .districtry-panel-foot .footer-metros { font-size: 11px; }
   .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
   /* ==== canvas app-shell layout (operator-directed: "Implement Districtry
@@ -227,7 +252,7 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .masthead .map-toolbar { position: static; transform: none; flex: 1 1 320px; max-width: 560px; }
   .masthead .search-shell { position: relative; box-shadow: none; background: transparent; border-color: transparent; padding: 0; }
   .masthead .search-row input[type="text"] {
-    background: var(--panel);
+    background: var(--dst-sunken);
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 9px 12px;
@@ -236,11 +261,19 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .masthead .search-row input[type="text"]:focus-visible {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(109, 63, 209, 0.14);
+    box-shadow: 0 0 0 3px var(--dst-focus-tint);
   }
   .masthead .search-row input[type="text"]::placeholder { color: var(--slate-soft); }
   .masthead .search-row button { background: var(--accent); border-radius: 8px; }
   .masthead .search-row button:hover { background: var(--accent-deep); }
+  /* Three more Chicago-flag literals found while auditing what a token swap
+     cannot reach: the engine hardcodes #08406e / #094377 / rgba(11,83,148,…)
+     as the HOVER state of three violet buttons, so each flashed Chicago navy
+     on approach. Same class as the flag stripe and the star — a city color
+     written as a literal, not a token. */
+  .metro-portal-go:hover,
+  .feedback-actions .btn-primary:hover { background: var(--accent-deep); }
+  .share-copy-btn:hover { background: var(--dst-brand-tint-soft); }
   .masthead .search-extra {
     position: absolute;
     top: calc(100% + 6px);
@@ -249,7 +282,7 @@ SKIN_ISLAND = """<style id="districtry-skin">
     background: var(--panel);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    box-shadow: 0 8px 24px rgba(23, 22, 28, 0.14);
+    box-shadow: 0 8px 24px var(--dst-shadow);
     padding: 8px;
     z-index: 900;
   }
@@ -286,15 +319,15 @@ SKIN_ISLAND = """<style id="districtry-skin">
   }
   .masthead-action-link:hover,
   .masthead-action-link:focus-visible {
-    background: rgba(109, 63, 209, 0.10);
+    background: var(--dst-brand-tint);
     color: var(--accent-deep);
     border-color: transparent;
     text-decoration: none;
     transform: none;
   }
   .masthead-actions .footer-link-btn {
-    border: 1px solid rgba(109, 63, 209, 0.30);
-    background: rgba(109, 63, 209, 0.07);
+    border: 1px solid var(--dst-brand-line);
+    background: var(--dst-brand-tint-soft);
     color: var(--accent-deep);
     font-weight: 600;
     font-size: 12.5px;
@@ -340,7 +373,7 @@ SKIN_ISLAND = """<style id="districtry-skin">
     padding: 0;
     margin: 0;
   }
-  .districtry-panel-head .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: rgba(109, 63, 209, 0.35); }
+  .districtry-panel-head .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: var(--dst-brand-line); }
   /* The share popover opens UPWARD off the chip because the chip used to sit
      at the map's bottom-left. Anchored at the panel's TOP that put the card
      above the viewport — open, unreachable, invisible. In the panel it opens
@@ -370,7 +403,7 @@ SKIN_ISLAND = """<style id="districtry-skin">
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 8px 12px;
-    box-shadow: 0 1px 3px rgba(23, 22, 28, 0.06);
+    box-shadow: 0 1px 3px var(--dst-shadow-soft);
     font-size: 11.5px;
     color: var(--slate);
   }
@@ -412,8 +445,345 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-map-legend .dml-pending { background: #8a62e0; opacity: 0.25; }
   .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
   .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
+
+  /* ==== dark mode (operator-approved 2026-08-20 — the one function this
+     re-skin ADDS rather than maintains) ====================================
+     The design package decided the palette; this block wires it to the real
+     app's token names. Everything is scoped to [data-theme="dark"] on <html>,
+     which a head script sets before first paint, so there is no flash and no
+     media query to keep in sync with the toggle.
+
+     Three things needed explicit rules rather than a token swap, and they are
+     the same lesson this preview keeps re-learning: a COLOR LITERAL IS
+     INVISIBLE TO A TOKEN SWAP. The engine's white card/popover/tooltip
+     surfaces, Leaflet's own chrome, and the map's per-layer stroke colors are
+     all literals — each is handled below, and none of them by editing a
+     fence. */
+  :root[data-theme="dark"] {
+    --accent: #a78bfa;
+    /* "deep" means MORE CONTRAST AGAINST THE GROUND, not darker — on a dark
+       ground that is lighter. Inverting this is why dark-mode links so often
+       come out unreadable. */
+    --accent-deep: #c4b0ff;
+    /* the warm slot keeps its job (Public Safety group dot + focus ring) and
+       its hue: #e879b9 is the design package's own dark value for the mark's
+       third polygon, so the four group dots stay four distinct hues. */
+    --accent-warm: #e879b9;
+    --accent-warm-deep: #f0a3cf;
+    --ink: #ece9f4;
+    --slate: #b6b1c4;
+    --slate-soft: #746e86;
+    --faint: #746e86;
+    --paper: #15131b;
+    --panel: #201d29;
+    --line: rgba(236, 233, 244, 0.10);
+    --line-strong: rgba(236, 233, 244, 0.22);
+    --ok: #5fd39b;
+    --warn: #e0a33a;
+    --err: #f2836f;
+    --dst-brand-tint: rgba(167, 139, 250, 0.18);
+    --dst-brand-tint-soft: rgba(167, 139, 250, 0.13);
+    --dst-brand-line: rgba(167, 139, 250, 0.42);
+    --dst-focus-tint: rgba(167, 139, 250, 0.24);
+    --dst-ink-tint: rgba(236, 233, 244, 0.05);
+    --dst-ink-tint-strong: rgba(236, 233, 244, 0.09);
+    --dst-shadow: rgba(0, 0, 0, 0.55);
+    --dst-shadow-soft: rgba(0, 0, 0, 0.4);
+    --dst-sunken: #15131b;
+    --dst-raised: #262331;
+    --dst-raised-hover: #322e40;
+    color-scheme: dark;
+  }
+  /* ---- the mark: multiply is a light-ground blend. On a dark ground the
+     same three translucent polygons must SCREEN, and the "d" glyph inverts. */
+  /* !important because the blend is an INLINE style attribute on each <g>
+     (multiply is right on light paper), and inline beats every selector —
+     this is the one case the keyword is the correct tool, not a shortcut.
+     Without it the three polygons stayed multiply and vanished into the dark
+     ground, leaving a bare "d". */
+  :root[data-theme="dark"] .districtry-mark g,
+  :root[data-theme="dark"] .districtry-empty-mark g { mix-blend-mode: screen !important; }
+  :root[data-theme="dark"] .districtry-mark g:nth-of-type(1) polygon,
+  :root[data-theme="dark"] .districtry-empty-mark g:nth-of-type(1) polygon { fill: #a78bfa; }
+  :root[data-theme="dark"] .districtry-mark g:nth-of-type(2) polygon,
+  :root[data-theme="dark"] .districtry-empty-mark g:nth-of-type(2) polygon { fill: #6ea8ff; }
+  :root[data-theme="dark"] .districtry-mark g:nth-of-type(3) polygon,
+  :root[data-theme="dark"] .districtry-empty-mark g:nth-of-type(3) polygon { fill: #e879b9; }
+  :root[data-theme="dark"] .districtry-mark circle,
+  :root[data-theme="dark"] .districtry-mark line { stroke: #ece9f4; }
+  :root[data-theme="dark"] .districtry-empty-mark circle,
+  :root[data-theme="dark"] .districtry-empty-mark line { stroke: #746e86; }
+  /* ---- result cards. The card system is its own palette (--card-*), so it
+     needs its own inversion; --card-accent/--card-link ARE the data tier and
+     take the design package's dark data ramp rather than the chrome violet. */
+  :root[data-theme="dark"] .layer-block {
+    --card-accent: #6ea8ff;
+    --card-link: #8db9ff;
+    --card-link-hover: #b6d2ff;
+    --card-ink: #ece9f4;
+    --card-ink-2: #d4d0e0;
+    --card-body-ink: #b6b1c4;
+    --card-muted: #9a94ab;
+    --card-detail-ink: #a9a3ba;
+    --card-hint: #746e86;
+    --card-sep: rgba(236, 233, 244, 0.22);
+    --card-badge-bg: rgba(110, 168, 255, 0.18);
+    --card-pill-bg: rgba(110, 168, 255, 0.10);
+    --card-section-bg: #262331;
+    --card-border: rgba(236, 233, 244, 0.10);
+    --card-row-border: rgba(236, 233, 244, 0.06);
+    --card-btn-border: rgba(110, 168, 255, 0.34);
+    background: #201d29;
+    border-color: rgba(236, 233, 244, 0.10);
+    /* the left stripe carries each layer's OWN map color — the card-to-overlay
+       tie. Half the layer palette is near-black, so on a dark card the tie
+       would simply disappear; color-mix lifts each color toward white while
+       keeping its hue, so the tie survives the theme instead of being traded
+       for a uniform blue. */
+    border-left-color: color-mix(in srgb, var(--layer-accent, var(--card-accent)) 62%, #ffffff);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4),
+      0 3px 14px -4px color-mix(in srgb, var(--layer-accent, var(--card-accent)) 30%, transparent);
+  }
+  :root[data-theme="dark"] .layer-block-head { background: #262331; }
+  :root[data-theme="dark"] .layer-card-body .retry-btn,
+  :root[data-theme="dark"] .card-footer .pin-parent-btn,
+  :root[data-theme="dark"] .school-chip,
+  :root[data-theme="dark"] .school-show-all { background: #262331; }
+  :root[data-theme="dark"] .card-footer .pin-parent-btn:hover { background: #322e40; }
+  :root[data-theme="dark"] .school-chip { border-color: rgba(236, 233, 244, 0.22); }
+  :root[data-theme="dark"] .school-chip-dot { background: #4b4757; }
+  /* error + empty states: #7c2d12 on #201d29 is unreadable, and the states
+     are the one place a card MUST be legible. */
+  [data-theme="dark"] .layer-block:has(> .layer-card-body.state-error) { border-left-color: #f97316; }
+  [data-theme="dark"] .layer-block:has(> .layer-card-body.state-empty) { border-left-color: #4b4757; }
+  [data-theme="dark"] .layer-card-body.state-error { color: #fdba74; }
+  /* ---- app chrome the engine hardcodes as white/near-white surfaces */
+  [data-theme="dark"] .map-col { background: #1c1a24; }
+  [data-theme="dark"] .hover-toggle-btn,
+  [data-theme="dark"] .pin-parent-btn,
+  [data-theme="dark"] .rel-legend,
+  [data-theme="dark"] .rel-unpin-btn { background: var(--dst-raised); }
+  [data-theme="dark"] .hover-toggle-btn { border-color: rgba(236, 233, 244, 0.22); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
+  [data-theme="dark"] .pin-parent-btn { border-color: rgba(110, 168, 255, 0.4); }
+  [data-theme="dark"] .rel-unpin-btn { color: #f2a2a2; border-color: rgba(242, 162, 162, 0.4); }
+  [data-theme="dark"] .rel-unpin-btn:hover { background: #3a2a30; }
+  [data-theme="dark"] #geocode-results button:hover,
+  [data-theme="dark"] #geocode-results button:focus-visible,
+  [data-theme="dark"] .locate-btn:hover,
+  [data-theme="dark"] .kbd-select-btn:hover,
+  [data-theme="dark"] .metro-portal-stay:hover,
+  [data-theme="dark"] .share-popover-close:hover,
+  [data-theme="dark"] .feedback-actions .btn-secondary:hover,
+  [data-theme="dark"] .pin-parent-btn:hover,
+  [data-theme="dark"] .hover-toggle-btn:hover { background: var(--dst-raised-hover); }
+  [data-theme="dark"] .share-popover { background: var(--panel); border-color: rgba(236, 233, 244, 0.14); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); }
+  [data-theme="dark"] .share-popover-url,
+  [data-theme="dark"] .share-popover-embed { background: var(--dst-sunken); border-color: rgba(236, 233, 244, 0.16); color: var(--slate); }
+  [data-theme="dark"] .layer-toggle-btn,
+  [data-theme="dark"] .search-shell,
+  [data-theme="dark"] .map-tile-banner { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55); }
+  /* the pinned-parent outline is deliberately near-black (#14181C) so it reads
+     as neutral over a light basemap; over a dark one it is simply gone. */
+  [data-theme="dark"] .rel-parent-outline { stroke: #ece9f4; }
+  [data-theme="dark"] .rel-sw-parent { border-top-color: #ece9f4; }
+  [data-theme="dark"] .rel-sw-in { border-top-color: #6ea8ff; }
+  [data-theme="dark"] .rel-sw-cross { border-top-color: #6ea8ff; }
+  /* ---- the hover popup is its own small design and all of it is literal */
+  [data-theme="dark"] .hover-popup .leaflet-popup-content-wrapper {
+    background: var(--panel);
+    color: var(--ink);
+    border-color: rgba(236, 233, 244, 0.12);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+  [data-theme="dark"] .hover-popup .leaflet-popup-tip {
+    background: var(--panel);
+    border-right-color: rgba(236, 233, 244, 0.12);
+    border-bottom-color: rgba(236, 233, 244, 0.12);
+  }
+  [data-theme="dark"] .hover-popup.hover-below .leaflet-popup-tip {
+    border-left-color: rgba(236, 233, 244, 0.12);
+    border-top-color: rgba(236, 233, 244, 0.12);
+  }
+  [data-theme="dark"] .hover-row { border-bottom-color: rgba(236, 233, 244, 0.07); }
+  [data-theme="dark"] .hover-dot-ring { background: var(--panel); border-color: rgba(236, 233, 244, 0.3); }
+  [data-theme="dark"] .hover-row-label,
+  [data-theme="dark"] .hover-poi-addr-text { color: #9a94ab; }
+  [data-theme="dark"] .hover-row-who,
+  [data-theme="dark"] .hover-poi-name,
+  [data-theme="dark"] .hover-has-poi .hover-row-own .hover-row-who { color: var(--ink); }
+  [data-theme="dark"] .hover-has-poi .hover-row-who,
+  [data-theme="dark"] .hover-has-poi .hover-row-own .hover-row-label { color: var(--slate); }
+  [data-theme="dark"] .hover-foot { border-top-color: rgba(236, 233, 244, 0.1); color: var(--faint); }
+  [data-theme="dark"] .hover-pin-eye { background: var(--panel); }
+  [data-theme="dark"] .hover-pin-sm { background: var(--faint); }
+  /* ---- Leaflet's own chrome (leaflet.css is inlined in this app, so these
+     are ordinary literals in the same stylesheet, not a third-party file) */
+  [data-theme="dark"] .leaflet-container { background: #15131b; }
+  [data-theme="dark"] .leaflet-tile { filter: brightness(1.35) saturate(0.92); }
+  [data-theme="dark"] .leaflet-bar a { background-color: var(--dst-raised); color: var(--ink); border-bottom-color: rgba(236, 233, 244, 0.12); }
+  [data-theme="dark"] .leaflet-bar a:hover,
+  [data-theme="dark"] .leaflet-bar a:focus { background-color: var(--dst-raised-hover); color: var(--ink); }
+  [data-theme="dark"] .leaflet-bar a.leaflet-disabled { background-color: var(--panel); color: #5b5668; }
+  [data-theme="dark"] .leaflet-touch .leaflet-bar,
+  [data-theme="dark"] .leaflet-touch .leaflet-control-layers { border-color: rgba(236, 233, 244, 0.18); }
+  [data-theme="dark"] .leaflet-container .leaflet-control-attribution { background: rgba(21, 19, 27, 0.82); color: #9a94ab; }
+  [data-theme="dark"] .leaflet-control-attribution a { color: var(--slate); }
+  [data-theme="dark"] .leaflet-tooltip { background-color: var(--dst-raised); border-color: rgba(236, 233, 244, 0.14); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+  [data-theme="dark"] .leaflet-tooltip-top:before { border-top-color: var(--dst-raised); }
+  [data-theme="dark"] .leaflet-tooltip-bottom:before { border-bottom-color: var(--dst-raised); }
+  [data-theme="dark"] .leaflet-tooltip-left:before { border-left-color: var(--dst-raised); }
+  [data-theme="dark"] .leaflet-tooltip-right:before { border-right-color: var(--dst-raised); }
+  [data-theme="dark"] .leaflet-popup-content-wrapper,
+  [data-theme="dark"] .leaflet-popup-tip { background: var(--panel); color: var(--ink); }
+  [data-theme="dark"] .leaflet-div-icon { background: var(--panel); border-color: rgba(236, 233, 244, 0.3); }
+  /* ---- the map's own data. Forty-odd layer stroke colors are literals in JS,
+     picked for a light basemap; several are near-black. Rather than fork the
+     palette (which would break the card-to-overlay tie and the categorical
+     encoding both), the overlay pane is lifted as a whole: brightness+saturate
+     is a hue-preserving color matrix, so every layer keeps its identity and
+     their relationships to each other. It is NOT paused during pan the way the
+     highlight drop-shadow is (.map-panning) — a color matrix is cheap where a
+     per-frame drop-shadow rasterization is not, and flipping it mid-pan would
+     flash the whole map. */
+  [data-theme="dark"] .leaflet-overlay-pane { filter: brightness(1.45) saturate(1.06); }
+  /* the selection marker joins the dark data ramp. The circle selector cannot
+     touch Chicago's flag star, which is a <path> and stays flag red. */
+  [data-theme="dark"] .chi-star-marker circle { fill: #6ea8ff; }
+  /* ---- masthead + panel chrome that reads off the tint tokens above */
+  [data-theme="dark"] header.masthead { background: var(--panel); border-bottom-color: var(--line); }
+  [data-theme="dark"] .masthead .search-row input[type="text"] { background: var(--dst-sunken); color: var(--ink); }
+  [data-theme="dark"] .masthead .search-extra { background: var(--panel); border-color: var(--line-strong); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55); }
+  [data-theme="dark"] .districtry-map-legend { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45); }
+  [data-theme="dark"] .districtry-map-legend .dml-glow { box-shadow: 0 0 5px 2.5px #a78bfa; }
+  [data-theme="dark"] .districtry-map-legend .dml-pending { background: #a78bfa; }
+  /* the out-of-Illinois wash is a DARKENING in dark mode, so its swatch is a
+     near-black chip that needs a hairline to be visible on the panel at all */
+  [data-theme="dark"] .districtry-map-legend .dml-out { background: #0b0a10; opacity: 1; box-shadow: inset 0 0 0 1px rgba(236, 233, 244, 0.25); }
+  [data-theme="dark"] .districtry-map-legend .dml-dot { background: #6ea8ff; }
+  /* ---- the toggle itself */
+  .districtry-theme-toggle {
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--slate);
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 12.5px;
+    /* the pills beside it inherit line-height 12.5px from the row; a button's
+       UA default is `normal`, which made this one 30px against their 28.5px
+       and pushed the whole app down a pixel. Matched, so adding a control to
+       the row costs no layout. */
+    line-height: 12.5px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .districtry-theme-toggle:hover,
+  .districtry-theme-toggle:focus-visible {
+    background: var(--dst-brand-tint);
+    color: var(--accent-deep);
+  }
+  /* a hairline before it: the four pills to its left are doors to content;
+     this is a control, and the rule says so without adding another box. */
+  .districtry-toggle-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--line-strong);
+    margin: 0 2px;
+    flex: none;
+  }
 </style>
 """
+
+# The theme is decided BEFORE FIRST PAINT, which is the whole reason this is a
+# blocking inline script in the head rather than part of the app boot: deferring
+# one attribute is a flash of the wrong ground on every single load. An explicit
+# choice wins and is remembered; with none on record the OS preference decides,
+# because a reader whose machine already says "dark" should not have to say it
+# again.
+THEME_BOOT_JS = """<script>
+  (function () {
+    var t = "light";
+    try {
+      var stored = localStorage.getItem("districtry-theme");
+      if (stored === "dark" || stored === "light") t = stored;
+      else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) t = "dark";
+    } catch (e) { /* blocked storage (private mode) — light is the safe ground */ }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+"""
+
+# CSS handles every surface that reads a token. This owns the four it cannot:
+# the basemap tiles, the coverage wash (drawn once in JS at idle, so it is
+# RESTYLED rather than re-drawn), the browser chrome color, and the toggle's own
+# label. Inserted at the fork-local tile-layer site so it closes over baseTiles.
+THEME_CONTROLLER_JS = """
+  /* ==== theme controller (preview-only) ================================== */
+  var districtryCoverageLayers = {};
+  var districtryTileKind = "light_all";
+  function styleDistrictryCoverage(dark) {
+    /* values are the design canvas's own (Districtry App.dc.html
+       styleOverlays): outside-Illinois DARKENS on a dark ground where it
+       greys on a light one, and the violet "data coming" wash lifts. */
+    var c = districtryCoverageLayers;
+    if (c.outMask) {
+      c.outMask.setStyle({
+        fillColor: dark ? "#08070c" : "#8d8a97",
+        fillOpacity: c.fallbackMask ? (dark ? 0.32 : 0.35) : (dark ? 0.38 : 0.42)
+      });
+    }
+    if (c.pending) c.pending.setStyle({ fillColor: dark ? "#a78bfa" : "#8a62e0", fillOpacity: dark ? 0.10 : 0.08 });
+    if (c.glow) c.glow.setStyle({ color: dark ? "#a78bfa" : "#ad8cee", opacity: dark ? 0.55 : 0.6 });
+    if (c.stateLine) c.stateLine.setStyle({ color: dark ? "#a78bfa" : "#ad8cee" });
+  }
+  function districtryTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+  function applyDistrictryTheme(theme, remember) {
+    var dark = theme === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    if (remember) {
+      try { localStorage.setItem("districtry-theme", dark ? "dark" : "light"); } catch (e) {}
+    }
+    var kind = dark ? "dark_all" : "light_all";
+    if (kind !== districtryTileKind) {
+      districtryTileKind = kind;
+      baseTiles.setUrl("https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png");
+    }
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#15131b" : "#6d3fd1");
+    styleDistrictryCoverage(dark);
+    var btn = document.querySelector(".districtry-theme-toggle");
+    if (btn) {
+      /* the label names what the button DOES, not the state it is in */
+      btn.textContent = dark ? "Light" : "Dark";
+      btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
+    }
+  }
+  (function () {
+    var btn = document.querySelector(".districtry-theme-toggle");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        applyDistrictryTheme(districtryTheme() === "dark" ? "light" : "dark", true);
+      });
+    }
+    /* the head script already set the attribute; this hands the same decision
+       to the surfaces CSS cannot reach — the tiles above all — without
+       remembering a choice the reader has not made */
+    applyDistrictryTheme(districtryTheme(), false);
+    /* and while no choice is on record, keep following the OS */
+    var mq = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq && mq.addEventListener) {
+      mq.addEventListener("change", function (e) {
+        var chosen = null;
+        try { chosen = localStorage.getItem("districtry-theme"); } catch (err) {}
+        if (chosen !== "dark" && chosen !== "light") applyDistrictryTheme(e.matches ? "dark" : "light", false);
+      });
+    }
+  })();
+"""
+
 
 # The canvas's three-zone coverage treatment, replacing the engine's single
 # out-of-coverage wash AT ITS FORK-LOCAL CALL SITE (the whenIdle line is fork
@@ -471,14 +841,19 @@ COVERAGE_JS = """  function drawDistrictryCoverage() {
         }
       }
       if (stateRing) {
-        L.polygon([world, stateRing], { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.42, interactive: false }).addTo(map);
-        L.polygon([stateRing].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8a62e0", fillOpacity: 0.08, interactive: false }).addTo(map);
+        districtryCoverageLayers.outMask = L.polygon([world, stateRing], { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.42, interactive: false }).addTo(map);
+        districtryCoverageLayers.pending = L.polygon([stateRing].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8a62e0", fillOpacity: 0.08, interactive: false }).addTo(map);
         var closed = stateRing.concat([stateRing[0]]);
-        L.polyline(closed, { pane: "scope-mask", className: "dst-glow", color: "#ad8cee", weight: 9, opacity: 0.6, interactive: false }).addTo(map);
-        L.polyline(closed, { pane: "scope-mask", color: "#ad8cee", weight: 1.5, opacity: 0.9, interactive: false }).addTo(map);
+        districtryCoverageLayers.glow = L.polyline(closed, { pane: "scope-mask", className: "dst-glow", color: "#ad8cee", weight: 9, opacity: 0.6, interactive: false }).addTo(map);
+        districtryCoverageLayers.stateLine = L.polyline(closed, { pane: "scope-mask", color: "#ad8cee", weight: 1.5, opacity: 0.9, interactive: false }).addTo(map);
       } else {
-        L.polygon([world].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.35, interactive: false }).addTo(map);
+        districtryCoverageLayers.outMask = L.polygon([world].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.35, interactive: false }).addTo(map);
+        districtryCoverageLayers.fallbackMask = true;
       }
+      /* the wash draws at idle, long after boot — in dark mode it would
+         otherwise paint its light-ground colors and stay that way until the
+         next toggle */
+      styleDistrictryCoverage(districtryTheme() === "dark");
       var host = document.querySelector(".map-bottom-left");
       if (host && !document.querySelector(".districtry-map-legend")) {
         var legend = document.createElement("div");
@@ -524,13 +899,30 @@ FAQ_PAGE_TEMPLATE = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
+__THEME_BOOT__<style>
+  /* the linked token sheet already carries the [data-theme="dark"] palette, so
+     this page needs only the boot script above and a toggle of its own —
+     a reader who picks dark on the map should not arrive here in daylight */
+  :root { color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
   body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--font-body); }
   .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 64px; }
   .mast { display: flex; align-items: baseline; gap: 8px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
   .mast .wordmark { font: var(--font-heading-weight) 28px/1 var(--font-heading); letter-spacing: .005em; color: var(--ink); text-decoration: none; }
   .mast .tag { font: 400 22px/1 var(--font-heading); color: var(--faint); }
   .back { font-size: 13px; }
+  .faq-theme-toggle {
+    margin-left: auto;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: 500 12.5px var(--font-body);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .faq-theme-toggle:hover,
+  .faq-theme-toggle:focus-visible { background: var(--brand-tint); color: var(--brand); }
   .back a { color: var(--brand); text-decoration: none; }
   .faq-section h2 { font: var(--font-heading-weight) 26px/1.2 var(--font-heading); margin: 22px 0 10px; }
   .faq-section details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow-card); margin: 0 0 10px; padding: 0 16px; }
@@ -545,12 +937,30 @@ FAQ_PAGE_TEMPLATE = """<!DOCTYPE html>
     <a class="wordmark" href="districtry-app.html">districtry</a>
     <span class="tag">/ il</span>
     <span class="tag">/ faq</span>
+    <button type="button" class="faq-theme-toggle" aria-label="Switch to the dark theme">Dark</button>
   </div>
   <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
   __FAQ_SECTION__
   <footer>Unlisted re-skin preview. <strong>Not for legal or official use.</strong> Boundary and roster
   data come from public sources that disclaim legal precision. __STAMP__</footer>
 </div>
+<script>
+  (function () {
+    var btn = document.querySelector(".faq-theme-toggle");
+    function paint() {
+      var dark = document.documentElement.getAttribute("data-theme") === "dark";
+      btn.textContent = dark ? "Light" : "Dark";
+      btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
+    }
+    btn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("districtry-theme", next); } catch (e) {}
+      paint();
+    });
+    paint();
+  })();
+</script>
 </body>
 </html>
 """
@@ -874,6 +1284,45 @@ def build(stamp_text):
     ):
         html = sub_once(html, ">" + emoji_label + "<", ">" + plain + "<", "pill label " + plain)
 
+    #    (b2) Dark mode joins the pill row as a CONTROL, not a fifth door. A
+    #    hairline separates it from the four "about the data" links, and it is
+    #    text-only because the operator's standing instruction for this row is
+    #    that its pills carry no icons — a sun/moon glyph would walk that back.
+    #    The label names what the button DOES ("Dark" while light), which is
+    #    also the design canvas's own semantics.
+    html = sub_once(
+        html,
+        ">Why this exists</a>",
+        ">Why this exists</a>\n"
+        '      <span class="districtry-toggle-sep" aria-hidden="true"></span>\n'
+        '      <button type="button" class="districtry-theme-toggle" '
+        'aria-label="Switch to the dark theme">Dark</button>',
+        "theme toggle button",
+    )
+
+    #    ...and the controller that owns what CSS cannot: tiles, the coverage
+    #    wash, the chrome color. Anchored on the fork-local tile-layer site so
+    #    it closes over baseTiles and map.
+    html = sub_once(
+        html,
+        "  }).addTo(map);\n\n  /* ---------- base-map tile-failure notice (R6) ----------",
+        "  }).addTo(map);\n" + THEME_CONTROLLER_JS +
+        "\n  /* ---------- base-map tile-failure notice (R6) ----------",
+        "theme controller",
+    )
+
+    #    the exports object is assigned OUTSIDE the exports fence (the window
+    #    property is fork-branded), so extending it here touches no engine text.
+    html = sub_once(
+        html,
+        "  window.ChiExplorer = EXPLORER_EXPORTS;",
+        "  window.ChiExplorer = EXPLORER_EXPORTS;\n"
+        "  // preview-only: lets a check drive the theme without a click\n"
+        "  EXPLORER_EXPORTS.setTheme = applyDistrictryTheme;\n"
+        "  EXPLORER_EXPORTS.getTheme = districtryTheme;",
+        "theme exports",
+    )
+
     #    (b3) Geocoder results name the state in full ("…, Springfield,
     #    Illinois, 62701"). The app answers statewide and will answer in more
     #    states, so the label carries the USPS code instead. photonLabel sits
@@ -907,7 +1356,11 @@ def build(stamp_text):
     faqs = faq_re.findall(html)
     if len(faqs) != 1:
         sys.exit("build-districtry-preview: FAIL — faq-section matched %d times" % len(faqs))
-    faq_html = FAQ_PAGE_TEMPLATE.replace("__FAQ_SECTION__", faqs[0]).replace("__STAMP__", stamp_text)
+    faq_html = (
+        FAQ_PAGE_TEMPLATE.replace("__FAQ_SECTION__", faqs[0])
+        .replace("__STAMP__", stamp_text)
+        .replace("__THEME_BOOT__", THEME_BOOT_JS)
+    )
 
     # -- empty state: the Chicago star stays in the DOM (JS writes its `d`)
     #    but is hidden by the skin; the districtry mark is drawn beside it.
@@ -1004,8 +1457,11 @@ def build(stamp_text):
         "rel swatch (crossing)",
     )
 
-    # -- the skin island, last in <head> so it wins the cascade.
+    # -- the skin island, last in <head> so it wins the cascade, and the
+    #    theme boot script immediately after it (it needs the island's rules
+    #    already parsed, and it must run before the first paint).
     html = sub_once(html, "</head>", SKIN_ISLAND + "</head>", "skin island")
+    html = sub_once(html, "</head>", THEME_BOOT_JS + "</head>", "theme boot")
 
     return html, faq_html
 

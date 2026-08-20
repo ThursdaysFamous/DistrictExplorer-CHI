@@ -409,6 +409,115 @@ never run locally. That is pre-existing and unrelated to the change (identical b
 correctness on the seal path was established by diffing the hierarchy instead: the seal call site
 is byte-identical apart from losing its `: makeCountyBadgeDivIcon(name)` alternative.
 
+## Dark mode (operator-approved 2026-08-20 — the one function this re-skin ADDS)
+
+Dark mode was the single item held back when Stage B shipped: everything else in the
+redesign already existed in the app and was *maintained*, while this was genuinely new and
+so waited for its own approval. It now ships in the preview, and only in the preview —
+`index.html` is untouched, as it has been for every round of this work.
+
+**The palette was not invented here.** `districtry/tokens/districtry.tokens.css` has carried a
+complete `[data-theme="dark"]` block since the package landed, and `Districtry App.dc.html`
+already implemented the control, the persistence key, the basemap swap and the tile filter.
+This change wires that decided design to the real app's token names; where the canvas and the
+app disagreed, the canvas won on appearance and the app won on structure.
+
+### What it does
+
+| Surface | Light | Dark |
+|---|---|---|
+| Chrome tokens | paper `#f4f2ee` / panel `#fff` / ink `#17161c` | `#15131b` / `#201d29` / `#ece9f4` |
+| Brand | `--accent #6d3fd1`, `--accent-deep #5730ab` | `#a78bfa`, **`#c4b0ff`** |
+| Warm slot (Safety dot + focus ring) | `#b0316e` | `#e879b9` |
+| Card data tier | `--card-accent #1d5fd6` | `#6ea8ff` |
+| Basemap | CARTO `light_all` | CARTO `dark_all` + `brightness(1.35) saturate(.92)` |
+| Selection marker | circle `#1d5fd6` | circle `#6ea8ff` (Chicago's flag star stays flag red) |
+| Coverage wash | grey outside IL, violet "data coming" | near-black outside IL, lifted violet |
+
+"Deep" means **more contrast against the ground, not darker** — on a dark ground that is
+*lighter*. Inverting that one word is why dark-mode links so often come out unreadable.
+
+### The decisions worth recording
+
+- **Default is the OS preference; an explicit choice wins and persists.** The canvas hard-defaults
+  to light; a reader whose machine already says "dark" should not have to say it again, so the
+  fallback follows `prefers-color-scheme` and only a click writes `districtry-theme` to
+  `localStorage`. While no choice is on record the page keeps following the OS live. One line to
+  reverse if the operator prefers a hard light default for a design-review preview.
+- **The toggle is a control, not a fifth door.** It sits at the end of the masthead pill row behind
+  a hairline, and it is **text-only** — the standing instruction for that row is that its pills
+  carry no icons, and a sun/moon glyph would walk that back. The label names what the button
+  *does* ("Dark" while light), which is also the canvas's own semantics.
+- **Set before first paint.** The theme attribute is written by a blocking inline script in the
+  head, not by the app boot. Deferring one attribute is a flash of the wrong ground on every load.
+- **The FAQ page shares the key.** It already linked the token sheet, so it needed only the same
+  boot script and a toggle; a choice made on the map carries to it and back.
+
+### What a token swap could not reach — again
+
+The recurring defect of this whole project is a **colour written as a literal rather than a token**,
+and dark mode is where every remaining one becomes visible at once. Four classes needed explicit
+rules:
+
+1. **The UA's own controls.** `color-scheme: dark` on the root. Without it the 39 layer checkboxes
+   stayed bright white squares on the dark cards — the single most visible thing wrong with the
+   first dark build, and invisible to any amount of CSS aimed at the app's own selectors.
+2. **The mark's blend mode is an inline `style` attribute**, which no selector outranks, so the
+   three polygons stayed `multiply` and vanished into the dark ground leaving a bare "d".
+   `!important` is the correct tool for exactly this case, and is used only here.
+3. **Leaflet's chrome and the engine's white surfaces** — popups, tooltips, the zoom bar, the
+   attribution strip, the share popover, the hover card, every `#fff`/`#EEF4F7` hover. Leaflet's
+   CSS is inlined in this app, so all of it is ordinary text in one stylesheet.
+4. **The map's own data.** Forty-odd layer stroke colours are JS literals picked for a light
+   basemap. Rather than fork the palette — which would break both the card-to-overlay tie and the
+   categorical encoding — the overlay pane is lifted as a whole with
+   `brightness(1.45) saturate(1.06)`, a hue-preserving colour matrix, so every layer keeps its
+   identity *and* its relationships. It is deliberately **not** paused during pan the way the
+   highlight drop-shadow is (`.map-panning`): a colour matrix is cheap where a per-frame
+   drop-shadow rasterisation is not, and flipping it mid-pan would flash the whole map.
+   **Known limit:** a lift cannot rescue near-black. `#14181C` and `#06375E` stay hard to see on a
+   dark basemap. The honest fix is per-layer dark colours in the layer definitions, which is a
+   data-tier change with its own review — not a re-skin. The one near-black that *is* handled is
+   the pinned-parent outline, which inverts to near-white because it is chrome, not a layer.
+
+### Two things fixed on the way past
+
+Both found by auditing what a token swap cannot reach, both light-mode bugs that predate this
+change:
+
+- **`--faint` was referenced and never defined.** The map legend has used it for its "COVERAGE"
+  kicker and the why-line since the legend shipped, so both silently fell back to inheriting
+  `--slate` and rendered at full label weight. Defined now; the legend's intended hierarchy
+  (kicker and why-line quieter than the labels they qualify) appears for the first time.
+- **Three Chicago-flag literals were still in the hover states of violet buttons** — `#08406e` on
+  the search and metro-portal buttons, `#094377` on the feedback primary, `rgba(11,83,148,…)` on
+  the share-copy button — so each flashed Chicago navy on approach. Same class as the flag stripe
+  and the star.
+
+Fifteen `rgba()` tint literals at their *winning* call sites became tokens (`--dst-brand-tint`,
+`--dst-ink-tint`, `--dst-shadow`, …) so the dark block has something to override. Light values are
+the ones already in force, so light mode is unchanged by the refactor.
+
+### How it was verified
+
+Behaviour, in real Chromium: OS-light-no-choice → light; OS-dark-no-choice → dark with the
+attribute already set before body paint; the toggle flips, persists, and survives reload against a
+contrary OS setting; tiles swap to `dark_all`; `theme-color` follows; the choice carries between
+the app and the FAQ page. No non-network console errors in either theme (the `ERR_CONNECTION_RESET`
+lines are the sandbox's blocked live APIs, identical in both).
+
+Appearance, by **pixel-diffing light mode against the shipped build**: on a clean load exactly two
+regions differ — the masthead pill row (the new toggle, and the four pills shifting left to make
+room) and the legend's kicker and why-line (the `--faint` fix). Nothing else in light mode moved,
+which is what "maintain existing functionality" has to mean in practice. That diff also caught a
+regression worth naming: the toggle was **1px taller** than its neighbours because a `<button>`
+defaults to `line-height: normal` where the row's links inherit `12.5px`, and it pushed the whole
+app down a pixel. Matched, so adding a control to that row now costs no layout at all.
+
+**Not verified here:** the real CARTO basemaps. The sandbox cannot reach the tile CDN, so both
+themes were driven against synthesised flat tiles at CARTO's own ground colours — good enough to
+judge overlay readability, not a substitute for looking at the deployed page.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

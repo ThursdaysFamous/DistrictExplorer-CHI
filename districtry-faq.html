@@ -10,13 +10,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var t = "light";
+    try {
+      var stored = localStorage.getItem("districtry-theme");
+      if (stored === "dark" || stored === "light") t = stored;
+      else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) t = "dark";
+    } catch (e) { /* blocked storage (private mode) — light is the safe ground */ }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 <style>
+  /* the linked token sheet already carries the [data-theme="dark"] palette, so
+     this page needs only the boot script above and a toggle of its own —
+     a reader who picks dark on the map should not arrive here in daylight */
+  :root { color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
   body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--font-body); }
   .wrap { max-width: 760px; margin: 0 auto; padding: 32px 24px 64px; }
   .mast { display: flex; align-items: baseline; gap: 8px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
   .mast .wordmark { font: var(--font-heading-weight) 28px/1 var(--font-heading); letter-spacing: .005em; color: var(--ink); text-decoration: none; }
   .mast .tag { font: 400 22px/1 var(--font-heading); color: var(--faint); }
   .back { font-size: 13px; }
+  .faq-theme-toggle {
+    margin-left: auto;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: 500 12.5px var(--font-body);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .faq-theme-toggle:hover,
+  .faq-theme-toggle:focus-visible { background: var(--brand-tint); color: var(--brand); }
   .back a { color: var(--brand); text-decoration: none; }
   .faq-section h2 { font: var(--font-heading-weight) 26px/1.2 var(--font-heading); margin: 22px 0 10px; }
   .faq-section details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow-card); margin: 0 0 10px; padding: 0 16px; }
@@ -31,6 +59,7 @@
     <a class="wordmark" href="districtry-app.html">districtry</a>
     <span class="tag">/ il</span>
     <span class="tag">/ faq</span>
+    <button type="button" class="faq-theme-toggle" aria-label="Switch to the dark theme">Dark</button>
   </div>
   <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
   <section class="faq-section" aria-labelledby="faq-heading">
@@ -86,7 +115,24 @@
   </details>
 </section>
   <footer>Unlisted re-skin preview. <strong>Not for legal or official use.</strong> Boundary and roster
-  data come from public sources that disclaim legal precision. districtry re-skin preview (unlisted) — generated from index.html @ 0f2767c on 2026-08-20</footer>
+  data come from public sources that disclaim legal precision. districtry re-skin preview (unlisted) — generated from index.html @ 7e5d91f on 2026-08-20</footer>
 </div>
+<script>
+  (function () {
+    var btn = document.querySelector(".faq-theme-toggle");
+    function paint() {
+      var dark = document.documentElement.getAttribute("data-theme") === "dark";
+      btn.textContent = dark ? "Light" : "Dark";
+      btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
+    }
+    btn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("districtry-theme", next); } catch (e) {}
+      paint();
+    });
+    paint();
+  })();
+</script>
 </body>
 </html>
