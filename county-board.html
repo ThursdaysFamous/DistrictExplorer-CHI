@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Google tag (gtag.js) — production host only; keeps local dev + CI out of analytics.
+     Same guard as index.html: hostname-gated and top-level-only. -->
+<script>
+  (function () {
+    if (location.hostname !== 'chidistricts.com') return;
+    if (window.top !== window.self) return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-YPJ570LWJB';
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-YPJ570LWJB');
+  })();
+</script>
+
+<title>Who is my county commissioner? Find your county board district — Chicago District Explorer</title>
+<meta name="description" content="Find your county board or commissioner district by address or ZIP — Cook County and dozens more Illinois counties, with the board members who represent your seat." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://chidistricts.com/county-board.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Chicago District Explorer" />
+<meta property="og:title" content="Who is my county commissioner?" />
+<meta property="og:description" content="Find your county board or commissioner district by address or ZIP — Cook County and dozens more Illinois counties, with the members who represent you." />
+<meta property="og:url" content="https://chidistricts.com/county-board.html" />
+<meta property="og:image" content="https://chidistricts.com/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Who is my county commissioner?" />
+<meta name="twitter:description" content="Find your county board or commissioner district by address or ZIP — Cook County and dozens more Illinois counties, with the members who represent you." />
+<meta name="twitter:image" content="https://chidistricts.com/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://chidistricts.com/county-board.html",
+  "url": "https://chidistricts.com/county-board.html",
+  "name": "Who is my county commissioner? Find your county board district — Chicago District Explorer",
+  "description": "Find your county board or commissioner district by address or ZIP — Cook County and dozens more Illinois counties, with the board members who represent your seat.",
+  "inLanguage": "en-US",
+  "isPartOf": { "@id": "https://chidistricts.com/#website" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Chicago District Explorer", "item": "https://chidistricts.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Who is my county commissioner?" }
+    ]
+  }
+}
+</script>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b3d91">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2341B6E6'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23C8102E'/%3E%3C/svg%3E" />
+
+<style>
+/* Self-hosted subset of index.html's faces — only the weights this page uses
+   (display 900, body 400/600), same files, same unicode-ranges. */
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(fonts/big-shoulders-display-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(fonts/big-shoulders-display-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/inter-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/inter-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Palette + type tokens: the same values index.html's :root carries. This page
+   is deliberately standalone — no shared stylesheet, no build step — so it
+   restates the tokens rather than importing them. */
+:root {
+  --accent: #41B6E6;
+  --accent-deep: #0B5394;
+  --accent-warm: #C8102E;
+  --ink: #14181C;
+  --slate: #55626C;
+  --slate-soft: #87929B;
+  --paper: #F4F7F9;
+  --panel: #FFFFFF;
+  --line: #D9E1E7;
+  --line-strong: #B9C6CE;
+  --font-display: 'Big Shoulders Display', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --focus-ring: 3px solid var(--accent-warm);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent-deep); }
+:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 16px;
+  z-index: 1000;
+  border-radius: 0 0 6px 0;
+}
+.skip-link:focus { left: 0; }
+
+.flag-stripe {
+  height: 10px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent) 0 30%,
+    #fff 30% 70%,
+    var(--accent) 70% 100%
+  );
+}
+
+/* ---- masthead: the same dark bookend index.html opens with ---- */
+header.masthead {
+  background: var(--ink);
+  color: #fff;
+  padding: 18px 20px 22px;
+}
+.masthead-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 28px;
+}
+h1.title { margin: 0; min-width: 0; }
+.title-row { display: flex; align-items: center; gap: 14px; }
+.masthead-star { width: 34px; height: 34px; flex: none; }
+.title-text {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 40px);
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+h1.title small {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #C9D4DB;
+  margin-top: 6px;
+}
+.masthead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+  padding-top: 5px;
+}
+.masthead-actions a {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  color: #C9D4DB;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(217,225,231,0.16);
+  border-radius: 10px;
+  padding: 9px 15px;
+  text-decoration: none;
+  transition: background .14s ease, border-color .14s ease, color .14s ease, transform .14s ease;
+}
+.masthead-actions a:hover,
+.masthead-actions a:focus-visible {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(217,225,231,0.38);
+  transform: translateY(-1px);
+}
+.masthead-actions a:active { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .masthead-actions a { transition: none; }
+  .masthead-actions a:hover { transform: none; }
+}
+@media (max-width: 900px) {
+  header.masthead { padding: 12px 16px 14px; }
+  .masthead-star { width: 24px; height: 24px; }
+  .title-text { font-size: 22px; }
+  h1.title small { font-size: 12px; margin-top: 3px; }
+  .masthead-inner { gap: 10px; }
+  .masthead-actions {
+    justify-content: flex-start;
+    margin-left: 0;
+    padding-top: 2px;
+    width: 100%;
+    gap: 6px;
+  }
+  .masthead-actions a { font-size: 12px; padding: 8px 13px; border-radius: 9px; }
+}
+
+/* ---- page body ---- */
+main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 10px; }
+section { margin: 0 0 34px; }
+h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 24px;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+p { max-width: 74ch; }
+.lede { max-width: 74ch; color: var(--slate); margin: 0 0 14px; font-size: 16px; }
+.lede strong { color: var(--ink); }
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  background: var(--accent-deep);
+  border-radius: 10px;
+  padding: 13px 22px;
+  text-decoration: none;
+  margin: 4px 0 10px;
+}
+.cta:hover, .cta:focus-visible { background: #0a4a84; }
+.cta-note { font-size: 13px; color: var(--slate-soft); margin: 4px 0 0; }
+
+.answer-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  max-width: 78ch;
+  margin: 0 0 16px;
+}
+.answer-card p { margin: 0 0 10px; }
+.answer-card p:last-child { margin-bottom: 0; }
+
+.disclaimer {
+  border-left: 3px solid var(--accent-warm);
+  padding: 12px 16px;
+  background: rgba(200,16,46,0.08);
+  border-radius: 0 6px 6px 0;
+  margin: 0 0 16px;
+  max-width: 78ch;
+  line-height: 1.55;
+}
+
+.related {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  max-width: 900px;
+}
+.related li {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 14px;
+}
+.related a { font-weight: 600; text-decoration: none; }
+.related a:hover { text-decoration: underline; }
+.related span { display: block; font-size: 13px; color: var(--slate); margin-top: 3px; }
+
+/* ---- footer: index.html's dark bookend, trimmed to this page's links ---- */
+footer.site-footer {
+  background: var(--ink);
+  padding: 30px 20px 40px;
+  font-size: 12.5px;
+  color: #C9D4DB;
+}
+.footer-inner { max-width: 1100px; margin: 0 auto; }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+}
+.footer-links a {
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+.footer-links a:hover { color: #fff; text-decoration: underline; }
+footer.site-footer p { max-width: 78ch; margin: 0 0 14px; line-height: 1.55; }
+footer.site-footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<a href="#page-main" class="skip-link">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <h1 class="title">
+      <span class="title-row">
+        <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
+          <polygon fill="var(--accent-warm)" points="50,3 57.6,39.2 92.9,27.5 65,50 92.9,72.5 57.6,60.8 50,97 42.4,60.8 7.1,72.5 35,50 7.1,27.5 42.4,39.2" />
+        </svg>
+        <span class="title-text">Who is my county commissioner?</span>
+      </span>
+      <small>County board &amp; commissioner district lookup — Cook County and dozens more Illinois counties.</small>
+    </h1>
+    <div class="masthead-actions">
+      <a href="./">← Back to the map</a>
+    </div>
+  </div>
+</header>
+<div class="flag-stripe" aria-hidden="true"></div>
+
+<main id="page-main" tabindex="-1">
+
+  <section>
+    <p class="lede"><strong>Every Illinois county is governed by an elected county board or board of
+      commissioners</strong> — and finding your own district, and the person in the seat, usually
+      means digging through your county's website. This map answers it in one click, in Cook County
+      and dozens of other Illinois counties, from the Wisconsin line to the Metro East.</p>
+    <a class="cta" href="./#layers=county-board,county">Look up your county board district →</a>
+    <p class="cta-note">Opens the map with the county and county board layers on. Search your
+      address or ZIP, or tap your location.</p>
+  </section>
+
+  <section>
+    <h2>What the lookup shows</h2>
+    <div class="answer-card">
+      <p>Select any point the Explorer serves and the county board card shows the <strong>board or
+        commissioner district</strong> that covers it and the <strong>members who represent
+        it</strong>, wherever the county publishes a roster — names are cited to their source,
+        never guessed.</p>
+      <p>Some Illinois counties elect their whole board <strong>at large</strong>, with no district
+        map at all. For those, the members appear on the County card instead — you still see who
+        represents you, there's just no boundary to draw.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>If your county isn't covered yet</h2>
+    <p>Coverage grows county by county, and each county joins only when its own data actually
+      answers there — the map never pads its numbers with counties it can't really serve. The
+      standing list of what's missing, and what would close each gap, is the
+      <a href="./#gaps">missing-data panel</a> on the map.</p>
+  </section>
+
+  <section>
+    <h2>Where the boundaries come from</h2>
+    <p>District boundaries and rosters come from each county's own published GIS data and board
+      pages; every county's exact source is on the <a href="sources.html">sources &amp; data
+      layers</a> page. The map is free, requires no login, and sets no tracking cookies.</p>
+    <div class="disclaimer">
+      <strong>Not for legal or official use.</strong> Boundary and roster data come from public
+      sources that explicitly disclaim legal precision. Confirm district assignments and
+      officeholders with the relevant government office before relying on them for anything
+      official.
+    </div>
+  </section>
+
+  <section>
+    <h2>Related lookups</h2>
+    <ul class="related">
+      <li><a href="./">What district am I in?</a><span>Every district for any address the Explorer serves — ward, school board, state, federal.</span></li>
+      <li><a href="police-district.html">What police district am I in?</a><span>Your CPD district, beat, nearest station, and District Council.</span></li>
+      <li><a href="school-board.html">Which school board district am I in?</a><span>Chicago's elected Board of Education districts, with your board member.</span></li>
+    </ul>
+  </section>
+
+</main>
+
+<div class="flag-stripe" aria-hidden="true"></div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>The Chicago District Explorer answers one question: which civic districts contain the point
+      you picked, and who represents you there. It reads public data, cites its sources, and never
+      guesses an officeholder.</p>
+    <div class="footer-links">
+      <a href="./">← Back to the map</a>
+      <a href="sources.html">Sources &amp; data layers</a>
+      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">View source on GitHub</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
