@@ -317,10 +317,11 @@ IGNORE_CAPTIONS = {"ward", "wards", "name", "office"}
 # Appointed department heads, recognised so they can be skipped quietly. A
 # leader row whose title is NOT here warns instead.
 STAFF_TITLE_RE = re.compile(
-    r"^(City Attorney|Village Attorney|Attorney|Budget|Police|Chief|Fire Chief|"
+    r"^(City Attorney|Village Attorney|Attorney|Budget|Police|Chief|Fire|"
     r"Deputy Chief|Director|Community|Planner|Administrative|Plumbing|"
     r"Electrical|Building|Buildings|Inspector|Public Works|Street|Water|"
-    r"Waste|Zoning|Engineer|Marshal|Interim|Custodian|Secretary)\b", re.I)
+    r"Waste|Zoning|Engineer|Marshal|Interim|Custodian|Secretary|Commission)\b",
+    re.I)
 
 HEAD_TITLES = {"mayor", "president"}
 
@@ -705,6 +706,13 @@ def parse(rows, warnings, drops, residences):
                                 % (muni.jurisdiction, left))
             continue
 
+        # --- a hall-header line ------------------------------------------
+        # Tried BEFORE the caption branch: a bare website line ("www.
+        # villageofcaledonia.com") is short, digit-free and comma-free, so the
+        # caption test would otherwise claim it as an office.
+        if hall_mode and parse_hall_line(muni, text, residences):
+            continue
+
         # --- an office caption -------------------------------------------
         if not leaders:
             caption = strip_term_caption(text)
@@ -738,8 +746,6 @@ def parse(rows, warnings, drops, residences):
                 continue
 
         # --- everything else is contact, and only a phone/e-mail is taken --
-        if hall_mode and parse_hall_line(muni, text, residences):
-            continue
         feed_contact(member, text, residences)
 
     if not municipalities:
