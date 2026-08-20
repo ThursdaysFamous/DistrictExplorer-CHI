@@ -42,7 +42,7 @@
 | Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `effingham-municipal-officials` (no-source) |
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Greene | 17061 | County card | at-large — County card | — | none |
-| Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source) |
+| Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
@@ -77,7 +77,7 @@
 | Putnam | 17155 | County card | at-large — County card | — | 1 — `putnam-precinct-geometry` (no-source) |
 | Randolph | 17157 | dispatch | at-large — County card | `county-precinct` | 2 — `randolph-fire-park-library` (no-source); `randolph-precinct-polling` (data-quality) |
 | Rock Island | 17161 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `rock-island-andalusia-township-library` (no-source) |
-| Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 2 — `county-board-office-addresses` (no-source); `sangamon-park-library-districts` (no-source) |
+| Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `municipal-website-dead-ends` (data-quality); `sangamon-park-library-districts` (no-source) |
 | Schuyler | 17169 | County card | at-large — County card | — | none |
 | Scott | 17171 | judicial circuit | no board layer — see gaps | — | 1 — `scott-county-commissioners` (no-source) |
 | Shelby | 17173 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 113 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 114 records in the Data gaps panel: `chicago-amenity-phones`.
