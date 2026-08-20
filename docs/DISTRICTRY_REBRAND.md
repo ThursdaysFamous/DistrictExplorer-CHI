@@ -201,6 +201,34 @@ starve it forever.
      story for chidistricts.com, subdomain scheme (il./chicago.districtry.com — operator call
      for CHI-as-statewide).
 
+## Usability round (operator review of the deployed preview, 2026-08-20)
+
+Six findings from driving the live preview, all fixed in the transform script:
+
+1. **Search field read as a grey box.** `.search-shell` carries a panel fill + drop shadow drawn
+   to float over a basemap; in a header that reads as a grey slab. The shell is now transparent
+   and the INPUT carries the affordance (white, hairline border, violet focus ring).
+2. **Prompt text** is now "Search an Illinois address" — the app stopped being Chicago-only.
+3. **Share popover opened off-screen.** It anchors `bottom: calc(100% + 10px)` — correct while
+   the chip sat at the map's bottom-left, fatal once the chip became the panel's TOP row, where
+   the card rendered above the viewport: open, invisible, unreachable. In the panel it opens
+   downward, clamped to the panel width.
+4. **Pills lost their emoji and became one segmented group** (hairline container, rules between
+   items) rather than three separately-outlined pills. ADOPTION NOTE: the gaps label lives inside
+   the `gaps-html` ENGINE fence — safe to edit in a copy that is never deploy-spliced, but in
+   production that same edit is an engine release, or the label becomes a config string.
+5. **The Layers button appeared to close the MAP.** `.results-col { display: flex }` (added with
+   the panel foot) outranks the UA's `[hidden] { display: none }`, so setting the hidden
+   attribute left the panel on screen while the grid collapsed to one column around it. Scoped
+   to `:not([hidden])` — a reminder that `display` on a class silently defeats `hidden`.
+6. **State names abbreviate to USPS codes** in geocoder results ("…, Springfield, IL, 62701")
+   and in the map legend ("IL" / "Outside IL"). Unknown values pass through unchanged, so a
+   geocoder answering with something unexpected prints what it said.
+
+Self-inflicted regression caught in the same pass: the stat row was the segmented group's first
+child, so `overflow: hidden` clipped its "Sources" link; stats and group are now siblings in one
+right-aligned header cluster.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
