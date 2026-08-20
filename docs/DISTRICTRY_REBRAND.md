@@ -15,7 +15,10 @@ the files are visible in the GitHub tree regardless. Accepted.
 ## Decisions of record
 
 - **Name:** *Districtry* (district + directory) — never "Districtory". One indivisible lowercase
-  word; instance tag suffix (`/ illinois`, `/ chicago`) in Barlow Condensed 400 at 80%.
+  word; instance tag suffix in Barlow Condensed 400 at 80%. **The tag is the TWO-LETTER
+  code, lowercase — `districtry / il`** (operator-directed 2026-08-20, superseding the brand
+  spec's spelled-out `/ illinois` example). Every future state uses its own code the same way;
+  the canvas still shows the old form and owes this correction on the next sync.
 - **Mark:** 5c — geometric lowercase *d* (ring + ascender, never typeset) over three translucent
   irregular polygons whose fills echo the map's layer encoding (brand violet #6d3fd1, data blue
   #1d5fd6, municipality magenta #b0316e). Multiply blends on light, screen on dark; flat
@@ -84,12 +87,9 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
   isolation) green on the re-skin, which is the "every existing function is maintained" proof.
   Refresh after index.html moves: re-run the script and commit;
   `build_districtry_preview.py --check` detects staleness on demand (deliberately not in CI).
-  **Open review items on the skin:** the warm-accent mapping (mark magenta `#b0316e` +
-  derived `#8f2659`, giving a magenta focus ring — alternative is violet for both slots); the
-  empty-state star outline now renders violet via `--accent-deep`; engine-fenced
-  `METRO_NAME + " District Explorer"` strings still show the old name in dialogs (accepted —
-  that is precisely the Phase-3 engine release); the point marker keeps the star *shape*
-  (a shape change is a design call for adoption, not a re-skin).
+  **Open review items on the skin:** all three resolved 2026-08-20 — see "Skin review items"
+  below. Still accepted as-is: engine-fenced `METRO_NAME + " District Explorer"` strings show
+  the old name in dialogs, which is precisely the Phase-3 engine release.
   **Fix round (2026-08-20, post-deploy):** `.flag-stripe` — the Chicago flag's
   accent/white/accent bands above and below the map, that fork's signature device — rendered
   as meaningless violet bands under the token swap; the Districtry design carries no stripe,
@@ -122,15 +122,47 @@ design). Consequences, as built into `districtry-app.html` by the transform scri
   page's head JSON-LD (FAQPage) and `sitemap.xml` entry become REQUIRED at adoption, since
   the production FAQ page must be indexable, unlike this preview.
 
-## Canvas refinement round (2026-08-20) — reviewed from screenshots, PENDING ADOPTION
+## Canvas version history — CORRECTED (2026-08-20, second look)
 
-The design canvas ("Districtry rebrand refinement", artifact
-`a952f418-fd74-409f-a7de-5a0fa3149b01`) has iterated past the zip this repo shipped: the
-editor shows a 5-page canvas with a rebuild round ("merged card/toggle surface with the gray
-out-of-coverage mask … 4 geometry tweaks … regenerated icons/OG, manifest + head snippet").
-**The artifact's shared pin still serves the older single-page publish**, so a code-level
-diff isn't possible yet — move the pin (or export a fresh zip) to sync. Deltas observed
-against the deployed preview, each needing its own approval before adoption:
+An earlier revision of this section claimed the canvas had "iterated past the zip". It had
+not: the Claude Design handoff bundle (uploaded 2026-08-20) is **byte-identical to the
+original package** for every load-bearing file (App canvas, tokens, support.js, Industry
+styles; same sync record 2026-08-19T20:52Z). There is exactly ONE canvas version. The
+refinement rounds visible in the canvas chat (gradient border replacing the rejected dashed
+line, dark-mode dot rings, merged card/toggle rebuild) are the history that PRODUCED the
+2026-08-19 rebuild — they are IN the shipped `/districtry/` canvas, not after it. The
+"5 pages" in the editor are the project's five .dc.html files, not new content.
+
+## Canvas app-shell implementation (operator-directed "Implement Districtry App.dc.html", 2026-08-20 — SHIPPED in the preview)
+
+The canvas's remaining unimplemented design landed in `/districtry-app.html` via the
+transform script, same relocate-don't-delete discipline as the footer round:
+
+1. **Three-zone coverage treatment** — the engine's single out-of-coverage wash is replaced
+   AT ITS FORK-LOCAL CALL SITE (the scope-mask ENGINE fence is untouched;
+   `coverageMaskRings` still gets set from `coverageOutlineRings`, preserving the engine's
+   point-in-coverage test): gray outside Illinois, violet "Data coming — not yet sourced"
+   wash on in-state unserved ground, soft violet glow + hairline on the state border
+   (TIGERweb, fail-fast — an unreachable TIGERweb degrades to the old single-wash), and a
+   map legend. Values are the canvas's own.
+2. **Search relocates into the masthead** — the whole `.map-toolbar` moves verbatim (the
+   geocoder binds `#geocode-form`/`#geocode-input`/… by id); `.search-extra` becomes an
+   absolute dropdown under the header field.
+3. **Header stat row** — "N counties · M layers · Sources", with N read from
+   `docs/COUNTY_STATUS.md` and M from `metro-worksheet.json` at generation time, so a
+   regeneration after a new county updates it.
+4. **Panel header row** — `#point-chip` (coords + Share) relocates from the map's
+   bottom-left to the top of the results panel; `position: relative` kept (it anchors the
+   engine's share popover).
+
+Not implemented, deliberately: the **Dark toggle** (dark mode remains deferred pending its
+own approval) and the **live "N of 39 layers on" counter** (a live-state label needing a JS
+hook into `state.layersOn`; the static stat row covers the header, the counter can join a
+later round). Verified: full Playwright smoke test passes; every relocated id exists exactly
+once; the coverage function schedules with an idle TIMEOUT so a busy main thread can't
+starve it forever.
+
+## Superseded delta list (kept for the record — all now resolved as above)
 
 1. **Statewide coverage visualization** (operator-directed): soft light-violet gradient glow
    on the Illinois border — the dashed border was explicitly rejected — a light violet wash
@@ -168,6 +200,323 @@ against the deployed preview, each needing its own approval before adoption:
      GoatCounter site code, canonicals/og:url/JSON-LD, sitemap, search re-verification, redirect
      story for chidistricts.com, subdomain scheme (il./chicago.districtry.com — operator call
      for CHI-as-statewide).
+
+## Usability round (operator review of the deployed preview, 2026-08-20)
+
+Six findings from driving the live preview, all fixed in the transform script:
+
+1. **Search field read as a grey box.** `.search-shell` carries a panel fill + drop shadow drawn
+   to float over a basemap; in a header that reads as a grey slab. The shell is now transparent
+   and the INPUT carries the affordance (white, hairline border, violet focus ring).
+2. **Prompt text** is now "Search an Illinois address" — the app stopped being Chicago-only.
+3. **Share popover opened off-screen.** It anchors `bottom: calc(100% + 10px)` — correct while
+   the chip sat at the map's bottom-left, fatal once the chip became the panel's TOP row, where
+   the card rendered above the viewport: open, invisible, unreachable. In the panel it opens
+   downward, clamped to the panel width.
+4. **Pills lost their emoji and became one segmented group** (hairline container, rules between
+   items) rather than three separately-outlined pills. ADOPTION NOTE: the gaps label lives inside
+   the `gaps-html` ENGINE fence — safe to edit in a copy that is never deploy-spliced, but in
+   production that same edit is an engine release, or the label becomes a config string.
+5. **The Layers button appeared to close the MAP.** `.results-col { display: flex }` (added with
+   the panel foot) outranks the UA's `[hidden] { display: none }`, so setting the hidden
+   attribute left the panel on screen while the grid collapsed to one column around it. Scoped
+   to `:not([hidden])` — a reminder that `display` on a class silently defeats `hidden`.
+6. **State names abbreviate to USPS codes** in geocoder results ("…, Springfield, IL, 62701")
+   and in the map legend ("IL" / "Outside IL"). Unknown values pass through unchanged, so a
+   geocoder answering with something unexpected prints what it said.
+
+Self-inflicted regression caught in the same pass: the stat row was the segmented group's first
+child, so `overflow: hidden` clipped its "Sources" link; stats and group are now siblings in one
+right-aligned header cluster.
+
+## Header/chrome round (operator review, 2026-08-20)
+
+- **The stat row left the masthead for the results panel's header bar**: coords + Share on the
+  left, `69 counties · 39 layers` flush to the page's right edge across from the Share button.
+  The stats sit OUTSIDE the chip on purpose — the chip is hidden until a point is selected and
+  the counts are true either way.
+- **Both redundant "Sources" links removed** — the trailing link in the stat row and the one in
+  the panel foot. The masthead pill is the single door; the OSM line that remains in the foot is
+  a licence obligation, not a repeat.
+- **The FAQ moved up into the pills** (`Common questions`), so all four "about the data" doors
+  sit together instead of one hiding in the panel foot.
+- **Instance tag is now the two-letter state code** (`districtry / il`) in the wordmark, the
+  page title, and the FAQ page — see the rule under Decisions of record.
+
+Regression caught by looking at the render rather than the diff: moving the chip into a new
+panel-head wrapper broke `.results-col > .selected-point-chip`, which silently un-did BOTH the
+chip's light restyle and the share-popover reposition (the popover would have gone back to
+opening off-screen). Re-scoped to `.districtry-panel-head .selected-point-chip`. A child
+combinator is a promise about depth, and moving markup breaks it quietly.
+
+## Header nav treatment (design review, 2026-08-20)
+
+The segmented bordered group was retired after an options review — seven treatments rendered
+live in the real masthead and compared side by side (artifact
+`ec042cef-798d-477d-ae86-da05b8a03469`). The complaint that started it was correct: a bordered
+container put a second hard rectangle beside the search field and gave four secondary links a
+toolbar's weight.
+
+**Shipped: emphasis matched to stated priority.** `index.html`'s own comment records that the
+gaps button was moved into the masthead *because it is the standing caveat on every answer this
+app gives* — so flattening all four to equal weight contradicted the project's own doctrine.
+The pill is now the shape of an action in this row: **"What data is missing?" wears one
+permanently and inverts to a solid violet fill on hover/focus**; its three peers are bare text
+that earn the same pill shape as a soft tint on approach. One family, two ranks.
+
+Rejected, with reasons worth keeping: a tab rail (form would promise view-switching with an
+active tab; these four open a modal, two pages and an external site); condensed uppercase (most
+on-brand, but four shouted phrases for secondary links, and 130px wider than any alternative);
+fully quiet text for all four (lightest, but under-signals the one item the project wants seen).
+
+## Map legend rebuild (operator-directed, 2026-08-20)
+
+The corner legend was a flat wrapping run of **loose** swatches and labels — nothing bound a
+swatch to the label it defines — so at the 340px cap the wrap fell between the blue dot and
+"Selected point", stranding a swatch from its own text. Seven treatments were rendered over the
+live map and compared (artifact `58ce7ef8-c196-4ae2-86d9-ca854c426cfa`); the operator chose the
+titled vertical list. Each row is now a grid whose swatch and label cannot be separated, so the
+defect is gone **by construction** rather than by picking a lucky width; the row-gap is 2px, not
+the shorthand 8px, because a why-line spaced as far from its own label as from the next row
+belongs to neither. The legend also gained a `COVERAGE` kicker — nothing previously named what
+the colours were a legend *of* — and a rule separating the three coverage zones from the point
+marker, which are two different kinds of fact.
+
+**The copy fix matters more than the layout.** "Data coming — not yet sourced" implied the violet
+counties hold no data at all. They are not empty: measured empirically by selecting a point in
+the Bureau County enclave, **the great majority of layers still answer there** — U.S. House, both
+Illinois chambers, IL Supreme Court, county, municipality, ZIP, school districts and zones, and
+the nearest-N station layers. What actually hides is that county's **own** local districts:
+county board, board of review, judicial subcircuit, fire protection, park, library, precinct,
+township and TIF. The swatch now reads **"Statewide layers only"** over a why-line — **"County
+board and local districts not sourced yet"** — which is the honest distinction and the one a
+reader in an unserved county actually needs. Deliberately **no count is printed**: which layers
+answer varies by county, and a sandboxed measurement is no basis for a live figure.
+
+**Adoption note (Phase 3):** this legend is created by the preview's own coverage script, so it
+is preview-local today. If the three-zone treatment is adopted into production, the legend and
+this copy travel with it, and the wording becomes a fork-owned string — worth a worksheet key so
+NYC/SF can say "Statewide layers only" about their own states without an engine release.
+
+## Skin review items — RESOLVED (2026-08-20)
+
+The three items left open when Stage B shipped, each investigated before deciding. Two were the
+same finding: **Chicago motifs that survived the re-skin because a token swap recolours a shape
+without questioning it.**
+
+1. **Warm accent — KEPT as a distinct hue, and the alternative disproven.** The open question was
+   whether `--accent-warm` should simply become violet ("one hue for both slots"). It must not:
+   the engine paints the **Public Safety group dot** with it (`.group-safety .dot`, index.html
+   ~1612) beside Political (`--accent`), Schools (`#E8A324`) and Geography (`#5C8F6B`). Violet in
+   both slots would render two of the four group dots identically — a categorical encoding
+   collapsing, not a taste call. It is also `--focus-ring`, where contrast *against* violet
+   controls is the point. `#b0316e` stays: it is the mark's own third polygon, so the hue is
+   on-brand without borrowing from the data tier (the police/fire reds are map colours and stay
+   map colours). Measured after the change: the four dots are four distinct hues.
+   `--accent-warm-deep` is referenced **nowhere** in the engine today; the override is kept only
+   so no Chicago flag red survives anywhere in the cascade.
+2. **Empty state — the Chicago flag star retired.** A six-pointed star is that city's emblem;
+   recoloured violet it was an off-brand city motif sitting in a Districtry app. It is now the 5c
+   mark drawn as a quiet outline. The `#star-path-empty` element **stays in the DOM, hidden** —
+   the boot script writes its `d` by id and would throw on a missing node (the same discipline as
+   the masthead star).
+3. **Selection marker — now the canvas's own answer.** The marker kept the star *shape* while
+   only its fill moved to data blue, so a Chicago emblem was still marking "your point". The
+   design canvas had already answered this: a circle with a white ring. It is now
+   `<circle r="17" fill="#1d5fd6" stroke="#fff">`. One transform owns shape **and** colour; the
+   earlier fill-only swap was deleted so two transforms cannot disagree about what the marker is.
+   *(This is the BASE marker. The hierarchy that overrides it was settled separately — see*
+   *"Marker hierarchy" below, which supersedes the badge bullet and the open question in this*
+   *section.)*
+
+**The marker is a hierarchy, and only its first branch was re-skinned.** `selectPointMarker()`
+walks four cases: inside Chicago → the base marker (now the circle); on Lake Michigan → the Water
+Taxi seal; inside an Illinois county → **that county's seal** where one ships (9 counties) or a
+**county-name badge** otherwise; outside Illinois → the base marker. Two consequences were found
+by reading that chain:
+
+- **The county name badge hardcoded `#0B5394` — the Chicago flag deep blue — inside a JS string**,
+  where no token swap could reach it. Exactly the same class of survival as the flag stripe and
+  the star: a city colour outliving the re-skin because it was written as a literal, not a token.
+  Moved to the data-tier `#1d5fd6` so it matches the circle the legend describes, and its
+  system-font stack moved to Barlow. **SUPERSEDED the same day** — the badge is retired
+  outright, so both of those transforms were deleted; see "Marker hierarchy" below.
+- **Two relationship-legend swatches (`.rel-sw-in`, `.rel-sw-cross`) carried the same literal.**
+  These are illustrative — the outlines the map actually draws take each layer's own colour,
+  darkened — so as Chicago blue they demonstrated a hue this app never draws. Now the data-tier
+  blue, sampling the tier they illustrate.
+
+**The county seals themselves are KEPT, and the open question is the operator's.** *(Answered —*
+*see "Marker hierarchy" below. The paragraph is kept for the reasoning that framed the question.)* They are each
+county's own emblem, not Chicago branding, and for a state-then-national product showing the seal
+of the county under your point is arguably an asset — they also carry researched licensing
+(`icons/source/README.md`, `docs/COUNTY_SEALS_REVIEW.md`). But note the tension the new legend
+makes visible: it says "● Selected point", which is true inside Chicago and outside Illinois,
+while in the rest of Illinois the marker is a seal or a name pill. The design canvas's own answer
+was a single circle everywhere. Retiring or keeping the seal/badge branch is a **product** call,
+not a re-skin one, so it is flagged rather than taken.
+
+Three `#0B5394` uses remain in the preview and are correctly out of scope: the `:root` definition
+(overridden by the skin), a `var(--accent-deep, #0B5394)` fallback that never applies, and the
+police-district / early-voting **map layer** colours — data tier, which the three-tier rule keeps.
+The Districtry token set itself retains `#0b5394` as `--layer-zip`.
+
+**Related finding, NOT changed:** the water-taxi marker (`icons/water-taxi.png`, swapped in when a
+point lands on Lake Michigan) is a third Chicago motif — the Chicago Water Taxi seal. It is a
+deliberate easter egg rather than chrome, so retiring or replacing it is a product call, not a
+re-skin one. Flagged here rather than silently changed.
+
+## Marker hierarchy — operator decision (2026-08-20)
+
+The question flagged above came back answered in three parts: **retire the county-name badge in
+favour of the default circle, restore the Chicago flag star for the city in its original colour,
+and leave the seal counties alone.** The re-skin had been treating the four branches as one
+question with one answer; the decision splits them by what each actually says.
+
+The shipped hierarchy in `selectPointMarker()`, in the order the function walks it:
+
+| Where the point lands | Marker | Why |
+|---|---|---|
+| Inside Chicago | **Six-pointed flag star, `#C8102E`** | The city's own emblem, for the city. What was wrong was using it as the default for all of Illinois — not using it at all. |
+| Lake Michigan | Water Taxi seal | Unchanged; still the flagged easter egg (below). |
+| An Illinois county **with** a shipped seal (9) | That county's seal | Unchanged. Each county's own emblem, licence-researched. |
+| Anywhere else — an Illinois county with no seal, or outside Illinois | **Circle, `#1d5fd6`** | The canvas's own answer, and now the genuine default. |
+
+Three consequences worth recording:
+
+- **`makeCountyBadgeDivIcon` is now dead code in the preview** — the definition survives (it is
+  engine text the transform script does not delete) but **zero call sites remain**. Both branches
+  that reached it are gone: the seal branch sets an icon only `if (ok)`, and the no-seal branch is
+  deleted entirely. The two transforms that had recoloured the badge went with it — a colour fix
+  on a shape that can no longer render is drift waiting to happen.
+- **The engine's early return had to be split.** `if (!live() || inCity) return;` conflated "the
+  selection is stale" with "Chicago needs no override", which is precisely why the base icon was
+  doing double duty as both *Chicago's marker* and *everywhere else's*. It is now
+  `if (!live()) return;` followed by `if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }`,
+  so the two facts are separate. `chiFlagStarDivIcon` is defined beside the base icon and reuses
+  the engine's `starPath()`, already in scope.
+- **The legend's "● Selected point" is now a simplification rather than a near-falsehood.** It is
+  literally true for the great majority of Illinois — every county without a seal, which is 60 of
+  the 69 served — and the two exceptions (Chicago's star, the nine seals) are self-evident on
+  sight. Before this change the pill rendered across most of the state, so the legend disagreed
+  with the map nearly everywhere it was read.
+
+Verified in Chromium against the built preview: Chicago Loop → `STAR` fill `#C8102E`;
+Bureau, Madison and Champaign (no seal) → `CIRCLE` fill `#1d5fd6`; a point in Indiana → `CIRCLE`.
+The seal branch is **not reachable in this sandbox** — `chicagoCoverage` awaits
+`loadCommunityAreas()` against Socrata, which is blocked here and never settles, so branches 2–4
+never run locally. That is pre-existing and unrelated to the change (identical before it), so
+correctness on the seal path was established by diffing the hierarchy instead: the seal call site
+is byte-identical apart from losing its `: makeCountyBadgeDivIcon(name)` alternative.
+
+## Dark mode (operator-approved 2026-08-20 — the one function this re-skin ADDS)
+
+Dark mode was the single item held back when Stage B shipped: everything else in the
+redesign already existed in the app and was *maintained*, while this was genuinely new and
+so waited for its own approval. It now ships in the preview, and only in the preview —
+`index.html` is untouched, as it has been for every round of this work.
+
+**The palette was not invented here.** `districtry/tokens/districtry.tokens.css` has carried a
+complete `[data-theme="dark"]` block since the package landed, and `Districtry App.dc.html`
+already implemented the control, the persistence key, the basemap swap and the tile filter.
+This change wires that decided design to the real app's token names; where the canvas and the
+app disagreed, the canvas won on appearance and the app won on structure.
+
+### What it does
+
+| Surface | Light | Dark |
+|---|---|---|
+| Chrome tokens | paper `#f4f2ee` / panel `#fff` / ink `#17161c` | `#15131b` / `#201d29` / `#ece9f4` |
+| Brand | `--accent #6d3fd1`, `--accent-deep #5730ab` | `#a78bfa`, **`#c4b0ff`** |
+| Warm slot (Safety dot + focus ring) | `#b0316e` | `#e879b9` |
+| Card data tier | `--card-accent #1d5fd6` | `#6ea8ff` |
+| Basemap | CARTO `light_all` | CARTO `dark_all` + `brightness(1.35) saturate(.92)` |
+| Selection marker | circle `#1d5fd6` | circle `#6ea8ff` (Chicago's flag star stays flag red) |
+| Coverage wash | grey outside IL, violet "data coming" | near-black outside IL, lifted violet |
+
+"Deep" means **more contrast against the ground, not darker** — on a dark ground that is
+*lighter*. Inverting that one word is why dark-mode links so often come out unreadable.
+
+### The decisions worth recording
+
+- **Default is the OS preference; an explicit choice wins and persists.** The canvas hard-defaults
+  to light; a reader whose machine already says "dark" should not have to say it again, so the
+  fallback follows `prefers-color-scheme` and only a click writes `districtry-theme` to
+  `localStorage`. While no choice is on record the page keeps following the OS live. One line to
+  reverse if the operator prefers a hard light default for a design-review preview.
+- **The toggle is a control, not a fifth door.** It sits at the end of the masthead pill row behind
+  a hairline, and it is **text-only** — the standing instruction for that row is that its pills
+  carry no icons, and a sun/moon glyph would walk that back. The label names what the button
+  *does* ("Dark" while light), which is also the canvas's own semantics.
+- **Set before first paint.** The theme attribute is written by a blocking inline script in the
+  head, not by the app boot. Deferring one attribute is a flash of the wrong ground on every load.
+- **The FAQ page shares the key.** It already linked the token sheet, so it needed only the same
+  boot script and a toggle; a choice made on the map carries to it and back.
+
+### What a token swap could not reach — again
+
+The recurring defect of this whole project is a **colour written as a literal rather than a token**,
+and dark mode is where every remaining one becomes visible at once. Four classes needed explicit
+rules:
+
+1. **The UA's own controls.** `color-scheme: dark` on the root. Without it the 39 layer checkboxes
+   stayed bright white squares on the dark cards — the single most visible thing wrong with the
+   first dark build, and invisible to any amount of CSS aimed at the app's own selectors.
+2. **The mark's blend mode is an inline `style` attribute**, which no selector outranks, so the
+   three polygons stayed `multiply` and vanished into the dark ground leaving a bare "d".
+   `!important` is the correct tool for exactly this case, and is used only here.
+3. **Leaflet's chrome and the engine's white surfaces** — popups, tooltips, the zoom bar, the
+   attribution strip, the share popover, the hover card, every `#fff`/`#EEF4F7` hover. Leaflet's
+   CSS is inlined in this app, so all of it is ordinary text in one stylesheet.
+4. **The map's own data.** Forty-odd layer stroke colours are JS literals picked for a light
+   basemap. Rather than fork the palette — which would break both the card-to-overlay tie and the
+   categorical encoding — the overlay pane is lifted as a whole with
+   `brightness(1.45) saturate(1.06)`, a hue-preserving colour matrix, so every layer keeps its
+   identity *and* its relationships. It is deliberately **not** paused during pan the way the
+   highlight drop-shadow is (`.map-panning`): a colour matrix is cheap where a per-frame
+   drop-shadow rasterisation is not, and flipping it mid-pan would flash the whole map.
+   **Known limit:** a lift cannot rescue near-black. `#14181C` and `#06375E` stay hard to see on a
+   dark basemap. The honest fix is per-layer dark colours in the layer definitions, which is a
+   data-tier change with its own review — not a re-skin. The one near-black that *is* handled is
+   the pinned-parent outline, which inverts to near-white because it is chrome, not a layer.
+
+### Two things fixed on the way past
+
+Both found by auditing what a token swap cannot reach, both light-mode bugs that predate this
+change:
+
+- **`--faint` was referenced and never defined.** The map legend has used it for its "COVERAGE"
+  kicker and the why-line since the legend shipped, so both silently fell back to inheriting
+  `--slate` and rendered at full label weight. Defined now; the legend's intended hierarchy
+  (kicker and why-line quieter than the labels they qualify) appears for the first time.
+- **Three Chicago-flag literals were still in the hover states of violet buttons** — `#08406e` on
+  the search and metro-portal buttons, `#094377` on the feedback primary, `rgba(11,83,148,…)` on
+  the share-copy button — so each flashed Chicago navy on approach. Same class as the flag stripe
+  and the star.
+
+Fifteen `rgba()` tint literals at their *winning* call sites became tokens (`--dst-brand-tint`,
+`--dst-ink-tint`, `--dst-shadow`, …) so the dark block has something to override. Light values are
+the ones already in force, so light mode is unchanged by the refactor.
+
+### How it was verified
+
+Behaviour, in real Chromium: OS-light-no-choice → light; OS-dark-no-choice → dark with the
+attribute already set before body paint; the toggle flips, persists, and survives reload against a
+contrary OS setting; tiles swap to `dark_all`; `theme-color` follows; the choice carries between
+the app and the FAQ page. No non-network console errors in either theme (the `ERR_CONNECTION_RESET`
+lines are the sandbox's blocked live APIs, identical in both).
+
+Appearance, by **pixel-diffing light mode against the shipped build**: on a clean load exactly two
+regions differ — the masthead pill row (the new toggle, and the four pills shifting left to make
+room) and the legend's kicker and why-line (the `--faint` fix). Nothing else in light mode moved,
+which is what "maintain existing functionality" has to mean in practice. That diff also caught a
+regression worth naming: the toggle was **1px taller** than its neighbours because a `<button>`
+defaults to `line-height: normal` where the row's links inherit `12.5px`, and it pushed the whole
+app down a pixel. Matched, so adding a control to that row now costs no layout at all.
+
+**Not verified here:** the real CARTO basemaps. The sandbox cannot reach the tile CDN, so both
+themes were driven against synthesised flat tiles at CARTO's own ground colours — good enough to
+judge overlay readability, not a substitute for looking at the deployed page.
 
 ## Known package flaws / adoption fix-list
 
