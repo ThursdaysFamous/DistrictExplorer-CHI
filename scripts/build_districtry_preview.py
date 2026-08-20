@@ -176,7 +176,7 @@ def build(stamp_text):
     #    and a leaked URL should unfurl as nothing.
     html = sub_once(
         html,
-        "<title>Chicago District Explorer — find your districts &amp; representatives</title>",
+        "<title>What district am I in? Find your district — Chicago District Explorer</title>",
         "<title>districtry / illinois — working preview (unlisted)</title>",
         "title",
     )
