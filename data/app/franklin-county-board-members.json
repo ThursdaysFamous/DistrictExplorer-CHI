@@ -1,0 +1,58 @@
+{
+  "1": {
+    "members": [
+      {
+        "name": "Angela Evans",
+        "phone": "618-435-7810"
+      },
+      {
+        "email": "curtissoverton@yahoo.com",
+        "name": "Curtis Overton",
+        "phone": "618-513-1333",
+        "role": "Transport. Committee Chairman"
+      },
+      {
+        "name": "Neil Hargis",
+        "phone": "618-218-7836",
+        "role": "Chairman"
+      }
+    ],
+    "sourceUrl": "https://franklincountyil.gov/county-board-members/"
+  },
+  "2": {
+    "members": [
+      {
+        "name": "Brad Wilson",
+        "phone": "618-218-5412",
+        "role": "Finance Committee Chairman"
+      },
+      {
+        "name": "Larry Miller",
+        "phone": "618-923-0112"
+      },
+      {
+        "name": "Ray Minor",
+        "phone": "314-925-0869"
+      }
+    ],
+    "sourceUrl": "https://franklincountyil.gov/county-board-members/"
+  },
+  "3": {
+    "members": [
+      {
+        "name": "David Bartoni",
+        "role": "Public Health & Safety Committee Chairman"
+      },
+      {
+        "name": "John Gossett",
+        "phone": "618-218-4145"
+      },
+      {
+        "name": "Kevin Weston",
+        "phone": "618-923-1628",
+        "role": "Vice Chairman"
+      }
+    ],
+    "sourceUrl": "https://franklincountyil.gov/county-board-members/"
+  }
+}

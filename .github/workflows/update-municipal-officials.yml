@@ -326,6 +326,16 @@ jobs:
         continue-on-error: true
         run: python3 scripts/whiteside_municipal_officials_scraper.py --out /tmp/whiteside_municipal_officials.json
 
+      # Macoupin's directory page arrives EMPTY and fills itself from a REST
+      # service mounted beside the CMS; the address was recorded from a browser
+      # capture on 2026-08-20, and needs no browser now that it is known. This
+      # step makes ~285 requests (one list call plus one per office, for the
+      # hall contact), paced at 0.4s — about two minutes.
+      - name: Read the Macoupin County Clerk's elected-officials service
+        id: scrape_macoupin
+        continue-on-error: true
+        run: python3 scripts/macoupin_municipal_officials_scraper.py --out /tmp/macoupin_municipal_officials.json
+
       # Freeport is the ONLY municipality in Stephenson County that its county
       # page omits — and it is the county seat, holding more than half the
       # county's municipal population. The city publishes its own governing body
@@ -531,6 +541,7 @@ jobs:
           add "${{ steps.scrape_washington.outcome }}"  washington  county /tmp/washington_municipal_officials.json
           add "${{ steps.scrape_dewitt.outcome }}"      dewitt      county /tmp/dewitt_municipal_officials.json
           add "${{ steps.scrape_mason.outcome }}"        mason       county /tmp/mason_municipal_officials.json
+          add "${{ steps.scrape_macoupin.outcome }}"    macoupin    county /tmp/macoupin_municipal_officials.json
           add "${{ steps.scrape_boone.outcome }}"       boone       county /tmp/boone_municipal_officials.json
           add "${{ steps.scrape_will_cities.outcome }}" will-cities enrich /tmp/will_city_councils.json
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
@@ -635,7 +646,7 @@ jobs:
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,
           # the force-push above already updated it.
-          body="Automated weekly refresh of three rosters from the county clerk directories: the Municipality card's governing bodies (\`municipal-officials.json\`, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication — the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll/Boone clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, and the three McLean ward cities' own pages — plus the four city-level payloads), the Township card's governing bodies (\`township-officials.json\`, \`scripts/build_township_officials.py\`, Cook's 29 townships from the same Clerk directory's TWNSP type), and the Cicero library board (\`cook-library-trustees.json\`, \`scripts/build_cicero_library_trustees.py\`, same fetch).
+          body="Automated weekly refresh of three rosters from the county clerk directories: the Municipality card's governing bodies (\`municipal-officials.json\`, rebuilt by \`scripts/build_municipal_officials_roster.py\` from every sourced county's official publication — the Cook and Will clerk directories, the DMMC directory, the Kane/McHenry/Kendall/Ogle/Carroll/Boone clerk yearbooks, LaSalle's clerk PDF, Winnebago's WinGIS officeholder layers, Stephenson's cities-and-villages page, Lake's county GIS hall contact, the Grundy/Livingston/Logan/Sangamon/Rock Island clerk documents, the East-West Gateway directory for Madison and St. Clair, Macoupin's SOE elected-officials service, and the three McLean ward cities' own pages — plus the four city-level payloads), the Township card's governing bodies (\`township-officials.json\`, \`scripts/build_township_officials.py\`, Cook's 29 townships from the same Clerk directory's TWNSP type), and the Cicero library board (\`cook-library-trustees.json\`, \`scripts/build_cicero_library_trustees.py\`, same fetch).
 
           Please review the diff before merging — this changes data about real officeholders.
 

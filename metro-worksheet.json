@@ -288,15 +288,15 @@
       "area_rank": 10,
       "rank_note": "IL county subdivision (1,695 statewide: townships + city/precinct MCDs)",
       "source": {
-        "answers": "The township or county subdivision containing the point \u2014 and, in covered counties, the township's elected officers.",
+        "answers": "The township or county subdivision containing the point — and, in covered counties, the township's elected officers.",
         "boundary": [
           {
             "label": "U.S. Census TIGERweb — Places / county subdivisions, layer 1",
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1"
           }
         ],
-        "people": "township-officials.json, rebuilt weekly by CI from the Cook County Clerk's directory (29 townships \u2014 supervisor, trustees, clerk/assessor/collector/highway commissioner, hall contact), joined by county-subdivision GEOID. Townships in other counties keep the identity-only card.",
-        "applies": "Illinois \u2014 statewide for the boundary; officials are carried for Cook County."
+        "people": "township-officials.json, rebuilt weekly by CI from the Cook County Clerk's directory (29 townships — supervisor, trustees, clerk/assessor/collector/highway commissioner, hall contact), joined by county-subdivision GEOID. Townships in other counties keep the identity-only card.",
+        "applies": "Illinois — statewide for the boundary; officials are carried for Cook County."
       }
     },
     {
@@ -1040,7 +1040,7 @@
         "file": "calhoun-precincts.json",
         "min_features": 5,
         "max_features": 5,
-        "note": "Calhoun County's five voting precincts \u2014 the seven Census 2020 voting districts DISSOLVED into the five the county runs today, which is a different shape from Clark's and needed a different gate. The county names the composition in the precincts' own titles (Belleview-Hamburg = BELLEVIEW + HAMBURG, Hardin-Gilead = HARDIN + GILEAD), and its certified returns either side of the 2022-2024 merge show each merged precinct's registration equal to the sum of its two named parts. Bounds are an EQUALITY because five is the county's whole precinct list. The Jasper test's name-for-name comparison is NOT the right gate here and would reject a fabric that has not moved; check_fabric_composed keeps the population identity while check_partition proves every voting district is claimed exactly once. NO BOARD DISTRICT ships and none ever will \u2014 Calhoun elects its five commissioners county-wide, so there is no district for a precinct to belong to. NO POLLING PLACE ships: the county publishes one, and it belongs with a roster guard and a date rather than inside a geometry file (scripts/build_calhoun_precincts.py)."
+        "note": "Calhoun County's five voting precincts — the seven Census 2020 voting districts DISSOLVED into the five the county runs today, which is a different shape from Clark's and needed a different gate. The county names the composition in the precincts' own titles (Belleview-Hamburg = BELLEVIEW + HAMBURG, Hardin-Gilead = HARDIN + GILEAD), and its certified returns either side of the 2022-2024 merge show each merged precinct's registration equal to the sum of its two named parts. Bounds are an EQUALITY because five is the county's whole precinct list. The Jasper test's name-for-name comparison is NOT the right gate here and would reject a fabric that has not moved; check_fabric_composed keeps the population identity while check_partition proves every voting district is claimed exactly once. NO BOARD DISTRICT ships and none ever will — Calhoun elects its five commissioners county-wide, so there is no district for a precinct to belong to. NO POLLING PLACE ships: the county publishes one, and it belongs with a roster guard and a date rather than inside a geometry file (scripts/build_calhoun_precincts.py)."
       },
       {
         "file": "clark-precincts.json",
@@ -1152,6 +1152,24 @@
         "min_features": 31,
         "max_features": 31,
         "note": "Edgar County's 31 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric: 29 of the 31 names match its own spelling character for character, their POP100 sums to its exact 2020 population (16,866), and the two that differ (the census writes EMBARRASS 1 and KANSAS 1 where the county writes Embarrass and Kansas) PAIR UNIQUELY at 31 against 31 — recorded as a rename in the builder's CENSUS_SPELLING, with both names shipped on the feature so a reader searching either finds it. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct. NO POLLING PLACE ships: the county publishes none as data (scripts/build_edgar_boundaries.py)."
+      },
+      {
+        "file": "franklin-county-board-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Franklin County's 3 County Board districts of THREE members each (staggered), DISSOLVED from the county's own precinct fabric (Census 2020 VTDs) per a composition THREE certified elections agree on EXACTLY — one better than Clark's two-witnesses-per-district standard. The 2024 General and the 2022 General each tabulate a board contest in every one of the county's 35 precincts, partitioning them 13/13/9 with each precinct claimed exactly once; the 2026 General Primary reproduces the same three sets and NAMES the districts in its contest headers, which corroborates the county members page's district key rather than resting on it. Populations sum to the county's exact 37,804 and run 11,172-14,044 against a 12,601 ideal — worst deviation +11.4%, the COUNTY'S apportionment rather than a certification of it. A SHORTCUT THAT LOOKED RIGHT AND WAS NOT: the results vendor's precinct ids group 51xx/61xx/71xx, which reads like a district key — Browning 1 and 3 sit in District 1 while Browning 2 sits in District 2, and the prefixes interleave across all three. The weekly roster run re-reads each district's precinct COUNT from the Clerk's newest board election and fails if it moves (scripts/build_franklin_boundaries.py; --check is the drift gate)."
+      },
+      {
+        "file": "franklin-precincts.json",
+        "min_features": 35,
+        "max_features": 35,
+        "note": "Franklin County's 35 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric: 34 of the 35 names match its own spelling character for character, their POP100 sums to its exact 2020 population (37,804), and the one that differs (the census writes CAVE 1 where the county writes Cave) pairs uniquely at 35 against 35 — the vestigial-1 rule, recorded in the builder's CENSUS_SPELLING with both names shipped on the feature. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct. NO POLLING PLACE ships: the county publishes no precinct-to-building pairing as data (scripts/build_franklin_boundaries.py)."
+      },
+      {
+        "file": "clinton-county-board-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Clinton County's 5 County Board districts of THREE members each, DISSOLVED from the Census 2020 voting districts per a composition THREE certified elections agree on: the 2024 General and the 2026 General Primary each carry a numbered 'FOR COUNTY BOARD DISTRICT n' contest in every one of the county's 34 precincts and partition them 7/9/6/5/7, and the 2022 General names candidates whose districts key onto the county's own board page — so the oldest election corroborates the two numbered ones from a different direction. A COMPOSED FABRIC, not a one-to-one one (the Calhoun shape, hence check_fabric_composed): census 2020 carries 39 Clinton voting districts against the 34 the county runs today, Irishtown/Lake/St Rose having each merged a numbered pair and Brookside gone from five to three. The first three merges are nameable and the fourth is NOT — and it cannot matter, because all five Brookside voting districts sit in District 1, so no merge can move a district line. Populations sum to the county's exact 36,899 and run 6,840-7,678 against a 7,380 ideal — worst deviation 7.3%, THE TIGHTEST THIS ROUTE HAS PRODUCED and the strongest evidence available that this is the county's current map rather than a stale one (Wayne, measured the same afternoon on the identical technique, came out at 32.4% and was NOT built). Each feature names the county's own 34 current precincts, not the 39 census units the geometry is built from (scripts/build_clinton_boundaries.py; --check is the drift gate)."
       },
       {
         "file": "edwards-county-outline.json",
@@ -1984,6 +2002,16 @@
         "note": "Edgar County Board members keyed by district (7 single-member districts). Scraped weekly from the county's own board page, which publishes name, district and party for all seven — 7/7 with a party — AND NOTHING ELSE: no e-mail, phone, term or board chairman ships, because none is published and the committees table's CHAIRMAN column names the chair of each COMMITTEE. READ THE DOMAIN: the roster is on edgarcountyillinois.COM; the county's .GOV links across to it and does not carry the board. THIS ROSTER IS THE PAGE AND NOT THE RETURNS, and Edgar is the fleet's clearest case for that split — its 2022 and 2024 canvasses elected Phillip Ludington in District 6, the page names Samantha McCarty, and the Clerk's 2026 primary confirms her with a '2-year unexpired term' contest for the seat. A mid-term appointment is exactly what a completed canvass cannot show. The same weekly run re-reads the district composition from the Clerk's feed as the redistricting tripwire, covering whichever districts were on the last ballot and naming the rest as unchecked."
       },
       {
+        "file": "franklin-county-board-members.json",
+        "min_keys": 3,
+        "note": "Franklin County Board members keyed by district (3 districts seating 3 each, staggered — 9 members; 8/9 with a phone, 1 e-mail, and the role the county prints beside 5 of them). Scraped weekly from the county's own members page. THE PAGE IS A GRID AND IS READ AS ONE: its WP Table Builder cells carry data-y-index/data-x-index, and a flattened text read pairs every role with the WRONG member because column 0's role arrives before its own row's name — the Cumberland trap. Its Address column is every member's HOME address and is never read (the Madison/Peoria rule), asserted address-free in both stages. Its e-mail column is Cloudflare-obfuscated, the exact failure that silently emptied Brown County's seven addresses, so the scraper decodes data-cfemail and FAILS if the markup is present and nothing decodes. The 'Home or E-Mail' column ships only its e-mail half — a home telephone is the one contact this project does not publish and the county does not say which a cell holds. NO PARTY: the page publishes none, and taking it from the canvasses would label only the third of the board last on the ballot. THE CHAIR IS THE COUNTY'S OWN LABEL, not an inference from returns — the table names committee chairs by their committee and the board's own officers plainly ('Chairman', 'Vice Chairman'). The same run re-checks the district composition against the Clerk's results system and fails on a re-precincting or a redistricting."
+      },
+      {
+        "file": "clinton-county-board-members.json",
+        "min_keys": 5,
+        "note": "Clinton County Board members keyed by district (5 districts seating 3 each — 15 members, ALL FIFTEEN with a phone, an e-mail and a term-expiry year, the richest board source the canvass route has met). Scraped weekly from the county's own board page, whose Board Chairman and Vice Chairman lines are matched onto their own member rows by name — a label matching no member is a hard failure rather than a badge attached to nobody. TWO OF THE FIFTEEN OPEN THEIR COLUMN WITH a photo wrapped in the same <strong> tag the name uses, so a reader that takes the FIRST match cleans to an empty string and drops the member while every other count still passes; the parser walks every one instead, which is how Kurt Schmitz was recovered on the first run. One member's published address is a personal gmail among fourteen on the county domain and ships as published — substituting a county address the county did not print would be inventing one. NO PARTY: the page publishes none. The same run re-checks the district composition against the Clerk's results system and fails on a re-precincting or a redistricting."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
@@ -2109,7 +2137,7 @@
       {
         "file": "municipal-officials.json",
         "min_keys": 500,
-        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell), Boone and the three counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table, Washington's 40-page Blue Book and De Witt's \"Village/City Officials\" Word list (e-mailed 2026-08-17; all seven municipalities, appointed/acting officers marked), all archived under data/source/raw/ and parsed from there — shipped: 597 municipalities — incl. the Town of Cicero, which the Cook Clerk files under the TWNSP township type as 'Cicero Township' (one coterminous town/township government; absent from MUNIS entirely), and the Village of Crete, whose Will-flipbook entry loses its header to PDF-text extraction and is recovered from the orphaned block + the county's certified 2025 canvass (will_municipal_officials_scraper.py recover_crete) — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID. Boone's yearbook prints a RESIDENCE under almost every official, so boone_municipal_officials_scraper.py refuses address lines by construction and proves on the built payload that none survived; its edition is discovered from the link TEXT ('2026 Yearbook') because the Clerk's page slug still reads 2019."
+        "note": "Municipal governing bodies keyed by Census place GEOID; all seven metro counties plus LaSalle, Winnebago, Ogle, Stephenson, Carroll, DeKalb, the pass-6 tranche (Grundy, Livingston, Logan, McLean's three ward cities, Sangamon, Madison, St. Clair, Rock Island), the pass-9 clerk-reply tranche (Henry, Cass, Whiteside, Peoria, Tazewell), Boone, Macoupin and the three counties whose clerks sent a DOCUMENT rather than a link — Marshall's elected-officers table, Washington's 40-page Blue Book and De Witt's \"Village/City Officials\" Word list (e-mailed 2026-08-17; all seven municipalities, appointed/acting officers marked), all archived under data/source/raw/ and parsed from there — shipped: 623 municipalities — incl. the Town of Cicero, which the Cook Clerk files under the TWNSP township type as 'Cicero Township' (one coterminous town/township government; absent from MUNIS entirely), and the Village of Crete, whose Will-flipbook entry loses its header to PDF-text extraction and is recovered from the orphaned block + the county's certified 2025 canvass (will_municipal_officials_scraper.py recover_crete) — per docs/EXPANSION_GUIDE.md Part 2.4. Winnebago is the only source that publishes governing bodies AS GIS LAYERS (winnebago_municipal_officials_scraper.py); Freeport, the one Stephenson municipality its county page omits, comes from the city's own site (freeport_council_scraper.py); Madison and St. Clair share one source (the East-West Gateway Public Officials Directory, ewg_municipal_officials_scraper.py); Cahokia Heights (incorporated 2021) joins via an explicit post-Census-2020 GEOID. Boone's yearbook prints a RESIDENCE under almost every official, so boone_municipal_officials_scraper.py refuses address lines by construction and proves on the built payload that none survived; its edition is discovered from the link TEXT ('2026 Yearbook') because the Clerk's page slug still reads 2019. Macoupin's directory PAGE carries no names at all — a vendor plugin (SOE Software) draws them in from a Java/Seam REST service beside the CMS, which is why no WordPress action ever answered; the service's address was recorded from a browser capture on 2026-08-20 and is an unauthenticated JSONP GET, so macoupin_municipal_officials_scraper.py needs no browser. Its per-office `effectiveAtLarge` flag means APPOINTED TO FILL AN UNEXPIRED TERM, not elected at large — the site's own legend for the asterisk it renders — and the scraper re-reads that legend every run rather than trusting the field name."
       },
       {
         "file": "lasalle-county-board-members.json",
@@ -2125,11 +2153,6 @@
         "file": "carroll-precinct-polling.json",
         "min_keys": 3,
         "note": "Carroll County precinct polling places, expanded from the clerk's published polling notice by scripts/build_carroll_precinct_polling.py against the county's 22 unchanged Census-2020 precinct names (deterministic grouped-label expansion; --check compares against the live notice). Per-election, like Logan's."
-      },
-      {
-        "file": "tazewell-precinct-polling.json",
-        "min_keys": 4,
-        "note": "The SIX precincts Tazewell County's own polling layer cannot answer. Its precinct layer points Cincinnati 02/05, Elm Grove 02, Morton 01 and Pekin 01/06 at facility ids 43, 50 and 54, none of which appear among the 49 voting locations it publishes. Deputy Clerk & Election Supervisor Vanessa L. Reynolds sent the Clerk's own countywide polling listing (19 townships, 82 precincts, 49 places) by e-mail on 2026-08-17 in reply to the question, and it names all six buildings with addresses. KEYED BY PRECINCT NAME, not by facility id like Whiteside's — the county's data forces it: id 50 is shared by Cincinnati 02/05 (Pekin Bible Church) and Elm Grove 02 (Grace Baptist Church), and id 54 by Pekin 01 (First Christian Church) and Pekin 06 (Miller Center), so precincts voting at DIFFERENT buildings share one id and no facility-keyed file could express the answer. Consulted ONLY where the county's own layer has no match, so publishing those buildings upstream retires it silently. Deliberately narrow: five precincts where the county's live layer and the Clerk's listing name DIFFERENT buildings are left showing the county's answer and asked of the Clerk instead — its layer was edited 2026-08-14 and is not stale, so overriding published county data from an e-mailed document would be guessing which county source is right."
       },
       {
         "file": "dekalb-precinct-townships.json",
@@ -2299,7 +2322,7 @@
       {
         "file": "township-officials.json",
         "min_keys": 25,
-        "note": "Township governing bodies keyed by Census county-subdivision GEOID \u2014 supervisor (or Cicero's president), four trustees, clerk/assessor/collector/highway commissioner, township-hall contact \u2014 from the Cook County Clerk's directory TWNSP type (build_township_officials.py, 29 townships live; Evanston Township dissolved 2014 and is skipped by name). Party committeepersons and per-person contact never ship: the committeeperson records are the feed's one personal-e-mail surface, and the hall mailbox is shared township-wide. Townships in uncovered counties keep the identity-only card."
+        "note": "Township governing bodies keyed by Census county-subdivision GEOID — supervisor (or Cicero's president), four trustees, clerk/assessor/collector/highway commissioner, township-hall contact — from the Cook County Clerk's directory TWNSP type (build_township_officials.py, 29 townships live; Evanston Township dissolved 2014 and is skipped by name). Party committeepersons and per-person contact never ship: the committeeperson records are the feed's one personal-e-mail surface, and the hall mailbox is shared township-wide. Townships in uncovered counties keep the identity-only card."
       }
     ]
   },
@@ -2593,6 +2616,16 @@
       "file": "update-edgar-county-board-roster.yml",
       "purpose": "Edgar County Board roster (edgarcountyillinois.COM board page — the .gov does not carry it) + the redistricting tripwire: the same run re-reads the district composition from the Clerk's results feed at il-edgar.pollresults.net and fails if it stops matching the shipped dissolve",
       "schedule": "Thu 21:00 UTC"
+    },
+    {
+      "file": "update-franklin-county-board-roster.yml",
+      "purpose": "Franklin County Board roster (the county's own members page, read as a GRID by cell coordinate — a flattened text read pairs every role with the wrong member, and its Address column is every member's home) + the redistricting tripwire: the same run re-checks the county's live precinct count and each numbered board contest's precinct count against the shipped dissolve, and fails if either moves",
+      "schedule": "Fri 19:00 UTC"
+    },
+    {
+      "file": "update-clinton-county-board-roster.yml",
+      "purpose": "Clinton County Board roster (the county's own board page — 15 members with phone, e-mail and term year, Chairman and Vice Chairman badged by name match) + the redistricting tripwire: the same run re-checks the county's live precinct count and each numbered board contest's precinct count against the shipped dissolve",
+      "schedule": "Sat 19:00 UTC"
     },
     {
       "file": "roster-health.yml",

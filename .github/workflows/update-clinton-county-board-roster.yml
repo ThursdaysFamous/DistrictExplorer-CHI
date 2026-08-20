@@ -1,0 +1,120 @@
+name: Update Clinton County Board roster
+
+# Weekly refresh of the Clinton County Board District card's member roster
+# (data/app/clinton-county-board-members.json), fetched by index.html.
+#
+# TWO JOBS IN ONE RUN, and the second is the important one.
+#
+# 1. THE ROSTER comes from the county's own board page,
+#    clintonco.illinois.gov/county-offices/county-board/ — fifteen members under
+#    District #1 through #5, and the richest board source the canvass route has
+#    met: a phone, an e-mail AND a term-expiry year on every one of the fifteen,
+#    with the Board Chairman and Vice Chairman named above the grid and matched
+#    onto their own member rows BY NAME (a label matching no member fails the
+#    run rather than badging nobody).
+#
+#    ONE PARSER TRAP IS BAKED IN. Two of the fifteen open their column with a
+#    photo wrapped in the same <strong> tag the name uses, so a reader that takes
+#    the FIRST match cleans to an empty string and drops that member while every
+#    count guard still passes — which is exactly what happened on the first run,
+#    losing Kurt Schmitz. The parser walks every <strong> in the column instead.
+#
+#    One member's published address is a personal gmail among fourteen on the
+#    county's own domain; it ships as published, because substituting an address
+#    the county did not print would be inventing one. No party ships — the page
+#    publishes none.
+#
+# 2. THE REDISTRICTING TRIPWIRE. Clinton's board districts are the DISSOLVE of
+#    Census 2020 voting districts (scripts/build_clinton_boundaries.py), because
+#    the county publishes its board map only as a PDF. The shipped boundary is
+#    correct only while the county's election authority keeps tabulating the same
+#    precincts in the same districts, so the same run re-reads two facts from the
+#    Clerk's results system at platinumelectionresults.com — the county's live
+#    precinct count, and the precinct count of each numbered board contest in the
+#    newest board election — and FAILS if either moves. A red run here means the
+#    county re-precincted or redistricted and a human must re-measure against the
+#    census fabric before this county ships again: the alarm working, not
+#    breakage.
+#
+#    The check COUNTS rather than names, at two requests a week instead of
+#    thirty-four. The full composition rests on three certified elections that
+#    agree (2024 General, 2026 General Primary, and the 2022 General keyed
+#    through the board page), not on this weekly check.
+#
+# If anything changed, this opens a PR rather than committing to main:
+# officeholder data gets a human look before it ships.
+
+on:
+  schedule:
+    - cron: "0 19 * * 6"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # Both surfaces are static server-rendered HTML, so requests plus the
+        # stdlib re module reach them. The builder imports only CONSTANTS from
+        # build_clinton_boundaries.py, whose geometry stack is function-local
+        # (the De Witt seam), so no shapely here.
+        run: pip install -c scripts/requirements.txt requests
+
+      - name: Scrape the board page and re-check the district composition
+        run: python3 scripts/clinton_county_board_scraper.py -o /tmp/clinton_board_raw.json
+
+      - name: Rebuild roster data file
+        run: python3 scripts/build_clinton_county_board.py /tmp/clinton_board_raw.json
+
+      # Gate the regenerated data before it can reach a PR.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR.
+          branch="bot/clinton-county-board-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/clinton-county-board-members.json
+          git commit -m "Update Clinton County Board roster from clintonco.illinois.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Clinton County Board roster from clintonco.illinois.gov" \
+              --body "Automated weekly refresh of the Clinton County Board District card's member roster, generated by \`scripts/clinton_county_board_scraper.py\` + \`scripts/build_clinton_county_board.py\`. Please review the diff before merging — this changes data about real officeholders. The same run re-checks the district composition against the Clerk's results system and fails if it stops matching the shipped dissolve; that failure would mean the county re-precincted or redistricted, and the geometry must be re-measured before it ships again." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
