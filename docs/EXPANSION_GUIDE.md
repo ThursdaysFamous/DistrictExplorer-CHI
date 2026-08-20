@@ -1362,6 +1362,20 @@ taught them.
   enclaves. Precinct-level certified returns answer §2.5 step 2 *and* supply the
   composition, without waiting for a reply.
 
+  **Two traps on this vendor, both paid for.** (a) The per-county DOWNLOAD HANDLER ids
+  differ — Clark 58/188, Edgar 59/189, Bond 52/220 — and a wrong pair returns the
+  vendor's LOGIN PAGE as a PDF: HTTP 200, plausible size, not a canvass. Verify every
+  download starts `%PDF` and reads "Statement of Votes Cast" for the right county.
+  (b) **A 200 from `il-<county>.*` PROVES NOTHING ABOUT WHETHER THE COUNTY IS CARRIED**
+  (measured 2026-08-20): the hostnames resolve for *any* county name and serve a generic
+  shell, so `il-hancock`, `il-jackson`, `il-marion` and `il-warren` all answer 200 while
+  carrying no data at all. Test by CONTENT, not status — a carried county returns its
+  result set inline (Bond and Clark: 34 `electionData` blocks, a 57–58 KB past-elections
+  page, 60 downloadable canvasses), while an uncarried one returns a 7,720-byte template
+  whose `electionData` hits are unfilled Angular placeholders and a 10.6 KB archive with
+  ZERO download links, byte-identical from county to county. Counting `Download.aspx`
+  links on `pastelections.aspx` is the cheapest reliable test: 0 means not carried.
+
 ## 2.6 Verification
 
 The standard gates (Part 6.5) plus: the Playwright smoke test's coverage-hide, permalink
