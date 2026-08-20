@@ -512,8 +512,8 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Franklin County's board districts are not shown — the board IS districted (its own members page groups Districts 1–3) but no boundary is published as data.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (franklincountyil.gov) is real: a County Board Members page grouping members under Districts 1, 2 and 3 — so the board is districted and the site itself is a roster source — plus Elections pages and a GIS page. The GIS page, though, links no public map service the probe could reach, and assessments run on DEVNET's parcel product.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\".",
-      "wanted": "Franklin County's three board-district boundaries as map data, or the precinct/township composition they are built from — the members page already covers the roster half."
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. The county site (franklincountyil.gov) is real: a County Board Members page grouping members under Districts 1, 2 and 3 — so the board is districted and the site itself is a roster source — plus Elections pages and a GIS page. The GIS page, though, links no public map service the probe could reach, and assessments run on DEVNET's parcel product.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". ANSWERED IN FULL 2026-08-20 WITHOUT ASKING, and Franklin is now BUILDABLE. The unlock was a THIRD statewide results vendor this project had not recorded: platinumelectionresults.com, linked from the county's own Elections page (Franklin is county/21, Clinton county/10, and it carries an /index of the rest). It publishes PER-PRECINCT race pages back to 2016. THE COMPOSITION, derived rather than transcribed: its 2024 General Election gives each of Franklin's 35 precincts its own page carrying exactly one 'FOR MEMBER OF THE COUNTY BOARD' contest, naming the candidate that precinct actually voted on. All 35 were fetched. They partition into three sets — Neil Hargis 13, Brad Wilson 13, David Bartoni 9 — summing to 35 with every precinct claimed EXACTLY ONCE, nothing overlapping and nothing left over. The county's own members page supplies the key: Hargis sits for District 1, Wilson for District 2, Bartoni for District 3. DISTRICT 1 = Goode 1, Goode 2, Barren, Tyrone 1-5, Browning 1, Browning 3, Six Mile 1-3. DISTRICT 2 = Ewing 1, Ewing 2, Northern, Browning 2, Benton 1-7, Eastern, Cave. DISTRICT 3 = Denning 1-5, Frankfort 1-4. The districts are unions of WHOLE precincts — no splits, which is exactly what killed Clay and Cumberland earlier in this same walk. A WRONG SHORTCUT IS RECORDED BECAUSE IT LOOKED RIGHT: the vendor's precinct ids group 51xx-54xx, 61xx-64xx, 71xx-74xx, which reads exactly like a district key and is not one — Browning 1 and Browning 3 sit in District 1 while Browning 2 sits in District 2, and the prefixes interleave across all three. The hypothesis was tested against the ballots rather than assumed, and it failed. THE FABRIC AND THE BALANCE, both measured: Census 2020 carries exactly 35 Franklin voting districts summing to the county's exact 37,804, and all 35 current precinct names map onto them (several need the vestigial-1 rule — the census writes CAVE 1 where the county writes CAVE; see the Jasper-test entry). Composed district populations run 12,588 / 14,044 / 11,172 against a 12,601 ideal — worst deviation +11.4%, an ordinary adopted-plan spread and better than Mercer's shipped -14.6%. WHAT A BUILDER MUST STILL HANDLE: the members page prints every member's HOME ADDRESS (Madison/Peoria rule — none ship), and its committee titles sit on the line BEFORE the name they belong to, which a flattened text read pairs with the wrong member. Resolve that from the markup, not the text order — the same trap Cumberland's board table set earlier in this walk.",
+      "wanted": "Nothing from a publisher. The composition is derived from the county's own certified per-precinct returns and partitions all 35 precincts exactly once; the census fabric is verified current; the roster is on the county's members page. This is now a BUILD rather than an ask, and the record stays open only until that build ships."
     },
     {
       "id": "galesburg-wards-outside-the-ring",
@@ -5111,6 +5111,41 @@ host, so ISBE covers the county but not that county's own archive).
 **The caveat to carry into any builder:** `Registration` is self-reported and is sometimes
 `0` (Calhoun 2026, all of Brown 2020). Zero is not a measurement, and a floor keyed on it
 would fire on the publisher's blank rather than on a real loss.
+
+### A THIRD results vendor, and the one that publishes per-precinct BALLOTS (found 2026-08-20)
+
+`platinumelectionresults.com`, linked from Franklin County's own Elections page. It is not a
+variant of the other two — it is the only one of the three that answers the composition
+question directly, and it is what made Franklin buildable in an afternoon with nobody asked.
+
+**Five Illinois counties**, probed by id: Clinton (`/turnouts/county/10`), Randolph (13),
+Wayne (14), Marion (18), Franklin (21). All five already carry gap records, and the index
+page is JS-driven so the list has to be probed rather than scraped.
+
+**What makes it different.** `pollresults`/`accessliberty` and `gbsvote` publish a contest's
+precinct COUNT; this publishes a **page per precinct per election**, back to 2016, listing the
+contests that were actually on that precinct's ballot:
+
+    /history/prraces/<year>_<ge|gp|ce>/<countyId>/<precinctId>
+
+So the district a precinct belongs to is not inferred from arithmetic — it is read off the
+ballot the county certified. Fetch all N precinct pages, group by which board candidate each
+one voted on, key the groups to the county's own members page, and the composition falls out
+as a partition you can check: Franklin's 35 precincts split 13/13/9, every precinct claimed
+exactly once, nothing left over. That check is the proof the districts are whole-precinct
+unions, and it is the same check that FAILED for Clay (19 slots over 18 precincts) and
+Cumberland (14 over 12).
+
+**A wrong shortcut, recorded because it looked right.** The vendor's precinct ids group
+`51xx`–`54xx`, `61xx`–`64xx`, `71xx`–`74xx` — three clean families that read exactly like a
+district key. They are not one. Franklin's Browning 1 and Browning 3 sit in District 1 while
+Browning 2 sits in District 2, and the prefixes interleave across all three districts. The id
+grouping was tested against the ballots and failed; only the ballots are evidence.
+
+**Worth doing next, cheaply, by the same method:** Wayne (id 14) already passes the fabric test
+— 27 census VTDs matching its current precinct names — so if its board is districted and
+whole-precinct, it resolves the same way Franklin did. Marion (18) does not: its fabric
+genuinely moved, 48 census VTDs against 37 current precincts.
 
 ### The Jasper test false-rejects about a third of counties, and the causes are mechanical (measured 2026-08-20)
 
