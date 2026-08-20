@@ -34,6 +34,7 @@ preview intentionally diverges (no manifest link, no SW registration).
 """
 
 import io
+import json
 import os
 import re
 import subprocess
@@ -182,7 +183,152 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-panel-foot .footer-link-btn:hover { background: rgba(109, 63, 209, 0.08); }
   .districtry-panel-foot .footer-metros { font-size: 11px; }
   .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
+  /* ==== canvas app-shell layout (operator-directed: "Implement Districtry
+     App.dc.html", 2026-08-20) ==== */
+  /* search moves from floating-over-map into the masthead */
+  .masthead .map-toolbar { position: static; transform: none; flex: 1 1 320px; max-width: 560px; }
+  .masthead .search-shell { position: relative; box-shadow: none; background: var(--paper); border-color: var(--line); }
+  .masthead .search-extra {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: -1px;
+    right: -1px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(23, 22, 28, 0.14);
+    padding: 8px;
+    z-index: 900;
+  }
+  .masthead .search-shell:not(:hover):not(:focus-within):not(.expanded) .search-extra { padding: 0; border-width: 0; }
+  /* header stat row */
+  .districtry-stats { font-size: 12.5px; color: var(--slate); align-self: center; white-space: nowrap; }
+  .districtry-stats a { color: var(--accent-deep); text-decoration: none; }
+  .districtry-stats a:hover { text-decoration: underline; }
+  /* the selected-point chip becomes the results panel's header row (keep
+     position:relative — it anchors the engine's share popover) */
+  .results-col > .selected-point-chip {
+    background: var(--panel);
+    color: var(--ink);
+    box-shadow: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 4px 0 12px;
+    margin: 0 0 12px;
+  }
+  .results-col > .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: rgba(109, 63, 209, 0.35); }
+  /* three-zone coverage treatment */
+  .dst-glow { filter: blur(7px); }
+  .districtry-map-legend {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(23, 22, 28, 0.06);
+    font-size: 11.5px;
+    color: var(--slate);
+    max-width: 340px;
+  }
+  .districtry-map-legend .dml-glow { width: 9px; height: 9px; border-radius: 50%; flex: none; box-shadow: 0 0 5px 2.5px #ad8cee; }
+  .districtry-map-legend .dml-sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .districtry-map-legend .dml-pending { background: #8a62e0; opacity: 0.25; }
+  .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
+  .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
+  .districtry-map-legend span + .dml-sw,
+  .districtry-map-legend span + .dml-glow,
+  .districtry-map-legend span + .dml-dot { margin-left: 6px; }
 </style>
+"""
+
+# The canvas's three-zone coverage treatment, replacing the engine's single
+# out-of-coverage wash AT ITS FORK-LOCAL CALL SITE (the whenIdle line is fork
+# code; the scope-mask ENGINE fence is untouched). Contract preserved:
+# coverageMaskRings is still set from coverageOutlineRings(feats), so the
+# engine's point-in-coverage test keeps working. Decorative like the original:
+# every failure path skips silently. Values are the canvas's (Districtry
+# App.dc.html initMap): gray outside Illinois, violet "data coming" wash on
+# in-state unserved ground, glow + hairline on the state border.
+COVERAGE_JS = """  function drawDistrictryCoverage() {
+    var stateUrl = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/0/query?where=" +
+      encodeURIComponent("STUSAB='IL'") + "&outFields=NAME&returnGeometry=true&geometryPrecision=3&outSR=4326&f=geojson";
+    var covP = loadMetroOutline().catch(function () { return null; });
+    // decorative: fail fast (one retry, short timeout) so an unreachable
+    // TIGERweb degrades to the single-wash fallback quickly
+    var stP = fetchJSONWithRetry(stateUrl, { timeoutMs: 6000 }, 1).catch(function () { return null; });
+    Promise.all([covP, stP]).then(function (res) {
+      var covGeo = res[0], stGeo = res[1];
+      var covFeats = (covGeo && covGeo.features) || [];
+      if (!covFeats.length) return;
+      var outline = coverageOutlineRings(covFeats);
+      if (!outline || !outline.length) {
+        outline = [];
+        for (var i = 0; i < covFeats.length; i++) {
+          var geom = covFeats[i].geometry;
+          if (!geom) continue;
+          var polys = geom.type === "Polygon" ? [geom.coordinates]
+                    : geom.type === "MultiPolygon" ? geom.coordinates : [];
+          for (var p = 0; p < polys.length; p++) {
+            for (var r = 0; r < polys[p].length; r++) outline.push(polys[p][r]);
+          }
+        }
+      }
+      coverageMaskRings = outline;
+      var covLatLng = [];
+      for (var j = 0; j < outline.length; j++) {
+        var src = outline[j], ring = [];
+        for (var v = 0; v < src.length; v++) ring.push([src[v][1], src[v][0]]);
+        covLatLng.push(ring);
+      }
+      var world = [[-89, -720], [89, -720], [89, 720], [-89, 720]];
+      var stateRing = null;
+      if (stGeo && stGeo.features && stGeo.features[0] && stGeo.features[0].geometry) {
+        var g = stGeo.features[0].geometry;
+        var raw = null;
+        if (g.type === "Polygon") raw = g.coordinates[0];
+        else if (g.type === "MultiPolygon") {
+          for (var m = 0; m < g.coordinates.length; m++) {
+            if (!raw || g.coordinates[m][0].length > raw.length) raw = g.coordinates[m][0];
+          }
+        }
+        if (raw && raw.length > 3) {
+          stateRing = [];
+          for (var s = 0; s < raw.length; s++) stateRing.push([raw[s][1], raw[s][0]]);
+        }
+      }
+      if (stateRing) {
+        L.polygon([world, stateRing], { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.42, interactive: false }).addTo(map);
+        L.polygon([stateRing].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8a62e0", fillOpacity: 0.08, interactive: false }).addTo(map);
+        var closed = stateRing.concat([stateRing[0]]);
+        L.polyline(closed, { pane: "scope-mask", className: "dst-glow", color: "#ad8cee", weight: 9, opacity: 0.6, interactive: false }).addTo(map);
+        L.polyline(closed, { pane: "scope-mask", color: "#ad8cee", weight: 1.5, opacity: 0.9, interactive: false }).addTo(map);
+      } else {
+        L.polygon([world].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.35, interactive: false }).addTo(map);
+      }
+      var host = document.querySelector(".map-bottom-left");
+      if (host && !document.querySelector(".districtry-map-legend")) {
+        var legend = document.createElement("div");
+        legend.className = "districtry-map-legend";
+        legend.innerHTML = '<span class="dml-glow"></span><span>Illinois</span>' +
+          '<span class="dml-sw dml-pending"></span><span>Data coming — not yet sourced</span>' +
+          '<span class="dml-sw dml-out"></span><span>Outside Illinois</span>' +
+          '<span class="dml-dot"></span><span>Selected point</span>';
+        host.insertBefore(legend, host.firstChild);
+      }
+    }).catch(function () { /* decorative — skip the wash, never surface an error */ });
+  }
+  // still off the boot critical path, but with an idle TIMEOUT — plain
+  // requestIdleCallback can be starved indefinitely while tiles and layer
+  // fetches keep the loop busy, and a coverage wash that may never draw is
+  // worse than one that costs a frame
+  if (window.requestIdleCallback) {
+    window.requestIdleCallback(drawDistrictryCoverage, { timeout: 4000 });
+  } else {
+    setTimeout(drawDistrictryCoverage, 800);
+  }
 """
 
 # The FAQ's new standalone home. The extracted .faq-section markup is spliced
@@ -452,6 +598,64 @@ def build(stamp_text):
         '<div id="groups-root" hidden></div>\n  </section>',
         '<div id="groups-root" hidden></div>\n    ' + panel_foot + "\n  </section>",
         "panel foot insert",
+    )
+
+    # -- canvas app-shell layout ("Implement Districtry App.dc.html").
+    #    (a) The search toolbar RELOCATES from floating-over-the-map into the
+    #    masthead (the geocoder binds #geocode-form/#geocode-input/… by id, so
+    #    the block moves verbatim, never duplicates).
+    toolbar_re = re.compile(r'[ ]*<div class="map-toolbar">.*?\n    </div>\n', re.S)
+    toolbars = toolbar_re.findall(html)
+    if len(toolbars) != 1:
+        sys.exit("build-districtry-preview: FAIL — map-toolbar matched %d times" % len(toolbars))
+    toolbar = toolbars[0].strip()
+    html = toolbar_re.sub("", html, count=1)
+    html = sub_once(html, "</h1>", "</h1>\n    " + toolbar, "toolbar into masthead")
+
+    #    (b) The header stat row, counts read from the repo's own generated
+    #    surfaces at build time so a new county updates it on regeneration.
+    county_count = "69"
+    try:
+        status = io.open(os.path.join(REPO_ROOT, "docs", "COUNTY_STATUS.md"), encoding="utf-8").read()
+        m2 = re.search(r"\*\*(\d+) of \d+ Illinois counties are served\*\*", status)
+        if m2:
+            county_count = m2.group(1)
+    except OSError:
+        pass
+    layer_count = "39"
+    try:
+        worksheet = json.load(io.open(os.path.join(REPO_ROOT, "metro-worksheet.json"), encoding="utf-8"))
+        layer_count = str(len(worksheet.get("layers", []))) or layer_count
+    except (OSError, ValueError):
+        pass
+    html = sub_once(
+        html,
+        '<div class="masthead-actions">',
+        '<div class="masthead-actions">\n      <span class="districtry-stats">'
+        + county_count + " counties · " + layer_count
+        + ' layers · <a href="./sources.html">Sources</a></span>',
+        "header stat row",
+    )
+
+    #    (c) The selected-point chip becomes the results panel's header row
+    #    (relocated — #point-chip is filled and un-hidden by the boot script).
+    chip = '<div class="selected-point-chip" id="point-chip" hidden></div>'
+    html = sub_once(html, "      " + chip + "\n", "", "point chip cut")
+    html = sub_once(
+        html,
+        '<div id="main-content" tabindex="-1"></div>',
+        chip + '\n    <div id="main-content" tabindex="-1"></div>',
+        "point chip into panel",
+    )
+
+    #    (d) The three-zone coverage treatment replaces the engine wash at its
+    #    fork-local call site (the scope-mask ENGINE fence itself is untouched;
+    #    coverageMaskRings stays set — see COVERAGE_JS).
+    html = sub_once(
+        html,
+        "  whenIdle(function () { drawOutOfScopeMask(loadMetroOutline); });\n",
+        COVERAGE_JS,
+        "three-zone coverage",
     )
 
     # -- the FAQ moves to its own page; the in-page section stays as a hidden
