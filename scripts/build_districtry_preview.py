@@ -61,6 +61,19 @@ MARK_SVG = (
     "</svg>"
 )
 
+# The 5c mark as a quiet outline, for the empty state where the Chicago flag
+# star used to sit. Same construction as MARK_SVG, drawn in the chrome inks
+# rather than at full saturation so it reads as a placeholder, not a logo.
+EMPTY_MARK_SVG = (
+    '<svg class="districtry-empty-mark" viewBox="0 0 96 96" aria-hidden="true">'
+    '<g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.20"></polygon></g>'
+    '<g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.18"></polygon></g>'
+    '<g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.16"></polygon></g>'
+    '<circle cx="42" cy="60" r="17" fill="none" stroke="#9aa3b2" stroke-width="9"></circle>'
+    '<line x1="59" y1="16" x2="59" y2="82.5" stroke="#9aa3b2" stroke-width="9"></line>'
+    "</svg>"
+)
+
 # Barlow rides Google Fonts here as a PREVIEW-ONLY shortcut (no committed font
 # binaries before the direction is approved). Production adoption self-hosts:
 # edit build_fonts.py's GFONTS_URL to the Barlow families, re-run, re-paste
@@ -85,8 +98,17 @@ SKIN_ISLAND = """<style id="districtry-skin">
   :root {
     --accent: #6d3fd1;        /* brand-600 — chrome only, never map data */
     --accent-deep: #5730ab;   /* brand-700 — text/links on light */
-    --accent-warm: #b0316e;   /* mark magenta — REVIEW: distinct 2nd hue */
-    --accent-warm-deep: #8f2659; /* derived — REVIEW: no token exists */
+    /* The warm accent is NOT decoration: the engine paints the Public Safety
+       group dot with it (index.html .group-safety .dot), beside Political
+       (--accent), Schools (#E8A324) and Geography (#5C8F6B). Setting it to
+       violet — the "one hue for both slots" idea — would make two of the four
+       group dots identical, so a distinct hue is required, not preferred. It
+       is also the focus ring, where contrast AGAINST violet controls is the
+       point. #b0316e is the mark's own third polygon, so the hue is on-brand
+       without borrowing from the data tier (police/fire reds are map colors). */
+    --accent-warm: #b0316e;   /* mark magenta — group dot + focus ring */
+    --accent-warm-deep: #8f2659; /* derived; unreferenced by the engine today,
+       overridden anyway so no Chicago flag red survives in the cascade */
     --ink: #17161c;
     --slate: #4b5563;
     --slate-soft: #9aa3b2;
@@ -109,6 +131,14 @@ SKIN_ISLAND = """<style id="districtry-skin">
      by the token swap it reads as meaningless violet bands, and the Districtry
      design carries no stripe, so the preview hides it */
   .flag-stripe { display: none; }
+  /* ==== empty state: the Chicago flag star retires ====
+     The six-pointed star is that city's emblem; recoloured violet it was
+     simply an off-brand Chicago motif sitting in a Districtry app. The path
+     element STAYS in the DOM (hidden) because the boot script writes its `d`
+     by id and would throw on a missing node — the same discipline as the
+     masthead star — and the 5c mark is drawn beside it. */
+  .empty-state .star-outline { display: none; }
+  .empty-state .districtry-empty-mark { width: 76px; height: 76px; margin: 0 auto 4px; display: block; opacity: 0.9; }
   /* masthead goes light (the approved app-shell direction) */
   header.masthead { background: var(--panel); color: var(--ink); border-bottom: 1px solid var(--line); }
   .masthead-star { display: none; }
@@ -705,11 +735,6 @@ def build(stamp_text):
         "generation stamp",
     )
 
-    # -- point marker joins the data tier (tokens: --data-500 is "selected
-    #    boundary, point marker"). Shape stays the star — a shape change is a
-    #    design call for adoption, not a re-skin.
-    html = sub_once(html, 'fill="#C8102E"', 'fill="#1d5fd6"', "point-marker fill")
-
     # -- a preview page must be inert: no service-worker registration (it
     #    would install the production SW for a reviewer who only ever visits
     #    the preview).
@@ -883,6 +908,101 @@ def build(stamp_text):
     if len(faqs) != 1:
         sys.exit("build-districtry-preview: FAIL — faq-section matched %d times" % len(faqs))
     faq_html = FAQ_PAGE_TEMPLATE.replace("__FAQ_SECTION__", faqs[0]).replace("__STAMP__", stamp_text)
+
+    # -- empty state: the Chicago star stays in the DOM (JS writes its `d`)
+    #    but is hidden by the skin; the districtry mark is drawn beside it.
+    html = sub_once(
+        html,
+        '<path fill="none" stroke="var(--accent-deep)" stroke-width="4" id="star-path-empty"></path>\n      </svg>',
+        '<path fill="none" stroke="var(--accent-deep)" stroke-width="4" id="star-path-empty"></path>\n      </svg>\n      '
+        + EMPTY_MARK_SVG,
+        "empty-state mark",
+    )
+
+    # -- the BASE selection marker becomes the canvas's own answer: a
+    #    data-tier circle with a white ring. This is what a point gets
+    #    everywhere the hierarchy does not override it — every Illinois county
+    #    without a shipped seal, and anywhere outside Illinois. The city and
+    #    the seal counties override it below.
+    html = sub_once(
+        html,
+        '\'<path d="\' + starPath(50, 50, 46, 19) + \'" fill="#C8102E" stroke="#ffffff" stroke-width="4"/>\' +',
+        '\'<circle cx="50" cy="50" r="17" fill="#1d5fd6" stroke="#ffffff" stroke-width="6"/>\' +',
+        "selection marker",
+    )
+
+    # -- ...and keep the Chicago flag star for Chicago itself, in flag red.
+    #    The city's own emblem is right for the city; what was wrong was using
+    #    it as the DEFAULT for the whole state. Defined next to the base icon so
+    #    both read as one decision, and it reuses starPath(), already in scope.
+    html = sub_once(
+        html,
+        "    iconSize: [34, 34],\n    iconAnchor: [17, 17]\n  });\n",
+        "    iconSize: [34, 34],\n    iconAnchor: [17, 17]\n  });\n\n"
+        "  // Chicago keeps its flag star, in flag red — the city's emblem for\n"
+        "  // the city, rather than for every point in Illinois.\n"
+        "  var chiFlagStarDivIcon = L.divIcon({\n"
+        '    className: "chi-star-marker",\n'
+        "    html: '<svg viewBox=\"0 0 100 100\" width=\"34\" height=\"34\" style=\"filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))\">' +\n"
+        "          '<path d=\"' + starPath(50, 50, 46, 19) + '\" fill=\"#C8102E\" stroke=\"#ffffff\" stroke-width=\"4\"/>' +\n"
+        '          "</svg>",\n'
+        "    iconSize: [34, 34],\n"
+        "    iconAnchor: [17, 17]\n"
+        "  });\n",
+        "chicago flag star icon",
+    )
+
+    # -- branch 1 of the hierarchy: inside the city, set the flag star. The
+    #    engine returned early here (keeping whatever the default was), which
+    #    is why the base icon had been doing double duty as both "Chicago" and
+    #    "everywhere else".
+    html = sub_once(
+        html,
+        "      if (!live() || inCity) return;",
+        "      if (!live()) return;\n"
+        "      if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }",
+        "chicago star branch",
+    )
+
+    # -- branch 3: a county WITH a shipped seal keeps its seal; a county
+    #    without one now keeps the default circle instead of a name badge.
+    html = sub_once(
+        html,
+        "          if (sealUrl) {\n"
+        "            whenSealImgReady(sealUrl, function (ok) {\n"
+        "              if (!live()) return;\n"
+        "              marker.setIcon(ok ? makeCountySealDivIcon(sealUrl, name) : makeCountyBadgeDivIcon(name));\n"
+        "            });\n"
+        "          } else {\n"
+        "            marker.setIcon(makeCountyBadgeDivIcon(name));\n"
+        "          }",
+        "          if (sealUrl) {\n"
+        "            whenSealImgReady(sealUrl, function (ok) {\n"
+        "              if (!live()) return;\n"
+        "              if (ok) marker.setIcon(makeCountySealDivIcon(sealUrl, name));\n"
+        "            });\n"
+        "          }",
+        "county badge retired",
+    )
+
+    # -- relationship-legend swatches: two more Chicago-flag-blue literals.
+    #    These are ILLUSTRATIVE — the outlines the map actually draws take each
+    #    layer's own colour, darkened (see the pin-relationship block), so the
+    #    swatch only demonstrates solid=inside vs dashed=crossing. Left as
+    #    Chicago blue they showed a hue this app never draws; moved to the
+    #    data-tier blue they at least sample the tier they illustrate.
+    html = sub_once(
+        html,
+        ".rel-sw-in { border-top: 3px solid #0B5394; }",
+        ".rel-sw-in { border-top: 3px solid #1d5fd6; }",
+        "rel swatch (inside)",
+    )
+    html = sub_once(
+        html,
+        ".rel-sw-cross { border-top: 3px dashed #0B5394; }",
+        ".rel-sw-cross { border-top: 3px dashed #1d5fd6; }",
+        "rel swatch (crossing)",
+    )
 
     # -- the skin island, last in <head> so it wins the cascade.
     html = sub_once(html, "</head>", SKIN_ISLAND + "</head>", "skin island")

@@ -2295,8 +2295,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .rel-key { display: flex; align-items: center; }
   .rel-sw { display: inline-block; width: 20px; height: 0; margin-right: 7px; flex: none; }
   .rel-sw-parent { height: 0; border-top: 3px solid #14181C; }
-  .rel-sw-in { border-top: 3px solid #0B5394; }
-  .rel-sw-cross { border-top: 3px dashed #0B5394; }
+  .rel-sw-in { border-top: 3px solid #1d5fd6; }
+  .rel-sw-cross { border-top: 3px dashed #1d5fd6; }
   .rel-note { opacity: 0.7; font-size: 11px; margin-top: 2px; }
   .rel-unpin-btn {
     margin-top: 8px;
@@ -2321,8 +2321,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
   :root {
     --accent: #6d3fd1;        /* brand-600 — chrome only, never map data */
     --accent-deep: #5730ab;   /* brand-700 — text/links on light */
-    --accent-warm: #b0316e;   /* mark magenta — REVIEW: distinct 2nd hue */
-    --accent-warm-deep: #8f2659; /* derived — REVIEW: no token exists */
+    /* The warm accent is NOT decoration: the engine paints the Public Safety
+       group dot with it (index.html .group-safety .dot), beside Political
+       (--accent), Schools (#E8A324) and Geography (#5C8F6B). Setting it to
+       violet — the "one hue for both slots" idea — would make two of the four
+       group dots identical, so a distinct hue is required, not preferred. It
+       is also the focus ring, where contrast AGAINST violet controls is the
+       point. #b0316e is the mark's own third polygon, so the hue is on-brand
+       without borrowing from the data tier (police/fire reds are map colors). */
+    --accent-warm: #b0316e;   /* mark magenta — group dot + focus ring */
+    --accent-warm-deep: #8f2659; /* derived; unreferenced by the engine today,
+       overridden anyway so no Chicago flag red survives in the cascade */
     --ink: #17161c;
     --slate: #4b5563;
     --slate-soft: #9aa3b2;
@@ -2345,6 +2354,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
      by the token swap it reads as meaningless violet bands, and the Districtry
      design carries no stripe, so the preview hides it */
   .flag-stripe { display: none; }
+  /* ==== empty state: the Chicago flag star retires ====
+     The six-pointed star is that city's emblem; recoloured violet it was
+     simply an off-brand Chicago motif sitting in a Districtry app. The path
+     element STAYS in the DOM (hidden) because the boot script writes its `d`
+     by id and would throw on a missing node — the same discipline as the
+     masthead star — and the 5c mark is drawn beside it. */
+  .empty-state .star-outline { display: none; }
+  .empty-state .districtry-empty-mark { width: 76px; height: 76px; margin: 0 auto 4px; display: block; opacity: 0.9; }
   /* masthead goes light (the approved app-shell direction) */
   header.masthead { background: var(--panel); color: var(--ink); border-bottom: 1px solid var(--line); }
   .masthead-star { display: none; }
@@ -2634,7 +2651,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 43e36fe on 2026-08-20</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 0f2767c on 2026-08-20</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -2714,6 +2731,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <svg class="star-outline" viewBox="0 0 100 100" aria-hidden="true">
         <path fill="none" stroke="var(--accent-deep)" stroke-width="4" id="star-path-empty"></path>
       </svg>
+      <svg class="districtry-empty-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.20"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.18"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.16"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#9aa3b2" stroke-width="9"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#9aa3b2" stroke-width="9"></line></svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
       <p class="empty-state-lede">See your ward, police district and beat, community area, congressional and Illinois legislative districts, Cook County commissioner, elected school board district, and CPS school zones — plus who represents you.</p>
@@ -2981,7 +2999,18 @@ function initChiExplorer() {
   var starDivIcon = L.divIcon({
     className: "chi-star-marker",
     html: '<svg viewBox="0 0 100 100" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
-          '<path d="' + starPath(50, 50, 46, 19) + '" fill="#1d5fd6" stroke="#ffffff" stroke-width="4"/>' +
+          '<circle cx="50" cy="50" r="17" fill="#1d5fd6" stroke="#ffffff" stroke-width="6"/>' +
+          "</svg>",
+    iconSize: [34, 34],
+    iconAnchor: [17, 17]
+  });
+
+  // Chicago keeps its flag star, in flag red — the city's emblem for
+  // the city, rather than for every point in Illinois.
+  var chiFlagStarDivIcon = L.divIcon({
+    className: "chi-star-marker",
+    html: '<svg viewBox="0 0 100 100" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
+          '<path d="' + starPath(50, 50, 46, 19) + '" fill="#C8102E" stroke="#ffffff" stroke-width="4"/>' +
           "</svg>",
     iconSize: [34, 34],
     iconAnchor: [17, 17]
@@ -3594,7 +3623,8 @@ function initChiExplorer() {
     function live() { return seq === state.sequence && marker === selectedMarker; }
     // 1. Inside the City of Chicago → keep the flag star (the default already set).
     chicagoCoverage(point).then(function (inCity) {
-      if (!live() || inCity) return;
+      if (!live()) return;
+      if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }
       // 2. On Lake Michigan → the Water Taxi seal.
       loadLakeMichigan().then(function (lake) {
         if (!live()) return;
@@ -3616,10 +3646,8 @@ function initChiExplorer() {
           if (sealUrl) {
             whenSealImgReady(sealUrl, function (ok) {
               if (!live()) return;
-              marker.setIcon(ok ? makeCountySealDivIcon(sealUrl, name) : makeCountyBadgeDivIcon(name));
+              if (ok) marker.setIcon(makeCountySealDivIcon(sealUrl, name));
             });
-          } else {
-            marker.setIcon(makeCountyBadgeDivIcon(name));
           }
         }).catch(function () { /* county load failed — keep the star */ });
       }).catch(function () { /* lake load failed — keep the star */ });

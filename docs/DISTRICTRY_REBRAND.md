@@ -87,12 +87,9 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
   isolation) green on the re-skin, which is the "every existing function is maintained" proof.
   Refresh after index.html moves: re-run the script and commit;
   `build_districtry_preview.py --check` detects staleness on demand (deliberately not in CI).
-  **Open review items on the skin:** the warm-accent mapping (mark magenta `#b0316e` +
-  derived `#8f2659`, giving a magenta focus ring — alternative is violet for both slots); the
-  empty-state star outline now renders violet via `--accent-deep`; engine-fenced
-  `METRO_NAME + " District Explorer"` strings still show the old name in dialogs (accepted —
-  that is precisely the Phase-3 engine release); the point marker keeps the star *shape*
-  (a shape change is a design call for adoption, not a re-skin).
+  **Open review items on the skin:** all three resolved 2026-08-20 — see "Skin review items"
+  below. Still accepted as-is: engine-fenced `METRO_NAME + " District Explorer"` strings show
+  the old name in dialogs, which is precisely the Phase-3 engine release.
   **Fix round (2026-08-20, post-deploy):** `.flag-stripe` — the Chicago flag's
   accent/white/accent bands above and below the map, that fork's signature device — rendered
   as meaningless violet bands under the token swap; the Districtry design carries no stripe,
@@ -300,6 +297,117 @@ answer varies by county, and a sandboxed measurement is no basis for a live figu
 is preview-local today. If the three-zone treatment is adopted into production, the legend and
 this copy travel with it, and the wording becomes a fork-owned string — worth a worksheet key so
 NYC/SF can say "Statewide layers only" about their own states without an engine release.
+
+## Skin review items — RESOLVED (2026-08-20)
+
+The three items left open when Stage B shipped, each investigated before deciding. Two were the
+same finding: **Chicago motifs that survived the re-skin because a token swap recolours a shape
+without questioning it.**
+
+1. **Warm accent — KEPT as a distinct hue, and the alternative disproven.** The open question was
+   whether `--accent-warm` should simply become violet ("one hue for both slots"). It must not:
+   the engine paints the **Public Safety group dot** with it (`.group-safety .dot`, index.html
+   ~1612) beside Political (`--accent`), Schools (`#E8A324`) and Geography (`#5C8F6B`). Violet in
+   both slots would render two of the four group dots identically — a categorical encoding
+   collapsing, not a taste call. It is also `--focus-ring`, where contrast *against* violet
+   controls is the point. `#b0316e` stays: it is the mark's own third polygon, so the hue is
+   on-brand without borrowing from the data tier (the police/fire reds are map colours and stay
+   map colours). Measured after the change: the four dots are four distinct hues.
+   `--accent-warm-deep` is referenced **nowhere** in the engine today; the override is kept only
+   so no Chicago flag red survives anywhere in the cascade.
+2. **Empty state — the Chicago flag star retired.** A six-pointed star is that city's emblem;
+   recoloured violet it was an off-brand city motif sitting in a Districtry app. It is now the 5c
+   mark drawn as a quiet outline. The `#star-path-empty` element **stays in the DOM, hidden** —
+   the boot script writes its `d` by id and would throw on a missing node (the same discipline as
+   the masthead star).
+3. **Selection marker — now the canvas's own answer.** The marker kept the star *shape* while
+   only its fill moved to data blue, so a Chicago emblem was still marking "your point". The
+   design canvas had already answered this: a circle with a white ring. It is now
+   `<circle r="17" fill="#1d5fd6" stroke="#fff">`. One transform owns shape **and** colour; the
+   earlier fill-only swap was deleted so two transforms cannot disagree about what the marker is.
+   *(This is the BASE marker. The hierarchy that overrides it was settled separately — see*
+   *"Marker hierarchy" below, which supersedes the badge bullet and the open question in this*
+   *section.)*
+
+**The marker is a hierarchy, and only its first branch was re-skinned.** `selectPointMarker()`
+walks four cases: inside Chicago → the base marker (now the circle); on Lake Michigan → the Water
+Taxi seal; inside an Illinois county → **that county's seal** where one ships (9 counties) or a
+**county-name badge** otherwise; outside Illinois → the base marker. Two consequences were found
+by reading that chain:
+
+- **The county name badge hardcoded `#0B5394` — the Chicago flag deep blue — inside a JS string**,
+  where no token swap could reach it. Exactly the same class of survival as the flag stripe and
+  the star: a city colour outliving the re-skin because it was written as a literal, not a token.
+  Moved to the data-tier `#1d5fd6` so it matches the circle the legend describes, and its
+  system-font stack moved to Barlow. **SUPERSEDED the same day** — the badge is retired
+  outright, so both of those transforms were deleted; see "Marker hierarchy" below.
+- **Two relationship-legend swatches (`.rel-sw-in`, `.rel-sw-cross`) carried the same literal.**
+  These are illustrative — the outlines the map actually draws take each layer's own colour,
+  darkened — so as Chicago blue they demonstrated a hue this app never draws. Now the data-tier
+  blue, sampling the tier they illustrate.
+
+**The county seals themselves are KEPT, and the open question is the operator's.** *(Answered —*
+*see "Marker hierarchy" below. The paragraph is kept for the reasoning that framed the question.)* They are each
+county's own emblem, not Chicago branding, and for a state-then-national product showing the seal
+of the county under your point is arguably an asset — they also carry researched licensing
+(`icons/source/README.md`, `docs/COUNTY_SEALS_REVIEW.md`). But note the tension the new legend
+makes visible: it says "● Selected point", which is true inside Chicago and outside Illinois,
+while in the rest of Illinois the marker is a seal or a name pill. The design canvas's own answer
+was a single circle everywhere. Retiring or keeping the seal/badge branch is a **product** call,
+not a re-skin one, so it is flagged rather than taken.
+
+Three `#0B5394` uses remain in the preview and are correctly out of scope: the `:root` definition
+(overridden by the skin), a `var(--accent-deep, #0B5394)` fallback that never applies, and the
+police-district / early-voting **map layer** colours — data tier, which the three-tier rule keeps.
+The Districtry token set itself retains `#0b5394` as `--layer-zip`.
+
+**Related finding, NOT changed:** the water-taxi marker (`icons/water-taxi.png`, swapped in when a
+point lands on Lake Michigan) is a third Chicago motif — the Chicago Water Taxi seal. It is a
+deliberate easter egg rather than chrome, so retiring or replacing it is a product call, not a
+re-skin one. Flagged here rather than silently changed.
+
+## Marker hierarchy — operator decision (2026-08-20)
+
+The question flagged above came back answered in three parts: **retire the county-name badge in
+favour of the default circle, restore the Chicago flag star for the city in its original colour,
+and leave the seal counties alone.** The re-skin had been treating the four branches as one
+question with one answer; the decision splits them by what each actually says.
+
+The shipped hierarchy in `selectPointMarker()`, in the order the function walks it:
+
+| Where the point lands | Marker | Why |
+|---|---|---|
+| Inside Chicago | **Six-pointed flag star, `#C8102E`** | The city's own emblem, for the city. What was wrong was using it as the default for all of Illinois — not using it at all. |
+| Lake Michigan | Water Taxi seal | Unchanged; still the flagged easter egg (below). |
+| An Illinois county **with** a shipped seal (9) | That county's seal | Unchanged. Each county's own emblem, licence-researched. |
+| Anywhere else — an Illinois county with no seal, or outside Illinois | **Circle, `#1d5fd6`** | The canvas's own answer, and now the genuine default. |
+
+Three consequences worth recording:
+
+- **`makeCountyBadgeDivIcon` is now dead code in the preview** — the definition survives (it is
+  engine text the transform script does not delete) but **zero call sites remain**. Both branches
+  that reached it are gone: the seal branch sets an icon only `if (ok)`, and the no-seal branch is
+  deleted entirely. The two transforms that had recoloured the badge went with it — a colour fix
+  on a shape that can no longer render is drift waiting to happen.
+- **The engine's early return had to be split.** `if (!live() || inCity) return;` conflated "the
+  selection is stale" with "Chicago needs no override", which is precisely why the base icon was
+  doing double duty as both *Chicago's marker* and *everywhere else's*. It is now
+  `if (!live()) return;` followed by `if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }`,
+  so the two facts are separate. `chiFlagStarDivIcon` is defined beside the base icon and reuses
+  the engine's `starPath()`, already in scope.
+- **The legend's "● Selected point" is now a simplification rather than a near-falsehood.** It is
+  literally true for the great majority of Illinois — every county without a seal, which is 60 of
+  the 69 served — and the two exceptions (Chicago's star, the nine seals) are self-evident on
+  sight. Before this change the pill rendered across most of the state, so the legend disagreed
+  with the map nearly everywhere it was read.
+
+Verified in Chromium against the built preview: Chicago Loop → `STAR` fill `#C8102E`;
+Bureau, Madison and Champaign (no seal) → `CIRCLE` fill `#1d5fd6`; a point in Indiana → `CIRCLE`.
+The seal branch is **not reachable in this sandbox** — `chicagoCoverage` awaits
+`loadCommunityAreas()` against Socrata, which is blocked here and never settles, so branches 2–4
+never run locally. That is pre-existing and unrelated to the change (identical before it), so
+correctness on the seal path was established by diffing the hierarchy instead: the seal call site
+is byte-identical apart from losing its `: makeCountyBadgeDivIcon(name)` alternative.
 
 ## Known package flaws / adoption fix-list
 
