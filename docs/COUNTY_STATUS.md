@@ -36,7 +36,7 @@
 | Crawford | 17033 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | De Witt | 17039 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `dewitt-township-officials` (data-quality) |
 | DeKalb | 17037 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source) |
-| DuPage | 17043 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source); `dupage-municipal-phones` (data-quality); `dupage-ward-cities` (no-source) |
+| DuPage | 17043 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source); `dupage-municipal-phones` (data-quality); `dupage-ward-cities` (no-source) |
 | Edgar | 17045 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Edwards | 17047 | County card | at-large — County card | — | 1 — `edwards-county-precincts` (no-source) |
 | Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `effingham-municipal-officials` (no-source) |
@@ -49,9 +49,9 @@
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 1 — `jersey-county-board-districts` (no-source) |
 | Jo Daviess | 17085 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
-| Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source) |
+| Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
-| Kendall | 17093 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `plano-ward-officials` (no-source) |
+| Kendall | 17093 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `plano-ward-officials` (no-source) |
 | LaSalle | 17099 | dispatch | districted | `county-board`, `county-precinct` | 5 — `county-board-office-addresses` (no-source); `lasalle-board-districts-stale` (no-source); `lasalle-municipal-wards` (no-source); `ogle-lasalle-special-districts` (no-source); `wenona-two-clerks-disagree` (data-quality) |
 | Lake | 17097 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `lake-municipal-names` (no-source); `park-city-wards` (no-source) |
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
@@ -89,7 +89,7 @@
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
-| Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (data-quality); `county-board-office-addresses` (no-source); `crete-municipal-clerk` (no-source); `joliet-municipal-contact` (blocked) |
+| Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source); `crete-municipal-clerk` (no-source); `joliet-municipal-contact` (blocked) |
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
