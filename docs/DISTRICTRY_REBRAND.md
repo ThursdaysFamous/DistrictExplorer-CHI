@@ -15,7 +15,10 @@ the files are visible in the GitHub tree regardless. Accepted.
 ## Decisions of record
 
 - **Name:** *Districtry* (district + directory) — never "Districtory". One indivisible lowercase
-  word; instance tag suffix (`/ illinois`, `/ chicago`) in Barlow Condensed 400 at 80%.
+  word; instance tag suffix in Barlow Condensed 400 at 80%. **The tag is the TWO-LETTER
+  code, lowercase — `districtry / il`** (operator-directed 2026-08-20, superseding the brand
+  spec's spelled-out `/ illinois` example). Every future state uses its own code the same way;
+  the canvas still shows the old form and owes this correction on the next sync.
 - **Mark:** 5c — geometric lowercase *d* (ring + ascender, never typeset) over three translucent
   irregular polygons whose fills echo the map's layer encoding (brand violet #6d3fd1, data blue
   #1d5fd6, municipality magenta #b0316e). Multiply blends on light, screen on dark; flat
@@ -228,6 +231,26 @@ Six findings from driving the live preview, all fixed in the transform script:
 Self-inflicted regression caught in the same pass: the stat row was the segmented group's first
 child, so `overflow: hidden` clipped its "Sources" link; stats and group are now siblings in one
 right-aligned header cluster.
+
+## Header/chrome round (operator review, 2026-08-20)
+
+- **The stat row left the masthead for the results panel's header bar**: coords + Share on the
+  left, `69 counties · 39 layers` flush to the page's right edge across from the Share button.
+  The stats sit OUTSIDE the chip on purpose — the chip is hidden until a point is selected and
+  the counts are true either way.
+- **Both redundant "Sources" links removed** — the trailing link in the stat row and the one in
+  the panel foot. The masthead pill is the single door; the OSM line that remains in the foot is
+  a licence obligation, not a repeat.
+- **The FAQ moved up into the pills** (`Common questions`), so all four "about the data" doors
+  sit together instead of one hiding in the panel foot.
+- **Instance tag is now the two-letter state code** (`districtry / il`) in the wordmark, the
+  page title, and the FAQ page — see the rule under Decisions of record.
+
+Regression caught by looking at the render rather than the diff: moving the chip into a new
+panel-head wrapper broke `.results-col > .selected-point-chip`, which silently un-did BOTH the
+chip's light restyle and the share-popover reposition (the popover would have gone back to
+opening off-screen). Re-scoped to `.districtry-panel-head .selected-point-chip`. A child
+combinator is a promise about depth, and moving markup breaks it quietly.
 
 ## Known package flaws / adoption fix-list
 
