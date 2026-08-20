@@ -147,6 +147,41 @@ def check_fabric(vtds, county_precincts, county_pop, fail):
     return vtd_pop
 
 
+def check_fabric_composed(vtds, county_pop, fail):
+    """THE JASPER TEST for a county whose precincts are unions of WHOLE VTDs.
+
+    check_fabric above compares the county's precinct NAMES against the census
+    VTD names one-for-one, which is exactly right for the Clark shape — one
+    precinct per voting district — and exactly wrong for the shape Calhoun has.
+    Calhoun runs five precincts over seven census voting districts, and it says
+    so in their names: Belleview-Hamburg is BELLEVIEW plus HAMBURG, Hardin-Gilead
+    is HARDIN plus GILEAD. Demanding name equality there rejects a county whose
+    fabric has not moved at all.
+
+    What survives is the half that actually tests the fabric: the voting
+    districts must still TILE the county, which the population identity proves.
+    The other half of check_fabric's job — that the composition accounts for
+    every voting district exactly once, with none left over and none claimed
+    twice — is already check_partition's, so a composed county gets the same
+    coverage from the pair that a one-to-one county gets from check_fabric
+    alone. Nothing is relaxed; the test is split across two calls instead of
+    one.
+
+    THE FAILURE THIS DOES NOT CATCH, said plainly because the population sum
+    passing is seductive: a county that re-precincted after 2020 can still sum
+    to its own Census 2020 count exactly — Bond, Jersey and Jo Daviess all do.
+    The sum says the fabric tiled the county in 2020, never that it is the
+    county's fabric today. For a composed county that assurance has to come
+    from the composition itself being witnessed in the county's own certified
+    returns, which is the caller's job and belongs in the caller's docstring.
+    """
+    vtd_pop = sum(v["pop"] for v in vtds.values())
+    if vtd_pop != county_pop:
+        fail("the %d voting districts sum to %d people and the county to %d — the "
+             "fabric is not a tiling of the county" % (len(vtds), vtd_pop, county_pop))
+    return vtd_pop
+
+
 def check_partition(composition, vtds, fail):
     """Every precinct in exactly one district, and every precinct used."""
     seen = {}

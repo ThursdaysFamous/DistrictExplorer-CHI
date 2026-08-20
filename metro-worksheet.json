@@ -1037,6 +1037,12 @@
         "note": "Clark County outline — the coverage test for the county's board and precinct dispatch entries (clarkCountyCoverage). Shipped 2026-08-04 as gap-location geometry when Clark read as source-less; promoted to a coverage outline on 2026-08-18 when the county joined as the 53rd dispatched county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
+        "file": "calhoun-precincts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Calhoun County's five voting precincts \u2014 the seven Census 2020 voting districts DISSOLVED into the five the county runs today, which is a different shape from Clark's and needed a different gate. The county names the composition in the precincts' own titles (Belleview-Hamburg = BELLEVIEW + HAMBURG, Hardin-Gilead = HARDIN + GILEAD), and its certified returns either side of the 2022-2024 merge show each merged precinct's registration equal to the sum of its two named parts. Bounds are an EQUALITY because five is the county's whole precinct list. The Jasper test's name-for-name comparison is NOT the right gate here and would reject a fabric that has not moved; check_fabric_composed keeps the population identity while check_partition proves every voting district is claimed exactly once. NO BOARD DISTRICT ships and none ever will \u2014 Calhoun elects its five commissioners county-wide, so there is no district for a precinct to belong to. NO POLLING PLACE ships: the county publishes one, and it belongs with a roster guard and a date rather than inside a geometry file (scripts/build_calhoun_precincts.py)."
+      },
+      {
         "file": "clark-precincts.json",
         "min_features": 23,
         "max_features": 23,
@@ -2298,7 +2304,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v45",
+    "cache_name": "district-explorer-shell-v46",
     "shell_urls": [
       "./",
       "./sources.html",

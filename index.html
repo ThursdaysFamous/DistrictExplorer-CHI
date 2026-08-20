@@ -9010,6 +9010,66 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/mercer-county-board-members.json", {}, 2);
   });
 
+  /* Calhoun and Morgan, added 2026-08-20 — the first two counties to gain a
+   * dispatch entry for PRECINCTS ALONE. Both elect their commissioners
+   * county-wide, so neither has board geometry and neither ever will; what
+   * each gains here is the answer to "which precinct am I in", which an audit
+   * found neither county could give despite both publishing everything needed
+   * to say so.
+   *
+   * MORGAN'S PRECINCTS ARE THE COUNTY'S OWN, LIVE. Its GIS Coordinator
+   * maintains a public feature service — copyright "Morgan County GIS", 27
+   * polygons, each carrying its polling place AND street address — which is
+   * why this is the one county here with no data file: nothing needs building.
+   * Its currency was proven against the county's own certified returns rather
+   * than assumed (the Coles rule): the 2026 primary reports 27 of 27 precincts
+   * and 25 of the 27 names match the layer exactly, the two differences being
+   * the county's own short forms for hyphenated precincts. Note the census
+   * route would have FAILED here — 27 current precincts against 40 Census 2020
+   * voting districts, Jacksonville alone having gone from eighteen to twelve —
+   * so the published layer is not a convenience, it is the only route.
+   *
+   * CALHOUN'S ARE DISSOLVED FROM CENSUS GEOMETRY, because the county runs no
+   * mapping system at all. Its five precincts are unions of WHOLE Census 2020
+   * voting districts and it wrote the composition into their names
+   * (Belleview-Hamburg, Hardin-Gilead), with its certified returns either side
+   * of the 2022-2024 merge showing each merged precinct's registration equal
+   * to the sum of its parts. See build_calhoun_precincts.py, which needed a
+   * new gate in the shared module: the Jasper test compares precinct names to
+   * voting-district names one-for-one, which is right for Clark and wrong for
+   * a county whose five precincts sit over seven voting districts without its
+   * fabric having moved.
+   *
+   * NEITHER CARRIES A BOARD DISTRICT, and that is permanent rather than
+   * pending — an at-large county has no district for a precinct to belong to.
+   * Morgan's card carries a polling place because its own layer does; Calhoun's
+   * does not, because that fact belongs with a roster guard and a date rather
+   * than inside a geometry file. */
+  var loadCalhounCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/calhoun-county-outline.json", {}, 2);
+  });
+  function calhounCountyCoverage(point) {
+    return loadCalhounCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadCalhounPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/calhoun-precincts.json", {}, 2);
+  });
+  var loadMorganCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
+  });
+  function morganCountyCoverage(point) {
+    return loadMorganCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var MORGAN_PRECINCT_SERVICE = "https://services3.arcgis.com/95PFahBF8eyGEfuc/" +
+    "arcgis/rest/services/VotingPrecincts/FeatureServer/0";
+  var loadMorganPrecincts = makeCached(function () {
+    return loadArcGISGeoJSON(MORGAN_PRECINCT_SERVICE);
+  });
+
   /* Edgar (the 56th dispatched county, added 2026-08-18) — the same canvass
    * route as Crawford and Mercer, and the first county it reached whose
    * composition rests on a FULL SET of certified documents rather than one
@@ -22706,6 +22766,90 @@ function initChiExplorer() {
         primaryLink: function () {
           return { label: "Edgar County Clerk — election results (official)",
                    url: "https://il-edgar.accessliberty.com/pastelections.aspx" };
+        }
+      },
+      // Calhoun — five precincts dissolved from the seven Census 2020 voting
+      // districts, whose composition the county names in the precincts' own
+      // titles (Belleview-Hamburg, Hardin-Gilead). NO BOARD DISTRICT: the
+      // county elects its five commissioners county-wide, so there is none to
+      // carry, and its members ride the County card. NO POLLING PLACE: the
+      // county publishes one, but it belongs with a roster guard and a date
+      // rather than inside a geometry file.
+      {
+        key: "calhoun",
+        coverage: calhounCountyCoverage,
+        loadGeometry: loadCalhounPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCalhounPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Calhoun County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Calhoun County Clerk — elections",
+            url: "https://www.calhouncountyil.gov/government/county-clerk/elections/"
+          };
+        }
+      },
+      // Morgan — the county's OWN live layer, maintained by its GIS
+      // Coordinator, carrying a polling place and street address on every
+      // precinct. No board district here either: Morgan elects its
+      // commissioners county-wide.
+      {
+        key: "morgan",
+        coverage: morganCountyCoverage,
+        loadGeometry: loadMorganPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMorganPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              pollingPlace: findPropCI(props, ["pollingplace"]),
+              pollingAddress: findPropCI(props, ["address"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) });
+          }
+          if (result.pollingAddress) {
+            fields.push({ label: "Polling address", value: String(result.pollingAddress) });
+          }
+          fields.push({ label: "County", value: "Morgan County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Morgan County GIS — voting precincts",
+            url: "https://morganmaps.maps.arcgis.com/"
+          };
         }
       },
     ],

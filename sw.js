@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v45";
+const CACHE_NAME = "district-explorer-shell-v46";
 
 const SHELL_URLS = [
   "./",
@@ -78,6 +78,7 @@ const GEOMETRY_URLS = [
   "./data/app/christian-county-outline.json",
   "./data/app/clark-county-board-districts.json",
   "./data/app/clark-county-outline.json",
+  "./data/app/calhoun-precincts.json",
   "./data/app/clark-precincts.json",
   "./data/app/clay-county-outline.json",
   "./data/app/clinton-county-outline.json",

@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**69 of 102 Illinois counties are served** — 56 through their own dispatch entries, 3 through a shipped judicial circuit, and 10 through the County card alone. 33 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**69 of 102 Illinois counties are served** — 58 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 33 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -27,7 +27,7 @@
 | Bond | 17005 | judicial circuit | no board layer — see gaps | — | 1 — `bond-county-board-districts` (no-source) |
 | Boone | 17007 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 5 — `boone-fire-belvidere-city` (data-quality); `boone-fire-names` (data-quality); `boone-municipal-officials` (no-source); `boone-park-library-districts` (no-source); `county-board-office-addresses` (no-source) |
 | Brown | 17009 | County card | at-large — County card | — | 1 — `brown-precinct-geometry` (no-source) |
-| Calhoun | 17013 | County card | at-large — County card | — | 1 — `calhoun-precinct-geometry` (no-source) |
+| Calhoun | 17013 | dispatch | at-large — County card | `county-precinct` | none |
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Cass | 17017 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Clark | 17023 | dispatch | districted | `county-board`, `county-precinct` | 2 — `clark-board-contact` (data-quality); `clark-precinct-polling` (data-quality) |
@@ -69,7 +69,7 @@
 | Mercer | 17131 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
-| Morgan | 17137 | County card | at-large — County card | — | none |
+| Morgan | 17137 | dispatch | at-large — County card | `county-precinct` | none |
 | Moultrie | 17139 | County card | at-large — County card | — | none |
 | Ogle | 17141 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `ogle-lasalle-special-districts` (no-source); `ogle-municipal-wards` (no-source) |
 | Peoria | 17143 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source); `peoria-fire-park-library-contact` (data-quality) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 114 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 113 records in the Data gaps panel: `chicago-amenity-phones`.

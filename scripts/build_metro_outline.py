@@ -370,7 +370,11 @@ DISPATCH_COUNTY_FIPS = {
     # Moultrie is deliberately ABSENT: its board is elected at large, so it has
     # no district geometry, no dispatch entry and no toggle — its members ride
     # the County card via data/app/il-county-commissioners.json. It appears in
-    # METRO_COUNTY_FIPS above and must not appear here (§1.5).
+    # METRO_COUNTY_FIPS above and must not appear here (§1.5).,
+    # Precinct-only dispatch entries: both elect their boards at large,
+    # so their members ride the County card and what they gain here is the
+    # precinct answer alone (2026-08-20).
+    "calhoun": "013", "morgan": "137",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
