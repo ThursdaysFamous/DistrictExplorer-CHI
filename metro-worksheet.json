@@ -1166,6 +1166,12 @@
         "note": "Franklin County's 35 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric: 34 of the 35 names match its own spelling character for character, their POP100 sums to its exact 2020 population (37,804), and the one that differs (the census writes CAVE 1 where the county writes Cave) pairs uniquely at 35 against 35 — the vestigial-1 rule, recorded in the builder's CENSUS_SPELLING with both names shipped on the feature. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct. NO POLLING PLACE ships: the county publishes no precinct-to-building pairing as data (scripts/build_franklin_boundaries.py)."
       },
       {
+        "file": "clinton-county-board-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Clinton County's 5 County Board districts of THREE members each, DISSOLVED from the Census 2020 voting districts per a composition THREE certified elections agree on: the 2024 General and the 2026 General Primary each carry a numbered 'FOR COUNTY BOARD DISTRICT n' contest in every one of the county's 34 precincts and partition them 7/9/6/5/7, and the 2022 General names candidates whose districts key onto the county's own board page — so the oldest election corroborates the two numbered ones from a different direction. A COMPOSED FABRIC, not a one-to-one one (the Calhoun shape, hence check_fabric_composed): census 2020 carries 39 Clinton voting districts against the 34 the county runs today, Irishtown/Lake/St Rose having each merged a numbered pair and Brookside gone from five to three. The first three merges are nameable and the fourth is NOT — and it cannot matter, because all five Brookside voting districts sit in District 1, so no merge can move a district line. Populations sum to the county's exact 36,899 and run 6,840-7,678 against a 7,380 ideal — worst deviation 7.3%, THE TIGHTEST THIS ROUTE HAS PRODUCED and the strongest evidence available that this is the county's current map rather than a stale one (Wayne, measured the same afternoon on the identical technique, came out at 32.4% and was NOT built). Each feature names the county's own 34 current precincts, not the 39 census units the geometry is built from (scripts/build_clinton_boundaries.py; --check is the drift gate)."
+      },
+      {
         "file": "edwards-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -2001,6 +2007,11 @@
         "note": "Franklin County Board members keyed by district (3 districts seating 3 each, staggered — 9 members; 8/9 with a phone, 1 e-mail, and the role the county prints beside 5 of them). Scraped weekly from the county's own members page. THE PAGE IS A GRID AND IS READ AS ONE: its WP Table Builder cells carry data-y-index/data-x-index, and a flattened text read pairs every role with the WRONG member because column 0's role arrives before its own row's name — the Cumberland trap. Its Address column is every member's HOME address and is never read (the Madison/Peoria rule), asserted address-free in both stages. Its e-mail column is Cloudflare-obfuscated, the exact failure that silently emptied Brown County's seven addresses, so the scraper decodes data-cfemail and FAILS if the markup is present and nothing decodes. The 'Home or E-Mail' column ships only its e-mail half — a home telephone is the one contact this project does not publish and the county does not say which a cell holds. NO PARTY: the page publishes none, and taking it from the canvasses would label only the third of the board last on the ballot. THE CHAIR IS THE COUNTY'S OWN LABEL, not an inference from returns — the table names committee chairs by their committee and the board's own officers plainly ('Chairman', 'Vice Chairman'). The same run re-checks the district composition against the Clerk's results system and fails on a re-precincting or a redistricting."
       },
       {
+        "file": "clinton-county-board-members.json",
+        "min_keys": 5,
+        "note": "Clinton County Board members keyed by district (5 districts seating 3 each — 15 members, ALL FIFTEEN with a phone, an e-mail and a term-expiry year, the richest board source the canvass route has met). Scraped weekly from the county's own board page, whose Board Chairman and Vice Chairman lines are matched onto their own member rows by name — a label matching no member is a hard failure rather than a badge attached to nobody. TWO OF THE FIFTEEN OPEN THEIR COLUMN WITH a photo wrapped in the same <strong> tag the name uses, so a reader that takes the FIRST match cleans to an empty string and drops the member while every other count still passes; the parser walks every one instead, which is how Kurt Schmitz was recovered on the first run. One member's published address is a personal gmail among fourteen on the county domain and ships as published — substituting a county address the county did not print would be inventing one. NO PARTY: the page publishes none. The same run re-checks the district composition against the Clerk's results system and fails on a re-precincting or a redistricting."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
@@ -2610,6 +2621,11 @@
       "file": "update-franklin-county-board-roster.yml",
       "purpose": "Franklin County Board roster (the county's own members page, read as a GRID by cell coordinate — a flattened text read pairs every role with the wrong member, and its Address column is every member's home) + the redistricting tripwire: the same run re-checks the county's live precinct count and each numbered board contest's precinct count against the shipped dissolve, and fails if either moves",
       "schedule": "Fri 19:00 UTC"
+    },
+    {
+      "file": "update-clinton-county-board-roster.yml",
+      "purpose": "Clinton County Board roster (the county's own board page — 15 members with phone, e-mail and term year, Chairman and Vice Chairman badged by name match) + the redistricting tripwire: the same run re-checks the county's live precinct count and each numbered board contest's precinct count against the shipped dissolve",
+      "schedule": "Sat 19:00 UTC"
     },
     {
       "file": "roster-health.yml",

@@ -9183,6 +9183,41 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/franklin-county-board-members.json", {}, 2);
   });
 
+  /* Clinton — the 71st county, and the SECOND from the platinum results vendor,
+   * found the same day as Franklin. Its five districts are dissolved from the
+   * Census 2020 voting districts per a composition three certified elections
+   * agree on: the 2024 General and 2026 General Primary each carry a numbered
+   * "FOR COUNTY BOARD DISTRICT n" contest in all 34 precincts (7/9/6/5/7), and
+   * the 2022 General names candidates whose districts key onto the county's own
+   * board page — so the oldest election corroborates the two numbered ones from
+   * a different direction.
+   *
+   * A COMPOSED FABRIC, NOT A ONE-TO-ONE ONE. Census 2020 carries 39 Clinton
+   * voting districts against the 34 precincts the county runs today: Irishtown,
+   * Lake and St Rose each merged a numbered pair, and Brookside went from five
+   * to three. The first three merges are nameable and the fourth is not — but
+   * all five Brookside voting districts sit in District 1, so no merge can move
+   * a district line. NO PRECINCT LAYER SHIPS for exactly that reason: a precinct
+   * card would have to say which Brookside is which, and nothing published does.
+   *
+   * The population spread is 7.3% worst — the tightest this route has produced,
+   * and the strongest available evidence that the composition is the county's
+   * current map rather than a stale one. */
+  var loadClintonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clinton-county-outline.json", {}, 2);
+  });
+  function clintonCountyCoverage(point) {
+    return loadClintonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadClintonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clinton-county-board-districts.json", {}, 2);
+  });
+  var loadClintonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clinton-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -18170,6 +18205,75 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadFranklinBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Clinton — 5 districts of THREE members each, dissolved from the
+      // Census 2020 voting districts per a composition three certified
+      // elections agree on (build_clinton_boundaries.py). The roster is the
+      // county's own board page and is the richest this route has met: phone,
+      // e-mail and term-expiry year on all fifteen, with the Chairman and
+      // Vice Chairman named above the grid and badged onto their own rows.
+      // The card names the county's own 34 current precincts, not the 39
+      // census units the geometry is dissolved from.
+      {
+        key: "clinton",
+        coverage: clintonCountyCoverage,
+        loadGeometry: loadClintonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadClintonBoardDistricts(),
+            loadClintonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Clinton County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Clinton County Board (official)",
+                   url: "https://clintonco.illinois.gov/county-offices/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadClintonBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

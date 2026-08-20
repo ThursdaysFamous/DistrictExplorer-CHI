@@ -332,6 +332,16 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # (Williamson, Saline, Perry, Jackson) still has unserved
                      # neighbours of its own.
                      "055",
+                     # Clinton (2026-08-20), the 71st county and the SECOND from
+                     # the platinum results vendor. It borders Washington,
+                     # St. Clair, Madison and Jefferson, all served, plus Bond
+                     # through the 3rd Circuit — so it fills a notch in the
+                     # Metro East rather than extending the frontier, and
+                     # CARLYLE MOVES FROM THE OUTSIDE LIST TO THE INSIDE ONE.
+                     # Salem (Marion) takes over as the eastern frontier anchor:
+                     # Marion borders Clinton, is served by nothing, and its
+                     # returns route was measured shut the same afternoon.
+                     "027",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -377,6 +387,7 @@ DISPATCH_COUNTY_FIPS = {
     "mercer": "131",
     "edgar": "045",
     "franklin": "055",
+    "clinton": "027",
     # Moultrie is deliberately ABSENT: its board is elected at large, so it has
     # no district geometry, no dispatch entry and no toggle — its members ride
     # the County card via data/app/il-county-commissioners.json. It appears in
@@ -602,6 +613,12 @@ INSIDE = {
     # counties of its own. Ava (Jackson) and Shawneetown (Gallatin) stay
     # OUTSIDE and now sit one county from the line rather than two.
     "Benton (Franklin)": (37.9967, -88.9203),
+    # Carlyle (Clinton) — the county seat, 2026-08-20, the 60th dispatched
+    # county. It held a place in the OUTSIDE list from the Metro East build
+    # onward, proving the fill stopped at Clinton's line; this join moved it up,
+    # and the guard failed the build until it did, which is the whole of that
+    # list's job. Salem (Marion) inherits the eastern frontier.
+    "Carlyle (Clinton)": (38.6103, -89.3726),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -623,7 +640,14 @@ OUTSIDE = {
     # behind is Gallatin, served by nothing and bordering White, Hamilton and
     # Saline; Shawneetown is its seat.)
     "Shawneetown (Gallatin)": (37.7131, -88.1867),
-    "Carlyle (Clinton)": (38.6103, -89.3726),
+    # Salem (Marion) replaced Carlyle here on 2026-08-20, when Clinton shipped
+    # and Carlyle moved up to INSIDE — the same forced promotion Carmi and
+    # Paris made. Marion is the honest successor: it borders Clinton, is served
+    # by nothing, and its own certified returns were measured the same
+    # afternoon and found INSUFFICIENT — five census voting districts under the
+    # base names CENTRALIA and SALEM span three board districts each, so no
+    # name can place them and the dissolve that built Clinton cannot build it.
+    "Salem (Marion)": (38.6270, -88.9456),
     "Ava (Jackson)": (37.8886, -89.4964),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so
     # it must stay outside — the guard that keeps "a circuit's secondary
