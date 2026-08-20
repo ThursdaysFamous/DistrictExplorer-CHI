@@ -48,6 +48,7 @@ PLACES_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_place_by_county
 # Census county FIPS for every sourced county, for county-preferred lookup.
 COUNTY_FIPS = {
     "Cook": "031",
+    "Boone": "007",
     "LaSalle": "099",
     "DuPage": "043",
     "Kane": "089",
@@ -135,6 +136,13 @@ OFFICER_OFFICES = {"clerk", "treasurer", "village clerk", "city clerk",
 # good file in place; ordinary turnover does not.
 COUNTY_FLOORS = {
     "Cook": {"municipalities": 120, "members": 900, "heads": 120},
+    # Boone, a full-governing-body source from the Clerk's own yearbook
+    # (2026 edition live: 5 municipalities / 47 officials / 5 heads). The
+    # county has exactly five incorporated places and the book carries every
+    # one in full, so the municipality floor is an equality in all but name;
+    # heads sits one under because Capron publishes a vacancy from time to
+    # time and one empty chair must not freeze the county.
+    "Boone": {"municipalities": 5, "members": 40, "heads": 4},
     "Will": {"municipalities": 30, "members": 260, "heads": 30},
     # LaSalle, the third full-governing-body source and the first county outside
     # the metro (2026-07 live: 26 municipalities / 206 officials / 26 heads).
@@ -317,6 +325,7 @@ PRESERVABLE = {
     # mayors. LaSalle carries its own 26 municipalities and nothing else depends
     # on it, so a fetch failure should carry its last-good entries forward, not
     # fail every other county's turnover.
+    "boone": {"kind": "county", "county": "Boone"},
     "lasalle": {"kind": "county", "county": "LaSalle"},
     "winnebago": {"kind": "county", "county": "Winnebago"},
     "dupage": {"kind": "county", "county": "DuPage"},
@@ -389,6 +398,7 @@ PRESERVABLE = {
 # claims any of them — verified at its 2026-08-17 build, which printed no
 # both-counties NOTE for it.
 COUNTY_PRECEDENCE = ["Cook", "Will", "DeKalb", "LaSalle", "Winnebago", "Ogle",
+                     "Boone",
                      "Stephenson", "Grundy", "Livingston", "Logan", "McLean",
                      "Sangamon", "Madison", "St. Clair", "Rock Island", "Henry",
                      "Cass", "Peoria", "Tazewell", "DuPage", "Kane", "Kendall", "McHenry",

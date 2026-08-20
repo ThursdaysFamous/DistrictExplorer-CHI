@@ -41,16 +41,31 @@ never renamed the page — and YEARBOOK_URL is the pinned FALLBACK, used only
 when the index page cannot be read or carries no dated link.
 
 WHY A WORD-POSITION READ (pdfplumber, not pypdf). Belvidere's ALDERPERSONS
-block prints the ward label in its own text column — labels at x≈49.4,
-member rows at x≈80.4 — and each label shares its baseline with the FIRST of
-that ward's two members. Nothing but that shared y ties a ward to a person.
-Measured on the 2025 and 2026 editions, a flattened extraction happens to
-emit the label ahead of its member, so a line parser would appear to work;
-this parser does not rely on that, because "appears to work" is how a ward
-gets silently attached to the wrong alderperson when a label drifts a
-fraction of a point above its row. The rows are rebuilt from word
-coordinates, the ward column is split off by x, and the assignment is then
-CROSS-CHECKED against the county's own Belvidere_Wards service (below).
+block prints the ward label in its own text column, and each label shares its
+BASELINE with the FIRST of that ward's two members — nothing but that shared y
+ties a ward to a person. Measured on both the 2025 and 2026 editions, a
+flattened extraction happens to emit each label just ahead of its member, so a
+line parser would appear to work; this parser does not rely on that, because
+"appears to work" is how a ward gets silently attached to the wrong
+alderperson the first time a label drifts a fraction of a point off its row.
+Rows are rebuilt from word coordinates, the ward label is lifted off the front
+of its row, and the assignment is then CROSS-CHECKED against the county's own
+Belvidere_Wards service (below).
+
+WHAT THE COORDINATES ARE AND ARE NOT USED FOR, because the obvious first draft
+of this was wrong. ABSOLUTE x THRESHOLDS ARE EDITION-SPECIFIC IN THIS BOOKLET:
+the 2025 edition's page is 252 x 457 pt with the ward labels at x≈27.0 and the
+member rows at x≈58.0, and the 2026 edition is the same page rescaled to
+297 x 684 with those columns at x≈49.4 and x≈80.4. A threshold measured on
+2026 puts BOTH of 2025's columns on the same side of the line and glues
+"First:" onto a person's name — which is a real regression this scraper was
+caught committing against last year's book before the rule changed. The gap
+between label and member is no better a key: it is a tab stop, so it ranges
+from 5.1 to 14.1 pt with the length of the label. What is stable across both
+editions, to within a twentieth of a point, is that all ten member rows start
+at the SAME x while every ward label starts left of it. So the label is found
+by CONTENT and the column is proven by ANCHOR AGREEMENT — a member landing off
+that anchor, or a label overlapping it, is a warning naming both coordinates.
 
 EVERY OTHER DECISION IS BY CONTENT, NOT BY GEOMETRY, and deliberately so:
 the booklet's own indentation is not reliable (Caledonia's sixth trustee,
@@ -61,9 +76,11 @@ leaders plus a title make an appointed-staff row, everything else is contact
 — and the x coordinates are used for the one thing content cannot settle.
 
 *** HOME ADDRESSES ARE PRINTED THROUGHOUT AND NEVER SHIP. ***
-The booklet prints a RESIDENCE under almost every official — 54 street-address
-lines in this section alone — exactly as Madison's and Peoria's sources do,
-and exactly as this project has always refused to publish. The refusal here is
+The booklet prints a RESIDENCE under almost every official — 54 of this
+section's lines open with a street number, and 40 of those are somebody's
+home (the other 14 are the six municipalities' own hall addresses, seven page
+numbers and one bare hall phone) — exactly as Madison's and Peoria's sources
+do, and exactly as this project has always refused to publish. The refusal is
 STRUCTURAL, not a blocklist: the only street address a record can ever carry
 is `office_address`, and the only lines that can set it are the hall-header
 lines between a municipality's own "X CITY/VILLAGE OFFICERS" banner and its
@@ -154,10 +171,14 @@ name warns for the same reason.
 
 WHAT WOULD BREAK THIS: the Clerk renaming the section banner or the
 "FIRE PROTECTION DISTRICT" heading that bounds it; a municipality banner in
-a form other than "<NAME> CITY|VILLAGE OFFICERS"; the ward column merging
-into the member column (the cross-check would fire, and MIN_WARDS would fail);
-the index page dropping its dated link text (the pinned fallback then serves,
-one edition behind, with a WARN).
+a form other than "<NAME> CITY|VILLAGE OFFICERS"; the ward column merging into
+the member column (the anchor check warns, the cross-check fires, and
+MIN_WARDS fails before anything is written); the index page dropping its dated
+link text (the pinned fallback then serves, one edition behind, with a WARN).
+Re-verify against the PREVIOUS edition after any change to the row assembly —
+`--pdf <last year's book> --no-cross-check` must still produce the same five
+municipalities and ten warded seats, and it is the check that caught the
+absolute-x mistake above.
 
 Usage:
     python3 boone_municipal_officials_scraper.py --out boone_municipal_officials.json
@@ -332,17 +353,28 @@ WARD_LABEL_RE = re.compile(
     re.I)
 WARD_ORDINALS = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
                  "sixth": 6, "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10}
-# Measured on the 2025 and 2026 editions: labels start at x≈49.4, member rows
-# at x≈80.4. The split is placed between them with room for a font change.
-WARD_LABEL_X_MAX = 75.0
-WARD_MEMBER_X_MIN = 75.0
+# THE COLUMN IS PROVEN BY ANCHOR AGREEMENT, NOT BY A PIXEL THRESHOLD, and that
+# is a correction of the obvious first draft. Absolute coordinates ARE
+# edition-specific here: the 2025 edition's page is 252 x 457 pt with the ward
+# labels at x≈27.0 and the member rows at x≈58.0, while the 2026 edition is the
+# same page scaled to 297 x 684 with those columns at x≈49.4 and x≈80.4. A
+# threshold measured on 2026 puts both of 2025's columns on the same side and
+# glues "First:" onto a person's name. The gap between label and member is no
+# better — it is a tab stop, so it ranges from 5.1 to 14.1 pt with the label's
+# length. What IS stable across both editions, to within a twentieth of a
+# point, is that every one of the ten member rows starts at the SAME x while
+# every ward label starts left of it. That is what a column is, and it is what
+# this checks.
+WARD_COLUMN_TOLERANCE = 2.0     # measured spread of the member anchor: 0.07 pt
 # Words within this many points of a row's top edge belong to that row. The
 # booklet's line pitch is ~9.5 pt and its superscripted ordinals ("9th") sit a
 # fraction high, so a fixed bucket splits them off their own line.
 ROW_TOLERANCE = 3.0
 
 # 2026-08 live: 5 municipalities / 47 officials / 5 heads / 10 ward seats
-# across 5 wards / 54 residence lines refused. Deliberate under-tolerances —
+# across 5 wards / 40 residences refused. The 2025 edition parses to the same
+# five counts, which is the regression test for any change to row assembly.
+# Deliberate under-tolerances —
 # ordinary turnover and a vacancy pass, a section that stopped parsing does
 # not. MIN_MUNICIPALITIES sits at the true value because Boone HAS five
 # incorporated places: this source cannot lose one and still be right.
@@ -426,15 +458,20 @@ class Row(object):
         self.x0 = self.words[0]["x0"] if self.words else 0.0
 
     def split_ward_column(self):
-        """-> (label_text, member_row) when a ward label shares this baseline."""
-        left = [w for w in self.words if w["x0"] < WARD_LABEL_X_MAX]
-        right = [w for w in self.words if w["x0"] >= WARD_MEMBER_X_MIN]
-        if not left or not right:
-            return None, self
-        label = clean(" ".join(w["text"] for w in left))
-        if not WARD_LABEL_RE.match(label or ""):
-            return None, self
-        return label, Row(right)
+        """-> (label, member_row, label_x1) when a ward label opens this row.
+
+        The label is identified by CONTENT (an ordinal in the ward vocabulary);
+        whether it is really a separate column is decided by the caller, which
+        compares the member's x against the anchor every other member row in
+        the block shares. Splitting on a fixed x would be wrong — see
+        WARD_COLUMN_TOLERANCE.
+        """
+        if len(self.words) < 2:
+            return None, self, None
+        first = self.words[0]
+        if not WARD_LABEL_RE.match(first["text"]):
+            return None, self, None
+        return first["text"], Row(self.words[1:]), first["x1"]
 
 
 def document_rows(pdf_bytes):
@@ -580,12 +617,24 @@ def parse(rows, warnings, drops, residences):
     office = None            # (label, appointed) currently in effect
     ward_mode = False
     ward = None
+    ward_anchor = None       # x of the member column beside the ward labels
     member = None
     pending_year = None      # a member row whose term year wrapped to its own line
     skipped = []
 
     def close_member():
+        """End the current member's contact block, and account for a lost year.
+
+        A member whose row ended in leaders and never met its wrapped term year
+        still ships — the person is the point — but it says so, because a
+        silently termless seat is the first symptom of the row assembly
+        drifting.
+        """
         nonlocal member, pending_year
+        if pending_year is not None and pending_year.term is None:
+            warnings.append("%s: '%s' is printed with leaders and no term year — "
+                            "shipped without one"
+                            % (muni.jurisdiction if muni else "?", pending_year.name))
         member = None
         pending_year = None
 
@@ -620,6 +669,7 @@ def parse(rows, warnings, drops, residences):
             office = None
             ward_mode = False
             ward = None
+            ward_anchor = None
             continue
 
         if skipping is not None:
@@ -631,15 +681,32 @@ def parse(rows, warnings, drops, residences):
 
         # --- ward column ------------------------------------------------
         row_ward = None
+        off_column = False
         if ward_mode:
-            label, row = row.split_ward_column()
+            label, member_row, label_x1 = row.split_ward_column()
             if label:
+                if ward_anchor is None:
+                    ward_anchor = member_row.x0
+                if abs(member_row.x0 - ward_anchor) > WARD_COLUMN_TOLERANCE:
+                    warnings.append("%s: the member beside ward label '%s' starts "
+                                    "at x=%.1f but this block's member column is "
+                                    "at x=%.1f — the ward columns moved; the ward "
+                                    "on this row may be wrong"
+                                    % (muni.jurisdiction, label, member_row.x0,
+                                       ward_anchor))
+                if label_x1 is not None and label_x1 > member_row.x0 + 0.5:
+                    warnings.append("%s: ward label '%s' overlaps the member "
+                                    "column — the two are no longer separate "
+                                    "columns" % (muni.jurisdiction, label))
                 row_ward = WARD_ORDINALS[label.rstrip(":").lower()]
+                row = member_row
                 text = row.text
-            elif WARD_LABEL_RE.match(text.split()[0].rstrip(":") + ":"):
-                warnings.append("%s: a ward label shares a line with its member "
-                                "but the two are not in separate columns — the "
-                                "booklet's ward geometry changed" % muni.jurisdiction)
+            elif (ward_anchor is not None
+                  and row.x0 < ward_anchor - WARD_COLUMN_TOLERANCE):
+                # Only meaningful if this turns out to BE a member row; the
+                # department-head rows that follow the block sit in the caption
+                # column and are not the ward column's business.
+                off_column = True
 
         leaders = LEADER_RE.search(text)
         left = clean(text[:leaders.start()]) if leaders else None
@@ -668,6 +735,11 @@ def parse(rows, warnings, drops, residences):
             if ward_mode:
                 if row_ward is not None:
                     ward = row_ward
+                elif off_column:
+                    warnings.append("%s: the member row '%s' starts left of this "
+                                    "block's member column at x=%.1f — a ward "
+                                    "label may have been read as part of the name"
+                                    % (muni.jurisdiction, left, ward_anchor))
                 member.district = "Ward %d" % ward if ward else None
             member.name = left
             if APPOINTED_RE.match(tail):
@@ -679,7 +751,19 @@ def parse(rows, warnings, drops, residences):
             continue
 
         # --- a member row whose year wrapped onto its own line -----------
+        # The booklet does this ("Mike Fidder ……" then "2029" alone on the next
+        # line, in the township section that precedes this one), so the shape is
+        # real. It is also the one shape that could ship an OFFICE as a person:
+        # "Village Treasurer ……" with nothing after it names nobody. So a left
+        # side that is itself a known caption is refused here rather than
+        # rescued — the row is a title with no holder, not a person with no year.
         if leaders and not tail and looks_like_title(left) and office is not None:
+            key = (left or "").lower().rstrip(":.")
+            if key in KEEP_TITLES or key in IGNORE_CAPTIONS or STAFF_TITLE_RE.match(left):
+                warnings.append("%s: the '%s' row names nobody — skipped"
+                                % (muni.jurisdiction, left))
+                close_member()
+                continue
             label, appointed = office
             member = Member(label, appointed, None)
             if ward_mode:
@@ -732,6 +816,7 @@ def parse(rows, warnings, drops, residences):
                     ward_mode = key in WARD_CAPTIONS
                     if not ward_mode:
                         ward = None
+                        ward_anchor = None
                     continue
                 if STAFF_TITLE_RE.match(caption):
                     office = None
@@ -748,6 +833,7 @@ def parse(rows, warnings, drops, residences):
         # --- everything else is contact, and only a phone/e-mail is taken --
         feed_contact(member, text, residences)
 
+    close_member()
     if not municipalities:
         raise RuntimeError("no municipality banners inside the section — the "
                            "yearbook's layout changed")
@@ -918,6 +1004,13 @@ def assert_no_home_addresses(payload, residences):
             if field != "district" and re.search(r"\d", value):
                 problems.append("%s carries a digit in its %s field ('%s')"
                                 % (record.get("jurisdiction"), field, value))
+            # A colon in a name is the ward-column failure wearing a disguise:
+            # "First: Clayton Stevens" is what a mis-split row produces, and it
+            # reads on a card as a person's name.
+            if field == "name" and ":" in value:
+                problems.append("%s carries a colon in a person's name ('%s') — "
+                                "a ward label was probably read as part of it"
+                                % (record.get("jurisdiction"), value))
 
     blob = json.dumps(payload, ensure_ascii=False)
     halls = {r.get("office_address") for r in payload["officials"] if r.get("office_address")}

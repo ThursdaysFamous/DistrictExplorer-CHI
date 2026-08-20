@@ -520,6 +520,22 @@ PROVENANCE = [
              "filename carries its edition ('2025- 2027 Yearbook.pdf'). Adeline "
              "is the one entry that labels a PHYSICAL and a MAILING address at "
              "different places; the scraper keeps them apart deliberately."},
+    {"layer": "Boone County municipal governing bodies (roster)",
+     "app_file": "municipal-officials.json",
+     "source_url": ("https://www.boonecountyil.gov/government/departments/"
+                    "clerk___recorder/2019_boone_county_illinois_year_book.php"),
+     "note": "The Clerk's yearbook, 'CITY/VILLAGE OFFICIALS' section "
+             "(boone_municipal_officials_scraper.py) — full governing body for "
+             "all 5 municipalities, including Belvidere's ten ward seats, which "
+             "are cross-checked against the county's own Belvidere_Wards "
+             "service before the payload is written. Pinned to the INDEX page, "
+             "not the PDF: the edition is discovered from the link TEXT ('2026 "
+             "Yearbook'), because the filenames are not a reliable edition key "
+             "— the page's own slug still says 2019 while it serves the 2026 "
+             "book. This yearbook prints a RESIDENCE under almost every "
+             "official; the scraper refuses those lines by construction and "
+             "proves it on the built payload, so no home address can reach "
+             "data/app (the Madison/Peoria rule)."},
     {"layer": "Stephenson County municipal governing bodies (roster)",
      "app_file": "municipal-officials.json",
      "source_url": ("https://stephensoncountyil.gov/government/"
