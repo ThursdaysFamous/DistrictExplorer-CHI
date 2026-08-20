@@ -1993,6 +1993,72 @@
     "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf",
     "url": "https://www.belvidereil.gov"
   },
+  "1705209": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Jerry Saracco",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "John Balzraine",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Michael \"Mickey\" Robinson",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Norman Emmons",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Brant McFarland",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Dustin Fletcher",
+        "nextElection": "2027",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "James F Kelly",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Benld",
+    "office": {
+      "address": "201 East Central Avenue, Benld IL 62009",
+      "email": "bnldclrk@gomadison.com",
+      "phone": "217-835-2114"
+    },
+    "officers": [
+      {
+        "name": "Terri J. Koyne",
+        "nextElection": "2029",
+        "role": "City Clerk"
+      },
+      {
+        "name": "Cindy L. Crites",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/",
+    "url": "http://www.benld.org/"
+  },
   "1705248": {
     "county": "DuPage",
     "head": {
@@ -2686,6 +2752,68 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://bridgeview-il.gov"
   },
+  "1708264": {
+    "board": [
+      {
+        "name": "Aaron Mead",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Bradley S. Arnold",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donald R. Little",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "James Winslade",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Bramley Jr.",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Marcella Wilfong",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Matthew P. Kasten",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Brighton",
+    "office": {
+      "address": "206 S Main P.O. Box 458, Brighton IL 62012",
+      "email": "clerk@brightonill.com",
+      "phone": "618-372-8860"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Ashley Ann Lievers",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Tamara A Jenkins",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/",
+    "url": "https://brightonil.socs.net/"
+  },
   "1708303": {
     "board": [
       {
@@ -3089,6 +3217,71 @@
     ],
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://thevillageofbullvalley.com"
+  },
+  "1709577": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Betty Phelps",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "David Schick",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Richard W. Girth",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Carlos Arzuagas",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Glenn Bruckert",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Grover K. Webb",
+        "nextElection": "2029",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "John P. Chapman",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Bunker Hill",
+    "office": {
+      "address": "801 S Franklin St, Bunker Hill IL 62014",
+      "phone": "618-585-4632"
+    },
+    "officers": [
+      {
+        "name": "Heather Kraus",
+        "nextElection": "2029",
+        "role": "City Clerk"
+      },
+      {
+        "name": "Lisa M. Webb",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/",
+    "url": "https://cityofbunkerhillil.org/"
   },
   "1709642": {
     "board": [
@@ -3965,6 +4158,78 @@
     ],
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf"
   },
+  "1711202": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Jody Reichmann",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "John M LeVora",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Carla Brockmeier",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "William R. Link",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Kenneth D. Reese",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Terry R. Ober",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Victoria L. Wagstaff",
+        "nextElection": "2029",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Doug Downey",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Carlinville",
+    "office": {
+      "address": "550 North Broad, Carlinville IL 62626",
+      "phone": "217-854-4076"
+    },
+    "officers": [
+      {
+        "name": "Mary Heller",
+        "nextElection": "2029",
+        "role": "City Clerk"
+      },
+      {
+        "appointed": true,
+        "name": "William Fanning Jr",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/",
+    "url": "http://www.cityofcarlinville.com"
+  },
   "1711332": {
     "county": "DuPage",
     "head": {
@@ -4498,6 +4763,55 @@
     },
     "name": "Village of Cherry Valley",
     "sourceUrl": "https://wingis.org/maps/electedofficials"
+  },
+  "1713165": {
+    "board": [
+      {
+        "name": "Brandon Callarman",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Corey Suttles",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Erik D. Stover",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Linda Rhodes",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Thomas Miller",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Stephanie Callarman",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Chesterfield",
+    "office": {
+      "address": "115 E Depot P.O. Box 143, Chesterfield IL 62630",
+      "email": "chesterfieldvillage1@gmail.com",
+      "phone": "618-753-3558"
+    },
+    "officers": [
+      {
+        "name": "Amanda Suttles",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1714000": {
     "board": [
@@ -7062,6 +7376,64 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vodolton.org"
   },
+  "1720370": {
+    "board": [
+      {
+        "name": "Charles (Chip) M. Knoche",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gina Henrichs",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jeffrey Kirkwood",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Cunningham",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michael Niebrand",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sue Ellen Campbell",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Charles R. Knoche",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Dorchester",
+    "office": {
+      "address": "100 W Chestnut Ave, Dorchester IL 62033",
+      "phone": "618-362-6279"
+    },
+    "officers": [
+      {
+        "name": "Amy Niebrand",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Tracie Kirkwood",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1720591": {
     "county": "DuPage",
     "head": {
@@ -7326,6 +7698,59 @@
     "sourceUrl": "https://www.grundycountyil.gov/Documents/Communities/Directory%20of%20Officials/BOOKLET%20GRUNDY%20COUNTY%20DIRECTORY%202026.pdf",
     "url": "https://www.dwightillinois.org"
   },
+  "1721410": {
+    "board": [
+      {
+        "name": "Dennis Zirkelbach",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donald L. Putnam Jr.",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jesse A. Houser",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Josh Dixon",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Julie Zirkelbach",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Carole Scheller",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Eagarville",
+    "office": {
+      "address": "116 S Mt Olive St P.O. Box 202, Eagarville IL 62023",
+      "email": "eagarvilleil@gmail.com"
+    },
+    "officers": [
+      {
+        "name": "Lori Grandone",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      },
+      {
+        "name": "April Balestri",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1721540": {
     "board": [
       {
@@ -7569,6 +7994,61 @@
     ],
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.eastdundee.net"
+  },
+  "1721852": {
+    "board": [
+      {
+        "name": "Bradley Buckner",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Bruce Hedrick",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Dennis Tallman",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ryan Bussmann",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sheldon Weinberg",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Larry Norville",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of East Gillespie",
+    "office": {
+      "address": "605 Springfield Rd P.O. Box 149, East Gillespie IL 62033",
+      "email": "villageofeastgillespie@yahoo.com",
+      "phone": "217-839-3062"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Adam Schmidt",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Brian Engelke",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1721904": {
     "board": [
@@ -9868,6 +10348,131 @@
     "sourceUrl": "https://clerk.kanecountyil.gov/elections",
     "url": "https://www.villageofgilberts.com"
   },
+  "1729236": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Dona Rauzi",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Robert F Fritz Jr",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "David Link",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Frank Barrett Jr",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Billy G Hayes",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Janet Odell-Mueller",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Wendy Rolando",
+        "nextElection": "2027",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Landon Pettit",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Gillespie",
+    "office": {
+      "address": "115 N Macoupin Street, Gillespie IL 62033",
+      "email": "cityofgillespie@frontiernet.net",
+      "phone": "217-839-2919"
+    },
+    "officers": [
+      {
+        "name": "Tammy Beechler",
+        "nextElection": "2029",
+        "role": "City Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
+  "1729392": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Kenneth Fox",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Taylor J. Edwards",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Patrick Martin",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Sara Fugate",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Tim McLean",
+        "nextElection": "2029",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Joseph H. Marko",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Girard",
+    "office": {
+      "address": "111 West Madison Street P.O. Box 115, Girard IL 62640",
+      "email": "cityclerk@royell.org",
+      "phone": "217-627-3512"
+    },
+    "officers": [
+      {
+        "name": "Paula Mouser",
+        "nextElection": "2029",
+        "role": "City Clerk"
+      },
+      {
+        "name": "Ryan Leonard",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1729483": {
     "board": [
       {
@@ -11363,6 +11968,48 @@
       }
     ],
     "sourceUrl": "https://marshallcountyillinois.gov/"
+  },
+  "1734423": {
+    "board": [
+      {
+        "name": "Cole Arnett",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donald Taylor",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gary Eyer",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jerry Schuetz",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Mark Releford",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shannon Bilbruck",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "name": "Village of Hettick",
+    "office": {
+      "address": "P.O. Box 2, Hettick IL 62649",
+      "email": "villageofhettick@gmail.com",
+      "phone": "618-778-5227"
+    },
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1734514": {
     "board": [
@@ -13546,6 +14193,59 @@
     ],
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.lith.org"
+  },
+  "1741214": {
+    "board": [
+      {
+        "name": "Curt Lovsey",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jean Inman",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Matthew Miller",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Randy Foster",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Roger Louis Hartman",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Carrie Lakin Rhodes",
+      "nextElection": "2027",
+      "role": "President"
+    },
+    "name": "Village of Lake Ka-Ho",
+    "office": {
+      "address": "6630 Edgewater Dr, Mt Olive IL 62069",
+      "phone": "217-250-1996"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Matthew Miller",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Laurie Greco",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1741326": {
     "county": "McHenry",
@@ -16355,6 +17055,65 @@
     "sourceUrl": "https://sangamonil.gov/departments/a-c/county-clerk/elected-officials/local-officials/city-village-officials",
     "url": "http://sites.google.com/view/mechanicsburgil"
   },
+  "1748138": {
+    "board": [
+      {
+        "name": "Danielle Moore",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jerry Manula",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jill Grant",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rachel Woods",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Randy Draper",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Ronald Bellitto",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Derek Isringhausen",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Medora",
+    "office": {
+      "address": "202 W. Locust P.O. Box 91, Medora IL 62063",
+      "email": "village.medora@gmail.com",
+      "phone": "618-729-3845"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Evelyn M. Kessinger",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Kimberly Kessinger",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1748242": {
     "board": [
       {
@@ -16959,6 +17718,59 @@
     "sourceUrl": "https://fliphtml5.com/hbvu/bbmp/",
     "url": "https://minooka.com"
   },
+  "1749802": {
+    "board": [
+      {
+        "name": "Jerry Patterson",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Dambacher",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kerry Leach",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Martha Anderson",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steven Rothe",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Thomas Thompson",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Modesto",
+    "office": {
+      "address": "201 E Grand P.O. Box 166, Modesto IL 62667",
+      "phone": "217-436-7516"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Trista Woods",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Jaden L. Dugger",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1749854": {
     "board": [
       {
@@ -17410,6 +18222,65 @@
     ],
     "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
   },
+  "1750920": {
+    "board": [
+      {
+        "name": "Greg Miller",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jaime Ruckman",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jason Williamson",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Klayton Buhs",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Roger Fritz",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Steve Fellin",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Jerry Rondi",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Mount Clare",
+    "office": {
+      "address": "410 Berry St, Mt Clare IL 62033",
+      "email": "villageofmtclare@yahoo.com",
+      "phone": "217-835-6661"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Lynn Petrelli",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Kathy Fellin",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1750998": {
     "board": [
       {
@@ -17443,6 +18314,83 @@
     ],
     "sourceUrl": "https://www.oglecountyil.gov/document_center/County%20Clerk/Yearbook/2025-%202027%20Yearbook.pdf",
     "url": "https://www.mtmorrisil.net"
+  },
+  "1751024": {
+    "board": [
+      {
+        "district": "1",
+        "name": "Ernest K Parish Jr",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "Michele A. Zippay",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Donnie Nowell",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Verne Schulte",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Steven Remer",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Theresa Ann Kirkwood",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Chuck Cox",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Thomas C. Curtis",
+        "nextElection": "2029",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Brian Kosowski",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Mount Olive",
+    "office": {
+      "address": "215 E. Main, Mt Olive IL 62069",
+      "email": "moclerk@madisontelco.com",
+      "phone": "217-999-4261"
+    },
+    "officers": [
+      {
+        "name": "Melinda Zippay",
+        "nextElection": "2029",
+        "role": "City Clerk"
+      },
+      {
+        "name": "Bryce Bone",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1751089": {
     "board": [
@@ -18250,6 +19198,60 @@
     },
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://vniles.com"
+  },
+  "1753039": {
+    "board": [
+      {
+        "name": "Craig Bridges",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Donald Wilson",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "John Caudle",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "John R. Gudgel II",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Judith A. Bivin",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Judith E. Behme",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Sandra Gatermann",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Town of Nilwood",
+    "office": {
+      "address": "33 Morean St. P.O. Box 33, Nilwood IL 62672",
+      "email": "villageofnilwood@yahoo.com",
+      "phone": "217-627-2231"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Tammy Wilson",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1753377": {
     "board": [
@@ -19825,6 +20827,65 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://palatine.il.us"
+  },
+  "1757329": {
+    "board": [
+      {
+        "name": "Aaron D. Williams",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jakoda Zinkan",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jordan Releford",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Patty Burk",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Rob Hohimer",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott McAdams",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "W. Bradley Bacon",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Palmyra",
+    "office": {
+      "address": "114 E. State St. P.O. Box 113, Palmyra IL 62674",
+      "email": "villageofpalmyra@gmail.com",
+      "phone": "217-436-2518"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Vicki McAdams",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Judy Bacon",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1757381": {
     "board": [
@@ -23022,6 +24083,65 @@
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.roxana-il.org"
   },
+  "1766196": {
+    "board": [
+      {
+        "name": "Charrease Frazier",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gary L. Weber",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Gregory Fraizer",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Henry Sanders",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "London Simmons",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Nina Petty",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Parkeoka Huddleston",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Royal Lakes",
+    "office": {
+      "address": "549 W Shipman Rd, Royal Lakes IL 62685",
+      "email": "vc.rlvillage@gmail.com",
+      "phone": "618-836-7124"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Vickie J Triplett",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Velma Caver",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1766443": {
     "board": [
       {
@@ -23473,6 +24593,71 @@
     ],
     "sourceUrl": "https://cms9files.revize.com/carrollil/2025-2026%20YEARBOOK.pdf"
   },
+  "1767873": {
+    "board": [
+      {
+        "name": "Candy Price",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "John G. Ondo",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Michelle Greenwalt",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Randy Ramseier",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Robert J. Reiman",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Sarah Wallace",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Shawn Pernicka",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "John Sorbie",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Sawyerville",
+    "office": {
+      "address": "300 Mine Rd. P.O. Box 7, Sawyerville IL 62085",
+      "email": "sawyervillevillage@gmail.com",
+      "phone": "217-835-2074"
+    },
+    "officers": [
+      {
+        "name": "Michelle Greenwalt",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Mary Ann Vadalabene",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
   "1768003": {
     "board": [
       {
@@ -23583,6 +24768,61 @@
     ],
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://villageofschillerpark.com"
+  },
+  "1768406": {
+    "board": [
+      {
+        "name": "Carolyn Maher",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Chris Grinkey",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lisa De Frates",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Ryan Woolfolk",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Sarah Wallace",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "appointed": true,
+      "name": "Derek Williams",
+      "nextElection": "2027",
+      "role": "President"
+    },
+    "name": "Village of Scottville",
+    "office": {
+      "address": "102 Walnut St., Scottville IL 62683",
+      "email": "village.scottville@gmail.com",
+      "phone": "217-370-0221"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Sarah Wallace",
+        "role": "Clerk"
+      },
+      {
+        "name": "Amanda Kaufman",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1768640": {
     "board": [
@@ -23863,6 +25103,64 @@
     ],
     "sourceUrl": "https://www.ewgateway.org/wp-content/uploads/2026/05/2026-POD.pdf",
     "url": "http://www.shilohil.org"
+  },
+  "1769563": {
+    "board": [
+      {
+        "name": "Brandon Robinson",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Devin Lefler",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Ethan Wilson",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Forest Mangham",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "appointed": true,
+        "name": "Vicki Dobbs",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Tim Trevino",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Town of Shipman",
+    "office": {
+      "address": "111 Keating St P.O. Box 169, Shipman IL 62685",
+      "email": "villageofshipmanclerk@gmail.com",
+      "phone": "618-836-7114"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Angela Fite",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Dawn Trevino",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1769758": {
     "board": [
@@ -24835,6 +26133,115 @@
     ],
     "sourceUrl": "https://www.mchenrycountyil.gov/county-government/county-yearbook/cities-villages",
     "url": "https://www.springgrovevillage.com"
+  },
+  "1772234": {
+    "board": [
+      {
+        "name": "Amanda Leibovitz",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Cary Kukowski",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Richard Griffith",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Craig Reed",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Standard City",
+    "office": {
+      "address": "650 Broadway, Standard City IL 62640",
+      "email": "villageofstandardcity@yahoo.com",
+      "phone": "217-854-8180"
+    },
+    "officers": [
+      {
+        "name": "Rebecca M. Griffith",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Christi Harris",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
+  },
+  "1772403": {
+    "board": [
+      {
+        "district": "1",
+        "name": "David L. Dias",
+        "nextElection": "2027",
+        "role": "Alderman"
+      },
+      {
+        "district": "1",
+        "name": "David M. Manning",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "2",
+        "name": "Kristy Berg",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "3",
+        "name": "Ryan Machota",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Matthew McKee",
+        "nextElection": "2029",
+        "role": "Alderman"
+      },
+      {
+        "district": "4",
+        "name": "Terry Wayne Tipler",
+        "nextElection": "2027",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Craig Neuhaus",
+      "nextElection": "2029",
+      "role": "Mayor"
+    },
+    "name": "City of Staunton",
+    "office": {
+      "address": "304 W Main St, Staunton IL 62088",
+      "phone": "618-635-2233"
+    },
+    "officers": [
+      {
+        "name": "Dennis Stiegemeier",
+        "nextElection": "2029",
+        "role": "Clerk"
+      },
+      {
+        "name": "Cynthia M. Pirok",
+        "nextElection": "2029",
+        "role": "Treasurer"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/",
+    "url": "https://www.cityofstauntonil.com/"
   },
   "1772520": {
     "board": [
@@ -27522,6 +28929,66 @@
     "sourceUrl": "https://www.cookcountyclerkil.gov/elections/directory-elected-officials",
     "url": "https://wheelingil.gov"
   },
+  "1781191": {
+    "board": [
+      {
+        "name": "Brandy Hendy",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Brenda Subick",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "James Cozart",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Kevin Shaw",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Roslyn Bohanan",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Scott VanLoo",
+        "nextElection": "2027",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Karen Clarke",
+      "nextElection": "2027",
+      "role": "President"
+    },
+    "name": "Village of White City",
+    "office": {
+      "address": "884 S Main, White City IL 62069",
+      "email": "villageofwhitecity@madisontelco.com",
+      "phone": "217-999-6123"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Beth L. Peebles",
+        "role": "Treasurer"
+      },
+      {
+        "appointed": true,
+        "name": "Saraab Avery",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/",
+    "url": "https://thevillageofwhitecity.myruralwater.com/"
+  },
   "1781815": {
     "board": [
       {
@@ -27809,6 +29276,60 @@
     },
     "sourceUrl": "https://www.wcgl.org/municipal-members.html",
     "url": "https://www.wilmington-il.com"
+  },
+  "1782218": {
+    "board": [
+      {
+        "name": "Donald K. Montoro",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Jennifer Dawn Byrd",
+        "nextElection": "2029",
+        "role": "Trustee"
+      },
+      {
+        "name": "Lisa A. Astemborski",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Pamela Zaksas",
+        "nextElection": "2027",
+        "role": "Trustee"
+      },
+      {
+        "name": "Timothy D. Campbell",
+        "nextElection": "2029",
+        "role": "Trustee"
+      }
+    ],
+    "county": "Macoupin",
+    "head": {
+      "name": "Bob Haney",
+      "nextElection": "2029",
+      "role": "President"
+    },
+    "name": "Village of Wilsonville",
+    "office": {
+      "address": "99 Wilson St, Wilsonville IL 62093",
+      "email": "wilsonville@madisontelco.com",
+      "phone": "217-835-2539"
+    },
+    "officers": [
+      {
+        "appointed": true,
+        "name": "Cindy L. Crites",
+        "role": "Treasurer"
+      },
+      {
+        "name": "Tena M. Cerentano",
+        "nextElection": "2029",
+        "role": "Village Clerk"
+      }
+    ],
+    "sourceUrl": "https://www.macoupinvotes.gov/election-results/elected-officials/"
   },
   "1782400": {
     "county": "DuPage",

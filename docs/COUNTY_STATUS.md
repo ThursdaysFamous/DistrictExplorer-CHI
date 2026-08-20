@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**69 of 102 Illinois counties are served** — 58 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 33 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**71 of 102 Illinois counties are served** — 60 through their own dispatch entries, 3 through a shipped judicial circuit, and 8 through the County card alone. 31 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (69)
+## Served counties (71)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -31,6 +31,7 @@
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Cass | 17017 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Clark | 17023 | dispatch | districted | `county-board`, `county-precinct` | 2 — `clark-board-contact` (data-quality); `clark-precinct-polling` (data-quality) |
+| Clinton | 17027 | dispatch | districted | `county-board` | 2 — `clinton-precinct-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Coles | 17029 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Cook | 17031 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | none |
 | Crawford | 17033 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
@@ -40,6 +41,7 @@
 | Edgar | 17045 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Edwards | 17047 | County card | at-large — County card | — | 1 — `edwards-county-precincts` (no-source) |
 | Effingham | 17049 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `effingham-municipal-officials` (no-source) |
+| Franklin | 17055 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Greene | 17061 | County card | at-large — County card | — | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
@@ -58,7 +60,7 @@
 | Livingston | 17105 | dispatch | districted | `county-board` | 3 — `county-board-office-addresses` (no-source); `livingston-precincts` (no-source); `livingston-special-districts` (no-source) |
 | Logan | 17107 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `logan-fire-districts` (no-source) |
 | Macon | 17115 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `county-board-office-addresses` (no-source); `macon-board-phone-area-code` (data-quality); `macon-district-name-formatting` (data-quality) |
-| Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 4 — `macoupin-county-board-districts` (no-source); `macoupin-municipal-officials` (blocked); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
+| Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 3 — `macoupin-county-board-districts` (no-source); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
 | Madison | 17119 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `madison-ward-officials` (no-source) |
 | Marshall | 17123 | dispatch | districted | `county-board` | 3 — `county-board-office-addresses` (no-source); `marshall-precinct-geometry` (no-source); `wenona-two-clerks-disagree` (data-quality) |
 | Mason | 17125 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `mason-precinct-vintage` (data-quality) |
@@ -84,7 +86,7 @@
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
-| Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `tazewell-precinct-polling` (data-quality) |
+| Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Wabash | 17185 | County card | at-large — County card | — | 1 — `wabash-precinct-geometry` (no-source) |
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
@@ -93,7 +95,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (33) — gap-recorded, not yet served
+## Researched frontier (31) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -104,12 +106,10 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Champaign | 17019 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Christian | 17021 | 1 — `christian-county-board-districts` (no-source) |
 | Clay | 17025 | 1 — `clay-county-board` (no-source) |
-| Clinton | 17027 | 1 — `clinton-county-board-geometry` (no-source) |
 | Cumberland | 17035 | 1 — `cumberland-county-board` (no-source) |
 | Douglas | 17041 | 1 — `douglas-county-board-districts` (no-source) |
 | Fayette | 17051 | 1 — `fayette-county-board-geometry` (no-source) |
 | Ford | 17053 | 1 — `ford-county-board-vintage` (no-source) |
-| Franklin | 17055 | 1 — `franklin-county-board-districts` (no-source) |
 | Gallatin | 17059 | 1 — `gallatin-county-board` (no-source) |
 | Hancock | 17067 | 1 — `pass10-frontier-unasked` (no-source) |
 | Hardin | 17069 | 1 — `hardin-county-board` (no-source) |
@@ -119,7 +119,7 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Johnson | 17087 | 1 — `johnson-county-board` (no-source) |
 | Knox | 17095 | 2 — `galesburg-wards-outside-the-ring` (data-quality); `knox-county-board-districts` (no-source) |
 | Lawrence | 17101 | 1 — `lawrence-county-board` (no-source) |
-| Marion | 17121 | 1 — `pass10-frontier-unasked` (no-source) |
+| Marion | 17121 | 1 — `marion-county-board-districts` (no-source) |
 | Massac | 17127 | 1 — `massac-county-board` (no-source) |
 | Perry | 17145 | 1 — `perry-county-website-blocked` (blocked) |
 | Piatt | 17147 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 112 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 110 records in the Data gaps panel: `chicago-amenity-phones`.

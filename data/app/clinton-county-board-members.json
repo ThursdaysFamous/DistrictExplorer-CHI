@@ -1,0 +1,119 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "joe.jansen@clintonco.us",
+        "name": "Joe Jansen",
+        "phone": "618-210-7858",
+        "termExpires": "2028"
+      },
+      {
+        "email": "ken.knolhoff@gmail.com",
+        "name": "Ken Knolhoff",
+        "phone": "618-920-3389",
+        "termExpires": "2026"
+      },
+      {
+        "email": "nelson.heinzmann@clintonco.us",
+        "name": "Nelson Heinzmann",
+        "phone": "618-292-7311",
+        "role": "Vice Chairman",
+        "termExpires": "2026"
+      }
+    ],
+    "sourceUrl": "https://clintonco.illinois.gov/county-offices/county-board/"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "brad.knolhoff@clintonco.us",
+        "name": "Brad Knolhoff",
+        "phone": "618-292-9669",
+        "role": "Chairman",
+        "termExpires": "2026"
+      },
+      {
+        "email": "greg.riechman@clintonco.us",
+        "name": "Greg Riechman",
+        "phone": "618-359-2523",
+        "termExpires": "2028"
+      },
+      {
+        "email": "jeff.crisel@clintonco.us",
+        "name": "Jeff Crisel",
+        "phone": "618-322-7608",
+        "termExpires": "2026"
+      }
+    ],
+    "sourceUrl": "https://clintonco.illinois.gov/county-offices/county-board/"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "ann.schroeder@clintonco.us",
+        "name": "Ann Schroeder",
+        "phone": "618-407-3148",
+        "termExpires": "2028"
+      },
+      {
+        "email": "mike.strieker@clintonco.us",
+        "name": "Michael Strieker",
+        "phone": "618-365-1054",
+        "termExpires": "2026"
+      },
+      {
+        "email": "mike.hilmes@clintonco.us",
+        "name": "Mike Hilmes",
+        "phone": "618-806-2992",
+        "termExpires": "2026"
+      }
+    ],
+    "sourceUrl": "https://clintonco.illinois.gov/county-offices/county-board/"
+  },
+  "4": {
+    "members": [
+      {
+        "email": "david.veizer@clintonco.us",
+        "name": "David Veizer",
+        "phone": "618-779-1699",
+        "termExpires": "2028"
+      },
+      {
+        "email": "kurt.schmitz@clintonco.us",
+        "name": "Kurt Schmitz",
+        "phone": "618-210-6775",
+        "termExpires": "2028"
+      },
+      {
+        "email": "mike.rakers@clintonco.us",
+        "name": "Michael Rakers",
+        "phone": "618-920-3015",
+        "termExpires": "2026"
+      }
+    ],
+    "sourceUrl": "https://clintonco.illinois.gov/county-offices/county-board/"
+  },
+  "5": {
+    "members": [
+      {
+        "email": "bruce.rapien@clintonco.us",
+        "name": "Bruce Rapien",
+        "phone": "618-979-0583",
+        "termExpires": "2028"
+      },
+      {
+        "email": "curt.haselhorst@clintonco.us",
+        "name": "Curt Haselhorst",
+        "phone": "618-322-5969",
+        "termExpires": "2026"
+      },
+      {
+        "email": "gary.arentsen@clintonco.us",
+        "name": "Gary Arentsen",
+        "phone": "618-210-4142",
+        "termExpires": "2028"
+      }
+    ],
+    "sourceUrl": "https://clintonco.illinois.gov/county-offices/county-board/"
+  }
+}
