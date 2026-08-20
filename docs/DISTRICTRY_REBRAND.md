@@ -87,12 +87,9 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
   isolation) green on the re-skin, which is the "every existing function is maintained" proof.
   Refresh after index.html moves: re-run the script and commit;
   `build_districtry_preview.py --check` detects staleness on demand (deliberately not in CI).
-  **Open review items on the skin:** the warm-accent mapping (mark magenta `#b0316e` +
-  derived `#8f2659`, giving a magenta focus ring — alternative is violet for both slots); the
-  empty-state star outline now renders violet via `--accent-deep`; engine-fenced
-  `METRO_NAME + " District Explorer"` strings still show the old name in dialogs (accepted —
-  that is precisely the Phase-3 engine release); the point marker keeps the star *shape*
-  (a shape change is a design call for adoption, not a re-skin).
+  **Open review items on the skin:** all three resolved 2026-08-20 — see "Skin review items"
+  below. Still accepted as-is: engine-fenced `METRO_NAME + " District Explorer"` strings show
+  the old name in dialogs, which is precisely the Phase-3 engine release.
   **Fix round (2026-08-20, post-deploy):** `.flag-stripe` — the Chicago flag's
   accent/white/accent bands above and below the map, that fork's signature device — rendered
   as meaningless violet bands under the token swap; the Districtry design carries no stripe,
@@ -300,6 +297,39 @@ answer varies by county, and a sandboxed measurement is no basis for a live figu
 is preview-local today. If the three-zone treatment is adopted into production, the legend and
 this copy travel with it, and the wording becomes a fork-owned string — worth a worksheet key so
 NYC/SF can say "Statewide layers only" about their own states without an engine release.
+
+## Skin review items — RESOLVED (2026-08-20)
+
+The three items left open when Stage B shipped, each investigated before deciding. Two were the
+same finding: **Chicago motifs that survived the re-skin because a token swap recolours a shape
+without questioning it.**
+
+1. **Warm accent — KEPT as a distinct hue, and the alternative disproven.** The open question was
+   whether `--accent-warm` should simply become violet ("one hue for both slots"). It must not:
+   the engine paints the **Public Safety group dot** with it (`.group-safety .dot`, index.html
+   ~1612) beside Political (`--accent`), Schools (`#E8A324`) and Geography (`#5C8F6B`). Violet in
+   both slots would render two of the four group dots identically — a categorical encoding
+   collapsing, not a taste call. It is also `--focus-ring`, where contrast *against* violet
+   controls is the point. `#b0316e` stays: it is the mark's own third polygon, so the hue is
+   on-brand without borrowing from the data tier (the police/fire reds are map colours and stay
+   map colours). Measured after the change: the four dots are four distinct hues.
+   `--accent-warm-deep` is referenced **nowhere** in the engine today; the override is kept only
+   so no Chicago flag red survives anywhere in the cascade.
+2. **Empty state — the Chicago flag star retired.** A six-pointed star is that city's emblem;
+   recoloured violet it was an off-brand city motif sitting in a Districtry app. It is now the 5c
+   mark drawn as a quiet outline. The `#star-path-empty` element **stays in the DOM, hidden** —
+   the boot script writes its `d` by id and would throw on a missing node (the same discipline as
+   the masthead star).
+3. **Selection marker — now the canvas's own answer.** The marker kept the star *shape* while
+   only its fill moved to data blue, so a Chicago emblem was still marking "your point". The
+   design canvas had already answered this: a circle with a white ring. It is now
+   `<circle r="17" fill="#1d5fd6" stroke="#fff">`. One transform owns shape **and** colour; the
+   earlier fill-only swap was deleted so two transforms cannot disagree about what the marker is.
+
+**Related finding, NOT changed:** the water-taxi marker (`icons/water-taxi.png`, swapped in when a
+point lands on Lake Michigan) is a third Chicago motif — the Chicago Water Taxi seal. It is a
+deliberate easter egg rather than chrome, so retiring or replacing it is a product call, not a
+re-skin one. Flagged here rather than silently changed.
 
 ## Known package flaws / adoption fix-list
 
