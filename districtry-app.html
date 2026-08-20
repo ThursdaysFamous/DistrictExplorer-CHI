@@ -2419,6 +2419,64 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .districtry-panel-foot .footer-link-btn:hover { background: rgba(109, 63, 209, 0.08); }
   .districtry-panel-foot .footer-metros { font-size: 11px; }
   .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
+  /* ==== canvas app-shell layout (operator-directed: "Implement Districtry
+     App.dc.html", 2026-08-20) ==== */
+  /* search moves from floating-over-map into the masthead */
+  .masthead .map-toolbar { position: static; transform: none; flex: 1 1 320px; max-width: 560px; }
+  .masthead .search-shell { position: relative; box-shadow: none; background: var(--paper); border-color: var(--line); }
+  .masthead .search-extra {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: -1px;
+    right: -1px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(23, 22, 28, 0.14);
+    padding: 8px;
+    z-index: 900;
+  }
+  .masthead .search-shell:not(:hover):not(:focus-within):not(.expanded) .search-extra { padding: 0; border-width: 0; }
+  /* header stat row */
+  .districtry-stats { font-size: 12.5px; color: var(--slate); align-self: center; white-space: nowrap; }
+  .districtry-stats a { color: var(--accent-deep); text-decoration: none; }
+  .districtry-stats a:hover { text-decoration: underline; }
+  /* the selected-point chip becomes the results panel's header row (keep
+     position:relative — it anchors the engine's share popover) */
+  .results-col > .selected-point-chip {
+    background: var(--panel);
+    color: var(--ink);
+    box-shadow: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 4px 0 12px;
+    margin: 0 0 12px;
+  }
+  .results-col > .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: rgba(109, 63, 209, 0.35); }
+  /* three-zone coverage treatment */
+  .dst-glow { filter: blur(7px); }
+  .districtry-map-legend {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(23, 22, 28, 0.06);
+    font-size: 11.5px;
+    color: var(--slate);
+    max-width: 340px;
+  }
+  .districtry-map-legend .dml-glow { width: 9px; height: 9px; border-radius: 50%; flex: none; box-shadow: 0 0 5px 2.5px #ad8cee; }
+  .districtry-map-legend .dml-sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .districtry-map-legend .dml-pending { background: #8a62e0; opacity: 0.25; }
+  .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
+  .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
+  .districtry-map-legend span + .dml-sw,
+  .districtry-map-legend span + .dml-glow,
+  .districtry-map-legend span + .dml-dot { margin-left: 6px; }
 </style>
 </head>
 <body>
@@ -2435,8 +2493,25 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ illinois</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 098b564 on 2026-08-20</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ e4534db on 2026-08-20</span></small>
     </h1>
+    <div class="map-toolbar">
+      <div class="search-shell">
+        <form id="geocode-form" class="search-row" role="search">
+          <label for="geocode-input" class="visually-hidden">Search a Chicago address</label>
+          <input type="text" id="geocode-input" placeholder="Search a Chicago address…" autocomplete="off" />
+          <button type="submit">Search</button>
+        </form>
+        <div class="search-extra" id="search-extra">
+          <button type="button" id="locate-btn" class="locate-btn">📍 Use my current location</button>
+          <div id="geo-status" class="geo-status" aria-live="polite"></div>
+          <ul id="geocode-results" role="listbox" aria-label="Address matches"></ul>
+          <button type="button" id="kbd-select-btn" class="kbd-select-btn">
+            ⌨ Keyboard / screen-reader users: select the point currently centered on the map
+          </button>
+        </div>
+      </div>
+    </div>
     <!-- Chicago-owned masthead action row: the two "about the data" doors, in
          the one place every visitor passes. "What data is missing?" moved up
          from the footer-links row — it is the standing caveat on every answer
@@ -2450,6 +2525,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
          masthead treatment is applied from OUTSIDE the fence by this fork's
          own CSS, so the fenced bytes stay portable. -->
     <div class="masthead-actions">
+      <span class="districtry-stats">69 counties · 39 layers · <a href="./sources.html">Sources</a></span>
       <!-- ==== ENGINE:BEGIN gaps-html ==== -->
       <button type="button" id="gaps-btn" class="footer-link-btn">🧩 What data is missing?</button>
       <!-- ==== ENGINE:END gaps-html ==== -->
@@ -2470,23 +2546,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <section class="map-col" aria-label="Interactive district map">
     <div id="map" role="application" aria-label="Map of Chicago. Click anywhere to select a point, or use the search box above."></div>
 
-    <div class="map-toolbar">
-      <div class="search-shell">
-        <form id="geocode-form" class="search-row" role="search">
-          <label for="geocode-input" class="visually-hidden">Search a Chicago address</label>
-          <input type="text" id="geocode-input" placeholder="Search a Chicago address…" autocomplete="off" />
-          <button type="submit">Search</button>
-        </form>
-        <div class="search-extra" id="search-extra">
-          <button type="button" id="locate-btn" class="locate-btn">📍 Use my current location</button>
-          <div id="geo-status" class="geo-status" aria-live="polite"></div>
-          <ul id="geocode-results" role="listbox" aria-label="Address matches"></ul>
-          <button type="button" id="kbd-select-btn" class="kbd-select-btn">
-            ⌨ Keyboard / screen-reader users: select the point currently centered on the map
-          </button>
-        </div>
-      </div>
-    </div>
 
     <button type="button" class="layer-toggle-btn" id="layer-drawer-btn" aria-expanded="true" aria-controls="results-col">
       Layers ▾
@@ -2496,7 +2555,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="rel-legend" id="rel-legend" hidden aria-live="polite"></div>
       <button type="button" class="hover-toggle-btn" id="hover-toggle" aria-pressed="true"
         title="Hover explorer — show the districts under your cursor as you move the mouse">Hover: on</button>
-      <div class="selected-point-chip" id="point-chip" hidden></div>
     </div>
 
     <div class="map-tile-banner" id="tile-banner" role="status" aria-live="polite" hidden>
@@ -2506,6 +2564,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </section>
 
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
+    <div class="selected-point-chip" id="point-chip" hidden></div>
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
       <svg class="star-outline" viewBox="0 0 100 100" aria-hidden="true">
@@ -23476,7 +23535,83 @@ function initChiExplorer() {
   // fetch PSI measured in the 669 ms initial-navigation chain for a decorative
   // wash (OPTIMIZATION_PLAYBOOK's recommended fix). Still at idle, and the
   // wash still skips silently on any error — it is a hint, not data.
-  whenIdle(function () { drawOutOfScopeMask(loadMetroOutline); });
+  function drawDistrictryCoverage() {
+    var stateUrl = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/0/query?where=" +
+      encodeURIComponent("STUSAB='IL'") + "&outFields=NAME&returnGeometry=true&geometryPrecision=3&outSR=4326&f=geojson";
+    var covP = loadMetroOutline().catch(function () { return null; });
+    // decorative: fail fast (one retry, short timeout) so an unreachable
+    // TIGERweb degrades to the single-wash fallback quickly
+    var stP = fetchJSONWithRetry(stateUrl, { timeoutMs: 6000 }, 1).catch(function () { return null; });
+    Promise.all([covP, stP]).then(function (res) {
+      var covGeo = res[0], stGeo = res[1];
+      var covFeats = (covGeo && covGeo.features) || [];
+      if (!covFeats.length) return;
+      var outline = coverageOutlineRings(covFeats);
+      if (!outline || !outline.length) {
+        outline = [];
+        for (var i = 0; i < covFeats.length; i++) {
+          var geom = covFeats[i].geometry;
+          if (!geom) continue;
+          var polys = geom.type === "Polygon" ? [geom.coordinates]
+                    : geom.type === "MultiPolygon" ? geom.coordinates : [];
+          for (var p = 0; p < polys.length; p++) {
+            for (var r = 0; r < polys[p].length; r++) outline.push(polys[p][r]);
+          }
+        }
+      }
+      coverageMaskRings = outline;
+      var covLatLng = [];
+      for (var j = 0; j < outline.length; j++) {
+        var src = outline[j], ring = [];
+        for (var v = 0; v < src.length; v++) ring.push([src[v][1], src[v][0]]);
+        covLatLng.push(ring);
+      }
+      var world = [[-89, -720], [89, -720], [89, 720], [-89, 720]];
+      var stateRing = null;
+      if (stGeo && stGeo.features && stGeo.features[0] && stGeo.features[0].geometry) {
+        var g = stGeo.features[0].geometry;
+        var raw = null;
+        if (g.type === "Polygon") raw = g.coordinates[0];
+        else if (g.type === "MultiPolygon") {
+          for (var m = 0; m < g.coordinates.length; m++) {
+            if (!raw || g.coordinates[m][0].length > raw.length) raw = g.coordinates[m][0];
+          }
+        }
+        if (raw && raw.length > 3) {
+          stateRing = [];
+          for (var s = 0; s < raw.length; s++) stateRing.push([raw[s][1], raw[s][0]]);
+        }
+      }
+      if (stateRing) {
+        L.polygon([world, stateRing], { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.42, interactive: false }).addTo(map);
+        L.polygon([stateRing].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8a62e0", fillOpacity: 0.08, interactive: false }).addTo(map);
+        var closed = stateRing.concat([stateRing[0]]);
+        L.polyline(closed, { pane: "scope-mask", className: "dst-glow", color: "#ad8cee", weight: 9, opacity: 0.6, interactive: false }).addTo(map);
+        L.polyline(closed, { pane: "scope-mask", color: "#ad8cee", weight: 1.5, opacity: 0.9, interactive: false }).addTo(map);
+      } else {
+        L.polygon([world].concat(covLatLng), { pane: "scope-mask", stroke: false, fillColor: "#8d8a97", fillOpacity: 0.35, interactive: false }).addTo(map);
+      }
+      var host = document.querySelector(".map-bottom-left");
+      if (host && !document.querySelector(".districtry-map-legend")) {
+        var legend = document.createElement("div");
+        legend.className = "districtry-map-legend";
+        legend.innerHTML = '<span class="dml-glow"></span><span>Illinois</span>' +
+          '<span class="dml-sw dml-pending"></span><span>Data coming — not yet sourced</span>' +
+          '<span class="dml-sw dml-out"></span><span>Outside Illinois</span>' +
+          '<span class="dml-dot"></span><span>Selected point</span>';
+        host.insertBefore(legend, host.firstChild);
+      }
+    }).catch(function () { /* decorative — skip the wash, never surface an error */ });
+  }
+  // still off the boot critical path, but with an idle TIMEOUT — plain
+  // requestIdleCallback can be starved indefinitely while tiles and layer
+  // fetches keep the loop busy, and a coverage wash that may never draw is
+  // worse than one that costs a frame
+  if (window.requestIdleCallback) {
+    window.requestIdleCallback(drawDistrictryCoverage, { timeout: 4000 });
+  } else {
+    setTimeout(drawDistrictryCoverage, 800);
+  }
 
   var verifiedEl = document.getElementById("verified-date");
   // sources.html prints the same date at the top of the layer matrix. Two

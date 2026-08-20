@@ -122,15 +122,47 @@ design). Consequences, as built into `districtry-app.html` by the transform scri
   page's head JSON-LD (FAQPage) and `sitemap.xml` entry become REQUIRED at adoption, since
   the production FAQ page must be indexable, unlike this preview.
 
-## Canvas refinement round (2026-08-20) — reviewed from screenshots, PENDING ADOPTION
+## Canvas version history — CORRECTED (2026-08-20, second look)
 
-The design canvas ("Districtry rebrand refinement", artifact
-`a952f418-fd74-409f-a7de-5a0fa3149b01`) has iterated past the zip this repo shipped: the
-editor shows a 5-page canvas with a rebuild round ("merged card/toggle surface with the gray
-out-of-coverage mask … 4 geometry tweaks … regenerated icons/OG, manifest + head snippet").
-**The artifact's shared pin still serves the older single-page publish**, so a code-level
-diff isn't possible yet — move the pin (or export a fresh zip) to sync. Deltas observed
-against the deployed preview, each needing its own approval before adoption:
+An earlier revision of this section claimed the canvas had "iterated past the zip". It had
+not: the Claude Design handoff bundle (uploaded 2026-08-20) is **byte-identical to the
+original package** for every load-bearing file (App canvas, tokens, support.js, Industry
+styles; same sync record 2026-08-19T20:52Z). There is exactly ONE canvas version. The
+refinement rounds visible in the canvas chat (gradient border replacing the rejected dashed
+line, dark-mode dot rings, merged card/toggle rebuild) are the history that PRODUCED the
+2026-08-19 rebuild — they are IN the shipped `/districtry/` canvas, not after it. The
+"5 pages" in the editor are the project's five .dc.html files, not new content.
+
+## Canvas app-shell implementation (operator-directed "Implement Districtry App.dc.html", 2026-08-20 — SHIPPED in the preview)
+
+The canvas's remaining unimplemented design landed in `/districtry-app.html` via the
+transform script, same relocate-don't-delete discipline as the footer round:
+
+1. **Three-zone coverage treatment** — the engine's single out-of-coverage wash is replaced
+   AT ITS FORK-LOCAL CALL SITE (the scope-mask ENGINE fence is untouched;
+   `coverageMaskRings` still gets set from `coverageOutlineRings`, preserving the engine's
+   point-in-coverage test): gray outside Illinois, violet "Data coming — not yet sourced"
+   wash on in-state unserved ground, soft violet glow + hairline on the state border
+   (TIGERweb, fail-fast — an unreachable TIGERweb degrades to the old single-wash), and a
+   map legend. Values are the canvas's own.
+2. **Search relocates into the masthead** — the whole `.map-toolbar` moves verbatim (the
+   geocoder binds `#geocode-form`/`#geocode-input`/… by id); `.search-extra` becomes an
+   absolute dropdown under the header field.
+3. **Header stat row** — "N counties · M layers · Sources", with N read from
+   `docs/COUNTY_STATUS.md` and M from `metro-worksheet.json` at generation time, so a
+   regeneration after a new county updates it.
+4. **Panel header row** — `#point-chip` (coords + Share) relocates from the map's
+   bottom-left to the top of the results panel; `position: relative` kept (it anchors the
+   engine's share popover).
+
+Not implemented, deliberately: the **Dark toggle** (dark mode remains deferred pending its
+own approval) and the **live "N of 39 layers on" counter** (a live-state label needing a JS
+hook into `state.layersOn`; the static stat row covers the header, the counter can join a
+later round). Verified: full Playwright smoke test passes; every relocated id exists exactly
+once; the coverage function schedules with an idle TIMEOUT so a busy main thread can't
+starve it forever.
+
+## Superseded delta list (kept for the record — all now resolved as above)
 
 1. **Statewide coverage visualization** (operator-directed): soft light-violet gradient glow
    on the Illinois border — the dashed border was explicitly rejected — a light violet wash
