@@ -325,28 +325,63 @@ SKIN_ISLAND = """<style id="districtry-skin">
   }
   /* three-zone coverage treatment */
   .dst-glow { filter: blur(7px); }
+  /* ==== map legend (operator-directed rebuild, 2026-08-20) ====
+     Was a flat wrapping run of LOOSE swatches and labels, so a wrap could
+     fall between a swatch and the label it defines — the blue dot ended one
+     line and "Selected point" began the next. Each row is now a grid whose
+     swatch and label cannot be separated, and the rows are stacked, so the
+     defect is gone by construction rather than by picking a lucky width. */
   .districtry-map-legend {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 4px 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 5px 10px;
+    padding: 8px 12px;
     box-shadow: 0 1px 3px rgba(23, 22, 28, 0.06);
     font-size: 11.5px;
     color: var(--slate);
-    max-width: 340px;
   }
+  .districtry-map-legend .dml-kicker {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 1px;
+  }
+  /* swatch and label ride one grid row — a wrap can never split the pair */
+  .districtry-map-legend .dml-item {
+    display: grid;
+    grid-template-columns: 10px auto;
+    align-items: center;
+    /* row-gap 2px, not 8: a shorthand gap would space the why-line as far from
+       the label it belongs to as from the next legend row, leaving it
+       visually orphaned between the two. */
+    gap: 2px 8px;
+  }
+  .districtry-map-legend .dml-label { white-space: nowrap; }
+  /* the "why" line under the partial-coverage swatch: the wash does NOT mean
+     the county is empty — statewide layers answer there. It means this county's
+     own districts are not sourced yet, which is the honest distinction. */
+  .districtry-map-legend .dml-sub {
+    grid-column: 2;
+    margin-bottom: 3px;
+    font-size: 10.5px;
+    line-height: 1.35;
+    color: var(--faint);
+    max-width: 25ch;
+    white-space: normal;
+  }
+  .districtry-map-legend .dml-rule { width: 100%; height: 1px; background: var(--line); margin: 3px 0 2px; }
   .districtry-map-legend .dml-glow { width: 9px; height: 9px; border-radius: 50%; flex: none; box-shadow: 0 0 5px 2.5px #ad8cee; }
   .districtry-map-legend .dml-sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
   .districtry-map-legend .dml-pending { background: #8a62e0; opacity: 0.25; }
   .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
   .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
-  .districtry-map-legend span + .dml-sw,
-  .districtry-map-legend span + .dml-glow,
-  .districtry-map-legend span + .dml-dot { margin-left: 6px; }
 </style>
 """
 
@@ -418,10 +453,17 @@ COVERAGE_JS = """  function drawDistrictryCoverage() {
       if (host && !document.querySelector(".districtry-map-legend")) {
         var legend = document.createElement("div");
         legend.className = "districtry-map-legend";
-        legend.innerHTML = '<span class="dml-glow"></span><span>IL</span>' +
-          '<span class="dml-sw dml-pending"></span><span>Data coming — not yet sourced</span>' +
-          '<span class="dml-sw dml-out"></span><span>Outside IL</span>' +
-          '<span class="dml-dot"></span><span>Selected point</span>';
+        legend.innerHTML = '<span class="dml-kicker">Coverage</span>' +
+          '<span class="dml-item"><span class="dml-glow"></span>' +
+            '<span class="dml-label">IL</span></span>' +
+          '<span class="dml-item"><span class="dml-sw dml-pending"></span>' +
+            '<span class="dml-label">Statewide layers only</span>' +
+            '<span class="dml-sub">County board and local districts not sourced yet</span></span>' +
+          '<span class="dml-item"><span class="dml-sw dml-out"></span>' +
+            '<span class="dml-label">Outside IL</span></span>' +
+          '<span class="dml-rule"></span>' +
+          '<span class="dml-item"><span class="dml-dot"></span>' +
+            '<span class="dml-label">Selected point</span></span>';
         host.insertBefore(legend, host.firstChild);
       }
     }).catch(function () { /* decorative — skip the wash, never surface an error */ });
