@@ -2758,12 +2758,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --card-btn-border: rgba(110, 168, 255, 0.34);
     background: #201d29;
     border-color: rgba(236, 233, 244, 0.10);
-    /* the left stripe carries each layer's OWN map color — the card-to-overlay
-       tie. Half the layer palette is near-black, so on a dark card the tie
-       would simply disappear; color-mix lifts each color toward white while
-       keeping its hue, so the tie survives the theme instead of being traded
-       for a uniform blue. */
-    border-left-color: color-mix(in srgb, var(--layer-accent, var(--card-accent)) 62%, #ffffff);
+    /* No color-mix on the stripe any more. --layer-accent is set from
+       moduleColor(), which reads the layer's style object — now theme-aware —
+       so the stripe carries the layer's real dark colour and matches the
+       overlay exactly rather than approximating it with a different lift. */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4),
       0 3px 14px -4px color-mix(in srgb, var(--layer-accent, var(--card-accent)) 30%, transparent);
   }
@@ -2859,16 +2857,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
   [data-theme="dark"] .leaflet-popup-content-wrapper,
   [data-theme="dark"] .leaflet-popup-tip { background: var(--panel); color: var(--ink); }
   [data-theme="dark"] .leaflet-div-icon { background: var(--panel); border-color: rgba(236, 233, 244, 0.3); }
-  /* ---- the map's own data. Forty-odd layer stroke colors are literals in JS,
-     picked for a light basemap; several are near-black. Rather than fork the
-     palette (which would break the card-to-overlay tie and the categorical
-     encoding both), the overlay pane is lifted as a whole: brightness+saturate
-     is a hue-preserving color matrix, so every layer keeps its identity and
-     their relationships to each other. It is NOT paused during pan the way the
-     highlight drop-shadow is (.map-panning) — a color matrix is cheap where a
-     per-frame drop-shadow rasterization is not, and flipping it mid-pan would
-     flash the whole map. */
-  [data-theme="dark"] .leaflet-overlay-pane { filter: brightness(1.45) saturate(1.06); }
+  /* ---- the map's own data is NOT restyled from here. It used to be: a
+     brightness+saturate lift on the whole overlay pane, which was a stopgap and
+     a poor one — a multiply cannot rescue a near-black, so the four worst layer
+     colours stayed invisible under it. Each layer now carries a real derived
+     dark colour instead (DST_DARK_MAP_COLORS, installed as getters on the layer
+     style objects), so the pane is left alone. */
   /* the selection marker joins the dark data ramp. The circle selector cannot
      touch Chicago's flag star, which is a <path> and stays flag red. */
   [data-theme="dark"] .chi-star-marker circle { fill: #6ea8ff; }
@@ -2942,7 +2936,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 1f16eba on 2026-08-20</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 28f681e on 2026-08-20</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3724,6 +3718,10 @@ function initChiExplorer() {
   }).addTo(map);
 
   /* ==== theme controller (preview-only) ================================== */
+  /* The dark counterpart of every layer stroke/fill in the app, derived at
+     build time — see dark_map_palette() above for the method and for why the
+     obvious minimum-lift was measured and rejected. */
+  var DST_DARK_MAP_COLORS = {"#00695C": "#4DBDAA", "#06375E": "#528DC6", "#0B5394": "#4FA4FE", "#0B7A6B": "#4DCBB6", "#0E7C86": "#4DCBD9", "#0F6F6F": "#52C1C0", "#14181C": "#696F76", "#14B8A6": "#30FFE7", "#19A0AD": "#43E9FA", "#1B7A3D": "#58CD7A", "#1E7A8C": "#57C9E1", "#1F6FB2": "#77BBFD", "#2B8CC4": "#8FD1FE", "#2E7D46": "#68CE83", "#2E8C6A": "#62DAAC", "#2F6B3A": "#6FBE7B", "#3949AB": "#849CFE", "#3B8FD4": "#A5D2FD", "#3D3D7A": "#898CE2", "#3D6B49": "#7EBC8D", "#3E4C59": "#899DB0", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#4DB6AC": "#70FAED", "#4FA06A": "#7FEAA1", "#5C6BC0": "#A7B7FD", "#5C8F6B": "#95D9A9", "#5E3A8C": "#B283F5", "#6A3FA0": "#BA8BFE", "#6A4A93": "#BC91F6", "#6B4FA0": "#B998FE", "#6B7280": "#B1BBCE", "#7A0A1C": "#EB5B61", "#7A0B1E": "#EA5C63", "#7A1E5C": "#E266B5", "#7A2D3D": "#E17587", "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8A6D3B": "#DBB471", "#8A6FBF": "#CEB8FF", "#8C2E4A": "#F47294", "#8C6A2E": "#DFB163", "#8E6BB8": "#D3B3FE", "#9C0B24": "#FE6B6E", "#A15C00": "#FD9F3D", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#C0A060": "#FFDE9D", "#C8102E": "#FE928F", "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7", "#E4572E": "#FFBCA9"};
   var districtryCoverageLayers = {};
   var districtryTileKind = "light_all";
   function styleDistrictryCoverage(dark) {
@@ -3741,11 +3739,41 @@ function initChiExplorer() {
     if (c.glow) c.glow.setStyle({ color: dark ? "#a78bfa" : "#ad8cee", opacity: dark ? 0.55 : 0.6 });
     if (c.stateLine) c.stateLine.setStyle({ color: dark ? "#a78bfa" : "#ad8cee" });
   }
+  /* Cached, and deliberately so: the layer-colour getters below sit on the
+     PAINT path — baseStyleFor() reads two of them per path, and a full repaint
+     runs over every path of every active layer. Reading an attribute off the
+     DOM there would put a document access inside the loop this repo has twice
+     optimised (P7, P8). The flag is refreshed by applyDistrictryTheme, which is
+     the only thing that changes the theme. */
+  var dstDark = document.documentElement.getAttribute("data-theme") === "dark";
   function districtryTheme() {
-    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    return dstDark ? "dark" : "light";
+  }
+  /* A theme flip moves every layer colour, so every painted path and every
+     rendered card accent is stale. Repaint through the ENGINE'S OWN paths
+     rather than reimplementing them: updateLayerHighlight() already handles
+     the three cases (a matched region, no selection, a per-feature-styled
+     layer) and re-derives each from baseStyleFor(), which now reads the
+     theme-aware colours. Hoisted, so applyDistrictryTheme above can call it. */
+  function dstRepaintLayers() {
+    if (typeof layers === "undefined" || !layers || !layers.length) return;
+    for (var i = 0; i < layers.length; i++) {
+      var mod = layers[i];
+      /* the card accent + dot, for every card on screen, active or not */
+      var cb = document.getElementById("toggle-" + mod.id);
+      var block = cb && cb.closest ? cb.closest(".layer-block") : null;
+      if (block) block.style.setProperty("--layer-accent", moduleColor(mod));
+      var rt = layerRuntime && layerRuntime[mod.id];
+      if (!rt || !rt.overlayLayer) continue;
+      /* force the full sweep: the P7 fast path repaints only the two paths
+         whose match role changed, and here every path's colour moved */
+      rt.highlightApplied = false;
+      updateLayerHighlight(mod);
+    }
   }
   function applyDistrictryTheme(theme, remember) {
     var dark = theme === "dark";
+    dstDark = dark;
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     if (remember) {
       try { localStorage.setItem("districtry-theme", dark ? "dark" : "light"); } catch (e) {}
@@ -3758,6 +3786,7 @@ function initChiExplorer() {
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? "#15131b" : "#6d3fd1");
     styleDistrictryCoverage(dark);
+    dstRepaintLayers();
     var btn = document.querySelector(".districtry-theme-toggle");
     if (btn) {
       /* the label names what the button DOES, not the state it is in */
@@ -13550,7 +13579,7 @@ function initChiExplorer() {
           els.chip.className = "school-chip" + (on ? " is-on" : "");
           els.chip.setAttribute("aria-pressed", on ? "true" : "false");
           if (on) {
-            els.chip.style.color = "color-mix(in srgb, " + meta.color + " 55%, #1f2937)";
+            els.chip.style.color = "color-mix(in srgb, " + meta.color + " 55%, " + (dstDark ? "#f3f4f6" : "#1f2937") + ")";
             els.chip.style.background = "color-mix(in srgb, " + meta.color + " 12%, transparent)";
             els.chip.style.borderColor = "color-mix(in srgb, " + meta.color + " 35%, transparent)";
             els.dot.style.background = meta.color;
@@ -24490,6 +24519,65 @@ function initChiExplorer() {
   // preview-only: lets a check drive the theme without a click
   EXPLORER_EXPORTS.setTheme = applyDistrictryTheme;
   EXPLORER_EXPORTS.getTheme = districtryTheme;
+  /* ==== per-layer dark map palette ==================================== */
+  function dstDarkColor(hex) {
+    if (typeof hex !== "string") return hex;
+    return DST_DARK_MAP_COLORS[hex.toUpperCase()] || hex;
+  }
+  function dstThemeColorProp(obj, key) {
+    if (!obj) return;
+    var light = obj[key];
+    if (typeof light !== "string" || light.charAt(0) !== "#") return;
+    var dark = dstDarkColor(light);
+    if (dark === light) return;
+    Object.defineProperty(obj, key, {
+      get: function () { return dstDark ? dark : light; },
+      /* a setter too, so an assignment anywhere degrades to plain data instead
+         of throwing on a getter-only property in strict mode */
+      set: function (v) { light = v; dark = dstDarkColor(v); },
+      enumerable: true,
+      configurable: true
+    });
+  }
+  (function () {
+    for (var i = 0; i < layers.length; i++) {
+      var mod = layers[i];
+      var st = mod.overlay && mod.overlay.style;
+      if (st) { dstThemeColorProp(st, "color"); dstThemeColorProp(st, "fillColor"); }
+      /* nearest-N point layers carry no flat style object; mod.color is what
+         moduleColor() falls back to for their card accent */
+      if (mod.color) dstThemeColorProp(mod, "color");
+    }
+    /* the School Location layer colour-codes every footprint from this table */
+    if (typeof SCHOOL_CAT_META === "object" && SCHOOL_CAT_META) {
+      for (var k in SCHOOL_CAT_META) {
+        if (Object.prototype.hasOwnProperty.call(SCHOOL_CAT_META, k)) {
+          dstThemeColorProp(SCHOOL_CAT_META[k], "color");
+        }
+      }
+    }
+  })();
+  /* The selection highlight is "the layer's own colour, shifted away from it so
+     the matched region pops". The engine spells that DARKEN, which is right on
+     light paper and exactly backwards on a dark map, where a darker outline
+     recedes into the ground instead of standing out. Rebound rather than
+     edited: darkenHexColor is a FENCED engine function, but a function
+     declaration's binding is writable from fork-local code, so this costs no
+     fence edit. At adoption the honest fix is for the engine to shift away from
+     the GROUND rather than toward black. */
+  var dstEngineDarken = darkenHexColor;
+  darkenHexColor = function (hex, amount) {
+    if (!dstDark) return dstEngineDarken(hex, amount);
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex || "");
+    if (!m) return hex;
+    var h = m[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var num = parseInt(h, 16);
+    var up = function (c) { return Math.round(c + (255 - c) * amount); };
+    return "#" + (0x1000000 + up((num >> 16) & 255) * 0x10000 +
+                  up((num >> 8) & 255) * 0x100 + up(num & 255)).toString(16).slice(1);
+  };
+
 }
 // Deferred Leaflet (above) executes before DOMContentLoaded, so L is ready by
 // the time this fires. Run immediately if the DOM is already parsed, else wait.

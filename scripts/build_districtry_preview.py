@@ -35,6 +35,7 @@ preview intentionally diverges (no manifest link, no SW registration).
 
 import io
 import json
+import math
 import os
 import re
 import subprocess
@@ -51,6 +52,105 @@ STAMP_RE = re.compile(r'<span class="preview-stamp">([^<]*)</span>')
 # Inserted AFTER the hidden .masthead-star svg — never in its place:
 # index.html's boot script writes #star-path-header by id and would throw on a
 # missing element.
+# ---------------------------------------------------------------------------
+# The dark map palette, DERIVED rather than hand-picked.
+#
+# The layer palette is ~59 literals chosen against a light basemap, and it does
+# not transfer: measured against CARTO dark_all's ground (#1a1a1a, which the
+# app's own tile filter lifts to about #232323), 28 of 37 stroke colours fall
+# below the 3:1 that WCAG 1.4.11 asks of a non-text boundary, and four —
+# #14181C, #06375E, #7A0A1C, #7A0B1E — sit under 1.5:1, which is to say gone.
+#
+# The obvious fix is the wrong one. Lifting each colour by the MINIMUM needed to
+# clear 3:1 collapses the palette, because in the light set a great deal of the
+# categorical separation IS lightness: measured, 314 of 703 pairs move closer
+# and 66 land inside dE 0.05 of each other (U.S. House and County both become
+# the same grey; City Ward and County Board District the same blue). Hue was
+# preserved and the encoding still broke.
+#
+# So the transform is an ORDER-PRESERVING remap instead: one monotonic affine
+# map on OKLCH lightness across the whole palette, hue untouched, chroma lifted
+# 1.25x to buy back the separation that compressing lightness costs. Monotonic
+# means every within-layer relationship survives by construction — a stroke
+# darker than its fill stays darker than its fill.
+#
+# The bar it is held to is not "looks nice" but a measurement against the light
+# palette's own record: the light set has 25 pairs inside dE 0.05 and a p5 dE of
+# 0.056; this dark set has 24 and 0.052. It is no more collision-prone than the
+# palette it derives from, and every stroke clears 3.10:1.
+DARK_L_LO, DARK_L_HI, DARK_CHROMA = 0.54, 0.92, 1.25
+
+
+def _srgb_to_lin(c):
+    c = c / 255.0
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def _lin_to_srgb(c):
+    c = max(0.0, min(1.0, c))
+    v = 12.92 * c if c <= 0.0031308 else 1.055 * (c ** (1 / 2.4)) - 0.055
+    return int(round(max(0.0, min(1.0, v)) * 255))
+
+
+def _to_oklab(hexs):
+    r, g, b = [_srgb_to_lin(int(hexs[i:i + 2], 16)) for i in (1, 3, 5)]
+    l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
+    m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
+    s_ = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
+    l, m, s_ = [x ** (1 / 3) if x > 0 else 0.0 for x in (l, m, s_)]
+    return (0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s_,
+            1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s_,
+            0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s_)
+
+
+def _from_oklab(L, a, b):
+    l_ = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3
+    m_ = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3
+    s_ = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3
+    return (4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_,
+            -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_,
+            -0.0041960863 * l_ - 0.7034186147 * m_ + 1.7076147010 * s_)
+
+
+def _in_gamut(L, a, b):
+    return all(-0.0005 <= c <= 1.0005 for c in _from_oklab(L, a, b))
+
+
+def _hex(L, a, b):
+    r, g, bl = _from_oklab(L, a, b)
+    return "#%02X%02X%02X" % (_lin_to_srgb(r), _lin_to_srgb(g), _lin_to_srgb(bl))
+
+
+def _oklch(hexs):
+    L, a, b = _to_oklab(hexs)
+    return L, math.hypot(a, b), math.atan2(b, a)
+
+
+def _lch_to_lab(L, C, H):
+    return L, C * math.cos(H), C * math.sin(H)
+
+
+def dark_map_palette(index_html):
+    """Every layer stroke/fill literal in index.html -> its dark counterpart."""
+    strokes = re.findall(r'\bcolor:\s*"(#[0-9A-Fa-f]{6})"', index_html)
+    fills = re.findall(r'fillColor:\s*"(#[0-9A-Fa-f]{6})"', index_html)
+    palette = sorted({c.upper() for c in strokes + fills})
+    if not palette:
+        sys.exit("build-districtry-preview: FAIL — found no layer colours to derive a dark palette from")
+    ls = [_oklch(c)[0] for c in palette]
+    lo, hi = min(ls), max(ls)
+    span = (hi - lo) or 1.0
+    out = {}
+    for c in palette:
+        L, C, H = _oklch(c)
+        Ln = DARK_L_LO + (L - lo) * (DARK_L_HI - DARK_L_LO) / span
+        Cn = C * DARK_CHROMA
+        while Cn > 0 and not _in_gamut(*_lch_to_lab(Ln, Cn, H)):
+            Cn -= 0.004
+        out[c] = _hex(*_lch_to_lab(Ln, Cn, H))
+    return out
+
+
 MARK_SVG = (
     '<svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true">'
     '<g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g>'
@@ -535,12 +635,10 @@ SKIN_ISLAND = """<style id="districtry-skin">
     --card-btn-border: rgba(110, 168, 255, 0.34);
     background: #201d29;
     border-color: rgba(236, 233, 244, 0.10);
-    /* the left stripe carries each layer's OWN map color — the card-to-overlay
-       tie. Half the layer palette is near-black, so on a dark card the tie
-       would simply disappear; color-mix lifts each color toward white while
-       keeping its hue, so the tie survives the theme instead of being traded
-       for a uniform blue. */
-    border-left-color: color-mix(in srgb, var(--layer-accent, var(--card-accent)) 62%, #ffffff);
+    /* No color-mix on the stripe any more. --layer-accent is set from
+       moduleColor(), which reads the layer's style object — now theme-aware —
+       so the stripe carries the layer's real dark colour and matches the
+       overlay exactly rather than approximating it with a different lift. */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4),
       0 3px 14px -4px color-mix(in srgb, var(--layer-accent, var(--card-accent)) 30%, transparent);
   }
@@ -636,16 +734,12 @@ SKIN_ISLAND = """<style id="districtry-skin">
   [data-theme="dark"] .leaflet-popup-content-wrapper,
   [data-theme="dark"] .leaflet-popup-tip { background: var(--panel); color: var(--ink); }
   [data-theme="dark"] .leaflet-div-icon { background: var(--panel); border-color: rgba(236, 233, 244, 0.3); }
-  /* ---- the map's own data. Forty-odd layer stroke colors are literals in JS,
-     picked for a light basemap; several are near-black. Rather than fork the
-     palette (which would break the card-to-overlay tie and the categorical
-     encoding both), the overlay pane is lifted as a whole: brightness+saturate
-     is a hue-preserving color matrix, so every layer keeps its identity and
-     their relationships to each other. It is NOT paused during pan the way the
-     highlight drop-shadow is (.map-panning) — a color matrix is cheap where a
-     per-frame drop-shadow rasterization is not, and flipping it mid-pan would
-     flash the whole map. */
-  [data-theme="dark"] .leaflet-overlay-pane { filter: brightness(1.45) saturate(1.06); }
+  /* ---- the map's own data is NOT restyled from here. It used to be: a
+     brightness+saturate lift on the whole overlay pane, which was a stopgap and
+     a poor one — a multiply cannot rescue a near-black, so the four worst layer
+     colours stayed invisible under it. Each layer now carries a real derived
+     dark colour instead (DST_DARK_MAP_COLORS, installed as getters on the layer
+     style objects), so the pane is left alone. */
   /* the selection marker joins the dark data ramp. The circle selector cannot
      touch Chicago's flag star, which is a <path> and stays flag red. */
   [data-theme="dark"] .chi-star-marker circle { fill: #6ea8ff; }
@@ -695,6 +789,74 @@ SKIN_ISLAND = """<style id="districtry-skin">
 </style>
 """
 
+
+# Installed at the very end of the script, where every registerLayer() call has
+# already run. GETTERS, not a swap: baseStyleFor() — the engine's single funnel
+# for every path it paints — and moduleColor() — the card accent, the sidebar
+# dot, the hover swatch — both read mod.overlay.style directly, so making the
+# property itself theme-aware makes every one of those reads correct with no
+# engine edit and no second copy of the state to keep in sync.
+DARK_PALETTE_INSTALL_JS = """  /* ==== per-layer dark map palette ==================================== */
+  function dstDarkColor(hex) {
+    if (typeof hex !== "string") return hex;
+    return DST_DARK_MAP_COLORS[hex.toUpperCase()] || hex;
+  }
+  function dstThemeColorProp(obj, key) {
+    if (!obj) return;
+    var light = obj[key];
+    if (typeof light !== "string" || light.charAt(0) !== "#") return;
+    var dark = dstDarkColor(light);
+    if (dark === light) return;
+    Object.defineProperty(obj, key, {
+      get: function () { return dstDark ? dark : light; },
+      /* a setter too, so an assignment anywhere degrades to plain data instead
+         of throwing on a getter-only property in strict mode */
+      set: function (v) { light = v; dark = dstDarkColor(v); },
+      enumerable: true,
+      configurable: true
+    });
+  }
+  (function () {
+    for (var i = 0; i < layers.length; i++) {
+      var mod = layers[i];
+      var st = mod.overlay && mod.overlay.style;
+      if (st) { dstThemeColorProp(st, "color"); dstThemeColorProp(st, "fillColor"); }
+      /* nearest-N point layers carry no flat style object; mod.color is what
+         moduleColor() falls back to for their card accent */
+      if (mod.color) dstThemeColorProp(mod, "color");
+    }
+    /* the School Location layer colour-codes every footprint from this table */
+    if (typeof SCHOOL_CAT_META === "object" && SCHOOL_CAT_META) {
+      for (var k in SCHOOL_CAT_META) {
+        if (Object.prototype.hasOwnProperty.call(SCHOOL_CAT_META, k)) {
+          dstThemeColorProp(SCHOOL_CAT_META[k], "color");
+        }
+      }
+    }
+  })();
+  /* The selection highlight is "the layer's own colour, shifted away from it so
+     the matched region pops". The engine spells that DARKEN, which is right on
+     light paper and exactly backwards on a dark map, where a darker outline
+     recedes into the ground instead of standing out. Rebound rather than
+     edited: darkenHexColor is a FENCED engine function, but a function
+     declaration's binding is writable from fork-local code, so this costs no
+     fence edit. At adoption the honest fix is for the engine to shift away from
+     the GROUND rather than toward black. */
+  var dstEngineDarken = darkenHexColor;
+  darkenHexColor = function (hex, amount) {
+    if (!dstDark) return dstEngineDarken(hex, amount);
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex || "");
+    if (!m) return hex;
+    var h = m[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var num = parseInt(h, 16);
+    var up = function (c) { return Math.round(c + (255 - c) * amount); };
+    return "#" + (0x1000000 + up((num >> 16) & 255) * 0x10000 +
+                  up((num >> 8) & 255) * 0x100 + up(num & 255)).toString(16).slice(1);
+  };
+"""
+
+
 # The theme is decided BEFORE FIRST PAINT, which is the whole reason this is a
 # blocking inline script in the head rather than part of the app boot: deferring
 # one attribute is a flash of the wrong ground on every single load. An explicit
@@ -720,6 +882,10 @@ THEME_BOOT_JS = """<script>
 # label. Inserted at the fork-local tile-layer site so it closes over baseTiles.
 THEME_CONTROLLER_JS = """
   /* ==== theme controller (preview-only) ================================== */
+  /* The dark counterpart of every layer stroke/fill in the app, derived at
+     build time — see dark_map_palette() above for the method and for why the
+     obvious minimum-lift was measured and rejected. */
+  var DST_DARK_MAP_COLORS = __DARK_PALETTE__;
   var districtryCoverageLayers = {};
   var districtryTileKind = "light_all";
   function styleDistrictryCoverage(dark) {
@@ -737,11 +903,41 @@ THEME_CONTROLLER_JS = """
     if (c.glow) c.glow.setStyle({ color: dark ? "#a78bfa" : "#ad8cee", opacity: dark ? 0.55 : 0.6 });
     if (c.stateLine) c.stateLine.setStyle({ color: dark ? "#a78bfa" : "#ad8cee" });
   }
+  /* Cached, and deliberately so: the layer-colour getters below sit on the
+     PAINT path — baseStyleFor() reads two of them per path, and a full repaint
+     runs over every path of every active layer. Reading an attribute off the
+     DOM there would put a document access inside the loop this repo has twice
+     optimised (P7, P8). The flag is refreshed by applyDistrictryTheme, which is
+     the only thing that changes the theme. */
+  var dstDark = document.documentElement.getAttribute("data-theme") === "dark";
   function districtryTheme() {
-    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    return dstDark ? "dark" : "light";
+  }
+  /* A theme flip moves every layer colour, so every painted path and every
+     rendered card accent is stale. Repaint through the ENGINE'S OWN paths
+     rather than reimplementing them: updateLayerHighlight() already handles
+     the three cases (a matched region, no selection, a per-feature-styled
+     layer) and re-derives each from baseStyleFor(), which now reads the
+     theme-aware colours. Hoisted, so applyDistrictryTheme above can call it. */
+  function dstRepaintLayers() {
+    if (typeof layers === "undefined" || !layers || !layers.length) return;
+    for (var i = 0; i < layers.length; i++) {
+      var mod = layers[i];
+      /* the card accent + dot, for every card on screen, active or not */
+      var cb = document.getElementById("toggle-" + mod.id);
+      var block = cb && cb.closest ? cb.closest(".layer-block") : null;
+      if (block) block.style.setProperty("--layer-accent", moduleColor(mod));
+      var rt = layerRuntime && layerRuntime[mod.id];
+      if (!rt || !rt.overlayLayer) continue;
+      /* force the full sweep: the P7 fast path repaints only the two paths
+         whose match role changed, and here every path's colour moved */
+      rt.highlightApplied = false;
+      updateLayerHighlight(mod);
+    }
   }
   function applyDistrictryTheme(theme, remember) {
     var dark = theme === "dark";
+    dstDark = dark;
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     if (remember) {
       try { localStorage.setItem("districtry-theme", dark ? "dark" : "light"); } catch (e) {}
@@ -754,6 +950,7 @@ THEME_CONTROLLER_JS = """
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? "#15131b" : "#6d3fd1");
     styleDistrictryCoverage(dark);
+    dstRepaintLayers();
     var btn = document.querySelector(".districtry-theme-toggle");
     if (btn) {
       /* the label names what the button DOES, not the state it is in */
@@ -1306,9 +1503,24 @@ def build(stamp_text):
     html = sub_once(
         html,
         "  }).addTo(map);\n\n  /* ---------- base-map tile-failure notice (R6) ----------",
-        "  }).addTo(map);\n" + THEME_CONTROLLER_JS +
+        "  }).addTo(map);\n" + THEME_CONTROLLER_JS.replace(
+            "__DARK_PALETTE__",
+            json.dumps(dark_map_palette(html), indent=None, sort_keys=True),
+        ) +
         "\n  /* ---------- base-map tile-failure notice (R6) ----------",
         "theme controller",
+    )
+
+    #    (b4) The School Location chips mix each type's colour toward a dark ink
+    #    to make readable text. meta.color is theme-aware via the palette getters
+    #    below, but the INK ANCHOR is a literal — on a dark chip it darkens the
+    #    label instead of lightening it. Fork-local line; same "deep means more
+    #    contrast, not darker" correction as --accent-deep.
+    html = sub_once(
+        html,
+        '"color-mix(in srgb, " + meta.color + " 55%, #1f2937)"',
+        '"color-mix(in srgb, " + meta.color + " 55%, " + (dstDark ? "#f3f4f6" : "#1f2937") + ")"',
+        "school chip ink anchor",
     )
 
     #    the exports object is assigned OUTSIDE the exports fence (the window
@@ -1319,8 +1531,9 @@ def build(stamp_text):
         "  window.ChiExplorer = EXPLORER_EXPORTS;\n"
         "  // preview-only: lets a check drive the theme without a click\n"
         "  EXPLORER_EXPORTS.setTheme = applyDistrictryTheme;\n"
-        "  EXPLORER_EXPORTS.getTheme = districtryTheme;",
-        "theme exports",
+        "  EXPLORER_EXPORTS.getTheme = districtryTheme;\n"
+        + DARK_PALETTE_INSTALL_JS,
+        "theme exports + dark map palette",
     )
 
     #    (b3) Geocoder results name the state in full ("…, Springfield,
