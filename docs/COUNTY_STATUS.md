@@ -85,7 +85,7 @@
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
-| Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `tazewell-precinct-polling` (data-quality) |
+| Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Wabash | 17185 | County card | at-large — County card | — | 1 — `wabash-precinct-geometry` (no-source) |
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 110 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 109 records in the Data gaps panel: `chicago-amenity-phones`.
