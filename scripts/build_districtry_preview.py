@@ -558,6 +558,26 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
   .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
 
+  /* The chooser's own control. Hidden on desktop, where the panel scrolls
+     independently and 39 rows cost nothing, and hidden whenever nothing is on,
+     because there is then no shorter state to offer. */
+  .dst-layer-toggle {
+    display: none;
+    width: 100%;
+    margin: 14px 0 4px;
+    padding: 13px 14px;
+    min-height: 44px;
+    font: 600 13px var(--font-body);
+    color: var(--accent-deep);
+    background: var(--dst-brand-tint-soft);
+    border: 1px solid var(--dst-brand-line);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .dst-layer-toggle:hover,
+  .dst-layer-toggle:focus-visible { background: var(--dst-brand-tint); }
+  .dst-layer-toggle[hidden] { display: none !important; }
   /* ==== the phone layout (mobile review, 2026-08-21) ====================
      Everything above this point is the desktop composition. Until now the
      re-skin's LAYOUT lived entirely in one @media (min-width: 901px) while its
@@ -604,6 +624,29 @@ SKIN_ISLAND = """<style id="districtry-skin">
        design decision, not a cleanup, which is why it was asked rather than
        assumed. */
     #map { height: 42vh; min-height: 260px; }
+
+    /* -- C. lead with the answers (operator-approved) ---------------------
+       39 cards stack vertically on a phone and the ones the reader has not
+       picked dominate: with two layers on, 37 unanswered rows sit between
+       them and the panel foot.
+
+       C was approved as "show only the layers that answered". Implemented
+       literally it would have been a REGRESSION, and the measurement is why:
+       state.layersOn starts EMPTY — 39 cards, 0 checked, verified on a clean
+       load — so a first-time visitor has no answers yet and would have met an
+       empty panel. The layer list is not clutter in front of the app, it IS
+       the way in.
+
+       So the collapse is conditional: it applies only when the reader has at
+       least one layer on, which is exactly when there is something to lead
+       with. With none on, the chooser is the whole panel, as before.
+
+       :has() does the hiding, so a card reappears the instant its box is
+       ticked with no state to keep in sync. The engine's own error/empty-state
+       rules already rely on :has(), so support is established here. */
+    .results-col.dst-collapsed .layer-block:not(:has(input[type="checkbox"]:checked)) { display: none; }
+    .results-col.dst-collapsed .group-section:not(:has(input[type="checkbox"]:checked)) { display: none; }
+    .dst-layer-toggle { display: block; }
 
     /* -- B. a masthead in the shape of a phone ---------------------------
        The tagline and the preview stamp are explanation, and the empty state
@@ -964,7 +1007,66 @@ DARK_PALETTE_INSTALL_JS = """  /* ==== per-layer dark map palette ==============
 """
 
 
-MOBILE_LAYOUT_JS = """  /* ==== phone layout (mobile review, 2026-08-21) ======================== */
+MOBILE_LAYOUT_JS = """  /* ==== C: lead with the answers ======================================
+     Collapse the layers the reader has not picked, but ONLY when they have
+     picked something — see the CSS above for why an unconditional version
+     would have handed a first-time visitor an empty panel. */
+  function dstLayerCounts() {
+    var root = document.getElementById("groups-root");
+    if (!root) return null;
+    return {
+      all: root.querySelectorAll(".layer-block").length,
+      on: root.querySelectorAll('input[type="checkbox"]:checked').length
+    };
+  }
+  function dstSyncLayerChooser() {
+    var col = document.querySelector(".results-col");
+    var btn = document.querySelector(".dst-layer-toggle");
+    var counts = dstLayerCounts();
+    if (!col || !btn || !counts) return;
+    /* nothing on -> nothing to collapse to, so the control has no meaning */
+    if (!counts.on) {
+      col.classList.remove("dst-collapsed");
+      btn.hidden = true;
+      return;
+    }
+    btn.hidden = false;
+    var collapsed = col.classList.contains("dst-collapsed");
+    btn.textContent = collapsed
+      ? "Show all " + counts.all + " layers"
+      : "Show only my " + counts.on + (counts.on === 1 ? " layer" : " layers");
+    btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  }
+  (function () {
+    var root = document.getElementById("groups-root");
+    var col = document.querySelector(".results-col");
+    if (!root || !col) return;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "dst-layer-toggle";
+    btn.hidden = true;
+    root.parentNode.insertBefore(btn, root.nextSibling);
+    btn.addEventListener("click", function () {
+      col.classList.toggle("dst-collapsed");
+      dstSyncLayerChooser();
+    });
+    /* a tick anywhere in the list changes both counts and, when it is the
+       first one, whether the control means anything at all */
+    root.addEventListener("change", function (e) {
+      if (e.target && e.target.type === "checkbox") {
+        /* the first layer a reader turns on is the moment there is something
+           to lead with, so that is when the panel collapses to it */
+        if (!col.classList.contains("dst-collapsed") && dstLayerCounts().on === 1 && dstIsPhone()) {
+          col.classList.add("dst-collapsed");
+        }
+        dstSyncLayerChooser();
+      }
+    });
+    /* a permalink arrives with layers already on: lead with them */
+    if (dstIsPhone() && (dstLayerCounts() || {}).on) col.classList.add("dst-collapsed");
+    dstSyncLayerChooser();
+  })();
+  /* ==== phone layout (mobile review, 2026-08-21) ======================== */
   function dstIsPhone() {
     return !!(window.matchMedia && window.matchMedia("(max-width: 900px)").matches);
   }
@@ -1009,7 +1111,17 @@ MOBILE_LAYOUT_JS = """  /* ==== phone layout (mobile review, 2026-08-21) =======
       doors.parentNode.removeChild(doors);
     }
   }
-  function dstApplyPhoneLayout() { dstPlaceDoors(); dstSyncLegendDisclosure(); }
+  function dstApplyPhoneLayout() {
+    dstPlaceDoors();
+    dstSyncLegendDisclosure();
+    /* crossing INTO the phone layout with layers already on should lead
+       with them; crossing out leaves the class harmless (the CSS that
+       reads it is inside the mobile media query). */
+    var col = document.querySelector(".results-col");
+    var counts = dstLayerCounts();
+    if (col && counts && dstIsPhone() && counts.on) col.classList.add("dst-collapsed");
+    dstSyncLayerChooser();
+  }
   dstApplyPhoneLayout();
   if (window.matchMedia) {
     var dstPhoneMQ = window.matchMedia("(max-width: 900px)");

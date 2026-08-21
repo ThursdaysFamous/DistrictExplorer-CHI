@@ -753,10 +753,51 @@ map with the point on it, coverage chip, coordinates, and **"U.S. House District
 Davis"**. Three rounds ago that card was at y=847. Tiles and the selection marker verified
 present at every size; desktop pixel-identical in both themes bar the generation stamp.
 
+### C — lead with the answers (approved, and adapted for a reason)
+
+39 cards stack vertically on a phone and the ones the reader has not picked dominate: with two
+layers on, 37 unanswered rows sit between them and the panel foot.
+
+**Implemented literally, C would have been a regression, and the measurement is what caught it.**
+`state.layersOn` starts EMPTY — verified on a clean load: 39 cards, **0 checked**. "Show only the
+layers that answered" would therefore show a reader who has just dropped their first pin an
+*empty panel*. The layer list is not clutter standing in front of the app; for a new visitor it
+**is** the way in.
+
+So the collapse is **conditional**: it applies only once at least one layer is on, which is
+exactly when there is something to lead with. With none on, the chooser is the whole panel, as
+before. The first layer a reader turns on is the moment the panel collapses to it.
+
+`:has(input:checked)` does the hiding, so a card reappears the instant its box is ticked with no
+state to keep in sync — the engine's own error/empty-state rules already rely on `:has()`, so
+support is established here. The control is a full-width button after `#groups-root`:
+*"Show all 39 layers"* ⇄ *"Show only my 2 layers"*, hidden entirely on desktop and whenever
+nothing is on (there is then no shorter state to offer).
+
+| | collapsed | expanded |
+|---|---|---|
+| cards shown | 2 | 32 |
+| group sections | 1 | 4 |
+| document, 375×667 | **1,529px** | 3,680px |
+| document, 393×852 | **1,590px** | 3,737px |
+
+**58% shorter**, round-tripping to the exact same height, no page errors. Desktop is
+pixel-identical bar the generation stamp, with the button `display: none` and 32 cards as before.
+
+**One bug worth recording**, because it is a class this project keeps meeting: the button's base
+`display: none` was emitted *after* the mobile `display: block` rule. Media queries add no
+specificity, so source order decided it and the control was never visible at any width. Moving
+the base styles above the media block fixed it — the same "later rule of equal specificity wins"
+trap as the `.masthead-actions` overrides.
+
+**Also recorded:** `offsetParent !== null` is not a usable visibility test in this app and misled
+two separate measurements in this session (an SVG mark, then these cards). `getComputedStyle(e)
+.display !== "none"` is the one that tells the truth.
+
 ### Still open
 
-- **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
-  two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
+- **D** (let tablets have the two-column layout — an engine release plus NYC/SF fan-out) is
+  approved and not yet built.
 - **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
   two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
 
