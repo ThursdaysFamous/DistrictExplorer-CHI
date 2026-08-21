@@ -430,6 +430,59 @@
   "sourceUrl": "https://randolphcountyil.gov/board-of-commissioners/",
   "structure": "Commission form — 3 commissioners elected countywide"
  },
+ "SALINE": {
+  "county": "Saline County",
+  "members": [
+   {
+    "name": "Jay Williams",
+    "role": "Chairman"
+   },
+   {
+    "name": "Mike McKinnies",
+    "role": "Vice Chairman"
+   },
+   {
+    "name": "Casey Perkins"
+   },
+   {
+    "name": "Chuck DePriest"
+   },
+   {
+    "name": "Curt Hustedde"
+   },
+   {
+    "name": "Danny Gibbs"
+   },
+   {
+    "name": "Jean Ellis"
+   },
+   {
+    "name": "Jeff Guard"
+   },
+   {
+    "name": "Justin Travelstead"
+   },
+   {
+    "name": "Mike Barnhill"
+   },
+   {
+    "name": "Roy Oldham"
+   },
+   {
+    "name": "Ryan Lambert"
+   },
+   {
+    "name": "Todd Horton"
+   }
+  ],
+  "office": {
+   "address": "10 E. Poplar St., Harrisburg, IL 62946",
+   "label": "Saline County Board",
+   "phone": "618-252-6905"
+  },
+  "sourceUrl": "https://salinecounty.illinois.gov/county-board/",
+  "structure": "13 members elected countywide — no districts"
+ },
  "SCHUYLER": {
   "county": "Schuyler County",
   "members": [
