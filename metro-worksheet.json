@@ -1172,6 +1172,12 @@
         "note": "Clinton County's 5 County Board districts of THREE members each, DISSOLVED from the Census 2020 voting districts per a composition THREE certified elections agree on: the 2024 General and the 2026 General Primary each carry a numbered 'FOR COUNTY BOARD DISTRICT n' contest in every one of the county's 34 precincts and partition them 7/9/6/5/7, and the 2022 General names candidates whose districts key onto the county's own board page — so the oldest election corroborates the two numbered ones from a different direction. A COMPOSED FABRIC, not a one-to-one one (the Calhoun shape, hence check_fabric_composed): census 2020 carries 39 Clinton voting districts against the 34 the county runs today, Irishtown/Lake/St Rose having each merged a numbered pair and Brookside gone from five to three. The first three merges are nameable and the fourth is NOT — and it cannot matter, because all five Brookside voting districts sit in District 1, so no merge can move a district line. Populations sum to the county's exact 36,899 and run 6,840-7,678 against a 7,380 ideal — worst deviation 7.3%, THE TIGHTEST THIS ROUTE HAS PRODUCED and the strongest evidence available that this is the county's current map rather than a stale one (Wayne, measured the same afternoon on the identical technique, came out at 32.4% and was NOT built). Each feature names the county's own 34 current precincts, not the 39 census units the geometry is built from (scripts/build_clinton_boundaries.py; --check is the drift gate)."
       },
       {
+        "file": "warren-county-board-districts.json",
+        "min_features": 4,
+        "max_features": 4,
+        "note": "Warren County's 4 County Board districts (seating 15, as 3/4/4/4), DISSOLVED from the Census 2020 voting districts per a composition THE COUNTY ITSELF PUBLISHES. Its precinct map is a raster image with no vector linework, so nothing is traced from it — but the map's TEXT LAYER carries a four-column table at the foot of the page, each column headed by a district and listing that district's precincts. That is Warren stating its own composition in machine-readable form, which is a STRONGER source than the election-returns route used for Franklin and Clinton, where the same fact is inferred from which ballot each precinct voted. A COMPOSED FABRIC and the cleanest this route has met: census 2020 carries 28 Warren voting districts against the 26 precincts the county runs today, and BOTH merges are nameable AND confined to one district — ROSEVILLE 1 + ROSEVILLE 2 in District 4, SPRING GROVE-ALEXIS + SPRING GROVE-GERLAW in District 3 — so neither can move a district line. That is the Clinton test passed twice over, where Clinton had one unnameable merge that merely happened to sit inside a single district. Populations sum to the county's exact 16,835 and run 4,030-4,332 against a 4,209 ideal — worst deviation 4.2%, THE TIGHTEST THIS ROUTE HAS PRODUCED, taking the record from Clinton's 7.3% hours later. Each feature names the county's own current 26 precincts, not the 28 census units the geometry is built from (scripts/build_warren_boundaries.py; --check is the drift gate)."
+      },
+      {
         "file": "edwards-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -2012,6 +2018,11 @@
         "note": "Clinton County Board members keyed by district (5 districts seating 3 each — 15 members, ALL FIFTEEN with a phone, an e-mail and a term-expiry year, the richest board source the canvass route has met). Scraped weekly from the county's own board page, whose Board Chairman and Vice Chairman lines are matched onto their own member rows by name — a label matching no member is a hard failure rather than a badge attached to nobody. TWO OF THE FIFTEEN OPEN THEIR COLUMN WITH a photo wrapped in the same <strong> tag the name uses, so a reader that takes the FIRST match cleans to an empty string and drops the member while every other count still passes; the parser walks every one instead, which is how Kurt Schmitz was recovered on the first run. One member's published address is a personal gmail among fourteen on the county domain and ships as published — substituting a county address the county did not print would be inventing one. NO PARTY: the page publishes none. The same run re-checks the district composition against the Clerk's results system and fails on a re-precincting or a redistricting."
       },
       {
+        "file": "warren-county-board-members.json",
+        "min_keys": 4,
+        "note": "Warren County Board members keyed by district (4 districts seating 15 as 3/4/4/4 — 14 e-mails, 7 phones, a term-expiry year on every seat, the committees the county lists, and the Chairman of the Board badged from his own row). Scraped weekly from the county's board page. THE PAGE WRITES MEMBERS TWO WAYS and only one is the obvious shape: thirteen are <li>Name<ul>details</ul></li> and two are <li>Name</li><li><ul>details</ul></li>. Matching only the first drops two of the fifteen — and one of the two is the CHAIRMAN OF THE BOARD, so the naive parse loses a member and the chair while every district still looks populated. Both shapes are matched explicitly rather than by searching backwards for a name, which is how an earlier attempt started reading members' HOME ADDRESSES as their names. THE COUNTY PUBLISHES A HOME ADDRESS FOR EVERY MEMBER: those lines are identified and dropped by construction, the run reports how many it saw and refused, and it FAILS if it sees none — because their disappearance would mean the layout moved and the parse should be re-read. Every e-mail is Cloudflare-obfuscated with no plain mailto anywhere, the exact markup that silently emptied Brown County's addresses, so data-cfemail is decoded and markup-present-but-nothing-decoded is a hard failure. ONE E-MAIL IS MISSPELLED AT SOURCE — the county prints TWinkler at 'warrecountyil.gov', missing the n — and ships as published, the Carroll 'Distirct' precedent. The same run re-reads the precinct-map legend the BOUNDARY was dissolved from, which makes this the strongest drift check in the fleet: the tripwire re-parses the exact document the geometry came from."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
@@ -2626,6 +2637,11 @@
       "file": "update-clinton-county-board-roster.yml",
       "purpose": "Clinton County Board roster (the county's own board page — 15 members with phone, e-mail and term year, Chairman and Vice Chairman badged by name match) + the redistricting tripwire: the same run re-checks the county's live precinct count and each numbered board contest's precinct count against the shipped dissolve",
       "schedule": "Sat 19:00 UTC"
+    },
+    {
+      "file": "update-warren-county-board-roster.yml",
+      "purpose": "Warren County Board roster (the county's own board page — 15 members with committees, term year, phone and e-mail, Chairman of the Board badged; home addresses seen and dropped) + the strongest drift check in the fleet: the same run re-reads the precinct-map legend the shipped boundary was dissolved from",
+      "schedule": "Sun 19:00 UTC"
     },
     {
       "file": "roster-health.yml",

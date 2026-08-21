@@ -1,0 +1,117 @@
+name: Update Warren County Board roster
+
+# Weekly refresh of the Warren County Board District card's member roster
+# (data/app/warren-county-board-members.json), fetched by index.html.
+#
+# TWO JOBS IN ONE RUN, and the second is the strongest drift check in the fleet.
+#
+# 1. THE ROSTER comes from the county's own board page,
+#    warrencountyil.gov/government/county-board/ — fifteen members across four
+#    districts (3/4/4/4), with the committees they serve on, a term-expiry year
+#    on every seat, phones for seven, e-mails for fourteen, and the Chairman of
+#    the Board badged from his own row.
+#
+#    TWO PARSER TRAPS ARE BAKED IN, both paid for. (a) The page writes members
+#    TWO ways: thirteen as <li>Name<ul>details</ul></li> and two as
+#    <li>Name</li><li><ul>details</ul></li>. Matching only the obvious shape
+#    drops two of the fifteen — and one of the two is the CHAIRMAN — while every
+#    district still looks populated. (b) An earlier attempt to fix (a) by
+#    searching BACKWARDS for a name started reading members' HOME ADDRESSES as
+#    their names, so both shapes are now matched explicitly instead.
+#
+#    THE COUNTY PUBLISHES A HOME ADDRESS FOR EVERY MEMBER. Those lines are
+#    identified and dropped by construction, the run reports how many it saw and
+#    refused, and it FAILS if it sees none — their disappearance would mean the
+#    layout moved and the parse should be re-read before it is trusted. Every
+#    e-mail is Cloudflare-obfuscated with no plain mailto anywhere, the markup
+#    that silently emptied Brown County's addresses, so it is decoded and
+#    markup-present-but-nothing-decoded is a hard failure.
+#
+# 2. THE REDISTRICTING TRIPWIRE, and this county's is exact rather than a proxy.
+#    Warren's board districts are the DISSOLVE of Census 2020 voting districts
+#    (scripts/build_warren_boundaries.py), and the composition they were
+#    dissolved by is the four-column table the county prints in the legend of
+#    its own precinct map. This run re-downloads that PDF and re-parses that
+#    legend, so the tripwire reads THE EXACT DOCUMENT THE GEOMETRY CAME FROM —
+#    not an election feed standing in for it. Any change to the county's table
+#    fails the run, which means the county reapportioned or re-precincted and a
+#    human must re-measure against the census fabric before this county ships
+#    again. That is the alarm working, not breakage.
+#
+# If anything changed, this opens a PR rather than committing to main:
+# officeholder data gets a human look before it ships.
+
+on:
+  schedule:
+    - cron: "0 19 * * 0"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # The board page is static HTML, but the composition tripwire re-reads
+        # the county's precinct-map PDF, so pdfplumber is needed here. The builder imports only CONSTANTS from
+        # build_warren_boundaries.py, whose geometry stack is function-local
+        # (the De Witt seam), so no shapely here.
+        run: pip install -c scripts/requirements.txt requests pdfplumber
+
+      - name: Scrape the board page and re-read the precinct-map legend
+        run: python3 scripts/warren_county_board_scraper.py -o /tmp/warren_board_raw.json
+
+      - name: Rebuild roster data file
+        run: python3 scripts/build_warren_county_board.py /tmp/warren_board_raw.json
+
+      # Gate the regenerated data before it can reach a PR.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR.
+          branch="bot/warren-county-board-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/warren-county-board-members.json
+          git commit -m "Update Warren County Board roster from warrencountyil.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Warren County Board roster from warrencountyil.gov" \
+              --body "Automated weekly refresh of the Warren County Board District card's member roster, generated by \`scripts/warren_county_board_scraper.py\` + \`scripts/build_warren_county_board.py\`. Please review the diff before merging — this changes data about real officeholders. The same run re-checks the district composition against the Clerk's results system and fails if it stops matching the shipped dissolve; that failure would mean the county re-precincted or redistricted, and the geometry must be re-measured before it ships again." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
