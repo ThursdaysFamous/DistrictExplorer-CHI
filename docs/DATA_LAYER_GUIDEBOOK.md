@@ -85,8 +85,8 @@ in the researched-but-unbuilt backlog.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Alexander County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. alexandercounty.illinois.gov answers 200 and is the county's own site, with a County Board page naming Chairman Joe Griggs and Vice Chairman Bruce Sims; alexandercountyil.org, the Clerk's e-mail domain, also resolves. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website.",
-      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. alexandercounty.illinois.gov answers 200 and is the county's own site, with a County Board page naming Chairman Joe Griggs and Vice Chairman Bruce Sims; alexandercountyil.org, the Clerk's e-mail domain, also resolves. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. RE-MEASURED 2026-08-21, AND THE ROSTER IS THE BLOCKER RATHER THAN THE FORM. Two corrections to the line above. First, alexandercountyil.org — the Clerk's e-mail domain — does NOT serve a site from here: it resolves to 208.91.197.27 and refuses TLS outright (tlsv1 alert internal error). Alexander is therefore the ONE frontier county the clerk-domain rule does not reach, and the pattern that does reach it is the state's own hosting, alexandercounty.illinois.gov (169 KB) — a sweep of that pattern across all 28 frontier counties is recorded separately and adds no other county. Second, the board page no longer says what this record says it says: it now names exactly TWO members, Chairman Joe Griggs and Member James Smith. Bruce Sims, whom this record named on 2026-08-09, is gone — his /team/bruce-sims/ page returns 404, as does /team/larry-essex/, and both survive only as stale entries in the site's navigation menu, which is why a link scrape sees four names and the page itself shows two. ISBE's county-board structure table gives Alexander as THREE commissioners elected at large. So the county publishes two of three, and the third is neither named nor explained anywhere — vacancy, resignation or simple omission, nothing published says which, and guessing is exactly what the honesty rules forbid. THE FORM IS STILL UNCONFIRMED BY A CERTIFIED DOCUMENT: the structure table is 2007-vintage and Richland proved on the same day that it can be wrong, both election-results vendors return their generic shells for Alexander, and ISBE's precinct archive carries only statewide offices. ONE GOOD SIGN FOR LATER: that archive lists Alexander's ten precincts — CACHE, CAIRO 1-5, MCCLURE, OLIVE BRANCH, TAMMS, THEBES — with NO sub-precinct reporting units at all, the opposite of Richland's nine, so nothing yet suggests a split fabric here.",
+      "wanted": "TWO THINGS, and the roster is the harder one. (1) The name of the third commissioner, or confirmation that the seat is vacant \u2014 the county's own page publishes only two of the three its board is supposed to have, and no source anywhere names the third. (2) The board's form from a certified election document, since the only source calling it at-large is a 2007-vintage table that was proven wrong for another county on the day it was adopted. A county clerk's certified canvass would answer both at once. NOT YET ASKED, and the Clerk is reachable: data/app/il-county-clerks.json carries acc@alexandercountyil.org, so the domain takes mail even though it serves no website."
     },
     {
       "id": "aurora-council-contact",
@@ -5136,6 +5136,57 @@ to look for and to corroborate a finding; never let it be the last word, and nev
 name from it (there is none to read — it names no members and no chairs). Saline shipped
 on its own certified canvass with this table in third place, which is why Richland's
 counter-example cost nothing.
+
+### The frontier, classified by board form (2026-08-21)
+
+The structure table above was read for **all 28 remaining unserved counties in one
+fetch**, which turns "28 counties left" into two piles that need completely different
+work. **Read this as research ORDERING, never as fact** — the table is 2007-vintage and
+Richland is already proven wrong in it (see below). Every row still needs its own
+certified document before anything ships.
+
+**Ten rows read AT-LARGE** — these need no geometry at all. If the form holds, each is a
+County-card roster ask of the kind Massac and Saline closed in an afternoon:
+
+| County | Members | Reachable? |
+|---|---|---|
+| Alexander | 3 | **yes** — but publishes only 2 of them (below) |
+| Gallatin | 5 | no — clerk domain unreachable from here |
+| Hardin | 3 | no — `hardincountyil.gov` serves a 114-byte parking lander |
+| Henderson | 11 | no — same, a 114-byte holding page |
+| Johnson | 3 | no site; form ALREADY PROVEN at-large from gbsvote canvasses |
+| Perry | 3 | no — 202 challenge; form ALREADY PROVEN at-large from three elections |
+| Pope | 3 | no — clerk domain unreachable from here |
+| Pulaski | 3 | no — 403 |
+| ~~Richland~~ | ~~7~~ | **DISPROVEN** — seven numbered districts, see its record |
+| Williamson | 3 | no — 202 challenge |
+
+So of the ten, one is disproven and **eight of the remaining nine are blocked at the
+website, not at the question**. Johnson and Perry already have their form settled and
+need only a roster the county will not serve. That is the shape of the at-large frontier:
+it is an ACCESS problem now, not a research one.
+
+**Eighteen rows read DISTRICTED** — Bureau 26, Champaign 27, Christian 16, Clay 14,
+Cumberland 6, Douglas 7, Fayette 14, Ford 12, Hancock 15, Jackson 14, Jasper 12, Knox 15,
+Lawrence 7, Marion 15, Piatt 6, Union 5, Vermilion 27, Wayne 14. Six of those are already
+MEASURED SHUT on split precincts (Bureau, Douglas, Ford, Piatt, Cumberland, Knox) and
+three more on fabric or balance (Christian, Vermilion, Wayne). The table's value here is
+smaller but real: it says how many seats to expect, which is the check that catches a
+half-scraped roster.
+
+### The state-hosted county-site pattern is exhausted (2026-08-21)
+
+Alexander's working site is `alexandercounty.illinois.gov` while its CLERK's e-mail domain
+is `alexandercountyil.org`, which fails TLS outright — so for that one county the
+clerk-domain rule that found Cumberland, Massac and Saline does NOT reach it, and a
+different pattern does: `<county>county.illinois.gov`, the state's own hosting.
+
+That pattern was then swept across all 28 frontier counties, and this is the result worth
+recording so nobody sweeps it again: it answers for **five** — Alexander, Clay, Ford,
+Lawrence and Richland — and **four of those five were already reachable** at their clerk's
+domain. Alexander is the only county the pattern adds. Every still-blocked frontier county
+(Gallatin, Hardin, Henderson, Johnson, Perry, Pope, Pulaski, Union, Williamson, Vermilion)
+is absent from it too. **The route is spent; the remaining blocks are real.**
 
 ### A THIRD results vendor, and the one that publishes per-precinct BALLOTS (found 2026-08-20)
 
