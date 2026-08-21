@@ -2713,6 +2713,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .districtry-map-legend .dml-mini { display: inline-flex; align-items: center; gap: 5px; }
     .districtry-map-legend[open] .dml-mini { display: none; }
     .districtry-map-legend .dml-items { padding: 6px 0 4px; }
+    /* -- the map gives back 60px (operator-directed, 2026-08-21) ---------
+       The engine sets #map to 48vh with a min-height of 340px. On a 375x667
+       phone 48vh is 320, so the FLOOR is what binds — the shortest screens,
+       where the space is scarcest, are the ones held to the tallest map. Even
+       with A and B the first result card cleared the fold there by only 43px:
+       its top edge, not its content.
+
+       42vh / 260 was chosen off a measured ladder (48vh/340 -> card at y=624;
+       42vh/260 -> 564; 38vh/240 -> 537). It is an override from OUTSIDE the
+       styles-core fence that sets it, so it costs no engine release and does
+       not reach the NYC or SF forks. Shortening the app's primary surface is a
+       design decision, not a cleanup, which is why it was asked rather than
+       assumed. */
+    #map { height: 42vh; min-height: 260px; }
+
     /* -- B. a masthead in the shape of a phone ---------------------------
        The tagline and the preview stamp are explanation, and the empty state
        already carries the same sentence where a reader will actually meet it.
@@ -3028,7 +3043,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 44d7190 on 2026-08-21</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 087112e on 2026-08-21</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">

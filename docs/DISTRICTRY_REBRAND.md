@@ -731,13 +731,32 @@ which also caught the one regression this change introduced: moving the flex col
 legend card onto a new `.dml-items` wrapper left the summary outside the `gap: 5px`, tightening
 the desktop legend by 5px. An eye would not have caught it.
 
+### The map gives back 60px — RESOLVED (operator-directed, same day)
+
+The lever above was put to the operator and answered: **42vh / min-height 260**, with the
+caveat staying in the panel foot.
+
+The floor was the part that mattered. The engine sets `#map` to `48vh` with `min-height: 340px`,
+and on a 375×667 phone 48vh is only 320 — so the FLOOR binds, and the shortest screens, where
+space is scarcest, were the ones held to the tallest map. Overriding both from outside the
+`styles-core` fence costs no engine release and does not reach the NYC or SF forks.
+
+| device | card visible above the fold, before → after |
+|---|---|
+| iPhone SE 375×667 | 43px (an edge) → **103px** |
+| iPhone 14 Pro 393×852 | 159px → **210px** (the whole card) |
+| Pixel 7 412×915 | — → **247px** |
+| iPad mini 768×1024 | — → **358px** |
+
+On the smallest phone the app now answers its own question without a scroll: wordmark, search,
+map with the point on it, coverage chip, coordinates, and **"U.S. House District IL-7 — Danny K.
+Davis"**. Three rounds ago that card was at y=847. Tiles and the selection marker verified
+present at every size; desktop pixel-identical in both themes bar the generation stamp.
+
 ### Still open
 
-- **The smallest phone still cannot show a *usable* answer above the fold.** At 375×667 the card
-  clears the fold by 43px — its top edge, not its content. The remaining lever is the map, and
-  the numbers are: `48vh/min 340` (shipped) → card at 624; `42vh/min 260` → 564; `38vh/min 240`
-  → 537. Shortening the app's primary surface is a design call, not a cleanup, so it is offered
-  rather than taken.
+- **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
+  two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
 - **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
   two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
 

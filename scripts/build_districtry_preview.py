@@ -590,6 +590,21 @@ SKIN_ISLAND = """<style id="districtry-skin">
     .districtry-map-legend .dml-mini { display: inline-flex; align-items: center; gap: 5px; }
     .districtry-map-legend[open] .dml-mini { display: none; }
     .districtry-map-legend .dml-items { padding: 6px 0 4px; }
+    /* -- the map gives back 60px (operator-directed, 2026-08-21) ---------
+       The engine sets #map to 48vh with a min-height of 340px. On a 375x667
+       phone 48vh is 320, so the FLOOR is what binds — the shortest screens,
+       where the space is scarcest, are the ones held to the tallest map. Even
+       with A and B the first result card cleared the fold there by only 43px:
+       its top edge, not its content.
+
+       42vh / 260 was chosen off a measured ladder (48vh/340 -> card at y=624;
+       42vh/260 -> 564; 38vh/240 -> 537). It is an override from OUTSIDE the
+       styles-core fence that sets it, so it costs no engine release and does
+       not reach the NYC or SF forks. Shortening the app's primary surface is a
+       design decision, not a cleanup, which is why it was asked rather than
+       assumed. */
+    #map { height: 42vh; min-height: 260px; }
+
     /* -- B. a masthead in the shape of a phone ---------------------------
        The tagline and the preview stamp are explanation, and the empty state
        already carries the same sentence where a reader will actually meet it.
