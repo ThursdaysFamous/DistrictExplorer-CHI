@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**79 of 102 Illinois counties are served** — 69 through their own dispatch entries, 2 through a shipped judicial circuit, and 8 through the County card alone. 23 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**79 of 102 Illinois counties are served** — 70 through their own dispatch entries, 2 through a shipped judicial circuit, and 7 through the County card alone. 23 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -72,7 +72,7 @@
 | McDonough | 17109 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | McHenry | 17111 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district` | 4 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `mchenry-park-district` (no-source); `mchenry-ward-cities` (blocked) |
 | McLean | 17113 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `mclean-special-districts` (no-source) |
-| Menard | 17129 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
+| Menard | 17129 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Mercer | 17131 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
@@ -87,7 +87,7 @@
 | Rock Island | 17161 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `rock-island-andalusia-township-library` (no-source) |
 | Saline | 17165 | County card | at-large — County card | — | 1 — `saline-precinct-geometry` (no-source) |
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `municipal-website-dead-ends` (data-quality); `sangamon-park-library-districts` (no-source) |
-| Schuyler | 17169 | County card | at-large — County card | — | none |
+| Schuyler | 17169 | dispatch | at-large — County card | `county-precinct` | none |
 | Scott | 17171 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `scott-county-commissioners` (no-source) |
 | Shelby | 17173 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |

@@ -579,6 +579,13 @@ DISPATCH_COUNTY_FIPS = {
     # deliberately absent from this addition: it has been dispatched since its
     # board districts shipped and is already listed above.
     "greene": "061", "scott": "171", "moultrie": "139",
+    # Schuyler joins them the same day, closing out the eight counties the
+    # 2026-08-20 audit named. It reached the ring on 2026-08-02 through the County
+    # card alone and had no outline at all until now, because a card needs no
+    # coverage test and a dispatch entry does. Menard is deliberately absent from
+    # this addition: it has been dispatched since its commissioner districts
+    # shipped and is already listed above.
+    "schuyler": "169",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))

@@ -805,6 +805,31 @@ COUNTIES = {
             (39.7359, -89.1455, "Christian County"),
         ],
     },
+    "schuyler": {
+        "fips": "169",
+        "name": "Schuyler County",
+        # Added 2026-08-21, when Schuyler's seventeen precincts dispatched. This
+        # county reached the ring on 2026-08-02 through the County card alone, so
+        # it had no outline at all until now — the card needs no coverage test and
+        # a dispatch entry does. Anchors DERIVED, not recalled: TIGERweb's
+        # Incorporated Places centroids inside the county and inside each of its
+        # six neighbours, every one checked with a point-in-county test before it
+        # was written down.
+        "inside": [
+            (40.1271, -90.3730, "Browning"),
+            (40.1528, -90.7733, "Camden"),
+            (40.2340, -90.6223, "Littleton"),
+            (40.1200, -90.5665, "Rushville (county seat)"),
+        ],
+        "outside": [
+            (40.2279, -90.3565, "Astoria — Fulton County"),
+            (40.1905, -90.1425, "Bath — Mason County"),
+            (39.8805, -90.3705, "Arenzville — Cass County"),
+            (40.0066, -90.8737, "Mound Station — Brown County"),
+            (40.0374, -91.0662, "Camp Point — Adams County"),
+            (40.4959, -90.5631, "Bardolph — McDonough County"),
+        ],
+    },
     "menard": {
         "fips": "129",
         "name": "Menard County",
