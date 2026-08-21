@@ -27,12 +27,17 @@ Usage:
     python3 il_county_commissioners_scraper.py [output.json]   # default: stdout
 """
 
+import base64
 import datetime
+import hashlib
 import html as html_mod
 import json
+import os
 import re
 import sys
+import tempfile
 import time
+import urllib.request
 
 import requests
 
@@ -928,8 +933,177 @@ def parse_saline(page):
 
 
 
+
+# ---------------------------------------------------------------- Gallatin
+# Separators Gallatin puts between a name and a board office. Explicit
+# characters, not a regex class, for the reason recorded on Massac: str.strip()
+# takes CHARACTERS, so a "\s" in this set would strip the letter "s" and
+# silently shorten any name ending in one.
+GALLATIN_SEP_CHARS = " \t-\u2013\u2014:,\u00a0"
+GALLATIN_WIDGET_RE = re.compile(
+    r'(?is)<h3 class="widget-title">\s*County Board Members\s*</h3>\s*'
+    r'<div class="textwidget">(.*?)</div>')
+GALLATIN_PARA_RE = re.compile(r"(?is)<p[^>]*>(.*?)</p>")
+
+
+def parse_gallatin(page):
+    """Gallatin publishes its five members as a SIDEBAR WIDGET on the County
+    Board page, not in the page body:
+
+        <h3 class="widget-title">County Board Members </h3>
+        <div class="textwidget">
+          <p>Andrew Lunsford - Chairman</p>
+          <p><span>Contact: (618) 499-0943<br /></span></p>
+          <p>Gary Vickery</p>
+          <p>Randy Drone</p>
+          <p>Warren Rollman</p>
+          <p><span>Contact: (618)-841-3608</span></p>
+          <p>Terry Schmitt</p>
+
+    THE BODY OF THAT PAGE IS AGENDAS AND MINUTES — some two hundred links and
+    not one member's name. A parser that reads the main column, which is where
+    every other county in this file keeps its roster, finds no board at all.
+
+    A "Contact:" LINE BELONGS TO THE MEMBER ABOVE IT, and getting that wrong is
+    the trap this county sets. Only two of the five publish a phone, so pairing
+    the two phones with the first two names — the obvious flattened read, and
+    the same shape of error as Franklin's grid — would hand Gary Vickery the
+    chairman's number. Each phone is attached to the preceding name or to
+    nothing. The other three members publish none and none is invented.
+
+    AT LARGE, PROVEN TWICE FROM THE COUNTY'S OWN CERTIFIED RESULTS, which is
+    what lets Gallatin ride the County card with no geometry at all. Both
+    canvasses on the Clerk's elections page mark the board contest COUNTY WIDE
+    with the same suffix every countywide office on the ballot carries:
+
+        2026 General Primary   CO.BD.MEMBER CWD      (VOTE FOR) 3
+        2024 General Primary   COUNTY BOARD MEMBER CWD (VOTE FOR) 2
+
+    The control sits beside them on the same page — COUNTY CLERK CWD, COUNTY
+    TREASURER CWD, COUNTY SHERIFF CWD — while district offices on the same
+    ballots carry their district in the name (12TH REP.IN CONGRESS, 117TH REP.
+    IN THE G.A.) and precinct offices carry a precinct (PCT. COMMITTEEPERSON
+    OMAHA). Five seats, staggered three and two, every one of them countywide.
+
+    AND THE TWO SOURCES AGREE ON THE PEOPLE: the 2024 pair (Vickery, Schmitt)
+    plus the 2026 trio (Lunsford, Rollman, Drone) are exactly the five names in
+    the widget. The roster still comes from the widget and never from the
+    returns — a return names who won a contest, not who holds the seat today,
+    and the 2026 primary named nominees for an election that has not yet been
+    held. Recorded because a cross-check that agrees is worth stating: the
+    ballot spells the third of them THOMAS R. DRONE where the county writes
+    Randy Drone, and this ships the county's spelling without asserting that
+    the two names are one person.
+
+    HOW THIS COUNTY BECAME READABLE AT ALL: gallatinco.illinois.gov serves an
+    incomplete TLS chain, which every automated client reports as a connection
+    failure and no browser notices. See AIA_INTERMEDIATES above.
+    """
+    widget = GALLATIN_WIDGET_RE.search(page)
+    if not widget:
+        return [], None
+    members = []
+    for para in GALLATIN_PARA_RE.findall(widget.group(1)):
+        txt = clean(para).strip(GALLATIN_SEP_CHARS)
+        if not txt:
+            continue
+        if re.match(r"(?i)^contact\b", txt):
+            phone = normalize_phone(txt)
+            if phone and members:
+                members[-1]["phone"] = phone
+            continue
+        name, role_text = txt, ""
+        split = re.split(r"\s+[-\u2013\u2014]\s+", txt, 1)
+        if len(split) == 2:
+            name, role_text = split[0], split[1]
+        name = name.strip(GALLATIN_SEP_CHARS)
+        if not name:
+            continue
+        entry = {"name": name}
+        canonical = role_of(role_text.strip(GALLATIN_SEP_CHARS))
+        if canonical:
+            entry["role"] = canonical
+        if not any(x["name"] == name for x in members):
+            members.append(entry)
+    return members, None
+
+
+
+# ------------------------------------------------- incomplete TLS chains
+# THE COLES PATTERN, MET A SECOND TIME. gallatinco.illinois.gov answers 200 and
+# renders perfectly in a browser, but serves ONLY its leaf certificate — the
+# Sectigo intermediate that signs it is missing from the handshake. Browsers
+# paper over that by fetching the issuer named in the leaf's own Authority
+# Information Access extension; requests, curl and every other automated client
+# do not, so they report "unable to get local issuer certificate" and the county
+# reads as unreachable. Gallatin's gap record said the county was "DARK to this
+# client on every route tried" for that reason alone.
+#
+# So the chase is done here, exactly as scripts/coles_county_board_scraper.py
+# does it: download the intermediate the certificate itself points at, refuse to
+# use it unless its bytes hash to the pin below, and verify the page fetch
+# against certifi's roots PLUS that one certificate. NOTHING HERE DISABLES
+# VERIFICATION, and if the county fixes its chain this keeps working unchanged.
+AIA_INTERMEDIATES = {
+    "GALLATIN": {
+        "url": "http://crt.sectigo.com/SectigoPublicServerAuthenticationCAOVR40.crt",
+        "sha256": "8eb2f17d668941c39a7fca0cee127ae0ebaf444610631cca3cd19eab46c5824a",
+        "subject_cn": "Sectigo Public Server Authentication CA OV R40",
+    },
+}
+
+
+def aia_ca_bundle(key):
+    """certifi's roots + the intermediate the county's server omits.
+
+    Returns a temp-file path the caller deletes. The intermediate is fetched
+    over plain HTTP because that is the URI the certificate publishes, and that
+    is safe here because the bytes are pinned by hash and because the page fetch
+    still verifies the whole chain afterwards. The DER->PEM rewrap is done in
+    Python so the weekly job does not depend on an openssl binary.
+    """
+    spec = AIA_INTERMEDIATES[key]
+    import certifi
+
+    # Start from whatever store the rest of this run already trusts. In CI no
+    # such variable is set and this is certifi, exactly as the Coles scraper
+    # does it; behind a TLS-terminating egress proxy the environment names a
+    # bundle that includes that proxy's own root, and swapping certifi in for it
+    # would break the one fetch this function exists to enable.
+    roots_path = (os.environ.get("REQUESTS_CA_BUNDLE")
+                  or os.environ.get("SSL_CERT_FILE") or certifi.where())
+
+    der = urllib.request.urlopen(spec["url"], timeout=60).read()
+    got = hashlib.sha256(der).hexdigest()
+    if got != spec["sha256"]:
+        raise SystemExit(
+            "county-commissioners: the intermediate at %s hashed %s, expected %s\n"
+            "— %s's certificate authority may have changed. Do not loosen this\n"
+            "check; re-read the leaf's AIA extension and update the pin."
+            % (spec["url"], got, spec["sha256"], key))
+    pem = "-----BEGIN CERTIFICATE-----\n%s-----END CERTIFICATE-----\n" % (
+        base64.encodebytes(der).decode("ascii"))
+    bundle = tempfile.NamedTemporaryFile(suffix=".pem", mode="w", delete=False)
+    with open(roots_path, "r") as roots:
+        bundle.write(roots.read())
+    bundle.write("\n# %s (AIA-supplied; the county's server omits it)\n"
+                 % spec["subject_cn"])
+    bundle.write(pem)
+    bundle.close()
+    return bundle.name
+
+
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
+    "GALLATIN": {
+        "name": "Gallatin County",
+        "url": "https://gallatinco.illinois.gov/departments/board/",
+        "structure": "5 members elected countywide \u2014 no districts",
+        "expect": 5,
+        "parse": parse_gallatin,
+        # gallatinco.illinois.gov omits its TLS intermediate; see aia_ca_bundle.
+        "ca_bundle": "GALLATIN",
+    },
     "SALINE": {
         "name": "Saline County",
         "url": "https://salinecounty.illinois.gov/county-board/",
@@ -1033,7 +1207,7 @@ SITES = {
 FETCH_ATTEMPTS = 3
 
 
-def fetch(session, url):
+def fetch(session, url, verify=True):
     """GET with a bounded retry. Returns (response, error_or_None).
 
     WHY A RETRY EXISTS HERE (added 2026-08-08). There was none, and a single
@@ -1047,7 +1221,7 @@ def fetch(session, url):
     last = None
     for attempt in range(FETCH_ATTEMPTS):
         try:
-            resp = session.get(url, headers=UA, timeout=60)
+            resp = session.get(url, headers=UA, timeout=60, verify=verify)
             resp.raise_for_status()
             return resp, None
         except requests.RequestException as exc:
@@ -1060,8 +1234,15 @@ def fetch(session, url):
 def main():
     out = {}
     session = requests.Session()
+    bundles = {}
     for key, spec in SITES.items():
-        resp, err = fetch(session, spec["url"])
+        verify = True
+        if spec.get("ca_bundle"):
+            name = spec["ca_bundle"]
+            if name not in bundles:
+                bundles[name] = aia_ca_bundle(name)
+            verify = bundles[name]
+        resp, err = fetch(session, spec["url"], verify)
         if resp is None:
             print("county-commissioners: WARN — %s unreadable after %d attempts (%s)"
                   % (key, FETCH_ATTEMPTS, err), file=sys.stderr)
@@ -1074,7 +1255,7 @@ def main():
         # refuses to write, exactly as before.
         if not members and spec["expect"]:
             time.sleep(3)
-            retry, _ = fetch(session, spec["url"])
+            retry, _ = fetch(session, spec["url"], verify)
             if retry is not None:
                 members, office = spec["parse"](retry.text)
                 if members:
@@ -1113,6 +1294,12 @@ def main():
         }
         if office:
             out[key]["office"] = office
+
+    for path in bundles.values():
+        try:
+            os.unlink(path)
+        except OSError:
+            pass
 
     # The counties with no website. Emitted without a fetch, and never quietly:
     # a hand-carried roster that ages is the failure mode this list invites, so

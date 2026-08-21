@@ -108,6 +108,7 @@ const GEOMETRY_URLS = [
   "./data/app/franklin-county-outline.json",
   "./data/app/fulton-county-outline.json",
   "./data/app/gallatin-county-outline.json",
+  "./data/app/gallatin-precincts.json",
   "./data/app/greene-county-outline.json",
   "./data/app/grundy-county-board-districts.json",
   "./data/app/grundy-county-outline.json",

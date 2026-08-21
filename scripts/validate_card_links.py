@@ -234,6 +234,19 @@ EXPECTED_UNREACHABLE = {
         "incomplete TLS chain (leaf only, no intermediate) — NOT a block: the site "
         "answers HTTP 200 to a client that supplies the missing issuer, which the "
         "roster scraper does by AIA with a pinned hash",
+    # THE SECOND OF THE SAME, and the reason Coles' entry above is worth its
+    # length: this is a PATTERN, not one county's misconfiguration. Gallatin was
+    # recorded on 2026-08-20 as "DARK to this client on every route tried" and
+    # was not dark at all — gallatinco.illinois.gov answers HTTP 200 with 247 KB
+    # and serves its leaf without the Sectigo intermediate that signs it.
+    # Measured 2026-08-21 by reading the leaf's own AIA caIssuers URI and
+    # completing the fetch with that certificate. The county shipped the same
+    # day; scripts/il_county_commissioners_scraper.py does the chase for its
+    # roster, pinned by hash, with verification never disabled.
+    "gallatinco.illinois.gov":
+        "incomplete TLS chain (leaf only, no intermediate) — NOT a block: the site "
+        "answers HTTP 200 to a client that supplies the missing issuer, which the "
+        "county-commissioners scraper does by AIA with a pinned hash",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map
