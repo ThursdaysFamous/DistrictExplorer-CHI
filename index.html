@@ -9104,6 +9104,67 @@ function initChiExplorer() {
   var loadGallatinPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/gallatin-precincts.json", {}, 2);
   });
+  /* CUMBERLAND is precinct-only for a DIFFERENT reason than Calhoun, Morgan and
+   * Gallatin, and the distinction is the point: those three elect their boards
+   * countywide, so there is no district for a precinct to belong to. Cumberland
+   * IS districted — six members from three compass-point districts, Western,
+   * Central and Eastern — and its districts SPLIT PRECINCTS, which its own
+   * certified returns say outright: the 2026 General Primary reports them as
+   * Central 6, Eastern 5 and Western 3 precincts, fourteen against a county of
+   * twelve, identically for both parties, while every countywide contest on the
+   * same canvass reports exactly twelve. So no union of whole precincts can draw
+   * the board and only the county's own boundary ever will — the board is shut,
+   * nothing rides the County card, and the precinct answer is the whole of what
+   * this county gains. Its twelve precincts ARE the Census 2020 voting districts,
+   * the Jasper test passing 12/12 with the population identity to the person.
+   * See build_cumberland_precincts.py. */
+  var loadCumberlandCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cumberland-county-outline.json", {}, 2);
+  });
+  function cumberlandCountyCoverage(point) {
+    return loadCumberlandCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadCumberlandPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cumberland-precincts.json", {}, 2);
+  });
+  /* JOHNSON and PERRY are the first two counties reached WITHOUT THEIR OWN
+   * WEBSITES BEING READ AT ALL. Both sites refuse this client and both blockers
+   * stand; what opened the counties is that their election authorities publish
+   * elsewhere, on results.gbsvote.com. Each county's certified 2026 General
+   * Primary carries a single countywide FOR COUNTY COMMISSIONER contest per
+   * party — 16 of 16 in Johnson, 27 of 27 in Perry — and no district-suffixed
+   * board contest anywhere, so both boards are elected at large and there is no
+   * district for a precinct to belong to. The same canvasses print a
+   * committeeperson contest per precinct, which is what NAMES the precincts, and
+   * both Jasper tests pass clean (16/16 and 27/27, populations to the person).
+   * NEITHER COUNTY'S COMMISSIONERS ARE CARRIED: that is a roster, and the only
+   * county source for each is the site nothing here can read — which is why
+   * these two join on precincts alone rather than on both tiers the way Gallatin
+   * did. See build_johnson_precincts.py and build_perry_precincts.py. */
+  var loadJohnsonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/johnson-county-outline.json", {}, 2);
+  });
+  function johnsonCountyCoverage(point) {
+    return loadJohnsonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadJohnsonPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/johnson-precincts.json", {}, 2);
+  });
+  var loadPerryCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/perry-county-outline.json", {}, 2);
+  });
+  function perryCountyCoverage(point) {
+    return loadPerryCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadPerryPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/perry-precincts.json", {}, 2);
+  });
   var loadMorganCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
   });
@@ -23341,6 +23402,123 @@ function initChiExplorer() {
           return {
             label: "Gallatin County Clerk — elections",
             url: "https://gallatinco.illinois.gov/elections/"
+          };
+        }
+      },
+      // Cumberland — twelve precincts that ARE the Census 2020 voting
+      // districts, one for one, named by the county's own certified 2026
+      // General Primary a committeeperson contest at a time and paired with
+      // eight buildings by its Clerk's polling notice. NO BOARD DISTRICT, and
+      // here that is not because the board is at large: Cumberland elects six
+      // members from three compass-point districts that SPLIT PRECINCTS, which
+      // its own returns prove by counting Central 6 + Eastern 5 + Western 3
+      // against a county of twelve. Only the county's own boundary can express
+      // that, so the board rides nothing here and nothing is invented for it.
+      // NO POLLING PLACE: the county publishes a list, and that belongs with a
+      // roster guard rather than inside a geometry file.
+      {
+        key: "cumberland",
+        coverage: cumberlandCountyCoverage,
+        loadGeometry: loadCumberlandPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCumberlandPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Cumberland County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Cumberland County Clerk — elections",
+            url: "https://cumberlandcoil.gov/elections/"
+          };
+        }
+      },
+      // Johnson — sixteen precincts that ARE the Census 2020 voting districts,
+      // named by the county's certified 2026 General Primary a committeeperson
+      // contest at a time. NO BOARD DISTRICT: the same canvass carries one
+      // countywide FOR COUNTY COMMISSIONER contest per party over all sixteen
+      // and no district-suffixed board contest at all. NO COMMISSIONER NAMED:
+      // that is a roster and the county's own site is behind a host-level block,
+      // so the card links the canvass that IS readable rather than a page that
+      // is not.
+      {
+        key: "johnson",
+        coverage: johnsonCountyCoverage,
+        loadGeometry: loadJohnsonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadJohnsonPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Johnson County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Johnson County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=12"
+          };
+        }
+      },
+      // Perry — twenty-seven precincts on the same footing as Johnson's, and
+      // for the same reason: the county's own site refuses this client, so the
+      // names, the count and the board's at-large form all come from its
+      // certified 2026 General Primary. The county seat keeps the census
+      // spelling, Du Quoin, where the results feed writes it closed up.
+      {
+        key: "perry",
+        coverage: perryCountyCoverage,
+        loadGeometry: loadPerryPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadPerryPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Perry County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Perry County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=283"
           };
         }
       },

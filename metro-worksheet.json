@@ -1101,8 +1101,13 @@
         "file": "cumberland-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Cumberland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Cumberland County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped on 2026-08-04 as gap-location geometry only, from the pass-13 detached-counties sweep, and was promoted on 2026-08-21 when Cumberland joined ON ITS PRECINCTS: its three compass-point board districts split precincts and are permanently shut to a whole-precinct dissolve, so the precincts dispatch alone and no board district ships."
+      },
+      {
+        "file": "cumberland-precincts.json",
+        "min_features": 12,
+        "max_features": 12,
+        "note": "Cumberland County's twelve voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 12/12 against the county's own precinct names and they sum to its exact 2020 population of 10,450. Bounds are an EQUALITY because twelve is the county's whole precinct list, counted by its own certified canvass (\"OF 12 PRECINCTS REPORTING\", and every countywide contest on it) and named by that canvass one contest at a time. NO ALIAS IS NEEDED and the reason is worth keeping: this project's own record predicted one, having read the Clerk's polling notice, which groups the precincts as \"NEOGA I & II\", \"SUMPTER I & II\" and \"GREENUP I, II, & III\". Those are POLLING-PLACE GROUPINGS — three buildings serving seven precincts — not precinct names; the certified returns print GREENUP 1/2/3, NEOGA 1/2 and SUMPTER 1/2 in arabic exactly as the census does. NO BOARD DISTRICT ships and none ever will from this route: the county's own returns report its board contests as Central 6, Eastern 5 and Western 3 precincts, fourteen against a county of twelve, so two precincts sit in two districts each. NO POLLING PLACE ships — the county publishes a list, and that belongs with a roster guard and a date (scripts/build_cumberland_precincts.py)."
       },
       {
         "file": "dekalb-county-outline.json",
@@ -1372,8 +1377,13 @@
         "file": "johnson-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Johnson County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Johnson County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped on 2026-08-04 as gap-location geometry only, from the pass-13 detached-counties sweep, and was promoted on 2026-08-21 when Johnson joined ON ITS PRECINCTS: its board is elected countywide, so there is no district geometry to seek, and its roster stays unshipped because the only county source for it is a website that refuses this client."
+      },
+      {
+        "file": "johnson-precincts.json",
+        "min_features": 16,
+        "max_features": 16,
+        "note": "Johnson County's sixteen voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 16/16 against the county's own precinct names and they sum to its exact 2020 population of 13,308. Bounds are an EQUALITY because sixteen is the county's whole precinct list. THE COUNTY'S OWN WEBSITE WAS NEVER READ — johnsoncountyil.com sits behind a host-level block — and none of this comes from it: the names, the count and the board's form all come from the county's certified 2026 General Primary on results.gbsvote.com, which prints a committeeperson contest per precinct per party and reads \"16 OF 16 PRECINCTS REPORTING\". NO BOARD DISTRICT ships and none ever will: that canvass carries a single countywide FOR COUNTY COMMISSIONER contest per party over all sixteen precincts and no district-suffixed board contest at all. NO ROSTER ships either — the commissioners are a County-card fact and the only county source for them is the blocked site — and NO POLLING PLACE, by the rule Calhoun's build set (scripts/build_johnson_precincts.py)."
       },
       {
         "file": "kane-county-outline.json",
@@ -1696,8 +1706,13 @@
         "file": "perry-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Perry County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Perry County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped on 2026-08-03 as gap-location geometry only, from the pass-10 frontier sweep, and was promoted on 2026-08-21 when Perry joined ON ITS PRECINCTS: its board is elected countywide, so there is no district geometry to seek, and its roster stays unshipped because the only county source for it is a website that refuses this client."
+      },
+      {
+        "file": "perry-precincts.json",
+        "min_features": 27,
+        "max_features": 27,
+        "note": "Perry County's twenty-seven voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 27/27 against the county's own precinct names and they sum to its exact 2020 population of 20,945. Bounds are an EQUALITY because twenty-seven is the county's whole precinct list. THE COUNTY'S OWN WEBSITE WAS NEVER READ — it refuses this client — and none of this comes from it: the names, the count and the board's form all come from the county's certified 2026 General Primary on results.gbsvote.com, which prints a committeeperson contest per precinct per party and reads \"27 OF 27 PRECINCTS REPORTING\". Each feature is LABELLED from the census basename so the county seat keeps its own spelling — the results feed writes DUQUOIN closed up where the census and the city write Du Quoin, a rendering difference that norm() absorbs rather than a different precinct. NO BOARD DISTRICT ships and none ever will: that canvass carries a single countywide FOR COUNTY COMMISSIONER contest per party over all twenty-seven precincts and no district-suffixed board contest at all. NO ROSTER ships either — the commissioners are a County-card fact and the only county source for them is the blocked site — and NO POLLING PLACE, by the rule Calhoun's build set (scripts/build_perry_precincts.py)."
       },
       {
         "file": "piatt-county-outline.json",
