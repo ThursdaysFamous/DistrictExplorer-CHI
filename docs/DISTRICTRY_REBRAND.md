@@ -882,6 +882,71 @@ desktop each drive both controls with no page errors. Desktop differs from the p
 **731 px in light and 734 in dark — the generation stamp plus the 34px chevron**; the new button
 lives at the end of the 39-card list, below the fold at 1440x900, so nothing visible at rest moved.
 
+## Map legibility under stacked layers (operator-reported, 2026-08-21)
+
+*"It's difficult to see the streets and other map features once you toggle on multiple layers."*
+Carried over from the live design, and it has one specific cause rather than being general
+translucency.
+
+### The engine already fights this, and exempts the one case that matters
+
+`scaleFactorForActiveCount()` scales every active layer's fill down as the count grows, and
+measured, it works: base fills plateau at about **11% obscuration however many layers are on**.
+
+But `highlightStyleFor()` returns a flat `fillOpacity: 0.32`, and `rescaleLayerFill()` explicitly
+skips any layer showing a highlight — its comment reasons that highlight opacities are
+"count-independent", which is true of each one alone and false of the stack.
+
+**That is the one fill where overlap is guaranteed rather than incidental.** Every active layer's
+matched region contains the selected point, so every highlight lands in the same place — which is
+exactly where the reader is looking. The composite is `0.68^n`:
+
+| layers on | basemap still visible |
+|---|---|
+| 1 | 68% |
+| 2 | 46% |
+| 4 | 21% |
+| 6 | **9.9%** |
+| 8 | **4.6%** |
+
+Measured on a stand-in basemap (white streets, dark labels, CARTO's land colour): the land falls
+from luminance **0.81 to 0.08** and the white streets from **1.00 to 0.10** between one layer and six.
+
+### What shipped
+
+Each of *n* stacked highlights takes `alpha = 1 - 0.68^(1/n)`, which composites to exactly 68% at
+any *n*. One sentence: **the stack never costs more than one layer's worth.** At n=1 that evaluates
+to 0.32, so a single layer is untouched — verified pixel-identical, 0 px differ.
+
+Measured on the built preview: 1 → 0.3200, 2 → 0.1754, 3 → 0.1206, 4 → 0.0919, 6 → 0.0623, with
+the composite reading 68.0% at every count.
+
+### Why this needed no engine release
+
+Every function involved — `highlightStyleFor`, `fadedStyle`, `scaledFillOpacity`,
+`scaleFactorForActiveCount` — lives inside the `layer-registry` fence. But **Leaflet writes
+`fill-opacity` as a presentation attribute**, and CSS outranks presentation attributes. So a
+fork-local rule reading a custom property wins outright, with no `!important` and no fence edit.
+Confirmed empirically rather than assumed: Leaflet still writes `fill-opacity="0.32"` and the
+*computed* value comes out as the variable.
+
+Two implementation choices worth keeping:
+
+- **Counted off the DOM, not `activeLayerCount()`.** What matters is how many highlights are
+  actually PAINTED: an outline-only layer contributes no fill, and neither does a layer whose
+  region does not contain the point. Counting `path.region-highlight` gets the real stack.
+- **Driven by a MutationObserver on the overlay pane**, filtered to `class` and `childList` —
+  precisely how the engine marks and unmarks a highlight — so point moves, toggles and coverage
+  changes are all covered without hooking a fenced function. Setting a custom property on `<html>`
+  mutates nothing inside the pane, so it cannot feed itself, and a rAF debounce makes a burst of
+  `setStyle` calls during one sweep cost a single recompute.
+
+**Not addressed, and the next thing a reader would notice:** each matched region also draws a
+`weight: 4, opacity: 1` outline, so six layers means six heavy lines. Far less damaging than the
+fill — the lines are signal, and they do not stack on the same pixels — so it is recorded rather
+than changed. **At adoption** the honest fix is for the engine to scale the highlight the way it
+already scales base fills, so the siblings get it too.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

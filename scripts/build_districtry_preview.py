@@ -650,6 +650,24 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .dst-layer-toggle:hover,
   .dst-layer-toggle:focus-visible { background: var(--dst-brand-tint); }
   .dst-layer-toggle[hidden] { display: none !important; }
+  /* ==== map legibility under stacked layers (operator-reported) ==========
+     The engine already fights overlay murk — scaleFactorForActiveCount()
+     scales each layer's fill down as more come on, and measured, that holds
+     base fills to about 11% obscuration however many are active. But it
+     EXEMPTS the selection highlight: highlightStyleFor() returns a flat
+     fillOpacity 0.32 and rescaleLayerFill() skips any layer showing one.
+
+     That is the one fill where overlap is GUARANTEED rather than incidental —
+     every active layer's matched region contains the selected point, so they
+     all stack in the same place, which is exactly where the reader is
+     looking. 0.68^n: two layers leave 46% of the basemap, four 21%, six 9.9%.
+     Measured on a stand-in basemap, the land falls from luminance 0.81 to
+     0.08 and white streets from 1.00 to 0.10.
+
+     Leaflet writes fill-opacity as a PRESENTATION ATTRIBUTE, which CSS
+     outranks, so this needs no engine release even though every function
+     above lives inside the layer-registry fence. */
+  .leaflet-overlay-pane path.region-highlight { fill-opacity: var(--dst-hl-fill, 0.32); }
   /* the collapse itself, now at every width */
   .results-col.dst-collapsed .layer-block:not(:has(input[type="checkbox"]:checked)) { display: none; }
   .results-col.dst-collapsed .group-section:not(:has(input[type="checkbox"]:checked)) { display: none; }
@@ -1077,7 +1095,47 @@ DARK_PALETTE_INSTALL_JS = """  /* ==== per-layer dark map palette ==============
 """
 
 
-MOBILE_LAYOUT_JS = """  /* ==== C: lead with the answers ======================================
+MOBILE_LAYOUT_JS = """  /* ==== map legibility: stacked highlights hold a constant composite ====
+     One highlight leaves 68% of the basemap showing, and that is the look the
+     app already has with a single layer on — so that is the number held. Each
+     of n stacked highlights takes alpha = 1 - 0.68^(1/n), which composites to
+     exactly 68% at ANY n. The rule is one sentence: the stack never costs more
+     than one layer's worth. (n = 1 yields 0.32, so a single layer is untouched.)
+
+     Counted off the DOM rather than off activeLayerCount(), because what
+     matters is how many highlights are actually PAINTED — an outline-only
+     layer contributes no fill, and a layer whose region does not contain the
+     point contributes none either. */
+  var DST_HL_TARGET = 0.68;
+  var dstHlQueued = false;
+  function dstUpdateHighlightAlpha() {
+    dstHlQueued = false;
+    var pane = document.querySelector(".leaflet-overlay-pane");
+    if (!pane) return;
+    var n = pane.querySelectorAll("path.region-highlight").length;
+    var alpha = n > 1 ? 1 - Math.pow(DST_HL_TARGET, 1 / n) : 0.32;
+    document.documentElement.style.setProperty("--dst-hl-fill", alpha.toFixed(4));
+  }
+  function dstQueueHighlightAlpha() {
+    if (dstHlQueued) return;
+    dstHlQueued = true;
+    /* a burst of setStyle calls during one sweep costs a single recompute */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(dstUpdateHighlightAlpha);
+    else setTimeout(dstUpdateHighlightAlpha, 0);
+  }
+  (function () {
+    var pane = document.querySelector(".leaflet-overlay-pane");
+    if (!pane || !window.MutationObserver) return;
+    /* class changes are how the engine marks and unmarks a highlight
+       (subLayer._path.classList.add(HIGHLIGHT_CLASS)); childList covers a
+       layer being toggled on or off. Setting a custom property on <html>
+       mutates nothing inside the pane, so this cannot feed itself. */
+    new MutationObserver(dstQueueHighlightAlpha).observe(pane, {
+      childList: true, subtree: true, attributes: true, attributeFilter: ["class"]
+    });
+    dstUpdateHighlightAlpha();
+  })();
+  /* ==== C: lead with the answers ======================================
      Collapse the layers the reader has not picked, but ONLY when they have
      picked something — see the CSS above for why an unconditional version
      would have handed a first-time visitor an empty panel. */
