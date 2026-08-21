@@ -299,7 +299,48 @@ SKIN_ISLAND = """<style id="districtry-skin">
      load-bearing elements are RELOCATED into the results-panel foot by the
      transforms and only the husks stay hidden here. */
   .faq-section, footer.site-footer { display: none; }
-  @media (min-width: 901px) {
+  /* ==== D: tablets get the two-column layout (operator-approved) =========
+     The engine's breakpoint is 900px, so an iPad mini at 768x1024 was handed
+     the phone design: a full-width map with the results stacked beneath and
+     thousands of pixels of page scroll. One pixel wider it gets the two-column
+     layout, and measured side by side at the same height that is plainly the
+     better deal — a 561x817 map, a 340px panel that scrolls INDEPENDENTLY, and
+     no page scroll at all (document height 1024 = the viewport).
+
+     Done fork-locally rather than by moving the engine's breakpoint. The seven
+     mobile media queries live inside styles-core / styles-app fences, so
+     changing them is an engine release plus fan-out PRs into NYC and SF — and
+     this preview is a sandbox whose production adoption is Phase 3. So the
+     shell simply starts earlier here, and the handful of engine mobile rules
+     that would otherwise leak into 768-900 are answered below at the same
+     specificity from outside the fence. AT ADOPTION this should become the
+     engine change so the siblings get it too. */
+  /* The engine's max-width:900px rules still match in 768-900 and set
+     properties the shell block below leaves alone, so each is answered here.
+     SCOPED TO THE BAND, not to min-width:768 — an undo that also applied at
+     1440 changed desktop by 11% of the viewport, because two of the values
+     were guessed at rather than read. Confined to 768-900 the question cannot
+     arise: above 900 there is nothing to undo. */
+  @media (min-width: 768px) and (max-width: 900px) {
+    main.layout { display: grid; }
+    .map-col { position: relative; }
+    .map-bottom-left {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 0;
+      background: none;
+      border-top: none;
+    }
+    .layer-toggle-btn { display: block; }
+    .results-col { border-left: 1px solid var(--line); border-top: none; }
+    header.masthead .masthead-inner { gap: 18px; }
+    .masthead-actions { justify-content: flex-end; margin-left: auto; padding-top: 0; width: auto; }
+  }
+  @media (min-width: 768px) {
     html, body { height: 100%; }
     body { display: flex; flex-direction: column; }
     header.masthead { flex: none; }
@@ -580,7 +621,8 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .dst-layer-toggle[hidden] { display: none !important; }
   /* ==== the phone layout (mobile review, 2026-08-21) ====================
      Everything above this point is the desktop composition. Until now the
-     re-skin's LAYOUT lived entirely in one @media (min-width: 901px) while its
+     re-skin's LAYOUT lived entirely in one @media (min-width: 901px) — now 768,
+     see D below — while its
      CHROME applied at every width, so a wide-screen composition was simply
      stacked onto a narrow one. Measured on a 375x667 phone: the masthead took
      247px (37% of the viewport), the first result card sat at y=847, and the
@@ -591,7 +633,7 @@ SKIN_ISLAND = """<style id="districtry-skin">
      are inside styles-core / styles-app fences and shared with the NYC and SF
      forks). Everything below is fork-local, overriding from OUTSIDE those
      fences at higher specificity — the blessed pattern, no engine release. */
-  @media (max-width: 900px) {
+  @media (max-width: 767px) {
     /* -- A. the coverage legend stops being pinned furniture ---------------
        .map-bottom-left is inside the sticky map column, so anything tall in it
        is on screen for the entire page. The engine reflowed that corner into a
@@ -1068,7 +1110,7 @@ MOBILE_LAYOUT_JS = """  /* ==== C: lead with the answers =======================
   })();
   /* ==== phone layout (mobile review, 2026-08-21) ======================== */
   function dstIsPhone() {
-    return !!(window.matchMedia && window.matchMedia("(max-width: 900px)").matches);
+    return !!(window.matchMedia && window.matchMedia("(max-width: 767px)").matches);
   }
   /* The legend is authored open, which is what desktop wants. On a phone it is
      pinned inside the sticky map column, so it starts closed. Driven here
@@ -1124,7 +1166,7 @@ MOBILE_LAYOUT_JS = """  /* ==== C: lead with the answers =======================
   }
   dstApplyPhoneLayout();
   if (window.matchMedia) {
-    var dstPhoneMQ = window.matchMedia("(max-width: 900px)");
+    var dstPhoneMQ = window.matchMedia("(max-width: 767px)");
     if (dstPhoneMQ.addEventListener) dstPhoneMQ.addEventListener("change", dstApplyPhoneLayout);
     else if (dstPhoneMQ.addListener) dstPhoneMQ.addListener(dstApplyPhoneLayout);
   }
