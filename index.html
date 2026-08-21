@@ -9084,6 +9084,26 @@ function initChiExplorer() {
   var loadCalhounPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/calhoun-precincts.json", {}, 2);
   });
+  /* GALLATIN reached the map only after the COLES PATTERN was found a second
+   * time: gallatinco.illinois.gov answers 200 and serves an INCOMPLETE TLS
+   * CHAIN, so every automated client called the county dark while the site
+   * rendered fine in a browser. Its eleven precincts ARE the Census 2020
+   * voting districts — the Jasper test passes 11/11 with the population
+   * identity to the person — corroborated by the county's own legible precinct
+   * map and by canvasses that count eleven and name nine. No board district
+   * here either: Gallatin elects its five board members countywide, so they
+   * ride the County card. See build_gallatin_precincts.py. */
+  var loadGallatinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/gallatin-county-outline.json", {}, 2);
+  });
+  function gallatinCountyCoverage(point) {
+    return loadGallatinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadGallatinPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/gallatin-precincts.json", {}, 2);
+  });
   var loadMorganCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
   });
@@ -23284,6 +23304,43 @@ function initChiExplorer() {
           return {
             label: "Calhoun County Clerk — elections",
             url: "https://www.calhouncountyil.gov/government/county-clerk/elections/"
+          };
+        }
+      },
+      // Gallatin — eleven precincts that ARE the Census 2020 voting districts,
+      // one for one, with the county's own precinct map and its certified
+      // canvasses naming the same eleven. NO BOARD DISTRICT: the board is
+      // elected countywide (CWD on its own ballots), so its five members ride
+      // the County card. NO POLLING PLACE: the county publishes a list, and
+      // that belongs with a roster guard rather than inside a geometry file.
+      {
+        key: "gallatin",
+        coverage: gallatinCountyCoverage,
+        loadGeometry: loadGallatinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadGallatinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Gallatin County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Gallatin County Clerk — elections",
+            url: "https://gallatinco.illinois.gov/elections/"
           };
         }
       },

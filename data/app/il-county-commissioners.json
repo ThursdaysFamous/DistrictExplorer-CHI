@@ -119,6 +119,31 @@
   "structure": "Commission form — 3 commissioners elected countywide",
   "verified": "2026-08-06"
  },
+ "GALLATIN": {
+  "county": "Gallatin County",
+  "members": [
+   {
+    "name": "Andrew Lunsford",
+    "phone": "618-499-0943",
+    "role": "Chairman"
+   },
+   {
+    "name": "Gary Vickery"
+   },
+   {
+    "name": "Randy Drone"
+   },
+   {
+    "name": "Warren Rollman",
+    "phone": "618-841-3608"
+   },
+   {
+    "name": "Terry Schmitt"
+   }
+  ],
+  "sourceUrl": "https://gallatinco.illinois.gov/departments/board/",
+  "structure": "5 members elected countywide — no districts"
+ },
  "GREENE": {
   "county": "Greene County",
   "members": [

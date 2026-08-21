@@ -415,6 +415,33 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # re-confirms four of five), an exact 33-precinct
                      # partition, and the Jasper test passed 33/33.
                      "067",
+                     # Gallatin — the 76th county (2026-08-21), joining
+                     # through the County card alone: its board is elected AT
+                     # LARGE, so there is no district geometry, no dispatch
+                     # entry and no toggle. Five members, proven countywide
+                     # TWICE from the Clerk's own certified canvasses
+                     # ("CO.BD.MEMBER CWD (VOTE FOR) 3" in 2026 and "COUNTY
+                     # BOARD MEMBER CWD (VOTE FOR) 2" in 2024, where CWD is the
+                     # marker every countywide office on those ballots carries).
+                     #
+                     # A MAINLAND JOIN: its Illinois neighbours are Saline,
+                     # White and Hamilton (all served) plus Hardin (unserved),
+                     # so nothing about the Massac island or the three enclaves
+                     # changes, and Hardin is not enclosed either — it still
+                     # borders unserved Pope. SHAWNEETOWN MOVES FROM THE OUTSIDE
+                     # LIST TO THE INSIDE ONE and Elizabethtown (Hardin) takes
+                     # over the southern frontier.
+                     #
+                     # HOW IT WAS REACHED, which is the part worth carrying
+                     # forward: this county was recorded on 2026-08-20 as "DARK
+                     # to this client on every route tried". It was not.
+                     # gallatinco.illinois.gov answers 200 and serves an
+                     # INCOMPLETE TLS CHAIN — the Coles pattern, met a second
+                     # time — so every automated client called it unreachable
+                     # while the site rendered fine in a browser. Supplying the
+                     # intermediate the certificate itself names opened it in
+                     # one step.
+                     "059",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -435,6 +462,7 @@ STATE_FIPS = "17"
 # counties served only through a circuit-keyed layer (the judicial-subcircuit
 # secondary counties), which have no dispatch entry of their own.
 DISPATCH_COUNTY_FIPS = {
+    "gallatin": "059",
     "hancock": "067",
     "cook": "031", "dupage": "043", "will": "197", "lake": "097",
     "kane": "089", "mchenry": "111", "kendall": "093",
@@ -513,6 +541,13 @@ INSIDE = {
     # Places centroid for Carthage city — the county seat, and the seat of
     # District 5 — round-tripped through a point-in-county query.
     "Carthage (Hancock)": (40.4144, -91.1284),
+    # Gallatin's anchor (2026-08-21), the 76th county, PROMOTED from the OUTSIDE
+    # list where it had stood for four days as the southern frontier. The build
+    # failed until it was moved, which is the whole of that list's job. Gallatin
+    # joins on the mainland through the County card alone — at-large board, no
+    # district geometry. The coordinate is unchanged from its OUTSIDE days and
+    # still round-trips to Gallatin County.
+    "Shawneetown (Gallatin)": (37.7131, -88.1867),
     # Pass 8: the county GIS carries board districts, precincts and Quincy's
     # wards; only the roster is blocked, which is a gap, not a reason to stay out.
     "Quincy (Adams)": (39.9356, -91.4098),
@@ -734,10 +769,17 @@ OUTSIDE = {
     # (Carmi held this spot from 2026-08-06 — proving the Edwards island and
     # the Hamilton mainland stayed separate — until White shipped on
     # 2026-08-17 and merged the last island in; it moved up to INSIDE exactly
-    # as the guard is designed to force. The southern frontier White leaves
-    # behind is Gallatin, served by nothing and bordering White, Hamilton and
-    # Saline; Shawneetown is its seat.)
-    "Shawneetown (Gallatin)": (37.7131, -88.1867),
+    # as the guard is designed to force. Shawneetown (Gallatin) inherited that
+    # southern frontier and held it for four days, until Gallatin itself
+    # shipped on 2026-08-21 and the guard forced the same promotion again.
+    # ELIZABETHTOWN (HARDIN) is the honest successor: Hardin is Gallatin's only
+    # unserved Illinois neighbour, it is researched and blocked — its minimal
+    # website surfaces no board, election or map link, and its certified 2026
+    # primary carries no county-board contest at all, so its board form is
+    # still unknown — and it is not enclosed, because it still borders unserved
+    # Pope. TIGERweb's Incorporated Places centroid for Elizabethtown village,
+    # round-tripped through a point-in-county query.)
+    "Elizabethtown (Hardin)": (37.4499, -88.3051),
     # The two anchors that prove the corridor between the MASSAC ISLAND and the
     # mainland is washed (§2.5.1 first-island checklist step 2), added with it
     # on 2026-08-21. Vienna is the county seat of Johnson, which borders Massac

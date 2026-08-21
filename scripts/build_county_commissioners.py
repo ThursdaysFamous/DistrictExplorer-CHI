@@ -87,13 +87,24 @@ EXPECT_MEMBERS = {
                                      # county's own commissioners page, never the returns.
                                      # A new ISLAND — all three Illinois neighbours
                                      # (Johnson, Pope, Pulaski) are unserved.
+    "GALLATIN": 5,                   # 2026-08-21; at-large proven TWICE from the county's
+                                     # own certified canvasses — "CO.BD.MEMBER CWD (VOTE
+                                     # FOR) 3" in the 2026 primary and "COUNTY BOARD MEMBER
+                                     # CWD (VOTE FOR) 2" in 2024, where CWD is the same
+                                     # county-wide marker the Clerk, Treasurer and Sheriff
+                                     # contests carry and district offices on the same
+                                     # ballot do not. Five seats staggered three and two.
+                                     # Reached only after the COLES PATTERN was found a
+                                     # second time: gallatinco.illinois.gov omits its TLS
+                                     # intermediate, so every automated client called the
+                                     # county dark while the site answered 200 all along.
     "WABASH": 3,                     # 2026-08-16; commission form stated in writing by
                                      # Clerk Will 2026-08-05, the three names sent by her
                                      # e-mail 2026-08-16. The SECOND no-website county
                                      # (DOCUMENT_ROSTERS): a mail domain with no web
                                      # server, measured 5 Aug and re-checked 9 Aug.
 }
-MIN_COUNTIES = 14
+MIN_COUNTIES = 15
 # How many counties may be CARRIED FORWARD from the shipped file in one run
 # before the build refuses. Expressed as a fraction of the expected roster
 # rather than a hand-set count, so it stays meaningful as counties are added.
