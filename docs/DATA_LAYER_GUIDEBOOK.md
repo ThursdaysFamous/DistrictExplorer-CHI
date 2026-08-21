@@ -5201,6 +5201,39 @@ is absent from it too. **The route is spent; the remaining blocks are real.**
 > block is real: a site whose TLS chain is incomplete answers a browser and refuses every
 > automated client, so it lands in a sweep exactly where an absent host does.
 
+### A precinct named for a ward is not the ward — check it against the place (2026-08-21)
+
+Jasper's redistricting map labels its precincts **"Wade 1 / Ward 1"**, **"Wade 2 / Ward 2"**,
+**"Wade 3 / Ward 3"**. Read as identity, that finishes the county: the city's ward map draws
+the wards, the fourth precinct is the township remainder, and every district dissolves from
+whole units. The build was one step from shipping on exactly that reading.
+
+**It is not identity, and one query says so.** Intersect each precinct with TIGER's place
+polygon for the town and read the fraction inside:
+
+| Census 2020 VTD | inside Newton city |
+|---|---|
+| WADE 1 | 1.13% |
+| WADE 2 | 1.48% |
+| WADE 3 | 2.80% |
+| WADE 4 | 29.08% |
+| WADE 5 | 6.79% |
+
+Not one is a city ward. Newton is 2.84% of Wade township by area, and every precinct is a
+**wedge** — a slice of the town plus a large rural share, which is the ordinary shape when a
+township's precincts radiate outward from the place at its centre. The label means each ward
+is the CITY PART of that precinct, not the whole of it.
+
+**The cost of getting it wrong is not subtle.** Treating the fourth precinct as "township
+minus city" would have put 97% of the township's area, and every rural voter in it, into one
+district while the county's own map divides that ground three ways. Nothing downstream would
+have caught it: the geometry validates, the tiling closes, and the registration balance still
+reads −8.4 / −0.1 / +8.6 across the three districts.
+
+**So run the intersection before believing the label.** It costs one TIGER query, it works for
+any county whose seat has wards, and it is the difference between a shipped county and a
+shipped error.
+
 ### Sweep domain patterns across the WHOLE frontier at once, not one county at a time (2026-08-21)
 
 Three separate passes have now recorded a county as having no website and been wrong:
