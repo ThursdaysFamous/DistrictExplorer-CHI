@@ -553,9 +553,18 @@ SKIN_ISLAND = """<style id="districtry-skin">
   }
   .districtry-map-legend .dml-mini { display: none; }
   .districtry-map-legend summary.dml-kicker::-webkit-details-marker { display: none; }
+  /* Collapsible at every width (operator-directed, 2026-08-21). It was a
+     tap-to-open chip on the phone only, because there it was pinned
+     furniture; on desktop it was a static label. A reader who has taken in
+     the coverage wash should be able to put it away on either. Desktop
+     still opens BY DEFAULT, so first paint is unchanged and closing it is a
+     choice rather than something done to them. */
   .districtry-map-legend summary.dml-kicker {
     list-style: none;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
     font-family: var(--font-display);
     font-size: 10.5px;
     font-weight: 600;
@@ -568,6 +577,23 @@ SKIN_ISLAND = """<style id="districtry-skin">
        desktop legend tightens by 5px, which a pixel-diff catches and an eye
        does not. */
     margin-bottom: 6px;
+  }
+  /* A chevron, so the label reads as a control rather than a caption: down
+     when closed, up when open. Two borders rather than a glyph, so it takes
+     the label's colour in both themes and needs no font. */
+  .districtry-map-legend summary.dml-kicker::after {
+    content: \"\";
+    margin-left: auto;
+    width: 5px;
+    height: 5px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .15s ease;
+    opacity: 0.8;
+  }
+  .districtry-map-legend[open] summary.dml-kicker::after {
+    transform: translateY(1px) rotate(-135deg);
   }
   /* swatch and label ride one grid row — a wrap can never split the pair */
   .districtry-map-legend .dml-item {
@@ -599,11 +625,16 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
   .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
 
-  /* The chooser's own control. Hidden on desktop, where the panel scrolls
-     independently and 39 rows cost nothing, and hidden whenever nothing is on,
-     because there is then no shorter state to offer. */
+  /* The chooser's own control. Shown at EVERY width (operator-directed,
+     2026-08-21) — built for the phone fold, but "show me only the layers I
+     picked" turns out to be worth having on a 340px desktop panel too. Still
+     hidden whenever nothing is on, because there is then no shorter state to
+     offer. Desktop does NOT auto-collapse: the phone does that because the
+     fold forces a choice, where a desktop panel scrolls on its own and a list
+     that silently shrank on the first tick would be a surprise. The control is
+     offered there, not applied. */
   .dst-layer-toggle {
-    display: none;
+    display: block;
     width: 100%;
     margin: 14px 0 4px;
     padding: 13px 14px;
@@ -619,6 +650,9 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .dst-layer-toggle:hover,
   .dst-layer-toggle:focus-visible { background: var(--dst-brand-tint); }
   .dst-layer-toggle[hidden] { display: none !important; }
+  /* the collapse itself, now at every width */
+  .results-col.dst-collapsed .layer-block:not(:has(input[type="checkbox"]:checked)) { display: none; }
+  .results-col.dst-collapsed .group-section:not(:has(input[type="checkbox"]:checked)) { display: none; }
   /* ==== the phone layout (mobile review, 2026-08-21) ====================
      Everything above this point is the desktop composition. Until now the
      re-skin's LAYOUT lived entirely in one @media (min-width: 901px) — now 768,
@@ -642,12 +676,9 @@ SKIN_ISLAND = """<style id="districtry-skin">
        into a 160px block. Closed, it is a chip beside the hover toggle. */
     .districtry-map-legend { padding: 5px 10px; }
     .districtry-map-legend summary.dml-kicker {
-      display: flex;
-      align-items: center;
       gap: 9px;
       margin-bottom: 0;
       min-height: 34px;
-      cursor: pointer;
     }
     .districtry-map-legend .dml-mini { display: inline-flex; align-items: center; gap: 5px; }
     .districtry-map-legend[open] .dml-mini { display: none; }
@@ -686,9 +717,6 @@ SKIN_ISLAND = """<style id="districtry-skin">
        :has() does the hiding, so a card reappears the instant its box is
        ticked with no state to keep in sync. The engine's own error/empty-state
        rules already rely on :has(), so support is established here. */
-    .results-col.dst-collapsed .layer-block:not(:has(input[type="checkbox"]:checked)) { display: none; }
-    .results-col.dst-collapsed .group-section:not(:has(input[type="checkbox"]:checked)) { display: none; }
-    .dst-layer-toggle { display: block; }
 
     /* -- B. a masthead in the shape of a phone ---------------------------
        The tagline and the preview stamp are explanation, and the empty state
@@ -1117,7 +1145,11 @@ MOBILE_LAYOUT_JS = """  /* ==== C: lead with the answers =======================
      rather than in CSS because `open` is an attribute, not a style. */
   function dstSyncLegendDisclosure() {
     var legend = document.querySelector(".districtry-map-legend");
-    if (!legend) return;
+    /* Now that the legend is collapsible at every width this sets only the
+       DEFAULT: once the reader has opened or closed it themselves, the
+       viewport stops having an opinion. Without that, crossing the
+       breakpoint would silently reopen a legend someone put away. */
+    if (!legend || legend.getAttribute("data-dst-user-set") === "1") return;
     if (dstIsPhone()) legend.removeAttribute("open");
     else legend.setAttribute("open", "");
   }
@@ -1394,6 +1426,16 @@ COVERAGE_JS = """  function drawDistrictryCoverage() {
           '<span class="dml-item"><span class="dml-dot"></span>' +
             '<span class="dml-label">Selected point</span></span>' +
           '</div>';
+        /* A click on the summary is unambiguous intent, and unlike the
+           `toggle` event it fires synchronously and only for the reader,
+           never for the sync above — which is why the flag hangs off click
+           rather than toggle. Keyboard activation raises it too. */
+        var legendSummary = legend.querySelector("summary");
+        if (legendSummary) {
+          legendSummary.addEventListener("click", function () {
+            legend.setAttribute("data-dst-user-set", "1");
+          });
+        }
         host.insertBefore(legend, host.firstChild);
         dstSyncLegendDisclosure();
       }
