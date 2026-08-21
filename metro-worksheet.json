@@ -1771,7 +1771,7 @@
         "file": "saline-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Saline County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "note": "Saline County outline — the 74th served county (2026-08-21). Saline joins through the County card alone: thirteen members elected countywide, so there is no district geometry and no dispatch entry, and this outline stays dynamic_reference. A mainland join, bordering the already-served Hamilton and White.",
         "dynamic_reference": true
       },
       {
