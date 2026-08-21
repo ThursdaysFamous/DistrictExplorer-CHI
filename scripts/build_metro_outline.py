@@ -380,6 +380,24 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # county's name — the same correction Cumberland forced on
                      # 2026-08-20, applied to the whole frontier at once.
                      "127",
+                     # Saline — the 74th county (2026-08-21), a plain MAINLAND
+                     # join: it borders Hamilton and White, both already served,
+                     # so nothing about the Massac island or the three enclaves
+                     # changes. Like Massac it joins through the AT-LARGE tier
+                     # alone — thirteen members elected countywide, no district
+                     # geometry, no dispatch entry.
+                     #
+                     # Its form is proven from the county's own certified 2026
+                     # primary canvass ("FOR MEMBERS OF THE COUNTY BOARD /
+                     # Precincts Counted 28 of 28 / Vote for not more than
+                     # seven", all 15,441 registered voters), and corroborated
+                     # by ISBE's county-board structure table and by the
+                     # county's own unlabelled member list.
+                     #
+                     # SHAWNEETOWN STAYS IN THE OUTSIDE LIST: Gallatin borders
+                     # Saline and is still unserved, so that anchor keeps doing
+                     # its job on the new eastern edge rather than moving.
+                     "165",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -468,6 +486,11 @@ INSIDE = {
     # Places centroid for Metropolis city and round-tripped through a
     # point-in-county query, per the §2.5.1 rule against recalled coordinates.
     "Metropolis (Massac)": (37.1565, -88.7082),
+    # Saline's anchor (2026-08-21), the 74th county. Derived from TIGERweb's
+    # Incorporated Places centroid for Harrisburg city and round-tripped
+    # through a point-in-county query, per the §2.5.1 rule against recalled
+    # coordinates. Saline joins on the mainland through the County card alone.
+    "Harrisburg (Saline)": (37.7375, -88.5457),
     # Pass 8: the county GIS carries board districts, precincts and Quincy's
     # wards; only the roster is blocked, which is a gap, not a reason to stay out.
     "Quincy (Adams)": (39.9356, -91.4098),

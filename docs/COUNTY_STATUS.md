@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**73 of 102 Illinois counties are served** — 61 through their own dispatch entries, 3 through a shipped judicial circuit, and 9 through the County card alone. 29 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**74 of 102 Illinois counties are served** — 61 through their own dispatch entries, 3 through a shipped judicial circuit, and 10 through the County card alone. 28 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (73)
+## Served counties (74)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -80,6 +80,7 @@
 | Putnam | 17155 | County card | at-large — County card | — | 1 — `putnam-precinct-geometry` (no-source) |
 | Randolph | 17157 | dispatch | at-large — County card | `county-precinct` | 2 — `randolph-fire-park-library` (no-source); `randolph-precinct-polling` (data-quality) |
 | Rock Island | 17161 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `rock-island-andalusia-township-library` (no-source) |
+| Saline | 17165 | County card | at-large — County card | — | 1 — `saline-precinct-geometry` (no-source) |
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `municipal-website-dead-ends` (data-quality); `sangamon-park-library-districts` (no-source) |
 | Schuyler | 17169 | County card | at-large — County card | — | none |
 | Scott | 17171 | judicial circuit | no board layer — see gaps | — | 1 — `scott-county-commissioners` (no-source) |
@@ -97,7 +98,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (29) — gap-recorded, not yet served
+## Researched frontier (28) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -127,7 +128,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Pope | 17151 | 1 — `pope-county-board` (no-source) |
 | Pulaski | 17153 | 1 — `pulaski-county-board` (no-source) |
 | Richland | 17159 | 1 — `richland-county-board` (no-source) |
-| Saline | 17165 | 1 — `saline-county-board` (no-source) |
 | Union | 17181 | 1 — `union-county-board` (no-source) |
 | Vermilion | 17183 | 1 — `vermilion-county-website` (no-source) |
 | Wayne | 17191 | 1 — `wayne-county-board` (no-source) |

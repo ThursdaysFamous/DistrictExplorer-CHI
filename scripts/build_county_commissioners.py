@@ -30,7 +30,11 @@ import sys
 # shape, and that must not ship quietly. The range below is the backstop for a
 # county added to the scraper before this table.
 MIN_MEMBERS = 3
-MAX_MEMBERS = 9
+# Raised from 9 to 13 on 2026-08-21 for Saline, the largest at-large board in
+# the file. This is only the backstop for a county added to the scraper before
+# EXPECT_MEMBERS gets a row; the per-county count below is the real guard, and
+# Saline has one. Widening this does NOT weaken any existing county.
+MAX_MEMBERS = 13
 EXPECT_MEMBERS = {
     "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
@@ -63,6 +67,16 @@ EXPECT_MEMBERS = {
                                      # all, so its three come from a document the Clerk
                                      # sent (DOCUMENT_ROSTERS in the scraper), and the
                                      # scraper says so on every run.
+    "SALINE": 13,                    # 2026-08-21; at-large proven from the county's own
+                                     # certified 2026 primary canvass — "FOR MEMBERS OF THE
+                                     # COUNTY BOARD / Precincts Counted 28 of 28 / (Vote for
+                                     # not more than seven)" over all 15,441 registered
+                                     # voters, with the Appellate Court contest on the same
+                                     # page as the control. Corroborated by ISBE's structure
+                                     # table (13, At-Large) — itself checked against four
+                                     # counties this project can read — and by the county's
+                                     # own unlabelled 13-member page. Seven of thirteen seats
+                                     # each cycle is the stagger.
     "MASSAC": 3,                     # 2026-08-21; commission form proven from the county's
                                      # own published results — "FOR COUNTY COMMISSIONER /
                                      # Precincts Counted 17 of 17 / (Vote for one)" over
@@ -79,7 +93,7 @@ EXPECT_MEMBERS = {
                                      # (DOCUMENT_ROSTERS): a mail domain with no web
                                      # server, measured 5 Aug and re-checked 9 Aug.
 }
-MIN_COUNTIES = 13
+MIN_COUNTIES = 14
 # How many counties may be CARRIED FORWARD from the shipped file in one run
 # before the build refuses. Expressed as a fraction of the expected roster
 # rather than a hand-set count, so it stays meaningful as counties are added.

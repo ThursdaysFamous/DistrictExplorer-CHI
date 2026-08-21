@@ -841,8 +841,102 @@ def parse_massac(page):
 
 
 
+# ------------------------------------------------------------------ Saline
+# Role lines on Saline's page are printed in caps on their own line under the
+# member's name. Matching "a line that is all capitals" would be a trap: a
+# county that prints a MEMBER in caps would have that member silently eaten as
+# a role and dropped from the board. So the test is a vocabulary, not a case
+# check, and anything else is a name.
+SALINE_ROLE_RE = re.compile(
+    r"(?i)^(vice[\s-]*chair(?:man|person|woman)?|chair(?:man|person|woman)?)$")
+
+
+def parse_saline(page):
+    """Saline prints its thirteen members as three plain WordPress columns
+    under an <h2>County Board Members</h2>, names separated by <br />:
+
+        <p>Jay Williams<br />CHAIRMAN</p>
+        <p>Mike McKinnies<br />VICE-CHAIRMAN</p>
+        <p>Casey Perkins<br />Chuck DePriest<br />...</p>
+
+    Only the first column carries roles; the other two are bare names. The
+    region is bounded by the NEXT <h2> (Agendas), so the month lists below it
+    cannot leak in as members.
+
+    AT-LARGE, PROVEN from the county's own certified canvass: Saline's
+    "2026 Primary Results" report, run 26 Mar 2026 and headed Official
+    Results, carries "FOR MEMBERS OF THE COUNTY BOARD - REPUBLICAN PARTY -
+    (Vote for not more than seven)" over "Precincts Counted 28 / Total 28 /
+    100.00%" against all 15,441 registered voters, with no district string
+    anywhere on the contest. The control sits on the same page: the Appellate
+    Court contest reports the identical 28-of-28 and 15,441. A districted
+    board reports only its own district's precincts. Both party ballots for
+    the same election print the contest the same way, and "not more than
+    seven" of thirteen seats is the stagger.
+
+    TWO INDEPENDENT SOURCES AGREE and were checked before this shipped:
+    ISBE's county-board structure table gives Saline as 13 members, At-Large,
+    one district — and that table is not taken on trust either, since its
+    metadata is from 2007: it was verified against four counties whose current
+    pages this project can read (Clay 14 single-member A-N, Hancock 5 districts
+    of 3, Lawrence 7 single-member, Adams 21 across 7) and matches all four.
+    The county's own page is the third: thirteen members, no district labels
+    anywhere on it.
+
+    PAIGE SCHIMP IS NOT A MEMBER and must never be parsed as one. She is the
+    County Board Secretary — staff to the board, not a seat on it — and she
+    appears in a separate contact block above the member columns, which is why
+    this parser starts at the <h2> and not at the top of the page. Her office
+    details are the county's own for the board, so they ship as the office
+    block; her name does not.
+    """
+    heading = re.search(r"(?is)<h2>\s*County Board Members\s*</h2>", page)
+    if not heading:
+        return [], None
+    rest = page[heading.end():]
+    stop = re.search(r"(?is)<h2>", rest)
+    region = rest[:stop.start()] if stop else rest
+
+    members = []
+    for para in re.findall(r"(?is)<p>(.*?)</p>", region):
+        for line in re.split(r"(?i)<br\s*/?>", para):
+            text = clean(line)
+            if not text:
+                continue
+            if SALINE_ROLE_RE.match(text):
+                if members:
+                    members[-1]["role"] = role_of(text) or text.title()
+                continue
+            if not any(x["name"] == text for x in members):
+                members.append({"name": text})
+
+    office = None
+    block = re.search(r"(?is)County Board Secretary(.{0,1200}?)Hours of Operation", page)
+    if block:
+        flat = clean(block.group(1))
+        addr = re.search(r"(\d+\s+[EWNS]?\.?\s*[A-Za-z.\s]+?,?\s*Harrisburg,\s*IL\s*\d{5})", flat)
+        # The page prints the street and the city on separate lines, so the
+        # flattened match joins them with a space and no comma. Restore it, so
+        # this address reads like every other office address in the file.
+        street = re.sub(r"\s+", " ", addr.group(1)).strip() if addr else None
+        if street:
+            street = re.sub(r"\s+(Harrisburg,)", r", \1", street)
+        office = {"label": "Saline County Board",
+                  "address": street,
+                  "phone": normalize_phone(flat)}
+    return members, office
+
+
+
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
+    "SALINE": {
+        "name": "Saline County",
+        "url": "https://salinecounty.illinois.gov/county-board/",
+        "structure": "13 members elected countywide \u2014 no districts",
+        "expect": 13,
+        "parse": parse_saline,
+    },
     "MASSAC": {
         "name": "Massac County",
         "url": "https://www.massaccountyil.gov/county-commissioner/",
