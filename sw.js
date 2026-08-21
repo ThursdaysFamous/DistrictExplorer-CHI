@@ -231,6 +231,7 @@ const GEOMETRY_URLS = [
   "./data/app/winnebago-judicial-subcircuits.json",
   "./data/app/woodford-county-board-districts.json",
   "./data/app/woodford-county-outline.json",
+  "./data/app/hancock-county-board-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -307,6 +308,7 @@ const ROSTER_URLS = [
   "./data/app/jo-daviess-county-board-members.json",
   "./data/app/cook-library-trustees.json",
   "./data/app/township-officials.json",
+  "./data/app/hancock-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

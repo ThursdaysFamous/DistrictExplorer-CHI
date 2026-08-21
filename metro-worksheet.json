@@ -1989,6 +1989,12 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Woodford County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "hancock-county-board-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Hancock County's 5 County Board districts (seating 15, three each), DISSOLVED from the Census 2020 voting districts per a composition the county's OWN CERTIFIED RETURNS state precinct by precinct. The source is the difference: Hancock's Clerk runs a results database at electionstats.hancockcounty-il.gov — the county's own, not a vendor's — and every contest page carries a PER-PRECINCT results table, so a district contest NAMES the precincts that voted in it one row at a time instead of only counting them. That is exactly what Knox's and Richland's canvasses withhold, and it is what makes this county buildable and those two not. TWO WITNESSES PER DISTRICT, the Clark standard: the 2022 and 2026 primaries carry all five district contests and agree exactly, with the 2024 primary re-confirming four of the five. THE PARTITION IS EXACT — 6+8+8+5+6 = 33 precinct slots, 33 distinct names, none shared and none left over against a county that runs 33 precincts. THE JASPER TEST PASSES 33/33 with the population identity to the person: the census voting districts sum to Hancock's exact 17,620. Thirteen names differ in SPELLING ONLY — the roman/arabic convention already recorded for Clay and Cumberland (CARTHAGE I for Carthage 1) — and ONE OF THE THIRTEEN IS A CENSUS TYPO, MONTIBELLO IV for Montebello 4, aliased like the rest and named so nobody reads it as a different place. Populations run 3,345-3,673 against a 3,524 ideal, 5.1% worst and 9.3% max-to-min (scripts/build_hancock_boundaries.py; --check is the drift gate)."
       }
     ],
     "rosters": [
@@ -2334,6 +2340,11 @@
         "file": "township-officials.json",
         "min_keys": 25,
         "note": "Township governing bodies keyed by Census county-subdivision GEOID — supervisor (or Cicero's president), four trustees, clerk/assessor/collector/highway commissioner, township-hall contact — from the Cook County Clerk's directory TWNSP type (build_township_officials.py, 29 townships live; Evanston Township dissolved 2014 and is skipped by name). Party committeepersons and per-person contact never ship: the committeeperson records are the feed's one personal-e-mail surface, and the hall mailbox is shared township-wide. Townships in uncovered counties keep the identity-only card."
+      },
+      {
+        "file": "hancock-county-board-members.json",
+        "min_keys": 5,
+        "note": "Hancock County Board members keyed by district (5 districts seating 15, three each, with a party letter per member). Scraped weekly from the county's board page, which publishes a name and a party and NOTHING ELSE — no e-mail, no phone, no term, and no chairman is named, so no row is badged one and there is no contact floor to set. THE COUNT IS THE GUARD for exactly that reason: with no field to watch, a page reshape shows up as a wrong number of members. Two parser traps are handled by construction. The page's <meta name=\"description\"> REPEATS District One's three members verbatim, so anchoring on the first 'District One' in the document parses the meta tag and ships three members as a whole board; the body is found by scanning for the last occurrence. And the last district has no following <h2> to bound it — an unbounded region runs to the end of the document and swallows the site's footer navigation, which parsed District Five as 35 'members', most of them menu links. Each district is bounded to its own first <ul> instead, and a per-district ceiling fails the run loudly if that ever stops holding."
       }
     ]
   },
@@ -2647,6 +2658,11 @@
       "file": "roster-health.yml",
       "purpose": "Daily watchdog over every roster refresh: reports the ones that are FAILING or have gone longer than their own cadence without a successful run, on one standing issue. Exists because a builder that refuses the write opens no PR and files nothing — the shipped roster silently freezes at its last good run",
       "schedule": "daily 23:00 UTC"
+    },
+    {
+      "file": "update-hancock-county-board-roster.yml",
+      "purpose": "Hancock County Board roster (county board page scrape)",
+      "schedule": "Fri 20:00 UTC"
     }
   ],
   "geocoder": {

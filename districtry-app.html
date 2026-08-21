@@ -3174,7 +3174,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 15d0d67 on 2026-08-21</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ cd24a72 on 2026-08-21</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3249,7 +3249,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
     <div class="districtry-panel-head">
       <div class="selected-point-chip" id="point-chip" hidden></div>
-      <span class="districtry-stats">74 counties · 39 layers</span>
+      <span class="districtry-stats">75 counties · 39 layers</span>
     </div>
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
@@ -10033,6 +10033,33 @@ function initChiExplorer() {
   });
   var loadWarrenBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/warren-county-board-members.json", {}, 2);
+  });
+
+  /* Hancock — 5 districts seating 15 (3 each), dissolved from the Census 2020
+   * voting districts per the PER-PRECINCT County Board contests in the county's
+   * own certified results database (build_hancock_boundaries.py). That database
+   * is the county Clerk's, not a vendor's, and each contest page names the
+   * precincts that voted in it one row at a time — which is what separates a
+   * buildable county from Knox and Richland, whose canvasses give counts only.
+   *
+   * Two witnesses per district: the 2022 and 2026 primaries agree exactly, with
+   * 2024 re-confirming four of five. The 33 census units are the county's own
+   * 33 precincts 33/33 and sum to its exact 17,620; thirteen names differ in
+   * spelling only (roman for arabic), one of them a census typo, MONTIBELLO IV.
+   * Populations run 3,345-3,673 against a 3,524 ideal, 5.1% worst. */
+  var loadHancockCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hancock-county-outline.json", {}, 2);
+  });
+  function hancockCountyCoverage(point) {
+    return loadHancockCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadHancockBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hancock-county-board-districts.json", {}, 2);
+  });
+  var loadHancockBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hancock-county-board-members.json", {}, 2);
   });
 
   var loadPeoriaCountyOutline = makeCached(function () {
@@ -19095,6 +19122,73 @@ function initChiExplorer() {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);
             var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Hancock — 5 districts seating 15 (3 each), dissolved from the Census
+      // 2020 voting districts per the per-precinct County Board contests in the
+      // county's OWN certified results database (build_hancock_boundaries.py).
+      // The roster is the county's board page, which publishes a name and a
+      // party letter per member and nothing else — no contact of any kind, and
+      // no chairman is named, so none is badged.
+      {
+        key: "hancock",
+        coverage: hancockCountyCoverage,
+        loadGeometry: loadHancockBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadHancockBoardDistricts(),
+            loadHancockBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Hancock County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Hancock County Board (official)",
+                   url: "https://hancockcounty-il.gov/county-board-members/" };
+        },
+        hoverOfficial: {
+          load: loadHancockBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d == null ? null : roster[String(d)];
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
           }

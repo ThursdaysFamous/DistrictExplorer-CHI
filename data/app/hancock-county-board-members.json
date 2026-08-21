@@ -1,0 +1,82 @@
+{
+ "1": {
+  "members": [
+   {
+    "name": "Joe Boyles",
+    "party": "R"
+   },
+   {
+    "name": "Wayne Bollin",
+    "party": "R"
+   },
+   {
+    "name": "Michelle Merritt",
+    "party": "R"
+   }
+  ]
+ },
+ "2": {
+  "members": [
+   {
+    "name": "Harry Douglas",
+    "party": "R"
+   },
+   {
+    "name": "Dennis Castlebury",
+    "party": "R"
+   },
+   {
+    "name": "Alex Blythe",
+    "party": "R"
+   }
+  ]
+ },
+ "3": {
+  "members": [
+   {
+    "name": "Thomas Rogers",
+    "party": "R"
+   },
+   {
+    "name": "Steve Lucie",
+    "party": "R"
+   },
+   {
+    "name": "Jason Jacquot",
+    "party": "R"
+   }
+  ]
+ },
+ "4": {
+  "members": [
+   {
+    "name": "Mark Menn",
+    "party": "R"
+   },
+   {
+    "name": "Mark Hanson",
+    "party": "R"
+   },
+   {
+    "name": "Josh Turner",
+    "party": "R"
+   }
+  ]
+ },
+ "5": {
+  "members": [
+   {
+    "name": "Lee Ann Lambert",
+    "party": "R"
+   },
+   {
+    "name": "Stephen M Finney",
+    "party": "R"
+   },
+   {
+    "name": "Mark Harrison",
+    "party": "R"
+   }
+  ]
+ }
+}

@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**74 of 102 Illinois counties are served** — 61 through their own dispatch entries, 3 through a shipped judicial circuit, and 10 through the County card alone. 28 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**75 of 102 Illinois counties are served** — 62 through their own dispatch entries, 3 through a shipped judicial circuit, and 10 through the County card alone. 27 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (74)
+## Served counties (75)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -46,6 +46,7 @@
 | Greene | 17061 | County card | at-large — County card | — | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
+| Hancock | 17067 | dispatch | districted | `county-board` | none |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
@@ -98,7 +99,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (28) — gap-recorded, not yet served
+## Researched frontier (27) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -114,7 +115,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Fayette | 17051 | 1 — `fayette-county-board-geometry` (no-source) |
 | Ford | 17053 | 1 — `ford-county-board-vintage` (no-source) |
 | Gallatin | 17059 | 1 — `gallatin-county-board` (no-source) |
-| Hancock | 17067 | 1 — `pass10-frontier-unasked` (no-source) |
 | Hardin | 17069 | 1 — `hardin-county-board` (no-source) |
 | Henderson | 17071 | 1 — `henderson-county-website` (no-source) |
 | Jackson | 17077 | 2 — `jackson-county-board-districts` (no-source); `pass10-frontier-unasked` (no-source) |

@@ -398,6 +398,23 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # Saline and is still unserved, so that anchor keeps doing
                      # its job on the new eastern edge rather than moving.
                      "165",
+                     # Hancock — the 75th county (2026-08-21), a MAINLAND join
+                     # on the Mississippi. Its Illinois neighbours are Adams,
+                     # McDonough and Schuyler (all served) plus Henderson (still
+                     # unserved), so it attaches to the mainland on three sides
+                     # and nothing about the Massac island or the three enclaves
+                     # changes. Henderson keeps its own OUTSIDE anchor at
+                     # Oquawka on the new northern edge.
+                     #
+                     # The first county built from a COUNTY-RUN RESULTS
+                     # DATABASE: its Clerk publishes every contest with a
+                     # per-precinct table at electionstats.hancockcounty-il.gov,
+                     # so each board-district contest NAMES its precincts
+                     # rather than merely counting them. Two witnesses per
+                     # district (2022 and 2026 primaries agree exactly, 2024
+                     # re-confirms four of five), an exact 33-precinct
+                     # partition, and the Jasper test passed 33/33.
+                     "067",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -418,6 +435,7 @@ STATE_FIPS = "17"
 # counties served only through a circuit-keyed layer (the judicial-subcircuit
 # secondary counties), which have no dispatch entry of their own.
 DISPATCH_COUNTY_FIPS = {
+    "hancock": "067",
     "cook": "031", "dupage": "043", "will": "197", "lake": "097",
     "kane": "089", "mchenry": "111", "kendall": "093",
     "lasalle": "099", "kankakee": "091", "boone": "007", "grundy": "063",
@@ -491,6 +509,10 @@ INSIDE = {
     # through a point-in-county query, per the §2.5.1 rule against recalled
     # coordinates. Saline joins on the mainland through the County card alone.
     "Harrisburg (Saline)": (37.7375, -88.5457),
+    # Hancock's anchor (2026-08-21), the 75th county. TIGERweb's Incorporated
+    # Places centroid for Carthage city — the county seat, and the seat of
+    # District 5 — round-tripped through a point-in-county query.
+    "Carthage (Hancock)": (40.4144, -91.1284),
     # Pass 8: the county GIS carries board districts, precincts and Quincy's
     # wards; only the roster is blocked, which is a gap, not a reason to stay out.
     "Quincy (Adams)": (39.9356, -91.4098),
