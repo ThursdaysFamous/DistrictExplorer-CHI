@@ -9213,6 +9213,31 @@ function initChiExplorer() {
   var loadMoultriePrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/moultrie-precincts.json", {}, 2);
   });
+  /* MENARD and SCHUYLER close out the eight the audit named, and neither came
+   * from a results platform: Menard is carried by none this project has found,
+   * and Schuyler's own canvass is cumulative and names only three of its
+   * seventeen. Menard's names come from a county precinct map that is a VECTOR
+   * PDF with a readable text layer; Schuyler's from its "Polling Places by
+   * Precinct" table, whose three "&" rows each serve two precincts from one
+   * building. Both label from the COUNTY'S spelling: Menard writes NORTH ATHENS
+   * CITY with a space where the census hyphenates, and Schuyler writes Frederick
+   * where the census drops the middle E. Menard's five commissioner districts
+   * ship separately; Schuyler's seven board members ride the County card. See
+   * build_menard_precincts.py and build_schuyler_precincts.py. */
+  var loadMenardPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/menard-precincts.json", {}, 2);
+  });
+  var loadSchuylerCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/schuyler-county-outline.json", {}, 2);
+  });
+  function schuylerCountyCoverage(point) {
+    return loadSchuylerCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadSchuylerPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/schuyler-precincts.json", {}, 2);
+  });
   var loadMorganCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
   });
@@ -23707,6 +23732,76 @@ function initChiExplorer() {
           return {
             label: "Moultrie County — certified election results",
             url: "https://il-moultrie.pollresults.net/"
+          };
+        }
+      },
+      // Menard — fourteen precincts that ARE the Census 2020 voting districts,
+      // named by the county's own precinct map (a vector PDF with a readable text
+      // layer) and its polling-place list. Its five COMMISSIONER DISTRICTS are a
+      // separate entry on the county-board layer and are not repeated here.
+      {
+        key: "menard",
+        coverage: menardCountyCoverage,
+        loadGeometry: loadMenardPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMenardPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Menard County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Menard County Clerk &amp; Recorder — elections",
+            url: "https://menardcountyil.gov/elected-officials/county-clerkrecorder/"
+          };
+        }
+      },
+      // Schuyler — seventeen precincts on the same footing. NO BOARD DISTRICT:
+      // the county's own official 2026 canvass carries a single countywide MEMBERS
+      // OF THE COUNTY BOARD contest over all seventeen, so its seven members ride
+      // the County card.
+      {
+        key: "schuyler",
+        coverage: schuylerCountyCoverage,
+        loadGeometry: loadSchuylerPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadSchuylerPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Schuyler County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Schuyler County — voting locations by precinct",
+            url: "https://www.schuylercounty.org/elections/voting-locations/"
           };
         }
       },

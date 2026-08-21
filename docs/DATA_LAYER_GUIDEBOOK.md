@@ -4960,11 +4960,45 @@ General Primary — Cass 21/21 with no alias, Greene 22/22, Scott 10/10, Moultri
 populations exact and each tiling its county 100.0000% with zero overlap. Moultrie's is
 its FIRST dispatch entry of any kind; Greene's and Scott's move those counties from the
 judicial and card tiers onto the dispatch tier without changing the ring; Cass's sits
-beside board districts it already had. **TWO OF THE EIGHT REMAIN — Menard and
-Schuyler** — and both need a different source than these four did: neither is carried by
-`results.gbsvote.com` or by `il-<county>.pollresults.net` (both return that vendor's
-7,720-byte NotFound shell), so their precinct NAME lists have to come from the counties'
-own publications.
+beside board districts it already had. **SHIPPED THE SAME EVENING: MENARD AND SCHUYLER — ALL EIGHT ARE
+NOW BUILT.** Both needed a different source than the other six, because neither is carried
+by `results.gbsvote.com` or by `il-<county>.pollresults.net`, and the two routes they took
+are each worth keeping.
+
+**Menard's precinct map is a VECTOR PDF WITH A TEXT LAYER** — rare in this fleet, where a
+county's precinct map is almost always a scan, and where a whole method section exists for
+reading raster ones. Its legend lists all fourteen as extractable text, and the Clerk's
+polling-place list numbers the same fourteen #1 to #14 across seven buildings. Jasper 14/14,
+population 12,297 exact. **Look for a text layer before reaching for the raster methods.**
+
+**Schuyler cost a wrong turn first, and the wrong turn is the lesson.** Its Clerk's mail
+domain — `schuylercountyil.gov`, the address sitting in `il-county-clerks.json` — HAS NO A
+RECORD AT ALL, so the clerk-domain rule that reached Cumberland, Massac and eighteen others
+does not reach this county. Its real site is `www.schuylercounty.org`, **which this repo has
+been scraping for the board roster since 2026-08-02**: the answer was already in the
+`SITES` table of `il_county_commissioners_scraper.py` while the clerk-domain probe came back
+empty. WHEN A CLERK DOMAIN DOES NOT RESOLVE, CHECK THE SCRAPERS BEFORE CONCLUDING ANYTHING.
+Its name list is the county's "Polling Places by Precinct" table, and that table GROUPS
+EXPLICITLY — three rows read "Buena Vista #1 & #2", "Rushville #1 & #2", "Rushville #3 &
+#4", one building serving two precincts apiece. Expanding them gives seventeen, the number
+the county's own canvass reports. **That ampersand is the whole difference from Cumberland's
+polling notice, where the grouping was implicit in a heading and cost that build a wrong
+prediction.**
+
+Schuyler also turned up **the second COUNTY-RUN results database this project has found**,
+after Hancock's: `elections.schuyler.il.us`, hosted by Logonix, carrying an official 2026
+General Primary that reads "Precincts Reporting 17 of 17 = 100.00%". It confirms the COUNT
+and settles the board's form from a certified document — one countywide "MEMBERS OF THE
+COUNTY BOARD (Vote for not more than four)" contest over all seventeen — but its report is
+CUMULATIVE, so it names only the three precincts where a committeeperson contest was filed.
+A county-run database is not automatically a per-precinct one; Hancock's is, this one is
+not, and the difference is worth checking before writing to anybody.
+
+One alias each, decided the same way as Greene's and Scott's — by which source is wrong.
+Schuyler's census writes FREDRICK where the county and the VILLAGE write Frederick, so the
+census is at fault and the county's spelling ships (the Hancock/MONTIBELLO shape). Menard's
+census hyphenates NORTH ATHENS-CITY where the county's own map writes a space, so the
+county's map wins. Buena Vista keeps its space for the same reason Du Quoin kept its.
 
 Three things this batch settled that generalise:
 
