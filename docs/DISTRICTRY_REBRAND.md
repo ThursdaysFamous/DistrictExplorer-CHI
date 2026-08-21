@@ -947,6 +947,47 @@ fill — the lines are signal, and they do not stack on the same pixels — so i
 than changed. **At adoption** the honest fix is for the engine to scale the highlight the way it
 already scales base fills, so the siblings get it too.
 
+## The highlight outlines follow the fills (operator-directed, 2026-08-21)
+
+The fill fix left the map's remaining murk in two places, both flagged rather than taken at the
+time. Asked for, and now done.
+
+**The drop shadow is a singleton affordance.** `.region-highlight` carries **two** stacked
+near-black `drop-shadow()`s, so six active layers put **twenty-four** blurred darkenings across the
+view — every one centred on a boundary the reader is trying to follow. What the shadow says
+("this region is lifted off the faded rest of its layer") is said perfectly by one and not at all
+by six. So: full at one highlight, a single lighter shadow at two, `none` from three on, where the
+stroke alone already separates matched from faded.
+
+Held as a variable containing the WHOLE filter rather than an alpha inside it, so switching it off
+yields `filter: none` instead of two zero-alpha drop-shadows still being rasterised — this app
+measured stacked `drop-shadow()` at **~3.7x pan-frame cost** (OPTIMIZATION_PLAYBOOK P9/R2-5), so a
+free one is worth taking. Verified that the engine's own `.map-panning .region-highlight { filter:
+none }` still wins on specificity — two classes to one — so that optimisation is untouched:
+measured `none` while panning and the shadow back at rest.
+
+**The outline tapers, it does not vanish.** Unlike the fill, each outline is a DIFFERENT district
+the reader may want to trace, so this is signal, not decoration. Weight goes `max(2.25, 4 −
+0.45(n−1))` — 4px at one layer, 2.25px floor from five on. That still reads heavier than a faded
+sibling, which the engine draws at weight−0.5 and opacity 0.18. **Stroke opacity stays at 1**
+deliberately: thinning a line keeps it legible where dimming it would not.
+
+### Measured, six active layers, same patch
+
+| | street luminance | land luminance | separation |
+|---|---|---|---|
+| before both fixes | 0.104 | 0.077 | 0.027 |
+| **after both fixes** | **0.651** | **0.540** | **0.111** |
+| no layers at all (ceiling) | 1.000 | 0.808 | 0.192 |
+
+Street/land separation recovers from 14% of the unobstructed baseline to **58%**, with six
+districts still individually traceable. The single-layer case is untouched at every property —
+fill 0.32, stroke 4px, both shadows — so nothing changes for the common case.
+
+Same mechanism as the fill: Leaflet writes `stroke-width` as a presentation attribute, which CSS
+outranks, so this too costs no engine release despite `highlightStyleFor()` and the
+`.region-highlight` rule both living inside fences.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

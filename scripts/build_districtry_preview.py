@@ -667,7 +667,29 @@ SKIN_ISLAND = """<style id="districtry-skin">
      Leaflet writes fill-opacity as a PRESENTATION ATTRIBUTE, which CSS
      outranks, so this needs no engine release even though every function
      above lives inside the layer-registry fence. */
-  .leaflet-overlay-pane path.region-highlight { fill-opacity: var(--dst-hl-fill, 0.32); }
+  .leaflet-overlay-pane path.region-highlight {
+    fill-opacity: var(--dst-hl-fill, 0.32);
+    stroke-width: var(--dst-hl-weight, 4px);
+  }
+  /* The matched region's DROP SHADOW is a depth cue — "this one is lifted off
+     the faded rest of its layer" — and one highlight says that perfectly. Six
+     say it twelve times over: the engine stacks TWO near-black shadows per
+     highlight, so six active layers put twenty-four blurred darkenings across
+     the view, every one of them centred on a boundary the reader is trying to
+     follow. So the shadow is treated as a SINGLETON affordance: full at one
+     highlight, lighter at two, gone from three on, where the stroke alone
+     already distinguishes matched from faded.
+
+     Kept as a variable holding the whole filter rather than an alpha inside
+     it, so that switching it off yields `filter: none` and not two zero-alpha
+     drop-shadows still being rasterised — this app measured stacked
+     drop-shadow() at ~3.7x pan-frame cost (OPTIMIZATION_PLAYBOOK P9/R2-5), so
+     a free one is worth having. The engine's own .map-panning override still
+     wins on specificity (two classes to one), so the pan optimisation is
+     untouched. */
+  .region-highlight {
+    filter: var(--dst-hl-shadow, drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35)));
+  }
   /* the collapse itself, now at every width */
   .results-col.dst-collapsed .layer-block:not(:has(input[type="checkbox"]:checked)) { display: none; }
   .results-col.dst-collapsed .group-section:not(:has(input[type="checkbox"]:checked)) { display: none; }
@@ -1113,8 +1135,20 @@ MOBILE_LAYOUT_JS = """  /* ==== map legibility: stacked highlights hold a consta
     var pane = document.querySelector(".leaflet-overlay-pane");
     if (!pane) return;
     var n = pane.querySelectorAll("path.region-highlight").length;
+    var root = document.documentElement;
     var alpha = n > 1 ? 1 - Math.pow(DST_HL_TARGET, 1 / n) : 0.32;
-    document.documentElement.style.setProperty("--dst-hl-fill", alpha.toFixed(4));
+    root.style.setProperty("--dst-hl-fill", alpha.toFixed(4));
+    /* The outline is SIGNAL, not decoration — each one is a different district
+       the reader may want to trace — so it tapers rather than vanishing, and
+       floors at 2.25px. That still reads as heavier than a faded sibling,
+       which the engine draws at weight-0.5 and opacity 0.18. Stroke opacity is
+       deliberately left at 1: thinning the line keeps it legible where dimming
+       it would not. */
+    root.style.setProperty("--dst-hl-weight", Math.max(2.25, 4 - (n - 1) * 0.45).toFixed(2) + "px");
+    root.style.setProperty("--dst-hl-shadow",
+      n <= 1 ? "drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35))"
+      : n === 2 ? "drop-shadow(0 3px 5px rgba(20, 24, 28, 0.28))"
+      : "none");
   }
   function dstQueueHighlightAlpha() {
     if (dstHlQueued) return;
