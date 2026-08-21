@@ -494,11 +494,14 @@ SKIN_ISLAND = """<style id="districtry-skin">
      line and "Selected point" began the next. Each row is now a grid whose
      swatch and label cannot be separated, and the rows are stacked, so the
      defect is gone by construction rather than by picking a lucky width. */
-  .districtry-map-legend {
+  .districtry-map-legend .dml-items {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+  }
+  .districtry-map-legend {
+    display: block;
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -507,14 +510,23 @@ SKIN_ISLAND = """<style id="districtry-skin">
     font-size: 11.5px;
     color: var(--slate);
   }
-  .districtry-map-legend .dml-kicker {
+  .districtry-map-legend .dml-mini { display: none; }
+  .districtry-map-legend summary.dml-kicker::-webkit-details-marker { display: none; }
+  .districtry-map-legend summary.dml-kicker {
+    list-style: none;
+    display: block;
     font-family: var(--font-display);
     font-size: 10.5px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--faint);
-    margin-bottom: 1px;
+    /* 6, not 1: the kicker used to be a flex item of the legend card and took a
+       5px `gap` from it. Now that .dml-items owns the flex column the summary
+       sits outside it, so the gap has to be spelled out — without this the
+       desktop legend tightens by 5px, which a pixel-diff catches and an eye
+       does not. */
+    margin-bottom: 6px;
   }
   /* swatch and label ride one grid row — a wrap can never split the pair */
   .districtry-map-legend .dml-item {
@@ -546,6 +558,86 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-map-legend .dml-out { background: #8d8a97; opacity: 0.55; }
   .districtry-map-legend .dml-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #1d5fd6; }
 
+  /* ==== the phone layout (mobile review, 2026-08-21) ====================
+     Everything above this point is the desktop composition. Until now the
+     re-skin's LAYOUT lived entirely in one @media (min-width: 901px) while its
+     CHROME applied at every width, so a wide-screen composition was simply
+     stacked onto a narrow one. Measured on a 375x667 phone: the masthead took
+     247px (37% of the viewport), the first result card sat at y=847, and the
+     map column — which the engine makes position:sticky below 900px — pinned
+     500px of 667, leaving a 167px slot to read a 3,780px document through.
+
+     The engine owns the sticky map, the 48vh height and this breakpoint (they
+     are inside styles-core / styles-app fences and shared with the NYC and SF
+     forks). Everything below is fork-local, overriding from OUTSIDE those
+     fences at higher specificity — the blessed pattern, no engine release. */
+  @media (max-width: 900px) {
+    /* -- A. the coverage legend stops being pinned furniture ---------------
+       .map-bottom-left is inside the sticky map column, so anything tall in it
+       is on screen for the entire page. The engine reflowed that corner into a
+       "slim static toolbar" on purpose — its own comment says a 48vh map is too
+       short to float things over — and the legend had turned the slim strip
+       into a 160px block. Closed, it is a chip beside the hover toggle. */
+    .districtry-map-legend { padding: 5px 10px; }
+    .districtry-map-legend summary.dml-kicker {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 0;
+      min-height: 34px;
+      cursor: pointer;
+    }
+    .districtry-map-legend .dml-mini { display: inline-flex; align-items: center; gap: 5px; }
+    .districtry-map-legend[open] .dml-mini { display: none; }
+    .districtry-map-legend .dml-items { padding: 6px 0 4px; }
+    /* -- B. a masthead in the shape of a phone ---------------------------
+       The tagline and the preview stamp are explanation, and the empty state
+       already carries the same sentence where a reader will actually meet it.
+       The four "about the data" doors move into the results panel (see
+       dstPlaceDoors) — they cannot fit on one row at 375px, and wrapped they
+       cost 65px of permanently visible header. The theme toggle stays, lifted
+       out of flow into the wordmark row so it costs no height at all. */
+    h1.title small { display: none; }
+    header.masthead { position: relative; }
+    .masthead-actions {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      width: auto;
+      padding-top: 0;
+      margin: 0;
+      gap: 0;
+    }
+    .districtry-toggle-sep { display: none; }
+    /* -- tap targets. Every pill measured 29px against Apple's 44 and
+       Material's 48dp; the row was sized for a mouse. */
+    .districtry-theme-toggle,
+    .masthead-action-link,
+    .masthead-actions .footer-link-btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .masthead .search-row button { min-height: 44px; }
+    .masthead .search-row input[type="text"] { min-height: 44px; }
+    .locate-btn, .kbd-select-btn { min-height: 44px; }
+    /* the doors, relocated: the first thing in the results panel rather than
+       the last thing in the header. "What data is missing?" keeps its solid
+       pill — the repo's own note records it as the standing caveat on every
+       answer the app gives, so it should not be demoted by the move. */
+    .districtry-doors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 0 10px;
+      margin: 0 0 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .districtry-doors .masthead-action-link,
+    .districtry-doors .footer-link-btn { min-height: 44px; }
+  }
   /* ==== dark mode (operator-approved 2026-08-20 — the one function this
      re-skin ADDS rather than maintains) ====================================
      The design package decided the palette; this block wires it to the real
@@ -857,6 +949,60 @@ DARK_PALETTE_INSTALL_JS = """  /* ==== per-layer dark map palette ==============
 """
 
 
+MOBILE_LAYOUT_JS = """  /* ==== phone layout (mobile review, 2026-08-21) ======================== */
+  function dstIsPhone() {
+    return !!(window.matchMedia && window.matchMedia("(max-width: 900px)").matches);
+  }
+  /* The legend is authored open, which is what desktop wants. On a phone it is
+     pinned inside the sticky map column, so it starts closed. Driven here
+     rather than in CSS because `open` is an attribute, not a style. */
+  function dstSyncLegendDisclosure() {
+    var legend = document.querySelector(".districtry-map-legend");
+    if (!legend) return;
+    if (dstIsPhone()) legend.removeAttribute("open");
+    else legend.setAttribute("open", "");
+  }
+  /* The four "about the data" doors move between the masthead and the top of
+     the results panel as the viewport crosses the breakpoint. They are moved,
+     never duplicated: two copies of #gaps-btn would break the engine's
+     getElementById binding. Order is preserved by re-inserting before the
+     theme toggle's separator on the way back. */
+  function dstPlaceDoors() {
+    var actions = document.querySelector(".masthead-actions");
+    var foot = document.querySelector(".districtry-panel-foot");
+    if (!actions || !foot) return;
+    var doors = document.querySelector(".districtry-doors");
+    if (dstIsPhone()) {
+      if (!doors) {
+        doors = document.createElement("div");
+        doors.className = "districtry-doors";
+        /* The panel FOOT, not the panel head. Measured: the four doors are a
+           107px block at 375px, and at the top of the panel they sit between
+           the reader's coordinates and the reader's answer — on a 393x852
+           phone that is the difference between 48px of the first card showing
+           and 155px of it. The cost is real and named: "What data is missing?"
+           loses on mobile the promoted position it was deliberately given in
+           the masthead. */
+        foot.insertBefore(doors, foot.firstChild);
+      }
+      var move = actions.querySelectorAll("#gaps-btn, .masthead-action-link");
+      for (var i = 0; i < move.length; i++) doors.appendChild(move[i]);
+    } else if (doors) {
+      var sep = actions.querySelector(".districtry-toggle-sep");
+      var back = doors.querySelectorAll("#gaps-btn, .masthead-action-link");
+      for (var j = 0; j < back.length; j++) actions.insertBefore(back[j], sep);
+      doors.parentNode.removeChild(doors);
+    }
+  }
+  function dstApplyPhoneLayout() { dstPlaceDoors(); dstSyncLegendDisclosure(); }
+  dstApplyPhoneLayout();
+  if (window.matchMedia) {
+    var dstPhoneMQ = window.matchMedia("(max-width: 900px)");
+    if (dstPhoneMQ.addEventListener) dstPhoneMQ.addEventListener("change", dstApplyPhoneLayout);
+    else if (dstPhoneMQ.addListener) dstPhoneMQ.addListener(dstApplyPhoneLayout);
+  }
+"""
+
 # The theme is decided BEFORE FIRST PAINT, which is the whole reason this is a
 # blocking inline script in the head rather than part of the app boot: deferring
 # one attribute is a flash of the wrong ground on every single load. An explicit
@@ -1053,9 +1199,21 @@ COVERAGE_JS = """  function drawDistrictryCoverage() {
       styleDistrictryCoverage(districtryTheme() === "dark");
       var host = document.querySelector(".map-bottom-left");
       if (host && !document.querySelector(".districtry-map-legend")) {
-        var legend = document.createElement("div");
+        /* A <details>, not a <div>: on desktop it is open and looks exactly as
+           it did (marker hidden, summary styled as the kicker); below 900px the
+           engine drops this whole corner into a static strip INSIDE the sticky
+           map column, so an open 143px legend is pinned to the screen for the
+           whole page. Closed it is a ~32px chip, and the "why" line survives one
+           tap away rather than being cut. */
+        var legend = document.createElement("details");
         legend.className = "districtry-map-legend";
-        legend.innerHTML = '<span class="dml-kicker">Coverage</span>' +
+        legend.open = true;
+        legend.innerHTML = '<summary class="dml-kicker">Coverage' +
+            '<span class="dml-mini" aria-hidden="true">' +
+              '<span class="dml-glow"></span><span class="dml-sw dml-pending"></span>' +
+              '<span class="dml-sw dml-out"></span><span class="dml-dot"></span>' +
+            '</span></summary>' +
+          '<div class="dml-items">' +
           '<span class="dml-item"><span class="dml-glow"></span>' +
             '<span class="dml-label">IL</span></span>' +
           '<span class="dml-item"><span class="dml-sw dml-pending"></span>' +
@@ -1065,8 +1223,10 @@ COVERAGE_JS = """  function drawDistrictryCoverage() {
             '<span class="dml-label">Outside IL</span></span>' +
           '<span class="dml-rule"></span>' +
           '<span class="dml-item"><span class="dml-dot"></span>' +
-            '<span class="dml-label">Selected point</span></span>';
+            '<span class="dml-label">Selected point</span></span>' +
+          '</div>';
         host.insertBefore(legend, host.firstChild);
+        dstSyncLegendDisclosure();
       }
     }).catch(function () { /* decorative — skip the wash, never surface an error */ });
   }
@@ -1532,7 +1692,8 @@ def build(stamp_text):
         "  // preview-only: lets a check drive the theme without a click\n"
         "  EXPLORER_EXPORTS.setTheme = applyDistrictryTheme;\n"
         "  EXPLORER_EXPORTS.getTheme = districtryTheme;\n"
-        + DARK_PALETTE_INSTALL_JS,
+        + DARK_PALETTE_INSTALL_JS
+        + MOBILE_LAYOUT_JS,
         "theme exports + dark map palette",
     )
 

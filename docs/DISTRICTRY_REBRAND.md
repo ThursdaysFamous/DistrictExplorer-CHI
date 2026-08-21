@@ -641,6 +641,106 @@ rather than a debt. The hover popup's `hoverDotIsInvisible()` fallback still ass
 too-LIGHT dot is the failure case; in dark that assumption inverts, but the dot ring keeps
 it legible.
 
+## The phone layout (mobile review, 2026-08-21) — A + B shipped
+
+A measured review of the preview on phones, and the first two of its four options.
+The review itself is the artifact published on 2026-08-21; this is the record of what it
+found and what changed.
+
+### What the review found
+
+Every number measured in Chromium at real device sizes, both themes, touch emulation on.
+
+| | iPhone SE 375×667 | iPhone 14 Pro 393×852 |
+|---|---|---|
+| masthead | 247px (**37% of the viewport**) | 245px |
+| first result card | y=847 | panel *header* at y≈840 of 852 |
+| pinned column | 500px of 667 | 569px of 852 |
+| reading slot | **167px** | 283px |
+| document | 3,780px (5.7 screens) | — |
+
+**The root cause is one line.** All of the re-skin's LAYOUT work sits inside a single
+`@media (min-width: 901px)`; below that the engine's original mobile design governs. But the
+re-skin's CHROME rules — search moved into the masthead, the pill row, the coverage legend —
+apply at every width. A composition built for a wide screen was being stacked onto a narrow
+one, and the parts that cost nothing on desktop were charged full price on a phone.
+
+Three findings, and two were mine:
+
+1. **The sticky column pinned 500px of 667.** The engine makes `.map-col` `position: sticky`
+   below 900px so the map stays put while results scroll under it — and the strip beneath the
+   map is inside that column, so whatever is in it is on screen for the entire page.
+2. **143px of that was the coverage legend.** It floats over the map on desktop and costs
+   nothing. The engine reflows that corner into a static strip on mobile *deliberately* — its
+   own comment says a 48vh map is too short to float things over — and the legend rebuild
+   turned the slim strip into a 160px block. Invisible on desktop, which is why it shipped.
+3. **Every masthead pill was 29px tall**, against Apple's 44 and Material's 48dp. That row was
+   sized for a mouse.
+
+**Scoping fact that shaped the options:** all six mobile media queries live inside
+`styles-core` / `styles-app` fences. The sticky map, the 48vh height and the 900px breakpoint
+are ENGINE, shared with NYC and SF — so anything touching them is a release, not a fork tweak.
+Everything below overrides from OUTSIDE those fences at higher specificity.
+
+### A — the legend stops being pinned furniture
+
+The legend is now a `<details>`. Authored `open`, which is what desktop wants; a boot pass
+closes it below 900px, where it becomes a ~34px "Coverage" chip beside the hover toggle, with
+the three swatches inline so colours can still be matched without opening. **The "why" line
+survives one tap away rather than being cut** — it was an explicit operator requirement that
+the wash explain itself, and a compact-legend-by-deletion would have thrown it away.
+
+Driven by JS rather than CSS because `open` is an attribute, not a style, and it re-syncs on
+every breakpoint crossing.
+
+### B — a masthead in the shape of a phone
+
+- The tagline and the preview stamp are hidden below 900px. The empty state already carries the
+  same sentence, where a reader actually meets it.
+- The four "about the data" doors **move into the panel foot** and back on resize. They are
+  *moved*, never duplicated — two copies of `#gaps-btn` would break the engine's
+  `getElementById` binding — and re-inserted before the toggle's separator so order survives.
+- The theme toggle is lifted out of flow into the wordmark row, so it costs no height at all.
+- Every remaining target is `min-height: 44px`.
+
+**The doors placement was measured twice, and the first answer was wrong.** They were first put
+at the *top* of the results panel, on the reasoning that "What data is missing?" is the standing
+caveat and should stay prominent. Measured, that block is **107px** — I had estimated 56 — and at
+the top of the panel it sits between the reader's coordinates and the reader's answer. On a
+393×852 phone that is the difference between 48px of the first card showing and 159px. The
+review had said panel foot; the measurement agreed with the review; the estimate was what was
+wrong. **Named cost:** on mobile, "What data is missing?" loses the promoted position it was
+deliberately given in the masthead.
+
+### Measured result
+
+| | before | after |
+|---|---|---|
+| masthead | 247px (37%) | **121px (18%)** |
+| pinned column | 500px | 403px |
+| reading slot | 167px | **264px (+58%)** |
+| first card, 375×667 | y=847 (below the fold) | **y=624 — above it** |
+| first card, 393×852 | below the panel header | **y=693, 159px visible** |
+| header tap targets | 29px | **≥44px** |
+
+Round-tripped across the breakpoint four times: order preserved, exactly one `#gaps-btn`
+throughout, legend open state tracking, no errors.
+
+**Desktop is pixel-identical in both themes** except the generation stamp — verified by diff,
+which also caught the one regression this change introduced: moving the flex column from the
+legend card onto a new `.dml-items` wrapper left the summary outside the `gap: 5px`, tightening
+the desktop legend by 5px. An eye would not have caught it.
+
+### Still open
+
+- **The smallest phone still cannot show a *usable* answer above the fold.** At 375×667 the card
+  clears the fold by 43px — its top edge, not its content. The remaining lever is the map, and
+  the numbers are: `48vh/min 340` (shipped) → card at 624; `42vh/min 260` → 564; `38vh/min 240`
+  → 537. Shortening the app's primary surface is a design call, not a cleanup, so it is offered
+  rather than taken.
+- **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
+  two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
