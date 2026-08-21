@@ -9165,6 +9165,54 @@ function initChiExplorer() {
   var loadPerryPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/perry-precincts.json", {}, 2);
   });
+  /* CASS, GREENE, SCOTT and MOULTRIE were never blocked. All four were already
+   * served, none had a gap record saying its precincts were missing, and that is
+   * exactly how a county goes unbuilt for weeks while every guard in the repo
+   * stays green — an audit of served counties WITHOUT a precinct layer and
+   * WITHOUT a record explaining it is what found them. Each one's precincts are
+   * the Census 2020 voting districts one for one, named by the county's own
+   * certified 2026 General Primary: Cass 21/21 with no alias, Greene 22/22,
+   * Scott 10/10, Moultrie 16/16, every population exact. Cass's four board
+   * districts already ship separately; the other three elect their boards
+   * countywide and ride the County card. See build_cass_precincts.py,
+   * build_greene_precincts.py, build_scott_precincts.py and
+   * build_moultrie_precincts.py. */
+  var loadCassPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cass-precincts.json", {}, 2);
+  });
+  var loadGreeneCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/greene-county-outline.json", {}, 2);
+  });
+  function greeneCountyCoverage(point) {
+    return loadGreeneCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadGreenePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/greene-precincts.json", {}, 2);
+  });
+  var loadScottCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/scott-county-outline.json", {}, 2);
+  });
+  function scottCountyCoverage(point) {
+    return loadScottCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadScottPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/scott-precincts.json", {}, 2);
+  });
+  var loadMoultrieCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/moultrie-county-outline.json", {}, 2);
+  });
+  function moultrieCountyCoverage(point) {
+    return loadMoultrieCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMoultriePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/moultrie-precincts.json", {}, 2);
+  });
   var loadMorganCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
   });
@@ -23519,6 +23567,146 @@ function initChiExplorer() {
           return {
             label: "Perry County — certified election results",
             url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=283"
+          };
+        }
+      },
+      // Cass — twenty-one precincts that ARE the Census 2020 voting districts,
+      // named by the county's certified 2026 General Primary a committeeperson
+      // contest at a time. Its four BOARD DISTRICTS are a separate entry on the
+      // county-board layer and are not repeated here; the same canvass reports
+      // their contests over 4 + 5 + 6 + 6 precincts, summing to twenty-one.
+      {
+        key: "cass",
+        coverage: cassCountyCoverage,
+        loadGeometry: loadCassPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCassPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Cass County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Cass County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&amp;l_id=8"
+          };
+        }
+      },
+      // Greene — twenty-two precincts on the same footing. NO BOARD DISTRICT: a
+      // single countywide COUNTY BOARD contest covers all twenty-two precincts,
+      // so Greene elects its board county-wide and its seven members ride the
+      // County card.
+      {
+        key: "greene",
+        coverage: greeneCountyCoverage,
+        loadGeometry: loadGreenePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadGreenePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Greene County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Greene County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&amp;l_id=11"
+          };
+        }
+      },
+      // Scott — ten precincts, likewise at-large. Merritt Township keeps the
+      // census spelling where the county's results feed drops a letter; the
+      // Winchester roman numerals are the county's own and are kept.
+      {
+        key: "scott",
+        coverage: scottCountyCoverage,
+        loadGeometry: loadScottPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadScottPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Scott County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Scott County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&amp;l_id=19"
+          };
+        }
+      },
+      // Moultrie — sixteen precincts, and this county's FIRST dispatch entry of
+      // any kind: it joined the ring through the County card alone. Its board's
+      // contest is styled COUNTY BOARD DISTRICT AT LARGE MEMBER on its own
+      // returns, so there is no district for a precinct to belong to.
+      {
+        key: "moultrie",
+        coverage: moultrieCountyCoverage,
+        loadGeometry: loadMoultriePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMoultriePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Moultrie County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Moultrie County — certified election results",
+            url: "https://il-moultrie.pollresults.net/"
           };
         }
       },

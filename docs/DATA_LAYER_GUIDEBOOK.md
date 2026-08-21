@@ -4954,6 +4954,43 @@ and wrong for a county whose five precincts sit over seven voting districts
 without its fabric having moved). **Six of the eight remain**: Cass, Menard,
 Moultrie, Greene, Schuyler and Scott.
 
+**SHIPPED 2026-08-21: CASS, GREENE, SCOTT AND MOULTRIE.** Four more of the eight, all
+four the census fabric one for one, all four named by the county's own certified 2026
+General Primary — Cass 21/21 with no alias, Greene 22/22, Scott 10/10, Moultrie 16/16,
+populations exact and each tiling its county 100.0000% with zero overlap. Moultrie's is
+its FIRST dispatch entry of any kind; Greene's and Scott's move those counties from the
+judicial and card tiers onto the dispatch tier without changing the ring; Cass's sits
+beside board districts it already had. **TWO OF THE EIGHT REMAIN — Menard and
+Schuyler** — and both need a different source than these four did: neither is carried by
+`results.gbsvote.com` or by `il-<county>.pollresults.net` (both return that vendor's
+7,720-byte NotFound shell), so their precinct NAME lists have to come from the counties'
+own publications.
+
+Three things this batch settled that generalise:
+
+**A name difference is decided by WHICH SOURCE IS WRONG, not by a fixed precedence.**
+Greene's `WRIGHTS 2` against the census's `WRIGHTS` is a NUMBER THE COUNTY ATTACHES — the
+county wins, and the alias renames the census feature onto the county's designation.
+Scott's `MERRIT` against `MERRITT` is a DROPPED LETTER in the results feed, and Merritt is
+the township's name — the census wins, and the shipped label comes from the spelling the
+alias displaced (`apply_aliases` records it as `censusName`, which is what makes labelling
+from it possible without a second lookup). Moultrie's `SULLIVAN #1` against `SULLIVAN 1` is
+neither: it is punctuation, `norm()` absorbs it, and no alias is involved at all.
+
+**Roman numerals are not always groupings.** Cumberland's turned out to be polling-place
+headings — three buildings serving seven precincts — and were not precinct names. Scott's
+`WINCHESTER I / II / III` are real: the county's returns AND the census BASENAMEs both
+carry them. Check which one you have before normalising either.
+
+**`title_case` had a latent defect and it was already shipped.** It lowercased the second
+half of a hyphenated name and turned roman numerals into words. `Crater-carlin` was sitting
+in `calhoun-precincts.json` and `Rocky Run-wilcox` in `hancock-county-board-districts.json`,
+both inside nested `votingDistricts` arrays where a scan of top-level `name` values misses
+them. Fixed in `vtd_board_districts.py` with a deliberately narrow roman-numeral rule —
+alphabet restricted to I/V/X and length to four — because the obvious rule mangles real
+place names: DIX is a village in Jefferson County and a valid 509, MI is a valid 1001, and
+CIVIL parses as a numeral too.
+
 **MORGAN IS PUBLISHED — build it first.** The county's GIS Coordinator maintains a public,
 anonymous, county-owned feature service:
 `services3.arcgis.com/95PFahBF8eyGEfuc/…/VotingPrecincts/FeatureServer/0` — **27 polygons,

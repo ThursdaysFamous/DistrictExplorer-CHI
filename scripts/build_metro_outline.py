@@ -571,6 +571,14 @@ DISPATCH_COUNTY_FIPS = {
     # because neither county's roster is readable: the only source for each is a
     # website that refuses this client (2026-08-21).
     "johnson": "087", "perry": "145",
+    # Greene, Scott and Moultrie gain a dispatch entry WITHOUT changing tier
+    # (2026-08-21). All three were already in the ring — Greene and Scott through
+    # a 7th-Circuit subcircuit, Moultrie and Greene through the County card — and
+    # all three elect their boards at large, so what they gain is the precinct
+    # answer alone. Moultrie's is its first dispatch entry of any kind. Cass is
+    # deliberately absent from this addition: it has been dispatched since its
+    # board districts shipped and is already listed above.
+    "greene": "061", "scott": "171", "moultrie": "139",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
