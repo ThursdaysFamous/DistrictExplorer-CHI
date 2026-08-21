@@ -342,6 +342,24 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # Marion borders Clinton, is served by nothing, and its
                      # returns route was measured shut the same afternoon.
                      "027",
+                     # Warren (2026-08-21), the 72nd county — and the first
+                     # reached by FIXING A PROBE rather than by asking anyone or
+                     # finding a vendor. It borders Mercer, Henry and McDonough,
+                     # all served, so it fills the western notch those three
+                     # left. MONMOUTH MOVES FROM THE OUTSIDE LIST TO THE INSIDE
+                     # ONE, and Henderson — Warren's unserved western
+                     # neighbour, whose own published address is a parked
+                     # domain — takes the west.
+                     #
+                     # AND IT CLOSES A DOUGHNUT ROUND KNOX. Warren was the last
+                     # unserved county on Knox's border: Henry, Stark, Peoria,
+                     # Fulton, McDonough and Mercer were already served, so this
+                     # join makes KNOX THE THIRD ENCLAVE and metro-outline.json
+                     # a four-ring polygon. Galesburg stays in the OUTSIDE list
+                     # and is now an ENCLAVE anchor rather than a frontier one —
+                     # it proves the hole stays open, which is exactly what an
+                     # outside anchor is for. Read the ring count from --check.
+                     "187",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -388,6 +406,7 @@ DISPATCH_COUNTY_FIPS = {
     "edgar": "045",
     "franklin": "055",
     "clinton": "027",
+    "warren": "187",
     # Moultrie is deliberately ABSENT: its board is elected at large, so it has
     # no district geometry, no dispatch entry and no toggle — its members ride
     # the County card via data/app/il-county-commissioners.json. It appears in
@@ -619,6 +638,11 @@ INSIDE = {
     # and the guard failed the build until it did, which is the whole of that
     # list's job. Salem (Marion) inherits the eastern frontier.
     "Carlyle (Clinton)": (38.6103, -89.3726),
+    # Monmouth (Warren) — the county seat, 2026-08-21, the 61st dispatched
+    # county. It held a place in the OUTSIDE list from Mercer's join onward and
+    # this move is the guard doing its job: the build failed until it was
+    # promoted. Oquawka (Henderson) inherits the western frontier.
+    "Monmouth (Warren)": (40.9114, -90.6473),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -685,10 +709,12 @@ OUTSIDE = {
     # borders the most served ground; Jasper and Lawrence keep it off the
     # enclave list.
     "Olney (Richland)": (38.7285, -88.0839),
-    # Monmouth (Warren) — the successor Mercer's join calls for. Mercer leaves
-    # Warren and Henderson, and Warren borders served McDonough and now Mercer,
-    # with Hancock, Henderson and Knox keeping it off the enclave list.
-    "Monmouth (Warren)": (40.9114, -90.6473),
+    # Oquawka (Henderson) — the successor Warren's join calls for. Warren left
+    # the OUTSIDE list on 2026-08-21 when its own board page and precinct-map
+    # legend turned out to be reachable all along; Henderson is the honest
+    # frontier it leaves behind, bordering Warren and served by nothing, and its
+    # own recorded gap is that its published web address leads to a holding page.
+    "Oquawka (Henderson)": (40.9339, -90.9484),
     # Cumberland — the successor anchor Coles's join called for (2026-08-17).
     # Coles left five unserved neighbours behind and this is the one nearest
     # to being swallowed: Cumberland now borders served Coles, Shelby AND

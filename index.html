@@ -9218,6 +9218,38 @@ function initChiExplorer() {
     return fetchJSONWithRetry("data/app/clinton-county-board-members.json", {}, 2);
   });
 
+  /* Warren — the 72nd county, and the one that never needed the letter. It sat
+   * in the pass-10 "frontier unasked" record, four counties whose stated next
+   * step was to write to their clerks. The pass-13 sweep had looked for county
+   * sites by permuting the county's NAME; Warren's real domain was already in
+   * this repo as the host of its Clerk's e-mail, and reading it took one lookup.
+   *
+   * THE COMPOSITION IS A LEGEND, NOT A DERIVATION. The county's precinct map is
+   * a raster image with no vector linework, so nothing is traced from it — but
+   * its text layer carries a four-column table naming each district's
+   * precincts. That is Warren stating its own composition, which is a stronger
+   * source than Franklin's and Clinton's, where the same fact is inferred from
+   * which ballot each precinct voted.
+   *
+   * Both census merges are nameable AND district-confined (Roseville 1+2 in
+   * District 4, Spring Grove-Alexis and -Gerlaw in District 3), so neither can
+   * move a line — the Clinton test passed twice over. Populations run
+   * 4,030-4,332 against a 4,209 ideal, 4.2% worst, the tightest yet. */
+  var loadWarrenCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/warren-county-outline.json", {}, 2);
+  });
+  function warrenCountyCoverage(point) {
+    return loadWarrenCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadWarrenBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/warren-county-board-districts.json", {}, 2);
+  });
+  var loadWarrenBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/warren-county-board-members.json", {}, 2);
+  });
+
   var loadPeoriaCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-outline.json", {}, 2);
   });
@@ -18274,6 +18306,73 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadClintonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Warren — 4 districts seating 15 (3/4/4/4), dissolved from the Census
+      // 2020 voting districts per the precinct table the county prints in its
+      // own map legend (build_warren_boundaries.py). The roster is the county's
+      // board page: committees, term-expiry year, phone and e-mail, with the
+      // Chairman of the Board badged from his own row. The page also prints a
+      // HOME ADDRESS for every member and none is carried.
+      {
+        key: "warren",
+        coverage: warrenCountyCoverage,
+        loadGeometry: loadWarrenBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWarrenBoardDistricts(),
+            loadWarrenBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Warren County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Warren County Board (official)",
+                   url: "https://warrencountyil.gov/government/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadWarrenBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

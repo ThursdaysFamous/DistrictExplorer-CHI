@@ -1,0 +1,146 @@
+{
+  "1": {
+    "members": [
+      {
+        "committees": [
+          "Finance Committee"
+        ],
+        "email": "ACox@warrencountyil.gov",
+        "name": "Austin “AJ” Cox",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Building & Grounds Committee"
+        ],
+        "email": "FDoyle@warrencountyil.gov",
+        "name": "Frank Doyle",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Building & Grounds Committee"
+        ],
+        "email": "TBresnahan@warrencountyil.gov",
+        "name": "Timothy “Tim” Bresnahan",
+        "termExpires": "2028"
+      }
+    ],
+    "sourceUrl": "https://warrencountyil.gov/government/county-board/"
+  },
+  "2": {
+    "members": [
+      {
+        "committees": [
+          "Road & Bridge and Animal Control Committee"
+        ],
+        "email": "CHopkins@warrencountyil.gov",
+        "name": "Court Hopkins",
+        "phone": "309-265-8201",
+        "termExpires": "2026"
+      },
+      {
+        "email": "MPearson@warrencountyil.gov",
+        "name": "Mike Pearson",
+        "phone": "309-221-7215",
+        "role": "Chairman of the Board",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Chairman on the Buildings and Grounds Committee"
+        ],
+        "email": "SCavanaugh@warrencountyil.gov",
+        "name": "Sean Cavanaugh",
+        "phone": "563-370-1223",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Buildings and Grounds Committee"
+        ],
+        "email": "SStevens@warrencountyil.gov",
+        "name": "Sean Stevens",
+        "termExpires": "2028"
+      }
+    ],
+    "sourceUrl": "https://warrencountyil.gov/government/county-board/"
+  },
+  "3": {
+    "members": [
+      {
+        "committees": [
+          "Finance Committee"
+        ],
+        "email": "lschar1948@gmail.com",
+        "name": "Lyman Schar",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Road & Bridge and Animal Control Committee"
+        ],
+        "email": "SHawkins@warrencountyil.gov",
+        "name": "Stephen C. Hawkins",
+        "termExpires": "2028"
+      },
+      {
+        "committees": [
+          "Finance Committee"
+        ],
+        "email": "TTharp@warrencountyil.gov",
+        "name": "Thaddeus Tharp",
+        "phone": "309-333-8814",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Buildings and Grounds Committee"
+        ],
+        "email": "TWinkler@warrecountyil.gov",
+        "name": "Todd Winkler",
+        "termExpires": "2028"
+      }
+    ],
+    "sourceUrl": "https://warrencountyil.gov/government/county-board/"
+  },
+  "4": {
+    "members": [
+      {
+        "committees": [
+          "Road & Bridge and Animal Control Committee"
+        ],
+        "email": "DByers@warrencountyil.gov",
+        "name": "Dan Byers",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Chairman of the Finance Committee"
+        ],
+        "name": "David “Dave” Jenks",
+        "phone": "309-734-7118",
+        "termExpires": "2028"
+      },
+      {
+        "committees": [
+          "Road & Bridge and Animal Control Committee"
+        ],
+        "email": "SMahoney@warrencountyil.gov",
+        "name": "Stephen Mahoney",
+        "phone": "309-337-0911",
+        "termExpires": "2026"
+      },
+      {
+        "committees": [
+          "Chairman of the Road & Bridge and Animal Control Committee"
+        ],
+        "email": "BThompson@warrencountyil.gov",
+        "name": "William M. Thompson",
+        "phone": "309-371-7800",
+        "termExpires": "2026"
+      }
+    ],
+    "sourceUrl": "https://warrencountyil.gov/government/county-board/"
+  }
+}
