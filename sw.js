@@ -89,6 +89,7 @@ const GEOMETRY_URLS = [
   "./data/app/crawford-county-outline.json",
   "./data/app/crawford-precincts.json",
   "./data/app/cumberland-county-outline.json",
+  "./data/app/cumberland-precincts.json",
   "./data/app/dekalb-county-outline.json",
   "./data/app/dewitt-county-board-districts.json",
   "./data/app/dewitt-county-outline.json",

@@ -9104,6 +9104,31 @@ function initChiExplorer() {
   var loadGallatinPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/gallatin-precincts.json", {}, 2);
   });
+  /* CUMBERLAND is precinct-only for a DIFFERENT reason than Calhoun, Morgan and
+   * Gallatin, and the distinction is the point: those three elect their boards
+   * countywide, so there is no district for a precinct to belong to. Cumberland
+   * IS districted — six members from three compass-point districts, Western,
+   * Central and Eastern — and its districts SPLIT PRECINCTS, which its own
+   * certified returns say outright: the 2026 General Primary reports them as
+   * Central 6, Eastern 5 and Western 3 precincts, fourteen against a county of
+   * twelve, identically for both parties, while every countywide contest on the
+   * same canvass reports exactly twelve. So no union of whole precincts can draw
+   * the board and only the county's own boundary ever will — the board is shut,
+   * nothing rides the County card, and the precinct answer is the whole of what
+   * this county gains. Its twelve precincts ARE the Census 2020 voting districts,
+   * the Jasper test passing 12/12 with the population identity to the person.
+   * See build_cumberland_precincts.py. */
+  var loadCumberlandCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cumberland-county-outline.json", {}, 2);
+  });
+  function cumberlandCountyCoverage(point) {
+    return loadCumberlandCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadCumberlandPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cumberland-precincts.json", {}, 2);
+  });
   var loadMorganCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
   });
@@ -23341,6 +23366,48 @@ function initChiExplorer() {
           return {
             label: "Gallatin County Clerk — elections",
             url: "https://gallatinco.illinois.gov/elections/"
+          };
+        }
+      },
+      // Cumberland — twelve precincts that ARE the Census 2020 voting
+      // districts, one for one, named by the county's own certified 2026
+      // General Primary a committeeperson contest at a time and paired with
+      // eight buildings by its Clerk's polling notice. NO BOARD DISTRICT, and
+      // here that is not because the board is at large: Cumberland elects six
+      // members from three compass-point districts that SPLIT PRECINCTS, which
+      // its own returns prove by counting Central 6 + Eastern 5 + Western 3
+      // against a county of twelve. Only the county's own boundary can express
+      // that, so the board rides nothing here and nothing is invented for it.
+      // NO POLLING PLACE: the county publishes a list, and that belongs with a
+      // roster guard rather than inside a geometry file.
+      {
+        key: "cumberland",
+        coverage: cumberlandCountyCoverage,
+        loadGeometry: loadCumberlandPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCumberlandPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Cumberland County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Cumberland County Clerk — elections",
+            url: "https://cumberlandcoil.gov/elections/"
           };
         }
       },

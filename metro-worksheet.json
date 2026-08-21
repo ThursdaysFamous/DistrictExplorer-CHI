@@ -1101,8 +1101,13 @@
         "file": "cumberland-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Cumberland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Cumberland County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped on 2026-08-04 as gap-location geometry only, from the pass-13 detached-counties sweep, and was promoted on 2026-08-21 when Cumberland joined ON ITS PRECINCTS: its three compass-point board districts split precincts and are permanently shut to a whole-precinct dissolve, so the precincts dispatch alone and no board district ships."
+      },
+      {
+        "file": "cumberland-precincts.json",
+        "min_features": 12,
+        "max_features": 12,
+        "note": "Cumberland County's twelve voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 12/12 against the county's own precinct names and they sum to its exact 2020 population of 10,450. Bounds are an EQUALITY because twelve is the county's whole precinct list, counted by its own certified canvass (\"OF 12 PRECINCTS REPORTING\", and every countywide contest on it) and named by that canvass one contest at a time. NO ALIAS IS NEEDED and the reason is worth keeping: this project's own record predicted one, having read the Clerk's polling notice, which groups the precincts as \"NEOGA I & II\", \"SUMPTER I & II\" and \"GREENUP I, II, & III\". Those are POLLING-PLACE GROUPINGS — three buildings serving seven precincts — not precinct names; the certified returns print GREENUP 1/2/3, NEOGA 1/2 and SUMPTER 1/2 in arabic exactly as the census does. NO BOARD DISTRICT ships and none ever will from this route: the county's own returns report its board contests as Central 6, Eastern 5 and Western 3 precincts, fourteen against a county of twelve, so two precincts sit in two districts each. NO POLLING PLACE ships — the county publishes a list, and that belongs with a roster guard and a date (scripts/build_cumberland_precincts.py)."
       },
       {
         "file": "dekalb-county-outline.json",

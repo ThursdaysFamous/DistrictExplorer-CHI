@@ -442,6 +442,30 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # intermediate the certificate itself names opened it in
                      # one step.
                      "059",
+                     # Cumberland — the 77th county served (2026-08-21), and the
+                     # first to join on its PRECINCTS while its board stays
+                     # measured shut. Its three compass-point districts —
+                     # Western, Central, Eastern — SPLIT precincts: the county's
+                     # own certified 2026 General Primary reports them as
+                     # Central 6, Eastern 5, Western 3, fourteen against a county
+                     # of twelve, identically for both parties, while every
+                     # countywide contest on the same canvass reports exactly
+                     # twelve. So no union of whole precincts can ever draw the
+                     # board, and only the county's own boundary will. The
+                     # precincts are a different question and they are answered:
+                     # the Jasper test passes 12/12 with the population identity
+                     # to the person, and the county's returns name all twelve
+                     # one committeeperson contest at a time. This is the join
+                     # bar settled on 2026-08-21 — the BOARD or the PRECINCTS —
+                     # cleared on the second, the way Calhoun, Morgan and
+                     # Gallatin cleared it.
+                     #
+                     # A MAINLAND JOIN THAT CLOSES NOTHING AND OPENS NOTHING:
+                     # its neighbours are Coles, Shelby, Effingham and Clark
+                     # (all served) plus Jasper (unserved), so no island and no
+                     # enclave moves. TOLEDO MOVES FROM THE OUTSIDE LIST TO THE
+                     # INSIDE ONE and Newton (Jasper) takes over that frontier.
+                     "035",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -499,6 +523,11 @@ DISPATCH_COUNTY_FIPS = {
     # so their members ride the County card and what they gain here is the
     # precinct answer alone (2026-08-20).
     "calhoun": "013", "morgan": "137",
+    # Cumberland is precinct-only for a DIFFERENT reason than those two: its
+    # board is districted, not at large, and its districts split precincts, so
+    # nothing rides the County card either and the precinct answer is the whole
+    # of what the county gains (2026-08-21).
+    "cumberland": "035",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -752,6 +781,16 @@ INSIDE = {
     # this move is the guard doing its job: the build failed until it was
     # promoted. Oquawka (Henderson) inherits the western frontier.
     "Monmouth (Warren)": (40.9114, -90.6473),
+    # Toledo (Cumberland) — the county seat, 2026-08-21, the 63rd dispatched
+    # county. It held a place in the OUTSIDE list from Coles's join on
+    # 2026-08-17, written to prove the fill stopped at Cumberland's line; four
+    # days later the county itself joined and the guard failed the build until
+    # this point was promoted, which is exactly the job that list does. The
+    # coordinates are unchanged — build_county_outline.py's own cumberland
+    # inside anchor, round-tripped through a point-in-county query on
+    # 2026-08-17 — so what moved is the claim about them, not the measurement.
+    # Newton (Jasper) inherits the frontier.
+    "Toledo (Cumberland)": (39.2728, -88.2422),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -842,16 +881,14 @@ OUTSIDE = {
     # frontier it leaves behind, bordering Warren and served by nothing, and its
     # own recorded gap is that its published web address leads to a holding page.
     "Oquawka (Henderson)": (40.9339, -90.9484),
-    # Cumberland — the successor anchor Coles's join called for (2026-08-17).
-    # Coles left five unserved neighbours behind and this is the one nearest
-    # to being swallowed: Cumberland now borders served Coles, Shelby AND
-    # Effingham, with only Jasper and Clark keeping it off the enclave list.
-    # An anchor here is what proves the fill stopped at the county line rather
-    # than running one county further, which is the exact failure the OUTSIDE
-    # list exists to catch. Toledo is the county seat; the coordinates are
-    # build_county_outline.py's own cumberland inside anchor, re-round-tripped
-    # through a point-in-county query on 2026-08-17.
-    "Toledo (Cumberland)": (39.2728, -88.2422),
+    # Newton (Jasper) — the successor anchor Cumberland's join calls for
+    # (2026-08-21). Cumberland left exactly one unserved neighbour behind and
+    # this is it, and Jasper is a MEASURED frontier rather than an unexamined
+    # one: its board districts are drawn through the middle of its townships,
+    # so its five precincts sit only 1-7% inside the city whose wards their
+    # names echo and no whole-precinct dissolve can answer there. Newton is
+    # the county seat.
+    "Newton (Jasper)": (38.9903, -88.1631),
     # Danville (Vermilion) — the successor Edgar's join calls for, hours after
     # Paris was written into this list and moved straight out of it again.
     # Edgar leaves Douglas and Vermilion behind; Tuscola already holds Douglas,
