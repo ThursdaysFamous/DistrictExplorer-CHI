@@ -978,8 +978,7 @@
         "file": "calhoun-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Calhoun County outline — the county IS served, but through the COUNTY card's board section rather than a dispatch entry: it elects its board at large, so there is no district geometry to dispatch on and index.html names no loader for this file. It is fetched by slug for the gaps panel, and it is what puts the county inside the coverage ring.",
-        "dynamic_reference": true
+        "note": "Calhoun County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. Calhoun elects its five commissioners at large, so its MEMBERS ride the County card and there is no board geometry; its precincts dispatch. This note used to say index.html names no loader for the file and that it was fetched by slug alone — true when it was written (#290), stale since #398 gave the county a dispatch entry and a loadCalhounCountyOutline of its own, so the dynamic_reference exemption is dropped and the reference check now covers it."
       },
       {
         "file": "carroll-county-board-districts.json",
