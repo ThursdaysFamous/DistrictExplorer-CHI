@@ -1005,6 +1005,12 @@
         "note": "Cass County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entry."
       },
       {
+        "file": "cass-precincts.json",
+        "min_features": 21,
+        "max_features": 21,
+        "note": "Cass County's twenty-one voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 21/21 with NO ALIAS and they sum to its exact 2020 population of 13,042. Bounds are an EQUALITY because twenty-one is the county's whole precinct list, named by its certified 2026 General Primary one committeeperson contest at a time (forty-two contests, both parties) under a header reading \"21 OF 21 PRECINCTS REPORTING\". NOTHING WAS EVER BLOCKING THIS COUNTY: it has been served since its board districts shipped and simply had no gap record saying its precincts were absent, which is how a county goes unbuilt while every guard stays green — the 2026-08-20 audit that found eleven such counties is why it exists. No board district is carried here (cass-county-board-districts.json ships those four separately, and the same canvass reports their contests over 4 + 5 + 6 + 6 precincts, summing to the county's exact twenty-one). No polling place ships (scripts/build_cass_precincts.py)."
+      },
+      {
         "file": "ccbr-districts.json",
         "min_features": 3,
         "max_features": 3
@@ -1238,8 +1244,13 @@
         "file": "greene-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Greene County outline — gap-location geometry only. Greene is served as a judicial-circuit secondary with no dispatch entry, so this ships purely so its 2026-08-08 board gap record attaches to ground the gaps panel can locate.",
-        "dynamic_reference": true
+        "note": "Greene County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped as gap-location geometry, served the County card when Greene's seven at-large board members joined on 2026-08-08, and was promoted on 2026-08-21 when its twenty-two precincts dispatched."
+      },
+      {
+        "file": "greene-precincts.json",
+        "min_features": 22,
+        "max_features": 22,
+        "note": "Greene County's twenty-two voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 22/22 and they sum to its exact 2020 population of 11,985. Bounds are an EQUALITY because twenty-two is the county's whole precinct list, named by its certified 2026 General Primary one committeeperson contest at a time under a header reading \"22 OF 22 PRECINCTS REPORTING\". ONE ALIAS is applied and it is a DESIGNATION rather than a spelling: the county's returns write WRIGHTS 2 where the census leaves WRIGHTS unnumbered, so the alias renames the census feature onto the county's own designation — never a merge, which apply_aliases refuses. NO BOARD DISTRICT ships and none ever will: the same canvass carries a single countywide COUNTY BOARD contest per party over all twenty-two precincts, so Greene elects its board county-wide and its seven members ride the County card. No polling place ships (scripts/build_greene_precincts.py)."
       },
       {
         "file": "grundy-county-board-districts.json",
@@ -1669,8 +1680,13 @@
         "file": "moultrie-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Moultrie County outline — NOT a dispatched county: its board is elected AT LARGE, so it has no district geometry and its members ride the County card via il-county-commissioners.json. The outline exists so the county's recorded gaps attach to ground in the data-gaps panel; referenced by slug-built URL, so the validator's literal-reference check skips it (scripts/build_county_outline.py).",
-        "dynamic_reference": true
+        "note": "Moultrie County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped as gap-location geometry, served the County card when Moultrie's nine at-large board members joined on 2026-08-18, and was promoted on 2026-08-21 when its sixteen precincts dispatched — the county's first dispatch entry of any kind."
+      },
+      {
+        "file": "moultrie-precincts.json",
+        "min_features": 16,
+        "max_features": 16,
+        "note": "Moultrie County's sixteen voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 16/16 and they sum to its exact 2020 population of 14,526. Bounds are an EQUALITY because sixteen is the county's whole precinct list, named by its certified 2026 General Primary on il-moultrie.pollresults.net. NO ALIAS is needed though the two sources look different at a glance: the county's feed writes SULLIVAN #1 where the census writes SULLIVAN 1, a numbering glyph that norm() absorbs, and the features are LABELLED from the census basename because '#' is punctuation rather than part of a name. This is Moultrie's FIRST DISPATCH ENTRY OF ANY KIND — it joined the ring on 2026-08-18 through the County card alone. NO BOARD DISTRICT ships and none ever will: the same returns carry the board's contest as COUNTY BOARD DISTRICT AT LARGE MEMBER, the county's own wording, so its nine members ride the County card. No polling place ships (scripts/build_moultrie_precincts.py)."
       },
       {
         "file": "municipal-ward-coverage.json",
@@ -1814,8 +1830,13 @@
         "file": "scott-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Scott County outline — gap-location geometry only. Scott is served as a judicial-circuit secondary with no dispatch entry, so this ships purely so its 2026-08-08 board gap record attaches to ground the gaps panel can locate.",
-        "dynamic_reference": true
+        "note": "Scott County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped as gap-location geometry beside the 7th-Circuit subcircuit that first served this county, and was promoted on 2026-08-21 when its ten precincts dispatched."
+      },
+      {
+        "file": "scott-precincts.json",
+        "min_features": 10,
+        "max_features": 10,
+        "note": "Scott County's ten voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 10/10 and they sum to its exact 2020 population of 4,949. Bounds are an EQUALITY because ten is the county's whole precinct list, named by its certified 2026 General Primary one committeeperson contest at a time under a header reading \"10 OF 10 PRECINCTS REPORTING\". ONE SPELLING IS RECORDED RATHER THAN CHOSEN, and it is decided the OPPOSITE way from Greene's: the county's results feed writes MERRIT where the census writes MERRITT, and MERRITT is the township's name, so the feed dropped a letter rather than the census adding one. The alias exists so the Jasper test can compare the county's own list while the shipped LABEL comes from the census name the alias displaces — apply_aliases records that as censusName. The Winchester roman numerals, by contrast, are REAL: county and census both write WINCHESTER I, II and III, unlike Cumberland's, which turned out to be polling-place groupings. NO BOARD DISTRICT ships and none ever will — a single countywide COUNTY COMMISSIONER contest over all ten precincts. No polling place ships (scripts/build_scott_precincts.py)."
       },
       {
         "file": "shelby-county-board-districts.json",

@@ -56,8 +56,37 @@ def norm(name):
     return re.sub(r"[^A-Z0-9]", "", (name or "").upper())
 
 
+# Roman numerals a precinct ordinal can plausibly be, and NOTHING WIDER. The
+# obvious rule — "uppercase any token that is a valid roman numeral" — mangles
+# real place names: DIX is a village in Jefferson County and a valid 509, MI is
+# a valid 1001, CIVIL parses as a numeral too. Restricting the alphabet to I, V
+# and X and the length to four keeps every ordinal a county actually uses (I
+# through XXXIX) and excludes all three of those.
+_ROMAN_ORDINAL = re.compile(r"^(X{0,3})(IX|IV|V?I{0,3})$")
+
+
+def _cap_word(word):
+    if word.isdigit():
+        return word
+    if word and len(word) <= 4 and _ROMAN_ORDINAL.match(word.upper()):
+        return word.upper()
+    return word.capitalize()
+
+
 def title_case(name):
-    return " ".join(w if w.isdigit() else w.capitalize() for w in str(name).split())
+    """Display form for an ALL-CAPS census BASENAME.
+
+    Two cases the plain str.capitalize() gets wrong, both found in Scott County
+    on 2026-08-21 and both visible on a card: a HYPHENATED name lowercases its
+    second half (EXETER-BLUFFS became "Exeter-bluffs"), and a ROMAN NUMERAL
+    becomes a word (WINCHESTER III became "Winchester Iii"). Apostrophes are
+    deliberately NOT special-cased — O'FALLON would want "O'Fallon" and WRIGHT'S
+    would want "Wright's", and no rule gets both — so a county with one needs an
+    explicit label rather than this function."""
+    out = []
+    for word in str(name).split():
+        out.append("-".join(_cap_word(part) for part in word.split("-")))
+    return " ".join(out)
 
 
 def get_json(url, params, fail):

@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**79 of 102 Illinois counties are served** — 66 through their own dispatch entries, 3 through a shipped judicial circuit, and 10 through the County card alone. 23 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**79 of 102 Illinois counties are served** — 69 through their own dispatch entries, 2 through a shipped judicial circuit, and 8 through the County card alone. 23 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -29,7 +29,7 @@
 | Brown | 17009 | County card | at-large — County card | — | 1 — `brown-precinct-geometry` (no-source) |
 | Calhoun | 17013 | dispatch | at-large — County card | `county-precinct` | none |
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
-| Cass | 17017 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
+| Cass | 17017 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Clark | 17023 | dispatch | districted | `county-board`, `county-precinct` | 2 — `clark-board-contact` (data-quality); `clark-precinct-polling` (data-quality) |
 | Clinton | 17027 | dispatch | districted | `county-board` | 2 — `clinton-precinct-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Coles | 17029 | dispatch | districted | `county-board`, `county-precinct` | none |
@@ -45,7 +45,7 @@
 | Franklin | 17055 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Gallatin | 17059 | dispatch | at-large — County card | `county-precinct` | 1 — `gallatin-board-contact` (data-quality) |
-| Greene | 17061 | County card | at-large — County card | — | none |
+| Greene | 17061 | dispatch | at-large — County card | `county-precinct` | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
 | Hancock | 17067 | dispatch | districted | `county-board` | none |
@@ -77,7 +77,7 @@
 | Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Morgan | 17137 | dispatch | at-large — County card | `county-precinct` | none |
-| Moultrie | 17139 | County card | at-large — County card | — | none |
+| Moultrie | 17139 | dispatch | at-large — County card | `county-precinct` | none |
 | Ogle | 17141 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `ogle-lasalle-special-districts` (no-source); `ogle-municipal-wards` (no-source) |
 | Peoria | 17143 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source); `peoria-fire-park-library-contact` (data-quality) |
 | Perry | 17145 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `perry-county-website-blocked` (blocked) |
@@ -88,7 +88,7 @@
 | Saline | 17165 | County card | at-large — County card | — | 1 — `saline-precinct-geometry` (no-source) |
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `municipal-website-dead-ends` (data-quality); `sangamon-park-library-districts` (no-source) |
 | Schuyler | 17169 | County card | at-large — County card | — | none |
-| Scott | 17171 | judicial circuit | no board layer — see gaps | — | 1 — `scott-county-commissioners` (no-source) |
+| Scott | 17171 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `scott-county-commissioners` (no-source) |
 | Shelby | 17173 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
