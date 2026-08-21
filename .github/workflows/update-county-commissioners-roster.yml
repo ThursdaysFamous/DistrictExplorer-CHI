@@ -38,8 +38,11 @@ jobs:
           python-version: "3.x"
 
       - name: Install scraper dependencies
-        # Plain server-rendered HTML.
-        run: pip install -c scripts/requirements.txt requests
+        # Plain server-rendered HTML, plus certifi: Gallatin's site omits its TLS
+        # intermediate, so the scraper chases the issuer the certificate itself
+        # names and verifies against certifi's roots plus that one certificate
+        # (the same posture the Coles workflow needs, for the same reason).
+        run: pip install -c scripts/requirements.txt requests certifi
 
       - name: Scrape roster
         run: python3 scripts/il_county_commissioners_scraper.py /tmp/raw.json
