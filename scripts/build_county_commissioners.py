@@ -63,13 +63,23 @@ EXPECT_MEMBERS = {
                                      # all, so its three come from a document the Clerk
                                      # sent (DOCUMENT_ROSTERS in the scraper), and the
                                      # scraper says so on every run.
+    "MASSAC": 3,                     # 2026-08-21; commission form proven from the county's
+                                     # own published results — "FOR COUNTY COMMISSIONER /
+                                     # Precincts Counted 17 of 17 / (Vote for one)" over
+                                     # all 11,265 registered voters, with the countywide
+                                     # Clerk contest on the same page as the control.
+                                     # That report is marked Unofficial and is relied on
+                                     # for the FORM only; the three names come from the
+                                     # county's own commissioners page, never the returns.
+                                     # A new ISLAND — all three Illinois neighbours
+                                     # (Johnson, Pope, Pulaski) are unserved.
     "WABASH": 3,                     # 2026-08-16; commission form stated in writing by
                                      # Clerk Will 2026-08-05, the three names sent by her
                                      # e-mail 2026-08-16. The SECOND no-website county
                                      # (DOCUMENT_ROSTERS): a mail domain with no web
                                      # server, measured 5 Aug and re-checked 9 Aug.
 }
-MIN_COUNTIES = 12
+MIN_COUNTIES = 13
 # How many counties may be CARRIED FORWARD from the shipped file in one run
 # before the build refuses. Expressed as a fraction of the expected roster
 # rather than a hand-set count, so it stays meaningful as counties are added.
@@ -96,9 +106,14 @@ MAX_CARRIED_FRACTION = 0.5
 # Moultrie writes "Chairperson" / "Vice Chairperson"; like Greene's
 # "Chairwoman", those are the county's own words for real people and are kept
 # verbatim rather than normalised, so the list widens instead.
+# Massac (2026-08-21) writes "Secretary" for its third commissioner. It is a
+# board OFFICE the county states, not a staff title: the page lists exactly
+# three people under "Massac County Commissioners" and gives the third that
+# word, so dropping it would print less than the county does. It is NOT a
+# chair role — see CHAIR_ROLES below, which is deliberately not widened.
 ALLOWED_ROLES = ("Chairman", "Chairwoman", "Chairperson", "Vice Chairman",
                  "Vice-Chairman", "Vice Chair", "Vice Chairperson",
-                 "Commissioner", "Board Member")
+                 "Commissioner", "Board Member", "Secretary")
 # Any of these means "this person chairs the board" for the one-chair guard.
 # Matching the literal "Chairman" alone would have let Greene seat two chairs
 # without a word, which is exactly the kind of silent hole widening

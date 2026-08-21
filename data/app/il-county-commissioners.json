@@ -194,6 +194,25 @@
   "sourceUrl": "https://www.hamiltoncountyil.gov/departments/county-board/",
   "structure": "5 members elected countywide — no districts"
  },
+ "MASSAC": {
+  "county": "Massac County",
+  "members": [
+   {
+    "name": "Jayson Farmer",
+    "role": "Chairman"
+   },
+   {
+    "name": "Jeff Brugger",
+    "role": "Vice Chairman"
+   },
+   {
+    "name": "Jimmy Burnham",
+    "role": "Secretary"
+   }
+  ],
+  "sourceUrl": "https://www.massaccountyil.gov/county-commissioner/",
+  "structure": "Commission form — 3 commissioners elected countywide"
+ },
  "MONROE": {
   "county": "Monroe County",
   "members": [

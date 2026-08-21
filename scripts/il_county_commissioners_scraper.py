@@ -761,8 +761,95 @@ DOCUMENT_ROSTERS = {
 }
 
 
+# ------------------------------------------------------------------ Massac
+# Separators the county mixes into these three lines: a plain hyphen, an
+# en dash, and a non-breaking space. Stripped from both ends of the name and
+# the role. Written as an explicit character set rather than a regex class
+# because str.strip() takes CHARACTERS, not patterns — a "\s" in that set
+# strips the letter "s", which silently shortens any name ending in one.
+MASSAC_SEP_CHARS = " \t-\u2013\u2014:,\u00a0"
+
+
+def parse_massac(page):
+    """Massac's commissioners page prints the whole board as one paragraph:
+
+        <h3>Massac County Commissioners</h3>
+        ...
+        <p><strong>Jayson Farmer</strong>&#8211; Chairman<br />
+           <strong>Jeff Brugger-&nbsp;</strong>Vice Chairman<br />
+           <strong>Jimmy Burnham</strong>&#8211; Secretary</p>
+
+    Note the second row: the county puts the separating hyphen INSIDE the
+    <strong>, so the name and the role are split inconsistently across the
+    three rows. Taking <strong> as the name and the tail as the role, then
+    stripping separators from both, is what reads all three the same way.
+
+    AT-LARGE, PROVEN from the county's own results: the Massac County Clerk's
+    "March 17, 2026 Primary Election Results" cumulative report carries
+    "FOR COUNTY COMMISSIONER - REPUBLICAN PARTY - (Vote for one)" over
+    "Precincts Counted 17 / Total 17 / 100.00%" against 11,265 registered
+    voters — the county entire, with no district string anywhere on the
+    ballot. The control is on the same page: the countywide County Clerk and
+    Regional Superintendent contests report the identical 17-of-17 and 11,265,
+    so the commissioner contest is countywide in the same sense they are. A
+    districted board reports only its own district's precincts, which is
+    exactly what neighbouring Jackson's canvass does (9 of its 56 for
+    District 1). Three commissioners, whole county, no districts.
+
+    THAT REPORT IS MARKED "Unofficial Results", and it is the only results
+    document the county publishes. It is relied on for the FORM alone, which
+    certification does not change — a canvass corrects counts, never the
+    shape of the ballot — and for nothing else. The roster below comes from
+    the county's own commissioners page, never from the returns, for the
+    reason worked out on the Scott record: a return names who WON a contest,
+    never who holds the seat today.
+
+    NO CONTACT DETAIL SHIPS because the county publishes none for this body:
+    its homepage lists a phone for eight departments and not for the
+    commissioners, and the commissioners' page carries no address, phone or
+    e-mail at all. The courthouse address on the County Clerk's record is the
+    CLERK's office and is not asserted here as theirs.
+    """
+    heading = re.search(r"(?is)<h3>\s*Massac County Commissioners\s*</h3>", page)
+    if not heading:
+        return [], None
+    block = re.search(r"(?is)<div class=\"et_pb_text_inner\">(.*?)</div>",
+                      page[heading.end():])
+    if not block:
+        return [], None
+    members = []
+    for part in re.split(r"(?i)<br\s*/?>", block.group(1)):
+        m = re.search(r"(?is)<strong>(.*?)</strong>(.*)$", part)
+        if not m:
+            continue
+        name = clean(m.group(1)).strip(MASSAC_SEP_CHARS)
+        role_text = clean(m.group(2)).strip(MASSAC_SEP_CHARS)
+        if not name:
+            continue
+        entry = {"name": name}
+        # role_of maps Chairman and Vice Chairman; Secretary is a board office
+        # this county names and the shared mapper does not, so it is kept
+        # verbatim here rather than by widening role_of for every county.
+        canonical = role_of(role_text)
+        if canonical:
+            entry["role"] = canonical
+        elif role_text.lower() == "secretary":
+            entry["role"] = "Secretary"
+        if not any(x["name"] == name for x in members):
+            members.append(entry)
+    return members, None
+
+
+
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
+    "MASSAC": {
+        "name": "Massac County",
+        "url": "https://www.massaccountyil.gov/county-commissioner/",
+        "structure": "Commission form \u2014 3 commissioners elected countywide",
+        "expect": 3,
+        "parse": parse_massac,
+    },
     "MONROE": {
         "name": "Monroe County",
         "url": "https://monroecountyil.gov/departments/board-of-commissioners/",

@@ -360,6 +360,26 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # it proves the hole stays open, which is exactly what an
                      # outside anchor is for. Read the ring count from --check.
                      "187",
+                     # Massac — the FOURTH ISLAND (2026-08-21), and the second
+                     # to join through the AT-LARGE tier alone, after Edwards:
+                     # no dispatch entry, no geometry, three commissioners on
+                     # the County card. It sits on the Ohio River at the far
+                     # south of the state and ALL THREE of its Illinois
+                     # neighbours are unserved (Johnson, Pope, Pulaski), so the
+                     # dissolve emits a second outer ring roughly eighty miles
+                     # clear of the mainland — the largest detachment yet, and
+                     # the reason Vienna (Johnson) and Marion (Williamson) join
+                     # the OUTSIDE list: they anchor the corridor between the
+                     # island and the mainland as washed.
+                     #
+                     # HOW IT WAS FOUND, because the route generalises: the
+                     # county was recorded as having "a real website" that
+                     # surfaced no board page. It has a Commissioners page, and
+                     # what reached it was probing the domain in the CLERK
+                     # ROSTER (massaccountyil.gov) instead of permuting the
+                     # county's name — the same correction Cumberland forced on
+                     # 2026-08-20, applied to the whole frontier at once.
+                     "127",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -439,6 +459,15 @@ SIMPLIFY_TOLERANCE_M = 25
 # outside it. A dissolve that silently drops a county still closes its rings,
 # so ring-closure alone is not proof — these are.
 INSIDE = {
+    # The FOURTH ISLAND's anchor (2026-08-21). Massac joins through the County
+    # card alone — at-large commission board, no district geometry, so no
+    # dispatch entry — and this point is what proves the island landed as its
+    # own OUTER ring rather than as a hole: a mis-nested island renders
+    # identically under the wash and answers False to every containment test
+    # inside it (the pass-4 nesting bug). Derived from TIGERweb's Incorporated
+    # Places centroid for Metropolis city and round-tripped through a
+    # point-in-county query, per the §2.5.1 rule against recalled coordinates.
+    "Metropolis (Massac)": (37.1565, -88.7082),
     # Pass 8: the county GIS carries board districts, precincts and Quincy's
     # wards; only the roster is blocked, which is a gap, not a reason to stay out.
     "Quincy (Adams)": (39.9356, -91.4098),
@@ -664,6 +693,17 @@ OUTSIDE = {
     # behind is Gallatin, served by nothing and bordering White, Hamilton and
     # Saline; Shawneetown is its seat.)
     "Shawneetown (Gallatin)": (37.7131, -88.1867),
+    # The two anchors that prove the corridor between the MASSAC ISLAND and the
+    # mainland is washed (§2.5.1 first-island checklist step 2), added with it
+    # on 2026-08-21. Vienna is the county seat of Johnson, which borders Massac
+    # directly; Marion is the county seat of Williamson, the next county north
+    # and the largest unserved one in the corridor. Both are also frontier
+    # anchors in the ordinary sense — each county is researched and blocked,
+    # Johnson at-large with an unreadable site, Williamson refusing automated
+    # requests — so if either ever ships, these move to the INSIDE list.
+    # Both derived from TIGERweb place centroids and round-tripped.
+    "Vienna (Johnson)": (37.4143, -88.8870),
+    "Marion (Williamson)": (37.7344, -88.9419),
     # Salem (Marion) replaced Carlyle here on 2026-08-20, when Clinton shipped
     # and Carlyle moved up to INSIDE — the same forced promotion Carmi and
     # Paris made. Marion is the honest successor: it borders Clinton, is served
