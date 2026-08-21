@@ -2422,7 +2422,48 @@ svg.leaflet-image-layer.leaflet-interactive path {
      load-bearing elements are RELOCATED into the results-panel foot by the
      transforms and only the husks stay hidden here. */
   .faq-section, footer.site-footer { display: none; }
-  @media (min-width: 901px) {
+  /* ==== D: tablets get the two-column layout (operator-approved) =========
+     The engine's breakpoint is 900px, so an iPad mini at 768x1024 was handed
+     the phone design: a full-width map with the results stacked beneath and
+     thousands of pixels of page scroll. One pixel wider it gets the two-column
+     layout, and measured side by side at the same height that is plainly the
+     better deal — a 561x817 map, a 340px panel that scrolls INDEPENDENTLY, and
+     no page scroll at all (document height 1024 = the viewport).
+
+     Done fork-locally rather than by moving the engine's breakpoint. The seven
+     mobile media queries live inside styles-core / styles-app fences, so
+     changing them is an engine release plus fan-out PRs into NYC and SF — and
+     this preview is a sandbox whose production adoption is Phase 3. So the
+     shell simply starts earlier here, and the handful of engine mobile rules
+     that would otherwise leak into 768-900 are answered below at the same
+     specificity from outside the fence. AT ADOPTION this should become the
+     engine change so the siblings get it too. */
+  /* The engine's max-width:900px rules still match in 768-900 and set
+     properties the shell block below leaves alone, so each is answered here.
+     SCOPED TO THE BAND, not to min-width:768 — an undo that also applied at
+     1440 changed desktop by 11% of the viewport, because two of the values
+     were guessed at rather than read. Confined to 768-900 the question cannot
+     arise: above 900 there is nothing to undo. */
+  @media (min-width: 768px) and (max-width: 900px) {
+    main.layout { display: grid; }
+    .map-col { position: relative; }
+    .map-bottom-left {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 0;
+      background: none;
+      border-top: none;
+    }
+    .layer-toggle-btn { display: block; }
+    .results-col { border-left: 1px solid var(--line); border-top: none; }
+    header.masthead .masthead-inner { gap: 18px; }
+    .masthead-actions { justify-content: flex-end; margin-left: auto; padding-top: 0; width: auto; }
+  }
+  @media (min-width: 768px) {
     html, body { height: 100%; }
     body { display: flex; flex-direction: column; }
     header.masthead { flex: none; }
@@ -2703,7 +2744,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .dst-layer-toggle[hidden] { display: none !important; }
   /* ==== the phone layout (mobile review, 2026-08-21) ====================
      Everything above this point is the desktop composition. Until now the
-     re-skin's LAYOUT lived entirely in one @media (min-width: 901px) while its
+     re-skin's LAYOUT lived entirely in one @media (min-width: 901px) — now 768,
+     see D below — while its
      CHROME applied at every width, so a wide-screen composition was simply
      stacked onto a narrow one. Measured on a 375x667 phone: the masthead took
      247px (37% of the viewport), the first result card sat at y=847, and the
@@ -2714,7 +2756,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
      are inside styles-core / styles-app fences and shared with the NYC and SF
      forks). Everything below is fork-local, overriding from OUTSIDE those
      fences at higher specificity — the blessed pattern, no engine release. */
-  @media (max-width: 900px) {
+  @media (max-width: 767px) {
     /* -- A. the coverage legend stops being pinned furniture ---------------
        .map-bottom-left is inside the sticky map column, so anything tall in it
        is on screen for the entire page. The engine reflowed that corner into a
@@ -3086,7 +3128,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ df2fc30 on 2026-08-21</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ d240555 on 2026-08-21</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -24901,7 +24943,7 @@ function initChiExplorer() {
   })();
   /* ==== phone layout (mobile review, 2026-08-21) ======================== */
   function dstIsPhone() {
-    return !!(window.matchMedia && window.matchMedia("(max-width: 900px)").matches);
+    return !!(window.matchMedia && window.matchMedia("(max-width: 767px)").matches);
   }
   /* The legend is authored open, which is what desktop wants. On a phone it is
      pinned inside the sticky map column, so it starts closed. Driven here
@@ -24957,7 +24999,7 @@ function initChiExplorer() {
   }
   dstApplyPhoneLayout();
   if (window.matchMedia) {
-    var dstPhoneMQ = window.matchMedia("(max-width: 900px)");
+    var dstPhoneMQ = window.matchMedia("(max-width: 767px)");
     if (dstPhoneMQ.addEventListener) dstPhoneMQ.addEventListener("change", dstApplyPhoneLayout);
     else if (dstPhoneMQ.addListener) dstPhoneMQ.addListener(dstApplyPhoneLayout);
   }

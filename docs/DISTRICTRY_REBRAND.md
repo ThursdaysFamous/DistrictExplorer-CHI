@@ -794,10 +794,56 @@ trap as the `.masthead-actions` overrides.
 two separate measurements in this session (an SVG mark, then these cards). `getComputedStyle(e)
 .display !== "none"` is the one that tells the truth.
 
-### Still open
+### D — tablets get the two-column layout (approved)
 
-- **D** (let tablets have the two-column layout — an engine release plus NYC/SF fan-out) is
-  approved and not yet built.
+The engine's breakpoint is 900px, so an iPad mini at 768×1024 was handed the phone design.
+Measured on the two sides of that boundary at the same height, one pixel apart:
+
+| at 1024px tall | 900px (phone layout) | 901px (two-column) |
+|---|---|---|
+| map | 900 × 430, full width | **561 × 817** |
+| results panel | full width, in the page scroll | **340px, scrolls independently** |
+| page scroll | 1,475px | **1,024px — none** |
+
+At 768 the two-column gives a 428 × 824 map and the same 340px panel, still with no page
+scroll. That is plainly the better deal, and the breakpoint was simply set for phones.
+
+**Done fork-locally, not as an engine release.** The seven mobile media queries live inside
+`styles-core` / `styles-app`, so moving the engine's breakpoint means a release tag plus fan-out
+PRs into NYC and SF — and this preview is a sandbox whose production adoption is Phase 3. So the
+shell starts at 768 here, and the engine's mobile rules that would otherwise leak into 768–900
+are answered from outside the fence at the same specificity. **At adoption this should become
+the engine change**, so the siblings get it too; the fork-local version is 11 breakpoint sites
+(8 CSS, 2 `matchMedia`, 1 comment) against the engine's 7 fenced queries.
+
+The 767/768 boundary flips every piece together, verified in both directions: at 767 the map is
+sticky at 42vh, the strip is static, the doors are relocated, the legend is closed, C's collapse
+is on and its button visible; at 768 all of it turns off and the legend floats back into the map
+corner. No horizontal overflow at any width, no page errors.
+
+**The regression this introduced, and the shape of it.** The first cut applied the undo rules at
+*every* width ≥768, and two of their values — `masthead-inner`'s gap and `.masthead-actions`'
+alignment — were written from assumption rather than read from the engine. Desktop moved by
+**147,868 pixels, 11% of the viewport.** Scoping the undo to `768–900` makes the mistake
+unavailable: above 900 there is nothing to undo. The fix is structural, not a corrected guess.
+
+Verified after: **desktop 729px (light) / 734px (dark) differ — the generation stamp alone — and
+the 375×667 phone differs by ZERO pixels.**
+
+### The four options, closed
+
+| | what | scope | shipped |
+|---|---|---|---|
+| A | legend stops being pinned furniture | fork-local | #415 |
+| B | a masthead in the shape of a phone | fork-local | #415 |
+| — | the phone map gives back 60px | fork-local | #416 |
+| C | lead with the answers | fork-local | #418 |
+| D | tablets get the two-column layout | fork-local (engine at adoption) | this change |
+
+**What the pixel-diff caught that review would not have**, across the four: a 5px tightening of
+the desktop legend (A), a 1px growth of the whole app from a `<button>`'s default line-height
+(B), a control invisible at every width from a media query losing a source-order race (C), and
+an 11% desktop shift from an over-broad media query (D). Four for four.
 - **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
   two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
 
