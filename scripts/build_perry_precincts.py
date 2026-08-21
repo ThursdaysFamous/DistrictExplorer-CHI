@@ -5,10 +5,16 @@ WHY THIS COUNTY WAS DARK, AND WHAT OPENED IT. Perry's recorded blocker is its
 website: the county's site refuses this client, so nothing it publishes about
 itself could be read. That blocker is unchanged and this build does not touch it.
 What changed is that the county's ELECTION AUTHORITY publishes somewhere else —
-results.gbsvote.com, a results platform carrying fourteen Illinois counties that
-this project had not catalogued until 2026-08-21 — and a county's certified
-canvass answers both questions a join needs without the county's own site being
-reachable at all.
+results.gbsvote.com, which carries THIRTEEN Illinois counties (plus one in
+Indiana) — and a county's certified canvass answers both questions a join needs
+without the county's own site being reachable at all.
+
+THE VENDOR WAS NOT A NEW DISCOVERY AND SHOULD NOT BE READ AS ONE. This project
+recorded it in its own backlog on 2026-08-20, swept it county by county, and
+measured this county's board form from it that day. What did not happen for the
+day after is the rest: the finding never reached the county's gap record, never reached
+CLAUDE.md's list of results platforms, and never became a build. A measurement
+filed in a backlog and nowhere else is a measurement the next pass repeats.
 
 THE BOARD'S FORM IS SETTLED, AND IT IS AT LARGE. Perry's certified 2026 General
 Primary carries a single "FOR COUNTY COMMISSIONER" contest per party, each

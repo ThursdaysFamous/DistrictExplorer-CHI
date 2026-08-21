@@ -481,9 +481,11 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # websites being readable at all. Both sites refuse this
                      # client, and both blockers stand; what opened the counties
                      # is that their ELECTION AUTHORITIES publish somewhere else,
-                     # on results.gbsvote.com — a results platform carrying
-                     # fourteen Illinois counties that this project had not
-                     # catalogued. A certified canvass answers both questions a
+                     # on results.gbsvote.com — thirteen Illinois counties,
+                     # which this project measured into its own backlog on
+                     # 2026-08-20 and then left there: never in a county record,
+                     # never in a build. A certified canvass answers both
+                     # questions a
                      # join needs: each county's 2026 General Primary carries a
                      # single countywide FOR COUNTY COMMISSIONER contest per
                      # party (16 of 16 in Johnson, 27 of 27 in Perry) and no
