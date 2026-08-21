@@ -847,6 +847,41 @@ an 11% desktop shift from an over-broad media query (D). Four for four.
 - **C** (lead with the answers, collapse the 39-layer checklist) and **D** (let tablets have the
   two-column layout — an engine release plus NYC/SF fan-out) are approved and not yet built.
 
+## Both collapse controls graduate to desktop (operator-directed, 2026-08-21)
+
+Two controls built for the phone fold turned out to be worth having everywhere, so
+both leave the `max-width: 767px` block.
+
+**The layer chooser.** *"Show all 39 layers"* ⇄ *"Show only my N layers"* now appears at every
+width. What does NOT graduate is the phone's **auto-collapse**: there, the fold forces a choice
+and the first layer a reader ticks is the moment the panel collapses to it. A desktop panel
+scrolls on its own, and a list that silently shrank on the first tick would be a surprise rather
+than a service — so on desktop and tablet the control is *offered*, never applied. Defaults are
+untouched: 32 cards showing, nothing collapsed, exactly as before.
+
+**The coverage legend.** It was a tap-to-open chip on the phone only, because there it was pinned
+furniture inside the sticky map column; on desktop it was a static caption. It is now collapsible
+on both, still **open by default** on desktop so first paint is unchanged. The summary takes
+`cursor: pointer` and a **chevron drawn from two borders** — not a glyph, so it inherits the
+label's colour in both themes and needs no font.
+
+**One thing the change forced, and it is the interesting part.** `dstSyncLegendDisclosure()` used
+to assert the per-viewport default on every breakpoint crossing: closed on a phone, open on
+desktop. Once the legend is collapsible on desktop, that assertion becomes an override — close it,
+resize past 768 and back, and it silently reopens. So the sync now sets only the DEFAULT and stops
+having an opinion once the reader has expressed one, recorded as `data-dst-user-set` on the
+element.
+
+The flag hangs off a **click on the summary, not the `toggle` event**, and that is deliberate:
+`toggle` fires asynchronously and fires for the sync's own writes too, so a flag set there could
+not tell the reader apart from the code. A click is synchronous and only ever the reader.
+Keyboard activation of a `<summary>` raises click as well, so it costs no accessibility.
+
+Verified: close on desktop → cross to phone → cross back → **still closed**. Phone, tablet and
+desktop each drive both controls with no page errors. Desktop differs from the previous build by
+**731 px in light and 734 in dark — the generation stamp plus the 34px chevron**; the new button
+lives at the end of the 39-card list, below the fold at 1440x900, so nothing visible at rest moved.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
