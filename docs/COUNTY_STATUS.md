@@ -127,7 +127,7 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Piatt | 17147 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Pope | 17151 | 1 — `pope-county-board` (no-source) |
 | Pulaski | 17153 | 1 — `pulaski-county-board` (no-source) |
-| Richland | 17159 | 1 — `richland-county-board` (no-source) |
+| Richland | 17159 | 1 — `richland-county-board-districts` (no-source) |
 | Union | 17181 | 1 — `union-county-board` (no-source) |
 | Vermilion | 17183 | 1 — `vermilion-county-website` (no-source) |
 | Wayne | 17191 | 1 — `wayne-county-board` (no-source) |

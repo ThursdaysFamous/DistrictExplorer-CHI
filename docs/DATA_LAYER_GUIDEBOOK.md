@@ -1255,17 +1255,17 @@ in the researched-but-unbuilt backlog.
       "wanted": "Polling places filled in on the precinct data, or any list from the clerk pairing precincts with polling places."
     },
     {
-      "id": "richland-county-board",
-      "concept": "County board",
+      "id": "richland-county-board-districts",
+      "concept": "County board districts",
       "area": "Richland County",
       "counties": [
         "richland"
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Richland County's board is not shown — the county HAS a website (found 2026-08-09); what is missing is map data and a board-form answer under the probed patterns.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. richlandcounty.illinois.gov answers 200 with a /county-board/ page. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. CORRECTED 2026-08-20 — THE 'NO WEBSITE' FINDING ABOVE IS FALSE, and it was false the day it was written. The pass-13 probe permuted the county's NAME across five domain patterns; the county's actual domain was already in this repo, in data/app/il-county-clerks.json, as the host of its Clerk's own e-mail address. That is the identical systematic failure Johnson's record diagnosed on 2026-08-09 and it was never swept across the other counties. Probing every frontier county's clerk-e-mail domain instead reaches a live site in EIGHTEEN of the thirty-one, several of them at hostnames no name permutation would produce (piatt.gov, bureaucounty-il.gov, hancockcounty-il.gov, champaigncountyclerkil.gov). For Richland the site is https://richlandcounty.illinois.gov/ and it is the largest of the five at 809 KB, linking County Board, County Board Meeting and Voter Registration from the homepage.",
-      "wanted": "The board's form (districted or at-large) from a certified election document, then either the district boundaries as map data or the commissioners' roster from a county source."
+      "summary": "Richland publishes a seven-district board map, names a member for every district, and still cannot be drawn: the map is a picture, and its own certified returns count districts without ever listing them.",
+      "blocker": "MEASURED IN FULL 2026-08-21, replacing a record that said no county website answered and that the board's form was undeterminable. Both of those are now false. THE SITE: richlandcounty.illinois.gov answers 200 (809 KB, the largest of the five frontier sites the clerk-domain sweep opened) and is the Clerk's own e-mail domain, which is the Cumberland correction again. THE FORM IS SETTLED, from the county's own certified Official Results and not from any structure table: the 5 Nov 2024 General carries 'FOR MEMBERS OF THE COUNTY BOARD DISTRICT 1 / 3 / 5 - (Vote for one)' and the 17 Mar 2026 General Primary carries DISTRICTS TWO, SIX and SEVEN on the Republican ballot and FOUR on the Democratic — seven single-member districts on a stagger, odd years then even. The county's own board page independently names one member per district for all seven, chaired by Morgan Henton. So this is a GEOMETRY ask and nothing else. WHAT THE COUNTY PUBLISHES AS A MAP IS A PICTURE. 'District Map' on the board page links Precinct-Map.pdf (May 2026): one page, ZERO extractable characters, a single raster image. It is a real seven-district map and legible in the countryside — DISTRICT 1 over Noble/Decker/Denver, DISTRICT 2 over Preston 1, Preston 2 and German, DISTRICT 3 over Claremont, Bonpas and the two Madisons — but Olney's core is where the lines actually cut, and there the labels do not survive: several precinct slivers carry unreadable names, and 'Olney Precinct 5' is a narrow strip that appears to straddle the District 4/5 area. Upscaling does not help, because the resolution is the source's. Reading composition off it would be guessing at exactly the points that decide a district line, which is the one output this pipeline must never produce. NOT TRACED, deliberately. THE CANVASSES COUNT BUT DO NOT LIST, the Knox shape. The 2024 report gives each district's precinct COUNT — District 1 = 4, District 3 = 4, District 5 = 2, against a county total of 21 precincts and 10,755 registered — and never names one. Those counts are consistent with a lawful whole-precinct plan (registration 1,491 / 1,474 / 1,530 against an ideal of about 1,536), and the map independently shows District 5 as exactly two Olney precincts, which is real corroboration — but three districts of seven, by count alone, cannot compose a county. A UNIT TRAP TO CARRY: the 2024 report counts PRECINCTS (21 of 21) and the 2026 report counts POLLING PLACES (14 of 14). The two are not the same denominator and a build that mixed them would mis-size every district. THIS COUNTY IS ALSO THE COUNTER-EXAMPLE TO A TOOL THIS PROJECT ADOPTED THE SAME DAY. ISBE's statewide county-board structure table — introduced for Saline, and checked before use against Clay, Hancock, Lawrence and Adams, matching all four — gives RICHLAND as 'At-Large'. The county has drawn seven numbered districts since at least 2024 and elects from them. The table's metadata is from 2007 and it carries no revision date, so the likeliest reading is that Richland was at-large then and districted after a later redistricting; either way the operational rule is now proven rather than merely stated: THE TABLE IS EVIDENCE OF STRUCTURE AT AN UNKNOWN DATE AND NEVER OF CURRENCY, and it must not be the last word for any county. Saline's at-large finding does not rest on it — that was proven from Saline's own certified canvass, with the table as third-place corroboration — but this is why it was written that way.",
+      "wanted": "Which precincts make up each of the seven districts — the redistricting ordinance's written description, a precinct-to-district table, or the map as data rather than as an image. Any one of those finishes the county, because everything else is already in hand: the form, the roster, the 21 precinct names and three districts' counts. The county's own ordinance archive (richlandcounty.illinois.gov documents, category 'ordinance') and its 1841-2021 minutes archive are the two places not yet read. NOT YET ASKED."
     },
     {
       "id": "rock-island-andalusia-township-library",
@@ -5100,6 +5100,42 @@ host, so ISBE covers the county but not that county's own archive).
 **The caveat to carry into any builder:** `Registration` is self-reported and is sometimes
 `0` (Calhoun 2026, all of Brown 2020). Zero is not a measurement, and a floor keyed on it
 would fire on the publisher's blank rather than on a real loss.
+
+### ISBE's county-board STRUCTURE table — every county's board shape, at an unknown date (found 2026-08-21)
+
+Found while settling Saline's board form, and nothing in this repo read it.
+
+    https://www.elections.il.gov/ElectionOperations/ComplianceRecord.htm
+
+An Excel-exported HTML table with a row for **all 102 counties** and five columns:
+number of board members, `Single-Member` / `Multi-Member` / `At-Large`, number of
+districts, members per district, and whether cumulative voting is used. It answers
+§2.5 step 2's *shape* question for any county in one fetch, with no canvass to read and
+nobody to e-mail — which matters most for exactly the counties whose own returns are
+image scans.
+
+**It was checked before it was used, and the check is the point.** Its embedded metadata
+is from **2007** and it carries no revision date. Before it informed anything it was
+verified against four counties whose current pages this project can read:
+
+| County | Table | The county today |
+|---|---|---|
+| Clay | 14 single-member | 14 districts A–N ✓ |
+| Hancock | 15, five multi-member × 3 | District One–Five, 3 each ✓ |
+| Lawrence | 7 single-member | Districts 1–7, one each ✓ |
+| Adams | 21, seven multi-member × 3 | matches the recorded finding ✓ |
+
+**And then RICHLAND broke it, the same day.** The table calls Richland `At-Large`; the
+county has drawn **seven numbered districts** since at least 2024 and elects from them,
+which its own certified Official Results for 2024 and 2026 state outright. The likeliest
+reading is that Richland was at-large in 2007 and districted at a later redistricting.
+
+So the rule, now proven rather than asserted: **this table is evidence of a county's
+board structure at an UNKNOWN DATE, never of its structure today.** Use it to know what
+to look for and to corroborate a finding; never let it be the last word, and never read a
+name from it (there is none to read — it names no members and no chairs). Saline shipped
+on its own certified canvass with this table in third place, which is why Richland's
+counter-example cost nothing.
 
 ### A THIRD results vendor, and the one that publishes per-precinct BALLOTS (found 2026-08-20)
 
