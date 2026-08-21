@@ -364,13 +364,23 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # to join through the AT-LARGE tier alone, after Edwards:
                      # no dispatch entry, no geometry, three commissioners on
                      # the County card. It sits on the Ohio River at the far
-                     # south of the state and ALL THREE of its Illinois
-                     # neighbours are unserved (Johnson, Pope, Pulaski), so the
-                     # dissolve emits a second outer ring roughly eighty miles
-                     # clear of the mainland — the largest detachment yet, and
-                     # the reason Vienna (Johnson) and Marion (Williamson) join
-                     # the OUTSIDE list: they anchor the corridor between the
-                     # island and the mainland as washed.
+                     # south of the state, and when it joined ALL THREE of its
+                     # Illinois neighbours were unserved (Johnson, Pope,
+                     # Pulaski), so the dissolve emitted a second outer ring
+                     # roughly eighty miles clear of the mainland — the largest
+                     # detachment yet, and the reason Vienna (Johnson) and
+                     # Marion (Williamson) joined the OUTSIDE list to anchor the
+                     # corridor between the island and the mainland as washed.
+                     #
+                     # ITS ISLANDHOOD LASTED THE SAME DAY. Johnson shipped that
+                     # evening, bordering served Saline on the mainland side and
+                     # Massac on the island's, and the dissolve dropped back to
+                     # ONE polygon — Vienna moving from the OUTSIDE list to the
+                     # INSIDE one exactly as its own note said it would. Massac
+                     # is kept here as an island because the record of HOW IT
+                     # JOINED is what the §2.5.1 checklist is for; what it is
+                     # today is a plain interior county, and the ring count
+                     # comes from --check rather than from this comment.
                      #
                      # HOW IT WAS FOUND, because the route generalises: the
                      # county was recorded as having "a real website" that
@@ -466,6 +476,32 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # enclave moves. TOLEDO MOVES FROM THE OUTSIDE LIST TO THE
                      # INSIDE ONE and Newton (Jasper) takes over that frontier.
                      "035",
+                     # Johnson and Perry — the 78th and 79th counties served
+                     # (2026-08-21), and the first two reached without their own
+                     # websites being readable at all. Both sites refuse this
+                     # client, and both blockers stand; what opened the counties
+                     # is that their ELECTION AUTHORITIES publish somewhere else,
+                     # on results.gbsvote.com — a results platform carrying
+                     # fourteen Illinois counties that this project had not
+                     # catalogued. A certified canvass answers both questions a
+                     # join needs: each county's 2026 General Primary carries a
+                     # single countywide FOR COUNTY COMMISSIONER contest per
+                     # party (16 of 16 in Johnson, 27 of 27 in Perry) and no
+                     # district-suffixed board contest anywhere, settling both
+                     # boards AT LARGE, and prints a committeeperson contest per
+                     # precinct that NAMES every precinct. Both Jasper tests pass
+                     # clean — 16/16 and 27/27 with the population identity to
+                     # the person — so both join on their precincts. Neither
+                     # roster ships: commissioners are a County-card fact and the
+                     # only county source for them is the blocked site.
+                     #
+                     # JOHNSON ENDS THE MASSAC ISLAND. It borders served Saline
+                     # on the mainland side and Massac on the island's, so the
+                     # dissolve drops back to ONE polygon. That is recomputed and
+                     # never patched — the Jefferson, Shelby and White precedents
+                     # — and VIENNA MOVES FROM THE OUTSIDE LIST TO THE INSIDE ONE
+                     # while Metropolis (Massac) does the same.
+                     "087", "145",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -528,6 +564,11 @@ DISPATCH_COUNTY_FIPS = {
     # nothing rides the County card either and the precinct answer is the whole
     # of what the county gains (2026-08-21).
     "cumberland": "035",
+    # Johnson and Perry are precinct-only for the Calhoun/Morgan/Gallatin reason
+    # — both boards are elected AT LARGE — but neither rides the County card,
+    # because neither county's roster is readable: the only source for each is a
+    # website that refuses this client (2026-08-21).
+    "johnson": "087", "perry": "145",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -552,12 +593,15 @@ SIMPLIFY_TOLERANCE_M = 25
 # outside it. A dissolve that silently drops a county still closes its rings,
 # so ring-closure alone is not proof — these are.
 INSIDE = {
-    # The FOURTH ISLAND's anchor (2026-08-21). Massac joins through the County
-    # card alone — at-large commission board, no district geometry, so no
-    # dispatch entry — and this point is what proves the island landed as its
-    # own OUTER ring rather than as a hole: a mis-nested island renders
-    # identically under the wash and answers False to every containment test
-    # inside it (the pass-4 nesting bug). Derived from TIGERweb's Incorporated
+    # Massac's anchor (2026-08-21). Massac joins through the County card alone —
+    # at-large commission board, no district geometry, so no dispatch entry.
+    # This point was written as the FOURTH ISLAND's proof that the island landed
+    # as its own OUTER ring rather than as a hole, since a mis-nested island
+    # renders identically under the wash and answers False to every containment
+    # test inside it (the pass-4 nesting bug). Johnson's join hours later ended
+    # the island, so what this anchor proves now is the ordinary thing every
+    # other entry here proves — that the county is inside the dissolve — and it
+    # stays exactly as it was measured. Derived from TIGERweb's Incorporated
     # Places centroid for Metropolis city and round-tripped through a
     # point-in-county query, per the §2.5.1 rule against recalled coordinates.
     "Metropolis (Massac)": (37.1565, -88.7082),
@@ -791,6 +835,23 @@ INSIDE = {
     # 2026-08-17 — so what moved is the claim about them, not the measurement.
     # Newton (Jasper) inherits the frontier.
     "Toledo (Cumberland)": (39.2728, -88.2422),
+    # Vienna (Johnson) — the county seat, 2026-08-21, and the anchor that ENDED
+    # THE MASSAC ISLAND. It was written into the OUTSIDE list that same day, as
+    # one of the two points proving the corridor between the island and the
+    # mainland was washed, with the note "if either ever ships, these move to
+    # the INSIDE list". It shipped within hours. Johnson borders served Saline on
+    # the mainland side and Massac on the island's, so the dissolve drops back to
+    # ONE polygon and Metropolis stops standing for a detached county — the
+    # island geometry is recomputed, never patched. Pope, Pulaski and Union keep
+    # Johnson off any enclave list.
+    "Vienna (Johnson)": (37.4143, -88.8870),
+    # Pinckneyville (Perry) — the county seat, 2026-08-21. A plain mainland join
+    # bordering served Washington, Franklin, Randolph and Jefferson, enclosing
+    # nothing: its one unserved neighbour, Jackson, still borders unserved
+    # Union and Williamson. Ava (Jackson) stays OUTSIDE and now sits against the
+    # line rather than one county from it. The coordinates are
+    # build_county_outline.py's own perry inside anchor.
+    "Pinckneyville (Perry)": (38.0803, -89.3823),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -819,16 +880,14 @@ OUTSIDE = {
     # Pope. TIGERweb's Incorporated Places centroid for Elizabethtown village,
     # round-tripped through a point-in-county query.)
     "Elizabethtown (Hardin)": (37.4499, -88.3051),
-    # The two anchors that prove the corridor between the MASSAC ISLAND and the
-    # mainland is washed (§2.5.1 first-island checklist step 2), added with it
-    # on 2026-08-21. Vienna is the county seat of Johnson, which borders Massac
-    # directly; Marion is the county seat of Williamson, the next county north
-    # and the largest unserved one in the corridor. Both are also frontier
-    # anchors in the ordinary sense — each county is researched and blocked,
-    # Johnson at-large with an unreadable site, Williamson refusing automated
-    # requests — so if either ever ships, these move to the INSIDE list.
-    # Both derived from TIGERweb place centroids and round-tripped.
-    "Vienna (Johnson)": (37.4143, -88.8870),
+    # Marion (Williamson) — county seat of the largest unserved county in the
+    # deep south, and what is left of the pair of anchors added on 2026-08-21 to
+    # prove the corridor between the Massac island and the mainland was washed.
+    # Its companion, Vienna (Johnson), lasted a matter of hours: that record said
+    # "if either ever ships, these move to the INSIDE list", and Johnson shipped
+    # the same day, ENDING THE ISLAND rather than merely bridging it. Williamson
+    # still refuses automated requests. Derived from a TIGERweb place centroid
+    # and round-tripped.
     "Marion (Williamson)": (37.7344, -88.9419),
     # Salem (Marion) replaced Carlyle here on 2026-08-20, when Clinton shipped
     # and Carlyle moved up to INSIDE — the same forced promotion Carmi and
