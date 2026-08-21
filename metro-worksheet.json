@@ -3,7 +3,7 @@
   "metro_name": "Chicago",
   "metro_bbox": {
     "minLng": -91.55,
-    "minLat": 37.75,
+    "minLat": 37.0,
     "maxLng": -87.0,
     "maxLat": 42.6
   },
@@ -12,7 +12,7 @@
     -87.6298
   ],
   "permalink_gate": {
-    "minLat": 37.7,
+    "minLat": 36.95,
     "maxLat": 42.75,
     "minLng": -91.65,
     "maxLng": -86.9
@@ -1544,7 +1544,7 @@
         "file": "massac-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Massac County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
+        "note": "Massac County outline — the SERVED area's fourth island (2026-08-21). Massac joins through the County card alone: its board is a three-member commission elected countywide, so there is no district geometry and no dispatch entry, and this outline stays dynamic_reference. Shipped as gap-location geometry by the pass-13 sweep (2026-08-04) and promoted here.",
         "dynamic_reference": true
       },
       {
