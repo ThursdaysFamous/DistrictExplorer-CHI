@@ -1135,7 +1135,20 @@ taught them.
   never joins for a rich statewide answer (the Centralia/Marion trap,
   `build_metro_outline.py`), and a dispatched layer never answers inside the wash — a
   municipality in an unserved county waits for its county (the Galesburg record,
-  `galesburg-wards-outside-the-ring`). **First-island checklist** — EXERCISED by
+  `galesburg-wards-outside-the-ring`).
+  **A THIRD RULE was added on 2026-08-21 (operator decision), and it narrows this one:
+  the county-keyed layer that lets a county join must be its BOARD or its PRECINCTS.**
+  Lawrence County forced the question. Its own GIS publishes four fire protection
+  districts — clean, non-overlapping, 0.02% spill outside the county line, 84.2% of the
+  county covered — and no board or precinct layer anywhere in its four-service org, so
+  by the letter of the rule above it qualified. It was HELD OUT. Every county served
+  carries a board or a precinct layer, and the coverage wash is read by visitors as
+  *"we can tell you who represents you here"*; a fire taxing district, however clean,
+  does not answer that. The finding stays on file in `lawrence-county-board` rather
+  than being built, and the same test now applies to any county whose only county-keyed
+  layer is a fire, park, library or drainage district. This does not narrow anything
+  else: an at-large county still joins on its County-card roster alone (fifteen have),
+  because that roster IS the who-represents-you answer. **First-island checklist** — EXERCISED by
   Effingham on 2026-08-04, the same day this rule landed (the pass-13 sweep found it
   build-ready; the shipped metro-outline.json is now a MultiPolygon whose second
   polygon is the island's own outer ring), and again by Hamilton on 2026-08-05 (the
