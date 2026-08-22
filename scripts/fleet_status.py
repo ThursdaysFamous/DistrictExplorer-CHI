@@ -237,7 +237,9 @@ def gaps_diff(gaps_map, metro_id, shipped_text):
         if only_shipped:
             bits.append("shipped but not recorded: %s" % ", ".join(only_shipped))
         # same ids on both sides means a FIELD changed — the common case after
-        # someone edits a blocker or a wanted line and forgets to regenerate
+        # someone edits a summary, why or wanted line and forgets to regenerate
+        # (a `blocker` edit changes nothing here: it is the maintainer's record
+        # and build_coverage_gaps.py does not emit it)
         detail = "; ".join(bits) or "same %d ids, but content differs" % len(want)
     w = "%s: GAPS — shipped %s is out of date (%s). Regenerate with %s" % (
         metro_id, GAPS_PATH, detail,

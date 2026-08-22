@@ -1865,6 +1865,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
    * width and the list inside it are new. */
   .feedback-panel.gaps-panel { max-width: 620px; max-height: 82vh; overflow-y: auto; }
   .gaps-empty { font-size: 13px; color: var(--slate); font-style: italic; }
+  .gaps-lede { font-size: 13px; margin: 0 0 14px; }
+  /* Each group is a <details>; its <summary> is the heading, so the panel opens
+   * as a short contents list rather than as a hundred stacked records. */
+  .gaps-group { margin-bottom: 8px; }
+  .gaps-group > .gap-item { margin-left: 2px; }
   .gaps-section-label {
     font-family: var(--font-display);
     font-size: 12px;
@@ -1874,8 +1879,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
     margin: 16px 0 8px;
     padding-bottom: 4px;
     border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    list-style: none;
   }
-  .gaps-section-label:first-of-type { margin-top: 10px; }
+  .gaps-section-label::-webkit-details-marker { display: none; }
+  .gaps-section-label::before {
+    content: "▸";
+    font-size: 10px;
+    line-height: 1;
+    color: var(--line-strong);
+  }
+  .gaps-group[open] > .gaps-section-label::before { content: "▾"; }
+  .gaps-section-label:hover { color: var(--ink); }
+  .gaps-section-text { flex: 1; }
+  .gaps-section-count {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+  .gaps-group:first-of-type > .gaps-section-label { margin-top: 4px; }
   .gap-item {
     border: 1px solid var(--line);
     border-left: 3px solid var(--line-strong);
@@ -1903,6 +1927,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
     white-space: nowrap;
   }
   .gap-summary { font-size: 13px; margin: 0 0 6px; }
+  /* The detail disclosure carries the cause and the ask. Collapsed by default:
+   * a reader checking whether their own answer is affected reads the summary
+   * and moves on; only someone who wants to help needs the rest. */
+  .gap-more { font-size: 12px; }
+  .gap-more-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate);
+    cursor: pointer;
+    list-style: none;
+    display: inline-block;
+    padding: 2px 0;
+  }
+  .gap-more-label::-webkit-details-marker { display: none; }
+  .gap-more-label::after { content: " +"; }
+  .gap-more[open] > .gap-more-label::after { content: " –"; }
+  .gap-more-label:hover { color: var(--ink); text-decoration: underline; }
+  .gap-more[open] > .gap-more-label { margin-bottom: 6px; }
   .gap-detail { font-size: 12px; color: var(--slate); margin: 0 0 6px; }
   .gap-detail b { color: var(--ink); font-weight: 600; }
   .gap-actions { margin-top: 8px; }
@@ -3196,7 +3238,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ b6435d3 on 2026-08-21</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ f8987c1 on 2026-08-22</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3271,7 +3313,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
     <div class="districtry-panel-head">
       <div class="selected-point-chip" id="point-chip" hidden></div>
-      <span class="districtry-stats">75 counties · 39 layers</span>
+      <span class="districtry-stats">79 counties · 39 layers</span>
     </div>
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
@@ -3415,7 +3457,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div class="feedback-panel gaps-panel" role="document">
     <button type="button" class="feedback-close" id="gaps-close" aria-label="Close">×</button>
     <h2 id="gaps-title">What data is missing</h2>
-    <p>Most of what this app can't tell you is missing because nobody publishes it, or because the publisher blocks automated fetching — not because the code isn't written. Here is the honest list, and what would fix each one.</p>
+    <p>This app only shows what a government actually publishes. Where a district or an officeholder is missing, it is nearly always because nobody publishes it, or because the publisher won't let a program read it — not because the code isn't written. Each line below says what you won't see and where; open one to find out why, and what would fix it.</p>
     <div id="gaps-body"></div>
     <p class="gaps-credit">Found a source? Every accepted one is credited by name in <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>. There's no cash bounty — the credit is the reward.</p>
   </div>
@@ -4785,11 +4827,22 @@ function initChiExplorer() {
       return outlineCache[slug];
     }
 
+    /* Two registers for the same fact. The BADGE is a two-word tag scanned at
+     * the left of a row; the HEADING is the sentence a reader would say out
+     * loud. Both are deliberately plain: "no-source" is the maintainer's word
+     * for it, and a reader asked to distinguish "no source" from "partial data"
+     * is being handed the project's vocabulary instead of an answer. */
     var KIND_LABEL = {
-      "no-source": "no source",
-      "blocked": "source blocks us",
-      "data-quality": "partial data"
+      "no-source": "not published",
+      "blocked": "publisher blocks us",
+      "data-quality": "partly published"
     };
+    var KIND_HEADING = {
+      "no-source": "Nobody publishes this",
+      "blocked": "The publisher won't let us read it",
+      "data-quality": "Only part of it is published"
+    };
+    var KIND_ORDER = ["no-source", "blocked", "data-quality"];
 
     /* Whether the pin sits inside the covered area at all, reusing the rings
      * the scope mask already dissolved (coverageMaskRings). Returns true /
@@ -4844,22 +4897,37 @@ function initChiExplorer() {
       head.appendChild(badge);
       item.appendChild(head);
 
+      // ONE VISIBLE LINE PER GAP. `summary` says what a reader won't see here
+      // and roughly where; everything else waits behind the disclosure. This
+      // panel used to print the full research record inline — every measured
+      // host, status code and dated correction — which made the one surface
+      // whose job is to make absence legible the least legible thing in the
+      // app. The record still exists; it lives in the guidebook now (see
+      // scripts/build_coverage_gaps.py, which no longer emits `blocker`).
       var summary = cardEl("p", "gap-summary");
       summary.textContent = gap.summary;
       item.appendChild(summary);
 
-      // Blocker and wanted are the two lines that stop a reader wasting effort:
-      // what was already checked, and what would actually help.
-      [["Why", gap.blocker], ["What would help", gap.wanted]].forEach(function (pair) {
+      // Why and what-would-help are the two lines that stop a reader wasting
+      // effort: the cause, and what a submission would need to contain. They
+      // are collapsed because most readers open this panel to find out whether
+      // THEIR answer is affected, not to fix it — and the handful who want to
+      // fix it are the ones who will open a disclosure.
+      var more = document.createElement("details");
+      more.className = "gap-more";
+      var moreLabel = document.createElement("summary");
+      moreLabel.className = "gap-more-label";
+      moreLabel.textContent = "Why, and what would fix it";
+      more.appendChild(moreLabel);
+      [["Why", gap.why], ["What would fix it", gap.wanted]].forEach(function (pair) {
         if (!pair[1]) return;
         var p = cardEl("p", "gap-detail");
         var b = document.createElement("b");
         b.textContent = pair[0] + ": ";
         p.appendChild(b);
         p.appendChild(document.createTextNode(pair[1]));
-        item.appendChild(p);
+        more.appendChild(p);
       });
-
       var actions = cardEl("div", "gap-actions");
       var link = document.createElement("a");
       link.className = "gap-suggest";
@@ -4868,17 +4936,26 @@ function initChiExplorer() {
       link.rel = "noopener";
       link.textContent = "Suggest a source →";
       actions.appendChild(link);
-      item.appendChild(actions);
+      more.appendChild(actions);
+      item.appendChild(more);
       return item;
     }
 
-    function section(label, gaps) {
-      var frag = document.createDocumentFragment();
-      var h = cardEl("div", "gaps-section-label");
-      h.textContent = label;
-      frag.appendChild(h);
-      gaps.forEach(function (g) { frag.appendChild(gapNode(g)); });
-      return frag;
+    /* One group = one <details>. Collapsed by default with its count in the
+     * heading, so the panel opens as a short table of contents rather than as
+     * a hundred stacked records; `open` is passed for the group a reader came
+     * for (the gaps where they clicked). */
+    function section(label, gaps, isOpen) {
+      var box = document.createElement("details");
+      box.className = "gaps-group";
+      if (isOpen) box.open = true;
+      var head = document.createElement("summary");
+      head.className = "gaps-section-label";
+      head.appendChild(cardEl("span", "gaps-section-text", label));
+      head.appendChild(cardEl("span", "gaps-section-count", String(gaps.length)));
+      box.appendChild(head);
+      gaps.forEach(function (g) { box.appendChild(gapNode(g)); });
+      return box;
     }
 
     function render() {
@@ -4909,32 +4986,49 @@ function initChiExplorer() {
         }
         var here = rows.filter(function (r) { return r.here; }).map(function (r) { return r.gap; });
         var rest = rows.filter(function (r) { return !r.here; }).map(function (r) { return r.gap; });
-        if (here.length) body.appendChild(section("Where you clicked", here));
-        if (rest.length) {
-          // "Nothing missing where you clicked" is only TRUE when some gap could
-          // have matched the point in the first place. A fork that tags no gap
-          // with a county (or one whose gaps are all footprint-less) can never
-          // match, so that phrasing would claim the point is clean when really
-          // the gaps simply are not mappable — for a fork with no outlines at
-          // all, every one of its gaps applies and the line would be a lie.
-          // And a point OUTSIDE the covered area entirely (under the gray
-          // wash) must never be told nothing is missing there — outside the
-          // coverage everything is, so that case gets its own honest header.
-          // pointInCoverage's null (mask not loaded) falls through to the
-          // wording that claims neither.
-          var mappable = rows.some(function (r) { return (r.gap.counties || []).length > 0; });
-          var label;
-          if (here.length) {
-            label = "Elsewhere in the coverage area";
-          } else if (point && pointInCoverage(point) === false) {
-            label = "Where you clicked is outside the covered area — the recorded gaps:";
-          } else if (point && mappable && pointInCoverage(point) === true) {
-            label = "Nothing missing where you clicked — elsewhere:";
-          } else {
-            label = "Known gaps";
-          }
-          body.appendChild(section(label, rest));
+
+        // THE LEDE ANSWERS THE READER'S ACTUAL QUESTION FIRST — "does any of
+        // this affect the place I clicked?" — before the list of everything
+        // else. Getting it wrong is worse than saying nothing, so each branch
+        // is only claimed when it is provable:
+        //  - "nothing missing where you clicked" is TRUE only if some gap COULD
+        //    have matched the point. A fork that tags no gap with a county can
+        //    never match, so that phrasing would claim a clean point when the
+        //    gaps simply are not mappable.
+        //  - a point OUTSIDE the covered area is never told nothing is missing
+        //    there: out there EVERYTHING is.
+        //  - pointInCoverage's null (mask not loaded) falls through to the
+        //    wording that claims neither.
+        var mappable = rows.some(function (r) { return (r.gap.counties || []).length > 0; });
+        var inCoverage = point ? pointInCoverage(point) : null;
+        var lede = cardEl("p", "gaps-lede");
+        if (here.length) {
+          lede.textContent = here.length === 1
+            ? "One recorded gap affects the spot you clicked. Everything else is grouped below."
+            : here.length + " recorded gaps affect the spot you clicked. Everything else is grouped below.";
+        } else if (point && inCoverage === false) {
+          lede.textContent = "You clicked outside the area this app covers, so nothing there can be " +
+            "answered yet. These are the gaps recorded inside the covered area.";
+        } else if (point && mappable && inCoverage === true) {
+          lede.textContent = "Nothing recorded is missing where you clicked. These are the gaps elsewhere.";
+        } else {
+          lede.textContent = "Click a spot on the map first and this list will lead with the gaps that " +
+            "affect you. Otherwise, here is everything that is missing and why.";
         }
+        body.appendChild(lede);
+
+        if (here.length) body.appendChild(section("Where you clicked", here, true));
+        // The rest is grouped by KIND rather than run together, because the
+        // three kinds ask different things of a reader: one needs a publisher
+        // to start publishing, one needs a publisher to stop refusing us, and
+        // one is a field missing from data we already have.
+        KIND_ORDER.forEach(function (kind) {
+          var group = rest.filter(function (g) { return g.kind === kind; });
+          if (!group.length) return;
+          body.appendChild(section(KIND_HEADING[kind] || kind, group, !here.length && rest.length <= 12));
+        });
+        var other = rest.filter(function (g) { return KIND_ORDER.indexOf(g.kind) === -1; });
+        if (other.length) body.appendChild(section("Other recorded gaps", other, false));
       }).catch(function () {
         body.textContent = "";
         var err = cardEl("p", "gaps-empty");
@@ -9890,6 +9984,160 @@ function initChiExplorer() {
   }
   var loadCalhounPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/calhoun-precincts.json", {}, 2);
+  });
+  /* GALLATIN reached the map only after the COLES PATTERN was found a second
+   * time: gallatinco.illinois.gov answers 200 and serves an INCOMPLETE TLS
+   * CHAIN, so every automated client called the county dark while the site
+   * rendered fine in a browser. Its eleven precincts ARE the Census 2020
+   * voting districts — the Jasper test passes 11/11 with the population
+   * identity to the person — corroborated by the county's own legible precinct
+   * map and by canvasses that count eleven and name nine. No board district
+   * here either: Gallatin elects its five board members countywide, so they
+   * ride the County card. See build_gallatin_precincts.py. */
+  var loadGallatinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/gallatin-county-outline.json", {}, 2);
+  });
+  function gallatinCountyCoverage(point) {
+    return loadGallatinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadGallatinPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/gallatin-precincts.json", {}, 2);
+  });
+  /* CUMBERLAND is precinct-only for a DIFFERENT reason than Calhoun, Morgan and
+   * Gallatin, and the distinction is the point: those three elect their boards
+   * countywide, so there is no district for a precinct to belong to. Cumberland
+   * IS districted — six members from three compass-point districts, Western,
+   * Central and Eastern — and its districts SPLIT PRECINCTS, which its own
+   * certified returns say outright: the 2026 General Primary reports them as
+   * Central 6, Eastern 5 and Western 3 precincts, fourteen against a county of
+   * twelve, identically for both parties, while every countywide contest on the
+   * same canvass reports exactly twelve. So no union of whole precincts can draw
+   * the board and only the county's own boundary ever will — the board is shut,
+   * nothing rides the County card, and the precinct answer is the whole of what
+   * this county gains. Its twelve precincts ARE the Census 2020 voting districts,
+   * the Jasper test passing 12/12 with the population identity to the person.
+   * See build_cumberland_precincts.py. */
+  var loadCumberlandCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cumberland-county-outline.json", {}, 2);
+  });
+  function cumberlandCountyCoverage(point) {
+    return loadCumberlandCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadCumberlandPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cumberland-precincts.json", {}, 2);
+  });
+  /* JOHNSON and PERRY are the first two counties reached WITHOUT THEIR OWN
+   * WEBSITES BEING READ AT ALL. Both sites refuse this client and both blockers
+   * stand; what opened the counties is that their election authorities publish
+   * elsewhere, on results.gbsvote.com. Each county's certified 2026 General
+   * Primary carries a single countywide FOR COUNTY COMMISSIONER contest per
+   * party — 16 of 16 in Johnson, 27 of 27 in Perry — and no district-suffixed
+   * board contest anywhere, so both boards are elected at large and there is no
+   * district for a precinct to belong to. The same canvasses print a
+   * committeeperson contest per precinct, which is what NAMES the precincts, and
+   * both Jasper tests pass clean (16/16 and 27/27, populations to the person).
+   * NEITHER COUNTY'S COMMISSIONERS ARE CARRIED: that is a roster, and the only
+   * county source for each is the site nothing here can read — which is why
+   * these two join on precincts alone rather than on both tiers the way Gallatin
+   * did. See build_johnson_precincts.py and build_perry_precincts.py. */
+  var loadJohnsonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/johnson-county-outline.json", {}, 2);
+  });
+  function johnsonCountyCoverage(point) {
+    return loadJohnsonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadJohnsonPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/johnson-precincts.json", {}, 2);
+  });
+  var loadPerryCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/perry-county-outline.json", {}, 2);
+  });
+  function perryCountyCoverage(point) {
+    return loadPerryCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadPerryPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/perry-precincts.json", {}, 2);
+  });
+  /* CASS, GREENE, SCOTT and MOULTRIE were never blocked. All four were already
+   * served, none had a gap record saying its precincts were missing, and that is
+   * exactly how a county goes unbuilt for weeks while every guard in the repo
+   * stays green — an audit of served counties WITHOUT a precinct layer and
+   * WITHOUT a record explaining it is what found them. Each one's precincts are
+   * the Census 2020 voting districts one for one, named by the county's own
+   * certified 2026 General Primary: Cass 21/21 with no alias, Greene 22/22,
+   * Scott 10/10, Moultrie 16/16, every population exact. Cass's four board
+   * districts already ship separately; the other three elect their boards
+   * countywide and ride the County card. See build_cass_precincts.py,
+   * build_greene_precincts.py, build_scott_precincts.py and
+   * build_moultrie_precincts.py. */
+  var loadCassPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/cass-precincts.json", {}, 2);
+  });
+  var loadGreeneCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/greene-county-outline.json", {}, 2);
+  });
+  function greeneCountyCoverage(point) {
+    return loadGreeneCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadGreenePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/greene-precincts.json", {}, 2);
+  });
+  var loadScottCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/scott-county-outline.json", {}, 2);
+  });
+  function scottCountyCoverage(point) {
+    return loadScottCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadScottPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/scott-precincts.json", {}, 2);
+  });
+  var loadMoultrieCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/moultrie-county-outline.json", {}, 2);
+  });
+  function moultrieCountyCoverage(point) {
+    return loadMoultrieCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadMoultriePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/moultrie-precincts.json", {}, 2);
+  });
+  /* MENARD and SCHUYLER close out the eight the audit named, and neither came
+   * from a results platform: Menard is carried by none this project has found,
+   * and Schuyler's own canvass is cumulative and names only three of its
+   * seventeen. Menard's names come from a county precinct map that is a VECTOR
+   * PDF with a readable text layer; Schuyler's from its "Polling Places by
+   * Precinct" table, whose three "&" rows each serve two precincts from one
+   * building. Both label from the COUNTY'S spelling: Menard writes NORTH ATHENS
+   * CITY with a space where the census hyphenates, and Schuyler writes Frederick
+   * where the census drops the middle E. Menard's five commissioner districts
+   * ship separately; Schuyler's seven board members ride the County card. See
+   * build_menard_precincts.py and build_schuyler_precincts.py. */
+  var loadMenardPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/menard-precincts.json", {}, 2);
+  });
+  var loadSchuylerCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/schuyler-county-outline.json", {}, 2);
+  });
+  function schuylerCountyCoverage(point) {
+    return loadSchuylerCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadSchuylerPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/schuyler-precincts.json", {}, 2);
   });
   var loadMorganCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/morgan-county-outline.json", {}, 2);
@@ -24091,6 +24339,370 @@ function initChiExplorer() {
           return {
             label: "Calhoun County Clerk — elections",
             url: "https://www.calhouncountyil.gov/government/county-clerk/elections/"
+          };
+        }
+      },
+      // Gallatin — eleven precincts that ARE the Census 2020 voting districts,
+      // one for one, with the county's own precinct map and its certified
+      // canvasses naming the same eleven. NO BOARD DISTRICT: the board is
+      // elected countywide (CWD on its own ballots), so its five members ride
+      // the County card. NO POLLING PLACE: the county publishes a list, and
+      // that belongs with a roster guard rather than inside a geometry file.
+      {
+        key: "gallatin",
+        coverage: gallatinCountyCoverage,
+        loadGeometry: loadGallatinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadGallatinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Gallatin County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Gallatin County Clerk — elections",
+            url: "https://gallatinco.illinois.gov/elections/"
+          };
+        }
+      },
+      // Cumberland — twelve precincts that ARE the Census 2020 voting
+      // districts, one for one, named by the county's own certified 2026
+      // General Primary a committeeperson contest at a time and paired with
+      // eight buildings by its Clerk's polling notice. NO BOARD DISTRICT, and
+      // here that is not because the board is at large: Cumberland elects six
+      // members from three compass-point districts that SPLIT PRECINCTS, which
+      // its own returns prove by counting Central 6 + Eastern 5 + Western 3
+      // against a county of twelve. Only the county's own boundary can express
+      // that, so the board rides nothing here and nothing is invented for it.
+      // NO POLLING PLACE: the county publishes a list, and that belongs with a
+      // roster guard rather than inside a geometry file.
+      {
+        key: "cumberland",
+        coverage: cumberlandCountyCoverage,
+        loadGeometry: loadCumberlandPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCumberlandPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Cumberland County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Cumberland County Clerk — elections",
+            url: "https://cumberlandcoil.gov/elections/"
+          };
+        }
+      },
+      // Johnson — sixteen precincts that ARE the Census 2020 voting districts,
+      // named by the county's certified 2026 General Primary a committeeperson
+      // contest at a time. NO BOARD DISTRICT: the same canvass carries one
+      // countywide FOR COUNTY COMMISSIONER contest per party over all sixteen
+      // and no district-suffixed board contest at all. NO COMMISSIONER NAMED:
+      // that is a roster and the county's own site is behind a host-level block,
+      // so the card links the canvass that IS readable rather than a page that
+      // is not.
+      {
+        key: "johnson",
+        coverage: johnsonCountyCoverage,
+        loadGeometry: loadJohnsonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadJohnsonPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Johnson County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Johnson County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=12"
+          };
+        }
+      },
+      // Perry — twenty-seven precincts on the same footing as Johnson's, and
+      // for the same reason: the county's own site refuses this client, so the
+      // names, the count and the board's at-large form all come from its
+      // certified 2026 General Primary. The county seat keeps the census
+      // spelling, Du Quoin, where the results feed writes it closed up.
+      {
+        key: "perry",
+        coverage: perryCountyCoverage,
+        loadGeometry: loadPerryPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadPerryPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Perry County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Perry County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=283"
+          };
+        }
+      },
+      // Cass — twenty-one precincts that ARE the Census 2020 voting districts,
+      // named by the county's certified 2026 General Primary a committeeperson
+      // contest at a time. Its four BOARD DISTRICTS are a separate entry on the
+      // county-board layer and are not repeated here; the same canvass reports
+      // their contests over 4 + 5 + 6 + 6 precincts, summing to twenty-one.
+      {
+        key: "cass",
+        coverage: cassCountyCoverage,
+        loadGeometry: loadCassPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadCassPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Cass County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Cass County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&amp;l_id=8"
+          };
+        }
+      },
+      // Greene — twenty-two precincts on the same footing. NO BOARD DISTRICT: a
+      // single countywide COUNTY BOARD contest covers all twenty-two precincts,
+      // so Greene elects its board county-wide and its seven members ride the
+      // County card.
+      {
+        key: "greene",
+        coverage: greeneCountyCoverage,
+        loadGeometry: loadGreenePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadGreenePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Greene County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Greene County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&amp;l_id=11"
+          };
+        }
+      },
+      // Scott — ten precincts, likewise at-large. Merritt Township keeps the
+      // census spelling where the county's results feed drops a letter; the
+      // Winchester roman numerals are the county's own and are kept.
+      {
+        key: "scott",
+        coverage: scottCountyCoverage,
+        loadGeometry: loadScottPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadScottPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Scott County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Scott County — certified election results",
+            url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&amp;l_id=19"
+          };
+        }
+      },
+      // Moultrie — sixteen precincts, and this county's FIRST dispatch entry of
+      // any kind: it joined the ring through the County card alone. Its board's
+      // contest is styled COUNTY BOARD DISTRICT AT LARGE MEMBER on its own
+      // returns, so there is no district for a precinct to belong to.
+      {
+        key: "moultrie",
+        coverage: moultrieCountyCoverage,
+        loadGeometry: loadMoultriePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMoultriePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Moultrie County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Moultrie County — certified election results",
+            url: "https://il-moultrie.pollresults.net/"
+          };
+        }
+      },
+      // Menard — fourteen precincts that ARE the Census 2020 voting districts,
+      // named by the county's own precinct map (a vector PDF with a readable text
+      // layer) and its polling-place list. Its five COMMISSIONER DISTRICTS are a
+      // separate entry on the county-board layer and are not repeated here.
+      {
+        key: "menard",
+        coverage: menardCountyCoverage,
+        loadGeometry: loadMenardPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadMenardPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Menard County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Menard County Clerk &amp; Recorder — elections",
+            url: "https://menardcountyil.gov/elected-officials/county-clerkrecorder/"
+          };
+        }
+      },
+      // Schuyler — seventeen precincts on the same footing. NO BOARD DISTRICT:
+      // the county's own official 2026 canvass carries a single countywide MEMBERS
+      // OF THE COUNTY BOARD contest over all seventeen, so its seven members ride
+      // the County card.
+      {
+        key: "schuyler",
+        coverage: schuylerCountyCoverage,
+        loadGeometry: loadSchuylerPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadSchuylerPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Schuyler County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Schuyler County — voting locations by precinct",
+            url: "https://www.schuylercounty.org/elections/voting-locations/"
           };
         }
       },
