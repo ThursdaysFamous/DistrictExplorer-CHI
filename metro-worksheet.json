@@ -2086,6 +2086,11 @@
         "note": "Warren County Board members keyed by district (4 districts seating 15 as 3/4/4/4 — 14 e-mails, 7 phones, a term-expiry year on every seat, the committees the county lists, and the Chairman of the Board badged from his own row). Scraped weekly from the county's board page. THE PAGE WRITES MEMBERS TWO WAYS and only one is the obvious shape: thirteen are <li>Name<ul>details</ul></li> and two are <li>Name</li><li><ul>details</ul></li>. Matching only the first drops two of the fifteen — and one of the two is the CHAIRMAN OF THE BOARD, so the naive parse loses a member and the chair while every district still looks populated. Both shapes are matched explicitly rather than by searching backwards for a name, which is how an earlier attempt started reading members' HOME ADDRESSES as their names. THE COUNTY PUBLISHES A HOME ADDRESS FOR EVERY MEMBER: those lines are identified and dropped by construction, the run reports how many it saw and refused, and it FAILS if it sees none — because their disappearance would mean the layout moved and the parse should be re-read. Every e-mail is Cloudflare-obfuscated with no plain mailto anywhere, the exact markup that silently emptied Brown County's addresses, so data-cfemail is decoded and markup-present-but-nothing-decoded is a hard failure. ONE E-MAIL IS MISSPELLED AT SOURCE — the county prints TWinkler at 'warrecountyil.gov', missing the n — and ships as published, the Carroll 'Distirct' precedent. The same run re-reads the precinct-map legend the BOUNDARY was dissolved from, which makes this the strongest drift check in the fleet: the tripwire re-parses the exact document the geometry came from."
       },
       {
+        "file": "adams-county-board-members.json",
+        "min_keys": 8,
+        "note": "Adams County Board members keyed by district (7 districts of THREE seats each, 21 in all) plus a top-level 'board' entry. PARTIAL BY CONSTRUCTION AND SAYS SO ON THE CARD: the county's own board page is a flat Akamai deny and the Internet Archive never captured it, so the roster is read from CERTIFIED ELECTION CANVASSES on platinumelectionresults.com \u2014 the THIRD results vendor, which carries Adams as county id 54 and which this county's gap record had never tested (it tested the pollresults/accessliberty pair, correctly found them empty, and stopped). Adams staggers 2 seats per district one cycle and 1 the next, so the November 2024 general names ONE of each district's three members and the other two were seated in November 2022 \u2014 a canvass the vendor returns as an empty placeholder for 2021, 2022 and 2023, which Clarity does not carry and which the county publishes only behind the same WAF. Every row renders the election that seated it (districtSource) because a canvass cannot show a mid-term appointment, and the card states the shortfall in words rather than leaving a short list to imply it. No chair is badged (ISBE's chair column measured wrong in 16 of 56 counties \u2014 the Coles rule) and no per-member contact ships, because it exists only on the unreadable page. The weekly run re-fetches the 2022 slug every time and reports it unread, so the day the county backfills it fourteen members appear instead of the gap quietly persisting (scripts/adams_county_board_scraper.py + build_adams_county_board_roster.py)."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
@@ -2406,7 +2411,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v46",
+    "cache_name": "district-explorer-shell-v47",
     "shell_urls": [
       "./",
       "./sources.html",
@@ -2705,6 +2710,11 @@
       "file": "update-clinton-county-board-roster.yml",
       "purpose": "Clinton County Board roster (the county's own board page — 15 members with phone, e-mail and term year, Chairman and Vice Chairman badged by name match) + the redistricting tripwire: the same run re-checks the county's live precinct count and each numbered board contest's precinct count against the shipped dissolve",
       "schedule": "Sat 19:00 UTC"
+    },
+    {
+      "file": "update-adams-county-board-roster.yml",
+      "purpose": "Adams County Board roster (certified canvasses on platinumelectionresults.com; also the backfill tripwire for the unread November 2022 canvass)",
+      "schedule": "Sat 20:00 UTC"
     },
     {
       "file": "update-warren-county-board-roster.yml",
