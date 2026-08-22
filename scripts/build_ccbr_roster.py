@@ -59,13 +59,23 @@ def resolve_roster(records):
         entry = {"name": name}
         if record.get("url"):
             entry["url"] = record["url"]
-        # First on-page email/phone only — the pages list at most one of each
-        # (the district inbox). Districts publishing none (District 2 used a
-        # contact form as of 2026-07-20) honestly omit the key.
+        # First on-page email only — the pages list at most one (the district
+        # inbox). Districts publishing none (District 2 used a contact form as
+        # of 2026-07-20) honestly omit the key.
         emails = record.get("emails") or []
         if emails:
             entry["email"] = emails[0]
-        phones = record.get("phones") or []
+        # PHONES ARE NOT TAKEN IN DOCUMENT ORDER, and the comment this replaced
+        # said they were ("the pages list at most one of each"). That was true
+        # when it was written and false by 2026-08-22: every commissioner page
+        # now carries several numbers in body copy, and the FIRST one was an SMS
+        # shortcode on District 3 ("Text EZJOIN to 872-345-4747", shipped as the
+        # office phone for weeks) and an event RSVP line on District 2 (PR #425,
+        # caught in review). The scraper now marks which numbers are presented
+        # as the commissioner's own contact — same sentence as the district
+        # inbox — and only those are eligible. There is deliberately NO FALLBACK
+        # to the raw list: a district that publishes no phone shows none.
+        phones = record.get("contact_phones") or []
         if phones:
             entry["phone"] = normalize_phone(phones[0])
         roster[key] = entry
