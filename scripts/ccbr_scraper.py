@@ -80,6 +80,59 @@ DISTRICT_AFTER = re.compile(
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 PHONE_RE = re.compile(r"\(?\d{3}\)?[ .-]\d{3}[ .-]\d{4}")
 
+# A COMMISSIONER'S PHONE IS THE ONE IN THE SENTENCE THAT ALSO CARRIES THEIR
+# DISTRICT INBOX, and taking anything else has now been wrong twice.
+#
+# Scoping to <main> (below) already keeps the sitewide footer's switchboard and
+# fax out. It does nothing about numbers in BODY COPY, and every commissioner
+# page has some. Measured 2026-08-22 across all three:
+#
+#   District 1  "Contact Commissioner Cardenas at (312) 603-2676 or
+#               BORDistrict1info@cookcountyil.gov"           <- the real one
+#               "please call the Riverside Township office at 708-447-7700"
+#                                                            <- another body's office
+#   District 2  "Please Call (773) 853-0799 to Register to Attend this Event"
+#                                                            <- an event RSVP line
+#   District 3  "Text EZJOIN to 872-345-4747"                <- an SMS shortcode
+#               "contact my office ... or by phone at 312-603-5540"  <- the real one
+#
+# Taking the FIRST number in document order, which this scraper did until
+# 2026-08-22, shipped the SMS shortcode as District 3's office phone and would
+# have shipped the event line as District 2's (PR #425, caught in review and
+# closed). Both parse perfectly and mean something else — the Coles lesson in a
+# different costume.
+#
+# The positive rule below is what the site itself does on both pages that
+# publish a contact: the phone and the district inbox sit in one sentence. It
+# yields the right number for Districts 1 and 3 and NOTHING for District 2,
+# which is correct — that page publishes a contact form instead, and a district
+# with no published phone must show none rather than borrow one.
+DISTRICT_INBOX_RE = re.compile(r"\bBORdistrict\d\w*@", re.IGNORECASE)
+SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
+# Defence in depth: constructions that put a number in a sentence WITHOUT it
+# being a number to call. Checked even inside an inbox sentence, because a
+# future page edit could put a shortcode next to an address.
+NOT_A_PHONE_CUE_RE = re.compile(
+    r"\btext\b[^.]{0,40}\bto\b\s*$|\bregister\b[^.]{0,30}$|\bfax\b\s*:?\s*$",
+    re.IGNORECASE)
+
+
+def contact_phones(text):
+    """Phones presented as THIS commissioner's contact, in document order.
+
+    `text` is the page's main-region text. Returns [] when the page publishes
+    no district-inbox sentence carrying a number, which is a real answer and
+    not a scrape failure."""
+    found = []
+    for sentence in SENTENCE_SPLIT_RE.split(text):
+        if not DISTRICT_INBOX_RE.search(sentence):
+            continue
+        for m in PHONE_RE.finditer(sentence):
+            if NOT_A_PHONE_CUE_RE.search(sentence[:m.start()]):
+                continue
+            found.append(m.group(0))
+    return list(dict.fromkeys(found))
+
 
 def fetch(url, session):
     resp = session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
@@ -151,7 +204,11 @@ def scrape_commissioner(name, url, session):
     text = " ".join(content.get_text(" ", strip=True).split())
     emails.extend(EMAIL_RE.findall(text))
     record["emails"] = list(dict.fromkeys(e for e in emails if e))
+    # Both lists ship: `phones` is every number in the main region, kept so a
+    # reviewer can see what was rejected and why, and `contact_phones` is the
+    # subset the builder is allowed to use.
     record["phones"] = list(dict.fromkeys(PHONE_RE.findall(text)))
+    record["contact_phones"] = contact_phones(text)
     record["district_number"] = extract_district(text)
     return record
 
