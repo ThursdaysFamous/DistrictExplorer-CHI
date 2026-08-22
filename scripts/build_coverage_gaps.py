@@ -14,10 +14,27 @@ drift gate: it re-emits and compares, so editing the guidebook without
 regenerating (or vice versa) fails the build rather than shipping a panel that
 disagrees with the document of record.
 
+TWO AUDIENCES, TWO SETS OF FIELDS. A gap record serves a maintainer (what was
+measured, on what date, against which host, and why the obvious route is closed)
+and a voter (what won't show up on my card, and why). Those are not the same
+text, and for a year they were: the panel printed `blocker` verbatim, which runs
+to ten thousand characters on the harder counties, so the one surface whose job
+is to make absence legible was the least legible thing in the app.
+
+So the fields are split by audience:
+  - READER FIELDS — `summary`, `why`, `wanted` — are the only ones emitted. Each
+    is capped at 240 characters and linted for the house style of the record
+    (shouting, hostnames, ISO dates), because a cap is the only thing that keeps
+    a research note from growing back into the panel one edit at a time.
+  - THE RECORD — `blocker` — is required, unbounded, and NEVER shipped. It stays
+    in the guidebook where the next maintainer looks, so nothing about the data
+    journey is lost; it simply stops being read aloud to somebody who only wants
+    to know who represents them.
+
 Validation is deliberately strict about the things a reader would be misled by:
-  - every entry needs a stable id, an area, a summary, a measured blocker, and a
-    `wanted` line, because a gap with no `wanted` invites re-sending a source
-    that was already rejected;
+  - every entry needs a stable id, an area, a summary, a plain-language `why`, a
+    measured blocker, and a `wanted` line, because a gap with no `wanted` invites
+    re-sending a source that was already rejected;
   - `kind` must be one of no-source / blocked / data-quality — the two classes
     the panel is scoped to, plus `blocked` for a source that exists but refuses
     automation;
@@ -56,11 +73,23 @@ GAPS_RE = re.compile(
     re.S,
 )
 KINDS = ("no-source", "blocked", "data-quality")
-REQUIRED = ("id", "concept", "area", "kind", "summary", "blocker", "wanted")
+REQUIRED = ("id", "concept", "area", "kind", "summary", "why", "blocker", "wanted")
 # Field order in the emitted file. Fixed so the output is byte-stable and --check
-# compares content rather than dict ordering.
+# compares content rather than dict ordering. `blocker` is deliberately absent:
+# it is the maintainer's record, kept in the guidebook and never shipped.
 FIELD_ORDER = ("id", "kind", "concept", "area", "layer", "counties",
-               "summary", "blocker", "wanted")
+               "summary", "why", "wanted")
+
+# The three fields a voter reads, and the budget each gets. 240 characters is
+# about two lines in the panel — enough for a plain sentence and not enough for
+# a research note.
+READER_FIELDS = ("summary", "why", "wanted")
+READER_MAX = 240
+# House-style tells that belong in `blocker` and read as noise on a card.
+SHOUTING_RE = re.compile(r"\b[A-Z]{3,}\b[ ,]+\b[A-Z]{3,}\b")
+HOSTNAME_RE = re.compile(r"\b[a-z0-9][a-z0-9-]*\.(?:gov|com|org|net|us|edu|io)\b")
+ISO_DATE_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
+URL_RE = re.compile(r"https?://")
 
 
 def fail(msg):
@@ -93,6 +122,37 @@ def shipped_outline_slugs():
             for f in os.listdir(APP_DATA_DIR) if f.endswith("-county-outline.json")}
 
 
+def reader_problems(where, e):
+    """Style problems in the three fields a voter actually reads.
+
+    Every rule here has a counter-example in this file's own history: the panel
+    once printed a 10,600-character blocker as its "Why" line, hostnames and
+    HTTP status codes and ALL-CAPS findings included. None of that is wrong in
+    the record; all of it is wrong on a card read by somebody who wants to know
+    who represents them. Keep the finding, move it to `blocker`.
+    """
+    out = []
+    for key in READER_FIELDS:
+        text = str(e.get(key) or "").strip()
+        if not text:
+            continue                     # absence is REQUIRED's business
+        if len(text) > READER_MAX:
+            out.append("%s: %s is %d characters (max %d) — say it plainly here "
+                       "and move the detail to `blocker`"
+                       % (where, key, len(text), READER_MAX))
+        if URL_RE.search(text) or HOSTNAME_RE.search(text):
+            out.append("%s: %s names a hostname or URL — readers get the "
+                       "publisher from the card, not from this line" % (where, key))
+        if ISO_DATE_RE.search(text):
+            out.append("%s: %s carries an ISO date — dates belong in `blocker`; "
+                       "write \"since 2021\" if the timing matters to a reader"
+                       % (where, key))
+        if SHOUTING_RE.search(text):
+            out.append("%s: %s shouts in capitals — that is record voice, not "
+                       "reader voice" % (where, key))
+    return out
+
+
 def validate(entries, layer_ids, outlines):
     problems, seen = [], set()
     for i, e in enumerate(entries):
@@ -100,6 +160,7 @@ def validate(entries, layer_ids, outlines):
         for key in REQUIRED:
             if not str(e.get(key) or "").strip():
                 problems.append("%s: missing %s" % (where, key))
+        problems.extend(reader_problems(where, e))
         if e.get("id") in seen:
             problems.append("%s: duplicate id" % where)
         seen.add(e.get("id"))

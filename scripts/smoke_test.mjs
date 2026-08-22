@@ -179,24 +179,40 @@ try {
         const b = document.getElementById("gaps-body");
         return b && !/Loading/.test(b.textContent) && b.textContent.trim().length > 0;
       }, null, { timeout: QUERY_TIMEOUT }).catch(() => {});
+      // Every gap lives inside a <details class="gaps-group">, so a section is
+      // read as {label, count-as-rendered, items-actually-inside}. Counting the
+      // items INSIDE each group rather than walking siblings is what makes this
+      // fork-generic: a sibling with three gaps renders three small groups and
+      // Chicago renders four large ones, and both satisfy the same assertions.
       return page.evaluate(() => {
         const b = document.getElementById("gaps-body");
-        const first = b.querySelector(".gaps-section-label");
-        let hereCount = 0;
-        for (let el = first && first.nextElementSibling; el && el.classList.contains("gap-item"); el = el.nextElementSibling) hereCount++;
+        const groups = Array.from(b.querySelectorAll(".gaps-group")).map((g) => ({
+          label: (g.querySelector(".gaps-section-text") || {}).textContent || "",
+          shown: Number((g.querySelector(".gaps-section-count") || {}).textContent),
+          items: g.querySelectorAll(".gap-item").length,
+        }));
         return {
           items: b.querySelectorAll(".gap-item").length,
-          sections: Array.from(b.querySelectorAll(".gaps-section-label")).map((e) => e.textContent),
-          hereCount,
+          lede: (b.querySelector(".gaps-lede") || {}).textContent || "",
+          groups,
+          details: b.querySelectorAll(".gap-item .gap-more").length,
           hrefs: Array.from(b.querySelectorAll(".gap-suggest")).map((a) => a.getAttribute("href")),
         };
       });
     }
 
     const cold = await openGaps();
-    check("data gaps panel renders every recorded gap",
-      cold.items === expected && cold.sections.length === 1,
-      `${cold.items}/${expected} items, ${cold.sections.length} section(s)`);
+    check("data gaps panel renders every recorded gap, grouped with honest counts",
+      cold.items === expected && cold.groups.length >= 1 &&
+      cold.groups.every((g) => g.label && g.shown === g.items) &&
+      cold.groups.reduce((n, g) => n + g.items, 0) === expected,
+      `${cold.items}/${expected} items in ${cold.groups.length} group(s): ` +
+      JSON.stringify(cold.groups));
+    // The panel's whole point is that a reader can scan it. Detail belongs
+    // behind a disclosure, one per gap — this is the assertion that would fail
+    // if a research note ever grew back into the card body.
+    check("every gap keeps its detail behind a disclosure",
+      cold.details === expected, `${cold.details}/${expected} disclosures`);
     check("every gap offers a prefilled source submission",
       cold.hrefs.length === expected &&
       cold.hrefs.every((h) => /template=source-submission\.yml/.test(h) && /[?&]gap_id=/.test(h)),
@@ -209,9 +225,11 @@ try {
     await page.evaluate(() => window.ChiExplorer.setSelectedPoint(41.1254, -87.8487));
     const warm = await openGaps();
     check("data gaps panel is location-aware (Kankakee point leads with its own gaps)",
-      warm.sections.length === 2 && /clicked/i.test(warm.sections[0]) &&
-      warm.hereCount === kankakeeGaps && warm.items === expected,
-      `sections=${JSON.stringify(warm.sections)} here=${warm.hereCount}/${kankakeeGaps} total=${warm.items}`);
+      warm.groups.length >= 2 && /clicked/i.test(warm.groups[0].label) &&
+      warm.groups[0].items === kankakeeGaps && warm.items === expected &&
+      /clicked/i.test(warm.lede),
+      `groups=${JSON.stringify(warm.groups.map((g) => g.label))} ` +
+      `here=${warm.groups[0] && warm.groups[0].items}/${kankakeeGaps} total=${warm.items}`);
 
     await context.close();
   }
