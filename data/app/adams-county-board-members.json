@@ -1,0 +1,93 @@
+{
+  "1": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 1, certified canvass)",
+        "name": "Timothy Siemer",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "2": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 2, certified canvass)",
+        "name": "Mark Thomas Sorensen",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "3": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 3, certified canvass)",
+        "name": "David P Bellis",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "4": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 4, certified canvass)",
+        "name": "Jeremy Daniel Farlow",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "5": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 5, certified canvass)",
+        "name": "Robert E Reich",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "6": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 6, certified canvass)",
+        "name": "David DL McCleary",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "7": {
+    "members": [
+      {
+        "districtSource": "elected 2024 (District 7, certified canvass)",
+        "name": "Brent A Fischer",
+        "party": "R"
+      }
+    ],
+    "seats": 3,
+    "sourceUrl": "https://platinumelectionresults.com/history/reports/summary/2024_ge/54"
+  },
+  "board": {
+    "address": "Adams County Courthouse, 507 Vermont Street, Quincy, IL 62301",
+    "clerkPhone": "(217) 277-2150",
+    "note": "Names come from Adams County's certified election canvasses. The county's own board page cannot be read by an automated client, so no per-member phone or e-mail is published here.",
+    "resultsUrl": "https://platinumelectionresults.com/history",
+    "sourceUrl": "https://www.adamscountyil.gov/county-board",
+    "unreadElections": [
+      {
+        "election": "November 2022 general",
+        "status": "empty",
+        "url": "https://platinumelectionresults.com/history/reports/summary/2022_ge/54"
+      }
+    ]
+  }
+}

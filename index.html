@@ -9819,6 +9819,14 @@ function initChiExplorer() {
   var loadAdamsCountyBoard = makeCached(function () {
     return loadAdamsLayer("Web_Voting_Data", 2, "DIST_NAME", "board districts");
   });
+  // Adams's roster does NOT come from the county — its board page is a flat
+  // Akamai deny — but from the county's own certified canvasses, which name one
+  // of each district's three members (the November 2024 cycle). The other two
+  // per district were seated in November 2022, a canvass nothing readable
+  // publishes, so the card says which seats it is naming and which it is not.
+  var loadAdamsBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/adams-county-board-members.json", {}, 2);
+  });
   // Precincts2021 rather than Web_Voting_Data/1: same 92 shapes, but this one
   // also carries PollingPlace, populated on all 92.
   var loadAdamsPrecincts = makeCached(function () {
@@ -18864,11 +18872,17 @@ function initChiExplorer() {
       // the GIS keys by integer — the scraper converts, so the join holds. The
       // Chairman and Vice Chairman are elected from among the 16 and each
       // holds a district seat, so both are badged on their own rows.
-      // Adams — 7 districts, county GIS, NO ROSTER. The county's own site is an
-      // Akamai hard deny and the Archive never captured its board page, so no
-      // member is named here: the card gives the district and links the body,
-      // which is the rule-4 floor rather than a guess. If a roster ever becomes
-      // reachable this entry gains it exactly as Logan's did.
+      // Adams — 7 districts of THREE seats each (21 members), county GIS, and a
+      // roster that is PARTIAL BY CONSTRUCTION. The county's own board page is a
+      // flat Akamai deny and the Archive never captured it, so no page can be
+      // read; what IS readable is the county's certified election canvasses, on
+      // platinumelectionresults.com. Adams staggers its seats 2-then-1, so the
+      // November 2024 general names ONE member per district and the other two
+      // were seated in November 2022 — a canvass that vendor returns empty and
+      // nobody else carries. The card therefore names a third of the board and
+      // SAYS which third, rather than showing a short list that reads like the
+      // whole one. Every row carries the election that seated it, because a
+      // canvass cannot show a mid-term appointment (the Clark rule).
       {
         key: "adams",
         coverage: adamsCountyCoverage,
@@ -18878,19 +18892,64 @@ function initChiExplorer() {
           return (v == null || v === "") ? null : String(v).replace(/^D/, "District ");
         },
         query: function (point, seq) {
-          return loadAdamsCountyBoard().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
+          return Promise.all([
+            loadAdamsCountyBoard(),
+            loadAdamsBoardMembers().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var d = findPropCI(feature.properties || {}, ["dist_name"]);
-            return { seq: seq, district: (d == null || d === "") ? null : String(d) };
+            var district = (d == null || d === "") ? null : String(d).replace(/^D/, "");
+            var roster = results[1];
+            return {
+              seq: seq,
+              district: district,
+              entry: (roster && district) ? roster[district] : null,
+              board: roster && roster.board,
+              rosterLoaded: !!roster
+            };
           });
         },
         render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var seats = (result.entry && result.entry.seats) || 0;
+          var note;
+          if (!result.rosterLoaded) {
+            // A fetch failure must never read as "the county names nobody".
+            note = "The member list could not be loaded just now.";
+          } else if (members.length && seats > members.length) {
+            note = members.length + " of this district's " + seats +
+              " seats named — the member elected in 2024. Adams elects the other " +
+              (seats - members.length) +
+              " in a separate cycle, and no source this project can read names them.";
+          } else {
+            note = boardCountNote(members.length, null);
+          }
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Adams County Board",
-            note: "Adams County does not publish its board membership anywhere reachable, so this card names the district only."
+            note: note
           }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The canvass is the ONLY thing placing this member in this
+              // district, so its provenance rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.board && result.board.clerkPhone) {
+            fields.push({ label: "County Clerk", value: String(result.board.clerkPhone) });
+          }
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board mail", value: String(result.board.address) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
           return wrap;
         },
         cardIdentifier: function (result) {
@@ -18902,6 +18961,17 @@ function initChiExplorer() {
             label: "Adams County Board (official)",
             url: "https://www.adamscountyil.gov/county-board"
           };
+        },
+        hoverOfficial: {
+          load: loadAdamsBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["dist_name"]);
+            if (d == null || d === "") return null;
+            var e = roster[String(d).replace(/^D/, "")];
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
         }
       },
       // McDonough — 3 districts of SEVEN members each, the boundary DERIVED
