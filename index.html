@@ -2813,7 +2813,7 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -91.55, minLat: 37.0, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -91.55, minLat: 36.96, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
   var PERMALINK_GATE = { minLat: 36.95, maxLat: 42.75, minLng: -91.65, maxLng: -86.9 };
@@ -7006,6 +7006,15 @@ function initChiExplorer() {
           return person;
         }), { tinted: true }));
         var note = board.structure ? String(board.structure) : null;
+        // A board LARGER than the list its county publishes says so, in the same
+        // words the districted counties use for a missing district member. The
+        // roster is known to have loaded here — `board` is null when the fetch
+        // fails — so this can never invent a vacancy out of a network error.
+        // Alexander is the county this exists for: three seats, two published,
+        // and a card that named two commissioners with no further comment would
+        // conceal the third exactly as surely as guessing a name would invent one.
+        var short = boardDirectoryShortfallNote(board, true);
+        if (short) note = note ? note + " \u00b7 " + short : short;
         if (note) wrap.appendChild(renderFieldStack([{ label: "Board", value: note }]));
         // Address OR phone: a board whose only published contact is a shared
         // switchboard (Calhoun prints the same number under all five members,

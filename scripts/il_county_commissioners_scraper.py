@@ -1090,6 +1090,101 @@ def parse_gallatin(page):
 
 
 
+# ------------------------------------------------------------- Alexander
+# TWO SURFACES ON ONE PAGE NAME THE BOARD AND THEY DISAGREE, which is the whole
+# reason this parser is written the way it is. alexandercounty.illinois.gov's
+# County Board page renders an Elementor TEAM WIDGET listing the members the
+# county maintains, and every page on the site also carries a hand-built NAV
+# MENU with a "County Board Chairman / County Board Member / County Board Vice
+# Chairman" trio pointing at /team/ slugs. The nav is STALE: its Member is Larry
+# Essex, who LOST the seat in November 2024, and its Vice Chairman is Bruce
+# Sims, and BOTH of those /team/ pages return 404 while the menu entries live
+# on. A parser that scanned the whole page for /team/ links would therefore ship
+# four commissioners for a three-seat board, two of them out of office. The
+# widget is read and the menu is ignored.
+ALEXANDER_WIDGET_RE = re.compile(
+    r'(?is)<div class="archive_team[^"]*">(.*?)(?:</section>|\Z)')
+ALEXANDER_ITEM_RE = re.compile(
+    r'(?is)<div class="items[^"]*">(.*?)</div>\s*</div>')
+ALEXANDER_NAME_RE = re.compile(
+    r'(?is)<a\s+href="([^"]*?/team/[^"]*?)"[^>]*class="name[^"]*"[^>]*>(.*?)</a>')
+ALEXANDER_JOB_RE = re.compile(r'(?is)<p class="job">(.*?)</p>')
+ALEXANDER_EMAIL_RE = re.compile(r'(?i)Email:\s*([^\s<]+@[^\s<]+)')
+ALEXANDER_PHONE_RE = re.compile(r'(?i)Phone:\s*([0-9][0-9\-().\s]{8,})')
+
+
+def parse_alexander(page):
+    """Alexander's board members, from the county's own team widget.
+
+    THE COUNTY SEATS THREE AND PUBLISHES TWO. Its 7 May 2024 minutes — the last
+    it has posted — carry the board in their letterhead as Chairman, Vice
+    Chairman and Commissioner, and its certified 2024 General canvass counts
+    "FOR COMMISSIONER" in all ELEVEN of its precincts, the same denominator the
+    presidential contest on that ballot reports, so the board is three members
+    elected countywide. The widget names two of them. Nothing here invents the
+    third: the SITES entry declares `seats` alongside `expect`, and the card
+    says in so many words that a seat is not listed. Concealing the gap and
+    inventing a name are the same failure from opposite directions.
+
+    WHY NOT READ THE THIRD OUT OF THE RETURNS. The 2024 canvass names James R.
+    Smith beating Larry S. Essex for the one seat on that ballot, which
+    corroborates the widget's James Smith exactly. It cannot reach the other two
+    seats: platinumelectionresults.com carries Alexander for 2024 alone (every
+    other slug answers with the vendor's redirect, not a report), so the
+    elections that seated Griggs and the unnamed third are not published
+    anywhere this project can read.
+    """
+    widget = ALEXANDER_WIDGET_RE.search(page)
+    if not widget:
+        return [], None
+    members = []
+    for item in ALEXANDER_ITEM_RE.findall(widget.group(1)):
+        name_m = ALEXANDER_NAME_RE.search(item)
+        if not name_m:
+            continue
+        name = clean(name_m.group(2))
+        if not name:
+            continue
+        entry = {"name": name, "profileUrl": name_m.group(1)}
+        job = ALEXANDER_JOB_RE.search(item)
+        canonical = role_of(job.group(1)) if job else None
+        if canonical:
+            entry["role"] = canonical
+        if not any(x["name"] == name for x in members):
+            members.append(entry)
+    return members, None
+
+
+def enrich_alexander(session, members, verify):
+    """Each member's own /team/ page carries the contact the widget omits.
+
+    The county publishes a personal gmail address and a mobile number for each
+    officeholder — that is the county publishing a way to reach the office, and
+    it ships. NO ADDRESS IS READ from these pages: the only address on them is
+    the courthouse in the site footer, and reading addresses per-person is the
+    habit that would let a residence ship the day a county changed its template
+    (the Madison/Peoria rule). `profileUrl` is consumed here and dropped — it is
+    a fetch target, not a card field.
+    """
+    for member in members:
+        url = member.pop("profileUrl", None)
+        if not url:
+            continue
+        resp, _ = fetch(session, url, verify)
+        if resp is None:
+            continue
+        text = clean(re.sub(r"<[^>]+>", " ", resp.text))
+        email = ALEXANDER_EMAIL_RE.search(text)
+        if email:
+            member["email"] = email.group(1).strip(".,;")
+        phone = ALEXANDER_PHONE_RE.search(text)
+        if phone:
+            normalized = normalize_phone(phone.group(1))
+            if normalized:
+                member["phone"] = normalized
+
+
+
 # ------------------------------------------------- incomplete TLS chains
 # THE COLES PATTERN, MET A SECOND TIME. gallatinco.illinois.gov answers 200 and
 # renders perfectly in a browser, but serves ONLY its leaf certificate — the
@@ -1156,6 +1251,21 @@ def aia_ca_bundle(key):
 
 SITES = {
     # normalized county key (see build_county_commissioners.py) -> spec
+    # ALEXANDER is the only county in this table whose board is LARGER than the
+    # roster it publishes, which is why `seats` exists beside `expect`: two
+    # members are named on the county's page, the board seats three, and the
+    # card prints the shortfall rather than either padding the list or hiding
+    # the seat. `enrich` is also unique to it — the widget carries names and
+    # roles, and the contact for each sits on that member's own /team/ page.
+    "ALEXANDER": {
+        "name": "Alexander County",
+        "url": "https://alexandercounty.illinois.gov/county-board/",
+        "structure": "Commission form \u2014 3 commissioners elected countywide",
+        "expect": 2,
+        "seats": 3,
+        "parse": parse_alexander,
+        "enrich": enrich_alexander,
+    },
     "GALLATIN": {
         "name": "Gallatin County",
         "url": "https://gallatinco.illinois.gov/departments/board/",
@@ -1415,12 +1525,19 @@ def main():
         if len(members) != spec["expect"]:
             print("county-commissioners: WARN — %s parsed %d members, expected %d"
                   % (key, len(members), spec["expect"]), file=sys.stderr)
+        if spec.get("enrich"):
+            spec["enrich"](session, members, verify)
         out[key] = {
             "county": spec["name"],
             "structure": spec["structure"],
             "sourceUrl": spec["url"],
             "members": members,
         }
+        # A board bigger than the list its county publishes. Carried so the card
+        # can SAY a seat is unnamed; absent for every county that publishes all
+        # of its members, which is all but one of them.
+        if spec.get("seats"):
+            out[key]["seats"] = spec["seats"]
         if office:
             out[key]["office"] = office
 

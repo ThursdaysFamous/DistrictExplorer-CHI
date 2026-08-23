@@ -36,6 +36,21 @@ MIN_MEMBERS = 3
 # Saline has one. Widening this does NOT weaken any existing county.
 MAX_MEMBERS = 13
 EXPECT_MEMBERS = {
+    "ALEXANDER": 2,                  # 2026-08-23; TWO PUBLISHED OF THREE SEATED, and
+                                     # the only county in this file where those numbers
+                                     # differ. Commission form proven from the county's
+                                     # own 7 May 2024 minutes (Chairman / Vice Chairman
+                                     # / Commissioner in the letterhead, three names in
+                                     # the roll call) and countywide election proven
+                                     # from its certified 2024 General canvass, where
+                                     # "FOR COMMISSIONER" reports all ELEVEN precincts —
+                                     # the same denominator the presidential contest on
+                                     # that ballot reports. The county's team widget
+                                     # names Chairman Joe Griggs and member James Smith
+                                     # and stops; its minutes stop in May 2024; and the
+                                     # third seat is named by no source anywhere. The
+                                     # block carries seats: 3 so the card says a seat is
+                                     # unlisted instead of implying a two-member board.
     "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
     "SCHUYLER": 7,                   # pass-8; at-large proven from the canvass
@@ -197,14 +212,32 @@ def main():
     roster = {}
     for key, block in counties.items():
         members = block.get("members") or []
-        if not (MIN_MEMBERS <= len(members) <= MAX_MEMBERS):
-            fail("%s parsed %d members, outside the %d-%d an at-large board should have"
-                 % (key, len(members), MIN_MEMBERS, MAX_MEMBERS))
-        seats = EXPECT_MEMBERS.get(key)
-        if seats is not None and len(members) != seats:
-            fail("%s parsed %d members, the county seats %d — the page's shape "
+        expect = EXPECT_MEMBERS.get(key)
+        # THE EXACT COUNT WINS WHERE THERE IS ONE. MIN/MAX_MEMBERS is the
+        # backstop for a county added to the scraper before it earns a row here,
+        # and applying it on top of an exact count would be worse than useless:
+        # Alexander publishes TWO members of a three-seat board, which its own
+        # row states precisely and which the generic floor would reject.
+        if expect is None:
+            if not (MIN_MEMBERS <= len(members) <= MAX_MEMBERS):
+                fail("%s parsed %d members, outside the %d-%d an at-large board "
+                     "should have" % (key, len(members), MIN_MEMBERS, MAX_MEMBERS))
+        elif len(members) != expect:
+            fail("%s parsed %d members, the county publishes %d — the page's shape "
                  "changed, or the board did. Re-read it before shipping."
-                 % (key, len(members), seats))
+                 % (key, len(members), expect))
+        # `seats` is the size of the BOARD, which is not always the length of the
+        # list a county publishes. It is carried only where the two differ, and
+        # it may never be smaller than the roster: a board with fewer seats than
+        # members is a reading error, not a finding.
+        seats = block.get("seats")
+        if seats is not None:
+            if not isinstance(seats, int) or seats < len(members):
+                fail("%s declares %r seats against %d members — a board cannot "
+                     "seat fewer people than it lists" % (key, seats, len(members)))
+            if seats == len(members):
+                fail("%s declares seats equal to its member count; drop the field "
+                     "rather than shipping a shortfall of nothing" % key)
         names = [m.get("name") for m in members]
         if len(set(names)) != len(names):
             fail("%s has duplicate member names (%s)" % (key, ", ".join(sorted(names))))
@@ -241,6 +274,8 @@ def main():
             "structure": block.get("structure"),
             "members": clean_members,
         }
+        if seats is not None:
+            out["seats"] = seats
         # Provenance, and exactly one kind of it. Eight counties are scraped
         # from a page and carry sourceUrl; Edwards has no website at all and
         # carries the document its Clerk sent plus the date it was verified.

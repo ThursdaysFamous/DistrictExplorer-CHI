@@ -527,6 +527,48 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # — and VIENNA MOVES FROM THE OUTSIDE LIST TO THE INSIDE ONE
                      # while Metropolis (Massac) does the same.
                      "087", "145",
+                     # Alexander — the 83rd county served (2026-08-23), joining
+                     # through the County card alone: three commissioners
+                     # elected countywide, so no district geometry, no dispatch
+                     # entry and no toggle. The form is proven twice from the
+                     # county's own documents — its 7 May 2024 minutes carry the
+                     # board in their letterhead as Chairman / Vice Chairman /
+                     # Commissioner with three names in the roll call, and its
+                     # certified 2024 General canvass reports "FOR COMMISSIONER"
+                     # in all ELEVEN precincts, the same denominator the
+                     # presidential contest on that ballot reports.
+                     #
+                     # THE FIRST COUNTY TO JOIN WITH ITS ROSTER KNOWINGLY SHORT.
+                     # The county publishes two of its three members and its
+                     # minutes stop in May 2024, so the third seat is named by no
+                     # source anywhere. The card prints "1 of 3 seats not listed
+                     # in the county's directory" rather than either padding the
+                     # list or showing two names without comment — concealing a
+                     # seat and inventing one are the same failure from opposite
+                     # directions, and the ask to its Clerk stays open.
+                     #
+                     # A MAINLAND JOIN AT THE SOUTHERN TIP: its only Illinois
+                     # neighbours are Union (served on 2026-08-22) and Pulaski,
+                     # so it attaches through Union and no island moves. MOUND
+                     # CITY (PULASKI) JOINS THE OUTSIDE LIST as the frontier
+                     # anchor it leaves behind.
+                     #
+                     # AND IT SETTLES WHAT AN ENCLAVE ACTUALLY IS, by very
+                     # nearly making a fourth one. After this join Pulaski has
+                     # no unserved Illinois neighbour left — Alexander, Union,
+                     # Johnson and Massac all serve — which is the test Bureau
+                     # and Christian meet as holes in the mainland. Pulaski is
+                     # NOT a hole, and the dissolve says so: the ring count is
+                     # unchanged at three (one outer plus those same two holes),
+                     # because Pulaski's southern edge IS THE OHIO RIVER, the
+                     # Kentucky state line. A county with no unserved neighbour
+                     # is an enclave only if it is INTERIOR; one that fronts the
+                     # state line is a notch in the outer boundary instead, and
+                     # the outer ring simply detours around it (2,231 vertices
+                     # to 2,644 in this one change). Read the ring count from
+                     # --check, never from this comment — the first draft of it
+                     # claimed a fourth enclave and the dissolve refuted it.
+                     "003",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -644,6 +686,15 @@ INSIDE = {
     # point-in-county query.
     "Marion (Williamson)": (37.7344, -88.9419),
     "Jonesboro (Union)": (37.4517, -89.2673),
+    # Cairo (Alexander) — the county seat at the confluence of the Ohio and the
+    # Mississippi, and the southernmost point in Illinois, 2026-08-23. Alexander
+    # joins through the County card alone (three commissioners elected
+    # countywide) on the day after Union, its only served neighbour. Verified by
+    # point-in-county against the county's own shipped outline rather than by
+    # eye, which matters more than usual here: the county is a narrow wedge
+    # between two rivers and most of the ground near this anchor is Missouri or
+    # Kentucky.
+    "Cairo (Alexander)": (37.0053, -89.1765),
     # Knox, the 80th county (2026-08-22). Galesburg moved here from OUTSIDE
     # the day the county joined: it spent that time proving a HOLE stayed
     # open in the mainland, and now proves the same hole is closed.
@@ -944,6 +995,16 @@ OUTSIDE = {
     # name can place them and the dissolve that built Clinton cannot build it.
     "Salem (Marion)": (38.6270, -88.9456),
     "Ava (Jackson)": (37.8886, -89.4964),
+    # Mound City (Pulaski) — the county seat, added 2026-08-23 with Alexander.
+    # Pulaski now has no unserved Illinois neighbour left (Alexander, Union,
+    # Johnson and Massac all serve) and is still NOT an enclave, because its
+    # southern edge is the Ohio River state line: the outer ring detours around
+    # it rather than closing over it, and the hole count stays at Bureau and
+    # Christian. That distinction is why this anchor is here — it asserts the
+    # notch, which is exactly as easy to fill by accident as a hole. Its own
+    # record stands unchanged: the county's site refuses this client with a 403
+    # and its board's form is unknown.
+    "Mound City (Pulaski)": (37.0856, -89.1631),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so
     # it must stay outside — the guard that keeps "a circuit's secondary
     # counties" from quietly becoming "everything nearby". (Pittsfield sat

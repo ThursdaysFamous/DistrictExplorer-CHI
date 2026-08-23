@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**82 of 102 Illinois counties are served** — 71 through their own dispatch entries, 2 through a shipped judicial circuit, and 9 through the County card alone. 20 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**83 of 102 Illinois counties are served** — 71 through their own dispatch entries, 2 through a shipped judicial circuit, and 10 through the County card alone. 19 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,11 +19,12 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (82)
+## Served counties (83)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
 | Adams | 17001 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district` | 3 — `adams-county-board-roster` (no-source); `county-board-office-addresses` (no-source); `quincy-ward-officeholders` (no-source) |
+| Alexander | 17003 | County card | at-large — County card | — | 1 — `alexander-county-board` (no-source) |
 | Bond | 17005 | judicial circuit | no board layer — see gaps | — | 1 — `bond-county-board-districts` (no-source) |
 | Boone | 17007 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `boone-fire-belvidere-city` (data-quality); `boone-fire-names` (data-quality); `boone-park-library-districts` (no-source); `county-board-office-addresses` (no-source) |
 | Brown | 17009 | County card | at-large — County card | — | 1 — `brown-precinct-geometry` (no-source) |
@@ -106,13 +107,12 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (20) — gap-recorded, not yet served
+## Researched frontier (19) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
 | County | FIPS | Gap records |
 |---|---|---|
-| Alexander | 17003 | 1 — `alexander-county-board` (no-source) |
 | Bureau | 17011 | 1 — `bureau-county-board-districts` (no-source) |
 | Champaign | 17019 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Christian | 17021 | 1 — `christian-county-board-districts` (no-source) |

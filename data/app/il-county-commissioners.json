@@ -1,4 +1,23 @@
 {
+ "ALEXANDER": {
+  "county": "Alexander County",
+  "members": [
+   {
+    "email": "Pdgriggsje601@gmail.com",
+    "name": "Joe Griggs",
+    "phone": "618-534-0712",
+    "role": "Chairman"
+   },
+   {
+    "email": "Jsmith1986189@gmail.com",
+    "name": "James Smith",
+    "phone": "618-306-0029"
+   }
+  ],
+  "seats": 3,
+  "sourceUrl": "https://alexandercounty.illinois.gov/county-board/",
+  "structure": "Commission form — 3 commissioners elected countywide"
+ },
  "BROWN": {
   "county": "Brown County",
   "members": [
