@@ -569,6 +569,75 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # --check, never from this comment — the first draft of it
                      # claimed a fourth enclave and the dissolve refuted it.
                      "003",
+                     # Pulaski — the 84th county served (2026-08-23), joining ON
+                     # ITS PRECINCTS the day after Alexander closed the wedge
+                     # around it, and the day its own comment above described it
+                     # as the frontier anchor. Both halves of that were true for
+                     # about an hour.
+                     #
+                     # ITS RECORD HAD SAID SINCE 4 AUG that whether the board is
+                     # districted or elected countywide was "not determinable in
+                     # this pass", because pulaskicountyil.gov resolves to an
+                     # address this project's egress refuses. That blocker is
+                     # unchanged and this join does not touch it. What changed is
+                     # a SWEEP CORRECTION rather than a new source:
+                     # platinumelectionresults.com carries Pulaski at county id
+                     # 19, and the sweep that had reported otherwise asked for
+                     # ONE election slug. Its certified 2024 General Primary
+                     # carries a single countywide "For County Commissioner"
+                     # contest per party over all ELEVEN precincts — the same
+                     # eleven every countywide office and the presidential
+                     # contest report — with no district-suffixed board contest
+                     # anywhere, and the only contests reporting 1 of 1 are the
+                     # eleven committeeperson races. The 2016 General agrees.
+                     # AT LARGE, so there is no board geometry to seek.
+                     #
+                     # The precincts ARE the Census 2020 voting districts: the
+                     # Jasper test passes 11/11 on the county's own names with
+                     # the population identity exact at 5,193. NO ROSTER SHIPS —
+                     # the commissioners are a County-card fact and the vendor
+                     # holds only a primary (nominees, not officeholders) and one
+                     # decade-old general.
+                     #
+                     # IT FILLS THE NOTCH IT WAS ADDED TO ASSERT. MOUND CITY
+                     # MOVES FROM THE OUTSIDE LIST TO THE INSIDE ONE, and with it
+                     # the whole southern wedge below Union is served, so the
+                     # outer ring stops detouring. Read the ring count from
+                     # --check.
+                     "153",
+                     # Hardin — the 85th county served (2026-08-23), joining on
+                     # its precincts an hour after Pulaski did, and the county
+                     # that CORRECTED A BAR THIS PROJECT HAD JUST INVENTED.
+                     # Pulaski's own build log said Hardin lacked "Pulaski's
+                     # second naming source", because the platinum canvass that
+                     # corroborates its board form carries no committeeperson
+                     # contests. That is a standard the fleet has never used:
+                     # Johnson, Perry and Pulaski each joined on ONE certified
+                     # canvass that names the precincts plus the Jasper test, and
+                     # holding a fourth county to a stricter one is not caution,
+                     # it is an inconsistency that keeps a county dark for no
+                     # stated reason.
+                     #
+                     # Hardin clears the actual bar twice over. Its certified 2026
+                     # General Primary prints a committeeperson contest per
+                     # precinct per party — twelve contests naming all six and no
+                     # seventh, each reporting 1 of 1 — while every countywide
+                     # office on it reports 6 of 6, and the board contest is one
+                     # of those. A SECOND VENDOR agrees a decade apart
+                     # (platinumelectionresults.com id 20, 2016 General, For
+                     # County Commissioner over 6 of 6). The Jasper test passes
+                     # 6/6 with the population identity exact at 3,649. NO ROSTER
+                     # SHIPS: hardincountyil.gov is a parking lander on both
+                     # hosts, and the readable canvass is a primary, which names
+                     # nominees rather than officeholders.
+                     #
+                     # A MAINLAND JOIN: its Illinois neighbours are Gallatin,
+                     # Saline and Pope, the first two already served. ELIZABETHTOWN
+                     # MOVES FROM THE OUTSIDE LIST TO THE INSIDE ONE, and Pope is
+                     # the frontier it leaves — the last unserved county in the
+                     # far south, and one the ring should be re-read for rather
+                     # than reasoned about here. Read the ring count from --check.
+                     "069",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -589,6 +658,8 @@ STATE_FIPS = "17"
 # counties served only through a circuit-keyed layer (the judicial-subcircuit
 # secondary counties), which have no dispatch entry of their own.
 DISPATCH_COUNTY_FIPS = {
+    "hardin": "069",
+    "pulaski": "153",
     "gallatin": "059",
     "hancock": "067",
     "cook": "031", "dupage": "043", "will": "197", "lake": "097",
@@ -695,6 +766,20 @@ INSIDE = {
     # between two rivers and most of the ground near this anchor is Missouri or
     # Kentucky.
     "Cairo (Alexander)": (37.0053, -89.1765),
+    # Mound City (Pulaski) — the county seat, and the anchor that spent about an
+    # hour in the OUTSIDE list on 2026-08-23. It was added there to assert the
+    # NOTCH Alexander's join created: Pulaski had no unserved Illinois neighbour
+    # left and was still not an enclave, because its southern edge is the Ohio
+    # River state line, so the outer ring detoured around it rather than closing
+    # over it. Then the county itself joined on its precincts and the notch
+    # closed, which is exactly the promotion this list is built to force.
+    "Mound City (Pulaski)": (37.0856, -89.1631),
+    # Elizabethtown (Hardin) — the county seat, promoted from OUTSIDE to INSIDE
+    # on 2026-08-23 when Hardin joined on its precincts. It had held the southern
+    # frontier for two days, the fourth anchor to hold that spot in three weeks
+    # (Carmi, then Shawneetown, then here) and the fourth to be promoted out of
+    # it by the county it stood for shipping.
+    "Elizabethtown (Hardin)": (37.4499, -88.3051),
     # Knox, the 80th county (2026-08-22). Galesburg moved here from OUTSIDE
     # the day the county joined: it spent that time proving a HOLE stayed
     # open in the mainland, and now proves the same hole is closed.
@@ -978,14 +1063,18 @@ OUTSIDE = {
     # as the guard is designed to force. Shawneetown (Gallatin) inherited that
     # southern frontier and held it for four days, until Gallatin itself
     # shipped on 2026-08-21 and the guard forced the same promotion again.
-    # ELIZABETHTOWN (HARDIN) is the honest successor: Hardin is Gallatin's only
-    # unserved Illinois neighbour, it is researched and blocked — its minimal
-    # website surfaces no board, election or map link, and its certified 2026
-    # primary carries no county-board contest at all, so its board form is
-    # still unknown — and it is not enclosed, because it still borders unserved
-    # Pope. TIGERweb's Incorporated Places centroid for Elizabethtown village,
-    # round-tripped through a point-in-county query.)
-    "Elizabethtown (Hardin)": (37.4499, -88.3051),
+    # Elizabethtown (Hardin) inherited it next and held it for two days, until
+    # Hardin itself shipped on 2026-08-23 on its precincts and the guard forced
+    # the same promotion a fourth time. GOLCONDA (POPE) is the successor and the
+    # last anchor this corner can hold: Pope is now the only unserved county in
+    # the far south, bordered by served Hardin, Saline, Johnson and Massac. Its
+    # own record is unchanged and is the reason it is still out here — the
+    # pass-13 probe's claim that no county website answered was corrected on
+    # 2026-08-09 (popecountyil.com answers 503 and the Clerk's domain is
+    # popeco.illinois.gov), and no county document has been read here at all.
+    # TIGERweb's Incorporated Places centroid for Golconda village, round-tripped
+    # through a point-in-county query against the county's own shipped outline.)
+    "Golconda (Pope)": (37.3648, -88.4870),
     # Salem (Marion) replaced Carlyle here on 2026-08-20, when Clinton shipped
     # and Carlyle moved up to INSIDE — the same forced promotion Carmi and
     # Paris made. Marion is the honest successor: it borders Clinton, is served
@@ -995,16 +1084,6 @@ OUTSIDE = {
     # name can place them and the dissolve that built Clinton cannot build it.
     "Salem (Marion)": (38.6270, -88.9456),
     "Ava (Jackson)": (37.8886, -89.4964),
-    # Mound City (Pulaski) — the county seat, added 2026-08-23 with Alexander.
-    # Pulaski now has no unserved Illinois neighbour left (Alexander, Union,
-    # Johnson and Massac all serve) and is still NOT an enclave, because its
-    # southern edge is the Ohio River state line: the outer ring detours around
-    # it rather than closing over it, and the hole count stays at Bureau and
-    # Christian. That distinction is why this anchor is here — it asserts the
-    # notch, which is exactly as easy to fill by accident as a hole. Its own
-    # record stands unchanged: the county's site refuses this client with a 403
-    # and its board's form is unknown.
-    "Mound City (Pulaski)": (37.0856, -89.1631),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so
     # it must stay outside — the guard that keeps "a circuit's secondary
     # counties" from quietly becoming "everything nearby". (Pittsfield sat
