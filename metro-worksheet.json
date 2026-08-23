@@ -1964,8 +1964,7 @@
         "file": "vermilion-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Vermilion County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Vermilion County coverage outline — the coverage test for the county's board dispatch entry (vermilionCountyCoverage). Shipped 2026-08-03 as gap-location geometry by the pass-10 frontier sweep; promoted to a coverage outline on 2026-08-23 when the county joined as the 89th served county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
         "file": "wabash-county-outline.json",
@@ -2095,6 +2094,12 @@
         "min_features": 7,
         "max_features": 7,
         "note": "Douglas County's 7 single-member County Board districts, and the FIRST in the fleet shipped exactly as the county draws them — no dissolve, no georeferencing, nothing derived. The county's GIS publishes CountyBoardDistricts as a PUBLIC ArcGIS feature service (services3.arcgis.com/HXjsHxkFFcZquC8P), shared with empty licenseInfo and no copyright text, and this ships those polygons. NOBODY HAD LOOKED: the county's ArcGIS web map names ONE parcel service in its config while the ORG BEHIND IT carries FIFTY-FOUR — a viewer shows what it uses, the org shows what the county has, which is the Richland finding for a second time. That matters here because Douglas SPLITS PRECINCTS: two of its seventeen vote in two districts each, so no dissolve of whole precincts could ever have drawn it, and the county's own polygons are the only thing that can. VERIFIED AGAINST A DIFFERENT COUNTY PRODUCT rather than described: its certified 8 November 2022 General Election Summary Report ran all seven districts and printed the NUMBER of precincts voting in each — 2, 2, 3, 2, 3, 2, 5, nineteen across a county of seventeen because the two split ones count twice — and overlaying the county's precinct layer on its district layer reproduces all seven exactly, including both splits (Bourbon 2 at 60.0%/39.9% between districts 1 and 3, Bowdre at 62.5%/37.5% between 5 and 7). That check is a GATE in the builder, not a comment. Three more: the layer's own TOTAL_POP sums to 19,740, the county's exact Census 2020 count, running 2,504-3,230 against a 2,820 ideal; the seven tile 99.97% of the county with 2,853 m2 of pairwise overlap and 92,043 m2 spilling outside the county line, both digitisation noise between independently drawn county layers and both held under ceilings; and the census voting districts carry the county's own precinct names 17/17. Each district names the precincts wholly inside it separately from those only partly in it (scripts/build_douglas_boundaries.py; --check is the drift gate)."
+      },
+      {
+        "file": "vermilion-county-board-districts.json",
+        "min_features": 9,
+        "max_features": 9,
+        "note": "Vermilion County's 9 County Board districts, three members each (27 seats), shipped exactly as the county draws them. THE COUNTY WAS NEVER BLOCKED: its gap record said the site \"is not reachable from this project's network\", which was true of a TLS handshake and false of the county \u2014 vercountyil.gov redirects to www.vercounty.org, which serves the COLES PATTERN, its leaf certificate without the GoGetSSL intermediate that signed it. The boundaries did not even need the site: the county's GIS publishes to an ArcGIS Online org (services6.arcgis.com/am689ZyfXfdo9vCK) carrying twenty-six public services, three of which draw board districts. THE WELL-LABELLED LAYER IS THE OBSOLETE ONE and that is this county's trap \u2014 a service described as \"Governmental and school districts in Vermilion County IL\" holds the superseded map, identical to a CountyBoardDistricts layer whose Name/Party/Elected/Email columns stop at 2018, while the CURRENT map is an undocumented layer with a typo in its own name, CountyBoardDistrcts2021. WHICH IS CURRENT IS A MEASUREMENT, NOT A READING OF ITS NAME, and it is a GATE in both directions: assigning all 4,943 Census 2020 blocks by centroid, the shipped layer runs 8,209-8,298 against an 8,243 ideal (worst 0.7%) and the better-labelled one 7,609-9,484 (worst 15.1%), and the builder refuses to write if the superseded layer ever comes into balance too. THREE INDEPENDENT WITNESSES: both election authorities' certified returns name all nine districts, the nine tile 99.98% of the county, and every one of its 74,188 residents lands in exactly one district. THE TWO AUTHORITIES NAME CONTESTS DIFFERENTLY and reading one convention hides a district \u2014 the County Clerk spells them out (\"COUNTY BOARD 8TH DISTRICT MEMBER\") and the Danville Election Commission abbreviates (\"CO. BD. MEMBER D8\"), so four of the clerk's canvasses show districts 1-8 and report DISTRICT 9 AS NOT EXISTING; it is in the commission's 17 March 2026 General Primary (scripts/build_vermilion_boundaries.py; --check is the drift gate)."
       },
       {
         "file": "douglas-precincts.json",
@@ -2476,6 +2481,11 @@
         "file": "douglas-county-board-members.json",
         "min_keys": 7,
         "note": "Douglas County Board members keyed by district (7 single-member districts = 7 seats). THE COUNTY PUBLISHES NO BOARD MEMBERS PAGE AT ALL — no member list, no district pages, nothing in its navigation — so the roster is assembled weekly from the two county documents that each answer half of it, found through the WordPress backend behind its Next.js site rather than hardcoded: the annual COUNTY YEARBOOK names the seven people and gives each a county e-mail, and the certified ELECTION SUMMARY REPORTS say which numbered district each of them won, in the county's own numbering. THE YEARBOOK'S OWN NUMBERS ARE NOT DISTRICT NUMBERS and that is this county's trap: it lists members '1. Tom Hettinger', '2. Bibby Appleby', which reads exactly like a district column, while the certified returns put Hettinger in District 3 and Appleby in District 2 — taking list position as district would misplace SIX of the seven. Its per-member precinct lists cannot recover the district either; they contain at least one error, naming 'Camargo 1 & 2' for a member whose district holds Camargo 2 and 3. So the join is on SURNAME and the builder FAILS when the two documents stop naming the same seven people. Each row carries the election that seated the member, because a certified return names who WON rather than who holds the seat today (the Scott reasoning) and the yearbook is what corroborates that they still do. SIX OF SEVEN E-MAILS SHIP: the yearbook prints District 1's address on the domain 'douglascountuil.gov', a typo for the 'douglascountyil.gov' the other six use, and a domain check drops it rather than shipping a dead address or silently correcting a character in someone's contact detail. HOME ADDRESSES NEVER SHIP, and the yearbook prints one for every member. The term line does not ship either: it reads 'November 2024' / 'November 2026' with nothing saying whether that is the seating election or the term's end, and both readings contradict the returns for at least one member."
+      },
+      {
+        "file": "vermilion-county-board-members.json",
+        "min_keys": 9,
+        "note": "Vermilion County Board members keyed by district (9 districts x 3 members = 27 seats). PEOPLE COME FROM THE COUNTY'S OWN MEMBERS PAGE, reached by supplying the intermediate certificate the county's server omits \u2014 chased from the AIA URI the county's own leaf certificate names, pinned by SHA-256, and NEVER by disabling verification. NOT from the county's district layer, whose attribute table carries three Name/Party/Elected/Email sets per district and is a 2018 snapshot on a retired e-mail domain: the Coles rule holds, an attribute table on a boundary layer is a snapshot of whenever that layer was published. FOUR TRAPS IN ONE TABLE, each handled rather than absorbed: ONE NAME IS INVERTED (twenty-six rows read \"First Last\" and one reads \"Auter, Tara\"), so the comma form is flipped and the flip is PRINTED on every run rather than becoming a silent edit to somebody's name; ROLES RIDE THE NAME CELL (\"Steve Miller (Chairman)\"), split to their own field because leaving them in ships a name nobody is called; ONE E-MAIL CELL CARRIES A PHONE TOO, so the cell is tokenised rather than taken whole; and SURNAMES ARE NOT KEYS, because District 4 seats two McFaddens. The board office's own address and phone ride each district's roster block, so a card for a member with no direct line still says where to reach the board. The county's own \"Elected/Appointed\" year ships as \"on the board since\", labelled that way because the county does not say which of the two it was. The board LANDING page's staff table is never read for members: it lists the HR director and the office manager alongside the chairman."
       }
     ]
   },
@@ -2819,6 +2829,11 @@
       "file": "update-douglas-county-board-roster.yml",
       "purpose": "Douglas County Board roster, assembled from the county's annual Yearbook (people and e-mail) and its certified election summary reports (district numbers), joined on surname; the builder fails if the two county documents stop naming the same seven people",
       "schedule": "Wed 21:00 UTC"
+    },
+    {
+      "file": "update-vermilion-county-board-roster.yml",
+      "purpose": "Vermilion County Board roster (27 members across 9 districts) from the county's own members page, fetched with the intermediate certificate its server omits supplied by AIA and pinned by hash",
+      "schedule": "Thu 22:00 UTC"
     }
   ],
   "geocoder": {
@@ -2844,8 +2859,7 @@
         "label": "OpenStreetMap contributors (Nominatim & Photon/Komoot)",
         "url": "https://www.openstreetmap.org/copyright",
         "note": "Address search and the office-address pins."
-      },
-      {
+      },      {
         "label": "Chicago Data Portal",
         "url": "https://data.cityofchicago.org",
         "note": "The city's own open-data portal — wards, precincts, community areas, CPS zones and networks, libraries."

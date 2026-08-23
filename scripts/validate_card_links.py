@@ -247,6 +247,24 @@ EXPECTED_UNREACHABLE = {
         "incomplete TLS chain (leaf only, no intermediate) — NOT a block: the site "
         "answers HTTP 200 to a client that supplies the missing issuer, which the "
         "county-commissioners scraper does by AIA with a pinned hash",
+    # THE THIRD OF THE SAME, and the most expensive one yet: Vermilion's gap
+    # record called the county unreachable for three weeks on the strength of
+    # this error, while the county published a maintained 27-member board
+    # roster and its GIS published the districts. vercounty.org sends its leaf
+    # signed by GoGetSSL RSA DV CA without that intermediate, so every plain
+    # client stops at "unable to get local issuer certificate" and no browser
+    # notices. Measured 2026-08-23 by reading the leaf's own AIA caIssuers URI
+    # (crt.usertrust.com/GoGetSSLRSADVCA.crt) and completing the fetch with that
+    # certificate — HTTP 200, 93 KB. Not listed separately but worth recording
+    # here: vercountyil.gov, the domain in the state's clerk directory, is the
+    # same site — it redirects to this host once the chain is completed, which
+    # is why it was once wrongly recorded as "parked". The app cites only
+    # vercounty.org, and this table warns about hosts the app has stopped
+    # citing, so vercountyil.gov gets no entry of its own.
+    "vercounty.org":
+        "incomplete TLS chain (leaf only, no intermediate) — NOT a block: the site "
+        "answers HTTP 200 to a client that supplies the missing issuer, which the "
+        "board roster scraper does by AIA with a pinned hash",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map

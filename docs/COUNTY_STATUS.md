@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**88 of 102 Illinois counties are served** — 76 through their own dispatch entries, 2 through a shipped judicial circuit, and 10 through the County card alone. 14 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**89 of 102 Illinois counties are served** — 77 through their own dispatch entries, 2 through a shipped judicial circuit, and 10 through the County card alone. 13 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (88)
+## Served counties (89)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -102,6 +102,7 @@
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
 | Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Union | 17181 | County card | at-large — County card | — | 1 — `captcha-county-commissioner-contact` (blocked) |
+| Vermilion | 17183 | dispatch | districted | `county-board` | 1 — `vermilion-precinct-geometry` (no-source) |
 | Wabash | 17185 | County card | at-large — County card | — | 1 — `wabash-precinct-geometry` (no-source) |
 | Warren | 17187 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `pass10-frontier-unasked` (no-source) |
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
@@ -112,7 +113,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (14) — gap-recorded, not yet served
+## Researched frontier (13) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -130,7 +131,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Marion | 17121 | 1 — `marion-county-board-districts` (no-source) |
 | Piatt | 17147 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Pope | 17151 | 1 — `pope-county-board` (no-source) |
-| Vermilion | 17183 | 1 — `vermilion-county-website` (no-source) |
 | Wayne | 17191 | 1 — `wayne-county-board` (no-source) |
 
 ## Unresearched (0)

@@ -251,6 +251,7 @@ const GEOMETRY_URLS = [
   "./data/app/jackson-county-board-districts.json",
   "./data/app/jackson-precincts.json",
   "./data/app/douglas-county-board-districts.json",
+  "./data/app/vermilion-county-board-districts.json",
   "./data/app/douglas-precincts.json",
 ];
 
@@ -334,6 +335,7 @@ const ROSTER_URLS = [
   "./data/app/richland-county-board-members.json",
   "./data/app/jackson-county-board-members.json",
   "./data/app/douglas-county-board-members.json",
+  "./data/app/vermilion-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
