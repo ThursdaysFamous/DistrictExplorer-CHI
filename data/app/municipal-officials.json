@@ -9994,6 +9994,63 @@
     ],
     "sourceUrl": "https://www.whitesidecountyil.gov/DocumentCenter/View/236/County-Clerk-Year-Book-PDF"
   },
+  "1728326": {
+    "board": [
+      {
+        "district": "Ward 1",
+        "name": "Angelica Mangieri",
+        "phone": "847-773-7310",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 2",
+        "name": "Wendel Hunigan",
+        "phone": "309-368-4477",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 3",
+        "name": "Chuck Reynolds",
+        "phone": "309-863-5420",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 4",
+        "name": "Dwight White",
+        "phone": "309-368-9114",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 5",
+        "name": "Heather Acerra",
+        "phone": "309-370-7943",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 6",
+        "name": "Greg Saul",
+        "phone": "309-337-7927",
+        "role": "Alderman"
+      },
+      {
+        "district": "Ward 7",
+        "name": "Steve Cheesman",
+        "phone": "309-335-6106",
+        "role": "Alderman"
+      }
+    ],
+    "county": "Knox",
+    "head": {
+      "name": "Peter Schwartzman",
+      "role": "Mayor"
+    },
+    "name": "City of Galesburg",
+    "office": {
+      "address": "55 W. Tompkins Street, Galesburg IL 61401",
+      "phone": "309-345-3600"
+    },
+    "sourceUrl": "https://www.ci.galesburg.il.us/government/elected_officials___election_offices/mayor_and_city_council/index.php"
+  },
   "1728430": {
     "board": [
       {

@@ -77,6 +77,13 @@ STATIC_ENTRY_MUNICIPALITIES = {
     # Mendota is the only one of LaSalle County's four ward-electing cities that
     # publishes ward geometry anywhere; La Salle, Peru and Earlville are a
     # recorded gap. The layer is the city's own, edited 2022-12.
+    # Galesburg's seven aldermanic wards, on the CITY's own AGOL org, added
+    # 2026-08-22 — the day after Knox County itself joined the coverage ring on
+    # its board districts. The wards were never the blocker: the city has
+    # published them, current and with a MEMBER column, the whole time. What
+    # blocked them was that their county was not covered, so this entry is the
+    # second half of the same join rather than a new source.
+    "galesburg": ["Galesburg"],
     "mendota": ["Mendota"],
     # The pass-6 ward tranche (2026-08-02) — thirteen sources across
     # twenty-two cities, every geometry vintage and officeholder posture
@@ -218,6 +225,7 @@ ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
                      "springfield": "167", "freeport": "177",
                      "st-clair-cities": "163", "rock-island": "161",
                      "whiteside-cities": "195",
+                     "galesburg": "095",
                      "peoria-city": "143"}
 
 

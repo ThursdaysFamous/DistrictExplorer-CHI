@@ -14086,6 +14086,32 @@ function initChiExplorer() {
   // Alderperson column is read NOWHERE: the shipped roster (the city's own
   // council pages) is the current source, and the measured risk is exactly a
   // stale name column shadowing it.
+  /* Galesburg's seven aldermanic wards, on the CITY's own AGOL org — the same
+   * org that publishes the county board districts inside the city and the 20
+   * city precincts, because Galesburg runs its own Board of Election
+   * Commissioners. Added 2026-08-22, the day after Knox County joined the
+   * coverage ring: the wards were published and current the whole time, and
+   * what blocked them was that their COUNTY was not covered.
+   *
+   * THE LAYER CARRIES A MEMBER COLUMN AND IT IS NOT READ. Its ward numbering
+   * is confirmed correct by the city's own council page, seven for seven, but
+   * one of its names is stale — the layer says "Heather Zeigler Acerra" where
+   * the city says "Heather Acerra". So the geometry comes from the layer and
+   * the people from the city's council page, via the municipal-officials
+   * roster (scripts/galesburg_council_scraper.py). That is the Coles rule: a
+   * GIS layer's officeholder column is a snapshot, and the body's own page is
+   * the record. */
+  var GALESBURG_WARD_SERVICE = "https://services1.arcgis.com/T5ar9pn3YeFZ47Wh/arcgis/rest/" +
+    "services/Galesburg_City_Council_Wards/FeatureServer/0";
+  var loadGalesburgWards = makeCached(function () {
+    return loadArcGISGeoJSON(GALESBURG_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var num = /(\d+)/.exec(String(findPropCI(f.properties || {}, ["ward"]) || ""));
+        return wardFeature(f, "Galesburg", "Ward", num ? num[1] : null);
+      }) };
+    });
+  });
+
   var FREEPORT_WARD_SERVICE = "https://services2.arcgis.com/1Wpk33n06s235zfI/arcgis/rest/" +
     "services/Wards2022_Public/FeatureServer/0";
   var loadFreeportWards = makeCached(function () {
@@ -14467,6 +14493,7 @@ function initChiExplorer() {
       municipalWardEntry("rockford", loadRockfordWards),
       municipalWardEntry("rock-island", loadRockIslandWards),
       municipalWardEntry("dekalb", loadDekalbWards),
+      municipalWardEntry("galesburg", loadGalesburgWards),
       municipalWardEntry("mendota", loadMendotaWards),
       // Quincy (Adams, pass 8) — SEAT-ONLY. The city's own site sits behind the
       // same Akamai deny as its county's (403 on every path tried), so no

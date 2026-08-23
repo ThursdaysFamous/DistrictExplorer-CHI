@@ -58,7 +58,7 @@
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
 | Kendall | 17093 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `plano-ward-officials` (no-source) |
-| Knox | 17095 | dispatch | districted | `county-board` | 1 — `galesburg-wards-outside-the-ring` (data-quality) |
+| Knox | 17095 | dispatch | districted | `county-board` | none |
 | LaSalle | 17099 | dispatch | districted | `county-board`, `county-precinct` | 5 — `county-board-office-addresses` (no-source); `lasalle-board-districts-stale` (no-source); `lasalle-municipal-wards` (no-source); `ogle-lasalle-special-districts` (no-source); `wenona-two-clerks-disagree` (data-quality) |
 | Lake | 17097 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `lake-municipal-names` (no-source); `park-city-wards` (no-source) |
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 110 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 109 records in the Data gaps panel: `chicago-amenity-phones`.
