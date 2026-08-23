@@ -9317,6 +9317,32 @@ function initChiExplorer() {
   var loadPerryPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/perry-precincts.json", {}, 2);
   });
+  /* PULASKI joined on 2026-08-23 the same way and for the same reason, one day
+   * after Alexander closed the wedge around it. Its website was never read
+   * either — pulaskicountyil.gov resolves to an address this project's network
+   * refuses — and its gap record had said since 4 Aug that the board's form was
+   * "not determinable in this pass". It was determinable; the vendor holding the
+   * answer had simply been swept one election slug wide. platinumelectionresults
+   * .com carries Pulaski at county id 19, and its certified 2024 General Primary
+   * carries a single countywide "For County Commissioner" contest per party over
+   * all eleven precincts — the same eleven every countywide office and the
+   * presidential contest report — with no district-suffixed board contest
+   * anywhere, and the 2016 General agrees. So the board is at large, there is no
+   * district for a precinct to belong to, and the Jasper test passes 11/11 with
+   * the population identity exact. NO COMMISSIONER IS NAMED: that is a roster,
+   * and the vendor holds only a primary (nominees, not officeholders) and one
+   * decade-old general. See build_pulaski_precincts.py. */
+  var loadPulaskiCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/pulaski-county-outline.json", {}, 2);
+  });
+  function pulaskiCountyCoverage(point) {
+    return loadPulaskiCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadPulaskiPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/pulaski-precincts.json", {}, 2);
+  });
   /* CASS, GREENE, SCOTT and MOULTRIE were never blocked. All four were already
    * served, none had a gap record saying its precincts were missing, and that is
    * exactly how a county goes unbuilt for weeks while every guard in the repo
@@ -23930,6 +23956,46 @@ function initChiExplorer() {
           return {
             label: "Perry County — certified election results",
             url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=283"
+          };
+        }
+      },
+      // Pulaski — eleven precincts that ARE the Census 2020 voting districts,
+      // named by the county's certified 2024 General Primary a committeeperson
+      // contest at a time. Same footing as Johnson and Perry, and the same
+      // reason it took this long: the county's site resolves to an address this
+      // project's network refuses, so nothing it publishes was ever read. NO
+      // BOARD DISTRICT — one countywide "For County Commissioner" contest per
+      // party over all eleven precincts, no district-suffixed board contest
+      // anywhere, and the 2016 General agrees. NO COMMISSIONER NAMED: the vendor
+      // holds a primary and one decade-old general, and a primary names nominees.
+      {
+        key: "pulaski",
+        coverage: pulaskiCountyCoverage,
+        loadGeometry: loadPulaskiPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadPulaskiPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Pulaski County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Pulaski County — certified election results",
+            url: "https://platinumelectionresults.com/history"
           };
         }
       },

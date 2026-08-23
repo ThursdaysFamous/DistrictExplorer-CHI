@@ -569,6 +569,42 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # --check, never from this comment — the first draft of it
                      # claimed a fourth enclave and the dissolve refuted it.
                      "003",
+                     # Pulaski — the 84th county served (2026-08-23), joining ON
+                     # ITS PRECINCTS the day after Alexander closed the wedge
+                     # around it, and the day its own comment above described it
+                     # as the frontier anchor. Both halves of that were true for
+                     # about an hour.
+                     #
+                     # ITS RECORD HAD SAID SINCE 4 AUG that whether the board is
+                     # districted or elected countywide was "not determinable in
+                     # this pass", because pulaskicountyil.gov resolves to an
+                     # address this project's egress refuses. That blocker is
+                     # unchanged and this join does not touch it. What changed is
+                     # a SWEEP CORRECTION rather than a new source:
+                     # platinumelectionresults.com carries Pulaski at county id
+                     # 19, and the sweep that had reported otherwise asked for
+                     # ONE election slug. Its certified 2024 General Primary
+                     # carries a single countywide "For County Commissioner"
+                     # contest per party over all ELEVEN precincts — the same
+                     # eleven every countywide office and the presidential
+                     # contest report — with no district-suffixed board contest
+                     # anywhere, and the only contests reporting 1 of 1 are the
+                     # eleven committeeperson races. The 2016 General agrees.
+                     # AT LARGE, so there is no board geometry to seek.
+                     #
+                     # The precincts ARE the Census 2020 voting districts: the
+                     # Jasper test passes 11/11 on the county's own names with
+                     # the population identity exact at 5,193. NO ROSTER SHIPS —
+                     # the commissioners are a County-card fact and the vendor
+                     # holds only a primary (nominees, not officeholders) and one
+                     # decade-old general.
+                     #
+                     # IT FILLS THE NOTCH IT WAS ADDED TO ASSERT. MOUND CITY
+                     # MOVES FROM THE OUTSIDE LIST TO THE INSIDE ONE, and with it
+                     # the whole southern wedge below Union is served, so the
+                     # outer ring stops detouring. Read the ring count from
+                     # --check.
+                     "153",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -589,6 +625,7 @@ STATE_FIPS = "17"
 # counties served only through a circuit-keyed layer (the judicial-subcircuit
 # secondary counties), which have no dispatch entry of their own.
 DISPATCH_COUNTY_FIPS = {
+    "pulaski": "153",
     "gallatin": "059",
     "hancock": "067",
     "cook": "031", "dupage": "043", "will": "197", "lake": "097",
@@ -695,6 +732,14 @@ INSIDE = {
     # between two rivers and most of the ground near this anchor is Missouri or
     # Kentucky.
     "Cairo (Alexander)": (37.0053, -89.1765),
+    # Mound City (Pulaski) — the county seat, and the anchor that spent about an
+    # hour in the OUTSIDE list on 2026-08-23. It was added there to assert the
+    # NOTCH Alexander's join created: Pulaski had no unserved Illinois neighbour
+    # left and was still not an enclave, because its southern edge is the Ohio
+    # River state line, so the outer ring detoured around it rather than closing
+    # over it. Then the county itself joined on its precincts and the notch
+    # closed, which is exactly the promotion this list is built to force.
+    "Mound City (Pulaski)": (37.0856, -89.1631),
     # Knox, the 80th county (2026-08-22). Galesburg moved here from OUTSIDE
     # the day the county joined: it spent that time proving a HOLE stayed
     # open in the mainland, and now proves the same hole is closed.
@@ -995,16 +1040,6 @@ OUTSIDE = {
     # name can place them and the dissolve that built Clinton cannot build it.
     "Salem (Marion)": (38.6270, -88.9456),
     "Ava (Jackson)": (37.8886, -89.4964),
-    # Mound City (Pulaski) — the county seat, added 2026-08-23 with Alexander.
-    # Pulaski now has no unserved Illinois neighbour left (Alexander, Union,
-    # Johnson and Massac all serve) and is still NOT an enclave, because its
-    # southern edge is the Ohio River state line: the outer ring detours around
-    # it rather than closing over it, and the hole count stays at Bureau and
-    # Christian. That distinction is why this anchor is here — it asserts the
-    # notch, which is exactly as easy to fill by accident as a hole. Its own
-    # record stands unchanged: the county's site refuses this client with a 403
-    # and its board's form is unknown.
-    "Mound City (Pulaski)": (37.0856, -89.1631),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so
     # it must stay outside — the guard that keeps "a circuit's secondary
     # counties" from quietly becoming "everything nearby". (Pittsfield sat
