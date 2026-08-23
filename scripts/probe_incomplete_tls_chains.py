@@ -156,7 +156,16 @@ def clerk_domains():
         if "@" not in email:
             continue
         dom = email.rsplit("@", 1)[1].lower()
-        hosts += [dom, "www." + dom]
+        # The bare and www hosts are the county's WEBSITE. `gis.` is added
+        # because of KNOX, 2026-08-22: its record said knoxcountyil.gov
+        # "refuses every request", which is true of the website and says
+        # nothing about gis.knoxcountyil.gov — a public ArcGIS Server on the
+        # same domain, serving the COLES PATTERN, carrying the county's
+        # townships and municipal polygons. It was found from a URL handed to
+        # this project, and this sweep could not have found it: a county's
+        # boundary data lives on its GIS host far more often than on its
+        # www host, and that host was never probed.
+        hosts += [dom, "www." + dom, "gis." + dom]
     return hosts
 
 
