@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v50";
+const CACHE_NAME = "district-explorer-shell-v51";
 
 const SHELL_URLS = [
   "./",
@@ -194,6 +194,7 @@ const GEOMETRY_URLS = [
   "./data/app/perry-county-outline.json",
   "./data/app/perry-precincts.json",
   "./data/app/pulaski-precincts.json",
+  "./data/app/hardin-precincts.json",
   "./data/app/piatt-county-outline.json",
   "./data/app/pike-county-outline.json",
   "./data/app/pope-county-outline.json",

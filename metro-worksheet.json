@@ -1287,8 +1287,7 @@
         "file": "hardin-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Hardin County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Hardin County coverage outline — the coverage test for the county's county-precinct dispatch entry, and what puts the county inside the coverage ring. It shipped on 2026-08-04 as gap-location geometry only, from the pass-13 detached-counties sweep, and was promoted on 2026-08-23 when Hardin joined ON ITS PRECINCTS: its board is elected countywide, so there is no district geometry to seek, and its roster stays unshipped because the county's own web domain is a parking lander on both hosts."
       },
       {
         "file": "henderson-county-outline.json",
@@ -1746,6 +1745,12 @@
         "min_features": 11,
         "max_features": 11,
         "note": "Pulaski County's eleven voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 11/11 against the county's own precinct names and they sum to its exact 2020 population of 5,193. Bounds are an EQUALITY because eleven is the county's whole precinct list. THE COUNTY'S OWN WEBSITE WAS NEVER READ — pulaskicountyil.gov resolves to an address this project's egress refuses — and none of this comes from it: the names, the count and the board's form all come from the county's certified 2024 General Primary on platinumelectionresults.com (county id 19), which prints a committeeperson contest per precinct per party. THE COUNTY WAS OPENED BY A SWEEP CORRECTION, not a new source: that vendor had been swept ONE election slug wide and reported as not carrying Pulaski. NO BOARD DISTRICT ships and none ever will: the same canvass carries a single countywide For County Commissioner contest per party over all eleven precincts and no district-suffixed board contest at all, and the 2016 General agrees. NO ROSTER ships either — the commissioners are a County-card fact, the county's site is unreachable, and the vendor holds only a primary (nominees, not officeholders) and one decade-old general — and NO POLLING PLACE, by the rule Calhoun's build set (scripts/build_pulaski_precincts.py)."
+      },
+      {
+        "file": "hardin-precincts.json",
+        "min_features": 6,
+        "max_features": 6,
+        "note": "Hardin County's six voting precincts — the Census 2020 voting districts ONE FOR ONE rather than a dissolve: the Jasper test passes 6/6 against the county's own precinct names and they sum to its exact 2020 population of 3,649. Bounds are an EQUALITY because six is the county's whole precinct list. THE COUNTY PUBLISHES NO WEB PAGE AT ALL — hardincountyil.gov and www.hardincountyil.gov both answer 200 with the same 114-byte script redirect to a parking lander — so none of this comes from the county's site: the names, the count and the board's at-large form all come from its certified 2026 General Primary on il-hardin.pollresults.net, which prints a committeeperson contest per precinct per party (twelve contests naming all six, each 1 of 1) while every countywide office reports 6 of 6. A SECOND VENDOR CORROBORATES THE FORM a decade apart: platinumelectionresults.com county id 20 carries a 2016 General with For County Commissioner over 6 of 6. THIS COUNTY ALSO CORRECTED A BAR THIS PROJECT INVENTED FOR AN HOUR — Pulaski's build log said Hardin lacked a 'second naming source', which is a standard Johnson, Perry and Pulaski were never held to. NO BOARD DISTRICT ships and none ever will. NO ROSTER ships either — a primary names nominees, not officeholders, and the county publishes no page — and NO POLLING PLACE, by the rule Calhoun's build set. TWO PRECINCTS CARRY AN EXPLICIT LABEL rather than a derived one, each with a source: McFarlan from the census's own mixed-case county-subdivision layer (title_case would render 'Mcfarlan'), and Cave In Rock from the county's returns, where the census hyphenates it and the county does not (scripts/build_hardin_precincts.py)."
       },
       {
         "file": "piatt-county-outline.json",
@@ -2427,7 +2432,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v50",
+    "cache_name": "district-explorer-shell-v51",
     "shell_urls": [
       "./",
       "./sources.html",

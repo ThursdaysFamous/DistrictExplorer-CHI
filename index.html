@@ -9343,6 +9343,31 @@ function initChiExplorer() {
   var loadPulaskiPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/pulaski-precincts.json", {}, 2);
   });
+  /* HARDIN followed Pulaski the same afternoon, and it is the county that
+   * corrected a bar this project had invented an hour earlier. Pulaski's build
+   * log said Hardin lacked "Pulaski's second naming source" because the platinum
+   * canvass carries no committeeperson contests. That was a standard the fleet
+   * has never used: Johnson, Perry and Pulaski each joined on ONE certified
+   * canvass naming the precincts plus the Jasper test, and Hardin's pollresults
+   * feed meets it identically — its 2026 General Primary prints a committeeperson
+   * contest per precinct per party, twelve contests naming all six and no
+   * seventh, each reporting 1 of 1, while every countywide office reports 6 of 6.
+   * The board is at large (that canvass, and a 2016 General on a second vendor),
+   * so there is no district for a precinct to belong to, and the Jasper test
+   * passes 6/6 with the population identity exact. NO ROSTER: hardincountyil.gov
+   * is a parking lander on both hosts, and a primary names nominees.
+   * See build_hardin_precincts.py. */
+  var loadHardinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hardin-county-outline.json", {}, 2);
+  });
+  function hardinCountyCoverage(point) {
+    return loadHardinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadHardinPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hardin-precincts.json", {}, 2);
+  });
   /* CASS, GREENE, SCOTT and MOULTRIE were never blocked. All four were already
    * served, none had a gap record saying its precincts were missing, and that is
    * exactly how a county goes unbuilt for weeks while every guard in the repo
@@ -23996,6 +24021,46 @@ function initChiExplorer() {
           return {
             label: "Pulaski County — certified election results",
             url: "https://platinumelectionresults.com/history"
+          };
+        }
+      },
+      // Hardin — six precincts that ARE the Census 2020 voting districts, named
+      // by the county's certified 2026 General Primary a committeeperson contest
+      // at a time. NO BOARD DISTRICT: the board is elected county-wide, proven
+      // from that canvass and again from a 2016 General on a second vendor. NO
+      // COMMISSIONER NAMED: hardincountyil.gov is a parking lander on both hosts,
+      // and the canvass that IS readable is a primary, which names nominees.
+      // Two precincts carry an explicit label rather than a derived one — McFarlan
+      // from the census's own mixed-case subdivision layer, Cave In Rock from the
+      // county's returns where the census hyphenates it.
+      {
+        key: "hardin",
+        coverage: hardinCountyCoverage,
+        loadGeometry: loadHardinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadHardinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Hardin County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Hardin County — certified election results",
+            url: "https://il-hardin.pollresults.net/"
           };
         }
       },
