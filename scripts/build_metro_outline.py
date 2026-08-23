@@ -372,6 +372,17 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # and near-equal Census populations both corroborate the
                      # transcription (scripts/build_knox_board_districts.py).
                      "095",
+                     # Union (181) and Williamson (199) — the 81st and 82nd
+                     # (2026-08-22), both joining through the AT-LARGE tier
+                     # alone: no dispatch entry, no district geometry, their
+                     # commissioners on the County card. Both sit behind an
+                     # sgcaptcha gate that answers 202, so their rosters come
+                     # from their own CERTIFIED CANVASSES on
+                     # platinumelectionresults.com — Union's five lettered seats
+                     # and Williamson's three, each row naming the election that
+                     # seated it. Deliberately ABSENT from DISPATCH_COUNTY_FIPS
+                     # below (§1.5), like Moultrie and Massac before them.
+                     "181", "199",
                      # Massac — the FOURTH ISLAND (2026-08-21), and the second
                      # to join through the AT-LARGE tier alone, after Edwards:
                      # no dispatch entry, no geometry, three commissioners on
@@ -623,6 +634,16 @@ SIMPLIFY_TOLERANCE_M = 25
 # outside it. A dissolve that silently drops a county still closes its rings,
 # so ring-closure alone is not proof — these are.
 INSIDE = {
+    # Union and Williamson, the 81st and 82nd counties (2026-08-22), both on
+    # the at-large tier. Marion (Williamson) moved here from OUTSIDE the day
+    # its county joined — it was the last of the pair added on 2026-08-21 to
+    # prove the corridor to the Massac island was washed, and its companion
+    # Vienna (Johnson) had made the same move within hours. Both counties
+    # still refuse automated requests; what changed is that their CANVASSES
+    # do not. Anchors are TIGERweb place centroids, round-tripped through a
+    # point-in-county query.
+    "Marion (Williamson)": (37.7344, -88.9419),
+    "Jonesboro (Union)": (37.4517, -89.2673),
     # Knox, the 80th county (2026-08-22). Galesburg moved here from OUTSIDE
     # the day the county joined: it spent that time proving a HOLE stayed
     # open in the mainland, and now proves the same hole is closed.
@@ -914,15 +935,6 @@ OUTSIDE = {
     # Pope. TIGERweb's Incorporated Places centroid for Elizabethtown village,
     # round-tripped through a point-in-county query.)
     "Elizabethtown (Hardin)": (37.4499, -88.3051),
-    # Marion (Williamson) — county seat of the largest unserved county in the
-    # deep south, and what is left of the pair of anchors added on 2026-08-21 to
-    # prove the corridor between the Massac island and the mainland was washed.
-    # Its companion, Vienna (Johnson), lasted a matter of hours: that record said
-    # "if either ever ships, these move to the INSIDE list", and Johnson shipped
-    # the same day, ENDING THE ISLAND rather than merely bridging it. Williamson
-    # still refuses automated requests. Derived from a TIGERweb place centroid
-    # and round-tripped.
-    "Marion (Williamson)": (37.7344, -88.9419),
     # Salem (Marion) replaced Carlyle here on 2026-08-20, when Clinton shipped
     # and Carlyle moved up to INSIDE — the same forced promotion Carmi and
     # Paris made. Marion is the honest successor: it borders Clinton, is served

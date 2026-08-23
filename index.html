@@ -6987,12 +6987,22 @@ function initChiExplorer() {
         wrap.appendChild(renderSectionLabel("County Board"));
         wrap.appendChild(renderPersonRows(board.members.map(function (m) {
           var person = { name: String(m.name) };
+          // The chair role wins the badge; where a county elects by LETTERED
+          // SEAT and names no chair (Union's A-E), the seat is the badge, since
+          // it is the only thing distinguishing one countywide seat from another.
           if (m.role) person.badge = String(m.role);
+          else if (m.seat) person.badge = String(m.seat);
           if (m.phone) person.phone = String(m.phone);
           if (m.email) person.email = String(m.email);
           // "Term: 2017 to Present" is a START, not an expiry — the one term
           // fact these sources publish, worded as the source words it.
-          if (m.since) person.note = "Serving since " + String(m.since);
+          var notes = [];
+          if (m.since) notes.push("Serving since " + String(m.since));
+          // Where the roster came from CERTIFIED RETURNS rather than a page,
+          // the seating election rides the row: a canvass cannot show a
+          // mid-term appointment, so the card says what it actually knows.
+          if (m.districtSource) notes.push(String(m.districtSource));
+          if (notes.length) person.note = notes.join(" · ");
           return person;
         }), { tinted: true }));
         var note = board.structure ? String(board.structure) : null;
