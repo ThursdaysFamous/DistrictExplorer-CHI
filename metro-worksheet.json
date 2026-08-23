@@ -1188,6 +1188,12 @@
         "note": "Warren County's 4 County Board districts (seating 15, as 3/4/4/4), DISSOLVED from the Census 2020 voting districts per a composition THE COUNTY ITSELF PUBLISHES. Its precinct map is a raster image with no vector linework, so nothing is traced from it — but the map's TEXT LAYER carries a four-column table at the foot of the page, each column headed by a district and listing that district's precincts. That is Warren stating its own composition in machine-readable form, which is a STRONGER source than the election-returns route used for Franklin and Clinton, where the same fact is inferred from which ballot each precinct voted. A COMPOSED FABRIC and the cleanest this route has met: census 2020 carries 28 Warren voting districts against the 26 precincts the county runs today, and BOTH merges are nameable AND confined to one district — ROSEVILLE 1 + ROSEVILLE 2 in District 4, SPRING GROVE-ALEXIS + SPRING GROVE-GERLAW in District 3 — so neither can move a district line. That is the Clinton test passed twice over, where Clinton had one unnameable merge that merely happened to sit inside a single district. Populations sum to the county's exact 16,835 and run 4,030-4,332 against a 4,209 ideal — worst deviation 4.2%, THE TIGHTEST THIS ROUTE HAS PRODUCED, taking the record from Clinton's 7.3% hours later. Each feature names the county's own current 26 precincts, not the 28 census units the geometry is built from (scripts/build_warren_boundaries.py; --check is the drift gate)."
       },
       {
+        "file": "knox-county-board-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Knox County's 5 County Board districts, and the only county in the fleet whose districts come from TWO publishers at once. Districts 1, 2 and 3 lie inside the CITY OF GALESBURG, which runs its own Board of Election Commissioners, and are taken exactly as the city publishes them. Districts 4 and 5 are unions of WHOLE TOWNSHIPS from the county's own GIS server \u2014 a host whose record said it 'refuses every request', which was true of the county's website and false of gis.knoxcountyil.gov, a public ArcGIS Server serving the COLES PATTERN \u2014 minus the city area. The composition is transcribed from the county's own adopted map, 'Knox County Board Districts 2022' (Knox County GIS Department, 01/28/2022), on which the black-and-yellow DASHED line is the district boundary and the thick ORANGE line the precinct boundary. THREE WITNESSES AGREE: the map names the townships; the county's certified returns report exactly 13 precincts in District 4 and 15 in District 5, in every election on the vendor archive back to 2022, without ever naming one; and Census 2020 populations land within 6.3% of the per-district ideal, districts 4 and 5 within 0.7%. A COLOUR-SAMPLING READ OF THE SAME MAP WAS TRIED FIRST AND WAS WRONG \u2014 its fills are per-township decoration, not per-district \u2014 and was caught by the precinct-count gate rather than by inspection, which is why that arithmetic is a gate in the builder and not a comment (scripts/build_knox_board_districts.py)."
+      },
+      {
         "file": "edwards-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -2091,6 +2097,11 @@
         "note": "Adams County Board members keyed by district (7 districts of THREE seats each, 21 in all) plus a top-level 'board' entry. PARTIAL BY CONSTRUCTION AND SAYS SO ON THE CARD: the county's own board page is a flat Akamai deny and the Internet Archive never captured it, so the roster is read from CERTIFIED ELECTION CANVASSES on platinumelectionresults.com \u2014 the THIRD results vendor, which carries Adams as county id 54 and which this county's gap record had never tested (it tested the pollresults/accessliberty pair, correctly found them empty, and stopped). Adams staggers 2 seats per district one cycle and 1 the next, so the November 2024 general names ONE of each district's three members and the other two were seated in November 2022 \u2014 a canvass the vendor returns as an empty placeholder for 2021, 2022 and 2023, which Clarity does not carry and which the county publishes only behind the same WAF. Every row renders the election that seated it (districtSource) because a canvass cannot show a mid-term appointment, and the card states the shortfall in words rather than leaving a short list to imply it. No chair is badged (ISBE's chair column measured wrong in 16 of 56 counties \u2014 the Coles rule) and no per-member contact ships, because it exists only on the unreadable page. The weekly run re-fetches the 2022 slug every time and reports it unread, so the day the county backfills it fourteen members appear instead of the gap quietly persisting (scripts/adams_county_board_scraper.py + build_adams_county_board_roster.py)."
       },
       {
+        "file": "knox-county-board-members.json",
+        "min_keys": 6,
+        "note": "Knox County Board members keyed by district (5 districts of THREE seats each, 15 in all) plus a top-level 'board' entry. THE ROSTER IS THE ROLL CALL OF THE COUNTY'S OWN BOARD MINUTES: knoxcountyil.gov answers 403 to every automated client and the Archive never captured its member page, but the same website's DOCUMENTS are served plainly from its Revize CMS, and every set of minutes opens by naming each seat with its district. Absent members are parsed exactly like present ones \u2014 a seat is not vacated by missing a meeting, and reading only the present block would have shipped fourteen of fifteen and called the county complete. Every row names the meeting it came from, because a roll call is one evening's record and cannot show a member seated the week after. The Chair is badged from the same minutes, which state it outright. No party, term, phone or e-mail ships: the minutes publish none and the page that does cannot be read, so the county's Clerk line stands for the board (the Calhoun/Clark switchboard posture). Attendance never ships (scripts/knox_county_board_scraper.py + build_knox_county_board_roster.py)."
+      },
+      {
         "file": "il-senate-members.json",
         "min_keys": 59
       },
@@ -2411,7 +2422,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v47",
+    "cache_name": "district-explorer-shell-v48",
     "shell_urls": [
       "./",
       "./sources.html",
@@ -2715,6 +2726,11 @@
       "file": "update-adams-county-board-roster.yml",
       "purpose": "Adams County Board roster (certified canvasses on platinumelectionresults.com; also the backfill tripwire for the unread November 2022 canvass)",
       "schedule": "Sat 20:00 UTC"
+    },
+    {
+      "file": "update-knox-county-board-roster.yml",
+      "purpose": "Knox County Board roster (roll call of the county's own board minutes on its Revize CMS; its member page is a 403)",
+      "schedule": "Sun 20:00 UTC"
     },
     {
       "file": "update-warren-county-board-roster.yml",

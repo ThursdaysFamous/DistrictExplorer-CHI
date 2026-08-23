@@ -360,6 +360,18 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # it proves the hole stays open, which is exactly what an
                      # outside anchor is for. Read the ring count from --check.
                      "187",
+                     # Knox — the 80th county (2026-08-22), and the join that
+                     # CLOSES AN ENCLAVE rather than extending the frontier: it
+                     # was one of the three holes in the mainland, so this
+                     # removes a ring instead of adding one. Read the ring count
+                     # from --check, never from a sentence. Its five board
+                     # districts are the county's own adopted 2022 map — its GIS
+                     # server serves the COLES PATTERN and its townships came
+                     # from there, the city of Galesburg publishes districts 1-3
+                     # itself, and the certified returns' 13/15 precinct counts
+                     # and near-equal Census populations both corroborate the
+                     # transcription (scripts/build_knox_board_districts.py).
+                     "095",
                      # Massac — the FOURTH ISLAND (2026-08-21), and the second
                      # to join through the AT-LARGE tier alone, after Edwards:
                      # no dispatch entry, no geometry, three commissioners on
@@ -553,6 +565,7 @@ DISPATCH_COUNTY_FIPS = {
     "franklin": "055",
     "clinton": "027",
     "warren": "187",
+    "knox": "095",
     # Moultrie is deliberately ABSENT: its board is elected at large, so it has
     # no district geometry, no dispatch entry and no toggle — its members ride
     # the County card via data/app/il-county-commissioners.json. It appears in
@@ -610,6 +623,10 @@ SIMPLIFY_TOLERANCE_M = 25
 # outside it. A dissolve that silently drops a county still closes its rings,
 # so ring-closure alone is not proof — these are.
 INSIDE = {
+    # Knox, the 80th county (2026-08-22). Galesburg moved here from OUTSIDE
+    # the day the county joined: it spent that time proving a HOLE stayed
+    # open in the mainland, and now proves the same hole is closed.
+    "Galesburg (Knox)": (40.9478, -90.3712),
     # Massac's anchor (2026-08-21). Massac joins through the County card alone —
     # at-large commission board, no district geometry, so no dispatch entry.
     # This point was written as the FOURTH ISLAND's proof that the island landed
@@ -931,9 +948,11 @@ OUTSIDE = {
     # and McDonough's western neighbours. Schuyler cannot serve as that anchor
     # even though it borders Fulton — it is already IN the ring through the
     # at-large tier, and naming it here failed this build immediately, which is
-    # the OUTSIDE list doing exactly its job. Knox is the honest frontier: it
-    # borders Fulton, is served by nothing, and carries its own recorded gap.
-    "Galesburg (Knox)": (40.9478, -90.3712),
+    # the OUTSIDE list doing exactly its job. Knox sat here as the honest
+    # frontier until 2026-08-22, when its five board districts shipped and it
+    # moved up to INSIDE as the 80th county — this list failed the build until
+    # it was moved, exactly as designed. The frontier it leaves behind on this
+    # edge is Fulton's other unserved neighbours.
     # Macon's arrival (pass 12) pushed the line south-east onto two counties
     # this project had never researched. Shelbyville sat beside Sullivan here
     # until 2026-08-11, when Clerk Jessica Fox's four-answer reply de-risked

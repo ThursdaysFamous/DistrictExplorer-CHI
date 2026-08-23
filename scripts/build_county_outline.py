@@ -805,6 +805,33 @@ COUNTIES = {
             (39.7359, -89.1455, "Christian County"),
         ],
     },
+    "knox": {
+        "fips": "095",
+        "name": "Knox County",
+        # Added 2026-08-22, when Knox's five County Board districts shipped and
+        # the county stopped being one of the coverage wash's three enclaves.
+        # Anchors DERIVED, not recalled: representative points of the county's
+        # own municipal polygons (its GIS server's Corp Poly layer) for the
+        # inside set, and of each of its seven neighbouring counties for the
+        # outside set, every one checked with a point-in-county test against the
+        # Census 2020 county polygon before it was written down.
+        "inside": [
+            (40.9468, -90.3812, "Galesburg (county seat)"),
+            (40.9058, -90.2843, "Knoxville"),
+            (40.8039, -90.4003, "Abingdon"),
+            (41.1092, -90.3974, "Rio"),
+            (40.9277, -90.0190, "Williamsfield"),
+        ],
+        "outside": [
+            (41.3660, -90.1452, "Henry County"),
+            (41.1044, -89.8116, "Stark County"),
+            (40.7439, -89.7688, "Peoria County"),
+            (40.4496, -90.1767, "Fulton County"),
+            (40.4582, -90.6775, "McDonough County"),
+            (40.8479, -90.6152, "Warren County"),
+            (41.1985, -90.7509, "Mercer County"),
+        ],
+    },
     "schuyler": {
         "fips": "169",
         "name": "Schuyler County",
