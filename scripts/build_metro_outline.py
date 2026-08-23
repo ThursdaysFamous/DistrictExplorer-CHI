@@ -638,6 +638,36 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # far south, and one the ring should be re-read for rather
                      # than reasoned about here. Read the ring count from --check.
                      "069",
+                     # Richland — 2026-08-23, a mainland join against served
+                     # Crawford, Edwards and Wabash. It is the first county in
+                     # the fleet whose board composition came from the COUNTY'S
+                     # OWN GIS rather than from election returns: its canvasses
+                     # count precincts per district and never name one (the Knox
+                     # shape), while richlandil.wthgis.com publishes the board
+                     # districts and the voting precincts as two county-authored
+                     # layers that overlay cleanly. THE JOIN LEAVES LAWRENCE
+                     # WITH NO UNSERVED ILLINOIS NEIGHBOUR — Crawford, Richland,
+                     # Wabash and Edwards all serve — and that does NOT make it
+                     # an enclave, for the reason Pulaski settled the same week:
+                     # Lawrence's eastern edge IS the Wabash River, the Indiana
+                     # state line, so it is a NOTCH in the outer boundary that
+                     # the dissolve walks around rather than a hole it closes
+                     # over. THE JOIN DOES CLOSE A HOLE, and a big one, which is
+                     # the part reasoning-from-the-map got wrong until --check
+                     # was run: Clay, Fayette, Jasper, Marion and Wayne form one
+                     # contiguous unserved block that used to reach the outside
+                     # through Richland and Lawrence. With Richland served the
+                     # block is sealed, and the mainland goes from two holes to
+                     # THREE — the fleet's first MULTI-COUNTY enclave, and by
+                     # far its largest. All five are individually MEASURED shut
+                     # (Clay City split between districts A and B; Avena split;
+                     # Jasper's wedge precincts; Marion's five VTDs spanning
+                     # three districts; Wayne's 32.4% deviation), so this is a
+                     # hole made of counties that are blocked rather than
+                     # unexamined — and each of the five carries its own OUTSIDE
+                     # anchor below, so the whole enclave is proven unwashed.
+                     # Read the ring count from --check, never from this comment.
+                     "159",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -723,6 +753,12 @@ DISPATCH_COUNTY_FIPS = {
     # this addition: it has been dispatched since its commissioner districts
     # shipped and is already listed above.
     "schuyler": "169",
+    # Richland joins 2026-08-23 as a full board + precinct dispatch entry. Its
+    # composition came from the COUNTY'S OWN GIS rather than from returns — the
+    # first in the fleet to be composed that way — after this project spent
+    # weeks reading its canvasses, which count precincts per district and never
+    # name one (scripts/build_richland_boundaries.py).
+    "richland": "159",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -1043,6 +1079,18 @@ INSIDE = {
     # line rather than one county from it. The coordinates are
     # build_county_outline.py's own perry inside anchor.
     "Pinckneyville (Perry)": (38.0803, -89.3823),
+    # Olney (Richland) — the county seat, 2026-08-23, moved up from OUTSIDE. A
+    # mainland join bordering served Crawford, Edwards and Wabash. It SEALS a
+    # five-county hole — Clay, Fayette, Jasper, Marion and Wayne, which reached
+    # the outside through Richland until now — so the mainland goes from two
+    # rings' worth of holes to three, and this is the fleet's first enclave that
+    # is not a single county. It also leaves LAWRENCE with no unserved Illinois
+    # neighbour, which is a NOTCH and not a fourth hole, because its eastern
+    # edge is the Wabash River and the Indiana state line (the Pulaski test).
+    # Lawrenceville is anchored OUTSIDE to prove that notch stays unwashed, and
+    # so are all five enclave counties. The coordinates are
+    # build_county_outline.py's own richland inside anchor.
+    "Olney (Richland)": (38.7285, -88.0839),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -1117,11 +1165,31 @@ OUTSIDE = {
     # the anchor: Douglas now borders served Coles and Moultrie, with Champaign,
     # Edgar and Piatt keeping it off the enclave list.
     "Tuscola (Douglas)": (39.7967, -88.2748),
-    # Olney (Richland) — the successor Crawford's join calls for. Crawford
-    # leaves Jasper, Lawrence and Richland behind, and Richland is the one that
-    # borders the most served ground; Jasper and Lawrence keep it off the
-    # enclave list.
-    "Olney (Richland)": (38.7285, -88.0839),
+    # Flora (Clay) and Lawrenceville (Lawrence) — the two successors Richland's
+    # join calls for (2026-08-23). Olney stood here until Richland shipped, and
+    # the guard failed the build until it was moved up to INSIDE, exactly as
+    # designed. Richland leaves four unserved neighbours: Jasper and Wayne are
+    # already anchored below, and these are the other two.
+    #
+    # CLAY is MEASURED shut rather than unexamined — Clay City is split between
+    # board districts A and B — and it is now part of the fleet's first
+    # MULTI-COUNTY enclave: Clay, Fayette, Jasper, Marion and Wayne are one
+    # contiguous unserved block, and Richland's join sealed it. Each of the five
+    # is anchored here (Flora, Vandalia, Newton, Salem, Fairfield), so the whole
+    # hole is proven unwashed rather than only its rim.
+    #
+    # LAWRENCE IS THE INTERESTING ONE, and it is why this anchor exists.
+    # Richland's join leaves it with NO unserved Illinois neighbour at all —
+    # Crawford, Richland, Wabash and Edwards all serve — which is the same test
+    # Bureau and Christian meet. It is still not an enclave, for the reason
+    # Pulaski settled on 2026-08-23: a county with no unserved neighbour is an
+    # enclave only if it is INTERIOR, and Lawrence's eastern edge IS the Wabash
+    # River, the Indiana state line. That makes it a NOTCH in the outer
+    # boundary, which the dissolve walks around rather than closing over. This
+    # anchor is what proves the notch stays unwashed; the ring count is read
+    # from --check, never reasoned about here.
+    "Flora (Clay)": (38.6688, -88.4759),
+    "Lawrenceville (Lawrence)": (38.7263, -87.6873),
     # Oquawka (Henderson) — the successor Warren's join calls for. Warren left
     # the OUTSIDE list on 2026-08-21 when its own board page and precinct-map
     # legend turned out to be reachable all along; Henderson is the honest
@@ -1197,8 +1265,9 @@ OUTSIDE = {
     # islands; both have since merged in (Shelby 2026-08-11, White
     # 2026-08-17), and Wayne is now a deep NOTCH in the mainland's southern
     # edge — bordered by served Jefferson, Hamilton, White and Edwards, with
-    # only Clay and Richland keeping it off the enclave list. This anchor is
-    # what proves the notch stays washed.
+    # only Clay and Marion keeping it off the enclave list (Richland stood in
+    # that sentence until it shipped on 2026-08-23 and now borders Wayne as
+    # served ground). This anchor is what proves the notch stays washed.
     "Fairfield (Wayne)": (38.3798, -88.3724),
     # (Putnam's anchor moved up to INSIDE in tranche 5, and Adams's Clayton in
     # pass 8, each joining exactly as its OUTSIDE comment said it would — Adams
