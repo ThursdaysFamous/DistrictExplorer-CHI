@@ -1295,8 +1295,8 @@ detail into `blocker`.
       "kind": "no-source",
       "layer": "county-board",
       "summary": "Nothing is shown for Pope County's board — not districts, not commissioners.",
-      "why": "No county document has been read at all: the county's site refuses this connection, and no map data for the county exists anywhere public.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. popecountyil.com resolves and answers 503 to this network; the Clerk's domain is popeco.illinois.gov. Unverified from here, but 'no website' is not the finding. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. A CENSUS MARKER, ADDED 2026-08-21 BY THE FRONTIER-WIDE SWEEP and recorded as CORROBORATION ONLY: TIGER's county-subdivision layer gives Pope 6 subdivisions, every one coded LSADC 29 (precinct) rather than 44 (township), which is the census marker for a county NOT under township organization — the ordinary precondition in Illinois for a three-member Board of Commissioners elected countywide, and the same shape Massac and Alexander have. IT ESTABLISHES NON-TOWNSHIP ORGANIZATION AND NOTHING MORE: not a seat count, not at-large election. Gallatin is the counter-example kept beside it — a TOWNSHIP county whose five-member board is elected countywide all the same. No county document has been read here at all, so this marker is the only evidence of the county's board form and is not enough on its own.",
+      "why": "No county document has been read at all. The county's web address serves a template page with no county information on it, and no map data for the county exists anywhere public.",
+      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. No county website answered under the five domain patterns probed. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". CORRECTED 2026-08-09 by a web search, the step this record was written without. The line above claiming no county website answered is FALSE. popecountyil.com resolves and answers 503 to this network; the Clerk's domain is popeco.illinois.gov. Unverified from here, but 'no website' is not the finding. The systematic failure: the probe permuted the county's NAME, while the answer was already in this repo — data/app/il-county-clerks.json carries each Clerk's e-mail, and for 9 of the 14 counties recorded this way the CLERK'S E-MAIL DOMAIN IS THE COUNTY'S WEB DOMAIN. This project was e-mailing these counties at those very domains on 2026-08-05 while telling readers the counties had no website. A CENSUS MARKER, ADDED 2026-08-21 BY THE FRONTIER-WIDE SWEEP and recorded as CORROBORATION ONLY: TIGER's county-subdivision layer gives Pope 6 subdivisions, every one coded LSADC 29 (precinct) rather than 44 (township), which is the census marker for a county NOT under township organization — the ordinary precondition in Illinois for a three-member Board of Commissioners elected countywide, and the same shape Massac and Alexander have. IT ESTABLISHES NON-TOWNSHIP ORGANIZATION AND NOTHING MORE: not a seat count, not at-large election. Gallatin is the counter-example kept beside it — a TOWNSHIP county whose five-member board is elected countywide all the same. No county document has been read here at all, so this marker is the only evidence of the county's board form and is not enough on its own.  RE-MEASURED 2026-08-23, WHEN POPE BECAME THE LAST UNSERVED COUNTY IN THE FAR SOUTH (Alexander, Pulaski and Hardin all shipped that day, and Johnson, Massac and Saline before them). THREE LINES ABOVE ARE NOW WRONG AND THE ROUTES ARE MEASURED RATHER THAN GUESSED. (1) popecountyil.com DOES NOT ANSWER 503 — it answers 200 with 74 KB, and what it serves is worse news than a 503: a CONTENT-FREE PLACEHOLDER. One page, a stock 'Explore the Historic Courthouse' hero, a fake telephone number printed as 555-555-1212, a 2025 copyright line and NOT ONE county link — no board, no clerk, no elections, no minutes. It is a template site, not a government one, so there is nothing here to scrape at any depth. (2) popeco.illinois.gov, named above as 'the Clerk's domain', HAS NO A RECORD AT ALL — it is not a website and never was. It does hold a working Microsoft 365 MX (popeco-illinois-gov.mail.protection.outlook.com), so the Clerk's address in il-county-clerks.json is deliverable and THE ASK ROUTE IS INTACT; what is absent is a site. That is the Wabash/Henderson pattern, and this pass found it on THREE frontier clerk domains at once — Pope's, Jasper's (jaspercounty.illinois.gov, MX at emailservice.io) and Marion's (marionco.illinois.gov, MX at arsmtp.com) — all no-A, all mail-live. It is a documented exception class to the Cumberland correction rather than a contradiction of it: a clerk's mail domain is OFTEN the county's web domain, and where it is a bare <county>.illinois.gov tenant it is often mail only. A no-A result there means NO SITE HERE, never an unreachable clerk. (3) THE VENDOR ROUTES ARE CLOSED, PROVEN RATHER THAN UNTRIED, which is what the Adams record was written for. il-pope.pollresults.net answers 200 with 7,720 bytes whose md5 (327b411ac93a...) is BYTE-IDENTICAL to that of a fabricated county name — the documented uncarried signature — and il-pope.accessliberty.com/pastelections.aspx 404s. platinumelectionresults.com does not carry it either: the ten-slug id sweep of 2026-08-23, the one that found Pulaski and Hardin, covered ids 1-100 and Pope is not among them. results.gbsvote.com's thirteen Illinois counties do not include it, and Clarity carries none of this frontier. SO NOTHING ABOUT THIS COUNTY'S BOARD IS KNOWN FROM ANY READABLE SOURCE, and the census marker above is still the only evidence of its form. What is different is that the alternatives are now measured shut instead of unexamined, and the one live route is named: the Clerk's e-mail.",
       "wanted": "Whether the board is elected by district or county-wide — then either the district boundaries as map data, or the commissioners' names from a county source."
     },
     {
@@ -2733,6 +2733,49 @@ What does NOT ship is contact: a canvass names a winner and never a phone
 number, and both counties' directories are behind the challenge. That absence is
 recorded as `captcha-county-commissioner-contact` rather than left to be
 inferred from an empty column.
+
+### 2026-08-23: what the far-south sweep measured about the counties that did NOT ship
+
+Four counties joined on 23 August (Alexander, Pulaski, Hardin — and Union and
+Williamson the day before), which leaves **Pope as the only unserved county in
+the far south**. The same afternoon's probes are worth recording for the counties
+that stayed out, because two of them corrected records rather than confirming
+them.
+
+**A MAIL-ONLY `.illinois.gov` IS A DOCUMENTED EXCEPTION CLASS, not a
+contradiction of the Cumberland correction.** That correction — a clerk's e-mail
+domain is often the county's web domain, and permuting the county's *name* is how
+this project told readers a county had no website while writing to it — remains
+right and has opened counties all month. But three frontier clerk domains
+resolved this pass with **no A record and a live MX**: `popeco.illinois.gov`
+(Microsoft 365), `jaspercounty.illinois.gov` (emailservice.io) and
+`marionco.illinois.gov` (arsmtp.com). A bare `<county>.illinois.gov` tenant is
+frequently mail only. **A no-A result there means NO SITE HERE, never an
+unreachable clerk** — the ask route is intact in all three — and the
+`probe_incomplete_tls_chains.py` state to read it by is `no-dns`, which reports
+A-record absence and says nothing about mail.
+
+**Pope's record was wrong in three places and is now measured.** It said
+`popecountyil.com` "answers 503"; it answers **200 with 74 KB**, and what it
+serves is worse news than a 503 — a content-free placeholder with a stock
+"Explore the Historic Courthouse" hero, a fake `555-555-1212` telephone number, a
+2025 copyright line and **not one county link**. It is a template site, not a
+government one. It said `popeco.illinois.gov` is "the Clerk's domain", which is
+true of mail and false of the web. And it left the vendor routes unexamined;
+they are now **proven closed**: `il-pope.pollresults.net` returns 7,720 bytes
+whose md5 is byte-identical to a fabricated county's (the documented uncarried
+signature), `il-pope.accessliberty.com/pastelections.aspx` 404s, the ten-slug
+platinum id sweep covering ids 1–100 does not reach it, GBS's thirteen Illinois
+counties exclude it, and Clarity carries none of this frontier.
+
+Nothing about Pope's board is known from any readable source, and the census
+non-township marker is still the only evidence of its form. What changed is that
+the alternatives are measured shut rather than unexamined, and the one live route
+has a name: **the Clerk's e-mail.**
+
+**No new Coles-pattern host.** All seventeen frontier clerk domains were probed
+for the incomplete-chain failure; Vermilion is still the only one, and its record
+already carries it.
 
 ### 2026-08-23: Pulaski, the 84th — a county opened by re-running a sweep, not by finding a source
 
