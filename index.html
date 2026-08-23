@@ -9293,6 +9293,44 @@ function initChiExplorer() {
   var loadDouglasBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/douglas-county-board-members.json", {}, 2);
   });
+  /* Vermilion (the 89th county, 2026-08-23) — the county that was never
+   * blocked. Its gap record said the county's website "is not reachable from
+   * this project's network", and that was true of a TLS handshake and false of
+   * the county: vercountyil.gov redirects to www.vercounty.org, which serves
+   * the COLES PATTERN — its leaf certificate without the GoGetSSL intermediate
+   * that signed it, so every automated client reports a failure no browser ever
+   * sees. Chasing that intermediate by AIA with a pinned hash (never by
+   * disabling verification) opens a maintained 27-member roster.
+   *
+   * The districts did not even need the site. The county's GIS publishes to an
+   * ArcGIS Online org carrying twenty-six public services, and THE
+   * WELL-LABELLED LAYER IS THE OBSOLETE ONE: a service described as
+   * "Governmental and school districts in Vermilion County IL" holds the
+   * SUPERSEDED map, while the current one is a misspelled, undocumented
+   * CountyBoardDistrcts2021. Which is which is a MEASUREMENT, not a reading of
+   * a name — on the Census 2020 blocks the shipped layer runs 8,209-8,298
+   * against an 8,243 ideal (0.7%) and the better-labelled one 7,609-9,484
+   * (15.1%). A plan drawn to the 2020 census balances on it
+   * (build_vermilion_boundaries.py).
+   *
+   * NO PRECINCT ENTRY, and that is measured rather than missing: the county
+   * re-precincted after the census, so the 84-feature precinct layer its GIS
+   * publishes is the 2020 fabric, not the 38 clerk and 22 Danville Election
+   * Commission precincts its own canvasses have reported since 2022. */
+  var loadVermilionCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/vermilion-county-outline.json", {}, 2);
+  });
+  function vermilionCountyCoverage(point) {
+    return loadVermilionCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadVermilionBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/vermilion-county-board-districts.json", {}, 2);
+  });
+  var loadVermilionBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/vermilion-county-board-members.json", {}, 2);
+  });
   var loadMercerCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/mercer-county-outline.json", {}, 2);
   });
@@ -18891,6 +18929,95 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadDouglasBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Vermilion County — 9 districts electing THREE members each (27 seats),
+      // shipped AS THE COUNTY DRAWS THEM from its own public feature service
+      // (build_vermilion_boundaries.py). The county publishes TWO board-district
+      // maps and the better-labelled one is superseded; the shipped layer is the
+      // one that balances on the Census 2020 blocks (0.7% worst deviation
+      // against the other's 15.1%), which the builder re-measures in both
+      // directions on every run. The roster is the county's own members page,
+      // reached by supplying the intermediate certificate the county's server
+      // omits — never by disabling verification — and NOT the Name/Party/Email
+      // columns on its own district layer, which are a 2018 snapshot on a
+      // retired e-mail domain. No precinct entry: the county re-precincted after
+      // the census and the precinct layer its GIS publishes is the old fabric.
+      {
+        key: "vermilion",
+        coverage: vermilionCountyCoverage,
+        loadGeometry: loadVermilionBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadVermilionBoardDistricts(),
+            loadVermilionBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var roster = results[1];
+            return {
+              seq: seq,
+              district: district,
+              entry: district != null ? roster[String(district)] : null,
+              rosterLoaded: !!(roster && Object.keys(roster).length)
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Vermilion County Board",
+            note: withShortfall(boardCountNote(members.length, null), result)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The county's own table prints an "Elected/Appointed" year per
+              // member. It rides the note rather than being dropped, and it is
+              // labelled "on the board since" because the county does not say
+              // which of the two it was.
+              if (m.since) {
+                p.note = p.note ? p.note + " · on the board since " + String(m.since)
+                  : "on the board since " + String(m.since);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.entry && result.entry.officeAddress) {
+            fields.push({ label: "County Board office",
+                          value: String(result.entry.officeAddress) });
+          }
+          if (result.entry && result.entry.officePhone) {
+            fields.push({ label: "Board office phone",
+                          value: String(result.entry.officePhone) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Vermilion County Board Members (official)", url: "https://www.vercounty.org/county-board/county-board-members/" };
+        },
+        hoverOfficial: {
+          load: loadVermilionBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

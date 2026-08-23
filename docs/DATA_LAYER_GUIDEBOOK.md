@@ -1481,18 +1481,18 @@ detail into `blocker`.
       "wanted": "Park and library district boundaries as map data — each of the eight districts holds its own, and none has been asked."
     },
     {
-      "id": "vermilion-county-website",
-      "concept": "County board districts",
+      "id": "vermilion-precinct-geometry",
+      "concept": "Voting precincts",
       "area": "Vermilion County",
       "counties": [
         "vermilion"
       ],
       "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Vermilion County's nine board districts aren't drawn. It's the largest county not yet covered here.",
-      "why": "The Clerk confirmed in writing that her office holds no map files, the county's published district maps are pictures, and two precincts are split between districts.",
-      "blocker": "Checked 3 Aug 2026. Vermilion is about 74,000 people, the biggest county adjacent to the served area, and none of its geography is on the site. The state's election directory gives the clerk an address at vercountyil.gov. That domain exists, but it refuses secure connections and, over an ordinary one, forwards visitors to Google — it is parked, not a county website. Several likely alternatives were tried and none exists. This is the same trap McDonough set: an e-mail address at a domain that hosts nothing. McDonough was solved by asking its clerk, who named a website no amount of guessing would have found. SO WAS THIS ONE, and the record predicted its own solution: ASKED 5 Aug 2026, ANSWERED THE SAME DAY by Chief Deputy County Clerk and Supervisor of Elections Carrie Wilson — the county's website is vercounty.org, and the maps her office publishes are at vercounty.org/county-clerk/voter-maps/. (Seal permissions, separately, go to Jennifer Jenkins in the County Board office, jjenkins@vercounty.org.) THE METHOD LESSON IS IN THE HOSTNAME: \"ver\" is an ABBREVIATION of Vermilion, so no ladder built from the county slug — vermilioncountyil.gov, vermilioncounty.org, co.vermilion.il.us — could ever have reached it, which is why two passes of searching failed where one question succeeded. Neither the site nor the Archive is reachable from this project's network, so what the voter-maps page actually carries is still unmeasured. THE FORMAT QUESTION IS NOW ANSWERED, AND THE ANSWER IS NO: asked on 5 Aug whether those maps exist as data, Wilson replied the same evening — \"Those are the only maps we offer, our county does not have shapefiles or GIS layers for precinct look ups. There is a precinct finder on the Illinois State Board of Elections site voters may utilize or they may call our office.\" That is a refusal from the right desk, which this ledger treats as a finding rather than a dead end: it converts an inferred blocker into a stated one, and it means no amount of further searching of the county's own publications will produce geometry. Read exactly, her sentence is explicit for PRECINCTS and covers board districts by implication (\"the only maps we offer\"), so it settles what the CLERK holds; a county GIS or assessor's desk, if Vermilion has one, is a different office and was not asked. The lookup she named — ova.elections.il.gov/PollingPlaceLookup.aspx — was measured before being recorded and is NOT a data lead: it is a per-address form (zip, then a street from a fixed dropdown, then a house number) that answers one voter at a time, holds no boundary, and offers no download.  MEASURED 2026-08-18 by the 34-county sweep of the `il-<county>.pollresults.net` / `il-<county>.accessliberty.com` election-results vendor (see the backlog entry and the Clark build log). That platform publishes each county's certified results as STRUCTURED DATA, naming which precincts vote in each board contest — which answers §2.5 step 2 outright and, where districts are unions of whole precincts AND the Census 2020 VTD fabric still matches the county's precinct names (the Jasper test), supplies the composition too. FOR VERMILION THE ANSWER IS NO, AND IT IS THE CLEAREST FABRIC FAILURE in the sweep. The county's certified 2026 General Primary reports 38 precincts; the Census 2020 voting-district fabric carries EIGHTY-FOUR, with Danville alone contributing a dozen the county no longer runs. Vermilion consolidated its precincts wholesale after the census, so census geometry is not its fabric and no dissolve of it could answer here — and two of its precincts (Middlefork, Newell 1) are split between districts besides. Its results DID settle the form: eight board districts electing one or two members each, plus a separate three-district Board of Review.  RE-MEASURED 2026-08-21, AND THE ONE LINE ABOVE THAT SAID THE SITE COULD NOT BE READ IS NOW RETIRED. This record said \"Neither the site nor the Archive is reachable from this project's network, so what the voter-maps page actually carries is still unmeasured\". The site was reachable all along: vercounty.org serves an INCOMPLETE TLS CHAIN — a leaf signed by GoGetSSL RSA DV CA, with that intermediate missing from the handshake and only the USERTrust root beside it — so every automated client reports \"unable to get local issuer certificate\" and no browser notices. That is the COLES PATTERN, and Vermilion is the second county it has hidden (Gallatin, found the same afternoon, is the third). Supplying the intermediate the certificate itself names, pinned by hash and with verification never disabled, returns 200. The same correction applies to the domain in the state's clerk directory: vercountyil.gov is NOT parked. Over plain http it does forward to Google, exactly as recorded — but over https, once the chain is completed, it redirects to www.vercounty.org, the county's own site. WHAT THE VOTER-MAPS PAGE CARRIES, now that it has been read: NINE County Board district PDFs (updated 30 Dec 2021), a County Board wall map, a combined \"County Board Districts and Precincts\" wall map, three Board of Review district maps, and one PDF per precinct. EVERY ONE IS A RASTER WITH NO TEXT LAYER — 0 characters extracted from all ten board sheets — so they corroborate nothing a machine can read, and Clerk Wilson's written \"our county does not have shapefiles or GIS layers\" stands unchanged. The three Google My Maps on that page, which would have carried real geometry, are congressional and legislative only; no county-board map is among them. THE SPLIT PRECINCTS NOW HAVE A SECOND WITNESS AND EXACT NUMBERS. The county's certified Statement of Votes Cast for the 5 Nov 2024 General prints each precinct's registration twice — once for turnout and once for the contest — and where a precinct is split the two differ. MIDDLEFORK: 875 registered, 258 of them in District 1 and 617 in District 2. NEWELL 1: 759 registered, 593 in District 6 and 166 in District 8. Both sums are exact, every other precinct in those contests shows identical figures, and the eight district contests' registrations sum to the county clerk's countywide 28,695 to the person. That closes the dissolve route on measurement rather than on inference. ONE CORRECTION TO THIS RECORD'S OWN COUNT: it says \"eight board districts\", which is the COUNTY CLERK'S VIEW. The county publishes NINE district maps, and Danville runs its own Election Commission whose canvass is a separate document — District 8's clerk-side share is a 166-voter sliver of one precinct and District 9 appears in neither the 2024 general nor the 2026 primary the Clerk certifies, which is what a district lying wholly inside the city would look like. Nine is what the county's own map page says.",
-      "wanted": "A map file of Vermilion's board districts or precincts from a holder other than the Clerk — a county GIS or assessor's office, or whoever drew the current map."
+      "layer": "county-precinct",
+      "summary": "Vermilion County's voting precincts aren't drawn, though its nine board districts now are.",
+      "why": "The only precinct map the county publishes as data was drawn before it consolidated its precincts, so it shows eighty-four where the county now runs sixty.",
+      "blocker": "Checked 3 Aug 2026 and RESOLVED 23 Aug 2026 for the board districts, which now ship; this record is narrowed to the precincts. THE RECORD NAMED ITS OWN ANSWER AND NOBODY WENT AND GOT IT. Everything it established stands: Clerk Wilson wrote on 5 Aug 2026 that \"our county does not have shapefiles or GIS layers for precinct look ups\"; the nine district PDFs on the voter-maps page are rasters with no text layer; and the site reads as unreachable only because vercounty.org serves the COLES PATTERN, its leaf without the GoGetSSL intermediate. But this record's own `wanted` line asked for \"a map file from a holder other than the Clerk — a county GIS or assessor's office\", and it flagged in its own text that \"a county GIS or assessor's desk, if Vermilion has one, is a different office and was not asked\". Vermilion has one, it publishes to ArcGIS Online, and it took one request to find: the DanvilleILGIS org (services6.arcgis.com/am689ZyfXfdo9vCK) carries twenty-six public services including CountyBoardDistrcts2021, shared public with empty licenseInfo. THE CLERK'S \"NO\" WAS ACCURATE ABOUT THE CLERK AND WAS READ AS AN ANSWER ABOUT THE COUNTY \u2014 the same shape as Knox, where a website that refuses is not a county that refuses. THE PRECINCTS ARE STILL NOT DRAWN, and now for a measured reason rather than an unexamined one: the org's Voting Precincts layer carries 84 features matching the Census 2020 fabric 84/84, which is exactly the problem \u2014 the county consolidated after the census and its own certified canvasses have reported 38 County Clerk precincts and 22 Danville Election Commission precincts continuously since June 2022. The GIS layer is sixty current precincts drawn as eighty-four superseded ones, so shipping it would show readers precincts that no longer exist. The org's VoterCodes layer (79 features named C51, C72, CITY) is NOT a precinct layer and splits across district lines everywhere; it is named here so nobody mistakes it for one. THE SPLIT-PRECINCT FINDING ALSO SURVIVES AND NO LONGER BLOCKS ANYTHING: Middlefork and Newell 1 are split between districts, which closed the dissolve route and never touched the districts themselves, because the county draws those and publishes them. ONE CORRECTION THIS RECORD ANTICIPATED AND COULD NOT CLOSE: it said nine districts where the Clerk's canvasses show eight, and guessed District 9 lies wholly inside Danville. Nine is right and the guess was not needed \u2014 District 9 is certified in the DANVILLE ELECTION COMMISSION's 17 March 2026 General Primary, which the Clerk's canvass would never carry. The two authorities NAME CONTESTS DIFFERENTLY (\"COUNTY BOARD 8TH DISTRICT MEMBER\" against \"CO. BD. MEMBER D8\"), so searching one convention reports a real district as non-existent.",
+      "wanted": "A current precinct map as data from Vermilion County GIS, which has not been asked, or from either election authority \u2014 the Clerk for the 38 outside Danville, the Election Commission for the 22 inside it."
     },
     {
       "id": "wabash-precinct-geometry",
@@ -5245,6 +5245,93 @@ contains only its own test point. Dispatch counties 56 → 58; the `calhoun-prec
 gap record is retired, and Morgan needed none because its absence had never been
 recorded — which is what the audit that started this was about.
 
+### 2026-08-23: Vermilion ships as the 89th county — the county that was never blocked, and the map that was never read
+
+Vermilion is the biggest county this project has ever added, and it had been recorded as
+unreachable for three weeks. **Its own gap record named the answer and nobody went and got it.**
+
+That record was long, careful and almost entirely correct. It established that Clerk Wilson
+wrote, in answer to a direct question, "our county does not have shapefiles or GIS layers for
+precinct look ups"; that the nine district PDFs on the county's voter-maps page are rasters
+with zero extractable characters; that the county consolidated 84 census precincts down to 38
+clerk precincts, closing the dissolve route; and that two precincts are split between districts
+besides. Every one of those still stands. It also contained, in its own words, the sentence
+that solved it:
+
+> a county GIS or assessor's desk, if Vermilion has one, is a different office and was not asked
+
+**Vermilion has one.** The county's GIS publishes to ArcGIS Online under the `DanvilleILGIS`
+org, 26 public services with empty `licenseInfo`, including three that draw board districts and
+one that draws precincts. It was found by the catalog query described above — one unauthenticated
+request, no county page read, which matters because **the county's website could not be read
+when the sweep started.**
+
+**The Clerk's "no" was accurate about the Clerk and was taken as an answer about the county.**
+That is the Knox shape exactly — a website that refuses is not a county that refuses — and it is
+the third time this fleet has paid for it.
+
+**Then the site turned out to be readable too.** `vercountyil.gov` redirects to
+`www.vercounty.org`, which serves the COLES PATTERN: its leaf certificate without the GoGetSSL
+RSA DV CA intermediate that signed it, so every automated client reports "unable to get local
+issuer certificate" and no browser notices. The record had *already identified this on
+2026-08-21* and retired the "site cannot be read" line — and the roster behind it was never
+fetched. Chasing the intermediate by AIA, pinned by SHA-256 and with verification never
+disabled, returns a maintained members table: 27 people, nine districts, three apiece, with
+party, year seated and a county e-mail for every one.
+
+**Three layers, and the well-labelled one is obsolete.** Covered in its own method section
+above; the short version is that `CountyBoardDistrcts2021` — misspelled, undocumented — is the
+plan in force, proven by a 0.7% population spread on the Census 2020 blocks against the
+better-labelled layer's 15.1%, and the builder gates that comparison in both directions.
+
+**The 27-member roster is scraped, not read off the boundary.** `CountyBoardDistricts` carries
+Name/Party/Elected/Email for three members per district, which is the shape that tempts a build
+to skip the page. Its newest `Elected` year is 2018 and its addresses are on a retired domain.
+The Coles rule holds.
+
+**One table, four traps**, each handled explicitly rather than absorbed: one of 27 names is
+published surname-first (`Auter, Tara`) and is flipped with the flip PRINTED on every run;
+roles ride the name cell (`Steve Miller (Chairman)`); one e-mail cell carries a phone number
+too; and District 4 seats two McFaddens, so surnames are not keys.
+
+**District 9 nearly went missing, and the near-miss is the most transferable thing here.** Four
+of the Clerk's certified canvasses name districts 1-8 and never a 9th. The obvious explanation —
+District 9 lies wholly inside Danville, which runs its own Election Commission — was already
+written into this guidebook and is WRONG: District 9 is 80.6% inside the city by population and
+**District 8 is 95.99% inside and appears in the clerk's canvass anyway.** The actual reason is
+that the two authorities name contests differently (`COUNTY BOARD 8TH DISTRICT MEMBER` against
+`CO. BD. MEMBER D8`), so a `COUNTY BOARD` search of the commission's reports returns zero
+matches in documents that carry three board contests. Searched with both vocabularies, all nine
+districts are certified.
+
+**No precinct layer ships, and that is a measurement.** The org's `Voting Precincts` layer
+carries 84 features matching the Census 2020 fabric 84/84 — which is the problem, because the
+county's own canvasses have reported 38 clerk precincts and 22 commission precincts
+continuously since June 2022. Sixty current precincts drawn as eighty-four superseded ones. The
+`VoterCodes` layer (79 features named C51, C72, CITY) is not a precinct layer at all and splits
+across district lines everywhere; it is named in the record so nobody mistakes it for one. The
+gap record is narrowed to `vermilion-precinct-geometry` rather than retired.
+
+**Verified in a real browser** against the shipped geometry, and each answer cross-checks a
+different certified document: a Danville point names District 8 with Boyd, Butler and Hawker; a
+Hoopeston point in the far north names District 1, whose certified composition is the rural
+Butler/Grant/Middlefork/Ross group; a Georgetown point in the south names District 4, whose
+composition is Georgetown 1/3/5/7 plus McKendree; and a Lake Michigan point hides the layer.
+
+**The join opened a three-county enclave, and it was PREDICTED WRONG before `--check` ran.**
+The comment first written into `build_metro_outline.py` said Champaign and Piatt "keep their own
+outlet to the frontier through Ford" — which quietly assumed Ford was an outlet rather than part
+of the block. Ford is unserved too, and its every other neighbour (Iroquois, Kankakee,
+Livingston, McLean and now Vermilion) is served, so **Champaign, Ford and Piatt are one enclosed
+block**: the fleet's second multi-county hole, after Clay/Fayette/Jasper/Marion/Wayne. The ring
+went 4 → 5 and the hole's bounds are exactly the union of the three counties' extents. All
+three carry their own OUTSIDE anchor, so the whole hole is proven unwashed rather than only its
+rim. **This is the second consecutive county whose topology was called wrong from a map in the
+head; read the ring count from `--check`.**
+
+Counties 88 → 89, dispatch entries 76 → 77, frontier 14 → 13, gap records unchanged at 105.
+
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker.
@@ -6043,6 +6130,76 @@ line crosses a precinct, and never evidence of WHICH** — Cumberland's reading 
 because its board contests independently over-summed (6+5+3 against 12 precincts), and Richland
 never had that corroboration.
 
+### Search the ArcGIS ONLINE CATALOG, not the county's website (2026-08-23)
+
+Douglas established that **a viewer shows what it uses; the org shows what the county has** —
+enumerate the ArcGIS org behind whatever service a county's web map names, and you see
+everything that org publishes rather than the handful the viewer draws. Vermilion sharpens it
+one step further, because Vermilion's *website could not be read at all* when the sweep started
+and the finding came anyway.
+
+`https://www.arcgis.com/sharing/rest/search?q=...&f=json` searches **every public item in
+ArcGIS Online**, unauthenticated, with no key. Searching `"<County> County" Illinois` and
+filtering titles and snippets for board/precinct/district words returns the county's own items
+wherever they live — under an org the county's site never links, under an owner account whose
+name nobody would guess. The 14-county frontier sweep on 2026-08-23 cost fourteen queries and
+surfaced two owner accounts that mattered: `bureaucountysa` and `DanvilleILGIS`.
+
+**The two results are worth contrasting, because the negative is as useful as the positive.**
+
+* `DanvilleILGIS` → org `am689ZyfXfdo9vCK`, 26 public services, among them
+  `CountyBoardDistricts`, `CountyBoardDistrcts2021`, `VoterCodes`, and a `Districts` service
+  whose layer 3 is `Board Districts` and layer 4 `Voting Precincts`. Vermilion shipped that
+  afternoon as the 89th county.
+* `bureaucountysa` → org `LiP3SciiR8VBXvcO`, **63** public services and not one board district
+  or precinct among them: parcels, soils, zoning, roads, and one feature service per township.
+  Bureau's gap record said the county "publishes no map and references no GIS host at all". The
+  host half of that was wrong — Bureau has an ArcGIS org and it is large — and the content half
+  is now MEASURED rather than assumed. That is a strictly better "no".
+
+**Order the checks by what they cost.** The catalog query is one request and needs nothing from
+the county. The org enumeration is one request once you have an org id. Both come before reading
+a viewer's application config, and long before any map-reading method.
+
+### The BEST-LABELLED layer can be the SUPERSEDED one — currency is a measurement (2026-08-23)
+
+Vermilion publishes **three** board-district layers and the one with a description, a sensible
+name and a roster attached is a decade out of date.
+
+    Districts/FeatureServer/3    "Board Districts", inside a service described as
+                                 "Governmental and school districts in Vermilion County IL"
+    CountyBoardDistricts/0       the same polygons (IoU 1.000000 on seven of nine districts),
+                                 plus Name/Party/Elected/Email columns for three members apiece
+    CountyBoardDistrcts2021/0    no description, no metadata, a typo in its own name
+
+The first two are the 2011 plan. The misspelled, undocumented third is the plan in force. A
+reader picking by metadata quality picks wrong, and so does a reader picking by which layer a
+county viewer happens to draw.
+
+**What settles it is arithmetic, and it is decisive.** A redistricting plan is drawn to balance
+on a particular census, so measure it against that census. Assigning all 4,943 Census 2020
+blocks by centroid:
+
+| layer | range | worst deviation |
+|---|---|---|
+| `CountyBoardDistrcts2021` | 8,209 – 8,298 | **0.7%** |
+| `Districts/3` (better labelled) | 7,609 – 9,484 | **15.1%** |
+
+An 0.7% spread is not something a ten-year-old map drifts into; a 15.1% spread is exactly what a
+2011 plan looks like measured against 2020 population. The test needs no county document and no
+correspondence.
+
+**Make it a gate in both directions.** `build_vermilion_boundaries.py` refuses to write unless
+the shipped layer is inside a tight ceiling **and** the superseded one is outside it. Checking
+only the first would let a silent republication of the old geometry through; checking both means
+that if the county ever adopts the other map, the build stops and says so rather than shipping
+whichever layer it was told to ship a year earlier.
+
+**The same county also carries the Coles roster trap again**, which is why the roster is scraped
+rather than read off `CountyBoardDistricts`: its Elected years stop at 2018 and its addresses are
+on a domain the county has retired. **Geometry from the county's service, PEOPLE from what the
+county maintains as people.**
+
 ### In Illinois a CITY can be its own election authority, and then the County Clerk's canvass is only half the county (2026-08-21)
 
 This is the finding that overturned a recorded conclusion, and it will overturn others.
@@ -6064,6 +6221,32 @@ appears in neither the 2024 general nor the 2026 primary the Clerk certifies, wh
 district lying wholly inside the city would look like." ISBE's election-authority page errors
 out for this client, so **how many Illinois municipalities run their own commissions is not
 recorded here and should not be guessed.**
+
+**CONFIRMED FOR VERMILION ON 2026-08-23, and the confirmation exposed a trap that would have
+buried it.** District 9 is certified — "CO.BD.MEMBER D9 (VOTE FOR) 2 (WITH 4 OF 4 PRECINCTS
+COUNTED)" in the Danville Election Commission's 17 March 2026 General Primary — so all nine of
+Vermilion's districts are witnessed by the county's own returns. Finding it took one extra step
+that is easy to skip: **the two authorities NAME THE SAME CONTEST DIFFERENTLY.**
+
+    County Clerk (outside Danville)          COUNTY BOARD 8TH DISTRICT MEMBER
+    Danville Election Commission (inside)    CO. BD. MEMBER D8
+
+A search for `COUNTY BOARD` across the commission's 2024 General report returns **zero
+matches** — in a document that carries three board contests. Reading only the clerk's convention
+gives districts 1-8 across four certified canvasses and reports District 9 as not existing.
+
+**Two things follow, and the second is the one that generalises.**
+
+1. **Sweep every authority's documents with every authority's vocabulary**, not with the
+   vocabulary of whichever one you read first. Both conventions are now applied to both
+   publishers in the Vermilion sweep, and only the union answers.
+2. **A geometric explanation that fits is not thereby the right one.** The obvious reading of
+   District 9's absence was that it lies wholly inside the city, and the record above had
+   already written it down. Measured, District 9 is 80.6% inside Danville by population — but
+   **District 8 is 95.99% inside and appears in the clerk's canvass anyway**, which kills the
+   explanation outright. The real reason is that District 9's seats came up in a cycle the
+   clerk's precincts did not vote in, and no amount of geometry would have shown that. The
+   plausible story survived only until somebody measured the county it was told about.
 
 **What to do about it, in order.**
 

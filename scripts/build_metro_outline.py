@@ -695,6 +695,34 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # nothing is enclosed — but read the ring count from
                      # --check, never from that sentence.
                      "041",
+                     # Vermilion — 2026-08-23, a mainland join on the Indiana
+                     # line against served Champaign-side neighbours Ford (no),
+                     # Iroquois, Champaign (no), Edgar and Douglas. THE COUNTY
+                     # WAS NEVER BLOCKED: its record said the site "is not
+                     # reachable from this project's network", which was true of
+                     # a TLS handshake and false of the county — vercounty.org
+                     # serves the COLES PATTERN, its leaf without the GoGetSSL
+                     # intermediate. Supplying that intermediate by AIA opens a
+                     # maintained 27-member roster. The districts come from the
+                     # county's own ArcGIS org, where the WELL-LABELLED layer is
+                     # the superseded one and the misspelled undocumented
+                     # CountyBoardDistrcts2021 is current — settled by population
+                     # balance against the 2020 census, 0.7% against 15.1%
+                     # (scripts/build_vermilion_boundaries.py). THIS JOIN OPENED
+                     # A THREE-COUNTY ENCLAVE — the fleet's second multi-county
+                     # hole after the Clay/Fayette/Jasper/Marion/Wayne block —
+                     # and it was PREDICTED WRONG before --check was run: the
+                     # comment here first read that Champaign and Piatt "keep
+                     # their own outlet to the frontier through Ford", which
+                     # quietly assumed Ford was an outlet rather than part of the
+                     # block. Ford is unserved too, and its every other
+                     # neighbour (Iroquois, Kankakee, Livingston, McLean and now
+                     # Vermilion) is served, so CHAMPAIGN, FORD and PIATT are one
+                     # enclosed block. The ring went 4 -> 5 and the hole's bounds
+                     # are exactly the union of those three counties' extents.
+                     # READ THE RING COUNT FROM --check, NEVER FROM A MAP IN
+                     # YOUR HEAD.
+                     "183",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -798,6 +826,14 @@ DISPATCH_COUNTY_FIPS = {
     # themselves as a public feature service
     # (scripts/build_douglas_boundaries.py).
     "douglas": "041",
+    # Vermilion joins 2026-08-23 as a BOARD-ONLY dispatch entry — nine districts
+    # of three members each, the county's own polygons shipped as drawn. NO
+    # PRECINCT ENTRY: the county re-precincted after the 2020 census, so the
+    # precinct layer its GIS publishes is the superseded 84-precinct fabric
+    # rather than the 38 clerk and 22 Danville Election Commission precincts its
+    # own canvasses have reported since 2022
+    # (scripts/build_vermilion_boundaries.py).
+    "vermilion": "183",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -1151,6 +1187,15 @@ INSIDE = {
     # so are all five enclave counties. The coordinates are
     # build_county_outline.py's own richland inside anchor.
     "Olney (Richland)": (38.7285, -88.0839),
+    # Danville (Vermilion) — the county seat, moved up from OUTSIDE on
+    # 2026-08-23. It stood in the OUTSIDE list from Edgar's join as "the biggest
+    # unserved county left, and a RECORDED GAP rather than an unexamined one",
+    # on the strength of a measurement that was correct and did not mean what it
+    # was taken to mean: Vermilion's 38 current precincts against 84 census 2020
+    # voting districts does close the DISSOLVE route, and closes nothing else.
+    # The county draws its own board districts and publishes them, so no
+    # dissolve was ever needed (scripts/build_vermilion_boundaries.py).
+    "Danville (Vermilion)": (40.1245, -87.6300),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -1265,15 +1310,6 @@ OUTSIDE = {
     # names echo and no whole-precinct dissolve can answer there. Newton is
     # the county seat.
     "Newton (Jasper)": (38.9903, -88.1631),
-    # Danville (Vermilion) — the successor Edgar's join calls for, hours after
-    # Paris was written into this list and moved straight out of it again.
-    # Edgar leaves Douglas and Vermilion behind; Tuscola already holds Douglas,
-    # and Vermilion is the larger frontier — the biggest unserved county left,
-    # and a RECORDED GAP rather than an unexamined one: the 2026 vendor sweep
-    # measured its 38 current precincts against EIGHTY-FOUR census 2020 voting
-    # districts, so it consolidated wholesale after the census and no dissolve
-    # of census geometry can answer there.
-    "Danville (Vermilion)": (40.1245, -87.6300),
     # Christian — ENCLOSED 2026-08-11 by Shelby's join: with Sangamon, Macon,
     # Shelby and Montgomery all served, Christian is the second enclave after
     # Bureau, an interior ring rather than frontier. This anchor is what
@@ -1330,6 +1366,20 @@ OUTSIDE = {
     # that sentence until it shipped on 2026-08-23 and now borders Wayne as
     # served ground). This anchor is what proves the notch stays washed.
     "Fairfield (Wayne)": (38.3798, -88.3724),
+    # Champaign, Ford and Piatt — ENCLOSED 2026-08-23 by Vermilion's join, the
+    # fleet's second multi-county enclave. Ford's every other neighbour
+    # (Iroquois, Kankakee, Livingston, McLean, Vermilion) is served and
+    # Champaign's and Piatt's are too, so the three are one interior block
+    # rather than frontier. All three carry an anchor rather than only the rim,
+    # so the whole hole is proven unwashed: mis-nested, the ring would render
+    # identically under the wash and all three would answer True here, failing
+    # the build. Each is MEASURED shut, not unexamined — Champaign and Piatt by
+    # the CCGISC licence ("All Rights Reserved"), Ford by having no vector
+    # district map and an adopted 2021 reapportionment resolution that leaves
+    # its districts "To be determined".
+    "Urbana (Champaign)": (40.1106, -88.2073),
+    "Paxton (Ford)": (40.4606, -88.0953),
+    "Monticello (Piatt)": (40.0281, -88.5728),
     # (Putnam's anchor moved up to INSIDE in tranche 5, and Adams's Clayton in
     # pass 8, each joining exactly as its OUTSIDE comment said it would — Adams
     # on the strength of its own GIS, with only the roster left as a gap.)
