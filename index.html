@@ -9172,6 +9172,45 @@ function initChiExplorer() {
   var loadCrawfordBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/crawford-county-board-members.json", {}, 2);
   });
+  /* Richland (the 86th county, 2026-08-23) — the first county in the fleet
+   * whose board composition came from the COUNTY'S OWN GIS rather than from
+   * election returns. Its canvasses COUNT precincts per district and never name
+   * one (the Knox shape), which is what kept it a gap for weeks; meanwhile the
+   * county's site links richlandil.wthgis.com, whose map publishes "County
+   * Board Districtrs" and "Voter Precincts" as two county-authored layers.
+   * Overlaid, every one of the 21 precincts falls 98.4-100% inside a single
+   * district, so the districts are unions of whole precincts and a dissolve of
+   * the Census 2020 voting districts draws them
+   * (build_richland_boundaries.py). The county's certified 2024 General
+   * independently counts 4, 4 and 2 precincts in districts 1, 3 and 5 — exactly
+   * what that composition gives.
+   *
+   * IT ALSO DISPROVED ITS OWN GAP RECORD, which had read nine of the county's
+   * 21 precincts reporting as two ISBE sub-units each as evidence that district
+   * lines run THROUGH precincts. They do not. What those sub-units are is still
+   * unknown and deliberately not guessed at.
+   *
+   * The roster is scraped weekly from the county's own board page, and that
+   * same run re-reads the two GIS layers and fails if either stops matching the
+   * shipped dissolve. NO POLLING PLACE: the county publishes a good list, but a
+   * polling place is a roster fact rather than geometry. */
+  var loadRichlandCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-county-outline.json", {}, 2);
+  });
+  function richlandCountyCoverage(point) {
+    return loadRichlandCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadRichlandPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-precincts.json", {}, 2);
+  });
+  var loadRichlandBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-county-board-districts.json", {}, 2);
+  });
+  var loadRichlandBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-county-board-members.json", {}, 2);
+  });
   var loadMercerCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/mercer-county-outline.json", {}, 2);
   });
@@ -18544,6 +18583,78 @@ function initChiExplorer() {
           }
         }
       },
+      // Richland County — 7 SINGLE-member districts, dissolved from the Census
+      // 2020 voting districts per a composition read off the COUNTY'S OWN GIS
+      // (build_richland_boundaries.py). This is the first county in the fleet
+      // composed from geometry rather than from returns: Richland's canvasses
+      // count precincts per district and never name one, while
+      // richlandil.wthgis.com publishes the board districts and the voting
+      // precincts as two county-authored layers that overlay cleanly — every
+      // precinct 98.4-100% inside one district. The county's certified 2024
+      // General independently counts 4, 4 and 2 precincts in districts 1, 3 and
+      // 5, which is what this dissolve gives. The roster is scraped weekly from
+      // the county's own board page, and that same run re-reads both GIS layers
+      // and fails if either stops matching this dissolve.
+      {
+        key: "richland",
+        coverage: richlandCountyCoverage,
+        loadGeometry: loadRichlandBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadRichlandBoardDistricts(),
+            loadRichlandBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Richland County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Richland County Board (official)", url: "https://richlandcounty.illinois.gov/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadRichlandBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Mercer County — 5 districts electing TWO members each (10 seats),
       // dissolved from the Census 2020 voting districts per the composition
       // the county's own certified results publish as structured data
@@ -23653,6 +23764,53 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Crawford County Clerk — Elections (official)", url: "https://crawfordcounty.illinois.gov/department/clerk-recorder/elections-voting/" };
+        }
+      },
+      // Richland County — 21 precincts, the Census 2020 voting districts, which
+      // are the county's own fabric by measurement twice over: the names match
+      // its certified 2026 General Primary ballot publication 21/21, POP100
+      // sums to its exact 2020 population, and each precinct polygon in the
+      // county's own GIS is 98.8-100% contained in the same-named voting
+      // district. The board district rides ON the feature — the composition is
+      // whole-precinct, so no spatial join is needed. The county's GIS and
+      // polling list write the county seat's precincts long ("Olney Precinct
+      // 5"); the label here follows the ballot and the census. NO POLLING
+      // PLACE: the county publishes a good list, but a polling place is a
+      // roster fact rather than geometry.
+      {
+        key: "richland",
+        coverage: richlandCountyCoverage,
+        loadGeometry: loadRichlandPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadRichlandPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Richland County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Richland County Clerk — Elections (official)", url: "https://richlandcounty.illinois.gov/county-clerk-recorder/elections/" };
         }
       },
       // Mercer County — 24 precincts, the Census 2020 voting districts, which are

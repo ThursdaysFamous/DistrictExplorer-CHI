@@ -1,0 +1,66 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "bvanblaricum@richlandcounty.illinois.gov",
+        "name": "Brian VanBlaricum"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "dgraves@richlandcounty.illinois.gov",
+        "name": "Dennis Graves"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "amcfarland@richlandcounty.illinois.gov",
+        "name": "Alexis McFarland"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  },
+  "4": {
+    "members": [
+      {
+        "email": "cgiven@richlandcounty.illinois.gov",
+        "name": "Cynthia Given"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  },
+  "5": {
+    "members": [
+      {
+        "email": "mhenton@richlandcounty.illinois.gov",
+        "name": "Morgan Henton"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  },
+  "6": {
+    "members": [
+      {
+        "email": "tpaddock@richlandcounty.illinois.gov",
+        "name": "Travis Paddock",
+        "role": "Chairman"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  },
+  "7": {
+    "members": [
+      {
+        "email": "sschonert@richlandcounty.illinois.gov",
+        "name": "Steve Schonert"
+      }
+    ],
+    "sourceUrl": "https://richlandcounty.illinois.gov/county-board/"
+  }
+}

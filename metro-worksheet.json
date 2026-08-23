@@ -1796,8 +1796,7 @@
         "file": "richland-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Richland County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Richland County coverage outline — the coverage test for the county's board and precinct dispatch entries (richlandCountyCoverage). Shipped 2026-08-04 as gap-location geometry by the pass-13 detached-counties sweep, when Richland read as source-less; promoted to a coverage outline on 2026-08-23 when the county joined as the 86th served county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
         "file": "rock-island-county-outline.json",
@@ -2068,6 +2067,18 @@
         "min_features": 5,
         "max_features": 5,
         "note": "Hancock County's 5 County Board districts (seating 15, three each), DISSOLVED from the Census 2020 voting districts per a composition the county's OWN CERTIFIED RETURNS state precinct by precinct. The source is the difference: Hancock's Clerk runs a results database at electionstats.hancockcounty-il.gov — the county's own, not a vendor's — and every contest page carries a PER-PRECINCT results table, so a district contest NAMES the precincts that voted in it one row at a time instead of only counting them. That is exactly what Knox's and Richland's canvasses withhold, and it is what makes this county buildable and those two not. TWO WITNESSES PER DISTRICT, the Clark standard: the 2022 and 2026 primaries carry all five district contests and agree exactly, with the 2024 primary re-confirming four of the five. THE PARTITION IS EXACT — 6+8+8+5+6 = 33 precinct slots, 33 distinct names, none shared and none left over against a county that runs 33 precincts. THE JASPER TEST PASSES 33/33 with the population identity to the person: the census voting districts sum to Hancock's exact 17,620. Thirteen names differ in SPELLING ONLY — the roman/arabic convention already recorded for Clay and Cumberland (CARTHAGE I for Carthage 1) — and ONE OF THE THIRTEEN IS A CENSUS TYPO, MONTIBELLO IV for Montebello 4, aliased like the rest and named so nobody reads it as a different place. Populations run 3,345-3,673 against a 3,524 ideal, 5.1% worst and 9.3% max-to-min (scripts/build_hancock_boundaries.py; --check is the drift gate)."
+      },
+      {
+        "file": "richland-county-board-districts.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "Richland County's 7 single-member County Board districts, DISSOLVED from the county's own precinct fabric (Census 2020 VTDs) per a composition read off THE COUNTY'S OWN GIS — the first county in the fleet composed from geometry rather than from election returns. Richland's canvasses COUNT precincts per district and never name one (the Knox shape), which is why this county sat as a gap for weeks; richlandil.wthgis.com, linked from the county's own site, publishes 17159countyboarddistricts.tml and votingprecincts.tml as separate county-authored layers, and overlaying them puts every one of the 21 precincts inside exactly one district at 98.4-100% of its area, with no precinct holding more than 0.89% in any second district. THREE INDEPENDENT WITNESSES AGREE: the certified 2024 General counts 4, 4 and 2 precincts in districts 1, 3 and 5 and this composition gives exactly those; the seven populations sum to the county's exact 15,813 and run 2,066-2,494 against a 2,259 ideal (worst deviation 10.4%); and the county's published precinct map, illegible where Olney's lines cut but legible in the countryside, agrees everywhere it can be read. THIS DISPROVES THE COUNTY'S OWN GAP RECORD, which had read nine of its 21 precincts reporting as two ISBE sub-units each as evidence that district lines run THROUGH precincts — what those sub-units actually are is still unknown and is not guessed at. The weekly roster run re-reads both GIS layers and fails if either stops matching this dissolve; full re-verification is scripts/build_richland_boundaries.py --check (operator step: requests/shapely)."
+      },
+      {
+        "file": "richland-precincts.json",
+        "min_features": 21,
+        "max_features": 21,
+        "note": "Richland County's 21 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be TWICE OVER: the names match the 21 its certified 17 March 2026 General Primary ballot publication prints as committeeperson contests 21/21 with no alias, their POP100 sums to its exact 2020 population (15,813), and each precinct polygon in the county's own GIS is 98.8-100.0% contained in the same-named voting district. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct — no precinct is split. The county's GIS and polling list write the county seat's precincts long ('Olney Precinct 5') where its ballot and the census write 'OLNEY 5'; the shipped label follows the ballot, because that is the form the county itself certifies. NO POLLING PLACE ships: the county publishes a good list, and a polling place is a roster fact rather than geometry (the Calhoun rule; scripts/build_richland_boundaries.py)."
       }
     ],
     "rosters": [
@@ -2428,6 +2439,11 @@
         "file": "hancock-county-board-members.json",
         "min_keys": 5,
         "note": "Hancock County Board members keyed by district (5 districts seating 15, three each, with a party letter per member). Scraped weekly from the county's board page, which publishes a name and a party and NOTHING ELSE — no e-mail, no phone, no term, and no chairman is named, so no row is badged one and there is no contact floor to set. THE COUNT IS THE GUARD for exactly that reason: with no field to watch, a page reshape shows up as a wrong number of members. Two parser traps are handled by construction. The page's <meta name=\"description\"> REPEATS District One's three members verbatim, so anchoring on the first 'District One' in the document parses the meta tag and ships three members as a whole board; the body is found by scanning for the last occurrence. And the last district has no following <h2> to bound it — an unbounded region runs to the end of the document and swallows the site's footer navigation, which parsed District Five as 35 'members', most of them menu links. Each district is bounded to its own first <ul> instead, and a per-district ceiling fails the run loudly if that ever stops holding."
+      },
+      {
+        "file": "richland-county-board-members.json",
+        "min_keys": 7,
+        "note": "Richland County Board members keyed by district (7 single-member districts = 7 seats). Scraped weekly from the county's own board page, which publishes each member as a card carrying a name, a district line and a county e-mail — 7/7 carry one — and badges the Chairman. No party, term or phone ships because the page publishes none. THE PARSER IS SCOPED TO THE ROSTER BLOCK ON PURPOSE: the same page carries a committees section above it whose 'Chair:' and 'Members:' lines name people who do not sit on the board at all — five community members on the 708 Mental Health Committee alone — so a greedy read would ship a fourteen-name board for a seven-seat county. THE SAME WEEKLY RUN IS THE REDISTRICTING TRIPWIRE: it re-reads the county's own GIS board-district and voting-precinct layers and fails if either stops matching the shipped dissolve, which is this county's only automatic warning that its lines moved. What that check can and cannot see is stated in the builder: it verifies the county still publishes SEVEN districts over the same TWENTY-ONE precinct names, and does not re-run the spatial overlay, which needs the census fabric and does not belong in a weekly roster job."
       }
     ]
   },
@@ -2756,6 +2772,11 @@
       "file": "update-hancock-county-board-roster.yml",
       "purpose": "Hancock County Board roster (county board page scrape)",
       "schedule": "Fri 20:00 UTC"
+    },
+    {
+      "file": "update-richland-county-board-roster.yml",
+      "purpose": "Richland County Board roster (the county's own board page) + the redistricting tripwire: the same run re-reads the board-district and voting-precinct layers from the county's own GIS at richlandil.wthgis.com and fails if either stops matching the shipped dissolve",
+      "schedule": "Mon 21:00 UTC"
     }
   ],
   "geocoder": {
