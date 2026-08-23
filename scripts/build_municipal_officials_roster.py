@@ -374,6 +374,11 @@ PRESERVABLE = {
     # that would have named them is precisely what is missing. Each list is
     # guarded by its scraper's own floor, so a drift here fails there first.
     "freeport": {"kind": "enrich", "places": ["City of Freeport"]},
+    # Galesburg, added 2026-08-22 with Knox County's ward layer. Knox has NO
+    # county municipal source at all — its Clerk's site is dead and the
+    # county's own answers 403 — so the city's page is not an enrichment of a
+    # county directory here, it is the only directory there is.
+    "galesburg": {"kind": "enrich", "places": ["City of Galesburg"]},
     "will-cities": {"kind": "enrich",
                     "places": ["City of Crest Hill", "City of Lockport",
                                "City of Wilmington"]},

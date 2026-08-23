@@ -347,6 +347,17 @@ jobs:
         continue-on-error: true
         run: python3 scripts/freeport_council_scraper.py --out /tmp/freeport_council.json
 
+      # Galesburg, added 2026-08-22 alongside Knox County's ward layer. Unlike
+      # every other enrichment here this is not refining a county directory —
+      # Knox County has NO municipal source at all (its Clerk's site is dead and
+      # the county's own answers 403), so the city's own council page is the
+      # only directory that exists for it. It also supersedes the ward layer's
+      # MEMBER column, which is correct on numbering and stale on one name.
+      - name: Scrape Galesburg's own council page
+        id: scrape_galesburg
+        continue-on-error: true
+        run: python3 scripts/galesburg_council_scraper.py --out /tmp/galesburg_council.json
+
       # The bounded per-city exception (docs/EXPANSION_GUIDE.md Part 2.4): the
       # Will ward cities' own sites carry per-seat contact the Clerk's directory
       # doesn't, and supply Lockport and Wilmington, which that directory omits
@@ -387,6 +398,7 @@ jobs:
           steps.scrape_skokie.outcome == 'failure' || steps.scrape_joliet.outcome == 'failure' ||
           steps.scrape_ogle.outcome == 'failure' || steps.scrape_stephenson.outcome == 'failure' ||
           steps.scrape_carroll.outcome == 'failure' || steps.scrape_freeport.outcome == 'failure' ||
+          steps.scrape_galesburg.outcome == 'failure' ||
           steps.scrape_dekalb.outcome == 'failure' || steps.scrape_grundy.outcome == 'failure' ||
           steps.scrape_livingston.outcome == 'failure' || steps.scrape_logan.outcome == 'failure' ||
           steps.scrape_mclean.outcome == 'failure' || steps.scrape_sangamon.outcome == 'failure' ||
@@ -547,6 +559,7 @@ jobs:
           add "${{ steps.scrape_skokie.outcome }}"      skokie      enrich /tmp/skokie_trustee_districts.json
           add "${{ steps.scrape_joliet.outcome }}"      joliet      enrich /tmp/joliet_council_contact.json
           add "${{ steps.scrape_freeport.outcome }}"    freeport    enrich /tmp/freeport_council.json
+          add "${{ steps.scrape_galesburg.outcome }}"   galesburg   enrich /tmp/galesburg_council.json
 
           # The shipped roster is the preserve source, so read it BEFORE the
           # builder overwrites it in place.
