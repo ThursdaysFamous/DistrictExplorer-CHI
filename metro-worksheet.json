@@ -1341,8 +1341,7 @@
         "file": "jackson-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Jackson County outline — gap-location geometry only, not a dispatched county. Added by the pass-10 frontier sweep (2026-08-03) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Jackson County coverage outline — the coverage test for the county's board and precinct dispatch entries (jacksonCountyCoverage). Shipped 2026-08-03 as gap-location geometry by the pass-10 frontier sweep; promoted to a coverage outline on 2026-08-23 when the county joined as the 87th served county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
         "file": "jasper-county-outline.json",
@@ -2079,6 +2078,18 @@
         "min_features": 21,
         "max_features": 21,
         "note": "Richland County's 21 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be TWICE OVER: the names match the 21 its certified 17 March 2026 General Primary ballot publication prints as committeeperson contests 21/21 with no alias, their POP100 sums to its exact 2020 population (15,813), and each precinct polygon in the county's own GIS is 98.8-100.0% contained in the same-named voting district. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct — no precinct is split. The county's GIS and polling list write the county seat's precincts long ('Olney Precinct 5') where its ballot and the census write 'OLNEY 5'; the shipped label follows the ballot, because that is the form the county itself certifies. NO POLLING PLACE ships: the county publishes a good list, and a polling place is a roster fact rather than geometry (the Calhoun rule; scripts/build_richland_boundaries.py)."
+      },
+      {
+        "file": "jackson-county-board-districts.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "Jackson County's 7 County Board districts, each electing TWO members (14 seats), and the FIRST in the fleet whose districts SPLIT precincts and are built anyway. Fifty-three of the county's 56 precincts take their district from its certified 5 November 2024 General canvass, which lists for each district's contest exactly the precincts that voted in it. THREE ARE REPORTED TWICE, under two districts each with their registration divided — Carbondale 21 (D6 600 / D7 282), Carbondale 24 (D5 609 / D6 98) and Murphysboro 4 (D3 166 / D5 391) — which is the county stating that a district line runs through them, and is why this county was recorded measured-shut beside Bureau, Cumberland, Douglas, Ford, Knox and Piatt. What that record missed is that it named the answer itself: the county publishes its adopted Board District Map as a VECTOR PDF whose seven districts are seven FILLED PATHS in the content stream — polygon objects with exact fill colours pairing one-for-one with the legend in legend order, not pixels to be classified (the method section warns against colour-sampling a RASTERISED map, and this is the opposite of that). The map is georeferenced to EPSG:3436 (Illinois State Plane West), established by fitting the union of the seven districts against TIGER's county boundary across candidate CRSs — 3436 matched the aspect ratio to four decimals and no other candidate did — and refined against the 53 unambiguous precincts; mean boundary offset 5.3 m, with the map's own scale bar independently confirming the scale. NOTHING TRACED SHIPS: the boundary is census geometry throughout, voting districts for the 53 whole precincts and whole census BLOCKS inside the three split ones, and the map is only ever allowed to choose between the two districts the canvass already names. FOUR INDEPENDENT VERIFICATIONS: all 53 unambiguous precincts land in the district the canvass names (53/53, at 98.3-100% of area); all three split precincts split between exactly the two it names (3/3); populations run 7,371-7,933 against a 7,568 ideal, worst deviation 4.83%, which a mis-assigned split precinct would destroy; and Murphysboro 4's census population divides 30.2/69.8 where its registration divides 29.8/70.2. THAT LAST CHECK IS DELIBERATELY NOT CLAIMED FOR THE OTHER TWO — Carbondale 21 and 24 hold SIU dormitories and student apartments, one block carrying 700 people in FOUR housing units, so census population does not predict registration there in either direction. Inside the three split precincts only FIVE blocks holding SIXTEEN people are less than 95% resolved by the georeferencing (scripts/build_jackson_boundaries.py; --check is the drift gate)."
+      },
+      {
+        "file": "jackson-precincts.json",
+        "min_features": 56,
+        "max_features": 56,
+        "note": "Jackson County's 56 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be: the names match its certified 2024 General canvass 56/56 and their POP100 sums to its exact 2020 population (52,974). Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID and POP100. Most carry their County Board district; THREE carry a LIST of two instead — Carbondale 21, Carbondale 24 and Murphysboro 4 are split between districts, which the county's own certified canvass states by reporting each of them twice with its registration divided. For those three the precinct genuinely does not determine the district and the card says which two it could be rather than picking one. Every one of the county's 2,773 census blocks nests 99%+ inside exactly one of these precincts, which is what makes the block-level resolution of the three splits well defined. NO POLLING PLACE ships: a polling place is a roster fact rather than geometry (the Calhoun rule; scripts/build_jackson_boundaries.py)."
       }
     ],
     "rosters": [
@@ -2444,6 +2455,11 @@
         "file": "richland-county-board-members.json",
         "min_keys": 7,
         "note": "Richland County Board members keyed by district (7 single-member districts = 7 seats). Scraped weekly from the county's own board page, which publishes each member as a card carrying a name, a district line and a county e-mail — 7/7 carry one — and badges the Chairman. No party, term or phone ships because the page publishes none. THE PARSER IS SCOPED TO THE ROSTER BLOCK ON PURPOSE: the same page carries a committees section above it whose 'Chair:' and 'Members:' lines name people who do not sit on the board at all — five community members on the 708 Mental Health Committee alone — so a greedy read would ship a fourteen-name board for a seven-seat county. THE SAME WEEKLY RUN IS THE REDISTRICTING TRIPWIRE: it re-reads the county's own GIS board-district and voting-precinct layers and fails if either stops matching the shipped dissolve, which is this county's only automatic warning that its lines moved. What that check can and cannot see is stated in the builder: it verifies the county still publishes SEVEN districts over the same TWENTY-ONE precinct names, and does not re-run the spatial overlay, which needs the census fabric and does not belong in a weekly roster job."
+      },
+      {
+        "file": "jackson-county-board-members.json",
+        "min_keys": 7,
+        "note": "Jackson County Board members keyed by district (7 districts electing TWO members each = 14 seats). Scraped weekly from the county's own board page, which groups members under 'District N Board Members' headings, plus each member's staff-directory entry for the county e-mail address — 14/14 carry one. THE HEADING IS THE AUTHORITY FOR THE DISTRICT, and that is this county's trap: a member's job title is their DISTRICT for twelve of the fourteen and their OFFICE for the other two, so the Chair's and Vice Chair's cards name no district at all and a parser keying on the title drops the two most prominent members and reports twelve seats for a fourteen-seat board. The directory entry states the district a second time, and the builder FAILS the run when the two county surfaces disagree rather than picking a winner. No party, phone or address ships because the county publishes none per member, and neither does the term length: the directory prints '2 Year Term' and '4 Year Term' but never a start or end date, and a term that cannot be placed in time tells a reader nothing."
       }
     ]
   },
@@ -2777,6 +2793,11 @@
       "file": "update-richland-county-board-roster.yml",
       "purpose": "Richland County Board roster (the county's own board page) + the redistricting tripwire: the same run re-reads the board-district and voting-precinct layers from the county's own GIS at richlandil.wthgis.com and fails if either stops matching the shipped dissolve",
       "schedule": "Mon 21:00 UTC"
+    },
+    {
+      "file": "update-jackson-county-board-roster.yml",
+      "purpose": "Jackson County Board roster (the county's own board page, grouped by district heading, plus each member's staff-directory entry for the e-mail); the builder fails if the page's grouping and the directory disagree about a member's district",
+      "schedule": "Tue 22:00 UTC"
     }
   ],
   "geocoder": {

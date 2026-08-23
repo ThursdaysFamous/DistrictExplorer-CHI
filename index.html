@@ -9211,6 +9211,46 @@ function initChiExplorer() {
   var loadRichlandBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/richland-county-board-members.json", {}, 2);
   });
+  /* Jackson (the 87th county, 2026-08-23) — the first county served whose board
+   * districts SPLIT precincts. Its own certified 2024 General canvass reports
+   * three of its 56 precincts TWICE, under two districts each with their
+   * registration divided, which is the county stating that a district line runs
+   * through them; that is why this county was recorded measured-shut beside
+   * Bureau, Cumberland, Douglas, Ford, Knox and Piatt.
+   *
+   * What its record missed is that it named the answer itself: the county
+   * publishes its adopted Board District Map as a VECTOR PDF, and the seven
+   * districts are seven FILLED PATHS in the content stream — polygon objects
+   * with exact fill colours pairing one-for-one with the legend, not pixels to
+   * be classified. Georeferenced to EPSG:3436 and checked against the canvass,
+   * all 53 unambiguous precincts land in the district the canvass names and all
+   * three split precincts split between exactly the two it names.
+   *
+   * NOTHING TRACED IS SHIPPED. The boundary is census geometry throughout —
+   * voting districts for the 53 whole precincts, whole census BLOCKS inside the
+   * three split ones — and the map is only ever allowed to choose between the
+   * two districts the canvass already named (build_jackson_boundaries.py).
+   *
+   * The three split precincts carry a LIST of districts on their precinct card
+   * rather than one, because in those three the precinct genuinely does not
+   * determine the district and the card should say so. */
+  var loadJacksonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-county-outline.json", {}, 2);
+  });
+  function jacksonCountyCoverage(point) {
+    return loadJacksonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadJacksonPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-precincts.json", {}, 2);
+  });
+  var loadJacksonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-county-board-districts.json", {}, 2);
+  });
+  var loadJacksonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-county-board-members.json", {}, 2);
+  });
   var loadMercerCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/mercer-county-outline.json", {}, 2);
   });
@@ -18655,6 +18695,83 @@ function initChiExplorer() {
           }
         }
       },
+      // Jackson County — 7 districts electing TWO members each (14 seats), and
+      // the first county served whose districts SPLIT precincts. Fifty-three of
+      // its 56 precincts take their district from the county's certified 2024
+      // General canvass; the three that canvass reports twice are resolved to
+      // whole census BLOCKS by the county's own adopted vector district map,
+      // which is only ever allowed to choose between the two districts the
+      // canvass already names (build_jackson_boundaries.py). The card names the
+      // partially-included precincts separately from the whole ones, because a
+      // reader in one of the three is not wholly in this district.
+      {
+        key: "jackson",
+        coverage: jacksonCountyCoverage,
+        loadGeometry: loadJacksonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadJacksonBoardDistricts(),
+            loadJacksonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              partialPrecincts: findPropCI(props, ["partialPrecincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Jackson County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts", value: result.precincts.join(", ") });
+          }
+          if (result.partialPrecincts && result.partialPrecincts.length) {
+            fields.push({
+              label: "Partly in this district",
+              value: result.partialPrecincts.join(", ") +
+                " — the county's own results report these precincts under two districts"
+            });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Jackson County Board (official)", url: "https://jacksoncounty-il.gov/158/County-Board" };
+        },
+        hoverOfficial: {
+          load: loadJacksonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Mercer County — 5 districts electing TWO members each (10 seats),
       // dissolved from the Census 2020 voting districts per the composition
       // the county's own certified results publish as structured data
@@ -23811,6 +23928,60 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Richland County Clerk — Elections (official)", url: "https://richlandcounty.illinois.gov/county-clerk-recorder/elections/" };
+        }
+      },
+      // Jackson County — 56 precincts, the Census 2020 voting districts, whose
+      // names match the county's own 56/56 and whose POP100 sums to its exact
+      // 2020 population. Most features carry their County Board district; THREE
+      // carry a list of two instead, because Carbondale 21, Carbondale 24 and
+      // Murphysboro 4 are SPLIT between districts — the county's own certified
+      // canvass reports each of them twice, with its registration divided. For
+      // those three the precinct does not determine the district and the card
+      // says which two it could be rather than guessing one. NO POLLING PLACE:
+      // a polling place is a roster fact rather than geometry.
+      {
+        key: "jackson",
+        coverage: jacksonCountyCoverage,
+        loadGeometry: loadJacksonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadJacksonPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              boardDistricts: findPropCI(props, ["districts"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistricts && result.boardDistricts.length) {
+            fields.push({
+              label: "County Board District",
+              value: "This precinct is split between Districts " +
+                result.boardDistricts.join(" and ") +
+                " — the county's own election results report it under both, so " +
+                "your precinct alone doesn't say which one you're in."
+            });
+          } else if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Jackson County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Jackson County Clerk — Voting & Elections (official)", url: "https://jacksoncounty-il.gov/340/Voting-Elections" };
         }
       },
       // Mercer County — 24 precincts, the Census 2020 voting districts, which are

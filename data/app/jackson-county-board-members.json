@@ -1,0 +1,95 @@
+{
+  "1": {
+    "members": [
+      {
+        "email": "jan.phillips@jacksoncounty-il.gov",
+        "name": "Jan L. Phillips"
+      },
+      {
+        "email": "tonya.knust@jacksoncounty-il.gov",
+        "name": "Tonya Knust"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "2": {
+    "members": [
+      {
+        "email": "aerbes@jacksoncounty-il.gov",
+        "name": "Andrew Erbes",
+        "role": "Vice Chair"
+      },
+      {
+        "email": "dbost@jacksoncounty-il.gov",
+        "name": "Daniel Bost"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "3": {
+    "members": [
+      {
+        "email": "cj.calandro@jacksoncounty-il.gov",
+        "name": "C. J. Calandro",
+        "role": "Chair"
+      },
+      {
+        "email": "tmueller@jacksoncounty-il.gov",
+        "name": "Tamiko Mueller"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "4": {
+    "members": [
+      {
+        "email": "christine.snyder@jacksoncounty-il.gov",
+        "name": "Christine Snyder"
+      },
+      {
+        "email": "faith.miller@jacksoncounty-il.gov",
+        "name": "Faith Miller"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "5": {
+    "members": [
+      {
+        "email": "jrendleman@jacksoncounty-il.gov",
+        "name": "John S. Rendleman"
+      },
+      {
+        "email": "jpeterson@jacksoncounty-il.gov",
+        "name": "Julie Peterson"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "6": {
+    "members": [
+      {
+        "email": "daniel.presley@jacksoncounty-il.gov",
+        "name": "Daniel Presley"
+      },
+      {
+        "email": "van.ikner@jacksoncounty-il.gov",
+        "name": "Van Ikner"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "7": {
+    "members": [
+      {
+        "email": "kevin.lister@jacksoncounty-il.gov",
+        "name": "Kevin Lister"
+      },
+      {
+        "email": "nel.battrell@jacksoncounty-il.gov",
+        "name": "Nell Battrell"
+      }
+    ],
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  }
+}

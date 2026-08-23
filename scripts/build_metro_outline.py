@@ -668,6 +668,19 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # anchor below, so the whole enclave is proven unwashed.
                      # Read the ring count from --check, never from this comment.
                      "159",
+                     # Jackson — 2026-08-23, and the county that FILLS ITS OWN
+                     # NOTCH: every one of its five Illinois neighbours (Perry,
+                     # Franklin, Williamson, Union, Randolph) was already served,
+                     # while its western edge is the Mississippi, the Missouri
+                     # state line — so it was a notch in the outer boundary
+                     # rather than an enclave, and joining closes it rather than
+                     # opening anything. It encloses nothing: it has no unserved
+                     # neighbour left to enclose. THE FIRST COUNTY IN THE FLEET
+                     # WHOSE DISTRICTS SPLIT PRECINCTS AND ARE BUILT ANYWAY,
+                     # from census BLOCKS inside the three split precincts
+                     # (scripts/build_jackson_boundaries.py). Read the ring count
+                     # from --check.
+                     "077",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -759,6 +772,12 @@ DISPATCH_COUNTY_FIPS = {
     # weeks reading its canvasses, which count precincts per district and never
     # name one (scripts/build_richland_boundaries.py).
     "richland": "159",
+    # Jackson joins 2026-08-23 as a full board + precinct dispatch entry, and is
+    # the first county served whose board districts SPLIT precincts: three of its
+    # 56 are reported twice by its own certified canvass, and are resolved to
+    # whole census blocks by the county's own adopted vector district map
+    # (scripts/build_jackson_boundaries.py).
+    "jackson": "077",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -1039,7 +1058,10 @@ INSIDE = {
     # checklist; it encloses nothing either, because each of its unserved
     # neighbours (Williamson, Saline, Perry, Jackson) still borders unserved
     # counties of its own. Ava (Jackson) and Shawneetown (Gallatin) stay
-    # OUTSIDE and now sit one county from the line rather than two.
+    # OUTSIDE and now sit one county from the line rather than two. (Every one
+    # of those four has since shipped — Perry and Saline 2026-08-21, Williamson
+    # 2026-08-22, Jackson 2026-08-23 — so this comment records what was true
+    # when Franklin joined, not the frontier today.)
     "Benton (Franklin)": (37.9967, -88.9203),
     # Carlyle (Clinton) — the county seat, 2026-08-20, the 60th dispatched
     # county. It held a place in the OUTSIDE list from the Metro East build
@@ -1075,10 +1097,22 @@ INSIDE = {
     # Pinckneyville (Perry) — the county seat, 2026-08-21. A plain mainland join
     # bordering served Washington, Franklin, Randolph and Jefferson, enclosing
     # nothing: its one unserved neighbour, Jackson, still borders unserved
-    # Union and Williamson. Ava (Jackson) stays OUTSIDE and now sits against the
-    # line rather than one county from it. The coordinates are
+    # Union and Williamson. Ava (Jackson) stayed OUTSIDE then and moved up to
+    # INSIDE on 2026-08-23 when Jackson itself shipped; Union and Williamson had
+    # shipped the day before, which is what left Jackson a state-line notch. The coordinates are
     # build_county_outline.py's own perry inside anchor.
     "Pinckneyville (Perry)": (38.0803, -89.3823),
+    # Ava (Jackson) — moved up from OUTSIDE on 2026-08-23, where it had sat
+    # since the Metro East build. Jackson had no unserved Illinois neighbour
+    # left — Perry, Franklin, Williamson, Union and Randolph all serve — and was
+    # a NOTCH rather than an enclave only because its western edge is the
+    # Mississippi River, the Missouri state line (the Pulaski test). Joining
+    # fills that notch and encloses nothing, because there is no unserved
+    # neighbour left to enclose. Ava is the county's own build_county_outline.py
+    # inside anchor rather than the county seat: Murphysboro and Carbondale both
+    # sit in the county's populous east, and an anchor in the sparse west is the
+    # one that would fail first if the fill were wrong.
+    "Ava (Jackson)": (37.8886, -89.4964),
     # Olney (Richland) — the county seat, 2026-08-23, moved up from OUTSIDE. A
     # mainland join bordering served Crawford, Edwards and Wabash. It SEALS a
     # five-county hole — Clay, Fayette, Jasper, Marion and Wayne, which reached
@@ -1131,7 +1165,6 @@ OUTSIDE = {
     # base names CENTRALIA and SALEM span three board districts each, so no
     # name can place them and the dissolve that built Clinton cannot build it.
     "Salem (Marion)": (38.6270, -88.9456),
-    "Ava (Jackson)": (37.8886, -89.4964),
     # Fayette borders the subcircuit counties but is in no shipped circuit, so
     # it must stay outside — the guard that keeps "a circuit's secondary
     # counties" from quietly becoming "everything nearby". (Pittsfield sat

@@ -1029,20 +1029,6 @@ detail into `blocker`.
       "wanted": "The county's board districts as map data — or which census precincts make up each of the current Centralia and Salem precincts."
     },
     {
-      "id": "jackson-county-board-districts",
-      "concept": "County board districts",
-      "area": "Jackson County",
-      "counties": [
-        "jackson"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Jackson County's seven board districts aren't drawn, so the card can't say which one you're in. All 14 members are named on the county's site.",
-      "why": "The county publishes no district map data, and its certified results show three precincts split between districts, so no arrangement of whole precincts can draw the lines.",
-      "blocker": "FIRST RECORD FOR THIS COUNTY, 2026-08-21. Jackson had no gap entry at all until now, which was itself the finding: at roughly 52,000 people (Carbondale, Murphysboro, SIU) it is the largest unserved county on the frontier after Champaign and Vermilion, and it went unrecorded because the pass-13 sweep never reached its website. jacksoncounty-il.gov answers HTTP 200 and always did — it is the domain in the County Clerk's own record in data/app/il-county-clerks.json, and probing THAT rather than permuting the county's name is what reached it, the same correction Cumberland forced on 2026-08-20. THE BOARD'S FORM AND ROSTER ARE BOTH ANSWERED: the county's own board page states \"fourteen members that are elected from seven districts\" and lists all fourteen by district with a contact page each, chaired by C.J. Calandro with Tamiko Mueller as vice chair. So this is a GEOMETRY ask, not a roster one, and the county even publishes a \"Board District Map (PDF)\" — a vector export dated 7/26/2022 whose text reads cleanly, drawn as \"County Districts and Townships\". THE CANVASS ROUTE IS OPEN AND THEN CLOSES, and this is the measurement worth keeping. The Clerk publishes machine-readable CANVASS RESULTS marked Official — the 5 Nov 2024 General runs one page per district, listing for each contest exactly the precincts that voted in it, which is precisely the input EXPANSION_GUIDE §2.5.1's canvass route needs. Reading all seven pages against the county's own 56-name precinct list gives 9/11/9/7/9/7/6 precincts, and 53 of the 56 fall in exactly one district. THREE DO NOT, and the canvass says so in the county's own numbers rather than by inference: CARBONDALE 24 appears under District 5 with 609 registered voters and under District 6 with 98; CARBONDALE 21 under District 6 with 600 and District 7 with 282; MURPHYSBORO 4 under District 3 with 166 and District 5 with 391. A precinct reported twice with its registration divided between two districts is the county stating that the precinct straddles the line. So no whole-precinct dissolve can draw Jackson's seven districts, and Jackson joins Bureau, Cumberland, Douglas, Ford, Knox and Piatt in the split-precinct class. Nothing was built. One parse caution for whoever returns: BRADLEY - CAMPBELL HILL wraps across two lines in the canvass and reads as missing unless the wrap is rejoined — it is in District 2.",
-      "wanted": "The seven districts as map data — or which district each half of the split Carbondale 21, Carbondale 24 and Murphysboro 4 precincts belongs to."
-    },
-    {
       "id": "massac-precinct-geometry",
       "concept": "Voting precincts",
       "area": "Massac County",
@@ -1201,17 +1187,16 @@ detail into `blocker`.
     {
       "id": "pass10-frontier-unasked",
       "concept": "Board districts and voting precincts",
-      "area": "Jackson and Warren counties",
+      "area": "Warren County",
       "counties": [
-        "jackson",
         "warren"
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Jackson County's board districts and Warren County's voting precincts are both missing, and neither county has ever been asked for them directly.",
-      "why": "Neither publishes these boundaries as map data anywhere findable, and the certified election results that settled other counties aren't available for either.",
-      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All answer normally on the web — Warren's board page even numbers four districts — but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one has a working e-mail address. THIS RECORD USED TO NAME FIVE COUNTIES. Jefferson left it on 6 Aug 2026 by being asked: its Clerk replied with a precinct shapefile the next day and the county is now served. That is the record's own prescription working on the first try, and it is the reason the remaining four are worth writing to rather than probing again. MEASURED 2026-08-20 against the election-results vendor, which is the route that has settled county after county since this record was written — and it is NOT available for any of the four. All eight hostnames answer HTTP 200 (il-hancock, il-jackson, il-marion and il-warren on both pollresults.net and accessliberty.com), which is exactly why this needed measuring rather than probing: THE VENDOR'S HOSTNAMES RESOLVE FOR ANY COUNTY NAME AND SERVE A GENERIC SHELL, so a 200 from one proves nothing at all. The tell is content, not status. A carried county returns its whole certified result set inline and an archive full of documents — Bond and Clark both return 34 electionData blocks and 57-58 KB past-election pages listing 60 downloadable canvasses. These four return a 7,720-byte template whose only electionData hits are unfilled Angular placeholders ({{electionData.MenuItem}}), and a past-elections page of 10.6 KB — byte-identical across all four counties — carrying ZERO download links. So the canvass route cannot answer these counties, which removes the cheapest remaining alternative to writing and strengthens rather than changes this record's own prescription.",
-      "wanted": "Whether these boundaries exist as map data, and where. Both County Clerks have working e-mail addresses, and asking has worked before."
+      "summary": "Warren County's voting precincts aren't drawn, so there is no precinct card there. Its board districts do show.",
+      "why": "The county doesn't publish its precinct boundaries as map data anywhere findable, and the election-results vendor that settled other counties doesn't carry it.",
+      "blocker": "Checked 3 Aug 2026 in the pass-10 sweep. All answer normally on the web — Warren's board page even numbers four districts — but none publishes board district or precinct boundaries as map data anywhere that could be found: nothing in the state map catalogue, and no mapping service at any of the usual addresses. Marion is worth a note: the address the state publishes for its clerk does not exist, and the county is actually at marioncountyil.gov. What has NOT been done is the step that worked repeatedly this week, which is writing to the clerk and asking. Every one has a working e-mail address. THIS RECORD USED TO NAME FIVE COUNTIES. Jefferson left it on 6 Aug 2026 by being asked: its Clerk replied with a precinct shapefile the next day and the county is now served. That is the record's own prescription working on the first try, and it is the reason the remaining four are worth writing to rather than probing again. MEASURED 2026-08-20 against the election-results vendor, which is the route that has settled county after county since this record was written — and it is NOT available for any of the four. All eight hostnames answer HTTP 200 (il-hancock, il-jackson, il-marion and il-warren on both pollresults.net and accessliberty.com), which is exactly why this needed measuring rather than probing: THE VENDOR'S HOSTNAMES RESOLVE FOR ANY COUNTY NAME AND SERVE A GENERIC SHELL, so a 200 from one proves nothing at all. The tell is content, not status. A carried county returns its whole certified result set inline and an archive full of documents — Bond and Clark both return 34 electionData blocks and 57-58 KB past-election pages listing 60 downloadable canvasses. These four return a 7,720-byte template whose only electionData hits are unfilled Angular placeholders ({{electionData.MenuItem}}), and a past-elections page of 10.6 KB — byte-identical across all four counties — carrying ZERO download links. So the canvass route cannot answer these counties, which removes the cheapest remaining alternative to writing and strengthens rather than changes this record's own prescription.  JACKSON LEFT THIS RECORD ON 2026-08-23 by shipping as the 87th county, and the way it left corrects a premise this record rests on. Everything above about the VENDOR is true and stays: il-jackson returns the generic 7,720-byte shell on both hosts and carries not one canvass. What was never checked is that JACKSON PUBLISHES ITS OWN CERTIFIED CANVASSES ON ITS OWN SITE — an Archived Election Results page running back to 2013, each election a text-layer PDF, the 5 Nov 2024 General listing for every board district contest exactly the precincts that voted in it. A county's election authority is a separate publisher from a results vendor, and a vendor that does not carry a county says nothing about what the county itself posts. Warren is the only county left in this record, and the same check is the first thing to run on it. (Jackson also turned out not to need the ask this record prescribes: its board districts came from its own adopted vector district map, and its 53 unambiguous precincts from that canvass.)",
+      "wanted": "Warren County's voting precincts as map data, or a precinct list its certified results name. The County Clerk has a working e-mail address, and asking has worked before."
     },
     {
       "id": "pass9-ward-seats-without-maps",
@@ -5746,6 +5731,86 @@ Two things the method taught that generalise beyond it:
   within a few RGB units of each other; a nearest-colour classifier put 2-15% of most
   precincts in the wrong district. The flood fill and the population check are the
   trustworthy halves. Never report a split from colour leakage alone.
+
+### A split-precinct county can still be built — read the map's FILL OBJECTS, georeference, snap to blocks (2026-08-23)
+
+Seven counties were recorded measured-shut for the same reason: **their board districts split
+precincts**, so no dissolve of whole precincts can ever draw them (Bureau, Cumberland, Douglas,
+Ford, Jackson, Knox, Piatt). Jackson shipped on 2026-08-23 and the method that shipped it is
+not specific to Jackson. It is the section above this one — *Reading a county's district map
+without georeferencing it* — carried two steps further, and those two steps are what turn a
+COMPOSITION into a BOUNDARY.
+
+**Step one: read the fill OBJECTS, not the pixels.** The older method rasterises the page and
+flood-fills, and it is explicit that colour classification of a rasterised map is unreliable
+because the fills are alpha-blended over a textured basemap. That warning is about pixels. An
+Esri vector export also contains the districts as **filled path objects in the content stream**,
+with exact fill colours and no blending at all. Jackson's map has 8,700 paths, of which exactly
+FOURTEEN are filled: seven small swatches in the legend and seven large polygons, pairing
+one-for-one by colour, in legend order, each large polygon containing its own district numeral.
+`page.get_drawings()` in pymupdf returns them directly. Nothing is classified and nothing is
+guessed — the county drew seven polygons and the file contains seven polygons.
+
+**Step two: georeference, and let the county's own returns prove it.** Fit the union of the
+seven districts to TIGER's county boundary across candidate CRSs. The right one announces
+itself: Jackson's map matched EPSG:3436 (Illinois State Plane WEST, ftUS) on aspect ratio to
+four decimal places where Web Mercator, UTM 16N, State Plane East and Albers all missed. A
+north-up map in its own CRS needs only scale and translation, so the fit has three parameters
+and no rotation. Jackson's landed at a **mean boundary offset of 5.3 m**, and the map's own
+scale bar confirmed the scale independently (19.4 pt/mile fitted against 19.3 pt/mile drawn).
+
+**Then snap to census geometry, so nothing traced ever ships.** This is the part that makes the
+output the same KIND of artifact as every other county in the fleet:
+
+* The precincts the canvass assigns to ONE district take their district from the canvass and
+  their geometry from the census voting districts. The map is not involved.
+* The split precincts take their geometry from census BLOCKS, each block assigned to whichever
+  of the **two districts the canvass already names for that precinct** the map puts it in. The
+  map is never allowed to pick a district the county's own returns did not name.
+
+Blocks are the right unit because that is what redistricting software draws on. Jackson's plan
+follows them: of its 2,773 blocks, 84% sit 99.9%+ inside a single district and 98% sit 95%+,
+and every block nests 99%+ inside exactly one precinct — which is what makes the split-precinct
+block sets well defined in the first place. Check both before relying on either.
+
+**VERIFY AGAINST SOMETHING THAT IS NOT THE MAP, and Jackson's four are the template:**
+
+1. **The canvass, per precinct.** All 53 of Jackson's unambiguously-assigned precincts land in
+   the district the canvass names, at 98.3-100% of area — 53/53. A wrong CRS, scale or offset
+   cannot produce that.
+2. **The splits.** The map splits each of the three split precincts between exactly the two
+   districts the canvass names — never a third.
+3. **Population balance.** 7,371-7,933 against a 7,568 ideal, worst 4.83%. Each split precinct
+   holds 728-2,743 people, so a mis-assignment shows up here immediately.
+4. **Registration against population, WHERE IT IS ALLOWED TO MEAN SOMETHING.** Murphysboro 4's
+   census population divides 30.2/69.8 between its two districts where its registered voters
+   divide 29.8/70.2. The same check was deliberately NOT claimed for Carbondale 21 and 24: both
+   hold SIU dormitories and student apartments — one block carries **700 people in FOUR housing
+   units** — and census population does not predict registration there in either direction.
+   Saying which of the three the check covers is the whole value of running it.
+
+**TWO PARSING TRAPS IN JACKSON'S CANVASS, both silent, both likely elsewhere.** A row's last
+two values can share one line ("262 135.50%"), so a line-per-value reader finishes the row one
+value short and swallows the next precinct's name — District 6 then reads as six precincts
+instead of seven. And the LAST board contest has no next-contest boundary, so slicing to the end
+of the document swallows the judicial retentions and District 7 reads as **77** precincts. Both
+were caught by arithmetic rather than by eye: the distinct precinct count has to equal the
+canvass header's own "56 of 56", and the district registrations have to sum to the countywide
+total it prints. They do, exactly.
+
+**A CORRECTION TO JACKSON'S OWN RETIRED RECORD, kept because the error is instructive.** It
+reported the composition as 9/11/9/7/9/7/6. District 2 has TWELVE precincts, not eleven — the
+missing one is BRADLEY - CAMPBELL HILL, whose name wraps across two lines, which is the very
+trap that record warned the next reader about. 9+12+9+7+9+7+6 = 59 rows over 56 precincts with
+three counted twice, which is the only reading that reconciles with the header.
+
+**SIX COUNTIES ARE STILL SHUT FOR THIS REASON and are now worth re-examining rather than
+re-probing** — Bureau, Cumberland, Douglas, Ford and Piatt (Knox shipped on other grounds). The
+question for each is no longer "are its districts whole-precinct" but "does it publish a VECTOR
+district map", and that is a different and much cheaper question. Two cautions before anyone
+starts: Champaign and Piatt's data is licensed rather than merely unpublished, which no method
+here touches; and a county whose map is a genuine raster scan is still shut, because step one
+needs path objects and a scan has none.
 
 ### The COLES PATTERN is a pattern: sites recorded as unreachable that answer a browser (2026-08-21)
 
