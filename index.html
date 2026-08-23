@@ -9050,6 +9050,45 @@ function initChiExplorer() {
    * unresolvable from the image, so the county's switchboard stands for the
    * board and the current list is an open ask. Polling places are not shown
    * either: the only list the county publishes is dated November 2018. */
+  /* Knox (the 80th county, 2026-08-22) — the join that CLOSED AN ENCLAVE
+   * rather than extending the frontier: every one of its seven neighbours was
+   * already served, so it read as a doughnut on the coverage wash and the
+   * outline went from four rings to three.
+   *
+   * FOUR HOSTS, ONE OF WHICH REFUSES. Its record said knoxcountyil.gov
+   * "refuses every request", which is true of the WEBSITE and was written as
+   * though it described the county. gis.knoxcountyil.gov serves the county's
+   * townships (the Coles pattern — its chain omits the intermediate), the
+   * website's documents are served plainly from its Revize CMS, and only the
+   * site itself denies.
+   *
+   * DISTRICTS 1-3 ARE THE CITY'S AND ARE TAKEN AS PUBLISHED. Galesburg runs
+   * its own Board of Election Commissioners and publishes those three as
+   * finished polygons. Districts 4 and 5 are unions of whole TOWNSHIPS,
+   * transcribed from the county's own adopted map, minus the city. Three
+   * witnesses agree: the map, the certified returns' 13-and-15 precinct counts,
+   * and Census populations within 6.3% of the per-district ideal
+   * (scripts/build_knox_board_districts.py).
+   *
+   * The roster is the ROLL CALL of the county's own board minutes, because the
+   * page that lists members cannot be read. Fifteen seats, three per district,
+   * each row naming the meeting it came from; no party, term or per-member
+   * contact, because the minutes publish none. */
+  var loadKnoxCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/knox-county-outline.json", {}, 2);
+  });
+  function knoxCountyCoverage(point) {
+    return loadKnoxCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadKnoxBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/knox-county-board-districts.json", {}, 2);
+  });
+  var loadKnoxBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/knox-county-board-members.json", {}, 2);
+  });
+
   var loadClarkCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/clark-county-outline.json", {}, 2);
   });
@@ -18150,6 +18189,95 @@ function initChiExplorer() {
             if (!roster) return null;
             var d = colesDistrictNumber(feature);
             var e = d ? roster[d] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Knox — 5 districts of THREE members each (15 seats), and the county
+      // that closed the coverage wash's Knox enclave when it shipped on
+      // 2026-08-22. Districts 1-3 are the CITY of Galesburg's, published by the
+      // city because it runs its own Board of Election Commissioners; 4 and 5
+      // are unions of whole townships off the county's adopted 2022 map, minus
+      // that city. The roster is the roll call of the county's own board
+      // minutes — its member page is a flat 403 — so every row names the
+      // meeting rather than claiming a currency a roll call cannot show.
+      {
+        key: "knox",
+        coverage: knoxCountyCoverage,
+        loadGeometry: loadKnoxBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : "District " + String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadKnoxBoardDistricts(),
+            loadKnoxBoardMembers().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var roster = results[1];
+            return {
+              seq: seq,
+              district: district == null ? null : String(district),
+              entry: (roster && district != null) ? roster[String(district)] : null,
+              board: roster && roster.board,
+              rosterLoaded: !!roster
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Knox County Board",
+            note: result.rosterLoaded
+              ? boardCountNote(members.length, null)
+              : "The member list could not be loaded just now."
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The minutes are the ONLY readable source placing this member in
+              // this district, so which meeting rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.board && result.board.phone) {
+            fields.push({
+              label: result.board.phoneLabel || "County offices",
+              value: String(result.board.phone)
+            });
+          }
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board mail", value: String(result.board.address) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + result.district : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Knox County Board (official)",
+            url: "https://www.knoxcountyil.gov/departments/county_board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadKnoxBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d == null ? null : roster[String(d)];
             if (!e || !e.members || !e.members.length) return null;
             return e.members.map(function (m) { return m.name; }).join(", ");
           }

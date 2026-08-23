@@ -41,7 +41,7 @@
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "district-explorer-shell-v47";
+const CACHE_NAME = "district-explorer-shell-v48";
 
 const SHELL_URLS = [
   "./",
@@ -103,6 +103,7 @@ const GEOMETRY_URLS = [
   "./data/app/franklin-precincts.json",
   "./data/app/clinton-county-board-districts.json",
   "./data/app/warren-county-board-districts.json",
+  "./data/app/knox-county-board-districts.json",
   "./data/app/edwards-county-outline.json",
   "./data/app/effingham-county-outline.json",
   "./data/app/fayette-county-outline.json",
@@ -256,6 +257,7 @@ const ROSTER_URLS = [
   "./data/app/clinton-county-board-members.json",
   "./data/app/warren-county-board-members.json",
   "./data/app/adams-county-board-members.json",
+  "./data/app/knox-county-board-members.json",
   "./data/app/il-senate-members.json",
   "./data/app/il-house-members.json",
   "./data/app/mercer-county-board-members.json",
