@@ -681,6 +681,20 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # (scripts/build_jackson_boundaries.py). Read the ring count
                      # from --check.
                      "077",
+                     # Douglas — 2026-08-23, a mainland join against served
+                     # Moultrie, Coles and Edgar. THE COUNTY PUBLISHES ITS OWN
+                     # BOARD DISTRICTS and nobody here had looked: its ArcGIS web
+                     # map names one parcel service while the ORG BEHIND IT
+                     # carries fifty-four, CountyBoardDistricts among them. So
+                     # this county joins on geometry the county drew, with no
+                     # dissolve and no map to interpret, even though two of its
+                     # seventeen precincts are split between districts
+                     # (scripts/build_douglas_boundaries.py). Its unserved
+                     # neighbours Champaign and Piatt are part of a block that
+                     # still reaches the Indiana line through Vermilion, so
+                     # nothing is enclosed — but read the ring count from
+                     # --check, never from that sentence.
+                     "041",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -778,6 +792,12 @@ DISPATCH_COUNTY_FIPS = {
     # whole census blocks by the county's own adopted vector district map
     # (scripts/build_jackson_boundaries.py).
     "jackson": "077",
+    # Douglas joins 2026-08-23 as a full board + precinct dispatch entry, and is
+    # the second county served whose board districts SPLIT precincts. Unlike
+    # Jackson it needed no map read at all: the county publishes the districts
+    # themselves as a public feature service
+    # (scripts/build_douglas_boundaries.py).
+    "douglas": "041",
 }
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -1113,6 +1133,12 @@ INSIDE = {
     # sit in the county's populous east, and an anchor in the sparse west is the
     # one that would fail first if the fill were wrong.
     "Ava (Jackson)": (37.8886, -89.4964),
+    # Tuscola (Douglas) — the county seat, moved up from OUTSIDE on 2026-08-23.
+    # It had stood there since Moultrie shipped, as the anchor for a frontier of
+    # Douglas and Piatt. Douglas encloses nothing on joining: Champaign and
+    # Piatt, its two unserved neighbours, sit in a block that still reaches the
+    # Indiana state line through Vermilion.
+    "Tuscola (Douglas)": (39.7967, -88.2748),
     # Olney (Richland) — the county seat, 2026-08-23, moved up from OUTSIDE. A
     # mainland join bordering served Crawford, Edwards and Wabash. It SEALS a
     # five-county hole — Clay, Fayette, Jasper, Marion and Wayne, which reached
@@ -1194,10 +1220,12 @@ OUTSIDE = {
     # Sullivan sat here until 2026-08-18, when the vendor sweep found Moultrie's
     # board is elected AT LARGE and it shipped as a County-card county — the
     # guard failed the build until it was moved up to INSIDE, exactly as
-    # designed. The frontier it leaves is Douglas and Piatt, and TUSCOLA takes
-    # the anchor: Douglas now borders served Coles and Moultrie, with Champaign,
-    # Edgar and Piatt keeping it off the enclave list.
-    "Tuscola (Douglas)": (39.7967, -88.2748),
+    # designed. The frontier it leaves is Douglas and Piatt, and TUSCOLA took
+    # the anchor: Douglas then bordered served Coles and Moultrie, with
+    # Champaign, Edgar and Piatt keeping it off the enclave list. (Douglas
+    # itself shipped on 2026-08-23 and Tuscola moved up to INSIDE, so PIATT is
+    # the frontier this corner now leaves — measured shut by the CCGISC licence
+    # rather than by a missing source.)
     # Flora (Clay) and Lawrenceville (Lawrence) — the two successors Richland's
     # join calls for (2026-08-23). Olney stood here until Richland shipped, and
     # the guard failed the build until it was moved up to INSIDE, exactly as

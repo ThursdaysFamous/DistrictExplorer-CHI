@@ -1,0 +1,78 @@
+{
+  "1": {
+    "members": [
+      {
+        "districtSource": "elected 2024 General (certified county canvass)",
+        "name": "Travis Wilson"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  },
+  "2": {
+    "members": [
+      {
+        "districtSource": "elected 2024 General (certified county canvass)",
+        "email": "mary.appleby@douglascountyil.gov",
+        "name": "Bibby Appleby"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  },
+  "3": {
+    "members": [
+      {
+        "districtSource": "elected 2024 General (certified county canvass)",
+        "email": "thomas.hettinger@douglascountyil.gov",
+        "name": "Tom Hettinger"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  },
+  "4": {
+    "members": [
+      {
+        "districtSource": "elected 2022 General (certified county canvass)",
+        "email": "phil.morris@douglascountyil.gov",
+        "name": "Phillip Morris"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  },
+  "5": {
+    "members": [
+      {
+        "districtSource": "elected 2022 General (certified county canvass)",
+        "email": "dan.henry@douglascountyil.gov",
+        "name": "Daniel Henry"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  },
+  "6": {
+    "members": [
+      {
+        "districtSource": "elected 2022 General (certified county canvass)",
+        "email": "Ed.carleton@douglascountyil.gov",
+        "name": "Ed Carleton"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  },
+  "7": {
+    "members": [
+      {
+        "districtSource": "elected 2024 General (certified county canvass)",
+        "email": "gary.luth@douglascountyil.gov",
+        "name": "Gary Luth"
+      }
+    ],
+    "sourceLabel": "Douglas County Yearbook (2025)",
+    "sourceUrl": "https://douglascountyil.gov"
+  }
+}

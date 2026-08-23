@@ -9251,6 +9251,48 @@ function initChiExplorer() {
   var loadJacksonBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/jackson-county-board-members.json", {}, 2);
   });
+  /* Douglas (the 88th county, 2026-08-23) — the SECOND county served whose board
+   * districts split precincts, and the one that needed no map read at all.
+   * Douglas sat on the frontier because two of its seventeen precincts vote in
+   * two districts each, so no dissolve of whole precincts can draw it. The
+   * sweep that went looking for a vector district map found something better:
+   * douglascountyil.gov links an ArcGIS web map whose config names ONE parcel
+   * service, while the ORG BEHIND IT carries fifty-four — CountyBoardDistricts
+   * and VotingDistricts among them, both shared public.
+   *
+   * A VIEWER SHOWS WHAT IT USES; THE ORG SHOWS WHAT THE COUNTY HAS. So the
+   * districts here are the county's own polygons, shipped as drawn: no
+   * dissolve, no georeferencing, nothing derived. They are checked against a
+   * DIFFERENT county product — its certified 2022 General ran all seven
+   * districts and printed 2, 2, 3, 2, 3, 2, 5 precincts, nineteen across a
+   * county of seventeen because two are split, and overlaying the county's
+   * precinct layer on its district layer reproduces all seven exactly
+   * (build_douglas_boundaries.py).
+   *
+   * The roster comes from two documents because the county publishes no board
+   * members page at all: the annual County Yearbook names the seven people and
+   * gives each a county e-mail, and the certified election summary reports say
+   * which numbered district each won. The yearbook's own "1., 2., 3." numbering
+   * is LIST ORDER, not district — the returns put its first-listed member in
+   * District 3 — so the join is on surname and the builder fails if the two
+   * documents stop naming the same seven people. */
+  var loadDouglasCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-county-outline.json", {}, 2);
+  });
+  function douglasCountyCoverage(point) {
+    return loadDouglasCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadDouglasPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-precincts.json", {}, 2);
+  });
+  var loadDouglasBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-county-board-districts.json", {}, 2);
+  });
+  var loadDouglasBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-county-board-members.json", {}, 2);
+  });
   var loadMercerCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/mercer-county-outline.json", {}, 2);
   });
@@ -18772,6 +18814,92 @@ function initChiExplorer() {
           }
         }
       },
+      // Douglas County — 7 SINGLE-member districts, shipped AS THE COUNTY DRAWS
+      // THEM: its GIS publishes CountyBoardDistricts as a public feature service,
+      // so nothing here is dissolved, georeferenced or derived
+      // (build_douglas_boundaries.py). Two of its seventeen precincts are split
+      // between districts, which is why this county sat on the frontier and why
+      // the county's own polygons are the only thing that could draw it. The
+      // roster is assembled from two county documents — the annual Yearbook for
+      // the people and the certified election summary reports for the district
+      // numbers — because the county publishes no board members page at all.
+      {
+        key: "douglas",
+        coverage: douglasCountyCoverage,
+        loadGeometry: loadDouglasBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDouglasBoardDistricts(),
+            loadDouglasBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              partialPrecincts: findPropCI(props, ["partialPrecincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Douglas County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The county publishes no members page, so the election that
+              // seated this member rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts", value: result.precincts.join(", ") });
+          }
+          if (result.partialPrecincts && result.partialPrecincts.length) {
+            fields.push({
+              label: "Partly in this district",
+              value: result.partialPrecincts.join(", ") +
+                " — the county's district map cuts through these precincts"
+            });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Douglas County Clerk — Elections (official)", url: "https://douglascountyil.gov/clerk-recorder/elections" };
+        },
+        hoverOfficial: {
+          load: loadDouglasBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Mercer County — 5 districts electing TWO members each (10 seats),
       // dissolved from the Census 2020 voting districts per the composition
       // the county's own certified results publish as structured data
@@ -23982,6 +24110,60 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Jackson County Clerk — Voting & Elections (official)", url: "https://jacksoncounty-il.gov/340/Voting-Elections" };
+        }
+      },
+      // Douglas County — 17 precincts, the Census 2020 voting districts, whose
+      // names match the county's own VotingDistricts service 17/17 and whose
+      // POP100 sums to its exact 2020 population. Most features carry their
+      // County Board district; TWO carry a list of two instead, because Bourbon
+      // 2 and Bowdre are SPLIT — the county's own district layer cuts through
+      // them, and its certified 2022 General counts nineteen precinct-slots
+      // across seven districts in a county of seventeen precincts. For those two
+      // the precinct does not determine the district and the card says which two
+      // it could be. NO POLLING PLACE: a polling place is a roster fact.
+      {
+        key: "douglas",
+        coverage: douglasCountyCoverage,
+        loadGeometry: loadDouglasPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadDouglasPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              boardDistricts: findPropCI(props, ["districts"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistricts && result.boardDistricts.length) {
+            fields.push({
+              label: "County Board District",
+              value: "This precinct is split between Districts " +
+                result.boardDistricts.join(" and ") +
+                " — the county's own district map runs through it, so your " +
+                "precinct alone doesn't say which one you're in."
+            });
+          } else if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Douglas County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Douglas County Clerk — Elections (official)", url: "https://douglascountyil.gov/clerk-recorder/elections" };
         }
       },
       // Mercer County — 24 precincts, the Census 2020 voting districts, which are

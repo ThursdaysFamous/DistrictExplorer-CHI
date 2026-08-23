@@ -250,6 +250,8 @@ const GEOMETRY_URLS = [
   "./data/app/richland-precincts.json",
   "./data/app/jackson-county-board-districts.json",
   "./data/app/jackson-precincts.json",
+  "./data/app/douglas-county-board-districts.json",
+  "./data/app/douglas-precincts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -331,6 +333,7 @@ const ROSTER_URLS = [
   "./data/app/hancock-county-board-members.json",
   "./data/app/richland-county-board-members.json",
   "./data/app/jackson-county-board-members.json",
+  "./data/app/douglas-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
