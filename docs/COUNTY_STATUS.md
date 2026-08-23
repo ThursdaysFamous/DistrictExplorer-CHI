@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**80 of 102 Illinois counties are served** — 71 through their own dispatch entries, 2 through a shipped judicial circuit, and 7 through the County card alone. 22 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**82 of 102 Illinois counties are served** — 71 through their own dispatch entries, 2 through a shipped judicial circuit, and 9 through the County card alone. 20 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (80)
+## Served counties (82)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -95,16 +95,18 @@
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
 | Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
+| Union | 17181 | County card | at-large — County card | — | 1 — `captcha-county-commissioner-contact` (blocked) |
 | Wabash | 17185 | County card | at-large — County card | — | 1 — `wabash-precinct-geometry` (no-source) |
 | Warren | 17187 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `pass10-frontier-unasked` (no-source) |
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
 | Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source); `crete-municipal-clerk` (no-source); `joliet-municipal-contact` (blocked) |
+| Williamson | 17199 | County card | at-large — County card | — | 1 — `captcha-county-commissioner-contact` (blocked) |
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (22) — gap-recorded, not yet served
+## Researched frontier (20) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -128,10 +130,8 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Pope | 17151 | 1 — `pope-county-board` (no-source) |
 | Pulaski | 17153 | 1 — `pulaski-county-board` (no-source) |
 | Richland | 17159 | 1 — `richland-county-board-districts` (no-source) |
-| Union | 17181 | 1 — `union-county-board` (no-source) |
 | Vermilion | 17183 | 1 — `vermilion-county-website` (no-source) |
 | Wayne | 17191 | 1 — `wayne-county-board` (no-source) |
-| Williamson | 17199 | 1 — `williamson-county-board` (no-source) |
 
 ## Unresearched (0)
 
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 109 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 108 records in the Data gaps panel: `chicago-amenity-phones`.

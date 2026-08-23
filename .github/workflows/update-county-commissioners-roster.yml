@@ -42,7 +42,11 @@ jobs:
         # intermediate, so the scraper chases the issuer the certificate itself
         # names and verifies against certifi's roots plus that one certificate
         # (the same posture the Coles workflow needs, for the same reason).
-        run: pip install -c scripts/requirements.txt requests certifi
+        # pymupdf reads the CERTIFIED CANVASSES two of these counties are
+        # sourced from: Union and Williamson both sit behind an sgcaptcha
+        # gate, so their rosters come from PDF election returns rather than
+        # from a page (scripts/platinum_canvass.py).
+        run: pip install -c scripts/requirements.txt requests certifi pymupdf
 
       - name: Scrape roster
         run: python3 scripts/il_county_commissioners_scraper.py /tmp/raw.json

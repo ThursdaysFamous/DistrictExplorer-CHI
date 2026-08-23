@@ -51,6 +51,9 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import platinum_canvass                                        # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 OUT_PATH = os.path.join(REPO, "data", "app", "adams-county-board-members.json")
@@ -77,44 +80,7 @@ BOARD = {
 PARTY_LETTER = {"REP": "R", "DEM": "D"}
 
 
-def name_case(raw):
-    """Title-case a canvass name without inventing punctuation.
-
-    The canvasses print names in capitals ("DAVID DL MCCLEARY"). Casing them is
-    unavoidable; adding periods, expanding initials or guessing an internal
-    capital is not, so none of that happens here. "Mc" is the one exception and
-    it is a rule rather than a guess: McCleary, never Mccleary. Prefixes this
-    file cannot decide (De-, Van-, O') are left alone deliberately — Adams's own
-    2018 canvass carries a DEMOSS whom local reporting spells DeMoss, and
-    guessing which is right is exactly the error the honesty rules forbid.
-    """
-    out = []
-    for word in str(raw).split():
-        parts = []
-        for piece in word.split("-"):
-            if not piece:
-                parts.append(piece)
-                continue
-            up = piece.upper()
-            if len(up) > 3 and up.startswith("MC"):
-                parts.append("Mc" + up[2:].capitalize())
-            elif len(piece) == 1:
-                parts.append(up)
-            elif len(up) == 2 and not set(up) & set("AEIOUY"):
-                # RUN-TOGETHER INITIALS, which this county actually publishes:
-                # District 6 is "DAVID DL MCCLEARY" in the general canvass and
-                # "DAVID D.L. MCCLEARY" in the primary. Capitalising it as a
-                # word gives "Dl", which reads as a name and is not one. A
-                # two-letter token with no vowel is initials; one with a vowel
-                # (Jo, Al, Ed) is a name and is left alone. The periods the
-                # primary prints are NOT added back — the seating canvass is
-                # what this row cites, and punctuation is not ours to invent.
-                parts.append(up)
-            else:
-                parts.append(piece.capitalize())
-        out.append("-".join(parts))
-    return " ".join(out)
-
+name_case = platinum_canvass.name_case
 
 def load_raw(path):
     with open(path, encoding="utf-8") as fh:

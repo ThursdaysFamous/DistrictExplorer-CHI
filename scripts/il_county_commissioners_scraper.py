@@ -39,6 +39,9 @@ import tempfile
 import time
 import urllib.request
 
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import platinum_canvass
 import requests
 
 UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -714,6 +717,64 @@ def parse_moultrie(page):
     return [], None
 
 
+# Counties whose roster comes from their own CERTIFIED ELECTION RETURNS, because
+# their websites cannot be read and no document has been carried by hand.
+#
+# WHY THIS TIER EXISTS. Union and Williamson both sit behind an sgcaptcha gate —
+# their sites answer HTTP 202 with a 169-byte redirect to /.well-known/sgcaptcha/,
+# which is this project's recorded "202 is never a document" case. What both
+# counties DO publish machine-readably is their canvasses, on
+# platinumelectionresults.com. So each member here is whoever the county
+# CERTIFIED as elected in the most recent general election that seated their
+# seat — the Clark posture, applied to an at-large board — and every row renders
+# that election, because a canvass cannot show a mid-term appointment.
+#
+# THE COUNTYWIDE CHECK IS A GATE, NOT AN ASSUMPTION. An at-large county belongs
+# on the County card precisely because every voter votes for every seat, so this
+# refuses to write unless each commissioner contest was counted in EVERY precinct
+# the canvass reports for any contest. That is what distinguishes these from
+# Adams, whose district contests count 9 or 10 precincts against a county of 74.
+# It also caught a stale state record: ISBE's 2007 county-board structure table
+# calls Union "Single-Member" with five districts, and Union's own returns count
+# all five lettered seats in 20 of 20 precincts, with Seat A polling 6,694 votes
+# against the countywide State's Attorney's 6,738 in the same canvass. A fifth of
+# the county would poll about 1,300. The returns are current and the table is not.
+RETURNS_ROSTERS = {
+    "UNION": {
+        "name": "Union County",
+        "countyId": 16,
+        "structure": "Commission form \u2014 5 commissioners elected countywide by "
+                     "lettered seat, six-year staggered terms",
+        "expect": 5,
+        # Each seat's own contest, newest election wins. The county writes
+        # "For County Commissioner Seat A" and also "For Commissioner Seat D";
+        # the letter is what identifies the seat, not the wording around it.
+        "seat_pattern": r"Commissioner\s+Seat\s+([A-E])\b",
+        "office": {
+            "label": "Union County Courthouse",
+            "address": "309 West Market Street, Jonesboro, IL 62952",
+        },
+    },
+    "WILLIAMSON": {
+        "name": "Williamson County",
+        "countyId": 51,
+        "structure": "Commission form \u2014 3 commissioners elected countywide, "
+                     "six-year staggered terms, one seat each general election",
+        "expect": 3,
+        # No seat labels here: every contest is just "For County Commissioner",
+        # one per general election. The three sitting commissioners are therefore
+        # the winners of the three most recent generals, deduplicated by name
+        # because a re-elected member holds ONE seat, not two (James "Jim" Marlo
+        # won in both 2018 and 2024, which is also what proves the six-year term).
+        "seat_pattern": None,
+        "contest_pattern": r"For\s+County\s+Commissioner\b",
+        "office": {
+            "label": "Williamson County Courthouse",
+            "address": "407 North Monroe Street, Marion, IL 62959",
+        },
+    },
+}
+
 DOCUMENT_ROSTERS = {
     "EDWARDS": {
         "name": "Edwards County",
@@ -1231,6 +1292,74 @@ def fetch(session, url, verify=True):
     return None, last
 
 
+
+def build_from_returns(key, spec, session, fail):
+    """One at-large county's sitting commissioners, from its certified canvasses.
+
+    Walks general elections newest-first. A county with lettered seats keeps the
+    newest winner of each seat; a county without them takes one winner per
+    general until its seat count is filled, deduplicated by name because a
+    re-elected member holds one seat rather than two.
+    """
+    year = datetime.date.today().year
+    slugs = ["%d_ge" % y for y in range(year if year % 2 == 0 else year - 1,
+                                        year - 12, -2)]
+    seat_re = re.compile(spec["seat_pattern"], re.I) if spec.get("seat_pattern") else None
+    contest_re = re.compile(spec.get("contest_pattern") or spec.get("seat_pattern"), re.I)
+
+    members = []
+    by_seat = {}
+    seen_names = set()
+    read = []
+    for slug in slugs:
+        text, size = platinum_canvass.fetch_report(slug, spec["countyId"], session)
+        if not text:
+            continue
+        name = platinum_canvass.county_name(text)
+        if not name:
+            # An unreadable header is a report this parser should not trust —
+            # skipped, never assumed to be the right county.
+            continue
+        if not name.upper().startswith(key):
+            fail("%s: %s returned a report for %r, not this county" % (key, slug, name))
+        found = platinum_canvass.contests(text)
+        countywide = max((c["precincts"] or 0) for c in found) if found else 0
+        read.append(slug)
+        for contest in found:
+            if not contest_re.search(contest["title"]) or not contest["candidates"]:
+                continue
+            # THE GATE: an at-large seat is voted in every precinct the canvass
+            # reports for anything. A districted contest counts fewer.
+            if not countywide or contest["precincts"] != countywide:
+                fail("%s: %r was counted in %s of %d precincts — that is a DISTRICT "
+                     "contest, and this county is on the at-large County card"
+                     % (key, contest["title"][:60], contest["precincts"], countywide))
+            winner = contest["candidates"][0]
+            election = "elected %s (certified canvass)" % slug[:4]
+            if seat_re:
+                m = seat_re.search(contest["title"])
+                if not m:
+                    fail("%s: %r carries no seat letter" % (key, contest["title"][:60]))
+                seat = m.group(1).upper()
+                if seat in by_seat:
+                    continue                      # an older election for a seat already filled
+                by_seat[seat] = {"name": platinum_canvass.name_case(winner["name"]), "seat": "Seat " + seat,
+                                 "party": winner["party"][:1], "since": int(slug[:4]),
+                                 "districtSource": election}
+            else:
+                if winner["name"] in seen_names or len(members) >= spec["expect"]:
+                    continue
+                seen_names.add(winner["name"])
+                members.append({"name": platinum_canvass.name_case(winner["name"]), "party": winner["party"][:1],
+                                "since": int(slug[:4]), "districtSource": election})
+    if seat_re:
+        members = [by_seat[k] for k in sorted(by_seat)]
+    if len(members) != spec["expect"]:
+        fail("%s: composed %d commissioners from %r, expected %d"
+             % (key, len(members), read, spec["expect"]))
+    return members, read
+
+
 def main():
     out = {}
     session = requests.Session()
@@ -1329,6 +1458,31 @@ def main():
             "sourceDocument": spec["document"],
             "verified": spec["verified"],
             "members": spec["members"],
+        }
+        if spec.get("office"):
+            out[key]["office"] = spec["office"]
+
+    # The counties read from their own certified returns. Re-read every run, so
+    # a new general election refreshes the board with nothing to hand-edit.
+    for key, spec in RETURNS_ROSTERS.items():
+        if key in out:
+            print("county-commissioners: FAIL — %s is in more than one source "
+                  "table; a county has one source, not two" % key, file=sys.stderr)
+            sys.exit(1)
+
+        def _fail(msg):
+            print("county-commissioners: FAIL — " + msg, file=sys.stderr)
+            sys.exit(1)
+
+        members, read = build_from_returns(key, spec, session, _fail)
+        print("county-commissioners: %s — %d commissioners from certified returns (%s)"
+              % (key, len(members), ", ".join(read)), file=sys.stderr)
+        out[key] = {
+            "county": spec["name"],
+            "structure": spec["structure"],
+            "sourceDocument": "certified county canvasses, %s"
+                              % platinum_canvass.RESULTS_HOME,
+            "members": members,
         }
         if spec.get("office"):
             out[key]["office"] = spec["office"]

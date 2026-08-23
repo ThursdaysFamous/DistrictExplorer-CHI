@@ -219,7 +219,14 @@ def main():
             if role and role not in ALLOWED_ROLES:
                 fail("%s: unrecognized role %r for %s" % (key, role, m["name"]))
             entry = {"name": m["name"]}
-            for f_ in ("role", "phone", "email", "since"):
+            # `seat` and `districtSource` carry the RETURNS tier's provenance:
+            # which lettered seat a commissioner holds, and which certified
+            # election seated them. A roster read from canvasses cannot show a
+            # mid-term appointment, so the row says what it is rather than
+            # implying a currency it does not have (the Clark rule). `party` is
+            # in the returns and is the county's own certification of it.
+            for f_ in ("role", "seat", "party", "phone", "email", "since",
+                       "districtSource"):
                 if m.get(f_):
                     entry[f_] = m[f_]
             clean_members.append(entry)

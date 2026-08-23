@@ -561,6 +561,52 @@
   "sourceUrl": "https://www.schuylercounty.org/county-board/county-board-members/",
   "structure": "7 members elected countywide"
  },
+ "UNION": {
+  "county": "Union County",
+  "members": [
+   {
+    "districtSource": "elected 2024 (certified canvass)",
+    "name": "Kent L Pitts",
+    "party": "R",
+    "seat": "Seat A",
+    "since": 2024
+   },
+   {
+    "districtSource": "elected 2020 (certified canvass)",
+    "name": "Darryl G. Harvell",
+    "party": "R",
+    "seat": "Seat B",
+    "since": 2020
+   },
+   {
+    "districtSource": "elected 2022 (certified canvass)",
+    "name": "David Gould",
+    "party": "R",
+    "seat": "Seat C",
+    "since": 2022
+   },
+   {
+    "districtSource": "elected 2024 (certified canvass)",
+    "name": "Max Miller",
+    "party": "R",
+    "seat": "Seat D",
+    "since": 2024
+   },
+   {
+    "districtSource": "elected 2022 (certified canvass)",
+    "name": "Brandon Bierstedt",
+    "party": "R",
+    "seat": "Seat E",
+    "since": 2022
+   }
+  ],
+  "office": {
+   "address": "309 West Market Street, Jonesboro, IL 62952",
+   "label": "Union County Courthouse"
+  },
+  "sourceDocument": "certified county canvasses, https://platinumelectionresults.com/history",
+  "structure": "Commission form — 5 commissioners elected countywide by lettered seat, six-year staggered terms"
+ },
  "WABASH": {
   "county": "Wabash County",
   "members": [
@@ -580,5 +626,34 @@
   "sourceDocument": "Commissioners' names and addresses, sent by e-mail by County Clerk & Recorder Janet L. Will, 2026-08-16; the chairmanship confirmed by her e-mail of 2026-08-17",
   "structure": "Commission form — 3 commissioners elected countywide",
   "verified": "2026-08-17"
+ },
+ "WILLIAMSON": {
+  "county": "Williamson County",
+  "members": [
+   {
+    "districtSource": "elected 2024 (certified canvass)",
+    "name": "James \"Jim\" Marlo",
+    "party": "R",
+    "since": 2024
+   },
+   {
+    "districtSource": "elected 2022 (certified canvass)",
+    "name": "Jim Rasor",
+    "party": "R",
+    "since": 2022
+   },
+   {
+    "districtSource": "elected 2020 (certified canvass)",
+    "name": "Tim Atkisson",
+    "party": "R",
+    "since": 2020
+   }
+  ],
+  "office": {
+   "address": "407 North Monroe Street, Marion, IL 62959",
+   "label": "Williamson County Courthouse"
+  },
+  "sourceDocument": "certified county canvasses, https://platinumelectionresults.com/history",
+  "structure": "Commission form — 3 commissioners elected countywide, six-year staggered terms, one seat each general election"
  }
 }

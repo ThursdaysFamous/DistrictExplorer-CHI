@@ -222,6 +222,21 @@ detail into `blocker`.
       "blocker": "Re-checked 31 Jul 2026 across the county's mapping server (56 datasets) and its online map catalogue (360 items): no park or library district boundaries anywhere, and every item labelled \"park\" turns out to be a conservation-district facility map. The districts do exist on paper — the clerk's yearbook prints the Belvidere Park District commissioners and the Ida Public Library board with contact details. RE-MEASURED WIDER 2026-08-20 and the finding holds: the county's ArcGIS server was enumerated in full (12 folders, 99 services, 279 layers, 240 distinct layer names) and the ArcGIS Online org queried across ALL owners rather than one (510 items against the 360 the earlier check saw) — LIBRARY matches across all 510: zero. The 63 park matches are every one a conservation-district or foundation FACILITY layer, individual properties with park_name and acres columns, not a district boundary. THE DISTRICTS THEMSELVES WERE CHECKED THIS TIME, which the earlier pass did not do. The Belvidere Park District does publish a boundary map — a 34x22-inch, purely vector PDF of nearly 59,000 line elements — but it is an assessor's plat sheet with the district edge drawn on it, carrying no title block, no legend, no coordinate grid and no georeferencing of any kind, so it is usable only by hand-digitising and is not a publisher-supplied boundary. The Ida Public Library publishes nothing: its own sitemap's 33 pages contain no boundary, service-area map or district page, and the one service-area mention is a sentence on the library-card page with no map behind it. Its site served a transient verification interstitial on one fetch and real content on the others, so this is \"not published\", not \"unreachable\". A DERIVABLE ROUTE EXISTS AND IS WORTH RECORDING even though it is not a published boundary, because this repo already ships the pattern for Rock Island: the county's parcel layer carries a tax_code column across 24,320 parcels, and the Clerk's district-rates-by-taxcode report maps each code to its constituent districts — PDBV (Belvidere Park District) appears in 20 tax codes covering 11,861 parcels and LYBV (Ida Library) in 16 covering 8,167, so dissolving parcels by those sets yields a footprint from two county-published sources. The catch a builder must reconcile first: the parcel layer's tax-code domain and the Clerk's report are different vintages and disagree on about a dozen codes in each direction.",
       "wanted": "Park and library district boundaries as map data from the county, or the park district's map republished with coordinates on it."
     },
+      {
+        "id": "captcha-county-commissioner-contact",
+        "kind": "blocked",
+        "concept": "County board contact",
+        "area": "Union and Williamson counties",
+        "layer": "county",
+        "counties": [
+          "union",
+          "williamson"
+        ],
+        "summary": "Union's five commissioners and Williamson's three are named on the County card, with no phone number or e-mail address for any of them.",
+        "why": "Both counties' websites turn away automated visits behind a challenge page. The names come from the counties' own certified election results, which publish no contact details.",
+        "wanted": "A phone number or e-mail for each commissioner — from either county's own site read by a person, or from a clerk's directory a program is allowed to read.",
+        "blocker": "Recorded 2026-08-22, when both counties shipped on the at-large tier. BOTH SITES ANSWER HTTP 202 WITH A 169-BYTE BODY: a meta-refresh to /.well-known/sgcaptcha/, which is this project's recorded \"202 is never a document\" case (the same shape dekalbcounty.org moved behind around 2026-07-31). It is a challenge page rather than a flat deny, so a person's browser passes it and no automated client does; NOTHING HERE ATTEMPTS TO WORK AROUND IT, because a challenge is an access control and defeating one is not a sourcing method. What made the counties shippable anyway is that their ELECTION AUTHORITY publishes elsewhere: platinumelectionresults.com carries both, and a certified canvass names a winner but never a phone number. So the roster is complete and the contact column is empty, which is the honest split rather than a partial roster. THE NARROW ASK is one directory read by a human, or a clerk's reply. Union's Clerk is Stephanie Cox (scox@unioncountyil.gov) and Williamson's is Amanda Barnes (abarnes@williamsoncountyil.gov); neither has been written to about this. ONE CORROBORATION WORTH KEEPING: ISBE's County Officers Book, last updated 15 Dec 2025, names Max Miller as Union's board chair and Tim Atkisson as Williamson's, and BOTH are people these counties' own returns independently place on those boards. That column is not shipped — this repo measured it wrong in 16 of the 56 counties where a comparison was possible — but its agreeing with a separately derived roster is real evidence the returns route landed on the right people."
+      },
     {
       "id": "brown-precinct-geometry",
       "concept": "Voting precincts",
@@ -1509,20 +1524,6 @@ detail into `blocker`.
       "wanted": "Park and library district boundaries as map data — each of the eight districts holds its own, and none has been asked."
     },
     {
-      "id": "union-county-board",
-      "concept": "County board",
-      "area": "Union County",
-      "counties": [
-        "union"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Nothing is shown for Union County's board — not districts, not members.",
-      "why": "The county's website refuses every automated request, so nothing behind it can be read, and no map data for the county exists anywhere public.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. unioncountyil.gov answers 403 Forbidden to every request from this environment, on both the apex and www hosts — the same refuse-all posture Knox County's site takes, so nothing behind it could be characterized. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". A CENSUS MARKER, ADDED 2026-08-21 BY THE FRONTIER-WIDE SWEEP and recorded as CORROBORATION ONLY: TIGER's county-subdivision layer gives Union 20 subdivisions, every one coded LSADC 29 (precinct) rather than 44 (township), which is the census marker for a county NOT under township organization — the ordinary precondition in Illinois for a three-member Board of Commissioners elected countywide, and the same shape Massac and Alexander have. IT ESTABLISHES NON-TOWNSHIP ORGANIZATION AND NOTHING MORE: not a seat count, not at-large election. Gallatin is the counter-example kept beside it — a TOWNSHIP county whose five-member board is elected countywide all the same. Worth pairing with the caution above: ISBE's structure table reads Union as FIVE DISTRICTS while the census marks it non-township, and both can be true — a non-township county may adopt a board of 5 to 29 members by referendum. The two sources do not conflict; neither settles it.",
-      "wanted": "Whether the board is elected by district or county-wide — then either the district boundaries as map data, or the members' names from a county source."
-    },
-    {
       "id": "vermilion-county-website",
       "concept": "County board districts",
       "area": "Vermilion County",
@@ -1648,20 +1649,6 @@ detail into `blocker`.
       "why": "The county publishes unusually rich election mapping and no taxing district boundaries of any kind.",
       "blocker": "The county's 63 published datasets, re-checked 31 Jul 2026: election geography, precincts, polling places and board districts — and no taxing district boundaries of any kind.",
       "wanted": "Fire, park and library district boundaries on the county's map account."
-    },
-    {
-      "id": "williamson-county-board",
-      "concept": "County board",
-      "area": "Williamson County",
-      "counties": [
-        "williamson"
-      ],
-      "kind": "no-source",
-      "layer": "county-board",
-      "summary": "Nothing is shown for Williamson County's board — not districts, not members.",
-      "why": "The county's website refuses every automated request, so nothing behind it can be read, and no map data for the county exists anywhere public.",
-      "blocker": "Probed 4 Aug 2026 in the pass-13 detached-counties sweep: no self-hosted ArcGIS under ten hostname patterns across two service roots, and the ArcGIS Online catalogue names nothing county-keyed for it. williamsoncountyil.gov answers 403 Forbidden to every request from this environment, on both the apex and www hosts — the same refuse-all posture Knox County's site takes, so nothing behind it could be characterized. Whether the board is districted or elected county-wide was not determinable in this pass — determine it from a certified election document (EXPANSION_GUIDE §2.5 step 2) before any build: an at-large answer makes this a roster ask (the tranche-5 County-card path), not a geometry ask.  NOT YET ASKED: this records what the pass-13 probe could see, which Ogle proved on 2026-08-03 is a different question from what the county will send on request — its precinct shapefile arrived by return e-mail from a gap that read exactly like this one. See \"The ask ledger\". A CENSUS MARKER, ADDED 2026-08-21 BY THE FRONTIER-WIDE SWEEP and recorded as CORROBORATION ONLY: TIGER's county-subdivision layer gives Williamson 12 subdivisions, every one coded LSADC 29 (precinct) rather than 44 (township), which is the census marker for a county NOT under township organization — the ordinary precondition in Illinois for a three-member Board of Commissioners elected countywide, and the same shape Massac and Alexander have. IT ESTABLISHES NON-TOWNSHIP ORGANIZATION AND NOTHING MORE: not a seat count, not at-large election. Gallatin is the counter-example kept beside it — a TOWNSHIP county whose five-member board is elected countywide all the same. The county's site answers 202 to this client, so this marker is the only evidence of the county's board form and is not enough on its own.",
-      "wanted": "Whether the board is elected by district or county-wide — then either the district boundaries as map data, or the members' names from a county source."
     },
     {
       "id": "winnebago-special-districts",
@@ -2711,6 +2698,41 @@ office, and the `commissioner1@…` address the COUNTY assigns, which belongs to
 the seat rather than the person. The office block carries the courthouse address
 and no phone: the number on the letterhead is the CLERK's line, and printing it
 under "Board Office" would imply the board answers it.
+
+**A THIRD SOURCE KIND FOR THE COUNTY CARD: CERTIFIED RETURNS (2026-08-22).**
+Union and Williamson joined as the 81st and 82nd counties without a page being
+read at all. Both sit behind an **sgcaptcha** gate — their sites answer HTTP 202
+with a 169-byte meta-refresh to `/.well-known/sgcaptcha/`, the "202 is never a
+document" case this repo already records for DeKalb's. **Nothing attempts to
+defeat that challenge.** A captcha is an access control, and getting around one
+is not a sourcing method; it is the reason `EXPECTED_UNREACHABLE`-style records
+exist instead.
+
+What made both shippable is that a county's ELECTION AUTHORITY is a separate
+publisher: platinumelectionresults.com carries them, so each commissioner is
+whoever the county CERTIFIED as elected in the most recent general that seated
+their seat, with that election rendered on the row. Union's five seats are
+lettered A–E and its canvasses name the letter; Williamson's three carry no
+label at all, so its board is the winners of the three most recent generals,
+deduplicated by name — James "Jim" Marlo won in both 2018 and 2024, which is
+also what proves the six-year term.
+
+**The countywide test is a GATE in the builder, and it caught a stale STATE
+record.** An at-large county belongs on the County card precisely because every
+voter votes for every seat, so `RETURNS_ROSTERS` refuses to write unless each
+commissioner contest was counted in EVERY precinct the canvass reports for any
+contest. ISBE's 2007 county-board structure table calls Union "Single-Member"
+with five districts. Union's own returns count all five lettered seats in 20 of
+20 precincts, and Seat A polled 6,694 votes against the countywide State's
+Attorney's 6,738 in the same canvass — a fifth of a 17,244-person county would
+poll about 1,300. **The returns are current and the table is not**, which is the
+first measured counter-example to that table and a caution on every other row of
+it: cite it for structure, never against a county's own certified returns.
+
+What does NOT ship is contact: a canvass names a winner and never a phone
+number, and both counties' directories are behind the challenge. That absence is
+recorded as `captcha-county-commissioner-contact` rather than left to be
+inferred from an empty column.
 
 **The mechanism this needed, and the honesty cost it carries.** Every other
 county in that roster is scraped from a page each week. Edwards has no page, so
