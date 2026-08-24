@@ -1490,9 +1490,9 @@ detail into `blocker`.
       "kind": "no-source",
       "layer": "county-precinct",
       "summary": "Knox County's voting precincts aren't drawn, though its five board districts are.",
-      "why": "Knox has two election authorities and both have redrawn their precincts since the last census, so the census map no longer matches either.",
-      "blocker": "Measured 23 Aug 2026 by the audit of SERVED counties with no precinct answer and no record explaining it \u2014 the Cass/Greene/Scott/Moultrie shape, where a county goes unbuilt for weeks while every guard stays green. That audit found four such counties; three of them (Hancock, Shelby, Warren) turned out to be buildable from data already in this repo and shipped the same day. Knox is the one that is genuinely blocked, and here is what it is blocked ON. KNOX HAS TWO ELECTION AUTHORITIES and each has moved off the census fabric. Census 2020 drew 52 voting districts here \u2014 21 named GALESBURG CITY plus a bare GALESBURG, and 30 others \u2014 while the City of Galesburg's Board of Election Commissioners now runs 20 precincts and the County Clerk's canvasses have reported 31, 32, 31, 28 and 29 across six years. Neither current fabric is the census one, so no dissolve of census geometry can answer for either half; that is the same test Vermilion fails and the opposite of what Hancock, Shelby and Warren pass. HALF OF IT IS ALREADY PUBLISHED, and this is where a submission could start: Galesburg publishes its 20 precincts as a public ArcGIS feature service (services1.arcgis.com/T5ar9pn3YeFZ47Wh, layer \"Galesburg Voting Precincts\"), Query-capable, empty licenseInfo, carrying PRECINCT, WARD, COUNTY and POLL. Nothing here ships it, because a county-precinct layer that answers inside Galesburg and stays silent across the rural county would leave a reader unable to tell which situation they were in \u2014 worse than answering nowhere. THE COUNTY HALF IS THE MISSING PIECE. The county's adopted district map is a vector PDF on which the thick ORANGE line is the precinct boundary, so the linework exists as vector paths; but those are LINES, not the filled path OBJECTS the Jackson method reads, and polygonising a line network is a different and much weaker operation than reading closed shapes. The county's website refuses this client while three of its other hosts answer (see the knox build log), so the ask route is open and has not been used for precincts.",
-      "wanted": "A current precinct map as data from Knox County \u2014 the Clerk's 28-29 precincts outside Galesburg are the missing half, since the city already publishes its 20."
+      "why": "All but one of the county's precincts can be located today; the exception is Knox Township, which went from seven precincts to six and nothing published says which became which.",
+      "blocker": "Measured 23 Aug 2026 by the audit of SERVED counties with no precinct answer and no record explaining it. RE-MEASURED THE SAME DAY BY THE GBS SWEEP, AND TWO SENTENCES OF THE FIRST VERSION WERE WRONG — they are corrected here rather than quietly dropped. That version said \"both have moved off the census fabric\" and \"no dissolve of census geometry answers for either half\". Neither holds. THE CITY HALF NEEDS NO DISSOLVE AT ALL: Galesburg's Board of Election Commissioners publishes its 20 precincts as GEOMETRY, a public ArcGIS feature service (services1.arcgis.com/T5ar9pn3YeFZ47Wh, layer \"Galesburg Voting Precincts\") that is Query-capable with empty licenseInfo and carries PRECINCT, WARD, COUNTY and POLL. Nothing has to be inferred there; it ships as drawn. THE CLERK HALF IS 27 OF 28 RESOLVED. results.gbsvote.com carries Knox at l_id=14 with fifteen elections back to 2016, and its certified 17 March 2026 General Primary prints a precinct committeeperson contest per precinct per party — 56 contests naming 28 precincts, which is the Clerk's current fabric stated by the Clerk's own certified return. Against the census's 31 non-city voting districts: 26 match EXACTLY, and two more are NAMEABLE MERGES of the Warren kind — HENDERSON 1 + HENDERSON 2 into Henderson, INDIAN POINT 1 + INDIAN POINT 2 into Indian Point. 31 units minus those two collapses is 29 against 28. EXACTLY ONE UNIT HAS NO COUNTERPART AND IT IS THE WHOLE BLOCKER: the census carries KNOX 1 through KNOX 7 and the county now runs KNOX 1 through KNOX 6. Knox 7's territory went somewhere and nothing published says where — not into a merge a name can describe, because all six surviving Knox precincts keep their own numbers. That is the Marion shape at the scale of a single township, and it is fatal to the whole township rather than to one precinct: six current precincts drawn from seven census units with no mapping between them cannot be drawn at all. WHAT THAT LEAVES, said plainly: 42 of Knox's 48 precincts are drawable today (20 city polygons the city publishes, plus 22 clerk precincts from census units that match by name or by a nameable merge), and the six in Knox Township are not. Nothing ships, because a precinct layer that answers across the county and goes blank over one township would leave a reader unable to tell a gap from a boundary. THE ASK IS NOW ONE SENTENCE LONG and it has not been sent: how did Knox Township's seven precincts become six? The county's website refuses this client while three of its other hosts answer (see the knox build log), so the route is open. Answering that one question makes the whole county buildable from sources already public.",
+      "wanted": "How Knox Township's seven precincts became six \u2014 a map, a written description, or word of which old precinct went into which new one. That single fact makes the whole county buildable."
     },
     {
       "id": "vermilion-precinct-geometry",
@@ -5424,6 +5424,71 @@ Worth a lint if a third instance appears — until then the cost of the guard ex
 bug, but the bug is real and shipped twice in one day.
 
 
+### 2026-08-23, night: widening the GBS sweep — the inventory was right about counties and wrong about carriage, and Knox is one precinct from buildable
+
+The platinum widening produced two method rules — sweep ids past the state's county count, and
+sweep election slugs across years, because carriage is per-election. Neither had been applied to
+`results.gbsvote.com`. This pass applies both.
+
+**THE PARSE HAD TO BE FIXED FIRST, and the failure is the familiar one.** A first draft matched a
+loose `<State>: <County>` pattern over the page text and reported **624 counties across 700 ids**.
+It was reading the site's own STATE DROPDOWN — Illinois, Michigan, Wisconsin, Indiana — not the
+heading. Identity lives in `<h1 class="par_title">`, and nowhere else. *A clean parse is not a
+correct reading*, for the third time this week.
+
+**THE ID CEILING WAS REAL BUT NEARLY EMPTY.** Walking `l_id` 1-800 (against the recorded sweep's
+1-320) enumerates **341 locations**. One sits past the old ceiling — `l_id=364`, **"GBS County"**,
+which is the vendor's own demo location and not a county at all. So the ceiling was too low and
+raising it bought nothing but the certainty; record that as a *clean* negative rather than as a
+reason not to have checked.
+
+**THE INVENTORY WAS RIGHT ABOUT COUNTIES AND WRONG ABOUT CARRIAGE.** Of the 341 locations, only
+**15 carry any content**, and one of those is the demo:
+
+    Cass, Cumberland, Fulton, Greene, Grundy, Jasper, Johnson, Knox, Lee,
+    Morgan, Perry, Scott, Warren, Washington            (14 Illinois counties)
+
+The table said twenty. The six that are **listed but currently carry nothing** — Boone, Carroll,
+Kankakee, Pike, Whiteside, Winnebago — are all already served, so nothing was missed that would
+have shipped. What is worth fixing is the *claim*: **a location being enumerable is not the same as
+its carrying results**, and the table conflated them. Both facts are now separated below.
+
+**THE YIELD IS KNOX, and it comes from the per-election axis.** Knox sits at `l_id=14` with
+**fifteen elections back to 2016** — the deepest archive on the platform after Washington's
+sixteen. Its certified 17 March 2026 General Primary prints a precinct committeeperson contest per
+precinct per party: 56 contests naming **28 precincts**, which is the Clerk's current fabric stated
+in the Clerk's own certified return. Measured against the census:
+
+| | |
+|---|---|
+| exact name matches | **26** |
+| nameable merges (the Warren shape) | **2** — Henderson 1+2 → Henderson; Indian Point 1+2 → Indian Point |
+| unresolved | **1** — the census carries KNOX 1–7; the county runs KNOX 1–6 |
+
+Knox 7's territory went somewhere and nothing published says where — all six surviving Knox
+precincts keep their own numbers, so no name describes the change. That is the Marion shape at the
+scale of one township, and it is fatal to the *township* rather than to one precinct: six current
+precincts drawn from seven census units with no mapping cannot be drawn at all.
+
+**Its record's own first version is corrected by this**, not quietly amended. That version said
+"both have moved off the census fabric" and "no dissolve of census geometry answers for either
+half". Neither holds. The **city half needs no dissolve at all** — Galesburg publishes its 20
+precincts as *geometry*, and the earlier record read that service's field list without noticing it
+was shipping polygons. **42 of Knox's 48 precincts are drawable today** and the six in Knox
+Township are not.
+
+So the ask shrinks from "a current precinct map" to one sentence: **how did Knox Township's seven
+precincts become six?** It has not been sent.
+
+**What GBS is for, restated after the sweep.** It NAMES a county's precincts (one committeeperson
+contest each) and SIZES its districts ("N of N precincts reporting"). It never COMPOSES them —
+no per-precinct vote table, no drill-down. That bound is unchanged. What the widening adds is
+that its **archive is deep**: fifteen and sixteen elections for Knox and Washington, back a
+decade. A county whose *current* fabric is wanted should be read from its newest primary; a county
+whose fabric is suspected of having moved should be read across the archive, which is what turned
+Knox from "moved, unmeasurable" into "moved by exactly one precinct".
+
+
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker.
@@ -6089,7 +6154,7 @@ advance whether that county can be built.
 | `il-<county>.pollresults.net` / `.accessliberty.com` | 34 (+ Hardin, found by CONTENT after the list said no) | structured results; names which precincts vote in each contest |
 | `platinumelectionresults.com` | **23** — Adams, Alexander, Calhoun, Champaign, Clinton, DeKalb, Effingham, Fayette, Franklin, Gallatin, Hamilton, Hardin, Henry, Jefferson, Marion, Monroe, Pike, Pulaski, Randolph, St. Clair, Union, Wayne, Williamson (25 county ids — St. Clair answers at two) | per-precinct race pages — composes districts outright |
 | `electionstats.hancockcounty-il.gov` | 1 (county-run, not a vendor) | per-contest PER-PRECINCT tables |
-| `results.gbsvote.com` — *recorded in this guidebook's backlog 2026-08-20, first BUILT from 2026-08-21* | **20** — Boone, Carroll, Cass, Cumberland, Fulton, Greene, Grundy, Jasper, Johnson, Kankakee, Knox, Lee, Morgan, Perry, Pike, Scott, Warren, Washington, Whiteside, Winnebago (+ Parke and Elkhart, Indiana) | **SUMMARY canvasses only**: a per-contest precinct COUNT, plus one committeeperson contest per precinct |
+| `results.gbsvote.com` — *recorded 2026-08-20, first BUILT 2026-08-21, swept 1-800 and re-measured 2026-08-23* | **20 enumerable, 14 carrying content.** Carrying: Cass, Cumberland, Fulton, Greene, Grundy, Jasper, Johnson, Knox, Lee, Morgan, Perry, Scott, Warren, Washington. Listed but currently empty: Boone, Carroll, Kankakee, Pike, Whiteside, Winnebago (all already served). ENUMERABLE IS NOT CARRIED — the earlier count conflated them | **SUMMARY canvasses only**: a per-contest precinct COUNT, plus one committeeperson contest per precinct. Archive is DEEP — 15-16 elections back to 2016 for Knox and Washington |
 | **`results.enr.clarityelections.com/IL/<County>/`** | **12** — DuPage, Kankakee, Kendall, Lake, Macoupin, Madison, McHenry, McLean, Sangamon, Vermilion, Will, Winnebago | Clarity/Scytl; eleven of the twelve are already in the ring |
 
 **BOTH COUNTS IN THAT TABLE WERE WRONG UNTIL 2026-08-23, AND THEY WERE WRONG IN THE SAME
