@@ -56,15 +56,10 @@ python3 scripts/validate_card_links.py         # --offline lists the surface onl
 # Roster retention gate (fails when a field stops being published):
 python3 scripts/check_roster_retention.py --base origin/main
 
-# State-template gate (hermetic; also in smoke-test.yml): the state-expansion
-# template repo is GENERATED from this tree by scripts/build_state_template.py
-# (docs/EXPANSION_GUIDE.md §4.10). TEMPLATE:BEGIN/END span markers (a third
-# fence vocabulary beside ENGINE and GENERATED, inert comments here) classify
-# index.html/sw.js line by line; an unclassified new line, a substitution
-# anchor this repo edits away, or reference-fork vocabulary leaking into the
-# emitted template all fail HERE, in the PR that causes it. NEVER hand-edit
-# the template repo itself — edit this tree or templates/state/ and rebuild:
-python3 scripts/build_state_template.py --check
+# (The state-template gate was RETIRED in R2.1 — docs/DEV_PROCESS_ASSESSMENT.md.
+# The template repo is archived and a new state is now a folder in this repo,
+# not a generated sibling. The TEMPLATE:BEGIN/END markers still in index.html
+# and sw.js are inert leftovers; the composer (R2.2) reclaims them.)
 ```
 
 `smoke_test.mjs` is a single end-to-end script, not a framework — there are no "individual tests" to select. It asserts the app boots, registers all layers, classifies a known downtown point against ground truth (school board 12, IL Supreme Court 1, Board of Review 3), and degrades to an isolated error card when a source fails. `node_modules`/`package.json` are intentionally gitignored — this repo never commits build artifacts.
@@ -110,7 +105,7 @@ This app is one of several sibling metro forks (NYC at `ThursdaysFamous/District
 - Don't edit inside an ENGINE fence unless the change will be ported to every sibling fork — and port it as the **actual git diff**, never by re-describing the feature in a prompt (same prompt ≠ same code; that's exactly how the forks drifted before the fences existed).
 - Region-agnostic changes land in this repo first; siblings apply the diff verbatim.
 - Never inline a city-specific value in an ENGINE block — add a variable to the METRO config block instead.
-- Verify with `python3 scripts/check_engine_parity.py index.html` (fence lint; `validate_index.py` also runs it) or `--against <sibling path or URL> --strict` (byte comparison). Parity is maintained **by construction**: the engine ships as a hash-verified release artifact (`release-engine.yml` on `engine-v*` tags) that sibling forks splice in via automated bump PRs. A weekly Chicago-only workflow (`engine-parity.yml`) additionally compares the deployed sites as belt-and-suspenders and opens a tracking issue on drift; siblings do not carry it.
+- Verify with `python3 scripts/check_engine_parity.py index.html` (fence lint). **The engine RELEASE CHANNEL was retired in R2.1** (`docs/DEV_PROCESS_ASSESSMENT.md`): the fleet is consolidating into this one repo, so there is one copy of the engine and parity holds because there is nothing left to keep in sync. The deploy no longer splices a pinned bundle over the tree — the committed bytes are the deployed bytes, which also means a fence edit now actually reaches production instead of being overwritten at deploy time. Until NYC and SF are imported (R3) they simply stop receiving bumps.
 - Full protocol + the known reconciliation backlog: `docs/ENGINE_SYNC.md`.
 
 ## Data pipeline
@@ -129,7 +124,7 @@ Most layers fetch live public APIs at runtime (Chicago Data Portal / Socrata, CP
 - **`BOT_PR_TOKEN` (repo secret) — why every roster PR runs CI.** A PR opened with the default `GITHUB_TOKEN` fires **no** workflows: GitHub suppresses recursive triggers, so the smoke test never ran on a bot PR and the PR page showed zero checks. All 13 PR-opening workflows now check out and open their PR as `BOT_PR_TOKEN` instead. It needs Contents **read/write** (push the `bot/*` branch) + Pull requests **read/write** (open it) on this repo — the same shape as `ENGINE_DISPATCH_TOKEN`. Every reference is `${{ secrets.BOT_PR_TOKEN || github.token }}`, so an absent or expired secret degrades to the old behaviour (a PR with no checks) rather than breaking the refresh — which also means **a silently expired PAT looks exactly like the bug it fixed**: if bot PRs stop showing checks, check the token before anything else. Data is still gated either way, because each workflow runs `validate_index.py` on the rebuilt files before opening the PR; the PAT is what makes that visible on the PR itself.
 - `validate-sources.yml` — monthly source-freshness check. Runs `scripts/validate_sources.py` **and `scripts/validate_card_links.py`**, folding both reports into one issue; on any WARN/FAIL (e.g. a Socrata dataset superseded by a newer-year edition, or a shapefile source gone unreachable) it **opens or updates a single tracking issue** rather than editing anything — the job stays green, the issue is the signal. Same "surface for a human, don't auto-apply" convention as the roster PRs. The issue title is matched to update in place, so it stays `Layer source drift detected — review needed` even though it now carries link findings too — renaming it would orphan the open issue.
 - `fleet-status.yml` — weekly (Mon 15:00 UTC) fleet aggregator, **Chicago repo only**: `scripts/fleet_status.py` reads `metros.json`, checks every fork's deploy/engine-pin/roster state, diffs each fork's layer roster against `docs/DATA_LAYER_GUIDEBOOK.md`'s coverage map, and diffs each fork's shipped `data/app/coverage-gaps.json` against the guidebook's gaps block. That last one is the **only** gate on sibling gap drift: the guidebook lives here, so a sibling's file is generated here and lands there via a bump PR — it has no local `--check`. It also diffs every fork's `docs/ENGINE_SYNC.md` against CHI's and checks that file's ENGINE block inventory against the fences actually present in `index.html`/`sw.js` — the file that says "the SAME copy ships in every fork" had drifted 164 lines with an inventory naming 50 blocks against 53 real fences, because `check_engine_parity.py` compares fenced CODE and nothing compared the document. Doc drift is reported in BOTH directions: a fork holding lines CHI lacks says "reconcile both ways", never "overwrite". Reports on a single standing issue.
-- Engine release machinery — `release-engine.yml` (publishes a hash-verified engine artifact on `engine-v*` tags and fans out bump PRs to the sibling forks), `create-engine-tag.yml` (tag helper), `engine-parity.yml` (weekly deployed-site comparison, belt-and-suspenders; Chicago only).
+- Engine release machinery — **RETIRED in R2.1** (`release-engine.yml`, `create-engine-tag.yml`, `engine-parity.yml`, `update-state-template.yml` deleted along with `apply_engine.py`, `build_engine_artifact.py`, `build_state_template.py`, `bootstrap_state.py`, `check_template_placeholders.py`, `templates/state/` and `engine.lock.json`). One repo, one copy of the engine, no fan-out.
 - `deploy-pages.yml` — publishes `main` to GitHub Pages (chidistricts.com).
 
 ## Conventions

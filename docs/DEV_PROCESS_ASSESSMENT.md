@@ -200,6 +200,27 @@ R5.
 
 ## Stage log
 
+- **R2.1 — SHIPPED (2026-08-24): the template and engine-release channels retired.**
+  The operator archived the Template and WI repos and confirmed the NYC/SF consolidation, which
+  made two pieces of machinery not merely redundant but actively wrong: the template gate and
+  its weekly push now target an archived repo, and **the Pages deploy was still splicing a
+  hash-pinned engine bundle over the tree**, so any fence edit made in this repo would have been
+  silently overwritten at deploy time — the exact trap the composer stage would have walked into.
+  Deleted: `release-engine.yml`, `create-engine-tag.yml`, `engine-parity.yml`,
+  `update-state-template.yml`, `scripts/{apply_engine,build_engine_artifact,build_state_template,bootstrap_state,check_template_placeholders}.py`,
+  `templates/state/` and `engine.lock.json` (33 files). `smoke-test.yml` loses the template gate;
+  `deploy-pages.yml` loses the fetch/verify/splice pair and now runs the merge gate and fence
+  lint **on exactly the bytes being published**. `check_engine_parity.py` stays as the fence
+  lint. NYC and SF simply stop receiving bumps until R3 imports them — no breakage, they freeze.
+  **A finding that changed the R2.3 plan before it was written:** the audit of all 72 workflows
+  found 60 roster refreshes gate their PR step on `git diff --quiet -- data/app/`, which through
+  a planned `data → il/data` symlink would exit 0 against an index holding `il/data/app/...` —
+  every refresh would go **green while silently never opening a PR again**, a failure no gate
+  and no health check would catch. The symlink shim is abandoned; the `/il/` move rewrites the
+  62 workflows' paths explicitly. Verified: fence lint, `validate_workflow_deps.py` (247 entry
+  points), the 19 generated regions, `validate_index.py` and the preview freshness check all
+  green after the deletion.
+
 - **R1 — SHIPPED (2026-08-24).** The worksheet gained an opt-in `brand` key (app name,
   tagline, theme color, favicon, head/OG/twitter strings, analytics — GA id + hostname gate +
   GoatCounter endpoint) and the generator now owns seven brand-bearing GENERATED regions:
