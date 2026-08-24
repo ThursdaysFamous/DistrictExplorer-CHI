@@ -250,6 +250,19 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   which is why `scripts/landing_test.mjs` asserts it in a real browser BOTH ways — an app link
   forwards, a plain visit and an unrelated campaign query do not — and runs in CI beside the
   three instance smoke tests.
+  **THAT TEST'S FIRST DRAFT PASSED LOCALLY FOR THE WORST POSSIBLE REASON, AND CI CAUGHT IT.**
+  It compared the post-forward URL byte-for-byte against what was sent, which is not a test of
+  the guard at all: once `/il/` is reached the APP boots and calls `syncUrlHash()`, rewriting the
+  hash into its own canonical form — 5-decimal coordinates, an appended `&zoom=`. The comparison
+  held locally only because this sandbox cannot reach the Leaflet CDN, so the app never booted
+  and never rewrote anything. CI reached the CDN, the app booted, and two checks failed **on a
+  guard that was working perfectly.** The sandbox's known and documented limitation had turned
+  into a silent source of false confidence — the same shape as the three path bugs above, a check
+  that is green because something upstream of it never ran. The fix is to STUB `/il/` so neither
+  the app nor the network is in the measurement, and **the stub is itself asserted** (the page
+  title must be the stub's) rather than assumed, because a route pattern that quietly stopped
+  matching would put the app right back in. Proven against both realistic regressions: a guard
+  that drops the hash fails three checks, one that stops recognising permalinks fails two.
   **A third instance of the R2.3 path class turned up on the way.** `build_fonts.py` still aimed
   at a repo-root `fonts/` that nothing read, having been correct only while the Illinois app WAS
   the root; running it would have left `il/fonts/` untouched. Nothing caught it because it is an

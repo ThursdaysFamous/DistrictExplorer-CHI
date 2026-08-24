@@ -68,42 +68,43 @@ try {
     await ctx.close();
   }
 
-  // --- 2. an old PERMALINK still reaches the app ---------------------------
-  {
+  // --- 2-4. old app links forward, carrying query AND hash ----------------
+  //
+  // /il/ IS STUBBED, and that is the point of this block. The guard's whole job
+  // is to hand the instance the exact query+hash it was given; what the app then
+  // does with that hash is the app's business, and it does plenty — booting, it
+  // calls syncUrlHash() and rewrites location.hash into its own canonical form
+  // (5-decimal coordinates, an appended &zoom=). Asserting the post-boot URL
+  // therefore tests the APP's normalisation, not the guard.
+  //
+  // The first draft did exactly that and passed locally for the worst possible
+  // reason: the sandbox cannot reach the Leaflet CDN, so the app never booted,
+  // never rewrote the hash, and the byte comparison held. CI reached the CDN,
+  // the app booted, and two checks failed on a guard that was working perfectly.
+  // Stubbing the destination removes both the app and the network from the
+  // measurement, so this asserts one thing and asserts it the same way
+  // everywhere.
+  for (const [name, query, hash] of [
+    ["permalink", "", "#point=41.88250,-87.62850&layers=ward,school-board"],
+    ["embed url", "?utm_source=embed&utm_medium=iframe", "#point=41.99,-87.66"],
+    ["share link", "?utm_source=share&utm_medium=link", "#point=41.9,-87.6"],
+    ["bare campaign tag", "?utm_source=share&utm_medium=link", ""],
+  ]) {
     const ctx = await browser.newContext({ serviceWorkers: "block" });
     const page = await ctx.newPage();
-    const hash = "#point=41.88250,-87.62850&layers=ward,school-board";
-    await page.goto(BASE + "/" + hash, { waitUntil: "domcontentloaded" });
-    await page.waitForTimeout(600);
+    await page.route("**/il/**", (r) =>
+      r.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>il stub</title>" }));
+    await page.goto(BASE + "/" + query + hash, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(400);
     const u = new URL(page.url());
-    check("permalink forwards to /il/", u.pathname === "/il/", page.url());
-    check("permalink hash survives the forward", u.hash === hash, u.hash);
-    await ctx.close();
-  }
-
-  // --- 3. an old EMBED url (query AND hash) still reaches the app ----------
-  {
-    const ctx = await browser.newContext({ serviceWorkers: "block" });
-    const page = await ctx.newPage();
-    const q = "?utm_source=embed&utm_medium=iframe";
-    const hash = "#point=41.99,-87.66";
-    await page.goto(BASE + "/" + q + hash, { waitUntil: "domcontentloaded" });
-    await page.waitForTimeout(600);
-    const u = new URL(page.url());
-    check("embed url forwards to /il/", u.pathname === "/il/", page.url());
-    check("embed QUERY survives the forward", u.search === q, u.search);
-    check("embed HASH survives the forward", u.hash === hash, u.hash);
-    await ctx.close();
-  }
-
-  // --- 4. a share link forwards too ---------------------------------------
-  {
-    const ctx = await browser.newContext({ serviceWorkers: "block" });
-    const page = await ctx.newPage();
-    await page.goto(BASE + "/?utm_source=share&utm_medium=link#point=41.9,-87.6",
-      { waitUntil: "domcontentloaded" });
-    await page.waitForTimeout(600);
-    check("share link forwards to /il/", new URL(page.url()).pathname === "/il/", page.url());
+    // Assert the stub actually served, never assume it: if the route pattern
+    // stopped matching, the REAL app would load and rewrite the hash, and this
+    // block would quietly go back to testing the app's normalisation.
+    const title = await page.title();
+    check(`${name} lands on the stub (not the live app)`, title === "il stub", title);
+    check(`${name} forwards to /il/`, u.pathname === "/il/", page.url());
+    check(`${name} keeps its query verbatim`, u.search === query, JSON.stringify(u.search));
+    check(`${name} keeps its hash verbatim`, u.hash === hash, JSON.stringify(u.hash));
     await ctx.close();
   }
 
