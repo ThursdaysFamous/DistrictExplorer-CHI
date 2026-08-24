@@ -480,11 +480,32 @@ def render_brand_palette(w):
 
 
 def render_masthead_brand(w):
+    """The masthead wordmark and subtitle.
+
+    When the worksheet carries product_name + instance_tag the wordmark is the
+    BRAND form — one indivisible lowercase word plus the instance tag, the tag
+    being a control that opens the fleet switcher ("districtry / il"). Without
+    those two keys it stays the historical single title-text span, which is what
+    keeps a fork that has not rebranded byte-identical here: SF and NYC carry no
+    brand block at all, so they never reach the first branch.
+    """
     b = w["brand"]
+    e = html_esc
+    if b.get("product_name") and b.get("instance_tag"):
+        wordmark = (
+            '        <span class="title-text">%s <span class="dst-metro-switch">'
+            '<button type="button" class="title-metro dst-metro-btn" aria-expanded="false" '
+            'aria-haspopup="true" aria-label="%s — switch explorer">/ %s'
+            '<span class="dst-metro-caret" aria-hidden="true">&#9662;</span></button>'
+            '<span class="dst-metro-menu" role="menu"></span></span></span>'
+            % (e(b["product_name"]), e(b["app_name"]), e(b["instance_tag"]))
+        )
+    else:
+        wordmark = '        <span class="title-text">%s</span>' % e(b["app_name"])
     return "\n".join([
-        '        <span class="title-text">%s</span>' % html_esc(b["app_name"]),
+        wordmark,
         "      </span>",
-        "      <small>%s</small>" % html_esc(b["tagline"]),
+        "      <small>%s</small>" % e(b["tagline"]),
     ])
 
 

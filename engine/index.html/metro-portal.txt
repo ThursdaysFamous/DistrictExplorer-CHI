@@ -120,11 +120,11 @@
     var p = ensureMetroPortal();
     if (!p.root.hidden) return; // one portal at a time
     var url = metroPortalUrl(metro, opts.point || null);
-    var explorerName = metro.label + " District Explorer";
+    var explorerName = siblingDisplayName(metro);
     p.emoji.textContent = metro.emoji || "🧭";
     p.title.textContent = opts.title || "Whoa — this is " + metro.label + "!";
     p.note.textContent = opts.note || "You've wandered a long way from " + METRO_NAME +
-      ". Good news: " + metro.label + " has a District Explorer of its own.";
+      ". Good news: " + metro.label + " has one of its own.";
     p.go.textContent = "Take me there now";
     p.stay.textContent = "Stay in " + METRO_NAME;
 

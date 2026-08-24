@@ -654,8 +654,11 @@ repeating the work:** the ISBE pair (`isbe_county_officers_scraper.py` +
 `build_county_board_chairs.py`) is a reproducible negative measurement — its
 output is proof ISBE's chair data is 29% wrong, "kept reproducible so the
 claim can be re-tested rather than re-argued" — and is not dead code;
-`build_districtry_preview.py` + `build_og_image.mjs` belong to the Districtry
-product track and are allowed-stale by their own design; the seal and font
+`build_og_image.mjs` belongs to the Districtry
+product track and is allowed-stale by its own design (`build_districtry_preview.py`
+sat beside it until R4.2 ADOPTED the skin it previewed, at which point a
+2,440-line builder and its 27,331-line output were deleted — a preview earns its
+keep until the thing it previews exists); the seal and font
 asset generators (`render_seal_svg.mjs`, `convert_raster_seal.py`,
 `build_fonts.py`) are the reproducibility recipes for committed binary
 assets; and `validate_workflow_deps.py` vs `check_roster_workflow_health.py`

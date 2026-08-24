@@ -285,11 +285,44 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   adding a tracker to a new surface is not a build-step decision), and no coverage map (it would
   need Leaflet plus one instance's boundary data, and a fleet page loading Illinois geometry
   tells a lie about the other two).
-  **Still open — R4 part 2, the larger half:** the instances have NOT adopted the skin. That is
-  the 2,440-line `build_districtry_preview.py` and its 27,331-line generated preview becoming the
-  real thing — 43 exactly-once transforms, a 966-line CSS override island, ~669 lines of injected
-  JS, and a fenced engine function rebound at runtime, all of which must land as ordinary
-  worksheet/brand/engine edits before that machinery can retire.
+- **R4 (part 2) — SHIPPED (2026-08-24): the app wears the skin, dark mode ships, and the
+  redesign stops being built twice.** `build_districtry_preview.py` (2,440 lines) and
+  `districtry-app.html` (27,331 lines) are DELETED. This record's sharpest complaint was that the
+  redesign was being done twice because `index.html` could not be parameterised; it is done once
+  now, and the second copy is gone.
+  **The adoption was measured before it was attempted.** Diffing the app against the preview put
+  36 of 39 hunks OUTSIDE every ENGINE fence, which is what made the skin metro-local: SF and NYC
+  compose the same engine and are untouched, and both smoke tests pass unchanged. Of the three
+  fence-touching hunks, two were brand literals that had no business being in an engine block at
+  all, and became data.
+  **THE SEVEN FENCED STRINGS UNLOCKED, and that is the assessment's own prediction closing.**
+  They composed the product name inline as `METRO_NAME + " District Explorer"`. A new
+  `brand-names` engine block reads `METRO_BRAND` instead, typeof-guarded — which is not defensive
+  habit but the mechanism: SF and NYC carry no brand block, so every one of the seven resolves to
+  exactly the bytes it did before. R1 shipped `METRO_BRAND` unconsumed and the schema said
+  "Optional until a rebrand consumes it." Proven per instance through the UI, since the embed
+  snippet's `title=` attribute IS the resolved name: il "Districtry Illinois", sf "San Francisco
+  District Explorer", nyc "New York City District Explorer".
+  **What the preview got wrong for production, and only adoption could find.** Its CSS hides the
+  document footer — where three elements the boot script binds BY ID live — so taking the CSS
+  without the relocation transform would have retired the verified date, the feedback button and
+  the fleet links in one rule, silently, with every gate green. And it hides the in-page FAQ in
+  favour of a page that never shipped and referenced assets that do not resolve from `il/`; that
+  hide is not adopted, because the in-page FAQ is what is live and indexed today.
+  **Dark mode is the one function the redesign ADDS**, and its map palette is DERIVED — an
+  order-preserving OKLCH remap, not a contrast lift, which was measured and rejected because it
+  collapses the categorical encoding. The preview inlined the computed result; that would have
+  been right on the day and wrong the day a layer colour changes, so it ships as
+  `build_dark_map_palette.py` over a GENERATED region with a `--check`. **Its smoke gate earned
+  itself immediately**: the assertion that a live overlay repaints from the derived palette FAILED
+  on first run (`#2E8C6A -> #2E8C6A`) because the theme-aware colour getters sit in a different
+  hunk than the controller. Without it the app ships looking dark with every district boundary
+  still light. It now reads `#2E8C6A -> #62DAAC`.
+  Verified: full static battery, all three instances' `validate_index`, all four browser surfaces,
+  the marker hierarchy in both directions (Chicago draws its star, Kankakee draws the circle), the
+  fleet switch filling from `METRO_EXPLORERS`, and the relocated footer elements still binding.
+  **Deferred, not abandoned:** the FAQ's own page, and SF/NYC adopting the skin — which is R5's
+  business, since they are not published until their domains move.
 
 - **R3 (part 2) — SHIPPED (2026-08-24): the tooling reconciliation, and the two defects it
   exposed.** Part 1 unified the engine; this unifies what runs *around* it. `generate_metro_files.py`

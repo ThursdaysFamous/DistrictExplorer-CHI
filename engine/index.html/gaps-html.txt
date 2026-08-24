@@ -1,1 +1,1 @@
-      <button type="button" id="gaps-btn" class="footer-link-btn">🧩 What data is missing?</button>
+      <button type="button" id="gaps-btn" class="footer-link-btn">What data is missing?</button>

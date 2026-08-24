@@ -66,6 +66,34 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
 
 ## Stage log
 
+- **STAGE B IS ADOPTED — the skin is the app (2026-08-24, R4.2).** The preview and its builder
+  are DELETED: `scripts/build_districtry_preview.py` (2,440 lines) and `districtry-app.html`
+  (27,331 lines). A preview earns its keep until the thing it previews exists, and it did — every
+  design decision recorded below was reviewed there before it shipped here.
+  **What adoption changed about the plan.** The preview's 43 exactly-once transforms did not port
+  one-for-one. The head hunks were almost entirely preview *de*-productionisation (analytics
+  stripped, `noindex`, OG and JSON-LD removed) and were skipped. The palette became worksheet
+  data rather than island CSS, because R1's `brand-palette` region already emitted those four
+  accents — restating them would have been two copies of one fact. Fonts self-host through
+  `build_fonts.py`, which is what this document always said production would do, and the
+  metric-matched fallback had to be RECALIBRATED: those four percentages are tuned to one
+  typeface, and carrying Inter's forward would have left an Arial shaped like Inter standing in
+  for Barlow. The dark map palette became a generator with a `--check` instead of an inlined
+  literal, because a derived table with a live source must not be a second copy of it.
+  **Two things the preview got wrong for production, found by adopting it.** Its CSS hides the
+  document footer, where three elements the boot script binds by id live — the verified date, the
+  feedback button and the fleet links — so adopting the CSS without the relocation transform
+  would have retired all three in one rule while every gate stayed green. And it hides the
+  in-page FAQ in favour of a `districtry-faq.html` that never shipped, still linked the preview,
+  and referenced assets that do not resolve from `il/`; the in-page FAQ is what is live and
+  indexed today, so that hide is NOT adopted. Giving the FAQ its own page remains the better end
+  state — deferred, not abandoned.
+  **Dark mode shipped with it** rather than waiting for a separate approval, at the operator's
+  direction. It is gated in CI by four smoke assertions, and the one that checks a live overlay
+  repainting from the derived palette FAILED on first run and caught a real omission — the
+  theme-aware colour getters sit in a different hunk than the controller. Without it the app
+  would have shipped looking dark while every district boundary kept its light colour.
+
 - **Stage A — SHIPPED (this change):** `/districtry/` microsite: landing page + the five design
   canvases (noindexed) + tokens + icons + OG card + manifest/head-snippet for later adoption.
   Purely additive — zero existing tracked files modified. Two package fixes applied: header stat

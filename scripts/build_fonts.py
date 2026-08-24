@@ -56,8 +56,12 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TARGETS = {
     "il": {
         "fonts_dir": "il/fonts",
-        "families": ("?family=Big+Shoulders+Display:wght@600;800;900"
-                     "&family=Inter:wght@400;500;600;700"
+        # Barlow Condensed (display) + Barlow (body) replaced Big Shoulders
+        # Display + Inter when the app adopted the Districtry skin (R4.2). The
+        # MONO is unchanged and deliberately so: it sets coordinates and ids,
+        # where IBM Plex Mono's disambiguated zero is doing real work.
+        "families": ("?family=Barlow+Condensed:wght@400;600;700"
+                     "&family=Barlow:wght@400;500;600;700"
                      "&family=IBM+Plex+Mono:wght@400;500"),
     },
     "landing": {

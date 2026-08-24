@@ -24,6 +24,12 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://chidistricts.com/il/faq.html</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://chidistricts.com/il/sources.html</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>

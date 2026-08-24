@@ -21,13 +21,13 @@
   })();
 </script>
 
-<title>Which Chicago school board district am I in? — Chicago District Explorer</title>
+<title>Which Chicago school board district am I in? — Districtry Illinois</title>
 <meta name="description" content="Find your elected Chicago school board district by address or ZIP — the district number, its sub-district name, and the Board of Education member who holds your seat." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://chidistricts.com/il/school-board.html" />
 
 <meta property="og:type" content="article" />
-<meta property="og:site_name" content="Chicago District Explorer" />
+<meta property="og:site_name" content="Districtry Illinois" />
 <meta property="og:title" content="Which Chicago school board district am I in?" />
 <meta property="og:description" content="Find your elected Chicago school board district by address or ZIP — the district number, its sub-district name, and your Board of Education member." />
 <meta property="og:url" content="https://chidistricts.com/il/school-board.html" />
@@ -47,14 +47,14 @@
   "@type": "WebPage",
   "@id": "https://chidistricts.com/il/school-board.html",
   "url": "https://chidistricts.com/il/school-board.html",
-  "name": "Which Chicago school board district am I in? — Chicago District Explorer",
+  "name": "Which Chicago school board district am I in? — Districtry Illinois",
   "description": "Find your elected Chicago school board district by address or ZIP — the district number, its sub-district name, and the Board of Education member who holds your seat.",
   "inLanguage": "en-US",
   "isPartOf": { "@id": "https://chidistricts.com/il/#website" },
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Chicago District Explorer", "item": "https://chidistricts.com/il/" },
+      { "@type": "ListItem", "position": 1, "name": "Districtry Illinois", "item": "https://chidistricts.com/il/" },
       { "@type": "ListItem", "position": 2, "name": "Which school board district am I in?" }
     ]
   }
@@ -62,59 +62,74 @@
 </script>
 
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0b3d91">
+<meta name="theme-color" content="#6d3fd1">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2341B6E6'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23C8102E'/%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2096%2096%22%3E%3Cpolygon%20points%3D%2216%2C20%2060%2C8%2090%2C34%2084%2C74%2046%2C90%2012%2C64%22%20fill%3D%22%236d3fd1%22%3E%3C%2Fpolygon%3E%3Ccircle%20cx%3D%2242%22%20cy%3D%2258%22%20r%3D%2215%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2210%22%3E%3C%2Fcircle%3E%3Cline%20x1%3D%2257%22%20y1%3D%2220%22%20x2%3D%2257%22%20y2%3D%2277.5%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2210%22%3E%3C%2Fline%3E%3C%2Fsvg%3E" />
 
+<script>
+  /* Same key and same precedence as the app's own boot, so the theme a reader
+     chose on the map carries to every sub-page — and runs before first paint,
+     so there is no white flash on the way into dark. */
+  (function () {
+    var t = "light";
+    try {
+      var stored = localStorage.getItem("districtry-theme");
+      if (stored === "dark" || stored === "light") t = stored;
+      else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) t = "dark";
+    } catch (e) { /* blocked storage (private mode) — light is the safe ground */ }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 <style>
+.districtry-mark { width: 34px; height: 34px; flex: 0 0 auto; }
 /* Self-hosted subset of index.html's faces — only the weights this page uses
    (display 900, body 400/600), same files, same unicode-ranges. */
 @font-face {
-  font-family: 'Big Shoulders Display';
+  font-family: 'Barlow Condensed';
   font-style: normal;
-  font-weight: 900;
+  font-weight: 700;
   font-display: swap;
-  src: url(fonts/big-shoulders-display-latin-ext.woff2) format('woff2');
+  src: url(fonts/barlow-condensed-700-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Big Shoulders Display';
+  font-family: 'Barlow Condensed';
   font-style: normal;
-  font-weight: 900;
+  font-weight: 700;
   font-display: swap;
-  src: url(fonts/big-shoulders-display-latin.woff2) format('woff2');
+  src: url(fonts/barlow-condensed-700-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  src: url(fonts/barlow-400-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(fonts/inter-latin.woff2) format('woff2');
+  src: url(fonts/barlow-400-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  src: url(fonts/barlow-600-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(fonts/inter-latin.woff2) format('woff2');
+  src: url(fonts/barlow-600-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -122,19 +137,36 @@
    is deliberately standalone — no shared stylesheet, no build step — so it
    restates the tokens rather than importing them. */
 :root {
-  --accent: #41B6E6;
-  --accent-deep: #0B5394;
-  --accent-warm: #C8102E;
-  --ink: #14181C;
-  --slate: #55626C;
-  --slate-soft: #87929B;
-  --paper: #F4F7F9;
-  --panel: #FFFFFF;
-  --line: #D9E1E7;
-  --line-strong: #B9C6CE;
-  --font-display: 'Big Shoulders Display', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --accent: #6d3fd1;
+  --accent-deep: #5730ab;
+  --accent-warm: #b0316e;
+  --ink: #17161c;
+  --slate: #4b5563;
+  --slate-soft: #9aa3b2;
+  --paper: #f4f2ee;
+  --panel: #ffffff;
+  --line: #e8e7ef;
+  --line-strong: #c9c5d4;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
   --focus-ring: 3px solid var(--accent-warm);
+}
+/* Dark tier, from districtry/tokens/districtry.tokens.css. These pages are
+   reached FROM the app, which has a theme toggle — a reader who picked dark and
+   clicked "Common questions" should not be handed a white page. The boot script
+   in <head> sets data-theme before first paint from the same
+   localStorage key the app writes, so the choice carries across pages. */
+:root[data-theme="dark"] {
+  --accent: #a78bfa;
+  --accent-deep: #c4b5fd;
+  --accent-warm: #fd88b8;
+  --ink: #ece9f4;
+  --slate: #b6b1c4;
+  --slate-soft: #9a94ab;
+  --paper: #15131b;
+  --panel: #201d29;
+  --line: rgba(236, 233, 244, 0.1);
+  --line-strong: rgba(236, 233, 244, 0.22);
 }
 
 * { box-sizing: border-box; }
@@ -192,7 +224,7 @@ h1.title { margin: 0; min-width: 0; }
 .masthead-star { width: 34px; height: 34px; flex: none; }
 .title-text {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   font-size: clamp(28px, 4vw, 40px);
   letter-spacing: 0.01em;
   line-height: 0.95;
@@ -266,7 +298,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 10px; }
 section { margin: 0 0 34px; }
 h2 {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 24px;
   letter-spacing: 0.01em;
@@ -365,9 +397,7 @@ footer.site-footer a { color: var(--accent); }
   <div class="masthead-inner">
     <h1 class="title">
       <span class="title-row">
-        <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
-          <polygon fill="var(--accent-warm)" points="50,3 57.6,39.2 92.9,27.5 65,50 92.9,72.5 57.6,60.8 50,97 42.4,60.8 7.1,72.5 35,50 7.1,27.5 42.4,39.2" />
-        </svg>
+        <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">Which school board district am I in?</span>
       </span>
       <small>Chicago's elected Board of Education districts — free lookup by address, ZIP, or a tap on the map.</small>
@@ -431,7 +461,7 @@ footer.site-footer a { color: var(--accent); }
 <div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
   <div class="footer-inner">
-    <p>The Chicago District Explorer answers one question: which civic districts contain the point
+    <p>Districtry Illinois answers one question: which civic districts contain the point
       you picked, and who represents you there. It reads public data, cites its sources, and never
       guesses an officeholder.</p>
     <div class="footer-links">

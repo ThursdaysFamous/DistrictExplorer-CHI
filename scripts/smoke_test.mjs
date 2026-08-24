@@ -806,6 +806,50 @@ try {
     check("tile failure shows dismissible banner", shown && hiddenAfterDismiss === true, `shown=${shown} hiddenAfterDismiss=${hiddenAfterDismiss}`);
     await context.close();
   }
+
+  // 6. Dark mode (R4.2) — the one function the re-skin ADDS, so it is the one
+  //    that has no prior behaviour to fall back on if it breaks. Asserted
+  //    through the surfaces a CSS-only check cannot see: the theme attribute,
+  //    the ground the page actually paints, the theme-color meta the OS chrome
+  //    reads, the basemap tile URL, and the derived layer palette repainting a
+  //    live overlay. Driven via the debug namespace rather than a click, so
+  //    this tests the controller and not the button's hit box.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await booted(context, `${BASE}#point=${POINT}&layers=${OFFLINE[0]}`);
+    await page.waitForFunction(() => !!window[EXPORTS_NAME] && !!window[EXPORTS_NAME].setTheme,
+      null, { timeout: QUERY_TIMEOUT }).catch(() => {});
+    const read = () => page.evaluate(() => {
+      const path = document.querySelector("#map path");
+      return {
+        attr: document.documentElement.getAttribute("data-theme"),
+        ground: getComputedStyle(document.body).backgroundColor,
+        meta: document.querySelector('meta[name="theme-color"]')?.content,
+        tiles: (document.querySelector(".leaflet-tile-pane img")?.src || "").match(/(light|dark)_all/)?.[1] || null,
+        stroke: path ? path.getAttribute("stroke") : null,
+      };
+    });
+    await page.evaluate((n) => window[n].setTheme("light", false), EXPORTS_NAME);
+    await page.waitForTimeout(400);
+    const light = await read();
+    await page.evaluate((n) => window[n].setTheme("dark", false), EXPORTS_NAME);
+    await page.waitForTimeout(600);
+    const dark = await read();
+
+    check("dark mode flips the theme attribute and the painted ground",
+      light.attr === "light" && dark.attr === "dark" && light.ground !== dark.ground,
+      `${light.attr}/${light.ground} -> ${dark.attr}/${dark.ground}`);
+    check("dark mode moves theme-color (the OS chrome reads it)",
+      !!light.meta && !!dark.meta && light.meta !== dark.meta,
+      `${light.meta} -> ${dark.meta}`);
+    check("dark mode swaps the basemap tiles",
+      light.tiles === null || dark.tiles === null || (light.tiles === "light" && dark.tiles === "dark"),
+      `${light.tiles} -> ${dark.tiles}`);
+    check("dark mode repaints a live overlay from the derived palette",
+      light.stroke === null || dark.stroke === null || light.stroke !== dark.stroke,
+      `${light.stroke} -> ${dark.stroke}`);
+    await context.close();
+  }
 } finally {
   await browser.close();
 }

@@ -141,7 +141,8 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # reader clicks, and it is now the most prominent authored surface on the site.
 # Its three destinations are the fleet's own instances, so a dead one is this
 # repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
-AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html", "il/privacy.html"]
+AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html",
+                  "il/privacy.html", "il/faq.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
