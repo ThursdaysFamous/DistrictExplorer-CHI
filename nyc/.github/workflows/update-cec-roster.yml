@@ -1,0 +1,63 @@
+name: Update CEC roster
+
+# Weekly refresh of data/app/cec-members.json (Community Education Council
+# members) from schools.nyc.gov via Playwright (WAF-sensitive, §6c). Opens a PR,
+# never commits to main. The builder keeps the placeholder until the scrape
+# reliably resolves the councils, so a short scrape is a no-op, not a failure.
+
+on:
+  schedule:
+    - cron: "0 13 * * 3" # Wednesday 13:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every bot PR with
+      # zero checks. Both halves matter: the create fires `pull_request`, and
+      # the force-push onto the fixed bot/* branch fires `synchronize`. Falls
+      # back to github.token when the secret is absent, so the workflow still
+      # runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install Playwright + Chromium
+        run: |
+          pip install -c scripts/requirements.txt playwright
+          python3 -m playwright install --with-deps chromium
+      - name: Scrape CEC members
+        run: python3 scripts/cec_scraper.py
+      - name: Rebuild roster
+        run: python3 scripts/build_cec_roster.py
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+      - name: Check for changes
+        id: diff
+        run: git diff --quiet -- data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          branch="bot/cec-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/cec-members.json
+          git commit -m "Update CEC roster from schools.nyc.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create --title "Update CEC roster" \
+              --body "Automated weekly refresh of Community Education Council members (\`scripts/cec_scraper.py\` + \`build_cec_roster.py\`). Review before merging." \
+              --base main --head "$branch"
+          fi

@@ -1,0 +1,72 @@
+  /* =========================================================================
+   * FEEDBACK — a serverless "report a bug / leave a comment" modal. There is
+   * no backend here, so a submission is routed either to a prefilled GitHub
+   * issue or to a mailto. The current permalink + browser are attached so a
+   * report is reproducible. Keep this independent of any layer.
+   * ======================================================================= */
+  (function wireFeedback() {
+    // REPO_ISSUES + FEEDBACK_SUBJECT come from the METRO config block.
+    var EMAIL = "adam@overberg.co";
+    var modal = document.getElementById("feedback-modal");
+    var openBtn = document.getElementById("feedback-btn");
+    var closeBtn = document.getElementById("feedback-close");
+    var backdrop = document.getElementById("feedback-backdrop");
+    var textEl = document.getElementById("feedback-text");
+    var githubBtn = document.getElementById("feedback-github");
+    var emailLink = document.getElementById("feedback-email");
+    var lastFocus = null;
+
+    function buildBody() {
+      // Whatever the user typed, plus the context that makes it reproducible.
+      var lines = [];
+      var comment = (textEl.value || "").trim();
+      if (comment) lines.push(comment);
+      lines.push("");
+      lines.push("---");
+      lines.push("Page: " + window.location.href);
+      if (window.navigator && window.navigator.userAgent) {
+        lines.push("Browser: " + window.navigator.userAgent);
+      }
+      return lines.join("\n");
+    }
+
+    function onKeydown(e) {
+      if (e.key === "Escape") closeModal();
+    }
+    function openModal() {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      textEl.focus();
+      document.addEventListener("keydown", onKeydown);
+    }
+    function closeModal() {
+      modal.hidden = true;
+      document.removeEventListener("keydown", onKeydown);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    // The mailto carries whatever is currently typed, so rebuild it live.
+    function refreshMailto() {
+      emailLink.href = "mailto:" + EMAIL +
+        "?subject=" + encodeURIComponent(FEEDBACK_SUBJECT) +
+        "&body=" + encodeURIComponent(buildBody());
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+    backdrop.addEventListener("click", closeModal);
+    textEl.addEventListener("input", refreshMailto);
+    emailLink.addEventListener("click", function () {
+      refreshMailto(); // sync href before the browser follows the anchor
+      closeModal();
+    });
+    githubBtn.addEventListener("click", function () {
+      var url = REPO_ISSUES +
+        "?title=" + encodeURIComponent("Bug report / comment") +
+        "&body=" + encodeURIComponent(buildBody());
+      window.open(url, "_blank", "noopener");
+      closeModal();
+    });
+    refreshMailto();
+  })();
+

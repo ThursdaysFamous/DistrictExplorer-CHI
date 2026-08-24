@@ -1,0 +1,60 @@
+  /* ---------- CPS Network (administrative region, not a single school) ----------
+   * Confirmed via live sample: each polygon covers a whole CPS "Network"
+   * (K-8's pnta-kuqa, High School's aupu-jt2g — same schema, separate
+   * datasets) and carries a real named administrator + phone + address —
+   * unlike commander/principal contacts, this one actually is in open data. */
+  function registerCpsNetwork(opts) {
+    // opts: id, label, datasetId, style
+    var loadNetworks = makeCachedLoader(opts.datasetId);
+    registerLayer({
+      id: opts.id,
+      group: "schools",
+      label: opts.label,
+      coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
+      overlay: { load: loadNetworks, style: opts.style },
+      // point-first by default (queryFeatureAt) — same pattern as the other factories
+      query: function (point, seq) {
+        return queryFeatureAt(loadNetworks, point).then(function (feature) {
+          if (!feature) return null;
+          var props = feature.properties || {};
+          var network = findPropCI(props, ["network", "networknum", "k12_networ"]);
+          var chief = findPropCI(props, ["admin", "chief", "administrator"]);
+          var phone = findPropCI(props, ["phone"]);
+          var address = findPropCI(props, ["address"]);
+          return { seq: seq, network: network, chief: chief, phone: phone, address: address };
+        });
+      },
+      render: function (result) {
+        // chief as a person row, the network office as an office block —
+        // the network number itself lives in the header pill (cardIdentifier)
+        var wrap = cardEl("div", "card-flush");
+        if (result.chief) {
+          wrap.appendChild(renderPersonRows([{ name: String(result.chief), badge: "Network Chief" }]));
+        }
+        if (result.address || result.phone) {
+          wrap.appendChild(renderOfficeGroup({
+            offices: [{
+              label: "Network Office",
+              lines: result.address ? [String(result.address)] : [],
+              phone: result.phone ? String(result.phone) : null
+            }]
+          }));
+        }
+        return wrap;
+      },
+      cardIdentifier: function (result) {
+        return result.network ? "Network " + String(result.network) : null;
+      },
+      pointOfInterest: function (result) {
+        if (!result.address) return null;
+        return { label: result.network ? "Network " + String(result.network) + " Office" : "CPS Network Office", address: String(result.address) };
+      },
+      // hover popup: the network chief's name lives in the boundary geometry, so
+      // no roster load is needed — read it straight from the feature properties.
+      hoverOfficial: {
+        name: function (feature) {
+          return findPropCI(feature.properties || {}, ["admin", "chief", "administrator"]) || null;
+        }
+      }
+    });
+  }

@@ -1,0 +1,121 @@
+name: Deploy to GitHub Pages
+
+# Publishes only the files the app actually serves — index.html, sw.js,
+# manifest.webmanifest, CNAME, .nojekyll, icons/, and data/app/*.json — instead
+# of the whole branch. The classic "Deploy from a branch" flow shipped the entire
+# tree to the CDN: the scrapers/builders (scripts/), the docs (docs/), and ~5 MB
+# of build-only geometry (data/source/ raw zips+xlsx and the three full-precision
+# data/*.geojson originals that data/app/*.json is simplified from). None of that
+# is fetched at runtime, so this assembles a curated site directory and uploads
+# that as the Pages artifact.
+#
+# ONE-TIME OWNER SETUP REQUIRED: this workflow only takes effect once the repo's
+# Pages *source* is switched from "Deploy from a branch" to "GitHub Actions"
+# (Settings -> Pages -> Build and deployment -> Source). Until then the classic
+# branch deploy keeps serving the live site and this job's final deploy step will
+# fail (harmless — no outage, the classic deploy is still authoritative). After
+# the flip, this becomes the deploy path and the custom domain (CNAME) is
+# preserved by shipping the CNAME file in the artifact.
+#
+# The exclude list below is the ONLY thing standing between "app files" and "app
+# files + 5 MB of build inputs". Keep data/app in and data/source + data/*.geojson
+# out when either moves.
+#
+# ENGINE ASSEMBLY (docs/MECHANIZATION_PLAYBOOK.md Conversion 1; NYC work order
+# 1.4): before the site is assembled, the fenced ENGINE blocks in index.html
+# and sw.js are replaced from the engine release pinned in engine.lock.json —
+# download, sha256-verify against the lockfile, splice (scripts/apply_engine.py),
+# then re-run the static merge gate on the assembled tree. Cross-fork parity is
+# true by construction: every fork deploys the same hash-pinned bytes. The
+# bump PRs commit the applied files, so the committed blocks always match the
+# pinned engine and assembly stays a verifying no-op.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Least-privilege token set the Pages deploy needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; let an in-progress deploy finish rather than
+# cancelling it mid-publish (which could leave the site half-updated).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+# Two jobs (the standard Pages layout): `assemble` carries no environment, so
+# it runs on ANY ref — which is what lets the work order's corruption drill
+# (and any future branch verification) actually exercise the hash gate; the
+# github-pages environment's branch protection rejects non-main jobs before a
+# single step runs, so a one-job layout can never fail at sha256sum on a
+# branch. `deploy` keeps the environment gate and only runs for main.
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The TWO spaces between hash and filename are load-bearing — a single
+      # space breaks `sha256sum --check` parsing. CHI is public, so the
+      # built-in token suffices for the release download.
+      - name: Fetch + verify + apply pinned engine
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ver="$(jq -r .engine_version engine.lock.json)"
+          gh release download "$ver" \
+            --repo ThursdaysFamous/DistrictExplorer-CHI \
+            --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' --clobber
+          echo "$(jq -r .sha256 engine.lock.json)  engine.bundle.js" | sha256sum --check -
+          python3 scripts/apply_engine.py
+          python3 scripts/validate_index.py index.html
+          # The parity checker, demoted (work order 1.4 / playbook migration
+          # step 4): no longer a cross-fork drift detector — it asserts
+          # post-assembly that the spliced blocks equal the downloaded
+          # bundle. The --against-bundle mode arrived via bump PR #23
+          # (engine-v1.0.1 shipped the updated shared script).
+          python3 scripts/check_engine_parity.py index.html --against-bundle engine.manifest.json --strict
+          python3 scripts/check_engine_parity.py sw.js --against-bundle engine.manifest.json --strict
+
+      - name: Assemble site (app files only — drop scripts/docs/raw data)
+        run: |
+          mkdir _site
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.claude' \
+            --exclude='scripts' \
+            --exclude='docs' \
+            --exclude='data/source' \
+            --exclude='data/*.geojson' \
+            --exclude='node_modules' \
+            --exclude='engine.lock.json' \
+            --exclude='engine.bundle.js' \
+            --exclude='engine.manifest.json' \
+            --exclude='CLAUDE.md' \
+            ./ _site/
+          echo "Published tree:" && find _site -type f | sort
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    # Only main deploys; a branch dispatch stops after `assemble` (that run's
+    # verdict IS the verification) instead of dying on the github-pages
+    # environment's branch protection.
+    if: github.ref == 'refs/heads/main'
+    needs: assemble
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -60,6 +60,15 @@ jobs:
       - name: Coverage gaps match the guidebook
         run: python3 scripts/build_coverage_gaps.py --check
 
+      # There is ONE copy of each engine block, under engine/, and every
+      # instance's index.html/sw.js is composed from it (R3). This is that
+      # invariant's gate: an ENGINE fence hand-edited inside an instance file,
+      # or an engine/ block edited without recomposing, fails here. It replaces
+      # the cross-repo release channel that used to keep N copies in step —
+      # there is no longer more than one copy to keep. Stdlib only.
+      - name: Instances carry exactly the shared engine
+        run: python3 scripts/compose_app.py --check
+
       # (The state-template gate was retired in R2.1 — the template repo is
       # archived and a new state is now a folder in this repo, not a generated
       # sibling. docs/DEV_PROCESS_ASSESSMENT.md.)

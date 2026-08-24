@@ -1,0 +1,15 @@
+  (function renderMetroLinks() {
+    var row = document.getElementById("footer-metros");
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var metro = METRO_EXPLORERS[i];
+      if (metro.id === THIS_METRO) continue;
+      var a = document.createElement("a");
+      a.href = metro.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = metro.label;
+      row.appendChild(a);
+    }
+    // keep the row hidden if every listed metro is this one (label-only row)
+    if (row.querySelector("a")) row.hidden = false;
+  })();

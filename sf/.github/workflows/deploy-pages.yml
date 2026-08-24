@@ -1,0 +1,213 @@
+name: Deploy to GitHub Pages
+
+# Publishes only the files the app actually serves — index.html, sw.js,
+# manifest.webmanifest, CNAME, .nojekyll, icons/, and data/app/*.json — instead
+# of the whole branch. The classic "Deploy from a branch" flow shipped the entire
+# tree to the CDN: the scrapers/builders (scripts/), the docs (docs/), and ~5 MB
+# of build-only geometry (data/source/ raw zips+xlsx and the three full-precision
+# data/*.geojson originals that data/app/*.json is simplified from). None of that
+# is fetched at runtime, so this assembles a curated site directory and uploads
+# that as the Pages artifact.
+#
+# ONE-TIME OWNER SETUP REQUIRED: this workflow only takes effect once the repo's
+# Pages *source* is switched from "Deploy from a branch" to "GitHub Actions"
+# (Settings -> Pages -> Build and deployment -> Source). Until then the classic
+# branch deploy keeps serving the live site and this job's final deploy step will
+# fail (harmless — no outage, the classic deploy is still authoritative). After
+# the flip, this becomes the deploy path and the custom domain (CNAME) is
+# preserved by shipping the CNAME file in the artifact.
+#
+# The exclude list below is the ONLY thing standing between "app files" and "app
+# files + 5 MB of build inputs". Keep data/app in and data/source + data/*.geojson
+# out when either moves.
+#
+# ENGINE ASSEMBLY (docs/MECHANIZATION_PLAYBOOK.md, Conversion 1): before the
+# site is assembled, the fenced ENGINE blocks in index.html and sw.js are
+# replaced from the engine release pinned in engine.lock.json — download,
+# sha256-verify against the lockfile, splice (scripts/apply_engine.py), then
+# re-run the merge gate and the behaviour gate on the assembled tree. Parity
+# with the sibling forks is true by construction: every fork deploys the same
+# hash-pinned bytes instead of trusting hand-ported diffs.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Least-privilege token set the Pages deploy needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; let an in-progress deploy finish rather than
+# cancelling it mid-publish (which could leave the site half-updated).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+# Two jobs (the standard Pages layout): `assemble` carries no environment, so
+# it runs on ANY ref — which is what lets a corruption drill (and any future
+# branch verification) actually exercise the hash gate; the github-pages
+# environment's branch protection rejects non-main jobs before a single step
+# runs, so a one-job layout can never fail at sha256sum on a branch. `deploy`
+# keeps the environment gate and only runs for main. (Ported from the NYC
+# fork, which hit exactly this in its Phase 1.5 drill.)
+# One pin, two consumers: the npm install and the browser-cache key below must
+# name the same Playwright version, or a bump re-downloads Chromium forever
+# against a stale cache key. Defined once so they cannot drift.
+env:
+  PLAYWRIGHT_VERSION: "1.56.1"
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    # A CEILING ON THE WHOLE JOB, ported with the install guards from the
+    # Chicago fork, where three runs in two days sat "in_progress" long enough
+    # to look hung (57, 35 and 16 minutes, every one on the Playwright install)
+    # and a deploy ground on while holding the Pages concurrency slot. A
+    # bounded-but-half-hour step is indistinguishable from a hang to anyone
+    # watching; this makes that state VISIBLE — a red run a human can act on.
+    # The install step's own budgets are sized to fail NAMED under its
+    # 15-minute cap, so this ceiling guards the other steps and catastrophes.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Download from the engine's SOURCE repo (engine.lock.json.source_repo),
+      # not this fork's own repo: the engine is published once by the reference
+      # implementation (CHI) and every fork consumes those exact hash-pinned
+      # bytes — this is what the source_repo pin is for. A fork that publishes no
+      # engine release of its own (a pure consumer, like this one) still deploys.
+      # source_repo is public, so github.token reads its releases fine.
+      # Any failure here — including a missing release — FAILS the deploy: the
+      # site never ships without hash-verified engine assembly. (The
+      # bootstrap-window skip guard that used to live here was deleted after
+      # engine-v1.0.0 published, per its TODO.)
+      - name: Fetch pinned engine release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$(jq -r .engine_version engine.lock.json)" \
+            --repo "$(jq -r .source_repo engine.lock.json)" \
+            --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' --clobber
+
+      # The TWO spaces between hash and filename are load-bearing — a single
+      # space (or CRLF) breaks `sha256sum --check` parsing. The two
+      # --against-bundle lines are the parity checker's demotion (playbook
+      # migration step 4): no longer a cross-fork drift detector, it asserts
+      # post-assembly that the spliced blocks equal the downloaded bundle.
+      - name: Verify engine hash, apply, re-run static merge gate
+        run: |
+          echo "$(jq -r .sha256 engine.lock.json)  engine.bundle.js" | sha256sum --check -
+          python3 scripts/apply_engine.py
+          python3 scripts/validate_index.py index.html
+          python3 scripts/check_engine_parity.py index.html --against-bundle engine.manifest.json --strict
+          python3 scripts/check_engine_parity.py sw.js --against-bundle engine.manifest.json --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Same pinned toolchain as smoke-test.yml. The behaviour gate re-runs
+      # here because the assembled tree (committed files + spliced engine) is
+      # what actually ships — smoke-test.yml only covered the committed tree.
+      # The cache + timeout/retry pair mirrors smoke-test.yml, which carries
+      # the full story (the 2026-08-18 CDN hangs in the Chicago fork).
+      - name: Cache Playwright Chromium
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}-${{ runner.os }}
+
+      - name: Install Playwright + Chromium
+        # Backstop for a multi-phase failure day. The ladder inside is sized to
+        # fail NAMED under this cap when any ONE phase is sick (budgets in the
+        # run body); two-plus sick phases at once is what this cap is for.
+        timeout-minutes: 15
+        run: |
+          # Phase budgets, sized so any SINGLE sick phase fails with a NAMED
+          # error inside the step's 15-minute cap — the cap stays the
+          # multi-phase backstop, never the first line of defence:
+          #   npm      3 x 60s   (normally ~2 s; lock-free, retry-safe)
+          #   apt      1 x 420s  (normally seconds; NEVER retried in-process —
+          #            a timeout-killed apt orphans apt-get still holding
+          #            /var/lib/dpkg/lock-frontend, so every in-job retry dies
+          #            on the corpse's lock, proven live in the SF fork. A
+          #            mirror too sick for 7 minutes needs a fresh runner,
+          #            and only a re-run provides one.)
+          #   browser  2 x 300s  on a cache miss only (the CDN fetch that hung
+          #            28 minutes in the Chicago fork; lock-free, retry-safe)
+          retry() {
+            local attempts=$1 budget=$2; shift 2
+            for i in $(seq 1 "$attempts"); do
+              timeout "$budget" "$@" && return 0
+              echo "::warning::attempt $i/$attempts of '$*' hung or failed"
+              sleep 5
+            done
+            echo "::error::'$*' failed $attempts time(s) at ${budget}s each"
+            return 1
+          }
+          retry 3 60 npm install "playwright@${PLAYWRIGHT_VERSION}"
+          retry 1 420 npx playwright install-deps chromium
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" ]; then
+            retry 2 300 npx playwright install chromium
+          fi
+
+      - name: Behaviour gate on the assembled tree (serve + smoke test)
+        env:
+          BASE_URL: http://localhost:8000/
+        run: |
+          python3 -m http.server 8000 &
+          server_pid=$!
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:8000/ >/dev/null && break
+            sleep 0.5
+          done
+          node scripts/smoke_test.mjs
+          status=$?
+          kill "$server_pid" 2>/dev/null || true
+          exit $status
+
+      - name: Assemble site (app files only — drop scripts/docs/raw data)
+        run: |
+          mkdir _site
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.claude' \
+            --exclude='scripts' \
+            --exclude='docs' \
+            --exclude='data/source' \
+            --exclude='icons/source' \
+            --exclude='data/*.geojson' \
+            --exclude='node_modules' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            --exclude='engine.lock.json' \
+            --exclude='engine.bundle.js' \
+            --exclude='engine.manifest.json' \
+            --exclude='CLAUDE.md' \
+            ./ _site/
+          echo "Published tree:" && find _site -type f | sort
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    # Only main deploys; a branch dispatch stops after `assemble` (that run's
+    # verdict IS the verification) instead of dying on the github-pages
+    # environment's branch protection.
+    if: github.ref == 'refs/heads/main'
+    needs: assemble
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

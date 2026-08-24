@@ -1,0 +1,98 @@
+  function registerNearestPointLayer(opts) {
+    var count = opts.count || 3;
+    var fullLabel = opts.label + " (nearest " + count + ")";
+    registerLayer({
+      id: opts.id,
+      group: opts.group,
+      label: fullLabel,
+      color: opts.color, // overlay has no flat style object for moduleColor() to read
+      overlay: {
+        load: opts.loader,
+        pointToLayer: function (feature, latlng) {
+          var marker = L.circleMarker(latlng, { radius: 5, color: opts.color, weight: 1.5, fillColor: opts.fill, fillOpacity: 0.85 });
+          // Hover identity for the dots — the POI-pin path (see updateLayerPoi):
+          // mouseover surfaces this feature in the shared dark hover snapshot,
+          // anchored to the dot (a standalone row, since a point layer has no
+          // polygon footprint for hoverContainingLayers to match); mouseout
+          // clears it. The identity is the same line() the card renders, so the
+          // two surfaces can't disagree — the segment before the first " — "
+          // separator reads as the name, the rest as the address sub-line.
+          // Same touch-device gate as the office pins (hoverCapable), so a tap
+          // never pops the popup on mobile.
+          if (hoverCapable) {
+            var token = null;
+            marker
+              .on("mouseover", function () {
+                var text = "";
+                try { text = String(opts.line(feature.properties || {}) || ""); } catch (e) { /* identity stays empty — fall back to the layer label */ }
+                var sep = text.indexOf(" — ");
+                token = {
+                  modId: opts.id,
+                  label: sep > 0 ? text.slice(0, sep) : (text || fullLabel),
+                  address: sep > 0 ? text.slice(sep + 3) : "",
+                  latlng: latlng,
+                  color: opts.color,
+                  layerLabel: fullLabel,
+                  // This layer has no polygon row for the hover popup's pin
+                  // header to read an identifier from, so it supplies the one
+                  // identity it does have — the same straight-line distance the
+                  // card's row pill shows, measured from the selected point.
+                  // No point selected yet → no pill, rather than a distance
+                  // from nowhere.
+                  distanceLabel: state.selectedPoint
+                    ? haversineMiles(state.selectedPoint.lat, state.selectedPoint.lng,
+                                     latlng.lat, latlng.lng).toFixed(1) + " mi"
+                    : null
+                };
+                hoveredPoi = token;
+                updateHover();
+              })
+              .on("mouseout", function () {
+                // token identity (not modId) so moving from dot A to dot B within
+                // the same layer never lets A's mouseout wipe B's fresh hover.
+                if (hoveredPoi === token) {
+                  hoveredPoi = null;
+                  updateHover();
+                }
+              });
+          }
+          return marker;
+        }
+      },
+      query: function (point, seq) {
+        return opts.loader().then(function (geojson) {
+          var features = (geojson && geojson.features) || [];
+          var withDistance = [];
+          for (var i = 0; i < features.length; i++) {
+            var latLng = pointFeatureLatLng(features[i]);
+            if (!latLng) continue;
+            withDistance.push({
+              props: features[i].properties || {},
+              distanceMi: haversineMiles(point.lat, point.lng, latLng.lat, latLng.lng)
+            });
+          }
+          if (!withDistance.length) return null;
+          withDistance.sort(function (a, b) { return a.distanceMi - b.distanceMi; });
+          return { seq: seq, items: withDistance.slice(0, count) };
+        });
+      },
+      render: function (result) {
+        // 4d nearest-N rows with distance pills (docs/CARD_RENDER_API.md).
+        // opts.item(props) -> {name, note} is the richer two-line split; a
+        // fork still on the single-string opts.line(props) contract gets a
+        // one-line row — the opts surface stays backward compatible.
+        var wrap = cardEl("div", "card-flush");
+        if (opts.intro) wrap.appendChild(renderBodyIntro({ note: opts.intro }));
+        wrap.appendChild(renderNearestRows(result.items.map(function (s) {
+          var item = (opts.item && opts.item(s.props)) || { name: opts.line(s.props) };
+          return {
+            name: item.name,
+            note: item.note,
+            distanceLabel: s.distanceMi.toFixed(1) + " mi"
+          };
+        })));
+        return wrap;
+      },
+      coverage: opts.coverage // optional location-relevance test (see overlay-cards)
+    });
+  }

@@ -1,0 +1,90 @@
+  function registerSchoolZone(opts) {
+    // One point-in-polygon attendance-zone layer per school level. City-specific
+    // dataset schemas and policies stay in opts: { id, label, datasetId, style,
+    // nameKeys, idKeys, districtKeys?, gradeKeys?, addressKeys?, requireId?,
+    // emptyNote?, titleCaseData?, profileLink?, moreLink? }. requireId treats a
+    // feature without an id as "no zoned school" (choice-based catchments carry
+    // placeholder polygons); emptyNote renders that honest empty state (with
+    // moreLink as an application link in the footer) instead of a bare
+    // no-result. profileLink(id) -> {label, url} is the fork's school-profile
+    // link builder — profile URLs are only ever built from a dataset-supplied
+    // id, never guessed from a name.
+    var loadZones = makeCachedLoader(opts.datasetId);
+    function zoneField(props, keys) {
+      return props && keys ? findPropCI(props, keys) : null;
+    }
+    registerLayer({
+      id: opts.id,
+      group: "schools",
+      label: opts.label,
+      coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
+      // hover popup: same identity the card headline shows — the zoned school's
+      // name, or the honest "None" where requireId treats the feature as unzoned.
+      hoverName: function (feature) {
+        var props = feature.properties || {};
+        if (opts.requireId && !zoneField(props, opts.idKeys)) return "None";
+        var name = zoneField(props, opts.nameKeys);
+        return name ? String(name) : null;
+      },
+      overlay: { load: loadZones, style: opts.style },
+      // point-first by default (queryFeatureAt) — makeCachedLoader zones
+      // answer a first click from one small intersects query
+      query: function (point, seq) {
+        return queryFeatureAt(loadZones, point).then(function (feature) {
+          var props = feature ? (feature.properties || {}) : null;
+          var schoolId = zoneField(props, opts.idKeys);
+          var district = intField(zoneField(props, opts.districtKeys));
+          if (opts.requireId && !schoolId) {
+            return opts.emptyNote ? { seq: seq, none: true, district: district } : null;
+          }
+          if (!feature) return null;
+          return {
+            seq: seq,
+            name: zoneField(props, opts.nameKeys),
+            schoolId: schoolId,
+            district: district,
+            grades: zoneField(props, opts.gradeKeys),
+            address: zoneField(props, opts.addressKeys)
+          };
+        });
+      },
+      render: function (result) {
+        if (result.none) {
+          var noneWrap = cardEl("div", "card-flush");
+          noneWrap.appendChild(renderBodyIntro({
+            title: "No zoned school",
+            note: opts.emptyNote + (result.district ? " (district " + String(result.district) + ")" : "")
+          }));
+          return noneWrap;
+        }
+        // Handoff 3 §6a: title-cased name/address (opts.titleCaseData for
+        // ALL-CAPS feeds), grades collapsed to a range and moved to the
+        // header pill (cardIdentifier below) — the note carries the address
+        // (and district where a fork's schema supplies one).
+        var fmt = opts.titleCaseData ? cardTitleCase : String;
+        var noteBits = [];
+        if (result.address) noteBits.push(fmt(String(result.address)));
+        if (result.district) noteBits.push("District " + String(result.district));
+        var wrap = cardEl("div", "card-flush");
+        wrap.appendChild(renderLinkRow({
+          title: result.name ? fmt(String(result.name)) : "Unknown",
+          note: noteBits.length ? noteBits.join(" · ") : null
+        }));
+        return wrap;
+      },
+      cardIdentifier: function (result) {
+        // the collapsed grade range as the identifier pill ("K–8"); no
+        // grades in the feed -> no pill, never an empty one
+        if (result.none || !result.grades) return null;
+        return cardGradeRange(String(result.grades));
+      },
+      primaryLink: function (result) {
+        if (result.none) return opts.moreLink || null;
+        return opts.profileLink ? opts.profileLink(result.schoolId) : null;
+      },
+      pointOfInterest: function (result) {
+        if (!result.address) return null;
+        return { label: result.name ? String(result.name) : "School", address: String(result.address) };
+      }
+    });
+  }

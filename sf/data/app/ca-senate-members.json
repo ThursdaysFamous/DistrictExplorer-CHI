@@ -1,0 +1,362 @@
+{
+  "1": {
+    "name": "Megan Dahle",
+    "party": "Republican",
+    "url": "https://ad01.asmrc.org/",
+    "districtOffice": [
+      "2635 Forest Ave., Suite 100, Chico, CA 95928",
+      "Phone: 530-879-7424"
+    ]
+  },
+  "2": {
+    "name": "Mike McGuire",
+    "party": "Democratic",
+    "url": "https://sd02.senate.ca.gov/",
+    "districtOffice": [
+      "885 Lakeport Blvd., Lakeport, CA 95453",
+      "Phone: 707-468-8914"
+    ]
+  },
+  "3": {
+    "name": "Christopher Cabaldon",
+    "party": "Democratic",
+    "url": "https://sd03.senate.ca.gov/",
+    "districtOffice": [
+      "555 Mason St., Suite 275, Vacaville, CA 95688",
+      "Phone: 707-454-3808"
+    ]
+  },
+  "4": {
+    "name": "Marie Alvarado-Gil",
+    "party": "Republican",
+    "url": "https://sd04.senate.ca.gov/",
+    "districtOffice": [
+      "4364 Town Center Blvd., Suite 313, El Dorado Hills, CA 95762",
+      "Phone: 916-933-8680"
+    ]
+  },
+  "5": {
+    "name": "Jerry McNerney",
+    "party": "Democratic",
+    "url": "https://sd05.senate.ca.gov/",
+    "districtOffice": [
+      "2291 W. March Lane Suite B200, Stockton, CA 95207",
+      "Phone: 209-472-9535"
+    ]
+  },
+  "6": {
+    "name": "Roger Niello",
+    "party": "Republican",
+    "url": "https://senate.ca.gov/sd06",
+    "districtOffice": [
+      "2729 Prospect Park Drive, Suite 130, Rancho Cordova, CA 95670",
+      "Phone: 916-464-3980"
+    ]
+  },
+  "7": {
+    "name": "Jesse Arreguín",
+    "party": "Democratic",
+    "url": "https://sd07.senate.ca.gov/",
+    "districtOffice": [
+      "1515 Clay St., Suite 2202, Oakland, CA 94612",
+      "Phone: 510-286-1333"
+    ]
+  },
+  "8": {
+    "name": "Angelique Ashby",
+    "party": "Democratic",
+    "url": "https://sd08.senate.ca.gov/",
+    "districtOffice": [
+      "1510 14th St., Sacramento, CA 95814",
+      "Phone: 916-319-0309"
+    ]
+  },
+  "9": {
+    "name": "Tim Grayson",
+    "party": "Democratic",
+    "url": "https://a14.asmdc.org",
+    "districtOffice": [
+      "51 Moraga Way, Suite 2, Orinda, CA 94563",
+      "Phone: 925-258-1176"
+    ]
+  },
+  "10": {
+    "name": "Aisha Wahab",
+    "party": "Democratic",
+    "url": "https://sd10.senate.ca.gov/",
+    "districtOffice": [
+      "39510 Paseo Padre Parkway, Suite 280, Fremont, CA 94538",
+      "Phone: 510-794-3900"
+    ]
+  },
+  "11": {
+    "name": "Scott Wiener",
+    "party": "Democratic",
+    "url": "https://sd11.senate.ca.gov/",
+    "districtOffice": [
+      "455 Golden Gate Ave., Suite 14800, San Francisco, CA 94102",
+      "Phone: 415-557-1300"
+    ]
+  },
+  "12": {
+    "name": "Shannon Grove",
+    "party": "Republican",
+    "url": "https://senate.ca.gov/sd12",
+    "districtOffice": [
+      "5701 Truxtun Ave., Suite 150, Bakersfield, CA 93309",
+      "Phone: 661-323-0443"
+    ]
+  },
+  "13": {
+    "name": "Josh Becker",
+    "party": "Democratic",
+    "url": "https://sd13.senate.ca.gov/",
+    "districtOffice": [
+      "3525 Alameda de las Pulgas, Menlo Park, CA 94025",
+      "Phone: 650-233-2724"
+    ]
+  },
+  "14": {
+    "name": "Anna Caballero",
+    "party": "Democratic",
+    "url": "https://sd14.senate.ca.gov/",
+    "districtOffice": [
+      "510 W. Main St. Suite E, Merced, CA 95340",
+      "Phone: 209-726-5495"
+    ]
+  },
+  "15": {
+    "name": "Dave Cortese",
+    "party": "Democratic",
+    "url": "https://sd15.senate.ca.gov/",
+    "districtOffice": [
+      "1155 Meridian Ave., Suite 100, San Jose, CA 95125",
+      "Phone: 408-723-4154"
+    ]
+  },
+  "16": {
+    "name": "Melissa Hurtado",
+    "party": "Democratic",
+    "url": "https://sd16.senate.ca.gov/",
+    "districtOffice": [
+      "5201 California Ave., Suite 220, Bakersfield, CA 93309",
+      "Phone: 661-395-2620"
+    ]
+  },
+  "17": {
+    "name": "John Laird",
+    "party": "Democratic",
+    "url": "https://sd17.senate.ca.gov/",
+    "districtOffice": [
+      "99 Pacific St., Suite 575-F, Monterey, CA 93940",
+      "Phone: 831-657-6315"
+    ]
+  },
+  "18": {
+    "name": "Steve Padilla",
+    "party": "Democratic",
+    "url": "https://sd18.senate.ca.gov/",
+    "districtOffice": [
+      "82013 Dr. Carreon Blvd. Suite J, Indio, CA 92201",
+      "Phone: 760-398-6442"
+    ]
+  },
+  "19": {
+    "name": "Rosilicie Ochoa Bogh",
+    "party": "Republican",
+    "url": "https://senate.ca.gov/sd23",
+    "districtOffice": [
+      "1758 Orange Tree Lane Suite B, Redlands, CA 92374",
+      "Phone: 909-335-0271"
+    ]
+  },
+  "20": {
+    "name": "Caroline Menjivar",
+    "party": "Democratic",
+    "url": "https://sd20.senate.ca.gov/",
+    "districtOffice": [
+      "6150 Van Nuys Blvd., Suite 400, Van Nuys, CA 91401",
+      "Phone: 818-901-5588"
+    ]
+  },
+  "21": {
+    "name": "Monique Limón",
+    "party": "Democratic",
+    "url": "https://sd19.senate.ca.gov/",
+    "districtOffice": [
+      "300 E. Esplanade Drive, Suite 430, Oxnard, CA 93036",
+      "Phone: 805-988-1940"
+    ]
+  },
+  "22": {
+    "name": "Susan Rubio",
+    "party": "Democratic",
+    "url": "https://sd22.senate.ca.gov/",
+    "districtOffice": [
+      "1520 N. Mountain Ave. Building E, Suite 201, Ontario, CA 91762",
+      "Phone: 909-460-6064"
+    ]
+  },
+  "23": {
+    "name": "Suzette Valladares",
+    "party": "Republican",
+    "url": "https://a38.asmdc.org/",
+    "districtOffice": [
+      "42505 10th St. West, Suite 109, Lancaster, CA 93534",
+      "Phone: 661-729-6232"
+    ]
+  },
+  "24": {
+    "name": "Ben Allen",
+    "party": "Democratic",
+    "url": "https://sd24.senate.ca.gov/",
+    "districtOffice": [
+      "111 Penn St., Suite 101, El Segundo, CA 90245",
+      "Phone: 310-414-8190"
+    ]
+  },
+  "25": {
+    "name": "Sasha Pérez",
+    "party": "Democratic",
+    "url": "https://sd25.senate.ca.gov/",
+    "districtOffice": [
+      "601 E. Glenoaks Blvd., Suite 210, Glendale, CA 91207",
+      "Phone: 818-409-0402"
+    ]
+  },
+  "26": {
+    "name": "María Elena Durazo",
+    "party": "Democratic",
+    "url": "https://sd26.senate.ca.gov/",
+    "districtOffice": [
+      "1808 W. Sunset Blvd., Los Angeles, CA 90026",
+      "Phone: 213-483-9300"
+    ]
+  },
+  "27": {
+    "name": "Henry Stern",
+    "party": "Democratic",
+    "url": "https://sd27.senate.ca.gov/",
+    "districtOffice": [
+      "14724 Ventura Blvd., Suite 1115, Sherman Oaks, CA 91403",
+      "Phone: 818-501-0650"
+    ]
+  },
+  "28": {
+    "name": "Lola Smallwood-Cuevas",
+    "party": "Democratic",
+    "url": "https://sd28.senate.ca.gov/",
+    "districtOffice": [
+      "700 Exposition Park Drive, Los Angeles, CA 90037",
+      "Phone: 213-745-6656"
+    ]
+  },
+  "29": {
+    "name": "Eloise Reyes",
+    "party": "Democratic",
+    "url": "https://a47.asmdc.org",
+    "districtOffice": [
+      "301 E. Vanderbilt Way, Suite 400, San Bernardino, CA 92408",
+      "Phone: 909-888-5360"
+    ]
+  },
+  "30": {
+    "name": "Bob Archuleta",
+    "party": "Democratic",
+    "url": "https://sd30.senate.ca.gov/",
+    "districtOffice": [
+      "12501 Imperial Highway, Suite 110, Norwalk, CA 90650",
+      "Phone: 562-406-1001"
+    ]
+  },
+  "31": {
+    "name": "Sabrina Cervantes",
+    "party": "Democratic",
+    "url": "https://a58.asmdc.org/",
+    "districtOffice": [
+      "3737 Main St., Suite 104, Riverside, CA 92501",
+      "Phone: 951-680-6750"
+    ]
+  },
+  "32": {
+    "name": "Kelly Seyarto",
+    "party": "Republican",
+    "url": "https://ad67.asmrc.org/",
+    "districtOffice": [
+      "4740 Green River Road, Suite 212, Corona, CA 92878",
+      "Phone: 951-280-1260"
+    ]
+  },
+  "33": {
+    "name": "Lena Gonzalez",
+    "party": "Democratic",
+    "url": "https://sd33.senate.ca.gov/",
+    "districtOffice": [
+      "3939 Atlantic Ave., Suite 107, Long Beach, CA 90807",
+      "Phone: 562-256-7921"
+    ]
+  },
+  "34": {
+    "name": "Tom Umberg",
+    "party": "Democratic",
+    "url": "https://sd34.senate.ca.gov/",
+    "districtOffice": [
+      "1000 E. Santa Ana Blvd., Suite 220B, Santa Ana, CA 92701",
+      "Phone: 714-558-3785"
+    ]
+  },
+  "35": {
+    "name": "Laura Richardson",
+    "party": "Democratic",
+    "url": "https://sd35.senate.ca.gov/",
+    "districtOffice": [
+      "302 W. 5th St., Suite 203, San Pedro, CA 90731",
+      "Phone: 310-514-8573"
+    ]
+  },
+  "36": {
+    "name": "Tony Strickland",
+    "party": "Republican",
+    "url": "https://cssrc.us/web/19/",
+    "districtOffice": [
+      "301 Main St., Suite 212, Huntington Beach, CA 92648",
+      "Phone: 714-374-4000"
+    ]
+  },
+  "37": {
+    "name": "Steve Choi",
+    "party": "Republican",
+    "url": "https://ad68.asmrc.org/",
+    "districtOffice": [
+      "2151 Michelson Drive, Suite 258, Irvine, CA 92612",
+      "Phone: 949-223-5472"
+    ]
+  },
+  "38": {
+    "name": "Catherine Blakespear",
+    "party": "Democratic",
+    "url": "https://sd38.senate.ca.gov/",
+    "districtOffice": [
+      "24031 El Toro Road, Suite 201A, Laguna Hills, CA 92653",
+      "Phone: 949-598-5850"
+    ]
+  },
+  "39": {
+    "name": "Akilah Weber Pierson",
+    "party": "Democratic",
+    "url": "https://a79.asmdc.org/",
+    "districtOffice": [
+      "7575 Metropolitan Drive, Suite 100, San Diego, CA 92108",
+      "Phone: 619-688-6700"
+    ]
+  },
+  "40": {
+    "name": "Brian Jones",
+    "party": "Republican",
+    "url": "https://senate.ca.gov/sd38",
+    "districtOffice": [
+      "720 N. Broadway, Suite 110, Escondido, CA 92025",
+      "Phone: 760-796-4655"
+    ]
+  }
+}

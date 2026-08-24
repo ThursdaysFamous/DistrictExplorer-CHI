@@ -1,0 +1,477 @@
+  #metro-portal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(11, 25, 36, 0.55);
+  }
+  #metro-portal[hidden] { display: none; }
+  .metro-portal-card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    border-top: 4px solid var(--accent-warm);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+    max-width: 430px;
+    width: 100%;
+    padding: 26px 24px 22px;
+    text-align: center;
+    animation: metro-portal-pop 0.25s ease-out;
+  }
+  @keyframes metro-portal-pop {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .metro-portal-emoji { font-size: 52px; line-height: 1; }
+  .metro-portal-card h2 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    letter-spacing: 0.5px;
+    color: var(--ink);
+    margin: 10px 0 6px;
+  }
+  .metro-portal-card p {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: var(--slate);
+  }
+  .metro-portal-count {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent-deep);
+    min-height: 16px;
+  }
+  .metro-portal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .metro-portal-actions button {
+    border-radius: 6px;
+    padding: 9px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+  }
+  .metro-portal-go {
+    background: var(--accent-deep);
+    border: 1px solid var(--accent-deep);
+    color: #fff;
+  }
+  .metro-portal-go:hover { background: #08406e; }
+  .metro-portal-stay {
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+  }
+  .metro-portal-stay:hover { background: #EEF4F7; }
+
+  .locate-btn {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-deep);
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .locate-btn:hover { background: #EEF4F7; }
+  .locate-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .kbd-select-btn {
+    width: 100%;
+    background: var(--paper);
+    border: 1px dashed var(--line-strong);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 12.5px;
+    color: var(--slate);
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .kbd-select-btn:hover { background: #EEF4F7; }
+
+  /* bottom-left map stack: hover toggle on top, selected-point chip below it.
+     column-anchored at the bottom, so the chip sits at the corner and the
+     toggle floats just above it (and the toggle sits alone when no point is
+     selected and the chip is hidden). */
+  .map-bottom-left {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  /* Below 900px the map is only 48vh tall (see #map media query) — floating the
+     hover toggle + coordinate chip over the tiles crowds an already-short strip
+     and can collide with the search bar. Drop them into normal flow as a slim
+     static toolbar under the map instead; the sticky .map-col keeps it pinned
+     alongside the map as the results column scrolls underneath. */
+  @media (max-width: 900px) {
+    .map-bottom-left {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+    }
+  }
+  /* Honest, dismissible notice when the CDN basemap tiles fail — the app itself
+   * keeps working offline (SW shell + same-origin data), so the map just goes
+   * gray without this. Bottom-center so it clears the top toolbar and the
+   * bottom-left controls. */
+  .map-tile-banner {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: min(92%, 440px);
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-left: 4px solid var(--warn);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 18px rgba(20, 24, 28, 0.18);
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .map-tile-banner[hidden] { display: none; }
+  .tile-banner-dismiss {
+    flex: none;
+    border: none;
+    background: transparent;
+    color: var(--slate);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+  .tile-banner-dismiss:hover { color: var(--ink); }
+  .hover-toggle-btn {
+    font-family: var(--font-body);
+    font-size: 12px;
+    padding: 5px 10px;
+    background: #fff;
+    color: var(--accent-deep, #08406e);
+    border: 1px solid rgba(20, 24, 28, 0.25);
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(20, 24, 28, 0.3);
+  }
+  .hover-toggle-btn:hover { background: #EEF4F7; }
+  .hover-toggle-btn[aria-pressed="true"] {
+    background: var(--accent-deep, #08406e);
+    color: #fff;
+    border-color: var(--accent-deep, #08406e);
+  }
+  .selected-point-chip {
+    position: relative; /* anchors the share popover (engine share-controls) */
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  .selected-point-chip .copy-link-btn {
+    margin-left: 10px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 7px;
+    cursor: pointer;
+  }
+  .selected-point-chip .copy-link-btn:hover { background: rgba(65,182,230,0.15); }
+
+  /* ---- Share popover (engine share-controls; opens upward off the chip).
+   * White card over the dark chip, body font — it reads as UI, while the
+   * link/embed/coords values inside stay mono like the chip itself. ---- */
+  .share-popover {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 10px);
+    width: min(340px, calc(100vw - 28px));
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 13px;
+    text-align: left;
+    border: 1px solid rgba(20, 24, 28, 0.14);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 12px 14px;
+    cursor: default;
+    z-index: 1100;
+  }
+  .share-popover-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .share-popover-title { font-size: 13px; }
+  .share-popover-close {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--slate);
+    font-size: 14px;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 4px;
+  }
+  .share-popover-close:hover { background: #EEF4F7; color: var(--ink); }
+  .share-popover-note { margin: 0 0 10px; color: var(--slate); font-size: 12px; line-height: 1.45; }
+  .share-popover-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 10px 0 4px;
+  }
+  .share-popover-row { display: flex; align-items: center; gap: 6px; }
+  .share-popover-row-end { justify-content: flex-end; margin-top: 6px; }
+  .share-popover-url,
+  .share-popover-embed {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink);
+    background: #F6F9FB;
+    border: 1px solid #CFD9E0;
+    border-radius: 5px;
+    padding: 6px 7px;
+  }
+  .share-popover-embed { display: block; resize: none; box-sizing: border-box; }
+  .share-popover-coords { flex: 1 1 auto; font-family: var(--font-mono); font-size: 12px; color: var(--ink); }
+  .share-copy-btn {
+    flex: 0 0 auto;
+    background: transparent;
+    color: var(--accent-deep, #0B5394);
+    border: 1px solid var(--accent-deep, #0B5394);
+    border-radius: 5px;
+    font-size: 12px;
+    padding: 6px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .share-copy-btn:hover { background: rgba(11, 83, 148, 0.08); }
+
+  /* ---- Layer toggle drawer ---- */
+  main.layout.rail-hidden { grid-template-columns: 1fr; }
+  .layer-toggle-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 500;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(20,24,28,0.15);
+  }
+
+  /* ---- Below ~1150px page width the map column (full width once the
+     layout stacks at 900px, or the ~65% grid track above that) narrows
+     enough that the centered search toolbar (width: min(92%, 560px))
+     and this top-right layer toggle button start to overlap and the
+     Search button becomes untappable. Anchor the toolbar to the left
+     and reserve fixed space on the right for a fixed-width layer
+     button instead. ---- */
+  @media (max-width: 1150px) {
+    .map-toolbar {
+      left: 10px;
+      right: 90px;
+      transform: none;
+      width: auto;
+    }
+    .layer-toggle-btn {
+      top: 11px;
+      right: 10px;
+      min-width: 60px;
+      padding: 9px 8px;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+
+  /* ---- The Layers button collapses the results rail to widen the map — a
+     desktop-only affordance. On phones the layout is already a single
+     stacked column (no rail to widen into), so the button does nothing
+     useful; hide it and let the search bar use the full row. ---- */
+  @media (max-width: 900px) {
+    .layer-toggle-btn { display: none; }
+    .map-toolbar { left: 10px; right: 10px; }
+  }
+
+  /* ---- Results rail ---- */
+  .results-col {
+    background: var(--panel);
+    border-left: 1px solid var(--line);
+    padding: 18px 18px 40px;
+    max-height: 78vh;
+    overflow-y: auto;
+  }
+  @media (max-width: 900px) {
+    .results-col { max-height: none; border-left: none; border-top: 1px solid var(--line); }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 12px;
+    color: var(--slate);
+  }
+  .empty-state .star-outline { width: 40px; height: 40px; margin: 0 auto 14px; opacity: 0.5; }
+  .empty-state h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .empty-state p { font-size: 14px; margin: 0; max-width: 34ch; margin-inline: auto; }
+
+  .group-section {
+    margin-bottom: 22px;
+  }
+  .group-section:not(:first-child) { border-top: 1px solid var(--line); padding-top: 18px; }
+
+  .group-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    margin: 0 0 10px;
+  }
+  .group-heading .dot {
+    width: 11px; height: 11px; border-radius: 50%;
+    flex: none;
+    border: 2px solid var(--ink);
+  }
+  .group-political .dot { background: var(--accent); }
+  .group-safety .dot { background: var(--accent-warm); }
+  .group-schools .dot { background: #E8A324; }
+  .group-geography .dot { background: #5C8F6B; }
+
+  /* Lets each top-level card's inline `order` (set in buildLayerBlock/its
+     change handler) float checked layers above unchecked ones within a group. */
+  .group-cards {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .layer-block {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--layer-accent, var(--line));
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  /* a sub-selection nested inside its parent's block (e.g. Police Beat under
+     Police District): indented, with a top rule separating it from the parent
+     card so it reads as "part of, but under, the district". */
+  .layer-block-sub {
+    margin: 0 10px 10px 22px;
+    border-top: 1px solid var(--line);
+  }
+  .layer-block-sub .layer-block-head {
+    padding: 8px 10px;
+    background: transparent;
+  }
+  .layer-block-sub .layer-block-head label {
+    font-weight: 500;
+    font-size: 12.5px;
+  }
+  .layer-block-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 12px;
+    background: #FAFCFD;
+  }
+  .layer-block-head label {
+    font-weight: 600;
+    font-size: 13.5px;
+    flex: 1;
+    cursor: pointer;
+  }
+  .layer-color-dot {
+    width: 11px; height: 11px; border-radius: 50%;
+    flex: none;
+    border: 2px solid var(--ink);
+    background: var(--layer-accent, var(--line));
+  }
+  .layer-block-head input[type="checkbox"] {
+    width: 17px; height: 17px;
+    accent-color: var(--accent-deep);
+    cursor: pointer;
+  }
+  .stub-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--accent-warm);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .layer-card-body {
+    padding: 12px;
+    font-size: 13.5px;
+    border-top: 1px solid var(--line);
+  }
+  .layer-card-body.state-off { display: none; }
+  .layer-card-body.state-empty { color: var(--slate-soft); font-style: italic; }
+  .layer-card-body .loading-row { display: flex; align-items: center; gap: 8px; color: var(--slate); }
+  .spinner {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--line-strong);
+    border-top-color: var(--accent-deep);
+    animation: spin 0.8s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .layer-card-body.state-error { color: var(--err); }
+  .layer-card-body .retry-btn {
+    margin-top: 6px;
+    border: 1px solid var(--err);
+    color: var(--err);
+    background: none;
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* .result-row/.result-fields (the legacy renderFieldList dt/dd table) were
+     retired in engine-v1.0.13 — see the render-helper tombstone. */
+

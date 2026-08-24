@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+
+# Transient — created only when running scripts/smoke_test.mjs locally
+# (`npm install playwright`). This project has no build step; none of these
+# are committed.
+node_modules/
+package.json
+package-lock.json
+
+# Transient — Leaflet fetched by scripts/vendor_leaflet.sh so the smoke test can
+# serve it same-origin where the browser can't reach the CDN (Claude Code web).
+# Third-party asset, never committed; production and CI load Leaflet from the CDN.
+scripts/vendor/
+
+# Scraper intermediate cache (stage-1 output, never committed)
+scripts/.cache/
+
+# Transient — pinned engine release assets (docs/MECHANIZATION_PLAYBOOK.md,
+# Conversion 1): `apply_engine.py` downloads them to the repo root when they're
+# absent, and CI fetches them fresh on every deploy/bump.
+# engine.lock.json (the version + sha256 pin) IS committed — never ignore it.
+/engine.bundle.js
+/engine.manifest.json

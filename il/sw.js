@@ -363,11 +363,29 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+// Retire MY OWN superseded caches, and only those.
+//
+// CacheStorage is per-ORIGIN, not per-scope, and this origin now serves several
+// instances side by side (/il/, /nyc/, /sf/), each with its own worker and its
+// own cache. The original sweep here was "delete every key that is not mine",
+// which was correct while an origin held exactly one app and becomes mutual
+// destruction the moment it holds two: every visit to one instance would wipe
+// the others' precached boundary geometry — tens of megabytes, re-fetched on
+// their next visit, forever.
+//
+// A cache belongs to this instance when it shares this instance's name minus
+// its version suffix, which every instance's CACHE_NAME carries ("…-v4",
+// "…-v9", "…-v1"). Anything else on the origin belongs to a sibling and is not
+// ours to delete. Cross-instance cleanup, where it is ever needed, is done
+// explicitly and by exact name — see the root kill switch in /sw.js.
 self.addEventListener("activate", (event) => {
+  const mine = CACHE_NAME.replace(/-v\d+$/, "");
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys
+          .filter((key) => key !== CACHE_NAME && key.startsWith(mine + "-v"))
+          .map((key) => caches.delete(key))
       )
     )
   );

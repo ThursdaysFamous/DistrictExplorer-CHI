@@ -1,0 +1,157 @@
+  /* =========================================================================
+   * PIN-PARENT RELATIONSHIPS — pick a district as the "parent" from its sidebar
+   * card, then see how every OTHER active layer's districts relate to it:
+   *   • solid outline = that district falls fully INSIDE the pinned one
+   *   • dashed outline = it CROSSES the pinned one's edge (partly in, partly out)
+   * Pinning lives on the result cards (not a map click) so click-to-select a
+   * point still works. The parent feature is always "the pinned layer's district
+   * at the currently selected point", so it tracks as you pick new points.
+   * Outlines are drawn into their own featureGroup, never by restyling the real
+   * overlays, so the click-selection highlight is untouched. Reuses the shared
+   * polygonFullyInside / polygonsOverlap geometry (each candidate bbox-gated).
+   * ======================================================================= */
+  var pinnedParentId = null;      // mod.id of the pinned parent layer, or null
+  var relationshipGroup = null;   // L.featureGroup holding the relationship outlines
+  var REL_MAX_OUTLINES = 250;     // perf backstop for a huge parent over a dense layer
+  var relLegendEl = document.getElementById("rel-legend");
+
+  function relationshipParentFeature() {
+    if (!pinnedParentId || !state.selectedPoint || !state.layersOn[pinnedParentId]) return null;
+    var rt = layerRuntime[pinnedParentId];
+    if (!rt || !rt.geojson) return null;
+    // a relevance-hidden parent (mod.coverage) contributes no outlines while
+    // out of coverage; pinnedParentId is kept so the pin resurrects with it
+    if (rt.relevant === false) return null;
+    return findFeatureContaining(rt.geojson, state.selectedPoint);
+  }
+
+  function drawRelationshipOutlines(parentFeature) {
+    // the pinned parent itself — bold dark frame so it reads as the reference
+    L.geoJSON(parentFeature, {
+      style: { color: "#14181C", weight: 4, opacity: 1, fill: false, className: "rel-parent-outline" },
+      interactive: false
+    }).addTo(relationshipGroup);
+
+    var nIn = 0, nCross = 0, drawn = 0, capped = false;
+    for (var li = 0; li < layers.length && !capped; li++) {
+      var mod = layers[li];
+      if (mod.id === pinnedParentId) continue;          // don't relate a layer to itself
+      if (!state.layersOn[mod.id]) continue;
+      if (!mod.overlay || !mod.overlay.style) continue; // polygon layers only
+      var rt = layerRuntime[mod.id];
+      if (!rt || !rt.geojson) continue;
+      if (rt.relevant === false) continue; // relevance-hidden here (mod.coverage) — draw nothing for it
+      var color = darkenHexColor(moduleColor(mod), 0.15);
+      var feats = rt.geojson.features || [];
+      for (var j = 0; j < feats.length; j++) {
+        var f = feats[j];
+        var inside = polygonFullyInside(f, parentFeature);
+        var cross = !inside && polygonsOverlap(f, parentFeature);
+        if (!inside && !cross) continue;
+        if (drawn >= REL_MAX_OUTLINES) { capped = true; break; }
+        L.geoJSON(f, {
+          // fill:false → outline only (no added fill-murk over the base layers);
+          // interactive:false → never intercepts the map click/mousemove beneath
+          style: {
+            color: color, weight: 2.5, opacity: 0.95, fill: false,
+            dashArray: inside ? null : "5 4",
+            className: inside ? "rel-inside-outline" : "rel-cross-outline"
+          },
+          interactive: false
+        }).addTo(relationshipGroup);
+        drawn++;
+        if (inside) nIn++; else nCross++;
+      }
+    }
+    if (capped) console.warn("pin relationships: capped at " + REL_MAX_OUTLINES + " outlines");
+    relationshipGroup.bringToFront();
+    return { inside: nIn, cross: nCross, capped: capped };
+  }
+
+  var relCounts = null; // last computed {inside, cross, capped}, or null
+
+  function refreshRelationshipOutlines() {
+    if (!relationshipGroup) relationshipGroup = L.featureGroup().addTo(map);
+    relationshipGroup.clearLayers();
+    var parentFeature = relationshipParentFeature();
+    relCounts = parentFeature ? drawRelationshipOutlines(parentFeature) : null;
+    updateRelLegend();
+  }
+
+  // The legend lives above the Hover toggle and, per the toggle's role as the
+  // explorer's on/off switch, is shown only while hover is on AND a parent is
+  // pinned. (Outlines themselves stay pinned regardless; unpin is still
+  // reachable from the parent's sidebar card when the legend is hidden.)
+  function updateRelLegend() {
+    if (!relLegendEl) return;
+    if (!pinnedParentId || !hoverActive) { relLegendEl.hidden = true; relLegendEl.innerHTML = ""; return; }
+    var counts = relCounts;
+    var mod = getLayerById(pinnedParentId);
+    var parentName = mod ? mod.label : "district";
+    var summary;
+    if (!counts) {
+      summary = '<div class="rel-note">Pick a point inside this district to see what relates to it.</div>';
+    } else {
+      summary = '<div class="rel-key"><span class="rel-sw rel-sw-in"></span>' + counts.inside + ' fully inside</div>' +
+        '<div class="rel-key"><span class="rel-sw rel-sw-cross"></span>' + counts.cross + ' crossing the edge</div>' +
+        (counts.capped ? '<div class="rel-note">(showing first ' + REL_MAX_OUTLINES + ')</div>' : "");
+    }
+    relLegendEl.hidden = false;
+    relLegendEl.innerHTML =
+      '<div class="rel-legend-head"><span class="rel-sw rel-sw-parent"></span><b>Parent:</b>&nbsp;' + sanitize(parentName) + "</div>" +
+      summary +
+      '<button type="button" class="rel-unpin-btn" id="rel-unpin">Unpin</button>';
+    var unpin = document.getElementById("rel-unpin");
+    if (unpin) unpin.addEventListener("click", function () { setPinnedParent(null); });
+  }
+
+  function setPinnedParent(id) {
+    pinnedParentId = (pinnedParentId === id) ? null : id;
+    refreshAllPinButtons();
+    refreshRelationshipOutlines();
+  }
+
+  // Update every card's pin button to reflect the current pinned layer.
+  function refreshAllPinButtons() {
+    layers.forEach(function (mod) {
+      var rt = layerRuntime[mod.id];
+      if (rt && rt.pinBtn) stylePinButton(rt.pinBtn, mod.id);
+    });
+  }
+  function stylePinButton(btn, id) {
+    var pinned = pinnedParentId === id;
+    btn.textContent = pinned ? "★ Parent — click to unpin" : "☆ Pin as parent";
+    btn.setAttribute("aria-pressed", pinned ? "true" : "false");
+    btn.classList.toggle("is-pinned", pinned);
+  }
+
+  // Append a "Pin as parent" control to a layer's card — only for polygon layers
+  // that actually have a district at the selected point. Called after each card
+  // renders its result.
+  function appendPinControl(mod) {
+    if (!mod.overlay || !mod.overlay.style) return; // polygon layers only
+    var rt = layerRuntime[mod.id];
+    if (!rt || !rt.geojson || !state.selectedPoint) return;
+    if (!findFeatureContaining(rt.geojson, state.selectedPoint)) return;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pin-parent-btn";
+    stylePinButton(btn, mod.id);
+    btn.addEventListener("click", function () { setPinnedParent(mod.id); });
+    rt.pinBtn = btn;
+    if (!rt.cardFooter && rt.cardBody.querySelector(".card-flush")) {
+      // a migrated (flush) card whose module declares no primaryLink still
+      // needs the footer — the flush body has no padding for a loose button
+      var footer = document.createElement("div");
+      footer.className = "card-footer";
+      rt.block.insertBefore(footer, rt.cardBody.nextSibling);
+      rt.cardFooter = footer;
+    }
+    if (rt.cardFooter) {
+      // migrated cards: the pin sits left in the shell-owned footer, before
+      // the right-aligned primary link (docs/CARD_RENDER_API.md)
+      rt.cardFooter.insertBefore(btn, rt.cardFooter.firstChild);
+    } else {
+      rt.cardBody.appendChild(btn);
+    }
+  }

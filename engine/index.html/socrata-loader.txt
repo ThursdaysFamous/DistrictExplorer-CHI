@@ -1,0 +1,75 @@
+  /* ---------- true if at least one feature has real (non-null) geometry.
+   * Some older "legacy" Socrata boundary datasets return HTTP 200 from the
+   * primary .geojson route with every feature's geometry stripped to null
+   * (confirmed on Boundaries - ZIP Codes / Police Districts) — that's not a
+   * fetch failure, so .catch() alone never sees it. ---------- */
+  function hasUsableGeometry(geojson) {
+    var features = geojson && geojson.features;
+    if (!features || !features.length) return false;
+    for (var i = 0; i < features.length; i++) {
+      if (features[i].geometry) return true;
+    }
+    return false;
+  }
+
+  /* ---------- fetch a Socrata dataset as GeoJSON, trying each known route in turn
+   * until one returns real geometry. Some datasets 200 with every geometry
+   * stripped to null on one route (confirmed on Police Districts /
+   * ZIP Codes' /resource/{id}.geojson route) but work fine via another —
+   * that's a "succeeded but useless" response, not a fetch failure, so a
+   * plain .catch() never sees it. ---------- */
+  function socrataRouteUrls(datasetId) {
+    return [
+      SOCRATA_HOST + "/resource/" + datasetId + ".geojson?$limit=1000",
+      SOCRATA_HOST + "/api/v3/views/" + datasetId + "/query.geojson",
+      SOCRATA_HOST + "/api/geospatial/" + datasetId + "?method=export&format=GeoJSON"
+    ].map(withAppToken);
+  }
+
+  /* ---------- walk a list of fallback routes, returning the first response that
+   * passes `validate`. Single catch per route: a fetch failure and a "200 but
+   * useless" response both advance to the next route exactly once — the old
+   * .then-recursion + .catch-recursion pair re-ran later routes twice, a bug
+   * this shared helper keeps fixed for both Socrata callers. Primary route (0)
+   * gets 2 retries, fallbacks 1. `label` only names the dataset in the reject. */
+  function tryRoutes(urls, validate, label) {
+    function tryRoute(i) {
+      if (i >= urls.length) return Promise.reject(new Error("no route for " + label + " succeeded"));
+      return fetchJSONWithRetry(urls[i], {}, i === 0 ? 2 : 1)
+        .then(function (data) {
+          if (validate(data)) return data;
+          throw new Error("route returned nothing usable");
+        })
+        .catch(function () { return tryRoute(i + 1); });
+    }
+    return tryRoute(0);
+  }
+
+  function loadSocrataGeoJSON(datasetId) {
+    return tryRoutes(socrataRouteUrls(datasetId), hasUsableGeometry, datasetId + " geometry");
+  }
+
+  /* ---------- point-first Socrata fetch: only the feature(s) containing one
+   * point, via SoQL intersects on the dataset's probed geometry column. A
+   * single district's geometry against the full boundary set, so a first
+   * click can answer before the whole download lands (see queryFeatureAt).
+   * Only the primary /resource/ route takes $where; a legacy dataset that
+   * nulls geometry on that route fails hasUsableGeometry here exactly as it
+   * does in the route walk, the caller falls back to the full-set load, and
+   * the fallback-route machinery keeps owning that failure mode. An empty
+   * result rejects too — deliberately: "nothing intersects" from the server
+   * is indistinguishable from those null-geometry lies, so the full set
+   * (whose routes are validated) stays the only authority for "no district
+   * here". ---------- */
+  function loadSocrataPointGeoJSON(datasetId, point) {
+    return probeGeometryColumn(datasetId).then(function (col) {
+      var wkt = "POINT (" + point.lng + " " + point.lat + ")";
+      var url = SOCRATA_HOST + "/resource/" + datasetId + ".geojson?$where=" +
+        encodeURIComponent("intersects(" + col + ", '" + wkt + "')") + "&$limit=8";
+      return fetchJSONWithRetry(withAppToken(url), {}, 1).then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("point query for " + datasetId + " returned no usable geometry");
+        return geojson;
+      });
+    });
+  }
+

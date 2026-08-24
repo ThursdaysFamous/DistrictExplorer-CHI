@@ -1,0 +1,35 @@
+  function loadArcGISGeoJSON(serviceUrl) {
+    // geometryPrecision=6 (~0.11 m) trims coordinate digits the server would
+    // otherwise send at full float precision — no visible or classification
+    // change at any zoom this map allows; a server that ignores it is unharmed.
+    var url = serviceUrl + "/query?where=1%3D1&outFields=*&f=geojson&outSR=4326&geometryPrecision=6";
+    return fetchJSONWithRetry(url, {}, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("no usable geometry from " + serviceUrl);
+        return geojson;
+      });
+  }
+
+  /* ---------- point-first ArcGIS fetch: only the feature(s) intersecting one
+   * point, from any FeatureServer/MapServer layer the full loaders read (a
+   * hosted org, a county GIS, TIGERweb). One district's geometry instead of
+   * the whole set, so a heavy layer's card can answer while the full
+   * download is still in flight (see queryFeatureAt). `where` is optional —
+   * a point filter already narrows harder than any attribute clause, but a
+   * caller whose full load filters (e.g. STATE='17') may pass the same
+   * clause for exact parity. An empty result rejects like a null-geometry
+   * one, so "no district here" is only ever concluded from the validated
+   * full set, never from a server quirk on the spatial query. ---------- */
+  function loadArcGISPointGeoJSON(serviceUrl, point, outFields, where) {
+    var url = serviceUrl + "/query?where=" + encodeURIComponent(where || "1=1") +
+      "&geometry=" + encodeURIComponent(point.lng + "," + point.lat) +
+      "&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=" + encodeURIComponent(outFields || "*") +
+      "&outSR=4326&f=geojson&geometryPrecision=6";
+    return fetchJSONWithRetry(url, {}, 1)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("point query returned no usable geometry: " + serviceUrl);
+        return geojson;
+      });
+  }
+

@@ -1,0 +1,36 @@
+  /* ---------- point-in-polygon: GeoJSON Polygon / MultiPolygon, holes-aware ---------- */
+  function pointInRing(pt, ring) {
+    // standard even-odd ray casting against a single ring
+    var x = pt[0], y = pt[1], inside = false;
+    for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      var xi = ring[i][0], yi = ring[i][1];
+      var xj = ring[j][0], yj = ring[j][1];
+      var intersect = ((yi > y) !== (yj > y)) &&
+        (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+  function pointInPolygonRings(pt, rings) {
+    // even-odd across outer ring + hole rings correctly excludes holes
+    var inside = false;
+    for (var i = 0; i < rings.length; i++) {
+      if (pointInRing(pt, rings[i])) inside = !inside;
+    }
+    return inside;
+  }
+  function pointInGeometry(pt, geometry) {
+    if (!geometry) return false;
+    var lngLat = [pt.lng, pt.lat];
+    if (geometry.type === "Polygon") {
+      return pointInPolygonRings(lngLat, geometry.coordinates);
+    }
+    if (geometry.type === "MultiPolygon") {
+      for (var i = 0; i < geometry.coordinates.length; i++) {
+        if (pointInPolygonRings(lngLat, geometry.coordinates[i])) return true;
+      }
+      return false;
+    }
+    return false;
+  }
+

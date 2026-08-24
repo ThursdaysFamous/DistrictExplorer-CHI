@@ -1,0 +1,26 @@
+  function loadArcGISPaged(layerUrl, outFields) {
+    var PAGE = 1000;
+    function page(offset, acc) {
+      var url = layerUrl + "/query?where=1%3D1&outFields=" + encodeURIComponent(outFields || "*") +
+        "&outSR=4326&f=geojson&geometryPrecision=6&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        var feats = (gj && gj.features) || [];
+        acc = acc.concat(feats);
+        var more = gj && (gj.exceededTransferLimit || (gj.properties && gj.properties.exceededTransferLimit));
+        // Continue while the server flags more AND this page returned rows.
+        // Guarding on feats.length > 0 (not === PAGE) keeps this correct when a
+        // service caps below PAGE: such a service still sets exceededTransferLimit
+        // on a short page, so an === PAGE test would stop after one page and
+        // silently ship a truncated FeatureCollection. resultOffset advances by
+        // feats.length, so a zero-row page always terminates the loop.
+        if (more && feats.length > 0) return page(offset + feats.length, acc);
+        var out = { type: "FeatureCollection", features: acc };
+        // Same "200 but useless" guard the unpaged loaders apply: an Esri error
+        // envelope 200s carrying no usable geometry; without this makeCached
+        // would retain that empty response as a permanent success.
+        if (!hasUsableGeometry(out)) throw new Error("paged ArcGIS layer returned no usable geometry: " + layerUrl);
+        return out;
+      });
+    }
+    return page(0, []);
+  }

@@ -1,0 +1,31 @@
+  /* ---------- IL State Senate / IL State House — Open States has no browser
+   * CORS (per playbook), so instead of a live roster join these look up the
+   * district in a build-side roster served from the same-origin
+   * data/app/il-senate-members.json / il-house-members.json, fetched lazily
+   * on first click and joined to the TIGERweb boundary. A roster-fetch
+   * failure degrades to "district number + ILGA directory link" (best-effort
+   * .catch below), the same surface as a district with no roster entry.
+   *
+   * The roster is generated, not hand-typed: scripts/ilga_scraper.py scrapes
+   * each member's ILGA detail page and scripts/build_il_roster.py resolves
+   * the current officeholder per district and writes the two roster JSON
+   * files. A weekly GitHub Action (.github/workflows/
+   * update-ilga-roster.yml) reruns this and opens a PR when the roster
+   * changes, so re-verify against ilga.gov/Senate/Members or
+   * ilga.gov/House/Members if that PR flow is ever paused. ---------- */
+  function officeFieldHtml(lines) {
+    if (!lines || !lines.length) return null;
+    return lines.map(sanitize).join("<br>");
+  }
+
+  // Extract a geocodable street address from an office's address lines (an array
+  // of strings): drop phone/fax lines, keep the street + city/zip. Used by
+  // registerIlgaChamber's pointOfInterest when a roster supplies office lines.
+  function officeAddressForGeocode(lines) {
+    if (!lines || !lines.length) return null;
+    var kept = lines.filter(function (l) {
+      return !/(?:phone|fax|tel|\(\d{3}\)|\d{3}[-.\s]\d{4})/i.test(String(l));
+    });
+    var addr = (kept.length ? kept : lines).join(", ").trim();
+    return addr || null;
+  }

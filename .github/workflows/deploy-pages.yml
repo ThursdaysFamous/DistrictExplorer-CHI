@@ -89,6 +89,7 @@ jobs:
           python3 scripts/validate_index.py il/index.html
           python3 scripts/check_engine_parity.py il/index.html
           python3 scripts/check_engine_parity.py il/sw.js
+          python3 scripts/compose_app.py --check
 
       - uses: actions/setup-node@v4
         with:
@@ -170,6 +171,18 @@ jobs:
             --exclude='node_modules' \
             --exclude='package.json' \
             --exclude='package-lock.json' \
+            # Imported instances are NOT published yet. sf/ and nyc/ live in this
+            # repo so they can share the engine and the tooling, but each still
+            # serves from its own domain and carries its own canonical. Publishing
+            # them here before that cutover would put a second live copy of each
+            # app on this origin. Delete the line for an instance when its domain
+            # moves (R5) — that is the switch that makes it live.
+            --exclude='sf' \
+            --exclude='nyc' \
+            --exclude='engine' \
+            --exclude='metros.json' \
+            --exclude='metro-worksheet.json' \
+            --exclude='schema' \
             --exclude='CLAUDE.md' \
             ./ _site/
           echo "Published tree:" && find _site -type f | sort

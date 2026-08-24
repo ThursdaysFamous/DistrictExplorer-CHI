@@ -1,0 +1,112 @@
+  /* ---------- polygon-in-polygon containment (used by the hover explorer's
+   * "districts fully inside the one you're over" outlining). There's no
+   * geometry library here, so this is a hand-rolled, vertex-based test:
+   * a child polygon counts as inside a parent when every one of its ring
+   * vertices is inside the parent (or within HOVER_CONTAIN_EPS of the parent's
+   * boundary — real nested layers like police beats share edges with their
+   * parent district, and two independently-simplified copies of a shared edge
+   * don't land on exactly the same coordinates, so an exact test would wrongly
+   * reject them). It's an APPROXIMATION: a concave parent could in theory clip
+   * a child edge that runs between two inside vertices. Good enough for civic
+   * exploration (never legal precision — see the app's disclaimer), and every
+   * call is gated by a cheap bounding-box reject first so the vertex loop only
+   * runs for the few candidates that could plausibly nest. ---------- */
+  function eachRing(geometry, cb) {
+    if (!geometry) return;
+    if (geometry.type === "Polygon") { geometry.coordinates.forEach(cb); }
+    else if (geometry.type === "MultiPolygon") {
+      geometry.coordinates.forEach(function (poly) { poly.forEach(cb); });
+    }
+  }
+
+  // bounding box [minLng, minLat, maxLng, maxLat], memoized on the feature so
+  // repeated hover frames don't re-walk the same coordinates.
+  function featureBBox(feature) {
+    if (feature.__hoverBBox) return feature.__hoverBBox;
+    var b = [Infinity, Infinity, -Infinity, -Infinity];
+    eachRing(feature.geometry, function (ring) {
+      for (var i = 0; i < ring.length; i++) {
+        var x = ring[i][0], y = ring[i][1];
+        if (x < b[0]) b[0] = x;
+        if (y < b[1]) b[1] = y;
+        if (x > b[2]) b[2] = x;
+        if (y > b[3]) b[3] = y;
+      }
+    });
+    feature.__hoverBBox = b;
+    return b;
+  }
+
+  function bboxInside(inner, outer, eps) {
+    return inner[0] >= outer[0] - eps && inner[1] >= outer[1] - eps &&
+           inner[2] <= outer[2] + eps && inner[3] <= outer[3] + eps;
+  }
+
+  function distPointToSegment(px, py, ax, ay, bx, by) {
+    var dx = bx - ax, dy = by - ay;
+    if (dx === 0 && dy === 0) return Math.hypot(px - ax, py - ay);
+    var t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy);
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+  }
+
+  // planar (degree-space) distance from a [lng,lat] point to a geometry's
+  // nearest boundary edge. Only used as a small on-boundary tolerance, so not
+  // scaling longitude by cos(lat) is fine at this metro's latitude.
+  function distToBoundary(pt, geometry) {
+    var min = Infinity;
+    eachRing(geometry, function (ring) {
+      for (var i = 0; i < ring.length - 1; i++) {
+        var d = distPointToSegment(pt[0], pt[1], ring[i][0], ring[i][1], ring[i + 1][0], ring[i + 1][1]);
+        if (d < min) min = d;
+      }
+    });
+    return min;
+  }
+
+  // ~11m tolerance. Two independently-sourced boundaries that share an edge
+  // (e.g. a police district and its beats, which come from different CPD
+  // services) don't land on identical coordinates, so a tighter value wrongly
+  // classified truly-nested shapes as "crossing". Far smaller than any real
+  // ward-vs-district crossing, so genuine straddlers are unaffected.
+  var CONTAIN_EPS = 1e-4;
+  function polygonFullyInside(child, parent) {
+    if (!bboxInside(featureBBox(child), featureBBox(parent), CONTAIN_EPS)) return false;
+    var parentGeom = parent.geometry;
+    var inside = true;
+    eachRing(child.geometry, function (ring) {
+      if (!inside) return;
+      for (var i = 0; i < ring.length; i++) {
+        var v = ring[i];
+        if (pointInGeometry({ lat: v[1], lng: v[0] }, parentGeom)) continue;
+        if (distToBoundary(v, parentGeom) <= CONTAIN_EPS) continue;
+        inside = false;
+        return;
+      }
+    });
+    return inside;
+  }
+
+  // Do two polygons overlap at all? Vertex-based approximation: true if any
+  // vertex of one lies inside the other. Misses the rare case of two polygons
+  // that cross only edge-to-edge with no vertex contained — negligible for the
+  // chunky civic boundaries here. Used to tell "crosses the edge" (overlaps but
+  // not fully inside) from "no relationship".
+  function anyVertexInside(a, b) {
+    var hit = false;
+    eachRing(a.geometry, function (ring) {
+      if (hit) return;
+      for (var i = 0; i < ring.length; i++) {
+        if (pointInGeometry({ lat: ring[i][1], lng: ring[i][0] }, b.geometry)) { hit = true; return; }
+      }
+    });
+    return hit;
+  }
+  function polygonsOverlap(a, b) {
+    if (!bboxIntersect(featureBBox(a), featureBBox(b))) return false;
+    return anyVertexInside(a, b) || anyVertexInside(b, a);
+  }
+  function bboxIntersect(x, y) {
+    return !(x[2] < y[0] || x[0] > y[2] || x[3] < y[1] || x[1] > y[3]);
+  }
+

@@ -1,0 +1,7 @@
+  /* Neutral class names for the shared map chrome, applied by engine code and
+   * styled by the fenced styles-markers CSS. Formerly fork-prefixed and worksheet-
+   * driven (docs/ENGINE_SYNC.md item 6); neutralized to byte-identical engine
+   * constants so the names and their CSS match across every fork. */
+  var HIGHLIGHT_CLASS = "region-highlight"; // selected-region highlight (drop-shadow filter)
+  var POI_PIN_CLASS = "poi-pin";            // geocoded point-of-interest marker
+  var PANNING_CLASS = "map-panning";        // map-container class that pauses the highlight filter mid-pan

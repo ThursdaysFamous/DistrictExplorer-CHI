@@ -1,0 +1,305 @@
+  /* =========================================================================
+   * SHAREABLE URL — #point=lat,lng&layers=id1,id2&zoom=N mirrors the current
+   * selection so any view can be copied out of the URL bar (or via the
+   * point chip's Copy-link button) and restored on load. replaceState, not
+   * location.hash assignment, so clicking around never pollutes the back
+   * button. Parsed once at boot by applyStateFromHash().
+   * ======================================================================= */
+
+  // The zoom this fork boots at, read from the map rather than configured, so
+  // the engine needs no per-metro constant and every fork gets its own default.
+  // Safe to capture here: nothing between map creation and this line changes the
+  // zoom, and applyStateFromHash() runs at the end of boot.
+  var bootZoom = map.getZoom();
+
+  function syncUrlHash() {
+    var parts = [];
+    if (state.selectedPoint) {
+      parts.push("point=" + state.selectedPoint.lat.toFixed(5) + "," + state.selectedPoint.lng.toFixed(5));
+    }
+    var on = layers.filter(function (l) { return state.layersOn[l.id]; })
+      .map(function (l) { return l.id; });
+    if (on.length) parts.push("layers=" + on.join(","));
+    // Zoom rides the permalink because it is part of what was shared: an embed of
+    // a whole county answers a different question from an embed of one block, and
+    // a refresh should not throw the reader back to the default view. Emitted
+    // ONLY when the user has moved off the boot zoom, so an untouched map still
+    // produces a clean, hash-free URL.
+    if (map.getZoom() !== bootZoom) parts.push("zoom=" + map.getZoom());
+    var hash = parts.length ? "#" + parts.join("&") : "";
+    try {
+      history.replaceState(null, "", hash || location.pathname + location.search);
+    } catch (e) {
+      // some file:// contexts refuse replaceState — losing the permalink
+      // there is fine, everything else keeps working
+    }
+  }
+
+  // Point and layer changes call syncUrlHash themselves; zoom has no such hook,
+  // because a zoom changes no app state — only the view. zoomend fires once per
+  // gesture (not per animation frame), so this is a handful of replaceState calls.
+  map.on("zoomend", syncUrlHash);
+
+  function applyStateFromHash() {
+    var raw = location.hash.replace(/^#/, "");
+    if (!raw) return;
+    var params = {};
+    raw.split("&").forEach(function (kv) {
+      var eq = kv.indexOf("=");
+      if (eq > 0) params[kv.slice(0, eq)] = decodeURIComponent(kv.slice(eq + 1));
+    });
+    if (params.layers) {
+      params.layers.split(",").forEach(function (id) {
+        var box = document.getElementById("toggle-" + id);
+        if (box && !box.checked) box.click(); // a real click, so the change handler runs
+      });
+    }
+    // Parsed BEFORE the point, because the point's pan has to know about it.
+    // An unparseable or out-of-range zoom is ignored rather than clamped: a link
+    // from a fork with different limits should fall back to this fork's default
+    // view, not to its nearest edge.
+    var zoom = null;
+    if (params.zoom !== undefined) {
+      var wanted = parseInt(params.zoom, 10);
+      if (isFinite(wanted) && wanted >= map.getMinZoom() && wanted <= map.getMaxZoom()) zoom = wanted;
+    }
+    var framed = false;
+    if (params.point) {
+      var pieces = params.point.split(",");
+      var lat = parseFloat(pieces[0]), lng = parseFloat(pieces[1]);
+      // sanity-bound to the greater metro area this app serves (PERMALINK_GATE)
+      if (isFinite(lat) && isFinite(lng) &&
+          lat > PERMALINK_GATE.minLat && lat < PERMALINK_GATE.maxLat &&
+          lng > PERMALINK_GATE.minLng && lng < PERMALINK_GATE.maxLng) {
+        // skipPan when the link carries its own zoom, then frame it here.
+        // setSelectedPoint's pan is ANIMATED and animates to at least zoom 15;
+        // an animation in flight settles AFTER anything applied synchronously
+        // afterwards, so a shared zoom set post-hoc is silently overwritten by
+        // the pan that was already running. Measured, not theorised — that is
+        // exactly what #point=…&zoom=9 did before this branch existed.
+        setSelectedPoint(lat, lng, zoom === null ? null : { skipPan: true });
+        if (zoom !== null) {
+          map.setView([lat, lng], zoom, { animate: false });
+          framed = true;
+        }
+      }
+    }
+    if (zoom !== null && !framed) map.setView(map.getCenter(), zoom, { animate: false });
+  }
+
+  /* ---------- share controls — the point chip's single "Share" surface -----
+   * One button replaces the old Copy-link / Embed pill pair: "Share" names
+   * the INTENT, and the popover behind it names each mechanism's OUTCOME
+   * ("the link opens the map at this exact point, with the layers you have
+   * on") — which two words on a pill next to a lat,lng readout never could;
+   * the old label read as "copy these coordinates" as easily as "share this
+   * view". Touch-first devices get the platform's native share sheet when
+   * the browser offers one; hover-capable devices get the popover with the
+   * permalink, the <iframe> snippet (visible BEFORE it is copied — no more
+   * blind clipboard write), and the coordinates as their own copyable row.
+   *
+   * Every URL handed out carries CAMPAIGN TAGS (?utm_source=share|embed
+   * before the #hash, so the hash router never sees them). gtag reads utm_*
+   * natively; GoatCounter's count.js sends location.search with every hit
+   * and uses utm_source as the referrer, while its canonical-link path
+   * normalization keeps the recorded path clean — so shared/embedded
+   * arrivals attribute in both stacks and the path stats pay nothing.
+   * Organic traffic stays untagged, and a re-share from a tagged page
+   * rebuilds from origin+pathname, so an inbound tag is never copied
+   * forward as the next reader's source.
+   *
+   * Everything interpolated is our own trusted content — canonical fork URL
+   * (METRO_EXPLORERS), numeric coords, registry layer ids, configured
+   * METRO_NAME — so the strings are safe verbatim, the same argument the
+   * embed snippet carried as fork code. Values are built at OPEN/COPY time
+   * from live state, never cached in the DOM, so the popover cannot hand
+   * out a stale view. Forks wire it with one line in their setSelectedPoint:
+   * pointChip.appendChild(buildShareControl()). ---------- */
+
+  function shareCanonicalBase() {
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      if (METRO_EXPLORERS[i].id === THIS_METRO) return METRO_EXPLORERS[i].url;
+    }
+    return location.origin + location.pathname; // preview/localhost fallback
+  }
+
+  // The shareable link: CURRENT origin (a preview shares the preview, exactly
+  // like the old Copy-link did) + campaign tags + the live hash. Any inbound
+  // search — including someone else's utm tags — is deliberately dropped.
+  function shareLinkUrl() {
+    syncUrlHash(); // reflect the very latest point/layers/zoom first
+    return location.origin + location.pathname +
+      "?utm_source=share&utm_medium=link" + location.hash;
+  }
+
+  function buildEmbedSnippet() {
+    syncUrlHash();
+    // Canonical base, not location: a snippet grabbed on a preview/localhost
+    // must still embed production. width:100% + max-width keeps it
+    // responsive; loading=lazy so it never blocks the host page;
+    // allow=geolocation keeps the "locate me" button working inside.
+    var url = shareCanonicalBase().replace(/[?#].*$/, "") +
+      "?utm_source=embed&utm_medium=iframe" + location.hash;
+    return '<iframe src="' + url + '" width="100%" height="600" ' +
+      'style="border:0;max-width:100%" loading="lazy" ' +
+      'title="' + METRO_NAME + ' District Explorer" ' +
+      'allow="geolocation" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+  }
+
+  function copyTextToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return false; });
+    }
+    return Promise.resolve(false); // clipboard API unavailable (e.g. some file:// contexts)
+  }
+
+  // A copy button that reports its outcome in place ("Copied!" / "Copy
+  // failed") and reverts — the same feedback contract the old pills had.
+  function shareCopyButton(label, getText, eventName) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "share-copy-btn";
+    btn.textContent = label;
+    btn.addEventListener("click", function () {
+      trackEvent(eventName);
+      copyTextToClipboard(getText()).then(function (ok) {
+        btn.textContent = ok ? "Copied!" : "Copy failed";
+        setTimeout(function () { btn.textContent = label; }, 1600);
+      });
+    });
+    return btn;
+  }
+
+  function shareCoordsText() {
+    if (!state.selectedPoint) return "";
+    return state.selectedPoint.lat.toFixed(5) + ", " + state.selectedPoint.lng.toFixed(5);
+  }
+
+  // The chip's share control (button + popover). Rebuilt with the rest of
+  // the chip on every selection, so an open popover never outlives the
+  // point it described; the document-level listeners self-clean on the next
+  // keydown/pointerdown even when the chip is torn down mid-open.
+  function buildShareControl() {
+    var wrap = document.createElement("span");
+    wrap.className = "share-control";
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy-link-btn share-btn";
+    btn.textContent = "Share";
+    btn.title = "Share this view — link, embed code, or coordinates";
+    btn.setAttribute("aria-haspopup", "dialog");
+    btn.setAttribute("aria-expanded", "false");
+    wrap.appendChild(btn);
+
+    var popover = null;
+    function closePopover(refocus) {
+      if (!popover) return;
+      document.removeEventListener("keydown", onKeydown, true);
+      document.removeEventListener("pointerdown", onOutside, true);
+      if (popover.parentNode) popover.parentNode.removeChild(popover);
+      popover = null;
+      btn.setAttribute("aria-expanded", "false");
+      if (refocus) btn.focus();
+    }
+    function onKeydown(e) {
+      if (e.key === "Escape") closePopover(true);
+    }
+    function onOutside(e) {
+      if (popover && !popover.contains(e.target) && !wrap.contains(e.target)) closePopover(false);
+    }
+    function selectOnFocus() { this.select(); }
+
+    function openPopover() {
+      popover = document.createElement("div");
+      popover.className = "share-popover";
+      popover.setAttribute("role", "dialog");
+      popover.setAttribute("aria-label", "Share this view");
+
+      var head = document.createElement("div");
+      head.className = "share-popover-head";
+      var title = document.createElement("strong");
+      title.className = "share-popover-title";
+      title.textContent = "Share this view";
+      var close = document.createElement("button");
+      close.type = "button";
+      close.className = "share-popover-close";
+      close.textContent = "✕";
+      close.setAttribute("aria-label", "Close share panel");
+      close.addEventListener("click", function () { closePopover(true); });
+      head.appendChild(title);
+      head.appendChild(close);
+      popover.appendChild(head);
+
+      var note = document.createElement("p");
+      note.className = "share-popover-note";
+      note.textContent = "The link opens the map at this exact point, with the layers you have on.";
+      popover.appendChild(note);
+
+      var linkRow = document.createElement("div");
+      linkRow.className = "share-popover-row";
+      var linkInput = document.createElement("input");
+      linkInput.type = "text";
+      linkInput.readOnly = true;
+      linkInput.className = "share-popover-url";
+      linkInput.value = shareLinkUrl();
+      linkInput.setAttribute("aria-label", "Shareable link");
+      linkInput.addEventListener("focus", selectOnFocus);
+      linkRow.appendChild(linkInput);
+      linkRow.appendChild(shareCopyButton("Copy link", shareLinkUrl, "share-permalink"));
+      popover.appendChild(linkRow);
+
+      var embedLabel = document.createElement("div");
+      embedLabel.className = "share-popover-label";
+      embedLabel.textContent = "Embed on your site";
+      popover.appendChild(embedLabel);
+      var embedBox = document.createElement("textarea");
+      embedBox.readOnly = true;
+      embedBox.rows = 3;
+      embedBox.className = "share-popover-embed";
+      embedBox.value = buildEmbedSnippet();
+      embedBox.setAttribute("aria-label", "Embed code");
+      embedBox.addEventListener("focus", selectOnFocus);
+      popover.appendChild(embedBox);
+      var embedRow = document.createElement("div");
+      embedRow.className = "share-popover-row share-popover-row-end";
+      embedRow.appendChild(shareCopyButton("Copy embed code", buildEmbedSnippet, "embed-iframe"));
+      popover.appendChild(embedRow);
+
+      var coordsLabel = document.createElement("div");
+      coordsLabel.className = "share-popover-label";
+      coordsLabel.textContent = "Coordinates";
+      popover.appendChild(coordsLabel);
+      var coordsRow = document.createElement("div");
+      coordsRow.className = "share-popover-row";
+      var coordsVal = document.createElement("code");
+      coordsVal.className = "share-popover-coords";
+      coordsVal.textContent = shareCoordsText();
+      coordsRow.appendChild(coordsVal);
+      coordsRow.appendChild(shareCopyButton("Copy", shareCoordsText, "copy-coordinates"));
+      popover.appendChild(coordsRow);
+
+      wrap.appendChild(popover);
+      btn.setAttribute("aria-expanded", "true");
+      document.addEventListener("keydown", onKeydown, true);
+      document.addEventListener("pointerdown", onOutside, true);
+      linkInput.focus();
+      trackEvent("share-open");
+    }
+
+    btn.addEventListener("click", function () {
+      // Touch-first devices with a native share sheet get the platform
+      // surface (the expected mobile pattern); hover-capable devices get
+      // the popover. A dismissed sheet needs no cleanup.
+      if (!hoverCapable && navigator.share) {
+        trackEvent("share-native");
+        navigator.share({ title: METRO_NAME + " District Explorer", url: shareLinkUrl() })
+          .catch(function () { /* user dismissed, or the platform refused — nothing to undo */ });
+        return;
+      }
+      if (popover) closePopover(true); else openPopover();
+    });
+
+    return wrap;
+  }
+

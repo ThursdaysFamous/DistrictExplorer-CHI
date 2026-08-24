@@ -1,0 +1,18 @@
+  /* ---------- district-number lookup with a name-field regex fallback, since
+   * TIGERweb's numbered-district field name changes with each Congress/GA
+   * (e.g. CD119FP) and hasn't been live-verified in this sandbox (see SURPRISE
+   * note in the playbook) ---------- */
+  function extractDistrictNumber(props, numericCandidates) {
+    var direct = findPropCI(props, numericCandidates);
+    if (direct !== null && direct !== undefined && String(direct) !== "") {
+      return String(direct).replace(/^0+(?=\d)/, "");
+    }
+    var keys = Object.keys(props || {});
+    for (var i = 0; i < keys.length; i++) {
+      if (/name/i.test(keys[i])) {
+        var m = String(props[keys[i]]).match(/(\d+)\s*$/);
+        if (m) return m[1];
+      }
+    }
+    return null;
+  }

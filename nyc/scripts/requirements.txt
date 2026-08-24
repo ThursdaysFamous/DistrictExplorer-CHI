@@ -1,0 +1,18 @@
+# Pinned dependencies for the NYC scraper pipeline (METRO_EXPANSION_PLAYBOOK §9;
+# playbook R10 — heuristic parsers are exactly the code that breaks on silent
+# dependency drift). Most scrapers use only the Python stdlib (urllib + re):
+#   ny_legislature_scraper.py  (Open Legislation API — needs NYSENATE_API_KEY)
+#   nypd_precinct_scraper.py   (nyc.gov precinct pages)
+#   council_scraper.py         (council.nyc.gov/districts)
+#   build_congress_roster.py   (congress-legislators, stdlib)
+# Only the CEC scraper needs a real browser:
+#   cec_scraper.py             (schools.nyc.gov — Playwright, §6c)
+# requests + beautifulsoup4 are pinned for any future HTML scraper that needs them.
+requests==2.33.1
+beautifulsoup4==4.15.0
+playwright==1.61.0
+
+# Conversion 2 (CHI docs/MECHANIZATION_PLAYBOOK.md): worksheet validation in
+# scripts/generate_metro_files.py. The generator is otherwise stdlib-only;
+# validate_index.py deliberately stays stdlib and does NOT import this.
+jsonschema==4.26.0

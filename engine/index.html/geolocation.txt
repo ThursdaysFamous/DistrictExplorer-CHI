@@ -1,0 +1,70 @@
+  /* =========================================================================
+   * GEOLOCATION — "Use my current location" via the browser's
+   * navigator.geolocation API. Feeds straight into the same
+   * setSelectedPoint() the map click and address search use, so a
+   * geolocated point behaves identically everywhere downstream.
+   * ======================================================================= */
+
+  var locateBtn = document.getElementById("locate-btn");
+  var geoStatusEl = document.getElementById("geo-status");
+
+  locateBtn.addEventListener("click", function () {
+    trackEvent("geolocate");
+    if (!("geolocation" in navigator)) {
+      geoStatusEl.textContent = "Geolocation isn't supported in this browser.";
+      geoStatusEl.className = "geo-status err";
+      return;
+    }
+
+    locateBtn.disabled = true;
+    geoStatusEl.textContent = "Locating…";
+    geoStatusEl.className = "geo-status";
+
+    navigator.geolocation.getCurrentPosition(
+      function (pos) {
+        locateBtn.disabled = false;
+        var lat = pos.coords.latitude, lng = pos.coords.longitude;
+        if (lat < METRO_BBOX.minLat || lat > METRO_BBOX.maxLat || lng < METRO_BBOX.minLng || lng > METRO_BBOX.maxLng) {
+          // easter egg: standing inside a sibling metro? offer its explorer,
+          // deep-linking the located point (the URL fragment stays client-side,
+          // same exposure as the sibling's own geolocate → permalink flow)
+          var siblingHere = siblingMetroAt(lat, lng);
+          if (siblingHere) {
+            geoStatusEl.textContent = "You're outside " + METRO_NAME + " — but " + siblingHere.label + " has its own District Explorer.";
+            geoStatusEl.className = "geo-status";
+            offerMetroPortal(siblingHere, {
+              point: { lat: lat, lng: lng },
+              source: "geolocate",
+              title: "You're in " + siblingHere.label + "!",
+              note: "This is the " + METRO_NAME + " District Explorer — but " + siblingHere.label +
+                " has one of its own, and it can look up the spot you're standing on."
+            });
+            return;
+          }
+          geoStatusEl.textContent = "Your current location looks like it's outside the " + METRO_NAME + " area this app covers.";
+          geoStatusEl.className = "geo-status err";
+          return;
+        }
+        geoStatusEl.textContent = "";
+        geoResultsList.innerHTML = "";
+        // rounded to ~1km (2 decimal places) — coarse enough that it can't
+        // pin an individual's address, fine enough to see which part of the
+        // city geolocation gets used from. Path stays fixed so GoatCounter
+        // groups every hit under one "geolocate-success" event; the
+        // approximate area only shows up in the per-hit title.
+        trackEvent("geolocate-success", lat.toFixed(2) + "," + lng.toFixed(2));
+        setSelectedPoint(lat, lng);
+      },
+      function (err) {
+        locateBtn.disabled = false;
+        var msg = "Couldn't get your location.";
+        if (err.code === err.PERMISSION_DENIED) msg = "Location access was denied. Allow it in your browser's site settings to use this.";
+        else if (err.code === err.TIMEOUT) msg = "Location request timed out. Try again.";
+        else if (err.code === err.POSITION_UNAVAILABLE) msg = "Your location is currently unavailable.";
+        geoStatusEl.textContent = msg;
+        geoStatusEl.className = "geo-status err";
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  });
+

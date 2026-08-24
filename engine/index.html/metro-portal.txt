@@ -1,0 +1,176 @@
+  /* =========================================================================
+   * SIBLING-METRO PORTAL (easter egg) — every fork knows where its siblings
+   * live (METRO_EXPLORERS[].bbox). Pan the map until its center lands inside
+   * a sibling's metro and a portal card offers to hand you off to that
+   * fork's explorer, with a short countdown. Fork-specific surfaces (the
+   * geocoder's out-of-city search fallback, geolocation) reuse the same card
+   * via offerMetroPortal()/siblingMetroAt(), optionally deep-linking the
+   * resolved point through the sibling's #point= permalink. Dismissing
+   * re-arms only after the map center leaves that sibling's bbox, so panning
+   * around inside it never nags twice.
+   * ======================================================================= */
+
+  /* A metro without a (well-formed) bbox simply opts out of the portal —
+   * it still gets its footer link, so new METRO_EXPLORERS entries can land
+   * before their bbox is decided. */
+  function validMetroBbox(b) {
+    return !!b && isFinite(b.minLat) && isFinite(b.maxLat) &&
+      isFinite(b.minLng) && isFinite(b.maxLng) &&
+      b.minLat < b.maxLat && b.minLng < b.maxLng;
+  }
+
+  function pointInMetroBbox(lat, lng, b) {
+    return lat >= b.minLat && lat <= b.maxLat && lng >= b.minLng && lng <= b.maxLng;
+  }
+
+  function siblingMetroAt(lat, lng) {
+    // greater-metro bboxes may overlap once enough metros exist (two nearby
+    // cities) — the nearest bbox center wins, not list order. Squared-degree
+    // distance is plenty for a tie-break between neighbors.
+    var best = null, bestDist = Infinity;
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var m = METRO_EXPLORERS[i];
+      if (m.id === THIS_METRO || !validMetroBbox(m.bbox)) continue;
+      if (!pointInMetroBbox(lat, lng, m.bbox)) continue;
+      var dLat = lat - (m.bbox.minLat + m.bbox.maxLat) / 2;
+      var dLng = lng - (m.bbox.minLng + m.bbox.maxLng) / 2;
+      var dist = dLat * dLat + dLng * dLng;
+      if (dist < bestDist) { best = m; bestDist = dist; }
+    }
+    return best;
+  }
+
+  function metroPortalUrl(metro, point) {
+    if (!point) return metro.url;
+    return metro.url + "#point=" + point.lat.toFixed(5) + "," + point.lng.toFixed(5);
+  }
+
+  var metroPortal = null;           // lazily built {root, emoji, title, note, count, go, stay}
+  var metroPortalTimer = null;      // countdown interval handle
+  var metroPortalDismissed = {};    // id -> true, dismissed via "Stay"; each re-arms on leaving THAT bbox
+  var metroPortalRestoreFocus = null;
+
+  function ensureMetroPortal() {
+    if (metroPortal) return metroPortal;
+    var root = document.createElement("div");
+    root.id = "metro-portal";
+    root.setAttribute("role", "alertdialog");
+    root.setAttribute("aria-modal", "true");
+    root.setAttribute("aria-labelledby", "metro-portal-title");
+    root.setAttribute("aria-describedby", "metro-portal-note");
+    root.hidden = true;
+    var card = document.createElement("div");
+    card.className = "metro-portal-card";
+    var emoji = document.createElement("div");
+    emoji.className = "metro-portal-emoji";
+    emoji.setAttribute("aria-hidden", "true");
+    var title = document.createElement("h2");
+    title.id = "metro-portal-title";
+    var note = document.createElement("p");
+    note.id = "metro-portal-note";
+    var count = document.createElement("p");
+    count.className = "metro-portal-count";
+    count.setAttribute("aria-live", "polite");
+    var actions = document.createElement("div");
+    actions.className = "metro-portal-actions";
+    var go = document.createElement("button");
+    go.type = "button";
+    go.className = "metro-portal-go";
+    var stay = document.createElement("button");
+    stay.type = "button";
+    stay.className = "metro-portal-stay";
+    actions.appendChild(go);
+    actions.appendChild(stay);
+    card.appendChild(emoji);
+    card.appendChild(title);
+    card.appendChild(note);
+    card.appendChild(count);
+    card.appendChild(actions);
+    root.appendChild(card);
+    root.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { stay.click(); return; }
+      // minimal focus trap — the dialog only ever holds these two buttons
+      if (e.key === "Tab") {
+        e.preventDefault();
+        (document.activeElement === go ? stay : go).focus();
+      }
+    });
+    root.addEventListener("click", function (e) {
+      if (e.target === root) stay.click(); // clicking the backdrop = "Stay"
+    });
+    document.body.appendChild(root);
+    metroPortal = { root: root, emoji: emoji, title: title, note: note, count: count, go: go, stay: stay };
+    return metroPortal;
+  }
+
+  function hideMetroPortal() {
+    if (metroPortalTimer) { clearInterval(metroPortalTimer); metroPortalTimer = null; }
+    if (metroPortal) metroPortal.root.hidden = true;
+    if (metroPortalRestoreFocus && document.contains(metroPortalRestoreFocus)) {
+      metroPortalRestoreFocus.focus();
+    }
+    metroPortalRestoreFocus = null;
+  }
+
+  /* Show the portal card for a sibling metro. opts: {point, source, title,
+   * note} — point deep-links via #point=, source labels the trackEvent,
+   * title/note override the default "you wandered here" copy. */
+  function offerMetroPortal(metro, opts) {
+    opts = opts || {};
+    var p = ensureMetroPortal();
+    if (!p.root.hidden) return; // one portal at a time
+    var url = metroPortalUrl(metro, opts.point || null);
+    var explorerName = metro.label + " District Explorer";
+    p.emoji.textContent = metro.emoji || "🧭";
+    p.title.textContent = opts.title || "Whoa — this is " + metro.label + "!";
+    p.note.textContent = opts.note || "You've wandered a long way from " + METRO_NAME +
+      ". Good news: " + metro.label + " has a District Explorer of its own.";
+    p.go.textContent = "Take me there now";
+    p.stay.textContent = "Stay in " + METRO_NAME;
+
+    var secondsLeft = 5;
+    function renderCountdown() {
+      p.count.textContent = "Opening the " + explorerName + " in " + secondsLeft + "…";
+    }
+    function depart() {
+      if (metroPortalTimer) { clearInterval(metroPortalTimer); metroPortalTimer = null; }
+      trackEvent("metro-portal-go/" + metro.id, opts.source || "wander");
+      window.location.href = url;
+    }
+    p.go.onclick = depart;
+    p.stay.onclick = function () {
+      metroPortalDismissed[metro.id] = true;
+      hideMetroPortal();
+    };
+    renderCountdown();
+    if (metroPortalTimer) clearInterval(metroPortalTimer);
+    metroPortalTimer = setInterval(function () {
+      secondsLeft -= 1;
+      if (secondsLeft <= 0) { depart(); return; }
+      renderCountdown();
+    }, 1000);
+
+    trackEvent("metro-portal/" + metro.id, opts.source || "wander");
+    metroPortalRestoreFocus = document.activeElement;
+    p.root.hidden = false;
+    p.stay.focus(); // safe default: Enter/Escape keeps you here, the countdown does the magic
+  }
+
+  map.on("moveend", function () {
+    var c = map.getCenter();
+    // per-metro re-arm: a dismissal lasts exactly until the center leaves that
+    // sibling's own bbox — with several (possibly adjacent) metros, dismissing
+    // one never mutes another and never un-mutes early
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var m = METRO_EXPLORERS[i];
+      if (metroPortalDismissed[m.id] &&
+          !(validMetroBbox(m.bbox) && pointInMetroBbox(c.lat, c.lng, m.bbox))) {
+        delete metroPortalDismissed[m.id];
+      }
+    }
+    var metro = siblingMetroAt(c.lat, c.lng);
+    if (!metro) return;
+    if (metroPortalDismissed[metro.id]) return;           // dismissed; quiet until they leave
+    if (metroPortal && !metroPortal.root.hidden) return;  // already showing
+    offerMetroPortal(metro, { source: "wander" });
+  });

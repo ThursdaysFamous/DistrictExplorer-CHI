@@ -1,0 +1,172 @@
+  function renderGeocodeResults(results) {
+    geoResultsList.innerHTML = "";
+    if (!results || results.length === 0) {
+      geoStatus.textContent = "No addresses matched inside " + METRO_NAME + " yet. Keep typing, or check the spelling.";
+      geoStatus.className = "geo-status err";
+      return;
+    }
+    geoStatus.textContent = results.length + " match" + (results.length === 1 ? "" : "es") + " found.";
+    geoStatus.className = "geo-status";
+    results.forEach(function (r) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = r.display_name; // textContent — never innerHTML — for untrusted geocoder output
+      btn.addEventListener("click", function () {
+        // cancel any pending debounce fire and in-flight search, so a late
+        // response can't re-open the list over the "Selected:" status
+        clearTimeout(debounceTimer);
+        if (inFlightController) inFlightController.abort();
+        trackEvent("address-search");
+        setSelectedPoint(parseFloat(r.lat), parseFloat(r.lon));
+        geoResultsList.innerHTML = "";
+        geoStatus.textContent = "Selected: " + r.display_name;
+        // a point is now chosen — collapse the shell back to just the input row
+        // so the confirmation + type-ahead controls stop covering the map. The
+        // "Selected: …" text stays in the DOM, so it reappears on hover/focus.
+        collapseAfterSelect = true;
+        refreshSearchShellExpanded();
+      });
+      li.appendChild(btn);
+      geoResultsList.appendChild(li);
+    });
+  }
+
+  /* ---------- sibling-metro search fallback (easter egg) ----------
+   * When a query matches nothing inside the home metro, quietly retry it
+   * against each sibling District Explorer's metro bbox (METRO_EXPLORERS —
+   * see the ENGINE metro-portal block). A hit renders as a special result
+   * row that hands off to that fork with the address pre-selected via its
+   * #point= permalink. Only runs after a zero-result home search, so the
+   * extra request never fires for normal in-city typing. */
+  function buildSiblingResultRow(metro, r) {
+    var li = document.createElement("li");
+    li.className = "sibling-result";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    var addr = document.createElement("span");
+    addr.className = "sibling-result-addr";
+    // textContent — never innerHTML — for untrusted geocoder output
+    addr.textContent = (metro.emoji ? metro.emoji + " " : "") + r.display_name;
+    var hint = document.createElement("span");
+    hint.className = "sibling-result-hint";
+    hint.textContent = "Open in the " + metro.label + " District Explorer →";
+    btn.appendChild(addr);
+    btn.appendChild(hint);
+    btn.addEventListener("click", function () {
+      clearTimeout(debounceTimer);
+      if (inFlightController) inFlightController.abort();
+      trackEvent("metro-portal-go/" + metro.id, "search");
+      window.location.href = metroPortalUrl(metro, { lat: parseFloat(r.lat), lng: parseFloat(r.lon) });
+    });
+    li.appendChild(btn);
+    return li;
+  }
+
+  var SIBLING_ROWS_PER_METRO = 2; // keeps a many-metro future from flooding the result list
+  function maybeRenderSiblingMatches(query) {
+    var anySibling = METRO_EXPLORERS.some(function (m) { return m.id !== THIS_METRO && m.bbox; });
+    if (!anySibling) return;
+    // share the geocoder's abort slot so a new keystroke/search cancels this
+    // lookup exactly like it cancels an in-city one
+    inFlightController = new AbortController();
+    var signal = inFlightController.signal;
+    // one UNBOUNDED whole-coverage query, classified into metros locally
+    // (siblingMetroAt) — exactly one extra request per home-metro miss no
+    // matter how many sibling metros exist; hits outside every sibling metro
+    // are dropped. geocodeUnbounded is the fork's provider (the home search
+    // box may be scoped to the city, so this lookup needs its own wider call).
+    return geocodeUnbounded(query, signal)
+      .then(function (results) {
+        if (signal.aborted) return;
+        var perMetro = {}; // id -> rows rendered
+        var labels = [];
+        results.forEach(function (r) {
+          var metro = siblingMetroAt(parseFloat(r.lat), parseFloat(r.lon));
+          if (!metro) return; // not inside any sibling metro
+          perMetro[metro.id] = (perMetro[metro.id] || 0) + 1;
+          if (perMetro[metro.id] > SIBLING_ROWS_PER_METRO) return;
+          if (labels.indexOf(metro.label) === -1) labels.push(metro.label);
+          geoResultsList.appendChild(buildSiblingResultRow(metro, r));
+        });
+        if (!labels.length) return; // leave the standard "no matches" status as-is
+        geoStatus.textContent = "Nothing in " + METRO_NAME + " matched — but it looks like you're searching " +
+          labels.join(" and ") + ".";
+        geoStatus.className = "geo-status";
+      })
+      .catch(function (err) {
+        if (err.name === "AbortError") throw err; // the callers' handlers ignore aborts
+        // otherwise swallow: the home search itself succeeded, so the honest
+        // state is the standard "no matches" message already on screen — a
+        // failed easter-egg lookup must never surface as a search error
+      });
+  }
+
+  /* ---------- unit-fragment retry ----------
+   * People paste the address off a letterhead — "233 S Wacker Dr Suite 8400,
+   * Chicago" — and the search box handed that to the geocoder verbatim, so a
+   * fragment the POI path has stripped since cleanPoiAddress() existed still
+   * sank the search box. Measured on 12 paired Chicago queries (same address
+   * with and without the unit): 7/12 resolved as typed, 9/12 after cleaning —
+   * and 9/12 is also what the hand-stripped address scores, so cleaning closes
+   * the entire gap the fragment opens. (The 3 that still miss lack the house
+   * number in OSM and fail on the plain address too — not a unit problem.)
+   *
+   * Retry rather than clean up front: the raw query keeps first crack, so a
+   * search that works today cannot regress, and a genuine place name that
+   * merely looks like a unit ("The Room 43") is only ever cleaned once the
+   * as-typed query has already come back empty. Costs one extra request on a
+   * miss, exactly like the sibling-metro fallback it runs ahead of. */
+  function runGeocodeSearch(q) {
+    return geocodeAddress(q).then(function (results) {
+      if (results && results.length) return renderGeocodeResults(results);
+      var cleaned = cleanPoiAddress(q);
+      if (cleaned === q) {
+        renderGeocodeResults(results);
+        return maybeRenderSiblingMatches(q);
+      }
+      return geocodeAddress(cleaned).then(function (retry) {
+        renderGeocodeResults(retry);
+        if (!retry || retry.length === 0) return maybeRenderSiblingMatches(q);
+      });
+    });
+  }
+
+  document.getElementById("geocode-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var q = document.getElementById("geocode-input").value.trim();
+    if (!q) return;
+    // cancel the pending input-debounce so it can't re-fire after this submit
+    // and abort/duplicate the very request we're about to make (the same guard
+    // the result-click handler already uses)
+    clearTimeout(debounceTimer);
+    geoStatus.textContent = "Searching…";
+    geoStatus.className = "geo-status";
+    runGeocodeSearch(q)
+      .catch(function (err) {
+        if (err.name === "AbortError") return;
+        geoStatus.textContent = "Search failed — the geocoder may be busy. Try again in a moment.";
+        geoStatus.className = "geo-status err";
+      });
+  });
+
+  document.getElementById("geocode-input").addEventListener("input", function () {
+    var q = this.value.trim();
+    clearTimeout(debounceTimer);
+    if (q.length < 3) {
+      // abort any in-flight search too — its late response would otherwise
+      // repopulate the just-cleared list for text no longer in the box
+      if (inFlightController) inFlightController.abort();
+      geoResultsList.innerHTML = "";
+      geoStatus.textContent = "";
+      return;
+    }
+    debounceTimer = setTimeout(function () {
+      geoStatus.textContent = "Searching…";
+      runGeocodeSearch(q).catch(function (err) {
+        if (err.name === "AbortError") return;
+        geoStatus.textContent = "Search failed — the geocoder may be busy. Try again in a moment.";
+        geoStatus.className = "geo-status err";
+      });
+    }, 400); // debounced to stay a courteous client of the fork's geocoder while feeling type-ahead-responsive
+  });

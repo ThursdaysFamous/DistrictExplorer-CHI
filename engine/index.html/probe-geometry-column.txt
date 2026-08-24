@@ -1,0 +1,22 @@
+  /* ---------- probe a Socrata dataset for its geometry column name ---------- */
+  var geometryColumnCache = {};
+  function probeGeometryColumn(datasetId) {
+    if (geometryColumnCache[datasetId]) return Promise.resolve(geometryColumnCache[datasetId]);
+    var url = withAppToken(SOCRATA_HOST + "/resource/" + datasetId + ".json?$limit=1");
+    return fetchJSONWithRetry(url, {}, 1)
+      .then(function (rows) {
+        var row = rows && rows[0];
+        var col = "the_geom";
+        if (row) {
+          var keys = Object.keys(row);
+          for (var i = 0; i < keys.length; i++) {
+            var v = row[keys[i]];
+            if (v && typeof v === "object" && v.type && v.coordinates) { col = keys[i]; break; }
+          }
+        }
+        geometryColumnCache[datasetId] = col;
+        return col;
+      })
+      .catch(function () { return "the_geom"; });
+  }
+

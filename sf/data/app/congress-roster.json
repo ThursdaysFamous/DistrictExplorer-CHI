@@ -1,0 +1,714 @@
+{
+  "1": {
+    "name": "James Gallagher",
+    "party": "Republican",
+    "url": null,
+    "capitolOffice": [
+      "408 Cannon House Office Building Washington DC 20515-0501",
+      "Phone: 202-225-3076"
+    ]
+  },
+  "2": {
+    "name": "Jared Huffman",
+    "party": "Democrat",
+    "url": "https://huffman.house.gov",
+    "capitolOffice": [
+      "2330 Rayburn House Office Building Washington DC 20515-0502",
+      "Phone: 202-225-5161"
+    ],
+    "districtOffice": [
+      "317 Third St., Suite 1",
+      "Eureka, CA 95501",
+      "Phone: 707-407-3585"
+    ]
+  },
+  "3": {
+    "name": "Kevin Kiley",
+    "party": "Independent",
+    "url": "https://kiley.house.gov",
+    "capitolOffice": [
+      "2445 Rayburn House Office Building Washington DC 20515-0503",
+      "Phone: 202-225-2523"
+    ],
+    "districtOffice": [
+      "6538 Lonetree Blvd, Suite 200",
+      "Rocklin, CA 95765",
+      "Phone: 916-724-2575"
+    ]
+  },
+  "4": {
+    "name": "Mike Thompson",
+    "party": "Democrat",
+    "url": "https://mikethompson.house.gov",
+    "capitolOffice": [
+      "268 Cannon House Office Building Washington DC 20515-0504",
+      "Phone: 202-225-3311"
+    ],
+    "districtOffice": [
+      "2721 Napa Valley Corporate Dr.",
+      "Napa, CA 94558",
+      "Phone: 707-226-9898"
+    ]
+  },
+  "5": {
+    "name": "Tom McClintock",
+    "party": "Republican",
+    "url": "https://mcclintock.house.gov",
+    "capitolOffice": [
+      "2256 Rayburn House Office Building Washington DC 20515-0505",
+      "Phone: 202-225-2511"
+    ],
+    "districtOffice": [
+      "1020 15th Street, Suite 11",
+      "Modesto, CA 95354",
+      "Phone: 209-550-6910"
+    ]
+  },
+  "6": {
+    "name": "Ami Bera",
+    "party": "Democrat",
+    "url": "https://bera.house.gov",
+    "capitolOffice": [
+      "172 Cannon House Office Building Washington DC 20515-0506",
+      "Phone: 202-225-5716"
+    ],
+    "districtOffice": [
+      "8950 Cal Center Dr., Suite 100",
+      "Building 3",
+      "Sacramento, CA 95826",
+      "Phone: 916-635-0505"
+    ]
+  },
+  "7": {
+    "name": "Doris O. Matsui",
+    "party": "Democrat",
+    "url": "https://matsui.house.gov",
+    "capitolOffice": [
+      "2206 Rayburn House Office Building Washington DC 20515-0507",
+      "Phone: 202-225-7163"
+    ],
+    "districtOffice": [
+      "501 I St., Suite 12-600",
+      "Robert T. Matsui U.S. Courthouse",
+      "Sacramento, CA 95814",
+      "Phone: 916-498-5600"
+    ]
+  },
+  "8": {
+    "name": "John Garamendi",
+    "party": "Democrat",
+    "url": "https://garamendi.house.gov",
+    "capitolOffice": [
+      "2428 Rayburn House Office Building Washington DC 20515-0508",
+      "Phone: 202-225-1880"
+    ],
+    "districtOffice": [
+      "1261 Travis Boulevard, Suite 100",
+      "Fairfield, CA 94533",
+      "Phone: 707-438-1822"
+    ]
+  },
+  "9": {
+    "name": "Josh Harder",
+    "party": "Democrat",
+    "url": "https://harder.house.gov",
+    "capitolOffice": [
+      "209 Cannon House Office Building Washington DC 20515-0509",
+      "Phone: 202-225-4540"
+    ],
+    "districtOffice": [
+      "1776 W March Ln, Suite 360",
+      "Stockton, CA 95207",
+      "Phone: 209-579-5458"
+    ]
+  },
+  "10": {
+    "name": "Mark DeSaulnier",
+    "party": "Democrat",
+    "url": "https://desaulnier.house.gov",
+    "capitolOffice": [
+      "2134 Rayburn House Office Building Washington DC 20515-0510",
+      "Phone: 202-225-2095"
+    ],
+    "districtOffice": [
+      "3100 Oak Road, Suite 110",
+      "Walnut Creek, CA 94597",
+      "Phone: 925-933-2660"
+    ]
+  },
+  "11": {
+    "name": "Nancy Pelosi",
+    "party": "Democrat",
+    "url": "https://pelosi.house.gov",
+    "capitolOffice": [
+      "1236 Longworth House Office Building Washington DC 20515-0511",
+      "Phone: 202-225-4965"
+    ],
+    "districtOffice": [
+      "90 7th St., Suite 2-800",
+      "San Francisco, CA 94103",
+      "Phone: 415-556-4862"
+    ]
+  },
+  "12": {
+    "name": "Lateefah Simon",
+    "party": "Democrat",
+    "url": "https://simon.house.gov",
+    "capitolOffice": [
+      "1023 Longworth House Office Building Washington DC 20515-0512",
+      "Phone: 202-225-2661"
+    ],
+    "districtOffice": [
+      "Oakland, CA 94612",
+      "Phone: 510-763-0370"
+    ]
+  },
+  "13": {
+    "name": "Adam Gray",
+    "party": "Democrat",
+    "url": "https://gray.house.gov",
+    "capitolOffice": [
+      "1230 Longworth House Office Building Washington DC 20515-0513",
+      "Phone: 202-225-1947"
+    ],
+    "districtOffice": [
+      "90 S. First St.",
+      "Turlock, CA 95380",
+      "Phone: 209-226-6880"
+    ]
+  },
+  "15": {
+    "name": "Kevin Mullin",
+    "party": "Democrat",
+    "url": "https://kevinmullin.house.gov",
+    "capitolOffice": [
+      "1404 Longworth House Office Building Washington DC 20515-0515",
+      "Phone: 202-225-3531"
+    ],
+    "districtOffice": [
+      "1528 S. El Camino Real, Suite 307",
+      "San Mateo, CA 94402",
+      "Phone: 650-342-0300"
+    ]
+  },
+  "16": {
+    "name": "Sam T. Liccardo",
+    "party": "Democrat",
+    "url": "https://liccardo.house.gov",
+    "capitolOffice": [
+      "1117 Longworth House Office Building Washington DC 20515-0516",
+      "Phone: 202-225-8104"
+    ],
+    "districtOffice": [
+      "270 Capistrano Rd, Suite 6",
+      "Half Moon Bay, CA 94019"
+    ]
+  },
+  "17": {
+    "name": "Ro Khanna",
+    "party": "Democrat",
+    "url": "https://khanna.house.gov",
+    "capitolOffice": [
+      "306 Cannon House Office Building Washington DC 20515-0517",
+      "Phone: 202-225-2631"
+    ],
+    "districtOffice": [
+      "3150 De La Cruz Blvd, Suite 240",
+      "Santa Clara, CA 95054",
+      "Phone: 408-436-2720"
+    ]
+  },
+  "18": {
+    "name": "Zoe Lofgren",
+    "party": "Democrat",
+    "url": "https://lofgren.house.gov",
+    "capitolOffice": [
+      "1401 Longworth House Office Building Washington DC 20515-0518",
+      "Phone: 202-225-3072"
+    ],
+    "districtOffice": [
+      "635 N. First St., Suite B",
+      "San Jose, CA 95112",
+      "Phone: 408-271-8700"
+    ]
+  },
+  "19": {
+    "name": "Jimmy Panetta",
+    "party": "Democrat",
+    "url": "https://panetta.house.gov",
+    "capitolOffice": [
+      "200 Cannon House Office Building Washington DC 20515-0519",
+      "Phone: 202-225-2861"
+    ],
+    "districtOffice": [
+      "701 Ocean St., Room 318C",
+      "Santa Cruz, CA 95060",
+      "Phone: 831-429-1976"
+    ]
+  },
+  "20": {
+    "name": "Vince Fong",
+    "party": "Republican",
+    "url": "https://fong.house.gov",
+    "capitolOffice": [
+      "243 Cannon House Office Building Washington DC 20515-0520",
+      "Phone: 202-225-2915"
+    ],
+    "districtOffice": [
+      "9700 Stockdale Highway, Suite 300",
+      "Bakersfield, CA 93311",
+      "Phone: 661-327-3611"
+    ]
+  },
+  "21": {
+    "name": "Jim Costa",
+    "party": "Democrat",
+    "url": "https://costa.house.gov",
+    "capitolOffice": [
+      "2081 Rayburn House Office Building Washington DC 20515-0521",
+      "Phone: 202-225-3341"
+    ],
+    "districtOffice": [
+      "425 E. Oak Ave, Suite 202",
+      "Visalia, CA 93291",
+      "Phone: 559-749-9330"
+    ]
+  },
+  "22": {
+    "name": "David G. Valadao",
+    "party": "Republican",
+    "url": "https://valadao.house.gov",
+    "capitolOffice": [
+      "2465 Rayburn House Office Building Washington DC 20515-0522",
+      "Phone: 202-225-4695"
+    ],
+    "districtOffice": [
+      "107 South Douty Street",
+      "Hanford, CA 93230",
+      "Phone: 559-460-6070"
+    ]
+  },
+  "23": {
+    "name": "Jay Obernolte",
+    "party": "Republican",
+    "url": "https://obernolte.house.gov",
+    "capitolOffice": [
+      "2433 Rayburn House Office Building Washington DC 20515-0523",
+      "Phone: 202-225-5861"
+    ],
+    "districtOffice": [
+      "9700 Seventh Ave., Suite 201",
+      "Hesperia, CA 92345",
+      "Phone: 760-247-1815"
+    ]
+  },
+  "24": {
+    "name": "Salud O. Carbajal",
+    "party": "Democrat",
+    "url": "https://carbajal.house.gov",
+    "capitolOffice": [
+      "2331 Rayburn House Office Building Washington DC 20515-0524",
+      "Phone: 202-225-3601"
+    ],
+    "districtOffice": [
+      "1411 Marsh St., Suite 205",
+      "San Luis Obispo, CA 93401",
+      "Phone: 805-546-8348"
+    ]
+  },
+  "25": {
+    "name": "Raul Ruiz",
+    "party": "Democrat",
+    "url": "https://ruiz.house.gov",
+    "capitolOffice": [
+      "2342 Rayburn House Office Building Washington DC 20515-0525",
+      "Phone: 202-225-5330"
+    ],
+    "districtOffice": [
+      "445 E. Florida Ave., 2nd Floor",
+      "Hemet, CA 92543",
+      "Phone: 951-492-3575"
+    ]
+  },
+  "26": {
+    "name": "Julia Brownley",
+    "party": "Democrat",
+    "url": "https://juliabrownley.house.gov",
+    "capitolOffice": [
+      "2262 Rayburn House Office Building Washington DC 20515-0526",
+      "Phone: 202-225-5811"
+    ],
+    "districtOffice": [
+      "201 East Fourth St., Suite 209B",
+      "Oxnard, CA 93030",
+      "Phone: 805-379-1779"
+    ]
+  },
+  "27": {
+    "name": "George Whitesides",
+    "party": "Democrat",
+    "url": "https://whitesides.house.gov",
+    "capitolOffice": [
+      "1504 Longworth House Office Building Washington DC 20515-0527",
+      "Phone: 202-225-1956"
+    ],
+    "districtOffice": [
+      "1043 West Ave M4, Suite A",
+      "Palmdale, CA 93551",
+      "Phone: 661-839-0532"
+    ]
+  },
+  "28": {
+    "name": "Judy Chu",
+    "party": "Democrat",
+    "url": "https://chu.house.gov",
+    "capitolOffice": [
+      "2423 Rayburn House Office Building Washington DC 20515-0528",
+      "Phone: 202-225-5464"
+    ],
+    "districtOffice": [
+      "415 W. Foothill Blvd., Suite 122",
+      "Claremont, CA 91711",
+      "Phone: 909-625-5394"
+    ]
+  },
+  "29": {
+    "name": "Luz M. Rivas",
+    "party": "Democrat",
+    "url": "https://rivas.house.gov",
+    "capitolOffice": [
+      "1319 Longworth House Office Building Washington DC 20515-0529",
+      "Phone: 202-225-6131"
+    ],
+    "districtOffice": [
+      "9300 Laurel Canyon Blvd, First Floor",
+      "Arleta, CA 91331",
+      "Phone: 818-253-3535"
+    ]
+  },
+  "30": {
+    "name": "Laura Friedman",
+    "party": "Democrat",
+    "url": "https://friedman.house.gov",
+    "capitolOffice": [
+      "1517 Longworth House Office Building Washington DC 20515-0530",
+      "Phone: 202-225-4176"
+    ],
+    "districtOffice": [
+      "245 E Olive Ave, Suite 200",
+      "Burbank, CA 91502",
+      "Phone: 818-524-4384"
+    ]
+  },
+  "31": {
+    "name": "Gilbert Ray Cisneros, Jr.",
+    "party": "Democrat",
+    "url": "https://cisneros.house.gov",
+    "capitolOffice": [
+      "2463 Rayburn House Office Building Washington DC 20515-0531",
+      "Phone: 202-225-5256"
+    ],
+    "districtOffice": [
+      "100 S. Citrus Ave, Suite 204",
+      "Covina, CA 91723",
+      "Phone: 626-646-0369"
+    ]
+  },
+  "32": {
+    "name": "Brad Sherman",
+    "party": "Democrat",
+    "url": "https://sherman.house.gov",
+    "capitolOffice": [
+      "2365 Rayburn House Office Building Washington DC 20515-0532",
+      "Phone: 202-225-5911"
+    ],
+    "districtOffice": [
+      "5000 Van Nuys Blvd., Suite 420",
+      "Sherman Oaks, CA 91403",
+      "Phone: 818-501-9200"
+    ]
+  },
+  "33": {
+    "name": "Pete Aguilar",
+    "party": "Democrat",
+    "url": "https://aguilar.house.gov",
+    "capitolOffice": [
+      "108 Cannon House Office Building Washington DC 20515-0533",
+      "Phone: 202-225-3201"
+    ],
+    "districtOffice": [
+      "685 E. Carnegie Dr., Suite 100",
+      "San Bernardino, CA 92408",
+      "Phone: 909-890-4445"
+    ]
+  },
+  "34": {
+    "name": "Jimmy Gomez",
+    "party": "Democrat",
+    "url": "https://gomez.house.gov",
+    "capitolOffice": [
+      "506 Cannon House Office Building Washington DC 20515-0534",
+      "Phone: 202-225-6235"
+    ],
+    "districtOffice": [
+      "350 S. Bixel St., #120",
+      "Los Angeles, CA 90017",
+      "Phone: 213-481-1425"
+    ]
+  },
+  "35": {
+    "name": "Norma J. Torres",
+    "party": "Democrat",
+    "url": "https://torres.house.gov",
+    "capitolOffice": [
+      "2227 Rayburn House Office Building Washington DC 20515-0535",
+      "Phone: 202-225-6161"
+    ],
+    "districtOffice": [
+      "3200 Inland Empire Blvd., Suite 200B",
+      "Ontario, CA 91764",
+      "Phone: 909-481-6474"
+    ]
+  },
+  "36": {
+    "name": "Ted Lieu",
+    "party": "Democrat",
+    "url": "https://lieu.house.gov",
+    "capitolOffice": [
+      "2454 Rayburn House Office Building Washington DC 20515-0536",
+      "Phone: 202-225-3976"
+    ],
+    "districtOffice": [
+      "1600 Rosecrans Ave., 4th Floor",
+      "Manhattan Beach, CA 90266",
+      "Phone: 310-321-7664"
+    ]
+  },
+  "37": {
+    "name": "Sydney Kamlager-Dove",
+    "party": "Democrat",
+    "url": "https://kamlager-dove.house.gov",
+    "capitolOffice": [
+      "144 Cannon House Office Building Washington DC 20515-0537",
+      "Phone: 202-225-7084"
+    ],
+    "districtOffice": [
+      "4929 Wilshire Blvd., Suite 650",
+      "Los Angeles, CA 90010",
+      "Phone: 323-965-1422"
+    ]
+  },
+  "38": {
+    "name": "Linda T. Sánchez",
+    "party": "Democrat",
+    "url": "https://lindasanchez.house.gov",
+    "capitolOffice": [
+      "2309 Rayburn House Office Building Washington DC 20515-0538",
+      "Phone: 202-225-6676"
+    ],
+    "districtOffice": [
+      "15111 Whittier Blvd, Suite 220",
+      "Whittier, CA 90603",
+      "Phone: 562-860-5050"
+    ]
+  },
+  "39": {
+    "name": "Mark Takano",
+    "party": "Democrat",
+    "url": "https://takano.house.gov",
+    "capitolOffice": [
+      "2078 Rayburn House Office Building Washington DC 20515-0539",
+      "Phone: 202-225-2305"
+    ],
+    "districtOffice": [
+      "3403 10th St., Suite 610",
+      "Riverside, CA 92501",
+      "Phone: 951-222-0203"
+    ]
+  },
+  "40": {
+    "name": "Young Kim",
+    "party": "Republican",
+    "url": "https://youngkim.house.gov",
+    "capitolOffice": [
+      "2439 Rayburn House Office Building Washington DC 20515-0540",
+      "Phone: 202-225-4111"
+    ],
+    "districtOffice": [
+      "200 Civic Center",
+      "Mission Viejo City Hall",
+      "Mission Viejo, CA 92691",
+      "Phone: 949-268-6706"
+    ]
+  },
+  "41": {
+    "name": "Ken Calvert",
+    "party": "Republican",
+    "url": "https://calvert.house.gov",
+    "capitolOffice": [
+      "2205 Rayburn House Office Building Washington DC 20515-0541",
+      "Phone: 202-225-1986"
+    ],
+    "districtOffice": [
+      "400 S. Vicentia Ave., Suite 125",
+      "Corona, CA 92882",
+      "Phone: 951-277-0042"
+    ]
+  },
+  "42": {
+    "name": "Robert Garcia",
+    "party": "Democrat",
+    "url": "https://robertgarcia.house.gov",
+    "capitolOffice": [
+      "109 Cannon House Office Building Washington DC 20515-0542",
+      "Phone: 202-225-7924"
+    ],
+    "districtOffice": [
+      "415 West Ocean Blvd., Suite 2803",
+      "Long Beach, CA 90802",
+      "Phone: 562-512-8489"
+    ]
+  },
+  "43": {
+    "name": "Maxine Waters",
+    "party": "Democrat",
+    "url": "https://waters.house.gov",
+    "capitolOffice": [
+      "2221 Rayburn House Office Building Washington DC 20515-0543",
+      "Phone: 202-225-2201"
+    ],
+    "districtOffice": [
+      "13605 Hawthorne Blvd.",
+      "Hawthorne, CA 90250",
+      "Phone: 323-757-8900"
+    ]
+  },
+  "44": {
+    "name": "Nanette Diaz Barragán",
+    "party": "Democrat",
+    "url": "https://barragan.house.gov",
+    "capitolOffice": [
+      "2312 Rayburn House Office Building Washington DC 20515-0544",
+      "Phone: 202-225-8220"
+    ],
+    "districtOffice": [
+      "701 E. Carson St.",
+      "Carson City Hall",
+      "Carson, CA 90745",
+      "Phone: 310-831-1799"
+    ]
+  },
+  "45": {
+    "name": "Derek Tran",
+    "party": "Democrat",
+    "url": "https://tran.house.gov",
+    "capitolOffice": [
+      "1127 Longworth House Office Building Washington DC 20515-0545",
+      "Phone: 202-225-2415"
+    ],
+    "districtOffice": [
+      "6803 International Ave., 100",
+      "Cypress, CA 90630",
+      "Phone: 714-960-6483"
+    ]
+  },
+  "46": {
+    "name": "J. Luis Correa",
+    "party": "Democrat",
+    "url": "https://correa.house.gov",
+    "capitolOffice": [
+      "2082 Rayburn House Office Building Washington DC 20515-0546",
+      "Phone: 202-225-2965"
+    ],
+    "districtOffice": [
+      "2323 N. Broadway, Suite 319",
+      "Rancho Santiago Community College Building",
+      "Santa Ana, CA 92706",
+      "Phone: 714-559-6190"
+    ]
+  },
+  "47": {
+    "name": "Dave Min",
+    "party": "Democrat",
+    "url": "https://min.house.gov",
+    "capitolOffice": [
+      "1034 Longworth House Office Building Washington DC 20515-0547",
+      "Phone: 202-225-5611"
+    ],
+    "districtOffice": [
+      "1370 Adams Ave, Suite A",
+      "Costa Mesa, CA 92626",
+      "Phone: 949-668-6600"
+    ]
+  },
+  "48": {
+    "name": "Darrell Issa",
+    "party": "Republican",
+    "url": "https://issa.house.gov",
+    "capitolOffice": [
+      "2108 Rayburn House Office Building Washington DC 20515-0548",
+      "Phone: 202-225-5672"
+    ],
+    "districtOffice": [
+      "221 W. Crest St, #110",
+      "Escondido, CA 92025",
+      "Phone: 760-304-7575"
+    ]
+  },
+  "49": {
+    "name": "Mike Levin",
+    "party": "Democrat",
+    "url": "https://levin.house.gov",
+    "capitolOffice": [
+      "2352 Rayburn House Office Building Washington DC 20515-0549",
+      "Phone: 202-225-3906"
+    ],
+    "districtOffice": [
+      "2204 El Camino Real, Suite 314",
+      "Oceanside, CA 92054",
+      "Phone: 760-599-5000"
+    ]
+  },
+  "50": {
+    "name": "Scott H. Peters",
+    "party": "Democrat",
+    "url": "https://scottpeters.house.gov",
+    "capitolOffice": [
+      "2369 Rayburn House Office Building Washington DC 20515-0550",
+      "Phone: 202-225-0508"
+    ],
+    "districtOffice": [
+      "4350 Executive Dr., Suite 105",
+      "San Diego, CA 92121",
+      "Phone: 858-455-5550"
+    ]
+  },
+  "51": {
+    "name": "Sara Jacobs",
+    "party": "Democrat",
+    "url": "https://sarajacobs.house.gov",
+    "capitolOffice": [
+      "2348 Rayburn House Office Building Washington DC 20515-0551",
+      "Phone: 202-225-2040"
+    ],
+    "districtOffice": [
+      "3465 Camino del Rio S, 350",
+      "San Diego, CA",
+      "Phone: 619-280-5353"
+    ]
+  },
+  "52": {
+    "name": "Juan Vargas",
+    "party": "Democrat",
+    "url": "https://vargas.house.gov",
+    "capitolOffice": [
+      "2467 Rayburn House Office Building Washington DC 20515-0552",
+      "Phone: 202-225-8045"
+    ],
+    "districtOffice": [
+      "333 F St., Suite A",
+      "Chula Vista, CA 91910",
+      "Phone: 619-422-5963"
+    ]
+  }
+}

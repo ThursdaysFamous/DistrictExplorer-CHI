@@ -1,0 +1,4 @@
+  function withAppToken(url) {
+    if (!SOCRATA_APP_TOKEN) return url;
+    return url + (url.indexOf("?") === -1 ? "?" : "&") + "$$app_token=" + SOCRATA_APP_TOKEN;
+  }

@@ -1,0 +1,32 @@
+  var geoStatus = document.getElementById("geo-status");
+  var geoResultsList = document.getElementById("geocode-results");
+  var debounceTimer = null;
+  var inFlightController = null;
+
+  /* Keeps the collapsed search shell open whenever there's a typed query,
+   * results, or a status message — so hover/focus-out never yanks content
+   * away mid-interaction. Hover/focus-within (CSS) handle the rest. */
+  var searchShellEl = document.querySelector(".search-shell");
+  var geocodeInputEl = document.getElementById("geocode-input");
+  // Set true the moment a search result is chosen so the shell collapses back
+  // to just the input row — the "Selected: …" status plus the type-ahead
+  // controls otherwise stay open over the map (the input still holds the typed
+  // query and the status line is non-empty, so hasContent below would keep it
+  // pinned open forever). Cleared as soon as the user re-engages the box (focus
+  // or typing) so normal type-ahead expansion resumes.
+  var collapseAfterSelect = false;
+  function refreshSearchShellExpanded() {
+    if (collapseAfterSelect) { searchShellEl.classList.remove("expanded"); return; }
+    var hasContent = geocodeInputEl.value.trim() !== "" ||
+      geoResultsList.children.length > 0 ||
+      geoStatus.textContent.trim() !== "";
+    searchShellEl.classList.toggle("expanded", hasContent);
+  }
+  function reengageSearchShell() {
+    collapseAfterSelect = false;
+    refreshSearchShellExpanded();
+  }
+  geocodeInputEl.addEventListener("input", reengageSearchShell);
+  geocodeInputEl.addEventListener("focus", reengageSearchShell);
+  new MutationObserver(refreshSearchShellExpanded).observe(geoStatus, { childList: true, characterData: true, subtree: true });
+  new MutationObserver(refreshSearchShellExpanded).observe(geoResultsList, { childList: true, subtree: true });

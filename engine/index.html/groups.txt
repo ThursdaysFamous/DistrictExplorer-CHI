@@ -1,0 +1,6 @@
+  var GROUPS = [
+    { id: "political", label: "Political" },
+    { id: "safety", label: "Public Safety" },
+    { id: "schools", label: "Schools" },
+    { id: "geography", label: "Geography" }
+  ];

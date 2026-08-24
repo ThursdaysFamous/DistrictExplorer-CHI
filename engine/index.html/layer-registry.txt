@@ -1,0 +1,306 @@
+  var layers = [];       // registered modules
+  var layerRuntime = {}; // id -> { overlayLayer, overlayLoaded, cardBody }
+
+  function registerLayer(mod) {
+    layers.push(mod);
+    layerRuntime[mod.id] = {
+      overlayLayer: null, overlayLoaded: false, cardBody: null, geojson: null,
+      highlightedLayer: null, poiMarker: null, block: null, pinBtn: null,
+      // highlight bookkeeping for the incremental-restyle fast path (P7): whether
+      // a highlight is currently applied, and a signature of the inputs the
+      // faded/base styles depend on (active-layer count + outline mode). When the
+      // signature is unchanged, a point move only restyles the two paths whose
+      // role flips instead of re-styling every path in the layer.
+      highlightApplied: false, highlightSignature: null,
+      // prefetched officeholder roster (see hoverOfficial + prefetchHoverRoster):
+      // loaded in the background on toggle-on so the hover popup can name the
+      // representative without a network request as the cursor moves.
+      roster: null,
+      // when true the layer draws its outline only (fillOpacity forced to 0),
+      // regardless of its own style — used when a sub-layer takes over the fill
+      // (e.g. Police Beat filling a Police District that's dropped to outline).
+      outlineOnly: false,
+      // location relevance (mod.coverage): whether this layer applies at the
+      // currently selected point. Layers that declare no coverage test stay
+      // true forever. relevanceSeq/relevancePromise memoize the async coverage
+      // test per selection so the block-visibility pass and the query dispatch
+      // share one evaluation (see layerRelevance in the overlay-cards block).
+      relevant: true, relevanceSeq: 0, relevancePromise: null,
+      // the selection whose RESULT this layer's card currently shows (null
+      // otherwise). A point-first query (queryFeatureAt) can answer the card
+      // while the full boundary download is still in flight — this is how
+      // the overlay-load failure path knows a verified answer is on display
+      // and must not be replaced by a boundaries error (see onLayerToggled).
+      resultSeq: null
+    };
+  }
+
+  function getLayerById(id) {
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].id === id) return layers[i];
+    }
+    return null;
+  }
+
+  /* ---------- fill-opacity scaling by active layer count: as more layers
+   * are toggled on at once, overlapping translucent fills stack into a
+   * murky mess, so each active polygon layer's fillOpacity is scaled down
+   * as the count grows (and back up as layers are removed). Strokes
+   * (color/weight/dashArray/opacity) are left untouched — those are what
+   * let you trace one layer's boundary apart from another's when several
+   * are on, so only the fill (which is what actually compounds) scales.
+   * baseStyleFor() is the single funnel point for this: initial L.geoJSON
+   * construction, clearLayerHighlight, and fadedStyle's input all read
+   * through it instead of mod.overlay.style directly. Point-dataset layers
+   * (police/fire stations) have no flat style object and are out of scope —
+   * small sparse point markers don't compound into fill-murk the way
+   * overlapping polygons do. ---------- */
+  function activeLayerCount() {
+    // relevance-hidden layers (mod.coverage) have no fill on the map, so they
+    // don't compound into murk — count only the visible actives
+    return layers.filter(function (l) {
+      return state.layersOn[l.id] && layerRuntime[l.id].relevant !== false;
+    }).length;
+  }
+
+  var OPACITY_SCALE_STEP = 0.12;
+  var OPACITY_SCALE_FLOOR = 0.30;
+
+  function scaleFactorForActiveCount(n) {
+    return Math.max(OPACITY_SCALE_FLOOR, 1 - (n - 1) * OPACITY_SCALE_STEP);
+  }
+
+  function scaledFillOpacity(mod) {
+    var style = mod.overlay && mod.overlay.style;
+    if (!style) return null;
+    var n = Math.max(1, activeLayerCount());
+    return (style.fillOpacity || 0) * scaleFactorForActiveCount(n);
+  }
+
+  function baseStyleFor(mod, feature) {
+    var style = mod.overlay && mod.overlay.style;
+    if (!style) return null;
+    var rt = layerRuntime[mod.id];
+    var base = {
+      color: style.color,
+      weight: style.weight,
+      fillColor: style.fillColor,
+      fillOpacity: (rt && rt.outlineOnly) ? 0 : scaledFillOpacity(mod),
+      dashArray: style.dashArray
+    };
+    // Optional per-feature override (e.g. the School Location layer color-codes
+    // each footprint by school type and hides types the card's filter turned
+    // off). Layered on top of the flat base so fill-opacity scaling still applies
+    // to the features that stay visible.
+    if (feature && mod.overlay.styleForFeature) {
+      var ov = mod.overlay.styleForFeature(feature);
+      if (ov) {
+        if (ov.color != null) base.color = ov.color;
+        if (ov.fillColor != null) base.fillColor = ov.fillColor;
+        if (ov.opacity != null) base.opacity = ov.opacity;
+        if (ov.fillOpacity != null) base.fillOpacity = ov.fillOpacity;
+        if (ov.dashArray != null) base.dashArray = ov.dashArray;
+      }
+    }
+    return base;
+  }
+
+  // Repaint every path in a layer's overlay from its per-feature base style —
+  // used when a layer's styling inputs change without the selected point moving
+  // (the School Location type filter toggling which categories are shown/colored).
+  function restyleOverlayFeatures(mod) {
+    var rt = layerRuntime[mod.id];
+    if (!rt || !rt.overlayLayer) return;
+    rt.overlayLayer.eachLayer(function (subLayer) {
+      if (subLayer.setStyle && subLayer.feature) subLayer.setStyle(baseStyleFor(mod, subLayer.feature));
+    });
+  }
+
+  // The active-layer-count signature the P7 incremental highlight fast path keys
+  // on: a layer's faded/base styling depends only on the active count and its
+  // outline mode, and the matched-region highlight depends on neither — so a point
+  // move whose signature is unchanged restyles just the two paths whose role
+  // flipped instead of the whole layer.
+  function highlightSignature(rt) {
+    return activeLayerCount() + "|" + (rt.outlineOnly ? "1" : "0");
+  }
+
+  // Rescale only an already-painted layer's fill opacity to the current active
+  // count, without re-running the point-in-polygon highlight (P8). A count change
+  // affects nothing else: a layer that's showing a selection highlight has fixed,
+  // count-independent faded/highlight fill opacities, so it needs no restyle at
+  // all — just keep its stored signature current so the next point move can still
+  // take the P7 fast path; a layer with no active highlight only needs its flat
+  // fill opacity nudged (one setStyle({fillOpacity}) per path), not the full
+  // highlight recomputation the old refresh ran for every active layer on every
+  // toggle.
+  function rescaleLayerFill(mod) {
+    var rt = layerRuntime[mod.id];
+    if (!rt.overlayLayer) return;
+    if (rt.highlightApplied) { rt.highlightSignature = highlightSignature(rt); return; }
+    if (rt.outlineOnly) return; // outline-only layers carry no fill to rescale
+    var fillOpacity = scaledFillOpacity(mod);
+    if (fillOpacity == null) return; // point-dataset layer (no flat style object)
+    rt.overlayLayer.eachLayer(function (subLayer) {
+      if (!subLayer.setStyle) return;
+      // A per-feature styler owns each path's fill (a filtered-out School
+      // Location footprint must stay hidden), so re-derive its full base style
+      // rather than force the flat scaled opacity back on.
+      if (mod.overlay.styleForFeature) subLayer.setStyle(baseStyleFor(mod, subLayer.feature));
+      else subLayer.setStyle({ fillOpacity: fillOpacity });
+    });
+  }
+
+  function refreshActiveLayerOpacities() {
+    layers.forEach(function (mod) {
+      if (!state.layersOn[mod.id]) return;
+      rescaleLayerFill(mod);
+    });
+  }
+
+  // Restack every active layer per LAYER_AREA_RANK (largest first, smallest
+  // last) so smaller/more granular boundaries always render on top of larger
+  // ones, regardless of toggle order or which layer finished loading first.
+  // bringToFront() moves a layer group above whatever else is currently on
+  // the map, so calling it in largest-to-smallest order leaves the smallest
+  // active layer on top after the last call.
+  function reorderActiveLayers() {
+    LAYER_AREA_RANK.forEach(function (id) {
+      var rt = layerRuntime[id];
+      if (state.layersOn[id] && rt && rt.overlayLayer && map.hasLayer(rt.overlayLayer)) {
+        rt.overlayLayer.bringToFront();
+      }
+    });
+  }
+
+  /* ---------- highlight whichever boundary the selected point actually falls in,
+   * and fade every other boundary in that same layer so the match pops.
+   * Deliberately generic, not per-module: it re-runs the same shared
+   * findFeatureContaining/pointInGeometry check against the overlay's own
+   * cached geojson (rt.geojson), then matches the result to the Leaflet
+   * sub-layer Leaflet already tagged with `.feature`. Point datasets (e.g.
+   * fire stations) never match since pointInGeometry only handles
+   * Polygon/MultiPolygon, so they're unaffected.
+   *
+   * The drop-shadow "floating" look is a CSS filter (the HIGHLIGHT_CLASS rule
+   * in each fork's stylesheet), applied by mutating the SVG path's class list
+   * directly — Leaflet's `className` style option only takes effect when the
+   * path is first created, not on later setStyle() calls, so setStyle() alone
+   * can't do this. */
+  // darken a #rrggbb / #rgb hex color toward black by `amount` (0 = unchanged, 1 = black).
+  // No color library in this codebase — this is the minimal hand-rolled version needed here.
+  function darkenHexColor(hex, amount) {
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex || "");
+    if (!m) return hex;
+    var h = m[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var num = parseInt(h, 16);
+    var mix = function (channel) { return Math.round(channel * (1 - amount)); };
+    var r = mix((num >> 16) & 255), g = mix((num >> 8) & 255), b = mix(num & 255);
+    return "#" + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1);
+  }
+
+  // selection-highlight border: same hue as the layer itself (moduleColor,
+  // defined below — safe to call here since it's a hoisted function
+  // declaration), darkened so the outline pops against that layer's own
+  // lighter fill/stroke instead of an unrelated universal gold.
+  var HIGHLIGHT_DARKEN_AMOUNT = 0.35;
+  function highlightStyleFor(mod) {
+    var rt = layerRuntime[mod.id];
+    return {
+      color: darkenHexColor(moduleColor(mod), HIGHLIGHT_DARKEN_AMOUNT),
+      weight: 4,
+      opacity: 1,
+      // an outline-only layer keeps no fill even when it's the matched region,
+      // so a sub-layer's fill (the beats) shows through unobscured
+      fillOpacity: (rt && rt.outlineOnly) ? 0 : 0.32,
+      dashArray: null
+    };
+  }
+
+  function fadedStyle(baseStyle) {
+    return {
+      color: baseStyle.color,
+      weight: Math.max(1, (baseStyle.weight || 1.5) - 0.5),
+      fillColor: baseStyle.fillColor,
+      fillOpacity: Math.min(baseStyle.fillOpacity || 0.06, 0.02),
+      opacity: 0.18,
+      dashArray: baseStyle.dashArray
+    };
+  }
+
+  function clearLayerHighlight(mod) {
+    var rt = layerRuntime[mod.id];
+    rt.highlightedLayer = null;
+    rt.highlightApplied = false; // next updateLayerHighlight must do a full sweep, not an incremental diff
+    rt.highlightSignature = null;
+    if (!rt.overlayLayer) return;
+    rt.overlayLayer.eachLayer(function (subLayer) {
+      if (subLayer.setStyle) subLayer.setStyle(baseStyleFor(mod, subLayer.feature));
+      if (subLayer._path) subLayer._path.classList.remove(HIGHLIGHT_CLASS);
+    });
+  }
+
+  function updateLayerHighlight(mod) {
+    var rt = layerRuntime[mod.id];
+    // A color-coded layer (School Location) owns its per-feature appearance and
+    // is a nearest-N layer, not a containment one — fading every footprint but
+    // the one a click happens to land inside would defeat the type coloring, so
+    // skip the highlight/fade sweep and just keep the per-feature base styling.
+    if (mod.overlay && mod.overlay.styleForFeature) { clearLayerHighlight(mod); return; }
+    if (!rt.overlayLayer || !rt.geojson || !state.selectedPoint) { clearLayerHighlight(mod); return; }
+    var feature = findFeatureContaining(rt.geojson, state.selectedPoint);
+    if (!feature) { clearLayerHighlight(mod); return; }
+
+    var faded = fadedStyle(baseStyleFor(mod));
+    var highlight = highlightStyleFor(mod);
+
+    // Fast path (P7): the faded/base style of the non-matched paths depends only
+    // on the active-layer count and outline mode; the matched-region highlight
+    // depends on neither. So when that signature is unchanged and this layer is
+    // already showing a highlight, a point move only flips two paths — the old
+    // match back to faded and the new match to highlight — and every other path
+    // already shows the identical faded style. That turns the common "same
+    // layers on, user clicked a new point" case from ~N setStyle calls (the
+    // measured dominant per-click cost) into 2. Any signature change (a layer
+    // toggled on/off, outline mode flipped) falls back to the full sweep below.
+    var signature = highlightSignature(rt);
+    var prevMatch = rt.highlightedLayer;
+    var incremental = rt.highlightApplied && rt.highlightSignature === signature && !!prevMatch;
+    if (incremental && prevMatch.feature === feature) return; // same match, same styling — nothing changed
+
+    rt.overlayLayer.eachLayer(function (subLayer) {
+      var isMatch = subLayer.feature === feature;
+      // In the incremental case only the previous match and the new match change
+      // role; leave every other path's DOM untouched.
+      if (incremental && isMatch === (subLayer === prevMatch)) return;
+      if (subLayer.setStyle) subLayer.setStyle(isMatch ? highlight : faded);
+      if (subLayer._path) {
+        if (isMatch) subLayer._path.classList.add(HIGHLIGHT_CLASS);
+        else subLayer._path.classList.remove(HIGHLIGHT_CLASS);
+      }
+      // NB: deliberately no subLayer.bringToFront() here. Lifting the matched
+      // region to the top of the overlay pane would pull its whole layer above
+      // every other active layer, defeating the area-size stacking that
+      // reorderActiveLayers() maintains (a large district's matched polygon
+      // would cover the smaller layers on top of it). The highlight already
+      // stands out via its darker/thicker outline + drop-shadow styling, so it
+      // needs no z-order lift; size order stays authoritative.
+      if (isMatch) rt.highlightedLayer = subLayer;
+    });
+    rt.highlightApplied = true;
+    rt.highlightSignature = signature;
+  }
+
+  /* ---------- optional per-module "point of interest" pin (e.g. a school's
+   * street address) — a small marker placed at a geocoded location,
+   * independent of the polygon highlight above. A module opts in by
+   * exposing mod.pointOfInterest(result) => {label, address} | null. ---------- */
+  // a layer's theme color — from its polygon style, its point-marker style
+  // (police/fire stations, which use pointToLayer instead of a flat style
+  // object), or an explicit mod.color fallback for anything with neither.
+  function moduleColor(mod) {
+    var style = mod.overlay && mod.overlay.style;
+    if (style && (style.color || style.fillColor)) return style.color || style.fillColor;
+    return mod.color || "#14181C";
+  }
