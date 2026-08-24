@@ -22,9 +22,13 @@ took manually dispatching six never-run workflows to find, and only because five
 of them failed identically in the same minute.
 
 WHAT IT CHECKS. For each workflow: read the packages its `pip install` lines
-declare, then for every `python3 scripts/X.py` it runs, walk X's transitive
-MODULE-SCOPE imports through other scripts/ modules and collect every
-third-party module that closure needs. Anything not declared is an error.
+declare, then for every `python3 <instance>/scripts/X.py` it runs, walk X's
+transitive MODULE-SCOPE imports through other modules in THAT instance's
+scripts/ directory and collect every third-party module that closure needs.
+Anything not declared is an error. The instance prefix matters twice over: it
+is how a relocated ny/ or ca/ refresh gets checked at all, and it is what keeps
+a sibling import inside ny/scripts/ from being resolved against Chicago's
+root scripts/, where several of the same names exist.
 
 Module scope is the whole point: an import inside a function is lazy and costs
 the caller nothing, which is exactly how the five builders were repaired. This
@@ -56,8 +60,29 @@ import re
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
 WORKFLOW_DIR = os.path.join(REPO_ROOT, ".github", "workflows")
+
+# EVERY INSTANCE'S SCRIPTS, NOT JUST CHICAGO'S. This gate matched only
+# `python3 scripts/X.py` for as long as there was only one scripts/ directory.
+# When ny/ and ca/ were imported as folders they brought their own, and on
+# 2026-08-24 their ten refreshes moved into the root .github/workflows and
+# started invoking `python3 ny/scripts/X.py` — which the old pattern did not
+# match, so those ten workflows would have been silently UNCHECKED by the one
+# gate that exists to catch a workflow running a script it has not installed
+# the dependencies for. A gate that quietly skips its newest subjects is worse
+# than no gate: it reports OK. The path table is IMPORTED from the generator
+# for the same reason fleet_status.py imports it — a second copy of "where does
+# ny/ keep its scripts" is the drift this file exists to catch.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from generate_metro_files import INSTANCES  # noqa: E402
+except ImportError:  # pragma: no cover
+    INSTANCES = {"il": {"scripts": "scripts"}}
+
+SCRIPTS_DIRS = {
+    inst["scripts"]: os.path.join(REPO_ROOT, inst["scripts"])
+    for inst in INSTANCES.values()
+}
 
 # pip name -> module name, where they differ. Extend as the fleet grows; an
 # unmapped package is assumed to import under its own name.
@@ -72,7 +97,9 @@ IMPORT_NAME = {
 ALWAYS_AVAILABLE = {"setuptools", "pip", "pkg_resources"}
 
 PIP_RE = re.compile(r"pip3?\s+install\s+([^\n]*)")
-RUN_RE = re.compile(r"python3?\s+(scripts/[A-Za-z0-9_]+\.py)")
+RUN_RE = re.compile(
+    r"python3?\s+((?:%s)/[A-Za-z0-9_]+\.py)"
+    % "|".join(re.escape(d) for d in sorted(SCRIPTS_DIRS, key=len, reverse=True)))
 
 failures = []
 
@@ -164,12 +191,17 @@ def module_scope_imports(path, include_local=False):
     return mods
 
 
-def closure(entry):
-    """Every scripts/ module reachable from entry via module-scope imports.
+def closure(entry, scripts_dir):
+    """Every module in `scripts_dir` reachable from entry via module-scope imports.
 
     The entry point is read with its function-local imports included, because
     running a script runs its functions; everything it merely imports is read at
     module scope only.
+
+    `scripts_dir` is the instance's own directory: a sibling import inside
+    ny/scripts/ resolves against ny/scripts/, never against Chicago's root
+    scripts/, so a name that exists in both cannot be walked into the wrong
+    tree.
     """
     seen, stack, third_party = set(), [entry], set()
     while stack:
@@ -177,13 +209,13 @@ def closure(entry):
         if name in seen:
             continue
         seen.add(name)
-        path = os.path.join(SCRIPTS_DIR, name + ".py")
+        path = os.path.join(scripts_dir, name + ".py")
         if not os.path.exists(path):
             continue
         for mod in module_scope_imports(path, include_local=(name == entry)):
             if mod in sys.stdlib_module_names or mod in ALWAYS_AVAILABLE:
                 continue
-            if os.path.exists(os.path.join(SCRIPTS_DIR, mod + ".py")):
+            if os.path.exists(os.path.join(scripts_dir, mod + ".py")):
                 stack.append(mod)            # local module: keep walking
             else:
                 third_party.add(mod)
@@ -207,10 +239,11 @@ def main():
         declared = declared_packages(text)
         for rel in entries:
             entry = os.path.basename(rel)[:-3]
-            if not os.path.exists(os.path.join(SCRIPTS_DIR, entry + ".py")):
+            scripts_dir = SCRIPTS_DIRS[os.path.dirname(rel)]
+            if not os.path.exists(os.path.join(scripts_dir, entry + ".py")):
                 fail("%s runs %s, which does not exist" % (fname, rel))
                 continue
-            reached, needed = closure(entry)
+            reached, needed = closure(entry, scripts_dir)
             missing = sorted(needed - declared)
             checked += 1
             if missing:

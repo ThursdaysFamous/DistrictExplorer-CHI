@@ -376,6 +376,41 @@ def open_bot_prs(repo):
         return []
 
 
+def workflow_name_collisions(repo_root):
+    """Instances that inventory the same workflow BASENAME.
+
+    WHY THIS IS SEPARATE FROM THE INERT CHECK BELOW. That check asks whether a
+    worksheet's workflow exists in the root .github/workflows — and a name is
+    all it can ask, because a workflow file carries nothing that says which
+    instance it serves. So when two instances inventory the same basename, the
+    check answers about whichever single file the root actually holds, and
+    reports the other instance's frozen refresh as healthy. That is exactly what
+    happened: `update-congress-roster.yml` and `validate-sources.yml` were in
+    all three worksheets, Chicago's copies sat at the root, and NYC's and SF's
+    four refreshes read as present while nothing ran them. Six inert workflows
+    were found; ten were inert.
+
+    A shared basename is therefore a FAILURE OF THE INVENTORY, not a detail:
+    at the root only one file can hold a name, so at most one of the instances
+    claiming it can be right. Say so loudly rather than letting the check below
+    answer confidently about the wrong file.
+    """
+    if INSTANCES is None:
+        return []
+    owners = {}
+    for tag, inst in INSTANCES.items():
+        raw = read_local(os.path.join(repo_root, inst["worksheet"]))
+        if not raw:
+            continue
+        try:
+            ws = json.loads(raw)
+        except ValueError:
+            continue
+        for wf in ws.get("workflows", []):
+            owners.setdefault(wf.get("file"), []).append(tag)
+    return [(name, tags) for name, tags in sorted(owners.items()) if len(tags) > 1]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--manifest", default="metros.json")
@@ -416,6 +451,20 @@ def main():
     lines.append(inv_line)
     lines.append("")
     warns.extend(inv_warns)
+
+    collisions = workflow_name_collisions(repo_root)
+    if collisions:
+        lines.append("**WORKFLOW NAME COLLISION:** the root `.github/workflows/` "
+                     "holds one file per name, so an inventory two instances "
+                     "share cannot be checked for either of them.")
+        for name, tags in collisions:
+            warns.append("workflows: `%s` is inventoried by %s — at the root only "
+                         "one file can hold that name, so the inert check below "
+                         "answers about whichever instance owns it and reports the "
+                         "others as healthy. Give each a distinct prefixed name."
+                         % (name, " and ".join(sorted(tags))))
+            lines.append("  - ⛔ `%s` — claimed by %s" % (name, ", ".join(sorted(tags))))
+        lines.append("")
 
     for m in metros:
         repo = m["repo"]

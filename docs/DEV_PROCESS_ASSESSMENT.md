@@ -286,6 +286,53 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R3 (part 3) — SHIPPED (2026-08-24): the imported automation moved to the root, and the
+  check that found it was itself half-blind.** Numbered R3 because it finishes R3 part 1's
+  marked trap; it ships after R4 because that is when the check that could see it existed.
+  R3 part 1 imported `ny/` and `ca/` with their `.github/workflows/` attached and wrote a
+  README in each saying the files were inert and were kept as the definition of the refreshes
+  that would one day move. **They stayed inert for as long as nothing measured them**, and the
+  README's stated reason for leaving them — that the refreshes still ran in the fork
+  repositories, which were still live — stopped being true at R5, when both domains were
+  forwarded here. From then until now, NYC's and SF's officeholder data had no refresh
+  mechanism anywhere that serves a reader.
+  **Ten workflows were inert, not six.** The inert check shipped with `fleet_status` reads each
+  worksheet's workflow inventory and asks whether the file exists in the root
+  `.github/workflows/`. A workflow file carries nothing that says which instance it serves, so
+  a name is all that check can ask — and `update-congress-roster.yml` and `validate-sources.yml`
+  were inventoried by all three instances. Chicago's copies sat at the root, so NYC's and SF's
+  four claims on those names resolved to a file that exists, and four frozen refreshes were
+  reported healthy by the very check written to find frozen refreshes. **A shared basename is a
+  failure of the inventory, not a detail**: at the root only one file can hold a name, so at
+  most one instance claiming it can be right. `fleet_status` now says so before it runs the
+  inert check, and the guard was verified by putting the pre-rename inventory back and watching
+  it name both collisions.
+  **What moved.** Ten workflows, rewritten with instance-aware paths — `<tag>/scripts/…`,
+  `<tag>/data/app/…`, `validate_index.py <tag>/index.html`, and a `bot/<tag>-…` PR branch that
+  cannot clash with another instance's — and renamed with a `<tag>-` prefix, which is what makes
+  the inventory unambiguous rather than merely tidy. Each instance's `validate-sources` also
+  takes an instance-scoped tracking-issue title; three workflows sharing one title would have
+  had them overwriting each other's issue body every month. Chicago's title is deliberately
+  untouched: it has an open issue that a rename would orphan.
+  **What was deleted rather than moved**, because the monorepo's own root workflows already do
+  the job for every instance: each fork's `deploy-pages.yml` (the root job publishes the whole
+  tree), `smoke-test.yml` (the root job runs all three `validate_index` and all three
+  `smoke_test.mjs`), and `engine-bump.yml` (it consumed a `repository_dispatch` from a release
+  channel retired at R2.1).
+  **The second half-blind gate, found by fixing the first.** `validate_workflow_deps.py` — the
+  gate that exists because five roster refreshes once shipped dead on arrival — matched only
+  `python3 scripts/X.py`. Relocating these ten made them invoke `python3 ny/scripts/X.py`, which
+  that pattern does not match, so the ten newest subjects of the fleet's dependency gate would
+  have been silently skipped while it printed OK. It now derives the instance prefixes from
+  `generate_metro_files.INSTANCES` and resolves each entry point's import closure against **its
+  own** `scripts/` directory, so a sibling import inside `ny/scripts/` cannot be walked into
+  Chicago's tree, where several of the same module names exist. Coverage went from 253 entry
+  points to 277; the failure path was verified by pointing a relocated workflow at a
+  non-existent script and watching it fail.
+  **Still open, and operator-side:** the fork repositories' own copies of these schedules. They
+  are outside this repo, they now refresh a tree nothing serves, and turning them off is a
+  Settings action rather than a commit.
+
 - **R4 (part 1) — SHIPPED (2026-08-24): the root becomes the fleet's front door.**
   "One repo, one site" only pays off if the site has a door. R2.3 left the root a redirect stub;
   it is now the districtry landing page — the mark, the wordmark, and the places the fleet
@@ -512,6 +559,11 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   automation moves), and where those refreshes actually run today: still in the fork
   repositories, deliberately, because running both would open two competing PRs against the
   same roster files.
+  **Superseded by R3 part 3 (2026-08-24):** those ten refreshes have moved to the root with
+  instance-aware paths, and the "they still run in the fork repositories" reason stopped
+  holding at R5, when both fork domains were forwarded here. The count in this paragraph is
+  also the count of FILES, not of frozen refreshes — six of the sixteen were duplicates of root
+  jobs and were deleted rather than moved.
   **Measured, for the tooling reconciliation that remains:** `check_engine_parity.py` is
   byte-identical across all three instances (it rode the engine channel) and can simply be
   deduped. `generate_metro_files.py` differs by 370 lines, but SF's and NYC's copies are

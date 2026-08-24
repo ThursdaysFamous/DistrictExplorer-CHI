@@ -1,8 +1,19 @@
 name: Update NY congressional roster
 
-# Weekly rebuild of data/app/congress-roster.json (NY U.S. House delegation) from
+# Weekly rebuild of ny/data/app/congress-roster.json (NY U.S. House delegation) from
 # the public congress-legislators dataset. Opens a PR rather than committing to
 # main (METRO_EXPANSION_PLAYBOOK §9). Stdlib only.
+#
+# THE `ny-` PREFIX IS LOAD-BEARING. GitHub Actions reads workflows only from
+# the repository ROOT's .github/workflows, so this file has to live here to run
+# at all — and at the root it shares a namespace with the other two instances.
+# Five basenames collided when the forks were imported as folders
+# (deploy-pages, smoke-test, engine-bump, update-congress-roster,
+# validate-sources), and a collision is worse than a duplicate: the root copy
+# wins, so NYC's refresh would look present and quietly run Chicago's.
+# Every path below is instance-scoped for the same reason — `ny/scripts/…`,
+# `ny/data/app/…`, and a `bot/ny-…` branch that cannot clash with
+# another instance's PR branch.
 
 on:
   schedule:
@@ -31,26 +42,26 @@ jobs:
         with:
           python-version: "3.x"
       - name: Rebuild congress roster
-        run: python3 scripts/build_congress_roster.py
+        run: python3 ny/scripts/build_congress_roster.py
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 ny/scripts/validate_index.py ny/index.html
       - name: Check for changes
         id: diff
-        run: git diff --quiet -- data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+        run: git diff --quiet -- ny/data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
       - name: Open or update pull request
         if: steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
         run: |
-          branch="bot/congress-roster-update"
+          branch="bot/ny-congress-roster-update"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/congress-roster.json
+          git add ny/data/app/congress-roster.json
           git commit -m "Update NY congressional roster from congress-legislators"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
             gh pr create --title "Update NY congressional roster" \
-              --body "Automated weekly refresh of NY's U.S. House delegation (\`scripts/build_congress_roster.py\`). Review before merging." \
+              --body "Automated weekly refresh of NY's U.S. House delegation (\`ny/scripts/build_congress_roster.py\`). Review before merging." \
               --base main --head "$branch"
           fi

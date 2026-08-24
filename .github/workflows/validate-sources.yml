@@ -1,6 +1,6 @@
 name: Validate layer sources
 
-# Monthly freshness check for the data sources index.html depends on.
+# Monthly freshness check for the data sources il/index.html depends on.
 # Unlike the roster workflows (which re-scrape the same page), this catches the
 # other failure mode: a publisher silently superseding a dataset with a newer
 # one — Chicago Data Portal (Socrata) datasets are re-published under a NEW id
@@ -125,7 +125,7 @@ jobs:
           # Each is included only if its step got far enough to write one — a
           # crashed checker must not take out the other's findings.
           {
-            echo "_Automated by \`.github/workflows/validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`index.html\` (dataset ids, card links) or re-download the boundary shapefile as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
+            echo "_Automated by \`.github/workflows/validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`il/index.html\` (dataset ids, card links) or re-download the boundary shapefile as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
             echo
             if [ -f source-report.md ]; then cat source-report.md; else
               echo "> \`validate_sources.py\` produced no report this run — check the job log."; fi
@@ -134,7 +134,16 @@ jobs:
               echo "> \`validate_card_links.py\` produced no report this run — check the job log."; fi
           } > issue-body.md
 
-          existing="$(gh issue list --state open --search "in:title $title" --json number --jq '.[0].number')"
+          # Search NARROWS; the exact title comparison DECIDES. `gh issue list
+          # --search` ANDs the terms and can return a near-miss, and this repo
+          # now carries three instances' source-drift issues — taking the first
+          # hit would let one instance's monthly run overwrite another's body.
+          # exported, not a command prefix: the prefix form would set TITLE for
+          # `gh` only, and the reader on the other side of the pipe is a
+          # separate process.
+          export TITLE="$title"
+          existing="$(gh issue list --state open --search "in:title $title" --json number,title \
+            | python3 -c 'import json,os,sys; t=os.environ["TITLE"]; print(next((str(i["number"]) for i in json.load(sys.stdin) if i["title"] == t), ""))')"
           if [ -n "$existing" ]; then
             gh issue edit "$existing" --body-file issue-body.md
             gh issue comment "$existing" --body "Refreshed by the monthly source-validation run — see the updated issue body for the current status."

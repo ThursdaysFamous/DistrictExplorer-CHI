@@ -1,9 +1,20 @@
 name: Update NY Senate/Assembly roster
 
 # Weekly refresh of the NY State Senate + Assembly district cards' rosters
-# (data/app/ny-senate-members.json / ny-assembly-members.json) from the NY Senate
+# (ny/data/app/ny-senate-members.json / ny-assembly-members.json) from the NY Senate
 # Open Legislation API. Opens a PR rather than committing to main — officeholder
 # data gets a human look before it ships (METRO_EXPANSION_PLAYBOOK §9).
+#
+# THE `ny-` PREFIX IS LOAD-BEARING. GitHub Actions reads workflows only from
+# the repository ROOT's .github/workflows, so this file has to live here to run
+# at all — and at the root it shares a namespace with the other two instances.
+# Five basenames collided when the forks were imported as folders
+# (deploy-pages, smoke-test, engine-bump, update-congress-roster,
+# validate-sources), and a collision is worse than a duplicate: the root copy
+# wins, so NYC's refresh would look present and quietly run Chicago's.
+# Every path below is instance-scoped for the same reason — `ny/scripts/…`,
+# `ny/data/app/…`, and a `bot/ny-…` branch that cannot clash with
+# another instance's PR branch.
 
 on:
   schedule:
@@ -38,17 +49,17 @@ jobs:
           # Optional: district-office enrichment. Without it, senate/assembly ship
           # names-only (no address guessed).
           OPENSTATES_API_KEY: ${{ secrets.OPENSTATES_API_KEY }}
-        run: python3 scripts/ny_legislature_scraper.py
+        run: python3 ny/scripts/ny_legislature_scraper.py
 
       - name: Rebuild roster data files
-        run: python3 scripts/build_ny_roster.py
+        run: python3 ny/scripts/build_ny_roster.py
 
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 ny/scripts/validate_index.py ny/index.html
 
       - name: Check for changes
         id: diff
-        run: git diff --quiet -- data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+        run: git diff --quiet -- ny/data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Open or update pull request
         if: steps.diff.outputs.changed == 'true'
@@ -59,11 +70,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/ny-senate-members.json data/app/ny-assembly-members.json
+          git add ny/data/app/ny-senate-members.json ny/data/app/ny-assembly-members.json
           git commit -m "Update NY Senate/Assembly roster from Open Legislation"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
             gh pr create --title "Update NY Senate/Assembly roster" \
-              --body "Automated weekly refresh from the NY Senate Open Legislation API (\`scripts/ny_legislature_scraper.py\` + \`build_ny_roster.py\`). Review before merging — this changes data about real officeholders." \
+              --body "Automated weekly refresh from the NY Senate Open Legislation API (\`ny/scripts/ny_legislature_scraper.py\` + \`build_ny_roster.py\`). Review before merging — this changes data about real officeholders." \
               --base main --head "$branch"
           fi

@@ -1,0 +1,96 @@
+name: Validate layer sources (SF)
+
+# Monthly freshness check for the data sources ca/index.html depends on.
+# Unlike the roster workflows (which re-scrape the same page), this catches the
+# other failure mode: a publisher silently superseding a dataset with a newer
+# one — DataSF (Socrata) datasets are re-published under a NEW id when a
+# publisher revises them, so a hardcoded id keeps serving the old edition with
+# no error. (This line said "Chicago Data Portal" until 2026-08-24: it came
+# across from the Chicago fork this instance was forked from, and named the
+# wrong publisher for every source ca/scripts/validate_sources.py checks.)
+#
+# ca/scripts/validate_sources.py never edits the app (swapping a dataset id is a
+# schema-sensitive judgement call). When it finds drift it exits with a WARN/FAIL
+# status; this workflow then opens — or updates in place — a single tracking
+# issue so a human reviews it. The job itself stays green: the issue is the
+# signal, matching the roster pattern of "officeholder/source changes get a
+# human look before they ship."
+#
+# THE `ca-` PREFIX IS LOAD-BEARING. GitHub Actions reads workflows only from
+# the repository ROOT's .github/workflows, so this file has to live here to run
+# at all — and at the root it shares a namespace with the other two instances.
+# Five basenames collided when the forks were imported as folders
+# (deploy-pages, smoke-test, engine-bump, update-congress-roster,
+# validate-sources), and a collision is worse than a duplicate: the root copy
+# wins, so SF's refresh would look present and quietly run Chicago's.
+# Every path below is instance-scoped for the same reason — `ca/scripts/…`,
+# `ca/data/app/…`, and a `bot/ca-…` branch that cannot clash with
+# another instance's PR branch.
+
+on:
+  schedule:
+    - cron: "0 14 1 * *" # 1st of the month, 14:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  validate-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        # Only requests is needed (no BeautifulSoup/Playwright); pinned via
+        # ca/scripts/requirements.txt.
+        run: pip install -c ca/scripts/requirements.txt requests
+
+      - name: Validate layer sources
+        id: validate
+        # continue-on-error: a FAIL exit (1) must not red the job — per the
+        # project's "surface for a human, don't block" convention, the tracking
+        # issue below is the signal. status.txt carries ok|warn|fail.
+        continue-on-error: true
+        run: |
+          python3 ca/scripts/validate_sources.py \
+            --report source-report.md \
+            --status-file status.txt
+          echo "status=$(cat status.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update tracking issue
+        if: steps.validate.outputs.status != 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="SF layer source drift — review needed"
+          # Prepend a short header so the issue explains itself, then the report.
+          {
+            echo "_Automated by \`.github/workflows/ca-validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`ca/index.html\` (dataset ids) or re-download the boundary shapefile as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
+            echo
+            cat source-report.md
+          } > issue-body.md
+
+          # Search NARROWS; the exact title comparison DECIDES. `gh issue list
+          # --search` ANDs the terms and can return a near-miss, and this repo
+          # now carries three instances' source-drift issues — taking the first
+          # hit would let one instance's monthly run overwrite another's body.
+          # exported, not a command prefix: the prefix form would set TITLE for
+          # `gh` only, and the reader on the other side of the pipe is a
+          # separate process.
+          export TITLE="$title"
+          existing="$(gh issue list --state open --search "in:title $title" --json number,title \
+            | python3 -c 'import json,os,sys; t=os.environ["TITLE"]; print(next((str(i["number"]) for i in json.load(sys.stdin) if i["title"] == t), ""))')"
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file issue-body.md
+            gh issue comment "$existing" --body "Refreshed by the monthly source-validation run — see the updated issue body for the current status."
+            echo "Updated existing issue #$existing."
+          else
+            gh issue create --title "$title" --body-file issue-body.md
+            echo "Opened a new tracking issue."
+          fi
