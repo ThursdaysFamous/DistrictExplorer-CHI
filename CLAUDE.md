@@ -22,7 +22,7 @@ Chicago District Explorer: a single-file, dependency-light web app. Click a poin
 **Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
 `python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
 
-- Metro: Chicago (`chicago`) — https://chidistricts.com/il/
+- Metro: Chicago (`chicago`) — https://districtry.com/il/
 - Geocoders: address Photon (Chicago-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Illinois-bounded, serial >=1s queue)
 - Ground truth: 41.88250,-87.62850 (downtown Loop — inside Cook County) → school-board 12; il-supreme-court 1; ccbr 3. Negative point 41.70000,-87.10000 (Lake Michigan, Indiana waters — outside all three anchor layers).
 - Layers: 39 registered (political 11, safety 7, schools 9, geography 12); `registerLayer(` floor 17. Debug namespace `window.ChiExplorer`.

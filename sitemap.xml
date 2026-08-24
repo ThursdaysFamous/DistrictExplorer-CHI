@@ -6,49 +6,49 @@
        first. /il/ keeps priority 1.0 — it is the app, and the page that
        actually answers the search queries this site ranks for. -->
   <url>
-    <loc>https://chidistricts.com/</loc>
+    <loc>https://districtry.com/</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/</loc>
+    <loc>https://districtry.com/il/</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/privacy.html</loc>
+    <loc>https://districtry.com/il/privacy.html</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/faq.html</loc>
+    <loc>https://districtry.com/il/faq.html</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/sources.html</loc>
+    <loc>https://districtry.com/il/sources.html</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/police-district.html</loc>
+    <loc>https://districtry.com/il/police-district.html</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/school-board.html</loc>
+    <loc>https://districtry.com/il/school-board.html</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/il/county-board.html</loc>
+    <loc>https://districtry.com/il/county-board.html</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
