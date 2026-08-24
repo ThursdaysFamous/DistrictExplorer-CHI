@@ -93,8 +93,10 @@ def fail(msg):
     sys.exit(1)
 
 
-def title_case(name):
-    return " ".join(w if w.isdigit() else w.capitalize() for w in name.split())
+# The shared implementation, not a fourth naive copy: identical on every name
+# in the shipped polling file (proven by round-trip at migration, 2026-08-24),
+# and roman-numeral/hyphen-aware should the county ever print one.
+from vtd_board_districts import title_case  # noqa: E402  (shared machinery — do not fork)
 
 
 def match_key(raw_name):
