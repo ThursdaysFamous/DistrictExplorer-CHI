@@ -21,7 +21,7 @@ import { dirname, join } from "path";
 // Vendored Leaflet fallback for sandboxed environments (e.g. Claude Code web),
 // where the browser (Chromium) cannot reach cdnjs.cloudflare.com — it does not
 // use the agent HTTPS proxy, so the request resets and the app never boots
-// ("L is not defined"). scripts/vendor_leaflet.sh populates this dir via curl,
+// ("L is not defined"). The repo-root scripts/vendor_leaflet.sh populates this dir via curl,
 // which *can* reach the CDN through the proxy; when present we serve Leaflet
 // same-origin below so the app boots. Absent (production, GitHub Actions CI)
 // the browser loads Leaflet straight from the CDN exactly as before.
@@ -67,7 +67,8 @@ const MOVE_POINT = { lat: 41.99, lng: -87.66, district: "4" }; // school-board d
 // geometry to delay, plus a point inside one of that county's districts.
 // App-RELATIVE on purpose: this doubles as a page.route glob ("**/" + it), and
 // an un-prefixed form matches whatever path the instance is served from. Disk
-// reads go through APP_DIR, which is where the instance lives in the repo.
+// reads go through INSTANCE_DIR (below), which anchors APP_DIR to this script
+// rather than to the process CWD.
 const STRAGGLER_FILE = "data/app/stephenson-county-board-districts.json";
 const APP_DIR = "il/";
 const STRAGGLER_POINT = "42.29660,-89.62120"; // Freeport, Stephenson County — inside board District B of the delayed file
@@ -79,6 +80,14 @@ const STRAGGLER_POINT = "42.29660,-89.62120"; // Freeport, Stephenson County —
 // "no district here" empty state at the negative point.
 const NEGATIVE_HIDDEN = ["school-board", "ccbr"];
 // ==== TEMPLATE:END smoke-fork-constants ====
+
+// Disk reads are anchored to THIS SCRIPT, never to the process CWD. APP_DIR
+// names the instance folder; joining it here is what makes a bare `node
+// scripts/smoke_test.mjs` work from any directory. While each instance was its
+// own repo a bare "data/app/…" read was correct, because you ran the test from
+// that repo's root — they are folders under one root now, and the un-anchored
+// form silently resolves against wherever you happen to be standing.
+const INSTANCE_DIR = join(dirname(dirname(fileURLToPath(import.meta.url))), APP_DIR);
 const BOOT_TIMEOUT = 45000; // Leaflet CDN + first paint on a cold CI runner
 const QUERY_TIMEOUT = 25000;
 
@@ -209,7 +218,7 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, BASE);
-    const shipped = JSON.parse(readFileSync(APP_DIR + "data/app/coverage-gaps.json", "utf8"));
+    const shipped = JSON.parse(readFileSync(join(INSTANCE_DIR, "data/app/coverage-gaps.json"), "utf8"));
     const expected = Object.keys(shipped).length;
 
     async function openGaps() {
@@ -596,7 +605,7 @@ try {
   //     point's own district — inside the delayed county — gets highlighted.
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
-    const stragglerBody = readFileSync(APP_DIR + STRAGGLER_FILE, "utf8");
+    const stragglerBody = readFileSync(join(INSTANCE_DIR, STRAGGLER_FILE), "utf8");
     const stragglerFeatures = JSON.parse(stragglerBody).features.length;
     const STRAGGLER_DELAY_MS = 8000;
     // STRAGGLER_POINT sits inside a district of the delayed county's file

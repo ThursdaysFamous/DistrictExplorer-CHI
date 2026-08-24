@@ -92,6 +92,15 @@ jobs:
       - name: Backfilled board seats still stamped
         run: python3 scripts/backfill_board_seats.py --check
 
+      # A `#` comment between two backslash-continued lines does not annotate
+      # the command, it TERMINATES it — bash joins the continuation first. Six
+      # lines of well-meant explanation inside the deploy's rsync invocation
+      # stopped the site publishing on 2026-08-24 while every gate here stayed
+      # green, because the assemble step only runs on main, AFTER the merge.
+      # This is the cheap guard that reaches the PR. Stdlib only.
+      - name: No comment inside a shell line-continuation
+        run: python3 scripts/validate_shell_continuations.py
+
       # Every script a workflow runs must import under the dependencies that
       # workflow installs. This catches the seam no other gate looks at: the
       # five derived-boundary roster refreshes (Cass, De Witt, Marshall, Mason,
@@ -181,17 +190,38 @@ jobs:
             retry 2 300 npx playwright install chromium
           fi
 
-      - name: Serve app and run smoke test
-        env:
-          BASE_URL: http://localhost:8000/il/
+      # Static merge gate, once per instance. Each instance's validate_index.py
+      # resolves data/app relative to the index it is handed, so all three run
+      # from the repo root. Stdlib only, so this sits before the browser work
+      # and fails fast.
+      - name: Each instance's index validates
+        run: |
+          python3 scripts/validate_index.py il/index.html
+          python3 sf/scripts/validate_index.py sf/index.html
+          python3 nyc/scripts/validate_index.py nyc/index.html
+
+      # ONE server, EVERY instance. Until R3 this ran il alone, which is what
+      # the repo had — sf and nyc were separate repos with their own CI. They
+      # are folders here now, and an ungated folder is worse than an ungated
+      # repo: it merges through this workflow while nothing looks at it. The
+      # first run of this step found the defect that proves the point — both
+      # imported smoke tests read "data/app/coverage-gaps.json" relative to the
+      # process CWD, correct when you ran them from their own repo root and
+      # ENOENT here. Each instance keeps its own smoke test because each
+      # describes a different city; what is shared is the server and the gate.
+      - name: Serve app and run every instance's smoke test
         run: |
           python3 -m http.server 8000 &
           server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for i in $(seq 1 40); do
             curl -sf http://localhost:8000/il/ >/dev/null && break
             sleep 0.5
           done
-          node scripts/smoke_test.mjs
-          status=$?
-          kill "$server_pid" 2>/dev/null || true
+          status=0
+          # Run all three even if an early one fails, so a PR sees every broken
+          # instance in one go rather than one per push.
+          BASE_URL=http://localhost:8000/il/  node scripts/smoke_test.mjs     || status=1
+          BASE_URL=http://localhost:8000/sf/  node sf/scripts/smoke_test.mjs  || status=1
+          BASE_URL=http://localhost:8000/nyc/ node nyc/scripts/smoke_test.mjs || status=1
           exit $status
