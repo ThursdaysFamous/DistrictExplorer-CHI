@@ -57,11 +57,12 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 PAST_ELECTIONS_URL = "https://il-clark.accessliberty.com/pastelections.aspx"
 BOARD_URL = "https://www.clarkcountyil.org/board"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 # The Clerk's past-elections page names each file; a seating election is a
 # November general. Odd years never carry one (consolidated elections are in
@@ -74,8 +75,6 @@ PARTY_RE = re.compile(r"\((REP|DEM|IND|GRN|LIB)\)")
 
 MIN_DISTRICTS = 7
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("clark-board-scraper")
 

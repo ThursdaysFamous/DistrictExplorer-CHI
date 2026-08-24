@@ -82,6 +82,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import vtd_board_districts as V  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app",
@@ -120,8 +121,6 @@ MAX_OVERLAP_M2 = 150000.0       # measured 27,349 across all 36 pairs
 MAX_OUTSIDE_M2 = 1500000.0      # measured 484,861 — 0.02% of the county
 MIN_COVERED = 0.999
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("vermilion-boundaries")
 

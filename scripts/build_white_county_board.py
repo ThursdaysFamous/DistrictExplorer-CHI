@@ -60,6 +60,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_white_boundaries import (  # noqa: E402
     CANVASS, ELECTIONS_URL, EXPECTED_PRECINCTS,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.whitecounty-il.gov/county-board"
 
@@ -87,8 +88,6 @@ TOWNSHIP_ALIASES = {"GRAY": "GREY"}
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("build-white-board")
 

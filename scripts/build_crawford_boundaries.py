@@ -66,6 +66,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_metro_outline import point_in_rings  # noqa: E402
 import vtd_board_districts as V  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "crawford-precincts.json")
@@ -102,8 +103,6 @@ BALANCE_DEV_MAX = 0.30          # measured 0.202 (District 5) — the county's p
 MAX_OVERLAP_M2 = 1.0
 MIN_COVERED = 0.9999
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("crawford-boundaries")
 

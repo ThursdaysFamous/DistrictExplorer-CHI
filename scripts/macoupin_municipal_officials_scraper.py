@@ -83,6 +83,7 @@ import sys
 import time
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 REST = "https://www.macoupinvotes.gov/ce/mobile/seam/resource/rest/voter/"
 # The callback the page itself uses, sent verbatim so the request this makes is
@@ -100,8 +101,7 @@ SOURCE_NOTE = ("Macoupin County Clerk, Elected Officials directory "
                "service the page itself queries")
 
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
     "Accept": "*/*",
 }
 REQUEST_TIMEOUT = 60

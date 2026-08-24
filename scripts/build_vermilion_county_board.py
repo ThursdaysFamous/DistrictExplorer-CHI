@@ -41,6 +41,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -56,8 +57,6 @@ MIN_EMAILS = 25          # 27 published; a floor, not a target
 MIN_PHONES = 1           # exactly one member publishes a direct line
 MIN_PARTIES = 25         # 27 published
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("vermilion-board-roster")
 

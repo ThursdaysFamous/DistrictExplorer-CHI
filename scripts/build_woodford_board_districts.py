@@ -48,6 +48,7 @@ from build_metro_outline import (  # noqa: E402  (shared machinery — do not fo
     HEADERS, REQUEST_TIMEOUT, SIMPLIFY_TOLERANCE_M, STATE_FIPS,
     dissolve, group_rings, point_in_rings, simplify,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "woodford-county-board-districts.json")
@@ -86,8 +87,6 @@ ANCHORS = [
     (40.7903, -89.3609, "3", "Metamora (Metamora Twp)"),
 ]
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("woodford-board")
 

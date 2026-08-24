@@ -46,6 +46,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_richland_boundaries import (COMPOSITION, COUNTY_PRECINCTS,  # noqa: E402
                                        SEATS_PER_DISTRICT)
 from vtd_board_districts import norm  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://richlandcounty.illinois.gov/county-board/"
 GIS_URL = "https://richlandil.wthgis.com/"
@@ -57,8 +58,6 @@ MIN_EMAILS = 6          # measured 7/7; a page that stops publishing them fails
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("richland-board-roster")
 

@@ -55,11 +55,12 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 WP = "https://douglas.wp.webfoot.io/wp-json/wp/v2/media"
 SITE = "https://douglascountyil.gov"
 TIMEOUT = 90
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)",
+HEADERS = {"User-Agent": UA_ROSTER_BOT,
            "Accept": "application/json"}
 
 EXPECT_MEMBERS = 7
@@ -76,8 +77,6 @@ CAND_RE = re.compile(r"^(.*?)\s{1,}\((R|D|N|NON)\)\s*$")
 INT_RE = re.compile(r"^[\d,]+$")
 NO_CANDIDATE_RE = re.compile(r"^\s*no\s+candidate\s*$", re.I)
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("douglas-board-scraper")
 

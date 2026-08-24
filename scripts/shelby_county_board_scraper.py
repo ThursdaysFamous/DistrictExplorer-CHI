@@ -40,11 +40,11 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.shelbycounty-il.gov/coboard.aspx"
 CONTACTS_URL = "https://www.shelbycounty-il.gov/contacts.aspx"
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 # Cards are delimited by their OPENING tags, not by matching close tags: a
 # non-greedy close-tag match swallowed the second member's </div> and every

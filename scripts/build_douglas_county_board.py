@@ -53,6 +53,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_douglas_boundaries import EXPECTED_DISTRICTS, SEATS_PER_DISTRICT  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 YEARBOOK_LABEL = "Douglas County Yearbook"
 SITE = "https://douglascountyil.gov"
@@ -66,8 +67,6 @@ DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 SUFFIX_RE = re.compile(r"\b(jr|sr|ii|iii|iv)\b\.?$", re.I)
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("douglas-board-roster")
 

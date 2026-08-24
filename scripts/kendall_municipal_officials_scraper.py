@@ -52,6 +52,7 @@ import sys
 from datetime import datetime, timezone
 
 import requests
+from scraper_common import UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
 
 PDF_URL = "https://www.kendallcountyil.gov/home/showdocument?id=184"
 DIRECTORY_URL = ("https://www.kendallcountyil.gov/offices/county-clerk-recorder/"
@@ -59,10 +60,7 @@ DIRECTORY_URL = ("https://www.kendallcountyil.gov/offices/county-clerk-recorder/
 WAYBACK_API = "https://archive.org/wayback/available?url=%s"
 
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_124,
     "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,"
                "image/avif,image/webp,*/*;q=0.8"),
     "Accept-Language": "en-US,en;q=0.9",

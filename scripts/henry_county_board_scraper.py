@@ -35,12 +35,13 @@ import sys
 import time
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 DISTRICT_LISTS = {
     1: "https://www.henrycty.com/Directory.aspx?DID=39",
     2: "https://www.henrycty.com/Directory.aspx?DID=40",
 }
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 REQUEST_TIMEOUT = 60
 FETCH_ATTEMPTS = 5
 # Between the two district listings. Small, but the 429 arrived on back-to-back

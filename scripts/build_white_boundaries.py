@@ -86,10 +86,10 @@ import vtd_board_districts as V  # noqa: E402  (shared machinery — do not fork
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     STATE_FIPS, TIGERWEB, point_in_rings,
 )
-from scraper_common import make_fail  # noqa: E402
 from build_stephenson_board_districts import (  # noqa: E402  (same fit machinery)
     fit_affine_icp, need, pt_seg_factory, rings_of_path,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_DIR = os.path.join(REPO_ROOT, "data", "source", "raw")

@@ -33,6 +33,7 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+from scraper_common import UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "municipal-ward-coverage.json")
@@ -43,8 +44,7 @@ TIGER_PLACES = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 COOK_WARDS = ("https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/"
               "MapServer/22/query")
 
-USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-              "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+USER_AGENT = UA_CHROME_WIN_124
 TIMEOUT = 120
 
 # Entries whose municipality list is fixed by the service itself (one service,

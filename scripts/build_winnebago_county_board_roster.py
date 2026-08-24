@@ -29,12 +29,12 @@ import os
 import re
 import sys
 import urllib.request
+from scraper_common import UA_CHROME_X11_120  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://wincoil.gov/government/county-board"
 GIS_QUERY = ("https://maps.wingis.org/public/rest/services/ElectedOfficials/"
              "MapServer/26/query?where=1%3D1&outFields=District,REP&returnGeometry=false&f=json")
-USER_AGENT = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-              "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+USER_AGENT = UA_CHROME_X11_120
 TIMEOUT = 60
 
 MIN_DISTRICTS = 18

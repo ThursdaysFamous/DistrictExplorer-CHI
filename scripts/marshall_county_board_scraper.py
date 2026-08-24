@@ -42,6 +42,7 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pdfplumber
@@ -51,8 +52,7 @@ except ImportError:                                    # pragma: no cover
 SOURCE_URL = ("https://marshallcountyillinois.gov/wp-content/uploads/2026/01/"
               "2026-New-County-Board-Roster-.pdf")
 ROSTER_PAGE = "https://marshallcountyillinois.gov/directory/county-board/"
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 # Column left edges in PDF points, measured against the 2026 revision's header
 # row (Official 24 / Title 142 / Address 213 / City 294 / Phone 328 /

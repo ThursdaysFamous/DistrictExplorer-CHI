@@ -28,10 +28,11 @@ import sys
 
 import requests
 from bs4 import BeautifulSoup
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.dupagecounty.gov"
 LIST_URL = BASE + "/government/county_board/county_board_members/"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 # mailto: local-parts that are site chrome / role inboxes, not a member address.
 BOILERPLATE_EMAIL = ("noreply", "webpageupdate", "bootstrap", "webmaster", "info@")
 

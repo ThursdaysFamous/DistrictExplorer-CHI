@@ -110,6 +110,7 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pdfplumber
@@ -119,8 +120,7 @@ except ImportError:  # pragma: no cover
 CLERK_PAGE = "https://www.henrycty.com/221/County-Clerk"
 HANDBOOK_FALLBACK = "https://www.henrycty.com/DocumentCenter/View/1102/THEHANDBOOK"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 120
 

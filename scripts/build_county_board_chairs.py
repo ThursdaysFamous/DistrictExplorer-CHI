@@ -157,6 +157,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 OUT_NAME = "isbe-county-board-chairs.json"
 
@@ -225,8 +226,6 @@ FLOOR_RE = re.compile(r"\b\d+\s*(?:st|nd|rd|th)?\s*floor\b.*", re.I)
 LEADING_HASH_RE = re.compile(r"^#\s*(?=\d)")
 NAME_SUFFIXES = frozenset(("jr", "sr", "ii", "iii", "iv", "v", "md", "phd"))
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("county-board-chairs")
 

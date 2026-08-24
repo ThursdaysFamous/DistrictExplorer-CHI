@@ -104,14 +104,14 @@ import requests
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import aia_bundle  # noqa: E402 (shared machinery — do not fork)
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.colesco.illinois.gov"
 SOURCE_URL = BASE + "/board/"
 COMMITTEES_URL = BASE + "/board/committees"
 
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 60
 FETCH_GAP_S = 1.0

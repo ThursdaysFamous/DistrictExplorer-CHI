@@ -65,6 +65,7 @@ import sys
 import urllib.parse
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pdfplumber
@@ -75,8 +76,7 @@ CLERK_PAGE = "https://tazewell-il.gov/countyclerkrecorder/"
 # Fallback only — the live URL is read off CLERK_PAGE (see module docstring).
 YEARBOOK_URL = "https://tazewell-il.gov/wp-content/uploads/2026/05/FULL-YEARBOOK-1.pdf"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 180
 YEARBOOK_LINK_RE = re.compile(r'href="([^"]*(?:YEARBOOK|Yearbook|yearbook)[^"]*\.pdf)"')

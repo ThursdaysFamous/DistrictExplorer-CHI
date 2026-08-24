@@ -55,6 +55,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_mason_board_districts import SEATS_PER_DISTRICT  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "mason-county-board-members.json")
@@ -132,8 +133,6 @@ PHONE_RE = re.compile(r"^\d{3}-\d{3}-\d{4}$")
 EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
 ADDRESS_RE = re.compile(r"\b\d+\s+(N|S|E|W|CR|County Road)\b", re.I)
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("mason-board-roster")
 

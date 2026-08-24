@@ -45,6 +45,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTLINE_PY = os.path.join(REPO_ROOT, "scripts", "build_metro_outline.py")
@@ -94,8 +95,6 @@ ALL_COUNTIES = (
 # "De Witt" ships as "dewitt" everywhere (dispatch table, outline file, gaps).
 SLUG_OVERRIDES = {"De Witt": "dewitt"}
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("build-county-status")
 

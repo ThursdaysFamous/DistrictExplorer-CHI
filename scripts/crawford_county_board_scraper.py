@@ -38,11 +38,12 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://crawfordcounty.illinois.gov/department/county-board/"
 RESULTS_URL = "https://il-crawford.pollresults.net/"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 # Each member is one linked personnel entry repeated three times in the markup
 # (name, district line, e-mail all point at the same /personnel/<slug>/ URL),
@@ -54,8 +55,6 @@ DISTRICT_RE = re.compile(r"County Board District\s*#?\s*(\d+)", re.I)
 CHAIR_RE = re.compile(r"\bchair(?:man|person|woman)?\b", re.I)
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("crawford-board-scraper")
 

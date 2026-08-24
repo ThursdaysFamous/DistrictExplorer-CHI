@@ -49,6 +49,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_franklin_boundaries import COMPOSITION, SEATS_PER_DISTRICT  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://franklincountyil.gov/county-board-members/"
 
@@ -62,8 +63,6 @@ STREET_RE = re.compile(
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("franklin-board-roster")
 

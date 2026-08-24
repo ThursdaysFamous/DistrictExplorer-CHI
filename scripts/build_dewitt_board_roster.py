@@ -32,6 +32,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_dewitt_board_districts import DISTRICTS as BOUNDARY_COMPOSITION  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://www.dewittcountyil.gov/government/county_board.php"
 
@@ -44,8 +45,6 @@ ALLOWED_ROLES = ("Chairman", "Vice-Chairman")
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("dewitt-board-roster")
 

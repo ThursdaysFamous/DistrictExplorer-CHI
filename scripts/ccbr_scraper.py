@@ -52,13 +52,11 @@ from datetime import datetime, timezone
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from scraper_common import UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.cookcountyboardofreview.com"
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_124,
     "Accept-Language": "en-US,en;q=0.9",
 }
 REQUEST_TIMEOUT = 30

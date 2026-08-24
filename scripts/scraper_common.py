@@ -48,6 +48,8 @@ UA_CHROME_X11_120 = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
 # Self-identifying bot strings:
 UA_ROSTER_BOT = "chidistricts.com roster bot (civic data; contact via site)"
 UA_ROSTER_COMPACT = "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"
+UA_CIVIC_BOT = ("Mozilla/5.0 (compatible; chidistricts.com civic data bot; "
+                "+https://chidistricts.com/)")
 
 
 def make_fail(label):

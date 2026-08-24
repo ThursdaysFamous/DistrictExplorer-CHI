@@ -110,6 +110,7 @@ from build_stephenson_board_districts import (  # noqa: E402  (same map series)
     TOWNSHIP_POP, as_features, fit_affine_icp, hydro_check, need,
     rings_of_path,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "stephenson-precincts.json")
@@ -177,8 +178,6 @@ ANCHORS = [
     (42.2966, -89.6220, "Freeport 01", "downtown Freeport"),
 ]
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("stephenson-precincts")
 

@@ -41,6 +41,7 @@ import requests  # noqa: E402
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     HEADERS, REQUEST_TIMEOUT, point_in_rings,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "washington-county-board-districts.json")
@@ -65,8 +66,6 @@ EXPECT_TOWNSHIPS = 16
 # a transcription smoke test, not a Voting Rights Act analysis.
 MAX_POP_SPREAD = 0.20
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("washington-board")
 

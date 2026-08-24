@@ -40,9 +40,9 @@ _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
 import aia_bundle
 import platinum_canvass
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 PHONE_RE = re.compile(r"(\d{3})\D{0,3}(\d{3})\D?(\d{4})")
 EXT_RE = re.compile(r"ext\.?\s*(\d+)", re.I)

@@ -50,6 +50,7 @@ import sys
 import urllib.parse
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pypdf
@@ -62,8 +63,7 @@ CLERK_PAGE = ("https://www.carrollcountyil.gov/county_departments/"
 # discovered link is relative and this is the only form that actually serves.
 CDN_ROOT = "https://cms9files.revize.com/carrollil/"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 120
 

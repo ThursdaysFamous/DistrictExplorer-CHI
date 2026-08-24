@@ -96,7 +96,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # constants, the count guard's wording, the balance ceiling — stays here.
 import vtd_board_districts as V  # noqa: E402  (shared machinery — do not fork)
 from build_metro_outline import point_in_rings  # noqa: E402  (shared machinery — do not fork)
-from scraper_common import make_fail  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "clark-precincts.json")

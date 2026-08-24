@@ -62,13 +62,13 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 DIRECTORY_URL = ("https://www.henrycty.com/BusinessDirectoryii.aspx"
                  "?lngBusinessCategoryID=25&lngNewPage=%d")
 CLERK_PAGE = "https://www.henrycty.com/211/Elections"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "henry-precincts.json")

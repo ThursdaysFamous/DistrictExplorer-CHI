@@ -61,6 +61,7 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://franklincountyil.gov/county-board-members/"
 # The Clerk's results system. TURNOUT_URL reports the county's live precinct
@@ -69,7 +70,7 @@ BOARD_URL = "https://franklincountyil.gov/county-board-members/"
 TURNOUT_URL = "https://platinumelectionresults.com/turnouts/county/21"
 RACE_URL = "https://platinumelectionresults.com/history/races/2026_gp/21/8"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 EXPECTED_DISTRICTS = ("1", "2", "3")
 EXPECTED_MEMBERS = 9
@@ -93,8 +94,6 @@ STREET_RE = re.compile(
 
 X_ROLE, X_NAME, X_ADDRESS, X_MOBILE, X_CONTACT = 0, 1, 2, 3, 4
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("franklin-board-scraper")
 

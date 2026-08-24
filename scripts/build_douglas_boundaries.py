@@ -66,6 +66,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import vtd_board_districts as V  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "douglas-precincts.json")
@@ -104,8 +105,6 @@ MAX_OVERLAP_M2 = 20000.0        # measured 2,853 across all 21 pairs
 MAX_OUTSIDE_M2 = 200000.0       # measured 92,043 — 0.009% of the county
 MIN_COVERED = 0.999
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("douglas-boundaries")
 

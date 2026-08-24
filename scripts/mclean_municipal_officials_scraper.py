@@ -48,14 +48,14 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 BLOOMINGTON_URL = "https://bloomingtonelectionsil.gov/information/bloomingtoncitycouncil/"
 LEROY_URL = "https://www.leroy.org/government/city-hall/city-council"
 LEXINGTON_COUNCIL_URL = "https://lexingtonil.gov/city-council"
 LEXINGTON_MAYOR_URL = "https://lexingtonil.gov/mayor"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 120
 

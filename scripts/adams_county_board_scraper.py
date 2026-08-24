@@ -62,6 +62,7 @@ import sys
 
 import pymupdf
 import requests
+from scraper_common import UA_CHROME_WIN_126_FULL  # noqa: E402  (shared machinery — do not fork)
 
 # platinumelectionresults.com's county id for Adams. Verified by reading the
 # county name out of page 1 of every report fetched — never trusted from the id.
@@ -89,8 +90,7 @@ MIN_REAL_REPORT_BYTES = 10000
 # rounding; Adams's own vote-for-two contests sum near 200.
 MULTI_SEAT_PCT_SUM = 115
 
-UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+UA = UA_CHROME_WIN_126_FULL
 TIMEOUT = 60
 
 # "COUNTY BOARD 1", "COUNTY BOARD DISTRICT 2" and "COUNTY BOARD #3" are all the

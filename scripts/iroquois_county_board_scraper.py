@@ -35,10 +35,10 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://iroquoiscountyil.gov/offices/county-board"
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 ROMAN = {"I": 1, "II": 2, "III": 3, "IV": 4}
 ROLE_RE = re.compile(r"^(Chairman|Vice\s*-?\s*Chairman)$", re.I)

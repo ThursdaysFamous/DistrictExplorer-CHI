@@ -26,6 +26,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://www.peoriacounty.gov/755/County-Board-Members"
 
@@ -41,8 +42,6 @@ ALLOWED_ROLES = ("Chairperson", "Vice-Chairperson")
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("peoria-board-roster")
 

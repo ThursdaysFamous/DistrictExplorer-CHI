@@ -47,6 +47,7 @@ import argparse
 import json
 import os
 import sys
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRECINCTS_PATH = os.path.join(REPO_ROOT, "data", "app", "mcdonough-precincts.json")
@@ -57,8 +58,7 @@ COUNTY_BOARD_LAYER = ("https://gis.wiu.edu/arcgis/rest/services/precinct_map/"
                       "MapServer/3")
 REQUEST_TIMEOUT = 120
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 
 # Transcribed verbatim from the district headings on MEMBERS_PAGE, read

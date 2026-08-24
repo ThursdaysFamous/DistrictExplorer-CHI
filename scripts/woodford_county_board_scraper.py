@@ -36,10 +36,11 @@ import sys
 import time
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.woodford-county.org"
 LIST_URL = BASE + "/m/directory/department?did=22"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 # Each district is a sub-department accordion whose title link carries its own
 # did; the members of that district follow it until the next such header.

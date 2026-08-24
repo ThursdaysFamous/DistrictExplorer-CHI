@@ -51,10 +51,11 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 INDEX_URL = "https://tazewell-il.gov/boardreps/"
 MEMBER_RE = re.compile(r'href="(https://tazewell-il\.gov/members/[^"#?]+/)"')
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 # the second source — boundary layer AND stale-but-speaking roster attributes
 GIS_LAYER = ("https://services.arcgis.com/LIEind9C2d6XYeOY/arcgis/rest/services/"

@@ -45,11 +45,12 @@ import sys
 import time
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://jacksoncounty-il.gov/158/County-Board"
 BASE = "https://jacksoncounty-il.gov"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 EXPECT_DISTRICTS = 7
 EXPECT_MEMBERS = 14
@@ -67,8 +68,6 @@ VICE_RE = re.compile(r"^\s*vice[\s-]*chair(man|person|woman)?\s*$", re.I)
 MAILTO_RE = re.compile(r'href="mailto:([^"?]+)"', re.I)
 EMP_DISTRICT_RE = re.compile(r"District\s+(\d+)")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("jackson-board-scraper")
 

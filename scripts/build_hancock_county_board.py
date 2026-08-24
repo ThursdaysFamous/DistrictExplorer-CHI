@@ -20,6 +20,7 @@ Usage:
 import json
 import os
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 EXPECT_DISTRICTS = 5
 EXPECT_MEMBERS = 15
@@ -28,8 +29,6 @@ SEATS = {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3}
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("hancock-board-roster")
 

@@ -18,6 +18,7 @@ Usage:
 import json
 import os
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = ("https://www.logancountyil.gov/index.php?option=com_content"
               "&view=article&id=176&Itemid=541&lang=en")
@@ -30,8 +31,6 @@ MIN_EMAILS = 10
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
-
-from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 fail = make_fail("logan-board-roster")
 
