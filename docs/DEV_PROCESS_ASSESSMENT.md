@@ -223,6 +223,50 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R3 (part 1) — SHIPPED (2026-08-24): one engine, three instances, one origin.**
+  `engine/` now holds one copy of each of the 55 engine blocks and every instance's
+  `index.html`/`sw.js` is composed from it (`scripts/compose_app.py`, gated in CI and at
+  deploy). Parity stops being a claim a checker makes about three repositories and becomes a
+  property of the layout: an instance cannot drift from a file it does not have. SF and NYC are
+  imported with their history as `sf/` and `nyc/`.
+  **The composer is deliberately small, and its first draft was not.** That draft also split
+  each instance's local text into fragment files — ~26,000 duplicated lines per instance for a
+  guarantee splicing already gives, and it put the composer in a fight with
+  `generate_metro_files.py` over who writes a GENERATED region. Sharing only the ENGINE fences
+  costs a fifth as much (408 KB), keeps exactly one writer per line, and dissolves the ordering
+  question: every generated region lives outside every fence.
+  **Importing paid for the composer immediately, twice.** Both forks were pinned three engine
+  releases behind; composing delivered the v1.0.22→v1.0.25 bump that the release channel never
+  managed to land, and their own changelogs' adoption notes were then worked through by hand —
+  v1.0.24's one out-of-fence line (the point chip moves to the engine's `buildShareControl()`,
+  the fork-level `embedBaseUrl`/`buildEmbedCode` deleted) and v1.0.25's data-shape change
+  (`coverage-gaps.json` regenerated so `why` replaces `blocker`, without which each fork's
+  gaps panel would explain half of what it used to).
+  **CONSOLIDATION CREATES A BUG, AND FINDING IT FIRST IS THE POINT.** CacheStorage is per
+  ORIGIN, and the engine's `activate` handler deleted every cache that was not its own —
+  correct while an origin held one app, mutual destruction the moment it holds two. Three
+  instances would have wiped each other's precached boundary geometry on every cross-instance
+  visit. The sweep now retires only this instance's own superseded versions, identified by its
+  cache name minus the version suffix. **Honest caveat:** an attempt to demonstrate the old
+  handler evicting a sibling end-to-end did not reliably trigger the other instance's
+  activation, so that half rests on reading the code — the filter deletes any key that is not
+  `CACHE_NAME`, and the keys are the whole origin's — rather than on a reproduced wipe. The fix
+  itself is verified in the browser.
+  Verified: **each fork's OWN smoke test passes in full at its new path** (SF at `/sf/` —
+  supervisor district, neighborhood, police district, all three legislative chambers with
+  roster joins; NYC at `/nyc/` — borough, judicial district, municipal court, a point move
+  across boroughs, the honest mid-river empty state), then all three driven in one browser
+  profile: each caches its own shell, all three caches coexist, all three workers hold their
+  own scope.
+  **Importing is not publishing.** `sf/` and `nyc/` are excluded from the Pages deploy: each
+  still serves from its own domain and carries its own canonical, and publishing here first
+  would put a second live copy of each app on this origin. Removing that exclude is the switch
+  that makes them live, and it belongs with their domain cutover (R5).
+  **Still open in R3:** the per-instance tooling. Each instance still carries its own
+  `scripts/`, `metro-worksheet.json`, `docs/` and `schema/`; the shared gate scripts still know
+  only about `il`. Reconciling those — the 585–891 divergent lines this assessment predicted —
+  is the remaining work, and it is genuine porting rather than mechanical rewriting.
+
 - **R2.3 — SHIPPED (2026-08-24): the Illinois app moved to `il/` and serves at `/il/`.**
   The structural half of "one repo, one site": the app is now an instance folder, the root is a
   redirect stub, and the shape that `/nyc/` and `/sf/` will land in exists. Moved under `il/`:
