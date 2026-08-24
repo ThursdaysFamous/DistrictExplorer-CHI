@@ -223,6 +223,47 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R3 (part 2) — SHIPPED (2026-08-24): the tooling reconciliation, and the two defects it
+  exposed.** Part 1 unified the engine; this unifies what runs *around* it. `generate_metro_files.py`
+  became instance-aware (one script, 33 generated regions across three worksheets, replacing three
+  copies), the five dead engine-channel scripts left in `sf/scripts` and `nyc/scripts` are deleted,
+  and the smoke workflow now gates **every instance** instead of `il` alone.
+  **An ungated folder is worse than an ungated repo.** While SF and NYC were separate repos they
+  had their own CI; as folders they merge through this repo's workflow, and until this change
+  nothing in it looked at them. Turning that gate on immediately found what it was for: both
+  imported smoke tests read `data/app/coverage-gaps.json` and `metro-worksheet.json` **relative to
+  the process CWD** — correct when you ran them from their own repo root, `ENOENT` here. All three
+  now anchor their disk reads to the script file, so a smoke test runs from any directory. The
+  negative case is exercised too: one broken instance turns the whole step red, and the two
+  healthy ones still report.
+  **The second defect is the one worth remembering, because a guard went quiet about its own
+  configuration.** `vendor_leaflet.sh` — which exists so the sandboxed browser can boot at all —
+  read the repo-root `index.html`, which R2.3 turned into a redirect stub. It found no Leaflet
+  URL, printed a soft note, and `exit 0`. The smoke test then died 45 seconds later at
+  `page.waitForFunction: Timeout`, which is precisely the symptom CLAUDE.md tells you **not** to
+  chase into app code — so the misleading diagnosis was pre-installed. Two changes: it fails hard
+  (exit 1, naming the instance) when an app file is missing or carries no Leaflet URL, while an
+  unreachable CDN stays best-effort as designed; and the three byte-identical per-fork copies
+  collapse into one instance-aware script. Those copies were **genuinely** non-redundant while the
+  instances were separate repos — each self-located into its own tree — and became pure
+  duplication the moment one root, one SessionStart hook, and one script that knows the instance
+  table could do the job. `sf/.claude/settings.json` goes with them: a Chicago-domain copy that
+  fired for nobody and pointed at a script that no longer exists.
+  **What deliberately did NOT get unified.** Each instance keeps its own `validate_index.py`,
+  `smoke_test.mjs` and `validate_sources.py`. They differ by 595–1,473 lines because they
+  *describe different cities* — that is legitimate difference, not drift, and merging them would
+  trade a real distinction for a false economy. The rule the whole stage runs on: unify what is
+  the same, gate what is different.
+  Verified: all three smoke tests pass at `/il/`, `/sf/` and `/nyc/` from an unrelated working
+  directory; all three `validate_index.py` pass from the repo root; `generate_metro_files.py
+  --check` (33 regions / 3 instances), `compose_app.py --check` (6 files / 3 instances),
+  `check_engine_parity.py`, `build_coverage_gaps.py --check`, `build_county_status.py --check`,
+  `validate_workflow_deps.py` all green; the composite CI step simulated locally in both
+  directions.
+  **Known debt, not fixed here:** each fork's gaps panel still links source submissions to its
+  own `DistrictExplorer-SF`/`-NYC` issue tracker (`repo_issues` in its worksheet). Correct today,
+  wrong the moment R6 archives those repos — retarget it there, with the domain cutover.
+
 - **R3 (part 1) — SHIPPED (2026-08-24): one engine, three instances, one origin.**
   `engine/` now holds one copy of each of the 55 engine blocks and every instance's
   `index.html`/`sw.js` is composed from it (`scripts/compose_app.py`, gated in CI and at

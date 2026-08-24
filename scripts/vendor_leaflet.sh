@@ -1,40 +1,90 @@
 #!/usr/bin/env bash
-# Vendor Leaflet locally for the headless smoke test.
+# Vendor Leaflet locally for the headless smoke tests.
 #
-# Why this exists: index.html loads Leaflet from cdnjs.cloudflare.com. In the
-# Claude Code web/sandbox environment the browser (Playwright's Chromium) cannot
-# reach that CDN — it does not use the agent HTTPS proxy, so every request resets
-# (ERR_CONNECTION_RESET → "L is not defined" → the app never boots). curl *can*
-# reach the CDN through the proxy, so we fetch Leaflet here and let
-# scripts/smoke_test.mjs serve it same-origin via page.route(). Production and
-# GitHub Actions CI are unaffected: they hit the real CDN and never see this dir
-# (it is gitignored and absent unless this script has run).
+# Why this exists: each instance's index.html loads Leaflet from
+# cdnjs.cloudflare.com. In the Claude Code web/sandbox environment the browser
+# (Playwright's Chromium) cannot reach that CDN — it does not use the agent
+# HTTPS proxy, so every request resets (ERR_CONNECTION_RESET → "L is not
+# defined" → the app never boots). curl *can* reach the CDN through the proxy,
+# so we fetch Leaflet here and let each instance's smoke_test.mjs serve it
+# same-origin via page.route(). Production and GitHub Actions CI are unaffected:
+# they hit the real CDN and never see these dirs (they are gitignored and absent
+# unless this script has run).
 #
-# Best-effort: never fails the caller. If the CDN is unreachable the smoke test
-# just falls back to loading Leaflet from the CDN as it always has.
+# ONE SCRIPT, EVERY INSTANCE. Three byte-identical copies of this used to live
+# in scripts/, sf/scripts/ and nyc/scripts/ — genuinely non-redundant while the
+# instances were separate REPOS, because each self-located into its own tree.
+# They are one repo now, one SessionStart hook fires at the repo root, and only
+# the root copy ever ran: a sandboxed sf or nyc smoke run would have hit exactly
+# the boot timeout described below. The instance table is the whole difference.
+#
+# EACH VENDOR DIR IS THE ONE ITS OWN SMOKE TEST LOOKS IN — smoke_test.mjs
+# resolves `dirname(import.meta.url)/vendor/leaflet`, so the third column below
+# must stay `<that instance's scripts dir>/vendor/leaflet`.
+#
+# FAILURE POSTURE, and it is two different things:
+#   * The CDN being unreachable is a NETWORK condition — warn, exit 0, and the
+#     smoke test falls back to loading Leaflet from the CDN as it always has.
+#   * An instance whose index.html is missing, or carries no Leaflet CDN URL, is
+#     a REPO BUG — exit 1, loudly. That case used to print a soft note and exit
+#     0, and it cost a real debugging session at R2.3: moving the app to il/
+#     left this script reading the repo-root index.html, which is now the
+#     redirect stub. It skipped silently, and the smoke test died 45 seconds
+#     later with `page.waitForFunction: Timeout` — a symptom CLAUDE.md
+#     explicitly tells you NOT to chase into app code. A guard that goes quiet
+#     when its own configuration is wrong is worse than no guard.
 set -u
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-index="$repo_root/index.html"
-out="$repo_root/scripts/vendor/leaflet"
 
-# Mirror the exact URLs the app requests, so the vendored copy can never drift
-# from index.html's pinned Leaflet version.
-mapfile -t urls < <(grep -oE 'https://cdnjs\.cloudflare\.com/[^"]*leaflet\.(js|css)' "$index" | sort -u)
-if [ "${#urls[@]}" -eq 0 ]; then
-  echo "vendor_leaflet: no Leaflet CDN URL found in index.html; skipping." >&2
-  exit 0
+# id : app file (relative to repo root) : vendor dir (relative to repo root)
+INSTANCES=(
+  "il:il/index.html:scripts/vendor/leaflet"
+  "sf:sf/index.html:sf/scripts/vendor/leaflet"
+  "nyc:nyc/index.html:nyc/scripts/vendor/leaflet"
+)
+
+wanted=("$@")
+if [ "${#wanted[@]}" -eq 0 ]; then
+  for row in "${INSTANCES[@]}"; do wanted+=("${row%%:*}"); done
 fi
 
-mkdir -p "$out"
-for url in "${urls[@]}"; do
-  name="${url##*/}"   # leaflet.js / leaflet.css
-  if curl -fsS --max-time 30 -o "$out/$name" "$url"; then
-    echo "vendor_leaflet: fetched $name ($(wc -c <"$out/$name") bytes)"
-  else
-    echo "vendor_leaflet: could not fetch $url — smoke test will fall back to CDN." >&2
-    rm -f "$out/$name"
+fail() { echo "vendor_leaflet: $*" >&2; exit 1; }
+
+for id in "${wanted[@]}"; do
+  row=""
+  for candidate in "${INSTANCES[@]}"; do
+    if [ "${candidate%%:*}" = "$id" ]; then row="$candidate"; break; fi
+  done
+  if [ -z "$row" ]; then
+    known=""
+    for candidate in "${INSTANCES[@]}"; do known="$known ${candidate%%:*}"; done
+    fail "unknown instance '$id' — known:$known"
   fi
+
+  rest="${row#*:}"
+  index="$repo_root/${rest%%:*}"
+  out="$repo_root/${rest#*:}"
+
+  [ -f "$index" ] || fail "$id: ${rest%%:*} does not exist"
+
+  # Mirror the exact URLs the app requests, so the vendored copy can never drift
+  # from the instance's pinned Leaflet version.
+  mapfile -t urls < <(grep -oE 'https://cdnjs\.cloudflare\.com/[^"]*leaflet\.(js|css)' "$index" | sort -u)
+  if [ "${#urls[@]}" -eq 0 ]; then
+    fail "$id: no Leaflet CDN URL in ${rest%%:*} — is that still the app file?"
+  fi
+
+  mkdir -p "$out"
+  for url in "${urls[@]}"; do
+    name="${url##*/}"   # leaflet.js / leaflet.css
+    if curl -fsS --max-time 30 -o "$out/$name" "$url"; then
+      echo "vendor_leaflet: $id — fetched $name ($(wc -c <"$out/$name") bytes)"
+    else
+      echo "vendor_leaflet: $id — could not fetch $url; smoke test will fall back to CDN." >&2
+      rm -f "$out/$name"
+    fi
+  done
 done
 
 exit 0

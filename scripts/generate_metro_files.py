@@ -630,42 +630,70 @@ def render_layer_matrix(w):
 # when the worksheet opts in, so a fork that has not sees a byte-identical file
 # and an untouched CI gate (docs/ENGINE_SYNC.md, "a shared-script change must be
 # inert in a fork that hasn't opted in").
-TARGETS = [
-    ("il/index.html", "metro-config", render_metro_config),
-    ("il/index.html", "layer-area-rank", render_layer_area_rank),
-    ("il/sw.js", "sw-metro-config", render_sw_metro_config),
-    ("scripts/validate_index.py", "validator-config", render_validator_config),
-    ("scripts/smoke_test.mjs", "smoke-config", render_smoke_config),
-    ("CLAUDE.md", "metro-facts", render_metro_facts),
-    ("README.md", "metro-header", render_metro_header),
-]
+# Every instance served from this repo, and where its files live.
+#
+# The three are NOT symmetric and this table is where that is stated rather
+# than hidden. `il` predates the consolidation, so its app sits in il/ while its
+# tooling and its worksheet are still at the repo root; sf and nyc arrived as
+# whole forks, so each keeps everything under its own folder. Making them
+# uniform (il's instance-specific scripts and worksheet moving into il/) is a
+# mechanical follow-up, not a prerequisite — a three-row table costs less than
+# a special case scattered through the renderers.
+#
+#   app       the instance's own directory (index.html, sw.js, sources.html)
+#   scripts   where ITS validate_index.py / smoke_test.mjs / perf harness live
+#   docs      where ITS CLAUDE.md and README.md live
+#   worksheet the file that drives all of it
+INSTANCES = {
+    "il":  {"app": "il",  "scripts": "scripts",     "docs": ".",   "worksheet": "metro-worksheet.json"},
+    "sf":  {"app": "sf",  "scripts": "sf/scripts",  "docs": "sf",  "worksheet": "sf/metro-worksheet.json"},
+    "nyc": {"app": "nyc", "scripts": "nyc/scripts", "docs": "nyc", "worksheet": "nyc/metro-worksheet.json"},
+}
 
 
-def targets_for(w):
-    """TARGETS plus whatever this worksheet has opted into.
+def _p(*parts):
+    """Join, dropping the "." that `docs: "."` would otherwise leave in front."""
+    return "/".join(x for x in parts if x not in (".", ""))
 
-    Opt-in is keyed on the worksheet, never on "does the file happen to exist":
-    a missing file or fence in a fork that DID opt in is a hard failure, which
-    is what a silently-skipped region would have hidden.
+
+def targets_for(w, inst):
+    """Every region this instance generates, as (path, region, renderer).
+
+    Opt-in is keyed on the WORKSHEET, never on "does the file happen to exist":
+    a missing file or fence in an instance that DID opt in is a hard failure,
+    which is what a silently-skipped region would have hidden.
     """
-    targets = list(TARGETS)
+    app, scr, docs = inst["app"], inst["scripts"], inst["docs"]
+    targets = [
+        (_p(app, "index.html"), "metro-config", render_metro_config),
+        (_p(app, "index.html"), "layer-area-rank", render_layer_area_rank),
+        (_p(app, "sw.js"), "sw-metro-config", render_sw_metro_config),
+        (_p(scr, "validate_index.py"), "validator-config", render_validator_config),
+        (_p(scr, "smoke_test.mjs"), "smoke-config", render_smoke_config),
+        (_p(docs, "CLAUDE.md"), "metro-facts", render_metro_facts),
+        (_p(docs, "README.md"), "metro-header", render_metro_header),
+    ]
     if "verified_date" in w:
-        targets.append(("il/index.html", "verified-date", render_verified_date))
+        targets.append((_p(app, "index.html"), "verified-date", render_verified_date))
     if "perf_profile" in w:
-        targets.append((w["perf_profile"]["file"], "perf-config",
-                        render_perf_config))
+        # Worksheet-relative to the instance's own scripts dir.
+        targets.append((_p(scr, os.path.basename(w["perf_profile"]["file"])),
+                        "perf-config", render_perf_config))
     if "sources_page" in w:
         page = w["sources_page"]["file"]
         targets.append((page, "sources-verified", render_sources_verified))
         targets.append((page, "source-credits", render_source_credits))
         targets.append((page, "layer-matrix", render_layer_matrix))
     if "brand" in w:
-        targets.append(("il/index.html", "head-analytics", render_head_analytics))
-        targets.append(("il/index.html", "head-brand", render_head_brand))
-        targets.append(("il/index.html", "head-theme", render_head_theme))
-        targets.append(("il/index.html", "brand-palette", render_brand_palette))
-        targets.append(("il/index.html", "masthead-brand", render_masthead_brand))
-        targets.append(("il/index.html", "goatcounter", render_goatcounter))
+        for region, renderer in (
+            ("head-analytics", render_head_analytics),
+            ("head-brand", render_head_brand),
+            ("head-theme", render_head_theme),
+            ("brand-palette", render_brand_palette),
+            ("masthead-brand", render_masthead_brand),
+            ("goatcounter", render_goatcounter),
+        ):
+            targets.append((_p(app, "index.html"), region, renderer))
         if "sources_page" in w:
             targets.append((w["sources_page"]["file"], "sources-palette",
                             render_sources_palette))
@@ -765,19 +793,66 @@ def split_regions(text, path):
     return lines, regions
 
 
+def load_worksheet(ws_path, schema):
+    """Read, schema-validate and sanity-check one instance's worksheet."""
+    try:
+        with open(ws_path, encoding="utf-8") as f:
+            worksheet = json.load(f)
+    except (OSError, ValueError) as e:
+        fail("cannot read worksheet %s: %s" % (ws_path, e))
+    try:
+        jsonschema.validate(worksheet, schema)
+    except jsonschema.ValidationError as e:
+        fail("%s does not validate against the schema: %s (at %s)"
+             % (ws_path, e.message, "/".join(str(p) for p in e.absolute_path) or "<root>"))
+
+    ranks = sorted(l["area_rank"] for l in worksheet["layers"])
+    if ranks != list(range(1, len(ranks) + 1)):
+        fail("%s: layers[].area_rank must be exactly 1..%d with no gaps or duplicates"
+             % (ws_path, len(ranks)))
+    anchor_ids = {a["layer"] for a in worksheet["anchors"]}
+    layer_ids = {l["id"] for l in worksheet["layers"]}
+    if not anchor_ids <= layer_ids:
+        fail("%s: anchors reference unknown layer id(s): %s"
+             % (ws_path, ", ".join(sorted(anchor_ids - layer_ids))))
+    if "sources_page" in worksheet:
+        if "verified_date" not in worksheet:
+            fail("%s: sources_page is set but verified_date is not — the page prints "
+                 "that date, and hand-writing it there is the drift this key exists to stop"
+                 % ws_path)
+        missing = [l["id"] for l in worksheet["layers"] if "source" not in l]
+        if missing:
+            fail("%s: sources_page is set, so every layer needs a source block; %d "
+                 "lack one: %s" % (ws_path, len(missing), ", ".join(missing)))
+    return worksheet
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root", default=".", help="repo root (default: .)")
-    ap.add_argument("--worksheet", default="metro-worksheet.json")
+    ap.add_argument("--instance", action="append", metavar="ID",
+                    help="limit to one instance (repeatable; default: every instance)")
     ap.add_argument("--schema", default="schema/metro-worksheet.schema.json")
     ap.add_argument("--check", action="store_true",
-                    help="verify committed regions match the worksheet; exit 1 on drift")
+                    help="verify committed regions match the worksheets; exit 1 on drift")
     ap.add_argument("--sync-fleet", nargs="?", const="", metavar="SRC",
                     help="refresh metro_explorers from the fleet manifest before generating "
                          "(SRC path/URL; default: repo-root metros.json, else %s)" % FLEET_URL)
     args = ap.parse_args()
 
-    ws_path = os.path.join(args.root, args.worksheet)
+    ids = args.instance or sorted(INSTANCES)
+    unknown = [i for i in ids if i not in INSTANCES]
+    if unknown:
+        fail("unknown instance(s): %s (known: %s)"
+             % (", ".join(unknown), ", ".join(sorted(INSTANCES))))
+
+    schema_path = os.path.join(args.root, args.schema)
+    try:
+        with open(schema_path, encoding="utf-8") as f:
+            schema = json.load(f)
+    except (OSError, ValueError) as e:
+        fail("cannot read schema %s: %s" % (schema_path, e))
+
     if args.sync_fleet is not None:
         if args.check:
             fail("--sync-fleet and --check are mutually exclusive (the CI gate stays hermetic)")
@@ -785,68 +860,43 @@ def main():
         if not src:
             local = os.path.join(args.root, "metros.json")
             src = local if os.path.exists(local) else FLEET_URL
-        try:
-            sync_fleet(ws_path, src)
-        except (OSError, ValueError, KeyError) as e:
-            fail("fleet sync from %s failed: %s" % (src, e))
-    schema_path = os.path.join(args.root, args.schema)
-    try:
-        with open(ws_path, encoding="utf-8") as f:
-            worksheet = json.load(f)
-    except (OSError, ValueError) as e:
-        fail("cannot read worksheet %s: %s" % (ws_path, e))
-    try:
-        with open(schema_path, encoding="utf-8") as f:
-            schema = json.load(f)
-    except (OSError, ValueError) as e:
-        fail("cannot read schema %s: %s" % (schema_path, e))
-    try:
-        jsonschema.validate(worksheet, schema)
-    except jsonschema.ValidationError as e:
-        fail("worksheet does not validate against the schema: %s (at %s)"
-             % (e.message, "/".join(str(p) for p in e.absolute_path) or "<root>"))
+        # Every instance carries the same fleet list, so every instance's
+        # worksheet is synced — a launch that updated only one would put the
+        # metro portal in one app out of step with the others.
+        for instance in ids:
+            try:
+                sync_fleet(os.path.join(args.root, INSTANCES[instance]["worksheet"]), src)
+            except (OSError, ValueError, KeyError) as e:
+                fail("fleet sync of %s from %s failed: %s" % (instance, src, e))
 
-    ranks = sorted(l["area_rank"] for l in worksheet["layers"])
-    if ranks != list(range(1, len(ranks) + 1)):
-        fail("layers[].area_rank must be exactly 1..%d with no gaps or duplicates" % len(ranks))
-    anchor_ids = {a["layer"] for a in worksheet["anchors"]}
-    layer_ids = {l["id"] for l in worksheet["layers"]}
-    if not anchor_ids <= layer_ids:
-        fail("anchors reference unknown layer id(s): %s" % ", ".join(sorted(anchor_ids - layer_ids)))
-    if "sources_page" in worksheet:
-        if "verified_date" not in worksheet:
-            fail("sources_page is set but verified_date is not — the page prints "
-                 "that date, and hand-writing it there is the drift this key exists to stop")
-        missing = [l["id"] for l in worksheet["layers"] if "source" not in l]
-        if missing:
-            fail("sources_page is set, so every layer needs a source block; %d "
-                 "lack one: %s" % (len(missing), ", ".join(missing)))
-
-    targets = targets_for(worksheet)
-    drift = []
-    for rel_path, name, render in targets:
-        path = os.path.join(args.root, rel_path)
-        try:
-            with open(path, encoding="utf-8", newline="") as f:
-                text = f.read()
-        except OSError as e:
-            fail("cannot read target %s: %s" % (path, e))
-        lines, regions = split_regions(text, rel_path)
-        if name not in regions:
-            fail("%s has no GENERATED region %r — fences missing?" % (rel_path, name))
-        begin, end = regions[name]
-        current = "\n".join(lines[begin + 1:end])
-        rendered = render(worksheet)
-        if args.check:
-            if current != rendered:
-                drift.append((rel_path, name, current, rendered))
-        elif current != rendered:
-            new_lines = lines[:begin + 1] + rendered.split("\n") + lines[end:]
-            with open(path, "w", encoding="utf-8", newline="") as f:
-                f.write("\n".join(new_lines))
-            print("generate-metro-files: %s — region %r regenerated" % (rel_path, name))
-        else:
-            print("generate-metro-files: %s — region %r already current" % (rel_path, name))
+    drift, processed = [], 0
+    for instance in ids:
+        inst = INSTANCES[instance]
+        worksheet = load_worksheet(os.path.join(args.root, inst["worksheet"]), schema)
+        for rel_path, name, render in targets_for(worksheet, inst):
+            path = os.path.join(args.root, rel_path)
+            try:
+                with open(path, encoding="utf-8", newline="") as f:
+                    text = f.read()
+            except OSError as e:
+                fail("cannot read target %s (instance %s): %s" % (path, instance, e))
+            lines, regions = split_regions(text, rel_path)
+            if name not in regions:
+                fail("%s has no GENERATED region %r — fences missing?" % (rel_path, name))
+            begin, end = regions[name]
+            current = "\n".join(lines[begin + 1:end])
+            rendered = render(worksheet)
+            processed += 1
+            if args.check:
+                if current != rendered:
+                    drift.append((rel_path, name, current, rendered))
+            elif current != rendered:
+                new_lines = lines[:begin + 1] + rendered.split("\n") + lines[end:]
+                with open(path, "w", encoding="utf-8", newline="") as f:
+                    f.write("\n".join(new_lines))
+                print("generate-metro-files: %s — region %r regenerated" % (rel_path, name))
+            else:
+                print("generate-metro-files: %s — region %r already current" % (rel_path, name))
 
     if args.check:
         if drift:
@@ -855,13 +905,15 @@ def main():
                 for dl in difflib.unified_diff(current.splitlines(), rendered.splitlines(),
                                                fromfile="committed", tofile="regenerated", lineterm="", n=1):
                     print("  " + dl, file=sys.stderr)
-            print("generate-metro-files: FAIL — %d region(s) drifted from the worksheet. "
-                  "Edit metro-worksheet.json and regenerate; never hand-edit a GENERATED region."
-                  % len(drift), file=sys.stderr)
+            print("generate-metro-files: FAIL — %d region(s) drifted from their worksheet. "
+                  "Edit the instance's metro-worksheet.json and regenerate; never hand-edit "
+                  "a GENERATED region." % len(drift), file=sys.stderr)
             sys.exit(1)
-        print("generate-metro-files: OK — all %d GENERATED regions match the worksheet" % len(targets))
+        print("generate-metro-files: OK — all %d GENERATED regions across %d instance(s) "
+              "match their worksheets" % (processed, len(ids)))
     else:
-        print("generate-metro-files: OK — %d regions processed" % len(targets))
+        print("generate-metro-files: OK — %d regions processed across %d instance(s)"
+              % (processed, len(ids)))
 
 
 if __name__ == "__main__":

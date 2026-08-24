@@ -24,7 +24,7 @@
 // and, when scripts/vendor/leaflet is present (see vendor_leaflet.sh), serves
 // Leaflet + a stub tile same-origin so the app boots without CDN egress.
 //
-//   bash scripts/vendor_leaflet.sh   # only needed in a CDN-blocked sandbox
+//   bash scripts/vendor_leaflet.sh il   # from the repo root; CDN-blocked sandbox only
 //   node scripts/perf_profile.mjs    # writes perf-results.json + prints a summary
 //
 // NOTE ON ABSOLUTES: headless Chromium here rasterizes on software GL, so

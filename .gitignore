@@ -28,3 +28,11 @@ dist/
 
 # Claude Code agent worktrees — transient, harness-managed
 .claude/worktrees/
+
+# Ad-hoc browser harnesses. Verifying something in real Chromium means writing a
+# throwaway .mjs INSIDE the repo (node resolves playwright from ./node_modules,
+# so /tmp will not do), and five of them once rode a `git add -A` into main —
+# where the deploy's rsync would have published them, since -a copies dotfiles
+# and no exclude names them. Name a scratch harness like this and it cannot.
+/.scratch-*.mjs
+/.*-test.mjs

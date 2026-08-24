@@ -25,7 +25,7 @@ import { dirname, join } from "path";
 // Vendored Leaflet fallback for sandboxed environments (e.g. Claude Code web),
 // where the browser (Chromium) cannot reach cdnjs.cloudflare.com — it does not
 // use the agent HTTPS proxy, so the request resets and the app never boots
-// ("L is not defined"). scripts/vendor_leaflet.sh populates this dir via curl,
+// ("L is not defined"). The repo-root scripts/vendor_leaflet.sh populates this dir via curl,
 // which *can* reach the CDN through the proxy; when present we serve Leaflet
 // same-origin below so the app boots. Absent (production, GitHub Actions CI)
 // the browser loads Leaflet straight from the CDN exactly as before.
@@ -35,6 +35,14 @@ const VENDORED_LEAFLET =
     ? { js: readFileSync(join(VENDOR_DIR, "leaflet.js")), css: readFileSync(join(VENDOR_DIR, "leaflet.css")) }
     : null;
 if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
+
+// Disk reads are anchored to THIS SCRIPT, never to the process CWD. While each
+// instance was its own repo, "data/app/…" was correct because you ran the smoke
+// test from that repo's root. They are folders under one root now, and a bare
+// relative read silently resolves against whatever directory you happen to be
+// in — which is how the SF run died on `ENOENT: data/app/coverage-gaps.json`
+// while the app itself booted fine. Anchoring costs one line and cannot drift.
+const INSTANCE_DIR = dirname(dirname(fileURLToPath(import.meta.url)));
 
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 // ==== GENERATED:BEGIN smoke-config ====
@@ -121,7 +129,7 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, BASE);
-    const shipped = JSON.parse(readFileSync("data/app/coverage-gaps.json", "utf8"));
+    const shipped = JSON.parse(readFileSync(join(INSTANCE_DIR, "data/app/coverage-gaps.json"), "utf8"));
     const expected = Object.keys(shipped).length;
 
     // The button lives in the masthead, not the footer (ported from the CHI
@@ -134,7 +142,7 @@ try {
     // The submission link is built from REPO_ISSUES, which is METRO config — so a
     // copy-paste of Chicago's value would quietly send this fork's readers to the
     // wrong issue tracker. Assert the host, not just the template.
-    const repoIssues = JSON.parse(readFileSync("metro-worksheet.json", "utf8")).repo_issues;
+    const repoIssues = JSON.parse(readFileSync(join(INSTANCE_DIR, "metro-worksheet.json"), "utf8")).repo_issues;
 
     async function openGaps() {
       await page.evaluate(() => { const m = document.getElementById("gaps-modal"); if (m) m.hidden = true; });
