@@ -1,0 +1,665 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+  "source_url": "https://www.sf.gov/return-your-ballot",
+  "additional_source_urls": [
+   "https://media.api.sf.gov/documents/J26_EN_VIP.pdf",
+   "https://www.google.com/maps/d/viewer?mid=1LiRzGpYK1HVoJ1yB7lV_WzmPQ1I3yWg",
+   "https://www.sf.gov/location--city-hall-voting-center",
+   "https://www.sf.gov/vote-in-person"
+  ],
+  "retrieved": "2026-07-18",
+  "coordinates": "geocoded from the official street address (Nominatim); locations approximate",
+  "note": "Hand-transcribed from SF Department of Elections pages. Refresh each election. The drop-box list and addresses are from the official June 2, 2026 Voter Information Pamphlet (doc 38-EN-J26-CP5); the same 37 sites appear on the Department's official 'Ballot Drop Box Locations' map linked from sf.gov/return-your-ballot as of 2026-07-18, which describes them in recurring terms ('the City's 37 official drop boxes', open beginning 29 days before Election Day). No list labeled for the November 3, 2026 election had been published as of retrieval. Every Nominatim coordinate was cross-checked to within 0.17 mi of the Department's own map placemark for the same site."
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "The City Hall Voting Center",
+    "address": "1 Dr. Carlton B. Goodlett Place",
+    "type": "voting-center",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.41926,
+     37.779293
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Cabrillo Playground",
+    "address": "853 38th Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.498282,
+     37.772812
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Richmond/Senator Milton Marks Branch Library",
+    "address": "351 9th Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.468115,
+     37.781857
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Golden Gate Valley Branch Library",
+    "address": "1801 Green St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.42901,
+     37.796795
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Presidio Branch Library",
+    "address": "3150 Sacramento St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.444853,
+     37.788855
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "City College of San Francisco - Chinatown Center",
+    "address": "808 Kearny St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 3
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.404687,
+     37.795591
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Huntington Park",
+    "address": "California St and Taylor St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 3,
+    "geocode_note": "Official address is an intersection (California St and Taylor St); coordinates geocoded from the official site name 'Huntington Park, San Francisco, CA' and verified within 0.03 mi of the Department of Elections' own map placemark."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.412177,
+     37.792175
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "North Beach Branch Library",
+    "address": "850 Columbus Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 3
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.413139,
+     37.802546
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ortega Branch Library",
+    "address": "3223 Ortega St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 4
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.498059,
+     37.751176
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Parkside Branch Library",
+    "address": "1200 Taraval St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 4
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.47931,
+     37.74316
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "City Hall",
+    "address": "1 Dr Carlton B Goodlett Pl",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 5
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.41926,
+     37.779293
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Father Alfred E. Boeddeker Park",
+    "address": "246 Eddy St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 5
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.411837,
+     37.784113
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Park Branch Library",
+    "address": "1833 Page St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 5
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.451019,
+     37.770165
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "UC Law San Francisco",
+    "address": "200 McAllister St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 5
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.415732,
+     37.781036
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Western Addition Branch Library",
+    "address": "1550 Scott St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 5
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.437569,
+     37.784114
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Jessie Square",
+    "address": "730 Mission St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 6
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.402265,
+     37.786175
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Mission Bay Branch Library",
+    "address": "960 4th St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 6
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.393485,
+     37.775213
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ship Shape Community Center",
+    "address": "850 Avenue I",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 6
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.368721,
+     37.827242
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Forest Hill Station (Muni Metro)",
+    "address": "380 Laguna Honda Blvd",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 7
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.459126,
+     37.747987
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ingleside Branch Library",
+    "address": "1298 Ocean Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 7
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.456304,
+     37.724188
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Merced Branch Library",
+    "address": "155 Winston Dr",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 7
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.474486,
+     37.726622
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Sunset Branch Library",
+    "address": "1305 18th Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 7
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.476318,
+     37.763344
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "San Francisco State - Mashouf Wellness Center",
+    "address": "755 Font Blvd",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 7
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.483238,
+     37.722382
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "UCSF Medical Center - Millberry Union Plaza",
+    "address": "500 Parnassus Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 7
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.458778,
+     37.763326
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Eureka Valley Recreation Center",
+    "address": "100 Collingwood St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 8
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.436205,
+     37.760695
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Glen Park BART Station",
+    "address": "2901 Diamond St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 8
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.433805,
+     37.733104
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Harvey Milk Recreation Center",
+    "address": "50 Scott St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 8
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.434562,
+     37.769542
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Noe Valley/Sally Brunn Branch Library",
+    "address": "451 Jersey St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 8
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.435117,
+     37.750238
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Bernal Heights Branch Library",
+    "address": "500 Cortland Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 9
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.416146,
+     37.738855
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "City College of San Francisco - Mission Center",
+    "address": "1125 Valencia St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 9
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.42059,
+     37.754835
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Portola Branch Library",
+    "address": "380 Bacon St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 9
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.406371,
+     37.727106
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Bayview/Linda Brooks-Burton Branch Library",
+    "address": "5075 3rd St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 10
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.391144,
+     37.732549
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Jackson Playground Rec Center",
+    "address": "Mariposa St and Arkansas St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 10,
+    "geocode_note": "Official address is an intersection (Mariposa St and Arkansas St); coordinates geocoded from 'Jackson Playground, San Francisco, CA' (Nominatim resolves it on Mariposa Street) and verified within 0.04 mi of the Department of Elections' own map placemark."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.399338,
+     37.763888
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Zuckerberg San Francisco General Hospital and Trauma Center",
+    "address": "1001 Potrero Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 10
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.405253,
+     37.75681
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Visitacion Valley Branch Library",
+    "address": "201 Leland Ave",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 10
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.407897,
+     37.712479
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Crocker Amazon Playground",
+    "address": "799 Moscow St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 11
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.432154,
+     37.715102
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Excelsior Branch Library",
+    "address": "4400 Mission St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 11
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.433306,
+     37.727127
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ocean View Branch Library",
+    "address": "345 Randolph St",
+    "type": "drop-box",
+    "election": "June 2, 2026, Consolidated Statewide Direct Primary Election",
+    "supervisorial_district": 11
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.465996,
+     37.714137
+    ]
+   }
+  }
+ ]
+}

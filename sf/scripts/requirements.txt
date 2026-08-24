@@ -1,0 +1,12 @@
+# Pinned Python dependencies for this fork's tooling. Used as a constraints
+# file: `pip install -c scripts/requirements.txt <pkg>` installs <pkg> at the
+# version pinned here.
+#
+# SF has no HTML scrapers — its rosters are built from canonical machine-readable
+# sources (OpenStates ca.csv, unitedstates/congress-legislators, DataSF) with the
+# stdlib only, so the roster builders need nothing here. Two gates do:
+#   scripts/validate_sources.py        (requests — source-freshness gate)
+#   scripts/generate_metro_files.py    (jsonschema — worksheet validation)
+# validate_index.py deliberately stays stdlib and does NOT import either.
+requests==2.33.1
+jsonschema==4.26.0

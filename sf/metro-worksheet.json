@@ -1,0 +1,358 @@
+{
+  "this_metro": "sf",
+  "metro_name": "San Francisco",
+  "metro_bbox": {
+    "minLng": -122.517,
+    "minLat": 37.703,
+    "maxLng": -122.353,
+    "maxLat": 37.833
+  },
+  "metro_center": [
+    37.7749,
+    -122.4194
+  ],
+  "permalink_gate": {
+    "minLat": 37.6,
+    "maxLat": 37.95,
+    "minLng": -122.6,
+    "maxLng": -122.3
+  },
+  "socrata_host": "https://data.sfgov.org",
+  "socrata_app_token": "",
+  "repo_issues": "https://github.com/ThursdaysFamous/DistrictExplorer-SF/issues/new",
+  "feedback_subject": "San Francisco District Explorer feedback",
+  "metro_explorers": [
+    {
+      "id": "chicago",
+      "label": "Chicago",
+      "url": "https://chidistricts.com/",
+      "emoji": "🌭",
+      "bbox": {
+        "minLng": -88.6,
+        "minLat": 41.0,
+        "maxLng": -87.0,
+        "maxLat": 42.6
+      }
+    },
+    {
+      "id": "nyc",
+      "label": "New York City",
+      "url": "https://nyc.chidistricts.com/",
+      "emoji": "🗽",
+      "bbox": {
+        "minLng": -74.3,
+        "minLat": 40.45,
+        "maxLng": -73.6,
+        "maxLat": 41.0
+      }
+    },
+    {
+      "id": "sf",
+      "label": "San Francisco",
+      "url": "https://sf.chidistricts.com/",
+      "emoji": "🌉",
+      "bbox": {
+        "minLng": -122.6,
+        "minLat": 37.6,
+        "maxLng": -122.3,
+        "maxLat": 37.95
+      }
+    }
+  ],
+  "hover_number_keys": [
+    [
+      "zip",
+      "zip_code",
+      "zipcode",
+      "zcta5ce10",
+      "zcta5ce20",
+      "geoid20",
+      "geoid10"
+    ],
+    [
+      "supervisor",
+      "sup_dist",
+      "supdist",
+      "supname",
+      "supdistpad"
+    ],
+    [
+      "district",
+      "dist_num",
+      "dist",
+      "district_number"
+    ],
+    [
+      "number"
+    ]
+  ],
+  "hover_name_keys": [
+    [
+      "nhood",
+      "neighborhood",
+      "name"
+    ]
+  ],
+  "layers": [
+    {
+      "id": "congress",
+      "label": "U.S. House District",
+      "group": "political",
+      "area_rank": 1,
+      "rank_note": "U.S. House (Congressional) district, pre-built SF-clipped TIGERweb (6 in window; CA-11 in SF) - largest"
+    },
+    {
+      "id": "ca-senate",
+      "label": "California State Senate District",
+      "group": "political",
+      "area_rank": 2,
+      "rank_note": "CA State Senate (SLDU), pre-built SF-clipped TIGERweb (4 in window; SD-11 in SF)"
+    },
+    {
+      "id": "ca-assembly",
+      "label": "California State Assembly District",
+      "group": "political",
+      "area_rank": 3,
+      "rank_note": "CA State Assembly (SLDL), pre-built SF-clipped TIGERweb (8 in window; SF split AD-17/19)"
+    },
+    {
+      "id": "bart-director",
+      "label": "BART Director District",
+      "group": "political",
+      "area_rank": 4,
+      "rank_note": "9 elected BART Board districts, 2022 Plan E2 (districts 7/8/9 cover SF; spans 3 counties) - smaller than the assembly slices"
+    },
+    {
+      "id": "election-precinct",
+      "label": "Election Precinct",
+      "group": "political",
+      "area_rank": 5,
+      "rank_note": "514 election precincts (2022 map) - subOf supervisor-district, ranks just before its parent so the outline frames the fills"
+    },
+    {
+      "id": "supervisor-district",
+      "label": "Supervisor District",
+      "group": "political",
+      "area_rank": 6,
+      "rank_note": "SF Board of Supervisors district (11; water-trimmed, tiles the city)"
+    },
+    {
+      "id": "police-district",
+      "label": "Police District",
+      "group": "safety",
+      "area_rank": 7,
+      "rank_note": "SFPD district (10)"
+    },
+    {
+      "id": "zip-code",
+      "label": "ZIP Code",
+      "group": "geography",
+      "area_rank": 8,
+      "rank_note": "national ZCTA (Census TIGERweb), SF-bounded"
+    },
+    {
+      "id": "neighborhood",
+      "label": "Neighborhood",
+      "group": "geography",
+      "area_rank": 9,
+      "rank_note": "SF Analysis Neighborhood (41) - smallest polygon layer"
+    },
+    {
+      "id": "elementary-attendance-area",
+      "label": "Elementary Attendance Area",
+      "group": "schools",
+      "area_rank": 10,
+      "rank_note": "SFUSD elementary attendance area (58; lottery tiebreaker, not a guaranteed seat)"
+    },
+    {
+      "id": "police-station",
+      "label": "Police Station",
+      "group": "safety",
+      "area_rank": 11,
+      "rank_note": "SFPD station house (nearest 3, straight-line; 10 stations) - point layer, topmost"
+    },
+    {
+      "id": "fire-station",
+      "label": "Fire Station",
+      "group": "safety",
+      "area_rank": 12,
+      "rank_note": "SFFD firehouse (nearest 3, straight-line; 44 active stations) - point layer, topmost"
+    },
+    {
+      "id": "school-site",
+      "label": "School Location",
+      "group": "schools",
+      "area_rank": 13,
+      "rank_note": "Every active SF school (nearest 3, straight-line; 232 public/charter/private) - point layer, topmost"
+    },
+    {
+      "id": "post-office",
+      "label": "Post Office",
+      "group": "geography",
+      "area_rank": 14,
+      "rank_note": "USGS National Map post offices (nearest 3, straight-line; METRO_BBOX envelope) - point layer, topmost"
+    },
+    {
+      "id": "library",
+      "label": "Library",
+      "group": "geography",
+      "area_rank": 15,
+      "rank_note": "SFPL locations from City Facilities (nearest 3, straight-line; Main Library + 27 branches, support facility excluded) - point layer, topmost"
+    },
+    {
+      "id": "early-voting",
+      "label": "Voting Center & Ballot Drop-off",
+      "group": "political",
+      "area_rank": 16,
+      "rank_note": "hand-curated SF Dept of Elections voting center + drop boxes (nearest 3) - point layer, topmost"
+    }
+  ],
+  "min_register_layer": 8,
+  "layer_count_note": "Thread-5: legislative chambers now pre-built SF-clipped geometry (data/app); supervisor-district is a bespoke roster-joined registerLayer; 11 layers total; + 3 amenity nearest-point layers (post-office, library, early-voting) = 14; + bart-director + election-precinct (parity-debt closures, 2026-07) = 16",
+  "anchor_point": {
+    "lat": 37.77927,
+    "lng": -122.41924,
+    "note": "SF City Hall (Civic Center)"
+  },
+  "anchors": [
+    {
+      "layer": "supervisor-district",
+      "expected": "5"
+    },
+    {
+      "layer": "neighborhood",
+      "expected": "Tenderloin"
+    },
+    {
+      "layer": "police-district",
+      "expected": "NORTHERN"
+    }
+  ],
+  "negative_point": {
+    "lat": 37.74,
+    "lng": -122.59,
+    "note": "Open Pacific west of Ocean Beach, beyond CA state waters - outside every layer, including the water-inclusive TIGERweb legislative chambers"
+  },
+  "data_files": {
+    "geometry": [
+      {
+        "file": "supervisor-districts.json",
+        "min_features": 11,
+        "max_features": 11
+      },
+      {
+        "file": "sf-neighborhoods.json",
+        "min_features": 41,
+        "max_features": 41
+      },
+      {
+        "file": "police-districts.json",
+        "min_features": 10,
+        "max_features": 10
+      },
+      {
+        "file": "congress-districts.json",
+        "min_features": 6,
+        "max_features": 6
+      },
+      {
+        "file": "ca-senate-districts.json",
+        "min_features": 4,
+        "max_features": 4
+      },
+      {
+        "file": "ca-assembly-districts.json",
+        "min_features": 8,
+        "max_features": 8
+      }
+    ],
+    "rosters": [
+      {
+        "file": "coverage-gaps.json",
+        "min_keys": 3,
+        "note": "Known data gaps keyed by gap id, driving the Data gaps panel \u2014 emitted from the fleet guidebook's GUIDEBOOK:BEGIN gaps block by scripts/build_coverage_gaps.py, which reads this fork's this_metro key (--check is the drift gate). Network-first like the rosters: a closed gap should stop being advertised on the next visit."
+      },
+      {
+        "file": "congress-roster.json",
+        "min_keys": 45,
+        "note": "CA U.S. House reps (52 seats; vacancies allowed) - unitedstates/congress-legislators"
+      },
+      {
+        "file": "ca-senate-members.json",
+        "min_keys": 38,
+        "note": "CA State Senate (40) - OpenStates"
+      },
+      {
+        "file": "ca-assembly-members.json",
+        "min_keys": 76,
+        "note": "CA State Assembly (80) - OpenStates"
+      },
+      {
+        "file": "sf-supervisor-members.json",
+        "min_keys": 11,
+        "note": "SF Board of Supervisors (11) - DataSF hcgx-vtsb sup_name"
+      },
+      {
+        "file": "early-voting-sites.json",
+        "min_keys": 3,
+        "note": "GeoJSON FeatureCollection (type/metadata/features - key floor is shape-only); hand-curated per election from sf.gov Dept of Elections pages, network-first so a new election's list is never served stale"
+      },
+      {
+        "file": "bart-directors.json",
+        "min_keys": 9,
+        "note": "9 BART directors keyed by district, hand-verified against bart.gov/about/bod (staggered 4-year terms; re-verify after each even-year November - see WATCH.md)"
+      }
+    ]
+  },
+  "sw": {
+    "cache_name": "district-explorer-shell-sf-v4",
+    "shell_urls": [
+      "./",
+      "./manifest.webmanifest",
+      "./icons/icon-192.png",
+      "./icons/icon-512.png",
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+    ]
+  },
+  "data_sources": {
+    "registry": "scripts/validate_sources.py",
+    "note": "SF source manifest: 5 live DataSF datasets (rwdu-9wb2, nc68-ngbr, e6tr-sxwg year-versioned, 7e7j-59qk, jg6x-23ig year-searched), 6 pre-built boundary files (3 DataSF anchors + 3 TIGERweb CA chambers), live endpoints (Census ZCTA, BART ArcGIS). Newer-edition search uses the portal-local catalog (data.sfgov.org is absent from the federated api.us.socrata.com)."
+  },
+  "workflows": [
+    {
+      "file": "update-congress-roster.yml",
+      "purpose": "CA U.S. House roster refresh (unitedstates/congress-legislators)",
+      "schedule": "Mon 13:00 UTC"
+    },
+    {
+      "file": "update-ca-legislature-roster.yml",
+      "purpose": "CA State Senate + Assembly roster refresh (OpenStates)",
+      "schedule": "Tue 13:00 UTC"
+    },
+    {
+      "file": "update-sf-supervisor-roster.yml",
+      "purpose": "SF Board of Supervisors roster refresh (DataSF hcgx-vtsb)",
+      "schedule": "Wed 13:00 UTC"
+    },
+    {
+      "file": "validate-sources.yml",
+      "purpose": "source freshness (SF manifest re-derived; full networked run 0 FAIL / 0 WARN)",
+      "schedule": "1st of month 14:00 UTC"
+    }
+  ],
+  "geocoder": {
+    "address": "Photon (SF-bounded type-ahead)",
+    "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
+    "poi": "Nominatim (office-address pin lookup, serial >=1s queue)"
+  },
+  "palette": {
+    "accent": "#1D6F8B",
+    "accent_deep": "#124F63",
+    "accent_warm": "#C0362C",
+    "accent_warm_deep": "#8E2A22"
+  },
+  "domains": {
+    "canonical": "https://sf.chidistricts.com/"
+  },
+  "exports_name": "SFExplorer"
+}

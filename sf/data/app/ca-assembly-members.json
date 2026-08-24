@@ -1,0 +1,722 @@
+{
+  "1": {
+    "name": "Heather Hadwick",
+    "party": "Republican",
+    "url": "https://ad01.asmrc.org/",
+    "districtOffice": [
+      "930 Executive Way, Suite 201, Redding, CA 96002",
+      "Phone: 530-223-6300"
+    ]
+  },
+  "2": {
+    "name": "Chris Rogers",
+    "party": "Democratic",
+    "url": "https://a02.asmdc.org/",
+    "districtOffice": [
+      "50 D St., Suite 450, Santa Rosa, CA 95404",
+      "Phone: 707-576-2526"
+    ]
+  },
+  "3": {
+    "name": "James Gallagher",
+    "party": "Republican",
+    "url": "https://ad03.asmrc.org/",
+    "districtOffice": [
+      "2060 Talbert Drive, Suite 110, Chico, CA 95928",
+      "Phone: 530-895-4217"
+    ]
+  },
+  "4": {
+    "name": "Cecilia Aguiar-Curry",
+    "party": "Democratic",
+    "url": "https://a04.asmdc.org/",
+    "districtOffice": [
+      "600 A St. Suite D, Davis, CA 95616",
+      "Phone: 530-757-1034"
+    ]
+  },
+  "5": {
+    "name": "Joe Patterson",
+    "party": "Republican",
+    "url": "https://ad05.asmrc.org",
+    "districtOffice": [
+      "Rocklin Corporate Plaza, 6030 W. Oaks Blvd., Suite 145, Rocklin, CA 95765",
+      "Phone: 916-435-0501"
+    ]
+  },
+  "6": {
+    "name": "Maggy Krell",
+    "party": "Democratic",
+    "url": "https://a06.asmdc.org/",
+    "districtOffice": [
+      "915 L St., Suite 110, Sacramento, CA 95814",
+      "Phone: 916-324-4676"
+    ]
+  },
+  "7": {
+    "name": "Joshua Hoover",
+    "party": "Republican",
+    "url": "https://ad07.asmrc.org",
+    "districtOffice": [
+      "13405 Folsom Blvd., Building 700 Suite A, Folsom, CA 95630",
+      "Phone: 916-294-9774"
+    ]
+  },
+  "8": {
+    "name": "David Tangipa",
+    "party": "Republican",
+    "url": "https://ad08.asmrc.org/",
+    "districtOffice": [
+      "6245 N. Fresno St., Suite 106, Fresno, CA 93710",
+      "Phone: 559-446-2029"
+    ]
+  },
+  "9": {
+    "name": "Heath Flora",
+    "party": "Republican",
+    "url": "https://ad09.asmrc.org/",
+    "districtOffice": [
+      "578 N. Wilma Ave. Suite B, Ripon, CA 95366",
+      "Phone: 209-599-2112"
+    ]
+  },
+  "10": {
+    "name": "Stephanie Nguyen",
+    "party": "Democratic",
+    "url": "https://a10.asmdc.org",
+    "districtOffice": [
+      "9250 Laguna Springs Drive, Suite 220, Elk Grove, CA 95758",
+      "Phone: 916-670-7888"
+    ]
+  },
+  "11": {
+    "name": "Lori Wilson",
+    "party": "Democratic",
+    "url": "https://a11.asmdc.org",
+    "districtOffice": [
+      "1 Harbor Center, Suite 270, Suisun City, CA 94585",
+      "Phone: 707-438-7359"
+    ]
+  },
+  "12": {
+    "name": "Damon Connolly",
+    "party": "Democratic",
+    "url": "https://a12.asmdc.org/",
+    "districtOffice": [
+      "Room 412, 3501 Civic Center Drive, San Rafael, CA 94903",
+      "Phone: 415-479-4920"
+    ]
+  },
+  "13": {
+    "name": "Rhodesia Ransom",
+    "party": "Democratic",
+    "url": "https://a13.asmdc.org/",
+    "districtOffice": [
+      "4643 Quail Lakes Drive, Suite 200, Stockton, CA 95207",
+      "Phone: 209-948-7479"
+    ]
+  },
+  "14": {
+    "name": "Buffy Wicks",
+    "party": "Democratic",
+    "url": "https://a14.asmdc.org",
+    "districtOffice": [
+      "1515 Clay St., Suite 2201, Oakland, CA 94612",
+      "Phone: 510-286-1400"
+    ]
+  },
+  "15": {
+    "name": "Anamarie Avila Farias",
+    "party": "Democratic",
+    "url": "https://a15.asmdc.org/",
+    "districtOffice": [
+      "2151 Salvio St. Suite P, Concord, CA 94520",
+      "Phone: 925-521-1511"
+    ]
+  },
+  "16": {
+    "name": "Rebecca Bauer-Kahan",
+    "party": "Democratic",
+    "url": "https://a16.asmdc.org/",
+    "districtOffice": [
+      "12677 Alcosta Blvd., Suite 395, San Ramon, CA 94583",
+      "Phone: 925-244-1600"
+    ]
+  },
+  "17": {
+    "name": "Matt Haney",
+    "party": "Democratic",
+    "url": "https://a17.asmdc.org/",
+    "districtOffice": [
+      "455 Golden Gate Ave., Suite 14300, San Francisco, CA 94102",
+      "Phone: 415-557-3013"
+    ]
+  },
+  "18": {
+    "name": "Mia Bonta",
+    "party": "Democratic",
+    "url": "https://a18.asmdc.org",
+    "districtOffice": [
+      "1515 Clay St., Suite 2204, Oakland, CA 94612",
+      "Phone: 510-286-1670"
+    ]
+  },
+  "19": {
+    "name": "Catherine Stefani",
+    "party": "Democratic",
+    "url": "https://a19.asmdc.org/",
+    "districtOffice": [
+      "455 Golden Gate Ave., Suite 14600, San Francisco, CA 94102",
+      "Phone: 415-557-2312"
+    ]
+  },
+  "20": {
+    "name": "Liz Ortega",
+    "party": "Democratic",
+    "url": "https://a20.asmdc.org",
+    "districtOffice": [
+      "22320 Foothill Blvd., Suite 540, Hayward, CA 94541",
+      "Phone: 510-583-8818"
+    ]
+  },
+  "21": {
+    "name": "Diane Papan",
+    "party": "Democratic",
+    "url": "https://a21.asmdc.org",
+    "districtOffice": [
+      "1528 S. El Camino Real, Suite 302, San Mateo, CA 94402",
+      "Phone: 650-349-2200"
+    ]
+  },
+  "22": {
+    "name": "Juan Alanis",
+    "party": "Republican",
+    "url": "https://ad22.asmrc.org/",
+    "districtOffice": [
+      "1010 10th St., Suite 5800, Modesto, CA 95354",
+      "Phone: 209-521-2201"
+    ]
+  },
+  "23": {
+    "name": "Marc Berman",
+    "party": "Democratic",
+    "url": "https://a23.asmdc.org/",
+    "districtOffice": [
+      "721 Colorado Ave., Suite 101, Palo Alto, CA 94303",
+      "Phone: 650-324-0224"
+    ]
+  },
+  "24": {
+    "name": "Alex Lee",
+    "party": "Democratic",
+    "url": "https://a24.asmdc.org/",
+    "districtOffice": [
+      "1313 N. Milpitas Blvd., Suite 255, Milpitas, CA 95035",
+      "Phone: 408-262-2501"
+    ]
+  },
+  "25": {
+    "name": "Ash Kalra",
+    "party": "Democratic",
+    "url": "https://a25.asmdc.org/",
+    "districtOffice": [
+      "111 W. Saint John St., Suite 1150, San Jose, CA 95113",
+      "Phone: 408-286-2535"
+    ]
+  },
+  "26": {
+    "name": "Patrick Ahrens",
+    "party": "Democratic",
+    "url": "https://a26.asmdc.org/",
+    "districtOffice": [
+      "20111 Stevens Creek Blvd., Suite 220, Cupertino, CA 95014",
+      "Phone: 408-446-2810"
+    ]
+  },
+  "27": {
+    "name": "Esmeralda Soria",
+    "party": "Democratic",
+    "url": "https://a27.asmdc.org/",
+    "districtOffice": [
+      "512 W. 18th St., Suite 512, Merced, CA 95340",
+      "Phone: 209-726-5465"
+    ]
+  },
+  "28": {
+    "name": "Gail Pellerin",
+    "party": "Democratic",
+    "url": "https://a28.asmdc.org/",
+    "districtOffice": [
+      "Room 318B, 701 Ocean St., Santa Cruz, CA 95060",
+      "Phone: 831-425-1503"
+    ]
+  },
+  "29": {
+    "name": "Robert Rivas",
+    "party": "Democratic",
+    "url": "https://a29.asmdc.org/",
+    "districtOffice": [
+      "60 W. Market St., Suite 110, Salinas, CA 93901",
+      "Phone: 831-759-8676"
+    ]
+  },
+  "30": {
+    "name": "Dawn Addis",
+    "party": "Democratic",
+    "url": "https://a30.asmdc.org/",
+    "districtOffice": [
+      "99 Pacific St., Suite 575G, Monterey, CA 93940",
+      "Phone: 831-649-2832"
+    ]
+  },
+  "31": {
+    "name": "Joaquin Arambula",
+    "party": "Democratic",
+    "url": "https://a31.asmdc.org/",
+    "districtOffice": [
+      "2550 Mariposa Mall, Suite 5031, Fresno, CA 93721",
+      "Phone: 559-445-5532"
+    ]
+  },
+  "32": {
+    "name": "Stan Ellis",
+    "party": "Republican",
+    "url": "https://ad32.asmrc.org/",
+    "districtOffice": [
+      "4550 California Ave., Suite 740, Bakersfield, CA 93309",
+      "Phone: 661-395-2995"
+    ]
+  },
+  "33": {
+    "name": "Ali Macedo",
+    "party": "Republican",
+    "url": "https://ad33.asmrc.org/",
+    "districtOffice": [
+      "100 W. Willow Plaza, Suite 405, Visalia, CA 93291",
+      "Phone: 559-636-3440"
+    ]
+  },
+  "34": {
+    "name": "Tom Lackey",
+    "party": "Republican",
+    "url": "https://ad34.asmrc.org/",
+    "districtOffice": [
+      "41301 W. 12th St. Suite F, Palmdale, CA 93551",
+      "Phone: 661-267-7636"
+    ]
+  },
+  "35": {
+    "name": "Jasmeet Bains",
+    "party": "Democratic",
+    "url": "https://a35.asmdc.org/",
+    "districtOffice": [
+      "1430 Truxtun Ave., Suite 803, Bakersfield, CA 93301",
+      "Phone: 661-335-0302"
+    ]
+  },
+  "36": {
+    "name": "Jeff Gonzalez",
+    "party": "Republican",
+    "url": "https://ad36.asmrc.org/",
+    "districtOffice": [
+      "48220 Jackson St. Suite A3, Coachella, CA 92236",
+      "Phone: 760-347-2360"
+    ]
+  },
+  "37": {
+    "name": "Gregg Hart",
+    "party": "Democratic",
+    "url": "https://a37.asmdc.org/",
+    "districtOffice": [
+      "1111 S. Broadway, Suite 101, Santa Maria, CA 93454",
+      "Phone: 805-346-1237"
+    ]
+  },
+  "38": {
+    "name": "Steve Bennett",
+    "party": "Democratic",
+    "url": "https://a37.asmdc.org/",
+    "districtOffice": [
+      "300 E. Esplanade Drive, Suite 1790, Oxnard, CA 93036",
+      "Phone: 805-485-4745"
+    ]
+  },
+  "39": {
+    "name": "Juan Carrillo",
+    "party": "Democratic",
+    "url": "https://a39.asmdc.org/",
+    "districtOffice": [
+      "823 East Ave. Q-9 Suite B, Palmdale, CA 93550",
+      "Phone: 661-266-3908"
+    ]
+  },
+  "40": {
+    "name": "Pilar Schiavo",
+    "party": "Democratic",
+    "url": "https://a40.asmdc.org/",
+    "districtOffice": [
+      "27441 Tourney Road, Suite 240, Santa Clarita, CA 91355",
+      "Phone: 661-286-1565"
+    ]
+  },
+  "41": {
+    "name": "John Harabedian",
+    "party": "Democratic",
+    "url": "https://a41.asmdc.org/",
+    "districtOffice": [
+      "600 N. Rosemead Blvd., Suite 117, Pasadena, CA 91107",
+      "Phone: 626-351-1917"
+    ]
+  },
+  "42": {
+    "name": "Jacqui Irwin",
+    "party": "Democratic",
+    "url": "https://a42.asmdc.org/",
+    "districtOffice": [
+      "The Atrium Building, 860 Via De La Paz Suite E3-D, Pacific Palisades, CA 90272",
+      "Phone: 424-238-2421"
+    ]
+  },
+  "43": {
+    "name": "Celeste Rodriguez",
+    "party": "Democratic",
+    "url": "https://a43.asmdc.org/",
+    "districtOffice": [
+      "9300 Laurel Canyon Blvd. First Floor, Arleta, CA 91331",
+      "Phone: 818-504-3911"
+    ]
+  },
+  "44": {
+    "name": "Nick Schultz",
+    "party": "Democratic",
+    "url": "https://a44.asmdc.org/",
+    "districtOffice": [
+      "300 E. Magnolia Blvd., Suite 504, Burbank, CA 91502",
+      "Phone: 818-558-3043"
+    ]
+  },
+  "45": {
+    "name": "James Ramos",
+    "party": "Democratic",
+    "url": "https://a40.asmdc.org/",
+    "districtOffice": [
+      "290 N. D St., Suite 805, San Bernardino, CA 92401",
+      "Phone: 909-889-7145"
+    ]
+  },
+  "46": {
+    "name": "Jesse Gabriel",
+    "party": "Democratic",
+    "url": "https://a45.asmdc.org/",
+    "districtOffice": [
+      "16501 Ventura Blvd., Suite 620, Encino, CA 91436",
+      "Phone: 818-380-2460"
+    ]
+  },
+  "47": {
+    "name": "Greg Wallis",
+    "party": "Republican",
+    "url": "https://ad47.asmrc.org/",
+    "districtOffice": [
+      "41-608 Indian Trail Road Suite D-1, Rancho Mirage, CA 92270",
+      "Phone: 760-346-6342"
+    ]
+  },
+  "48": {
+    "name": "Blanca Rubio",
+    "party": "Democratic",
+    "url": "https://a48.asmdc.org",
+    "districtOffice": [
+      "100 N. Barranca St., Suite 895, West Covina, CA 91791",
+      "Phone: 626-960-4457"
+    ]
+  },
+  "49": {
+    "name": "Mike Fong",
+    "party": "Democratic",
+    "url": "https://a49.asmdc.org/",
+    "districtOffice": [
+      "1411 S. Garfield Ave., Suite 307, Alhambra, CA 91801",
+      "Phone: 626-457-4918"
+    ]
+  },
+  "50": {
+    "name": "Robert Garcia",
+    "party": "Democratic",
+    "url": "https://a50.asmdc.org/",
+    "districtOffice": [
+      "10390 Commerce Center Drive Suite C-280, Rancho Cucamonga, CA 91730",
+      "Phone: 909-966-5090"
+    ]
+  },
+  "51": {
+    "name": "Rick Zbur",
+    "party": "Democratic",
+    "url": "https://a51.asmdc.org/",
+    "districtOffice": [
+      "1445 N. Stanley Ave. Third Floor, Los Angeles, CA 90046",
+      "Phone: 323-436-5184"
+    ]
+  },
+  "52": {
+    "name": "Jessica Caloza",
+    "party": "Democratic",
+    "url": "https://a52.asmdc.org/",
+    "districtOffice": [
+      "1910 W. Sunset Blvd., Suite 810, Los Angeles, CA 90026",
+      "Phone: 213-483-5252"
+    ]
+  },
+  "53": {
+    "name": "Michelle Rodriguez",
+    "party": "Democratic",
+    "url": "https://a53.asmdc.org/",
+    "districtOffice": [
+      "13160 7th St., Chino, CA 91710",
+      "Phone: 909-902-9606"
+    ]
+  },
+  "54": {
+    "name": "Mark González",
+    "party": "Democratic",
+    "url": "https://a54.asmdc.org/",
+    "districtOffice": [
+      "Room 1050, 320 W. 4th St., Los Angeles, CA 90013",
+      "Phone: 213-620-4646"
+    ]
+  },
+  "55": {
+    "name": "Isaac Bryan",
+    "party": "Democratic",
+    "url": "https://a54.asmdc.org",
+    "districtOffice": [
+      "5601 W. Slauson Ave., Suite 200, Culver City, CA 90230",
+      "Phone: 310-641-5410"
+    ]
+  },
+  "56": {
+    "name": "Lisa Calderon",
+    "party": "Democratic",
+    "url": "https://a56.asmdc.org/",
+    "districtOffice": [
+      "13181 Crossroads Parkway North, Suite 160, City of Industry, CA 91746",
+      "Phone: 562-692-5858"
+    ]
+  },
+  "57": {
+    "name": "Sade Elhawary",
+    "party": "Democratic",
+    "url": "https://a57.asmdc.org/",
+    "districtOffice": [
+      "700 Exposition Park Drive, Los Angeles, CA 90037",
+      "Phone: 213-744-2111"
+    ]
+  },
+  "58": {
+    "name": "Leticia Castillo",
+    "party": "Republican",
+    "url": "https://ad58.asmrc.org/",
+    "districtOffice": [
+      "391 N. Main St., Suite 210, Corona, CA 92878",
+      "Phone: 951-371-6860"
+    ]
+  },
+  "59": {
+    "name": "Phillip Chen",
+    "party": "Republican",
+    "url": "https://ad55.asmrc.org",
+    "districtOffice": [
+      "3 Pointe Drive, Suite 313, Brea, CA 92821",
+      "Phone: 714-529-5502"
+    ]
+  },
+  "60": {
+    "name": "Corey Jackson",
+    "party": "Democratic",
+    "url": "https://a60.asmdc.org/",
+    "districtOffice": [
+      "22690 Cactus Ave., Suite 280, Moreno Valley, CA 92553",
+      "Phone: 951-653-0960"
+    ]
+  },
+  "61": {
+    "name": "Tina McKinnor",
+    "party": "Democratic",
+    "url": "https://a61.asmdc.org/",
+    "districtOffice": [
+      "One Manchester Blvd., Suite 601, Inglewood, CA 90301",
+      "Phone: 310-412-6400"
+    ]
+  },
+  "62": {
+    "name": "José Solache",
+    "party": "Democratic",
+    "url": "https://a62.asmdc.org/",
+    "districtOffice": [
+      "4909 Lakewood Blvd., Suite 400, Lakewood, CA 90712",
+      "Phone: 562-529-3250"
+    ]
+  },
+  "63": {
+    "name": "Natasha Johnson",
+    "party": "Republican",
+    "url": "https://ad63.asmrc.org/",
+    "districtOffice": [
+      "4160 Temescal Canyon Road, Suite 110, Corona, CA 92883",
+      "Phone: 951-277-3639"
+    ]
+  },
+  "64": {
+    "name": "Blanca Pacheco",
+    "party": "Democratic",
+    "url": "https://a64.asmdc.org/",
+    "districtOffice": [
+      "8255 Firestone Blvd., Suite 203, Downey, CA 90241",
+      "Phone: 562-861-5803"
+    ]
+  },
+  "65": {
+    "name": "Mike Gipson",
+    "party": "Democratic",
+    "url": "https://a64.asmdc.org/",
+    "districtOffice": [
+      "879 W. 190th St., Suite 920, Gardena, CA 90248",
+      "Phone: 310-324-6408"
+    ]
+  },
+  "66": {
+    "name": "Al Muratsuchi",
+    "party": "Democratic",
+    "url": "https://a66.asmdc.org/",
+    "districtOffice": [
+      "3424 W. Carson St., Suite 450, Torrance, CA 90503",
+      "Phone: 310-375-0691"
+    ]
+  },
+  "67": {
+    "name": "Sharon Quirk-Silva",
+    "party": "Democratic",
+    "url": "https://a65.asmdc.org/",
+    "districtOffice": [
+      "4 Centerpointe Drive, Suite 120, La Palma, CA 90623",
+      "Phone: 714-521-6713"
+    ]
+  },
+  "68": {
+    "name": "Avelino Valencia",
+    "party": "Democratic",
+    "url": "https://a68.asmdc.org/",
+    "districtOffice": [
+      "2400 E. Katella Ave., Suite 640, Anaheim, CA 92806",
+      "Phone: 714-939-8469"
+    ]
+  },
+  "69": {
+    "name": "Josh Lowenthal",
+    "party": "Democratic",
+    "url": "https://a69.asmdc.org/",
+    "districtOffice": [
+      "3777 Long Beach Blvd., Suite 260, Long Beach, CA 90807",
+      "Phone: 562-366-2769"
+    ]
+  },
+  "70": {
+    "name": "Tri Ta",
+    "party": "Republican",
+    "url": "https://ad70.asmrc.org",
+    "districtOffice": [
+      "14361 Beach Blvd., Suite 211, Westminster, CA 92683",
+      "Phone: 714-379-0970"
+    ]
+  },
+  "71": {
+    "name": "Kate Sanchez",
+    "party": "Republican",
+    "url": "https://ad71.asmrc.org/",
+    "districtOffice": [
+      "24630 Washington Ave., Suite 202, Murrieta, CA 92562",
+      "Phone: 951-696-0002"
+    ]
+  },
+  "72": {
+    "name": "Diane Dixon",
+    "party": "Republican",
+    "url": "https://ad72.asmrc.org",
+    "districtOffice": [
+      "4100 MacArthur Blvd., Suite 340, Newport Beach, CA 92660",
+      "Phone: 949-798-7221"
+    ]
+  },
+  "73": {
+    "name": "Cottie Petrie-Norris",
+    "party": "Democratic",
+    "url": "https://a73.asmdc.org/",
+    "districtOffice": [
+      "19712 MacArthur Blvd., Suite 150, Irvine, CA 92612",
+      "Phone: 949-251-0074"
+    ]
+  },
+  "74": {
+    "name": "Laurie Davies",
+    "party": "Republican",
+    "url": "https://ad73.asmrc.org/",
+    "districtOffice": [
+      "32332 Camino Capistrano, Suite 102A, San Juan Capistrano, CA 92675",
+      "Phone: 949-240-7300"
+    ]
+  },
+  "75": {
+    "name": "Carl DeMaio",
+    "party": "Republican",
+    "url": "https://ad75.asmrc.org/",
+    "districtOffice": [
+      "9820 Willow Creek Road, Suite 240, San Diego, CA 92131",
+      "Phone: 858-566-7538"
+    ]
+  },
+  "76": {
+    "name": "Darsh Patel",
+    "party": "Democratic",
+    "url": "https://a76.asmdc.org/",
+    "districtOffice": [
+      "12396 World Trade Drive, Suite 118, San Diego, CA 92128",
+      "Phone: 858-675-0760"
+    ]
+  },
+  "77": {
+    "name": "Tasha Boerner",
+    "party": "Democratic",
+    "url": "https://a77.asmdc.org/",
+    "districtOffice": [
+      "505 Lomas Santa Fe Drive, Suite 110, Solana Beach, CA 92075",
+      "Phone: 858-481-7704"
+    ]
+  },
+  "78": {
+    "name": "Chris Ward",
+    "party": "Democratic",
+    "url": "https://a78.asmdc.org/",
+    "districtOffice": [
+      "2700 Adams Ave., Suite 102, San Diego, CA 92116",
+      "Phone: 619-280-7801"
+    ]
+  },
+  "79": {
+    "name": "LaShae Sharp-Collins",
+    "party": "Democratic",
+    "url": "https://a79.asmdc.org/",
+    "districtOffice": [
+      "4700 Spring St., Suite 301, La Mesa, CA 91942",
+      "Phone: 619-465-7903"
+    ]
+  },
+  "80": {
+    "name": "David Alvarez",
+    "party": "Democratic",
+    "url": "https://a80.asmdc.org/",
+    "districtOffice": [
+      "276 Church Ave. Suite D, Chula Vista, CA 91910",
+      "Phone: 619-498-8580"
+    ]
+  }
+}
