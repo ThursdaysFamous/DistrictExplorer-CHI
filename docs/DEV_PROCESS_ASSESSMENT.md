@@ -321,6 +321,75 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R6 (part 4) — SHIPPED (2026-08-24): every page in the sitemap now carries the same brand,
+  and an AUDIT rather than an impression decided what was wrong with them.** The pass began by
+  driving all seventeen sitemap URLs in a browser and printing one row each — font, theme, mark,
+  and which of the four standing links it carried. That table, not a reading of the tree, is what
+  found the work.
+  **The three sibling SEO sub-pages had never been rebranded at all.** `ny/council-district.html`,
+  `ny/community-board.html` and `ca/supervisor-district.html` were still serving **Inter and Big
+  Shoulders**, with no theme boot and no mark, while Illinois's three equivalents had all of it.
+  They were missed by every earlier stage because nothing had ever compared them: R6 part 2
+  rebranded the APPS, and these are separate documents. They now carry Illinois's own sub-page
+  style island verbatim — Barlow, the dark tier, the pre-paint theme boot and the mark beside the
+  star the skin hides (the star STAYS: the app's JS fills its path).
+  **The footer rows disagreed on every page and now do not.** Each instance page ends with the
+  same row — sources, common questions, privacy, why, GitHub — built per page so a page never
+  links itself, and the two generated root pages gained the `overberg.co/why/` link they lacked.
+  **Verified the same way it was diagnosed:** all seventeen pages re-driven in dark mode, every
+  one now Barlow, theme-aware, marked, and carrying every standing link, with **zero dead links
+  across the whole sitemap**.
+  **AND THE AUDIT BECAME A GATE, because otherwise this fixes today and not tomorrow.**
+  `scripts/page_consistency_test.mjs` is the throwaway script, kept: it drives every url in
+  `sitemap.xml` in both colour schemes and asserts the brand typeface, that the page paints the
+  ground its viewer asked for, the mark, canonical and og:title, the standing links, and that
+  every relative link resolves. It **derives its surface** — pages from the sitemap, expectations
+  from the tree, so a page is expected to link its instance's sources page only when that
+  instance HAS one and never to link itself. A fourth instance or a retired sub-page therefore
+  cannot fail it, which is the distinction between a gate and a tripwire (SF's smoke test
+  asserted its brand name as a literal and failed the rebrand).
+  **It was proved by breaking things rather than by passing:** reverting one page's font to Inter,
+  dropping a standing link, breaking a relative href and deleting the mark each produce a named
+  failure, and the first of those is the exact defect that survived two stages. **The first
+  negative test was itself wrong** — the sed matched nothing, so the gate "passed" a bug that was
+  never introduced; a gate that cannot fail is worse than no gate, and finding that out took
+  running it against the real thing. It also had to serve vendored Leaflet the way the smoke
+  tests do, or the three map pages fail on a sandbox CDN block that is not a page defect. Runtime
+  went from minutes to **12 seconds** by probing each distinct link once for the whole run rather
+  than once per page.
+
+- **R6 (part 3b) — SHIPPED (2026-08-24): SF gets a sources page, and the provenance behind it is
+  DERIVED FROM THE CODE rather than recalled.** A sources page is a set of claims about where data
+  comes from, and the generator refuses a layer without one — SF had 16 layers carrying zero
+  `source` blocks. Writing 64 provenance facts from memory was never an option on the one page
+  whose entire job is provenance.
+  **So the facts were extracted, and the extractor is committed** as
+  `scripts/audit_layer_provenance.py`. It follows the app: layer → its loader → that loader's
+  definition → the dataset actually fetched, through six hops that each had to be ADDED BECAUSE OF
+  A SPECIFIC WRONG ANSWER — a factory argument (`makeCachedLoader("rwdu-9wb2")`), a factory
+  property (`datasetId:`), a named constant (`USGS_POST_OFFICE_LAYER`), a nested helper, an inline
+  factory in the loader slot, and the RAW PULL kept beside each builder, whose filename carries the
+  upstream id that produced a shipped file (`sf-supervisor-districts-hcgx-vtsb.geojson`).
+  **Four times it was confidently wrong in a way that looked right, and that is the record worth
+  keeping.** The first probe gave two unrelated layers the same host — it read past the end of a
+  block. `fn_body` then grabbed braces from hundreds of lines away, the same bug in a new place,
+  which made real Socrata ids report as "not found". Matching only `loader:`/`load:` silently
+  dropped every legislative chamber. And the constant resolution worked perfectly, then appended
+  its answer UNQUOTED so the extractor discarded its own correct result one line later. Each was
+  caught by disbelieving a plausible table, not by a gate. **On a provenance page a confident wrong
+  answer is the worst possible output**, which is why the bounding matters more than the coverage.
+  **Result: 16/16 SF layers resolved to a concrete dataset.** Two NYC layers resolve to
+  "derived-by:registerBoroughOfficeLayer" and that is the TRUE answer rather than a gap — the
+  Borough President and District Attorney layers have no boundary of their own; they draw the
+  borough geometry and differ only by role.
+  **The page itself is built from Illinois's**, with its four GENERATED regions emptied so the
+  generator fills them for SF rather than leaving Chicago's content in San Francisco's page.
+  Verified in a browser: 16 matrix rows across 7/3/2/4 group counts, both themes, no dead links.
+  **NYC's page followed in the same change** once its 27 layers had been through the same
+  extraction: 13 publisher credits, and two layers whose honest answer is that they have no
+  boundary of their own. All three instances now publish a layer matrix — 39, 27 and 16 rows —
+  and every layer in the fleet can say where it came from.
+
 - **R6 (part 3a) — SHIPPED (2026-08-24): NYC and SF get FAQ pages, built from IL's shell rather
   than resembling it.** Both apps had no `faq.html` at all while Illinois has ranked on one since
   R4. Each page reuses `il/faq.html`'s own `<style>` island and mark SVG **verbatim** — lifted at

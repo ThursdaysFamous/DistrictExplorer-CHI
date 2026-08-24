@@ -271,4 +271,17 @@ jobs:
           # typo there breaks other people's pages silently, on a page that still
           # looks right and still passes its drift check.
           BASE_URL=http://localhost:8000        node scripts/landing_test.mjs || status=1
+
+          # Every page in the sitemap carries the same brand and the same
+          # standing links. This exists because three published pages were found
+          # on 2026-08-24 still serving the PRE-REBRAND skin — Inter, no theme
+          # boot, no mark — having survived two consecutive stages whose whole
+          # subject was the rebrand. Nothing caught them because nothing
+          # COMPARED them: the composer checks the apps, the generator checks
+          # generated regions, the link gate checks that links resolve, and not
+          # one of them asks whether two published documents look like the same
+          # product. It derives its page list from sitemap.xml and its
+          # expectations from the tree, so a new page is covered the day it
+          # ships and a correct change cannot fail it.
+          BASE_URL=http://localhost:8000        node scripts/page_consistency_test.mjs || status=1
           exit $status

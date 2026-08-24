@@ -54,54 +54,55 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23C0362C'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23ffffff'/%3E%3C/svg%3E" />
 
 <style>
+.districtry-mark { width: 34px; height: 34px; flex: 0 0 auto; }
 /* Self-hosted subset of index.html's faces — only the weights this page uses
    (display 900, body 400/600), same files, same unicode-ranges. */
 @font-face {
-  font-family: 'Big Shoulders Display';
+  font-family: 'Barlow Condensed';
   font-style: normal;
-  font-weight: 900;
+  font-weight: 700;
   font-display: swap;
-  src: url(fonts/big-shoulders-display-latin-ext.woff2) format('woff2');
+  src: url(fonts/barlow-condensed-700-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Big Shoulders Display';
+  font-family: 'Barlow Condensed';
   font-style: normal;
-  font-weight: 900;
+  font-weight: 700;
   font-display: swap;
-  src: url(fonts/big-shoulders-display-latin.woff2) format('woff2');
+  src: url(fonts/barlow-condensed-700-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  src: url(fonts/barlow-400-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(fonts/inter-latin.woff2) format('woff2');
+  src: url(fonts/barlow-400-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  src: url(fonts/barlow-600-latin-ext.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Barlow';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(fonts/inter-latin.woff2) format('woff2');
+  src: url(fonts/barlow-600-latin.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -109,19 +110,36 @@
    is deliberately standalone — no shared stylesheet, no build step — so it
    restates the tokens rather than importing them. */
 :root {
-  --accent: #1D6F8B;
-  --accent-deep: #124F63;
-  --accent-warm: #C0362C;
-  --ink: #14181C;
-  --slate: #55626C;
-  --slate-soft: #87929B;
-  --paper: #F4F7F9;
-  --panel: #FFFFFF;
-  --line: #D9E1E7;
-  --line-strong: #B9C6CE;
-  --font-display: 'Big Shoulders Display', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --accent: #6d3fd1;
+  --accent-deep: #5730ab;
+  --accent-warm: #b0316e;
+  --ink: #17161c;
+  --slate: #4b5563;
+  --slate-soft: #9aa3b2;
+  --paper: #f4f2ee;
+  --panel: #ffffff;
+  --line: #e8e7ef;
+  --line-strong: #c9c5d4;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
   --focus-ring: 3px solid var(--accent-warm);
+}
+/* Dark tier, from districtry/tokens/districtry.tokens.css. These pages are
+   reached FROM the app, which has a theme toggle — a reader who picked dark and
+   clicked "Common questions" should not be handed a white page. The boot script
+   in <head> sets data-theme before first paint from the same
+   localStorage key the app writes, so the choice carries across pages. */
+:root[data-theme="dark"] {
+  --accent: #a78bfa;
+  --accent-deep: #c4b5fd;
+  --accent-warm: #fd88b8;
+  --ink: #ece9f4;
+  --slate: #b6b1c4;
+  --slate-soft: #9a94ab;
+  --paper: #15131b;
+  --panel: #201d29;
+  --line: rgba(236, 233, 244, 0.1);
+  --line-strong: rgba(236, 233, 244, 0.22);
 }
 
 * { box-sizing: border-box; }
@@ -179,7 +197,7 @@ h1.title { margin: 0; min-width: 0; }
 .masthead-star { width: 34px; height: 34px; flex: none; }
 .title-text {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   font-size: clamp(28px, 4vw, 40px);
   letter-spacing: 0.01em;
   line-height: 0.95;
@@ -253,7 +271,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 10px; }
 section { margin: 0 0 34px; }
 h2 {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 24px;
   letter-spacing: 0.01em;
@@ -277,7 +295,7 @@ p { max-width: 74ch; }
   text-decoration: none;
   margin: 4px 0 10px;
 }
-.cta:hover, .cta:focus-visible { background: #1D6F8B; }
+.cta:hover, .cta:focus-visible { background: #0a4a84; }
 .cta-note { font-size: 13px; color: var(--slate-soft); margin: 4px 0 0; }
 
 .answer-card {
@@ -343,6 +361,20 @@ footer.site-footer {
 footer.site-footer p { max-width: 78ch; margin: 0 0 14px; line-height: 1.55; }
 footer.site-footer a { color: var(--accent); }
 </style>
+<script>
+  /* Same key and same precedence as the app's own boot, so the theme a reader
+     chose on the map carries to every sub-page — and runs before first paint,
+     so there is no white flash on the way into dark. */
+  (function () {
+    var t = "light";
+    try {
+      var stored = localStorage.getItem("districtry-theme");
+      if (stored === "dark" || stored === "light") t = stored;
+      else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) t = "dark";
+    } catch (e) { /* blocked storage (private mode) — light is the safe ground */ }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 </head>
 <body>
 
@@ -355,6 +387,7 @@ footer.site-footer a { color: var(--accent); }
         <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
           <polygon fill="var(--accent-warm)" points="50,3 57.6,39.2 92.9,27.5 65,50 92.9,72.5 57.6,60.8 50,97 42.4,60.8 7.1,72.5 35,50 7.1,27.5 42.4,39.2" />
         </svg>
+        <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">What supervisor district am I in?</span>
       </span>
       <small>San Francisco supervisor district lookup — free, by address, ZIP, or a tap on the map.</small>
@@ -431,7 +464,9 @@ footer.site-footer a { color: var(--accent); }
     <div class="footer-links">
       <a href="./">← Back to the map</a>
       <a href="faq.html">Common questions</a>
+      <a href="sources.html">Sources &amp; data layers</a>
       <a href="../privacy.html">Privacy</a>
+      <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a>
       <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">View source on GitHub</a>
     </div>
   </div>
