@@ -52,7 +52,10 @@ SENTINELS = [
     "January 1, 2000",
 ]
 FINGERPRINTS = [
-    "chidistricts",
+    # "//"-anchored: the reference fork's own URLs (https://chidistricts.com/,
+    # its GoatCounter endpoint) — NOT the fleet's *.chidistricts.com
+    # subdomains, which sibling forks legitimately deploy on (nyc./sf./wi.).
+    "//chidistricts",
     "cityofchicago",
     "chiexplorer",
     "chicago",
