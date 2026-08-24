@@ -43,6 +43,13 @@
     border-radius: 999px;
     cursor: pointer;
   }
+  /* both labels stacked in one cell — see the app's .dtt-labels note: the
+     two words differ in width, and a control whose box changes with the
+     theme moves the row it sits in */
+  .dtt-labels { display: inline-grid; justify-items: center; }
+  .dtt-labels > span { grid-area: 1 / 1; }
+  :root:not([data-theme="dark"]) .dtt-light,
+  :root[data-theme="dark"] .dtt-dark { visibility: hidden; }
   .faq-theme-toggle:hover,
   .faq-theme-toggle:focus-visible { background: var(--brand-tint); color: var(--brand); }
   .back a { color: var(--brand); text-decoration: none; }
@@ -59,7 +66,7 @@
     <a class="wordmark" href="districtry-app.html">districtry</a>
     <span class="tag">/ il</span>
     <span class="tag">/ faq</span>
-    <button type="button" class="faq-theme-toggle" aria-label="Switch to the dark theme">Dark</button>
+    <button type="button" class="faq-theme-toggle" aria-label="Switch to the dark theme"><span class="dtt-labels"><span class="dtt-dark">Dark</span><span class="dtt-light">Light</span></span></button>
   </div>
   <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
   <section class="faq-section" aria-labelledby="faq-heading">
@@ -115,14 +122,14 @@
   </details>
 </section>
   <footer>Unlisted re-skin preview. <strong>Not for legal or official use.</strong> Boundary and roster
-  data come from public sources that disclaim legal precision. districtry re-skin preview (unlisted) — generated from index.html @ e2dbaaf on 2026-08-24</footer>
+  data come from public sources that disclaim legal precision. districtry re-skin preview (unlisted) — generated from index.html @ 8263214 on 2026-08-24</footer>
 </div>
 <script>
   (function () {
     var btn = document.querySelector(".faq-theme-toggle");
     function paint() {
       var dark = document.documentElement.getAttribute("data-theme") === "dark";
-      btn.textContent = dark ? "Light" : "Dark";
+      /* which word shows is CSS, keyed on data-theme — see .dtt-labels */
       btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
     }
     btn.addEventListener("click", function () {
