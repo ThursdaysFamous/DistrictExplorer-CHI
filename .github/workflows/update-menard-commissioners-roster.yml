@@ -12,8 +12,11 @@ name: Update Menard County commissioners roster
 # county's Clerk and Supervisor of Assessments obtained on request, so
 # refreshing it means asking again rather than re-fetching, exactly as Ogle's
 # and Henry's do. scripts/build_menard_commissioner_districts.py --check guards
-# the shipped copy against the archived source on every pull request; it reads
-# no network, so it sits in the per-PR gate rather than the monthly one.
+# the shipped copy against the archived source in this workflow (the stark
+# pattern — offline, reading the committed export, so it runs beside the roster
+# rebuild rather than in the monthly network gate). An earlier version of this
+# comment claimed the check ran "on every pull request"; it ran nowhere until
+# the 2026-08-24 scripts audit wired it here.
 #
 # DISTRICT COMES FROM THE COLUMN, NOT FROM TEXT BESIDE THE NAME. The page is one
 # five-column table with a single body row: the header names the districts and
@@ -56,14 +59,21 @@ jobs:
 
       - name: Install scraper dependencies
         # A static, server-rendered WPBakery page — no JS and no challenge — so
-        # requests alone, parsed with the stdlib re module.
-        run: pip install -c scripts/requirements.txt requests
+        # requests alone, parsed with the stdlib re module. pyogrio/pyproj/
+        # shapely are for the boundary --check below, not the scrape.
+        run: pip install -c scripts/requirements.txt requests pyogrio pyproj shapely
 
       - name: Scrape Menard County commissioners roster
         run: python3 scripts/menard_commissioners_scraper.py /tmp/menard_commissioners_raw.json
 
       - name: Rebuild roster data file
         run: python3 scripts/build_menard_commissioners_roster.py /tmp/menard_commissioners_raw.json
+
+      # The district boundaries change on reapportionment, not weekly — but the
+      # shipped copy should never drift from what the builder derives from the
+      # archived Beacon export in data/source/raw. Offline.
+      - name: Re-check the shipped boundary against the archived export
+        run: python3 scripts/build_menard_commissioner_districts.py --check
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present and
