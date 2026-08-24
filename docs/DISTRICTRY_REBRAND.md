@@ -1220,14 +1220,28 @@ Hovering `/ il` in the wordmark now opens a menu of the other explorers, and the
 "Explore another metro" row is retired. Both halves of one idea: the fleet belongs beside the name
 of the thing you are looking at, not at the bottom of a column nobody scrolls.
 
-**There is no Wisconsin fork.** The operator asked for "NYC, SF, and wi"; `metros.json` — the
-fleet's single source, from which `--sync-fleet` projects each fork's `METRO_EXPLORERS` — holds
-exactly three entries, Chicago, NYC and SF, and nothing anywhere in the repo references a WI fork or
-host. `docs/EXPANSION_GUIDE.md` §4 mentions Wisconsin only as a hypothetical example of a
-whole-state fork. So the menu ships the two that exist. **It is built from `METRO_EXPLORERS` rather
-than from a hand-written list precisely so that the fourth costs nothing here**: add it to
-`metros.json`, `--sync-fleet` into the worksheet, regenerate, and it appears in the menu, in the
-portal, and in the (hidden) footer row together.
+**On Wisconsin — this record was wrong for about an hour, and here is the correction.** The
+operator asked for "NYC, SF, and wi". When this shipped, `metros.json` — the fleet's single source,
+from which `--sync-fleet` projects each fork's `METRO_EXPLORERS` — held exactly three entries, and
+nothing in *this* repo referenced a WI fork, so the change went out saying there was no such thing.
+**There is.** `ThursdaysFamous/DistrictExplorer-WI` was created at 03:39 UTC on 2026-08-24, about
+fifteen minutes before that claim was written, and it is **the first state through the template
+route**; #474 landed on `main` the same evening fixing a localization fingerprint that
+`wi.chidistricts.com` itself had tripped. **Searching one repository is not searching the fleet** —
+`list_repos` answers in a single call what no `grep` across this tree can.
+
+**It is still not in the menu, and that is now a measurement rather than an oversight.**
+`wi.chidistricts.com` has **no DNS record** — NYC and SF both resolve to `thursdaysfamous.github.io`
+and WI resolves to nothing — so the site is not live and a link to it would be dead on arrival,
+which is the exact thing `validate_card_links.py` exists to catch. `metros.json`'s own comment makes
+adding an entry a **launch** step rather than a pre-launch one, and it is not a local step either:
+`--sync-fleet` projects that entry into every fork, so a WI row would appear in the LIVE Chicago
+app's footer and its metro portal, not only in this preview.
+
+So the menu ships the two that are reachable. **It is built from `METRO_EXPLORERS` rather than from
+a hand-written list precisely so the third costs nothing here**: point the subdomain, add the entry
+to `metros.json`, `--sync-fleet` into the worksheet, regenerate, and Wisconsin appears in the menu,
+in the portal, and in the (hidden) footer row together — with no change to any of this code.
 
 ### What it is
 
