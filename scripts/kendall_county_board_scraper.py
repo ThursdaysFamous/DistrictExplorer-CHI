@@ -74,14 +74,12 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from scraper_common import UA_CHROME_WIN_126_FULL  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.kendallcountyil.gov"
 LISTING_PATH = "/county-board/board-members"
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_126_FULL,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
 }

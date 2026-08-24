@@ -39,6 +39,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_crawford_boundaries import COMPOSITION, SEATS_PER_DISTRICT  # noqa: E402
 from vtd_board_districts import norm  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://crawfordcounty.illinois.gov/department/county-board/"
 RESULTS_URL = "https://il-crawford.pollresults.net"
@@ -51,9 +52,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("crawford-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("crawford-board-roster")
 
 
 def main():

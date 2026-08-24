@@ -32,6 +32,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_cass_board_districts import SEATS as BOUNDARY_SEATS  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://co.cass.il.us/elected-officials/cass-county-board"
 
@@ -45,9 +46,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("cass-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("cass-board-roster")
 
 
 def main():

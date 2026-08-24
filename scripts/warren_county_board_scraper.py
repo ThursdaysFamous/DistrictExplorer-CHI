@@ -34,11 +34,12 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://warrencountyil.gov/government/county-board/"
 MAP_URL = "https://warrencountyil.gov/wp-content/uploads/2025/07/Precinct-Map.pdf"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 EXPECTED_DISTRICTS = ("1", "2", "3", "4")
 EXPECTED_MEMBERS = 15
@@ -68,9 +69,7 @@ STREET_RE = re.compile(
     r"blvd|hwy|way|circle|cir|place|pl|trail)\b", re.I)
 
 
-def fail(msg):
-    print("warren-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("warren-board-scraper")
 
 
 def get(url, binary=False):

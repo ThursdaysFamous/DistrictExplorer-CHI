@@ -45,6 +45,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTLINE_PY = os.path.join(REPO_ROOT, "scripts", "build_metro_outline.py")
@@ -95,9 +96,7 @@ ALL_COUNTIES = (
 SLUG_OVERRIDES = {"De Witt": "dewitt"}
 
 
-def fail(msg):
-    print("build-county-status: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("build-county-status")
 
 
 def slug_of(name):

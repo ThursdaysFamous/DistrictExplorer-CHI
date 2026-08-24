@@ -52,6 +52,7 @@ import requests  # noqa: E402
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     HEADERS, REQUEST_TIMEOUT, point_in_rings,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "dewitt-county-board-districts.json")
@@ -86,9 +87,7 @@ EXPECT_PRECINCTS = 23
 MAX_POP_SPREAD = 0.20
 
 
-def fail(msg):
-    print("dewitt-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("dewitt-board")
 
 
 def norm(name):

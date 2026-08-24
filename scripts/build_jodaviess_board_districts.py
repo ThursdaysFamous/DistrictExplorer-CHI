@@ -96,6 +96,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
@@ -152,9 +153,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
 
 
-def fail(msg):
-    print("jodaviess-districts: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("jodaviess-districts")
 
 
 def need(name):

@@ -23,9 +23,10 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 LIST_URL = "https://www.grundycountyil.gov/government/county_board.php"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 # "Democrat, Board Member Since 2005, District 3" — with the page's own
 # variance absorbed: a missing space after the party comma (Harold Vota) and

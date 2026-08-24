@@ -60,6 +60,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_white_boundaries import (  # noqa: E402
     CANVASS, ELECTIONS_URL, EXPECTED_PRECINCTS,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.whitecounty-il.gov/county-board"
 
@@ -88,13 +89,13 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("build-white-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("build-white-board")
 
 
-def title_case(name):
-    return " ".join(w if w.isdigit() else w.capitalize() for w in name.split())
+# The shared implementation, not a fourth naive copy: identical on every name
+# in the shipped polling file (proven by round-trip at migration, 2026-08-24),
+# and roman-numeral/hyphen-aware should the county ever print one.
+from vtd_board_districts import title_case  # noqa: E402  (shared machinery — do not fork)
 
 
 def match_key(raw_name):

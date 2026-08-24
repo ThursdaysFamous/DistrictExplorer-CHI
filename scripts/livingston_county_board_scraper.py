@@ -37,12 +37,12 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_120  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://www.livingstoncountyil.gov/government/county_board_members.php"
 # The county site 202s a bare client; a browser UA is enough (no challenge).
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/120.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_X11_120,
 }
 REQUEST_TIMEOUT = 60
 

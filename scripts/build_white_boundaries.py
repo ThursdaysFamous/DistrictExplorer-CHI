@@ -78,13 +78,18 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import requests  # noqa: E402
+# Migrated onto vtd_board_districts by the 2026-08-24 scripts audit (the same
+# follow-up the module's preamble named for Clark); --check is a byte compare,
+# so the migration is proven. County-specific machinery — the map tracing, the
+# inset anchoring, the count guard's wording — stays here.
+import vtd_board_districts as V  # noqa: E402  (shared machinery — do not fork)
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
-    HEADERS, REQUEST_TIMEOUT, STATE_FIPS, TIGERWEB, point_in_rings,
+    STATE_FIPS, TIGERWEB, point_in_rings,
 )
 from build_stephenson_board_districts import (  # noqa: E402  (same fit machinery)
     fit_affine_icp, need, pt_seg_factory, rings_of_path,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_DIR = os.path.join(REPO_ROOT, "data", "source", "raw")
@@ -94,8 +99,6 @@ OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app", "white-county-board-distr
 OUTLINE_PATH = os.path.join(REPO_ROOT, "data", "app", "white-county-outline.json")
 
 COUNTY_FIPS = "193"
-VTD_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
-           "tigerWMS_Census2020/MapServer/58/query")
 COUNTY2020_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
                   "tigerWMS_Census2020/MapServer/82/query")
 
@@ -162,45 +165,25 @@ MIN_PANEL_LABELS = 14
 COORD_PRECISION = 6
 
 
-def fail(msg):
-    print("white-boundaries: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
-
-
-def title_case(name):
-    return " ".join(w if w.isdigit() else w.capitalize() for w in name.split())
+fail = make_fail("white-boundaries")
+title_case = V.title_case
 
 
 def get_json(url, params):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT, params=params)
-    resp.raise_for_status()
-    data = resp.json()
-    if isinstance(data, dict) and data.get("error"):
-        fail("%s answered an error: %s" % (url, data["error"]))
-    return data
+    return V.get_json(url, params, fail)
 
 
 def fetch_vtds(shape_fn):
-    data = get_json(VTD_URL, {
-        "where": "STATE='%s' AND COUNTY='%s'" % (STATE_FIPS, COUNTY_FIPS),
-        "outFields": "GEOID,BASENAME,POP100", "returnGeometry": "true",
-        "outSR": "4326", "f": "geojson"})
-    feats = data.get("features") or []
-    if len(feats) != EXPECTED_PRECINCTS:
+    """V.fetch_vtds re-keyed onto the raw census BASENAME (White's lookups and
+    sorted() feature order stay byte-for-byte), plus the White-worded count
+    guard."""
+    vtds = {rec["basename"]: rec
+            for rec in V.fetch_vtds(COUNTY_FIPS, shape_fn, fail).values()}
+    if len(vtds) != EXPECTED_PRECINCTS:
         fail("the Census voting-district layer carries %d White precincts, "
              "expected %d — the fabric changed; re-read the county's map and "
-             "canvasses before rebuilding" % (len(feats), EXPECTED_PRECINCTS))
-    out = {}
-    for f in feats:
-        props = f.get("properties") or {}
-        name = " ".join((props.get("BASENAME") or "").upper().split())
-        if name in out:
-            fail("the voting-district layer carries two features named %r" % name)
-        geom = shape_fn(f["geometry"])
-        out[name] = {"geom": geom if geom.is_valid else geom.buffer(0),
-                     "geoid": props.get("GEOID"),
-                     "pop": int(props.get("POP100") or 0)}
-    return out
+             "canvasses before rebuilding" % (len(vtds), EXPECTED_PRECINCTS))
+    return vtds
 
 
 def fetch_county_pop():
@@ -597,13 +580,7 @@ def main():
 
     # ---- emit ---------------------------------------------------------------
     def round_geom(geom):
-        def fix(coords):
-            if isinstance(coords[0], (float, int)):
-                return [round(coords[0], COORD_PRECISION),
-                        round(coords[1], COORD_PRECISION)]
-            return [fix(c) for c in coords]
-        geo = mapping(geom)
-        return {"type": geo["type"], "coordinates": fix(geo["coordinates"])}
+        return V.round_geom(geom, mapping)
 
     precinct_features = []
     for map_name in sorted(all_names):
@@ -661,23 +638,17 @@ def main():
     }
 
     # the app's own even-odd test, per composition rep point (the Shelby guard)
-    def rings_of(geometry):
-        if geometry["type"] == "Polygon":
-            return geometry["coordinates"]
-        return [r for poly in geometry["coordinates"] for r in poly]
     for dnum, names in CANVASS.items():
         for n in names:
             probe = vtds[CENSUS_SPELLING.get(n, n)]["geom"].representative_point()
             hits = [f["properties"]["district"] for f in district_features
-                    if point_in_rings(probe.y, probe.x, rings_of(f["geometry"]))]
+                    if point_in_rings(probe.y, probe.x, V.rings_of(f["geometry"]))]
             if hits != [dnum]:
                 fail("precinct %s lands in district %s after rounding, expected "
                      "%s" % (n, hits or "none", dnum))
 
-    prec_body = json.dumps(precincts_payload, sort_keys=True,
-                           separators=(",", ":")) + "\n"
-    dist_body = json.dumps(districts_payload, sort_keys=True,
-                           separators=(",", ":")) + "\n"
+    prec_body = V.dumps(precincts_payload)
+    dist_body = V.dumps(districts_payload)
 
     print("white-boundaries: 18 precincts -> 5 districts; map tracing and "
           "canvasses agree 18/18 (worst VTD-in-face share %.4f, %s)"

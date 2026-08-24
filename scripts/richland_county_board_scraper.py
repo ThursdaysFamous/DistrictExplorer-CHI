@@ -40,6 +40,7 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://richlandcounty.illinois.gov/county-board/"
 GIS_URL = "https://richlandil.wthgis.com/"
@@ -53,7 +54,7 @@ EXPECTED_DISTRICTS = 7
 EXPECTED_PRECINCTS = 21
 
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 # The roster block, and nothing above it. See the docstring. The block runs from
 # its own marker to the page's contact sidebar, which is the next thing on the
@@ -80,9 +81,7 @@ GIS_COUNT_RE = re.compile(r"<small>\s*(\d+)\s+records?\s*</small>", re.I)
 GIS_VALUE_RE = re.compile(r"class=ftrval>(.*?)</td>", re.S)
 
 
-def fail(msg):
-    print("richland-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("richland-board-scraper")
 
 
 def get(url):

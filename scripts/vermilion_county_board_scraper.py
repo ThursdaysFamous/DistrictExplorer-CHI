@@ -57,33 +57,25 @@ Usage:
     python3 scripts/vermilion_county_board_scraper.py [out.json]
 """
 
-import base64
-import hashlib
 import html
 import json
 import os
 import re
 import sys
-import tempfile
 import time
-import urllib.request
 
 import requests
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import aia_bundle  # noqa: E402 (shared machinery — do not fork)
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.vercounty.org"
 SOURCE_URL = BASE + "/county-board/county-board-members/"
 BOARD_URL = BASE + "/county-board/"
 
-# The AIA caIssuers URI printed inside the county's own leaf certificate, and
-# the SHA-256 of the DER it serves. Pinned so the download cannot be substituted.
-INTERMEDIATE_URL = "http://crt.usertrust.com/GoGetSSLRSADVCA.crt"
-INTERMEDIATE_SHA256 = (
-    "43cac31ef8e8ba1b4b16b8206e4c0a26c5badb2fc3aa09e90170e41b66c2fd64")
-INTERMEDIATE_SUBJECT_CN = "GoGetSSL RSA DV CA"
-
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 60
 FETCH_GAP_S = 1.5
@@ -109,37 +101,6 @@ def text(fragment):
     if fragment is None:
         return ""
     return re.sub(r"\s+", " ", html.unescape(TAG_RE.sub(" ", fragment))).strip()
-
-
-def _ca_bundle():
-    """certifi's roots + the intermediate the county's server omits.
-
-    The download is over plain HTTP by design — that is the AIA URI the
-    certificate itself publishes — and is safe because the bytes are pinned by
-    hash below and because the page fetches still verify the whole chain. The
-    DER->PEM re-wrap is done here rather than by shelling out so the job does
-    not depend on an openssl binary being present.
-    """
-    import certifi
-
-    der = urllib.request.urlopen(INTERMEDIATE_URL, timeout=REQUEST_TIMEOUT).read()
-    got = hashlib.sha256(der).hexdigest()
-    if got != INTERMEDIATE_SHA256:
-        raise SystemExit(
-            "vermilion: the intermediate at %s hashed %s, expected %s — the\n"
-            "county's certificate authority may have changed. Do not loosen this\n"
-            "check; re-read the leaf's AIA extension and update the pin\n"
-            "deliberately." % (INTERMEDIATE_URL, got, INTERMEDIATE_SHA256))
-    pem = ("-----BEGIN CERTIFICATE-----\n%s-----END CERTIFICATE-----\n"
-           % base64.encodebytes(der).decode("ascii"))
-    bundle = tempfile.NamedTemporaryFile(suffix=".pem", mode="w", delete=False)
-    with open(certifi.where(), "r") as roots:
-        bundle.write(roots.read())
-    bundle.write("\n# %s (AIA-supplied; the county's server omits it)\n"
-                 % INTERMEDIATE_SUBJECT_CN)
-    bundle.write(pem)
-    bundle.close()
-    return bundle.name
 
 
 def fetch(url, verify):
@@ -256,7 +217,9 @@ def parse_office(page):
 
 def main():
     out_path = sys.argv[1] if len(sys.argv) > 1 else "vermilion-board-raw.json"
-    verify = _ca_bundle()
+    # The county serves the Coles pattern (leaf only, no GoGetSSL
+    # intermediate); aia_bundle holds the pinned copy.
+    verify = aia_bundle.ca_bundle("vermilion", key="gogetssl-rsa-dv")
     try:
         members_page = fetch(SOURCE_URL, verify)
         time.sleep(FETCH_GAP_S)

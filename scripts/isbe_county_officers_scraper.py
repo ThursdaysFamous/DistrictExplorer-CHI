@@ -87,14 +87,12 @@ import sys
 
 import pymupdf
 import requests
+from scraper_common import make_fail, UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://elections.il.gov/Downloads/ElectionOperations/PDF/coofficers.pdf"
 SOURCE_PAGE = "https://elections.il.gov/ElectionOperations/CountyOfficials.aspx"
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_124,
 }
 REQUEST_TIMEOUT = 60
 FETCH_ATTEMPTS = 3
@@ -140,9 +138,7 @@ KNOWN_TITLES = {
 }
 
 
-def fail(msg):
-    print("isbe-county-officers: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("isbe-county-officers")
 
 
 def warn(msg):

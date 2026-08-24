@@ -28,10 +28,11 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 LIST_URL = ("https://www.logancountyil.gov/index.php?option=com_content"
             "&view=article&id=176&Itemid=541&lang=en")
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 ROLE_MAP = {"MEMBER": None, "CHAIR": "Chair", "VICE CHAIR": "Vice Chair"}
 PHONE_RE = re.compile(r"^\(?(\d{3})\)?[.\- ](\d{3})[.\- ](\d{4})$")

@@ -83,6 +83,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_metro_outline import point_in_rings  # noqa: E402
 import vtd_board_districts as V  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "jackson-precincts.json")
@@ -185,9 +186,7 @@ BLOCK_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
              "tigerWMS_Census2020/MapServer/10/query")
 
 
-def fail(msg):
-    print("jackson-boundaries: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("jackson-boundaries")
 
 
 def fetch_blocks(shape_fn):

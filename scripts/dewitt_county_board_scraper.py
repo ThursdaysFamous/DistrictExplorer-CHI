@@ -32,10 +32,10 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://www.dewittcountyil.gov/government/county_board.php"
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 NAME_RE = re.compile(r"^[A-Z][A-Z.'\-]*(?:\s+[A-Z][A-Z.'\-]*){1,3}$")
 DISTRICT_RE = re.compile(r"^District\s+([A-D])$", re.I)

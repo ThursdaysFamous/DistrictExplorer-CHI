@@ -243,3 +243,23 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  notify-indexnow:
+    # Best-effort recrawl ping to the IndexNow engines (Bing/Yandex/Seznam/
+    # Naver — not Google). scripts/indexnow_submit.py's own rule is "run only
+    # AFTER a deploy where the key file is already live": `needs: deploy` is
+    # exactly that, since deploy-pages@v4 completes only once the Pages
+    # deployment reports success — including the very first deploy that ships
+    # the key file itself. Job-level continue-on-error because a rejected ping
+    # must never redden a successful deploy, and this job runs after `deploy`
+    # completes so it can never hold the `pages` concurrency slot. The script
+    # is stdlib-only (validate_workflow_deps.py holds it to that, since this
+    # workflow installs nothing).
+    if: github.ref == 'refs/heads/main'
+    needs: deploy
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/indexnow_submit.py

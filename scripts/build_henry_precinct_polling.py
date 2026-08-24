@@ -62,13 +62,13 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_WIN_126, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 DIRECTORY_URL = ("https://www.henrycty.com/BusinessDirectoryii.aspx"
                  "?lngBusinessCategoryID=25&lngNewPage=%d")
 CLERK_PAGE = "https://www.henrycty.com/211/Elections"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "henry-precincts.json")
@@ -91,15 +91,11 @@ def clean(text):
 
 
 def fetch(url):
-    last = None
-    for attempt in range(FETCH_ATTEMPTS):
-        try:
-            response = requests.get(url, headers=HEADERS, timeout=60)
-            response.raise_for_status()
-            return response.text
-        except Exception as exc:            # network flake, not a markup change
-            last = exc
-    raise last
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, HEADERS, timeout=60,
+                            attempts=FETCH_ATTEMPTS).text
 
 
 def parse_page(html):

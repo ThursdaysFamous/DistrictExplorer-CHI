@@ -524,6 +524,19 @@
           }
         }
       }
+    },
+    "perf_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file"
+      ],
+      "description": "Opts this fork's performance harness into the generated perf-config region (the anchor point + offline layer list that must mirror smoke-config). Present = the generator owns that region in the named file; absent = no target, byte-identical output (the verified_date pattern).",
+      "properties": {
+        "file": {
+          "type": "string"
+        }
+      }
     }
   },
   "definitions": {

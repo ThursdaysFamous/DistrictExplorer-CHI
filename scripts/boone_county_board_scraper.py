@@ -26,9 +26,10 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 LIST_URL = "https://www.boonecountyil.gov/government/county_board_members.php"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 # Section header between member tables: <span class="subheader">District N
 SUBHEADER_RE = re.compile(

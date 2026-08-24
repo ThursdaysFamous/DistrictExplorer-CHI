@@ -85,16 +85,18 @@ Usage:
 """
 
 import argparse
-import json
-import math
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import requests  # noqa: E402
-from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
-    HEADERS, REQUEST_TIMEOUT, STATE_FIPS, point_in_rings,
-)
+# Clark shipped with every step inline hours before vtd_board_districts.py was
+# extracted from it; the module's own preamble named migrating this file as the
+# clean follow-up, and the 2026-08-24 scripts audit did it (--check is a byte
+# compare, so the migration is proven). County-specific machinery — the witness
+# constants, the count guard's wording, the balance ceiling — stays here.
+import vtd_board_districts as V  # noqa: E402  (shared machinery — do not fork)
+from build_metro_outline import point_in_rings  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "clark-precincts.json")
@@ -102,10 +104,6 @@ OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app",
                              "clark-county-board-districts.json")
 
 COUNTY_FIPS = "023"
-VTD_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
-           "tigerWMS_Census2020/MapServer/58/query")
-COUNTY2020_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
-                  "tigerWMS_Census2020/MapServer/82/query")
 
 BOARD_URL = "https://www.clarkcountyil.org/board"
 RESULTS_URL = "https://il-clark.accessliberty.com/pastelections.aspx"
@@ -157,61 +155,23 @@ BALANCE_DEV_MAX = 0.30
 # match the census county polygon to within rounding.
 MAX_OVERLAP_M2 = 1.0
 MIN_COVERED = 0.9999
-COORD_PRECISION = 6
 
-
-def fail(msg):
-    print("clark-boundaries: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
-
-
-def title_case(name):
-    return " ".join(w if w.isdigit() else w.capitalize() for w in name.split())
-
-
-def get_json(url, params):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT, params=params)
-    resp.raise_for_status()
-    data = resp.json()
-    if isinstance(data, dict) and data.get("error"):
-        fail("%s answered an error: %s" % (url, data["error"]))
-    return data
+fail = make_fail("clark-boundaries")
 
 
 def fetch_vtds(shape_fn):
-    data = get_json(VTD_URL, {
-        "where": "STATE='%s' AND COUNTY='%s'" % (STATE_FIPS, COUNTY_FIPS),
-        "outFields": "GEOID,BASENAME,POP100", "returnGeometry": "true",
-        "outSR": "4326", "f": "geojson"})
-    feats = data.get("features") or []
-    if len(feats) != EXPECTED_PRECINCTS:
+    """V.fetch_vtds re-keyed onto the raw census BASENAME — Clark's names ARE
+    the canvass spellings, so raw keys keep every downstream lookup and the
+    sorted() feature order byte-for-byte what they were before the migration —
+    plus the Clark-worded count guard."""
+    vtds = {rec["basename"]: rec
+            for rec in V.fetch_vtds(COUNTY_FIPS, shape_fn, fail).values()}
+    if len(vtds) != EXPECTED_PRECINCTS:
         fail("the Census voting-district layer carries %d Clark precincts, "
              "expected %d — the fabric changed; re-read the county's canvasses "
              "before rebuilding (this is the test Jasper fails)"
-             % (len(feats), EXPECTED_PRECINCTS))
-    out = {}
-    for f in feats:
-        props = f.get("properties") or {}
-        name = " ".join((props.get("BASENAME") or "").upper().split())
-        if name in out:
-            fail("the voting-district layer carries two features named %r" % name)
-        geom = shape_fn(f["geometry"])
-        out[name] = {"geom": geom if geom.is_valid else geom.buffer(0),
-                     "geoid": props.get("GEOID"),
-                     "pop": int(props.get("POP100") or 0)}
-    return out
-
-
-def fetch_county(shape_fn):
-    data = get_json(COUNTY2020_URL, {
-        "where": "STATE='%s' AND COUNTY='%s'" % (STATE_FIPS, COUNTY_FIPS),
-        "outFields": "POP100", "returnGeometry": "true", "outSR": "4326",
-        "f": "geojson"})
-    feats = data.get("features") or []
-    if not feats:
-        fail("Census 2020 county layer returned nothing for Clark County")
-    props = feats[0].get("properties") or {}
-    return shape_fn(feats[0]["geometry"]), int(props.get("POP100") or 0)
+             % (len(vtds), EXPECTED_PRECINCTS))
+    return vtds
 
 
 def main():
@@ -248,7 +208,7 @@ def main():
         fail("census fabric carries %s, which no canvass district claims"
              % ", ".join(extra))
 
-    county_geom, county_pop = fetch_county(shape)
+    county_geom, county_pop = V.fetch_county(COUNTY_FIPS, shape, fail)
     if county_pop != COUNTY_POP_2020:
         fail("census county population is %d, expected %d" % (county_pop, COUNTY_POP_2020))
     vtd_pop = sum(v["pop"] for v in vtds.values())
@@ -271,38 +231,15 @@ def main():
              % (worst[1], 100 * worst[0], 100 * BALANCE_DEV_MAX))
 
     # --- tiling: districts must not overlap and must cover the county --------
-    lat = county_geom.centroid.y
-    mx = 111320.0 * math.cos(math.radians(lat))
-    my = 110574.0
-
-    def area_m2(geom):
-        from shapely.ops import transform
-        return transform(lambda x, y, z=None: (x * mx, y * my), geom).area
-
+    from shapely.ops import transform  # noqa: E402 (the De Witt seam)
     keys = sorted(districts, key=int)
-    overlap_m2 = 0.0
-    for i, a in enumerate(keys):
-        for b in keys[i + 1:]:
-            inter = districts[a].intersection(districts[b])
-            if not inter.is_empty:
-                overlap_m2 += area_m2(inter)
-    if overlap_m2 > MAX_OVERLAP_M2:
-        fail("districts overlap by %.1f m2 (ceiling %.1f)" % (overlap_m2, MAX_OVERLAP_M2))
-    union = unary_union(list(districts.values()))
-    covered = area_m2(union.intersection(county_geom)) / area_m2(county_geom)
-    if covered < MIN_COVERED:
-        fail("the seven districts cover only %.4f%% of the county"
-             % (100 * covered))
+    overlap_m2, covered = V.check_tiling(
+        districts, county_geom, transform, MAX_OVERLAP_M2, MIN_COVERED,
+        unary_union, fail)
 
     # ---- emit ---------------------------------------------------------------
     def round_geom(geom):
-        def fix(coords):
-            if isinstance(coords[0], (float, int)):
-                return [round(coords[0], COORD_PRECISION),
-                        round(coords[1], COORD_PRECISION)]
-            return [fix(c) for c in coords]
-        geo = mapping(geom)
-        return {"type": geo["type"], "coordinates": fix(geo["coordinates"])}
+        return V.round_geom(geom, mapping)
 
     where = {n: d for d, names in CANVASS.items() for n in names}
     precinct_features = []
@@ -310,7 +247,7 @@ def main():
         rec = vtds[name]
         precinct_features.append({
             "type": "Feature",
-            "properties": {"name": title_case(name), "district": where[name],
+            "properties": {"name": V.title_case(name), "district": where[name],
                            "geoid": rec["geoid"], "pop2020": rec["pop"]},
             "geometry": round_geom(rec["geom"]),
         })
@@ -337,7 +274,7 @@ def main():
             "type": "Feature",
             "properties": {
                 "district": dnum, "name": "District %s" % dnum,
-                "precincts": [title_case(n) for n in CANVASS[dnum]],
+                "precincts": [V.title_case(n) for n in CANVASS[dnum]],
                 "pop2020": pops[dnum],
             },
             "geometry": round_geom(districts[dnum]),
@@ -365,23 +302,17 @@ def main():
     }
 
     # the app's own even-odd test, per precinct representative point
-    def rings_of(geometry):
-        if geometry["type"] == "Polygon":
-            return geometry["coordinates"]
-        return [r for poly in geometry["coordinates"] for r in poly]
     for dnum, names in CANVASS.items():
         for n in names:
             probe = vtds[n]["geom"].representative_point()
             hits = [f["properties"]["district"] for f in district_features
-                    if point_in_rings(probe.y, probe.x, rings_of(f["geometry"]))]
+                    if point_in_rings(probe.y, probe.x, V.rings_of(f["geometry"]))]
             if hits != [dnum]:
                 fail("precinct %s lands in district %s after rounding, expected %s"
                      % (n, hits or "none", dnum))
 
-    prec_body = json.dumps(precincts_payload, sort_keys=True,
-                           separators=(",", ":")) + "\n"
-    dist_body = json.dumps(districts_payload, sort_keys=True,
-                           separators=(",", ":")) + "\n"
+    prec_body = V.dumps(precincts_payload)
+    dist_body = V.dumps(districts_payload)
 
     print("clark-boundaries: 23 precincts -> 7 single-member districts; "
           "canvass names match the census fabric 23/23")

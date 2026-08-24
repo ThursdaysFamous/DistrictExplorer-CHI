@@ -42,6 +42,7 @@ import datetime
 import json
 import re
 import sys
+from scraper_common import UA_CIVIC_BOT  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import requests
@@ -51,8 +52,7 @@ except ImportError:  # pragma: no cover
 SOURCE_URL = "https://starkco.illinois.gov/government/elected-officials-and-staff"
 COUNTY_PAGE = "https://starkco.illinois.gov/"
 TIMEOUT = 45
-USER_AGENT = ("Mozilla/5.0 (compatible; chidistricts.com civic data bot; "
-              "+https://chidistricts.com/)")
+USER_AGENT = UA_CIVIC_BOT
 
 # Eight seats, four per district. Floors sit two under the full board so a
 # genuine vacancy does not fail the run, but a parse regression does.

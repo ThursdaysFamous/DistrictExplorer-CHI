@@ -157,6 +157,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 OUT_NAME = "isbe-county-board-chairs.json"
 
@@ -226,9 +227,7 @@ LEADING_HASH_RE = re.compile(r"^#\s*(?=\d)")
 NAME_SUFFIXES = frozenset(("jr", "sr", "ii", "iii", "iv", "v", "md", "phd"))
 
 
-def fail(msg):
-    print("county-board-chairs: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("county-board-chairs")
 
 
 def warn(msg):

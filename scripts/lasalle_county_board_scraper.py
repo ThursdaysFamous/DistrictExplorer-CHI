@@ -36,10 +36,11 @@ import time
 import sys
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://lasallecountyil.gov"
 LIST_URL = BASE + "/m/directory/department?did=39"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 BLOCK_SPLIT = '<li class="list-group-item'
 NAME_RE = re.compile(

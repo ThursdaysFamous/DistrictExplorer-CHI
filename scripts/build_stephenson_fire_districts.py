@@ -55,6 +55,7 @@ from build_stephenson_board_districts import (  # noqa: E402  (same map series)
     as_features, need, pt_seg_factory, rings_of_path,
     DERIVED_TOLERANCE_M, HYDRO_COLOURS,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 # WHY THIS FIT IS INVERTED RELATIVE TO THE BOARD BUILD. The board map's
 # polygons tile exactly one township, so their union outline IS the fit
@@ -150,9 +151,7 @@ ANCHORS = [
 ]
 
 
-def fail(msg):
-    print("stephenson-fire: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("stephenson-fire")
 
 
 def rings_of_feature(feature):

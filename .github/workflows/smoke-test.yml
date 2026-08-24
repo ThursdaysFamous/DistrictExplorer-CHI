@@ -68,6 +68,17 @@ jobs:
       - name: County status matches its sources
         run: python3 scripts/build_county_status.py --check
 
+      # Three counties' rosters carry a `seats` value their blocked scrapers
+      # cannot re-stamp (DeKalb behind a captcha, Kendall and McHenry blocking
+      # every automated client — see scripts/backfill_board_seats.py). This is
+      # that invariant's gate: it fails if a shipped roster loses `seats` or
+      # holds more members in a district than the builder's own
+      # SEATS_PER_DISTRICT allows. It advertised --check from the day it was
+      # written and no workflow ran it until the 2026-08-24 scripts audit.
+      # Stdlib only.
+      - name: Backfilled board seats still stamped
+        run: python3 scripts/backfill_board_seats.py --check
+
       # Every script a workflow runs must import under the dependencies that
       # workflow installs. This catches the seam no other gate looks at: the
       # five derived-boundary roster refreshes (Cass, De Witt, Marshall, Mason,

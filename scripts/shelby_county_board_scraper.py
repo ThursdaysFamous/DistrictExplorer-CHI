@@ -40,11 +40,11 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_128, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.shelbycounty-il.gov/coboard.aspx"
 CONTACTS_URL = "https://www.shelbycounty-il.gov/contacts.aspx"
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 # Cards are delimited by their OPENING tags, not by matching close tags: a
 # non-greedy close-tag match swallowed the second member's </div> and every
@@ -74,9 +74,10 @@ def clean(fragment):
 
 
 def fetch(url):
-    resp = requests.get(url, headers=UA, timeout=60)
-    resp.raise_for_status()
-    return resp.text
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, UA, timeout=60).text
 
 
 def parse_board(page):

@@ -78,6 +78,7 @@ from shapely import make_valid
 from shapely.geometry import mapping, shape, Point
 from shapely.ops import transform, unary_union
 from shapely.strtree import STRtree
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -150,9 +151,7 @@ SOURCES = [
 ]
 
 
-def fail(msg):
-    print("build-parcel-fabric-districts: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("build-parcel-fabric-districts")
 
 
 def clean(g):

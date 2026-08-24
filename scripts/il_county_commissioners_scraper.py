@@ -27,25 +27,22 @@ Usage:
     python3 il_county_commissioners_scraper.py [output.json]   # default: stdout
 """
 
-import base64
 import datetime
-import hashlib
 import html as html_mod
 import json
 import os
 import re
 import sys
-import tempfile
 import time
-import urllib.request
 
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import aia_bundle
 import platinum_canvass
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 
 PHONE_RE = re.compile(r"(\d{3})\D{0,3}(\d{3})\D?(\d{4})")
 EXT_RE = re.compile(r"ext\.?\s*(\d+)", re.I)
@@ -1058,7 +1055,7 @@ def parse_gallatin(page):
 
     HOW THIS COUNTY BECAME READABLE AT ALL: gallatinco.illinois.gov serves an
     incomplete TLS chain, which every automated client reports as a connection
-    failure and no browser notices. See AIA_INTERMEDIATES above.
+    failure and no browser notices. See scripts/aia_bundle.py.
     """
     widget = GALLATIN_WIDGET_RE.search(page)
     if not widget:
@@ -1195,58 +1192,14 @@ def enrich_alexander(session, members, verify):
 # reads as unreachable. Gallatin's gap record said the county was "DARK to this
 # client on every route tried" for that reason alone.
 #
-# So the chase is done here, exactly as scripts/coles_county_board_scraper.py
-# does it: download the intermediate the certificate itself points at, refuse to
-# use it unless its bytes hash to the pin below, and verify the page fetch
-# against certifi's roots PLUS that one certificate. NOTHING HERE DISABLES
-# VERIFICATION, and if the county fixes its chain this keeps working unchanged.
-AIA_INTERMEDIATES = {
-    "GALLATIN": {
-        "url": "http://crt.sectigo.com/SectigoPublicServerAuthenticationCAOVR40.crt",
-        "sha256": "8eb2f17d668941c39a7fca0cee127ae0ebaf444610631cca3cd19eab46c5824a",
-        "subject_cn": "Sectigo Public Server Authentication CA OV R40",
-    },
-}
-
-
-def aia_ca_bundle(key):
-    """certifi's roots + the intermediate the county's server omits.
-
-    Returns a temp-file path the caller deletes. The intermediate is fetched
-    over plain HTTP because that is the URI the certificate publishes, and that
-    is safe here because the bytes are pinned by hash and because the page fetch
-    still verifies the whole chain afterwards. The DER->PEM rewrap is done in
-    Python so the weekly job does not depend on an openssl binary.
-    """
-    spec = AIA_INTERMEDIATES[key]
-    import certifi
-
-    # Start from whatever store the rest of this run already trusts. In CI no
-    # such variable is set and this is certifi, exactly as the Coles scraper
-    # does it; behind a TLS-terminating egress proxy the environment names a
-    # bundle that includes that proxy's own root, and swapping certifi in for it
-    # would break the one fetch this function exists to enable.
-    roots_path = (os.environ.get("REQUESTS_CA_BUNDLE")
-                  or os.environ.get("SSL_CERT_FILE") or certifi.where())
-
-    der = urllib.request.urlopen(spec["url"], timeout=60).read()
-    got = hashlib.sha256(der).hexdigest()
-    if got != spec["sha256"]:
-        raise SystemExit(
-            "county-commissioners: the intermediate at %s hashed %s, expected %s\n"
-            "— %s's certificate authority may have changed. Do not loosen this\n"
-            "check; re-read the leaf's AIA extension and update the pin."
-            % (spec["url"], got, spec["sha256"], key))
-    pem = "-----BEGIN CERTIFICATE-----\n%s-----END CERTIFICATE-----\n" % (
-        base64.encodebytes(der).decode("ascii"))
-    bundle = tempfile.NamedTemporaryFile(suffix=".pem", mode="w", delete=False)
-    with open(roots_path, "r") as roots:
-        bundle.write(roots.read())
-    bundle.write("\n# %s (AIA-supplied; the county's server omits it)\n"
-                 % spec["subject_cn"])
-    bundle.write(pem)
-    bundle.close()
-    return bundle.name
+# So the chase is done by scripts/aia_bundle.py — the fleet's ONE copy of the
+# pinned-intermediate machinery (a pinned hash that exists in two files is a
+# pin that drifts; this file carried its own copy until the 2026-08-24 scripts
+# audit folded it back). A SITES entry that needs it names the intermediate's
+# key in aia_bundle.INTERMEDIATES as `ca_bundle`; the fetch below verifies
+# against the trusted roots PLUS that one pinned certificate. NOTHING HERE
+# DISABLES VERIFICATION, and if the county fixes its chain this keeps working
+# unchanged.
 
 
 SITES = {
@@ -1272,8 +1225,9 @@ SITES = {
         "structure": "5 members elected countywide \u2014 no districts",
         "expect": 5,
         "parse": parse_gallatin,
-        # gallatinco.illinois.gov omits its TLS intermediate; see aia_ca_bundle.
-        "ca_bundle": "GALLATIN",
+        # gallatinco.illinois.gov omits its TLS intermediate; the pinned
+        # Sectigo copy lives in aia_bundle.INTERMEDIATES under this key.
+        "ca_bundle": "sectigo-ov-r40",
     },
     "SALINE": {
         "name": "Saline County",
@@ -1479,7 +1433,7 @@ def main():
         if spec.get("ca_bundle"):
             name = spec["ca_bundle"]
             if name not in bundles:
-                bundles[name] = aia_ca_bundle(name)
+                bundles[name] = aia_bundle.ca_bundle("county-commissioners", name)
             verify = bundles[name]
         resp, err = fetch(session, spec["url"], verify)
         if resp is None:

@@ -12,9 +12,11 @@ name: Update Montgomery County Board roster
 # export, an operator step rather than a weekly one: refreshing it means asking
 # Montgomery County GIS for a new file, exactly as Ogle's and Henry's do.
 # scripts/build_montgomery_boundaries.py --check guards the shipped copy against
-# the archived source on every pull request; it reads no network, so unlike the
-# TIGERweb-backed dissolves it can sit in the per-PR gate rather than the
-# monthly one.
+# the archived source in this workflow (the stark pattern — offline, reading the
+# committed .gdb archive, so it runs beside the roster rebuild rather than in
+# the monthly network gate). An earlier version of this comment claimed the
+# check ran "on every pull request"; it ran nowhere until the 2026-08-24
+# scripts audit wired it here.
 #
 # WHY THE PAGE AND NOT THE PDF. The Clerk also publishes a "County Board
 # Districts/Members" PDF (revised 12/2024) that lists the same fourteen seats,
@@ -52,14 +54,21 @@ jobs:
 
       - name: Install scraper dependencies
         # A static, server-rendered WPBakery page — no JS and no challenge — so
-        # requests alone, parsed with the stdlib re module.
-        run: pip install -c scripts/requirements.txt requests
+        # requests alone, parsed with the stdlib re module. pyogrio/pyproj/
+        # shapely are for the boundary --check below, not the scrape.
+        run: pip install -c scripts/requirements.txt requests pyogrio pyproj shapely
 
       - name: Scrape Montgomery County Board member roster
         run: python3 scripts/montgomery_county_board_scraper.py /tmp/montgomery_county_board_raw.json
 
       - name: Rebuild roster data file
         run: python3 scripts/build_montgomery_board_roster.py /tmp/montgomery_county_board_raw.json
+
+      # The district boundaries change on reapportionment, not weekly — but the
+      # shipped copy should never drift from what the builder derives from the
+      # archived county GIS export in data/source/raw. Offline.
+      - name: Re-check the shipped boundary against the archived export
+        run: python3 scripts/build_montgomery_boundaries.py --check
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present and

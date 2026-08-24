@@ -37,11 +37,11 @@ import sys
 import time
 
 import requests
+from scraper_common import make_fail, UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://hancockcounty-il.gov/county-board-members/"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 60
 MAX_RETRIES = 3
@@ -60,9 +60,7 @@ def clean(fragment):
     return re.sub(r"\s+", " ", html_mod.unescape(TAG_RE.sub(" ", fragment or ""))).strip()
 
 
-def fail(msg):
-    print("hancock-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("hancock-board-scraper")
 
 
 def fetch(url):

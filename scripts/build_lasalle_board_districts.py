@@ -58,6 +58,7 @@ import requests  # noqa: E402
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     HEADERS, REQUEST_TIMEOUT, point_in_rings,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 # WHY SHAPELY AND NOT build_metro_outline's dissolve(): that dissolve cancels
 # segments walked twice, which requires the fabric to share EXACT vertex chains
@@ -145,9 +146,7 @@ PRINTED_POP = {"1": 3934, "2": 3966, "4": 3850, "8": 3649, "9": 3731,
                "12": 3870, "13": 3747, "21": 3660, "23": 3662}
 
 
-def fail(msg):
-    print("lasalle-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("lasalle-board")
 
 
 def fetch_precincts():

@@ -40,6 +40,7 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_X11_128  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_PAGE = "https://masoncountyil.gov/county-board/"
 ROSTER_PDF = ("https://masoncountyil.gov/wp-content/uploads/2026/05/"
@@ -47,8 +48,7 @@ ROSTER_PDF = ("https://masoncountyil.gov/wp-content/uploads/2026/05/"
 # sha256 of the PDF as read 2026-08-02, the transcription in
 # scripts/build_mason_board_roster.py.
 KNOWN_SHA256 = "a1d1e96af9d4f3e8548be133639be370f1fa2e385c9edd3da24797c99632c551"
-UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")}
+UA = {"User-Agent": UA_CHROME_X11_128}
 TIMEOUT = 90
 
 # What the county-board page calls the link, used only to report a rename.

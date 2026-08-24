@@ -12,9 +12,11 @@ name: Update Jefferson County Board roster
 # own precincts per the approved composition list its Clerk sent, so it changes
 # when the county reapportions (next after the 2030 census, per the list's own
 # note) rather than weekly. scripts/build_jefferson_board_districts.py --check
-# guards the shipped copy on every pull request; it reads no network, so unlike
-# the TIGERweb-backed dissolves it sits in the per-PR gate rather than the
-# monthly one.
+# guards the shipped copy in this workflow (the mcdonough/stark pattern —
+# offline, reading the committed precinct file, so it belongs beside the roster
+# rebuild rather than in the monthly network gate). An earlier version of this
+# comment claimed the check ran "on every pull request"; it ran nowhere until
+# the 2026-08-24 scripts audit wired it here.
 #
 # THE URL IS THE SITE ROOT, NOT /government/. jeffersoncounty.illinois.gov's own
 # navigation links /government/county_board/index.php, which 404s — while still
@@ -50,14 +52,21 @@ jobs:
 
       - name: Install scraper dependencies
         # A static, server-rendered table — no JS and no challenge — so requests
-        # alone, parsed with the stdlib re module.
-        run: pip install -c scripts/requirements.txt requests
+        # alone, parsed with the stdlib re module. shapely is for the boundary
+        # --check below, not the scrape.
+        run: pip install -c scripts/requirements.txt requests shapely
 
       - name: Scrape Jefferson County Board member roster
         run: python3 scripts/jefferson_county_board_scraper.py /tmp/jefferson_county_board_raw.json
 
       - name: Rebuild roster data file
         run: python3 scripts/build_jefferson_board_roster.py /tmp/jefferson_county_board_raw.json
+
+      # The district boundaries change on reapportionment, not weekly — but the
+      # shipped copy should never drift from what the builder derives from the
+      # committed precinct file and the Clerk's composition list. Offline.
+      - name: Re-check the shipped board districts against a fresh dissolve
+        run: python3 scripts/build_jefferson_board_districts.py --check
 
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present and

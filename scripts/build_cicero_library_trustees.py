@@ -40,6 +40,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 AGENCY_ID = "20060001"
 LIBRARY_NAME = "Cicero Public Library"
@@ -54,9 +55,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("build-cicero-library: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("build-cicero-library")
 
 
 def clean(value):

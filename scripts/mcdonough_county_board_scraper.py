@@ -48,12 +48,12 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_WIN_126, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "http://mcg.mcdonough.il.us/members.html"
 COUNTY_PAGE = "http://mcg.mcdonough.il.us/"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 120
 
@@ -89,9 +89,10 @@ MIN_DISTRICTS = 3
 
 
 def fetch(url):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
-    return resp.text
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, HEADERS, timeout=REQUEST_TIMEOUT).text
 
 
 def cell_lines(html_fragment):

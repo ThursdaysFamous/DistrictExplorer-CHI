@@ -35,6 +35,7 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pypdf
@@ -46,8 +47,7 @@ NOTICE_URL = ("https://cms9files.revize.com/carrollil/"
 CLERK_PAGE = ("https://www.carrollcountyil.gov/county_departments/"
               "clerk___recorder/index.php")
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "carroll-precinct-polling.json")
@@ -79,9 +79,7 @@ EXPECTED = {
 }
 
 
-def fail(msg):
-    print("carroll-precinct-polling: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("carroll-precinct-polling")
 
 
 def clean(value):

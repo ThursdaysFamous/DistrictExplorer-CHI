@@ -110,6 +110,7 @@ from build_stephenson_board_districts import (  # noqa: E402  (same map series)
     TOWNSHIP_POP, as_features, fit_affine_icp, hydro_check, need,
     rings_of_path,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "stephenson-precincts.json")
@@ -178,9 +179,7 @@ ANCHORS = [
 ]
 
 
-def fail(msg):
-    print("stephenson-precincts: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("stephenson-precincts")
 
 
 def fill_geometry(rings, Polygon, unary_union):

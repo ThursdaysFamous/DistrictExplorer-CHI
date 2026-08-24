@@ -53,6 +53,7 @@ import requests  # noqa: E402
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     HEADERS, REQUEST_TIMEOUT, point_in_rings,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 # WHY SHAPELY AND NOT build_metro_outline's dissolve(): same reason as the
 # LaSalle build — segment-cancellation dissolve requires exact shared vertex
@@ -101,9 +102,7 @@ PRINTED_POP = {"1": 17663, "2": 17364, "3": 17506}
 EXPECT_TOTAL_POP = 52533
 
 
-def fail(msg):
-    print("grundy-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("grundy-board")
 
 
 def fetch_precincts():

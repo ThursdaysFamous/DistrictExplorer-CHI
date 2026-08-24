@@ -46,12 +46,14 @@ const PORT = Number(process.env.PORT || 8137);
 const BASE = `http://localhost:${PORT}/`;
 const BOOT_RUNS = Number(process.env.BOOT_RUNS || 7);
 
-// Ground truth mirrors smoke_test.mjs's GENERATED smoke-config (kept in sync by
-// hand — this analysis tool isn't a generate_metro_files.py target, so no
-// GENERATED region here). If the worksheet's anchor point/offline layers change,
-// update these to match.
-const POINT = "41.88250,-87.62850"; // downtown Loop — inside all three no-API layers
+// Ground truth shares smoke_test.mjs's worksheet source: the perf-config
+// region below is a generate_metro_files.py target (key: perf_profile), so
+// the anchor point and offline layer list can no longer drift from
+// smoke-config by hand — which is exactly what this header used to warn about.
+// ==== GENERATED:BEGIN perf-config ====
+const POINT = "41.88250,-87.62850"; // downtown Loop — inside Cook County
 const OFFLINE = ["school-board", "il-supreme-court", "ccbr"];
+// ==== GENERATED:END perf-config ====
 const POINT2 = "41.99000,-87.66000"; // school-board D4 — the point-move target
 
 const VDIR = join(REPO, "scripts", "vendor", "leaflet");

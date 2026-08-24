@@ -66,7 +66,7 @@ All numbers were measured against this working tree unless marked *(not live-ver
 | operator step | `build_embedded_boundaries.py school-board` | ✅ 3,525 coord pairs, 83,470 B; 2000/2000 agreement, 0 overlaps; byte-identical to committed |
 | `smoke-test` (behaviour gate) | `scripts/smoke_test.mjs` | ⚠️ not exercisable in the review sandbox — Playwright's bundled Chromium can't reach the Leaflet CDN or the localhost server through the session's egress proxy (`net::ERR_CONNECTION_RESET` on cdnjs). It is a GitHub-hosted-runner gate with direct egress, recorded green there; **no code defect**, environmental only. |
 
-**Redundant/orphaned-script review:** none found. All eight scripts are live — seven wired into the four workflows, plus `build_embedded_boundaries.py` as the documented occasional operator step (`README.md`, `index.html:2474`, this doc). The `fetch`/`clean`/`HEADERS` helpers duplicated across `ilga_scraper.py` and `cpd_district_scraper.py` are a deliberate keep-scripts-standalone choice (no shared module = no cross-script coupling in the heuristic scrapers), consistent with the no-build-step architecture; left as-is.
+**Redundant/orphaned-script review:** none found. All eight scripts are live — seven wired into the four workflows, plus `build_embedded_boundaries.py` as the documented occasional operator step (`README.md`, `index.html:2474`, this doc). The `fetch`/`clean`/`HEADERS` helpers duplicated across `ilga_scraper.py` and `cpd_district_scraper.py` are a deliberate keep-scripts-standalone choice (no shared module = no cross-script coupling in the heuristic scrapers), consistent with the no-build-step architecture; left as-is. *[Superseded 2026-08-24 for the machinery half — see §8; the heuristic-parser half stands.]*
 
 ---
 
@@ -592,3 +592,72 @@ tighter tolerance, re-clear the 2,000-point gate). Phase 2 (SVG highlight pane)
 **Gate before Phase 1:** a real-hardware capture that shows SVG *paint* (not
 projection) as the felt bottleneck. If projection dominates on GPU too, do the
 vertex-reduction pass first — it's the cheaper lever for a projection-bound cost.
+
+---
+
+## 8. Scripts audit — 2026-08-24
+
+The whole of `scripts/` was re-run through the §"Redundant/orphaned-script
+review" question, thirteen months of county expansion later. The 2026-07-09
+answer above was measured against **eight** scripts; this one was measured
+against **257** files (73k lines), and both its halves came out differently.
+
+**The fleet was healthier than its size suggests.** 176 scripts are run by a
+workflow; ~21 more are import-reachable shared libraries
+(`build_metro_outline.py` alone has 33 importers — it is the de facto
+constants module for `METRO_COUNTY_FIPS`/`DISPATCH_COUNTY_FIPS`); every
+one-shot geometry builder's output still ships in `data/app/` (18/18
+spot-checked), and 24 of the 33 not-in-a-workflow builders carry a `--check`
+that doubles as the county's re-precincting drift gate. **Exactly one file was
+genuinely dead**: `build_rock_island_tax_districts.py`, deleted by its own
+supersession commit (`9753cb8`, 2026-08-16 — the successor's docstring records
+"Supersedes …", which is this repo's script-retirement convention) and then
+silently resurrected by a merge (`f19790e`, 2026-08-21). Deleted again. The
+zombie mechanism is worth a sentence: a branch cut before a deletion and
+merged after it restores the file with no conflict and no reviewer surface.
+
+**One script was unreferenced rather than dead**: `indexnow_submit.py`, whose
+ownership key file deploys with every release while nothing ever submitted.
+Wired into `deploy-pages.yml` as a best-effort post-deploy job. Four builders
+advertised a `--check` no workflow invoked (`backfill_board_seats`,
+`build_jefferson_board_districts`, `build_menard_commissioner_districts`,
+`build_montgomery_boundaries`) — three behind workflow header comments
+claiming the check ran "on every pull request". All four are now wired
+(smoke-test for the stdlib one; the county's own weekly workflow for the
+three offline geometry re-checks, the mcdonough/stark pattern).
+
+**The duplication measurements, and what was done with each:**
+
+| Measurement | Disposition |
+|---|---|
+| 93 byte-identical `fail()` templates (of 101 `def fail`; 8 deliberate variants) | `scraper_common.make_fail(label)`, output byte-identical |
+| 8 multi-file User-Agent strings (Chrome/126 alone in 42 definitions; 96 dict-form definitions total) + 10 single-file | The 8 became `scraper_common.UA_*` constants — **the definition is consolidated, never the value** (a changed UA can change how a county site treats a client); the 10 single-file strings stay local |
+| 4 hand-rolled retry shapes across ~20 fetch loops; only `henry_county_board_scraper.py`'s honours Retry-After and refuses to retry 404 | `scraper_common.fetch()` encodes the henry semantics, proven by a committed localhost selftest (`selftest_scraper_common.py`); 13 fetches migrated, 5 vetted and left bespoke for named reasons (hancock/lasalle/kane/lake/isbe), Playwright/archive/TLS ladders untouched |
+| TLS-pin machinery ×4 across 3 CAs, though `aia_bundle.py:19` said "this is the one copy" | Folded into a keyed `aia_bundle.INTERMEDIATES` table; pins moved byte-for-byte and re-verified live |
+| ~1,850 lines of pre-module VTD machinery in the clark/white/shelby builders (the migration `vtd_board_districts.py`'s own preamble pre-authorized) | All three migrated, each proven by its `--check` byte-compare against the shipped files. The audit's earlier "~2,280 lines" figure had wrongly counted `build_montgomery_boundaries.py` — a pyogrio/.gdb builder with no VTD machinery at all; only its `--check` wiring was in scope |
+| `perf_profile.mjs` hand-mirroring smoke-config ("kept in sync by hand", its own header) | Now a worksheet-keyed `generate_metro_files.py` opt-in target (`perf_profile` key, the `verified_date` pattern) |
+
+**The 2026-07-09 ruling is superseded — by half.** "Keep scrapers standalone"
+was right about the heuristic half and still is: parsers, selectors, zero-row
+guards and per-county quirks stay in the county's own file, where a reader
+looks for them. It is superseded for the machinery half, and had already been
+superseded in practice by `vtd_board_districts.py`, `platinum_canvass.py` and
+`aia_bundle.py`: **genuinely-identical machinery — fail voices, UA
+definitions, retry plumbing, TLS pins, VTD dissolve mechanics — lives in a
+shared module with a "why this is shared" docstring.** The test between the
+halves: if two copies could drift and a reader would want them to stay
+identical, it is machinery; if a copy encodes something one county does, it is
+heuristic.
+
+**Explicit KEEP decisions, so the next audit reads the count instead of
+repeating the work:** the ISBE pair (`isbe_county_officers_scraper.py` +
+`build_county_board_chairs.py`) is a reproducible negative measurement — its
+output is proof ISBE's chair data is 29% wrong, "kept reproducible so the
+claim can be re-tested rather than re-argued" — and is not dead code;
+`build_districtry_preview.py` + `build_og_image.mjs` belong to the Districtry
+product track and are allowed-stale by their own design; the seal and font
+asset generators (`render_seal_svg.mjs`, `convert_raster_seal.py`,
+`build_fonts.py`) are the reproducibility recipes for committed binary
+assets; and `validate_workflow_deps.py` vs `check_roster_workflow_health.py`
+are complementary (static pre-merge import gate vs post-hoc run watchdog),
+not overlapping.

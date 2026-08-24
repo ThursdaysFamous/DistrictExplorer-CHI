@@ -51,6 +51,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_metro_outline import point_in_rings  # noqa: E402
 import vtd_board_districts as V  # noqa: E402
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app",
@@ -103,9 +104,7 @@ MAX_OVERLAP_M2 = 1.0
 MIN_COVERED = 0.9999
 
 
-def fail(msg):
-    print("hancock-boundaries: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("hancock-boundaries")
 
 
 def main():

@@ -36,10 +36,11 @@ import sys
 import time
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.woodford-county.org"
 LIST_URL = BASE + "/m/directory/department?did=22"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 # Each district is a sub-department accordion whose title link carries its own
 # did; the members of that district follow it until the next such header.
@@ -56,17 +57,10 @@ FETCH_ATTEMPTS = 3
 
 
 def fetch(url):
-    last = None
-    for attempt in range(FETCH_ATTEMPTS):
-        try:
-            r = requests.get(url, headers=UA, timeout=60)
-            r.raise_for_status()
-            return r.text
-        except Exception as exc:      # network flake, not a markup change
-            last = exc
-            if attempt + 1 < FETCH_ATTEMPTS:
-                time.sleep(2 * (attempt + 1))
-    raise last
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, UA, timeout=60, attempts=FETCH_ATTEMPTS).text
 
 
 def clean(s):

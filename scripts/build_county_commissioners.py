@@ -24,6 +24,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 # Every county here elects at large. The per-county seat count is the real
 # guard — a board that suddenly parses one member short means the page changed
@@ -167,9 +168,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("county-commissioners-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("county-commissioners-roster")
 
 
 def norm_key(name):

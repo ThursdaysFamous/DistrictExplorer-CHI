@@ -58,13 +58,13 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+from scraper_common import UA_CHROME_X11_120  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://maps.wingis.org/public/rest/services/ElectedOfficials/MapServer"
 DIRECTORY_URL = "https://wingis.org/maps/electedofficials"
 COUNTY = "Winnebago"
 TIMEOUT = 90
-USER_AGENT = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-              "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
+USER_AGENT = UA_CHROME_X11_120
 
 # layer -> how to read it. `name` is the municipality as the app's TIGER places
 # layer spells it; the layers' own CityName is upper-cased and South Beloit's

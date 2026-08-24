@@ -20,6 +20,7 @@ Usage:
 import json
 import os
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://www.boonecountyil.gov/government/county_board_members.php"
 
@@ -34,9 +35,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("boone-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("boone-board-roster")
 
 
 def main():

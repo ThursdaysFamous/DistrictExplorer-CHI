@@ -52,6 +52,7 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pypdf
@@ -62,8 +63,7 @@ YEARBOOK_URL = ("https://www.oglecountyil.gov/document_center/County%20Clerk/"
                 "Yearbook/2025-%202027%20Yearbook.pdf")
 CLERK_PAGE = "https://www.oglecountyil.gov/departments/county_clerk/index.php"
 HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"),
+    "User-Agent": UA_CHROME_WIN_126,
 }
 REQUEST_TIMEOUT = 120
 

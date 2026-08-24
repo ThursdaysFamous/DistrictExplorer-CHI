@@ -87,6 +87,7 @@ import sys
 from datetime import datetime, timezone
 
 import requests
+from scraper_common import UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.cookcountyclerkil.gov/api"
 JURISDICTIONS_URL = BASE + "/Jurisdiction/GetByJurisdictionType?id=MUNIS&language=en"
@@ -138,10 +139,7 @@ CICERO_EXCLUDED_OFFICES = {"Democratic Township Committeeperson",
 DIRECTORY_URL = "https://www.cookcountyclerkil.gov/elections/directory-elected-officials"
 
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_124,
     "Accept": "application/json, text/plain, */*",
 }
 REQUEST_TIMEOUT = 60

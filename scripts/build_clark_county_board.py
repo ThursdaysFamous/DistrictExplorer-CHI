@@ -50,6 +50,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_clark_boundaries import CANVASS  # noqa: E402  (the drift check)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.clarkcountyil.org/board"
 RESULTS_URL = "https://il-clark.accessliberty.com/pastelections.aspx"
@@ -68,9 +69,7 @@ DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 PARTY_LABEL = {"REP": "R", "DEM": "D", "IND": "I", "GRN": "G", "LIB": "L"}
 
 
-def fail(msg):
-    print("clark-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("clark-board-roster")
 
 
 def display_name(raw):

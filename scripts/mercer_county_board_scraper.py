@@ -38,11 +38,12 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.mercercountyil.org/county_board/index.php"
 RESULTS_URL = "https://il-mercer.pollresults.net/"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 ROW_RE = re.compile(r"<tr\b.*?</tr>", re.S | re.I)
 CELL_RE = re.compile(r"<t[dh]\b[^>]*>(.*?)</t[dh]>", re.S | re.I)
@@ -59,9 +60,7 @@ CHAIR_RE = re.compile(r"\bCHAIR(?:MAN|PERSON|WOMAN)?\b", re.I)
 STREET_RE = re.compile(r"\d+\s+\w+\s+(st|street|ave|avenue|rd|road|dr|drive|ln|lane|ct|court|blvd|hwy|highway)\b", re.I)
 
 
-def fail(msg):
-    print("mercer-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("mercer-board-scraper")
 
 
 def get(url):

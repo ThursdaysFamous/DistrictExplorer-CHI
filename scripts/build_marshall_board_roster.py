@@ -40,6 +40,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_marshall_board_districts import (  # noqa: E402
     DISTRICTS as BOUNDARY_COMPOSITION, SEATS_PER_DISTRICT, norm as township_key,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = ("https://marshallcountyillinois.gov/wp-content/uploads/2026/01/"
               "2026-New-County-Board-Roster-.pdf")
@@ -53,9 +54,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("marshall-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("marshall-board-roster")
 
 
 def township_keys(text):

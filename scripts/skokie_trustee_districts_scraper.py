@@ -51,15 +51,13 @@ import sys
 from datetime import datetime, timezone
 
 import requests
+from scraper_common import UA_CHROME_WIN_124, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.skokie.org/486/Board-of-Trustees"
 ELECTORAL_CHANGES_URL = "https://www.skokie.org/1379/2025-Electoral-Changes"
 
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_124,
     "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,"
                "image/avif,image/webp,*/*;q=0.8"),
     "Accept-Language": "en-US,en;q=0.9",
@@ -77,9 +75,10 @@ EXPECTED_AT_LARGE = 2
 
 
 def fetch(url):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
-    return resp.text
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, HEADERS, timeout=REQUEST_TIMEOUT).text
 
 
 def text_lines(html_text):

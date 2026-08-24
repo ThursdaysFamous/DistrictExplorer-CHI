@@ -42,13 +42,14 @@ import re
 import sys
 
 import requests
+from scraper_common import make_fail, UA_ROSTER_BOT  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://clintonco.illinois.gov/county-offices/county-board/"
 # The Clerk's results system: county 10, race category 8 is COUNTY BOARD.
 RESULTS_URL = "https://platinumelectionresults.com/turnouts/county/10"
 RACE_URL = "https://platinumelectionresults.com/history/races/2026_gp/10/8"
 TIMEOUT = 60
-HEADERS = {"User-Agent": "chidistricts.com roster bot (civic data; contact via site)"}
+HEADERS = {"User-Agent": UA_ROSTER_BOT}
 
 EXPECTED_DISTRICTS = ("1", "2", "3", "4", "5")
 EXPECTED_MEMBERS = 15
@@ -70,9 +71,7 @@ STREET_RE = re.compile(
     r"blvd|hwy|way|circle|cir|place|pl|trail)\b", re.I)
 
 
-def fail(msg):
-    print("clinton-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("clinton-board-scraper")
 
 
 def get(url):

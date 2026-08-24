@@ -34,11 +34,12 @@ import re
 import sys
 
 import requests
+from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
 
 ROSTER_LAYER = ("https://services.arcgis.com/iPiPjILCMYxPZWTc/arcgis/rest/"
                 "services/ElectoralDistricts/FeatureServer/3/query")
 INDEX_URL = "https://www.peoriacounty.gov/755/County-Board-Members"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; districtexplorer-roster/1.0)"}
+UA = {"User-Agent": UA_ROSTER_COMPACT}
 
 MAILTO_RE = re.compile(
     r"mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})")

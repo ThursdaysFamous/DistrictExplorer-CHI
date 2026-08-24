@@ -52,16 +52,14 @@ import time
 from datetime import datetime, timezone
 
 import requests
+from scraper_common import UA_CHROME_WIN_126_FULL  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www2.kanecountyil.gov"
 LISTING_PAGE = BASE + "/pages/countyboard/boardMembers.aspx"
 API_URL = BASE + "/_api/web/lists/getbytitle('Board%20Members')/items?$orderby=District"
 PROFILE_URL = BASE + "/Pages/CountyBoard/BoardMember.aspx?bmID=%d"
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-    ),
+    "User-Agent": UA_CHROME_WIN_126_FULL,
     "Accept": "application/json;odata=nometadata",
 }
 

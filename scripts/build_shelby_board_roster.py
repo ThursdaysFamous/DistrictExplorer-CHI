@@ -45,6 +45,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_shelby_board_districts import (  # noqa: E402
     COMPOSITION, EXPECT_PRECINCTS,
 )
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 BOARD_URL = "https://www.shelbycounty-il.gov/coboard.aspx"
 CONTACTS_URL = "https://www.shelbycounty-il.gov/contacts.aspx"
@@ -69,9 +70,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("shelby-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("shelby-board-roster")
 
 
 def norm(name):

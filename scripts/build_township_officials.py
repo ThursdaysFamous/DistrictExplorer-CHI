@@ -78,6 +78,7 @@ import json
 import os
 import re
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 COUSUB_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_cousub2020.txt")
@@ -141,9 +142,7 @@ MIN_MEMBERS = 195
 MIN_TRUSTEES_PER_TOWNSHIP = 3
 
 
-def fail(msg):
-    print("build-township-officials: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("build-township-officials")
 
 
 def warn(msg):

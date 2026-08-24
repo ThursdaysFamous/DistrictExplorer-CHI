@@ -21,6 +21,7 @@ output_dir defaults to the repo's data/app/ directory.
 import json
 import os
 import sys
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 SOURCE_URL = "https://lasallecountyil.gov/m/directory/department?did=39"
 
@@ -35,9 +36,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 
-def fail(msg):
-    print("lasalle-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("lasalle-board-roster")
 
 
 def member_obj(rec):
