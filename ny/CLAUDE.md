@@ -12,7 +12,7 @@ NYC District Explorer: a single-file, dependency-light web app. Click a point in
 **Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
 `python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
 
-- Metro: New York City (`nyc`) — https://nyc.chidistricts.com/
+- Metro: New York City (`nyc`) — https://districtry.com/ny/
 - Geocoders: address GeoSearch (NYC-bounded type-ahead, geosearch.planninglabs.nyc); unbounded Photon (whole-coverage, sibling-metro lookup); POI GeoSearch (office-address pin lookup)
 - Ground truth: 40.71274,-74.00602 (New York City Hall (Manhattan)) → borough Manhattan; judicial-district 1; municipal-court 1. Negative point 40.72000,-74.04000 (Hudson River, New Jersey waters — outside every anchor geometry (the East River is inside the county-derived judicial districts, so mid-river points there are only borough-negative)).
 - Layers: 27 registered (political 11, safety 5, schools 6, geography 5); `registerLayer(` floor 5. Debug namespace `window.NycExplorer`.

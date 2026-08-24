@@ -53,7 +53,7 @@ Usage:
     python3 scripts/build_coverage_gaps.py
     python3 scripts/build_coverage_gaps.py --check
     # emit a sibling fork's file from Chicago's guidebook:
-    python3 scripts/build_coverage_gaps.py --metro nyc --out ../nyc/data/app/coverage-gaps.json
+    python3 scripts/build_coverage_gaps.py --metro nyc --out ny/data/app/coverage-gaps.json
 """
 
 import argparse
