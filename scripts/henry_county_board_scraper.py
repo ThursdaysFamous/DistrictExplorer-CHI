@@ -35,7 +35,7 @@ import sys
 import time
 
 import requests
-from scraper_common import UA_ROSTER_COMPACT  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import UA_ROSTER_COMPACT, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 DISTRICT_LISTS = {
     1: "https://www.henrycty.com/Directory.aspx?DID=39",
@@ -50,29 +50,12 @@ PACING_SECONDS = 2.0
 
 
 def fetch(url):
-    """GET with backoff on throttling. 429 and 5xx are retried; a 404 is not —
-    that would be the directory moving, which no amount of waiting fixes."""
-    last = None
-    for attempt in range(FETCH_ATTEMPTS):
-        try:
-            resp = requests.get(url, headers=UA, timeout=REQUEST_TIMEOUT)
-            if resp.status_code == 429 or resp.status_code >= 500:
-                # Retry-After may be seconds or a date; only the numeric form is
-                # honoured, and it is capped so a hostile value cannot hang CI.
-                after = (resp.headers.get("Retry-After") or "").strip()
-                delay = min(float(after), 30.0) if after.isdigit() else 2.0 * (attempt + 1)
-                last = "HTTP %d" % resp.status_code
-                time.sleep(delay)
-                continue
-            resp.raise_for_status()
-            return resp.text
-        except requests.RequestException as exc:
-            if getattr(exc.response, "status_code", None) in (401, 403, 404):
-                raise
-            last = str(exc)
-            time.sleep(2.0 * (attempt + 1))
-    raise RuntimeError("failed to fetch %s after %d attempts: %s"
-                       % (url, FETCH_ATTEMPTS, last))
+    """GET with backoff on throttling — the loop scraper_common.fetch was
+    modeled on (the 2026-08-02 back-to-back-429 story), now called from its
+    one shared home. 429 and 5xx are retried; a 404 is not — that would be
+    the directory moving, which no amount of waiting fixes."""
+    return fetch_with_retry(url, UA, timeout=REQUEST_TIMEOUT,
+                            attempts=FETCH_ATTEMPTS).text
 
 NAME_RE = re.compile(
     r'href="/m/directory/employee\?eid=\d+"[^>]*>\s*([^<]+?)\s*</a>')

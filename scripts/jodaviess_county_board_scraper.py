@@ -60,7 +60,7 @@ import sys
 import time
 
 import requests
-from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import UA_CHROME_WIN_126, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.jodaviesscountyil.gov"
 SOURCE_URL = BASE + "/1199/County-Board"
@@ -96,20 +96,12 @@ def text_of(fragment):
 
 
 def get(url):
-    last = None
-    for attempt in range(MAX_RETRIES + 1):
-        resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-        if resp.status_code in (429, 500, 502, 503, 504):
-            wait = 2.0 * (attempt + 1)
-            ra = resp.headers.get("Retry-After")
-            if ra and ra.isdigit():
-                wait = min(int(ra), RETRY_AFTER_CAP_S)
-            last = resp
-            time.sleep(wait)
-            continue
-        resp.raise_for_status()
-        return resp.text
-    last.raise_for_status()
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, HEADERS, timeout=REQUEST_TIMEOUT,
+                            attempts=MAX_RETRIES + 1,
+                            retry_after_cap=RETRY_AFTER_CAP_S).text
 
 
 def name_key(name):

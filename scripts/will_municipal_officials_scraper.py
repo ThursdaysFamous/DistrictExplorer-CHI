@@ -60,7 +60,7 @@ import sys
 from datetime import datetime, timezone
 
 import requests
-from scraper_common import UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import UA_CHROME_WIN_124, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 CLERK_PAGE = "https://www.willcountyclerk.gov/local-election-officials/"
 FLIPBOOK_HOST = "https://fliphtml5.com"
@@ -166,9 +166,10 @@ def clean(value):
 
 
 def fetch(url):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
-    return resp.text
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    return fetch_with_retry(url, HEADERS, timeout=REQUEST_TIMEOUT).text
 
 
 def discover_flipbook(page_html):

@@ -69,7 +69,7 @@ import time
 import urllib.parse
 
 import requests
-from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import UA_CHROME_WIN_126, fetch as fetch_with_retry  # noqa: E402  (shared machinery — do not fork)
 
 try:
     import pypdf
@@ -233,8 +233,10 @@ def discover_pdf_url(warnings):
 
 
 def fetch_pdf(url):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
+    # scraper_common.fetch retries 429/5xx (numeric Retry-After honoured,
+    # capped) and refuses to retry 401/403/404 — the Henry rule. Parsing and
+    # every page check stay in this file.
+    resp = fetch_with_retry(url, HEADERS, timeout=REQUEST_TIMEOUT)
     if not resp.content.startswith(b"%PDF"):
         raise RuntimeError("yearbook URL did not return a PDF (got %d bytes of %s)"
                            % (len(resp.content), resp.headers.get("Content-Type")))
