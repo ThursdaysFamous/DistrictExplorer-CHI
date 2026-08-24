@@ -245,11 +245,23 @@ would have opened the map with no layer on. All three are in `sitemap.xml`.
 
 **What the fleet still owes this surface:**
 
-1. **Per-URL redirects from the old hosts.** Every ranked page needs its own 301 —
-   `nyc.chidistricts.com`, `sf.chidistricts.com` and the Illinois landing pages each carry
-   accumulated equity a root-only rule discards.
+1. **Per-URL redirects from the old hosts — DONE for the four that were broken, with a
+   caveat.** The operator's 2026-08-24 GSC export (archived at
+   `docs/search-baseline/2026-08-24-chidistricts-gsc.md`) names exactly seven indexed URLs.
+   Squarespace forwards the old hosts **with the path intact**, so the root and both
+   subdomains were already fine; the four Illinois pages 404'd because their paths moved
+   under `/il/` in R2.3 and nothing held the old ones — 126 impressions landing on nothing.
+   Root-level redirect shells now catch them. **They are meta-refresh + canonical, not 301s**,
+   because GitHub Pages cannot issue a 301; that is the strongest substitute available at this
+   origin. Put a CDN/proxy in front and they can be deleted in favour of real 301s. Two
+   remaining nits, both operator-side at Squarespace: the forwards target
+   **`http://www.districtry.com`**, so every redirected visitor takes two extra hops
+   (http→https, www→apex) — point them at `https://districtry.com` instead.
 2. **Re-request indexing** for the moved URLs and the new pages, and keep the question-led
-   composition when titles become worksheet-emitted.
+   composition when titles become worksheet-emitted. The `districtry.com` property is new and
+   starts empty: run **Change of Address** from the old property, and keep the old one
+   verified — a GSC property cannot be renamed and its history never moves, which is why the
+   baseline above is committed rather than left in the console.
 3. **A link gate for the new pages.** `validate_card_links.py` extracts its surface from
    authored HTML; confirm it reaches `ny/` and `ca/` now that they carry authored pages.
 
