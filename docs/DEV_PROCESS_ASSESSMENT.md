@@ -188,15 +188,38 @@ hash-verified releases as the parity proof).
 | Stage | Work | Gate |
 |---|---|---|
 | **R1 — Brand-as-data** | Opt-in `brand` key in `metro-worksheet.json` + schema (product name, instance tag, app name, OG block, palette tiers, theme color, favicon, analytics incl. the GA hostname gate and GoatCounter URL); opt-in GENERATED regions for head-brand, head-analytics, and the `sources.html` palette; `explorer_name` in `metros.json` | `generate_metro_files.py --check`; running the new generator over NYC/SF checkouts produces **zero diff** (opt-in means inert — the recorded v1.0.16 lesson); `build_state_template.py --check` |
-| **R2 — In-place reorg to `/il`** | The composer inversion lands with the move: engine fragments + `metros/il/`; composed `/il/index.html`; root serves a redirect stub to `/il/` for now; chidistricts.com keeps working throughout; the seven fenced brand strings become ordinary edits (no release channel needed) | compose→cmp byte-identity in CI; the full existing gate battery + smoke against `/il/` |
-| **R3 — Import SF, then NYC** | Each as `metros/<id>/` + `/sf/`, `/nyc/`; their divergent validate/smoke copies (585–891 lines each) reconcile into the one script set — real porting work, budgeted as such; scraper workflows move and consolidate to matrix runners; old repos freeze behind a no-new-merges window | per-instance smoke; a no-op proof (the composed instance byte-equals the fork's deployed HEAD minus intended deletions); the retention gate re-baselined |
-| **R4 — Landing page + Districtry skin** | `/` becomes the state-list landing (brand package, coverage); instances take the skin from worksheet brand keys; the preview machinery retires; WI bootstraps as `/wi` when ready | smoke + validate + link gates + a leftover-brand grep |
+| **R2 — In-place reorg to `/il`** | Retire the template and engine-release channels (R2.1); move the app to `il/` behind a redirect stub (R2.3); chidistricts.com keeps working throughout. **The composer moved to R3 by operator decision** — see the note below | the full existing gate battery + smoke against `/il/`, plus a Chromium check of the redirect and SW transition |
+| **R3 — Composer, then import SF and NYC** | The composer inversion opens R3 (deferred from R2, below). Then each fork as `metros/<id>/` + `/sf/`, `/nyc/`; their divergent validate/smoke copies (585–891 lines each) reconcile into the one script set — real porting work, budgeted as such; scraper workflows move and consolidate to matrix runners; old repos freeze behind a no-new-merges window | per-instance smoke; a no-op proof (the composed instance byte-equals the fork's deployed HEAD minus intended deletions); the retention gate re-baselined |
+| **R4 — Landing page + Districtry skin** | `/` becomes the state-list landing (brand package, coverage); instances take the skin from worksheet brand keys; the preview machinery retires; a new state bootstraps as its own folder when ready | smoke + validate + link gates + a leftover-brand grep |
 | **R5 — Domain cutover** | CNAME → districtry.com, DNS, one sitemap, analytics keys, redirect shells in the old repos/domains, search re-verification | `validate_card_links.py` + live probes + redirect checks |
 | **R6 — Retire machinery** | Engine releases/locks/fan-out, the Template repo, cross-repo fleet_status, per-fork doc copies; archive NYC/SF/Template/WI with pointer READMEs | grep for dead references; docs regenerated |
 
 Rebrand timing simplifies under this ordering: **chidistricts.com is never rebranded in
 place** — Districtry ships as the identity of the new tree, and the old domains redirect at
-R5.
+R5. (Re-confirmed by the operator on 2026-08-24, after acquiring districtry.com: the domain
+cutover stays last and independent. The cost is two canonical moves for the Illinois app —
+root→`/il/` now, host→districtry.com at R5 — and that is accepted, because each is small and
+separately verifiable where a combined move would land DNS, a Pages custom domain, redirect
+shells on the old domains and search re-verification all before the fleet is consolidated.)
+
+### The composer, deferred to R3 (operator decision, 2026-08-24)
+
+The composer inversion was scoped into R2 and moved to the head of R3. **R2.1 is what changed
+the calculus**: the composer's headline benefit was that fence edits would stop being
+overwritten, and retiring the deploy-time splice delivered exactly that on its own — a fence
+edit already reaches production today. What remains is per-instance code organization, which
+pays off when there is more than one instance to organize; building it at the head of R3 means
+one composer serves three instances instead of one, and gives NYC and SF a defined place to
+land rather than a place retrofitted after they arrive. Against that, the standing cost is a
+dual representation — every line of a 26,000-line file committed twice, once as fragments and
+once as composed output — which is worth paying once, for three instances, rather than now,
+for one.
+
+**Consequence worth protecting:** the 33 `TEMPLATE:BEGIN` spans in `il/index.html` (plus those
+in `il/sw.js`, `il/sources.html` and several scripts) are now inert — the builder that read
+them was deleted in R2.1 — but they are **not** dead weight to be swept up. They are a
+hand-authored, semantically meaningful segmentation of the app file, which is precisely the
+fragment-boundary information the composer needs. Leave them where they are; R3 reclaims them.
 
 ## Stage log
 
