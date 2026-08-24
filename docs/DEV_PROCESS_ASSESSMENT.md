@@ -202,9 +202,10 @@ root→`/il/` now, host→districtry.com at R5 — and that is accepted, because
 separately verifiable where a combined move would land DNS, a Pages custom domain, redirect
 shells on the old domains and search re-verification all before the fleet is consolidated.)
 
-### The SEO surface, now carried by all three instances (2026-08-24)
+### The SEO surface, now carried by the whole fleet (2026-08-24)
 
-Search Console drove a copy change in the Illinois app that is now carried fleet-wide.
+Search Console drove a copy change in the Illinois app that is now carried fleet-wide, and
+finishing it exposed a gap in the one page nobody had audited.
 
 **What it is.** `/il/` shipped it first (DistrictExplorer-CHI#401): a **question-led title** —
 the query phrasing searchers actually type, with the brand as the *trailing, swappable* half —
@@ -222,18 +223,35 @@ rather than half-rebranding a live page. The composition is built so that swap i
 edit and nothing more — when the wordmark lands, only the trailing half changes, and the
 question phrasing that earns the ranking is untouched.
 
+**The root landing page was the gap nobody had looked at.** It shipped with a brand-led title,
+no structured data, no social image and no `robots` — the one page naming the whole fleet was
+the one page search engines were told least about — while the 1200x630 brand card built for it
+(`districtry/og-districtry.png`) sat in the tree unreferenced, so every share of districtry.com
+rendered as a bare text card. It is GENERATED, so the fix lives in
+`scripts/build_landing_page.py`: question-led title, ZIP-aware description, `og:image` /
+`twitter:image` pointing at a promoted `/og-image.png`, `summary_large_image`, explicit robots,
+and a `WebSite` + `Organization` + `ItemList` graph built **from the same `metros.json` list the
+page renders**, so the graph cannot drift from the instances it names.
+
+**Landing pages now exist for all three instances.** `/il/` had three; `/ny/` gained
+`council-district.html` and `community-board.html`, `/ca/` gained `supervisor-district.html`
+— chosen by query evidence rather than symmetry (the export shows NYC council-district and
+community-board phrasings and SF supervisor-district ones; nothing justified a fourth). Each
+carries its own instance's palette, fonts, favicon and analytics — **CA has no Google tag**, so
+its page takes CA's cookieless counter rather than inheriting one that would report to the
+wrong property — and deep-links with that app's real layer id (`council`, `community-district`,
+`supervisor-district`), checked against the registry: the first draft guessed `supervisor` and
+would have opened the map with no layer on. All three are in `sitemap.xml`.
+
 **What the fleet still owes this surface:**
 
-1. **Landing pages for `/ny/` and `/ca/`.** `/il/` has three; the other two have none, and the
-   query data shows the demand (NYC council-district and community-board phrasings, SF
-   supervisor-district ones — all landing on the *Illinois* property at positions 35–60). This
-   was blocked before the cutover because an unpublished page earns nothing and its canonical
-   was undecidable; both reasons are now gone, and it is ordinary authorable work.
-2. **Per-URL redirects from the old hosts.** Every ranked page needs its own 301 —
+1. **Per-URL redirects from the old hosts.** Every ranked page needs its own 301 —
    `nyc.chidistricts.com`, `sf.chidistricts.com` and the Illinois landing pages each carry
    accumulated equity a root-only rule discards.
-3. **Re-request indexing** for the moved URLs, and keep the question-led composition when
-   titles become worksheet-emitted.
+2. **Re-request indexing** for the moved URLs and the new pages, and keep the question-led
+   composition when titles become worksheet-emitted.
+3. **A link gate for the new pages.** `validate_card_links.py` extracts its surface from
+   authored HTML; confirm it reaches `ny/` and `ca/` now that they carry authored pages.
 
 ### The composer, deferred to R3 (operator decision, 2026-08-24)
 
