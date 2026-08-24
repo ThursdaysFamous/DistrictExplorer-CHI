@@ -828,6 +828,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
     <div class="footer-links">
       <a href="/">&larr; districtry</a>
       %(footerlinks)s
+      <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a>
       <a href="%(repo)s" target="_blank" rel="noopener">View source on GitHub</a>
     </div>
   </div>

@@ -531,6 +531,7 @@ footer .foot-links { margin-top: 12px; }
          exists, it links the official body instead.</p>
       <p>Each place above names its own sources on its sources page.</p>
       <p class="foot-links"><a href="privacy.html">Privacy</a> ·
+         <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a> ·
          <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">Source on GitHub</a></p>
     </footer>
   </div>

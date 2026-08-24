@@ -321,6 +321,25 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R6 (part 4) — SHIPPED (2026-08-24): every page in the sitemap now carries the same brand,
+  and an AUDIT rather than an impression decided what was wrong with them.** The pass began by
+  driving all seventeen sitemap URLs in a browser and printing one row each — font, theme, mark,
+  and which of the four standing links it carried. That table, not a reading of the tree, is what
+  found the work.
+  **The three sibling SEO sub-pages had never been rebranded at all.** `ny/council-district.html`,
+  `ny/community-board.html` and `ca/supervisor-district.html` were still serving **Inter and Big
+  Shoulders**, with no theme boot and no mark, while Illinois's three equivalents had all of it.
+  They were missed by every earlier stage because nothing had ever compared them: R6 part 2
+  rebranded the APPS, and these are separate documents. They now carry Illinois's own sub-page
+  style island verbatim — Barlow, the dark tier, the pre-paint theme boot and the mark beside the
+  star the skin hides (the star STAYS: the app's JS fills its path).
+  **The footer rows disagreed on every page and now do not.** Each instance page ends with the
+  same row — sources, common questions, privacy, why, GitHub — built per page so a page never
+  links itself, and the two generated root pages gained the `overberg.co/why/` link they lacked.
+  **Verified the same way it was diagnosed:** all seventeen pages re-driven in dark mode, every
+  one now Barlow, theme-aware, marked, and carrying every standing link, with **zero dead links
+  across the whole sitemap**.
+
 - **R6 (part 3b) — SHIPPED (2026-08-24): SF gets a sources page, and the provenance behind it is
   DERIVED FROM THE CODE rather than recalled.** A sources page is a set of claims about where data
   comes from, and the generator refuses a layer without one — SF had 16 layers carrying zero
