@@ -1,7 +1,7 @@
 name: Update Shelby County Board roster
 
 # Weekly refresh of the Shelby County Board District card's member roster
-# (data/app/shelby-county-board-members.json, fetched by index.html) — and,
+# (il/data/app/shelby-county-board-members.json, fetched by index.html) — and,
 # just as importantly, the weekly DRIFT CHECK on that county's derived
 # district boundary.
 #
@@ -21,7 +21,7 @@ name: Update Shelby County Board roster
 #
 # If the job fails on a composition change, the fix is to re-read the county
 # board page, update COMPOSITION in build_shelby_board_districts.py, and
-# regenerate data/app/shelby-county-board-districts.json.
+# regenerate il/data/app/shelby-county-board-districts.json.
 
 on:
   schedule:
@@ -59,12 +59,12 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -81,7 +81,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/shelby-county-board-members.json
+          git add il/data/app/shelby-county-board-members.json
           git commit -m "Update Shelby County Board roster from shelbycounty-il.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

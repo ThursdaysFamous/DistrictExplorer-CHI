@@ -31,7 +31,7 @@
     {
       "id": "chicago",
       "label": "Chicago",
-      "url": "https://chidistricts.com/",
+      "url": "https://chidistricts.com/il/",
       "emoji": "🌭",
       "bbox": {
         "minLng": -88.6,
@@ -2508,7 +2508,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v51",
+    "cache_name": "districtry-il-shell-v1",
     "shell_urls": [
       "./",
       "./sources.html",
@@ -2863,15 +2863,41 @@
     "accent": "#41B6E6",
     "accent_deep": "#0B5394",
     "accent_warm": "#C8102E",
-    "accent_warm_deep": "#9C0B24"
+    "accent_warm_deep": "#9C0B24",
+    "label": "Chicago flag palette",
+    "notes": {
+      "accent": "flag stripe blue",
+      "accent_deep": "deeper blue for text/links on light bg",
+      "accent_warm": "flag star red"
+    }
   },
   "domains": {
-    "canonical": "https://chidistricts.com/"
+    "canonical": "https://chidistricts.com/il/"
+  },
+  "brand": {
+    "app_name": "Chicago District Explorer",
+    "tagline": "Click the map or search an address to see every district that covers it, and who represents it.",
+    "theme_color": "#0b3d91",
+    "favicon_data_uri": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2341B6E6'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23C8102E'/%3E%3C/svg%3E",
+    "head": {
+      "title": "What district am I in? Find your district — Chicago District Explorer",
+      "description": "Enter an address or ZIP — or tap the map — to find your district: ward, police district, elected school board, county board, congressional and Illinois legislative districts, and who represents you. Free, no login.",
+      "og_title": "What district am I in? — Chicago District Explorer",
+      "og_description": "Click the map or search any Chicago address to see every civic district that covers it — ward, police district, community area, congressional and state districts, school zones — and who represents you.",
+      "og_image_alt": "Chicago District Explorer — a map of Chicago with the question: which districts cover this point, and who represents you?",
+      "twitter_title": "What district am I in? — Chicago District Explorer",
+      "twitter_description": "See every civic district that covers a Chicago address — ward, police district, community area, congressional and state districts, school zones — and who represents you."
+    },
+    "analytics": {
+      "ga_id": "G-YPJ570LWJB",
+      "ga_hostname": "chidistricts.com",
+      "goatcounter_url": "https://chidistricts.goatcounter.com/count"
+    }
   },
   "exports_name": "ChiExplorer",
   "verified_date": "August 3, 2026",
   "sources_page": {
-    "file": "sources.html",
+    "file": "il/sources.html",
     "credits": [
       {
         "label": "OpenStreetMap contributors (Nominatim & Photon/Komoot)",

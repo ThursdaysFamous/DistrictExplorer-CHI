@@ -36,8 +36,8 @@ import urllib.request
 from scraper_common import UA_CHROME_WIN_124  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "municipal-ward-coverage.json")
-PLACES_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_place_by_county2020.txt")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "municipal-ward-coverage.json")
+PLACES_FILE = os.path.join(REPO_ROOT, "il", "data", "source", "st17_il_place_by_county2020.txt")
 
 TIGER_PLACES = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
                 "Places_CouSub_ConCity_SubMCD/MapServer/4/query")

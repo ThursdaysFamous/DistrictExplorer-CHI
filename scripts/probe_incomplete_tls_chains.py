@@ -64,7 +64,7 @@ import sys
 import urllib.request
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CLERKS = os.path.join(REPO_ROOT, "data", "app", "il-county-clerks.json")
+CLERKS = os.path.join(REPO_ROOT, "il", "data", "app", "il-county-clerks.json")
 TIMEOUT = 25
 
 

@@ -1,7 +1,7 @@
 name: Update Henry County precinct polling places
 
 # Weekly refresh of the Henry County precinct card's polling-place row
-# (data/app/henry-precinct-polling.json, fetched by index.html).
+# (il/data/app/henry-precinct-polling.json, fetched by index.html).
 #
 # THIS IS THE FLEET'S FIRST SCHEDULED POLLING JOB, and the reason is the field
 # itself. Carroll's, Logan's and Montgomery's polling tables are operator steps
@@ -61,7 +61,7 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
@@ -70,11 +70,11 @@ jobs:
           # not a polling place moved. Compare the precincts payload only —
           # otherwise this opens a no-op PR every Friday and the real ones stop
           # being read.
-          if git diff --quiet -- data/app/henry-precinct-polling.json; then
+          if git diff --quiet -- il/data/app/henry-precinct-polling.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           elif python3 - <<'PY'
           import json, subprocess, sys
-          path = "data/app/henry-precinct-polling.json"
+          path = "il/data/app/henry-precinct-polling.json"
           old = json.loads(subprocess.run(["git", "show", "HEAD:" + path],
                                           capture_output=True, text=True, check=True).stdout)
           with open(path, encoding="utf-8") as handle:
@@ -84,7 +84,7 @@ jobs:
           then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Only the fetch date moved; no polling place changed."
-            git checkout -- data/app/henry-precinct-polling.json
+            git checkout -- il/data/app/henry-precinct-polling.json
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
@@ -100,7 +100,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/henry-precinct-polling.json
+          git add il/data/app/henry-precinct-polling.json
           git commit -m "Update Henry County precinct polling places from henrycty.com"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

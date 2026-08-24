@@ -70,7 +70,7 @@ except ImportError:  # pragma: no cover
              "pip install -c scripts/requirements.txt requests shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "macon-board-district-labels.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "macon-board-district-labels.json")
 
 SERVICE = ("https://services1.arcgis.com/a3k0qIja5SolIRYR/arcgis/rest/services/"
            "ElectionGeography_public_e465746545b04d86ad93c78e731c292a/FeatureServer/")

@@ -1,7 +1,7 @@
 name: Update Edgar County Board roster
 
 # Weekly refresh of the Edgar County Board District card's member roster
-# (data/app/edgar-county-board-members.json), fetched by index.html.
+# (il/data/app/edgar-county-board-members.json), fetched by index.html.
 #
 # TWO JOBS IN ONE RUN, and the second is the important one.
 #
@@ -75,12 +75,12 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -97,7 +97,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/edgar-county-board-members.json
+          git add il/data/app/edgar-county-board-members.json
           git commit -m "Update Edgar County Board roster from edgarcounty.illinois.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

@@ -35,7 +35,7 @@ MIN_COUNCILS = 20
 MIN_COUNCILORS = 40
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 def resolve_roster(records):

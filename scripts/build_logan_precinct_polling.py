@@ -37,7 +37,7 @@ HEADERS = {
     "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "logan-precinct-polling.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "logan-precinct-polling.json")
 
 # The county runs 29 precincts; refuse to ship a scrape that lost coverage.
 MIN_PRECINCTS = 27

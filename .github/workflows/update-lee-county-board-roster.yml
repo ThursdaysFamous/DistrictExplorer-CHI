@@ -1,7 +1,7 @@
 name: Update Lee County Board roster
 
 # Weekly refresh of the Lee County Board District card's member roster
-# (data/app/lee-county-board-members.json, fetched by index.html). Re-scrapes
+# (il/data/app/lee-county-board-members.json, fetched by index.html). Re-scrapes
 # the Clerk's Member Contact List (district, name, party, the year the seat is
 # next on the ballot, county e-mail) and, if anything changed, opens a PR rather
 # than committing directly to main — officeholder data should get a human look
@@ -66,12 +66,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present and
       # well formed.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -89,7 +89,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/lee-county-board-members.json
+          git add il/data/app/lee-county-board-members.json
           git commit -m "Update Lee County Board roster from leecountyil.com"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

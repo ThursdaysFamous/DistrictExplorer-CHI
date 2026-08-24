@@ -1,7 +1,7 @@
 name: Update Winnebago County Board contact
 
 # Weekly refresh of the CONTACT half of the Winnebago County Board District
-# card (data/app/winnebago-county-board-members.json, fetched by index.html).
+# card (il/data/app/winnebago-county-board-members.json, fetched by index.html).
 #
 # The member and party come from WinGIS at query time and are not touched here.
 # This job scrapes only what that layer declares and leaves empty on all 20
@@ -47,12 +47,12 @@ jobs:
         run: python3 scripts/build_winnebago_county_board_roster.py /tmp/winnebago_county_board_raw.json
 
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -69,7 +69,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/winnebago-county-board-members.json
+          git add il/data/app/winnebago-county-board-members.json
           git commit -m "Update Winnebago County Board contact from wincoil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

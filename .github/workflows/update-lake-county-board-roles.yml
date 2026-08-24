@@ -1,7 +1,7 @@
 name: Update Lake County Board leadership roles
 
 # Weekly refresh of the consolidated county-board layer's Lake leadership
-# tags (data/app/lake-county-board-roles.json, fetched by index.html). The
+# tags (il/data/app/lake-county-board-roles.json, fetched by index.html). The
 # Lake boundary GIS carries every member's name/contact live — this tiny
 # roster carries the one officeholder fact it lacks: which member chairs
 # the board (Chair / Vice-Chair, elected from among the 19 members). On
@@ -52,12 +52,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -75,7 +75,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/lake-county-board-roles.json
+          git add il/data/app/lake-county-board-roles.json
           git commit -m "Update Lake County Board leadership roles from lakecountyil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

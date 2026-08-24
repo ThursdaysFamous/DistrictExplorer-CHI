@@ -72,7 +72,7 @@ except ImportError:  # pragma: no cover
     sys.exit("olefile is required: pip install -c scripts/requirements.txt olefile")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_DOC = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_DOC = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "Washington County Blue Book 2027-2028.doc")
 COUNTY_SITE = "https://washingtonco.illinois.gov/"
 SOURCE_NOTE = ("Washington County Clerk & Recorder, \"Blue Book of Washington "

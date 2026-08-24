@@ -50,11 +50,11 @@ import re
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "montgomery-precincts.json")
-GIS_ZIP = os.path.join(REPO_ROOT, "data", "source", "raw",
+PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "montgomery-precincts.json")
+GIS_ZIP = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                        "MontgomeryCountyIL_GIS_2026-08-07.zip")
 GDB_IN_ZIP = "Overberg Data/OverbergData.gdb"
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                         "montgomery-precinct-polling.json")
 
 SOURCE_URL = ("https://montgomerycountyil.gov/wp-content/uploads/"

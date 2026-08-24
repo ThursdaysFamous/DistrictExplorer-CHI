@@ -86,7 +86,7 @@ ROLE_LABELS = {"CHAIR": "Board Chair", "VICE": "Vice Chair"}
 TOWNSHIP_ALIASES = {"GRAY": "GREY"}
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("build-white-board")

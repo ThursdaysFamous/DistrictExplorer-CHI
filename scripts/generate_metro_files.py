@@ -33,6 +33,13 @@ on (a fork without the key sees a byte-identical file and an untouched gate):
     source-credits     >  the public sources page (key: sources_page)
     layer-matrix      /   — the credits row that used to live in the footer, and
                             one matrix row per registered layer
+    head-analytics    \
+    head-brand         \
+    head-theme          \  brand-as-data (key: brand — docs/DEV_PROCESS_ASSESSMENT.md
+    brand-palette       /  stage R1): every brand-bearing surface in index.html,
+    masthead-brand     /   plus METRO_BRAND on the metro-config region; with
+    goatcounter       /    sources_page also set, the sources page's :root accents
+    sources-palette  /     (sources-palette) join too
 
 Modes:
     python3 scripts/generate_metro_files.py           # splice regions in place
@@ -145,6 +152,21 @@ def render_metro_config(w):
     a("  var SOCRATA_APP_TOKEN = %s;" % js_str(w["socrata_app_token"]))
     a("  var REPO_ISSUES = %s;" % js_str(w["repo_issues"]))
     a("  var FEEDBACK_SUBJECT = %s;" % js_str(w["feedback_subject"]))
+    # Brand-as-data (docs/DEV_PROCESS_ASSESSMENT.md, R1). Same inertness rule as
+    # poi_geocode_bbox above: emitted ONLY when the worksheet opts in, so a fork
+    # without the key sees a byte-identical region. Engine code may read this
+    # only through a typeof guard — a fork without the key has no METRO_BRAND
+    # and must keep its historical composed strings.
+    if "brand" in w:
+        b = w["brand"]
+        fields = ["appName: %s" % js_str(b["app_name"])]
+        if "product_name" in b:
+            fields.append("productName: %s" % js_str(b["product_name"]))
+        if "instance_tag" in b:
+            fields.append("instanceTag: %s" % js_str(b["instance_tag"]))
+        a("  // Brand identity as worksheet data — never read from an ENGINE block")
+        a("  // without a typeof guard (forks that have not opted in do not define it).")
+        a("  var METRO_BRAND = { %s };" % ", ".join(fields))
     a("  /* Sibling District Explorer deployments — one canonical list shared by every")
     a("   * metro fork. When a new metro launches, add its entry to every fork's")
     a("   * worksheet and regenerate (Conversion 3 will source this list from the")
@@ -159,6 +181,10 @@ def render_metro_config(w):
         tail = "," if i != len(w["metro_explorers"]) - 1 else ""
         head = "    { id: %s, label: %s, url: %s, emoji: %s," % (
             js_str(e["id"]), js_str(e["label"]), js_str(e["url"]), js_str(e["emoji"]))
+        # A rebranded sibling names its app outright; absent, the engine keeps
+        # composing label + " District Explorer" as it always has.
+        if "explorer_name" in e:
+            head += " explorerName: %s," % js_str(e["explorer_name"])
         if "bbox" in e:
             a(head)
             a("      bbox: %s }%s" % (bbox_js(e["bbox"], ["minLng", "minLat", "maxLng", "maxLat"]), tail))
@@ -366,6 +392,121 @@ def render_verified_date(w):
     return '  verifiedEl.textContent = %s;' % js_str(w["verified_date"])
 
 
+# ------------------------------------------------------------- brand-as-data
+# (docs/DEV_PROCESS_ASSESSMENT.md, stage R1.) Every renderer below reproduces a
+# surface that was hand-written until the brand key existed; the values moved
+# into the worksheet verbatim, so opting in changes no rendered byte until the
+# worksheet's brand values themselves change.
+
+def render_head_analytics(w):
+    ga = w["brand"]["analytics"]
+    return "\n".join([
+        "<!-- Google tag (gtag.js) — production host only; keeps local dev + CI out of analytics -->",
+        "<script>",
+        "  (function () {",
+        "    if (location.hostname !== '%s') return;" % ga["ga_hostname"],
+        "    if (window.top !== window.self) return; // top-level only — no Google Analytics inside an embedded iframe (the cookieless GoatCounter still counts)",
+        "    var s = document.createElement('script');",
+        "    s.async = true;",
+        "    s.src = 'https://www.googletagmanager.com/gtag/js?id=%s';" % ga["ga_id"],
+        "    document.head.appendChild(s);",
+        "    window.dataLayer = window.dataLayer || [];",
+        "    window.gtag = function () { dataLayer.push(arguments); };",
+        "    gtag('js', new Date());",
+        "    gtag('config', '%s');" % ga["ga_id"],
+        "  })();",
+        "</script>",
+    ])
+
+
+def render_head_brand(w):
+    b = w["brand"]
+    h = b["head"]
+    canonical = w["domains"]["canonical"]
+    og_image = canonical + "og-image.png"
+    e = html_esc
+    return "\n".join([
+        "<title>%s</title>" % e(h["title"]),
+        '<meta name="description" content="%s" />' % e(h["description"]),
+        '<meta name="robots" content="index, follow" />',
+        '<link rel="canonical" href="%s" />' % e(canonical),
+        "",
+        "<!-- Open Graph / social share previews (Facebook, LinkedIn, iMessage, Slack…) -->",
+        '<meta property="og:type" content="website" />',
+        '<meta property="og:site_name" content="%s" />' % e(b["app_name"]),
+        '<meta property="og:title" content="%s" />' % e(h["og_title"]),
+        '<meta property="og:description" content="%s" />' % e(h["og_description"]),
+        '<meta property="og:url" content="%s" />' % e(canonical),
+        '<meta property="og:image" content="%s" />' % e(og_image),
+        '<meta property="og:image:width" content="1200" />',
+        '<meta property="og:image:height" content="630" />',
+        '<meta property="og:image:alt" content="%s" />' % e(h["og_image_alt"]),
+        '<meta property="og:locale" content="en_US" />',
+        "",
+        "<!-- Twitter / X card -->",
+        '<meta name="twitter:card" content="summary_large_image" />',
+        '<meta name="twitter:title" content="%s" />' % e(h["twitter_title"]),
+        '<meta name="twitter:description" content="%s" />' % e(h["twitter_description"]),
+        '<meta name="twitter:image" content="%s" />' % e(og_image),
+    ])
+
+
+def render_head_theme(w):
+    b = w["brand"]
+    return "\n".join([
+        '<meta name="theme-color" content="%s">' % b["theme_color"],
+        "",
+        '<link rel="icon" type="image/svg+xml" href="%s" />' % html_esc(b["favicon_data_uri"]),
+    ])
+
+
+def render_brand_palette(w):
+    """The :root accent tokens in index.html — the four values the worksheet's
+    palette key already carried while the stylesheet restated them by hand (two
+    copies of one fact, the drift class this generator exists to end)."""
+    p = w["palette"]
+    notes = p.get("notes", {})
+    L = []
+    if p.get("label"):
+        L.append("    /* ---- %s ---- */" % p["label"])
+    for key, prop in [("accent", "--accent"), ("accent_deep", "--accent-deep"),
+                      ("accent_warm", "--accent-warm"),
+                      ("accent_warm_deep", "--accent-warm-deep")]:
+        line = "    %s: %s;" % (prop, p[key])
+        if notes.get(key):
+            line += " /* %s */" % notes[key]
+        L.append(line)
+    return "\n".join(L)
+
+
+def render_masthead_brand(w):
+    b = w["brand"]
+    return "\n".join([
+        '        <span class="title-text">%s</span>' % html_esc(b["app_name"]),
+        "      </span>",
+        "      <small>%s</small>" % html_esc(b["tagline"]),
+    ])
+
+
+def render_goatcounter(w):
+    return "\n".join([
+        '<script data-goatcounter="%s"' % html_esc(w["brand"]["analytics"]["goatcounter_url"]),
+        '        async src="//gc.zgo.at/count.js"></script>',
+    ])
+
+
+def render_sources_palette(w):
+    """The sources page's mirrored :root accents — the page is deliberately
+    standalone (no shared stylesheet), so it restates the tokens; this region
+    is what keeps the restatement from drifting."""
+    p = w["palette"]
+    return "\n".join([
+        "  --accent: %s;" % p["accent"],
+        "  --accent-deep: %s;" % p["accent_deep"],
+        "  --accent-warm: %s;" % p["accent_warm"],
+    ])
+
+
 def render_sources_verified(w):
     return ('        <p class="verified">Data last verified: <strong>%s</strong></p>'
             % html_esc(w["verified_date"]))
@@ -490,9 +631,9 @@ def render_layer_matrix(w):
 # and an untouched CI gate (docs/ENGINE_SYNC.md, "a shared-script change must be
 # inert in a fork that hasn't opted in").
 TARGETS = [
-    ("index.html", "metro-config", render_metro_config),
-    ("index.html", "layer-area-rank", render_layer_area_rank),
-    ("sw.js", "sw-metro-config", render_sw_metro_config),
+    ("il/index.html", "metro-config", render_metro_config),
+    ("il/index.html", "layer-area-rank", render_layer_area_rank),
+    ("il/sw.js", "sw-metro-config", render_sw_metro_config),
     ("scripts/validate_index.py", "validator-config", render_validator_config),
     ("scripts/smoke_test.mjs", "smoke-config", render_smoke_config),
     ("CLAUDE.md", "metro-facts", render_metro_facts),
@@ -509,7 +650,7 @@ def targets_for(w):
     """
     targets = list(TARGETS)
     if "verified_date" in w:
-        targets.append(("index.html", "verified-date", render_verified_date))
+        targets.append(("il/index.html", "verified-date", render_verified_date))
     if "perf_profile" in w:
         targets.append((w["perf_profile"]["file"], "perf-config",
                         render_perf_config))
@@ -518,6 +659,16 @@ def targets_for(w):
         targets.append((page, "sources-verified", render_sources_verified))
         targets.append((page, "source-credits", render_source_credits))
         targets.append((page, "layer-matrix", render_layer_matrix))
+    if "brand" in w:
+        targets.append(("il/index.html", "head-analytics", render_head_analytics))
+        targets.append(("il/index.html", "head-brand", render_head_brand))
+        targets.append(("il/index.html", "head-theme", render_head_theme))
+        targets.append(("il/index.html", "brand-palette", render_brand_palette))
+        targets.append(("il/index.html", "masthead-brand", render_masthead_brand))
+        targets.append(("il/index.html", "goatcounter", render_goatcounter))
+        if "sources_page" in w:
+            targets.append((w["sources_page"]["file"], "sources-palette",
+                            render_sources_palette))
     return targets
 
 
@@ -532,9 +683,12 @@ def render_explorers_json(entries):
     L = ["["]
     for i, e in enumerate(entries):
         tail = "," if i != len(entries) - 1 else ""
-        L.append('    { "id": %s, "label": %s, "url": %s, "emoji": %s,' % (
+        head = '    { "id": %s, "label": %s, "url": %s, "emoji": %s,' % (
             json.dumps(e["id"]), json.dumps(e["label"], ensure_ascii=False),
-            json.dumps(e["url"]), json.dumps(e["emoji"], ensure_ascii=False)))
+            json.dumps(e["url"]), json.dumps(e["emoji"], ensure_ascii=False))
+        if "explorer_name" in e:
+            head += ' "explorer_name": %s,' % json.dumps(e["explorer_name"], ensure_ascii=False)
+        L.append(head)
         b = e["bbox"]
         L.append('      "bbox": { "minLng": %s, "minLat": %s, "maxLng": %s, "maxLat": %s } }%s' % (
             json.dumps(b["minLng"]), json.dumps(b["minLat"]),
@@ -555,10 +709,12 @@ def sync_fleet(ws_path, src):
     else:
         with open(src, encoding="utf-8") as f:
             manifest = json.load(f)
-    entries = [
-        {"id": m["id"], "label": m["label"], "url": m["url"], "emoji": m["emoji"], "bbox": m["bbox"]}
-        for m in manifest["metros"]
-    ]
+    entries = []
+    for m in manifest["metros"]:
+        e = {"id": m["id"], "label": m["label"], "url": m["url"], "emoji": m["emoji"], "bbox": m["bbox"]}
+        if "explorer_name" in m:
+            e["explorer_name"] = m["explorer_name"]
+        entries.append(e)
     text = open(ws_path, encoding="utf-8", newline="").read()
     key = '"metro_explorers": ['
     i = text.index(key)

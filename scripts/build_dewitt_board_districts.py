@@ -55,7 +55,7 @@ from build_metro_outline import (  # noqa: E402  (shared machinery — do not fo
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "dewitt-county-board-districts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "dewitt-county-board-districts.json")
 
 PRECINCT_URL = ("https://services.arcgis.com/4YineAQdtmx0tv46/arcgis/rest/services/"
                 "ElectionPrecincts_DeWittIL/FeatureServer/0/query")

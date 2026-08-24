@@ -1,11 +1,11 @@
 name: Deploy to GitHub Pages
 
 # Publishes only the files the app actually serves — index.html, sw.js,
-# manifest.webmanifest, CNAME, .nojekyll, icons/, and data/app/*.json — instead
+# manifest.webmanifest, CNAME, .nojekyll, icons/, and il/data/app/*.json — instead
 # of the whole branch. The classic "Deploy from a branch" flow shipped the entire
 # tree to the CDN: the scrapers/builders (scripts/), the docs (docs/), and ~5 MB
 # of build-only geometry (data/source/ raw zips+xlsx and the three full-precision
-# data/*.geojson originals that data/app/*.json is simplified from). None of that
+# data/*.geojson originals that il/data/app/*.json is simplified from). None of that
 # is fetched at runtime, so this assembles a curated site directory and uploads
 # that as the Pages artifact.
 #
@@ -21,13 +21,14 @@ name: Deploy to GitHub Pages
 # files + 5 MB of build inputs". Keep data/app in and data/source + data/*.geojson
 # out when either moves.
 #
-# ENGINE ASSEMBLY (docs/MECHANIZATION_PLAYBOOK.md, Conversion 1): before the
-# site is assembled, the fenced ENGINE blocks in index.html and sw.js are
-# replaced from the engine release pinned in engine.lock.json — download,
-# sha256-verify against the lockfile, splice (scripts/apply_engine.py), then
-# re-run the merge gate and the behaviour gate on the assembled tree. Parity
-# with the sibling forks is true by construction: every fork deploys the same
-# hash-pinned bytes instead of trusting hand-ported diffs.
+# NO ENGINE ASSEMBLY (retired in R2.1 — docs/DEV_PROCESS_ASSESSMENT.md). This
+# deploy used to splice the fenced ENGINE blocks from a hash-pinned release
+# before publishing, because the engine had to reach sibling REPOS byte-identically.
+# The fleet is consolidating into this one repo, so there is one copy of the
+# engine and parity is true because there is nothing to keep in sync. The tree
+# that is committed is the tree that ships — and that also means a fence edit
+# now reaches production instead of being silently overwritten at deploy time.
+# The gates still run here on exactly the bytes being published.
 
 on:
   push:
@@ -79,69 +80,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Any failure here — including a release that never appears — FAILS the
-      # deploy: the site never ships without hash-verified engine assembly.
-      # (The bootstrap-window skip guard that used to live here was deleted
-      # after engine-v1.0.0 published, per its TODO.)
-      #
-      # THE PUBLISH RACE. An engine bump lands on main as a normal merge, which
-      # fires this workflow immediately — but the release that merge pins is
-      # created afterwards, by create-engine-tag.yml then release-engine.yml.
-      # For the minutes in between, main legitimately pins a release that does
-      # not exist yet, and a single `gh release download` fails with a bare
-      # "release not found". That is what it did for both engine-v1.0.17 and
-      # v1.0.18, each needing a manual re-run once the release landed.
-      #
-      # So wait for it rather than failing on the first miss. Polling the
-      # releases/tags endpoint (not `gh release view`) keeps the existing
-      # draft rule: it returns PUBLISHED releases only, so a draft left by a
-      # failed release run can never satisfy this wait. A release that is
-      # already there costs one API call and no delay — the wait is only ever
-      # paid inside the window it exists for. If it never arrives, the job
-      # fails loudly and says exactly which two dispatches are outstanding;
-      # release-engine.yml also dispatches this workflow once it publishes, so
-      # a timed-out deploy still heals itself without anyone re-running it.
-      - name: Fetch pinned engine release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DEADLINE_S: "900" # 15 min — a human running the two dispatches by hand
+      # The gates run on exactly the bytes about to be published. There is no
+      # splice step any more (R2.1): the committed tree IS the deployed tree,
+      # so this re-runs the merge gate and the fence lint against it rather
+      # than against an assembled copy that only existed inside this job.
+      - name: Static merge gate + fence lint on the tree being published
         run: |
-          tag="$(jq -r .engine_version engine.lock.json)"
-          # The release lives in the repo the lockfile names, not necessarily
-          # this one: the reference repo's lock names itself (identical
-          # behavior there), while a sibling/state fork's lock names the
-          # reference repo — the exact $GITHUB_REPOSITORY-vs-source_repo
-          # mixup §4.4.1 item 6 exists to catch is impossible by construction.
-          src="$(jq -r .source_repo engine.lock.json)"
-          waited=0
-          until gh api "repos/$src/releases/tags/$tag" --silent 2>/dev/null; do
-            if [ "$waited" -ge "$DEADLINE_S" ]; then
-              echo "::error::engine release $tag is still not published after $((DEADLINE_S / 60))m. main pins it, so the site cannot ship without it. Run 'Create engine tag' (tag=$tag, sha=$GITHUB_SHA) then 'Publish engine release' at that tag ref; this deploy will be re-dispatched automatically once the release publishes."
-              exit 1
-            fi
-            if [ "$waited" = 0 ]; then
-              echo "::notice::$tag not published yet — waiting up to $((DEADLINE_S / 60))m for the release this commit pins (see THE PUBLISH RACE in this workflow)."
-            fi
-            sleep 20
-            waited=$((waited + 20))
-          done
-          [ "$waited" -gt 0 ] && echo "$tag appeared after ${waited}s"
-          gh release download "$tag" \
-            --repo "$src" \
-            --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' --clobber
-
-      # The TWO spaces between hash and filename are load-bearing — a single
-      # space (or CRLF) breaks `sha256sum --check` parsing. The two
-      # --against-bundle lines are the parity checker's demotion (playbook
-      # migration step 4): no longer a cross-fork drift detector, it asserts
-      # post-assembly that the spliced blocks equal the downloaded bundle.
-      - name: Verify engine hash, apply, re-run static merge gate
-        run: |
-          echo "$(jq -r .sha256 engine.lock.json)  engine.bundle.js" | sha256sum --check -
-          python3 scripts/apply_engine.py
-          python3 scripts/validate_index.py index.html
-          python3 scripts/check_engine_parity.py index.html --against-bundle engine.manifest.json --strict
-          python3 scripts/check_engine_parity.py sw.js --against-bundle engine.manifest.json --strict
+          python3 scripts/validate_index.py il/index.html
+          python3 scripts/check_engine_parity.py il/index.html
+          python3 scripts/check_engine_parity.py il/sw.js
 
       - uses: actions/setup-node@v4
         with:
@@ -195,12 +142,12 @@ jobs:
 
       - name: Behaviour gate on the assembled tree (serve + smoke test)
         env:
-          BASE_URL: http://localhost:8000/
+          BASE_URL: http://localhost:8000/il/
         run: |
           python3 -m http.server 8000 &
           server_pid=$!
           for i in $(seq 1 40); do
-            curl -sf http://localhost:8000/ >/dev/null && break
+            curl -sf http://localhost:8000/il/ >/dev/null && break
             sleep 0.5
           done
           node scripts/smoke_test.mjs
@@ -217,15 +164,12 @@ jobs:
             --exclude='.claude' \
             --exclude='scripts' \
             --exclude='docs' \
-            --exclude='data/source' \
-            --exclude='icons/source' \
-            --exclude='data/*.geojson' \
+            --exclude='il/data/source' \
+            --exclude='il/icons/source' \
+            --exclude='il/data/*.geojson' \
             --exclude='node_modules' \
             --exclude='package.json' \
             --exclude='package-lock.json' \
-            --exclude='engine.lock.json' \
-            --exclude='engine.bundle.js' \
-            --exclude='engine.manifest.json' \
             --exclude='CLAUDE.md' \
             ./ _site/
           echo "Published tree:" && find _site -type f | sort

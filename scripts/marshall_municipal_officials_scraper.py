@@ -69,7 +69,7 @@ except ImportError:  # pragma: no cover
     sys.exit("pdfplumber is required: pip install -c scripts/requirements.txt pdfplumber")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_PDF = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_PDF = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "Marshall County Cities and Villages 2025-2029.pdf")
 COUNTY_SITE = "https://marshallcountyillinois.gov/"
 SOURCE_NOTE = ("Marshall County Clerk & Recorder, \"City & Village Elected "

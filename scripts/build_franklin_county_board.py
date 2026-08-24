@@ -61,7 +61,7 @@ STREET_RE = re.compile(
     r"blvd|hwy|way|circle|cir|place|pl|trail|heights)\b", re.I)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("franklin-board-roster")

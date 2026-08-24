@@ -137,12 +137,11 @@ sources.html                        the public sources page — credits + one pr
 scripts/validate_index.py           static merge gate: app parses, all layers registered, all data/app files complete,
                                     sources page covers every layer and is linked from the app
 scripts/validate_sources.py         source-freshness gate (dataset ids resolve, newer editions flagged)
-scripts/check_engine_parity.py      engine-fence lint (byte-identical engine across forks)
-scripts/build_engine_artifact.py + apply_engine.py    engine release producer / consumer splice
+scripts/check_engine_parity.py      engine-fence lint (the release channel retired in R2.1 — one repo, one engine)
 scripts/fleet_status.py             weekly fleet-status aggregator (runs here, reports on every fork)
 scripts/smoke_test.mjs              Playwright boot/behaviour smoke test (runs on every PR)
 .github/workflows/                  weekly roster refreshes (PR for human review), per-PR smoke test,
-                                    monthly validate-sources, weekly fleet-status, engine release machinery, Pages deploy
+                                    monthly validate-sources, weekly fleet-status, Pages deploy
 docs/                               the expansion guide, fleet layer guidebook, redistricting runbook, archives
 WATCH.md                            the redistricting watch calendar (when to look; the runbook is what to do)
 ```

@@ -52,7 +52,7 @@ LIBRARY_ADDRESS_TYPE = 4
 MIN_TRUSTEES = 5
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("build-cicero-library")

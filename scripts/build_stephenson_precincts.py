@@ -113,11 +113,11 @@ from build_stephenson_board_districts import (  # noqa: E402  (same map series)
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "stephenson-precincts.json")
-RAW_DIR = os.path.join(REPO_ROOT, "data", "source", "raw")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "stephenson-precincts.json")
+RAW_DIR = os.path.join(REPO_ROOT, "il", "data", "source", "raw")
 FREEPORT_PDF = os.path.join(RAW_DIR, "Stephenson FREEPORT TOWNSHIP PRECINCTS 010722.pdf")
 RURAL_PDF = os.path.join(RAW_DIR, "Stephenson RURAL PRECINCTS 010722.pdf")
-BOARD_PATH = os.path.join(REPO_ROOT, "data", "app",
+BOARD_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                           "stephenson-county-board-districts.json")
 
 COUNTY_FIPS = "177"

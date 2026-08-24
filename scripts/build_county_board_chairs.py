@@ -196,8 +196,8 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # "WHY NOTHING HERE REACHES A CARD". Writing it into data/app would make it a
 # shipped roster by the repo's own conventions (sw.js caching, validate_index,
 # the link gate) and would invite a later change to render it.
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "source")
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "source")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 COUNTY_STATUS_PY = os.path.join(REPO_ROOT, "scripts", "build_county_status.py")
 COMMISSIONERS_JSON = os.path.join(APP_DATA_DIR, "il-county-commissioners.json")
 

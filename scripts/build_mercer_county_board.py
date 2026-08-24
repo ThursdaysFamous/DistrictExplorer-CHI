@@ -52,7 +52,7 @@ MIN_PARTIES = 10        # measured 10/10 — the page prints a party on every ro
 MIN_TERMS = 10          # measured 10/10 — and a term-expiry beside each
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("mercer-board-roster")

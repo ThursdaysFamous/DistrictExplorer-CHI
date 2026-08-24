@@ -66,8 +66,8 @@ from scraper_common import make_fail  # noqa: E402  (shared machinery — do not
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GUIDEBOOK = os.path.join(REPO_ROOT, "docs", "DATA_LAYER_GUIDEBOOK.md")
 WORKSHEET = os.path.join(REPO_ROOT, "metro-worksheet.json")
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "coverage-gaps.json")
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "coverage-gaps.json")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 GAPS_RE = re.compile(
     r"<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->\s*```json\s*(.*?)\s*```",

@@ -37,7 +37,7 @@ import os
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 # county -> (builder module filename, shipped roster filename)
 COUNTIES = {

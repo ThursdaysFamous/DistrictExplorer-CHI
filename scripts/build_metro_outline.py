@@ -846,7 +846,7 @@ assert not _UNLISTED, (
     % _UNLISTED)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "metro-outline.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "metro-outline.json")
 WORKSHEET = os.path.join(REPO_ROOT, "metro-worksheet.json")
 
 HEADERS = {"User-Agent": "DistrictExplorer-CHI metro-outline builder"}

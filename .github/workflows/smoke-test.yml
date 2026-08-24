@@ -53,12 +53,16 @@ jobs:
           pip install -c scripts/requirements.txt jsonschema
           python3 scripts/generate_metro_files.py --check
 
-      # The Data gaps panel is driven by data/app/coverage-gaps.json, emitted
+      # The Data gaps panel is driven by il/data/app/coverage-gaps.json, emitted
       # from the guidebook's gaps block. This is the drift gate: editing the
       # guidebook without regenerating (or the reverse) fails here rather than
       # shipping a panel that disagrees with the document of record. Stdlib only.
       - name: Coverage gaps match the guidebook
         run: python3 scripts/build_coverage_gaps.py --check
+
+      # (The state-template gate was retired in R2.1 — the template repo is
+      # archived and a new state is now a folder in this repo, not a generated
+      # sibling. docs/DEV_PROCESS_ASSESSMENT.md.)
 
       # The per-county completion table (docs/COUNTY_STATUS.md) is generated
       # from the coverage-ring lists, index.html's dispatch tables,
@@ -170,12 +174,12 @@ jobs:
 
       - name: Serve app and run smoke test
         env:
-          BASE_URL: http://localhost:8000/
+          BASE_URL: http://localhost:8000/il/
         run: |
           python3 -m http.server 8000 &
           server_pid=$!
           for i in $(seq 1 40); do
-            curl -sf http://localhost:8000/ >/dev/null && break
+            curl -sf http://localhost:8000/il/ >/dev/null && break
             sleep 0.5
           done
           node scripts/smoke_test.mjs

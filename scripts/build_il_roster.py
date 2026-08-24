@@ -26,7 +26,7 @@ PARTY_NAMES = {"D": "Democratic", "R": "Republican", "I": "Independent"}
 DISTRICT_RE = re.compile(r"^\s*(\d+)")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 def district_number(record):

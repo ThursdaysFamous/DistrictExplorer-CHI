@@ -85,8 +85,8 @@ from build_metro_outline import point_in_rings  # noqa: E402  (shared machinery 
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "shelby-county-board-districts.json")
-OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "shelby-precincts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "shelby-county-board-districts.json")
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "shelby-precincts.json")
 
 COBOARD_URL = "https://www.shelbycounty-il.gov/coboard.aspx"
 MAP_SOURCE = ("ShelbyCoIL_CountyBoardDistricts.pdf — the county's adopted 2021 plan "
@@ -179,7 +179,7 @@ MAX_ROUNDED_OVERLAP_M2 = 5.0             # what COORD_PRECISION can re-create
 # The shipped coverage outline is a simplified TIGER county boundary of an
 # older vintage; the VTD union differs from it by a hairline band measured at
 # 0.059% of the county in 2026. 4x that means a changed source, not noise.
-OUTLINE_PATH = os.path.join(REPO_ROOT, "data", "app", "shelby-county-outline.json")
+OUTLINE_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "shelby-county-outline.json")
 MAX_OUTLINE_SYMDIFF_PCT = 0.25
 
 BOUNDARY_NOTES = {

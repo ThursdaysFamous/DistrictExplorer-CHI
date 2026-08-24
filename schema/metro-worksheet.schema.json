@@ -105,6 +105,10 @@
           "emoji": {
             "type": "string"
           },
+          "explorer_name": {
+            "type": "string",
+            "description": "Optional display name for this sibling's app (e.g. a rebranded fork). Absent = the engine's historical composition (label + \" District Explorer\") stands; present = emitted onto the METRO_EXPLORERS entry for the engine to prefer. Sourced from metros.json by --sync-fleet when the manifest carries it."
+          },
           "bbox": {
             "$ref": "#/definitions/bbox"
           }
@@ -459,6 +463,21 @@
         },
         "accent_warm_deep": {
           "$ref": "#/definitions/color"
+        },
+        "label": {
+          "type": "string",
+          "description": "One-line provenance of the palette (e.g. \"Chicago flag palette\"), printed as the comment heading the generated :root accent block. Only read when the brand key opts the fork into the generated palette regions."
+        },
+        "notes": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional per-token comment printed beside the generated :root line for that token.",
+          "properties": {
+            "accent": { "type": "string" },
+            "accent_deep": { "type": "string" },
+            "accent_warm": { "type": "string" },
+            "accent_warm_deep": { "type": "string" }
+          }
         }
       }
     },
@@ -479,6 +498,90 @@
       "type": "string",
       "pattern": "^[A-Za-z][A-Za-z0-9]*$",
       "description": "window.<name> debug namespace, twinned with the smoke test."
+    },
+    "brand": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Opts this fork into brand-as-data (docs/DEV_PROCESS_ASSESSMENT.md, stage R1): the generator owns the brand-bearing GENERATED regions (head-analytics, head-brand, head-theme, brand-palette, masthead-brand, goatcounter in index.html; sources-palette on the sources page when sources_page is also set) and emits METRO_BRAND into the metro-config region. Absent = every one of those surfaces stays hand-written and the generator emits nothing new, which is what keeps this key inert in a fork that has not opted in.",
+      "required": [
+        "app_name",
+        "tagline",
+        "theme_color",
+        "favicon_data_uri",
+        "head",
+        "analytics"
+      ],
+      "properties": {
+        "app_name": {
+          "type": "string",
+          "description": "This instance's display name (masthead title, og:site_name; e.g. \"Chicago District Explorer\")."
+        },
+        "product_name": {
+          "type": "string",
+          "description": "The product's brand name shared across instances (e.g. \"Districtry\"). Optional until a rebrand consumes it; emitted onto METRO_BRAND when present."
+        },
+        "instance_tag": {
+          "type": "string",
+          "description": "The wordmark's instance suffix (e.g. \"il\"). Optional until a rebrand consumes it; emitted onto METRO_BRAND when present."
+        },
+        "tagline": {
+          "type": "string",
+          "description": "The masthead's one-line subtitle under the title."
+        },
+        "theme_color": {
+          "$ref": "#/definitions/color"
+        },
+        "favicon_data_uri": {
+          "type": "string",
+          "pattern": "^data:image/",
+          "description": "The favicon as an inline data: URI, exactly as the <link rel=\"icon\"> href should carry it."
+        },
+        "head": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "description",
+            "og_title",
+            "og_description",
+            "og_image_alt",
+            "twitter_title",
+            "twitter_description"
+          ],
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "og_title": { "type": "string" },
+            "og_description": { "type": "string" },
+            "og_image_alt": { "type": "string" },
+            "twitter_title": { "type": "string" },
+            "twitter_description": { "type": "string" }
+          }
+        },
+        "analytics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ga_id",
+            "ga_hostname",
+            "goatcounter_url"
+          ],
+          "properties": {
+            "ga_id": {
+              "type": "string",
+              "pattern": "^G-[A-Z0-9]+$"
+            },
+            "ga_hostname": {
+              "type": "string",
+              "description": "The production hostname the GA snippet gates on — analytics never fire on local dev, CI, or previews."
+            },
+            "goatcounter_url": {
+              "type": "string",
+              "pattern": "^https://"
+            }
+          }
+        }
+      }
     },
     "verified_date": {
       "type": "string",

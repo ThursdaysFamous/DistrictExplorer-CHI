@@ -70,8 +70,8 @@ import vtd_board_districts as V  # noqa: E402
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "mercer-precincts.json")
-OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app",
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "mercer-precincts.json")
+OUT_DISTRICTS = os.path.join(REPO_ROOT, "il", "data", "app",
                              "mercer-county-board-districts.json")
 
 COUNTY_FIPS = "131"

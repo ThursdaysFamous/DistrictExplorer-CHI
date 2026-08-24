@@ -1,7 +1,7 @@
 name: Update Illinois county clerk roster
 
 # Weekly refresh of the County card's clerk roster
-# (data/app/il-county-clerks.json, fetched by index.html). Re-scrapes the
+# (il/data/app/il-county-clerks.json, fetched by index.html). Re-scrapes the
 # State Board of Elections' election-authority directory and, if anything
 # changed, opens a PR rather than committing directly to main — officeholder
 # data should get a human look before it ships.
@@ -67,12 +67,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -90,7 +90,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/il-county-clerks.json
+          git add il/data/app/il-county-clerks.json
           git commit -m "Update Illinois county clerk roster from the ISBE directory"
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,

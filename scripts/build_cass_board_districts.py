@@ -49,7 +49,7 @@ from build_metro_outline import (  # noqa: E402  (shared machinery — do not fo
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "cass-county-board-districts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "cass-county-board-districts.json")
 
 VTD_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
            "tigerWMS_Census2020/MapServer/58/query")     # 58 = Voting Districts

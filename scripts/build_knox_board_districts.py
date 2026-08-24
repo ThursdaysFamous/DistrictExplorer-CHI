@@ -75,7 +75,7 @@ import vtd_board_districts as V                               # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-OUT_PATH = os.path.join(REPO, "data", "app", "knox-county-board-districts.json")
+OUT_PATH = os.path.join(REPO, "il", "data", "app", "knox-county-board-districts.json")
 
 COUNTY_FIPS = "095"
 COUNTY_POP_2020 = 49967

@@ -174,9 +174,9 @@ except ImportError:  # pragma: no cover
     sys.exit("shapely is required: pip install -c scripts/requirements.txt shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "jefferson-precincts.json")
-OUTLINE = os.path.join(REPO_ROOT, "data", "app", "jefferson-county-outline.json")
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
+PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "jefferson-precincts.json")
+OUTLINE = os.path.join(REPO_ROOT, "il", "data", "app", "jefferson-county-outline.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                         "jefferson-county-board-districts.json")
 
 SOURCE_NOTE = ("Jefferson County Clerk & Recorder Joe Davis, \"County Board "

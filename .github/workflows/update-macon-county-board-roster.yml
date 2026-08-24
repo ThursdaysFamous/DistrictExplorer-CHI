@@ -1,7 +1,7 @@
 name: Update Macon County Board roster
 
 # Weekly refresh of the Macon County Board District card's member roster
-# (data/app/macon-county-board-members.json, fetched by index.html).
+# (il/data/app/macon-county-board-members.json, fetched by index.html).
 # Re-scrapes the county's board-members page (district, name, party, phone(s),
 # county e-mail, term-expiry, Chairman/Vice-Chairman role) and, if anything
 # changed, opens a PR rather than committing directly to main — officeholder
@@ -10,7 +10,7 @@ name: Update Macon County Board roster
 # THIS PAGE IS THE ONLY PLACE MACON PUBLISHES A MEMBER'S DISTRICT. The county's
 # GIS carries five board district shapes with every attribute null, so the
 # numbers on the map come from the Clerk's colour-coded map instead
-# (data/app/macon-board-district-labels.json). Party and district arrive here as
+# (il/data/app/macon-board-district-labels.json). Party and district arrive here as
 # one token: "D-1" is a Democrat in District 1.
 #
 # THE 3-3-3-3-3 SPLIT IS A CHECK ON MORE THAN THIS PAGE. Macon seats three
@@ -64,12 +64,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present and
       # well formed.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -87,7 +87,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/macon-county-board-members.json
+          git add il/data/app/macon-county-board-members.json
           git commit -m "Update Macon County Board roster from maconcounty.illinois.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

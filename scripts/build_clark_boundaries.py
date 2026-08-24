@@ -99,8 +99,8 @@ from build_metro_outline import point_in_rings  # noqa: E402  (shared machinery 
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "clark-precincts.json")
-OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app",
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "clark-precincts.json")
+OUT_DISTRICTS = os.path.join(REPO_ROOT, "il", "data", "app",
                              "clark-county-board-districts.json")
 
 COUNTY_FIPS = "023"

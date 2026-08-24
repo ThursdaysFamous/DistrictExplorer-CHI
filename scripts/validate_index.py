@@ -50,6 +50,11 @@ import os
 import re
 import subprocess
 import sys
+
+# The repo root, derived from THIS FILE rather than from the index.html passed
+# on argv: the app moved into an instance folder (il/) while the worksheet and
+# scripts/ stayed at the repo root.
+SCRIPT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import tempfile
 
 # Machine-readable capability declaration (docs/MECHANIZATION_PLAYBOOK.md,
@@ -748,7 +753,10 @@ def check_negative_point(repo_root, app_dir):
     of every anchor geometry file — the honest no-district state the smoke
     test asserts is only meaningful if the committed geometries agree. Catches
     a re-simplified boundary quietly swallowing the negative point."""
-    ws_path = os.path.join(repo_root, "metro-worksheet.json")
+    # Repo-level, NOT app-level: the worksheet stays at the repo root while the
+    # app lives in its instance folder (il/), so this is resolved from the
+    # script's own location rather than from the index passed on argv.
+    ws_path = os.path.join(SCRIPT_ROOT, "metro-worksheet.json")
     if not os.path.exists(ws_path):
         fail("metro-worksheet.json not found — negative-point ground truth needs it")
     ws = json.load(open(ws_path))
@@ -879,7 +887,7 @@ def check_county_coverage_list(html, repo_root):
     county listed there but dispatching nothing makes all three quietly wrong.
     An at-large county belongs in METRO_COUNTY_FIPS only.
     """
-    outline_py = os.path.join(repo_root, "scripts", "build_metro_outline.py")
+    outline_py = os.path.join(SCRIPT_ROOT, "scripts", "build_metro_outline.py")
     if not os.path.exists(outline_py):
         fail("scripts/build_metro_outline.py not found — the county-list check "
              "cannot run; it is the source of the coverage ring")

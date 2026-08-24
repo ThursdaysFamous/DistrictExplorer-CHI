@@ -37,7 +37,7 @@ import os
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                         "fulton-county-board-members.json")
 
 MIN_MEMBERS = 12

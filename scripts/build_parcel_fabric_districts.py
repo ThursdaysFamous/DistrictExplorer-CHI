@@ -81,7 +81,7 @@ from shapely.strtree import STRtree
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DIR = os.path.join(REPO_ROOT, "data", "app")
+APP_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 CLOSE_FT = 75.0       # bridges voids < 150 ft; survey medians run 39-107 ft
 SIMPLIFY_FT = 10.0

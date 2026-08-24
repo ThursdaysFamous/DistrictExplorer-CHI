@@ -1,7 +1,7 @@
 name: Update Adams County Board roster
 
 # Weekly refresh of the Adams County Board District card's member roster
-# (data/app/adams-county-board-members.json), fetched by index.html.
+# (il/data/app/adams-county-board-members.json), fetched by index.html.
 #
 # THE ROSTER IS THE COUNTY'S ELECTION RETURNS, NOT A BOARD PAGE, and here that
 # is forced rather than chosen. adamscountyil.gov is a flat Akamai WAF deny —
@@ -69,12 +69,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present and
       # well formed.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -92,7 +92,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/adams-county-board-members.json
+          git add il/data/app/adams-county-board-members.json
           git commit -m "Update Adams County Board roster from the county's certified canvasses"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

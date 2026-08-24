@@ -64,7 +64,7 @@ import subprocess
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 # A field on a single record is one person's phone number; losing it is
 # turnover. Two is where "the source stopped saying this" becomes the more
@@ -152,19 +152,33 @@ def groups_of(payload):
     return groups
 
 
-def git_show(ref, rel_path):
-    """The file's content at `ref`, or None if it is not there."""
-    try:
-        out = subprocess.run(["git", "show", "%s:%s" % (ref, rel_path)],
-                             cwd=REPO_ROOT, capture_output=True, check=False)
-    except OSError as e:
-        raise SystemExit("check-roster-retention: cannot run git (%s)" % e)
-    if out.returncode != 0:
-        return None
-    try:
-        return json.loads(out.stdout.decode("utf-8"))
-    except ValueError:
-        return None
+# Where the roster files live in a commit, newest layout first. The app moved
+# into an instance folder (il/) in R2.3, so a PR opened after the move compares
+# against a base that may predate it. Git reads a TREE at the base ref — it
+# cannot follow a rename or a symlink — so the base lookup has to try both, or
+# every file reads as "absent at the base", every file lands in `skipped`, and
+# the vacuity guard below fails every PR with the wrong diagnosis (it would say
+# "shallow clone"). The move PR itself passes either way; the breakage would
+# have arrived on the NEXT PR, which is the worst possible timing.
+APP_REL_DIRS = ("il/data/app", "data/app")
+
+
+def git_show(ref, name):
+    """The roster's content at `ref`, or None if it is not there under any
+    known layout."""
+    for rel_dir in APP_REL_DIRS:
+        try:
+            out = subprocess.run(["git", "show", "%s:%s/%s" % (ref, rel_dir, name)],
+                                 cwd=REPO_ROOT, capture_output=True, check=False)
+        except OSError as e:
+            raise SystemExit("check-roster-retention: cannot run git (%s)" % e)
+        if out.returncode != 0:
+            continue
+        try:
+            return json.loads(out.stdout.decode("utf-8"))
+        except ValueError:
+            return None
+    return None
 
 
 def compare(name, old, new):
@@ -235,7 +249,6 @@ def main():
     for path in sorted(os.listdir(APP_DATA_DIR)):
         if not path.endswith(".json"):
             continue
-        rel = os.path.join("data", "app", path)
         full = os.path.join(APP_DATA_DIR, path)
         try:
             with open(full, encoding="utf-8") as f:
@@ -244,7 +257,7 @@ def main():
             continue
         if not records_in(new):
             continue                      # geometry-only file: nothing to retain
-        old = git_show(args.base, rel)
+        old = git_show(args.base, path)
         if old is None:
             skipped.append(path)          # new file, or absent at the base ref
             continue

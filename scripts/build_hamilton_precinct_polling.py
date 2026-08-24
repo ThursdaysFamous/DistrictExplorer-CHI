@@ -57,7 +57,7 @@ HEADERS = {
     "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "hamilton-precinct-polling.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "hamilton-precinct-polling.json")
 
 # The 16 notice labels, longest-first so "South Crouch" never matches as
 # "Crouch". The GIS join key is the label uppercased with "#" dropped —

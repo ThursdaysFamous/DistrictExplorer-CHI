@@ -50,12 +50,12 @@ from scraper_common import make_fail  # noqa: E402  (shared machinery — do not
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTLINE_PY = os.path.join(REPO_ROOT, "scripts", "build_metro_outline.py")
 VALIDATE_PY = os.path.join(REPO_ROOT, "scripts", "validate_index.py")
-INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
-GAPS_JSON = os.path.join(REPO_ROOT, "data", "app", "coverage-gaps.json")
+INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
+GAPS_JSON = os.path.join(REPO_ROOT, "il", "data", "app", "coverage-gaps.json")
 OUT_PATH = os.path.join(REPO_ROOT, "docs", "COUNTY_STATUS.md")
 
 # ==== TEMPLATE:BEGIN county-status-config ====
-COMMISSIONERS_JSON = os.path.join(REPO_ROOT, "data", "app",
+COMMISSIONERS_JSON = os.path.join(REPO_ROOT, "il", "data", "app",
                                   "il-county-commissioners.json")
 STATE_FIPS = "17"
 

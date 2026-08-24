@@ -40,7 +40,7 @@ MIN_PARTIES = 16
 ALLOWED_ROLES = ("Chairperson", "Vice-Chairperson")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("peoria-board-roster")

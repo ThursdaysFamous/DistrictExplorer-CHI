@@ -64,7 +64,7 @@ EXPECT_DISTRICTS = 7
 SEATS_PER_DISTRICT = 1
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 PARTY_LABEL = {"REP": "R", "DEM": "D", "IND": "I", "GRN": "G", "LIB": "L"}
 

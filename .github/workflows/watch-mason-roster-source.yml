@@ -8,7 +8,7 @@ name: Watch Mason County Board roster source
 # survive extraction — pdfplumber and pdftotext both return line noise
 # ("xRF# ISgH tlgP") rather than failing. Noise that PARSES is worse than no
 # text at all: a scraper would not error, it would ship confident garbage under
-# real officeholders' names. So data/app/mason-county-board-members.json is
+# real officeholders' names. So il/data/app/mason-county-board-members.json is
 # transcribed by hand (see scripts/build_mason_board_roster.py), and this job
 # checks the two things a machine still can:
 #
@@ -98,7 +98,7 @@ jobs:
             echo "1. Open the roster PDF linked from <https://masoncountyil.gov/county-board/> and read it."
             echo "2. Update \`MEMBERS\` in \`scripts/build_mason_board_roster.py\` (and \`TRANSCRIBED\`)."
             echo "3. If the \"District n - …\" composition lines moved, update \`DISTRICTS\` in \`scripts/build_mason_board_districts.py\` too."
-            echo "4. Rebuild both \`data/app/mason-county-board-*.json\` files and update \`KNOWN_SHA256\` in \`scripts/mason_roster_watch.py\`."
+            echo "4. Rebuild both \`il/data/app/mason-county-board-*.json\` files and update \`KNOWN_SHA256\` in \`scripts/mason_roster_watch.py\`."
             echo
             echo "_Reminder: Mason ships no residence data at all, not even the home town — one member's address is legally protected and a town-for-seven roster would single her out._"
           } > issue-body.md

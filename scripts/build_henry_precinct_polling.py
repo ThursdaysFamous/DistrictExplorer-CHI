@@ -71,8 +71,8 @@ HEADERS = {
     "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "henry-precincts.json")
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "henry-precinct-polling.json")
+PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "henry-precincts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "henry-precinct-polling.json")
 
 EXPECTED_PRECINCTS = 52
 MAX_PAGES = 12            # the directory pages ten at a time; this is a runaway stop

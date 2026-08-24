@@ -67,6 +67,16 @@ GAPS_RE = re.compile(
     r"<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->\s*```json\s*(.*?)\s*```",
     re.DOTALL)
 GAPS_PATH = "data/app/coverage-gaps.json"
+# Where an instance's tree sits inside its repo. This repo consolidated its app
+# under il/ (R2.3); the sibling forks are still repo-root apps until R3 imports
+# them, at which point they become "nyc/" and "sf/" here and this table dies
+# with the remote fetching it exists for.
+REPO_PREFIX = {"chicago": "il/"}
+
+
+def repo_path(metro_id, rel):
+    """Repo-relative path of an instance-owned file, for the remote fetches."""
+    return REPO_PREFIX.get(metro_id, "") + rel
 ENGINE_SYNC_PATH = os.path.join("docs", "ENGINE_SYNC.md")
 # "## Current ENGINE block inventory (53 in index.html + 2 in sw.js)" followed
 # by the backticked block list on the "index.html: ..." line(s).
@@ -295,7 +305,7 @@ def inventory_diff(repo_root):
     actual = {}
     for fname in ("index.html", "sw.js"):
         try:
-            with open(os.path.join(repo_root, fname), encoding="utf-8") as f:
+            with open(os.path.join(repo_root, "il", fname), encoding="utf-8") as f:
                 actual[fname] = sorted(extract_blocks(f.read(), fname))
         except (OSError, ValueError) as e:
             return ("- ENGINE_SYNC inventory: **SYNC WARN** — cannot read fences from %s" % fname,
@@ -512,7 +522,7 @@ def main():
         # take this check down with it.
         if gaps_map is not None:
             gaps_line, gaps_warns = gaps_diff(
-                gaps_map, m["id"], fetch_file(repo, GAPS_PATH))
+                gaps_map, m["id"], fetch_file(repo, repo_path(m["id"], GAPS_PATH)))
             lines.append(gaps_line)
             warns.extend(gaps_warns)
 

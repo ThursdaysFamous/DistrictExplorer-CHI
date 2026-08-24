@@ -1,14 +1,14 @@
 name: Update Livingston County Board roster
 
 # Weekly refresh of the Livingston County Board District card's member roster
-# (data/app/livingston-county-board-members.json, fetched by index.html).
+# (il/data/app/livingston-county-board-members.json, fetched by index.html).
 # Re-scrapes the county's directory page (district, name, party, role,
 # @livingstoncountyil.gov email) and, if anything changed, opens a PR rather
 # than committing directly to main — officeholder data should get a human look
 # before it ships.
 #
 # Only the ROSTER is on a cron. The other half of this county's card —
-# data/app/livingston-county-board-districts.json, the TIGER township dissolve —
+# il/data/app/livingston-county-board-districts.json, the TIGER township dissolve —
 # is an operator step, not a weekly one: it changes when the county
 # reapportions (last effective 2002-12-02, unchanged by the 2020 census), and
 # scripts/build_livingston_board_districts.py --check runs in the merge gate so
@@ -56,12 +56,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present and
       # well formed.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -79,7 +79,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/livingston-county-board-members.json
+          git add il/data/app/livingston-county-board-members.json
           git commit -m "Update Livingston County Board roster from livingstoncountyil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

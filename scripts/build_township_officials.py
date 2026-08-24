@@ -81,8 +81,8 @@ import sys
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-COUSUB_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_cousub2020.txt")
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+COUSUB_FILE = os.path.join(REPO_ROOT, "il", "data", "source", "st17_il_cousub2020.txt")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 # Counties this builder knows how to key. Growth is adding a FIPS here and a
 # payload on the command line — the EXPANSION_GUIDE Part 2 shape.
