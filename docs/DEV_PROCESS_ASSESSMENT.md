@@ -339,6 +339,24 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   **Verified the same way it was diagnosed:** all seventeen pages re-driven in dark mode, every
   one now Barlow, theme-aware, marked, and carrying every standing link, with **zero dead links
   across the whole sitemap**.
+  **AND THE AUDIT BECAME A GATE, because otherwise this fixes today and not tomorrow.**
+  `scripts/page_consistency_test.mjs` is the throwaway script, kept: it drives every url in
+  `sitemap.xml` in both colour schemes and asserts the brand typeface, that the page paints the
+  ground its viewer asked for, the mark, canonical and og:title, the standing links, and that
+  every relative link resolves. It **derives its surface** — pages from the sitemap, expectations
+  from the tree, so a page is expected to link its instance's sources page only when that
+  instance HAS one and never to link itself. A fourth instance or a retired sub-page therefore
+  cannot fail it, which is the distinction between a gate and a tripwire (SF's smoke test
+  asserted its brand name as a literal and failed the rebrand).
+  **It was proved by breaking things rather than by passing:** reverting one page's font to Inter,
+  dropping a standing link, breaking a relative href and deleting the mark each produce a named
+  failure, and the first of those is the exact defect that survived two stages. **The first
+  negative test was itself wrong** — the sed matched nothing, so the gate "passed" a bug that was
+  never introduced; a gate that cannot fail is worse than no gate, and finding that out took
+  running it against the real thing. It also had to serve vendored Leaflet the way the smoke
+  tests do, or the three map pages fail on a sandbox CDN block that is not a page defect. Runtime
+  went from minutes to **12 seconds** by probing each distinct link once for the whole run rather
+  than once per page.
 
 - **R6 (part 3b) — SHIPPED (2026-08-24): SF gets a sources page, and the provenance behind it is
   DERIVED FROM THE CODE rather than recalled.** A sources page is a set of claims about where data
