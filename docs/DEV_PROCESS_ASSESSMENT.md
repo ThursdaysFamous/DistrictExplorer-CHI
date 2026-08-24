@@ -321,6 +321,36 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R6 (part 3b) — SHIPPED (2026-08-24): SF gets a sources page, and the provenance behind it is
+  DERIVED FROM THE CODE rather than recalled.** A sources page is a set of claims about where data
+  comes from, and the generator refuses a layer without one — SF had 16 layers carrying zero
+  `source` blocks. Writing 64 provenance facts from memory was never an option on the one page
+  whose entire job is provenance.
+  **So the facts were extracted, and the extractor is committed** as
+  `scripts/audit_layer_provenance.py`. It follows the app: layer → its loader → that loader's
+  definition → the dataset actually fetched, through six hops that each had to be ADDED BECAUSE OF
+  A SPECIFIC WRONG ANSWER — a factory argument (`makeCachedLoader("rwdu-9wb2")`), a factory
+  property (`datasetId:`), a named constant (`USGS_POST_OFFICE_LAYER`), a nested helper, an inline
+  factory in the loader slot, and the RAW PULL kept beside each builder, whose filename carries the
+  upstream id that produced a shipped file (`sf-supervisor-districts-hcgx-vtsb.geojson`).
+  **Four times it was confidently wrong in a way that looked right, and that is the record worth
+  keeping.** The first probe gave two unrelated layers the same host — it read past the end of a
+  block. `fn_body` then grabbed braces from hundreds of lines away, the same bug in a new place,
+  which made real Socrata ids report as "not found". Matching only `loader:`/`load:` silently
+  dropped every legislative chamber. And the constant resolution worked perfectly, then appended
+  its answer UNQUOTED so the extractor discarded its own correct result one line later. Each was
+  caught by disbelieving a plausible table, not by a gate. **On a provenance page a confident wrong
+  answer is the worst possible output**, which is why the bounding matters more than the coverage.
+  **Result: 16/16 SF layers resolved to a concrete dataset.** Two NYC layers resolve to
+  "derived-by:registerBoroughOfficeLayer" and that is the TRUE answer rather than a gap — the
+  Borough President and District Attorney layers have no boundary of their own; they draw the
+  borough geometry and differ only by role.
+  **The page itself is built from Illinois's**, with its four GENERATED regions emptied so the
+  generator fills them for SF rather than leaving Chicago's content in San Francisco's page.
+  Verified in a browser: 16 matrix rows across 7/3/2/4 group counts, both themes, no dead links.
+  **NYC's sources page is deliberately still absent** — 27 more layers of the same careful work,
+  and it ships when it is done rather than half-done.
+
 - **R6 (part 3a) — SHIPPED (2026-08-24): NYC and SF get FAQ pages, built from IL's shell rather
   than resembling it.** Both apps had no `faq.html` at all while Illinois has ranked on one since
   R4. Each page reuses `il/faq.html`'s own `<style>` island and mark SVG **verbatim** — lifted at

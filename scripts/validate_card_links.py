@@ -143,7 +143,7 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
 AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html",
                   "privacy.html", "il/faq.html", "ny/index.html", "ny/faq.html",
-                  "ca/index.html", "ca/faq.html"]
+                  "ca/index.html", "ca/faq.html", "ca/sources.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
