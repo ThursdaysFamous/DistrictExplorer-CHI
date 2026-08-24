@@ -3376,7 +3376,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <!-- ==== GENERATED:BEGIN masthead-brand ==== -->
         <span class="title-text">districtry <span class="dst-metro-switch"><button type="button" class="title-metro dst-metro-btn" aria-expanded="false" aria-haspopup="true" aria-label="Illinois — switch explorer">/ il<span class="dst-metro-caret" aria-hidden="true">▾</span></button><span class="dst-metro-menu" role="menu"></span></span></span>
       </span>
-      <small>Click the map for every district you&#39;re in, and who represents you.<span class="preview-stamp">unlisted preview · index.html @ 0c18b47 · 2026-08-24</span></small>
+      <small>Click the map for every district you&#39;re in, and who represents you.<span class="preview-stamp">unlisted preview · index.html @ e6f59ec · 2026-08-24</span></small>
         <!-- ==== GENERATED:END masthead-brand ==== -->
     </h1>
     <div class="map-toolbar">
@@ -18435,10 +18435,10 @@ function initChiExplorer() {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
-            return {
-              seq: seq, district: district,
-              entry: district != null ? results[1][String(district)] : null
-            };
+            var roster = results[1];
+            var entry = district != null ? roster[String(district)] : null;
+            return { seq: seq, district: district, entry: entry,
+                     rosterLoaded: !!(roster && Object.keys(roster).length) };
           });
         },
         render: function (result) {
@@ -18446,7 +18446,7 @@ function initChiExplorer() {
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Carroll County Board",
-            note: boardCountNote(members.length, null)
+            note: withShortfall(boardCountNote(members.length, null), result)
           }));
           if (members.length) {
             wrap.appendChild(renderPersonRows(members.map(function (m) {
