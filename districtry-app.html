@@ -2555,7 +2555,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
      surface (panel fill + drop shadow) was drawn to float over a basemap; in
      a header it reads as a grey box around the field, so the shell goes
      invisible and the INPUT carries the affordance. */
-  .masthead .map-toolbar { position: static; transform: none; flex: 1 1 320px; max-width: 560px; }
+  /* The three children of .masthead-inner are [title][search][pills], and the
+     row is one line only while their widths fit. Measured at the shipped
+     values: title 529 + gap 28 + search basis 320 + gap 28 + pills 645 +
+     padding 40 = 1590px, which WAS the wrap threshold to the pixel — below it
+     the pills dropped to a second row and the masthead grew from 118px to
+     162px. Operator: move the pills closer to the search bar and narrow the
+     masthead. Whenever the row IS one line the pills already sit right after
+     the search; what separates them is the wrap, so the thing to move is the
+     row's MINIMUM width, and the two levers that do it without touching the
+     copy or the pill spec are the gap between the three children and the
+     search's own flex-basis. The search still GROWS to fill, so nothing
+     changes at any width where the row already fitted — only the point at
+     which it stops fitting. Threshold measured after: 1530px, so the pills
+     stay beside the search for 60px more of window. It is a THRESHOLD and not
+     a cure: any fixed row wraps eventually, and below 1530 this one still
+     does. (Two further levers were tried and dropped as no-ops: the pill row
+     gap is ALREADY 6px further down this island, and a padding override loses
+     to the pill spec below it — tightening the pills means editing that spec,
+     which is a look change rather than a layout one, so it is left alone.) */
+  header.masthead .masthead-inner { gap: 10px 20px; }
+  .masthead .map-toolbar { position: static; transform: none; flex: 1 1 250px; max-width: 560px; }
   .masthead .search-shell { position: relative; box-shadow: none; background: transparent; border-color: transparent; padding: 0; }
   .masthead .search-row input[type="text"] {
     background: var(--dst-sunken);
@@ -3268,7 +3288,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 8263214 on 2026-08-24</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 09758b2 on 2026-08-24</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
