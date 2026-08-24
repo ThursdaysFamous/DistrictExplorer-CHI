@@ -1044,6 +1044,89 @@ what it does, not a layout bug.
 Costs no engine release: `.search-shell`'s engine rule is untouched, and the change is a deletion
 from a fork-local dark block that only ever existed in the skin island.
 
+## The theme toggle stops moving the masthead (operator-reported, 2026-08-24)
+
+The follow-up to the search-shell fix, and a **different fault with the same symptom**: the search
+bar was not in the same place in the two themes. The previous round measured every box in the
+control and found them identical — which was true, and at the widths measured. It was not true
+everywhere, and the reason the first pass missed it is worth keeping: **the sweep ran at 390px and
+1400px, and the band where the themes disagree is four pixels wide.**
+
+### The measurement that found it
+
+Binary-searching the width at which `.masthead-actions` stops sharing a row with the toolbar, per
+theme:
+
+| | one row from | wraps at and below | `.masthead-actions` | toggle |
+|---|---|---|---|---|
+| light | 1586px | 1585px | 641px | "Dark" 53px |
+| dark | 1590px | 1589px | 645px | "Light" 57px |
+
+**1586-1589px is a band where light fits on one line and dark wraps.** Wrapping also frees the
+line, so `.map-toolbar`'s `flex-grow` takes the space up to its `max-width: 560px` — which is why
+the dark search bar looked not merely displaced but much wider, and why the reporter's screenshots
+showed one masthead of one row and one of two.
+
+The whole 4px is the toggle: the actions row is 641 against 645, and the button is 53 against 57.
+**The label names what the button does** — "Dark" while light, "Light" while dark — so the control's
+own box changes with the theme, and it sits in a flex row that is one line only while it fits.
+
+This needed the real webfont to reproduce. In the sandbox's fallback font the two labels differ by
+**0.7px** and both themes wrapped at the same integer width, so the first sweep saw nothing. Barlow
+was vendored (`fonts.googleapis.com` + `fonts.gstatic.com` fulfilled from disk through
+`page.route`, the same trick the smoke test uses for Leaflet) and the band appeared immediately.
+**A layout bug that lives in text metrics cannot be measured in a fallback font.**
+
+### The fix
+
+Both words ship in the DOM, stacked in one grid cell, so the button is always as wide as the wider
+of them:
+
+    .dtt-labels { display: inline-grid; justify-items: center; }
+    .dtt-labels > span { grid-area: 1 / 1; }
+    :root:not([data-theme="dark"]) .dtt-light,
+    :root[data-theme="dark"] .dtt-dark { visibility: hidden; }
+
+Which word shows is now a CSS question keyed on `data-theme`, so both controllers (the app's and the
+FAQ page's) stop writing `textContent` and set only the accessible name. `visibility: hidden` keeps
+the inactive word out of the accessibility tree as well as out of sight — the button's computed name
+is "Switch to the dark theme", never "DarkLight".
+
+Two details that are load-bearing rather than incidental. The labels are wrapped in **their own
+span** instead of gridding the button, because the phone rule re-declares the button as
+`inline-flex`, which would lay the two words side by side and double the width instead of
+overlapping them. And the button's height is unchanged at **28.5px**, matching its neighbouring
+pills exactly — the same parity the toggle's own `line-height: 12.5px` was added to preserve.
+
+Measured after: `.masthead-actions` **645px in both themes**, threshold gap **0px**, and every box
+in the masthead — masthead, actions, toolbar, search input, map — **identical** light against dark
+at 1400px, 1587px and 1700px. The cost is stated plainly: pinning to the wider label means the
+wrap threshold is now uniformly the dark one (1590px), so light wraps 4px earlier than it used to.
+Pinning to the narrower label would clip "Light", so this is the only direction available.
+
+### And a two-pixel misdraw that the pixel diff caught
+
+Diffing the two builds at 1587px showed 23,393 pixels moving in the **dark** theme, where every
+measured box was identical — so it was chased rather than dismissed, and it was not this change.
+Tracing `#map`'s height across the load:
+
+    base:  741px at 62ms  ->  739px at 194ms
+    post:  741px at 36ms  ->  739px at 148ms
+
+Barlow is loaded with `font-display: swap` and its metrics are not the fallback's, so **the masthead
+re-lays out after Leaflet has already measured its container**. Leaflet caches the size at init and
+never re-reads it, so from the swap onward the map draws two pixels out of register with the element
+it lives in — every overlay, marker and the coverage wash, in both themes, for the whole session.
+Nobody had noticed because two pixels of a map look like a map; it surfaced only because a hair of
+extra parse work moved which frame the wash landed on. A single `map.invalidateSize({pan: false})`
+on `document.fonts.ready` re-reads the box for good — verified: the cached size goes from
+`[1040, 741]` against a 739px element to `[1040, 739]`, and forcing the same call by hand made the
+two builds render **0 pixels apart**. Guarded, so a browser without the Font Loading API keeps
+today's behaviour.
+
+Neither change touches an ENGINE fence: the toggle is fork-local markup and skin CSS, and the
+`invalidateSize` call sits in the fork-local controller that already closes over `map`.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

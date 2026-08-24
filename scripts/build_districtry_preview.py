@@ -1040,6 +1040,28 @@ SKIN_ISLAND = """<style id="districtry-skin">
     cursor: pointer;
     transition: background .15s ease, color .15s ease;
   }
+  /* The label names what the button DOES, so it reads "Dark" in the light
+     theme and "Light" in the dark one — two words of DIFFERENT WIDTH (4px
+     apart in Barlow at 12.5px). That put a THEME-DEPENDENT WIDTH into the
+     masthead's flex row, and the row is one line only while it fits:
+     measured, .masthead-actions is 641px in light and 645px in dark, and
+     between 1586px and 1589px of viewport the row sits on one line in light
+     and WRAPS in dark. Wrapping also frees the line, so .map-toolbar's
+     flex-grow takes the space up to its 560px cap — which is why the dark
+     search bar looked not just displaced but much wider. A window anywhere
+     in that 4px band therefore showed two different mastheads for one page.
+     Both words now ship in the DOM, stacked in a single grid cell, so the
+     button is always as wide as the wider of them and the row's width no
+     longer depends on the theme. They are wrapped in their own span rather
+     than gridding the button itself, because the phone rule above
+     re-declares the button's display as inline-flex — which would lay the
+     two labels out side by side and double the width instead of overlapping
+     them. `visibility: hidden` keeps the inactive word out of the
+     accessibility tree as well as out of sight. */
+  .dtt-labels { display: inline-grid; justify-items: center; }
+  .dtt-labels > span { grid-area: 1 / 1; }
+  :root:not([data-theme="dark"]) .dtt-light,
+  :root[data-theme="dark"] .dtt-dark { visibility: hidden; }
   .districtry-theme-toggle:hover,
   .districtry-theme-toggle:focus-visible {
     background: var(--dst-brand-tint);
@@ -1400,8 +1422,11 @@ THEME_CONTROLLER_JS = """
     dstRepaintLayers();
     var btn = document.querySelector(".districtry-theme-toggle");
     if (btn) {
-      /* the label names what the button DOES, not the state it is in */
-      btn.textContent = dark ? "Light" : "Dark";
+      /* The label names what the button DOES, not the state it is in —
+         and both words are in the DOM at once, so which one shows is a
+         CSS question keyed on data-theme. Writing textContent here would
+         destroy the stacked spans and put the theme back into the
+         masthead's width. Only the accessible name is set from here. */
       btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
     }
   }
@@ -1426,6 +1451,29 @@ THEME_CONTROLLER_JS = """
       });
     }
   })();
+
+  /* ---- the masthead settles AFTER Leaflet has measured its container.
+     This skin loads Barlow as a webfont with font-display: swap, and Barlow's
+     metrics are not the fallback's, so the swap re-lays the masthead out and
+     the map below it changes height: traced across the load, #map is 741px
+     tall at first paint and 739px once the font lands. Leaflet caches the
+     container size at init and never re-reads it on its own, so from that
+     moment the map draws two pixels out of register with the element it
+     lives in — every overlay, marker and the coverage wash alike, in both
+     themes, for the rest of the session.
+     Nobody had noticed because two pixels of a map look like a map. It
+     surfaced as pixel-diff noise: two builds differing only in a span would
+     draw the wash a few pixels apart, because a hair of extra parse work
+     moved which frame the draw landed on relative to the swap.
+     document.fonts.ready resolves after the swap, so one invalidateSize()
+     there re-reads the box for good. `pan: false` because this corrects the
+     canvas, it does not move the reader's view. Guarded and silent: a
+     browser without the Font Loading API keeps today's behaviour. */
+  if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+    document.fonts.ready.then(function () {
+      try { map.invalidateSize({ pan: false, animate: false }); } catch (e) {}
+    });
+  }
 """
 
 
@@ -1589,6 +1637,13 @@ __THEME_BOOT__<style>
     border-radius: 999px;
     cursor: pointer;
   }
+  /* both labels stacked in one cell — see the app's .dtt-labels note: the
+     two words differ in width, and a control whose box changes with the
+     theme moves the row it sits in */
+  .dtt-labels { display: inline-grid; justify-items: center; }
+  .dtt-labels > span { grid-area: 1 / 1; }
+  :root:not([data-theme="dark"]) .dtt-light,
+  :root[data-theme="dark"] .dtt-dark { visibility: hidden; }
   .faq-theme-toggle:hover,
   .faq-theme-toggle:focus-visible { background: var(--brand-tint); color: var(--brand); }
   .back a { color: var(--brand); text-decoration: none; }
@@ -1605,7 +1660,7 @@ __THEME_BOOT__<style>
     <a class="wordmark" href="districtry-app.html">districtry</a>
     <span class="tag">/ il</span>
     <span class="tag">/ faq</span>
-    <button type="button" class="faq-theme-toggle" aria-label="Switch to the dark theme">Dark</button>
+    <button type="button" class="faq-theme-toggle" aria-label="Switch to the dark theme"><span class="dtt-labels"><span class="dtt-dark">Dark</span><span class="dtt-light">Light</span></span></button>
   </div>
   <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
   __FAQ_SECTION__
@@ -1617,7 +1672,7 @@ __THEME_BOOT__<style>
     var btn = document.querySelector(".faq-theme-toggle");
     function paint() {
       var dark = document.documentElement.getAttribute("data-theme") === "dark";
-      btn.textContent = dark ? "Light" : "Dark";
+      /* which word shows is CSS, keyed on data-theme — see .dtt-labels */
       btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
     }
     btn.addEventListener("click", function () {
@@ -1964,7 +2019,9 @@ def build(stamp_text):
         ">Why this exists</a>\n"
         '      <span class="districtry-toggle-sep" aria-hidden="true"></span>\n'
         '      <button type="button" class="districtry-theme-toggle" '
-        'aria-label="Switch to the dark theme">Dark</button>',
+        'aria-label="Switch to the dark theme">'
+        '<span class="dtt-labels"><span class="dtt-dark">Dark</span>'
+        '<span class="dtt-light">Light</span></span></button>',
         "theme toggle button",
     )
 
