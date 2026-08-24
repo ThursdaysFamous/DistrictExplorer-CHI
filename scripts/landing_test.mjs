@@ -136,7 +136,18 @@ try {
     const ctx = await browser.newContext({ serviceWorkers: "block" });
     const page = await ctx.newPage();
     const errs = [];
-    page.on("console", (m) => { if (m.type() === "error") errs.push(m.text()); });
+    // Ignore network unreachability, the same way all three instance smoke tests do.
+    // This page carried no external script at all until it took the fleet's GoatCounter
+    // tag, so the check could afford to be absolute; now gc.zgo.at is a third-party host
+    // that is unroutable from the sandbox and can be slow or down in CI. A failed request
+    // to it says nothing about whether the page boots — which is what this check is for.
+    // An *app* JS error still surfaces, via pageerror below and any non-network console error.
+    page.on("console", (m) => {
+      if (m.type() !== "error") return;
+      const t = m.text();
+      if (/Failed to load resource|net::ERR|gc\.zgo\.at|googletagmanager/i.test(t)) return;
+      errs.push(t);
+    });
     page.on("pageerror", (e) => errs.push(String(e)));
     await page.goto(BASE + "/", { waitUntil: "load" });
     await page.waitForTimeout(500);

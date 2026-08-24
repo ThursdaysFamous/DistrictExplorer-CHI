@@ -265,6 +265,41 @@ would have opened the map with no layer on. All three are in `sitemap.xml`.
 3. **A link gate for the new pages.** `validate_card_links.py` extracts its surface from
    authored HTML; confirm it reaches `ny/` and `ca/` now that they carry authored pages.
 
+### One analytics site for the fleet, and the two that were silently dropping data (2026-08-24)
+
+**`/ny/` and `/ca/` were reporting to GoatCounter sites that did not exist.** Their tags came
+over with the imported forks pointing at `nycdistricts.goatcounter.com` and
+`sfdistricts.goatcounter.com`; both answer **HTTP 400 — byte-identical to the response for a
+hostname invented as a control** — so every count those live apps fired was rejected. Not
+degraded: dropped. Nothing in the tree could have caught it, because a fire-and-forget beacon
+has no success path to assert on.
+
+**The fix is one site, split by path.** The fleet is a single domain now, and the path already
+distinguishes the instances, so every published page reports to
+**`districtry.goatcounter.com`** and `/`, `/il/…`, `/ny/…`, `/ca/…` tell them apart. IL's tag
+is GENERATED from its worksheet's `brand.analytics.goatcounter_url` and was already correct;
+NY and CA have not adopted the brand keys yet (R1 opt-in), so theirs are hand-authored and were
+edited in place. Nothing was lost in the consolidation: the two dead sites held no data,
+because they never existed.
+
+**Coverage is now complete, which it never was.** The root landing page carried *no* analytics
+of any kind — the fleet's front door was the one page that could not be counted — and the
+per-cluster landing pages carried Google's tag but not the counter. All of them now carry it,
+so a path breakdown is a true fleet view rather than a view of three index pages.
+
+**A caveat this creates, recorded rather than hidden:** events share one namespace. A layer id
+that exists in more than one instance (`layer/congress`) now sums across cities, while
+city-specific ids (`layer/ward`, `layer/council`, `layer/supervisor-district`) stay
+unambiguous. Prefixing events per instance would fix it and is a `trackEvent` change in all
+three apps; deliberately not done here, and the traffic report says so where it reports layers.
+
+**And a gate that had to relax to stay honest.** `landing_test.mjs` asserted *zero* console
+errors, which was affordable while the landing page loaded nothing third-party. With the
+counter it fails on `net::ERR_CONNECTION_RESET` in the sandbox and would flake in CI whenever
+gc.zgo.at is slow — a verdict about someone else's host, not about whether the page boots. It
+now filters network unreachability exactly as all three instance smoke tests already do.
+Verified by injecting a deliberate `TypeError`: the check still fails on a real app error.
+
 ### The composer, deferred to R3 (operator decision, 2026-08-24)
 
 The composer inversion was scoped into R2 and moved to the head of R3. **R2.1 is what changed

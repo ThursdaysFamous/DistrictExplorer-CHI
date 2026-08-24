@@ -336,6 +336,12 @@ def build():
 <meta name="twitter:title" content="%(title)s" />
 <meta name="twitter:description" content="%(desc)s" />
 <meta name="twitter:image" content="%(canonical)sog-image.png" />
+<!-- GoatCounter — cookieless page counts. One site for the whole fleet: every instance
+     reports to districtry.goatcounter.com and the PATH tells them apart (/, /il, /ny,
+     /ca). This page had no analytics at all until then, which made the fleet's front
+     door the one page that could not be counted. -->
+<script data-goatcounter="https://districtry.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 <script type="application/ld+json">
 %(jsonld)s
 </script>
