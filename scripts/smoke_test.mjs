@@ -117,6 +117,7 @@ async function cardText(page, id) {
         const el = document.getElementById("card-" + cid);
         return el && !el.querySelector(".loading-row") &&
           (el.querySelector(".card-flush") ||
+           el.classList.contains("state-compact") ||
            el.querySelector(".state-empty") ||
            el.classList.contains("state-empty") || el.classList.contains("state-error") || el.querySelector(".state-error"));
       },
@@ -129,7 +130,14 @@ async function cardText(page, id) {
     if (!el) return { text: "(no card)", error: true, empty: false };
     const block = el.closest(".layer-block");
     const pill = block && block.querySelector(".card-id-pill:not([hidden])");
-    const text = (pill ? pill.textContent + " " : "") + el.innerText;
+    // a compact (4b name-only) card renders its whole reader-visible content
+    // into the block HEAD (.card-compact-value/-meta) and leaves the body
+    // empty — read the head, or a compact layer's card reads as blank
+    const compact = block
+      ? Array.from(block.querySelectorAll(".card-compact-value, .card-compact-meta"))
+          .map((n) => n.textContent).join(" ")
+      : "";
+    const text = (pill ? pill.textContent + " " : "") + (compact ? compact + " " : "") + el.innerText;
     return {
       text: text.replace(/\s+/g, " ").trim(),
       error: el.classList.contains("state-error") || !!el.querySelector(".state-error"),
@@ -395,17 +403,24 @@ try {
   }
 
   // 2. The three no-API layers classify a known point against known ground
-  //    truth, fetched from data/app/*.json.
+  //    truth, fetched from data/app/*.json. Two expected-value shapes: a
+  //    NUMERIC expectation asserts the card's own "District N" token exactly
+  //    (never a stray digit elsewhere in the card); a NAME expectation (a
+  //    state-template fork's county or school-district anchor, whose card
+  //    honestly prints an identity rather than a number) asserts the card
+  //    names that identity verbatim.
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, `${BASE}#point=${POINT}&layers=${OFFLINE.join(",")}`);
     for (const id of OFFLINE) {
       const info = await cardText(page, id);
+      const want = EXPECT_DISTRICT[id];
       const m = /District\s+(\S+)/i.exec(info.text);
       const got = m ? m[1] : null;
+      const ok = /[^0-9]/.test(want) ? info.text.includes(want) : got === want;
       check(
-        `${id} classifies point (District ${EXPECT_DISTRICT[id]})`,
-        !info.error && got === EXPECT_DISTRICT[id],
+        `${id} classifies point (District ${want})`,
+        !info.error && ok,
         info.text.slice(0, 70)
       );
     }

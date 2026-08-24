@@ -164,6 +164,11 @@ SUBS = {
         # the share-control boot URL seeds OFFLINE[0]'s CHI id; harmless if
         # unknown (the boot parse drops it) but rewritten for cleanliness
         ("lit", "&layers=school-board", "&layers=county", 1),
+        # engine-pure cleanPoiAddress fixture — the city name is arbitrary
+        ("lit", " CHICAGO, IL 60602", " PEORIA, IL 61602", 2),
+        ("lit", "Chicago renders four large ones", "the reference fork renders four large ones", 1),
+        ("lit", "// chicagoCoverage's fallback leg consults the community-area dataset",
+         "// A fork's coverage fallback leg may consult a second dataset", 1),
     ],
     "scripts/validate_sources.py": [
         ("lit", "DistrictExplorer-CHI source validator (+https://chidistricts.com)",
@@ -477,6 +482,9 @@ def emit_file(path, dispo, counters):
 def synth_worksheet():
     with open(os.path.join(TPL, "template-worksheet.json"), encoding="utf-8") as f:
         w = json.load(f)
+    # the $comment documents the SOURCE file; the schema (additionalProperties:
+    # false) rightly refuses it in a live worksheet
+    w.pop("$comment", None)
     with open(os.path.join(REPO, "metros.json"), encoding="utf-8") as f:
         fleet = json.load(f)["metros"]
     explorers = [{k: m[k] for k in ("id", "label", "url", "emoji", "bbox") if k in m} for m in fleet]
@@ -714,7 +722,7 @@ def node_check(outdir):
     # smoke_test.mjs carries raw {{TOKENS}} (some in numeric positions), so
     # syntax-check a token-filled copy, exactly as bootstrap will produce.
     with open(os.path.join(outdir, "scripts", "smoke_test.mjs"), encoding="utf-8") as f:
-        smoke = TOKEN_RE.sub("0", f.read())
+        smoke = TOKEN_RE.sub("X0", f.read())
     tmp = os.path.join(outdir, "scripts", "_smoke_tokcheck.mjs")
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(smoke)
@@ -727,7 +735,7 @@ def node_check(outdir):
         html = f.read()
     scripts = re.findall(r"<script>(.*?)</script>", html, flags=re.DOTALL)
     body = max(scripts, key=len) if scripts else ""
-    body = TOKEN_RE.sub("0", body)
+    body = TOKEN_RE.sub("X0", body)
     tmp = os.path.join(outdir, "_inline_check.js")
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(body)

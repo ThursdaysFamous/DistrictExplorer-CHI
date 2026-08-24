@@ -69,7 +69,13 @@ SKIP_FILES = {
     "engine.bundle.js",
     "engine.manifest.json",
 }
-SKIP_DIRS = {".git", "node_modules", "fonts", "data/source", "dist",
+# data/ is skipped WHOLESALE: bootstrap-built boundary files and rosters are
+# real-world civic data, and the real world legitimately contains the
+# reference fork's vocabulary — the first Indiana e2e run failed on the
+# School City of EAST CHICAGO, Indiana. The sweep polices authored code and
+# prose; data answers to its own gates (validate_index's counts, the roster
+# retention gate), never to a place-name blacklist.
+SKIP_DIRS = {".git", "node_modules", "fonts", "data", "dist",
              ".claude/worktrees", "scripts/vendor", "__pycache__"}
 SKIP_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".ico", ".woff", ".woff2",
                  ".zip", ".pdf", ".pyc")
