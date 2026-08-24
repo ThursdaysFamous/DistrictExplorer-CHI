@@ -11,7 +11,7 @@
 <!-- Google tag (gtag.js) — production host only; keeps local dev + CI out of analytics -->
 <script>
   (function () {
-    if (location.hostname !== 'chidistricts.com') return;
+    if (location.hostname !== 'districtry.com') return;
     if (window.top !== window.self) return; // top-level only — no Google Analytics inside an embedded iframe (the cookieless GoatCounter still counts)
     var s = document.createElement('script');
     s.async = true;
@@ -31,15 +31,15 @@
 <title>What district am I in? Find your district — Districtry Illinois</title>
 <meta name="description" content="Enter an address or ZIP — or tap the map — to find your district: ward, police district, elected school board, county board, congressional and Illinois legislative districts, and who represents you. Free, no login." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://chidistricts.com/il/" />
+<link rel="canonical" href="https://districtry.com/il/" />
 
 <!-- Open Graph / social share previews (Facebook, LinkedIn, iMessage, Slack…) -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Districtry Illinois" />
 <meta property="og:title" content="What district am I in? — Districtry Illinois" />
 <meta property="og:description" content="Click the map or search any Chicago address to see every civic district that covers it — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
-<meta property="og:url" content="https://chidistricts.com/il/" />
-<meta property="og:image" content="https://chidistricts.com/il/og-image.png" />
+<meta property="og:url" content="https://districtry.com/il/" />
+<meta property="og:image" content="https://districtry.com/il/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Districtry Illinois — a map of Chicago with the question: which districts cover this point, and who represents you?" />
@@ -49,7 +49,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="What district am I in? — Districtry Illinois" />
 <meta name="twitter:description" content="See every civic district that covers a Chicago address — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
-<meta name="twitter:image" content="https://chidistricts.com/il/og-image.png" />
+<meta name="twitter:image" content="https://districtry.com/il/og-image.png" />
 <!-- ==== GENERATED:END head-brand ==== -->
 <!-- ==== TEMPLATE:END head-meta ==== -->
 
@@ -61,23 +61,23 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://chidistricts.com/il/#website",
-      "url": "https://chidistricts.com/il/",
+      "@id": "https://districtry.com/il/#website",
+      "url": "https://districtry.com/il/",
       "name": "Districtry Illinois",
       "description": "Find every civic district that covers a point or address in Chicago, and who represents you there.",
       "inLanguage": "en-US",
-      "publisher": { "@id": "https://chidistricts.com/il/#publisher" }
+      "publisher": { "@id": "https://districtry.com/il/#publisher" }
     },
     {
       "@type": "Organization",
-      "@id": "https://chidistricts.com/il/#publisher",
+      "@id": "https://districtry.com/il/#publisher",
       "name": "Overberg",
       "url": "https://overberg.co"
     },
     {
       "@type": "WebApplication",
       "name": "Districtry Illinois",
-      "url": "https://chidistricts.com/il/",
+      "url": "https://districtry.com/il/",
       "description": "Click any point in Chicago, or search an address, to see every civic district that contains it — ward, police district and beat, community area, U.S. House and Illinois legislative districts, Cook County commissioner and Board of Review, elected school board district, and CPS attendance zones — and who represents you.",
       "applicationCategory": "Reference",
       "operatingSystem": "Any (modern web browser)",
@@ -85,10 +85,10 @@
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "inLanguage": "en-US",
-      "image": "https://chidistricts.com/il/og-image.png",
+      "image": "https://districtry.com/il/og-image.png",
       "areaServed": { "@type": "City", "name": "Chicago", "containedInPlace": { "@type": "State", "name": "Illinois" } },
       "keywords": "Chicago ward map, what ward am I in, Chicago police district, Chicago community area, congressional district, Illinois legislative district, Cook County commissioner, elected school board district, CPS attendance zone, who represents me Chicago",
-      "isPartOf": { "@id": "https://chidistricts.com/il/#website" },
+      "isPartOf": { "@id": "https://districtry.com/il/#website" },
       "sameAs": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI"
     }
   ]
@@ -3856,7 +3856,7 @@ function initChiExplorer() {
    * or search/geolocate a point inside one — and the app offers to hand you
    * off to that fork's explorer. */
   var METRO_EXPLORERS = [
-    { id: "chicago", label: "Chicago", url: "https://chidistricts.com/il/", emoji: "🌭",
+    { id: "chicago", label: "Chicago", url: "https://districtry.com/il/", emoji: "🌭",
       bbox: { minLng: -88.6, minLat: 41.0, maxLng: -87.0, maxLat: 42.6 } },
     { id: "nyc", label: "New York City", url: "https://nyc.chidistricts.com/", emoji: "🗽",
       bbox: { minLng: -74.3, minLat: 40.45, maxLng: -73.6, maxLat: 41.0 } },

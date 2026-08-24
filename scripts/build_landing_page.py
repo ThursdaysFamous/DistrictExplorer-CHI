@@ -64,7 +64,7 @@ OUT = os.path.join(REPO_ROOT, "index.html")
 # The canonical host TODAY. R5 moves this to districtry.com along with
 # metros.json's urls; both are data, so that cutover is an edit here plus a
 # regenerate, never a rewrite of the page.
-CANONICAL = "https://chidistricts.com/"
+CANONICAL = "https://districtry.com/"
 
 # Where a forwarded visit goes. The Illinois app is what lived at this root
 # before R2.3, so it is the only instance whose old links can be in the wild.
