@@ -218,8 +218,17 @@ starve it forever.
   3. Fork-local branding rows per `EXPANSION_GUIDE.md` §4.2 (head meta/OG/JSON-LD/theme-color/
      favicon, masthead mark/wordmark, `:root` palette values, analytics).
   4. `sources.html` hand-mirrored palette (lines 140–154) re-pointed.
-  5. Assets + SW: replace root manifest/icons/og-image in place (SHELL_URLS-pinned filenames),
-     bump `sw.cache_name` via the worksheet; head-snippet og:image made absolute.
+  5. Assets + SW — **manifests + icons SHIPPED (2026-08-24)**; og-image and the head-snippet's
+     absolute `og:image` still open. The manifest was the one branded surface nothing generated,
+     and it rotted exactly there: every other surface had said districtry since the rebrand while
+     `il/manifest.webmanifest` still read `"Chicago District Explorer"` in the pre-rebrand navy
+     `#0b3d91`, pointing at the old Chicago-flag star icons — so **installing to an Android home
+     screen produced the old name and the old icon**, which is how it was found. NY and SF were
+     the same with their own old names. `scripts/build_manifests.py` now emits all three from the
+     worksheet `brand` block and `--check` gates them in `smoke-test.yml`. Icons were replaced in
+     **place** (`sw.shell_urls` pins the filenames; NY's live under `icons/app/`), a padded
+     `icon-maskable-512.png` added per instance and to each shell list, and each
+     `sw.cache_name` bumped so returning installs re-precache.
   6. Tooling: `build_fonts.py` → self-hosted Barlow woff2s (no font CDN in production);
      `build_og_image.mjs` rebuilt from `OG Card.dc.html`.
   7. **Dark mode** — its own proposal and approval (greenfield engine work).
@@ -1318,8 +1327,11 @@ and the title column unchanged at 371px — the switch adds a caret, not a row.
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
   fix at adoption.
-- `manifest.webmanifest` `start_url: ./index.html` assumes the manifest sits beside the app —
-  correct at adoption, wrong anywhere else; the preview deliberately links no manifest.
+- ~~`manifest.webmanifest` `start_url: ./index.html`~~ — **resolved at adoption (2026-08-24).**
+  The generated manifests use `start_url: "./"`, which is what the service worker precaches; the
+  package's `./index.html` would have made an installed app's first offline launch miss the shell
+  cache. (Navigations are network-first with a `"./"` fallback, so a deep `/index.html` bookmark
+  still boots offline — see `OPTIMIZATION_PLAYBOOK.md` item 22.)
 - Mockup stats are hand-set snapshots and will drift (the 60→69 fix is already one instance);
   production surfaces must derive counts from the worksheet, never hardcode them.
 - Dark-mode tokens exist in the tokens file; dark mode itself is out of scope until approved.

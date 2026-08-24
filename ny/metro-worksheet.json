@@ -143,12 +143,13 @@
     ]
   },
   "sw": {
-    "cache_name": "nyc-district-explorer-shell-v9",
+    "cache_name": "nyc-district-explorer-shell-v10",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
       "./icons/app/icon-192.png",
       "./icons/app/icon-512.png",
+      "./icons/app/icon-maskable-512.png",
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
     ]
   },

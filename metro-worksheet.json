@@ -2478,13 +2478,14 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v1",
+    "cache_name": "districtry-il-shell-v2",
     "shell_urls": [
       "./",
       "./sources.html",
       "./manifest.webmanifest",
       "./icons/icon-192.png",
       "./icons/icon-512.png",
+      "./icons/icon-maskable-512.png",
       "./icons/water-taxi.png",
       "./icons/seals/cook-county.png",
       "./icons/seals/kane.png",

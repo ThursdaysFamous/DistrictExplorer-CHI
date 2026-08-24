@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v1";
+const CACHE_NAME = "districtry-il-shell-v2";
 
 const SHELL_URLS = [
   "./",
@@ -51,6 +51,7 @@ const SHELL_URLS = [
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
+  "./icons/icon-maskable-512.png",
   "./icons/water-taxi.png",
   "./icons/seals/cook-county.png",
   "./icons/seals/kane.png",
