@@ -67,11 +67,13 @@ GAPS_RE = re.compile(
     r"<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->\s*```json\s*(.*?)\s*```",
     re.DOTALL)
 GAPS_PATH = "data/app/coverage-gaps.json"
-# Where an instance's tree sits inside its repo. This repo consolidated its app
-# under il/ (R2.3); the sibling forks are still repo-root apps until R3 imports
-# them, at which point they become "nyc/" and "sf/" here and this table dies
-# with the remote fetching it exists for.
-REPO_PREFIX = {"chicago": "il/"}
+# Where an instance's tree sits inside its repo. All three are folders in THIS
+# repo now — il/ at R2.3, ny/ and ca/ imported at R3 and published at R5 — so
+# the table is complete rather than a Chicago special case. It still exists
+# because metros.json's `repo` field still names the old per-metro forks for the
+# remote fetches; retiring that is the last piece of the consolidation and is
+# deliberately not done here.
+REPO_PREFIX = {"chicago": "il/", "nyc": "ny/", "sf": "ca/"}
 
 
 def repo_path(metro_id, rel):

@@ -11,7 +11,16 @@ package-lock.json
 # Transient — Leaflet fetched by scripts/vendor_leaflet.sh so the smoke test can
 # serve it same-origin where the browser can't reach the CDN (Claude Code web).
 # Third-party asset, never committed; production and CI load Leaflet from the CDN.
-scripts/vendor/
+#
+# UNANCHORED (`**/`), because the script vendors ONE COPY PER INSTANCE and a
+# pattern containing a slash is anchored to the repo root — `scripts/vendor/`
+# matched the root copy and never il/'s, ca/'s or ny/'s. That went unnoticed only
+# because each imported instance still carried its own .gitignore from its fork
+# days; the R5 rename moved sf/.gitignore to ca/ and left sf/scripts/vendor/
+# behind unignored, where the next `git add -A` staged 160 KB of third-party
+# Leaflet. Ignoring the directory NAME covers every instance, including the next
+# one, and needs nothing from a per-instance file that may not exist.
+**/scripts/vendor/
 
 # Transient — outputs of scripts/perf_profile.mjs (the performance harness behind
 # docs/PERFORMANCE_ANALYSIS_2026-07.md). Regenerated on demand; never committed.

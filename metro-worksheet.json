@@ -31,7 +31,7 @@
     {
       "id": "chicago",
       "label": "Chicago",
-      "url": "https://chidistricts.com/il/",
+      "url": "https://districtry.com/il/",
       "emoji": "🌭",
       "bbox": {
         "minLng": -88.6,
@@ -2872,7 +2872,7 @@
     }
   },
   "domains": {
-    "canonical": "https://chidistricts.com/il/"
+    "canonical": "https://districtry.com/il/"
   },
   "brand": {
     "app_name": "districtry Illinois",
@@ -2890,8 +2890,8 @@
     },
     "analytics": {
       "ga_id": "G-YPJ570LWJB",
-      "ga_hostname": "chidistricts.com",
-      "goatcounter_url": "https://chidistricts.goatcounter.com/count"
+      "ga_hostname": "districtry.com",
+      "goatcounter_url": "https://districtry.goatcounter.com/count"
     },
     "product_name": "districtry",
     "instance_tag": "il"

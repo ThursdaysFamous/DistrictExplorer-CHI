@@ -28,8 +28,8 @@
  *    was also renamed to districtry-il-shell-* in the same change, so neither
  *    side can name the other's cache even by accident — and the engine's own
  *    "delete every cache that isn't mine" activate step stops being a weapon
- *    the moment two instances share an origin, which is exactly what /nyc/ and
- *    /sf/ will do.)
+ *    the moment two instances share an origin, which is exactly what /ny/ and
+ *    /ca/ now do.)
  *
  * 3. NO re-registration from the stub page. The browser's own on-navigation
  *    update check is what delivers this file; a register() call in the stub

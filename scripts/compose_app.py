@@ -57,8 +57,8 @@ ENGINE_DIR = os.path.join(REPO_ROOT, "engine")
 # row here; nothing else in this script knows how many instances exist.
 INSTANCES = {
     "il": ["il/index.html", "il/sw.js"],
-    "sf": ["sf/index.html", "sf/sw.js"],
-    "nyc": ["nyc/index.html", "nyc/sw.js"],
+    "ca": ["ca/index.html", "ca/sw.js"],
+    "ny": ["ny/index.html", "ny/sw.js"],
 }
 
 ENGINE_RE = re.compile(

@@ -12,7 +12,7 @@
 # unless this script has run).
 #
 # ONE SCRIPT, EVERY INSTANCE. Three byte-identical copies of this used to live
-# in scripts/, sf/scripts/ and nyc/scripts/ — genuinely non-redundant while the
+# in scripts/, ca/scripts/ and ny/scripts/ — genuinely non-redundant while the
 # instances were separate REPOS, because each self-located into its own tree.
 # They are one repo now, one SessionStart hook fires at the repo root, and only
 # the root copy ever ran: a sandboxed sf or nyc smoke run would have hit exactly
@@ -40,8 +40,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # id : app file (relative to repo root) : vendor dir (relative to repo root)
 INSTANCES=(
   "il:il/index.html:scripts/vendor/leaflet"
-  "sf:sf/index.html:sf/scripts/vendor/leaflet"
-  "nyc:nyc/index.html:nyc/scripts/vendor/leaflet"
+  "ca:ca/index.html:ca/scripts/vendor/leaflet"
+  "ny:ny/index.html:ny/scripts/vendor/leaflet"
 )
 
 wanted=("$@")

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chidistricts.com/sitemap.xml
+Sitemap: https://districtry.com/sitemap.xml

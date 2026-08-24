@@ -672,8 +672,8 @@ def render_layer_matrix(w):
 #   worksheet the file that drives all of it
 INSTANCES = {
     "il":  {"app": "il",  "scripts": "scripts",     "docs": ".",   "worksheet": "metro-worksheet.json"},
-    "sf":  {"app": "sf",  "scripts": "sf/scripts",  "docs": "sf",  "worksheet": "sf/metro-worksheet.json"},
-    "nyc": {"app": "nyc", "scripts": "nyc/scripts", "docs": "nyc", "worksheet": "nyc/metro-worksheet.json"},
+    "ca":  {"app": "ca",  "scripts": "ca/scripts",  "docs": "ca",  "worksheet": "ca/metro-worksheet.json"},
+    "ny":  {"app": "ny",  "scripts": "ny/scripts",  "docs": "ny",  "worksheet": "ny/metro-worksheet.json"},
 }
 
 

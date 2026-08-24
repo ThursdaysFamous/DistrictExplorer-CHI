@@ -153,6 +153,6 @@
     "accent_warm": "#FF6319",
     "accent_warm_deep": "#C74E12"
   },
-  "domains": { "canonical": "https://nyc.chidistricts.com/" },
+  "domains": { "canonical": "https://districtry.com/ny/" },
   "exports_name": "NycExplorer"
 }

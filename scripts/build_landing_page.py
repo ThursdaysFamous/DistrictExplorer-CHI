@@ -67,10 +67,15 @@ MARK_SOURCE = os.path.join(REPO_ROOT, "il", "index.html")
 # Each instance's worksheet, for the layer count on its card. A card that states
 # a number must read it from the thing that owns it; a hand-typed count is the
 # drift this repo keeps writing generators to avoid.
+#
+# KEYED BY INSTANCE TAG — the folder, which is the URL, which is the state code
+# on the card. R5 renamed sf/ -> ca/ and nyc/ -> ny/ (the tag is the STATE, not
+# the metro: metros.json still calls them 'sf' and 'nyc' by id), and this table
+# is the one place that pairs a tag with a file, so it moves with them.
 INSTANCE_WORKSHEET = {
     "il": "metro-worksheet.json",
-    "sf": "sf/metro-worksheet.json",
-    "nyc": "nyc/metro-worksheet.json",
+    "ca": "ca/metro-worksheet.json",
+    "ny": "ny/metro-worksheet.json",
 }
 FONTFACE = os.path.join(REPO_ROOT, "fonts", "barlow-fontface.css")
 OUT = os.path.join(REPO_ROOT, "index.html")
@@ -78,7 +83,7 @@ OUT = os.path.join(REPO_ROOT, "index.html")
 # The canonical host TODAY. R5 moves this to districtry.com along with
 # metros.json's urls; both are data, so that cutover is an edit here plus a
 # regenerate, never a rewrite of the page.
-CANONICAL = "https://chidistricts.com/"
+CANONICAL = "https://districtry.com/"
 
 # The rename notice. Data, not markup, so retiring it is deleting a constant
 # rather than editing a page — set NOTICE to None when it has served its time.

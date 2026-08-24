@@ -51,7 +51,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #             and body type (districtry/tokens/districtry.tokens.css:
 #             --font-heading Barlow Condensed 600, --font-body Barlow)
 #
-# sf/ and nyc/ keep their own copies of this script, which self-locate into
+# ca/ and ny/ keep their own copies of this script, which self-locate into
 # their own trees correctly and are NOT redundant with this one.
 TARGETS = {
     "il": {

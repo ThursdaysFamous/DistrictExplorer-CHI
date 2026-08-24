@@ -4,7 +4,7 @@
     {
       "id": "chicago",
       "label": "Chicago",
-      "url": "https://chidistricts.com/il/",
+      "url": "https://districtry.com/il/",
       "emoji": "🌭",
       "repo": "ThursdaysFamous/DistrictExplorer-CHI",
       "bbox": {
@@ -20,7 +20,7 @@
     {
       "id": "nyc",
       "label": "New York City",
-      "url": "https://nyc.chidistricts.com/",
+      "url": "https://districtry.com/ny/",
       "emoji": "🗽",
       "repo": "ThursdaysFamous/DistrictExplorer-NYC",
       "bbox": {
@@ -29,14 +29,14 @@
         "maxLng": -73.6,
         "maxLat": 41.0
       },
-      "tag": "nyc",
+      "tag": "ny",
       "landing_name": "New York City",
       "blurb": "Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them."
     },
     {
       "id": "sf",
       "label": "San Francisco",
-      "url": "https://sf.chidistricts.com/",
+      "url": "https://districtry.com/ca/",
       "emoji": "🌉",
       "repo": "ThursdaysFamous/DistrictExplorer-SF",
       "bbox": {
@@ -45,7 +45,7 @@
         "maxLng": -122.3,
         "maxLat": 37.95
       },
-      "tag": "sf",
+      "tag": "ca",
       "landing_name": "San Francisco",
       "blurb": "Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them."
     }
