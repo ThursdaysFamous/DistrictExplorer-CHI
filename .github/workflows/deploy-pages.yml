@@ -197,6 +197,10 @@ jobs:
           # never pass silently — it is exactly what the broken form produced.
           test -f _site/il/index.html || { echo "::error::assemble produced no il/index.html"; exit 1; }
           test -f _site/index.html    || { echo "::error::assemble produced no root redirect stub"; exit 1; }
+          # The fleet privacy page is generated and lives at the ROOT, and every
+          # app links it with a `../` hop. An assemble that drops it turns that
+          # link into a 404 on all three apps at once.
+          test -f _site/privacy.html  || { echo "::error::assemble produced no root privacy.html"; exit 1; }
           for unpublished in engine; do
             test ! -e "_site/$unpublished" || { echo "::error::$unpublished leaked into the published tree"; exit 1; }
           done

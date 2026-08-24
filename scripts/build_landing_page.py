@@ -524,7 +524,7 @@ footer .foot-links { margin-top: 12px; }
          and it never guesses at who holds a seat — where no verifiable roster
          exists, it links the official body instead.</p>
       <p>Each place above names its own sources on its sources page.</p>
-      <p class="foot-links"><a href="il/privacy.html">Privacy</a> ·
+      <p class="foot-links"><a href="privacy.html">Privacy</a> ·
          <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">Source on GitHub</a></p>
     </footer>
   </div>
