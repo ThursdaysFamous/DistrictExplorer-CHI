@@ -377,15 +377,28 @@ def render_analytics_section(apps):
             % (esc(", ".join(a["name"] for a in none)),
                "carry" if len(none) > 1 else "carries"))
     parts.append("<h3>GoatCounter</h3>")
+    # Where the counts go is a CLAIM about arrangement, not just a list of names, so the
+    # sentence has to follow the arrangement. The apps reported to separate sites until
+    # 2026-08-24 and to one shared site after; a template that says "their own separate
+    # site" while listing the same name four times is not a formatting wart, it is a false
+    # statement on a privacy page. Both shapes are spelled out rather than interpolated.
+    gc_sites = {a["goatcounter"]["site"] for a in gc}
+    if len(gc_sites) == 1 and len(gc) > 1:
+        where = ("%s all report to a single GoatCounter site (%s); the page path is what "
+                 "distinguishes them" % (esc(", ".join(a["name"] for a in gc)),
+                                         code(sorted(gc_sites)[0])))
+    else:
+        where = ("%s each report to their own separate GoatCounter site (%s)"
+                 % (esc(", ".join(a["name"] for a in gc)),
+                    ", ".join(code(a["goatcounter"]["site"]) for a in gc)))
     parts.append(
         '<p><a href="https://www.goatcounter.com/help/privacy" target="_blank" '
         'rel="noopener">GoatCounter</a> is cookieless and does not build a profile across '
-        "sites. %s each report to their own separate GoatCounter site (%s). Besides the "
+        "sites. %s. Besides the "
         "page view, each app sends named events for: %s. Exactly two of those — %s — carry "
         "coordinates, <strong>rounded to %d decimal places</strong>. "
         "<strong>Nothing you type is ever sent to it.</strong></p>"
-        % (esc(", ".join(a["name"] for a in gc)),
-           ", ".join(code(a["goatcounter"]["site"]) for a in gc),
+        % (where,
            esc(", ".join(EXPECTED_EVENTS)),
            esc(" and ".join(EXPECTED_COORD_EVENTS)), COORD_DECIMALS))
     parts.append("<h3>Google Analytics</h3>")

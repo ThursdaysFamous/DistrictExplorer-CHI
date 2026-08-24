@@ -361,7 +361,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
           <tr>
             <th scope="row"><a href="/">The front door</a><small>/</small></th>
             <td><em>None.</em></td>
-            <td><em>None.</em></td>
+            <td><code class="k">https://districtry.goatcounter.com/count</code></td>
             <td><em>Nothing.</em></td>
             <td><em>No search box.</em></td>
             <td><em>None.</em></td>
@@ -377,7 +377,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
           <tr>
             <th scope="row"><a href="/ny/">New York City</a><small>/ny/</small></th>
             <td>Google Analytics <code class="k">G-YPJ570LWJB</code><small>live host only (<code class="k">districtry.com</code>), never in an embed</small></td>
-            <td><code class="k">https://nycdistricts.goatcounter.com/count</code></td>
+            <td><code class="k">https://districtry.goatcounter.com/count</code></td>
             <td><code class="k">nyc-school-type-filter</code><small>session</small></td>
             <td>Photon / Komoot, GeoSearch / NYC Planning</td>
             <td><em>None.</em></td>
@@ -385,7 +385,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
           <tr>
             <th scope="row"><a href="/ca/">San Francisco</a><small>/ca/</small></th>
             <td><em>None.</em></td>
-            <td><code class="k">https://sfdistricts.goatcounter.com/count</code></td>
+            <td><code class="k">https://districtry.goatcounter.com/count</code></td>
             <td><code class="k">sf-school-type-filter</code><small>session</small></td>
             <td>Photon / Komoot, Nominatim / OpenStreetMap</td>
             <td><em>None.</em></td>
@@ -506,11 +506,9 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
     <h2>Analytics, precisely</h2>
     <p>Counters run for one reason: to know whether anyone is using this and which parts.</p>
 
-    <p>The front door carries no analytics of any kind — no counter, no page view, no event.</p>
-
     <h3>GoatCounter</h3>
 
-    <p><a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">GoatCounter</a> is cookieless and does not build a profile across sites. Illinois, New York City, San Francisco each report to their own separate GoatCounter site (<code class="k">districtry</code>, <code class="k">nycdistricts</code>, <code class="k">sfdistricts</code>). Besides the page view, each app sends named events for: address-search, geolocate, geolocate-success, layer/, metro-portal-go/, metro-portal/, select, share-native, share-open. Exactly two of those — geolocate-success and select — carry coordinates, <strong>rounded to 2 decimal places</strong>. <strong>Nothing you type is ever sent to it.</strong></p>
+    <p><a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">GoatCounter</a> is cookieless and does not build a profile across sites. The front door, Illinois, New York City, San Francisco all report to a single GoatCounter site (<code class="k">districtry</code>); the page path is what distinguishes them. Besides the page view, each app sends named events for: address-search, geolocate, geolocate-success, layer/, metro-portal-go/, metro-portal/, select, share-native, share-open. Exactly two of those — geolocate-success and select — carry coordinates, <strong>rounded to 2 decimal places</strong>. <strong>Nothing you type is ever sent to it.</strong></p>
 
     <h3>Google Analytics</h3>
 
