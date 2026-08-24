@@ -16,8 +16,8 @@ THE DISTRICT KEY IS ARABIC. The county's directory writes Roman numerals
 ("District II") while its map uses "District 2"; the scraper converts, so this
 file and the boundary agree.
 
-Shape mirrors the other rosters — {district: {members: [...], sourceUrl}}. The
-Board Chair and Vice Chair are district members carrying a `role`, not a
+Shape mirrors the other rosters — {district: {members: [...], seats, sourceUrl}}.
+The Board Chair and Vice Chair are district members carrying a `role`, not a
 countywide section: Carroll's board elects its officers from among its own 9
 members, so there is no at-large seat to imply.
 
@@ -31,18 +31,30 @@ import sys
 
 SOURCE_URL = "https://www.carrollcountyil.gov/county_board/board_members.php"
 
+# THE SEAT COUNT IS CARRIED INTO THE DATA, not just asserted in this docstring,
+# because the card has no other way to know a district is SHORT. Emitting
+# `seats` lets the card say "1 of 3 seats not listed in the county's directory"
+# instead of quietly showing two names where three belong — the Ogle/DeKalb/
+# Kendall pattern. It states what the source shows, never why: a row can be
+# missing because a seat is empty or because the parse dropped it, and this
+# county publishes nothing that tells the two apart.
+SEATS_PER_DISTRICT = 3
+
 # Three districts, three seats each. Floors, not equalities: a resignation
 # between scrapes is normal and must not block a refresh, while a collapse means
 # the directory table changed and the old file should stand.
 #
-# MIN_MEMBERS is set at 9 — the full board — DELIBERATELY, not one under. The
-# county has "District" typo'd as "Distirct" on one row, and the first version of
-# the scraper silently dropped that member; a card showing two names for a
-# three-member district looks entirely normal. On a board this small a floor of 8
-# would have let exactly that through, so the floor is the count and a genuine
-# vacancy is expected to need a human to lower it.
+# MIN_MEMBERS was 9 (the full board) DELIBERATELY, not one under, to force a
+# human to confirm any vacancy before it shipped — the county has "District"
+# typo'd as "Distirct" on one row, and the first version of the scraper
+# silently dropped that member, which a floor of 8 would not have caught. That
+# confirmation happened on 2026-08-24: the live directory was read directly and
+# genuinely lists 8, District III down to Iske and Beyers with Kevin Barnes no
+# longer on the page. Now that `seats` makes a shortfall VISIBLE on the card
+# instead of silent, the floor can drop to match the confirmed count rather
+# than continuing to block every refresh until the vacant seat is filled.
 MIN_DISTRICTS = 3
-MIN_MEMBERS = 9
+MIN_MEMBERS = 8
 MIN_EMAILS = 8
 MIN_PHONES = 8
 
@@ -65,7 +77,8 @@ def resolve_roster(records):
         name = (rec.get("name") or "").strip()
         if not district or not name:
             continue
-        slot = roster.setdefault(district, {"members": [], "sourceUrl": SOURCE_URL})
+        slot = roster.setdefault(district, {"members": [], "seats": SEATS_PER_DISTRICT,
+                                            "sourceUrl": SOURCE_URL})
         slot["members"].append(member_obj(rec))
     rank = {"Board Chair": 0, "Vice Chair": 1}
     for slot in roster.values():
