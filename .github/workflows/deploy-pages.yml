@@ -107,8 +107,14 @@ jobs:
           DEADLINE_S: "900" # 15 min — a human running the two dispatches by hand
         run: |
           tag="$(jq -r .engine_version engine.lock.json)"
+          # The release lives in the repo the lockfile names, not necessarily
+          # this one: the reference repo's lock names itself (identical
+          # behavior there), while a sibling/state fork's lock names the
+          # reference repo — the exact $GITHUB_REPOSITORY-vs-source_repo
+          # mixup §4.4.1 item 6 exists to catch is impossible by construction.
+          src="$(jq -r .source_repo engine.lock.json)"
           waited=0
-          until gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --silent 2>/dev/null; do
+          until gh api "repos/$src/releases/tags/$tag" --silent 2>/dev/null; do
             if [ "$waited" -ge "$DEADLINE_S" ]; then
               echo "::error::engine release $tag is still not published after $((DEADLINE_S / 60))m. main pins it, so the site cannot ship without it. Run 'Create engine tag' (tag=$tag, sha=$GITHUB_SHA) then 'Publish engine release' at that tag ref; this deploy will be re-dispatched automatically once the release publishes."
               exit 1
@@ -121,7 +127,7 @@ jobs:
           done
           [ "$waited" -gt 0 ] && echo "$tag appeared after ${waited}s"
           gh release download "$tag" \
-            --repo "$GITHUB_REPOSITORY" \
+            --repo "$src" \
             --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' --clobber
 
       # The TWO spaces between hash and filename are load-bearing — a single

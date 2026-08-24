@@ -52,9 +52,11 @@ OUTLINE_PY = os.path.join(REPO_ROOT, "scripts", "build_metro_outline.py")
 VALIDATE_PY = os.path.join(REPO_ROOT, "scripts", "validate_index.py")
 INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
 GAPS_JSON = os.path.join(REPO_ROOT, "data", "app", "coverage-gaps.json")
+OUT_PATH = os.path.join(REPO_ROOT, "docs", "COUNTY_STATUS.md")
+
+# ==== TEMPLATE:BEGIN county-status-config ====
 COMMISSIONERS_JSON = os.path.join(REPO_ROOT, "data", "app",
                                   "il-county-commissioners.json")
-OUT_PATH = os.path.join(REPO_ROOT, "docs", "COUNTY_STATUS.md")
 STATE_FIPS = "17"
 
 # All 102 Illinois counties, name -> county FIPS. Static on purpose: this is
@@ -94,6 +96,7 @@ ALL_COUNTIES = (
 # The repo's slug convention is the default rule below except where it isn't:
 # "De Witt" ships as "dewitt" everywhere (dispatch table, outline file, gaps).
 SLUG_OVERRIDES = {"De Witt": "dewitt"}
+# ==== TEMPLATE:END county-status-config ====
 
 
 fail = make_fail("build-county-status")

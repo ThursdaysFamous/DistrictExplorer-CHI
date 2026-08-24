@@ -1455,7 +1455,7 @@ official-body link is the floor; the metro carve-out exists because seven clerks
 keyable directories); every step preserves Chicago byte-for-byte where fenced and
 behavior-identical where not.
 
-## 3.5 Verification
+## 3.4 Verification
 
 Ground-truth a downstate point against every statewide layer (the shipped check: Homer
 Glen → Will County / Homer Township / Homer Glen village / Lockport Twp HSD 205 / Homer
@@ -1478,6 +1478,9 @@ digitized boundaries at all. Completed-port worked examples: NYC
 (`docs/archive/METRO_EXPANSION_NYC.md` — thread log; registry/roster model in
 `docs/archive/METRO_EXPANSION_PLAYBOOK.md` Part II) and SF
 (`docs/archive/METRO_EXPANSION_SF_WORKSHEET.md` — a completed §0 worksheet).
+**Starting a NEW STATE rather than a metro?** Read **§4.10** first — the generated
+template repo pre-does the re-core surgery and several §4.4.1 items by construction,
+and its bootstrap replaces most of §4.1's worksheet-filling with one derived pass.
 
 ## 4.1 City Worksheet — fill this in first (Thread 0's first deliverable)
 
@@ -1501,11 +1504,16 @@ digitized boundaries at all. Completed-port worked examples: NYC
 
 ## 4.2 What the fork keeps vs rewrites
 
-`index.html` is ~60–65% metro-agnostic engine — map boot, registry + card framework,
-state/sequence, permalinks, hover explorer, shared utilities, loaders, factories — all
-fenced and machine-enforced (`check_engine_parity.py … --strict` passes when the re-core
-is done and stays a per-thread gate). The fork rewrites the **layer modules** (the THREAD
-banner spans) and the **METRO config + branding constants**.
+`index.html` is ~23% metro-agnostic engine by line count (5,871 of 25,717 as of
+2026-08-24 — the engine hasn't shrunk; Chicago's statewide growth diluted it: the
+same 53 fenced blocks were ~60–65% of the file before the county expansion) — map
+boot, registry + card framework, state/sequence, permalinks, hover explorer, shared
+utilities, loaders, factories — all fenced and machine-enforced
+(`check_engine_parity.py … --strict` passes when the re-core is done and stays a
+per-thread gate). The fork rewrites the **layer modules** (the THREAD banner spans)
+and the **METRO config + branding constants**. A stripped fork's `index.html` lands
+around 7–8k lines — which is exactly what the §4.10 template build produces
+mechanically.
 
 **Re-core surgery notes (paid for in NYC):** delete only the `registerXxx({…})` calls and
 their city-specific preamble; keep every factory and loader. Then grep the ENTIRE
@@ -1527,7 +1535,7 @@ present — §4.4 step 4) · `SOCRATA_HOST`/`SOCRATA_APP_TOKEN` (or delete the S
 if unused — fenced-block deletion reads as honest "unused", not drift) ·
 `arcgisServiceUrl` org id · TIGERweb `STATE='NN'` filter · school-profile URL builder ·
 "data last verified" date · debug namespace (twinned in `smoke_test.mjs`) · hover fallback
-key lists · preconnect/dns-prefetch set (≤4, aimed at your LCP — §4.10) · analytics tag
+key lists · preconnect/dns-prefetch set (≤4, aimed at your LCP — §4.9's performance-parity notes) · analytics tag
 (fork's own GoatCounter — never the reference's, never absent) · `METRO_EXPLORERS`
 (shared canonical list — a new metro's entry is added in EVERY sibling as the same config
 diff, with `emoji` + `bbox` for the metro-portal easter egg; `validate_index.py` lints
@@ -1810,6 +1818,92 @@ freshness split; deploy exclude list. **Measure on production PSI mobile, never 
 sandbox proxy** (the sandbox stubs exactly the third parties that dominate delivery;
 the reference banked at 78 on an LCP-bound frontier — don't chase the last points).
 The canvas renderer stays a fleet-shared open item — inherit it, don't preempt.
+
+## 4.10 A new STATE: the template-repo route
+
+**What this is.** A fork whose scope is a whole state from day one — Indiana, Wisconsin,
+Missouri — rather than a metro that may grow into one. It is the combination this guide
+never covered before 2026-08-24: Part 4's fork mechanics carrying Part 3's statewide data
+model. (Part 3 decided *Illinois* statewide = grow the Chicago app in place; that decision
+is about the reference fork only. A NEW state has no app to grow, so it forks — and what
+it forks from is no longer Chicago's live tree.)
+
+**The template repo is a GENERATED ARTIFACT, not a hand-cut skeleton.**
+`scripts/build_state_template.py` (CHI-only, like `fleet_status.py`) derives the template
+from this repo's live tree: `TEMPLATE:BEGIN/END <name>` span markers (a third fence
+vocabulary beside ENGINE and GENERATED — comment lines, inert here) classify every line
+of the marked files as keep / drop / replace-with-payload, and in `index.html`/`sw.js`
+an UNCLASSIFIED non-blank line **fails the build** — so a future change to this repo
+must consciously classify its own lines in the PR that adds them, which is the anti-rot
+property (the same reasoning as the generated-region drift gate; a hand-kept skeleton is
+how `ENGINE_SYNC.md` itself once drifted 164 lines). The authored payloads live in
+`templates/state/` (starter modules, workflows, docs, the sentinel worksheet, the token
+registry); everything else is CHI's own bytes, stripped and substituted mechanically.
+`build_state_template.py --check` runs hermetically in every PR (smoke-test.yml);
+`.github/workflows/update-state-template.yml` regenerates the template repo weekly, on
+demand, and after every engine release — and before pushing it **boots the result**: a
+real `bootstrap_state.py` run against a test state (Indiana), then that tree's own gate
+battery and Playwright smoke test. A template that cannot become a running state app
+does not ship.
+
+**What a fresh copy contains.** The 53+2 ENGINE fences FILLED at the pinned release
+(`engine.lock.json` names `ThursdaysFamous/DistrictExplorer-CHI` as `source_repo`, so
+deploys and bumps fetch from the reference repo's release channel with no edit — the
+§4.4.1-item-6 mixup is impossible by construction); the consumer `engine-bump.yml`
+(which this repo itself does not carry — pre-template, a new fork had to crib it from
+NYC/SF), shipping the regenerate-after-apply shape ENGINE_SYNC.md names as the eventual
+structural fix; five FREE-tier starter layers any U.S. state serves from national
+publishers (county, county subdivision, municipality, unified school district, U.S.
+House with the congress-legislators roster — §3.3's taxonomy made concrete, with the
+roster path deliberately exercised on day one because NYC's dangling-helper crash hid
+until the first real roster landed); the standard gates; and `{{TOKEN}}` placeholders
+plus schema-valid sentinels everywhere a state fact belongs. The new repo's CI is
+**deliberately red until bootstrapped**: `scripts/check_template_placeholders.py` is
+§4.4.2's localization sweep as a day-one gate (tokens + sentinels + reference-fork
+fingerprints), and it prints the fix. The template repo itself stays green — its gates
+key on GitHub's own "Template repository" bit.
+
+**Starting a state (the whole flow):**
+
+1. GitHub → the template repo → **"Use this template"** (never the import function, and
+   not a fork: the machinery is content-addressed fence splicing with zero git-ancestry
+   requirements, and importing would drag the reference repo's history into every state).
+2. `python3 scripts/bootstrap_state.py --state-fips NN --state-name <Name>
+   --repo <owner/repo> --domain <host> --brand-name "<Name> District Explorer"` —
+   one TIGERweb pass derives the bbox/center/permalink gate, the anchor point and its
+   expected classifications, and pre-builds the starter data (`metro-outline`,
+   `state-counties`, `congress-districts` + roster, `school-districts-unified`,
+   a seeded `coverage-gaps.json`); then it rewrites the worksheet, fills every token,
+   regenerates, and runs the gate battery locally.
+3. Work the registration delta the bootstrap prints. §4.4.1 stays the source of truth;
+   the template pre-does items 5, 6, 11, 12 and 13's scaffold by construction, leaving:
+   **CHI-side** — `metros.json` entry + `--sync-fleet` regeneration PRs in every fork,
+   the `release-engine.yml` fan-out list, the `engine-parity.yml` URL block, guidebook
+   coverage-map + gaps entries; **operator** — the `ENGINE_DISPATCH_TOKEN` PAT scope,
+   Pages source + custom domain + `CNAME`, the Actions "allow PR creation" toggle,
+   `BOT_PR_TOKEN`, a GoatCounter site (item 14 — trackEvent no-ops silently without
+   one), real icons + og-image, the IndexNow key file.
+4. Grow. From here the fork is on Part 2 (county recipe) and §4.3 (new modules) exactly
+   like any sibling; its smoke test carries the 18 engine-generic checks, and the
+   CHI-scenario checks it dropped (failure isolation, straggler draw, legacy aliases)
+   return one by one as the fork ships the layers they exercise — cribbed back from
+   this repo's `smoke_test.mjs`, whose `smoke-*` TEMPLATE spans mark exactly which
+   checks those are.
+
+**Operator runbook (one-time, creating the template repo):** create the empty repo
+(recommended name `DistrictExplorer-Template`) → add it to the `ENGINE_DISPATCH_TOKEN`
+PAT's repo scope (Contents read/write) → dispatch `update-state-template.yml` (its
+`TEMPLATE_REPO` env names the target) → Settings → check **"Template repository"**.
+The push is a plain non-force push: if it ever fails non-fast-forward, someone
+hand-committed to the artifact — fold their change into CHI or drop it, never force.
+
+**Follow-ups recorded, not done here:** collapsing the four sibling registries
+(release-engine.yml's loop, engine-parity.yml's URL blocks, metros.json, the PAT
+scope) into metros.json-driven generation; retrofitting regenerate-after-apply
+`engine-bump.yml` into NYC/SF; `fleet_status.py` tracking template freshness
+(compare the template repo's `engine.lock.json` to the latest release);
+ENGINE_SYNC.md's own "~60%" engine-fraction line (fleet-synced doc — a change there
+lands in every repo or none).
 
 ---
 

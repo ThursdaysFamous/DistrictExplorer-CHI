@@ -1,0 +1,87 @@
+{
+  "$comment": "The template's placeholder vocabulary — one registry, three consumers. scripts/build_state_template.py emits every {{TOKEN}} listed here (and nothing else: an emitted token missing from this file, or a listed token missing from the emitted tree, both fail the build). scripts/bootstrap_state.py fills every token and sentinel. scripts/check_template_placeholders.py (shipped in the template) fails the new fork's CI while any token or sentinel survives. Tokens are for free-text files (HTML/JS/YAML comments and strings); sentinels are schema-valid stand-in VALUES for JSON files whose patterns would reject {{...}} — both are listed so the checker flags them all.",
+  "tokens": {
+    "STATE_NAME": {
+      "description": "The state's English name",
+      "example": "Indiana"
+    },
+    "STATE_FIPS": {
+      "description": "Two-digit state FIPS code, zero-padded",
+      "example": "18"
+    },
+    "BRAND_NAME": {
+      "description": "The fork's product name, used in the masthead, titles and social cards",
+      "example": "Indiana District Explorer"
+    },
+    "CANONICAL_URL": {
+      "description": "Canonical site URL with scheme and trailing slash",
+      "example": "https://indistricts.example.com/"
+    },
+    "REPO_URL": {
+      "description": "The fork's GitHub repository URL",
+      "example": "https://github.com/example/DistrictExplorer-IN"
+    },
+    "EXPORTS_NAME": {
+      "description": "The window debug-namespace identifier (^[A-Za-z][A-Za-z0-9]*$), twinned between index.html and smoke_test.mjs",
+      "example": "InExplorer"
+    },
+    "GOATCOUNTER_URL": {
+      "description": "The fork's own GoatCounter count endpoint — EXPANSION_GUIDE §4.4.1 item 14: trackEvent no-ops silently without one",
+      "example": "https://indistricts.goatcounter.com/count"
+    },
+    "THEME_COLOR": {
+      "description": "PWA theme-color hex",
+      "example": "#1e3a5f"
+    },
+    "FAVICON_DATA_URI": {
+      "description": "Inline SVG favicon as a data: URI",
+      "example": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%234A90D9'/%3E%3C/svg%3E"
+    },
+    "PALETTE_ACCENT": {
+      "description": "Primary accent hex (worksheet palette.accent)",
+      "example": "#4A90D9"
+    },
+    "PALETTE_ACCENT_DEEP": {
+      "description": "Deep accent hex for text/links on light bg",
+      "example": "#2C5F9E"
+    },
+    "PALETTE_ACCENT_WARM": {
+      "description": "Warm accent hex (selection marker, emphasis)",
+      "example": "#D97706"
+    },
+    "PALETTE_ACCENT_WARM_DEEP": {
+      "description": "Deep warm accent hex",
+      "example": "#B45309"
+    },
+    "GEOCODER_BIAS_LAT": {
+      "description": "Photon type-ahead bias latitude — the state's population centre, 2 decimals",
+      "example": "39.77"
+    },
+    "GEOCODER_BIAS_LON": {
+      "description": "Photon type-ahead bias longitude",
+      "example": "-86.16"
+    },
+    "PORTAL_HOST": {
+      "description": "The fork's primary open-data portal host (bare hostname), used by the smoke test's failure-isolation kill; a fork with no portal keeps a .invalid host and the kill test stays inert",
+      "example": "data.indy.gov"
+    },
+    "EMPTY_STATE_LEDE": {
+      "description": "One orientation sentence under the empty-state prompt naming what a reader will see",
+      "example": "See your county, township, municipality, school district, and U.S. House district — plus who represents you."
+    }
+  },
+  "sentinels": [
+    "newstate",
+    "Newstate",
+    "newstate.example",
+    "newstate-owner",
+    "StateExplorer",
+    "January 1, 2000"
+  ],
+  "fingerprints": [
+    "chidistricts",
+    "cityofchicago",
+    "chiexplorer",
+    "chicago"
+  ]
+}

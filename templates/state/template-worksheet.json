@@ -1,0 +1,146 @@
+{
+  "$comment": "Seed metro-worksheet.json for a NEW-STATE fork, emitted by scripts/build_state_template.py as the template repo's metro-worksheet.json. Every value here must validate against schema/metro-worksheet.schema.json AS-IS (the template build regenerates all GENERATED regions from it), so state-specific facts are carried as SENTINELS — 'newstate'/'Newstate', https://newstate.example/, the Null-Island bbox, the StateExplorer namespace — never as {{TOKENS}}, which the schema's patterns would reject. scripts/bootstrap_state.py rewrites every sentinel with the real state's values (scripts/check_template_placeholders.py fails the new fork's CI until it has). metro_explorers is synced from CHI's metros.json at template-build time, plus the fork's own sentinel entry.",
+  "this_metro": "newstate",
+  "metro_name": "Newstate",
+  "metro_bbox": { "minLng": -0.4, "minLat": -0.3, "maxLng": 0.4, "maxLat": 0.3 },
+  "metro_center": [0.1, 0.1],
+  "permalink_gate": { "minLat": -0.5, "maxLat": 0.5, "minLng": -0.6, "maxLng": 0.6 },
+  "socrata_host": "https://data.newstate.example",
+  "socrata_app_token": "",
+  "repo_issues": "https://github.com/newstate-owner/newstate-repo/issues/new",
+  "feedback_subject": "Newstate District Explorer feedback",
+  "metro_explorers": [],
+  "hover_number_keys": [
+    ["district", "basename", "cd", "sldust", "sldlst"],
+    ["geoid", "number"]
+  ],
+  "hover_name_keys": [
+    ["name", "namelsad"]
+  ],
+  "layers": [
+    {
+      "id": "us-house",
+      "label": "U.S. House",
+      "group": "political",
+      "area_rank": 1,
+      "rank_note": "Congressional districts — the largest districts a state carries below the state itself",
+      "source": {
+        "answers": "The U.S. House district covering the point, and the representative holding it.",
+        "boundary": [{ "label": "U.S. Census TIGERweb — Legislative, layer 0 (congressional districts), pre-built for the state and shipped with the app", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/0" }],
+        "people": "congress-roster.json, rebuilt weekly by CI from the public-domain unitedstates/congress-legislators dataset — including each member's district office and Washington office.",
+        "applies": "Newstate — statewide."
+      }
+    },
+    {
+      "id": "school-district-unified",
+      "label": "School District (Unified)",
+      "group": "schools",
+      "area_rank": 3,
+      "rank_note": "Unified (K-12) school districts; pre-built from TIGERweb at bootstrap",
+      "source": {
+        "answers": "The unified (K-12) school district serving the point.",
+        "boundary": [{ "label": "U.S. Census TIGERweb — School, layer 0, pre-built for the state and shipped with the app", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/0" }],
+        "people": "No roster is joined; the card names the district.",
+        "applies": "Newstate — statewide."
+      }
+    },
+    {
+      "id": "county",
+      "label": "County",
+      "group": "geography",
+      "area_rank": 2,
+      "rank_note": "Counties, pre-built from TIGERweb at bootstrap; the fork's offline anchor layer",
+      "source": {
+        "answers": "Which county contains the point.",
+        "boundary": [{ "label": "U.S. Census TIGERweb — State_County, layer 1, pre-built for the state and shipped with the app", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1" }],
+        "people": "No roster is joined yet; growing this card is the fork's first expansion (docs/EXPANSION_GUIDE.md Part 2).",
+        "applies": "Newstate — statewide."
+      }
+    },
+    {
+      "id": "county-subdivision",
+      "label": "County Subdivision",
+      "group": "geography",
+      "area_rank": 4,
+      "rank_note": "Townships / county subdivisions (TIGERweb CouSub, live)",
+      "source": {
+        "answers": "The township or county subdivision containing the point.",
+        "boundary": [{ "label": "U.S. Census TIGERweb — Places / county subdivisions, layer 1", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1" }],
+        "people": "No roster is joined; the card names the subdivision.",
+        "applies": "Newstate — statewide."
+      }
+    },
+    {
+      "id": "municipality",
+      "label": "Municipality",
+      "group": "geography",
+      "area_rank": 5,
+      "rank_note": "Incorporated places (TIGERweb Places, live); unincorporated points say so",
+      "source": {
+        "answers": "The city, village or town containing the point — or that it sits in unincorporated county.",
+        "boundary": [{ "label": "U.S. Census TIGERweb — Places, layer 4", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4" }],
+        "people": "No roster is joined yet; municipal officials are a per-county build (docs/EXPANSION_GUIDE.md Part 2.4).",
+        "applies": "Newstate — statewide."
+      }
+    }
+  ],
+  "min_register_layer": 8,
+  "anchor_point": { "lat": 0.1, "lng": 0.1, "note": "SENTINEL — bootstrap_state.py replaces this with an interior point of the state's most-populous county" },
+  "anchors": [
+    { "layer": "county", "expected": "Sentinel" },
+    { "layer": "us-house", "expected": "0" },
+    { "layer": "school-district-unified", "expected": "Sentinel" }
+  ],
+  "negative_point": { "lat": -0.2, "lng": -0.4, "note": "SENTINEL — bootstrap_state.py replaces this with a point just outside the state envelope" },
+  "data_files": {
+    "geometry": [
+      { "file": "metro-outline.json", "min_features": 1, "max_features": 1, "note": "State outline dissolved from TIGERweb by bootstrap_state.py; drives the out-of-scope wash." },
+      { "file": "state-counties.json", "min_features": 1, "max_features": 500, "note": "Every county in the state, pre-built from TIGERweb by bootstrap_state.py (bounds tightened to the real count at bootstrap)." },
+      { "file": "congress-districts.json", "min_features": 1, "max_features": 60, "note": "The state's U.S. House districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap)." },
+      { "file": "school-districts-unified.json", "min_features": 1, "max_features": 1500, "note": "The state's unified school districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap)." }
+    ],
+    "rosters": [
+      { "file": "congress-roster.json", "min_keys": 1, "note": "U.S. House roster for the state, built from unitedstates/congress-legislators by bootstrap_state.py and refreshed weekly by update-congress-roster.yml (min tightened at bootstrap)." },
+      { "file": "coverage-gaps.json", "min_keys": 1, "note": "The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps." }
+    ]
+  },
+  "sw": {
+    "cache_name": "district-explorer-shell-v1",
+    "shell_urls": [
+      "./",
+      "./sources.html",
+      "./manifest.webmanifest",
+      "./icons/icon-192.png",
+      "./icons/icon-512.png"
+    ]
+  },
+  "data_sources": {
+    "registry": "scripts/validate_sources.py",
+    "note": "The machine-checked source manifest lives in the freshness gate; the template ships it scaffolded with the five starter layers' endpoints, and the fork grows it with every layer it adds."
+  },
+  "workflows": [
+    { "file": "update-congress-roster.yml", "purpose": "U.S. House roster (unitedstates/congress-legislators)", "schedule": "Mon 13:00 UTC" }
+  ],
+  "geocoder": {
+    "address": "Photon (Newstate-bounded type-ahead)",
+    "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
+    "poi": "Nominatim (office-address pin lookup, Newstate-bounded, serial >=1s queue)"
+  },
+  "palette": {
+    "accent": "#4A90D9",
+    "accent_deep": "#2C5F9E",
+    "accent_warm": "#D97706",
+    "accent_warm_deep": "#B45309"
+  },
+  "domains": { "canonical": "https://newstate.example/" },
+  "exports_name": "StateExplorer",
+  "verified_date": "January 1, 2000",
+  "sources_page": {
+    "file": "sources.html",
+    "credits": [
+      { "label": "OpenStreetMap contributors (Nominatim & Photon/Komoot)", "url": "https://www.openstreetmap.org/copyright", "note": "Address search and the office-address pins." },
+      { "label": "U.S. Census TIGERweb", "url": "https://tigerweb.geo.census.gov", "note": "The national boundary service behind every starter layer: counties, county subdivisions, municipalities, school districts, and the congressional districts." },
+      { "label": "unitedstates/congress-legislators", "url": "https://github.com/unitedstates/congress-legislators", "note": "The public-domain roster of sitting members of Congress, including district and D.C. offices." }
+    ]
+  }
+}
