@@ -1214,6 +1214,64 @@ changed. **1400px now sits on one row where it wrapped before**, and the map tak
 second row was holding. Light against dark is **identical at 1400px, 1530px and 1700px** — the
 toggle fix holds. Gates green including the smoke test against both `index.html` and the preview.
 
+## The state code becomes the fleet switch (operator-directed, 2026-08-24)
+
+Hovering `/ il` in the wordmark now opens a menu of the other explorers, and the panel foot's
+"Explore another metro" row is retired. Both halves of one idea: the fleet belongs beside the name
+of the thing you are looking at, not at the bottom of a column nobody scrolls.
+
+**There is no Wisconsin fork.** The operator asked for "NYC, SF, and wi"; `metros.json` — the
+fleet's single source, from which `--sync-fleet` projects each fork's `METRO_EXPLORERS` — holds
+exactly three entries, Chicago, NYC and SF, and nothing anywhere in the repo references a WI fork or
+host. `docs/EXPANSION_GUIDE.md` §4 mentions Wisconsin only as a hypothetical example of a
+whole-state fork. So the menu ships the two that exist. **It is built from `METRO_EXPLORERS` rather
+than from a hand-written list precisely so that the fourth costs nothing here**: add it to
+`metros.json`, `--sync-fleet` into the worksheet, regenerate, and it appears in the menu, in the
+portal, and in the (hidden) footer row together.
+
+### What it is
+
+The state code becomes a `<button>` inside a positioned wrapper, with an empty `role="menu"` span
+that the controller fills at boot. It skips the current metro the way `renderMetroLinks()` does —
+you do not offer someone the page they are on — and if that leaves nothing, it **unwraps itself back
+into the plain `<span class="title-metro">`**, which is what a one-metro fleet should look like.
+
+Opening is CSS: `:hover` and `:focus-within`, so mouse and keyboard both work with no script. Three
+details that are the difference between a menu and a nuisance:
+
+- **The gap is bridged.** The menu sits 8px below the button, and that 8px belongs to no element, so
+  a pointer travelling down would drop `:hover` halfway and shut the menu in its own face. An
+  invisible strip is drawn as a **child of the menu**, so crossing it keeps
+  `.dst-metro-switch:hover` true.
+- **Escape actually closes it.** `:focus-within` holds the menu open, and Escape returns focus to
+  the button — which is still inside the switch — so without help the only dismissal a keyboard has
+  does nothing. A `data-dismissed` flag beats the hover rules on source order, and clears on
+  `mouseleave` and on focus leaving the wrapper, so it can never latch the menu shut. Verified:
+  focus opens, Escape closes and holds, focus elsewhere re-arms, focus back opens, Tab walks into
+  the links.
+- **Touch has no hover.** The button also owns a real `aria-expanded` that a tap toggles, an
+  outside click closes, and `focusout` closes — the same attribute that keeps the control honest to
+  a screen reader. Its accessible name reads "Illinois — switch explorer".
+
+`.title-text` lowercases everything beneath it, which is right for the wordmark and wrong for place
+names, so the menu resets `text-transform`.
+
+### The footer row is hidden, not deleted
+
+`#footer-metros` sits inside the `metro-links-html` ENGINE fence, and the engine's
+`renderMetroLinks()` does `getElementById(...)` then `appendChild` **with no null guard** — removing
+the element would throw at boot and take the rest of the boot tail with it. So it is hidden in CSS
+and the engine goes on filling it, exactly as the masthead star is hidden rather than removed.
+Verified after: the row computes `display: none` and still holds its two engine-rendered links.
+
+Nothing here touches a fence: the wordmark is fork-local markup, the styles are skin-island, and the
+controller is inserted **after** `ENGINE:END metro-links`, which is where `METRO_EXPLORERS` and
+`THIS_METRO` are both in scope and where the engine has just finished with the row.
+
+Measured: menu 208×99px opening under the state code, painting **over** the map (its own links
+answer `elementFromPoint` 45px below the masthead's edge), identical in both themes, no page errors,
+and the title column unchanged at 371px — the switch adds a caret, not a row.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

@@ -270,6 +270,53 @@ SKIN_ISLAND = """<style id="districtry-skin">
   .districtry-mark { width: 38px; height: 38px; flex: none; }
   .title-text { font-weight: 600; text-transform: lowercase; letter-spacing: 0.005em; }
   .title-metro { color: var(--slate-soft); font-weight: 400; }
+  /* ---- the state code is the fleet switch. The engine already knows the
+     fleet (METRO_EXPLORERS) and already renders it as a footer row; this
+     puts the same list where a reader looks when they wonder what else
+     exists — beside the name of the thing they are looking at. The row
+     itself is hidden further down rather than deleted: it is inside an
+     ENGINE fence and the engine appends to it by id at boot. */
+  .dst-metro-switch { position: relative; display: inline-block; }
+  .dst-metro-btn {
+    font: inherit; color: inherit; background: none; border: 0;
+    padding: 0; margin: 0; line-height: inherit; cursor: pointer;
+  }
+  .dst-metro-btn:hover, .dst-metro-btn:focus-visible { color: var(--accent); }
+  .dst-metro-caret { font-size: 0.42em; margin-left: 3px; vertical-align: middle; opacity: 0.6; }
+  .dst-metro-menu {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 900;
+    display: none; flex-direction: column; min-width: 208px; padding: 6px;
+    background: var(--panel); border: 1px solid var(--line-strong);
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(23, 22, 28, 0.14);
+    /* .title-text lowercases everything under it, and these are place names */
+    text-transform: none; letter-spacing: normal;
+  }
+  /* the 8px gap above belongs to no element, so a pointer travelling from
+     the button to the menu would leave :hover halfway and shut the menu in
+     its own face. This strip is a CHILD of the menu, so hovering it keeps
+     .dst-metro-switch:hover true across the gap. */
+  .dst-metro-menu::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; height: 10px; }
+  .dst-metro-switch:hover .dst-metro-menu,
+  .dst-metro-switch:focus-within .dst-metro-menu,
+  .dst-metro-btn[aria-expanded="true"] + .dst-metro-menu { display: flex; }
+  /* Escape has to shut a menu that :focus-within is holding open — the key
+     returns focus to the button, which is still inside the switch, so
+     without this the menu shrugs off the only dismissal a keyboard has.
+     Last rule wins at equal specificity; the flag clears the moment the
+     pointer or focus leaves, so it can never latch the menu shut. */
+  .dst-metro-switch[data-dismissed="1"] .dst-metro-menu { display: none; }
+  .dst-metro-menu-label {
+    padding: 3px 9px 6px; font: 600 10px/1 var(--font-body);
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--slate-soft);
+  }
+  .dst-metro-menu a {
+    display: flex; align-items: center; gap: 9px; padding: 8px 9px;
+    border-radius: 7px; font: 500 13.5px var(--font-body); color: var(--ink);
+    text-decoration: none; white-space: nowrap;
+  }
+  .dst-metro-menu a:hover,
+  .dst-metro-menu a:focus-visible { background: var(--dst-brand-tint-soft); color: var(--accent-deep); }
+  .dst-metro-menu-emoji { font-size: 15px; line-height: 1; }
   h1.title small { color: var(--slate); }
   .preview-stamp { display: block; margin-top: 4px; font-size: 11px; color: var(--slate-soft); }
   .masthead-actions .footer-link-btn {
@@ -382,8 +429,13 @@ SKIN_ISLAND = """<style id="districtry-skin">
     cursor: pointer;
   }
   .districtry-panel-foot .footer-link-btn:hover { background: var(--dst-brand-tint-soft); }
-  .districtry-panel-foot .footer-metros { font-size: 11px; }
-  .districtry-panel-foot .footer-metros a { color: var(--accent-deep); }
+  /* Retired: the fleet now hangs off the state code in the wordmark, and a
+     second copy at the foot of the panel is one list of three links too
+     many. HIDDEN, never removed — #footer-metros lives inside the
+     metro-links-html ENGINE fence and the engine's renderMetroLinks()
+     appends to it by id with no null guard, so deleting the element would
+     throw at boot. The masthead star is hidden for exactly this reason. */
+  .districtry-panel-foot .footer-metros { display: none; }
   /* ==== canvas app-shell layout (operator-directed: "Implement Districtry
      App.dc.html", 2026-08-20) ==== */
   /* search moves from floating-over-map into the masthead. The shell's own
@@ -1034,6 +1086,12 @@ SKIN_ISLAND = """<style id="districtry-skin">
   /* ---- masthead + panel chrome that reads off the tint tokens above */
   [data-theme="dark"] header.masthead { background: var(--panel); border-bottom-color: var(--line); }
   [data-theme="dark"] .masthead .search-row input[type="text"] { background: var(--dst-sunken); color: var(--ink); }
+  [data-theme="dark"] .dst-metro-menu {
+    background: var(--panel); border-color: rgba(236, 233, 244, 0.16);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  }
+  [data-theme="dark"] .dst-metro-menu a:hover,
+  [data-theme="dark"] .dst-metro-menu a:focus-visible { background: var(--dst-raised-hover); color: var(--ink); }
   [data-theme="dark"] .masthead .search-extra { background: var(--panel); border-color: var(--line-strong); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55); }
   [data-theme="dark"] .districtry-map-legend { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45); }
   [data-theme="dark"] .districtry-map-legend .dml-glow { box-shadow: 0 0 5px 2.5px #a78bfa; }
@@ -1497,6 +1555,85 @@ THEME_CONTROLLER_JS = """
 """
 
 
+METRO_MENU_JS = """
+  /* ---- the state code's dropdown, filled from the SAME list the engine's
+     footer row reads (METRO_EXPLORERS), so the two can never disagree and a
+     fourth metro needs nothing here: add it to metros.json, --sync-fleet into
+     the worksheet, regenerate, and it appears in the menu. Chicago is skipped
+     the way renderMetroLinks() skips it — you do not offer someone the page
+     they are on. If nothing is left after that skip the switch degrades to
+     plain text, which is what a one-metro fleet should look like. */
+  (function buildMetroSwitch() {
+    var wrap = document.querySelector(".dst-metro-switch");
+    var menu = wrap && wrap.querySelector(".dst-metro-menu");
+    var btn = wrap && wrap.querySelector(".dst-metro-btn");
+    if (!wrap || !menu || !btn) return;
+    var made = 0;
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var m = METRO_EXPLORERS[i];
+      if (m.id === THIS_METRO) continue;
+      var a = document.createElement("a");
+      a.href = m.url;
+      a.setAttribute("role", "menuitem");
+      if (m.emoji) {
+        var e = document.createElement("span");
+        e.className = "dst-metro-menu-emoji";
+        e.setAttribute("aria-hidden", "true");
+        /* labels and emoji come from a generated config, but they render
+           through textContent regardless — the fleet list is data */
+        e.textContent = m.emoji;
+        a.appendChild(e);
+      }
+      a.appendChild(document.createTextNode(m.label));
+      menu.appendChild(a);
+      made++;
+    }
+    if (!made) {
+      /* a lone metro: unwrap the button back into the plain state code */
+      var plain = document.createElement("span");
+      plain.className = "title-metro";
+      plain.textContent = btn.textContent.replace("\u25BE", "");
+      wrap.parentNode.replaceChild(plain, wrap);
+      return;
+    }
+    var label = document.createElement("span");
+    label.className = "dst-metro-menu-label";
+    label.textContent = "Other explorers";
+    menu.insertBefore(label, menu.firstChild);
+
+    /* CSS opens the menu on :hover and :focus-within, which covers mouse and
+       keyboard. It does NOT cover touch, where there is no hover and a tap
+       lands as a click — so the button also owns an explicit expanded state,
+       and the same attribute keeps the control honest to a screen reader. */
+    function setOpen(open) {
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) wrap.removeAttribute("data-dismissed");
+    }
+    btn.addEventListener("click", function () {
+      var opening = btn.getAttribute("aria-expanded") !== "true";
+      setOpen(opening);
+      if (!opening) wrap.setAttribute("data-dismissed", "1");
+    });
+    wrap.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.key === "Esc") {
+        setOpen(false);
+        wrap.setAttribute("data-dismissed", "1");
+        btn.focus();
+      }
+    });
+    wrap.addEventListener("mouseleave", function () { wrap.removeAttribute("data-dismissed"); });
+    /* a click-open menu that only shuts on a second click on the button is a
+       menu people leave open by accident */
+    document.addEventListener("click", function (e) {
+      if (!wrap.contains(e.target)) setOpen(false);
+    });
+    wrap.addEventListener("focusout", function (e) {
+      if (!wrap.contains(e.relatedTarget)) { setOpen(false); wrap.removeAttribute("data-dismissed"); }
+    });
+  })();
+"""
+
+
 # The canvas's three-zone coverage treatment, replacing the engine's single
 # out-of-coverage wash AT ITS FORK-LOCAL CALL SITE (the whenIdle line is fork
 # code; the scope-mask ENGINE fence is untouched). Contract preserved:
@@ -1877,7 +2014,11 @@ def build(stamp_text):
     html = sub_once(
         html,
         '<span class="title-text">Chicago District Explorer</span>',
-        '<span class="title-text">districtry <span class="title-metro">/ il</span></span>',
+        '<span class="title-text">districtry <span class="dst-metro-switch">'
+        '<button type="button" class="title-metro dst-metro-btn" aria-expanded="false" '
+        'aria-haspopup="true" aria-label="Illinois — switch explorer">/ il'
+        '<span class="dst-metro-caret" aria-hidden="true">▾</span></button>'
+        '<span class="dst-metro-menu" role="menu"></span></span></span>',
         "wordmark",
     )
     html = sub_once(
@@ -2043,6 +2184,17 @@ def build(stamp_text):
         '<span class="dtt-labels"><span class="dtt-dark">Dark</span>'
         '<span class="dtt-light">Light</span></span></button>',
         "theme toggle button",
+    )
+
+    #    The fleet switch hanging off the state code. Anchored AFTER the
+    #    metro-links ENGINE fence, which is where METRO_EXPLORERS and
+    #    THIS_METRO are both in scope and where the engine has just
+    #    finished filling the footer row this skin hides.
+    html = sub_once(
+        html,
+        "  /* ==== ENGINE:END metro-links ==== */\n",
+        "  /* ==== ENGINE:END metro-links ==== */\n" + METRO_MENU_JS,
+        "metro switch controller",
     )
 
     #    ...and the controller that owns what CSS cannot: tiles, the coverage
