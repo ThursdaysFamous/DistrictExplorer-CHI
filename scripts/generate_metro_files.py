@@ -462,11 +462,26 @@ def render_head_brand(w):
 
 def render_head_theme(w):
     b = w["brand"]
-    return "\n".join([
+    L = [
         '<meta name="theme-color" content="%s">' % b["theme_color"],
         "",
         '<link rel="icon" type="image/svg+xml" href="%s" />' % html_esc(b["favicon_data_uri"]),
-    ])
+    ]
+    # iOS does NOT read the web app manifest's icons when adding to the Home
+    # Screen — it reads this tag and nothing else, which is why an iPhone
+    # install had no branded icon at all while Android's was merely stale. The
+    # companion title tag matters for the same reason: absent it, iOS labels
+    # the shortcut from <title>, and <title> is the question-led SEO string
+    # ("What district am I in? Find your district — districtry Illinois"),
+    # which truncates to a fragment of a question under the icon.
+    if b.get("apple_touch_icon"):
+        L += [
+            "",
+            '<link rel="apple-touch-icon" href="%s" />' % html_esc(b["apple_touch_icon"]),
+            '<meta name="apple-mobile-web-app-title" content="%s" />'
+            % html_esc(b.get("product_name") or b["app_name"]),
+        ]
+    return "\n".join(L)
 
 
 def render_brand_palette(w):
@@ -921,6 +936,15 @@ def main():
     for instance in ids:
         inst = INSTANCES[instance]
         worksheet = load_worksheet(os.path.join(args.root, inst["worksheet"]), schema)
+        # The apple-touch-icon href is the one generated brand value naming a
+        # file on disk rather than carrying its own bytes (the favicon is a
+        # data: URI). A tag pointing at a missing PNG is invisible in every
+        # other gate and shows up only as a blank tile on someone's phone, so
+        # the path is resolved here, where the instance directory is known.
+        atouch = worksheet.get("brand", {}).get("apple_touch_icon")
+        if atouch and not os.path.exists(os.path.join(args.root, inst["app"], atouch)):
+            fail("%s: brand.apple_touch_icon names %s, which does not exist in %s/"
+                 % (inst["worksheet"], atouch, inst["app"]))
         for rel_path, name, render in targets_for(worksheet, inst):
             path = os.path.join(args.root, rel_path)
             try:

@@ -121,6 +121,18 @@ jobs:
       - name: Privacy page matches what the apps actually do
         run: python3 scripts/build_privacy_page.py --check
 
+      # The web app manifest is the surface NO other gate could see, and it
+      # rotted for exactly that reason: after the rebrand every generated
+      # surface said districtry while il/manifest.webmanifest still read
+      # "Chicago District Explorer" in the pre-rebrand navy, so installing to
+      # an Android home screen produced the old name and the old icon. NY and
+      # SF were the same. It is generated from each worksheet's brand block
+      # now, and this is the gate that keeps it that way. It also refuses to
+      # name an icon that is not on disk — a manifest pointing at a missing
+      # PNG installs a blank square and nothing else notices. Stdlib only.
+      - name: Install manifests match the brand keys
+        run: python3 scripts/build_manifests.py --check
+
       # A `#` comment between two backslash-continued lines does not annotate
       # the command, it TERMINATES it — bash joins the continuation first. Six
       # lines of well-meant explanation inside the deploy's rsync invocation

@@ -1,12 +1,30 @@
 {
-  "name": "Chicago District Explorer",
-  "short_name": "District Explorer",
-  "start_url": "./index.html",
+  "name": "districtry Illinois",
+  "short_name": "districtry",
+  "description": "Enter an address or ZIP — or tap the map — to find your district: ward, police district, elected school board, county board, congressional and Illinois legislative districts, and who represents you. Free, no login.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0b3d91",
-  "theme_color": "#0b3d91",
+  "background_color": "#F4F7F9",
+  "theme_color": "#6d3fd1",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
