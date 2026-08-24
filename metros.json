@@ -1,14 +1,53 @@
 {
-  "$comment": "The fleet manifest (docs/MECHANIZATION_PLAYBOOK.md, Conversion 3) — the single source of the metro fleet, served at https://chidistricts.com/metros.json by the Pages deploy. Runtime behavior is deliberately unchanged: the app never fetches this file. It is consumed at GENERATION time — `generate_metro_files.py --sync-fleet` projects these entries (minus `repo`) into each fork's worksheet metro_explorers, and the weekly fleet-status workflow reads `repo` to aggregate across forks. Launching metro N+1 means: add its entry here, then run --sync-fleet + regenerate in each fork (a regeneration PR, never a hand edit).",
+  "$comment": "The fleet manifest (docs/MECHANIZATION_PLAYBOOK.md, Conversion 3) — the single source of the metro fleet, served at https://chidistricts.com/metros.json by the Pages deploy. Runtime behavior is deliberately unchanged: the app never fetches this file. It is consumed at GENERATION time — `generate_metro_files.py --sync-fleet` projects these entries (minus `repo`) into each fork's worksheet metro_explorers, and the weekly fleet-status workflow reads `repo` to aggregate across forks. Launching metro N+1 means: add its entry here, then run --sync-fleet + regenerate in each fork (a regeneration PR, never a hand edit). The `tag`, `landing_name` and `blurb` fields drive the ROOT LANDING PAGE (scripts/build_landing_page.py) and are deliberately fleet-level: sync_fleet projects a whitelist into each worksheet's metro_explorers, so these three never reach an app. `tag` is the instance tag the brand spec sets in the wordmark (districtry / il); `landing_name` is the AREA a reader picks, which is not always the metro label — the Illinois instance is listed as Illinois because it serves 89 counties, while its metro label stays Chicago for the app's own sibling-metro portal. `url` is what the landing page links: at R5 these become districtry.com paths, and the page follows automatically.",
   "metros": [
-    { "id": "chicago", "label": "Chicago", "url": "https://chidistricts.com/il/", "emoji": "🌭",
+    {
+      "id": "chicago",
+      "label": "Chicago",
+      "url": "https://chidistricts.com/il/",
+      "emoji": "🌭",
       "repo": "ThursdaysFamous/DistrictExplorer-CHI",
-      "bbox": { "minLng": -88.6, "minLat": 41.0, "maxLng": -87.0, "maxLat": 42.6 } },
-    { "id": "nyc", "label": "New York City", "url": "https://nyc.chidistricts.com/", "emoji": "🗽",
+      "bbox": {
+        "minLng": -88.6,
+        "minLat": 41.0,
+        "maxLng": -87.0,
+        "maxLat": 42.6
+      },
+      "tag": "il",
+      "landing_name": "Illinois",
+      "blurb": "89 counties. Wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats."
+    },
+    {
+      "id": "nyc",
+      "label": "New York City",
+      "url": "https://nyc.chidistricts.com/",
+      "emoji": "🗽",
       "repo": "ThursdaysFamous/DistrictExplorer-NYC",
-      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
-    { "id": "sf", "label": "San Francisco", "url": "https://sf.chidistricts.com/", "emoji": "🌉",
+      "bbox": {
+        "minLng": -74.3,
+        "minLat": 40.45,
+        "maxLng": -73.6,
+        "maxLat": 41.0
+      },
+      "tag": "nyc",
+      "landing_name": "New York City",
+      "blurb": "Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them."
+    },
+    {
+      "id": "sf",
+      "label": "San Francisco",
+      "url": "https://sf.chidistricts.com/",
+      "emoji": "🌉",
       "repo": "ThursdaysFamous/DistrictExplorer-SF",
-      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } }
+      "bbox": {
+        "minLng": -122.6,
+        "minLat": 37.6,
+        "maxLng": -122.3,
+        "maxLat": 37.95
+      },
+      "tag": "sf",
+      "landing_name": "San Francisco",
+      "blurb": "Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them."
+    }
   ]
 }
