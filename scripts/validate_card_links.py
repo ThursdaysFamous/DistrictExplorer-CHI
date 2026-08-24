@@ -135,7 +135,7 @@ INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
 # dropped ~50 authored URLs off this gate's surface the day that page shipped.
 # A page listed here but absent is skipped, not fatal: a fork without the page
 # is not a broken fork.
-AUTHORED_PAGES = ["index.html", "sources.html"]
+AUTHORED_PAGES = ["index.html", "sources.html", "privacy.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
