@@ -264,6 +264,43 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   own `DistrictExplorer-SF`/`-NYC` issue tracker (`repo_issues` in its worksheet). Correct today,
   wrong the moment R6 archives those repos — retarget it there, with the domain cutover.
 
+- **THE DEPLOY BROKE ON THE R3 PART-1 MERGE AND EVERY GATE STAYED GREEN (2026-08-24).** Fixed in
+  the same change as part 2. The site simply stopped publishing after #481: three consecutive
+  green PR runs, a merge, and then a red `assemble` job nobody was looking at. Worth recording in
+  full, because the cause, the blind spot and the fix are three different lessons.
+  **The cause is six lines of comment.** Part 1 added an explanation of why `sf/` and `nyc/` are
+  excluded from the published tree — written *between* two backslash-continued lines of the
+  deploy's `rsync` invocation. Bash joins a continuation **before** it looks for comments, so the
+  comment does not annotate the command, it **terminates** it: `rsync` ran with its excludes and
+  no source or destination, exited 1 on a usage error, and every line after the comment was
+  parsed as a separate command (`--exclude=sf: command not found`). The construct is invisible on
+  review — it reads exactly like a well-commented command, YAML parses it, and nothing lints a
+  `run:` body.
+  **The blind spot is structural and is the more useful half.** `assemble` runs on `push` to main
+  and `workflow_dispatch` only, so the one step that turns a commit into a website is the one
+  step this repo's PR gates never execute. Everything a PR checks — layers, rosters, engine
+  parity, generated regions, the real-Chromium behaviour test — checks the *committed tree*, and
+  the committed tree was perfect. **A gate that runs only after the merge is not a gate on the
+  merge.**
+  **Three guards now, where there were none.** `scripts/validate_shell_continuations.py` fails on
+  a comment inside any backslash continuation in any `.yml`/`.yaml`/`.sh` — the rule needs no
+  shell parser because the construct is *always* wrong — and it is wired into `smoke-test.yml`,
+  so it reaches the PR. The excludes moved into an `EXCLUDES` array, where an explanation has
+  somewhere safe to live. And the assemble step now asserts its own output: no `il/index.html`,
+  no root redirect stub, or an unpublished instance leaking into `_site/` each fail with a named
+  `::error::` instead of an rsync usage dump.
+  Verified: the actual step body was extracted from the YAML (not retyped) and run against the
+  real repo through an `rsync` stand-in that fails identically on a usage error — 337 files, both
+  index assertions pass, `sf`/`nyc`/`engine` absent. Three negative cases each fire: rsync with
+  no source/dest exits non-zero, a dropped `sf` exclude reports `sf leaked into the published
+  tree`, and a missing `il/index.html` reports itself. The new lint was proven in both directions
+  by reintroducing the exact bug. A sweep of all 88 shell-bearing files found no other instance.
+  **Residual gap, deliberately not closed here:** `assemble` still does not run on pull requests,
+  so a *different* kind of break in it would still land on main first. Running it per-PR means
+  duplicating the Playwright job on every PR; the honest options are a paths-filtered trigger or
+  extracting the assemble into a script both workflows call. Decide it at R5, when the deploy
+  changes anyway to publish `sf/` and `nyc/`.
+
 - **R3 (part 1) — SHIPPED (2026-08-24): one engine, three instances, one origin.**
   `engine/` now holds one copy of each of the 55 engine blocks and every instance's
   `index.html`/`sw.js` is composed from it (`scripts/compose_app.py`, gated in CI and at

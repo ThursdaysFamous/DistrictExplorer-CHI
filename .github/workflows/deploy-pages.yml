@@ -156,35 +156,47 @@ jobs:
           kill "$server_pid" 2>/dev/null || true
           exit $status
 
+      # NEVER put a `#` comment between two backslash-continued lines. Bash joins
+      # the continuation FIRST, so the comment swallows the rest of the logical
+      # line: rsync ran with its excludes and NO SOURCE OR DESTINATION, exited 1
+      # on a usage error, and the remaining `--exclude='sf' … ./ _site/` lines
+      # were parsed as a separate command. That is how this deploy broke on the
+      # R3 part-1 merge — the gates all passed, the site simply stopped
+      # publishing. Explanations go ABOVE the command, or in a variable.
+      #
+      # Two things this list is load-bearing for:
+      #
+      # 1. App files only. It is the ONLY thing standing between "app files" and
+      #    "app files + 5 MB of build inputs". Keep il/data/app IN and
+      #    il/data/source + il/data/*.geojson OUT when either moves.
+      #
+      # 2. Imported instances are NOT published yet. sf/ and nyc/ live in this
+      #    repo so they can share the engine and the tooling, but each still
+      #    serves from its own domain and carries its own canonical. Publishing
+      #    them here before that cutover would put a second live copy of each app
+      #    on this origin. Drop an instance from EXCLUDES when its domain moves
+      #    (R5) — that is the switch that makes it live.
       - name: Assemble site (app files only — drop scripts/docs/raw data)
         run: |
           mkdir _site
-          rsync -a \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.claude' \
-            --exclude='scripts' \
-            --exclude='docs' \
-            --exclude='il/data/source' \
-            --exclude='il/icons/source' \
-            --exclude='il/data/*.geojson' \
-            --exclude='node_modules' \
-            --exclude='package.json' \
-            --exclude='package-lock.json' \
-            # Imported instances are NOT published yet. sf/ and nyc/ live in this
-            # repo so they can share the engine and the tooling, but each still
-            # serves from its own domain and carries its own canonical. Publishing
-            # them here before that cutover would put a second live copy of each
-            # app on this origin. Delete the line for an instance when its domain
-            # moves (R5) — that is the switch that makes it live.
-            --exclude='sf' \
-            --exclude='nyc' \
-            --exclude='engine' \
-            --exclude='metros.json' \
-            --exclude='metro-worksheet.json' \
-            --exclude='schema' \
-            --exclude='CLAUDE.md' \
-            ./ _site/
+          EXCLUDES=(
+            .git .github .claude scripts docs
+            il/data/source il/icons/source 'il/data/*.geojson'
+            node_modules package.json package-lock.json
+            sf nyc
+            engine metros.json metro-worksheet.json schema CLAUDE.md
+            _site
+          )
+          args=()
+          for e in "${EXCLUDES[@]}"; do args+=(--exclude="$e"); done
+          rsync -a "${args[@]}" ./ _site/
+          # A published tree with no il/index.html is the failure this step must
+          # never pass silently — it is exactly what the broken form produced.
+          test -f _site/il/index.html || { echo "::error::assemble produced no il/index.html"; exit 1; }
+          test -f _site/index.html    || { echo "::error::assemble produced no root redirect stub"; exit 1; }
+          for unpublished in sf nyc engine; do
+            test ! -e "_site/$unpublished" || { echo "::error::$unpublished leaked into the published tree"; exit 1; }
+          done
           echo "Published tree:" && find _site -type f | sort
 
       - uses: actions/configure-pages@v5

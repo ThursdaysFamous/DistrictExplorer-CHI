@@ -92,6 +92,15 @@ jobs:
       - name: Backfilled board seats still stamped
         run: python3 scripts/backfill_board_seats.py --check
 
+      # A `#` comment between two backslash-continued lines does not annotate
+      # the command, it TERMINATES it — bash joins the continuation first. Six
+      # lines of well-meant explanation inside the deploy's rsync invocation
+      # stopped the site publishing on 2026-08-24 while every gate here stayed
+      # green, because the assemble step only runs on main, AFTER the merge.
+      # This is the cheap guard that reaches the PR. Stdlib only.
+      - name: No comment inside a shell line-continuation
+        run: python3 scripts/validate_shell_continuations.py
+
       # Every script a workflow runs must import under the dependencies that
       # workflow installs. This catches the seam no other gate looks at: the
       # five derived-boundary roster refreshes (Cass, De Witt, Marshall, Mason,
