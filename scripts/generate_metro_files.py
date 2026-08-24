@@ -26,6 +26,9 @@ Opt-in targets, emitted only when the worksheet carries the key that turns them
 on (a fork without the key sees a byte-identical file and an untouched gate):
     verified-date     -> index.html   (the one line the footer's date is set from;
                                        key: verified_date)
+    perf-config       -> the performance harness's anchor point + offline layer
+                                       list, which must mirror smoke-config
+                                       (key: perf_profile)
     sources-verified  \
     source-credits     >  the public sources page (key: sources_page)
     layer-matrix      /   — the credits row that used to live in the footer, and
@@ -346,6 +349,19 @@ def html_esc(s):
              .replace('"', "&quot;"))
 
 
+def render_perf_config(w):
+    """The two smoke-config lines the performance harness shares: the anchor
+    point and the no-API offline layer list. perf_profile.mjs hand-mirrored
+    these from smoke_test.mjs until the 2026-08-24 scripts audit — the exact
+    drift this generator exists to end."""
+    pt = w["anchor_point"]
+    return "\n".join([
+        "const POINT = \"%.5f,%.5f\";%s" % (
+            pt["lat"], pt["lng"], (" // " + pt["note"]) if pt.get("note") else ""),
+        "const OFFLINE = [%s];" % ", ".join(js_str(x["layer"]) for x in w["anchors"]),
+    ])
+
+
 def render_verified_date(w):
     return '  verifiedEl.textContent = %s;' % js_str(w["verified_date"])
 
@@ -494,6 +510,9 @@ def targets_for(w):
     targets = list(TARGETS)
     if "verified_date" in w:
         targets.append(("index.html", "verified-date", render_verified_date))
+    if "perf_profile" in w:
+        targets.append((w["perf_profile"]["file"], "perf-config",
+                        render_perf_config))
     if "sources_page" in w:
         page = w["sources_page"]["file"]
         targets.append((page, "sources-verified", render_sources_verified))

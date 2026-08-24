@@ -2943,5 +2943,8 @@
         "note": "Dozens of individual county GIS services, board pages and clerk directories — each named in the row of the layer it feeds, and tracked per county in COUNTY_STATUS.md."
       }
     ]
+  },
+  "perf_profile": {
+    "file": "scripts/perf_profile.mjs"
   }
 }
