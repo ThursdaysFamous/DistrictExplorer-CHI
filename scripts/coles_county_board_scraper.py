@@ -93,30 +93,21 @@ Usage:
     python3 coles_county_board_scraper.py [output.json]
 """
 
-import base64
-import hashlib
 import html
 import json
 import os
 import re
 import sys
-import tempfile
 import time
-import urllib.request
 
 import requests
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import aia_bundle  # noqa: E402 (shared machinery — do not fork)
 
 BASE = "https://www.colesco.illinois.gov"
 SOURCE_URL = BASE + "/board/"
 COMMITTEES_URL = BASE + "/board/committees"
-
-# The AIA caIssuers URI printed inside the county's own leaf certificate, and
-# the SHA-256 of the certificate it serves. Pinned so the download cannot be
-# substituted; see the module docstring for why the chase is needed at all.
-INTERMEDIATE_URL = "http://certificates.godaddy.com/repository/gdig2.crt"
-INTERMEDIATE_SHA256 = (
-    "973a41276ffd01e027a2aad49e34c37846d3e976ff6a620b6712e33832041aa6")
-INTERMEDIATE_SUBJECT_CN = "Go Daddy Secure Certificate Authority - G2"
 
 HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -158,41 +149,6 @@ def text(fragment):
     if fragment is None:
         return ""
     return re.sub(r"\s+", " ", html.unescape(TAG_RE.sub(" ", fragment))).strip()
-
-
-def _ca_bundle():
-    """certifi's roots + the intermediate the county's server omits.
-
-    Written to a temp file the caller deletes when the fetches are done.
-    certifi rather than the system store so this scraper trusts exactly what
-    every other scraper in the repo does (it is requests' own store).
-
-    The download is over plain HTTP by design — that is the AIA URI the
-    certificate itself publishes — and is safe because the bytes are pinned by
-    hash below and because the page fetches still verify the whole chain. The
-    DER->PEM re-wrap is base64 in a header, done here rather than by shelling
-    out so the job does not depend on an openssl binary being present.
-    """
-    import certifi
-
-    der = urllib.request.urlopen(INTERMEDIATE_URL, timeout=REQUEST_TIMEOUT).read()
-    got = hashlib.sha256(der).hexdigest()
-    if got != INTERMEDIATE_SHA256:
-        raise SystemExit(
-            "coles: the intermediate at %s hashed %s, expected %s — the county's\n"
-            "certificate authority may have changed. Do not loosen this check;\n"
-            "re-read the leaf's AIA extension and update the pin deliberately."
-            % (INTERMEDIATE_URL, got, INTERMEDIATE_SHA256))
-    body = base64.encodebytes(der).decode("ascii")
-    pem = "-----BEGIN CERTIFICATE-----\n%s-----END CERTIFICATE-----\n" % body
-    bundle = tempfile.NamedTemporaryFile(suffix=".pem", mode="w", delete=False)
-    with open(certifi.where(), "r") as roots:
-        bundle.write(roots.read())
-    bundle.write("\n# %s (AIA-supplied; the county's server omits it)\n"
-                 % INTERMEDIATE_SUBJECT_CN)
-    bundle.write(pem)
-    bundle.close()
-    return bundle.name
 
 
 def fetch(url, verify):
@@ -297,7 +253,9 @@ def parse_board_contact(page):
 
 def main():
     out_path = sys.argv[1] if len(sys.argv) > 1 else "coles-board-raw.json"
-    verify = _ca_bundle()
+    # The county serves the Coles pattern this module's docstring describes;
+    # aia_bundle holds the pinned GoDaddy intermediate (the one copy).
+    verify = aia_bundle.ca_bundle("coles")
     try:
         board_page = fetch(SOURCE_URL, verify)
         time.sleep(FETCH_GAP_S)
