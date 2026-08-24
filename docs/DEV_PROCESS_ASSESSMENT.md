@@ -198,6 +198,31 @@ Rebrand timing simplifies under this ordering: **chidistricts.com is never rebra
 place** — Districtry ships as the identity of the new tree, and the old domains redirect at
 R5.
 
+## Stage log
+
+- **R1 — SHIPPED (2026-08-24).** The worksheet gained an opt-in `brand` key (app name,
+  tagline, theme color, favicon, head/OG/twitter strings, analytics — GA id + hostname gate +
+  GoatCounter endpoint) and the generator now owns seven brand-bearing GENERATED regions:
+  `head-analytics`, `head-brand`, `head-theme`, `brand-palette`, `masthead-brand`,
+  `goatcounter` in index.html and `sources-palette` on the sources page, plus a `METRO_BRAND`
+  emission in the metro-config region (typeof-guard rule recorded there) and `explorer_name`
+  plumbing through metros.json → `--sync-fleet` → `METRO_EXPLORERS`. Five of the seven new
+  regions rendered **byte-identical** to the hand-written content they replaced (the
+  faithful-rendering proof); the only content deltas were the palette comment alignment
+  (whitespace) and the new `METRO_BRAND` var. The `brand-palette` region also closed a live
+  two-copies risk: the worksheet's `palette` values and index.html's `:root` accents were two
+  hand-kept copies of one fact. Inertness was proven, not assumed: the old and new generator
+  produce **zero-diff output over copies of NYC, SF, Template and WI** (the v1.0.16 rule —
+  a fork that has not opted in sees no change at all). The template stays PRE-BRAND by
+  design: `build_state_template.py` unwraps the brand regions on emission (markers stripped,
+  interiors substituted exactly as before), so the emitted template tree differs only by the
+  palette whitespace plus the two engine-channel scripts carried verbatim — upgrading the
+  template itself to brand-as-data belongs to the WI pilot (R-stage 3 prerequisite), not R1.
+  Verified: all 19 generated regions `--check` clean, `validate_index.py`,
+  `check_engine_parity.py`, `build_state_template.py --check`, and the full Playwright smoke
+  test green; the Districtry preview's 43 exactly-once transforms all survived (the preview
+  was regenerated per its documented flow, not left stale).
+
 ## Alternatives considered
 
 - **Brand-as-data only, stop there.** Cheapest; fully unblocks the rebrand; leaves the fork

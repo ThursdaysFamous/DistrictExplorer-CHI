@@ -7,23 +7,29 @@
 <!-- ==== TEMPLATE:END head-open ==== -->
 
 <!-- ==== TEMPLATE:BEGIN head-analytics ==== -->
+<!-- ==== GENERATED:BEGIN head-analytics ==== -->
 <!-- analytics stripped: unlisted preview -->
+<!-- ==== GENERATED:END head-analytics ==== -->
 <!-- ==== TEMPLATE:END head-analytics ==== -->
 
 <!-- ==== TEMPLATE:BEGIN head-meta ==== -->
+<!-- ==== GENERATED:BEGIN head-brand ==== -->
 <title>districtry / il — working preview (unlisted)</title>
 <meta name="description" content="Unlisted working preview of the Districtry re-skin. The live product is chidistricts.com." />
 <meta name="robots" content="noindex, nofollow" />
 
 
+<!-- ==== GENERATED:END head-brand ==== -->
 <!-- ==== TEMPLATE:END head-meta ==== -->
 
 <!-- ==== TEMPLATE:BEGIN head-jsonld ==== -->
 <!-- ==== TEMPLATE:END head-jsonld ==== -->
 <!-- ==== TEMPLATE:BEGIN head-assets ==== -->
+<!-- ==== GENERATED:BEGIN head-theme ==== -->
 <meta name="theme-color" content="#6d3fd1">
 
 <link rel="icon" type="image/svg+xml" href="districtry/icons/favicon.svg" />
+<!-- ==== GENERATED:END head-theme ==== -->
 
 <!-- warm the connections first paint waits on: Leaflet's CDN (JS before the app
      script) and the CARTO tile hosts the map hits the moment it initializes.
@@ -767,11 +773,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ==== TEMPLATE:END head-assets ==== */
   /* ==== TEMPLATE:BEGIN palette ==== */
   :root {
+  /* ==== GENERATED:BEGIN brand-palette ==== */
     /* ---- Chicago flag palette ---- */
-    --accent: #41B6E6;        /* flag stripe blue */
-    --accent-deep: #0B5394;   /* deeper blue for text/links on light bg */
-    --accent-warm: #C8102E;         /* flag star red */
+    --accent: #41B6E6; /* flag stripe blue */
+    --accent-deep: #0B5394; /* deeper blue for text/links on light bg */
+    --accent-warm: #C8102E; /* flag star red */
     --accent-warm-deep: #9C0B24;
+  /* ==== GENERATED:END brand-palette ==== */
   /* ==== TEMPLATE:END palette ==== */
   /* ==== ENGINE:BEGIN styles-core ==== */
 
@@ -2374,6 +2382,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ==== TEMPLATE:BEGIN body-shell ==== */
 </style>
 
+<!-- ==== GENERATED:BEGIN goatcounter ==== -->
+<!-- ==== GENERATED:END goatcounter ==== -->
 <style id="districtry-skin">
   /* ==== Districtry re-skin island (Stage B preview) ====
      Appended AFTER the engine styles so same-specificity rules win the
@@ -3363,9 +3373,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <path fill="var(--accent-warm)" id="star-path-header"></path>
         </svg>
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
+        <!-- ==== GENERATED:BEGIN masthead-brand ==== -->
         <span class="title-text">districtry <span class="dst-metro-switch"><button type="button" class="title-metro dst-metro-btn" aria-expanded="false" aria-haspopup="true" aria-label="Illinois — switch explorer">/ il<span class="dst-metro-caret" aria-hidden="true">▾</span></button><span class="dst-metro-menu" role="menu"></span></span></span>
       </span>
-      <small>Click the map for every district you&#39;re in, and who represents you.<span class="preview-stamp">unlisted preview · index.html @ ded81b0 · 2026-08-24</span></small>
+      <small>Click the map for every district you&#39;re in, and who represents you.<span class="preview-stamp">unlisted preview · index.html @ 324b2e4 · 2026-08-24</span></small>
+        <!-- ==== GENERATED:END masthead-brand ==== -->
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3647,6 +3659,9 @@ function initChiExplorer() {
   var SOCRATA_APP_TOKEN = "";
   var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new";
   var FEEDBACK_SUBJECT = "Chicago District Explorer feedback";
+  // Brand identity as worksheet data — never read from an ENGINE block
+  // without a typeof guard (forks that have not opted in do not define it).
+  var METRO_BRAND = { appName: "Chicago District Explorer" };
   /* Sibling District Explorer deployments — one canonical list shared by every
    * metro fork. When a new metro launches, add its entry to every fork's
    * worksheet and regenerate (Conversion 3 will source this list from the

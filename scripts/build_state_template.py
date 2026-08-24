@@ -117,6 +117,20 @@ ENGINE_CHANNEL = {
     "scripts/generate_metro_files.py",
 }
 
+# Brand-as-data regions (generate_metro_files.py, worksheet key: brand —
+# docs/DEV_PROCESS_ASSESSMENT.md, stage R1). The template is PRE-BRAND: its
+# synthesized worksheet carries no brand key, so these regions UNWRAP on
+# emission — the markers never reach the template and the interiors become
+# plain lines, which is what lets the substitution table below keep localizing
+# them exactly as it did before the regions existed. A bootstrapped fork that
+# later opts into brand re-adds the markers alongside the worksheet key
+# (upgrading the template itself to brand-as-data is the WI-pilot stage, not
+# this builder's job today).
+BRAND_REGIONS = frozenset({
+    "head-analytics", "head-brand", "head-theme", "brand-palette",
+    "masthead-brand", "goatcounter", "sources-palette",
+})
+
 # Per-file substitutions: (kind, pattern, replacement, min_hits).
 # kind "lit" = plain-string replace; "re" = regex (MULTILINE). Applied only to
 # unfenced remnant lines. A table entry matching fewer than min_hits times
@@ -440,7 +454,10 @@ def emit_file(path, dispo, counters):
 
     for kind, name, body in segs:
         if kind in ("engine", "generated"):
-            out.append("\n".join(body))
+            if kind == "generated" and name in BRAND_REGIONS:
+                emit_plain(body[1:-1])
+            else:
+                out.append("\n".join(body))
         elif kind == "plain":
             bad = [l for l in body if l.strip() and not METRO_RE.match(l)]
             if strict and bad:
@@ -455,16 +472,22 @@ def emit_file(path, dispo, counters):
                 continue
             if d == "keep":
                 for k2, n2, b2 in body:
-                    if k2 in ("engine", "generated"):
+                    if k2 == "generated" and n2 in BRAND_REGIONS:
+                        emit_plain(b2[1:-1])
+                    elif k2 in ("engine", "generated"):
                         out.append("\n".join(b2))
                     else:
                         emit_plain(b2)
             elif d == "drop":
-                fences = [b2 for k2, _n2, b2 in body if k2 in ("engine", "generated")]
+                fences = [b2 for k2, n2, b2 in body
+                          if k2 == "engine"
+                          or (k2 == "generated" and n2 not in BRAND_REGIONS)]
                 for b2 in fences:
                     out.append("\n".join(b2))
             else:  # ("replace", text)
-                if any(k2 in ("engine", "generated") for k2, _n, _b in body):
+                if any(k2 == "engine"
+                       or (k2 == "generated" and _n not in BRAND_REGIONS)
+                       for k2, _n, _b in body):
                     err("%s: replace span %r encloses a fence" % (path, name))
                 out.append(d[1])
     joined = "\n".join(p for p in out if p != "")

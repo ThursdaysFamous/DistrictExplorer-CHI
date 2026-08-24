@@ -7,6 +7,7 @@
 <!-- ==== TEMPLATE:END head-open ==== -->
 
 <!-- ==== TEMPLATE:BEGIN head-analytics ==== -->
+<!-- ==== GENERATED:BEGIN head-analytics ==== -->
 <!-- Google tag (gtag.js) — production host only; keeps local dev + CI out of analytics -->
 <script>
   (function () {
@@ -22,9 +23,11 @@
     gtag('config', 'G-YPJ570LWJB');
   })();
 </script>
+<!-- ==== GENERATED:END head-analytics ==== -->
 <!-- ==== TEMPLATE:END head-analytics ==== -->
 
 <!-- ==== TEMPLATE:BEGIN head-meta ==== -->
+<!-- ==== GENERATED:BEGIN head-brand ==== -->
 <title>What district am I in? Find your district — Chicago District Explorer</title>
 <meta name="description" content="Enter an address or ZIP — or tap the map — to find your district: ward, police district, elected school board, county board, congressional and Illinois legislative districts, and who represents you. Free, no login." />
 <meta name="robots" content="index, follow" />
@@ -47,6 +50,7 @@
 <meta name="twitter:title" content="What district am I in? — Chicago District Explorer" />
 <meta name="twitter:description" content="See every civic district that covers a Chicago address — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
 <meta name="twitter:image" content="https://chidistricts.com/og-image.png" />
+<!-- ==== GENERATED:END head-brand ==== -->
 <!-- ==== TEMPLATE:END head-meta ==== -->
 
 <!-- ==== TEMPLATE:BEGIN head-jsonld ==== -->
@@ -112,9 +116,11 @@
 <!-- ==== TEMPLATE:END head-jsonld ==== -->
 <!-- ==== TEMPLATE:BEGIN head-assets ==== -->
 <link rel="manifest" href="manifest.webmanifest">
+<!-- ==== GENERATED:BEGIN head-theme ==== -->
 <meta name="theme-color" content="#0b3d91">
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2341B6E6'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23C8102E'/%3E%3C/svg%3E" />
+<!-- ==== GENERATED:END head-theme ==== -->
 
 <!-- warm the connections first paint waits on: Leaflet's CDN (JS before the app
      script) and the CARTO tile hosts the map hits the moment it initializes.
@@ -972,11 +978,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ==== TEMPLATE:END head-assets ==== */
   /* ==== TEMPLATE:BEGIN palette ==== */
   :root {
+  /* ==== GENERATED:BEGIN brand-palette ==== */
     /* ---- Chicago flag palette ---- */
-    --accent: #41B6E6;        /* flag stripe blue */
-    --accent-deep: #0B5394;   /* deeper blue for text/links on light bg */
-    --accent-warm: #C8102E;         /* flag star red */
+    --accent: #41B6E6; /* flag stripe blue */
+    --accent-deep: #0B5394; /* deeper blue for text/links on light bg */
+    --accent-warm: #C8102E; /* flag star red */
     --accent-warm-deep: #9C0B24;
+  /* ==== GENERATED:END brand-palette ==== */
   /* ==== TEMPLATE:END palette ==== */
   /* ==== ENGINE:BEGIN styles-core ==== */
 
@@ -2579,8 +2587,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ==== TEMPLATE:BEGIN body-shell ==== */
 </style>
 
+<!-- ==== GENERATED:BEGIN goatcounter ==== -->
 <script data-goatcounter="https://chidistricts.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+<!-- ==== GENERATED:END goatcounter ==== -->
 </head>
 <body>
 
@@ -2593,9 +2603,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
           <path fill="var(--accent-warm)" id="star-path-header"></path>
         </svg>
+        <!-- ==== GENERATED:BEGIN masthead-brand ==== -->
         <span class="title-text">Chicago District Explorer</span>
       </span>
       <small>Click the map or search an address to see every district that covers it, and who represents it.</small>
+        <!-- ==== GENERATED:END masthead-brand ==== -->
     </h1>
     <!-- Chicago-owned masthead action row: the two "about the data" doors, in
          the one place every visitor passes. "What data is missing?" moved up
@@ -2859,6 +2871,9 @@ function initChiExplorer() {
   var SOCRATA_APP_TOKEN = "";
   var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new";
   var FEEDBACK_SUBJECT = "Chicago District Explorer feedback";
+  // Brand identity as worksheet data — never read from an ENGINE block
+  // without a typeof guard (forks that have not opted in do not define it).
+  var METRO_BRAND = { appName: "Chicago District Explorer" };
   /* Sibling District Explorer deployments — one canonical list shared by every
    * metro fork. When a new metro launches, add its entry to every fork's
    * worksheet and regenerate (Conversion 3 will source this list from the
