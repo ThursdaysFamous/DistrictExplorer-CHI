@@ -3,7 +3,7 @@
 **What this is.** The decision record for reviewing how this fleet is developed and deployed —
 single-file no-build apps, a byte-identical fenced engine distributed by hash-verified releases
 and fan-out bump PRs, worksheet-generated regions, a generated template repo, one repo per
-metro — measured against the Districtry rebrand (`docs/DISTRICTRY_REBRAND.md`), with the
+metro — measured against the districtry rebrand (`docs/DISTRICTRY_REBRAND.md`), with the
 recommended alternative and its staged rollout. Every number below was **measured on
 2026-08-24** and will drift; where a live count matters, read it from the tool named beside it,
 never from this file (the repo's own standing rule).
@@ -111,7 +111,7 @@ output, and the fork repos collapse into paths of one repo.
   never committed, with copy that has already forked from the app by design. At adoption,
   every one of those 43 substitutions must be redone as real changes; the script's own
   docstring calls its table "the adoption checklist."
-- **The brand model stopped matching the repo model.** Districtry is positioned
+- **The brand model stopped matching the repo model.** districtry is positioned
   fleet-by-state (`districtry / il`); the fleet is metro-first forks. WI — "the first state
   through the template route" — is un-bootstrapped (88 placeholder findings) and behind the
   #474 fingerprint fix, and the rebrand work itself recorded the fleet-knowledge failure: a
@@ -190,12 +190,12 @@ hash-verified releases as the parity proof).
 | **R1 — Brand-as-data** | Opt-in `brand` key in `metro-worksheet.json` + schema (product name, instance tag, app name, OG block, palette tiers, theme color, favicon, analytics incl. the GA hostname gate and GoatCounter URL); opt-in GENERATED regions for head-brand, head-analytics, and the `sources.html` palette; `explorer_name` in `metros.json` | `generate_metro_files.py --check`; running the new generator over NYC/SF checkouts produces **zero diff** (opt-in means inert — the recorded v1.0.16 lesson); `build_state_template.py --check` |
 | **R2 — In-place reorg to `/il`** | Retire the template and engine-release channels (R2.1); move the app to `il/` behind a redirect stub (R2.3); chidistricts.com keeps working throughout. **The composer moved to R3 by operator decision** — see the note below | the full existing gate battery + smoke against `/il/`, plus a Chromium check of the redirect and SW transition |
 | **R3 — Composer, then import SF and NYC** | The composer inversion opens R3 (deferred from R2, below). Then each fork as `metros/<id>/` + `/sf/`, `/nyc/`; their divergent validate/smoke copies (585–891 lines each) reconcile into the one script set — real porting work, budgeted as such; scraper workflows move and consolidate to matrix runners; old repos freeze behind a no-new-merges window | per-instance smoke; a no-op proof (the composed instance byte-equals the fork's deployed HEAD minus intended deletions); the retention gate re-baselined |
-| **R4 — Landing page + Districtry skin** | `/` becomes the state-list landing (brand package, coverage); instances take the skin from worksheet brand keys; the preview machinery retires; a new state bootstraps as its own folder when ready | smoke + validate + link gates + a leftover-brand grep |
+| **R4 — Landing page + districtry skin** | `/` becomes the state-list landing (brand package, coverage); instances take the skin from worksheet brand keys; the preview machinery retires; a new state bootstraps as its own folder when ready | smoke + validate + link gates + a leftover-brand grep |
 | **R5 — Domain cutover** | CNAME → districtry.com, DNS, one sitemap, analytics keys, redirect shells in the old repos/domains, search re-verification | `validate_card_links.py` + live probes + redirect checks |
 | **R6 — Retire machinery** | Engine releases/locks/fan-out, the Template repo, cross-repo fleet_status, per-fork doc copies; archive NYC/SF/Template/WI with pointer READMEs | grep for dead references; docs regenerated |
 
 Rebrand timing simplifies under this ordering: **chidistricts.com is never rebranded in
-place** — Districtry ships as the identity of the new tree, and the old domains redirect at
+place** — districtry ships as the identity of the new tree, and the old domains redirect at
 R5. (Re-confirmed by the operator on 2026-08-24, after acquiring districtry.com: the domain
 cutover stays last and independent. The cost is two canonical moves for the Illinois app —
 root→`/il/` now, host→districtry.com at R5 — and that is accepted, because each is small and
@@ -225,12 +225,12 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 - **R4 (part 1) — SHIPPED (2026-08-24): the root becomes the fleet's front door.**
   "One repo, one site" only pays off if the site has a door. R2.3 left the root a redirect stub;
-  it is now the Districtry landing page — the mark, the wordmark, and the places the fleet
+  it is now the districtry landing page — the mark, the wordmark, and the places the fleet
   answers for — with the drift gate, the link gate and a browser gate all pointed at it.
   **It is GENERATED, and that is the whole argument rather than a convenience.** This record's
   central finding was that brand identity had decayed into scattered literals; a hand-written
   front door whose state list is HTML would have reproduced that on day one of the fix. Every
-  fact comes from a file that already owns it — `metros.json` for the places, the Districtry
+  fact comes from a file that already owns it — `metros.json` for the places, the districtry
   token file for the palette (light AND dark, extracted BY NAME so a rename fails the build
   instead of emitting a broken custom property), `favicon.svg` inlined as a data URI, and the
   self-hosted Barlow CSS. Adding a state is a manifest entry and a regenerate; restyling is a
@@ -301,7 +301,7 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   habit but the mechanism: SF and NYC carry no brand block, so every one of the seven resolves to
   exactly the bytes it did before. R1 shipped `METRO_BRAND` unconsumed and the schema said
   "Optional until a rebrand consumes it." Proven per instance through the UI, since the embed
-  snippet's `title=` attribute IS the resolved name: il "Districtry Illinois", sf "San Francisco
+  snippet's `title=` attribute IS the resolved name: il "districtry Illinois", sf "San Francisco
   District Explorer", nyc "New York City District Explorer".
   **What the preview got wrong for production, and only adoption could find.** Its CSS hides the
   document footer — where three elements the boot script binds BY ID live — so taking the CSS
@@ -545,7 +545,7 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   template itself to brand-as-data belongs to the WI pilot (R-stage 3 prerequisite), not R1.
   Verified: all 19 generated regions `--check` clean, `validate_index.py`,
   `check_engine_parity.py`, `build_state_template.py --check`, and the full Playwright smoke
-  test green; the Districtry preview's 43 exactly-once transforms all survived (the preview
+  test green; the districtry preview's 43 exactly-once transforms all survived (the preview
   was regenerated per its documented flow, not left stale).
 
 ## Alternatives considered

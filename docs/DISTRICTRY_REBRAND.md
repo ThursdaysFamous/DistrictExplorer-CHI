@@ -1,6 +1,6 @@
-# Districtry rebrand — decision record & staged rollout
+# districtry rebrand — decision record & staged rollout
 
-**What this is.** The record for the *Districtry* rebrand: the decisions that carried it, the
+**What this is.** The record for the *districtry* rebrand: the decisions that carried it, the
 staged rollout plan, and the fix-list the package still owes before production adoption. The
 reviewable package itself is deployed as an **unlisted preview at `/districtry/`** on the live
 site (a new root directory ships automatically with the Pages deploy; `docs/` never ships, which
@@ -14,7 +14,7 @@ the files are visible in the GitHub tree regardless. Accepted.
 
 ## Decisions of record
 
-- **Name:** *Districtry* (district + directory) — never "Districtory". One indivisible lowercase
+- **Name:** *districtry* (district + directory) — never "Districtory". One indivisible lowercase
   word; instance tag suffix in Barlow Condensed 400 at 80%. **The tag is the TWO-LETTER
   code, lowercase — `districtry / il`** (operator-directed 2026-08-20, superseding the brand
   spec's spelled-out `/ illinois` example). Every future state uses its own code the same way;
@@ -38,7 +38,7 @@ the files are visible in the GitHub tree regardless. Accepted.
 
 ## Provenance (package ↔ repo)
 
-Package `Districtry_rebrand_refinement.zip`, rebuilt 2026-08-19 from this repo's ground truth
+Package `districtry_rebrand_refinement.zip`, rebuilt 2026-08-19 from this repo's ground truth
 (sync record `github.md`, not committed — its content is this table):
 
 | Deliverable | Built from |
@@ -120,7 +120,7 @@ The "N of 39 layers on" label is presentation of existing state — in scope as 
   the old name in dialogs, which is precisely the Phase-3 engine release.
   **Fix round (2026-08-20, post-deploy):** `.flag-stripe` — the Chicago flag's
   accent/white/accent bands above and below the map, that fork's signature device — rendered
-  as meaningless violet bands under the token swap; the Districtry design carries no stripe,
+  as meaningless violet bands under the token swap; the districtry design carries no stripe,
   so the skin island now hides it.
 
 ## Footer elimination (operator-directed 2026-08-20 — IMPLEMENTED in the preview)
@@ -344,7 +344,7 @@ without questioning it.**
    `--accent-warm-deep` is referenced **nowhere** in the engine today; the override is kept only
    so no Chicago flag red survives anywhere in the cascade.
 2. **Empty state — the Chicago flag star retired.** A six-pointed star is that city's emblem;
-   recoloured violet it was an off-brand city motif sitting in a Districtry app. It is now the 5c
+   recoloured violet it was an off-brand city motif sitting in a districtry app. It is now the 5c
    mark drawn as a quiet outline. The `#star-path-empty` element **stays in the DOM, hidden** —
    the boot script writes its `d` by id and would throw on a missing node (the same discipline as
    the masthead star).
@@ -387,7 +387,7 @@ not a re-skin one, so it is flagged rather than taken.
 Three `#0B5394` uses remain in the preview and are correctly out of scope: the `:root` definition
 (overridden by the skin), a `var(--accent-deep, #0B5394)` fallback that never applies, and the
 police-district / early-voting **map layer** colours — data tier, which the three-tier rule keeps.
-The Districtry token set itself retains `#0b5394` as `--layer-zip`.
+The districtry token set itself retains `#0b5394` as `--layer-zip`.
 
 **Related finding, NOT changed:** the water-taxi marker (`icons/water-taxi.png`, swapped in when a
 point lands on Lake Michigan) is a third Chicago motif — the Chicago Water Taxi seal. It is a
@@ -1335,5 +1335,5 @@ and the title column unchanged at 371px — the switch adds a caret, not a row.
 - The preview stays out of `sitemap.xml` and is never linked from `index.html`/`sources.html`
   (linking from index.html would also drag its URLs into gate surfaces).
 - Root filename collisions to avoid: `manifest.webmanifest`, `og-image.png`,
-  `icons/icon-192/512.png` are SHELL_URLS-pinned — Districtry assets keep distinct names/paths
+  `icons/icon-192/512.png` are SHELL_URLS-pinned — districtry assets keep distinct names/paths
   until the adoption step swaps them in place.

@@ -58,6 +58,20 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST = os.path.join(REPO_ROOT, "metros.json")
 TOKENS = os.path.join(REPO_ROOT, "districtry", "tokens", "districtry.tokens.css")
 FAVICON = os.path.join(REPO_ROOT, "districtry", "icons", "favicon.svg")
+# The 5c mark is lifted from the app rather than restated, so the geometry has
+# one source. The favicon above is the SIMPLIFIED one-polygon fallback the brand
+# spec calls for below 24px — right for a browser tab, wrong for the front door,
+# which is why the two are different files doing different jobs.
+MARK_SOURCE = os.path.join(REPO_ROOT, "il", "index.html")
+
+# Each instance's worksheet, for the layer count on its card. A card that states
+# a number must read it from the thing that owns it; a hand-typed count is the
+# drift this repo keeps writing generators to avoid.
+INSTANCE_WORKSHEET = {
+    "il": "metro-worksheet.json",
+    "sf": "sf/metro-worksheet.json",
+    "nyc": "nyc/metro-worksheet.json",
+}
 FONTFACE = os.path.join(REPO_ROOT, "fonts", "barlow-fontface.css")
 OUT = os.path.join(REPO_ROOT, "index.html")
 
@@ -65,6 +79,17 @@ OUT = os.path.join(REPO_ROOT, "index.html")
 # metros.json's urls; both are data, so that cutover is an edit here plus a
 # regenerate, never a rewrite of the page.
 CANONICAL = "https://chidistricts.com/"
+
+# The rename notice. Data, not markup, so retiring it is deleting a constant
+# rather than editing a page — set NOTICE to None when it has served its time.
+# It is deliberately plain about what happened and what it means for a reader
+# who typed the old name, because that is the only reason they are reading it.
+NOTICE = {
+    "heading": "chidistricts.com is now districtry.com",
+    "body": ("Same map, same data, same answers — a new name, because it now covers "
+             "more than Chicago and more than one state. Illinois lives at "
+             "districtry.com/il, and every link below goes straight there."),
+}
 
 # Where a forwarded visit goes. The Illinois app is what lived at this root
 # before R2.3, so it is the only instance whose old links can be in the wild.
@@ -123,6 +148,44 @@ def token_css(names, table, where, extra=None, indent="  "):
     return "\n".join(out)
 
 
+def load_mark():
+    """The 5c mark, taken from the app and made theme-aware.
+
+    Two adaptations, both from the brand spec: the polygons MULTIPLY on a light
+    ground and SCREEN on a dark one (the app only ever paints light, so it
+    hardcodes multiply), and the ring-and-ascender takes currentColor so the
+    ink follows the theme instead of staying near-black on a dark page.
+    """
+    src = read(MARK_SOURCE, "the app, for the 5c mark")
+    i = src.find('<svg class="districtry-mark"')
+    if i < 0:
+        fail("the app no longer carries a districtry-mark SVG to lift")
+    svg = src[i:src.index("</svg>", i) + len("</svg>")]
+    n = svg.count('style="mix-blend-mode:multiply"')
+    if n != 3:
+        fail("expected the mark's 3 blended polygons, found %d" % n)
+    svg = svg.replace('style="mix-blend-mode:multiply"', 'class="mk-blend"')
+    if svg.count('stroke="#17161c"') != 2:
+        fail("expected the mark's 2 ink strokes (ring + ascender)")
+    svg = svg.replace('stroke="#17161c"', 'stroke="currentColor"')
+    return svg.replace('<svg class="districtry-mark"', '<svg class="logo-mark"')
+
+
+def instance_layer_count(tag):
+    rel = INSTANCE_WORKSHEET.get(tag)
+    if not rel:
+        fail("no worksheet mapped for instance %r — add it to INSTANCE_WORKSHEET "
+             "so its card can state a layer count" % tag)
+    try:
+        w = json.loads(read(os.path.join(REPO_ROOT, rel), "the %s worksheet" % tag))
+    except ValueError as e:
+        fail("%s is not valid JSON: %s" % (rel, e))
+    n = len(w.get("layers") or [])
+    if not n:
+        fail("%s lists no layers" % rel)
+    return n
+
+
 def load_metros():
     try:
         manifest = json.loads(read(MANIFEST, "the fleet manifest"))
@@ -140,6 +203,18 @@ def load_metros():
     return metros
 
 
+def render_notice():
+    if not NOTICE:
+        return ""
+    return (
+        '    <aside class="notice" aria-labelledby="notice-h">\n'
+        '      <p id="notice-h" class="notice-h">%s</p>\n'
+        '      <p class="notice-b">%s</p>\n'
+        '    </aside>\n'
+        % (html.escape(NOTICE["heading"]), html.escape(NOTICE["body"]))
+    )
+
+
 def render_cards(metros):
     rows = []
     for m in metros:
@@ -148,11 +223,13 @@ def render_cards(metros):
             '        <span class="card-word">districtry<span class="card-tag"> / %s</span></span>\n'
             '        <b>%s</b>\n'
             '        <span class="blurb">%s</span>\n'
+            '        <span class="card-stat">%d layers</span>\n'
             '      </a>'
             % (html.escape(m["url"], quote=True),
                html.escape(m["tag"]),
                html.escape(m["landing_name"]),
-               html.escape(m["blurb"]))
+               html.escape(m["blurb"]),
+               instance_layer_count(m["tag"]))
         )
     return "\n".join(rows)
 
@@ -173,8 +250,8 @@ def build():
         fail("fonts/barlow-fontface.css carries no @font-face — regenerate it with "
              "`python3 scripts/build_fonts.py landing > fonts/barlow-fontface.css`")
 
-    title = "Districtry — find your districts and who represents you"
-    desc = ("Pick a place and Districtry shows every civic district that covers a "
+    title = "districtry — find your districts and who represents you"
+    desc = ("Pick a place and districtry shows every civic district that covers a "
             "point on the map — and the people who hold those seats. Free, no login.")
 
     return """<!DOCTYPE html>
@@ -192,7 +269,7 @@ def build():
 <meta property="og:description" content="%(desc)s" />
 <meta property="og:url" content="%(canonical)s" />
 <meta name="twitter:card" content="summary" />
-<!-- GENERATED by scripts/build_landing_page.py from metros.json + the Districtry
+<!-- GENERATED by scripts/build_landing_page.py from metros.json + the districtry
      tokens. Do NOT hand-edit: `--check` fails the build. Add a state to
      metros.json and regenerate. -->
 <script>
@@ -255,18 +332,38 @@ body {
 }
 .wrap { max-width: 940px; margin: 0 auto; padding: 56px 24px 72px; }
 
-header.mast { display: flex; align-items: baseline; gap: 10px; }
+/* The logo lockup: the 5c mark beside the wordmark, at a size the mark is
+   actually drawn for. The brand spec's blend rule is a REAL rule, not
+   decoration — the three polygons read as overlapping translucent districts
+   only if they multiply on a light ground and screen on a dark one; keep
+   multiply on dark and they go muddy and near-black. */
+header.mast { display: flex; align-items: center; gap: 14px; }
+.logo-mark { width: 64px; height: 64px; flex: 0 0 auto; color: var(--ink); }
+.logo-mark .mk-blend { mix-blend-mode: multiply; }
+@media (prefers-color-scheme: dark) {
+  .logo-mark .mk-blend { mix-blend-mode: screen; }
+}
 .wordmark {
-  font: var(--font-heading-weight) 44px/1 var(--font-heading);
+  font: var(--font-heading-weight) 52px/1 var(--font-heading);
   letter-spacing: .005em; color: var(--ink);
 }
-.markdot { width: 30px; height: 30px; align-self: center; margin-right: 4px; }
 
 h1 {
   font: 400 26px/1.3 var(--font-heading);
   color: var(--ink-3); margin: 22px 0 0; max-width: 34em;
 }
 .lede { color: var(--muted); margin: 14px 0 0; max-width: 40em; font-size: 15px; }
+
+.notice {
+  margin: 26px 0 0; padding: 14px 18px 15px;
+  background: var(--brand-tint); border: 1px solid var(--brand-border);
+  border-radius: var(--radius-card);
+}
+.notice-h {
+  margin: 0 0 5px; font: var(--font-heading-weight) 17px/1.25 var(--font-heading);
+  color: var(--ink);
+}
+.notice-b { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-3); max-width: 52em; }
 
 h2 {
   font: var(--font-heading-weight) 15px/1 var(--font-heading);
@@ -289,6 +386,15 @@ h2 {
 .card-tag { font-weight: 400; }
 .card b { display: block; font: var(--font-heading-weight) 21px/1.15 var(--font-heading); margin-bottom: 6px; }
 .blurb { display: block; font-size: 14px; line-height: 1.5; color: var(--ink-3); }
+.card-stat {
+  display: inline-block; margin-top: 11px; padding: 3px 9px 4px;
+  background: var(--brand-tint); border: 1px solid var(--brand-border);
+  border-radius: 999px; font-size: 12px; color: var(--ink-3);
+}
+
+.does { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 22px 26px; }
+.does b { display: block; font: var(--font-heading-weight) 17px/1.25 var(--font-heading); margin-bottom: 5px; }
+.does p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink-3); }
 
 footer { margin-top: 52px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--muted); }
 footer a { color: var(--brand-600); }
@@ -297,7 +403,8 @@ footer p { margin: 0 0 8px; max-width: 46em; }
 
 @media (max-width: 560px) {
   .wrap { padding: 36px 18px 56px; }
-  .wordmark { font-size: 36px; }
+  .wordmark { font-size: 38px; }
+  .logo-mark { width: 48px; height: 48px; }
   h1 { font-size: 22px; }
 }
 </style>
@@ -305,20 +412,41 @@ footer p { margin: 0 0 8px; max-width: 46em; }
 <body>
   <div class="wrap">
     <header class="mast">
-      <img class="markdot" src="%(favicon)s" alt="" width="30" height="30" />
+      %(mark)s
       <span class="wordmark">districtry</span>
     </header>
 
     <h1>Every district that covers a point, and who represents it.</h1>
     <p class="lede">%(desc)s</p>
 
+%(notice)s
     <h2>Choose a place</h2>
     <div class="cards">
 %(cards)s
     </div>
 
+    <h2>What it does</h2>
+    <div class="does">
+      <div>
+        <b>Every district, not the one you asked for</b>
+        <p>Pick a point and it reports every civic boundary that contains it at once —
+           legislative, judicial, policing, schools, and the local special districts most
+           tools leave out.</p>
+      </div>
+      <div>
+        <b>The people, where they can be verified</b>
+        <p>It names who holds each seat when a published roster says so, and links the
+           official body when none does. It never guesses an officeholder.</p>
+      </div>
+      <div>
+        <b>It shows its work</b>
+        <p>Every layer names the publisher its boundary came from and where its names come
+           from. What nobody publishes is listed too, rather than quietly missing.</p>
+      </div>
+    </div>
+
     <footer>
-      <p>Districtry is a public civic reference built from official published
+      <p>districtry is a public civic reference built from official published
          boundaries and rosters. It is not a legal record of any district line,
          and it never guesses at who holds a seat — where no verifiable roster
          exists, it links the official body instead.</p>
@@ -339,6 +467,8 @@ footer p { margin: 0 0 8px; max-width: 46em; }
         "dark": token_css(DARK_TOKENS, dark, '[data-theme="dark"]', DARK_EXTRA,
                           indent="    "),
         "cards": render_cards(metros),
+        "mark": load_mark(),
+        "notice": render_notice(),
     }
 
 
@@ -363,10 +493,10 @@ def main():
                     fromfile="committed index.html", tofile="regenerated",
                     lineterm="", n=1))[:40]:
                 print("  " + dl, file=sys.stderr)
-            fail("index.html has drifted from metros.json + the Districtry tokens. "
+            fail("index.html has drifted from metros.json + the districtry tokens. "
                  "Edit the DATA and regenerate; never hand-edit the landing page.")
         print("build-landing-page: OK — index.html matches metros.json (%d place(s)) "
-              "and the Districtry tokens" % len(load_metros()))
+              "and the districtry tokens" % len(load_metros()))
         return
 
     with open(OUT, "w", encoding="utf-8", newline="") as f:

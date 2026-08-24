@@ -654,7 +654,7 @@ repeating the work:** the ISBE pair (`isbe_county_officers_scraper.py` +
 `build_county_board_chairs.py`) is a reproducible negative measurement — its
 output is proof ISBE's chair data is 29% wrong, "kept reproducible so the
 claim can be re-tested rather than re-argued" — and is not dead code;
-`build_og_image.mjs` belongs to the Districtry
+`build_og_image.mjs` belongs to the districtry
 product track and is allowed-stale by its own design (`build_districtry_preview.py`
 sat beside it until R4.2 ADOPTED the skin it previewed, at which point a
 2,440-line builder and its 27,331-line output were deleted — a preview earns its
