@@ -142,7 +142,7 @@
       "?utm_source=embed&utm_medium=iframe" + location.hash;
     return '<iframe src="' + url + '" width="100%" height="600" ' +
       'style="border:0;max-width:100%" loading="lazy" ' +
-      'title="' + METRO_NAME + ' District Explorer" ' +
+      'title="' + appDisplayName() + '" ' +
       'allow="geolocation" referrerpolicy="no-referrer-when-downgrade"></iframe>';
   }
 
@@ -293,7 +293,7 @@
       // the popover. A dismissed sheet needs no cleanup.
       if (!hoverCapable && navigator.share) {
         trackEvent("share-native");
-        navigator.share({ title: METRO_NAME + " District Explorer", url: shareLinkUrl() })
+        navigator.share({ title: appDisplayName(), url: shareLinkUrl() })
           .catch(function () { /* user dismissed, or the platform refused — nothing to undo */ });
         return;
       }

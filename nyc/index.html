@@ -2861,6 +2861,35 @@ function initNycExplorer() {
   }
   /* ==== ENGINE:END app-token ==== */
 
+  /* ==== ENGINE:BEGIN brand-names ==== */
+  /* The app's display name, and a sibling's — as DATA, never composed here.
+     Seven engine strings used to build the product name inline
+     ("Chicago" + " District Explorer"), which is precisely what the engine
+     rules forbid: a brand is a metro-owned fact and an ENGINE block may not
+     inline one. It survived because the composition happened to be right for
+     every fork at once, and stopped being right the moment one of them
+     rebranded — the rebrand assessment counted these as seven strings locked
+     behind a release channel.
+
+     Both helpers are OPT-IN and fall back to the historical composition, which
+     is what keeps a fork that has not rebranded byte-identical in behaviour:
+     METRO_BRAND is emitted only when its worksheet carries a `brand` block
+     (SF and NYC carry none today), and `explorerName` rides a METRO_EXPLORERS
+     entry only when the fleet manifest gives that metro an `explorer_name`.
+     Read METRO_BRAND nowhere else in an ENGINE block without this guard. */
+  function appDisplayName() {
+    if (typeof METRO_BRAND !== "undefined" && METRO_BRAND && METRO_BRAND.appName) {
+      return METRO_BRAND.appName;
+    }
+    return METRO_NAME + " District Explorer";
+  }
+
+  function siblingDisplayName(metro) {
+    if (!metro) return "";
+    return metro.explorerName || (metro.label + " District Explorer");
+  }
+  /* ==== ENGINE:END brand-names ==== */
+
   /* ---------- map-pin geometry (used for the selection marker + decorative
    * icons). NYC has no flag star like Chicago's, so the wordmark/marker motif
    * is a "drop a pin" location marker — a teardrop with a hole (two subpaths,
@@ -3604,7 +3633,7 @@ function initNycExplorer() {
       "?utm_source=embed&utm_medium=iframe" + location.hash;
     return '<iframe src="' + url + '" width="100%" height="600" ' +
       'style="border:0;max-width:100%" loading="lazy" ' +
-      'title="' + METRO_NAME + ' District Explorer" ' +
+      'title="' + appDisplayName() + '" ' +
       'allow="geolocation" referrerpolicy="no-referrer-when-downgrade"></iframe>';
   }
 
@@ -3755,7 +3784,7 @@ function initNycExplorer() {
       // the popover. A dismissed sheet needs no cleanup.
       if (!hoverCapable && navigator.share) {
         trackEvent("share-native");
-        navigator.share({ title: METRO_NAME + " District Explorer", url: shareLinkUrl() })
+        navigator.share({ title: appDisplayName(), url: shareLinkUrl() })
           .catch(function () { /* user dismissed, or the platform refused — nothing to undo */ });
         return;
       }
@@ -3810,13 +3839,14 @@ function initNycExplorer() {
           // same exposure as the sibling's own geolocate → permalink flow)
           var siblingHere = siblingMetroAt(lat, lng);
           if (siblingHere) {
-            geoStatusEl.textContent = "You're outside " + METRO_NAME + " — but " + siblingHere.label + " has its own District Explorer.";
+            geoStatusEl.textContent = "You're outside " + METRO_NAME + " — but " +
+              siblingDisplayName(siblingHere) + " covers where you are.";
             geoStatusEl.className = "geo-status";
             offerMetroPortal(siblingHere, {
               point: { lat: lat, lng: lng },
               source: "geolocate",
               title: "You're in " + siblingHere.label + "!",
-              note: "This is the " + METRO_NAME + " District Explorer — but " + siblingHere.label +
+              note: "This is " + appDisplayName() + " — but " + siblingHere.label +
                 " has one of its own, and it can look up the spot you're standing on."
             });
             return;
@@ -4337,11 +4367,11 @@ function initNycExplorer() {
     var p = ensureMetroPortal();
     if (!p.root.hidden) return; // one portal at a time
     var url = metroPortalUrl(metro, opts.point || null);
-    var explorerName = metro.label + " District Explorer";
+    var explorerName = siblingDisplayName(metro);
     p.emoji.textContent = metro.emoji || "🧭";
     p.title.textContent = opts.title || "Whoa — this is " + metro.label + "!";
     p.note.textContent = opts.note || "You've wandered a long way from " + METRO_NAME +
-      ". Good news: " + metro.label + " has a District Explorer of its own.";
+      ". Good news: " + metro.label + " has one of its own.";
     p.go.textContent = "Take me there now";
     p.stay.textContent = "Stay in " + METRO_NAME;
 
@@ -4580,7 +4610,7 @@ function initNycExplorer() {
     addr.textContent = (metro.emoji ? metro.emoji + " " : "") + r.display_name;
     var hint = document.createElement("span");
     hint.className = "sibling-result-hint";
-    hint.textContent = "Open in the " + metro.label + " District Explorer →";
+    hint.textContent = "Open in " + siblingDisplayName(metro) + " →";
     btn.appendChild(addr);
     btn.appendChild(hint);
     btn.addEventListener("click", function () {

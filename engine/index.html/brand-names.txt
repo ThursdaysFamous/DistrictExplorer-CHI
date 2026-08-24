@@ -1,0 +1,26 @@
+  /* The app's display name, and a sibling's — as DATA, never composed here.
+     Seven engine strings used to build the product name inline
+     ("Chicago" + " District Explorer"), which is precisely what the engine
+     rules forbid: a brand is a metro-owned fact and an ENGINE block may not
+     inline one. It survived because the composition happened to be right for
+     every fork at once, and stopped being right the moment one of them
+     rebranded — the rebrand assessment counted these as seven strings locked
+     behind a release channel.
+
+     Both helpers are OPT-IN and fall back to the historical composition, which
+     is what keeps a fork that has not rebranded byte-identical in behaviour:
+     METRO_BRAND is emitted only when its worksheet carries a `brand` block
+     (SF and NYC carry none today), and `explorerName` rides a METRO_EXPLORERS
+     entry only when the fleet manifest gives that metro an `explorer_name`.
+     Read METRO_BRAND nowhere else in an ENGINE block without this guard. */
+  function appDisplayName() {
+    if (typeof METRO_BRAND !== "undefined" && METRO_BRAND && METRO_BRAND.appName) {
+      return METRO_BRAND.appName;
+    }
+    return METRO_NAME + " District Explorer";
+  }
+
+  function siblingDisplayName(metro) {
+    if (!metro) return "";
+    return metro.explorerName || (metro.label + " District Explorer");
+  }

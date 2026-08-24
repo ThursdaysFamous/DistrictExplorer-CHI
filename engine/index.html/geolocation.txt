@@ -30,13 +30,14 @@
           // same exposure as the sibling's own geolocate → permalink flow)
           var siblingHere = siblingMetroAt(lat, lng);
           if (siblingHere) {
-            geoStatusEl.textContent = "You're outside " + METRO_NAME + " — but " + siblingHere.label + " has its own District Explorer.";
+            geoStatusEl.textContent = "You're outside " + METRO_NAME + " — but " +
+              siblingDisplayName(siblingHere) + " covers where you are.";
             geoStatusEl.className = "geo-status";
             offerMetroPortal(siblingHere, {
               point: { lat: lat, lng: lng },
               source: "geolocate",
               title: "You're in " + siblingHere.label + "!",
-              note: "This is the " + METRO_NAME + " District Explorer — but " + siblingHere.label +
+              note: "This is " + appDisplayName() + " — but " + siblingHere.label +
                 " has one of its own, and it can look up the spot you're standing on."
             });
             return;

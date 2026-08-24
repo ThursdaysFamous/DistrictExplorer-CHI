@@ -50,7 +50,7 @@
     addr.textContent = (metro.emoji ? metro.emoji + " " : "") + r.display_name;
     var hint = document.createElement("span");
     hint.className = "sibling-result-hint";
-    hint.textContent = "Open in the " + metro.label + " District Explorer →";
+    hint.textContent = "Open in " + siblingDisplayName(metro) + " →";
     btn.appendChild(addr);
     btn.appendChild(hint);
     btn.addEventListener("click", function () {
