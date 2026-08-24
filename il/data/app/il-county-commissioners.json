@@ -3,20 +3,21 @@
   "county": "Alexander County",
   "members": [
    {
-    "email": "Pdgriggsje601@gmail.com",
-    "name": "Joe Griggs",
-    "phone": "618-534-0712",
+    "name": "James (Jim) Smith",
     "role": "Chairman"
    },
    {
-    "email": "Jsmith1986189@gmail.com",
-    "name": "James Smith",
-    "phone": "618-306-0029"
+    "name": "Larry (Steve) Essex",
+    "role": "Vice Chairman"
+   },
+   {
+    "name": "Joe E. Griggs",
+    "role": "Member"
    }
   ],
-  "seats": 3,
-  "sourceUrl": "https://alexandercounty.illinois.gov/county-board/",
-  "structure": "Commission form — 3 commissioners elected countywide"
+  "sourceDocument": "e-mail from the Alexander County Clerk & Recorder's office (acc@alexandercountyil.org), 2026-08-24",
+  "structure": "Commission form — 3 commissioners elected countywide",
+  "verified": "2026-08-24"
  },
  "BROWN": {
   "county": "Brown County",

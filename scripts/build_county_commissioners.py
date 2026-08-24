@@ -37,21 +37,22 @@ MIN_MEMBERS = 3
 # Saline has one. Widening this does NOT weaken any existing county.
 MAX_MEMBERS = 13
 EXPECT_MEMBERS = {
-    "ALEXANDER": 2,                  # 2026-08-23; TWO PUBLISHED OF THREE SEATED, and
-                                     # the only county in this file where those numbers
-                                     # differ. Commission form proven from the county's
-                                     # own 7 May 2024 minutes (Chairman / Vice Chairman
-                                     # / Commissioner in the letterhead, three names in
-                                     # the roll call) and countywide election proven
-                                     # from its certified 2024 General canvass, where
-                                     # "FOR COMMISSIONER" reports all ELEVEN precincts —
-                                     # the same denominator the presidential contest on
-                                     # that ballot reports. The county's team widget
-                                     # names Chairman Joe Griggs and member James Smith
-                                     # and stops; its minutes stop in May 2024; and the
-                                     # third seat is named by no source anywhere. The
-                                     # block carries seats: 3 so the card says a seat is
-                                     # unlisted instead of implying a two-member board.
+    "ALEXANDER": 3,                  # 2026-08-24; ALL THREE SEATS NAMED, closing the
+                                     # shortfall this file carried since 2026-08-23.
+                                     # Commission form proven from the county's own 7
+                                     # May 2024 minutes (Chairman / Vice Chairman /
+                                     # Commissioner in the letterhead) and countywide
+                                     # election proven from its certified 2024 General
+                                     # canvass, where "FOR COMMISSIONER" reports all
+                                     # ELEVEN precincts — the same denominator the
+                                     # presidential contest on that ballot reports. The
+                                     # county's own team widget was proven stale on TWO
+                                     # counts the same day (missing Essex entirely, and
+                                     # Griggs/Smith's titles reversed), so the roster
+                                     # moved to DOCUMENT_ROSTERS: an e-mail from the
+                                     # Clerk & Recorder's office naming all three —
+                                     # Chairman James (Jim) Smith, Vice Chairman Larry
+                                     # (Steve) Essex, Member Joe E. Griggs.
     "MONROE": 3, "RANDOLPH": 3,      # commission form, 3 commissioners
     "PIKE": 9, "PUTNAM": 5, "BROWN": 7, "CALHOUN": 5,
     "SCHUYLER": 7,                   # pass-8; at-large proven from the canvass
@@ -152,9 +153,13 @@ MAX_CARRIED_FRACTION = 0.5
 # three people under "Massac County Commissioners" and gives the third that
 # word, so dropping it would print less than the county does. It is NOT a
 # chair role — see CHAIR_ROLES below, which is deliberately not widened.
+# Alexander (2026-08-24) writes plain "Member" for its third seat, in the
+# Clerk's office's own e-mail alongside "Chairman" and "Vice Chairman" for the
+# other two — the same "keep the county's own word" case as Greene's
+# "Chairwoman" and Massac's "Secretary", not a staff title either.
 ALLOWED_ROLES = ("Chairman", "Chairwoman", "Chairperson", "Vice Chairman",
                  "Vice-Chairman", "Vice Chair", "Vice Chairperson",
-                 "Commissioner", "Board Member", "Secretary")
+                 "Commissioner", "Board Member", "Member", "Secretary")
 # Any of these means "this person chairs the board" for the one-chair guard.
 # Matching the literal "Chairman" alone would have let Greene seat two chairs
 # without a word, which is exactly the kind of silent hole widening
