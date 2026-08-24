@@ -1,0 +1,263 @@
+  /* The theme controller and the wordmark fleet switch, shared for the same
+     reason the skin CSS is: neither names a metro.
+
+     WHY THIS FENCE STARTS HERE rather than at the theme section's own
+     banner: the per-layer dark map palette (DST_DARK_MAP_COLORS) sits just
+     above it and is GENERATED per instance, because a metro's layer colours
+     are a fact about that metro's layers. An ENGINE fence may not contain a
+     GENERATED marker, and it should not want to — the controller below
+     READS that table and never owns it. */
+  var districtryCoverageLayers = {};
+  var districtryTileKind = "light_all";
+  function styleDistrictryCoverage(dark) {
+    /* values are the design canvas's own (Districtry App.dc.html
+       styleOverlays): outside-Illinois DARKENS on a dark ground where it
+       greys on a light one, and the violet "data coming" wash lifts. */
+    var c = districtryCoverageLayers;
+    if (c.outMask) {
+      c.outMask.setStyle({
+        fillColor: dark ? "#08070c" : "#8d8a97",
+        fillOpacity: c.fallbackMask ? (dark ? 0.32 : 0.35) : (dark ? 0.38 : 0.42)
+      });
+    }
+    if (c.pending) c.pending.setStyle({ fillColor: dark ? "#a78bfa" : "#8a62e0", fillOpacity: dark ? 0.10 : 0.08 });
+    if (c.glow) c.glow.setStyle({ color: dark ? "#a78bfa" : "#ad8cee", opacity: dark ? 0.55 : 0.6 });
+    if (c.stateLine) c.stateLine.setStyle({ color: dark ? "#a78bfa" : "#ad8cee" });
+  }
+  /* Cached, and deliberately so: the layer-colour getters below sit on the
+     PAINT path — baseStyleFor() reads two of them per path, and a full repaint
+     runs over every path of every active layer. Reading an attribute off the
+     DOM there would put a document access inside the loop this repo has twice
+     optimised (P7, P8). The flag is refreshed by applyDistrictryTheme, which is
+     the only thing that changes the theme. */
+  var dstDark = document.documentElement.getAttribute("data-theme") === "dark";
+  function districtryTheme() {
+    return dstDark ? "dark" : "light";
+  }
+  /* A theme flip moves every layer colour, so every painted path and every
+     rendered card accent is stale. Repaint through the ENGINE'S OWN paths
+     rather than reimplementing them: updateLayerHighlight() already handles
+     the three cases (a matched region, no selection, a per-feature-styled
+     layer) and re-derives each from baseStyleFor(), which now reads the
+     theme-aware colours. Hoisted, so applyDistrictryTheme above can call it. */
+  function dstRepaintLayers() {
+    if (typeof layers === "undefined" || !layers || !layers.length) return;
+    for (var i = 0; i < layers.length; i++) {
+      var mod = layers[i];
+      /* the card accent + dot, for every card on screen, active or not */
+      var cb = document.getElementById("toggle-" + mod.id);
+      var block = cb && cb.closest ? cb.closest(".layer-block") : null;
+      if (block) block.style.setProperty("--layer-accent", moduleColor(mod));
+      var rt = layerRuntime && layerRuntime[mod.id];
+      if (!rt || !rt.overlayLayer) continue;
+      /* force the full sweep: the P7 fast path repaints only the two paths
+         whose match role changed, and here every path's colour moved */
+      rt.highlightApplied = false;
+      updateLayerHighlight(mod);
+    }
+  }
+  function applyDistrictryTheme(theme, remember) {
+    var dark = theme === "dark";
+    dstDark = dark;
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    if (remember) {
+      try { localStorage.setItem("districtry-theme", dark ? "dark" : "light"); } catch (e) {}
+    }
+    var kind = dark ? "dark_all" : "light_all";
+    if (kind !== districtryTileKind) {
+      districtryTileKind = kind;
+      baseTiles.setUrl("https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png");
+    }
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#15131b" : "#6d3fd1");
+    styleDistrictryCoverage(dark);
+    dstRepaintLayers();
+    var btn = document.querySelector(".districtry-theme-toggle");
+    if (btn) {
+      /* The label names what the button DOES, not the state it is in —
+         and both words are in the DOM at once, so which one shows is a
+         CSS question keyed on data-theme. Writing textContent here would
+         destroy the stacked spans and put the theme back into the
+         masthead's width. Only the accessible name is set from here. */
+      btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
+    }
+  }
+  (function () {
+    var btn = document.querySelector(".districtry-theme-toggle");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        applyDistrictryTheme(districtryTheme() === "dark" ? "light" : "dark", true);
+      });
+    }
+    /* the head script already set the attribute; this hands the same decision
+       to the surfaces CSS cannot reach — the tiles above all — without
+       remembering a choice the reader has not made */
+    applyDistrictryTheme(districtryTheme(), false);
+    /* and while no choice is on record, keep following the OS */
+    var mq = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq && mq.addEventListener) {
+      mq.addEventListener("change", function (e) {
+        var chosen = null;
+        try { chosen = localStorage.getItem("districtry-theme"); } catch (err) {}
+        if (chosen !== "dark" && chosen !== "light") applyDistrictryTheme(e.matches ? "dark" : "light", false);
+      });
+    }
+  })();
+
+  /* ---- the masthead settles AFTER Leaflet has measured its container.
+     This skin loads Barlow as a webfont with font-display: swap, and Barlow's
+     metrics are not the fallback's, so the swap re-lays the masthead out and
+     the map below it changes height: traced across the load, #map is 741px
+     tall at first paint and 739px once the font lands. Leaflet caches the
+     container size at init and never re-reads it on its own, so from that
+     moment the map draws two pixels out of register with the element it
+     lives in — every overlay, marker and the coverage wash alike, in both
+     themes, for the rest of the session.
+     Nobody had noticed because two pixels of a map look like a map. It
+     surfaced as pixel-diff noise: two builds differing only in a span would
+     draw the wash a few pixels apart, because a hair of extra parse work
+     moved which frame the draw landed on relative to the swap.
+     document.fonts.ready resolves after the swap, so one invalidateSize()
+     there re-reads the box for good. `pan: false` because this corrects the
+     canvas, it does not move the reader's view. Guarded and silent: a
+     browser without the Font Loading API keeps today's behaviour. */
+  if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+    document.fonts.ready.then(function () {
+      try { map.invalidateSize({ pan: false, animate: false }); } catch (e) {}
+    });
+  }
+
+  /* ---- the state code's dropdown, filled from the SAME list the engine's
+     footer row reads (METRO_EXPLORERS), so the two can never disagree and a
+     fourth metro needs nothing here: add it to metros.json, --sync-fleet into
+     the worksheet, regenerate, and it appears in the menu. Chicago is skipped
+     the way renderMetroLinks() skips it — you do not offer someone the page
+     they are on. If nothing is left after that skip the switch degrades to
+     plain text, which is what a one-metro fleet should look like. */
+  (function buildMetroSwitch() {
+    var wrap = document.querySelector(".dst-metro-switch");
+    var menu = wrap && wrap.querySelector(".dst-metro-menu");
+    var btn = wrap && wrap.querySelector(".dst-metro-btn");
+    if (!wrap || !menu || !btn) return;
+    var made = 0;
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var m = METRO_EXPLORERS[i];
+      if (m.id === THIS_METRO) continue;
+      var a = document.createElement("a");
+      a.href = m.url;
+      a.setAttribute("role", "menuitem");
+      if (m.emoji) {
+        var e = document.createElement("span");
+        e.className = "dst-metro-menu-emoji";
+        e.setAttribute("aria-hidden", "true");
+        /* labels and emoji come from a generated config, but they render
+           through textContent regardless — the fleet list is data */
+        e.textContent = m.emoji;
+        a.appendChild(e);
+      }
+      a.appendChild(document.createTextNode(m.label));
+      menu.appendChild(a);
+      made++;
+    }
+    if (!made) {
+      /* a lone metro: unwrap the button back into the plain state code */
+      var plain = document.createElement("span");
+      plain.className = "title-metro";
+      plain.textContent = btn.textContent.replace("▾", "");
+      wrap.parentNode.replaceChild(plain, wrap);
+      return;
+    }
+    var label = document.createElement("span");
+    label.className = "dst-metro-menu-label";
+    label.textContent = "Other explorers";
+    menu.insertBefore(label, menu.firstChild);
+
+    /* CSS opens the menu on :hover and :focus-within, which covers mouse and
+       keyboard. It does NOT cover touch, where there is no hover and a tap
+       lands as a click — so the button also owns an explicit expanded state,
+       and the same attribute keeps the control honest to a screen reader. */
+    function setOpen(open) {
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) wrap.removeAttribute("data-dismissed");
+    }
+    btn.addEventListener("click", function () {
+      var opening = btn.getAttribute("aria-expanded") !== "true";
+      setOpen(opening);
+      if (!opening) wrap.setAttribute("data-dismissed", "1");
+    });
+    wrap.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.key === "Esc") {
+        setOpen(false);
+        wrap.setAttribute("data-dismissed", "1");
+        btn.focus();
+      }
+    });
+    wrap.addEventListener("mouseleave", function () { wrap.removeAttribute("data-dismissed"); });
+    /* a click-open menu that only shuts on a second click on the button is a
+       menu people leave open by accident */
+    document.addEventListener("click", function (e) {
+      if (!wrap.contains(e.target)) setOpen(false);
+    });
+    wrap.addEventListener("focusout", function (e) {
+      if (!wrap.contains(e.relatedTarget)) { setOpen(false); wrap.removeAttribute("data-dismissed"); }
+    });
+  })();
+
+  /* ==== per-layer dark map palette ==================================== */
+  function dstDarkColor(hex) {
+    if (typeof hex !== "string") return hex;
+    return DST_DARK_MAP_COLORS[hex.toUpperCase()] || hex;
+  }
+  function dstThemeColorProp(obj, key) {
+    if (!obj) return;
+    var light = obj[key];
+    if (typeof light !== "string" || light.charAt(0) !== "#") return;
+    var dark = dstDarkColor(light);
+    if (dark === light) return;
+    Object.defineProperty(obj, key, {
+      get: function () { return dstDark ? dark : light; },
+      /* a setter too, so an assignment anywhere degrades to plain data instead
+         of throwing on a getter-only property in strict mode */
+      set: function (v) { light = v; dark = dstDarkColor(v); },
+      enumerable: true,
+      configurable: true
+    });
+  }
+  (function () {
+    for (var i = 0; i < layers.length; i++) {
+      var mod = layers[i];
+      var st = mod.overlay && mod.overlay.style;
+      if (st) { dstThemeColorProp(st, "color"); dstThemeColorProp(st, "fillColor"); }
+      /* nearest-N point layers carry no flat style object; mod.color is what
+         moduleColor() falls back to for their card accent */
+      if (mod.color) dstThemeColorProp(mod, "color");
+    }
+    /* the School Location layer colour-codes every footprint from this table */
+    if (typeof SCHOOL_CAT_META === "object" && SCHOOL_CAT_META) {
+      for (var k in SCHOOL_CAT_META) {
+        if (Object.prototype.hasOwnProperty.call(SCHOOL_CAT_META, k)) {
+          dstThemeColorProp(SCHOOL_CAT_META[k], "color");
+        }
+      }
+    }
+  })();
+  /* The selection highlight is "the layer's own colour, shifted away from it so
+     the matched region pops". The engine spells that DARKEN, which is right on
+     light paper and exactly backwards on a dark map, where a darker outline
+     recedes into the ground instead of standing out. Rebound rather than
+     edited: darkenHexColor is a FENCED engine function, but a function
+     declaration's binding is writable from fork-local code, so this costs no
+     fence edit. At adoption the honest fix is for the engine to shift away from
+     the GROUND rather than toward black. */
+  var dstEngineDarken = darkenHexColor;
+  darkenHexColor = function (hex, amount) {
+    if (!dstDark) return dstEngineDarken(hex, amount);
+    var m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex || "");
+    if (!m) return hex;
+    var h = m[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var num = parseInt(h, 16);
+    var up = function (c) { return Math.round(c + (255 - c) * amount); };
+    return "#" + (0x1000000 + up((num >> 16) & 255) * 0x10000 +
+                  up((num >> 8) & 255) * 0x100 + up(num & 255)).toString(16).slice(1);
+  };

@@ -2597,6 +2597,22 @@ svg.leaflet-image-layer.leaflet-interactive path {
         async src="//gc.zgo.at/count.js"></script>
 <!-- ==== GENERATED:END goatcounter ==== -->
 <style id="districtry-skin">
+  /* ==== ENGINE:BEGIN styles-districtry-skin ==== */
+  /* THE SKIN IS THE ENGINE'S NOW, not this app's. Every rule below was
+     fork-local until 2026-08-24, which meant NYC and SF could only get the
+     districtry look by having it copied into them — "the redesign done
+     twice", the exact failure the consolidation was created to end (and
+     which the retired build_districtry_preview.py had already committed
+     once).
+
+     It qualifies as engine because it names no metro: every colour it sets
+     comes from the brand palette the GENERATED brand-palette region emits,
+     or is a districtry PRODUCT value shared by the whole fleet. There is
+     not one Chicago literal in these rules — checked, not assumed.
+
+     An instance opts in by CARRYING this fence; one that does not keeps its
+     old skin byte-for-byte, which is why extracting it changed nothing for
+     NYC and SF. */
   /* ==== districtry skin ====
      Appended AFTER the engine styles, last in <head>, so same-specificity
      rules win the cascade and no ENGINE fence interior is edited. That is the
@@ -3583,6 +3599,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     margin: 0 2px;
     flex: none;
   }
+  /* ==== ENGINE:END styles-districtry-skin ==== */
 </style>
 <script>
   (function () {
@@ -26988,6 +27005,16 @@ function initChiExplorer() {
     "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#C0A060": "#FFDE9D", "#C8102E": "#FE928F",
     "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7", "#E4572E": "#FFBCA9"};
   /* ==== GENERATED:END dark-map-palette ==== */
+  /* ==== ENGINE:BEGIN districtry-theme ==== */
+  /* The theme controller and the wordmark fleet switch, shared for the same
+     reason the skin CSS is: neither names a metro.
+
+     WHY THIS FENCE STARTS HERE rather than at the theme section's own
+     banner: the per-layer dark map palette (DST_DARK_MAP_COLORS) sits just
+     above it and is GENERATED per instance, because a metro's layer colours
+     are a fact about that metro's layers. An ENGINE fence may not contain a
+     GENERATED marker, and it should not want to — the controller below
+     READS that table and never owns it. */
   var districtryCoverageLayers = {};
   var districtryTileKind = "light_all";
   function styleDistrictryCoverage(dark) {
@@ -27242,6 +27269,7 @@ function initChiExplorer() {
     return "#" + (0x1000000 + up((num >> 16) & 255) * 0x10000 +
                   up((num >> 8) & 255) * 0x100 + up(num & 255)).toString(16).slice(1);
   };
+  /* ==== ENGINE:END districtry-theme ==== */
   /* ==== map legibility: stacked highlights hold a constant composite ====
      One highlight leaves 68% of the basemap showing, and that is the look the
      app already has with a single layer on — so that is the number held. Each
