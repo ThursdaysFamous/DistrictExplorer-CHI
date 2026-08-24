@@ -324,6 +324,15 @@ def render_smoke_config(w):
         "%s: %s" % (js_str(x["layer"]), js_str(x["expected"])) for x in w["anchors"]))
     a("const NEGATIVE_POINT = \"%.5f,%.5f\";%s" % (neg["lat"], neg["lng"],
                                                    (" // " + neg["note"]) if neg.get("note") else ""))
+    # The app's own display name, so a behaviour check can assert the brand
+    # without hardcoding it. SF's smoke test carried
+    # /San Francisco District Explorer/ as a literal and FAILED THE REBRAND —
+    # a correct rename breaking a gate, which is the failure mode a gate must
+    # not have (landing_test.mjs learned the same lesson from a hardcoded
+    # (il|nyc|sf) tag list). Derived the same way appDisplayName() derives it at
+    # runtime, so the two cannot disagree.
+    a("const APP_NAME = %s;" % js_str(
+        (w.get("brand") or {}).get("app_name") or (w["metro_name"] + " District Explorer")))
     a("const EXPECT_LAYERS = %d;%s" % (len(w["layers"]),
                                        (" // " + w["layer_count_note"]) if w.get("layer_count_note") else ""))
     return "\n".join(L)
@@ -711,15 +720,28 @@ def targets_for(w, inst):
         targets.append((page, "source-credits", render_source_credits))
         targets.append((page, "layer-matrix", render_layer_matrix))
     if "brand" in w:
+        # THE TWO ANALYTICS SURFACES ARE INDEPENDENTLY OPT-IN, and that is a
+        # privacy property rather than a convenience. `analytics` used to be
+        # REQUIRED inside a brand block with a ga_id, so adopting the districtry
+        # brand would have FORCED Google Analytics onto SF — an app that ships
+        # none today and whose readers have never been sent to Google. A rebrand
+        # must not add a tracker. So each region is emitted only when the
+        # worksheet actually names it, and an instance that wants the brand
+        # without the counter simply omits the keys.
+        an = w["brand"].get("analytics") or {}
         for region, renderer in (
-            ("head-analytics", render_head_analytics),
             ("head-brand", render_head_brand),
             ("head-theme", render_head_theme),
             ("brand-palette", render_brand_palette),
             ("masthead-brand", render_masthead_brand),
-            ("goatcounter", render_goatcounter),
         ):
             targets.append((_p(app, "index.html"), region, renderer))
+        if an.get("ga_id"):
+            targets.append((_p(app, "index.html"), "head-analytics",
+                            render_head_analytics))
+        if an.get("goatcounter_url"):
+            targets.append((_p(app, "index.html"), "goatcounter",
+                            render_goatcounter))
         if "sources_page" in w:
             targets.append((w["sources_page"]["file"], "sources-palette",
                             render_sources_palette))

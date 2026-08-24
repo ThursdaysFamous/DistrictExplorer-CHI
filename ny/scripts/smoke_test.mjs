@@ -50,6 +50,7 @@ const POINT = "40.71274,-74.00602"; // New York City Hall (Manhattan)
 const OFFLINE = ["borough", "judicial-district", "municipal-court"];
 const EXPECT_DISTRICT = { "borough": "Manhattan", "judicial-district": "1", "municipal-court": "1" };
 const NEGATIVE_POINT = "40.72000,-74.04000"; // Hudson River, New Jersey waters — outside every anchor geometry (the East River is inside the county-derived judicial districts, so mid-river points there are only borough-negative)
+const APP_NAME = "districtry New York City";
 const EXPECT_LAYERS = 27; // Threads 1–4: full roster (+ council, community-district, congress, state senate/assembly, election-district, borough-president, district-attorney) + 3 amenity nearest-point layers (post-office, library, early-voting)
 // ==== GENERATED:END smoke-config ====
 const POINT2 = "40.69354,-73.98963"; // Brooklyn Borough Hall (Brooklyn) — the re-classify hop stays fork test code

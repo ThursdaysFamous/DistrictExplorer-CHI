@@ -38,8 +38,12 @@ FONTS_DIR = os.path.join(REPO_ROOT, "fonts")
 # reference. Keep in lockstep with those CSS vars in index.html.
 GFONTS_URL = (
     "https://fonts.googleapis.com/css2"
-    "?family=Big+Shoulders+Display:wght@600;800;900"
-    "&family=Inter:wght@400;500;600;700"
+    # Barlow Condensed (display) + Barlow (body) replaced Big Shoulders Display
+    # + Inter when this app adopted the districtry skin. The MONO is unchanged
+    # and deliberately so: it sets coordinates and ids, where IBM Plex Mono's
+    # disambiguated zero is doing real work.
+    "?family=Barlow+Condensed:wght@400;600;700"
+    "&family=Barlow:wght@400;500;600;700"
     "&family=IBM+Plex+Mono:wght@400;500"
     "&display=swap"
 )

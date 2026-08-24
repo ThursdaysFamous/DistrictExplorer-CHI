@@ -248,6 +248,14 @@ def esc(s):
     return html.escape(s, quote=True)
 
 
+def joined(names):
+    """'a', 'a and b', 'a, b and c' — the page reads as prose, not as a list."""
+    names = list(names)
+    if len(names) <= 2:
+        return " and ".join(names)
+    return ", ".join(names[:-1]) + " and " + names[-1]
+
+
 def code(s):
     return '<code class="k">%s</code>' % esc(s)
 
@@ -352,17 +360,17 @@ def render_storage_paragraphs(apps):
                 "<p><strong>One display preference, per app.</strong> The school layer's type "
                 "filter is remembered in %s under %s on %s. It is a handful of true/false "
                 "switches, it is erased when you close the tab, and it never leaves your "
-                "browser.</p>" % (code(store), code(key), esc(" and ".join(users))))
+                "browser.</p>" % (code(store), code(key), esc(joined(users))))
         elif key == "districtry-theme":
             out.append(
                 "<p><strong>Light or dark.</strong> If you use the theme toggle, the choice is "
                 "kept in %s under %s on %s, so the site does not flash white on your next "
                 "visit. It is one word, and it never leaves your browser.</p>"
-                % (code(store), code(key), esc(" and ".join(users))))
+                % (code(store), code(key), esc(joined(users))))
         else:
             out.append(
                 "<p><strong>%s.</strong> Stored in %s on %s. It never leaves your browser.</p>"
-                % (code(key), code(store), esc(" and ".join(users))))
+                % (code(key), code(store), esc(joined(users))))
     return "\n      ".join(out)
 
 
@@ -374,7 +382,7 @@ def render_analytics_section(apps):
     if none:
         parts.append(
             "<p>%s %s no analytics of any kind — no counter, no page view, no event.</p>"
-            % (esc(", ".join(a["name"] for a in none)),
+            % (esc(joined(a["name"] for a in none)),
                "carry" if len(none) > 1 else "carries"))
     parts.append("<h3>GoatCounter</h3>")
     # Where the counts go is a CLAIM about arrangement, not just a list of names, so the
@@ -385,11 +393,11 @@ def render_analytics_section(apps):
     gc_sites = {a["goatcounter"]["site"] for a in gc}
     if len(gc_sites) == 1 and len(gc) > 1:
         where = ("%s all report to a single GoatCounter site (%s); the page path is what "
-                 "distinguishes them" % (esc(", ".join(a["name"] for a in gc)),
+                 "distinguishes them" % (esc(joined(a["name"] for a in gc)),
                                          code(sorted(gc_sites)[0])))
     else:
         where = ("%s each report to their own separate GoatCounter site (%s)"
-                 % (esc(", ".join(a["name"] for a in gc)),
+                 % (esc(joined(a["name"] for a in gc)),
                     ", ".join(code(a["goatcounter"]["site"]) for a in gc)))
     parts.append(
         '<p><a href="https://www.goatcounter.com/help/privacy" target="_blank" '
@@ -411,8 +419,8 @@ def render_analytics_section(apps):
             "of what Google sees. Google's handling is governed by "
             '<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">its '
             "own privacy policy</a>.</p>"
-            % (code(ga[0]["ga"]["id"]), esc(" and ".join(a["name"] for a in ga)),
-               esc(", ".join(a["name"] for a in apps if not a["ga"]))))
+            % (code(ga[0]["ga"]["id"]), esc(joined(a["name"] for a in ga)),
+               esc(joined(a["name"] for a in apps if not a["ga"]))))
     else:
         parts.append("<p>No app here loads Google Analytics.</p>")
     parts.append(

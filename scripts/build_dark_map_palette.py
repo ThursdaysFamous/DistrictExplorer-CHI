@@ -31,7 +31,42 @@ import re
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TARGET = os.path.join(REPO_ROOT, "il", "index.html")
+
+# EVERY INSTANCE THAT CARRIES THE REGION, not just Chicago. This script pointed
+# at il/index.html alone for as long as Chicago was the only app with dark mode.
+# When NYC and SF adopted the skin they gained the same GENERATED region and the
+# same need for a derived table — and a builder hardcoded to one instance would
+# have left both regions EMPTY while its own --check went on passing, because it
+# was only ever looking at the one file it knew about. That is the same shape as
+# the two half-blind gates found on 2026-08-24: a check that quietly excludes its
+# newest subjects reports OK.
+#
+# The set is discovered rather than listed: an instance is a target when its
+# index.html actually carries the fences, so an app WITHOUT dark mode is skipped
+# instead of failing, and an app that adopts it is picked up with nothing here to
+# edit.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from generate_metro_files import INSTANCES
+except ImportError:  # pragma: no cover
+    INSTANCES = {"il": {"app": "il"}}
+
+
+def targets():
+    out = []
+    for tag in sorted(INSTANCES):
+        rel = os.path.join(INSTANCES[tag]["app"], "index.html")
+        path = os.path.join(REPO_ROOT, rel)
+        try:
+            with open(path, encoding="utf-8", newline="") as f:
+                text = f.read()
+        except OSError:
+            continue
+        if ("GENERATED:BEGIN %s" % REGION) in text:
+            out.append((rel, path, text))
+    if not out:
+        fail("no instance carries a GENERATED:%s region — add the fences first" % REGION)
+    return out
 REGION = "dark-map-palette"
 
 
@@ -157,7 +192,7 @@ def split_region(text):
     begin = "  /* ==== GENERATED:BEGIN %s ==== */" % REGION
     end = "  /* ==== GENERATED:END %s ==== */" % REGION
     if text.count(begin) != 1 or text.count(end) != 1:
-        fail("il/index.html has no single GENERATED:%s region — add the fences first" % REGION)
+        fail("no single GENERATED:%s region — add the fences first" % REGION)
     i = text.index(begin) + len(begin)
     j = text.index(end)
     return text[:i], text[i:j], text[j:]
@@ -170,28 +205,33 @@ def main():
                     help="verify the emitted table matches the app's colours; exit 1 on drift")
     args = ap.parse_args()
 
-    with open(TARGET, encoding="utf-8", newline="") as f:
-        text = f.read()
-    head, current, tail = split_region(text)
-    body, n = render(text)
-    rendered = "\n" + body + "\n"
+    totals = []
+    for rel, path, text in targets():
+        head, current, tail = split_region(text)
+        body, n = render(text)
+        rendered = "\n" + body + "\n"
+        totals.append((rel, n))
 
+        if args.check:
+            if current != rendered:
+                for dl in list(difflib.unified_diff(
+                        current.splitlines(), rendered.splitlines(),
+                        fromfile="committed " + rel, tofile="derived",
+                        lineterm="", n=1))[:24]:
+                    print("  " + dl, file=sys.stderr)
+                fail("%s: the dark map palette has drifted from that app's layer "
+                     "colours. A layer colour changed and its dark counterpart did "
+                     "not; re-run scripts/build_dark_map_palette.py." % rel)
+            continue
+
+        with open(path, "w", encoding="utf-8", newline="") as f:
+            f.write(head + rendered + tail)
+        print("build-dark-map-palette: %s — wrote %d derived dark colour(s)" % (rel, n))
+
+    summary = ", ".join("%s %d" % (rel.split("/")[0], n) for rel, n in totals)
     if args.check:
-        if current != rendered:
-            for dl in list(difflib.unified_diff(
-                    current.splitlines(), rendered.splitlines(),
-                    fromfile="committed", tofile="derived", lineterm="", n=1))[:24]:
-                print("  " + dl, file=sys.stderr)
-            fail("the dark map palette has drifted from the app's layer colours. "
-                 "A layer colour changed and its dark counterpart did not; "
-                 "re-run scripts/build_dark_map_palette.py.")
-        print("build-dark-map-palette: OK — %d layer colour(s) match their derived "
-              "dark counterparts" % n)
-        return
-
-    with open(TARGET, "w", encoding="utf-8", newline="") as f:
-        f.write(head + rendered + tail)
-    print("build-dark-map-palette: wrote %d derived dark colour(s)" % n)
+        print("build-dark-map-palette: OK — layer colours match their derived dark "
+              "counterparts in %d instance(s): %s" % (len(totals), summary))
 
 
 if __name__ == "__main__":

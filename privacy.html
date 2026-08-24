@@ -378,7 +378,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
             <th scope="row"><a href="/ny/">New York City</a><small>/ny/</small></th>
             <td>Google Analytics <code class="k">G-YPJ570LWJB</code><small>live host only (<code class="k">districtry.com</code>), never in an embed</small></td>
             <td><code class="k">https://districtry.goatcounter.com/count</code></td>
-            <td><code class="k">nyc-school-type-filter</code><small>session</small></td>
+            <td><code class="k">nyc-school-type-filter</code><small>session</small> <code class="k">districtry-theme</code><small>kept</small></td>
             <td>Photon / Komoot, GeoSearch / NYC Planning</td>
             <td><em>None.</em></td>
           </tr>
@@ -386,7 +386,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
             <th scope="row"><a href="/ca/">San Francisco</a><small>/ca/</small></th>
             <td><em>None.</em></td>
             <td><code class="k">https://districtry.goatcounter.com/count</code></td>
-            <td><code class="k">sf-school-type-filter</code><small>session</small></td>
+            <td><code class="k">sf-school-type-filter</code><small>session</small> <code class="k">districtry-theme</code><small>kept</small></td>
             <td>Photon / Komoot, Nominatim / OpenStreetMap</td>
             <td><em>None.</em></td>
           </tr>
@@ -399,7 +399,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
     <h2>What stays on your device</h2>
     <p>All of it is yours to clear at any time through your browser's &#34;clear site data&#34;.</p>
     <div class="card">
-      <p><strong>Light or dark.</strong> If you use the theme toggle, the choice is kept in <code class="k">localStorage</code> under <code class="k">districtry-theme</code> on Illinois, so the site does not flash white on your next visit. It is one word, and it never leaves your browser.</p>
+      <p><strong>Light or dark.</strong> If you use the theme toggle, the choice is kept in <code class="k">localStorage</code> under <code class="k">districtry-theme</code> on Illinois, New York City and San Francisco, so the site does not flash white on your next visit. It is one word, and it never leaves your browser.</p>
       <p><strong>One display preference, per app.</strong> The school layer's type filter is remembered in <code class="k">sessionStorage</code> under <code class="k">chi-school-type-filter</code> on Illinois. It is a handful of true/false switches, it is erased when you close the tab, and it never leaves your browser.</p>
       <p><strong>One display preference, per app.</strong> The school layer's type filter is remembered in <code class="k">sessionStorage</code> under <code class="k">nyc-school-type-filter</code> on New York City. It is a handful of true/false switches, it is erased when you close the tab, and it never leaves your browser.</p>
       <p><strong>One display preference, per app.</strong> The school layer's type filter is remembered in <code class="k">sessionStorage</code> under <code class="k">sf-school-type-filter</code> on San Francisco. It is a handful of true/false switches, it is erased when you close the tab, and it never leaves your browser.</p>
@@ -508,11 +508,11 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
 
     <h3>GoatCounter</h3>
 
-    <p><a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">GoatCounter</a> is cookieless and does not build a profile across sites. The front door, Illinois, New York City, San Francisco all report to a single GoatCounter site (<code class="k">districtry</code>); the page path is what distinguishes them. Besides the page view, each app sends named events for: address-search, geolocate, geolocate-success, layer/, metro-portal-go/, metro-portal/, select, share-native, share-open. Exactly two of those — geolocate-success and select — carry coordinates, <strong>rounded to 2 decimal places</strong>. <strong>Nothing you type is ever sent to it.</strong></p>
+    <p><a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">GoatCounter</a> is cookieless and does not build a profile across sites. The front door, Illinois, New York City and San Francisco all report to a single GoatCounter site (<code class="k">districtry</code>); the page path is what distinguishes them. Besides the page view, each app sends named events for: address-search, geolocate, geolocate-success, layer/, metro-portal-go/, metro-portal/, select, share-native, share-open. Exactly two of those — geolocate-success and select — carry coordinates, <strong>rounded to 2 decimal places</strong>. <strong>Nothing you type is ever sent to it.</strong></p>
 
     <h3>Google Analytics</h3>
 
-    <p>GA4 (<code class="k">G-YPJ570LWJB</code>) runs on Illinois and New York City — and <strong>only there</strong>: never on a local copy, never inside an iframe embed, and not at all on The front door, San Francisco. It sets its own cookies and records the standard GA4 page view, which <strong>includes the page URL</strong> — so if you arrived on a shared permalink, the point encoded in that link is part of what Google sees. Google's handling is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">its own privacy policy</a>.</p>
+    <p>GA4 (<code class="k">G-YPJ570LWJB</code>) runs on Illinois and New York City — and <strong>only there</strong>: never on a local copy, never inside an iframe embed, and not at all on The front door and San Francisco. It sets its own cookies and records the standard GA4 page view, which <strong>includes the page URL</strong> — so if you arrived on a shared permalink, the point encoded in that link is part of what Google sees. Google's handling is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">its own privacy policy</a>.</p>
 
     <p class="cta-note">Blocking either one is fine. The analytics calls are written so that a blocked or failed counter is a no-op — nothing about the map changes.</p>
   </section>
