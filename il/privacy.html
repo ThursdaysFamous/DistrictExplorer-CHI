@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Moved — Privacy</title>
+<!-- REDIRECT SHELL, and the mirror image of the four at the repo root. Those catch paths that
+     moved DOWN into /il/ when the app did (R2.3). This one catches a page that moved UP: the
+     privacy page was Illinois-specific for about a day, and is now one page for the whole
+     fleet at /privacy.html, because the site serves three apps and NYC and SF had none.
+
+     Short-lived is not the same as unlinked. This path was in sitemap.xml, and a crawler that
+     fetched it, or a reader who kept it, should land on the page that answers rather than on a
+     404 — the same argument #493 made for the root shells, applied the moment it applies.
+
+     Same mechanism, for the same reason: GitHub Pages cannot issue a 301, so this is an
+     instant meta refresh (Google treats it as a redirect), a canonical naming the real page so
+     the signal consolidates there, and a JS replace so the browser leaves no history entry.
+     Deliberately NOT noindex — that would block the consolidation this exists to do.
+
+     Put a real 301 in front of the origin (a CDN/proxy layer) and this can be deleted. -->
+<meta http-equiv="refresh" content="0; url=/privacy.html" />
+<link rel="canonical" href="https://districtry.com/privacy.html" />
+<script>location.replace("/privacy.html" + location.search + location.hash);</script>
+<style>
+  body { margin: 0; padding: 48px 20px; background: #f4f7f9; color: #14181c;
+         font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 34rem; margin: 0 auto; }
+  a { color: #5730ab; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>This page moved</h1>
+  <p>Privacy is now one page for every app on the site, at
+    <a href="/privacy.html">districtry.com/privacy.html</a>.</p>
+  <p>You should be redirected automatically. If not, follow the link above.</p>
+</main>
+</body>
+</html>
