@@ -235,10 +235,11 @@ rather than re-running the failed sibling run.
 > in the changelog. A changelog that promises a clean adoption and doesn't
 > deliver one costs every sibling a red CI run and a manual repair.
 
-## Current ENGINE block inventory (53 in index.html + 2 in sw.js)
+## Current ENGINE block inventory (54 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
-`cached-loaders`, `card-helpers`, `chamber-factory`, `coverage-gaps`,
+`brand-names`, `cached-loaders`, `card-helpers`, `chamber-factory`,
+`coverage-gaps`,
 `cps-network-factory`, `exports`, `extract-district-number`, `feedback`,
 `fetch-retry`, `find-prop-ci`, `gaps-html`, `gaps-modal-html`,
 `geocoder-search`, `geocoder-shell`, `geolocation`, `groups`, `haversine`,

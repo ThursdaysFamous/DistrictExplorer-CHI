@@ -89,7 +89,7 @@
       "areaServed": { "@type": "City", "name": "Chicago", "containedInPlace": { "@type": "State", "name": "Illinois" } },
       "keywords": "Chicago ward map, what ward am I in, Chicago police district, Chicago community area, congressional district, Illinois legislative district, Cook County commissioner, elected school board district, CPS attendance zone, who represents me Chicago",
       "isPartOf": { "@id": "https://districtry.com/il/#website" },
-      "sameAs": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI"
+      "sameAs": "https://github.com/ThursdaysFamous/districtry"
     }
   ]
 }
@@ -2738,7 +2738,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .dst-metro-menu a:focus-visible { background: var(--dst-brand-tint-soft); color: var(--accent-deep); }
   .dst-metro-menu-emoji { font-size: 15px; line-height: 1; }
   h1.title small { color: var(--slate); }
-  .preview-stamp { display: block; margin-top: 4px; font-size: 11px; color: var(--slate-soft); }
   .masthead-actions .footer-link-btn {
     color: var(--accent-deep);
     background: rgba(109, 63, 209, 0.08);
@@ -3721,7 +3720,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <a href="./sources.html">Every layer, and where its data comes from →</a>
         <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>
         <a href="./privacy.html">Privacy</a>
-        <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">GitHub</a>
         <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
         <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       </div>
@@ -3770,7 +3769,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="footer-links">
       <!-- The gaps-html ENGINE fence moved to the masthead action row; see the
            comment there for why the move costs no engine release. -->
-      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">View source on GitHub</a>
+      <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">View source on GitHub</a>
       <a href="./privacy.html">Privacy</a>
       <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
@@ -3801,7 +3800,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <h2 id="gaps-title">What data is missing</h2>
     <p>This app only shows what a government actually publishes. Where a district or an officeholder is missing, it is nearly always because nobody publishes it, or because the publisher won't let a program read it — not because the code isn't written. Each line below says what you won't see and where; open one to find out why, and what would fix it.</p>
     <div id="gaps-body"></div>
-    <p class="gaps-credit">Found a source? Every accepted one is credited by name in <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>. There's no cash bounty — the credit is the reward.</p>
+    <p class="gaps-credit">Found a source? Every accepted one is credited by name in <a href="https://github.com/ThursdaysFamous/districtry/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>. There's no cash bounty — the credit is the reward.</p>
   </div>
 </div>
 <!-- ==== ENGINE:END gaps-modal-html ==== -->
@@ -3852,7 +3851,7 @@ function initChiExplorer() {
   // a throttling identifier, not a secret — public exposure is Socrata's
   // intended use (do NOT put an API Key *secret* here). Blank = sent as-is.
   var SOCRATA_APP_TOKEN = "";
-  var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new";
+  var REPO_ISSUES = "https://github.com/ThursdaysFamous/districtry/issues/new";
   var FEEDBACK_SUBJECT = "districtry Illinois feedback";
   // Brand identity as worksheet data — never read from an ENGINE block
   // without a typeof guard (forks that have not opted in do not define it).

@@ -6,7 +6,7 @@
   "permalink_gate": { "minLat": 40.4, "maxLat": 41.05, "minLng": -74.3, "maxLng": -73.6 },
   "socrata_host": "https://data.cityofnewyork.us",
   "socrata_app_token": "mde4YTGz0w7M4jDhUJ7WVn85W",
-  "repo_issues": "https://github.com/ThursdaysFamous/DistrictExplorer-NYC/issues/new",
+  "repo_issues": "https://github.com/ThursdaysFamous/districtry/issues/new",
   "feedback_subject": "NYC District Explorer feedback",
   "metro_explorers": [
     { "id": "chicago", "label": "Chicago", "url": "https://chidistricts.com/", "emoji": "🌭",
