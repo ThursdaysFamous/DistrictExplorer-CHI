@@ -142,7 +142,8 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # Its three destinations are the fleet's own instances, so a dead one is this
 # repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
 AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html",
-                  "privacy.html", "il/faq.html"]
+                  "privacy.html", "il/faq.html", "ny/index.html", "ny/faq.html",
+                  "ca/index.html", "ca/faq.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

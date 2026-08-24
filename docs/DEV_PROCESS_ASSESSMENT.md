@@ -321,6 +321,31 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R6 (part 3a) — SHIPPED (2026-08-24): NYC and SF get FAQ pages, built from IL's shell rather
+  than resembling it.** Both apps had no `faq.html` at all while Illinois has ranked on one since
+  R4. Each page reuses `il/faq.html`'s own `<style>` island and mark SVG **verbatim** — lifted at
+  build time, not retyped — so brand parity is structural rather than a resemblance somebody has
+  to maintain. Nine questions each, question-led for the same search reason Illinois's are.
+  **EVERY NUMBER IN THEM IS READ OUT OF SHIPPED DATA, not recalled**: 51 Council districts and 78
+  NYPD precincts from `council-members.json` and `nypd-precinct-info.json`; 11 supervisor
+  districts, 10 SFPD districts and 41 analysis neighborhoods from SF's own files. A count in an
+  FAQ is a factual claim, and the file that holds it is the only thing entitled to make it.
+  **One answer says the app does not know something, and that is the point.** NYC's
+  `cec-members.json` is literally `{}` — the Community Education Council roster is EMPTY, which
+  is consistent with its refresh being one of the ten workflows that had never run in this repo
+  (R3 part 3). So the school-district answer says no verifiable roster is published in a form the
+  app reads and the card links the council instead. Writing "and its CEC members" there would
+  have been the easiest sentence on the page and a false one.
+  **The structured data is generated FROM the visible Q&A**, so the `FAQPage` block cannot drift
+  from what a reader sees — a mismatch is a Google penalty and a lie in the same move. Asserted
+  in a browser: 9 visible questions and 9 `mainEntity` entries on every page, both themes, no
+  dead links, valid JSON. The only console error is GoatCounter failing to load in the sandbox,
+  which reproduces identically on Illinois's untouched page.
+  **Wired in the same pass:** both mastheads link the page, the three sibling sub-pages carry it
+  in their footers, `sitemap.xml` gained both, and `validate_card_links.py`'s authored-page list
+  finally covers the sibling apps at all — it had only ever looked at Illinois.
+  **Deliberately NOT linked: a sources page**, because neither instance has one yet. See part 3b.
+
 - **R6 (part 2) — SHIPPED (2026-08-24): NYC and SF wear the brand, and a schema that would have
   forced a tracker on them was fixed first.** Both apps now carry the districtry palette, Barlow,
   the mark, the wordmark fleet switch, dark mode and the `overberg.co/why/` link — the same
