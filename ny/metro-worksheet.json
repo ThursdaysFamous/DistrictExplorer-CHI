@@ -49,65 +49,567 @@
     ["ntaname", "boroname", "borough"],
     ["short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"]
   ],
+  "sources_page": {
+    "file": "ny/sources.html",
+    "credits": [
+      {
+        "label": "NYC Open Data",
+        "url": "https://opendata.cityofnewyork.us",
+        "note": "The city's own open-data portal — boroughs, Council districts, community districts, police precincts and sectors, school zones, NTAs, MODZCTAs, and the facility points behind the nearest-station layers."
+      },
+      {
+        "label": "U.S. Census Bureau (TIGERweb)",
+        "url": "https://tigerweb.geo.census.gov",
+        "note": "Congressional and New York State legislative district geometry, and the county boundaries the judicial districts are relabelled from."
+      },
+      {
+        "label": "OpenStreetMap contributors (Photon/Komoot)",
+        "url": "https://www.openstreetmap.org/copyright",
+        "note": "The cross-metro lookup that offers a hand-off when a point falls in a sibling city."
+      },
+      {
+        "label": "NYC Planning (GeoSearch)",
+        "url": "https://geosearch.planninglabs.nyc",
+        "note": "Address search and the office-address pins."
+      },
+      {
+        "label": "NYC Council",
+        "url": "https://council.nyc.gov/districts/",
+        "note": "The Council Member roster joined to the City Council district card."
+      },
+      {
+        "label": "NYPD",
+        "url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts-landing.page",
+        "note": "Precinct commanding officers, where the department publishes one."
+      },
+      {
+        "label": "NY Senate Open Legislation API",
+        "url": "https://www.nysenate.gov",
+        "note": "State Senate and Assembly members."
+      },
+      {
+        "label": "OpenStates",
+        "url": "https://openstates.org",
+        "note": "District-office addresses for state legislators, where it publishes them."
+      },
+      {
+        "label": "unitedstates/congress-legislators",
+        "url": "https://github.com/unitedstates/congress-legislators",
+        "note": "The U.S. House roster joined to the congressional district card."
+      },
+      {
+        "label": "NYS Education Department",
+        "url": "https://data.nysed.gov",
+        "note": "School locations, public and private."
+      },
+      {
+        "label": "MySchools",
+        "url": "https://www.myschools.nyc",
+        "note": "Linked from the school-zone cards, which is what decides a placement."
+      },
+      {
+        "label": "NYS ITS Geospatial Services",
+        "url": "https://gis.ny.gov",
+        "note": "Early-voting sites, sourced from the state and city Boards of Elections."
+      },
+      {
+        "label": "USGS The National Map",
+        "url": "https://www.usgs.gov/programs/national-geospatial-program/national-map",
+        "note": "Post office locations."
+      }
+    ]
+  },
   "layers": [
-    { "id": "borough", "label": "Borough / County", "group": "geography", "area_rank": 1,
+    {
+      "id": "borough",
+      "label": "Borough / County",
+      "group": "geography",
+      "area_rank": 1,
       "rank_note": "5 counties — largest",
       "rank_comment": [
         "borough / judicial-district / BP / DA are the same 5 county polygons —",
         "later = drawn on top (§7)."
-      ] },
-    { "id": "judicial-district", "label": "NY Supreme Court Judicial District", "group": "political", "area_rank": 2 },
-    { "id": "borough-president", "label": "Borough President", "group": "political", "area_rank": 3 },
-    { "id": "district-attorney", "label": "District Attorney", "group": "political", "area_rank": 4 },
-    { "id": "congress", "label": "U.S. House District", "group": "political", "area_rank": 5,
-      "rank_note": "~13 in-city U.S. House districts" },
-    { "id": "municipal-court", "label": "Civil Court (Municipal Court) District", "group": "political", "area_rank": 6,
-      "rank_note": "28 Civil Court districts" },
-    { "id": "state-senate", "label": "NY State Senate District", "group": "political", "area_rank": 7,
-      "rank_note": "~26 in-city" },
-    { "id": "school-district", "label": "Community School District", "group": "schools", "area_rank": 8,
-      "rank_note": "32 community school districts" },
-    { "id": "cec", "label": "Community Education Council", "group": "schools", "area_rank": 9,
-      "rank_note": "same 32, drawn just after school-district" },
-    { "id": "fire-battalion", "label": "FDNY Battalion", "group": "safety", "area_rank": 10,
-      "rank_note": "49 FDNY battalions" },
-    { "id": "council", "label": "City Council District", "group": "political", "area_rank": 11,
-      "rank_note": "51 City Council districts" },
-    { "id": "community-district", "label": "Community District / Board", "group": "political", "area_rank": 12,
-      "rank_note": "59 community districts" },
-    { "id": "election-district", "label": "Election District", "group": "political", "area_rank": 13,
+      ],
+      "source": {
+        "answers": "Which borough — and therefore which county — this address is in.",
+        "boundary": [
+          {
+            "label": "Borough boundaries from NYC Open Data (gthc-hcne), shoreline-clipped, simplified and shipped with the app",
+            "url": "https://data.cityofnewyork.us/d/gthc-hcne"
+          }
+        ],
+        "people": "Borough-wide officeholders ship with the app and are surfaced on the Borough President and District Attorney cards rather than here.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "judicial-district",
+      "label": "NY Supreme Court Judicial District",
+      "group": "political",
+      "area_rank": 2,
+      "source": {
+        "answers": "Which New York Supreme Court judicial district covers this address.",
+        "boundary": [
+          {
+            "label": "The five boroughs relabelled to their judicial districts (1, 2, 11, 12, 13), from the Census Bureau's TIGERweb State_County service — no live source publishes these directly",
+            "url": "https://tigerweb.geo.census.gov"
+          }
+        ],
+        "people": "No roster is joined; the card links the court system rather than naming justices from an unverifiable list.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "borough-president",
+      "label": "Borough President",
+      "group": "political",
+      "area_rank": 3,
+      "source": {
+        "answers": "Which Borough President's office covers this address.",
+        "boundary": [
+          {
+            "label": "No boundary of its own: this layer draws the borough geometry above and differs only by the office it names",
+            "url": "https://data.cityofnewyork.us/d/gthc-hcne"
+          }
+        ],
+        "people": "Borough Presidents ship with the app from the city's own directory.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "district-attorney",
+      "label": "District Attorney",
+      "group": "political",
+      "area_rank": 4,
+      "source": {
+        "answers": "Which District Attorney's office covers this address.",
+        "boundary": [
+          {
+            "label": "No boundary of its own: this layer draws the borough geometry above and differs only by the office it names",
+            "url": "https://data.cityofnewyork.us/d/gthc-hcne"
+          }
+        ],
+        "people": "District Attorneys ship with the app from the city's own directory.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "congress",
+      "label": "U.S. House District",
+      "group": "political",
+      "area_rank": 5,
+      "rank_note": "~13 in-city U.S. House districts",
+      "source": {
+        "answers": "Which U.S. House district covers this address, and who represents it.",
+        "boundary": [
+          {
+            "label": "Congressional districts from the Census Bureau's TIGERweb Legislative service, clipped to the city and shipped with the app",
+            "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer"
+          }
+        ],
+        "people": "Members come from the unitedstates/congress-legislators dataset, refreshed weekly and reviewed before it ships.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "municipal-court",
+      "label": "Civil Court (Municipal Court) District",
+      "group": "political",
+      "area_rank": 6,
+      "rank_note": "28 Civil Court districts",
+      "source": {
+        "answers": "Which Civil (Municipal) Court district covers this address.",
+        "boundary": [
+          {
+            "label": "The 28 Civil Court districts from NYC Open Data (7vpq-4bh4), simplified and shipped with the app",
+            "url": "https://data.cityofnewyork.us/d/7vpq-4bh4"
+          }
+        ],
+        "people": "No roster is joined; the card links the court rather than naming judges.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "state-senate",
+      "label": "NY State Senate District",
+      "group": "political",
+      "area_rank": 7,
+      "rank_note": "~26 in-city",
+      "source": {
+        "answers": "Which New York State Senate district covers this address, and who holds the seat.",
+        "boundary": [
+          {
+            "label": "State Senate districts from the Census Bureau's TIGERweb Legislative service, clipped to the city and shipped with the app",
+            "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer"
+          }
+        ],
+        "people": "Senators come from the NY Senate's Open Legislation API, refreshed weekly and reviewed before they ship; district offices are enriched from OpenStates where it publishes them.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "school-district",
+      "label": "Community School District",
+      "group": "schools",
+      "area_rank": 8,
+      "rank_note": "32 community school districts",
+      "source": {
+        "answers": "Which community school district this address is in.",
+        "boundary": [
+          {
+            "label": "Community school districts from NYC Open Data (8ugf-3d8u)",
+            "url": "https://data.cityofnewyork.us/d/8ugf-3d8u"
+          }
+        ],
+        "people": "Superintendents are appointed rather than elected; the card links the district rather than naming one from an unverifiable list.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "cec",
+      "label": "Community Education Council",
+      "group": "schools",
+      "area_rank": 9,
+      "rank_note": "same 32, drawn just after school-district",
+      "source": {
+        "answers": "Which Community Education Council serves this address.",
+        "boundary": [
+          {
+            "label": "The same community school district geometry from NYC Open Data (8ugf-3d8u) — a CEC serves one district",
+            "url": "https://data.cityofnewyork.us/d/8ugf-3d8u"
+          }
+        ],
+        "people": "No roster ships. No CEC membership list is published in a form this app can verify, so the card links the council rather than naming people it cannot check.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "fire-battalion",
+      "label": "FDNY Battalion",
+      "group": "safety",
+      "area_rank": 10,
+      "rank_note": "49 FDNY battalions",
+      "source": {
+        "answers": "Which FDNY battalion covers this address.",
+        "boundary": [
+          {
+            "label": "FDNY battalion boundaries as the city publishes them to ArcGIS Online",
+            "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ"
+          }
+        ],
+        "people": "No roster is joined; a battalion has no single officeholder to name.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "council",
+      "label": "City Council District",
+      "group": "political",
+      "area_rank": 11,
+      "rank_note": "51 City Council districts",
+      "source": {
+        "answers": "Which City Council district covers this address, and who represents it.",
+        "boundary": [
+          {
+            "label": "City Council districts from NYC Open Data (872g-cjhh)",
+            "url": "https://data.cityofnewyork.us/d/872g-cjhh"
+          }
+        ],
+        "people": "Council Members are re-scraped weekly from council.nyc.gov's own district directory and reviewed before they ship.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "community-district",
+      "label": "Community District / Board",
+      "group": "political",
+      "area_rank": 12,
+      "rank_note": "59 community districts",
+      "source": {
+        "answers": "Which community district covers this address, and which community board advises on it.",
+        "boundary": [
+          {
+            "label": "Community district boundaries from NYC Open Data (ruf7-3wgc), with board contact details from (5crt-au7u)",
+            "url": "https://data.cityofnewyork.us/d/ruf7-3wgc"
+          }
+        ],
+        "people": "Board contact details come from the city's own community board dataset; individual members are not named.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "election-district",
+      "label": "Election District",
+      "group": "political",
+      "area_rank": 13,
       "rank_comment": [
         "election-district (~4,200) sits just BEFORE its parent Assembly so the",
         "Assembly outline frames its fills (same rule as police-sector below)"
-      ] },
-    { "id": "state-assembly", "label": "NY State Assembly District", "group": "political", "area_rank": 14,
-      "rank_note": "~65 in-city" },
-    { "id": "police-sector", "label": "NYPD Sector", "group": "safety", "area_rank": 15,
-      "rank_note": "303 sectors — just before its parent precinct" },
-    { "id": "police-precinct", "label": "NYPD Precinct", "group": "safety", "area_rank": 16,
-      "rank_note": "78 NYPD precincts" },
-    { "id": "zip-code", "label": "ZIP Code (MODZCTA)", "group": "geography", "area_rank": 17,
-      "rank_note": "~178 MODZCTA" },
-    { "id": "neighborhood", "label": "Neighborhood (NTA)", "group": "geography", "area_rank": 18,
-      "rank_note": "~262 NTAs" },
-    { "id": "hs-zone", "label": "High School Zone", "group": "schools", "area_rank": 19,
-      "rank_note": "high-school zones (sparse)" },
-    { "id": "ms-zone", "label": "Middle School Zone", "group": "schools", "area_rank": 20,
-      "rank_note": "middle-school zones (partial)" },
-    { "id": "es-zone", "label": "Elementary School Zone", "group": "schools", "area_rank": 21,
-      "rank_note": "elementary zones — smallest polygon layer" },
-    { "id": "school-site", "label": "School", "group": "schools", "area_rank": 22,
-      "rank_note": "point marker — always topmost" },
-    { "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 23,
-      "rank_note": "point marker — always topmost" },
-    { "id": "fire-station", "label": "Firehouse", "group": "safety", "area_rank": 24,
-      "rank_note": "point marker — always topmost" },
-    { "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 25,
-      "rank_note": "point marker — always topmost" },
-    { "id": "library", "label": "Library", "group": "geography", "area_rank": 26,
-      "rank_note": "point marker — always topmost" },
-    { "id": "early-voting", "label": "Early Voting Site", "group": "political", "area_rank": 27,
-      "rank_note": "point marker — always topmost" }
+      ],
+      "source": {
+        "answers": "Which election district this address votes in.",
+        "boundary": [
+          {
+            "label": "Election district boundaries as the city publishes them to ArcGIS Online",
+            "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ"
+          }
+        ],
+        "people": "No roster: an election district has no officeholder.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "state-assembly",
+      "label": "NY State Assembly District",
+      "group": "political",
+      "area_rank": 14,
+      "rank_note": "~65 in-city",
+      "source": {
+        "answers": "Which New York State Assembly district covers this address, and who holds the seat.",
+        "boundary": [
+          {
+            "label": "State Assembly districts from the Census Bureau's TIGERweb Legislative service, clipped to the city and shipped with the app",
+            "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer"
+          }
+        ],
+        "people": "Assemblymembers come from the NY Senate's Open Legislation API, refreshed weekly and reviewed before they ship.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "police-sector",
+      "label": "NYPD Sector",
+      "group": "safety",
+      "area_rank": 15,
+      "rank_note": "303 sectors — just before its parent precinct",
+      "source": {
+        "answers": "Which NYPD sector — the patrol area inside a precinct — covers this address.",
+        "boundary": [
+          {
+            "label": "Police sector boundaries from NYC Open Data (5rqd-h5ci)",
+            "url": "https://data.cityofnewyork.us/d/5rqd-h5ci"
+          }
+        ],
+        "people": "No roster is joined; a sector has no separate commander to name.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "police-precinct",
+      "label": "NYPD Precinct",
+      "group": "safety",
+      "area_rank": 16,
+      "rank_note": "78 NYPD precincts",
+      "source": {
+        "answers": "Which NYPD precinct covers this address, and who commands it.",
+        "boundary": [
+          {
+            "label": "Police precinct boundaries from NYC Open Data (y76i-bdw7)",
+            "url": "https://data.cityofnewyork.us/d/y76i-bdw7"
+          }
+        ],
+        "people": "Commanding officers are re-scraped weekly from the NYPD's own precinct pages. Where the NYPD publishes no commander the card says so rather than guessing — about four of the 78 at any time.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "zip-code",
+      "label": "ZIP Code (MODZCTA)",
+      "group": "geography",
+      "area_rank": 17,
+      "rank_note": "~178 MODZCTA",
+      "source": {
+        "answers": "Which Modified ZIP Code Tabulation Area contains this address.",
+        "boundary": [
+          {
+            "label": "MODZCTA boundaries from NYC Open Data (pri4-ifjk)",
+            "url": "https://data.cityofnewyork.us/d/pri4-ifjk"
+          }
+        ],
+        "people": "No roster: a ZIP code has no officeholder.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "neighborhood",
+      "label": "Neighborhood (NTA)",
+      "group": "geography",
+      "area_rank": 18,
+      "rank_note": "~262 NTAs",
+      "source": {
+        "answers": "Which Neighborhood Tabulation Area contains this address.",
+        "boundary": [
+          {
+            "label": "2020 NTAs from NYC Open Data (9nt8-h7nd)",
+            "url": "https://data.cityofnewyork.us/d/9nt8-h7nd"
+          }
+        ],
+        "people": "No roster: an NTA is a statistical area, and its name is not always the one a listing or a local would use.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "hs-zone",
+      "label": "High School Zone",
+      "group": "schools",
+      "area_rank": 19,
+      "rank_note": "high-school zones (sparse)",
+      "source": {
+        "answers": "Which zoned high school serves this address, where one does.",
+        "boundary": [
+          {
+            "label": "High school zones from NYC Open Data (ruu9-egea)",
+            "url": "https://data.cityofnewyork.us/d/ruu9-egea"
+          }
+        ],
+        "people": "No roster; most NYC high schools admit by application citywide rather than by zone, and the card says so where no zone applies.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "ms-zone",
+      "label": "Middle School Zone",
+      "group": "schools",
+      "area_rank": 20,
+      "rank_note": "middle-school zones (partial)",
+      "source": {
+        "answers": "Which zoned middle school serves this address, where one does.",
+        "boundary": [
+          {
+            "label": "Middle school zones from NYC Open Data (t26j-jbq7)",
+            "url": "https://data.cityofnewyork.us/d/t26j-jbq7"
+          }
+        ],
+        "people": "No roster; the card links MySchools, which is what decides a placement.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "es-zone",
+      "label": "Elementary School Zone",
+      "group": "schools",
+      "area_rank": 21,
+      "rank_note": "elementary zones — smallest polygon layer",
+      "source": {
+        "answers": "Which zoned elementary school serves this address.",
+        "boundary": [
+          {
+            "label": "Elementary school zones from NYC Open Data (cmjf-yawu)",
+            "url": "https://data.cityofnewyork.us/d/cmjf-yawu"
+          }
+        ],
+        "people": "No roster; the card links MySchools, which is what decides a placement.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "school-site",
+      "label": "School",
+      "group": "schools",
+      "area_rank": 22,
+      "rank_note": "point marker — always topmost",
+      "source": {
+        "answers": "The nearest school sites to this point, by straight-line distance.",
+        "boundary": [
+          {
+            "label": "School locations from the NYS Education Department's ArcGIS service, public and private",
+            "url": "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k"
+          }
+        ],
+        "people": "No roster is joined; the card names the school and its address.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "police-station",
+      "label": "Police Station",
+      "group": "safety",
+      "area_rank": 23,
+      "rank_note": "point marker — always topmost",
+      "source": {
+        "answers": "The nearest police stations to this point, by straight-line distance.",
+        "boundary": [
+          {
+            "label": "Police station locations from NYC Open Data (ji82-xba5)",
+            "url": "https://data.cityofnewyork.us/d/ji82-xba5"
+          }
+        ],
+        "people": "No roster is joined; the card gives the station and its address.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "fire-station",
+      "label": "Firehouse",
+      "group": "safety",
+      "area_rank": 24,
+      "rank_note": "point marker — always topmost",
+      "source": {
+        "answers": "The nearest firehouses to this point, by straight-line distance.",
+        "boundary": [
+          {
+            "label": "Firehouse locations from NYC Open Data (hc8x-tcnd)",
+            "url": "https://data.cityofnewyork.us/d/hc8x-tcnd"
+          }
+        ],
+        "people": "No roster is joined. The city's firehouse dataset carries no phone number, which is a gap at the source rather than something the card withholds.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "post-office",
+      "label": "Post Office",
+      "group": "geography",
+      "area_rank": 25,
+      "rank_note": "point marker — always topmost",
+      "source": {
+        "answers": "The nearest post offices to this point, by straight-line distance.",
+        "boundary": [
+          {
+            "label": "USGS National Map structures service, queried within the metro bounding box",
+            "url": "https://www.usgs.gov/programs/national-geospatial-program/national-map"
+          }
+        ],
+        "people": "No roster is joined; the card names the facility and its address.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "library",
+      "label": "Library",
+      "group": "geography",
+      "area_rank": 26,
+      "rank_note": "point marker — always topmost",
+      "source": {
+        "answers": "The nearest public libraries to this point, by straight-line distance.",
+        "boundary": [
+          {
+            "label": "Library locations from NYC Open Data (feuq-due4)",
+            "url": "https://data.cityofnewyork.us/d/feuq-due4"
+          }
+        ],
+        "people": "No roster is joined. The dataset carries no phone number, which is a gap at the source rather than something the card withholds.",
+        "applies": "New York City."
+      }
+    },
+    {
+      "id": "early-voting",
+      "label": "Early Voting Site",
+      "group": "political",
+      "area_rank": 27,
+      "rank_note": "point marker — always topmost",
+      "source": {
+        "answers": "The nearest early-voting sites to this point for the current election.",
+        "boundary": [
+          {
+            "label": "Early-voting sites from NYS ITS Geospatial Services' ArcGIS service, sourced from the state and city Boards of Elections",
+            "url": "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k"
+          }
+        ],
+        "people": "No roster: a voting site has no officeholder. Hours change per election — confirm with the Board of Elections.",
+        "applies": "New York City."
+      }
+    }
   ],
   "min_register_layer": 5,
   "layer_count_note": "Threads 1–4: full roster (+ council, community-district, congress, state senate/assembly, election-district, borough-president, district-attorney) + 3 amenity nearest-point layers (post-office, library, early-voting)",

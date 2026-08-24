@@ -348,8 +348,10 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   **The page itself is built from Illinois's**, with its four GENERATED regions emptied so the
   generator fills them for SF rather than leaving Chicago's content in San Francisco's page.
   Verified in a browser: 16 matrix rows across 7/3/2/4 group counts, both themes, no dead links.
-  **NYC's sources page is deliberately still absent** — 27 more layers of the same careful work,
-  and it ships when it is done rather than half-done.
+  **NYC's page followed in the same change** once its 27 layers had been through the same
+  extraction: 13 publisher credits, and two layers whose honest answer is that they have no
+  boundary of their own. All three instances now publish a layer matrix — 39, 27 and 16 rows —
+  and every layer in the fleet can say where it came from.
 
 - **R6 (part 3a) — SHIPPED (2026-08-24): NYC and SF get FAQ pages, built from IL's shell rather
   than resembling it.** Both apps had no `faq.html` at all while Illinois has ranked on one since
