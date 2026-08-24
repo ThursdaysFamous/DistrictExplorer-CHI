@@ -23,6 +23,7 @@
 /* ==== ENGINE:END sw-header ==== */
 
 /* ==== METRO:BEGIN sw-config ==== */
+/* ==== TEMPLATE:BEGIN sw-version-history ==== */
 // (-v3 dropped the duplicate "./index.html" shell entry; -v4 added the two
 // roster files missing from ROSTER_URLS; -v5 added the water-taxi marker
 // icon shown when a point lands on water; -v6/-v7 added the Will County
@@ -40,6 +41,7 @@
 // weigh down every install; -v12 added the hand-curated early-voting-sites.json
 // roster backing the Early Voting Site nearest-point layer — network-first,
 // refreshed per election.)
+/* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
 const CACHE_NAME = "district-explorer-shell-v51";
 

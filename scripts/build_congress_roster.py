@@ -64,6 +64,18 @@ EXPECTED_DISTRICTS = 17
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 
+# A state-template fork parameterizes this script by writing
+# data/state/state.json (scripts/bootstrap_state.py) instead of editing the
+# constants above: {"usps": "IN", "house_districts": 9}. The reference fork
+# carries no data/state/, so the IL defaults hold and this block is inert
+# there — one script, byte-identical, in every fork.
+_STATE_CONFIG = os.path.join(REPO_ROOT, "data", "state", "state.json")
+if os.path.exists(_STATE_CONFIG):
+    with open(_STATE_CONFIG) as _f:
+        _state_cfg = json.load(_f)
+    STATE = _state_cfg.get("usps", STATE)
+    EXPECTED_DISTRICTS = int(_state_cfg.get("house_districts", EXPECTED_DISTRICTS))
+
 
 def fetch_json(url):
     with urllib.request.urlopen(url, timeout=60) as resp:

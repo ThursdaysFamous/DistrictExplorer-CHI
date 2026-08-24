@@ -1,0 +1,163 @@
+name: Engine bump (consumer)
+
+# The CONSUMER half of the fleet's engine release channel
+# (docs/ENGINE_SYNC.md). The reference repo publishes a hash-verified engine
+# release and fires a repository_dispatch at every registered fork; this
+# workflow answers it: pin the new release in engine.lock.json, refresh the
+# shared scripts from the release assets, splice the engine between the
+# fences, REGENERATE the worksheet-driven regions, validate everything, and
+# open a PR on a fixed bot branch. Nothing lands on main without CI.
+#
+# This template ships the "regenerate after applying" shape ENGINE_SYNC.md
+# names as the eventual structural fix: a release that changes what
+# generate_metro_files.py emits lands here as a regenerated region inside the
+# same bump PR, instead of tripping the drift gate after merge (the
+# engine-v1.0.22 failure mode). A fresh fork has no legacy bump behavior to
+# coordinate with, so it starts on the fixed shape.
+#
+# NOTE (registration): dispatches only arrive once this repo is added to the
+# reference repo's release-engine.yml fan-out list AND its
+# ENGINE_DISPATCH_TOKEN PAT scope — EXPANSION_GUIDE §4.4.1 items 2–3. Until
+# then this workflow simply never fires; run it by hand with
+# workflow_dispatch (inputs mirror the dispatch payload) to catch up.
+
+on:
+  repository_dispatch:
+    types: [engine-release]
+  workflow_dispatch:
+    inputs:
+      engine_version:
+        description: "Engine tag to pin (e.g. engine-v1.0.25)"
+        required: true
+      sha256:
+        description: "sha256 of that release's engine.bundle.js"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PLAYWRIGHT_VERSION: "1.56.1"
+    steps:
+      # BOT_PR_TOKEN so the resulting PR actually runs CI; a PR opened with
+      # the default GITHUB_TOKEN fires no workflows. Falls back to
+      # github.token (PR opens, with no checks) when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - name: Pin the new engine release
+        run: |
+          version="${{ github.event.client_payload.engine_version || inputs.engine_version }}"
+          sha="${{ github.event.client_payload.sha256 || inputs.sha256 }}"
+          if [ -z "$version" ] || [ -z "$sha" ]; then
+            echo "::error::no engine_version/sha256 in the dispatch payload or inputs"; exit 1
+          fi
+          jq --arg v "$version" --arg s "$sha" \
+            '.engine_version = $v | .sha256 = $s' engine.lock.json > engine.lock.json.new
+          mv engine.lock.json.new engine.lock.json
+          cat engine.lock.json
+
+      - name: Download release, verify hash, refresh shared scripts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$(jq -r .engine_version engine.lock.json)"
+          src="$(jq -r .source_repo engine.lock.json)"
+          gh release download "$tag" --repo "$src" --clobber \
+            --pattern 'engine.bundle.js' --pattern 'engine.manifest.json' \
+            --pattern 'apply_engine.py' --pattern 'check_engine_parity.py' \
+            --pattern 'generate_metro_files.py' --pattern 'metro-worksheet.schema.json'
+          # TWO spaces are load-bearing for sha256sum --check
+          echo "$(jq -r .sha256 engine.lock.json)  engine.bundle.js" | sha256sum --check -
+          # The release is the shared scripts' distribution channel — refresh
+          # this repo's copies so they can never drift from the engine they pair with.
+          mv -f apply_engine.py check_engine_parity.py generate_metro_files.py scripts/
+          mv -f metro-worksheet.schema.json schema/
+
+      - name: Apply engine + regenerate + validate
+        run: |
+          pip install -c scripts/requirements.txt jsonschema
+          python3 scripts/apply_engine.py
+          # Regenerate-after-apply: a generator change in this release lands
+          # in this same PR instead of failing the drift gate after merge.
+          python3 scripts/generate_metro_files.py
+          python3 scripts/generate_metro_files.py --check
+          python3 scripts/validate_index.py index.html
+          python3 scripts/check_engine_parity.py index.html --against-bundle engine.manifest.json --strict
+          python3 scripts/check_engine_parity.py sw.js --against-bundle engine.manifest.json --strict
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache Playwright Chromium
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}-${{ runner.os }}
+
+      - name: Install Playwright + Chromium
+        timeout-minutes: 15
+        run: |
+          retry() {
+            local attempts=$1 budget=$2; shift 2
+            for i in $(seq 1 "$attempts"); do
+              timeout "$budget" "$@" && return 0
+              echo "::warning::attempt $i/$attempts of '$*' hung or failed"
+              sleep 5
+            done
+            echo "::error::'$*' failed $attempts time(s) at ${budget}s each"
+            return 1
+          }
+          retry 3 60 npm install "playwright@${PLAYWRIGHT_VERSION}"
+          retry 1 420 npx playwright install-deps chromium
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" ]; then
+            retry 2 300 npx playwright install chromium
+          fi
+
+      - name: Behaviour gate on the bumped tree
+        env:
+          BASE_URL: http://localhost:8000/
+        run: |
+          python3 -m http.server 8000 &
+          server_pid=$!
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:8000/ >/dev/null && break
+            sleep 0.5
+          done
+          node scripts/smoke_test.mjs
+          status=$?
+          kill "$server_pid" 2>/dev/null || true
+          exit $status
+
+      - name: Open or update the bump PR
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          version="$(jq -r .engine_version engine.lock.json)"
+          branch="bot/engine-bump"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Already at $version — nothing to bump."; exit 0
+          fi
+          git commit -m "Bump engine to $version"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Bump engine to $version" \
+              --body "Automated engine bump from the reference repo's release channel (docs/ENGINE_SYNC.md): re-pins engine.lock.json, refreshes the shared scripts from the release assets, re-splices the fenced ENGINE blocks, and regenerates the worksheet-driven regions. Validated by the static and behaviour gates before this PR opened." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

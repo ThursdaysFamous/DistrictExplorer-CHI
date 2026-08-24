@@ -61,9 +61,11 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 
+HTTP_TIMEOUT = 25
+
+# ==== TEMPLATE:BEGIN sources-manifest ====
 SOCRATA_DOMAIN = "data.cityofchicago.org"
 CATALOG_API = "https://api.us.socrata.com/api/catalog/v1"
-HTTP_TIMEOUT = 25
 
 # ---------------------------------------------------------------------------
 # The manifest: every source index.html depends on that can go stale silently.
@@ -964,6 +966,7 @@ ENDPOINTS = [
      "url": ("https://services2.arcgis.com/MgTN1xrZnaahv1AF/arcgis/rest/services/"
              "2022_Voter_Precincts_WFL1/FeatureServer?f=json")},
 ]
+# ==== TEMPLATE:END sources-manifest ====
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 
@@ -1154,6 +1157,7 @@ def check_endpoints(findings, offline):
                          "renamed or retired" % (res, e["url"]))
 
 
+# ==== TEMPLATE:BEGIN sources-ward-manifest ====
 # The `ward` layer is the one CountyDispatch whose entries are keyed by SOURCE
 # rather than by county, so its disjointness is not guaranteed by geography the
 # way county-keyed layers' is. registerCountyLayer dispatches by containment and
@@ -1206,6 +1210,7 @@ WARD_SOURCES = [
      "url": "https://services6.arcgis.com/z8UuifZkerkF2dpG/arcgis/rest/services/"
             "Mendota_Wards/FeatureServer/0/query"},
 ]
+# ==== TEMPLATE:END sources-ward-manifest ====
 
 
 def _ward_rings(feature):

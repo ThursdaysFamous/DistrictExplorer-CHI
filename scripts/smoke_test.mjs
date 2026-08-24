@@ -40,6 +40,33 @@ const EXPECT_DISTRICT = { "school-board": "12", "il-supreme-court": "1", "ccbr":
 const NEGATIVE_POINT = "41.70000,-87.10000"; // Lake Michigan, Indiana waters — outside all three anchor layers
 const EXPECT_LAYERS = 39; // 17 base + police-beat (#43) + school-site (#45) + ccpsa-district-council + ward-precinct + 6 statewide local-gov layers (county, township, municipality, school districts x3 — TIGERweb) + 6 consolidated county-dispatched layers (county-board, judicial-subcircuit, fire-district, park-district, library-district, county-precinct — Cook/Will/DuPage/Lake/Kane/McHenry/Kendall entries; docs/COUNTY_LAYER_CONSOLIDATION.md) + 1 DuPage-only layer (dupage-county-special-police) + 2 Cook-only tax-agency layers (tif-district, mwrd — dedicated until a second county ships the concept) + 3 amenity nearest-point layers (post-office, library, early-voting) = 39 — live-verified 2026-07
 // ==== GENERATED:END smoke-config ====
+// ==== TEMPLATE:BEGIN smoke-fork-constants ====
+// Fork constants: every Chicago/Illinois literal the checks below use. Layer
+// ids (school-board, ccbr, county-board, fire-district, …) are deliberately
+// NOT here — they are worksheet-driven and stay inline in the checks.
+const EXPORTS_NAME = "ChiExplorer"; // the fork's window debug namespace
+const PORTAL_HOST = "data.cityofchicago.org"; // the Socrata portal chicagoCoverage's fallback leg consults (check 2b aborts it)
+// Geocoder fixture (check 1b): the stub answers ONLY the cleaned form, which
+// is what the real geocoder does for these queries.
+const GEOCODER_QUERY_RAW = "233 S Wacker Dr Suite 8400, Chicago"; // typed query carrying a unit fragment
+const GEOCODER_UNIT_FRAGMENT = "Suite 8400"; // the fragment the retry must strip
+const GEOCODER_QUERY_CLEANED = "233 S Wacker Dr, Chicago"; // the only q the stub answers
+const GEOCODER_STUB_FEATURE = {
+  type: "Feature",
+  geometry: { type: "Point", coordinates: [-87.6359, 41.8789] },
+  properties: { housenumber: "233", street: "South Wacker Drive", city: "Chicago", state: "Illinois", postcode: "60606" },
+};
+// Gaps-panel location probe (check 1a): a point in a county that shipped gap
+// records name, so the panel must lead with that county's own gaps there.
+const GAP_PROBE = { county: "kankakee", label: "Kankakee", lat: 41.1254, lng: -87.8487 };
+// Point-move probe (check 2): a second point in a DIFFERENT district of the
+// first anchor layer than the ground-truth POINT, exercising the
+// incremental-restyle fast path. district is the expected identifier there.
+const MOVE_POINT = { lat: 41.99, lng: -87.66, district: "4" }; // school-board district 4 (vs 12 at the Loop POINT)
+// Straggler fixture (check 2d): one same-origin county-board county's
+// geometry to delay, plus a point inside one of that county's districts.
+const STRAGGLER_FILE = "data/app/stephenson-county-board-districts.json";
+const STRAGGLER_POINT = "42.29660,-89.62120"; // Freeport, Stephenson County — inside board District B of the delayed file
 // Anchor layers that declare a location-relevance test (mod.coverage) HIDE at
 // an out-of-coverage point instead of reporting an empty card — this list
 // mirrors the fork's coverage declarations in index.html (school-board is
@@ -47,6 +74,7 @@ const EXPECT_LAYERS = 39; // 17 base + police-beat (#43) + school-site (#45) + c
 // cookCountyCoverage). il-supreme-court declares none and keeps the honest
 // "no district here" empty state at the negative point.
 const NEGATIVE_HIDDEN = ["school-board", "ccbr"];
+// ==== TEMPLATE:END smoke-fork-constants ====
 const BOOT_TIMEOUT = 45000; // Leaflet CDN + first paint on a cold CI runner
 const QUERY_TIMEOUT = 25000;
 
@@ -72,7 +100,7 @@ async function booted(context, url, routeFn) {
   }
   if (routeFn) await routeFn(page);
   await page.goto(url, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => !!window.ChiExplorer, null, { timeout: BOOT_TIMEOUT });
+  await page.waitForFunction((n) => !!window[n], EXPORTS_NAME, { timeout: BOOT_TIMEOUT });
   return page;
 }
 
@@ -116,7 +144,7 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, BASE);
-    check("app boots (window.ChiExplorer exported)", true);
+    check(`app boots (window.${EXPORTS_NAME} exported)`, true);
     const n = await page.evaluate(
       () => document.querySelectorAll('input[type=checkbox][id^="toggle-"]').length
     );
@@ -148,8 +176,8 @@ try {
       ["100 Main St, Winston-Salem, NC 27101", "100 Main St, Winston-Salem, NC 27101"]                    // hyphenated city — never trimmed
     ];
     const poiResults = await page.evaluate(
-      (cases) => cases.map(([input]) => window.ChiExplorer.cleanPoiAddress(input)),
-      poiCases
+      ({ cases, n }) => cases.map(([input]) => window[n].cleanPoiAddress(input)),
+      { cases: poiCases, n: EXPORTS_NAME }
     );
     const poiBad = poiCases
       .map(([input, want], i) => ({ input, want, got: poiResults[i] }))
@@ -218,18 +246,23 @@ try {
       cold.hrefs.every((h) => /template=source-submission\.yml/.test(h) && /[?&]gap_id=/.test(h)),
       `${cold.hrefs.length} links`);
 
+    // ==== TEMPLATE:BEGIN smoke-gap-probe ====
     // With a point selected the panel must lead with the gaps that apply THERE.
-    // Kankakee is the strongest probe: exactly two of its gaps name that county.
-    const kankakeeGaps = Object.values(shipped)
-      .filter((g) => (g.counties || []).indexOf("kankakee") !== -1).length;
-    await page.evaluate(() => window.ChiExplorer.setSelectedPoint(41.1254, -87.8487));
+    // GAP_PROBE names the strongest probe county in the shipped gap records.
+    // (Needs county-tagged gap records at the probe point — forks whose gaps
+    // data is not county-tagged drop or payload this span.)
+    const probeGaps = Object.values(shipped)
+      .filter((g) => (g.counties || []).indexOf(GAP_PROBE.county) !== -1).length;
+    await page.evaluate(({ n, lat, lng }) => window[n].setSelectedPoint(lat, lng),
+      { n: EXPORTS_NAME, lat: GAP_PROBE.lat, lng: GAP_PROBE.lng });
     const warm = await openGaps();
-    check("data gaps panel is location-aware (Kankakee point leads with its own gaps)",
+    check(`data gaps panel is location-aware (${GAP_PROBE.label} point leads with its own gaps)`,
       warm.groups.length >= 2 && /clicked/i.test(warm.groups[0].label) &&
-      warm.groups[0].items === kankakeeGaps && warm.items === expected &&
+      warm.groups[0].items === probeGaps && warm.items === expected &&
       /clicked/i.test(warm.lede),
       `groups=${JSON.stringify(warm.groups.map((g) => g.label))} ` +
-      `here=${warm.groups[0] && warm.groups[0].items}/${kankakeeGaps} total=${warm.items}`);
+      `here=${warm.groups[0] && warm.groups[0].items}/${probeGaps} total=${warm.items}`);
+    // ==== TEMPLATE:END smoke-gap-probe ====
 
     await context.close();
   }
@@ -251,6 +284,10 @@ try {
     }));
     check("gaps button sits in the masthead, not the footer",
       chrome.gapsInMasthead, `inMasthead=${chrome.gapsInMasthead}`);
+    // ==== TEMPLATE:BEGIN smoke-sources-page ====
+    // sources.html is OPT-IN per fork (the worksheet's sources_page key): a
+    // fork that carries no sources page drops this span — the masthead and
+    // #gaps deep-link checks around it stay.
     check("the app points readers at the sources page",
       chrome.sourcesLinks >= 1, `${chrome.sourcesLinks} link(s)`);
 
@@ -284,6 +321,7 @@ try {
     check("sources page's relative links resolve",
       resolved.every((r) => r.endsWith("=200")), resolved.join(" "));
     await sources.close();
+    // ==== TEMPLATE:END smoke-sources-page ====
 
     // sources.html sends readers back with #gaps; that must land ON the panel.
     // Through booted(), not a bare newPage: the panel's handler is attached by
@@ -313,23 +351,18 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const seen = [];
-    const CLEANED = "233 S Wacker Dr, Chicago";
     const page = await booted(context, BASE, async (p) => {
       await p.route("**/photon.komoot.io/**", (route) => {
         const u = new URL(route.request().url());
         // the home-metro search carries bbox; the sibling-metro fallback is the
         // same host WITHOUT it — never conflate the two when counting requests
         seen.push({ q: u.searchParams.get("q"), bounded: u.searchParams.has("bbox") });
-        const hit = u.searchParams.get("q") === CLEANED;
+        const hit = u.searchParams.get("q") === GEOCODER_QUERY_CLEANED;
         route.fulfill({
           status: 200, contentType: "application/json",
           body: JSON.stringify({
             type: "FeatureCollection",
-            features: hit ? [{
-              type: "Feature",
-              geometry: { type: "Point", coordinates: [-87.6359, 41.8789] },
-              properties: { housenumber: "233", street: "South Wacker Drive", city: "Chicago", state: "Illinois", postcode: "60606" },
-            }] : [],
+            features: hit ? [GEOCODER_STUB_FEATURE] : [],
           }),
         });
       });
@@ -340,7 +373,7 @@ try {
       await page.press("#geocode-input", "Enter");
     }
 
-    await search("233 S Wacker Dr Suite 8400, Chicago");
+    await search(GEOCODER_QUERY_RAW);
     await page
       .waitForFunction(() => document.querySelectorAll("#geocode-results li").length > 0,
         null, { timeout: QUERY_TIMEOUT })
@@ -348,7 +381,7 @@ try {
     const rows = await page.$$eval("#geocode-results li", (ls) => ls.length);
     const bounded = seen.filter((c) => c.bounded);
     check("search box retries a unit-fragment miss with the cleaned address",
-      bounded.length === 2 && bounded[0].q.includes("Suite 8400") && bounded[1].q === CLEANED && rows > 0,
+      bounded.length === 2 && bounded[0].q.includes(GEOCODER_UNIT_FRAGMENT) && bounded[1].q === GEOCODER_QUERY_CLEANED && rows > 0,
       `calls=${JSON.stringify(bounded.map((c) => c.q))} rows=${rows}`);
 
     seen.length = 0;
@@ -376,17 +409,20 @@ try {
         info.text.slice(0, 70)
       );
     }
+    // ==== TEMPLATE:BEGIN smoke-roster-join ====
     // Bonus: the school-board card joins its externalized member roster.
     const board = await cardText(page, "school-board");
     check("school-board joins member roster", /Board member/i.test(board.text), board.text.slice(0, 70));
+    // ==== TEMPLATE:END smoke-roster-join ====
 
+    // ==== TEMPLATE:BEGIN smoke-move-point ====
     // Bonus: moving the selection re-classifies correctly. This exercises the
     // incremental-restyle fast path (P7) — same layers on, new point — where
     // updateLayerHighlight only flips the old/new matched paths instead of
-    // re-styling every path. 41.99,-87.66 is school-board district 4 (vs 12 at
+    // re-styling every path. MOVE_POINT is school-board district 4 (vs 12 at
     // the Loop point above), and the matched-region highlight must move with it.
-    const moved = await page.evaluate(async () => {
-      window.ChiExplorer.setSelectedPoint(41.99, -87.66);
+    const moved = await page.evaluate(async ({ n, lat, lng, district }) => {
+      window[n].setSelectedPoint(lat, lng);
       const el = document.getElementById("card-school-board");
       // the district identifier lives in the header pill on redesigned cards
       const cardTextNow = () => {
@@ -394,19 +430,25 @@ try {
         const pill = block && block.querySelector(".card-id-pill:not([hidden])");
         return ((pill ? pill.textContent + " " : "") + (el ? el.innerText : "")).replace(/\s+/g, " ").trim();
       };
+      const districtRe = new RegExp("District\\s+" + district + "\\b", "i");
       for (let i = 0; i < 100; i++) {
-        if (el && !el.querySelector(".loading-row") && /District\s+4\b/i.test(cardTextNow())) break;
+        if (el && !el.querySelector(".loading-row") && districtRe.test(cardTextNow())) break;
         await new Promise((r) => setTimeout(r, 100));
       }
       const highlights = document.querySelectorAll("#map .region-highlight").length;
       return { text: el ? cardTextNow() : "(no card)", highlights };
-    });
+    }, { n: EXPORTS_NAME, lat: MOVE_POINT.lat, lng: MOVE_POINT.lng, district: MOVE_POINT.district });
     check(
-      "point move re-classifies (District 12 -> 4) and re-highlights",
-      /District\s+4\b/i.test(moved.text) && moved.highlights >= 1,
+      `point move re-classifies (District ${EXPECT_DISTRICT["school-board"]} -> ${MOVE_POINT.district}) and re-highlights`,
+      new RegExp("District\\s+" + MOVE_POINT.district + "\\b", "i").test(moved.text) && moved.highlights >= 1,
       `${moved.text.slice(0, 60)} | highlights=${moved.highlights}`
     );
+    // ==== TEMPLATE:END smoke-move-point ====
 
+    // ==== TEMPLATE:BEGIN smoke-toggle-preserve ====
+    // (If smoke-move-point is dropped, the selection simply stays at POINT —
+    // the assertions below only need >= 2 anchor layers highlighting wherever
+    // the selection currently sits, so they hold either way.)
     // Bonus: toggling one layer off/on must NOT disturb the other active layers'
     // highlights (P8). The opacity rescale on a count change now skips layers that
     // already show a selection highlight (their faded/highlight fill is
@@ -435,6 +477,7 @@ try {
       toggled.before >= 2 && toggled.afterOff === toggled.before - 1 && toggled.afterOn === toggled.before,
       `before=${toggled.before} afterOff=${toggled.afterOff} afterOn=${toggled.afterOn}`
     );
+    // ==== TEMPLATE:END smoke-toggle-preserve ====
     await context.close();
   }
 
@@ -455,7 +498,7 @@ try {
     // deterministically fast in every environment; the verdict here is
     // identical either way — the negative point is outside both tilings.
     const page = await booted(context, `${BASE}#point=${NEGATIVE_POINT}&layers=${OFFLINE.join(",")}`, async (p) => {
-      await p.route("**data.cityofchicago.org**", (r) => r.abort());
+      await p.route(`**${PORTAL_HOST}**`, (r) => r.abort());
     });
     for (const id of OFFLINE) {
       if (NEGATIVE_HIDDEN.includes(id)) {
@@ -470,7 +513,8 @@ try {
         // assert the invariant directly, not just its hash reflection: hide
         // must never mutate state.layersOn (that's what keeps permalinks and
         // reappear-on-return working)
-        const stillOn = await page.evaluate((cid) => window.ChiExplorer.state.layersOn[cid] === true, id);
+        const stillOn = await page.evaluate(
+          ({ cid, n }) => window[n].state.layersOn[cid] === true, { cid: id, n: EXPORTS_NAME });
         check(
           `${id} hides at the negative point (out of coverage, permalink intact)`,
           hidden && hashKeepsLayer && stillOn,
@@ -488,6 +532,7 @@ try {
     await context.close();
   }
 
+  // ==== TEMPLATE:BEGIN smoke-legacy-aliases ====
   // 2c. Consolidated-layer permalink compatibility: pre-consolidation ids in a
   //     shared link (#layers=commissioner / will-county-board / will-county-fire
   //     / …) must light the consolidated toggles — the fork's alias shim
@@ -498,19 +543,19 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, `${BASE}#layers=commissioner,will-county-board,will-county-fire`);
-    const res = await page.evaluate(() => {
+    const res = await page.evaluate((n) => {
       const board = document.getElementById("toggle-county-board");
       const fire = document.getElementById("toggle-fire-district");
       const hash = location.hash;
       return {
-        boardOn: !!(board && board.checked) && window.ChiExplorer.state.layersOn["county-board"] === true,
-        fireOn: !!(fire && fire.checked) && window.ChiExplorer.state.layersOn["fire-district"] === true,
+        boardOn: !!(board && board.checked) && window[n].state.layersOn["county-board"] === true,
+        fireOn: !!(fire && fire.checked) && window[n].state.layersOn["fire-district"] === true,
         hashRewritten: hash.indexOf("county-board") !== -1 && hash.indexOf("fire-district") !== -1 &&
           hash.indexOf("commissioner") === -1 && hash.indexOf("will-county-board") === -1 &&
           hash.indexOf("will-county-fire") === -1,
         oneCopy: hash.split("county-board").length === 2,
       };
-    });
+    }, EXPORTS_NAME);
     check(
       "old permalink ids alias to the consolidated layers",
       res.boardOn && res.fireOn && res.hashRewritten && res.oneCopy,
@@ -518,7 +563,9 @@ try {
     );
     await context.close();
   }
+  // ==== TEMPLATE:END smoke-legacy-aliases ====
 
+  // ==== TEMPLATE:BEGIN smoke-straggler ====
   // 2d. The county-board union overlay draws INCREMENTALLY: boundaries appear
   //     as soon as the first county's geometry is in, instead of waiting out
   //     the slowest of ~40 independent county servers (the 2026-08-04
@@ -530,14 +577,13 @@ try {
   //     point's own district — inside the delayed county — gets highlighted.
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
-    const STRAGGLER_FILE = "data/app/stephenson-county-board-districts.json";
     const stragglerBody = readFileSync(STRAGGLER_FILE, "utf8");
     const stragglerFeatures = JSON.parse(stragglerBody).features.length;
     const STRAGGLER_DELAY_MS = 8000;
-    // Freeport, Stephenson County — inside board District B of the delayed file
+    // STRAGGLER_POINT sits inside a district of the delayed county's file
     const page = await booted(
       context,
-      `${BASE}#point=42.29660,-89.62120&layers=county-board`,
+      `${BASE}#point=${STRAGGLER_POINT}&layers=county-board`,
       (p) => p.route("**/" + STRAGGLER_FILE, async (r) => {
         await new Promise((res) => setTimeout(res, STRAGGLER_DELAY_MS));
         await r.fulfill({ status: 200, contentType: "application/json", body: stragglerBody });
@@ -575,6 +621,7 @@ try {
     );
     await context.close();
   }
+  // ==== TEMPLATE:END smoke-straggler ====
 
   // 2e. Share control: the point chip carries ONE "Share" button whose popover
   //     serves the live campaign-tagged permalink, the embed snippet (tagged
@@ -619,8 +666,11 @@ try {
     await context.close();
   }
 
+  // ==== TEMPLATE:BEGIN smoke-failure-isolation ====
   // 3. A failing data source degrades to that layer's error card + Retry, in
-  //    isolation — the app's per-layer failure-isolation rule.
+  //    isolation — the app's per-layer failure-isolation rule. (Named on two
+  //    CHI anchor layers and one same-origin data file — a fork keeps the
+  //    scenario by payloading this span with two of its own anchors.)
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(
@@ -655,7 +705,9 @@ try {
     check("failure is isolated (other layer still classifies)", res.otherOk);
     await context.close();
   }
+  // ==== TEMPLATE:END smoke-failure-isolation ====
 
+  // ==== TEMPLATE:BEGIN smoke-prepoint-failure ====
   // 4. Overlay-load failure with NO point selected still surfaces (R5 / item 7).
   //    Toggle a layer via the permalink before any point is picked and fail its
   //    boundary fetch — the card must show an error + Retry (un-hidden), not
@@ -677,15 +729,15 @@ try {
         { timeout: QUERY_TIMEOUT }
       )
       .catch(() => {});
-    const res = await page.evaluate(() => {
+    const res = await page.evaluate((n) => {
       const el = document.getElementById("card-school-board");
       return {
-        pointSelected: !!(window.ChiExplorer && window.ChiExplorer.state.selectedPoint),
+        pointSelected: !!(window[n] && window[n].state.selectedPoint),
         errored: !!el && el.classList.contains("state-error"),
         hasRetry: !!el && !!el.querySelector(".retry-btn"),
         visible: !!el && getComputedStyle(el).display !== "none",
       };
-    });
+    }, EXPORTS_NAME);
     check(
       "pre-point overlay failure surfaces (not silent)",
       !res.pointSelected && res.errored && res.hasRetry && res.visible,
@@ -693,6 +745,7 @@ try {
     );
     await context.close();
   }
+  // ==== TEMPLATE:END smoke-prepoint-failure ====
 
   // 5. Base-map tile failure surfaces an honest, dismissible banner (R6 / item
   //    16), instead of a silently gray map. Fail the CARTO tile CDN and assert

@@ -78,6 +78,8 @@ import requests
 
 TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
+
+# ==== TEMPLATE:BEGIN outline-county-config ====
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
 # Kane, McHenry, Kendall), then LaSalle, Kankakee, Boone and Grundy from research
 # passes 2-3, then Winnebago, the Livingston -> McLean -> Logan -> Sangamon ->
@@ -835,6 +837,7 @@ DISPATCH_COUNTY_FIPS = {
     # (scripts/build_vermilion_boundaries.py).
     "vermilion": "183",
 }
+# ==== TEMPLATE:END outline-county-config ====
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
 assert not _UNLISTED, (
@@ -854,6 +857,7 @@ REQUEST_TIMEOUT = 180
 # tolerance that ever moved the edge past an anchor would fail the build.
 SIMPLIFY_TOLERANCE_M = 25
 
+# ==== TEMPLATE:BEGIN outline-anchors ====
 # Points that MUST fall inside the dissolved outline (one per county) and
 # outside it. A dissolve that silently drops a county still closes its rings,
 # so ring-closure alone is not proof — these are.
@@ -1384,6 +1388,7 @@ OUTSIDE = {
     # pass 8, each joining exactly as its OUTSIDE comment said it would — Adams
     # on the strength of its own GIS, with only the roster left as a gap.)
 }
+# ==== TEMPLATE:END outline-anchors ====
 
 
 def fetch_counties():

@@ -26,8 +26,10 @@ import json
 import sys
 import urllib.request
 
+# ==== TEMPLATE:BEGIN indexnow-host ====
 KEY = "6ce8d9c81c2e4b0b914e34fd134ed36e"
 HOST = "chidistricts.com"
+# ==== TEMPLATE:END indexnow-host ====
 ENDPOINT = "https://api.indexnow.org/indexnow"  # shared endpoint: fans out to all IndexNow engines
 
 def main():

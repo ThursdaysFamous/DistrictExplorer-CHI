@@ -186,6 +186,7 @@ HOLLOW_MARKERS = (
 )
 RATE_LIMIT_PAUSE = 8
 
+# ==== TEMPLATE:BEGIN card-links-host-tables ====
 # ---------------------------------------------------------------------------
 # Hosts measured to refuse this client while serving a browser normally. The
 # check INVERTS for these: refusal is OK, answering is the WARN. Keyed by host
@@ -273,6 +274,7 @@ NO_ROOT_DOCUMENT = {
     "basemaps.cartocdn.com", "a.basemaps.cartocdn.com",
     "b.basemaps.cartocdn.com", "c.basemaps.cartocdn.com",
 }
+# ==== TEMPLATE:END card-links-host-tables ====
 
 
 def expected_block(host):
