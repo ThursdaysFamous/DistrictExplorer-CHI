@@ -2076,6 +2076,7 @@ def build(stamp_text):
         # and the OSM attribution below is a licence obligation, not a repeat.
         '      <div class="dpf-links">\n'
         '        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>\n'
+        '        <a href="privacy.html">Privacy</a>\n'
         '        <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">GitHub</a>\n'
         '        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>\n'
         '        <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>\n'
