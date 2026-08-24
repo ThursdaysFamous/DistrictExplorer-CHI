@@ -67,18 +67,35 @@ GAPS_RE = re.compile(
     r"<!-- ==== GUIDEBOOK:BEGIN gaps ==== -->\s*```json\s*(.*?)\s*```",
     re.DOTALL)
 GAPS_PATH = "data/app/coverage-gaps.json"
-# Where an instance's tree sits inside its repo. All three are folders in THIS
-# repo now — il/ at R2.3, ny/ and ca/ imported at R3 and published at R5 — so
-# the table is complete rather than a Chicago special case. It still exists
-# because metros.json's `repo` field still names the old per-metro forks for the
-# remote fetches; retiring that is the last piece of the consolidation and is
-# deliberately not done here.
-REPO_PREFIX = {"chicago": "il/", "nyc": "ny/", "sf": "ca/"}
+
+# WHERE EACH INSTANCE LIVES. This used to be a remote-fetch problem: three
+# separate fork repos, each read over the GitHub contents API. The
+# consolidation ended that — il/ at R2.3, ny/ and ca/ imported at R3 and
+# published at R5 — so every file this script wants is on disk beside it, and
+# reading them over the network was checking repos that are no longer deployed.
+# The path table is IMPORTED from the generator rather than restated here: two
+# copies of "where does ny/ keep its worksheet" is precisely the drift class
+# this file exists to catch.
+try:
+    from generate_metro_files import INSTANCES  # noqa: E402
+except ImportError:  # pragma: no cover — reported as a WARN by the caller
+    INSTANCES = None
 
 
-def repo_path(metro_id, rel):
-    """Repo-relative path of an instance-owned file, for the remote fetches."""
-    return REPO_PREFIX.get(metro_id, "") + rel
+def local_path(repo_root, tag, kind, rel=""):
+    """Absolute path of an instance-owned file. `kind` keys INSTANCES."""
+    base = INSTANCES[tag][kind]
+    parts = [repo_root] + ([] if base == "." else [base]) + ([rel] if rel else [])
+    return os.path.join(*parts)
+
+
+def read_local(path):
+    """File contents, or None — the local counterpart of the old fetch_file."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    except OSError:
+        return None
 ENGINE_SYNC_PATH = os.path.join("docs", "ENGINE_SYNC.md")
 # "## Current ENGINE block inventory (53 in index.html + 2 in sw.js)" followed
 # by the backticked block list on the "index.html: ..." line(s).
@@ -131,14 +148,6 @@ def api_get(path, raw=False):
     with urllib.request.urlopen(req, timeout=30) as resp:
         data = resp.read()
     return data if raw else json.loads(data.decode("utf-8"))
-
-
-def fetch_file(repo, path):
-    """Raw file contents from the repo's default branch, or None."""
-    try:
-        return api_get("/repos/%s/contents/%s" % (repo, path), raw=True).decode("utf-8")
-    except (urllib.error.URLError, UnicodeDecodeError):
-        return None
 
 
 def parse_capabilities(validator_text):
@@ -338,50 +347,6 @@ def inventory_diff(repo_root):
              "went stale before." % (ENGINE_SYNC_PATH, detail)])
 
 
-def engine_sync_diff(chi_doc, repo, metro_id):
-    """(report_line, warn_list) for one fork's ENGINE_SYNC.md vs CHI's copy.
-
-    Reports drift in BOTH directions, and says so, because the file's own rule
-    is that reconciling means merging rather than overwriting: a fork can hold
-    a paragraph CHI needs. The 2026-08 reconciliation found the opposite (the
-    siblings were purely behind), but a raw line count could not tell those two
-    cases apart, and "just copy CHI's over" is the wrong instinct to encode.
-    """
-    if metro_id == "chicago":
-        return ("- ENGINE_SYNC doc: the reference copy (%d lines)" % len(chi_doc.splitlines()), [])
-    fork_doc = fetch_file(repo, ENGINE_SYNC_PATH)
-    if fork_doc is None:
-        return ("- ENGINE_SYNC doc: **SYNC WARN** — fork carries no %s" % ENGINE_SYNC_PATH,
-                ["%s: SYNC — fork carries no %s, but every fork must ship the same copy"
-                 % (metro_id, ENGINE_SYNC_PATH)])
-    if fork_doc == chi_doc:
-        return ("- ENGINE_SYNC doc: identical to CHI (%d lines)" % len(chi_doc.splitlines()), [])
-
-    chi_lines, fork_lines = chi_doc.splitlines(), fork_doc.splitlines()
-    only_fork = [l for l in fork_lines if l.strip() and l not in chi_lines]
-    only_chi = [l for l in chi_lines if l.strip() and l not in fork_lines]
-    if only_fork:
-        detail = ("%d line(s) only in the fork, %d only in CHI — **reconcile both ways**, "
-                  "the fork may hold content CHI needs" % (len(only_fork), len(only_chi)))
-    else:
-        detail = "fork is behind by %d line(s); CHI's copy supersedes it" % len(only_chi)
-    return ("- ENGINE_SYNC doc: **SYNC WARN** — %s" % detail,
-            ["%s: SYNC — %s differs from CHI's (%s). That file ships the same in every "
-             "fork; land the reconciled copy in all three repos, since nothing else "
-             "compares them." % (metro_id, ENGINE_SYNC_PATH, detail)])
-
-
-def latest_engine_release(chi_repo):
-    try:
-        rels = api_get("/repos/%s/releases?per_page=10" % chi_repo)
-        for r in rels:
-            if r.get("tag_name", "").startswith("engine-v") and not r.get("draft"):
-                return r["tag_name"]
-    except urllib.error.URLError:
-        pass
-    return None
-
-
 def workflow_health(repo, wf_file):
     """(conclusion, date, coverage_lines) of the last completed run."""
     try:
@@ -427,10 +392,11 @@ def main():
               encoding="utf-8") as f:
         chi_caps = parse_capabilities(f.read()) or []
 
-    latest = latest_engine_release(chi["repo"])
     warns = []
     lines = ["# Fleet status", ""]
-    lines.append("Latest engine release: **%s**" % (latest or "unknown (API unreachable?)"))
+    lines.append("All %d instance(s) live in `%s` and are read from this checkout; "
+                 "only workflow runs and open PRs still need the API."
+                 % (len(metros), chi["repo"]))
     lines.append("")
 
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -446,19 +412,6 @@ def main():
                      "data-gaps drift unchecked in every fork.")
         lines.append("")
 
-    # The canonical ENGINE_SYNC copy, read once: the per-fork check below diffs
-    # against it, and the inventory check validates it against CHI's own fences
-    # before it is used as the reference for anything.
-    try:
-        with open(os.path.join(repo_root, ENGINE_SYNC_PATH), encoding="utf-8") as f:
-            chi_engine_sync = f.read()
-    except OSError:
-        chi_engine_sync = None
-        warns.append("engine-sync: CHI's %s is unreadable — cross-fork doc drift unchecked"
-                     % ENGINE_SYNC_PATH)
-        lines.append("**SYNC WARN:** CHI's `%s` is unreadable — cross-fork doc drift "
-                     "unchecked in every fork." % ENGINE_SYNC_PATH)
-        lines.append("")
     inv_line, inv_warns = inventory_diff(repo_root)
     lines.append(inv_line)
     lines.append("")
@@ -466,23 +419,27 @@ def main():
 
     for m in metros:
         repo = m["repo"]
-        lines.append("## %s (`%s`)" % (m["label"], repo))
+        tag = m.get("tag")
+        if not tag or INSTANCES is None or tag not in INSTANCES:
+            warns.append("%s: no instance folder for tag %r — cannot check it locally"
+                         % (m["id"], tag))
+            lines.append("## %s" % m["label"])
+            lines.append("")
+            lines.append("- **INSTANCE WARN** — metros.json gives tag %r, which is not an "
+                         "instance in generate_metro_files.INSTANCES. Every check below "
+                         "needs that folder, so all of them are skipped." % tag)
+            lines.append("")
+            continue
+        lines.append("## %s (`%s/`)" % (m["label"], tag))
         lines.append("")
 
-        lock_raw = fetch_file(repo, "engine.lock.json")
-        pin = None
-        if lock_raw:
-            try:
-                pin = json.loads(lock_raw).get("engine_version")
-            except ValueError:
-                pass
-        if pin and latest and pin != latest:
-            warns.append("%s: engine pin %s is behind latest release %s" % (m["id"], pin, latest))
-            lines.append("- Engine pin: **%s — BEHIND %s** (bump PR pending?)" % (pin, latest))
-        else:
-            lines.append("- Engine pin: %s" % (pin or "not found"))
-
-        caps = parse_capabilities(fetch_file(repo, "scripts/validate_index.py"))
+        # The engine-pin check is GONE, not broken. R2.1 retired the release
+        # channel and deleted engine.lock.json: one repo, one copy of the
+        # engine, and compose_app.py --check proves every instance carries it.
+        # Reporting "Engine pin: not found" three times a week was noise about
+        # a mechanism that no longer exists.
+        caps = parse_capabilities(read_local(
+            local_path(repo_root, tag, "scripts", "validate_index.py")))
         if caps is None:
             lines.append("- Validator capabilities: not declared yet (Conversion 3 §3.1)")
         elif m["id"] == "chicago":
@@ -499,7 +456,7 @@ def main():
             if behind:
                 lines.append("  (fork missing vs CHI: %s — forward parity, arrives via normal porting)" % ", ".join("`%s`" % c for c in behind))
 
-        ws_raw = fetch_file(repo, "metro-worksheet.json")
+        ws_raw = read_local(os.path.join(repo_root, INSTANCES[tag]["worksheet"]))
         ws = None
         if ws_raw:
             try:
@@ -524,7 +481,7 @@ def main():
         # take this check down with it.
         if gaps_map is not None:
             gaps_line, gaps_warns = gaps_diff(
-                gaps_map, m["id"], fetch_file(repo, repo_path(m["id"], GAPS_PATH)))
+                gaps_map, m["id"], read_local(local_path(repo_root, tag, "app", GAPS_PATH)))
             lines.append(gaps_line)
             warns.extend(gaps_warns)
 
@@ -533,6 +490,21 @@ def main():
         else:
             lines.append("- Scrapers (last completed run):")
             for wf in wfs:
+                # GITHUB ACTIONS ONLY READS THE REPOSITORY ROOT'S .github/workflows.
+                # An instance imported as a folder brings its .github/ with it, and
+                # every file in there is INERT — it looks like a live refresh and
+                # never runs. Nothing caught that before, because this script asked
+                # the old fork repo, where the same file genuinely does run. Ask the
+                # checkout where the file actually is, and say so.
+                if not os.path.isfile(os.path.join(repo_root, ".github", "workflows", wf["file"])):
+                    stray = os.path.join(repo_root, tag, ".github", "workflows", wf["file"])
+                    where = ("`%s/.github/workflows/` — NOT run by Actions" % tag
+                             if os.path.isfile(stray) else "absent from the checkout")
+                    warns.append("%s: %s is not in the root .github/workflows (%s) — "
+                                 "it cannot run, so whatever it refreshes is frozen"
+                                 % (m["id"], wf["file"], where))
+                    lines.append("  - ⛔ `%s` **INERT — %s**" % (wf["file"], where))
+                    continue
                 concl, date, cov = workflow_health(repo, wf["file"])
                 if concl not in ("success", "no runs"):
                     warns.append("%s: %s last run %s (%s)" % (m["id"], wf["file"], concl, date))
@@ -541,16 +513,12 @@ def main():
                 for c in cov:
                     lines.append("    - coverage: `%s`" % c)
 
-        # Deliberately outside the worksheet/guidebook nesting above: this file
-        # is prose, not generated from the worksheet, so an unreadable worksheet
-        # must not take the doc check down with it.
-        if chi_engine_sync is not None:
-            es_line, es_warns = engine_sync_diff(chi_engine_sync, repo, m["id"])
-            lines.append(es_line)
-            warns.extend(es_warns)
-
-        bots = open_bot_prs(repo)
-        lines.append("- Open bot PRs: %s" % (", ".join(bots) if bots else "none"))
+        # The cross-fork ENGINE_SYNC diff is GONE for the same reason as the
+        # engine pin: it compared each fork's copy of the doc against CHI's, and
+        # there is now ONE copy in ONE repo. It was warning that "the fork
+        # carries no docs/ENGINE_SYNC.md" about folders that were never supposed
+        # to have their own. The inventory check above still validates that doc
+        # against the real fences, which is the part that was ever load-bearing.
         lines.append("")
 
     status = "warn" if warns else "ok"
