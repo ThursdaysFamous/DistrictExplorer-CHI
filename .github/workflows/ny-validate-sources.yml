@@ -1,21 +1,32 @@
-name: Validate layer sources
+name: Validate layer sources (NYC)
 
-# Monthly freshness check for the data sources index.html depends on.
+# Monthly freshness check for the data sources ny/index.html depends on.
 # Unlike the roster workflows (which re-scrape the same page), this catches the
 # other failure mode: a publisher silently superseding a dataset with a newer
 # one — NYC school-zone datasets are re-published under a NEW Socrata id every
 # school year, the 2020 NTAs will one day gain a 2030 successor, and Census
 # TIGERweb rolls its congressional layer in place with each Congress
 # (CD119 → CD121). This workflow replaces check-school-zone-ids.yml, whose
-# school-zone catalog search is folded into scripts/validate_sources.py (it
+# school-zone catalog search is folded into ny/scripts/validate_sources.py (it
 # also inherits that workflow's monthly cron slot).
 #
-# scripts/validate_sources.py never edits the app (swapping a dataset id is a
+# ny/scripts/validate_sources.py never edits the app (swapping a dataset id is a
 # schema-sensitive judgement call). When it finds drift it exits with a WARN/FAIL
 # status; this workflow then opens — or updates in place — a single tracking
 # issue so a human reviews it. The job itself stays green: the issue is the
 # signal, matching the roster pattern of "officeholder/source changes get a
 # human look before they ship."
+#
+# THE `ny-` PREFIX IS LOAD-BEARING. GitHub Actions reads workflows only from
+# the repository ROOT's .github/workflows, so this file has to live here to run
+# at all — and at the root it shares a namespace with the other two instances.
+# Five basenames collided when the forks were imported as folders
+# (deploy-pages, smoke-test, engine-bump, update-congress-roster,
+# validate-sources), and a collision is worse than a duplicate: the root copy
+# wins, so NYC's refresh would look present and quietly run Chicago's.
+# Every path below is instance-scoped for the same reason — `ny/scripts/…`,
+# `ny/data/app/…`, and a `bot/ny-…` branch that cannot clash with
+# another instance's PR branch.
 
 on:
   schedule:
@@ -38,8 +49,8 @@ jobs:
 
       - name: Install dependencies
         # Only requests is needed (no BeautifulSoup/Playwright); pinned via
-        # scripts/requirements.txt.
-        run: pip install -c scripts/requirements.txt requests
+        # ny/scripts/requirements.txt.
+        run: pip install -c ny/scripts/requirements.txt requests
 
       - name: Validate layer sources
         id: validate
@@ -50,7 +61,7 @@ jobs:
         env:
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
         run: |
-          python3 scripts/validate_sources.py \
+          python3 ny/scripts/validate_sources.py \
             --report source-report.md \
             --status-file status.txt
           echo "status=$(cat status.txt)" >> "$GITHUB_OUTPUT"
@@ -60,15 +71,24 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          title="Layer source drift detected — review needed"
+          title="NYC layer source drift — review needed"
           # Prepend a short header so the issue explains itself, then the report.
           {
-            echo "_Automated by \`.github/workflows/validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`index.html\` (dataset ids) or regenerate the anchor boundaries as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
+            echo "_Automated by \`.github/workflows/ny-validate-sources.yml\` on $(date -u +%Y-%m-%d). Nothing was changed in the app — review each item, then update \`ny/index.html\` (dataset ids) or regenerate the anchor boundaries as needed. Close this issue once addressed; it will reopen/refresh on the next run if drift remains._"
             echo
             cat source-report.md
           } > issue-body.md
 
-          existing="$(gh issue list --state open --search "in:title $title" --json number --jq '.[0].number')"
+          # Search NARROWS; the exact title comparison DECIDES. `gh issue list
+          # --search` ANDs the terms and can return a near-miss, and this repo
+          # now carries three instances' source-drift issues — taking the first
+          # hit would let one instance's monthly run overwrite another's body.
+          # exported, not a command prefix: the prefix form would set TITLE for
+          # `gh` only, and the reader on the other side of the pipe is a
+          # separate process.
+          export TITLE="$title"
+          existing="$(gh issue list --state open --search "in:title $title" --json number,title \
+            | python3 -c 'import json,os,sys; t=os.environ["TITLE"]; print(next((str(i["number"]) for i in json.load(sys.stdin) if i["title"] == t), ""))')"
           if [ -n "$existing" ]; then
             gh issue edit "$existing" --body-file issue-body.md
             gh issue comment "$existing" --body "Refreshed by the monthly source-validation run — see the updated issue body for the current status."

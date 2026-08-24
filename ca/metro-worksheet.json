@@ -320,22 +320,22 @@
   },
   "workflows": [
     {
-      "file": "update-congress-roster.yml",
+      "file": "ca-update-congress-roster.yml",
       "purpose": "CA U.S. House roster refresh (unitedstates/congress-legislators)",
       "schedule": "Mon 13:00 UTC"
     },
     {
-      "file": "update-ca-legislature-roster.yml",
+      "file": "ca-update-legislature-roster.yml",
       "purpose": "CA State Senate + Assembly roster refresh (OpenStates)",
       "schedule": "Tue 13:00 UTC"
     },
     {
-      "file": "update-sf-supervisor-roster.yml",
+      "file": "ca-update-sf-supervisor-roster.yml",
       "purpose": "SF Board of Supervisors roster refresh (DataSF hcgx-vtsb)",
       "schedule": "Wed 13:00 UTC"
     },
     {
-      "file": "validate-sources.yml",
+      "file": "ca-validate-sources.yml",
       "purpose": "source freshness (SF manifest re-derived; full networked run 0 FAIL / 0 WARN)",
       "schedule": "1st of month 14:00 UTC"
     }

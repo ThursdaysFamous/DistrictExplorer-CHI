@@ -1,8 +1,19 @@
 name: Update NYPD precinct commanders
 
-# Weekly refresh of data/app/nypd-precinct-info.json (precinct commanding
+# Weekly refresh of ny/data/app/nypd-precinct-info.json (precinct commanding
 # officers) scraped from the nyc.gov precinct pages. Opens a PR, never commits to
 # main (METRO_EXPANSION_PLAYBOOK §9).
+#
+# THE `ny-` PREFIX IS LOAD-BEARING. GitHub Actions reads workflows only from
+# the repository ROOT's .github/workflows, so this file has to live here to run
+# at all — and at the root it shares a namespace with the other two instances.
+# Five basenames collided when the forks were imported as folders
+# (deploy-pages, smoke-test, engine-bump, update-congress-roster,
+# validate-sources), and a collision is worse than a duplicate: the root copy
+# wins, so NYC's refresh would look present and quietly run Chicago's.
+# Every path below is instance-scoped for the same reason — `ny/scripts/…`,
+# `ny/data/app/…`, and a `bot/ny-…` branch that cannot clash with
+# another instance's PR branch.
 
 on:
   schedule:
@@ -33,28 +44,28 @@ jobs:
       - name: Scrape NYPD precinct commanders
         env:
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
-        run: python3 scripts/nypd_precinct_scraper.py
+        run: python3 ny/scripts/nypd_precinct_scraper.py
       - name: Rebuild roster
-        run: python3 scripts/build_nypd_roster.py
+        run: python3 ny/scripts/build_nypd_roster.py
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 ny/scripts/validate_index.py ny/index.html
       - name: Check for changes
         id: diff
-        run: git diff --quiet -- data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+        run: git diff --quiet -- ny/data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
       - name: Open or update pull request
         if: steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
         run: |
-          branch="bot/nypd-roster-update"
+          branch="bot/ny-nypd-roster-update"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/nypd-precinct-info.json
+          git add ny/data/app/nypd-precinct-info.json
           git commit -m "Update NYPD precinct commanders from nyc.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
             gh pr create --title "Update NYPD precinct commanders" \
-              --body "Automated weekly refresh of precinct commanding officers (\`scripts/nypd_precinct_scraper.py\` + \`build_nypd_roster.py\`). Review before merging." \
+              --body "Automated weekly refresh of precinct commanding officers (\`ny/scripts/nypd_precinct_scraper.py\` + \`build_nypd_roster.py\`). Review before merging." \
               --base main --head "$branch"
           fi
