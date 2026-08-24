@@ -58,10 +58,10 @@ except ImportError:  # pragma: no cover
              "pip install -c scripts/requirements.txt pyshp pyproj shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_ZIP = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_ZIP = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "HenryCountyIL_VR_2026-08-13.zip")
-OUTLINE = os.path.join(REPO_ROOT, "data", "app", "henry-county-outline.json")
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "henry-precincts.json")
+OUTLINE = os.path.join(REPO_ROOT, "il", "data", "app", "henry-county-outline.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "henry-precincts.json")
 SHAPE_STEM = "Precincts"
 
 SOURCE_NOTE = ("Henry County GIS (Bruce Lang), voting-precinct shapefile "

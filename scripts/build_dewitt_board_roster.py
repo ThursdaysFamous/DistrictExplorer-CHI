@@ -43,7 +43,7 @@ MIN_EMAILS = 10
 ALLOWED_ROLES = ("Chairman", "Vice-Chairman")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("dewitt-board-roster")

@@ -77,7 +77,7 @@ import vtd_board_districts as V  # noqa: E402
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "schuyler-precincts.json")
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "schuyler-precincts.json")
 
 COUNTY_FIPS = "169"
 COUNTY_POP_2020 = 6902

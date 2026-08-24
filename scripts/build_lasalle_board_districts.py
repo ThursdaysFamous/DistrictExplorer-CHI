@@ -70,7 +70,7 @@ from scraper_common import make_fail  # noqa: E402  (shared machinery — do not
 # same even-odd test the app uses, so the two libraries cross-check each other.
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "lasalle-county-board-districts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "lasalle-county-board-districts.json")
 
 PRECINCT_URL = ("https://gis.lasallecounty.org/arcgis/rest/services/"
                 "PollingPlaceLocator/MapServer/1/query")

@@ -1,7 +1,7 @@
 name: Update Logan County Board roster
 
 # Weekly refresh of the Logan County Board District card's member roster
-# (data/app/logan-county-board-members.json, fetched by index.html).
+# (il/data/app/logan-county-board-members.json, fetched by index.html).
 # Re-scrapes the county's own Joomla board page (six two-member
 # districts with Chair/Vice-Chair tags and per-member phone + e-mail) and, if anything changed, opens a PR
 # rather than committing directly to main — officeholder data should get a
@@ -47,12 +47,12 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -69,7 +69,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/logan-county-board-members.json
+          git add il/data/app/logan-county-board-members.json
           git commit -m "Update Logan County Board roster from logancountyil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

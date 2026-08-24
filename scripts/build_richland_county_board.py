@@ -56,7 +56,7 @@ EXPECT_MEMBERS = EXPECT_DISTRICTS * SEATS_PER_DISTRICT      # 7 seats
 MIN_EMAILS = 6          # measured 7/7; a page that stops publishing them fails
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("richland-board-roster")

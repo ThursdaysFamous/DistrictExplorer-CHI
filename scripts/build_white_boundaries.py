@@ -92,11 +92,11 @@ from build_stephenson_board_districts import (  # noqa: E402  (same fit machiner
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RAW_DIR = os.path.join(REPO_ROOT, "data", "source", "raw")
+RAW_DIR = os.path.join(REPO_ROOT, "il", "data", "source", "raw")
 MAP_PDF = os.path.join(RAW_DIR, "White County IL voting districts and precincts map.pdf")
-OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "white-precincts.json")
-OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app", "white-county-board-districts.json")
-OUTLINE_PATH = os.path.join(REPO_ROOT, "data", "app", "white-county-outline.json")
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "il", "data", "app", "white-precincts.json")
+OUT_DISTRICTS = os.path.join(REPO_ROOT, "il", "data", "app", "white-county-board-districts.json")
+OUTLINE_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "white-county-outline.json")
 
 COUNTY_FIPS = "193"
 COUNTY2020_URL = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"

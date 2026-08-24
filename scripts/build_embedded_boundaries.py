@@ -39,7 +39,7 @@ import sys
 import tempfile
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 MAPSHAPER = "mapshaper@0.6.102"  # pinned for reproducible output
 
 # name -> how to regenerate its data/app/<out> file.

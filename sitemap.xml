@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://chidistricts.com/</loc>
+    <loc>https://chidistricts.com/il/</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/privacy.html</loc>
+    <loc>https://chidistricts.com/il/privacy.html</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/sources.html</loc>
+    <loc>https://chidistricts.com/il/sources.html</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/police-district.html</loc>
+    <loc>https://chidistricts.com/il/police-district.html</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/school-board.html</loc>
+    <loc>https://chidistricts.com/il/school-board.html</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://chidistricts.com/county-board.html</loc>
+    <loc>https://chidistricts.com/il/county-board.html</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

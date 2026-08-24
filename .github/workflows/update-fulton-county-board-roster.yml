@@ -1,7 +1,7 @@
 name: Update Fulton County Board roster
 
 # Weekly refresh of the Fulton County Board District card's member roster
-# (data/app/fulton-county-board-members.json, fetched by index.html).
+# (il/data/app/fulton-county-board-members.json, fetched by index.html).
 #
 # WHAT THIS SCRAPE IS ACTUALLY DOING. The county's Members page publishes the
 # board TWICE and neither half is sufficient alone:
@@ -57,12 +57,12 @@ jobs:
         run: python3 scripts/build_fulton_board_roster.py /tmp/raw.json
 
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -79,7 +79,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/fulton-county-board-members.json
+          git add il/data/app/fulton-county-board-members.json
           git commit -m "Update Fulton County Board roster from fultoncountyil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

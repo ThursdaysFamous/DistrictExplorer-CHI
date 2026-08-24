@@ -49,7 +49,7 @@ MIN_MEMBERS = 9
 MIN_EMAILS = 8
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 def resolve_roster(records):

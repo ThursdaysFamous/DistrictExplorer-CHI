@@ -27,7 +27,7 @@ EXPECT_MEMBERS = 15
 SEATS = {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3}
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("hancock-board-roster")

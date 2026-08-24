@@ -1,7 +1,7 @@
 name: Update LaSalle County Board roster
 
 # Weekly refresh of the LaSalle County Board District card's member roster
-# (data/app/lasalle-county-board-members.json, fetched by index.html).
+# (il/data/app/lasalle-county-board-members.json, fetched by index.html).
 # Re-scrapes the county's own CivicPlus staff directory (29 single-member
 # districts with full 10-digit phones and district-office e-mails, plus the
 # countywide-elected Board Chairman) and, if anything changed, opens a PR
@@ -11,7 +11,7 @@ name: Update LaSalle County Board roster
 # This roster exists BECAUSE the county's board-boundary GIS is the superseded
 # 2011-2021 map with a 2015-frozen roster (the 2026-07-31 validation-pass
 # finding); the directory is the county's roster of record for the 2022-2031
-# board. The boundary half is data/app/lasalle-county-board-districts.json,
+# board. The boundary half is il/data/app/lasalle-county-board-districts.json,
 # rebuilt by an operator (scripts/build_lasalle_board_districts.py) and
 # drift-checked monthly in validate-sources.yml, not here.
 
@@ -53,12 +53,12 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -75,7 +75,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/lasalle-county-board-members.json
+          git add il/data/app/lasalle-county-board-members.json
           git commit -m "Update LaSalle County Board roster from lasallecountyil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

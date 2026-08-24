@@ -62,11 +62,11 @@ except ImportError:  # pragma: no cover
              "pip install -c scripts/requirements.txt pyogrio pyproj shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_ZIP = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_ZIP = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "MenardCountyIL_CountyBoardDistricts_2026-08-07.zip")
 SHAPE_IN_ZIP = "CountyBoardDistricts.shp"
-OUTLINE = os.path.join(REPO_ROOT, "data", "app", "menard-county-outline.json")
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
+OUTLINE = os.path.join(REPO_ROOT, "il", "data", "app", "menard-county-outline.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                         "menard-commissioner-districts.json")
 
 SOURCE_NOTE = ("Menard County, Beacon/Schneider export of the Commissioner "

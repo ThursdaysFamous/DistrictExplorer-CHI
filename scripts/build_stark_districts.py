@@ -97,10 +97,10 @@ except ImportError:  # pragma: no cover
 KML_NS = {"k": "http://www.opengis.net/kml/2.2"}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_KML = os.path.join(ROOT, "data", "source", "raw",
+SOURCE_KML = os.path.join(ROOT, "il", "data", "source", "raw",
                           "Stark County Illinois Maps 2026-08-03.kml")
-OUTLINE = os.path.join(ROOT, "data", "app", "stark-county-outline.json")
-APP_DIR = os.path.join(ROOT, "data", "app")
+OUTLINE = os.path.join(ROOT, "il", "data", "app", "stark-county-outline.json")
+APP_DIR = os.path.join(ROOT, "il", "data", "app")
 
 # The live export, kept here so a future operator can refresh the archive without
 # hunting for the id. We do NOT fetch it at build time: a hand-maintained consumer

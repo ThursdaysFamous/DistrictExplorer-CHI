@@ -63,7 +63,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_DOC = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_DOC = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "DeWitt County City and Village Officials 2025.docx")
 COUNTY_SITE = "https://www.dewittcountyil.gov/"
 SOURCE_NOTE = ("De Witt County Clerk & Recorder, \"Village/City Officials\" "

@@ -58,8 +58,8 @@ except ImportError:  # pragma: no cover - requests is pinned in requirements.txt
     requests = None
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 HTTP_TIMEOUT = 25
 

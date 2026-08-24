@@ -94,8 +94,8 @@ TOWNS = {
 }
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "stephenson-fire-districts.json")
-RAW_DIR = os.path.join(REPO_ROOT, "data", "source", "raw")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "stephenson-fire-districts.json")
+RAW_DIR = os.path.join(REPO_ROOT, "il", "data", "source", "raw")
 FIRE_PDF = os.path.join(RAW_DIR, "Stephenson COUNTY FIRE DISTRICT MAP 070814.pdf")
 
 COUNTY_FIPS = "177"

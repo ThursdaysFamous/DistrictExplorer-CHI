@@ -42,8 +42,8 @@ import sys
 from collections import defaultdict
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
-PLACES_FILE = os.path.join(REPO_ROOT, "data", "source", "st17_il_place_by_county2020.txt")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
+PLACES_FILE = os.path.join(REPO_ROOT, "il", "data", "source", "st17_il_place_by_county2020.txt")
 
 # Census county FIPS for every sourced county, for county-preferred lookup.
 COUNTY_FIPS = {

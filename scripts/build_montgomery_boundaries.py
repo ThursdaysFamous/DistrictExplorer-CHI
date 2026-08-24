@@ -94,13 +94,13 @@ except ImportError:  # pragma: no cover
              "pip install -c scripts/requirements.txt pyogrio pyproj shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_ZIP = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_ZIP = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "MontgomeryCountyIL_GIS_2026-08-06.zip")
 GDB_IN_ZIP = "Overberg Data/OverbergData.gdb"
-OUTLINE = os.path.join(REPO_ROOT, "data", "app", "montgomery-county-outline.json")
-DISTRICTS_OUT = os.path.join(REPO_ROOT, "data", "app",
+OUTLINE = os.path.join(REPO_ROOT, "il", "data", "app", "montgomery-county-outline.json")
+DISTRICTS_OUT = os.path.join(REPO_ROOT, "il", "data", "app",
                              "montgomery-county-board-districts.json")
-PRECINCTS_OUT = os.path.join(REPO_ROOT, "data", "app", "montgomery-precincts.json")
+PRECINCTS_OUT = os.path.join(REPO_ROOT, "il", "data", "app", "montgomery-precincts.json")
 
 DISTRICT_LAYER = "CountyBoardDistricts_2010"
 PRECINCT_LAYER = "Precincts"

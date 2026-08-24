@@ -99,9 +99,9 @@ import tempfile
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app",
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                         "jo-daviess-county-board-districts.json")
-OUTLINE_PATH = os.path.join(REPO_ROOT, "data", "app",
+OUTLINE_PATH = os.path.join(REPO_ROOT, "il", "data", "app",
                             "jo-daviess-county-outline.json")
 
 SHAPE_STEM = "CountyBoardDistricts_2021"

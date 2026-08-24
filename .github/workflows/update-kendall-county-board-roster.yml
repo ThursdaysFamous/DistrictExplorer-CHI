@@ -1,7 +1,7 @@
 name: Update Kendall County Board roster
 
 # Weekly refresh of the consolidated county-board layer's Kendall member
-# roster (data/app/kendall-county-board-members.json, fetched by index.html).
+# roster (il/data/app/kendall-county-board-members.json, fetched by index.html).
 # Re-scrapes kendallcountyil.gov's board-members listing + per-member pages
 # (names, districts, the Chairman role, phones, emails) and, if anything
 # changed, opens a PR rather than committing directly to main — officeholder
@@ -74,7 +74,7 @@ jobs:
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' || true)
           if [ -z "$num" ]; then
-            gh issue create --title "$title" --body "The weekly roster scrape failed on every engine (direct, headless Chromium, and Internet Archive Save Page Now — the county blocks the Archive's crawler too, SPN2 error:no-request). The shipped data/app/kendall-county-board-members.json keeps its last hand-verified state and stays correct until the county changes members. Manual step when this issue is old or an election/appointment happened: re-verify the members against the county's own directory and refresh the file via scripts/build_kendall_county_board_roster.py (see the scraper docstring). This issue is updated by each failed weekly run; close it if the block lifts and a run goes green. Latest failed run: $run_url"
+            gh issue create --title "$title" --body "The weekly roster scrape failed on every engine (direct, headless Chromium, and Internet Archive Save Page Now — the county blocks the Archive's crawler too, SPN2 error:no-request). The shipped il/data/app/kendall-county-board-members.json keeps its last hand-verified state and stays correct until the county changes members. Manual step when this issue is old or an election/appointment happened: re-verify the members against the county's own directory and refresh the file via scripts/build_kendall_county_board_roster.py (see the scraper docstring). This issue is updated by each failed weekly run; close it if the block lifts and a run goes green. Latest failed run: $run_url"
           else
             gh issue comment "$num" --body "Still blocked as of $(date -u +%F) — $run_url"
           fi
@@ -88,13 +88,13 @@ jobs:
       # and well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
         if: steps.scrape.outcome == 'success'
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         if: steps.scrape.outcome == 'success'
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -112,7 +112,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/kendall-county-board-members.json
+          git add il/data/app/kendall-county-board-members.json
           git commit -m "Update Kendall County Board roster from kendallcountyil.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

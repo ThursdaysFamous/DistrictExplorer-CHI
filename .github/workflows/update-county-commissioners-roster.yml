@@ -1,6 +1,6 @@
 name: Update at-large county board rosters
 
-# Weekly refresh of data/app/il-county-commissioners.json — the boards of
+# Weekly refresh of il/data/app/il-county-commissioners.json — the boards of
 # counties that elect their members AT LARGE, rendered on the COUNTY card.
 #
 # These counties — Monroe and Randolph (commission form, three commissioners
@@ -56,12 +56,12 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -78,7 +78,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/il-county-commissioners.json
+          git add il/data/app/il-county-commissioners.json
           git commit -m "Update at-large county board rosters"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

@@ -31,7 +31,7 @@
     {
       "id": "chicago",
       "label": "Chicago",
-      "url": "https://chidistricts.com/",
+      "url": "https://chidistricts.com/il/",
       "emoji": "🌭",
       "bbox": {
         "minLng": -88.6,
@@ -2508,7 +2508,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-v51",
+    "cache_name": "districtry-il-shell-v1",
     "shell_urls": [
       "./",
       "./sources.html",
@@ -2880,7 +2880,7 @@
     }
   },
   "domains": {
-    "canonical": "https://chidistricts.com/"
+    "canonical": "https://chidistricts.com/il/"
   },
   "brand": {
     "app_name": "Chicago District Explorer",
@@ -2905,7 +2905,7 @@
   "exports_name": "ChiExplorer",
   "verified_date": "August 3, 2026",
   "sources_page": {
-    "file": "sources.html",
+    "file": "il/sources.html",
     "credits": [
       {
         "label": "OpenStreetMap contributors (Nominatim & Photon/Komoot)",

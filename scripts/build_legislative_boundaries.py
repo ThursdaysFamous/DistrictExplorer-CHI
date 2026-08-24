@@ -49,7 +49,7 @@ import sys
 import tempfile
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 MAPSHAPER = "mapshaper@0.6.102"  # pinned for reproducible output (matches build_embedded_boundaries.py)
 TIGERWEB = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer"
 IL_FIPS = "17"

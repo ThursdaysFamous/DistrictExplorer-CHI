@@ -44,7 +44,7 @@ import sys
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 SOURCE_LABEL = "Vermilion County Board members page"
 COUNTY_EMAIL_DOMAIN = "vercounty.org"

@@ -200,6 +200,46 @@ R5.
 
 ## Stage log
 
+- **R2.3 — SHIPPED (2026-08-24): the Illinois app moved to `il/` and serves at `/il/`.**
+  The structural half of "one repo, one site": the app is now an instance folder, the root is a
+  redirect stub, and the shape that `/nyc/` and `/sf/` will land in exists. Moved under `il/`:
+  `index.html`, `sw.js`, `sources.html`, the four landing pages, `manifest.webmanifest`,
+  `og-image.png`, `icons/`, `fonts/`, `data/` and the two generated preview pages. Left at the
+  root: `metro-worksheet.json`, `metros.json`, `sitemap.xml`, `robots.txt`, `CNAME`, the
+  IndexNow key, `scripts/`, `docs/`, `districtry/`.
+  **No symlinks anywhere, and that is a finding rather than a preference.** Both a
+  `data → il/data` shim and root `index.html`/`sw.js` shims were considered and rejected on
+  measurements: git does not traverse a symlink, so 60 roster workflows' `git diff --quiet`
+  gate would have gone green-but-silent; and a root `index.html` symlink is incompatible with a
+  redirect stub, since Pages would dereference it and publish a duplicate app at the root.
+  So every path is explicit — 186 `data` joins across 140 scripts, 283 lines across 66
+  workflows, and the gate scripts' own constants.
+  **The root transition is designed around two measured facts.** Navigations were already
+  network-first, so no returning visitor is ever served a stale app — the stub reaches them on
+  their first online visit whether or not the worker has updated. But CacheStorage is
+  per-ORIGIN, so a root worker and an `/il/` worker can delete each other's caches. Hence: the
+  root `sw.js` is a kill switch with **no fetch handler at all** (a worker without one is
+  skipped for navigations, which also makes the offline redirect loop structurally impossible),
+  it deletes only the exact legacy cache name rather than sweeping a prefix, the stub
+  unregisters only the registration whose scope is the origin root, and the instance's cache
+  was renamed to `districtry-il-shell-v1` so the two can never name each other's storage. The
+  stub preserves **query and hash** — the hash is the permalink, the query is the tagging every
+  already-copied embed snippet still sends to the old root URL.
+  **Three scripts needed real fixes, not path rewrites.** `check_roster_retention.py` reads its
+  baseline with `git show <base>:<path>`, which cannot follow a move, so it now tries both
+  layouts — without that, every PR *after* the move (not the move itself) would have failed
+  with the wrong diagnosis. `validate_index.py` gained a `SCRIPT_ROOT` for the two repo-level
+  assets it reaches through the index's own directory. `fleet_status.py` gained a per-instance
+  path prefix for the remote fetch of Chicago's own gaps file.
+  Verified: all 19 generated regions, `validate_index.py`, both fence lints, coverage-gaps,
+  county-status, backfilled seats, `validate_workflow_deps.py`, the link gate's surface (1,298
+  URLs), the preview freshness check, **the full Playwright smoke test against
+  `http://localhost:8126/il/`**, and a purpose-written Chromium check of the transition itself:
+  bare `/` redirects, a hash permalink survives, a query+hash embed URL survives with the query
+  intact, and — the one that would have been silent — **the `/il/` worker survives a root
+  visit**. The retention gate was run across the layout change specifically and compared all
+  222 roster files; without the fallback it would have compared zero.
+
 - **R2.1 — SHIPPED (2026-08-24): the template and engine-release channels retired.**
   The operator archived the Template and WI repos and confirmed the NYC/SF consolidation, which
   made two pieces of machinery not merely redundant but actively wrong: the template gate and

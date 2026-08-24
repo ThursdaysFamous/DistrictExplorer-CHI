@@ -128,15 +128,15 @@ except ImportError:  # pragma: no cover - requests is pinned in requirements.txt
     requests = None
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INDEX_HTML = os.path.join(REPO_ROOT, "index.html")
+INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # Every authored HTML page the app serves, not just the app itself. sources.html
 # now carries the credit row that used to live in index.html's footer plus one
 # boundary link per layer, so scanning index.html alone would have quietly
 # dropped ~50 authored URLs off this gate's surface the day that page shipped.
 # A page listed here but absent is skipped, not fatal: a fork without the page
 # is not a broken fork.
-AUTHORED_PAGES = ["index.html", "sources.html", "privacy.html"]
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+AUTHORED_PAGES = ["il/index.html", "il/sources.html", "il/privacy.html"]
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 

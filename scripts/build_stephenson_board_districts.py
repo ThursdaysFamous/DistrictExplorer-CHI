@@ -76,8 +76,8 @@ from build_metro_outline import (  # noqa: E402  (shared machinery — do not fo
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "stephenson-county-board-districts.json")
-RAW_DIR = os.path.join(REPO_ROOT, "data", "source", "raw")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "stephenson-county-board-districts.json")
+RAW_DIR = os.path.join(REPO_ROOT, "il", "data", "source", "raw")
 FREEPORT_PDF = os.path.join(RAW_DIR, "Stephenson COUNTY BOARD FREEPORT TOWNSHIP DISTRICTS 010622.pdf")
 
 COUNTY_FIPS = "177"

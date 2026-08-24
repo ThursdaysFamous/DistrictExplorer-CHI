@@ -32,7 +32,7 @@ MIN_PHONES = 12
 MIN_EMAILS = 17
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 
 fail = make_fail("henry-board-roster")

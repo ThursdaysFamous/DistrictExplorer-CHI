@@ -42,9 +42,9 @@ import subprocess
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(REPO_ROOT, "index.html")
-OUT = os.path.join(REPO_ROOT, "districtry-app.html")
-FAQ_OUT = os.path.join(REPO_ROOT, "districtry-faq.html")
+SRC = os.path.join(REPO_ROOT, "il", "index.html")
+OUT = os.path.join(REPO_ROOT, "il", "districtry-app.html")
+FAQ_OUT = os.path.join(REPO_ROOT, "il", "districtry-faq.html")
 
 STAMP_RE = re.compile(r'<span class="preview-stamp">([^<]*)</span>')
 
@@ -1931,11 +1931,17 @@ def build(stamp_text):
         '<meta name="robots" content="noindex, nofollow" />',
         "robots",
     )
+    # Matched by SHAPE, not by the literal URL: the canonical is worksheet data
+    # (domains.canonical) and moved with the app into il/ in R2.3, which tripped
+    # this transform's exactly-once assertion — working precisely as intended.
+    # A preview that is noindexed must declare no canonical at all, so whatever
+    # the live one currently is, it goes.
     html = sub_once(
         html,
-        '<link rel="canonical" href="https://chidistricts.com/" />\n',
+        re.compile(r'<link rel="canonical" href="[^"]*" />\n'),
         "",
         "canonical",
+        regex=True,
     )
     html = sub_once(
         html,

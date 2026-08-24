@@ -37,7 +37,7 @@ from build_metro_outline import (  # noqa: E402  (shared machinery — do not fo
 )
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 # county slug -> FIPS, display name, and the anchors that prove the built ring
 # still answers correctly. `inside` points sit well within the county; `outside`

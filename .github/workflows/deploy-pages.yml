@@ -1,11 +1,11 @@
 name: Deploy to GitHub Pages
 
 # Publishes only the files the app actually serves — index.html, sw.js,
-# manifest.webmanifest, CNAME, .nojekyll, icons/, and data/app/*.json — instead
+# manifest.webmanifest, CNAME, .nojekyll, icons/, and il/data/app/*.json — instead
 # of the whole branch. The classic "Deploy from a branch" flow shipped the entire
 # tree to the CDN: the scrapers/builders (scripts/), the docs (docs/), and ~5 MB
 # of build-only geometry (data/source/ raw zips+xlsx and the three full-precision
-# data/*.geojson originals that data/app/*.json is simplified from). None of that
+# data/*.geojson originals that il/data/app/*.json is simplified from). None of that
 # is fetched at runtime, so this assembles a curated site directory and uploads
 # that as the Pages artifact.
 #
@@ -86,9 +86,9 @@ jobs:
       # than against an assembled copy that only existed inside this job.
       - name: Static merge gate + fence lint on the tree being published
         run: |
-          python3 scripts/validate_index.py index.html
-          python3 scripts/check_engine_parity.py index.html
-          python3 scripts/check_engine_parity.py sw.js
+          python3 scripts/validate_index.py il/index.html
+          python3 scripts/check_engine_parity.py il/index.html
+          python3 scripts/check_engine_parity.py il/sw.js
 
       - uses: actions/setup-node@v4
         with:
@@ -142,12 +142,12 @@ jobs:
 
       - name: Behaviour gate on the assembled tree (serve + smoke test)
         env:
-          BASE_URL: http://localhost:8000/
+          BASE_URL: http://localhost:8000/il/
         run: |
           python3 -m http.server 8000 &
           server_pid=$!
           for i in $(seq 1 40); do
-            curl -sf http://localhost:8000/ >/dev/null && break
+            curl -sf http://localhost:8000/il/ >/dev/null && break
             sleep 0.5
           done
           node scripts/smoke_test.mjs
@@ -164,9 +164,9 @@ jobs:
             --exclude='.claude' \
             --exclude='scripts' \
             --exclude='docs' \
-            --exclude='data/source' \
-            --exclude='icons/source' \
-            --exclude='data/*.geojson' \
+            --exclude='il/data/source' \
+            --exclude='il/icons/source' \
+            --exclude='il/data/*.geojson' \
             --exclude='node_modules' \
             --exclude='package.json' \
             --exclude='package-lock.json' \

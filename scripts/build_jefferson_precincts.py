@@ -160,10 +160,10 @@ except ImportError:  # pragma: no cover
              "pip install -c scripts/requirements.txt pyshp pyproj shapely")
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE_ZIP = os.path.join(REPO_ROOT, "data", "source", "raw",
+SOURCE_ZIP = os.path.join(REPO_ROOT, "il", "data", "source", "raw",
                           "Jefferson County precinct shape files 2026-08-06.zip")
-OUTLINE = os.path.join(REPO_ROOT, "data", "app", "jefferson-county-outline.json")
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "jefferson-precincts.json")
+OUTLINE = os.path.join(REPO_ROOT, "il", "data", "app", "jefferson-county-outline.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "jefferson-precincts.json")
 # The archive ships as "precinct shape files.zip" holding precinct_shape_files.*;
 # the archive is renamed on the way in so data/source/raw/ says which county.
 SHAPE_STEM = "precinct_shape_files"

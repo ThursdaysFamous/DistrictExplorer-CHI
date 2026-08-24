@@ -63,7 +63,7 @@ from scraper_common import make_fail  # noqa: E402  (shared machinery — do not
 # uses, so the two libraries cross-check each other.
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "grundy-county-board-districts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "grundy-county-board-districts.json")
 
 PRECINCT_URL = ("https://maps.grundyco.org/arcgis/rest/services/"
                 "CountyClerk/PollingPlaces_SPIE_Public/MapServer/1/query")

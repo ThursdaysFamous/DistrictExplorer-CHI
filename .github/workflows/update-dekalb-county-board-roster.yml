@@ -1,7 +1,7 @@
 name: Update DeKalb County Board roster
 
 # Weekly refresh of the DeKalb County Board District card's member roster
-# (data/app/dekalb-county-board-members.json, fetched by index.html).
+# (il/data/app/dekalb-county-board-members.json, fetched by index.html).
 # Re-scrapes the county's own members page (district, name, party, phone,
 # @dekalbcounty.org email) plus its chairperson table, and, if anything changed,
 # opens a PR rather than committing directly to main — officeholder data should
@@ -86,7 +86,7 @@ jobs:
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' || true)
           if [ -z "$num" ]; then
-            gh issue create --title "$title" --body "This week's roster scrape failed on every engine (direct requests, headless Chromium, and the Internet Archive). **This is expected to happen some weeks and not others, and it does not mean the source changed.** dekalbcounty.org serves SiteGround's SG-Captcha, which scores the CALLER'S ADDRESS (\`y=ipr:<address>\` in its own redirect) rather than sampling requests, and GitHub hands out runners from a pool — measured 2026-08-02 across four runs on one commit, three runner addresses were refused and one was carried by plain requests on its first try. So a failed run is address luck; the next scheduled run may well succeed on its own and open its PR as usual. The shipped data/app/dekalb-county-board-members.json keeps its last verified state (confirmed current against the live source on 2026-08-02, from CI) and stays correct until the county changes members. Act on this issue only if it keeps recurring across many weeks or an election/appointment has happened — then re-run the scraper from any host that clears the edge and refresh via scripts/build_dekalb_county_board_roster.py. Close it once runs are landing reliably. Latest failed run: $run_url"
+            gh issue create --title "$title" --body "This week's roster scrape failed on every engine (direct requests, headless Chromium, and the Internet Archive). **This is expected to happen some weeks and not others, and it does not mean the source changed.** dekalbcounty.org serves SiteGround's SG-Captcha, which scores the CALLER'S ADDRESS (\`y=ipr:<address>\` in its own redirect) rather than sampling requests, and GitHub hands out runners from a pool — measured 2026-08-02 across four runs on one commit, three runner addresses were refused and one was carried by plain requests on its first try. So a failed run is address luck; the next scheduled run may well succeed on its own and open its PR as usual. The shipped il/data/app/dekalb-county-board-members.json keeps its last verified state (confirmed current against the live source on 2026-08-02, from CI) and stays correct until the county changes members. Act on this issue only if it keeps recurring across many weeks or an election/appointment has happened — then re-run the scraper from any host that clears the edge and refresh via scripts/build_dekalb_county_board_roster.py. Close it once runs are landing reliably. Latest failed run: $run_url"
           else
             gh issue comment "$num" --body "Refused again on $(date -u +%F) — $run_url (address luck; see the issue body)"
           fi
@@ -100,13 +100,13 @@ jobs:
       # well formed.
       - name: Validate app + data files
         if: steps.scrape.outcome == 'success'
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         if: steps.scrape.outcome == 'success'
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -124,7 +124,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/dekalb-county-board-members.json
+          git add il/data/app/dekalb-county-board-members.json
           git commit -m "Update DeKalb County Board roster from dekalbcounty.org"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

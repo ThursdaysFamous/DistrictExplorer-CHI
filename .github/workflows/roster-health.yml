@@ -6,7 +6,7 @@ name: Roster refresh health
 # floor at their exact board size so any vacancy stops the write rather than
 # shipping a short roster — but the consequence is a red run in the Actions tab
 # and nothing else. No pull request opens (there is no data change to open one
-# with), no issue is filed, and the shipped data/app/ file goes on naming
+# with), no issue is filed, and the shipped il/data/app/ file goes on naming
 # whoever it named on the last good run. So the counties that handle a vacancy
 # most conservatively are exactly the ones whose vacancy is least likely to be
 # noticed.

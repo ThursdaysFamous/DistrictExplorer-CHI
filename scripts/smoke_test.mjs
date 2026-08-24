@@ -65,7 +65,11 @@ const GAP_PROBE = { county: "kankakee", label: "Kankakee", lat: 41.1254, lng: -8
 const MOVE_POINT = { lat: 41.99, lng: -87.66, district: "4" }; // school-board district 4 (vs 12 at the Loop POINT)
 // Straggler fixture (check 2d): one same-origin county-board county's
 // geometry to delay, plus a point inside one of that county's districts.
+// App-RELATIVE on purpose: this doubles as a page.route glob ("**/" + it), and
+// an un-prefixed form matches whatever path the instance is served from. Disk
+// reads go through APP_DIR, which is where the instance lives in the repo.
 const STRAGGLER_FILE = "data/app/stephenson-county-board-districts.json";
+const APP_DIR = "il/";
 const STRAGGLER_POINT = "42.29660,-89.62120"; // Freeport, Stephenson County — inside board District B of the delayed file
 // Anchor layers that declare a location-relevance test (mod.coverage) HIDE at
 // an out-of-coverage point instead of reporting an empty card — this list
@@ -205,7 +209,7 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, BASE);
-    const shipped = JSON.parse(readFileSync("data/app/coverage-gaps.json", "utf8"));
+    const shipped = JSON.parse(readFileSync(APP_DIR + "data/app/coverage-gaps.json", "utf8"));
     const expected = Object.keys(shipped).length;
 
     async function openGaps() {
@@ -592,7 +596,7 @@ try {
   //     point's own district — inside the delayed county — gets highlighted.
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
-    const stragglerBody = readFileSync(STRAGGLER_FILE, "utf8");
+    const stragglerBody = readFileSync(APP_DIR + STRAGGLER_FILE, "utf8");
     const stragglerFeatures = JSON.parse(stragglerBody).features.length;
     const STRAGGLER_DELAY_MS = 8000;
     // STRAGGLER_POINT sits inside a district of the delayed county's file

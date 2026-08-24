@@ -63,7 +63,7 @@ COUNTY_EMAIL_DOMAIN = "douglascountyil.gov"
 MIN_EMAILS = 5          # measured 6 of 7 — the seventh is a typo'd domain, see above
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
+DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 SUFFIX_RE = re.compile(r"\b(jr|sr|ii|iii|iv)\b\.?$", re.I)
 

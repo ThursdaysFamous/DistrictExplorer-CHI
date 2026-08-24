@@ -58,7 +58,7 @@ from build_mason_board_districts import SEATS_PER_DISTRICT  # noqa: E402
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "mason-county-board-members.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "mason-county-board-members.json")
 
 SOURCE_URL = "https://masoncountyil.gov/county-board/"
 ROSTER_PDF = "https://masoncountyil.gov/wp-content/uploads/2026/05/Board-Members-.pdf"

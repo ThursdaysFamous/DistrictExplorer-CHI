@@ -56,7 +56,7 @@ import platinum_canvass                                        # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-OUT_PATH = os.path.join(REPO, "data", "app", "adams-county-board-members.json")
+OUT_PATH = os.path.join(REPO, "il", "data", "app", "adams-county-board-members.json")
 SCRAPER = os.path.join(HERE, "adams_county_board_scraper.py")
 
 EXPECTED_DISTRICTS = 7

@@ -1,7 +1,7 @@
 name: Update Will County Board roster
 
 # Weekly refresh of the Will County Board District card's member roster
-# (data/app/will-county-board-members.json, fetched by index.html). Re-scrapes
+# (il/data/app/will-county-board-members.json, fetched by index.html). Re-scrapes
 # willcountyboard.com's member index + per-member profile pages (names, cities,
 # roles, phones, committee assignments, and Cloudflare-obfuscated emails) and,
 # if anything changed, opens a PR rather than committing directly to main —
@@ -49,12 +49,12 @@ jobs:
       # parse and carry every layer, and every data/app file must be present and
       # well formed. node is preinstalled on ubuntu-latest.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -72,7 +72,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/will-county-board-members.json
+          git add il/data/app/will-county-board-members.json
           git commit -m "Update Will County Board roster from willcountyboard.com"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

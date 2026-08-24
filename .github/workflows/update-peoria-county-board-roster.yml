@@ -1,7 +1,7 @@
 name: Update Peoria County Board roster
 
 # Weekly refresh of the Peoria County Board District card's member roster
-# (data/app/peoria-county-board-members.json, fetched by index.html).
+# (il/data/app/peoria-county-board-members.json, fetched by index.html).
 #
 # Peoria's roster SPINE is a GIS layer, not a page: the county's own
 # ElectoralDistricts service publishes district -> member name, party and
@@ -52,12 +52,12 @@ jobs:
 
       # Gate the regenerated data before it can reach a PR.
       - name: Validate app + data files
-        run: python3 scripts/validate_index.py index.html
+        run: python3 scripts/validate_index.py il/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- data/app/; then
+          if git diff --quiet -- il/data/app/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -74,7 +74,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add data/app/peoria-county-board-members.json
+          git add il/data/app/peoria-county-board-members.json
           git commit -m "Update Peoria County Board roster from peoriacounty.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

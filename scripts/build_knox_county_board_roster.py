@@ -38,7 +38,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-OUT_PATH = os.path.join(REPO, "data", "app", "knox-county-board-members.json")
+OUT_PATH = os.path.join(REPO, "il", "data", "app", "knox-county-board-members.json")
 SCRAPER = os.path.join(HERE, "knox_county_board_scraper.py")
 
 EXPECTED_DISTRICTS = 5

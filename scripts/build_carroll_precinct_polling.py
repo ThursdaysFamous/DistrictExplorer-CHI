@@ -50,7 +50,7 @@ HEADERS = {
     "User-Agent": UA_CHROME_WIN_126,
 }
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "carroll-precinct-polling.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "carroll-precinct-polling.json")
 
 # TIGER 2020 BASENAMEs for Carroll's 22 VTDs — the precinct card's join keys,
 # verified live against TIGERweb 2026-08-01. Keyed here as (notice spelling ->

@@ -51,7 +51,7 @@ from build_metro_outline import group_rings  # noqa: E402  (shared — do not fo
 from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "mcdonough-precincts.json")
+OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "mcdonough-precincts.json")
 
 SERVICE = "https://gis.wiu.edu/arcgis/rest/services/precinct_map/MapServer"
 PRECINCT_LAYER = 4

@@ -631,9 +631,9 @@ def render_layer_matrix(w):
 # and an untouched CI gate (docs/ENGINE_SYNC.md, "a shared-script change must be
 # inert in a fork that hasn't opted in").
 TARGETS = [
-    ("index.html", "metro-config", render_metro_config),
-    ("index.html", "layer-area-rank", render_layer_area_rank),
-    ("sw.js", "sw-metro-config", render_sw_metro_config),
+    ("il/index.html", "metro-config", render_metro_config),
+    ("il/index.html", "layer-area-rank", render_layer_area_rank),
+    ("il/sw.js", "sw-metro-config", render_sw_metro_config),
     ("scripts/validate_index.py", "validator-config", render_validator_config),
     ("scripts/smoke_test.mjs", "smoke-config", render_smoke_config),
     ("CLAUDE.md", "metro-facts", render_metro_facts),
@@ -650,7 +650,7 @@ def targets_for(w):
     """
     targets = list(TARGETS)
     if "verified_date" in w:
-        targets.append(("index.html", "verified-date", render_verified_date))
+        targets.append(("il/index.html", "verified-date", render_verified_date))
     if "perf_profile" in w:
         targets.append((w["perf_profile"]["file"], "perf-config",
                         render_perf_config))
@@ -660,12 +660,12 @@ def targets_for(w):
         targets.append((page, "source-credits", render_source_credits))
         targets.append((page, "layer-matrix", render_layer_matrix))
     if "brand" in w:
-        targets.append(("index.html", "head-analytics", render_head_analytics))
-        targets.append(("index.html", "head-brand", render_head_brand))
-        targets.append(("index.html", "head-theme", render_head_theme))
-        targets.append(("index.html", "brand-palette", render_brand_palette))
-        targets.append(("index.html", "masthead-brand", render_masthead_brand))
-        targets.append(("index.html", "goatcounter", render_goatcounter))
+        targets.append(("il/index.html", "head-analytics", render_head_analytics))
+        targets.append(("il/index.html", "head-brand", render_head_brand))
+        targets.append(("il/index.html", "head-theme", render_head_theme))
+        targets.append(("il/index.html", "brand-palette", render_brand_palette))
+        targets.append(("il/index.html", "masthead-brand", render_masthead_brand))
+        targets.append(("il/index.html", "goatcounter", render_goatcounter))
         if "sources_page" in w:
             targets.append((w["sources_page"]["file"], "sources-palette",
                             render_sources_palette))
