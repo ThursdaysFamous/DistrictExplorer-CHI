@@ -1,17 +1,26 @@
+<!-- ==== TEMPLATE:BEGIN head-open ==== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- ==== TEMPLATE:END head-open ==== -->
 
+<!-- ==== TEMPLATE:BEGIN head-analytics ==== -->
 <!-- analytics stripped: unlisted preview -->
+<!-- ==== TEMPLATE:END head-analytics ==== -->
 
+<!-- ==== TEMPLATE:BEGIN head-meta ==== -->
 <title>districtry / il — working preview (unlisted)</title>
 <meta name="description" content="Unlisted working preview of the Districtry re-skin. The live product is chidistricts.com." />
 <meta name="robots" content="noindex, nofollow" />
 
 
+<!-- ==== TEMPLATE:END head-meta ==== -->
 
+<!-- ==== TEMPLATE:BEGIN head-jsonld ==== -->
+<!-- ==== TEMPLATE:END head-jsonld ==== -->
+<!-- ==== TEMPLATE:BEGIN head-assets ==== -->
 <meta name="theme-color" content="#6d3fd1">
 
 <link rel="icon" type="image/svg+xml" href="districtry/icons/favicon.svg" />
@@ -755,12 +764,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
   line-gap-override: 0.00%;
   size-adjust: 107.40%;
 }
+  /* ==== TEMPLATE:END head-assets ==== */
+  /* ==== TEMPLATE:BEGIN palette ==== */
   :root {
     /* ---- Chicago flag palette ---- */
     --accent: #41B6E6;        /* flag stripe blue */
     --accent-deep: #0B5394;   /* deeper blue for text/links on light bg */
     --accent-warm: #C8102E;         /* flag star red */
     --accent-warm-deep: #9C0B24;
+  /* ==== TEMPLATE:END palette ==== */
   /* ==== ENGINE:BEGIN styles-core ==== */
 
     --ink: #14181C;
@@ -1728,6 +1740,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .card-details-hint-word { display: none; }
   }
   /* ==== ENGINE:END styles-card-v2 ==== */
+  /* ==== TEMPLATE:BEGIN styles-school-chips ==== */
   /* ---- School Location layer: type filter + color-coded nearest list ---- */
   /* School Location card (Handoff 3 §8a/8b): type chips + typed rows.
      On-state chip colors are set inline from the type palette; this is the
@@ -1754,6 +1767,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     padding: 4px 11px; cursor: pointer; white-space: nowrap;
   }
   .school-list-empty { padding: 12px 18px; margin: 0; color: var(--slate); }
+  /* ==== TEMPLATE:END styles-school-chips ==== */
 
   /* ==== ENGINE:BEGIN styles-footer ==== */
   /* ---- Footer: a dark bookend echoing the masthead ---- */
@@ -2082,6 +2096,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .map-panning .region-highlight { filter: none; transition: none; }
   .poi-pin { background: none; border: none; }
   /* ==== ENGINE:END styles-markers ==== */
+  /* ==== TEMPLATE:BEGIN styles-masthead-actions ==== */
   /* Chicago-specific: the masthead action row — the Data-gaps button and the
      sources-page link, pinned to the RIGHT of the wordmark so the masthead
      reads as one bar (brand left, actions right) instead of a title with a
@@ -2186,6 +2201,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
      the district vocabulary a first-time (or crawling) visitor reads before a
      point is picked. Styled a step down from the primary prompt above it. */
   .empty-state .empty-state-lede { font-size: 12.5px; margin-top: 12px; max-width: 40ch; color: var(--slate-soft); }
+  /* ==== TEMPLATE:END styles-masthead-actions ==== */
+  /* ==== TEMPLATE:BEGIN styles-faq ==== */
   /* Chicago-specific: evergreen FAQ below the tool — crawlable answers to the
      district questions people search for, kept in collapsed <details> so they
      stay indexable without cluttering the UI. */
@@ -2198,6 +2215,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .faq-section summary::after { content: "+"; color: var(--accent-deep); font-size: 22px; font-weight: 400; line-height: 1; }
   .faq-section details[open] summary::after { content: "\2013"; }
   .faq-section details p { margin: 0 0 16px; color: var(--slate); font-size: 14px; line-height: 1.55; max-width: 70ch; }
+  /* ==== TEMPLATE:END styles-faq ==== */
   /* ==== ENGINE:BEGIN styles-hover-responsive ==== */
 
   /* ---- hover explorer: a live popup that follows the cursor and names the
@@ -2353,6 +2371,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
   .rel-unpin-btn:hover { background: #FBECEE; }
   /* ==== ENGINE:END styles-hover-responsive ==== */
+  /* ==== TEMPLATE:BEGIN body-shell ==== */
 </style>
 
 <style id="districtry-skin">
@@ -3288,7 +3307,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ 09758b2 on 2026-08-24</span></small>
+      <small>Click the map for every district you&#39;re in, and who represents you.<span class="preview-stamp">unlisted preview · index.html @ 8f04575 · 2026-08-24</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3324,6 +3343,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <button type="button" id="gaps-btn" class="footer-link-btn">What data is missing?</button>
       <!-- ==== ENGINE:END gaps-html ==== -->
       <a class="masthead-action-link" href="./sources.html">Sources &amp; data layers</a>
+<!-- ==== TEMPLATE:END body-shell ==== -->
+<!-- ==== TEMPLATE:BEGIN body-why-link ==== -->
       <!-- The maker's own account of why this project exists. overberg.co's
            nav names the page "Why this exists" and links it as /why/ with the
            trailing slash — both copied here verbatim rather than paraphrased,
@@ -3334,6 +3355,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <a class="masthead-action-link" href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a>
       <span class="districtry-toggle-sep" aria-hidden="true"></span>
       <button type="button" class="districtry-theme-toggle" aria-label="Switch to the dark theme"><span class="dtt-labels"><span class="dtt-dark">Dark</span><span class="dtt-light">Light</span></span></button>
+<!-- ==== TEMPLATE:END body-why-link ==== -->
+<!-- ==== TEMPLATE:BEGIN body-main ==== -->
     </div>
   </div>
 </header>
@@ -3399,7 +3422,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </section>
 </main>
+<!-- ==== TEMPLATE:END body-main ==== -->
 
+<!-- ==== TEMPLATE:BEGIN body-faq ==== -->
 <div class="flag-stripe" aria-hidden="true"></div>
 
 <section class="faq-section" aria-labelledby="faq-heading">
@@ -3454,7 +3479,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p>No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official.</p>
   </details>
 </section>
+<!-- ==== TEMPLATE:END body-faq ==== -->
 
+<!-- ==== TEMPLATE:BEGIN body-footer ==== -->
 <div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
   <div class="footer-inner">
@@ -3534,6 +3561,7 @@ function initChiExplorer() {
   /* =========================================================================
    * CORE — shared across every layer module. Built once; rarely touched.
    * ======================================================================= */
+  /* ==== TEMPLATE:END body-footer ==== */
 
   /* ==== METRO:BEGIN config ==== */
   /* ==== GENERATED:BEGIN metro-config ==== */
@@ -3605,6 +3633,7 @@ function initChiExplorer() {
   /* ==== GENERATED:END metro-config ==== */
   /* ==== METRO:END config ==== */
 
+  /* ==== TEMPLATE:BEGIN core-config ==== */
   /* ==== ENGINE:BEGIN map-chrome-classes ==== */
   /* Neutral class names for the shared map chrome, applied by engine code and
    * styled by the fenced styles-markers CSS. Formerly fork-prefixed and worksheet-
@@ -3654,7 +3683,9 @@ function initChiExplorer() {
     iconSize: [34, 34],
     iconAnchor: [17, 17]
   });
+  /* ==== TEMPLATE:END core-config ==== */
 
+  /* ==== TEMPLATE:BEGIN marker-water-taxi-icon ==== */
   /* ---------- water-taxi marker: the selection marker becomes the Chicago Water
    * Taxi seal when a clicked/searched point lands on Lake Michigan (open water),
    * not on land — see selectPointMarker(). The logo is a circular seal
@@ -3672,6 +3703,8 @@ function initChiExplorer() {
     iconSize: [50, 50],
     iconAnchor: [25, 25]
   });
+  /* ==== TEMPLATE:END marker-water-taxi-icon ==== */
+  /* ==== TEMPLATE:BEGIN core-when-idle ==== */
   // Run cb during browser idle (fallback: a short timeout). Used to keep
   // conditional-marker art and the decorative coverage wash — both of which PSI
   // measured sitting in the initial-navigation critical chain — OFF the boot
@@ -3679,6 +3712,8 @@ function initChiExplorer() {
   function whenIdle(cb) {
     return (window.requestIdleCallback || function (fn) { return setTimeout(fn, 200); })(cb);
   }
+  /* ==== TEMPLATE:END core-when-idle ==== */
+  /* ==== TEMPLATE:BEGIN marker-water-taxi-preload ==== */
   // Preload at idle (not on the boot critical path) so a water selection still
   // swaps instantly, but the 27 KB PNG doesn't compete with first paint; the
   // load-state guard still prevents a broken/blocked asset from ever producing a
@@ -3700,7 +3735,9 @@ function initChiExplorer() {
     waterTaxiImg.addEventListener("load", function () { finish(true); });
     waterTaxiImg.addEventListener("error", function () { finish(false); });
   }
+  /* ==== TEMPLATE:END marker-water-taxi-preload ==== */
 
+  /* ==== TEMPLATE:BEGIN marker-county-seals ==== */
   /* ---------- location-aware selection marker: beyond the Chicago flag star
    * (inside the city) and the Water Taxi seal (on Lake Michigan), a point that
    * lands in a county outside the city gets that county's seal — the Cook
@@ -3782,7 +3819,9 @@ function initChiExplorer() {
   whenIdle(function () {
     Object.keys(COUNTY_SEAL_URLS).forEach(function (k) { whenSealImgReady(COUNTY_SEAL_URLS[k], function () {}); });
   });
+  /* ==== TEMPLATE:END marker-county-seals ==== */
 
+  /* ==== TEMPLATE:BEGIN core-utils ==== */
   /* ==== ENGINE:BEGIN sanitize ==== */
   /* ---------- sanitize: escape any external string before it touches innerHTML ---------- */
   function sanitize(str) {
@@ -4370,7 +4409,9 @@ function initChiExplorer() {
 
   var selectedMarker = null;
   var pointChip = document.getElementById("point-chip");
+  /* ==== TEMPLATE:END core-utils ==== */
 
+  /* ==== TEMPLATE:BEGIN select-point-marker ==== */
   /* ---------- pick the selection marker for a point by containment, most
    * specific first: inside Chicago → the flag star (already set); on Lake
    * Michigan → the Water Taxi seal; otherwise the containing county's seal (or
@@ -4417,7 +4458,9 @@ function initChiExplorer() {
       }).catch(function () { /* lake load failed — keep the star */ });
     }).catch(function () { /* coverage test failed — keep the star */ });
   }
+  /* ==== TEMPLATE:END select-point-marker ==== */
 
+  /* ==== TEMPLATE:BEGIN core-selection ==== */
   function setSelectedPoint(lat, lng, opts) {
     opts = opts || {};
     state.selectedPoint = { lat: lat, lng: lng };
@@ -5716,6 +5759,7 @@ function initChiExplorer() {
     { id: "geography", label: "Geography" }
   ];
   /* ==== ENGINE:END groups ==== */
+  /* ==== TEMPLATE:END core-selection ==== */
 
   /* ==== GENERATED:BEGIN layer-area-rank ==== */
   // Approximate real-world area ranking, largest to smallest, used to keep
@@ -5776,6 +5820,7 @@ function initChiExplorer() {
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
 
+  /* ==== TEMPLATE:BEGIN core-registry ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
   var layers = [];       // registered modules
   var layerRuntime = {}; // id -> { overlayLayer, overlayLoaded, cardBody }
@@ -7196,6 +7241,8 @@ function initChiExplorer() {
     return wrap;
   }
   /* ==== ENGINE:END card-helpers ==== */
+  /* ==== TEMPLATE:END core-registry ==== */
+  /* ==== TEMPLATE:BEGIN thread-1-geography ==== */
   /* =========================================================================
    * THREAD 1 — GEOGRAPHY: Community Area + ZIP Code
    * Both datasets are small (77 community areas, ~60 ZIPs) so each module
@@ -13250,6 +13297,8 @@ function initChiExplorer() {
     compact: true // 4b name-only card (no meta field — the ZIP is the value)
   });
 
+  /* ==== TEMPLATE:END thread-1-geography ==== */
+  /* ==== TEMPLATE:BEGIN thread-2-safety ==== */
   /* =========================================================================
    * THREAD 2 — PUBLIC SAFETY: Police District + Police Stations + Fire Stations
    * Police District follows the Thread 1 polygon pattern exactly, now sourced
@@ -14015,6 +14064,8 @@ function initChiExplorer() {
     }
   });
 
+  /* ==== TEMPLATE:END thread-2-safety ==== */
+  /* ==== TEMPLATE:BEGIN thread-3-schools ==== */
   /* =========================================================================
    * THREAD 3 — SCHOOLS: Elementary / Middle / High attendance zones
    * All three are the same point-in-polygon pattern as Thread 1/2's polygon
@@ -14559,6 +14610,8 @@ function initChiExplorer() {
     }
   });
 
+  /* ==== TEMPLATE:END thread-3-schools ==== */
+  /* ==== TEMPLATE:BEGIN thread-4-political ==== */
   /* =========================================================================
    * THREAD 4 — POLITICAL: Ward+Alderman, U.S. House, IL Senate/House, School Board
    * Five layers, three different join patterns:
@@ -16081,6 +16134,8 @@ function initChiExplorer() {
   });
 
 
+  /* ==== TEMPLATE:END thread-4-political ==== */
+  /* ==== TEMPLATE:BEGIN starter-modules ==== */
   /* =========================================================================
    * THREAD 6 — POLITICAL (judicial & county): IL Supreme Court district +
    * Cook County Board of Review district.
@@ -26069,6 +26124,8 @@ function initChiExplorer() {
     }
   }());
 
+  /* ==== TEMPLATE:END starter-modules ==== */
+  /* ==== TEMPLATE:BEGIN tail-fences ==== */
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -26625,7 +26682,9 @@ function initChiExplorer() {
   /* =========================================================================
    * BOOT
    * ======================================================================= */
+  /* ==== TEMPLATE:END tail-fences ==== */
 
+  /* ==== TEMPLATE:BEGIN sidebar-rank ==== */
   // Sidebar order — the governance-informed rank each group's blocks render
   // in (docs/EXPANSION_GUIDE.md Part 5 "Sidebar placement standard"):
   // identity hierarchy, then representation, then service/taxing overlays,
@@ -26659,6 +26718,8 @@ function initChiExplorer() {
     "community-area", "zip-code", "park-district", "library-district",
     "mwrd", "tif-district", "post-office", "library"
   ];
+  /* ==== TEMPLATE:END sidebar-rank ==== */
+  /* ==== TEMPLATE:BEGIN tail-boot ==== */
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -26673,6 +26734,8 @@ function initChiExplorer() {
 
   buildGroupsUI();
   applyStateFromHash(); // restore a shared #point=…&layers=… link, if present
+  /* ==== TEMPLATE:END tail-boot ==== */
+  /* ==== TEMPLATE:BEGIN wash-comment ==== */
   // Out-of-scope wash: the METRO edge, not the city line. It used to be drawn
   // from the ERSB school-board tiling, i.e. Chicago's limits, which washed all
   // of suburban Cook and the six collar counties — a claim the data stopped
@@ -26690,6 +26753,8 @@ function initChiExplorer() {
   // fetch PSI measured in the 669 ms initial-navigation chain for a decorative
   // wash (OPTIMIZATION_PLAYBOOK's recommended fix). Still at idle, and the
   // wash still skips silently on any error — it is a hint, not data.
+  /* ==== TEMPLATE:END wash-comment ==== */
+  /* ==== TEMPLATE:BEGIN tail-close ==== */
   function drawDistrictryCoverage() {
     var stateUrl = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/0/query?where=" +
       encodeURIComponent("STUSAB='IL'") + "&outFields=NAME&returnGeometry=true&geometryPrecision=3&outSR=4326&f=geojson";
@@ -27112,3 +27177,4 @@ if (document.readyState === "loading") {
 <!-- SW registration stripped: unlisted preview -->
 </body>
 </html>
+<!-- ==== TEMPLATE:END tail-close ==== -->
