@@ -25,7 +25,7 @@
   },
   "socrata_host": "https://data.cityofchicago.org",
   "socrata_app_token": "",
-  "repo_issues": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new",
+  "repo_issues": "https://github.com/ThursdaysFamous/districtry/issues/new",
   "feedback_subject": "districtry Illinois feedback",
   "metro_explorers": [
     {
@@ -338,7 +338,7 @@
           },
           {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
-            "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
+            "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "No roster is joined; each card links the circuit court that seats the judges.",
@@ -366,7 +366,7 @@
           },
           {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
-            "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
+            "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "Cook joins the county's own live elected-officials table on the same server. Every other county joins a roster rebuilt weekly by CI from that county's own board page — two counties whose boards publish nothing online ride a document their clerk sent, and the refresh says so out loud rather than implying it was re-read.",
@@ -412,7 +412,7 @@
           },
           {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
-            "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
+            "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "Most counties publish no trustee roster alongside the boundary, so most cards name the district only; where a county's GIS carries district contact details, the card shows them.",
@@ -458,7 +458,7 @@
           },
           {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
-            "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
+            "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "Name-only in most counties; where a county's GIS carries commissioners or a district office, the card shows them.",
@@ -486,7 +486,7 @@
           },
           {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
-            "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
+            "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "Name-only in most counties; where a county's GIS carries trustees or a district office, the card shows them. Cicero's library board comes from the Cook County Clerk's directory of elected officials (cook-library-trustees.json, rebuilt weekly by CI).",
@@ -754,7 +754,7 @@
           },
           {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
-            "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md"
+            "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "No officeholder. Where the county publishes polling places, the card names the one serving the precinct; where it publishes a board-district join, the card names that too.",
@@ -2968,7 +2968,7 @@
       },
       {
         "label": "County and municipal governments across Illinois",
-        "url": "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/COUNTY_STATUS.md",
+        "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md",
         "note": "Dozens of individual county GIS services, board pages and clerk directories — each named in the row of the layer it feeds, and tracked per county in COUNTY_STATUS.md."
       }
     ]

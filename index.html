@@ -239,6 +239,9 @@ footer { margin-top: 52px; padding-top: 20px; border-top: 1px solid var(--border
 footer a { color: var(--brand-600); }
 footer a:hover { color: var(--brand-700); }
 footer p { margin: 0 0 8px; max-width: 46em; }
+/* The front door had no links at all — no way to reach the privacy page
+   or the source from the page most visitors land on first. */
+footer .foot-links { margin-top: 12px; }
 
 @media (max-width: 560px) {
   .wrap { padding: 36px 18px 56px; }
@@ -311,6 +314,8 @@ footer p { margin: 0 0 8px; max-width: 46em; }
          and it never guesses at who holds a seat — where no verifiable roster
          exists, it links the official body instead.</p>
       <p>Each place above names its own sources on its sources page.</p>
+      <p class="foot-links"><a href="il/privacy.html">Privacy</a> ·
+         <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">Source on GitHub</a></p>
     </footer>
   </div>
 </body>

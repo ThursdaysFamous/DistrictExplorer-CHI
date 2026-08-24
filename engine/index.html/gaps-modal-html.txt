@@ -5,6 +5,6 @@
     <h2 id="gaps-title">What data is missing</h2>
     <p>This app only shows what a government actually publishes. Where a district or an officeholder is missing, it is nearly always because nobody publishes it, or because the publisher won't let a program read it — not because the code isn't written. Each line below says what you won't see and where; open one to find out why, and what would fix it.</p>
     <div id="gaps-body"></div>
-    <p class="gaps-credit">Found a source? Every accepted one is credited by name in <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>. There's no cash bounty — the credit is the reward.</p>
+    <p class="gaps-credit">Found a source? Every accepted one is credited by name in <a href="https://github.com/ThursdaysFamous/districtry/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>. There's no cash bounty — the credit is the reward.</p>
   </div>
 </div>

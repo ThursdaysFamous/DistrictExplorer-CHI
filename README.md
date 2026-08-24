@@ -4,11 +4,11 @@
 **Click any point in Chicago — or search an address — and see every civic district that contains it, and who represents you there.**
 <!-- ==== GENERATED:END metro-header ==== -->
 
-A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. Deployed as a static site to [chidistricts.com](https://chidistricts.com/) — any static host or server works.
+A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. Deployed as a static site to [districtry.com/il/](https://districtry.com/il/) — any static host or server works.
 
 ![Chicago District Explorer showing a downtown point with the U.S. House, IL State House, IL State Senate and Cook County Board of Review layers on, each card naming the officeholder](docs/screenshot.png)
 
-This is the reference implementation of a small fleet of sibling metro forks ([nyc.chidistricts.com](https://nyc.chidistricts.com/), [sf.chidistricts.com](https://sf.chidistricts.com/)). The metro-agnostic engine inside `index.html` stays byte-identical across forks; everything city-specific lives in `metro-worksheet.json` and the `METRO:BEGIN config` block. The fleet-wide layer inventory is [`docs/DATA_LAYER_GUIDEBOOK.md`](docs/DATA_LAYER_GUIDEBOOK.md).
+This is the reference implementation of a fleet that now lives in ONE repo: Illinois at [`il/`](https://districtry.com/il/), New York City at [`ny/`](https://districtry.com/ny/) and San Francisco at [`ca/`](https://districtry.com/ca/), each an instance folder served from its own path. The per-metro forks are retired — the shared engine has ONE copy under `engine/` and `scripts/compose_app.py` splices it into every instance, so parity is what the layout makes true rather than what a checker asserts. Everything city-specific lives in that instance's `metro-worksheet.json` and its `METRO:BEGIN config` block. The fleet-wide layer inventory is [`docs/DATA_LAYER_GUIDEBOOK.md`](docs/DATA_LAYER_GUIDEBOOK.md).
 
 ## What it answers
 
@@ -84,7 +84,7 @@ Stable core + pluggable layer modules, all inside `index.html`. The full contrac
 
 ### Data sources
 
-The reader-facing version of this is **[chidistricts.com/sources.html](https://chidistricts.com/sources.html)** (`sources.html`): the same credits, plus a **layer matrix** giving each of the app's layers its own row — what it answers, the publisher its boundary comes from, where the names on its card come from, and the ground it answers on. It is generated from `metro-worksheet.json`'s `layers[].source`, off the same list that drives the layer registry, so it cannot fall behind the app. The table below stays as the maintainer's summary, grouped by publisher rather than by layer.
+The reader-facing version of this is **[districtry.com/il/sources.html](https://districtry.com/il/sources.html)** (`il/sources.html`): the same credits, plus a **layer matrix** giving each of the app's layers its own row — what it answers, the publisher its boundary comes from, where the names on its card come from, and the ground it answers on. It is generated from `metro-worksheet.json`'s `layers[].source`, off the same list that drives the layer registry, so it cannot fall behind the app. The table below stays as the maintainer's summary, grouped by publisher rather than by layer.
 
 | Source | Used for |
 |---|---|

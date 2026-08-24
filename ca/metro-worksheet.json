@@ -19,7 +19,7 @@
   },
   "socrata_host": "https://data.sfgov.org",
   "socrata_app_token": "",
-  "repo_issues": "https://github.com/ThursdaysFamous/DistrictExplorer-SF/issues/new",
+  "repo_issues": "https://github.com/ThursdaysFamous/districtry/issues/new",
   "feedback_subject": "San Francisco District Explorer feedback",
   "metro_explorers": [
     {
