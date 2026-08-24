@@ -182,6 +182,7 @@ jobs:
           EXCLUDES=(
             .git .github .claude scripts docs
             il/data/source il/icons/source 'il/data/*.geojson'
+            fonts/barlow-fontface.css
             node_modules package.json package-lock.json
             sf nyc
             engine metros.json metro-worksheet.json schema CLAUDE.md

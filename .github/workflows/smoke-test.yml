@@ -92,6 +92,14 @@ jobs:
       - name: Backfilled board seats still stamped
         run: python3 scripts/backfill_board_seats.py --check
 
+      # The root landing page is GENERATED from metros.json + the Districtry
+      # tokens (R4). This is its drift gate: hand-editing the page, or adding a
+      # place to the fleet without regenerating, fails here rather than shipping
+      # a front door that disagrees with the manifest. It is also what catches a
+      # renamed design token — the builder names the ones it needs. Stdlib only.
+      - name: Landing page matches the fleet manifest
+        run: python3 scripts/build_landing_page.py --check
+
       # A `#` comment between two backslash-continued lines does not annotate
       # the command, it TERMINATES it — bash joins the continuation first. Six
       # lines of well-meant explanation inside the deploy's rsync invocation
@@ -224,4 +232,10 @@ jobs:
           BASE_URL=http://localhost:8000/il/  node scripts/smoke_test.mjs     || status=1
           BASE_URL=http://localhost:8000/sf/  node sf/scripts/smoke_test.mjs  || status=1
           BASE_URL=http://localhost:8000/nyc/ node nyc/scripts/smoke_test.mjs || status=1
+          # The root landing page and — the part that matters — its forwarding
+          # guard, which is what keeps every already-distributed share link and
+          # embed snippet built from the OLD root URL reaching the app. A regex
+          # typo there breaks other people's pages silently, on a page that still
+          # looks right and still passes its drift check.
+          BASE_URL=http://localhost:8000        node scripts/landing_test.mjs || status=1
           exit $status

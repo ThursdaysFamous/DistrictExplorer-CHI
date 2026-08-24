@@ -223,6 +223,74 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R4 (part 1) — SHIPPED (2026-08-24): the root becomes the fleet's front door.**
+  "One repo, one site" only pays off if the site has a door. R2.3 left the root a redirect stub;
+  it is now the Districtry landing page — the mark, the wordmark, and the places the fleet
+  answers for — with the drift gate, the link gate and a browser gate all pointed at it.
+  **It is GENERATED, and that is the whole argument rather than a convenience.** This record's
+  central finding was that brand identity had decayed into scattered literals; a hand-written
+  front door whose state list is HTML would have reproduced that on day one of the fix. Every
+  fact comes from a file that already owns it — `metros.json` for the places, the Districtry
+  token file for the palette (light AND dark, extracted BY NAME so a rename fails the build
+  instead of emitting a broken custom property), `favicon.svg` inlined as a data URI, and the
+  self-hosted Barlow CSS. Adding a state is a manifest entry and a regenerate; restyling is a
+  token edit and a regenerate. `metros.json` gained three landing fields (`tag`, `landing_name`,
+  `blurb`) and gained them safely, because `sync_fleet` projects a whitelist — they cannot reach
+  an app's worksheet. `landing_name` exists because the two names genuinely differ: the Illinois
+  instance is listed as **Illinois** since it serves 89 counties, while its metro `label` stays
+  **Chicago** for the app's own sibling-metro portal.
+  **THE FORWARDING GUARD IS THE PART THAT MATTERED, and it nearly got missed.** Before R2.3 the
+  app served from this origin's root, so every share link and embed snippet it ever handed out
+  was built from the root URL — `/?utm_source=share&utm_medium=link#point=…` and the `iframe`
+  equivalent — and those sit in other people's pages and bookmarks where they cannot be recalled.
+  Replacing the redirect stub with a landing page would have answered every one of them with a
+  page about Illinois instead of the map they asked for. So the root still forwards any URL
+  carrying app parameters, query and hash intact, and renders the landing page only for a bare
+  visit. That guard is invisible to a diff and would survive its own drift check while broken,
+  which is why `scripts/landing_test.mjs` asserts it in a real browser BOTH ways — an app link
+  forwards, a plain visit and an unrelated campaign query do not — and runs in CI beside the
+  three instance smoke tests.
+  **THAT TEST'S FIRST DRAFT PASSED LOCALLY FOR THE WORST POSSIBLE REASON, AND CI CAUGHT IT.**
+  It compared the post-forward URL byte-for-byte against what was sent, which is not a test of
+  the guard at all: once `/il/` is reached the APP boots and calls `syncUrlHash()`, rewriting the
+  hash into its own canonical form — 5-decimal coordinates, an appended `&zoom=`. The comparison
+  held locally only because this sandbox cannot reach the Leaflet CDN, so the app never booted
+  and never rewrote anything. CI reached the CDN, the app booted, and two checks failed **on a
+  guard that was working perfectly.** The sandbox's known and documented limitation had turned
+  into a silent source of false confidence — the same shape as the three path bugs above, a check
+  that is green because something upstream of it never ran. The fix is to STUB `/il/` so neither
+  the app nor the network is in the measurement, and **the stub is itself asserted** (the page
+  title must be the stub's) rather than assumed, because a route pattern that quietly stopped
+  matching would put the app right back in. Proven against both realistic regressions: a guard
+  that drops the hash fails three checks, one that stops recognising permalinks fails two.
+  **A third instance of the R2.3 path class turned up on the way.** `build_fonts.py` still aimed
+  at a repo-root `fonts/` that nothing read, having been correct only while the Illinois app WAS
+  the root; running it would have left `il/fonts/` untouched. Nothing caught it because it is an
+  occasional operator step, not CI — the same shape as `vendor_leaflet.sh` reading the redirect
+  stub. It is target-aware now (`il` → `il/fonts/`, `landing` → `fonts/`), which is also how the
+  landing page got its four self-hosted Barlow faces — trimmed to exactly the weights the page
+  sets, because a weight it never uses is dead bytes in the published tree.
+  The link gate gained the page for the reason `sources.html` once did: every link on it is a
+  link a reader clicks, and it is now the most prominent authored surface on the site. The
+  sitemap gained the root, which had been deliberately absent while it was a `noindex` stub.
+  Verified: 15 browser checks green — the page renders, all three places list with their tags,
+  Barlow actually loads (not a silent system-ui fallback), permalinks forward with their hash,
+  embed URLs forward with query AND hash, a share link forwards, an unrelated `utm_source`
+  does NOT, and the page boots with no console errors; light, dark and 390px reviewed by
+  screenshot; both drift-gate negatives fire (a hand-edited page, and a new metro missing its
+  landing fields); all three sibling destinations probed live at 200; the assemble step
+  re-simulated so `fonts/` publishes and the generated font CSS does not.
+  **Deliberately absent, and worth stating so a later pass does not read it as an oversight:**
+  no analytics (the stub carried none, the brand block's analytics keys are per-instance, and
+  adding a tracker to a new surface is not a build-step decision), and no coverage map (it would
+  need Leaflet plus one instance's boundary data, and a fleet page loading Illinois geometry
+  tells a lie about the other two).
+  **Still open — R4 part 2, the larger half:** the instances have NOT adopted the skin. That is
+  the 2,440-line `build_districtry_preview.py` and its 27,331-line generated preview becoming the
+  real thing — 43 exactly-once transforms, a 966-line CSS override island, ~669 lines of injected
+  JS, and a fenced engine function rebound at runtime, all of which must land as ordinary
+  worksheet/brand/engine edits before that machinery can retire.
+
 - **R3 (part 2) — SHIPPED (2026-08-24): the tooling reconciliation, and the two defects it
   exposed.** Part 1 unified the engine; this unifies what runs *around* it. `generate_metro_files.py`
   became instance-aware (one script, 33 generated regions across three worksheets, replacing three

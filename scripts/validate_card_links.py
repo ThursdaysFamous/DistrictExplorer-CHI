@@ -135,7 +135,13 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # dropped ~50 authored URLs off this gate's surface the day that page shipped.
 # A page listed here but absent is skipped, not fatal: a fork without the page
 # is not a broken fork.
-AUTHORED_PAGES = ["il/index.html", "il/sources.html", "il/privacy.html"]
+#
+# The repo-root index.html is the FLEET LANDING PAGE as of R4, and it belongs
+# here for exactly the reason sources.html did: every link on it is a link a
+# reader clicks, and it is now the most prominent authored surface on the site.
+# Its three destinations are the fleet's own instances, so a dead one is this
+# repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
+AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html", "il/privacy.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
