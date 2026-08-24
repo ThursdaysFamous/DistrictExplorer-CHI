@@ -228,7 +228,13 @@ starve it forever.
      worksheet `brand` block and `--check` gates them in `smoke-test.yml`. Icons were replaced in
      **place** (`sw.shell_urls` pins the filenames; NY's live under `icons/app/`), a padded
      `icon-maskable-512.png` added per instance and to each shell list, and each
-     `sw.cache_name` bumped so returning installs re-precache.
+     `sw.cache_name` bumped so returning installs re-precache. **iOS was worse than stale — it was
+     absent**: Safari ignores the manifest's icons entirely when adding to the Home Screen and
+     reads `<link rel="apple-touch-icon">`, which no instance had ever carried, so an iPhone
+     install has never had a branded icon to use. `brand.apple_touch_icon` now names the
+     180x180 opaque asset per instance and `head-theme` emits it alongside
+     `apple-mobile-web-app-title` (without which iOS labels the shortcut from `<title>` — the
+     question-led SEO string, truncated mid-question).
   6. Tooling: `build_fonts.py` → self-hosted Barlow woff2s (no font CDN in production);
      `build_og_image.mjs` rebuilt from `OG Card.dc.html`.
   7. **Dark mode** — its own proposal and approval (greenfield engine work).

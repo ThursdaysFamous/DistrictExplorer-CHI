@@ -535,6 +535,11 @@
           "pattern": "^data:image/",
           "description": "The favicon as an inline data: URI, exactly as the <link rel=\"icon\"> href should carry it."
         },
+        "apple_touch_icon": {
+          "type": "string",
+          "pattern": "^[^/].*\\.png$",
+          "description": "Instance-relative href for <link rel=\"apple-touch-icon\"> (e.g. \"icons/apple-touch-icon.png\"; NY's icons live under \"icons/app/\"). iOS ignores the web app manifest's icons entirely when adding to the Home Screen and reads only this tag, so without it an iPhone install has no branded icon to use. The file must be 180x180 and FULLY OPAQUE — iOS composites a transparent apple-touch-icon onto black, and it applies its own corner mask, so the artwork is full-bleed with no rounding of its own. Optional: omit it and no tag is emitted, which is the pre-existing behaviour for a fork that has not shipped the asset."
+        },
         "head": {
           "type": "object",
           "additionalProperties": false,

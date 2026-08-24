@@ -34,6 +34,7 @@ const SHELL_URLS = [
   "./manifest.webmanifest",
   "./icons/app/icon-192.png",
   "./icons/app/icon-512.png",
+  "./icons/app/apple-touch-icon.png",
   "./icons/app/icon-maskable-512.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
 ];
