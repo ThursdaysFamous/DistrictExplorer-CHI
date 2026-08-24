@@ -1162,6 +1162,58 @@ the same island) and a pill-padding override (it loses to the pill spec below it
 written, both changed the threshold by 0px, and both were removed rather than left in looking
 load-bearing.
 
+## The subtitle and the stamp, shortened (operator-directed, 2026-08-24)
+
+Follows the pill move. The masthead's left column is a flex item **as wide as its widest child**,
+and the three children were measured before either was touched:
+
+| | width | note |
+|---|---|---|
+| subtitle (13px) | **529px** | the binding one |
+| generation stamp (11px) | 430px | the next one |
+| wordmark row (32px + mark) | 231px | never binding |
+
+That arithmetic is the reason the operator asked for **both**: shortening only the subtitle would
+have bought 99px and then stopped dead at the stamp. Cutting one without the other is wasted work,
+and the column would have looked untouched below 430px.
+
+**Subtitle**, 529px → **371px**: *"Click the map or search an address to see every district that
+covers it, and who represents it."* → *"Click the map for every district you're in, and who
+represents you."* What went is the naming of the search box, which now sits **immediately to the
+right in the same row** since the pill move and is labelled "Search an Illinois address" — a
+sentence spending 158px to point at a control the reader is already looking at. What stayed is both
+halves of the promise, the districts and the people, because that pairing is the product. The
+trailing "represents **it**" also became "represents **you**", which is what was meant: a district
+does not have a representative on its own behalf.
+
+Rewritten **in the preview only** — the transform already rewrote that line to append the stamp, so
+this is one more substitution in the same `sub_once`. `index.html` keeps its own subtitle and is
+byte-unchanged.
+
+**Stamp**, 430px → **250px**: *"districtry re-skin preview (unlisted) — generated from index.html @
+`<sha>` on `<date>`"* → *"unlisted preview · index.html @ `<sha>` · `<date>`"*. It has to carry
+exactly four facts — unlisted, generated, from which commit, and when — and all four survive; what
+went was re-announcing the brand to a reader looking straight at the wordmark above it. `STAMP_RE`
+reads whatever text is committed and rebuilds with it, so `--check` is indifferent to the format.
+
+The FAQ page's footer opened *"Unlisted re-skin preview."* and then printed the stamp two sentences
+later, so with the new wording it said "unlisted" twice in one paragraph. The lead-in went; the
+stamp says it.
+
+### Measured
+
+| | before | after |
+|---|---|---|
+| title column | 529px | **371px** |
+| masthead one row from | 1530px | **1372px** |
+| masthead height at 1400px | 162px | **118px** |
+| map height at 1400px | 838px | **882px** |
+
+The threshold moved by exactly the 158px the column lost, which is the check that nothing else
+changed. **1400px now sits on one row where it wrapped before**, and the map takes back the 44px the
+second row was holding. Light against dark is **identical at 1400px, 1530px and 1700px** — the
+toggle fix holds. Gates green including the smoke test against both `index.html` and the preview.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

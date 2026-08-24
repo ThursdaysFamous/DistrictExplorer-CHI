@@ -1684,8 +1684,8 @@ __THEME_BOOT__<style>
   </div>
   <p class="back"><a href="districtry-app.html">← Back to the map</a></p>
   __FAQ_SECTION__
-  <footer>Unlisted re-skin preview. <strong>Not for legal or official use.</strong> Boundary and roster
-  data come from public sources that disclaim legal precision. __STAMP__</footer>
+  <footer><strong>Not for legal or official use.</strong> Boundary and roster data come from
+  public sources that disclaim legal precision. __STAMP__</footer>
 </div>
 <script>
   (function () {
@@ -1883,9 +1883,9 @@ def build(stamp_text):
     html = sub_once(
         html,
         "<small>Click the map or search an address to see every district that covers it, and who represents it.</small>",
-        "<small>Click the map or search an address to see every district that covers it, and who represents it."
+        "<small>Click the map for every district you&#39;re in, and who represents you."
         '<span class="preview-stamp">' + stamp_text + "</span></small>",
-        "generation stamp",
+        "subtitle + generation stamp",
     )
 
     # -- a preview page must be inert: no service-worker registration (it
@@ -2252,7 +2252,16 @@ def main():
         ["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT, text=True
     ).strip()
     date = subprocess.check_output(["date", "-u", "+%Y-%m-%d"], text=True).strip()
-    stamp = "districtry re-skin preview (unlisted) — generated from index.html @ %s on %s" % (sha, date)
+    # The stamp is the preview's honesty line and its staleness signal, and it
+    # has to carry exactly four facts: that the page is unlisted, that it is
+    # GENERATED, from which commit of index.html, and when. It used to spend
+    # 430px saying them ("districtry re-skin preview (unlisted) — generated
+    # from index.html @ <sha> on <date>") — a sentence that also re-announced
+    # the brand to a reader already looking at the wordmark above it. Said in
+    # 250px instead, which matters because this line and the subtitle share a
+    # flex column: the column is as wide as its widest child, so shortening
+    # only one of them buys nothing once the other becomes the binding one.
+    stamp = "unlisted preview · index.html @ %s · %s" % (sha, date)
     html, faq_html = build(stamp)
     io.open(OUT, "w", encoding="utf-8").write(html)
     io.open(FAQ_OUT, "w", encoding="utf-8").write(faq_html)
