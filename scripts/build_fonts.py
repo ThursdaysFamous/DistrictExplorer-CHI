@@ -47,7 +47,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # prefix stays "fonts/" for all of them.
 #
 #   il        the Illinois app (il/index.html's --font-display/-body/-mono)
-#   landing   the fleet landing page at the repo root — Districtry's wordmark
+#   landing   the fleet landing page at the repo root — districtry's wordmark
 #             and body type (districtry/tokens/districtry.tokens.css:
 #             --font-heading Barlow Condensed 600, --font-body Barlow)
 #
@@ -57,7 +57,7 @@ TARGETS = {
     "il": {
         "fonts_dir": "il/fonts",
         # Barlow Condensed (display) + Barlow (body) replaced Big Shoulders
-        # Display + Inter when the app adopted the Districtry skin (R4.2). The
+        # Display + Inter when the app adopted the districtry skin (R4.2). The
         # MONO is unchanged and deliberately so: it sets coordinates and ids,
         # where IBM Plex Mono's disambiguated zero is doing real work.
         "families": ("?family=Barlow+Condensed:wght@400;600;700"

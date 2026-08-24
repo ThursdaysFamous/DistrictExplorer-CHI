@@ -40,8 +40,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # id : app file (relative to repo root) : vendor dir (relative to repo root)
 INSTANCES=(
   "il:il/index.html:scripts/vendor/leaflet"
-  "sf:sf/index.html:sf/scripts/vendor/leaflet"
-  "nyc:nyc/index.html:nyc/scripts/vendor/leaflet"
+  "ca:ca/index.html:ca/scripts/vendor/leaflet"
+  "ny:ny/index.html:ny/scripts/vendor/leaflet"
 )
 
 wanted=("$@")

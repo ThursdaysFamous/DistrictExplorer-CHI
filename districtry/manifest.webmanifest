@@ -1,6 +1,6 @@
 {
-  "name": "Districtry — Illinois",
-  "short_name": "Districtry",
+  "name": "districtry — Illinois",
+  "short_name": "districtry",
   "description": "Click any point — see every civic district that contains it, and who represents you there.",
   "start_url": "./index.html",
   "display": "standalone",

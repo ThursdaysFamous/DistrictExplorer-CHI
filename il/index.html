@@ -28,26 +28,26 @@
 
 <!-- ==== TEMPLATE:BEGIN head-meta ==== -->
 <!-- ==== GENERATED:BEGIN head-brand ==== -->
-<title>What district am I in? Find your district — Districtry Illinois</title>
+<title>What district am I in? Find your district — districtry Illinois</title>
 <meta name="description" content="Enter an address or ZIP — or tap the map — to find your district: ward, police district, elected school board, county board, congressional and Illinois legislative districts, and who represents you. Free, no login." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://districtry.com/il/" />
 
 <!-- Open Graph / social share previews (Facebook, LinkedIn, iMessage, Slack…) -->
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="Districtry Illinois" />
-<meta property="og:title" content="What district am I in? — Districtry Illinois" />
+<meta property="og:site_name" content="districtry Illinois" />
+<meta property="og:title" content="What district am I in? — districtry Illinois" />
 <meta property="og:description" content="Click the map or search any Chicago address to see every civic district that covers it — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
 <meta property="og:url" content="https://districtry.com/il/" />
 <meta property="og:image" content="https://districtry.com/il/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Districtry Illinois — a map of Chicago with the question: which districts cover this point, and who represents you?" />
+<meta property="og:image:alt" content="districtry Illinois — a map of Chicago with the question: which districts cover this point, and who represents you?" />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="What district am I in? — Districtry Illinois" />
+<meta name="twitter:title" content="What district am I in? — districtry Illinois" />
 <meta name="twitter:description" content="See every civic district that covers a Chicago address — ward, police district, community area, congressional and state districts, school zones — and who represents you." />
 <meta name="twitter:image" content="https://districtry.com/il/og-image.png" />
 <!-- ==== GENERATED:END head-brand ==== -->
@@ -63,7 +63,7 @@
       "@type": "WebSite",
       "@id": "https://districtry.com/il/#website",
       "url": "https://districtry.com/il/",
-      "name": "Districtry Illinois",
+      "name": "districtry Illinois",
       "description": "Find every civic district that covers a point or address in Chicago, and who represents you there.",
       "inLanguage": "en-US",
       "publisher": { "@id": "https://districtry.com/il/#publisher" }
@@ -76,7 +76,7 @@
     },
     {
       "@type": "WebApplication",
-      "name": "Districtry Illinois",
+      "name": "districtry Illinois",
       "url": "https://districtry.com/il/",
       "description": "Click any point in Chicago, or search an address, to see every civic district that contains it — ward, police district and beat, community area, U.S. House and Illinois legislative districts, Cook County commissioner and Board of Review, elected school board district, and CPS attendance zones — and who represents you.",
       "applicationCategory": "Reference",
@@ -954,7 +954,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
    --font-body stack elsewhere.
 
    RECALIBRATED FOR BARLOW (R4.2). These four numbers are calibrated to ONE
-   typeface, and the Districtry skin changed the body font from Inter to
+   typeface, and the districtry skin changed the body font from Inter to
    Barlow. Carrying Inter's values forward would have left an Arial shaped like
    Inter standing in for Barlow — reintroducing the exact swap-shift this face
    exists to prevent, silently and while still looking deliberate. The values
@@ -978,7 +978,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ==== TEMPLATE:BEGIN palette ==== */
   :root {
   /* ==== GENERATED:BEGIN brand-palette ==== */
-    /* ---- Districtry palette — brand violet is CHROME ONLY, never map data ---- */
+    /* ---- districtry palette — brand violet is CHROME ONLY, never map data ---- */
     --accent: #6d3fd1; /* brand-600 — buttons, links, pills, checked states */
     --accent-deep: #5730ab; /* brand-700 — text and links on light */
     --accent-warm: #b0316e; /* the mark's magenta polygon — Public Safety group dot + focus ring; a DISTINCT hue is required, not preferred, because the engine paints four group dots and violet in both slots would make two identical */
@@ -2597,7 +2597,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         async src="//gc.zgo.at/count.js"></script>
 <!-- ==== GENERATED:END goatcounter ==== -->
 <style id="districtry-skin">
-  /* ==== Districtry skin ====
+  /* ==== districtry skin ====
      Appended AFTER the engine styles, last in <head>, so same-specificity
      rules win the cascade and no ENGINE fence interior is edited. That is the
      blessed outside-the-fence pattern (docs/ENGINE_SYNC.md) and it is why this
@@ -2662,12 +2662,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --card-section-bg: #f8f7fc;
   }
   /* the Chicago flag-stripe motif is that fork's signature device — recolored
-     by the token swap it reads as meaningless violet bands, and the Districtry
+     by the token swap it reads as meaningless violet bands, and the districtry
      design carries no stripe, so the preview hides it */
   .flag-stripe { display: none; }
   /* ==== empty state: the Chicago flag star retires ====
      The six-pointed star is that city's emblem; recoloured violet it was
-     simply an off-brand Chicago motif sitting in a Districtry app. The path
+     simply an off-brand Chicago motif sitting in a districtry app. The path
      element STAYS in the DOM (hidden) because the boot script writes its `d`
      by id and would throw on a missing node — the same discipline as the
      masthead star — and the 5c mark is drawn beside it. */
@@ -2679,6 +2679,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .districtry-mark { width: 38px; height: 38px; flex: none; }
   .title-text { font-weight: 600; text-transform: lowercase; letter-spacing: 0.005em; }
   .title-metro { color: var(--slate-soft); font-weight: 400; }
+  /* The wordmark is a link home, and should read as the wordmark until a
+     reader reaches for it: no underline, no colour shift, the app's own ink. */
+  .dst-wordmark-link { color: inherit; text-decoration: none; }
+  .dst-wordmark-link:hover, .dst-wordmark-link:focus-visible { color: var(--accent); }
+  .dst-wordmark-link:focus-visible { outline: var(--focus-ring); outline-offset: 3px; border-radius: 4px; }
   /* ---- the state code is the fleet switch. The engine already knows the
      fleet (METRO_EXPLORERS) and already renders it as a footer row; this
      puts the same list where a reader looks when they wonder what else
@@ -2687,7 +2692,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
      ENGINE fence and the engine appends to it by id at boot. */
   .dst-metro-switch { position: relative; display: inline-block; }
   .dst-metro-btn {
-    font: inherit; color: inherit; background: none; border: 0;
+    /* The tag is GREY, as .title-metro sets it and the original design had it.
+       This button replaced a plain <span class="title-metro"> when the tag
+       became the fleet switch, and `color: inherit` quietly took the wordmark's
+       ink instead — the control gained a function and lost its colour in the
+       same change. Naming the token here rather than inheriting keeps the two
+       from drifting again. */
+    font: inherit; color: var(--slate-soft); background: none; border: 0;
     padding: 0; margin: 0; line-height: inherit; cursor: pointer;
   }
   .dst-metro-btn:hover, .dst-metro-btn:focus-visible { color: var(--accent); }
@@ -2855,8 +2866,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
      appends to it by id with no null guard, so deleting the element would
      throw at boot. The masthead star is hidden for exactly this reason. */
   .districtry-panel-foot .footer-metros { display: none; }
-  /* ==== canvas app-shell layout (operator-directed: "Implement Districtry
-     App.dc.html", 2026-08-20) ==== */
+  /* ==== canvas app-shell layout (operator-directed: "Implement
+     Districtry App.dc.html", 2026-08-20) ==== */
   /* search moves from floating-over-map into the masthead. The shell's own
      surface (panel fill + drop shadow) was drawn to float over a basemap; in
      a header it reads as a grey box around the field, so the shell goes
@@ -3599,7 +3610,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </svg>
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <!-- ==== GENERATED:BEGIN masthead-brand ==== -->
-        <span class="title-text">Districtry <span class="dst-metro-switch"><button type="button" class="title-metro dst-metro-btn" aria-expanded="false" aria-haspopup="true" aria-label="Districtry Illinois — switch explorer">/ il<span class="dst-metro-caret" aria-hidden="true">&#9662;</span></button><span class="dst-metro-menu" role="menu"></span></span></span>
+        <span class="title-text"><a class="dst-wordmark-link" href="../">districtry</a> <span class="dst-metro-switch"><button type="button" class="title-metro dst-metro-btn" aria-expanded="false" aria-haspopup="true" aria-label="districtry Illinois — switch explorer">/ il<span class="dst-metro-caret" aria-hidden="true">&#9662;</span></button><span class="dst-metro-menu" role="menu"></span></span></span>
       </span>
       <small>Click the map for every district you're in, and who represents you.</small>
         <!-- ==== GENERATED:END masthead-brand ==== -->
@@ -3842,10 +3853,10 @@ function initChiExplorer() {
   // intended use (do NOT put an API Key *secret* here). Blank = sent as-is.
   var SOCRATA_APP_TOKEN = "";
   var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-CHI/issues/new";
-  var FEEDBACK_SUBJECT = "Districtry Illinois feedback";
+  var FEEDBACK_SUBJECT = "districtry Illinois feedback";
   // Brand identity as worksheet data — never read from an ENGINE block
   // without a typeof guard (forks that have not opted in do not define it).
-  var METRO_BRAND = { appName: "Districtry Illinois", productName: "Districtry", instanceTag: "il" };
+  var METRO_BRAND = { appName: "districtry Illinois", productName: "districtry", instanceTag: "il" };
   /* Sibling District Explorer deployments — one canonical list shared by every
    * metro fork. When a new metro launches, add its entry to every fork's
    * worksheet and regenerate (Conversion 3 will source this list from the

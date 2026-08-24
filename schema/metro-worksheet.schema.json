@@ -518,7 +518,7 @@
         },
         "product_name": {
           "type": "string",
-          "description": "The product's brand name shared across instances (e.g. \"Districtry\"). Optional until a rebrand consumes it; emitted onto METRO_BRAND when present."
+          "description": "The product's brand name shared across instances (e.g. \"districtry\"). Optional until a rebrand consumes it; emitted onto METRO_BRAND when present."
         },
         "instance_tag": {
           "type": "string",
