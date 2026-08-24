@@ -55,6 +55,7 @@ import vtd_board_districts as V  # noqa: E402
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DISTRICTS = os.path.join(REPO_ROOT, "data", "app",
                              "hancock-county-board-districts.json")
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "hancock-precincts.json")
 
 COUNTY_FIPS = "067"
 COUNTY_POP_2020 = 17620
@@ -137,7 +138,7 @@ def main():
              % (county_pop, COUNTY_POP_2020))
     # THE JASPER TEST, on the county's own 33 names after the spelling aliases.
     V.check_fabric(vtds, claimed, county_pop, fail)
-    V.check_partition(COMPOSITION, vtds, fail)
+    where = V.check_partition(COMPOSITION, vtds, fail)
 
     districts, pops = V.dissolve(COMPOSITION, vtds, unary_union)
     ideal = county_pop / float(len(COMPOSITION))
@@ -185,7 +186,50 @@ def main():
 
     V.verify_point_in_rings(COMPOSITION, vtds, features, point_in_rings, fail)
 
+    # ---- the precincts themselves -----------------------------------------
+    # Nothing new is sourced here. The 33 census units ARE the county's 33
+    # precincts — that is what the Jasper test above establishes — and the
+    # composition already says which district each belongs to. This absence had
+    # no gap record explaining it, which is the only reason it went unbuilt.
+    # THE COUNTY'S SPELLING SHIPS, not the census's: apply_aliases renamed the
+    # census features onto the names Hancock's own results database prints, and
+    # one of those census names (MONTIBELLO IV) is a typo for Montebello 4.
+    precinct_features = []
+    for key in sorted(vtds, key=lambda k: vtds[k]["basename"]):
+        rec = vtds[key]
+        props = {"name": V.title_case(rec["basename"]), "geoid": rec["geoid"],
+                 "pop2020": rec["pop"], "district": where[key]}
+        if rec.get("censusName") and rec["censusName"] != rec["basename"]:
+            # Kept so a reader who looks the precinct up in census products can
+            # find it, and so the typo is visible rather than silently corrected.
+            props["censusName"] = V.title_case(rec["censusName"])
+        precinct_features.append({"type": "Feature", "properties": props,
+                                  "geometry": V.round_geom(rec["geom"], mapping)})
+    precincts_payload = {
+        "type": "FeatureCollection",
+        "properties": {
+            "source": SOURCE_LABEL, "boardUrl": BOARD_URL,
+            "resultsUrl": RESULTS_URL,
+            "note": ("Hancock County's 33 voting precincts are the Census 2020 "
+                     "voting districts, which ARE the county's own fabric: they "
+                     "carry its 33 precinct names 33/33 as its certified "
+                     "results database prints them, and sum to its exact 2020 "
+                     "population of 17,620. Thirteen names differ in spelling "
+                     "only — the roman/arabic convention (CARTHAGE I for "
+                     "Carthage 1) — and one is a census TYPO, MONTIBELLO IV for "
+                     "Montebello 4. The county's spelling is what ships; where "
+                     "the census differs, its own name rides the feature as "
+                     "censusName rather than being silently corrected away. "
+                     "Every precinct carries its County Board district, because "
+                     "Hancock's districts are unions of WHOLE precincts. No "
+                     "polling place ships: a polling place is a roster fact "
+                     "rather than geometry (the Calhoun rule)."),
+        },
+        "features": precinct_features,
+    }
+
     body = V.dumps(payload)
+    prec_body = V.dumps(precincts_payload)
     print("hancock-boundaries: %d census voting districts -> %d districts"
           % (EXPECTED_VTDS, len(COMPOSITION)))
     print("  populations: %s (total %d = census POP100; worst deviation %.1f%% in "
@@ -194,7 +238,14 @@ def main():
              county_pop, 100 * worst[0], worst[1]))
     print("  tiling: overlap %.2f m2; %.4f%% of the county covered"
           % (overlap, 100 * covered))
-    V.write_or_check([(OUT_DISTRICTS, body)], args.check, REPO_ROOT, fail, "hancock")
+    aliased = sum(1 for k in vtds
+                  if vtds[k].get("censusName")
+                  and vtds[k]["censusName"] != vtds[k]["basename"])
+    print("  precincts: %d shipped, each carrying its district (%d census names "
+          "differ from the county's and ride the feature as censusName)"
+          % (len(precinct_features), aliased))
+    V.write_or_check([(OUT_DISTRICTS, body), (OUT_PRECINCTS, prec_body)],
+                     args.check, REPO_ROOT, fail, "hancock")
 
 
 if __name__ == "__main__":
