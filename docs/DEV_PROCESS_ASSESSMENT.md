@@ -202,6 +202,39 @@ root→`/il/` now, host→districtry.com at R5 — and that is accepted, because
 separately verifiable where a combined move would land DNS, a Pages custom domain, redirect
 shells on the old domains and search re-verification all before the fleet is consolidated.)
 
+### The SEO surface, now carried by all three instances (2026-08-24)
+
+Search Console drove a copy change in the Illinois app that is now carried fleet-wide.
+
+**What it is.** `/il/` shipped it first (DistrictExplorer-CHI#401): a **question-led title** —
+the query phrasing searchers actually type, with the brand as the *trailing, swappable* half —
+a description naming "address or ZIP", the FAQ on its own page, and three per-cluster landing
+pages. `/ny/` and `/ca/` now carry the same title composition, the same ZIP-aware description,
+and a lead **"What district am I in?"** FAQ entry naming that city's own districts. `/ca/` had
+the `.faq-section` styles and no FAQ section at all — a doubled `flag-stripe` sat where one
+belonged — so it gains a seven-entry section and its first `FAQPage` JSON-LD, keyed to its
+post-cutover `districtry.com/ca/#website`. Its counts (11 supervisor districts, 10 police
+districts, 41 neighborhoods) are read off its own shipped `data/app`, not recalled.
+
+**Why the sibling titles still say "… District Explorer".** The cutover moved the domain, not
+the wordmark: `ny/` and `ca/` still carry their own product names, so the SEO change kept them
+rather than half-rebranding a live page. The composition is built so that swap is a suffix
+edit and nothing more — when the wordmark lands, only the trailing half changes, and the
+question phrasing that earns the ranking is untouched.
+
+**What the fleet still owes this surface:**
+
+1. **Landing pages for `/ny/` and `/ca/`.** `/il/` has three; the other two have none, and the
+   query data shows the demand (NYC council-district and community-board phrasings, SF
+   supervisor-district ones — all landing on the *Illinois* property at positions 35–60). This
+   was blocked before the cutover because an unpublished page earns nothing and its canonical
+   was undecidable; both reasons are now gone, and it is ordinary authorable work.
+2. **Per-URL redirects from the old hosts.** Every ranked page needs its own 301 —
+   `nyc.chidistricts.com`, `sf.chidistricts.com` and the Illinois landing pages each carry
+   accumulated equity a root-only rule discards.
+3. **Re-request indexing** for the moved URLs, and keep the question-led composition when
+   titles become worksheet-emitted.
+
 ### The composer, deferred to R3 (operator decision, 2026-08-24)
 
 The composer inversion was scoped into R2 and moved to the head of R3. **R2.1 is what changed

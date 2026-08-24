@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 
-<title>San Francisco District Explorer — find your districts &amp; representatives</title>
-<meta name="description" content="Click any point in San Francisco — or search an address — and see every civic district that contains it, and who represents you there." />
+<title>What district am I in? Find your SF district — San Francisco District Explorer</title>
+<meta name="description" content="Enter an address or ZIP — or tap the map — to find your district: supervisor district, police district, neighborhood, California Assembly and Senate districts, U.S. House district, and who represents you. Free, no login." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://districtry.com/ca/" />
 
 <!-- Open Graph / social share previews (Facebook, LinkedIn, iMessage, Slack…) -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="San Francisco District Explorer" />
-<meta property="og:title" content="San Francisco District Explorer — find your districts and representatives" />
+<meta property="og:title" content="What district am I in? — San Francisco District Explorer" />
 <meta property="og:description" content="Click the map or search any San Francisco address to see every civic district that covers it, and who represents you." />
 <meta property="og:url" content="https://districtry.com/ca/" />
 <meta property="og:image" content="https://districtry.com/ca/og-image.png" />
@@ -24,7 +24,7 @@
 
 <!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="San Francisco District Explorer — find your districts and representatives" />
+<meta name="twitter:title" content="What district am I in? — San Francisco District Explorer" />
 <meta name="twitter:description" content="See every civic district that covers a San Francisco address, and who represents you." />
 <meta name="twitter:image" content="https://districtry.com/ca/og-image.png" />
 
@@ -65,6 +65,23 @@
       "isPartOf": { "@id": "https://districtry.com/ca/#website" },
       "sameAs": "https://github.com/ThursdaysFamous/DistrictExplorer-SF"
     }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://districtry.com/ca/#faq",
+  "isPartOf": { "@id": "https://districtry.com/ca/#website" },
+  "mainEntity": [
+    { "@type": "Question", "name": "What district am I in?", "acceptedAnswer": { "@type": "Answer", "text": "Enter your address or ZIP code in the search box, or click your location on the map above, and the tool lists every district that contains that exact point \u2014 your supervisor district, police district, neighborhood, California State Senate and Assembly districts, U.S. House district, and more \u2014 along with who represents you in each one." } },
+    { "@type": "Question", "name": "How do I find out what supervisor district I'm in?", "acceptedAnswer": { "@type": "Answer", "text": "Search your address or click your location on the map above. The tool shows your San Francisco supervisor district and who represents it, along with every other civic district that covers that exact point." } },
+    { "@type": "Question", "name": "How many supervisor districts does San Francisco have?", "acceptedAnswer": { "@type": "Answer", "text": "San Francisco has 11 supervisor districts, each represented by a member of the Board of Supervisors." } },
+    { "@type": "Question", "name": "What San Francisco police district am I in?", "acceptedAnswer": { "@type": "Answer", "text": "San Francisco is divided into 10 police districts, each run from its own SFPD district station. Select any address above to see the police district that covers it, plus the nearest station." } },
+    { "@type": "Question", "name": "What neighborhood am I in?", "acceptedAnswer": { "@type": "Answer", "text": "The map carries San Francisco's 41 official analysis neighborhoods \u2014 the boundaries the city uses for planning and statistics. Pick any point to see which one contains it." } },
+    { "@type": "Question", "name": "Who represents me in Sacramento and in Congress?", "acceptedAnswer": { "@type": "Answer", "text": "Pick a location to see your U.S. House district, California State Senate district, and California State Assembly district, along with the people currently holding those seats." } },
+    { "@type": "Question", "name": "Is this an official government tool?", "acceptedAnswer": { "@type": "Answer", "text": "No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official." } }
   ]
 }
 </script>
@@ -2608,6 +2625,49 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <div class="flag-stripe" aria-hidden="true"></div>
 
+<section class="faq-section" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">Common questions about San Francisco districts</h2>
+  <details>
+    <summary>What district am I in?</summary>
+    <p>Enter your address or ZIP code in the search box, or click your location on the map above,
+      and the tool lists every district that contains that exact point — your supervisor district,
+      police district, neighborhood, California State Senate and Assembly districts, U.S. House
+      district, and more — along with who represents you in each one.</p>
+  </details>
+  <details>
+    <summary>How do I find out what supervisor district I'm in?</summary>
+    <p>Search your address or click your location on the map above. The tool shows your San Francisco
+      supervisor district and who represents it, along with every other civic district that covers
+      that exact point.</p>
+  </details>
+  <details>
+    <summary>How many supervisor districts does San Francisco have?</summary>
+    <p>San Francisco has 11 supervisor districts, each represented by a member of the Board of
+      Supervisors.</p>
+  </details>
+  <details>
+    <summary>What San Francisco police district am I in?</summary>
+    <p>San Francisco is divided into 10 police districts, each run from its own SFPD district
+      station. Select any address above to see the police district that covers it, plus the nearest
+      station.</p>
+  </details>
+  <details>
+    <summary>What neighborhood am I in?</summary>
+    <p>The map carries San Francisco's 41 official analysis neighborhoods — the boundaries the city
+      uses for planning and statistics. Pick any point to see which one contains it.</p>
+  </details>
+  <details>
+    <summary>Who represents me in Sacramento and in Congress?</summary>
+    <p>Pick a location to see your U.S. House district, California State Senate district, and
+      California State Assembly district, along with the people currently holding those seats.</p>
+  </details>
+  <details>
+    <summary>Is this an official government tool?</summary>
+    <p>No. It draws on public data sources that disclaim legal precision, so always confirm district
+      assignments and officeholders with the relevant government office before relying on them for
+      anything official.</p>
+  </details>
+</section>
 
 <div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
