@@ -262,6 +262,24 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
   still serves from its own domain and carries its own canonical, and publishing here first
   would put a second live copy of each app on this origin. Removing that exclude is the switch
   that makes them live, and it belongs with their domain cutover (R5).
+  **A trap the import created, and marked rather than left:** the fork trees brought their
+  `.github/workflows/` with them, 16 files now sitting at `sf/.github/` and `nyc/.github/`
+  where GitHub cannot see them — inert, but indistinguishable from live to anyone reading the
+  tree. Each directory now carries a README saying so, why they are kept (they are the
+  definition of the refreshes that must be rewritten with instance-aware paths when the
+  automation moves), and where those refreshes actually run today: still in the fork
+  repositories, deliberately, because running both would open two competing PRs against the
+  same roster files.
+  **Measured, for the tooling reconciliation that remains:** `check_engine_parity.py` is
+  byte-identical across all three instances (it rode the engine channel) and can simply be
+  deduped. `generate_metro_files.py` differs by 370 lines, but SF's and NYC's copies are
+  identical to each other — the same version-lag shape the engine blocks had. The rest are
+  genuinely fork-specific rather than drifted: `validate_index.py` (595/635 lines apart),
+  `smoke_test.mjs` (897/723) and `validate_sources.py` (1150/1473) encode each instance's own
+  ground truth, layer set and source manifest. **So "unify the tooling" is the wrong goal for
+  most of them** — the right one is a shared gate that takes the instance as a parameter, with
+  each instance keeping its own facts.
+
   **Still open in R3:** the per-instance tooling. Each instance still carries its own
   `scripts/`, `metro-worksheet.json`, `docs/` and `schema/`; the shared gate scripts still know
   only about `il`. Reconciling those — the 585–891 divergent lines this assessment predicted —
