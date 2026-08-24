@@ -390,7 +390,27 @@ SKIN_ISLAND = """<style id="districtry-skin">
      surface (panel fill + drop shadow) was drawn to float over a basemap; in
      a header it reads as a grey box around the field, so the shell goes
      invisible and the INPUT carries the affordance. */
-  .masthead .map-toolbar { position: static; transform: none; flex: 1 1 320px; max-width: 560px; }
+  /* The three children of .masthead-inner are [title][search][pills], and the
+     row is one line only while their widths fit. Measured at the shipped
+     values: title 529 + gap 28 + search basis 320 + gap 28 + pills 645 +
+     padding 40 = 1590px, which WAS the wrap threshold to the pixel — below it
+     the pills dropped to a second row and the masthead grew from 118px to
+     162px. Operator: move the pills closer to the search bar and narrow the
+     masthead. Whenever the row IS one line the pills already sit right after
+     the search; what separates them is the wrap, so the thing to move is the
+     row's MINIMUM width, and the two levers that do it without touching the
+     copy or the pill spec are the gap between the three children and the
+     search's own flex-basis. The search still GROWS to fill, so nothing
+     changes at any width where the row already fitted — only the point at
+     which it stops fitting. Threshold measured after: 1530px, so the pills
+     stay beside the search for 60px more of window. It is a THRESHOLD and not
+     a cure: any fixed row wraps eventually, and below 1530 this one still
+     does. (Two further levers were tried and dropped as no-ops: the pill row
+     gap is ALREADY 6px further down this island, and a padding override loses
+     to the pill spec below it — tightening the pills means editing that spec,
+     which is a look change rather than a layout one, so it is left alone.) */
+  header.masthead .masthead-inner { gap: 10px 20px; }
+  .masthead .map-toolbar { position: static; transform: none; flex: 1 1 250px; max-width: 560px; }
   .masthead .search-shell { position: relative; box-shadow: none; background: transparent; border-color: transparent; padding: 0; }
   .masthead .search-row input[type="text"] {
     background: var(--dst-sunken);

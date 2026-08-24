@@ -1127,6 +1127,41 @@ today's behaviour.
 Neither change touches an ENGINE fence: the toggle is fork-local markup and skin CSS, and the
 `invalidateSize` call sits in the fork-local controller that already closes over `map`.
 
+## The pills come back up beside the search (operator-directed, 2026-08-24)
+
+*"Move the pills closer to the search bar to narrow the masthead."* Measured first, because the
+pills are **already adjacent** whenever the row is one line — at 1700px the gap between the Search
+button and the first pill was exactly the row's own 28px column gap, with no slack anywhere. What
+separates them is the **wrap**, and what causes the wrap is the row's minimum width:
+
+    title 529 + gap 28 + search basis 320 + gap 28 + pills 645 + padding 40 = 1590px
+
+which was the wrap threshold to the pixel. Below it the pills drop to a second row and the masthead
+goes from **118px to 162px** — the tall, spread-out masthead the request is about.
+
+So the thing to move is that sum. Two levers do it without touching the copy or the pill spec:
+
+- **the inner column gap 28 -> 20** (twice over: 16px), which is also literally "closer"
+- **the search's flex-basis 320 -> 250** (70px). It still `flex-grow`s to fill, so at any width
+  where the row already fitted **nothing changes at all** — only the point at which it stops
+  fitting moves.
+
+Measured after: threshold **1590px -> 1530px**, and at 1560px the masthead goes 162px -> 118px in
+both themes with the pills sitting immediately after the Search button. Light and dark stay
+byte-for-byte identical in layout at 1400px, 1587px and 1700px, so #468's parity is intact.
+
+**Stated as a threshold, not a cure.** Any fixed row wraps eventually; below 1530px this one still
+does, and at 1400px the masthead is still two rows. If more is wanted, the remaining levers are all
+look changes rather than layout ones and are deliberately left for a decision: the pill spec's own
+padding (`7px 13px` / `7px 14px`), the pill font-size (12.5px), and the title block's subtitle
+sentence, which is 529px of the 1590 by itself.
+
+Two things were tried in the first draft and **dropped as measured no-ops**, which is why they are
+not in the diff: a `.masthead-actions { gap: 6px }` override (the skin already sets 6px further down
+the same island) and a pill-padding override (it loses to the pill spec below it). Both were
+written, both changed the threshold by 0px, and both were removed rather than left in looking
+load-bearing.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;
