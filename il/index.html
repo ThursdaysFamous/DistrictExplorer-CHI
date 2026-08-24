@@ -63,7 +63,7 @@
       "@type": "WebSite",
       "@id": "https://chidistricts.com/il/#website",
       "url": "https://chidistricts.com/il/",
-      "name": "Chicago District Explorer",
+      "name": "Districtry Illinois",
       "description": "Find every civic district that covers a point or address in Chicago, and who represents you there.",
       "inLanguage": "en-US",
       "publisher": { "@id": "https://chidistricts.com/il/#publisher" }
@@ -76,7 +76,7 @@
     },
     {
       "@type": "WebApplication",
-      "name": "Chicago District Explorer",
+      "name": "Districtry Illinois",
       "url": "https://chidistricts.com/il/",
       "description": "Click any point in Chicago, or search an address, to see every civic district that contains it — ward, police district and beat, community area, U.S. House and Illinois legislative districts, Cook County commissioner and Board of Review, elected school board district, and CPS attendance zones — and who represents you.",
       "applicationCategory": "Reference",
@@ -94,25 +94,10 @@
   ]
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "@id": "https://chidistricts.com/il/#faq",
-  "isPartOf": { "@id": "https://chidistricts.com/il/#website" },
-  "mainEntity": [
-    { "@type": "Question", "name": "What district am I in?", "acceptedAnswer": { "@type": "Answer", "text": "Enter your address or ZIP code in the search box, or click your location on the map above, and the tool lists every district that contains that exact point — your ward, police district and beat, elected school board district, county board or commissioner district, Illinois House and Senate districts, U.S. House district, and more — along with who represents you in each one." } },
-    { "@type": "Question", "name": "How do I find out what ward I'm in?", "acceptedAnswer": { "@type": "Answer", "text": "Search your address or click your location on the map above. The tool shows your Chicago ward and who represents it, along with every other civic district that covers that exact point." } },
-    { "@type": "Question", "name": "How many wards does Chicago have?", "acceptedAnswer": { "@type": "Answer", "text": "Chicago has 50 wards, each represented by an alderperson on the City Council." } },
-    { "@type": "Question", "name": "What are my Chicago police district and beat?", "acceptedAnswer": { "@type": "Answer", "text": "Chicago is divided into 22 police districts, each split into smaller beats. Select any address above to see the police district and beat that cover it, plus the nearest police station." } },
-    { "@type": "Question", "name": "What is a Chicago community area?", "acceptedAnswer": { "@type": "Answer", "text": "Chicago has 77 official community areas — long-established neighborhood boundaries used for planning and statistics. The tool shows which community area contains any point you pick." } },
-    { "@type": "Question", "name": "Which Chicago school board district am I in?", "acceptedAnswer": { "@type": "Answer", "text": "Chicago now elects its Board of Education from numbered school board districts, each with a sub-district name like 1a or 6b — the scheme CPS materials and candidate guides use. Pick your address above to see your elected school board district and the board member currently holding the seat; vacant seats are shown as vacant, never guessed." } },
-    { "@type": "Question", "name": "Who represents me in Congress and in Springfield?", "acceptedAnswer": { "@type": "Answer", "text": "Pick a location to see your U.S. House district, Illinois State Senate district, and Illinois State House district, along with the people currently holding those seats." } },
-    { "@type": "Question", "name": "Who is my county commissioner or county board member?", "acceptedAnswer": { "@type": "Answer", "text": "The tool works far beyond Chicago: select a point anywhere it serves — from the Wisconsin line to the Metro East — and the county board card shows your county board or commissioner district and the members who represent it, wherever the county publishes that information. Counties that elect their board at large show their members on the County card instead." } },
-    { "@type": "Question", "name": "Is this an official government tool?", "acceptedAnswer": { "@type": "Answer", "text": "No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official." } }
-  ]
-}
-</script>
+<!-- The FAQPage structured data moved to faq.html WITH its questions. FAQ
+     markup must describe content the page actually shows, so leaving it
+     here once the section left would be a schema violation rather than a
+     leftover. -->
 <!-- ==== TEMPLATE:END head-jsonld ==== -->
 <!-- ==== TEMPLATE:BEGIN head-assets ==== -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -2779,7 +2764,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
      am I in"). Hiding it in favour of a page that does not exist would have
      been a silent content and search regression. Giving it its own page is
      still the better end state; it is deferred, not abandoned. */
-  footer.site-footer { display: none; }
+  footer.site-footer { display: none; }  /* the FAQ is its own page now, not a hidden husk */
   /* ==== D: tablets get the two-column layout (operator-approved) =========
      The engine's breakpoint is 900px, so an iPad mini at 768x1024 was handed
      the phone design: a full-width map with the results stacked beneath and
@@ -3654,6 +3639,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <button type="button" id="gaps-btn" class="footer-link-btn">What data is missing?</button>
       <!-- ==== ENGINE:END gaps-html ==== -->
       <a class="masthead-action-link" href="./sources.html">Sources &amp; data layers</a>
+      <a class="masthead-action-link" href="./faq.html">Common questions</a>
 <!-- ==== TEMPLATE:END body-shell ==== -->
 <!-- ==== TEMPLATE:BEGIN body-why-link ==== -->
       <!-- The maker's own account of why this project exists. overberg.co's
@@ -3743,58 +3729,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <!-- ==== TEMPLATE:BEGIN body-faq ==== -->
 <div class="flag-stripe" aria-hidden="true"></div>
 
-<section class="faq-section" aria-labelledby="faq-heading">
-  <h2 id="faq-heading">Common questions about Chicago districts</h2>
-  <details>
-    <summary>What district am I in?</summary>
-    <p>Enter your address or ZIP code in the search box, or click your location on the map above,
-      and the tool lists every district that contains that exact point — your ward,
-      <a href="police-district.html">police district and beat</a>,
-      <a href="school-board.html">elected school board district</a>,
-      <a href="county-board.html">county board or commissioner district</a>, Illinois House and
-      Senate districts, U.S. House district, and more — along with who represents you in each one.</p>
-  </details>
-  <details>
-    <summary>How do I find out what ward I'm in?</summary>
-    <p>Search your address or click your location on the map above. The tool shows your Chicago ward and who represents it, along with every other civic district that covers that exact point.</p>
-  </details>
-  <details>
-    <summary>How many wards does Chicago have?</summary>
-    <p>Chicago has 50 wards, each represented by an alderperson on the City Council.</p>
-  </details>
-  <details>
-    <summary>What are my Chicago police district and beat?</summary>
-    <p>Chicago is divided into 22 police districts, each split into smaller beats. Select any address above to see the police district and beat that cover it, plus the nearest police station.</p>
-  </details>
-  <details>
-    <summary>What is a Chicago community area?</summary>
-    <p>Chicago has 77 official community areas — long-established neighborhood boundaries used for planning and statistics. The tool shows which community area contains any point you pick.</p>
-  </details>
-  <details>
-    <summary>Which Chicago school board district am I in?</summary>
-    <p>Chicago now elects its Board of Education from numbered school board districts, each with a
-      sub-district name like 1a or 6b — the scheme CPS materials and candidate guides use. Pick
-      your address above to see <a href="school-board.html">your elected school board district</a>
-      and the board member currently holding the seat; vacant seats are shown as vacant, never
-      guessed.</p>
-  </details>
-  <details>
-    <summary>Who represents me in Congress and in Springfield?</summary>
-    <p>Pick a location to see your U.S. House district, Illinois State Senate district, and Illinois State House district, along with the people currently holding those seats.</p>
-  </details>
-  <details>
-    <summary>Who is my county commissioner or county board member?</summary>
-    <p>The tool works far beyond Chicago: select a point anywhere it serves — from the Wisconsin
-      line to the Metro East — and the <a href="county-board.html">county board card</a> shows
-      your county board or commissioner district and the members who represent it, wherever the
-      county publishes that information. Counties that elect their board at large show their
-      members on the County card instead.</p>
-  </details>
-  <details>
-    <summary>Is this an official government tool?</summary>
-    <p>No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official.</p>
-  </details>
-</section>
+<!-- The common-questions section is now faq.html, linked from the masthead.
+     One copy, not two: the same nine answers on two URLs would be duplicate
+     content competing with itself. -->
 <!-- ==== TEMPLATE:END body-faq ==== -->
 
 <!-- ==== TEMPLATE:BEGIN body-footer ==== -->
