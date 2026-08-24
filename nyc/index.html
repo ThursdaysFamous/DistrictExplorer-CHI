@@ -2554,8 +2554,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .rel-key { display: flex; align-items: center; }
   .rel-sw { display: inline-block; width: 20px; height: 0; margin-right: 7px; flex: none; }
   .rel-sw-parent { height: 0; border-top: 3px solid #14181C; }
-  .rel-sw-in { border-top: 3px solid #0B5394; }
-  .rel-sw-cross { border-top: 3px dashed #0B5394; }
+  /* ILLUSTRATIVE swatches: the outlines the map actually draws take each
+     layer's own colour darkened (see the pin-relationship block), so these
+     only demonstrate solid=inside vs dashed=crossing. The hue is a METRO
+     fact and had no business being a literal in an engine block — it is a
+     variable now, defaulting to exactly the value that was hardcoded, so an
+     instance that sets nothing renders byte-identically. */
+  .rel-sw-in { border-top: 3px solid var(--rel-swatch, #0B5394); }
+  .rel-sw-cross { border-top: 3px dashed var(--rel-swatch, #0B5394); }
   .rel-note { opacity: 0.7; font-size: 11px; margin-top: 2px; }
   .rel-unpin-btn {
     margin-top: 8px;

@@ -2582,8 +2582,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .rel-key { display: flex; align-items: center; }
   .rel-sw { display: inline-block; width: 20px; height: 0; margin-right: 7px; flex: none; }
   .rel-sw-parent { height: 0; border-top: 3px solid #14181C; }
-  .rel-sw-in { border-top: 3px solid #0B5394; }
-  .rel-sw-cross { border-top: 3px dashed #0B5394; }
+  /* ILLUSTRATIVE swatches: the outlines the map actually draws take each
+     layer's own colour darkened (see the pin-relationship block), so these
+     only demonstrate solid=inside vs dashed=crossing. The hue is a METRO
+     fact and had no business being a literal in an engine block — it is a
+     variable now, defaulting to exactly the value that was hardcoded, so an
+     instance that sets nothing renders byte-identically. */
+  .rel-sw-in { border-top: 3px solid var(--rel-swatch, #0B5394); }
+  .rel-sw-cross { border-top: 3px dashed var(--rel-swatch, #0B5394); }
   .rel-note { opacity: 0.7; font-size: 11px; margin-top: 2px; }
   .rel-unpin-btn {
     margin-top: 8px;
@@ -2658,6 +2664,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --font-display: 'Barlow Condensed', sans-serif;
     --font-body: 'Barlow', 'Barlow Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
     /* --font-mono unchanged: IBM Plex Mono stays self-hosted */
+    /* the relationship-legend swatches: illustrative only, but Chicago-flag
+       blue showed a hue this app never draws. The data tier is what they
+       illustrate, so they sample it. */
+    --rel-swatch: #1d5fd6;
   }
   /* card chrome only — --card-accent/--card-link ARE the data tier, kept */
   .layer-block {
@@ -2754,12 +2764,22 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .footer-metros a:hover { background: rgba(109, 63, 209, 0.2); }
   /* ==== footer elimination (operator-directed, 2026-08-20) ====
      The redesign gives the map the left and bottom viewport bounds: no
-     document footer, no in-page FAQ (it moves to districtry-faq.html).
-     Both sections are HIDDEN, never removed — the boot script fills
-     #verified-date and binds #feedback-btn / #footer-metros by id, so the
-     load-bearing elements are RELOCATED into the results-panel foot by the
-     transforms and only the husks stay hidden here. */
-  .faq-section, footer.site-footer { display: none; }
+     document footer. Its three load-bearing elements are RELOCATED into the
+     results-panel foot (see #districtry-panel-foot) rather than hidden with
+     it: the boot script fills #verified-date and binds #feedback-btn /
+     #footer-metros by id, so hiding them where they stood would have quietly
+     retired the verified date, the feedback button and the fleet links at
+     once. Only the husk stays hidden here.
+
+     THE IN-PAGE FAQ IS DELIBERATELY NOT HIDDEN, which departs from the
+     preview. That preview moved it to a districtry-faq.html of its own — a
+     page that never shipped, still linked the preview, and referenced assets
+     that do not resolve from il/. The in-page FAQ is what is live and indexed
+     TODAY, and it answers the queries this app actually ranks for ("what ward
+     am I in"). Hiding it in favour of a page that does not exist would have
+     been a silent content and search regression. Giving it its own page is
+     still the better end state; it is deferred, not abandoned. */
+  footer.site-footer { display: none; }
   /* ==== D: tablets get the two-column layout (operator-approved) =========
      The engine's breakpoint is 900px, so an iPad mini at 768x1024 was handed
      the phone design: a full-width map with the results stacked beneath and
@@ -3679,11 +3699,43 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <svg class="star-outline" viewBox="0 0 100 100" aria-hidden="true">
         <path fill="none" stroke="var(--accent-deep)" stroke-width="4" id="star-path-empty"></path>
       </svg>
+      <svg class="districtry-empty-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.20"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.18"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.16"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#9aa3b2" stroke-width="9"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#9aa3b2" stroke-width="9"></line></svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
       <p class="empty-state-lede">See your ward, police district and beat, community area, congressional and Illinois legislative districts, Cook County commissioner, elected school board district, and CPS school zones — plus who represents you.</p>
     </div>
     <div id="groups-root" hidden></div>
+    <!-- The results panel's own foot. The redesign gives the map the bottom
+         viewport bound, so the document footer and the in-page FAQ are HIDDEN
+         (see "footer elimination" in the skin) — which means the three things
+         that footer carried and the boot script binds by id had to come with
+         it, not be hidden with it. #verified-date is filled at boot,
+         #feedback-btn is bound at boot, and #footer-metros is an ENGINE block
+         moved VERBATIM: its bytes are untouched, only its slot changed, and
+         placement is the one thing the fences deliberately do not pin. -->
+    <div class="districtry-panel-foot" id="districtry-panel-foot">
+      <p><strong>Not for legal or official use.</strong> Boundary and roster data come from public
+      sources that disclaim legal precision — confirm with the relevant government office before
+      relying on them for anything official.</p>
+      <div class="footer-meta" id="footer-meta">
+        <span>Data last verified: <strong id="verified-date"></strong></span>
+      </div>
+      <div class="dpf-links">
+        <a href="./sources.html">Every layer, and where its data comes from →</a>
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>
+        <a href="./privacy.html">Privacy</a>
+        <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
+        <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
+      </div>
+      <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
+    <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
+    <div class="footer-metros" id="footer-metros" hidden>
+      <span class="footer-metros-label">Explore another metro</span>
+      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
+    </div>
+    <!-- ==== ENGINE:END metro-links-html ==== -->
+    </div>
   </section>
 </main>
 <!-- ==== TEMPLATE:END body-main ==== -->
@@ -3755,9 +3807,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       explicitly disclaim legal precision. Always confirm district assignments and officeholders with the
       relevant government office before relying on them for anything official.
     </div>
-    <div class="footer-meta" id="footer-meta">
-      <span>Data last verified: <strong id="verified-date"></strong></span>
-    </div>
     <!-- The ten-link credit row this used to be is now sources.html, where the
          same credits sit alongside a per-layer matrix naming the exact source
          behind every one of the app's layers. A flat list of publishers could
@@ -3770,14 +3819,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <a href="./sources.html">Every layer, and where its data comes from →</a>
       <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim &amp; Photon/Komoot)</a>
     </div>
-    <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
-    <div class="footer-metros" id="footer-metros" hidden>
-      <span class="footer-metros-label">Explore another metro</span>
-      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
-    </div>
-    <!-- ==== ENGINE:END metro-links-html ==== -->
     <div class="footer-links">
-      <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
       <!-- The gaps-html ENGINE fence moved to the masthead action row; see the
            comment there for why the move costs no engine release. -->
       <a href="https://github.com/ThursdaysFamous/DistrictExplorer-CHI" target="_blank" rel="noopener">View source on GitHub</a>
@@ -3974,6 +4016,17 @@ function initChiExplorer() {
   var starDivIcon = L.divIcon({
     className: "chi-star-marker",
     html: '<svg viewBox="0 0 100 100" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
+          '<circle cx="50" cy="50" r="17" fill="#1d5fd6" stroke="#ffffff" stroke-width="6"/>' +
+          "</svg>",
+    iconSize: [34, 34],
+    iconAnchor: [17, 17]
+  });
+
+  // Chicago keeps its flag star, in flag red — the city's emblem for
+  // the city, rather than for every point in Illinois.
+  var chiFlagStarDivIcon = L.divIcon({
+    className: "chi-star-marker",
+    html: '<svg viewBox="0 0 100 100" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
           '<path d="' + starPath(50, 50, 46, 19) + '" fill="#C8102E" stroke="#ffffff" stroke-width="4"/>' +
           "</svg>",
     iconSize: [34, 34],
@@ -4074,22 +4127,12 @@ function initChiExplorer() {
     });
   }
 
-  // Clean name badge for a county with no seal yet: a rounded pill in the app's
-  // civic blue with the county name, centred on the point like the star.
-  function makeCountyBadgeDivIcon(name) {
-    var label = sanitize(name);
-    var w = Math.max(52, name.length * 7 + 22);
-    return L.divIcon({
-      className: "chi-county-badge-marker",
-      html: '<div style="box-sizing:border-box;white-space:nowrap;overflow:hidden;' +
-            'text-overflow:ellipsis;width:' + w + 'px;padding:3px 9px;border-radius:11px;' +
-            'background:#0B5394;color:#ffffff;border:2px solid #ffffff;' +
-            "font:600 11px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;" +
-            'text-align:center;box-shadow:0 2px 4px rgba(0,0,0,0.45)">' + label + '</div>',
-      iconSize: [w, 22],
-      iconAnchor: [w / 2, 11]
-    });
-  }
+  // The name badge is RETIRED (R4.2). A county without a shipped seal now
+  // keeps the default data-tier circle: the badge was a Chicago-blue pill
+  // that named the county on the map, which duplicated the County card
+  // right beside it and put a fourth marker shape on a point that already
+  // had three. whenSealImgReady() still falls back — to the circle, by
+  // simply not setting an icon — so a blocked seal is still handled.
 
   // Preload + readiness tracking for seal images, keyed by URL — same pattern as
   // the water-taxi preload, so a blocked/broken seal cleanly falls back to the
@@ -4599,7 +4642,8 @@ function initChiExplorer() {
     function live() { return seq === state.sequence && marker === selectedMarker; }
     // 1. Inside the City of Chicago → keep the flag star (the default already set).
     chicagoCoverage(point).then(function (inCity) {
-      if (!live() || inCity) return;
+      if (!live()) return;
+      if (inCity) { marker.setIcon(chiFlagStarDivIcon); return; }
       // 2. On Lake Michigan → the Water Taxi seal.
       loadLakeMichigan().then(function (lake) {
         if (!live()) return;
@@ -4621,10 +4665,8 @@ function initChiExplorer() {
           if (sealUrl) {
             whenSealImgReady(sealUrl, function (ok) {
               if (!live()) return;
-              marker.setIcon(ok ? makeCountySealDivIcon(sealUrl, name) : makeCountyBadgeDivIcon(name));
+              if (ok) marker.setIcon(makeCountySealDivIcon(sealUrl, name));
             });
-          } else {
-            marker.setIcon(makeCountyBadgeDivIcon(name));
           }
         }).catch(function () { /* county load failed — keep the star */ });
       }).catch(function () { /* lake load failed — keep the star */ });
@@ -27118,6 +27160,82 @@ function initChiExplorer() {
       try { map.invalidateSize({ pan: false, animate: false }); } catch (e) {}
     });
   }
+
+  /* ---- the state code's dropdown, filled from the SAME list the engine's
+     footer row reads (METRO_EXPLORERS), so the two can never disagree and a
+     fourth metro needs nothing here: add it to metros.json, --sync-fleet into
+     the worksheet, regenerate, and it appears in the menu. Chicago is skipped
+     the way renderMetroLinks() skips it — you do not offer someone the page
+     they are on. If nothing is left after that skip the switch degrades to
+     plain text, which is what a one-metro fleet should look like. */
+  (function buildMetroSwitch() {
+    var wrap = document.querySelector(".dst-metro-switch");
+    var menu = wrap && wrap.querySelector(".dst-metro-menu");
+    var btn = wrap && wrap.querySelector(".dst-metro-btn");
+    if (!wrap || !menu || !btn) return;
+    var made = 0;
+    for (var i = 0; i < METRO_EXPLORERS.length; i++) {
+      var m = METRO_EXPLORERS[i];
+      if (m.id === THIS_METRO) continue;
+      var a = document.createElement("a");
+      a.href = m.url;
+      a.setAttribute("role", "menuitem");
+      if (m.emoji) {
+        var e = document.createElement("span");
+        e.className = "dst-metro-menu-emoji";
+        e.setAttribute("aria-hidden", "true");
+        /* labels and emoji come from a generated config, but they render
+           through textContent regardless — the fleet list is data */
+        e.textContent = m.emoji;
+        a.appendChild(e);
+      }
+      a.appendChild(document.createTextNode(m.label));
+      menu.appendChild(a);
+      made++;
+    }
+    if (!made) {
+      /* a lone metro: unwrap the button back into the plain state code */
+      var plain = document.createElement("span");
+      plain.className = "title-metro";
+      plain.textContent = btn.textContent.replace("▾", "");
+      wrap.parentNode.replaceChild(plain, wrap);
+      return;
+    }
+    var label = document.createElement("span");
+    label.className = "dst-metro-menu-label";
+    label.textContent = "Other explorers";
+    menu.insertBefore(label, menu.firstChild);
+
+    /* CSS opens the menu on :hover and :focus-within, which covers mouse and
+       keyboard. It does NOT cover touch, where there is no hover and a tap
+       lands as a click — so the button also owns an explicit expanded state,
+       and the same attribute keeps the control honest to a screen reader. */
+    function setOpen(open) {
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) wrap.removeAttribute("data-dismissed");
+    }
+    btn.addEventListener("click", function () {
+      var opening = btn.getAttribute("aria-expanded") !== "true";
+      setOpen(opening);
+      if (!opening) wrap.setAttribute("data-dismissed", "1");
+    });
+    wrap.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.key === "Esc") {
+        setOpen(false);
+        wrap.setAttribute("data-dismissed", "1");
+        btn.focus();
+      }
+    });
+    wrap.addEventListener("mouseleave", function () { wrap.removeAttribute("data-dismissed"); });
+    /* a click-open menu that only shuts on a second click on the button is a
+       menu people leave open by accident */
+    document.addEventListener("click", function (e) {
+      if (!wrap.contains(e.target)) setOpen(false);
+    });
+    wrap.addEventListener("focusout", function (e) {
+      if (!wrap.contains(e.relatedTarget)) { setOpen(false); wrap.removeAttribute("data-dismissed"); }
+    });
+  })();
 
   /* ==== per-layer dark map palette ==================================== */
   function dstDarkColor(hex) {
