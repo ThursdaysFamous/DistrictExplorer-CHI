@@ -75,10 +75,14 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import requests  # noqa: E402
-from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
-    HEADERS, REQUEST_TIMEOUT, point_in_rings,
-)
+# Migrated onto vtd_board_districts by the 2026-08-24 scripts audit (the same
+# follow-up the module's preamble named for Clark); --check is a byte compare,
+# so the migration is proven. Everything Shelby-specific — the corridor split,
+# the block adjudication, norm()'s whitespace-only collapse (V.norm strips all
+# punctuation, which would change sort keys here) — stays local.
+import vtd_board_districts as V  # noqa: E402  (shared machinery — do not fork)
+from build_metro_outline import point_in_rings  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import make_fail  # noqa: E402
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "shelby-county-board-districts.json")
@@ -200,26 +204,16 @@ BOUNDARY_NOTES = {
 }
 
 
-def fail(msg):
-    print("shelby-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+fail = make_fail("shelby-board")
+title_case = V.title_case
 
 
 def norm(name):
     return " ".join(str(name or "").upper().split())
 
 
-def title_case(name):
-    return " ".join(w if w.isdigit() else w.capitalize() for w in name.split())
-
-
 def get_json(url, params):
-    resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT, params=params)
-    resp.raise_for_status()
-    data = resp.json()
-    if isinstance(data, dict) and data.get("error"):
-        fail("%s answered an error: %s" % (url, data["error"]))
-    return data
+    return V.get_json(url, params, fail)
 
 
 def envelope_params(env):
@@ -437,18 +431,10 @@ def adjudicate(pieces, s5_geom, blocks):
 
 def round_geom(geom):
     from shapely.geometry import mapping
-    def fix(coords):
-        if isinstance(coords[0], (float, int)):
-            return [round(coords[0], COORD_PRECISION), round(coords[1], COORD_PRECISION)]
-        return [fix(c) for c in coords]
-    geo = mapping(geom)
-    return {"type": geo["type"], "coordinates": fix(geo["coordinates"])}
+    return V.round_geom(geom, mapping)
 
 
-def rings_of(geometry):
-    if geometry["type"] == "Polygon":
-        return geometry["coordinates"]
-    return [r for poly in geometry["coordinates"] for r in poly]
+rings_of = V.rings_of
 
 
 def main():
@@ -674,10 +660,9 @@ def main():
         },
         "features": precinct_features,
     }
-    prec_body = json.dumps(precincts_payload, sort_keys=True,
-                           separators=(",", ":")) + "\n"
+    prec_body = V.dumps(precincts_payload)
 
-    body = json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n"
+    body = V.dumps(payload)
 
     print("shelby-board: 11 districts dissolved from 33 precincts; "
           "Shelbyville 5 cut three ways (S %d / NE %d / NW %d people, exact)"
