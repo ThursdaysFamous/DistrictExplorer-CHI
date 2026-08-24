@@ -1,4 +1,5 @@
-// Behaviour gate for the root landing page (R4) — run in CI by smoke-test.yml.
+// Behaviour gate for the root's GENERATED pages — the landing page (R4) and the
+// fleet privacy page — run in CI by smoke-test.yml.
 //
 // WHY THIS IS A GATE AND NOT A SCRATCH SCRIPT. The page itself is generated and
 // drift-checked by build_landing_page.py, which proves it matches metros.json.
@@ -142,12 +143,94 @@ try {
     check("landing page boots with no console errors", errs.length === 0, errs.slice(0, 2).join(" | "));
     await ctx.close();
   }
+  // --- 7. the fleet privacy page ------------------------------------------
+  //
+  // Generated and drift-checked by build_privacy_page.py, which proves the page
+  // matches what the apps do. As with the landing page, that cannot prove it
+  // WORKS, and two things here are invisible to a diff.
+  //
+  // The first is the theme boot. This page is reached FROM an app that has a
+  // dark toggle, and it applies the stored choice in <head> before first paint;
+  // a reader who picked dark must not be handed a white flash. Nothing in a
+  // diff can tell you whether that ran.
+  //
+  // The second is the reachability of the link itself. The page moved from
+  // il/privacy.html to the root, which turned every in-app link into a `../`
+  // hop — from il/, ny/ and ca/ alike, and from five sub-pages that had never
+  // carried one. A wrong number of dots is a 404 that no gate here would
+  // otherwise see: validate_card_links.py probes ABSOLUTE urls, so a relative
+  // href is not its subject at all.
+  for (const scheme of ["light", "dark"]) {
+    const ctx = await browser.newContext({ serviceWorkers: "block", colorScheme: scheme });
+    const page = await ctx.newPage();
+    const errs = [];
+    page.on("console", (m) => { if (m.type() === "error") errs.push(m.text()); });
+    page.on("pageerror", (e) => errs.push(String(e)));
+    const resp = await page.goto(BASE + "/privacy.html", { waitUntil: "load" });
+    check(`privacy page loads (${scheme})`, resp.status() === 200, `HTTP ${resp.status()}`);
+    check(`privacy page has no console errors (${scheme})`, errs.length === 0,
+      errs.slice(0, 2).join(" | "));
+
+    // The ground must follow the scheme. A page whose only dark rule lived in a
+    // media query, or whose body had no explicit background, would pass a diff
+    // and read as a white sheet in a dark client.
+    const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    const lum = (s) => { const [r, g, b] = s.match(/\d+/g).map(Number); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    check(`privacy page paints a ${scheme} ground`, (lum(bg) < 90) === (scheme === "dark"), bg);
+
+    // One row per app, read from the manifest rather than counted by hand: a
+    // new instance that never reached the privacy table is the failure this
+    // catches, and it is exactly the shape of the bug this page was built to
+    // end (an app with no privacy page of its own).
+    const appRows = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("table")[0].querySelectorAll("tbody tr"))
+        .map((r) => r.querySelector("th").innerText.split("\n")[1]));
+    for (const tag of TAGS) {
+      check(`privacy table has a row for /${tag}/`, appRows.includes(`/${tag}/`), appRows.join(" "));
+    }
+    await ctx.close();
+  }
+
+  // A dark choice made in an app must survive the hop to this page.
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block", colorScheme: "light" });
+    await ctx.addInitScript(() => {
+      try { localStorage.setItem("districtry-theme", "dark"); } catch (e) { /* private mode */ }
+    });
+    const page = await ctx.newPage();
+    await page.goto(BASE + "/privacy.html", { waitUntil: "domcontentloaded" });
+    const attr = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+    const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    check("a dark choice made in an app carries to the privacy page",
+      attr === "dark" && /rgb\(2?\d, /.test(bg), `data-theme=${attr} bg=${bg}`);
+    await ctx.close();
+  }
+
+  // --- 8. every app links the privacy page, and the link resolves ----------
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    for (const where of ["/", ...TAGS.map((t) => `/${t}/`)]) {
+      await page.goto(BASE + where, { waitUntil: "domcontentloaded" });
+      const href = await page.evaluate(() => {
+        const a = Array.from(document.querySelectorAll("a[href]"))
+          .find((x) => /privacy\.html$/.test(x.getAttribute("href")));
+        return a ? a.href : null;
+      });
+      check(`${where} links the privacy page`, href !== null, String(href));
+      if (!href) continue;
+      const r = await page.request.get(href);
+      check(`${where}'s privacy link resolves`, r.status() === 200,
+        `${href} -> HTTP ${r.status()}`);
+    }
+    await ctx.close();
+  }
 } finally {
   await browser.close();
 }
 
 if (failures.length) {
-  console.error(`\n${failures.length} landing check(s) failed: ${failures.join(", ")}`);
+  console.error(`\n${failures.length} root-page check(s) failed: ${failures.join(", ")}`);
   process.exit(1);
 }
-console.log("\nAll landing-page checks passed.");
+console.log("\nAll root-page checks passed.");
