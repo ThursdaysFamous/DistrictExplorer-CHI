@@ -508,8 +508,7 @@
         "tagline",
         "theme_color",
         "favicon_data_uri",
-        "head",
-        "analytics"
+        "head"
       ],
       "properties": {
         "app_name": {
@@ -561,11 +560,8 @@
         "analytics": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "ga_id",
-            "ga_hostname",
-            "goatcounter_url"
-          ],
+          "description": "OPTIONAL, and every key inside it is optional too. A brand block used to REQUIRE this object with a ga_id, which meant adopting the districtry brand FORCED Google Analytics onto the app — including SF, which ships none today and whose readers have never been sent to Google. A rebrand must not add a tracker, so each surface is independently opt-in: the generator emits the GA snippet only when ga_id and ga_hostname are both present, and the GoatCounter tag only when goatcounter_url is. The dependentRequired below keeps the one real coupling — a ga_id with no hostname gate would fire on local dev, CI and previews, which is exactly what that gate exists to prevent.",
+          "dependentRequired": { "ga_id": ["ga_hostname"], "ga_hostname": ["ga_id"] },
           "properties": {
             "ga_id": {
               "type": "string",

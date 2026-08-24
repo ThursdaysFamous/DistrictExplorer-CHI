@@ -3,6 +3,7 @@
   "metros": [
     {
       "id": "chicago",
+      "explorer_name": "districtry Illinois",
       "label": "Chicago",
       "url": "https://districtry.com/il/",
       "emoji": "🌭",
@@ -19,6 +20,7 @@
     },
     {
       "id": "nyc",
+      "explorer_name": "districtry New York City",
       "label": "New York City",
       "url": "https://districtry.com/ny/",
       "emoji": "🗽",
@@ -35,6 +37,7 @@
     },
     {
       "id": "sf",
+      "explorer_name": "districtry San Francisco",
       "label": "San Francisco",
       "url": "https://districtry.com/ca/",
       "emoji": "🌉",

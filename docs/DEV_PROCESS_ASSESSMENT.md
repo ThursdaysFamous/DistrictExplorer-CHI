@@ -321,6 +321,53 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R6 (part 2) — SHIPPED (2026-08-24): NYC and SF wear the brand, and a schema that would have
+  forced a tracker on them was fixed first.** Both apps now carry the districtry palette, Barlow,
+  the mark, the wordmark fleet switch, dark mode and the `overberg.co/why/` link — the same
+  surfaces Illinois has, from the same engine block, opted into by carrying its fence.
+  **THE SCHEMA WOULD HAVE ADDED GOOGLE ANALYTICS TO SF, and that is the finding.** A `brand`
+  block REQUIRED `analytics`, and `analytics` required `ga_id` — so adopting the brand would have
+  put a Google tag on an app that ships none today and whose readers have never been sent to
+  Google. **A rebrand must not add a tracker.** `analytics` is now optional and every key inside
+  it is independently opt-in: the generator emits the GA snippet only when `ga_id` and
+  `ga_hostname` are both present and the GoatCounter tag only when `goatcounter_url` is, with a
+  `dependentRequired` keeping the one real coupling (a `ga_id` with no hostname gate would fire
+  on local dev, CI and previews). SF therefore takes the brand with GoatCounter only.
+  **The rebrand was DATA, until three things turned out not to be.** Eight GENERATED regions and
+  two ENGINE fences were placed in each sibling and the rest is worksheet: a `brand` block built
+  from what each app already shipped, `verified_date` carried over unchanged (this stage is a
+  rebrand, not a re-verification — silently advancing a "data last verified" date would be a
+  claim nobody checked), and `explorer_name` on `metros.json` so the portal hand-off stops
+  saying "District Explorer" in the one place a reader is being sent somewhere. The three that
+  were not data:
+  **(1) The palette lives in its own worksheet key.** `render_brand_palette` reads `palette`,
+  not `brand` — so both siblings regenerated cleanly and still painted the NYC flag blue and the
+  SF bay blue. A gate cannot catch that: the region matched its source exactly. It was caught by
+  DRIVING THE APPS and reading `--accent` out of the live page.
+  **(2) `build_dark_map_palette.py` was hardcoded to `il/index.html`.** Both siblings gained the
+  region and it stayed EMPTY while the script's own `--check` went on passing, because it was
+  only ever looking at the one file it knew about — the third half-blind check found in one day.
+  It now discovers its targets by asking which instances CARRY the region, so an app without
+  dark mode is skipped rather than failed, and each derives from its OWN layers: 59 colours for
+  Illinois, 37 for NYC, 23 for SF.
+  **(3) SF's smoke test asserted the old brand as a literal** — `/San Francisco District
+  Explorer/` — so it FAILED THE REBRAND. A correct rename breaking a gate is the failure mode a
+  gate must not have, and `landing_test.mjs` had already learned it from a hardcoded
+  `(il|nyc|sf)` tag list. `APP_NAME` is now emitted into the generated smoke config from the same
+  brand block `appDisplayName()` reads at runtime, so the two cannot disagree.
+  **The privacy page updated itself, which is the design paying off.** Its `--check` failed the
+  moment the siblings gained a theme toggle, because they now store `districtry-theme`; the
+  regenerated page says so, in all three rows, without anyone remembering to edit it.
+  **Fonts are per-instance and were refetched:** both siblings dropped Big Shoulders + Inter for
+  Barlow, their metric-matched fallback face was recalibrated from Inter's numbers to Barlow's
+  (carrying Inter's forward would leave an Arial shaped like Inter standing in for Barlow —
+  reintroducing the exact swap-shift that face exists to prevent), and the four dead woff2s were
+  deleted, leaving all three instances with byte-identical 18-face sets.
+  **The old brand is retired from every shipped page.** Each app's index.html is down to seven
+  occurrences — all comments plus the documented `METRO_NAME + " District Explorer"` fallback
+  that keeps an un-rebranded fork working — and the five sibling sub-pages, including their
+  structured-data names, now read `districtry New York City` / `districtry San Francisco`.
+
 - **R6 (part 1) — SHIPPED (2026-08-24): the districtry skin became engine, so it stops being
   something a fork can be missing.** `/ny/` and `/ca/` carried NONE of the rebrand — zero Barlow
   faces, zero `data-theme` rules, no mark, no wordmark switcher — while `/il/` carried all of it

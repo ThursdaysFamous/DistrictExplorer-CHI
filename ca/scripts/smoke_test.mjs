@@ -52,6 +52,7 @@ const POINT = "37.77927,-122.41924"; // SF City Hall (Civic Center)
 const OFFLINE = ["supervisor-district", "neighborhood", "police-district"];
 const EXPECT_DISTRICT = { "supervisor-district": "5", "neighborhood": "Tenderloin", "police-district": "NORTHERN" };
 const NEGATIVE_POINT = "37.74000,-122.59000"; // Open Pacific west of Ocean Beach, beyond CA state waters - outside every layer, including the water-inclusive TIGERweb legislative chambers
+const APP_NAME = "districtry San Francisco";
 const EXPECT_LAYERS = 16; // Thread-5: legislative chambers now pre-built SF-clipped geometry (data/app); supervisor-district is a bespoke roster-joined registerLayer; 11 layers total; + 3 amenity nearest-point layers (post-office, library, early-voting) = 14; + bart-director + election-precinct (parity-debt closures, 2026-07) = 16
 // ==== GENERATED:END smoke-config ====
 const BOOT_TIMEOUT = 45000; // Leaflet + first paint on a cold CI runner
@@ -143,7 +144,11 @@ try {
     check("Leaflet map initialized", hasMap);
 
     const title = await page.title();
-    check("SF-branded title", /San Francisco District Explorer/.test(title), title);
+    // Asserted against the name the worksheet owns, not a literal: this check
+    // was /San Francisco District Explorer/ and failed the districtry rebrand —
+    // a gate rejecting a correct change. APP_NAME is generated from the same
+    // brand block appDisplayName() reads at runtime.
+    check("title carries the app's own name", title.includes(APP_NAME), `${title} | expected ${APP_NAME}`);
 
     const stubOk = await page.evaluate(() => !!document.getElementById("toggle-zip-code"));
     check("ZIP Code stub layer present", stubOk);
