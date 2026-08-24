@@ -3103,8 +3103,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
   [data-theme="dark"] .share-popover-url,
   [data-theme="dark"] .share-popover-embed { background: var(--dst-sunken); border-color: rgba(236, 233, 244, 0.16); color: var(--slate); }
   [data-theme="dark"] .layer-toggle-btn,
-  [data-theme="dark"] .search-shell,
   [data-theme="dark"] .map-tile-banner { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55); }
+  /* .search-shell is deliberately NOT in that list. In the engine it floats
+     over the map as a card and earns a shadow; this skin moves the toolbar
+     into the masthead and flattens the shell to nothing (transparent, no
+     border, no padding, no shadow) so the input alone reads as the control.
+     Re-shadowing the flattened shell painted a soft black plate behind the
+     search field that light mode has no counterpart for — the two themes
+     stopped describing the same object. Measured at 390px and 1400px, idle
+     and expanded: this shadow was the ONLY non-colour difference between
+     them; every box in the search bar is otherwise identical. */
   /* the pinned-parent outline is deliberately near-black (#14181C) so it reads
      as neutral over a light basemap; over a dark one it is simply gone. */
   [data-theme="dark"] .rel-parent-outline { stroke: #ece9f4; }
@@ -3238,7 +3246,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="districtry-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#17161c" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#17161c" stroke-width="11"></line></svg>
         <span class="title-text">districtry <span class="title-metro">/ il</span></span>
       </span>
-      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ f8987c1 on 2026-08-22</span></small>
+      <small>Click the map or search an address to see every district that covers it, and who represents it.<span class="preview-stamp">districtry re-skin preview (unlisted) — generated from index.html @ e2dbaaf on 2026-08-24</span></small>
     </h1>
     <div class="map-toolbar">
       <div class="search-shell">
@@ -3313,7 +3321,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
     <div class="districtry-panel-head">
       <div class="selected-point-chip" id="point-chip" hidden></div>
-      <span class="districtry-stats">79 counties · 39 layers</span>
+      <span class="districtry-stats">89 counties · 39 layers</span>
     </div>
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
@@ -3493,7 +3501,7 @@ function initChiExplorer() {
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
   var THIS_METRO = "chicago";           // key into METRO_EXPLORERS below
   var METRO_NAME = "Chicago";           // used in user-facing strings
-  var METRO_BBOX = { minLng: -91.55, minLat: 37.0, maxLng: -87.0, maxLat: 42.6 };
+  var METRO_BBOX = { minLng: -91.55, minLat: 36.96, maxLng: -87.0, maxLat: 42.6 };
   var METRO_CENTER = [41.8781, -87.6298];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
   var PERMALINK_GATE = { minLat: 36.95, maxLat: 42.75, minLng: -91.65, maxLng: -86.9 };
@@ -7794,15 +7802,34 @@ function initChiExplorer() {
         wrap.appendChild(renderSectionLabel("County Board"));
         wrap.appendChild(renderPersonRows(board.members.map(function (m) {
           var person = { name: String(m.name) };
+          // The chair role wins the badge; where a county elects by LETTERED
+          // SEAT and names no chair (Union's A-E), the seat is the badge, since
+          // it is the only thing distinguishing one countywide seat from another.
           if (m.role) person.badge = String(m.role);
+          else if (m.seat) person.badge = String(m.seat);
           if (m.phone) person.phone = String(m.phone);
           if (m.email) person.email = String(m.email);
           // "Term: 2017 to Present" is a START, not an expiry — the one term
           // fact these sources publish, worded as the source words it.
-          if (m.since) person.note = "Serving since " + String(m.since);
+          var notes = [];
+          if (m.since) notes.push("Serving since " + String(m.since));
+          // Where the roster came from CERTIFIED RETURNS rather than a page,
+          // the seating election rides the row: a canvass cannot show a
+          // mid-term appointment, so the card says what it actually knows.
+          if (m.districtSource) notes.push(String(m.districtSource));
+          if (notes.length) person.note = notes.join(" · ");
           return person;
         }), { tinted: true }));
         var note = board.structure ? String(board.structure) : null;
+        // A board LARGER than the list its county publishes says so, in the same
+        // words the districted counties use for a missing district member. The
+        // roster is known to have loaded here — `board` is null when the fetch
+        // fails — so this can never invent a vacancy out of a network error.
+        // Alexander is the county this exists for: three seats, two published,
+        // and a card that named two commissioners with no further comment would
+        // conceal the third exactly as surely as guessing a name would invent one.
+        var short = boardDirectoryShortfallNote(board, true);
+        if (short) note = note ? note + " \u00b7 " + short : short;
         if (note) wrap.appendChild(renderFieldStack([{ label: "Board", value: note }]));
         // Address OR phone: a board whose only published contact is a shared
         // switchboard (Calhoun prints the same number under all five members,
@@ -9655,6 +9682,9 @@ function initChiExplorer() {
   var loadShelbyBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/shelby-county-board-districts.json", {}, 2);
   });
+  var loadShelbyPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/shelby-precincts.json", {}, 2);
+  });
   var loadShelbyBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/shelby-county-board-members.json", {}, 2);
   });
@@ -9857,6 +9887,45 @@ function initChiExplorer() {
    * unresolvable from the image, so the county's switchboard stands for the
    * board and the current list is an open ask. Polling places are not shown
    * either: the only list the county publishes is dated November 2018. */
+  /* Knox (the 80th county, 2026-08-22) — the join that CLOSED AN ENCLAVE
+   * rather than extending the frontier: every one of its seven neighbours was
+   * already served, so it read as a doughnut on the coverage wash and the
+   * outline went from four rings to three.
+   *
+   * FOUR HOSTS, ONE OF WHICH REFUSES. Its record said knoxcountyil.gov
+   * "refuses every request", which is true of the WEBSITE and was written as
+   * though it described the county. gis.knoxcountyil.gov serves the county's
+   * townships (the Coles pattern — its chain omits the intermediate), the
+   * website's documents are served plainly from its Revize CMS, and only the
+   * site itself denies.
+   *
+   * DISTRICTS 1-3 ARE THE CITY'S AND ARE TAKEN AS PUBLISHED. Galesburg runs
+   * its own Board of Election Commissioners and publishes those three as
+   * finished polygons. Districts 4 and 5 are unions of whole TOWNSHIPS,
+   * transcribed from the county's own adopted map, minus the city. Three
+   * witnesses agree: the map, the certified returns' 13-and-15 precinct counts,
+   * and Census populations within 6.3% of the per-district ideal
+   * (scripts/build_knox_board_districts.py).
+   *
+   * The roster is the ROLL CALL of the county's own board minutes, because the
+   * page that lists members cannot be read. Fifteen seats, three per district,
+   * each row naming the meeting it came from; no party, term or per-member
+   * contact, because the minutes publish none. */
+  var loadKnoxCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/knox-county-outline.json", {}, 2);
+  });
+  function knoxCountyCoverage(point) {
+    return loadKnoxCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadKnoxBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/knox-county-board-districts.json", {}, 2);
+  });
+  var loadKnoxBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/knox-county-board-members.json", {}, 2);
+  });
+
   var loadClarkCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/clark-county-outline.json", {}, 2);
   });
@@ -9920,6 +9989,165 @@ function initChiExplorer() {
   });
   var loadCrawfordBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/crawford-county-board-members.json", {}, 2);
+  });
+  /* Richland (the 86th county, 2026-08-23) — the first county in the fleet
+   * whose board composition came from the COUNTY'S OWN GIS rather than from
+   * election returns. Its canvasses COUNT precincts per district and never name
+   * one (the Knox shape), which is what kept it a gap for weeks; meanwhile the
+   * county's site links richlandil.wthgis.com, whose map publishes "County
+   * Board Districtrs" and "Voter Precincts" as two county-authored layers.
+   * Overlaid, every one of the 21 precincts falls 98.4-100% inside a single
+   * district, so the districts are unions of whole precincts and a dissolve of
+   * the Census 2020 voting districts draws them
+   * (build_richland_boundaries.py). The county's certified 2024 General
+   * independently counts 4, 4 and 2 precincts in districts 1, 3 and 5 — exactly
+   * what that composition gives.
+   *
+   * IT ALSO DISPROVED ITS OWN GAP RECORD, which had read nine of the county's
+   * 21 precincts reporting as two ISBE sub-units each as evidence that district
+   * lines run THROUGH precincts. They do not. What those sub-units are is still
+   * unknown and deliberately not guessed at.
+   *
+   * The roster is scraped weekly from the county's own board page, and that
+   * same run re-reads the two GIS layers and fails if either stops matching the
+   * shipped dissolve. NO POLLING PLACE: the county publishes a good list, but a
+   * polling place is a roster fact rather than geometry. */
+  var loadRichlandCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-county-outline.json", {}, 2);
+  });
+  function richlandCountyCoverage(point) {
+    return loadRichlandCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadRichlandPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-precincts.json", {}, 2);
+  });
+  var loadRichlandBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-county-board-districts.json", {}, 2);
+  });
+  var loadRichlandBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/richland-county-board-members.json", {}, 2);
+  });
+  /* Jackson (the 87th county, 2026-08-23) — the first county served whose board
+   * districts SPLIT precincts. Its own certified 2024 General canvass reports
+   * three of its 56 precincts TWICE, under two districts each with their
+   * registration divided, which is the county stating that a district line runs
+   * through them; that is why this county was recorded measured-shut beside
+   * Bureau, Cumberland, Douglas, Ford, Knox and Piatt.
+   *
+   * What its record missed is that it named the answer itself: the county
+   * publishes its adopted Board District Map as a VECTOR PDF, and the seven
+   * districts are seven FILLED PATHS in the content stream — polygon objects
+   * with exact fill colours pairing one-for-one with the legend, not pixels to
+   * be classified. Georeferenced to EPSG:3436 and checked against the canvass,
+   * all 53 unambiguous precincts land in the district the canvass names and all
+   * three split precincts split between exactly the two it names.
+   *
+   * NOTHING TRACED IS SHIPPED. The boundary is census geometry throughout —
+   * voting districts for the 53 whole precincts, whole census BLOCKS inside the
+   * three split ones — and the map is only ever allowed to choose between the
+   * two districts the canvass already named (build_jackson_boundaries.py).
+   *
+   * The three split precincts carry a LIST of districts on their precinct card
+   * rather than one, because in those three the precinct genuinely does not
+   * determine the district and the card should say so. */
+  var loadJacksonCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-county-outline.json", {}, 2);
+  });
+  function jacksonCountyCoverage(point) {
+    return loadJacksonCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadJacksonPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-precincts.json", {}, 2);
+  });
+  var loadJacksonBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-county-board-districts.json", {}, 2);
+  });
+  var loadJacksonBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jackson-county-board-members.json", {}, 2);
+  });
+  /* Douglas (the 88th county, 2026-08-23) — the SECOND county served whose board
+   * districts split precincts, and the one that needed no map read at all.
+   * Douglas sat on the frontier because two of its seventeen precincts vote in
+   * two districts each, so no dissolve of whole precincts can draw it. The
+   * sweep that went looking for a vector district map found something better:
+   * douglascountyil.gov links an ArcGIS web map whose config names ONE parcel
+   * service, while the ORG BEHIND IT carries fifty-four — CountyBoardDistricts
+   * and VotingDistricts among them, both shared public.
+   *
+   * A VIEWER SHOWS WHAT IT USES; THE ORG SHOWS WHAT THE COUNTY HAS. So the
+   * districts here are the county's own polygons, shipped as drawn: no
+   * dissolve, no georeferencing, nothing derived. They are checked against a
+   * DIFFERENT county product — its certified 2022 General ran all seven
+   * districts and printed 2, 2, 3, 2, 3, 2, 5 precincts, nineteen across a
+   * county of seventeen because two are split, and overlaying the county's
+   * precinct layer on its district layer reproduces all seven exactly
+   * (build_douglas_boundaries.py).
+   *
+   * The roster comes from two documents because the county publishes no board
+   * members page at all: the annual County Yearbook names the seven people and
+   * gives each a county e-mail, and the certified election summary reports say
+   * which numbered district each won. The yearbook's own "1., 2., 3." numbering
+   * is LIST ORDER, not district — the returns put its first-listed member in
+   * District 3 — so the join is on surname and the builder fails if the two
+   * documents stop naming the same seven people. */
+  var loadDouglasCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-county-outline.json", {}, 2);
+  });
+  function douglasCountyCoverage(point) {
+    return loadDouglasCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadDouglasPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-precincts.json", {}, 2);
+  });
+  var loadDouglasBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-county-board-districts.json", {}, 2);
+  });
+  var loadDouglasBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/douglas-county-board-members.json", {}, 2);
+  });
+  /* Vermilion (the 89th county, 2026-08-23) — the county that was never
+   * blocked. Its gap record said the county's website "is not reachable from
+   * this project's network", and that was true of a TLS handshake and false of
+   * the county: vercountyil.gov redirects to www.vercounty.org, which serves
+   * the COLES PATTERN — its leaf certificate without the GoGetSSL intermediate
+   * that signed it, so every automated client reports a failure no browser ever
+   * sees. Chasing that intermediate by AIA with a pinned hash (never by
+   * disabling verification) opens a maintained 27-member roster.
+   *
+   * The districts did not even need the site. The county's GIS publishes to an
+   * ArcGIS Online org carrying twenty-six public services, and THE
+   * WELL-LABELLED LAYER IS THE OBSOLETE ONE: a service described as
+   * "Governmental and school districts in Vermilion County IL" holds the
+   * SUPERSEDED map, while the current one is a misspelled, undocumented
+   * CountyBoardDistrcts2021. Which is which is a MEASUREMENT, not a reading of
+   * a name — on the Census 2020 blocks the shipped layer runs 8,209-8,298
+   * against an 8,243 ideal (0.7%) and the better-labelled one 7,609-9,484
+   * (15.1%). A plan drawn to the 2020 census balances on it
+   * (build_vermilion_boundaries.py).
+   *
+   * NO PRECINCT ENTRY, and that is measured rather than missing: the county
+   * re-precincted after the census, so the 84-feature precinct layer its GIS
+   * publishes is the 2020 fabric, not the 38 clerk and 22 Danville Election
+   * Commission precincts its own canvasses have reported since 2022. */
+  var loadVermilionCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/vermilion-county-outline.json", {}, 2);
+  });
+  function vermilionCountyCoverage(point) {
+    return loadVermilionCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadVermilionBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/vermilion-county-board-districts.json", {}, 2);
+  });
+  var loadVermilionBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/vermilion-county-board-members.json", {}, 2);
   });
   var loadMercerCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/mercer-county-outline.json", {}, 2);
@@ -10065,6 +10293,57 @@ function initChiExplorer() {
   }
   var loadPerryPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/perry-precincts.json", {}, 2);
+  });
+  /* PULASKI joined on 2026-08-23 the same way and for the same reason, one day
+   * after Alexander closed the wedge around it. Its website was never read
+   * either — pulaskicountyil.gov resolves to an address this project's network
+   * refuses — and its gap record had said since 4 Aug that the board's form was
+   * "not determinable in this pass". It was determinable; the vendor holding the
+   * answer had simply been swept one election slug wide. platinumelectionresults
+   * .com carries Pulaski at county id 19, and its certified 2024 General Primary
+   * carries a single countywide "For County Commissioner" contest per party over
+   * all eleven precincts — the same eleven every countywide office and the
+   * presidential contest report — with no district-suffixed board contest
+   * anywhere, and the 2016 General agrees. So the board is at large, there is no
+   * district for a precinct to belong to, and the Jasper test passes 11/11 with
+   * the population identity exact. NO COMMISSIONER IS NAMED: that is a roster,
+   * and the vendor holds only a primary (nominees, not officeholders) and one
+   * decade-old general. See build_pulaski_precincts.py. */
+  var loadPulaskiCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/pulaski-county-outline.json", {}, 2);
+  });
+  function pulaskiCountyCoverage(point) {
+    return loadPulaskiCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadPulaskiPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/pulaski-precincts.json", {}, 2);
+  });
+  /* HARDIN followed Pulaski the same afternoon, and it is the county that
+   * corrected a bar this project had invented an hour earlier. Pulaski's build
+   * log said Hardin lacked "Pulaski's second naming source" because the platinum
+   * canvass carries no committeeperson contests. That was a standard the fleet
+   * has never used: Johnson, Perry and Pulaski each joined on ONE certified
+   * canvass naming the precincts plus the Jasper test, and Hardin's pollresults
+   * feed meets it identically — its 2026 General Primary prints a committeeperson
+   * contest per precinct per party, twelve contests naming all six and no
+   * seventh, each reporting 1 of 1, while every countywide office reports 6 of 6.
+   * The board is at large (that canvass, and a 2016 General on a second vendor),
+   * so there is no district for a precinct to belong to, and the Jasper test
+   * passes 6/6 with the population identity exact. NO ROSTER: hardincountyil.gov
+   * is a parking lander on both hosts, and a primary names nominees.
+   * See build_hardin_precincts.py. */
+  var loadHardinCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hardin-county-outline.json", {}, 2);
+  });
+  function hardinCountyCoverage(point) {
+    return loadHardinCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadHardinPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hardin-precincts.json", {}, 2);
   });
   /* CASS, GREENE, SCOTT and MOULTRIE were never blocked. All four were already
    * served, none had a gap record saying its precincts were missing, and that is
@@ -10301,6 +10580,9 @@ function initChiExplorer() {
   var loadWarrenBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/warren-county-board-districts.json", {}, 2);
   });
+  var loadWarrenPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/warren-precincts.json", {}, 2);
+  });
   var loadWarrenBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/warren-county-board-members.json", {}, 2);
   });
@@ -10327,6 +10609,9 @@ function initChiExplorer() {
   }
   var loadHancockBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/hancock-county-board-districts.json", {}, 2);
+  });
+  var loadHancockPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hancock-precincts.json", {}, 2);
   });
   var loadHancockBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/hancock-county-board-members.json", {}, 2);
@@ -10625,6 +10910,14 @@ function initChiExplorer() {
   }
   var loadAdamsCountyBoard = makeCached(function () {
     return loadAdamsLayer("Web_Voting_Data", 2, "DIST_NAME", "board districts");
+  });
+  // Adams's roster does NOT come from the county — its board page is a flat
+  // Akamai deny — but from the county's own certified canvasses, which name one
+  // of each district's three members (the November 2024 cycle). The other two
+  // per district were seated in November 2022, a canvass nothing readable
+  // publishes, so the card says which seats it is naming and which it is not.
+  var loadAdamsBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/adams-county-board-members.json", {}, 2);
   });
   // Precincts2021 rather than Web_Voting_Data/1: same 92 shapes, but this one
   // also carries PollingPlace, populated on all 92.
@@ -14846,6 +15139,32 @@ function initChiExplorer() {
   // Alderperson column is read NOWHERE: the shipped roster (the city's own
   // council pages) is the current source, and the measured risk is exactly a
   // stale name column shadowing it.
+  /* Galesburg's seven aldermanic wards, on the CITY's own AGOL org — the same
+   * org that publishes the county board districts inside the city and the 20
+   * city precincts, because Galesburg runs its own Board of Election
+   * Commissioners. Added 2026-08-22, the day after Knox County joined the
+   * coverage ring: the wards were published and current the whole time, and
+   * what blocked them was that their COUNTY was not covered.
+   *
+   * THE LAYER CARRIES A MEMBER COLUMN AND IT IS NOT READ. Its ward numbering
+   * is confirmed correct by the city's own council page, seven for seven, but
+   * one of its names is stale — the layer says "Heather Zeigler Acerra" where
+   * the city says "Heather Acerra". So the geometry comes from the layer and
+   * the people from the city's council page, via the municipal-officials
+   * roster (scripts/galesburg_council_scraper.py). That is the Coles rule: a
+   * GIS layer's officeholder column is a snapshot, and the body's own page is
+   * the record. */
+  var GALESBURG_WARD_SERVICE = "https://services1.arcgis.com/T5ar9pn3YeFZ47Wh/arcgis/rest/" +
+    "services/Galesburg_City_Council_Wards/FeatureServer/0";
+  var loadGalesburgWards = makeCached(function () {
+    return loadArcGISGeoJSON(GALESBURG_WARD_SERVICE).then(function (geojson) {
+      return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+        var num = /(\d+)/.exec(String(findPropCI(f.properties || {}, ["ward"]) || ""));
+        return wardFeature(f, "Galesburg", "Ward", num ? num[1] : null);
+      }) };
+    });
+  });
+
   var FREEPORT_WARD_SERVICE = "https://services2.arcgis.com/1Wpk33n06s235zfI/arcgis/rest/" +
     "services/Wards2022_Public/FeatureServer/0";
   var loadFreeportWards = makeCached(function () {
@@ -15227,6 +15546,7 @@ function initChiExplorer() {
       municipalWardEntry("rockford", loadRockfordWards),
       municipalWardEntry("rock-island", loadRockIslandWards),
       municipalWardEntry("dekalb", loadDekalbWards),
+      municipalWardEntry("galesburg", loadGalesburgWards),
       municipalWardEntry("mendota", loadMendotaWards),
       // Quincy (Adams, pass 8) — SEAT-ONLY. The city's own site sits behind the
       // same Akamai deny as its county's (403 on every path tried), so no
@@ -18954,6 +19274,95 @@ function initChiExplorer() {
           }
         }
       },
+      // Knox — 5 districts of THREE members each (15 seats), and the county
+      // that closed the coverage wash's Knox enclave when it shipped on
+      // 2026-08-22. Districts 1-3 are the CITY of Galesburg's, published by the
+      // city because it runs its own Board of Election Commissioners; 4 and 5
+      // are unions of whole townships off the county's adopted 2022 map, minus
+      // that city. The roster is the roll call of the county's own board
+      // minutes — its member page is a flat 403 — so every row names the
+      // meeting rather than claiming a currency a roll call cannot show.
+      {
+        key: "knox",
+        coverage: knoxCountyCoverage,
+        loadGeometry: loadKnoxBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : "District " + String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadKnoxBoardDistricts(),
+            loadKnoxBoardMembers().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var roster = results[1];
+            return {
+              seq: seq,
+              district: district == null ? null : String(district),
+              entry: (roster && district != null) ? roster[String(district)] : null,
+              board: roster && roster.board,
+              rosterLoaded: !!roster
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Knox County Board",
+            note: result.rosterLoaded
+              ? boardCountNote(members.length, null)
+              : "The member list could not be loaded just now."
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The minutes are the ONLY readable source placing this member in
+              // this district, so which meeting rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.board && result.board.phone) {
+            fields.push({
+              label: result.board.phoneLabel || "County offices",
+              value: String(result.board.phone)
+            });
+          }
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board mail", value: String(result.board.address) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district ? "District " + result.district : null;
+        },
+        primaryLink: function () {
+          return {
+            label: "Knox County Board (official)",
+            url: "https://www.knoxcountyil.gov/departments/county_board/"
+          };
+        },
+        hoverOfficial: {
+          load: loadKnoxBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d == null ? null : roster[String(d)];
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Clark — 7 SINGLE-member districts, dissolved from the Census 2020
       // voting districts per a composition the county's own certified
       // canvasses state three times over (build_clark_boundaries.py). The
@@ -19109,6 +19518,330 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadCrawfordBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Richland County — 7 SINGLE-member districts, dissolved from the Census
+      // 2020 voting districts per a composition read off the COUNTY'S OWN GIS
+      // (build_richland_boundaries.py). This is the first county in the fleet
+      // composed from geometry rather than from returns: Richland's canvasses
+      // count precincts per district and never name one, while
+      // richlandil.wthgis.com publishes the board districts and the voting
+      // precincts as two county-authored layers that overlay cleanly — every
+      // precinct 98.4-100% inside one district. The county's certified 2024
+      // General independently counts 4, 4 and 2 precincts in districts 1, 3 and
+      // 5, which is what this dissolve gives. The roster is scraped weekly from
+      // the county's own board page, and that same run re-reads both GIS layers
+      // and fails if either stops matching this dissolve.
+      {
+        key: "richland",
+        coverage: richlandCountyCoverage,
+        loadGeometry: loadRichlandBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadRichlandBoardDistricts(),
+            loadRichlandBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Richland County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Richland County Board (official)", url: "https://richlandcounty.illinois.gov/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadRichlandBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Jackson County — 7 districts electing TWO members each (14 seats), and
+      // the first county served whose districts SPLIT precincts. Fifty-three of
+      // its 56 precincts take their district from the county's certified 2024
+      // General canvass; the three that canvass reports twice are resolved to
+      // whole census BLOCKS by the county's own adopted vector district map,
+      // which is only ever allowed to choose between the two districts the
+      // canvass already names (build_jackson_boundaries.py). The card names the
+      // partially-included precincts separately from the whole ones, because a
+      // reader in one of the three is not wholly in this district.
+      {
+        key: "jackson",
+        coverage: jacksonCountyCoverage,
+        loadGeometry: loadJacksonBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadJacksonBoardDistricts(),
+            loadJacksonBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              partialPrecincts: findPropCI(props, ["partialprecincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Jackson County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts", value: result.precincts.join(", ") });
+          }
+          if (result.partialPrecincts && result.partialPrecincts.length) {
+            fields.push({
+              label: "Partly in this district",
+              value: result.partialPrecincts.join(", ") +
+                " — the county's own results report these precincts under two districts"
+            });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Jackson County Board (official)", url: "https://jacksoncounty-il.gov/158/County-Board" };
+        },
+        hoverOfficial: {
+          load: loadJacksonBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Douglas County — 7 SINGLE-member districts, shipped AS THE COUNTY DRAWS
+      // THEM: its GIS publishes CountyBoardDistricts as a public feature service,
+      // so nothing here is dissolved, georeferenced or derived
+      // (build_douglas_boundaries.py). Two of its seventeen precincts are split
+      // between districts, which is why this county sat on the frontier and why
+      // the county's own polygons are the only thing that could draw it. The
+      // roster is assembled from two county documents — the annual Yearbook for
+      // the people and the certified election summary reports for the district
+      // numbers — because the county publishes no board members page at all.
+      {
+        key: "douglas",
+        coverage: douglasCountyCoverage,
+        loadGeometry: loadDouglasBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadDouglasBoardDistricts(),
+            loadDouglasBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              partialPrecincts: findPropCI(props, ["partialprecincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Douglas County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The county publishes no members page, so the election that
+              // seated this member rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts", value: result.precincts.join(", ") });
+          }
+          if (result.partialPrecincts && result.partialPrecincts.length) {
+            fields.push({
+              label: "Partly in this district",
+              value: result.partialPrecincts.join(", ") +
+                " — the county's district map cuts through these precincts"
+            });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Douglas County Clerk — Elections (official)", url: "https://douglascountyil.gov/clerk-recorder/elections" };
+        },
+        hoverOfficial: {
+          load: loadDouglasBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Vermilion County — 9 districts electing THREE members each (27 seats),
+      // shipped AS THE COUNTY DRAWS THEM from its own public feature service
+      // (build_vermilion_boundaries.py). The county publishes TWO board-district
+      // maps and the better-labelled one is superseded; the shipped layer is the
+      // one that balances on the Census 2020 blocks (0.7% worst deviation
+      // against the other's 15.1%), which the builder re-measures in both
+      // directions on every run. The roster is the county's own members page,
+      // reached by supplying the intermediate certificate the county's server
+      // omits — never by disabling verification — and NOT the Name/Party/Email
+      // columns on its own district layer, which are a 2018 snapshot on a
+      // retired e-mail domain. No precinct entry: the county re-precincted after
+      // the census and the precinct layer its GIS publishes is the old fabric.
+      {
+        key: "vermilion",
+        coverage: vermilionCountyCoverage,
+        loadGeometry: loadVermilionBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadVermilionBoardDistricts(),
+            loadVermilionBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            var roster = results[1];
+            return {
+              seq: seq,
+              district: district,
+              entry: district != null ? roster[String(district)] : null,
+              rosterLoaded: !!(roster && Object.keys(roster).length)
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Vermilion County Board",
+            note: withShortfall(boardCountNote(members.length, null), result)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The county's own table prints an "Elected/Appointed" year per
+              // member. It rides the note rather than being dropped, and it is
+              // labelled "on the board since" because the county does not say
+              // which of the two it was.
+              if (m.since) {
+                p.note = p.note ? p.note + " · on the board since " + String(m.since)
+                  : "on the board since " + String(m.since);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.entry && result.entry.officeAddress) {
+            fields.push({ label: "County Board office",
+                          value: String(result.entry.officeAddress) });
+          }
+          if (result.entry && result.entry.officePhone) {
+            fields.push({ label: "Board office phone",
+                          value: String(result.entry.officePhone) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Vermilion County Board Members (official)", url: "https://www.vercounty.org/county-board/county-board-members/" };
+        },
+        hoverOfficial: {
+          load: loadVermilionBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);
@@ -19671,11 +20404,17 @@ function initChiExplorer() {
       // the GIS keys by integer — the scraper converts, so the join holds. The
       // Chairman and Vice Chairman are elected from among the 16 and each
       // holds a district seat, so both are badged on their own rows.
-      // Adams — 7 districts, county GIS, NO ROSTER. The county's own site is an
-      // Akamai hard deny and the Archive never captured its board page, so no
-      // member is named here: the card gives the district and links the body,
-      // which is the rule-4 floor rather than a guess. If a roster ever becomes
-      // reachable this entry gains it exactly as Logan's did.
+      // Adams — 7 districts of THREE seats each (21 members), county GIS, and a
+      // roster that is PARTIAL BY CONSTRUCTION. The county's own board page is a
+      // flat Akamai deny and the Archive never captured it, so no page can be
+      // read; what IS readable is the county's certified election canvasses, on
+      // platinumelectionresults.com. Adams staggers its seats 2-then-1, so the
+      // November 2024 general names ONE member per district and the other two
+      // were seated in November 2022 — a canvass that vendor returns empty and
+      // nobody else carries. The card therefore names a third of the board and
+      // SAYS which third, rather than showing a short list that reads like the
+      // whole one. Every row carries the election that seated it, because a
+      // canvass cannot show a mid-term appointment (the Clark rule).
       {
         key: "adams",
         coverage: adamsCountyCoverage,
@@ -19685,19 +20424,64 @@ function initChiExplorer() {
           return (v == null || v === "") ? null : String(v).replace(/^D/, "District ");
         },
         query: function (point, seq) {
-          return loadAdamsCountyBoard().then(function (geojson) {
-            var feature = findFeatureContaining(geojson, point);
+          return Promise.all([
+            loadAdamsCountyBoard(),
+            loadAdamsBoardMembers().catch(function () { return null; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
             var d = findPropCI(feature.properties || {}, ["dist_name"]);
-            return { seq: seq, district: (d == null || d === "") ? null : String(d) };
+            var district = (d == null || d === "") ? null : String(d).replace(/^D/, "");
+            var roster = results[1];
+            return {
+              seq: seq,
+              district: district,
+              entry: (roster && district) ? roster[district] : null,
+              board: roster && roster.board,
+              rosterLoaded: !!roster
+            };
           });
         },
         render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var seats = (result.entry && result.entry.seats) || 0;
+          var note;
+          if (!result.rosterLoaded) {
+            // A fetch failure must never read as "the county names nobody".
+            note = "The member list could not be loaded just now.";
+          } else if (members.length && seats > members.length) {
+            note = members.length + " of this district's " + seats +
+              " seats named — the member elected in 2024. Adams elects the other " +
+              (seats - members.length) +
+              " in a separate cycle, and no source this project can read names them.";
+          } else {
+            note = boardCountNote(members.length, null);
+          }
           var wrap = cardEl("div", "card-flush");
           wrap.appendChild(renderBodyIntro({
             title: "Adams County Board",
-            note: "Adams County does not publish its board membership anywhere reachable, so this card names the district only."
+            note: note
           }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(function (m) {
+              var p = boardMemberPerson(m);
+              // The canvass is the ONLY thing placing this member in this
+              // district, so its provenance rides the row.
+              if (m.districtSource) {
+                p.note = p.note ? p.note + " · " + String(m.districtSource)
+                  : String(m.districtSource);
+              }
+              return p;
+            })));
+          }
+          var fields = [];
+          if (result.board && result.board.clerkPhone) {
+            fields.push({ label: "County Clerk", value: String(result.board.clerkPhone) });
+          }
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board mail", value: String(result.board.address) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
           return wrap;
         },
         cardIdentifier: function (result) {
@@ -19709,6 +20493,17 @@ function initChiExplorer() {
             label: "Adams County Board (official)",
             url: "https://www.adamscountyil.gov/county-board"
           };
+        },
+        hoverOfficial: {
+          load: loadAdamsBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["dist_name"]);
+            if (d == null || d === "") return null;
+            var e = roster[String(d).replace(/^D/, "")];
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
         }
       },
       // McDonough — 3 districts of SEVEN members each, the boundary DERIVED
@@ -24167,6 +24962,319 @@ function initChiExplorer() {
           return { label: "Crawford County Clerk — Elections (official)", url: "https://crawfordcounty.illinois.gov/department/clerk-recorder/elections-voting/" };
         }
       },
+      // Richland County — 21 precincts, the Census 2020 voting districts, which
+      // are the county's own fabric by measurement twice over: the names match
+      // its certified 2026 General Primary ballot publication 21/21, POP100
+      // sums to its exact 2020 population, and each precinct polygon in the
+      // county's own GIS is 98.8-100% contained in the same-named voting
+      // district. The board district rides ON the feature — the composition is
+      // whole-precinct, so no spatial join is needed. The county's GIS and
+      // polling list write the county seat's precincts long ("Olney Precinct
+      // 5"); the label here follows the ballot and the census. NO POLLING
+      // PLACE: the county publishes a good list, but a polling place is a
+      // roster fact rather than geometry.
+      {
+        key: "richland",
+        coverage: richlandCountyCoverage,
+        loadGeometry: loadRichlandPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadRichlandPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Richland County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Richland County Clerk — Elections (official)", url: "https://richlandcounty.illinois.gov/county-clerk-recorder/elections/" };
+        }
+      },
+      // Jackson County — 56 precincts, the Census 2020 voting districts, whose
+      // names match the county's own 56/56 and whose POP100 sums to its exact
+      // 2020 population. Most features carry their County Board district; THREE
+      // carry a list of two instead, because Carbondale 21, Carbondale 24 and
+      // Murphysboro 4 are SPLIT between districts — the county's own certified
+      // canvass reports each of them twice, with its registration divided. For
+      // those three the precinct does not determine the district and the card
+      // says which two it could be rather than guessing one. NO POLLING PLACE:
+      // a polling place is a roster fact rather than geometry.
+      {
+        key: "jackson",
+        coverage: jacksonCountyCoverage,
+        loadGeometry: loadJacksonPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadJacksonPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              boardDistricts: findPropCI(props, ["districts"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistricts && result.boardDistricts.length) {
+            fields.push({
+              label: "County Board District",
+              value: "This precinct is split between Districts " +
+                result.boardDistricts.join(" and ") +
+                " — the county's own election results report it under both, so " +
+                "your precinct alone doesn't say which one you're in."
+            });
+          } else if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Jackson County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Jackson County Clerk — Voting & Elections (official)", url: "https://jacksoncounty-il.gov/340/Voting-Elections" };
+        }
+      },
+      // Shelby County — 33 precincts, the Census 2020 voting districts, which
+      // carry the county's adopted board-district map's own 33 precinct names
+      // 33/33 and sum to its exact 2020 population. That agreement is what makes
+      // the district dissolve legitimate, so the precincts were buildable from
+      // the day the districts shipped; the absence simply had no gap record.
+      // SHELBYVILLE 5 CARRIES THREE DISTRICTS. It wraps around the city of
+      // Shelbyville and the adopted plan divides it between 8, 9 and 10 along
+      // two landmarks the county names — but a PRECINCT is not divided, so it
+      // ships whole and says which three it spans rather than picking the
+      // largest piece. NO POLLING PLACE: a polling place is a roster fact.
+      {
+        key: "shelby",
+        coverage: shelbyCountyCoverage,
+        loadGeometry: loadShelbyPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadShelbyPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              boardDistricts: findPropCI(props, ["districts"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          var many = result.boardDistricts;
+          if (many && many.length) {
+            // Listed with commas and a final "and" so three reads as three.
+            var joined = many.length > 1
+              ? many.slice(0, -1).join(", ") + " and " + many[many.length - 1]
+              : String(many[0]);
+            fields.push({
+              label: "County Board District",
+              value: "This precinct is split between Districts " + joined +
+                " — the county's adopted plan divides it, so your precinct " +
+                "alone doesn't say which one you're in."
+            });
+          } else if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Shelby County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Shelby County Board (official)", url: "https://www.shelbycounty-il.gov/coboard.aspx" };
+        }
+      },
+      // Warren County — the county's own 26 precincts, named exactly as its
+      // precinct-map legend prints them. Census 2020 drew 28 voting districts
+      // here, so TWO are merged back to the county's fabric (Roseville 1 and 2
+      // into Roseville; Spring Grove-Alexis and -Gerlaw into Spring Grove) and
+      // each merged feature names the census units it is built from. Both merges
+      // sit wholly inside one district, which is the same fact that lets the
+      // districts be dissolved from census geometry at all. Nothing new was
+      // sourced; the absence simply had no gap record. NO POLLING PLACE.
+      {
+        key: "warren",
+        coverage: warrenCountyCoverage,
+        loadGeometry: loadWarrenPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadWarrenPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              censusUnits: findPropCI(props, ["censusunits"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          if (result.censusUnits && result.censusUnits.length) {
+            fields.push({
+              label: "In census products",
+              value: "Drawn as " + result.censusUnits.join(" and ") +
+                " — the county runs them as one precinct."
+            });
+          }
+          fields.push({ label: "County", value: "Warren County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Warren County Board (official)", url: "https://www.warrencountyil.gov/county-board" };
+        }
+      },
+      // Hancock County — 33 precincts, the Census 2020 voting districts, which
+      // ARE the county's own fabric by measurement: they carry its 33 precinct
+      // names 33/33 as its certified results database prints them, and their
+      // POP100 sums to its exact 2020 population. Nothing new was sourced for
+      // this — the composition that draws the board districts already said which
+      // district each precinct belongs to, and the absence simply had no gap
+      // record explaining it (the Cass/Greene/Scott/Moultrie shape). THE
+      // COUNTY'S SPELLING SHIPS: thirteen census names differ, one of them a
+      // census TYPO (MONTIBELLO IV for Montebello 4), and the census's own name
+      // rides the feature rather than being corrected away silently. NO POLLING
+      // PLACE: a polling place is a roster fact.
+      {
+        key: "hancock",
+        coverage: hancockCountyCoverage,
+        loadGeometry: loadHancockPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadHancockPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Hancock County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Hancock County Clerk — election results (official)", url: "https://electionstats.hancockcounty-il.gov/" };
+        }
+      },
+      // Douglas County — 17 precincts, the Census 2020 voting districts, whose
+      // names match the county's own VotingDistricts service 17/17 and whose
+      // POP100 sums to its exact 2020 population. Most features carry their
+      // County Board district; TWO carry a list of two instead, because Bourbon
+      // 2 and Bowdre are SPLIT — the county's own district layer cuts through
+      // them, and its certified 2022 General counts nineteen precinct-slots
+      // across seven districts in a county of seventeen precincts. For those two
+      // the precinct does not determine the district and the card says which two
+      // it could be. NO POLLING PLACE: a polling place is a roster fact.
+      {
+        key: "douglas",
+        coverage: douglasCountyCoverage,
+        loadGeometry: loadDouglasPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadDouglasPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              boardDistricts: findPropCI(props, ["districts"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistricts && result.boardDistricts.length) {
+            fields.push({
+              label: "County Board District",
+              value: "This precinct is split between Districts " +
+                result.boardDistricts.join(" and ") +
+                " — the county's own district map runs through it, so your " +
+                "precinct alone doesn't say which one you're in."
+            });
+          } else if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Douglas County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Douglas County Clerk — Elections (official)", url: "https://douglascountyil.gov/clerk-recorder/elections" };
+        }
+      },
       // Mercer County — 24 precincts, the Census 2020 voting districts, which are
       // the county's own fabric by measurement: names match 24/24 and POP100
       // sums to its exact 2020 population. The board district rides ON the
@@ -24493,6 +25601,86 @@ function initChiExplorer() {
           return {
             label: "Perry County — certified election results",
             url: "https://results.gbsvote.com/locations/counties.asp?p_id=3&l_id=283"
+          };
+        }
+      },
+      // Pulaski — eleven precincts that ARE the Census 2020 voting districts,
+      // named by the county's certified 2024 General Primary a committeeperson
+      // contest at a time. Same footing as Johnson and Perry, and the same
+      // reason it took this long: the county's site resolves to an address this
+      // project's network refuses, so nothing it publishes was ever read. NO
+      // BOARD DISTRICT — one countywide "For County Commissioner" contest per
+      // party over all eleven precincts, no district-suffixed board contest
+      // anywhere, and the 2016 General agrees. NO COMMISSIONER NAMED: the vendor
+      // holds a primary and one decade-old general, and a primary names nominees.
+      {
+        key: "pulaski",
+        coverage: pulaskiCountyCoverage,
+        loadGeometry: loadPulaskiPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadPulaskiPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Pulaski County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Pulaski County — certified election results",
+            url: "https://platinumelectionresults.com/history"
+          };
+        }
+      },
+      // Hardin — six precincts that ARE the Census 2020 voting districts, named
+      // by the county's certified 2026 General Primary a committeeperson contest
+      // at a time. NO BOARD DISTRICT: the board is elected county-wide, proven
+      // from that canvass and again from a 2016 General on a second vendor. NO
+      // COMMISSIONER NAMED: hardincountyil.gov is a parking lander on both hosts,
+      // and the canvass that IS readable is a primary, which names nominees.
+      // Two precincts carry an explicit label rather than a derived one — McFarlan
+      // from the census's own mixed-case subdivision layer, Cave In Rock from the
+      // county's returns where the census hyphenates it.
+      {
+        key: "hardin",
+        coverage: hardinCountyCoverage,
+        loadGeometry: loadHardinPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadHardinPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Hardin County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Hardin County — certified election results",
+            url: "https://il-hardin.pollresults.net/"
           };
         }
       },

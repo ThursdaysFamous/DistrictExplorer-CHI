@@ -988,6 +988,62 @@ Same mechanism as the fill: Leaflet writes `stroke-width` as a presentation attr
 outranks, so this too costs no engine release despite `highlightStyleFor()` and the
 `.region-highlight` rule both living inside fences.
 
+## The search bar reads the same in both themes (operator-reported, 2026-08-24)
+
+Reported as a **layout** difference between light and dark, so it was measured as one before
+anything was changed: every box in the search bar — `.map-toolbar`, `.search-shell`, `.search-row`,
+the input, the Search button, `.search-extra` and its four children — read for
+`getBoundingClientRect()` plus twenty computed box properties, at **390px and 1400px**, **idle and
+expanded-with-a-query**, in both themes.
+
+**Every rect was identical.** Nothing moved, nothing resized, no padding or border-width or
+line-height differed anywhere in the control. Across all four states the only non-colour difference
+in the entire component was one property on one element:
+
+    .search-shell   box-shadow: none  ->  0 4px 18px rgba(0, 0, 0, 0.55)
+
+That is a real fault and it is the one the eye was reporting. In the engine, `.search-shell` is a
+**card floating over the map** — `.map-toolbar` is `position: absolute` above the tiles — so the
+shell carries panel background, a border, 8px of padding and a shadow, and the shadow is what lifts
+it off the basemap. This skin **relocates the toolbar into the masthead** (a markup move in the
+build script, not a media query — the shell is a `.masthead` descendant in every state at every
+width) and **flattens the shell to nothing**: transparent, no border, no padding, `box-shadow:
+none`. The input alone is the control; the shell is now just a wrapper.
+
+The dark block re-shadowed it anyway, grouped with `.layer-toggle-btn` and `.map-tile-banner` —
+two elements that genuinely do still float over the map and genuinely do still need the lift. On
+the flattened shell the same declaration painted a soft black plate roughly 210 x 60px behind the
+search field, sitting on the masthead where light mode has nothing at all. So light showed a crisp
+outlined input on a flat header and dark showed an input on a floating slab: **the two themes had
+stopped describing the same object**, which is exactly what "the layout isn't the same" means when
+no box has actually moved.
+
+Fixed by dropping `.search-shell` from that selector list, leaving the skin's own
+`.masthead .search-shell { box-shadow: none }` to govern in both themes. The comment left in its
+place says why it is absent, so the next person adding a dark shadow does not put it back.
+
+### Verification
+
+Both builds generated from the **same** `index.html` (`e2dbaaf`), so the diff is the CSS change
+alone and nothing the base moved underneath it:
+
+| | pixels differing | bounding box |
+|---|---|---|
+| light theme | **0** | none |
+| dark theme | 27,359 | x 798-1400, y 0-82 |
+
+Zero in light is the guarantee that mattered — the rule is `[data-theme="dark"]`-scoped, and the
+render agrees. In dark the delta is confined to the search bar's own corner of the masthead with no
+knock-on anywhere else on the page. Re-measured after the fix, `.search-shell` reports
+**identical** on every property.
+
+The one remaining geometric difference between the themes is `.masthead-actions` at 0.7px, because
+the theme toggle's own label is "Dark" in one and "Light" in the other. That is the control naming
+what it does, not a layout bug.
+
+Costs no engine release: `.search-shell`'s engine rule is untouched, and the change is a deletion
+from a fork-local dark block that only ever existed in the skin island.
+
 ## Known package flaws / adoption fix-list
 
 - `pwa/head-snippet.html` uses a **relative** `og:image` — scrapers require an absolute URL;

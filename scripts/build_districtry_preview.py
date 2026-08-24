@@ -938,8 +938,16 @@ SKIN_ISLAND = """<style id="districtry-skin">
   [data-theme="dark"] .share-popover-url,
   [data-theme="dark"] .share-popover-embed { background: var(--dst-sunken); border-color: rgba(236, 233, 244, 0.16); color: var(--slate); }
   [data-theme="dark"] .layer-toggle-btn,
-  [data-theme="dark"] .search-shell,
   [data-theme="dark"] .map-tile-banner { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55); }
+  /* .search-shell is deliberately NOT in that list. In the engine it floats
+     over the map as a card and earns a shadow; this skin moves the toolbar
+     into the masthead and flattens the shell to nothing (transparent, no
+     border, no padding, no shadow) so the input alone reads as the control.
+     Re-shadowing the flattened shell painted a soft black plate behind the
+     search field that light mode has no counterpart for — the two themes
+     stopped describing the same object. Measured at 390px and 1400px, idle
+     and expanded: this shadow was the ONLY non-colour difference between
+     them; every box in the search bar is otherwise identical. */
   /* the pinned-parent outline is deliberately near-black (#14181C) so it reads
      as neutral over a light basemap; over a dark one it is simply gone. */
   [data-theme="dark"] .rel-parent-outline { stroke: #ece9f4; }
