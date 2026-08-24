@@ -18,7 +18,7 @@ self.addEventListener("install", (event) => {
 // Retire MY OWN superseded caches, and only those.
 //
 // CacheStorage is per-ORIGIN, not per-scope, and this origin now serves several
-// instances side by side (/il/, /nyc/, /sf/), each with its own worker and its
+// instances side by side (/il/, /ny/, /ca/), each with its own worker and its
 // own cache. The original sweep here was "delete every key that is not mine",
 // which was correct while an origin held exactly one app and becomes mutual
 // destruction the moment it holds two: every visit to one instance would wipe

@@ -12,7 +12,7 @@
 # unless this script has run).
 #
 # ONE SCRIPT, EVERY INSTANCE. Three byte-identical copies of this used to live
-# in scripts/, sf/scripts/ and nyc/scripts/ — genuinely non-redundant while the
+# in scripts/, ca/scripts/ and ny/scripts/ — genuinely non-redundant while the
 # instances were separate REPOS, because each self-located into its own tree.
 # They are one repo now, one SessionStart hook fires at the repo root, and only
 # the root copy ever ran: a sandboxed sf or nyc smoke run would have hit exactly

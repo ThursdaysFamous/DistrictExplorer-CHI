@@ -4,29 +4,44 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<!-- Google tag (gtag.js) — production host only; keeps local dev + CI out of analytics -->
+<script>
+  (function () {
+    if (location.hostname !== 'districtry.com') return;
+    if (window.top !== window.self) return; // top-level only — no Google Analytics inside an embedded iframe (the cookieless GoatCounter still counts)
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-YPJ570LWJB';
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-YPJ570LWJB');
+  })();
+</script>
 
-<title>San Francisco District Explorer — find your districts &amp; representatives</title>
-<meta name="description" content="Click any point in San Francisco — or search an address — and see every civic district that contains it, and who represents you there." />
+<title>NYC District Explorer — find your districts &amp; representatives</title>
+<meta name="description" content="Find your NYC City Council district, community board, NYPD precinct, school district, and state and congressional districts — plus who represents you." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://sf.chidistricts.com/" />
+<link rel="canonical" href="https://districtry.com/ny/" />
 
 <!-- Open Graph / social share previews (Facebook, LinkedIn, iMessage, Slack…) -->
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="San Francisco District Explorer" />
-<meta property="og:title" content="San Francisco District Explorer — find your districts and representatives" />
-<meta property="og:description" content="Click the map or search any San Francisco address to see every civic district that covers it, and who represents you." />
-<meta property="og:url" content="https://sf.chidistricts.com/" />
-<meta property="og:image" content="https://sf.chidistricts.com/og-image.png" />
+<meta property="og:site_name" content="NYC District Explorer" />
+<meta property="og:title" content="NYC District Explorer — find your districts and representatives" />
+<meta property="og:description" content="Click the map or search any New York City address to see every civic district that covers it — City Council district, community board, NYPD precinct, school district, state and congressional districts — and who represents you." />
+<meta property="og:url" content="https://districtry.com/ny/" />
+<meta property="og:image" content="https://districtry.com/ny/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="San Francisco District Explorer — a map of San Francisco with the question: which districts cover this point, and who represents you?" />
+<meta property="og:image:alt" content="NYC District Explorer — a map of New York City with the question: which districts cover this point, and who represents you?" />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="San Francisco District Explorer — find your districts and representatives" />
-<meta name="twitter:description" content="See every civic district that covers a San Francisco address, and who represents you." />
-<meta name="twitter:image" content="https://sf.chidistricts.com/og-image.png" />
+<meta name="twitter:title" content="NYC District Explorer — find your districts and representatives" />
+<meta name="twitter:description" content="See every civic district that covers a New York City address — City Council district, community board, NYPD precinct, school district, state and congressional districts — and who represents you." />
+<meta name="twitter:image" content="https://districtry.com/ny/og-image.png" />
 
 <!-- Structured data: help search engines understand what this tool is -->
 <script type="application/ld+json">
@@ -35,43 +50,60 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://sf.chidistricts.com/#website",
-      "url": "https://sf.chidistricts.com/",
-      "name": "San Francisco District Explorer",
-      "description": "Find every civic district that covers a point or address in San Francisco, and who represents you there.",
+      "@id": "https://districtry.com/ny/#website",
+      "url": "https://districtry.com/ny/",
+      "name": "NYC District Explorer",
+      "description": "Find every civic district that covers a point or address in New York City, and who represents you there.",
       "inLanguage": "en-US",
-      "publisher": { "@id": "https://sf.chidistricts.com/#publisher" }
+      "publisher": { "@id": "https://districtry.com/ny/#publisher" }
     },
     {
       "@type": "Organization",
-      "@id": "https://sf.chidistricts.com/#publisher",
+      "@id": "https://districtry.com/ny/#publisher",
       "name": "Overberg",
       "url": "https://overberg.co"
     },
     {
       "@type": "WebApplication",
-      "name": "San Francisco District Explorer",
-      "url": "https://sf.chidistricts.com/",
-      "description": "Click any point in San Francisco, or search an address, to see every civic district that contains it, and who represents you.",
+      "name": "NYC District Explorer",
+      "url": "https://districtry.com/ny/",
+      "description": "Click any point in New York City, or search an address, to see every civic district that contains it — City Council district, community board, NYPD precinct and sector, community school district, borough, U.S. House, and New York State Senate and Assembly districts — and who represents you.",
       "applicationCategory": "Reference",
       "operatingSystem": "Any (modern web browser)",
       "browserRequirements": "Requires JavaScript",
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "inLanguage": "en-US",
-      "image": "https://sf.chidistricts.com/og-image.png",
-      "areaServed": { "@type": "City", "name": "San Francisco", "containedInPlace": { "@type": "State", "name": "California" } },
-      "keywords": "San Francisco district map, what district am I in, San Francisco supervisor district, civic districts, who represents me San Francisco",
-      "isPartOf": { "@id": "https://sf.chidistricts.com/#website" },
-      "sameAs": "https://github.com/ThursdaysFamous/DistrictExplorer-SF"
+      "image": "https://districtry.com/ny/og-image.png",
+      "areaServed": { "@type": "City", "name": "New York City", "containedInPlace": { "@type": "State", "name": "New York" } },
+      "keywords": "NYC City Council district map, what council district am I in, NYPD precinct, community board, community school district, New York State Assembly district, New York State Senate district, congressional district, who represents me NYC",
+      "isPartOf": { "@id": "https://districtry.com/ny/#website" },
+      "sameAs": "https://github.com/ThursdaysFamous/DistrictExplorer-NYC"
     }
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://districtry.com/ny/#faq",
+  "isPartOf": { "@id": "https://districtry.com/ny/#website" },
+  "mainEntity": [
+    { "@type": "Question", "name": "How do I find out what City Council district I'm in?", "acceptedAnswer": { "@type": "Answer", "text": "Search your address or click your location on the map above. The tool shows your New York City Council district and who represents it, along with every other civic district that covers that exact point." } },
+    { "@type": "Question", "name": "How many City Council districts does New York City have?", "acceptedAnswer": { "@type": "Answer", "text": "New York City has 51 City Council districts, each represented by a Council Member." } },
+    { "@type": "Question", "name": "What NYPD precinct am I in?", "acceptedAnswer": { "@type": "Answer", "text": "New York City is divided into 78 NYPD precincts, each split into smaller sectors. Select any address above to see the precinct that covers it, plus the nearest police station." } },
+    { "@type": "Question", "name": "What is a community district or community board?", "acceptedAnswer": { "@type": "Answer", "text": "New York City has 59 community districts, each served by a community board that advises on land use, the city budget, and local services. The tool shows which community district contains any point you pick." } },
+    { "@type": "Question", "name": "Who represents me in Albany and in Congress?", "acceptedAnswer": { "@type": "Answer", "text": "Pick a location to see your U.S. House district, New York State Senate district, and New York State Assembly district, along with the people currently holding those seats." } },
+    { "@type": "Question", "name": "Is this an official government tool?", "acceptedAnswer": { "@type": "Answer", "text": "No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official." } }
+  ]
+}
+</script>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#C0362C">
+<meta name="theme-color" content="#12305C">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23C0362C'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23ffffff'/%3E%3C/svg%3E" />
+<!-- Favicon: the New York City flag — blue / white / orange vertical bands. -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23ffffff'/%3E%3Crect width='21' height='64' fill='%2312305C'/%3E%3Crect x='43' width='21' height='64' fill='%23FF6319'/%3E%3C/svg%3E" />
 
 <!-- warm the connections first paint waits on: Leaflet's CDN (JS before the app
      script) and the CARTO tile hosts the map hits the moment it initializes.
@@ -84,9 +116,10 @@
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com">
 <link rel="preconnect" href="https://b.basemaps.cartocdn.com">
 <link rel="preconnect" href="https://c.basemaps.cartocdn.com">
-<link rel="dns-prefetch" href="https://data.sfgov.org">
+<link rel="dns-prefetch" href="https://data.cityofnewyork.us">
+<link rel="dns-prefetch" href="https://geosearch.planninglabs.nyc">
+<link rel="dns-prefetch" href="https://services5.arcgis.com">
 <link rel="dns-prefetch" href="https://tigerweb.geo.census.gov">
-<link rel="dns-prefetch" href="https://nominatim.openstreetmap.org">
 <link rel="dns-prefetch" href="https://photon.komoot.io">
 <!-- Fonts are self-hosted (same-origin @font-face in <style>, built by
      scripts/build_fonts.py) — no fonts.googleapis.com / fonts.gstatic.com. Frees
@@ -928,11 +961,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   size-adjust: 107.40%;
 }
   :root {
-    /* ---- San Francisco palette (bay blue + Golden Gate International Orange) ---- */
-    --accent: #1D6F8B;        /* flag stripe blue */
-    --accent-deep: #124F63;   /* deeper blue for text/links on light bg */
-    --accent-warm: #C0362C;         /* flag star red */
-    --accent-warm-deep: #8E2A22;
+    /* ---- New York City flag palette (blue / white / orange) ---- */
+    --accent: #2A6EBB;        /* flag blue, used as the light accent */
+    --accent-deep: #12305C;   /* deeper blue for text/links on light bg */
+    --accent-warm: #FF6319;      /* NYC orange */
+    --accent-warm-deep: #C74E12;
   /* ==== ENGINE:BEGIN styles-core ==== */
 
     --ink: #14181C;
@@ -2283,7 +2316,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
   /* A pill, not a text link: inline-flex so the label centres against its icon,
      a tinted surface rather than a bare outline, and a 1px lift on hover. The
-     tint is this metro's own --accent (#1D6F8B); it is a literal rgba
+     tint is this metro's own --accent (#2A6EBB); it is a literal rgba
      because CSS cannot interpolate a custom property into rgba(), and the label
      stays near-white so contrast never depends on how dark the accent is. */
   .masthead-actions .footer-link-btn {
@@ -2300,8 +2333,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
     text-decoration: none;
     cursor: pointer;
     color: #EAF4FA;
-    background: rgba(29,111,139,0.24);
-    border: 1px solid rgba(29,111,139,0.62);
+    background: rgba(42,110,187,0.24);
+    border: 1px solid rgba(42,110,187,0.62);
     transition: background .14s ease, border-color .14s ease, color .14s ease, transform .14s ease;
   }
   /* Beats the engine rule's `.footer-link-btn:hover { text-decoration: underline }`
@@ -2309,7 +2342,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .masthead-actions .footer-link-btn:hover,
   .masthead-actions .footer-link-btn:focus-visible {
     color: #fff;
-    background: rgba(29,111,139,0.38);
+    background: rgba(42,110,187,0.38);
     border-color: var(--accent);
     text-decoration: none;
     transform: translateY(-1px);
@@ -2334,11 +2367,43 @@ svg.leaflet-image-layer.leaflet-interactive path {
     }
     .masthead-actions .footer-link-btn { font-size: 12px; padding: 8px 13px; border-radius: 9px; }
   }
-  /* The SEO/orientation lede under the empty-state prompt —
-     the district vocabulary a first-time (or crawling) visitor reads before a
-     point is picked. Styled a step down from the primary prompt above it. */
   .empty-state .empty-state-lede { font-size: 12.5px; margin-top: 12px; max-width: 40ch; color: var(--slate-soft); }
-  /* (legacy) FAQ styles below the tool — crawlable answers to the
+
+  /* ---- selection marker as a borough seal: once the selected point resolves
+     to one of the five boroughs, the plain teardrop is swapped for that
+     borough's official seal in a round white badge with a small pointer tail
+     aimed at the exact spot (see boroughSealIcon). background:none clears
+     Leaflet's default divIcon chrome. ---- */
+  .nyc-borough-marker { background: none; border: none; }
+  .nyc-borough-pin {
+    position: relative;
+    width: 48px;
+    height: 58px;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+  }
+  .nyc-borough-pin img {
+    display: block;
+    width: 44px;
+    height: 44px;
+    margin: 0 2px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #ffffff;
+    box-sizing: border-box;
+  }
+  /* the tail: a white triangle centered under the badge, its tip the anchor */
+  .nyc-borough-pin-tail {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 12px solid #ffffff;
+  }
+  /* NYC-specific: evergreen FAQ below the tool — crawlable answers to the
      district questions people search for, kept in collapsed <details> so they
      stay indexable without cluttering the UI. */
   .faq-section { max-width: 1800px; margin: 0 auto; padding: 34px 20px 8px; }
@@ -2513,7 +2578,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ==== ENGINE:END styles-hover-responsive ==== */
 </style>
 
-<script data-goatcounter="https://sfdistricts.goatcounter.com/count"
+<script data-goatcounter="https://nycdistricts.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
@@ -2527,7 +2592,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
           <path fill="var(--accent-warm)" id="star-path-header"></path>
         </svg>
-        <span class="title-text">San Francisco District Explorer</span>
+        <span class="title-text">NYC District Explorer</span>
       </span>
       <small>Click the map or search an address to see every district that covers it, and who represents it.</small>
     </h1>
@@ -2555,13 +2620,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <main class="layout" id="layout">
   <section class="map-col" aria-label="Interactive district map">
-    <div id="map" role="application" aria-label="Map of San Francisco. Click anywhere to select a point, or use the search box above."></div>
+    <div id="map" role="application" aria-label="Map of New York City. Click anywhere to select a point, or use the search box above."></div>
 
     <div class="map-toolbar">
       <div class="search-shell">
         <form id="geocode-form" class="search-row" role="search">
-          <label for="geocode-input" class="visually-hidden">Search a San Francisco address</label>
-          <input type="text" id="geocode-input" placeholder="Search a San Francisco address…" autocomplete="off" />
+          <label for="geocode-input" class="visually-hidden">Search a New York City address</label>
+          <input type="text" id="geocode-input" placeholder="Search a New York City address…" autocomplete="off" />
           <button type="submit">Search</button>
         </form>
         <div class="search-extra" id="search-extra">
@@ -2600,7 +2665,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
-      <p class="empty-state-lede">See every civic district that covers your location — and who represents you there.</p>
+      <p class="empty-state-lede">See your City Council district, community board, NYPD precinct, community school district, borough, U.S. House and New York State districts — plus who represents you.</p>
     </div>
     <div id="groups-root" hidden></div>
   </section>
@@ -2608,6 +2673,33 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <div class="flag-stripe" aria-hidden="true"></div>
 
+<section class="faq-section" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">Common questions about New York City districts</h2>
+  <details>
+    <summary>How do I find out what City Council district I'm in?</summary>
+    <p>Search your address or click your location on the map above. The tool shows your New York City Council district and who represents it, along with every other civic district that covers that exact point.</p>
+  </details>
+  <details>
+    <summary>How many City Council districts does New York City have?</summary>
+    <p>New York City has 51 City Council districts, each represented by a Council Member.</p>
+  </details>
+  <details>
+    <summary>What NYPD precinct am I in?</summary>
+    <p>New York City is divided into 78 NYPD precincts, each split into smaller sectors. Select any address above to see the precinct that covers it, plus the nearest police station.</p>
+  </details>
+  <details>
+    <summary>What is a community district or community board?</summary>
+    <p>New York City has 59 community districts, each served by a community board that advises on land use, the city budget, and local services. The tool shows which community district contains any point you pick.</p>
+  </details>
+  <details>
+    <summary>Who represents me in Albany and in Congress?</summary>
+    <p>Pick a location to see your U.S. House district, New York State Senate district, and New York State Assembly district, along with the people currently holding those seats.</p>
+  </details>
+  <details>
+    <summary>Is this an official government tool?</summary>
+    <p>No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official.</p>
+  </details>
+</section>
 
 <div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
@@ -2623,14 +2715,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
     <div class="footer-sources" id="footer-sources">
       <span class="footer-sources-label">Sources</span>
-      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors (Nominatim &amp; Photon/Komoot)</a>
-      <a href="https://data.sfgov.org" target="_blank" rel="noopener">DataSF</a>
+      <a href="https://geosearch.planninglabs.nyc" target="_blank" rel="noopener">Geocoding © NYC Planning (GeoSearch)</a>
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Cross-metro lookup © OpenStreetMap contributors (Photon/Komoot)</a>
+      <a href="https://opendata.cityofnewyork.us" target="_blank" rel="noopener">NYC Open Data</a>
       <a href="https://tigerweb.geo.census.gov" target="_blank" rel="noopener">U.S. Census TIGERweb</a>
+      <a href="https://www.arcgis.com/home/item.html?id=GfwWNkhOj9bNBqoJ" target="_blank" rel="noopener">Fire battalions &amp; election districts © NYC (ArcGIS)</a>
+      <a href="https://data.nysed.gov" target="_blank" rel="noopener">School districts © NYS Education Dept</a>
       <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener">unitedstates/congress-legislators</a>
       <a href="https://openstates.org" target="_blank" rel="noopener">State legislator offices © Open States</a>
       <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map (post offices)</a>
-      <a href="https://www.sf.gov/departments--department-elections" target="_blank" rel="noopener">SF Department of Elections (voting sites)</a>
-      <a href="https://www.bart.gov/about/bod" target="_blank" rel="noopener">BART Board of Directors (director districts)</a>
+      <a href="https://gis.ny.gov" target="_blank" rel="noopener">Early-voting sites © NYS ITS Geospatial Services / NYS &amp; NYC Boards of Elections</a>
     </div>
     <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
     <div class="footer-metros" id="footer-metros" hidden>
@@ -2642,7 +2736,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
       <!-- The gaps-html ENGINE fence moved to the masthead action row; see the
            comment there for why the move costs no engine release. -->
-      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-SF" target="_blank" rel="noopener">View source on GitHub</a>
+      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-NYC" target="_blank" rel="noopener">View source on GitHub</a>
       <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
     </div>
@@ -2681,17 +2775,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
      with HTML parsing instead of blocking first paint (~1.3 s on mobile, PSI's
      largest single render-blocking request). Deferred scripts execute in order
      before DOMContentLoaded; the app boot below is gated on DOMContentLoaded, so
-     L is guaranteed defined before use. This is what the old §2.4 "leaflet.js
-     doesn't need defer" anti-finding said would break boot — it's correct that a
-     bare defer breaks the immediate IIFE, which is exactly why the boot is now
-     DOMContentLoaded-gated instead of immediate. (OPTIMIZATION_PLAYBOOK R2-1.) -->
+     L is guaranteed defined before use. (OPTIMIZATION_PLAYBOOK R2-1.) -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin=""></script>
 
 <script>
 // The app boot was a bare IIFE that ran at parse time and dereferenced L
 // synchronously. With Leaflet now deferred, boot is gated on DOMContentLoaded
-// (deferred scripts finish before it), so L is ready when initSFExplorer runs.
-function initSFExplorer() {
+// (deferred scripts finish before it), so L is ready when initNycExplorer runs.
+function initNycExplorer() {
   "use strict";
 
   /* =========================================================================
@@ -2704,19 +2795,19 @@ function initSFExplorer() {
    * lives here, so an ENGINE block never needs a per-city edit. Fenced ENGINE
    * blocks are byte-identical across every metro fork — see
    * docs/ENGINE_SYNC.md and scripts/check_engine_parity.py. */
-  var THIS_METRO = "sf";                // key into METRO_EXPLORERS below
-  var METRO_NAME = "San Francisco";     // used in user-facing strings
-  var METRO_BBOX = { minLng: -122.517, minLat: 37.703, maxLng: -122.353, maxLat: 37.833 };
-  var METRO_CENTER = [37.7749, -122.4194];
+  var THIS_METRO = "nyc";               // key into METRO_EXPLORERS below
+  var METRO_NAME = "New York City";     // used in user-facing strings
+  var METRO_BBOX = { minLng: -74.27, minLat: 40.48, maxLng: -73.68, maxLat: 40.93 };
+  var METRO_CENTER = [40.7128, -74.006];
   // Permalink sanity gate: the *greater* metro area (wider than METRO_BBOX).
-  var PERMALINK_GATE = { minLat: 37.6, maxLat: 37.95, minLng: -122.6, maxLng: -122.3 };
-  var SOCRATA_HOST = "https://data.sfgov.org";
+  var PERMALINK_GATE = { minLat: 40.4, maxLat: 41.05, minLng: -74.3, maxLng: -73.6 };
+  var SOCRATA_HOST = "https://data.cityofnewyork.us";
   // Socrata app token: some metros' portals throttle anonymous requests. It is
   // a throttling identifier, not a secret — public exposure is Socrata's
   // intended use (do NOT put an API Key *secret* here). Blank = sent as-is.
-  var SOCRATA_APP_TOKEN = "";
-  var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-SF/issues/new";
-  var FEEDBACK_SUBJECT = "San Francisco District Explorer feedback";
+  var SOCRATA_APP_TOKEN = "mde4YTGz0w7M4jDhUJ7WVn85W";
+  var REPO_ISSUES = "https://github.com/ThursdaysFamous/DistrictExplorer-NYC/issues/new";
+  var FEEDBACK_SUBJECT = "NYC District Explorer feedback";
   /* Sibling District Explorer deployments — one canonical list shared by every
    * metro fork. When a new metro launches, add its entry to every fork's
    * worksheet and regenerate (Conversion 3 will source this list from the
@@ -2742,9 +2833,9 @@ function initSFExplorer() {
   // keys are this metro's dataset vocabulary — re-seed them from observed
   // field names in the worksheet, keeping encoded fields out.
   var HOVER_NUMBER_KEYS = [
-    "zip", "zip_code", "zipcode", "zcta5ce10", "zcta5ce20", "geoid20", "geoid10",
-    "supervisor", "sup_dist", "supdist", "supname", "supdistpad",
-    "district", "dist_num", "dist", "district_number",
+    "district", "dist_num", "dist", "district_number", "district_no",
+    "coundist", "schooldist", "precinct", "firebn",
+    "modzcta", "zip", "zip_code", "zipcode",
     "number"
   ];
 
@@ -2753,7 +2844,8 @@ function initSFExplorer() {
   // are excluded on purpose: for legislative layers those just restate the
   // number this pairs with.
   var HOVER_NAME_KEYS = [
-    "nhood", "neighborhood", "name"
+    "ntaname", "boroname", "borough",
+    "short_name", "school_nam", "school_nm", "school_name", "schoolname", "sch_name"
   ];
   /* ==== GENERATED:END metro-config ==== */
   /* ==== METRO:END config ==== */
@@ -2804,35 +2896,91 @@ function initSFExplorer() {
   }
   /* ==== ENGINE:END brand-names ==== */
 
-  /* ---------- six-pointed star geometry (used for marker + decorative icons) ---------- */
-  function starPath(cx, cy, outerR, innerR) {
-    var pts = [];
-    for (var i = 0; i < 12; i++) {
-      var angle = (Math.PI / 6) * i - Math.PI / 2;
-      var r = (i % 2 === 0) ? outerR : innerR;
-      pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
-    }
-    return "M" + pts.map(function (p) { return p[0].toFixed(2) + "," + p[1].toFixed(2); }).join(" L") + " Z";
-  }
-  document.getElementById("star-path-header").setAttribute("d", starPath(50, 52, 46, 19));
-  document.getElementById("star-path-empty").setAttribute("d", starPath(50, 50, 40, 16));
+  /* ---------- map-pin geometry (used for the selection marker + decorative
+   * icons). NYC has no flag star like Chicago's, so the wordmark/marker motif
+   * is a "drop a pin" location marker — a teardrop with a hole (two subpaths,
+   * even-odd fill so the hole reads through). Fixed path in a 0 0 100 100 box. */
+  var PIN_PATH =
+    "M50 4 C30.7 4 15 19.7 15 39 C15 65 50 96 50 96 C50 96 85 65 85 39 " +
+    "C85 19.7 69.3 4 50 4 Z M50 27 A13 13 0 1 0 50.01 27 Z";
+  document.getElementById("star-path-header").setAttribute("d", PIN_PATH);
+  document.getElementById("star-path-header").setAttribute("fill-rule", "evenodd");
+  document.getElementById("star-path-empty").setAttribute("d", PIN_PATH);
+  document.getElementById("star-path-empty").setAttribute("fill-rule", "evenodd");
 
   var starDivIcon = L.divIcon({
-    className: "sf-star-marker",
-    html: '<svg viewBox="0 0 100 100" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
-          '<path d="' + starPath(50, 50, 46, 19) + '" fill="#C0362C" stroke="#ffffff" stroke-width="4"/>' +
+    className: "nyc-point-marker",
+    html: '<svg viewBox="0 0 100 100" width="30" height="40" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
+          '<path fill-rule="evenodd" d="' + PIN_PATH + '" fill="#FF6319" stroke="#ffffff" stroke-width="4"/>' +
           "</svg>",
-    iconSize: [34, 34],
-    iconAnchor: [17, 17]
+    iconSize: [30, 40],
+    iconAnchor: [15, 38]
   });
 
-  // Run cb during browser idle (fallback: a short timeout). Used to keep
-  // conditional-marker art and the decorative coverage wash — both of which PSI
-  // measured sitting in the initial-navigation critical chain — OFF the boot
-  // critical path without losing the "swaps instantly later" behavior (R2-3/R2-4).
-  function whenIdle(cb) {
-    return (window.requestIdleCallback || function (fn) { return setTimeout(fn, 200); })(cb);
+  /* ---------- borough-seal selection marker ----------
+   * Once a selected point resolves to one of the five boroughs, the plain
+   * teardrop above is replaced by that borough's official seal in a round white
+   * badge. boroname (from data/app/borough-boundaries.json) maps to the seal
+   * folder slug; the actual swap happens async in applyBoroughMarker (below
+   * setSelectedPoint) so map feedback is instant and the badge upgrades in once
+   * the offline borough geometry is cached. Points that match no borough are NYC
+   * waterways — they get the NYC Ferry logo instead (see loadWaterFerryIcon). */
+  var BOROUGH_SEAL_SLUG = {
+    "Manhattan": "manhattan",
+    "Bronx": "bronx",
+    "Brooklyn": "brooklyn",
+    "Queens": "queens",
+    "Staten Island": "staten-island"
+  };
+  // Build the round-badge divIcon (circular art + white ring + pointer tail)
+  // shared by every borough seal and the water ferry logo.
+  function sealPinIcon(url) {
+    return L.divIcon({
+      className: "nyc-borough-marker",
+      html: '<div class="nyc-borough-pin">' +
+            '<img src="' + url + '" alt="" width="44" height="44">' +
+            '<span class="nyc-borough-pin-tail"></span>' +
+            "</div>",
+      iconSize: [48, 58],
+      iconAnchor: [24, 56]
+    });
   }
+  var boroughIconCache = {};
+  function boroughSealIcon(slug) {
+    if (!boroughIconCache[slug]) {
+      boroughIconCache[slug] = sealPinIcon("icons/boroughs/" + slug + "/seal-96.png");
+    }
+    return boroughIconCache[slug];
+  }
+
+  /* ---------- water marker: NYC Ferry logo ----------
+   * A click that matches no borough is on the water. Show the NYC Ferry logo
+   * there. The logo is preloaded and only swapped in once it actually loads, so
+   * if the asset is missing the marker cleanly stays the default teardrop rather
+   * than rendering a broken image. Result is cached after the first probe. */
+  var WATER_FERRY_URL = "icons/app/ferry.png";
+  var waterFerryIcon = null;   // built once the image is confirmed loadable
+  var waterFerryState = 0;     // 0 = unprobed, 1 = loaded, 2 = missing/failed
+  var waterFerryWaiters = [];
+  function loadWaterFerryIcon(cb) {
+    if (waterFerryState === 1) return cb(waterFerryIcon);
+    if (waterFerryState === 2) return cb(null);
+    waterFerryWaiters.push(cb);
+    if (waterFerryWaiters.length > 1) return; // a probe is already in flight
+    function flush(v) {
+      var w = waterFerryWaiters; waterFerryWaiters = [];
+      for (var i = 0; i < w.length; i++) w[i](v);
+    }
+    var probe = new Image();
+    probe.onload = function () {
+      waterFerryState = 1;
+      waterFerryIcon = sealPinIcon(WATER_FERRY_URL);
+      flush(waterFerryIcon);
+    };
+    probe.onerror = function () { waterFerryState = 2; flush(null); };
+    probe.src = WATER_FERRY_URL;
+  }
+
   /* ==== ENGINE:BEGIN sanitize ==== */
   /* ---------- sanitize: escape any external string before it touches innerHTML ---------- */
   function sanitize(str) {
@@ -3095,7 +3243,7 @@ function initSFExplorer() {
    * MAP
    * ======================================================================= */
 
-  var map = L.map("map", { minZoom: 9, maxZoom: 18, zoomControl: false }).setView(METRO_CENTER, 11);
+  var map = L.map("map", { minZoom: 10, maxZoom: 18, zoomControl: false }).setView(METRO_CENTER, 11);
   L.control.zoom({ position: "bottomright" }).addTo(map);
   /* ==== ENGINE:BEGIN map-pan-filter ==== */
   // Pause the selection-highlight drop-shadow during pan/zoom (see the
@@ -3289,13 +3437,6 @@ function initSFExplorer() {
   var selectedMarker = null;
   var pointChip = document.getElementById("point-chip");
 
-  /* ---------- selection marker: SF keeps the default star set in
-   * setSelectedPoint(). The reference's conditional marker swap (Chicago flag
-   * star / Water Taxi seal on Lake Michigan / county seal) read Chicago-scoped
-   * coverage + IL county geometry and was dropped in the SF re-core; a later SF
-   * thread can reintroduce a metro-specific marker here. ---------- */
-  function selectPointMarker(point, seq, marker) { /* SF: default star kept */ }
-
 
   function setSelectedPoint(lat, lng, opts) {
     opts = opts || {};
@@ -3310,8 +3451,8 @@ function initSFExplorer() {
 
     if (selectedMarker) map.removeLayer(selectedMarker);
     selectedMarker = L.marker([lat, lng], { icon: starDivIcon, alt: "Selected point" }).addTo(map);
-    selectPointMarker(state.selectedPoint, state.sequence, selectedMarker);
     if (!opts.skipPan) map.setView([lat, lng], Math.max(map.getZoom(), 15));
+    applyBoroughMarker(lat, lng, state.sequence);
 
     pointChip.hidden = false;
     pointChip.innerHTML = "";
@@ -3325,6 +3466,32 @@ function initSFExplorer() {
 
     runAllActiveLayerQueries();
     syncUrlHash();
+  }
+
+  /* Swap the teardrop marker for the borough seal once the point resolves to a
+   * borough, or the NYC Ferry logo when it resolves to none (water). Reuses the
+   * shared cached borough-boundary loader and pointInGeometry test, so no extra
+   * fetch. Stale-async guarded by seq; a boundary-load failure silently keeps
+   * the default teardrop. */
+  function applyBoroughMarker(lat, lng, seq) {
+    if (typeof loadBoroughBoundaries !== "function") return;
+    loadBoroughBoundaries().then(function (geo) {
+      if (seq !== state.sequence || !selectedMarker) return;
+      var feats = (geo && geo.features) || [];
+      var pt = { lat: lat, lng: lng };
+      for (var i = 0; i < feats.length; i++) {
+        if (pointInGeometry(pt, feats[i].geometry)) {
+          var name = feats[i].properties && feats[i].properties.boroname;
+          var slug = BOROUGH_SEAL_SLUG[name];
+          if (slug) selectedMarker.setIcon(boroughSealIcon(slug));
+          return;
+        }
+      }
+      // no borough matched — the point is on NYC water: use the ferry logo
+      loadWaterFerryIcon(function (icon) {
+        if (icon && seq === state.sequence && selectedMarker) selectedMarker.setIcon(icon);
+      });
+    }).catch(function () { /* keep the default teardrop marker */ });
   }
 
   /* ==== ENGINE:BEGIN permalink ==== */
@@ -4262,10 +4429,11 @@ function initSFExplorer() {
   });
   /* ==== ENGINE:END metro-portal ==== */
   /* =========================================================================
-   * GEOCODER — Photon search box + Nominatim POI lookups, bounded to
-   * San Francisco, attributed. Fork-provider seam: geocodeAddress() /
-   * geocodeUnbounded() / poiGeocodeRequest() below feed the fenced
-   * geocoder-shell / geocoder-search / poi-geocode engine blocks.
+   * GEOCODER — NYC Planning GeoSearch (Pelias) search box + POI lookups,
+   * NYC-scoped, attributed; Photon (OSM) for the cross-metro sibling lookup.
+   * Fork-provider seam: geocodeAddress() / geocodeUnbounded() /
+   * poiGeocodeRequest() below feed the fenced geocoder-shell /
+   * geocoder-search / poi-geocode engine blocks.
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN geocoder-shell ==== */
@@ -4303,8 +4471,54 @@ function initSFExplorer() {
   new MutationObserver(refreshSearchShellExpanded).observe(geoResultsList, { childList: true, subtree: true });
   /* ==== ENGINE:END geocoder-shell ==== */
 
-  /* Builds a Nominatim-style comma-separated label from a Photon feature's
-   * properties, so renderGeocodeResults can stay geocoder-agnostic. */
+  /* Builds a comma-separated label from a GeoSearch (Pelias) feature's
+   * properties. Pelias already supplies a ready-made `label`; fall back to
+   * assembling one from parts so renderGeocodeResults stays geocoder-agnostic. */
+  function geosearchLabel(p) {
+    if (p.label) return p.label;
+    var streetLine = "";
+    if (p.housenumber && p.street) streetLine = p.housenumber + " " + p.street;
+    else if (p.street) streetLine = p.street;
+    var parts = [];
+    if (p.name && p.name !== p.street) parts.push(p.name);
+    if (streetLine) parts.push(streetLine);
+    if (p.borough) parts.push(p.borough);
+    else if (p.locality) parts.push(p.locality);
+    if (p.region_a) parts.push(p.region_a);
+    if (p.postalcode) parts.push(p.postalcode);
+    return parts.join(", ");
+  }
+
+  /* Normalizes a GeoSearch GeoJSON FeatureCollection into the {lat, lon,
+   * display_name} shape the rest of the search UI already consumes. */
+  function normalizeGeoSearch(fc) {
+    var feats = (fc && fc.features) || [];
+    return feats.map(function (f) {
+      var c = (f.geometry && f.geometry.coordinates) || [];
+      return { lat: c[1], lon: c[0], display_name: geosearchLabel(f.properties || {}) };
+    }).filter(function (r) {
+      return r.lat != null && r.lon != null && r.display_name;
+    });
+  }
+
+  function geocodeAddress(query) {
+    if (inFlightController) inFlightController.abort();
+    inFlightController = new AbortController();
+    // NYC Planning GeoSearch (Pelias) — keyless, backed by the city's own PAD
+    // address file, so it's more authoritative than OSM for NYC addresses and
+    // matches partial street names as you type. NYC-scoped by construction, so
+    // no bias/bbox is needed. (METRO_EXPANSION_PLAYBOOK §6a.)
+    var url = "https://geosearch.planninglabs.nyc/v2/autocomplete?text=" +
+      encodeURIComponent(query) + "&size=6";
+    return fetch(url, { signal: inFlightController.signal, headers: { "Accept": "application/json" } })
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+      .then(normalizeGeoSearch);
+  }
+
+  /* Whole-OSM lookup for the fenced sibling-metro search fallback: GeoSearch
+   * only covers NYC, so a sibling-metro address needs an OSM-backed provider —
+   * Photon (Komoot), the same one the reference fork's search box uses. Fires
+   * only after a zero-result NYC search (see maybeRenderSiblingMatches). */
   function photonLabel(p) {
     var streetLine = "";
     if (p.housenumber && p.street) streetLine = p.housenumber + " " + p.street;
@@ -4318,9 +4532,6 @@ function initSFExplorer() {
     if (p.postcode) parts.push(p.postcode);
     return parts.join(", ");
   }
-
-  /* Normalizes a Photon GeoJSON FeatureCollection into the {lat, lon,
-   * display_name} shape the rest of the search UI already consumes. */
   function normalizePhoton(fc) {
     var feats = (fc && fc.features) || [];
     return feats.map(function (f) {
@@ -4330,27 +4541,6 @@ function initSFExplorer() {
       return r.lat != null && r.lon != null && r.display_name;
     });
   }
-
-  function geocodeAddress(query) {
-    if (inFlightController) inFlightController.abort();
-    inFlightController = new AbortController();
-    // Photon (Komoot) — an OSM-based, autocomplete-optimized geocoder. Unlike
-    // Nominatim's /search, it matches partial street names as you type
-    // ("1901 W Madi" resolves), which is exactly what the search box needs.
-    // Biased toward the metro centre and hard-bounded to the metro bbox so
-    // results stay in-city. Point-selection and POI geocoding remain on
-    // Nominatim; only this type-ahead box moved.
-    var bbox = [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",");
-    var url = "https://photon.komoot.io/api/?q=" + encodeURIComponent(query) +
-      "&lang=en&limit=6&lat=" + METRO_CENTER[0] + "&lon=" + METRO_CENTER[1] + "&bbox=" + bbox;
-    return fetch(url, { signal: inFlightController.signal, headers: { "Accept": "application/json" } })
-      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
-      .then(normalizePhoton);
-  }
-
-  /* Whole-OSM lookup for the fenced sibling-metro search fallback: the same
-   * Photon provider as the search box, minus the metro bias/bbox, so a
-   * sibling-metro address can actually resolve. */
   function geocodeUnbounded(query, signal) {
     var url = "https://photon.komoot.io/api/?q=" + encodeURIComponent(query) + "&lang=en&limit=8";
     return fetch(url, { signal: signal, headers: { "Accept": "application/json" } })
@@ -4358,19 +4548,18 @@ function initSFExplorer() {
       .then(normalizePhoton);
   }
 
-  /* POI provider for the fenced poi-geocode queue: Nominatim structured
-   * /search, hard-bounded to the metro viewbox. Resolves {lat,lng} | null on
-   * a successful lookup; rejects on transport failure so the engine won't
-   * cache the miss. Verified against the CA legislative district-office
-   * addresses (e.g. 455 Golden Gate Ave.). */
+  /* POI provider for the fenced poi-geocode queue: NYC Planning GeoSearch
+   * /v2/search — keyless, PAD-backed, NYC-scoped by construction (no viewbox
+   * needed). Resolves {lat,lng} | null on a successful lookup; rejects on
+   * transport failure so the engine won't cache the miss. (§6a.) */
   function poiGeocodeRequest(address) {
-    var viewbox = [METRO_BBOX.minLng, METRO_BBOX.maxLat, METRO_BBOX.maxLng, METRO_BBOX.minLat].join(",");
-    var url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&bounded=1&viewbox=" +
-      viewbox + "&q=" + encodeURIComponent(address);
+    var url = "https://geosearch.planninglabs.nyc/v2/search?text=" +
+      encodeURIComponent(address) + "&size=1";
     return fetchJSONWithRetry(url, { headers: { "Accept": "application/json" } }, 1)
-      .then(function (results) {
-        var hit = results && results[0];
-        return hit ? { lat: parseFloat(hit.lat), lng: parseFloat(hit.lon) } : null;
+      .then(function (fc) {
+        var hit = fc && fc.features && fc.features[0];
+        var c = (hit && hit.geometry && hit.geometry.coordinates) || null;
+        return c ? { lat: c[1], lng: c[0] } : null;
       });
   }
 
@@ -4563,6 +4752,11 @@ function initSFExplorer() {
   ];
   /* ==== ENGINE:END groups ==== */
 
+  // Approximate real-world area ranking, largest to smallest, used to keep
+  // smaller/more granular boundaries visible on top of larger ones (see
+  // reorderActiveLayers()). Hand-authored from known geography — there's no
+  // geometry library in this codebase to compute polygon area from data.
+  //
   /* ==== GENERATED:BEGIN layer-area-rank ==== */
   // Approximate real-world area ranking, largest to smallest, used to keep
   // smaller/more granular boundaries visible on top of larger ones (see
@@ -4570,22 +4764,37 @@ function initSFExplorer() {
   // geometry library in this codebase to compute polygon area from data.
   // GENERATED from the worksheet's layers[] (area_rank order + rank notes).
   var LAYER_AREA_RANK = [
-    "congress",          // U.S. House (Congressional) district, pre-built SF-clipped TIGERweb (6 in window; CA-11 in SF) - largest
-    "ca-senate",         // CA State Senate (SLDU), pre-built SF-clipped TIGERweb (4 in window; SD-11 in SF)
-    "ca-assembly",       // CA State Assembly (SLDL), pre-built SF-clipped TIGERweb (8 in window; SF split AD-17/19)
-    "bart-director",     // 9 elected BART Board districts, 2022 Plan E2 (districts 7/8/9 cover SF; spans 3 counties) - smaller than the assembly slices
-    "election-precinct", // 514 election precincts (2022 map) - subOf supervisor-district, ranks just before its parent so the outline frames the fills
-    "supervisor-district", // SF Board of Supervisors district (11; water-trimmed, tiles the city)
-    "police-district",   // SFPD district (10)
-    "zip-code",          // national ZCTA (Census TIGERweb), SF-bounded
-    "neighborhood",      // SF Analysis Neighborhood (41) - smallest polygon layer
-    "elementary-attendance-area", // SFUSD elementary attendance area (58; lottery tiebreaker, not a guaranteed seat)
-    "police-station",    // SFPD station house (nearest 3, straight-line; 10 stations) - point layer, topmost
-    "fire-station",      // SFFD firehouse (nearest 3, straight-line; 44 active stations) - point layer, topmost
-    "school-site",       // Every active SF school (nearest 3, straight-line; 232 public/charter/private) - point layer, topmost
-    "post-office",       // USGS National Map post offices (nearest 3, straight-line; METRO_BBOX envelope) - point layer, topmost
-    "library",           // SFPL locations from City Facilities (nearest 3, straight-line; Main Library + 27 branches, support facility excluded) - point layer, topmost
-    "early-voting"       // hand-curated SF Dept of Elections voting center + drop boxes (nearest 3) - point layer, topmost
+    // borough / judicial-district / BP / DA are the same 5 county polygons —
+    // later = drawn on top (§7).
+    "borough",           // 5 counties — largest
+    "judicial-district",
+    "borough-president",
+    "district-attorney",
+    "congress",          // ~13 in-city U.S. House districts
+    "municipal-court",   // 28 Civil Court districts
+    "state-senate",      // ~26 in-city
+    "school-district",   // 32 community school districts
+    "cec",               // same 32, drawn just after school-district
+    "fire-battalion",    // 49 FDNY battalions
+    "council",           // 51 City Council districts
+    "community-district", // 59 community districts
+    // election-district (~4,200) sits just BEFORE its parent Assembly so the
+    // Assembly outline frames its fills (same rule as police-sector below)
+    "election-district",
+    "state-assembly",    // ~65 in-city
+    "police-sector",     // 303 sectors — just before its parent precinct
+    "police-precinct",   // 78 NYPD precincts
+    "zip-code",          // ~178 MODZCTA
+    "neighborhood",      // ~262 NTAs
+    "hs-zone",           // high-school zones (sparse)
+    "ms-zone",           // middle-school zones (partial)
+    "es-zone",           // elementary zones — smallest polygon layer
+    "school-site",       // point marker — always topmost
+    "police-station",    // point marker — always topmost
+    "fire-station",      // point marker — always topmost
+    "post-office",       // point marker — always topmost
+    "library",           // point marker — always topmost
+    "early-voting"       // point marker — always topmost
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
 
@@ -6009,6 +6218,17 @@ function initSFExplorer() {
     return wrap;
   }
   /* ==== ENGINE:END card-helpers ==== */
+  /* =========================================================================
+   * SHARED DATA LOADERS + LAYER FACTORIES
+   * The metro-agnostic engine the playbook (§2) says to reuse: the Socrata /
+   * ArcGIS / TIGERweb loaders, the cached-promise wrappers, the point-in-
+   * polygon join, and the declarative registerPolygonLayer / registerSchoolZone
+   * / registerCpsNetwork / registerIlgaChamber factories. NYC's layer modules
+   * are built on these thread by thread (see METRO_EXPANSION_PLAYBOOK). Doc
+   * examples below still name Chicago datasets; they document the generic
+   * behavior and are re-pointed as each real NYC layer lands.
+   * ======================================================================= */
+
   /* ==== ENGINE:BEGIN socrata-loader ==== */
   /* ---------- true if at least one feature has real (non-null) geometry.
    * Some older "legacy" Socrata boundary datasets return HTTP 200 from the
@@ -6120,10 +6340,6 @@ function initSFExplorer() {
   }
 
   /* ==== ENGINE:END cached-loaders ==== */
-  // (No SF layer uses the CPD-org arcgisServiceUrl seam, so this fork carries
-  // none. The Post Office layer does read a USGS National Map ArcGIS service,
-  // but fetches it directly by URL — not through the generic ArcGIS engine
-  // loaders below, which stay for cross-fork parity, unused here.)
   /* ==== ENGINE:BEGIN arcgis-loader ==== */
   function loadArcGISGeoJSON(serviceUrl) {
     // geometryPrecision=6 (~0.11 m) trims coordinate digits the server would
@@ -6161,70 +6377,6 @@ function initSFExplorer() {
   }
 
   /* ==== ENGINE:END arcgis-loader ==== */
-
-  /* ---------- paged ArcGIS fetch, for layers that exceed the service's
-   * maxRecordCount transfer cap (commonly 1000-2000 features): loops
-   * resultOffset until the response stops reporting exceededTransferLimit.
-   * No Chicago layer currently needs it (all fit in one response) — kept in
-   * the engine for metro forks, where multi-thousand-feature layers are
-   * common (METRO_EXPANSION_PLAYBOOK §6.6; back-ported from the NYC fork,
-   * which pages its ~4,200 election districts through it). ---------- */
-  /* ==== ENGINE:BEGIN arcgis-paged-loader ==== */
-  function loadArcGISPaged(layerUrl, outFields) {
-    var PAGE = 1000;
-    function page(offset, acc) {
-      var url = layerUrl + "/query?where=1%3D1&outFields=" + encodeURIComponent(outFields || "*") +
-        "&outSR=4326&f=geojson&geometryPrecision=6&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
-      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
-        var feats = (gj && gj.features) || [];
-        acc = acc.concat(feats);
-        var more = gj && (gj.exceededTransferLimit || (gj.properties && gj.properties.exceededTransferLimit));
-        // Continue while the server flags more AND this page returned rows.
-        // Guarding on feats.length > 0 (not === PAGE) keeps this correct when a
-        // service caps below PAGE: such a service still sets exceededTransferLimit
-        // on a short page, so an === PAGE test would stop after one page and
-        // silently ship a truncated FeatureCollection. resultOffset advances by
-        // feats.length, so a zero-row page always terminates the loop.
-        if (more && feats.length > 0) return page(offset + feats.length, acc);
-        var out = { type: "FeatureCollection", features: acc };
-        // Same "200 but useless" guard the unpaged loaders apply: an Esri error
-        // envelope 200s carrying no usable geometry; without this makeCached
-        // would retain that empty response as a permanent success.
-        if (!hasUsableGeometry(out)) throw new Error("paged ArcGIS layer returned no usable geometry: " + layerUrl);
-        return out;
-      });
-    }
-    return page(0, []);
-  }
-  /* ==== ENGINE:END arcgis-paged-loader ==== */
-
-  /* ---------- point-dataset loader for datasets whose .geojson route serves
-   * NO geometry — the coordinates live only in latitude/longitude *properties*
-   * (NYC's facilities DB and firehouse datasets both behave this way). Builds
-   * a real Point FeatureCollection from the .json rows so both the overlay
-   * markers and a nearest-N query work. No Chicago layer currently needs it
-   * (all of Chicago's point sources serve real geometry) — kept in the engine
-   * for metro forks (METRO_EXPANSION_PLAYBOOK §6.9; back-ported from the NYC
-   * fork, where three layers share it). ---------- */
-  /* ==== ENGINE:BEGIN socrata-point-loader ==== */
-  function makeSocrataPointLoader(datasetId, whereClause, latField, lngField) {
-    return makeCached(function () {
-      var q = "?$limit=1000" + (whereClause ? "&$where=" + encodeURIComponent(whereClause) : "");
-      var url = withAppToken(SOCRATA_HOST + "/resource/" + datasetId + ".json" + q);
-      return fetchJSONWithRetry(url, {}, 2).then(function (rows) {
-        var feats = [];
-        (rows || []).forEach(function (r) {
-          var lat = parseFloat(r[latField]), lng = parseFloat(r[lngField]);
-          if (isFinite(lat) && isFinite(lng)) {
-            feats.push({ type: "Feature", properties: r, geometry: { type: "Point", coordinates: [lng, lat] } });
-          }
-        });
-        return { type: "FeatureCollection", features: feats };
-      });
-    });
-  }
-  /* ==== ENGINE:END socrata-point-loader ==== */
-
   /* ==== ENGINE:BEGIN find-prop-ci ==== */
   /* ---------- case-insensitive property lookup — Socrata field-name casing/
    * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
@@ -6404,344 +6556,257 @@ function initSFExplorer() {
     });
   }
   /* ==== ENGINE:END polygon-factory ==== */
-  /* ---------- ZIP Code (statewide ZCTA) ---------- */
-  // Thread-0 stub layer. Census ZCTAs are national and the TIGERweb ZCTA layer
-  // has no STATE field (ZCTAs cross state lines), so it's fetched by a spatial
-  // bounding envelope — here San Francisco + the inner Bay. The server
-  // generalizes the geometry with maxAllowableOffset (~55 m). ZCTAs are the
-  // Census Bureau's approximation of USPS ZIP delivery areas, not the postal
-  // boundaries themselves — the caveat every ZCTA-based tool carries.
-  var SF_BBOX_ENVELOPE = { xmin: -122.62, ymin: 37.58, xmax: -122.28, ymax: 37.96 };
-  var loadZipCodes = makeCached(function () {
-    var url = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query" +
-      "?where=" + encodeURIComponent("1=1") +
-      "&geometry=" + encodeURIComponent(JSON.stringify(SF_BBOX_ENVELOPE)) +
-      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
-      "&outFields=ZCTA5&returnGeometry=true&outSR=4326&f=geojson" +
-      "&geometryPrecision=4&maxAllowableOffset=0.0005";
-    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
-      .then(function (geojson) {
-        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb ZCTA layer returned no usable geometry");
-        return geojson;
+
+  /* =========================================================================
+   * THREAD 1 — GEOGRAPHY + OFFLINE ANCHORS (METRO_EXPANSION_PLAYBOOK §7/§8)
+   * Neighborhood (NTA) and ZIP (MODZCTA) load live from Socrata. Borough,
+   * Judicial District and Municipal Court are the three deterministic offline
+   * anchors — no reliable live API, so their simplified boundaries ship as
+   * same-origin data/app/*.json (built by scripts/build_embedded_boundaries.py)
+   * and are the ground truth the smoke test classifies against.
+   * ======================================================================= */
+
+  /* ---------- Neighborhood (NTA 2020) ---------- */
+  // NTAs cover the whole city including parks, cemeteries, airports and Rikers
+  // (ntatype != 0). Surface that type so a click in Central Park or JFK reads
+  // honestly (§6d.6) instead of looking like a residential neighborhood. The
+  // loader maps the numeric ntatype code to a word onto a derived property so
+  // the declarative factory can show it; residential (0) is left unlabeled.
+  var NTA_TYPE_LABEL = {
+    "5": "Rikers Island", "6": "Non-residential area",
+    "7": "Cemetery", "8": "Airport", "9": "Park / open space"
+  };
+  var loadNeighborhoods = makeCached(function () {
+    return loadSocrataGeoJSON("9nt8-h7nd").then(function (gj) {
+      (gj.features || []).forEach(function (f) {
+        var p = f.properties || {};
+        var t = NTA_TYPE_LABEL[String(p.ntatype)];
+        if (t) p.ntatype_label = t;
       });
-  });
-
-  registerPolygonLayer({
-    id: "zip-code",
-    group: "geography",
-    label: "ZIP Code",
-    loader: loadZipCodes,
-    // dotted outline (distinct pattern from the Neighborhood layer) + different hue
-    style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" },
-    fields: [
-      { name: "zip", label: "ZIP Code", keys: ["zcta5", "zip", "zip_code", "zipcode", "zcta5ce10"], primary: true }
-    ],
-    compact: true // 4b name-only card (no meta field — the ZIP is the value)
-  });
-
-  /* ---------- SF Thread-1 offline anchors: Supervisor District, Neighborhood,
-   * Police District. Boundaries ship as same-origin static files under data/app/
-   * (mapshaper-simplified from DataSF tables via build_embedded_boundaries.py,
-   * validated on the 2,000-point protocol), fetched cache-first on first toggle.
-   * Officeholder names are intentionally NOT baked into the decadal boundaries —
-   * a supervisor roster lands in a later thread. ---------- */
-  var loadSupervisorDistricts = makeCached(function () {
-    return fetchJSONWithRetry("data/app/supervisor-districts.json", {}, 2);
-  });
-  // Supervisor roster (district -> current supervisor), scraped from DataSF into a
-  // same-origin file (build_sf_supervisor_roster.py) and joined by district
-  // number. The volatile name is kept out of the decadal boundary geometry and
-  // served here (network-first) instead. A missing district or a roster-fetch
-  // failure degrades to the Board link — the name is never guessed. This is a
-  // bespoke registerLayer (not registerPolygonLayer) because the polygon factory
-  // has no roster-join hook.
-  var loadSupervisorRoster = makeCached(function () {
-    return fetchJSONWithRetry("data/app/sf-supervisor-members.json", {}, 2);
-  });
-  var SF_BOARD_HTML = '<a href="https://sfbos.org/" target="_blank" rel="noopener">San Francisco Board of Supervisors</a>';
-  function supervisorDistrictNum(props) {
-    return findPropCI(props || {}, ["district", "sup_dist_num", "sup_dist", "sup_dist_pad"]);
-  }
-  registerLayer({
-    id: "supervisor-district",
-    group: "political",
-    label: "Supervisor District",
-    // hover popup: the current supervisor's name (prefetched roster) under the
-    // district-number row, matching the card headline.
-    hoverName: function (feature) {
-      var d = supervisorDistrictNum(feature.properties);
-      return d != null ? String(d) : null;
-    },
-    hoverOfficial: {
-      load: loadSupervisorRoster,
-      name: function (feature, roster) {
-        if (!roster) return null;
-        var d = supervisorDistrictNum(feature.properties);
-        var m = d != null ? roster[String(d)] : null;
-        return m ? m.name : null;
-      }
-    },
-    overlay: {
-      load: loadSupervisorDistricts,
-      style: { color: "#8E2A22", weight: 2, fillColor: "#C0362C", fillOpacity: 0.06 }
-    },
-    query: function (point, seq) {
-      return Promise.all([
-        loadSupervisorDistricts(),
-        loadSupervisorRoster().catch(function () { return {}; })
-      ]).then(function (results) {
-        var feature = findFeatureContaining(results[0], point);
-        if (!feature) return null;
-        var district = supervisorDistrictNum(feature.properties);
-        var member = district != null ? results[1][String(district)] : null;
-        return { seq: seq, district: district, member: member || null };
-      });
-    },
-    render: function (result) {
-      // supervisor as a badged person row; district in the header pill; the
-      // Board of Supervisors link in the footer (card-helpers vocabulary,
-      // engine-v1.0.10; docs/CARD_RENDER_API.md in the reference fork)
-      var wrap = cardEl("div", "card-flush");
-      wrap.appendChild(renderBodyIntro({ title: "San Francisco Board of Supervisors" }));
-      if (result.member && result.member.name) {
-        wrap.appendChild(renderPersonRows([{ name: String(result.member.name), badge: "Supervisor" }]));
-      }
-      return wrap;
-    },
-    cardIdentifier: function (result) {
-      return result.district ? "District " + String(result.district) : null;
-    },
-    primaryLink: function () {
-      return { label: "San Francisco Board of Supervisors", url: "https://sfbos.org/" };
-    }
-  });
-
-  /* ---------- Election Precinct (514, 2022 map) — DataSF `jg6x-23ig`.
-   * The resource route serves this map-type view without geometry; the
-   * engine's three-route Socrata loader falls through to the api/v3
-   * query.geojson route, which serves the full MultiPolygons (verified).
-   * A sub-selection of Supervisor District, same as Chicago's ward-precinct:
-   * toggling it drops the parent to outline-only so the precinct fills read
-   * inside the supervisor frame. The card links the official polling-place
-   * lookup — precincts are ASSIGNED, so the honest offer is "look yours up",
-   * never a guess. ---------- */
-  var loadElectionPrecincts = makeCachedLoader("jg6x-23ig");
-  var SF_POLLSITE_HTML = '<a href="https://www.sf.gov/vote-in-person" target="_blank" rel="noopener">Look up your assigned polling place (SF Elections)</a>';
-
-  registerLayer({
-    id: "election-precinct",
-    group: "political",
-    subOf: "supervisor-district",
-    label: "Election Precinct",
-    hoverName: function (feature) {
-      var p = findPropCI(feature.properties || {}, ["prec_2022", "precname", "precinct"]);
-      return (p == null || p === "") ? null : String(p);
-    },
-    overlay: {
-      load: loadElectionPrecincts,
-      // solid thin outline + visible fill: with the supervisor district
-      // dropped to outline-only, the precincts carry the interior fill.
-      // Same red family as the parent, a shade deeper so the two read as
-      // related (the Chicago ward/ward-precinct rule).
-      style: { color: "#6E1F19", weight: 1, fillColor: "#C0362C", fillOpacity: 0.12, dashArray: null }
-    },
-    query: function (point, seq) {
-      return loadElectionPrecincts().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        var props = feature.properties || {};
-        var precinct = findPropCI(props, ["prec_2022", "precname", "precinct"]);
-        var supe = findPropCI(props, ["supe22", "supervisor", "supe"]);
-        return {
-          seq: seq,
-          precinct: precinct != null ? String(precinct) : null,
-          supervisorDistrict: supe != null ? String(supe) : null
-        };
-      });
-    },
-    // 4b compact: precinct in the header, its supervisor district as the
-    // meta line; polling-place lookup stays one click away in the footer
-    compact: true,
-    cardIdentifier: function (result) {
-      return result.precinct ? "Precinct " + String(result.precinct) : "Unknown";
-    },
-    cardMeta: function (result) {
-      return result.supervisorDistrict ? "Supervisor District " + String(result.supervisorDistrict) : null;
-    },
-    primaryLink: function () {
-      return { label: "Look up your polling place (SF Elections)", url: "https://www.sf.gov/vote-in-person" };
-    },
-    onToggle: function (on) {
-      var supeRt = layerRuntime["supervisor-district"];
-      if (on) {
-        // a sub-selection needs its parent visible — turn the supervisor
-        // district on (as the outline frame) if it isn't already. box.click()
-        // runs the normal toggle path (overlay load + query + hash sync).
-        if (!state.layersOn["supervisor-district"]) {
-          var box = document.getElementById("toggle-supervisor-district");
-          if (box && !box.checked) box.click();
-        }
-        supeRt.outlineOnly = true;
-      } else {
-        supeRt.outlineOnly = false;
-      }
-      // Restyle the already-loaded parent overlay to reflect the fill change.
-      // If it's still loading (just auto-enabled above), baseStyleFor reads
-      // outlineOnly at L.geoJSON construction time, so no restyle is needed yet.
-      var supeMod = getLayerById("supervisor-district");
-      if (supeMod && supeRt.overlayLayer) updateLayerHighlight(supeMod);
-    }
-  });
-
-  /* ---------- BART Director District (9) — the regional transit board is
-   * elected by district; districts 7, 8, and 9 cover San Francisco (2022
-   * Plan E2 map, in place until the post-2030-census redistricting).
-   * Geometry: BART's own ArcGIS org (the base data behind bart.gov's
-   * District Boundary Viewer), fetched live — 9 polygons, CORS-open.
-   * Roster: hand-verified data/app/bart-directors.json (bart.gov 403s
-   * non-browser clients and serves no CORS JSON, so no live scrape —
-   * operator-maintained; staggered 4-year terms, re-verified after each
-   * even-year November per WATCH.md). ---------- */
-  var BART_DISTRICTS_SERVICE = "https://services.arcgis.com/sqS7RNuF1BQinj5N/ArcGIS/rest/services/Board_of_Directors_District_Boundary_Viewer_Base_Data_WFL1/FeatureServer/2";
-  var loadBartDistricts = makeCached(function () { return loadArcGISGeoJSON(BART_DISTRICTS_SERVICE); });
-  var loadBartDirectors = makeCached(function () {
-    return fetchJSONWithRetry("data/app/bart-directors.json", {}, 2);
-  });
-  var BART_BOARD_HTML = '<a href="https://www.bart.gov/about/bod" target="_blank" rel="noopener">BART Board of Directors</a>';
-  function bartDistrictNum(props) {
-    return findPropCI(props || {}, ["district"]);
-  }
-
-  registerLayer({
-    id: "bart-director",
-    group: "political",
-    label: "BART Director District",
-    hoverName: function (feature) {
-      var d = bartDistrictNum(feature.properties);
-      return d != null ? String(d) : null;
-    },
-    hoverOfficial: {
-      load: loadBartDirectors,
-      name: function (feature, roster) {
-        if (!roster) return null;
-        var d = bartDistrictNum(feature.properties);
-        var m = d != null ? roster[String(d)] : null;
-        return m ? m.name : null;
-      }
-    },
-    overlay: {
-      load: loadBartDistricts,
-      style: { color: "#005E7C", weight: 2, fillColor: "#0099D8", fillOpacity: 0.05, dashArray: "6 3" }
-    },
-    query: function (point, seq) {
-      return Promise.all([
-        loadBartDistricts(),
-        loadBartDirectors().catch(function () { return {}; })
-      ]).then(function (results) {
-        var feature = findFeatureContaining(results[0], point);
-        if (!feature) return null;
-        var district = bartDistrictNum(feature.properties);
-        var member = district != null ? results[1][String(district)] : null;
-        return { seq: seq, district: district, member: member || null };
-      });
-    },
-    render: function (result) {
-      // director as a badged person row (board role as the badge when the
-      // roster carries one), profile on the person, board link in the footer
-      var wrap = cardEl("div", "card-flush");
-      if (result.member && result.member.name) {
-        var person = {
-          name: String(result.member.name),
-          badge: result.member.role ? String(result.member.role) : "Director"
-        };
-        var profile = result.member.url ? safeHttpUrl(result.member.url) : null;
-        if (profile) person.links = [{ label: "Profile (bart.gov)", url: profile }];
-        wrap.appendChild(renderPersonRows([person]));
-      }
-      return wrap;
-    },
-    cardIdentifier: function (result) {
-      return result.district != null ? "District " + String(result.district) : null;
-    },
-    primaryLink: function () {
-      return { label: "BART Board of Directors", url: "https://www.bart.gov/about/bod" };
-    }
-  });
-
-  var loadSfNeighborhoods = makeCached(function () {
-    return fetchJSONWithRetry("data/app/sf-neighborhoods.json", {}, 2);
+      return gj;
+    });
   });
   registerPolygonLayer({
     id: "neighborhood",
     group: "geography",
-    label: "Neighborhood",
-    loader: loadSfNeighborhoods,
-    style: { color: "#124F63", weight: 1.5, fillColor: "#1D6F8B", fillOpacity: 0.05, dashArray: "4 3" },
+    label: "Neighborhood (NTA)",
+    loader: loadNeighborhoods,
+    style: { color: "#2E7D5B", weight: 2, fillColor: "#2E7D5B", fillOpacity: 0.06 },
+    compact: true, compactMetaField: "code", // 4b name-only card, NTA code as meta
     fields: [
-      { name: "nhood", label: "Neighborhood", keys: ["nhood", "name", "neighborhood"], primary: true }
-    ],
-    compact: true // 4b name-only card (no meta field — the neighborhood name is the value)
+      { name: "name", label: "Neighborhood", keys: ["ntaname"], primary: true },
+      { name: "code", label: "NTA code", keys: ["nta2020"] },
+      { name: "borough", label: "Borough", keys: ["boroname"] },
+      { name: "type", label: "Area type", keys: ["ntatype_label"] }
+    ]
   });
 
-  var loadPoliceDistricts = makeCached(function () {
-    return fetchJSONWithRetry("data/app/police-districts.json", {}, 2);
+  /* ---------- ZIP Code (MODZCTA) ----------
+   * Modified ZCTA: merges sliver ZIPs and covers the whole city, so it's the
+   * honest citywide ZIP layer. `label` lists the raw ZIPs a MODZCTA represents. */
+  registerPolygonLayer({
+    id: "zip-code",
+    group: "geography",
+    label: "ZIP Code (MODZCTA)",
+    loader: makeCachedLoader("pri4-ifjk"),
+    style: { color: "#4E6E9C", weight: 2, fillColor: "#4E6E9C", fillOpacity: 0.05, dashArray: "1 3" },
+    pill: true, // ZIP identifier in the header pill (Handoff 3 §5b, "60564" style)
+    fields: [
+      // label shortened so the pill reads "ZIP 10001"; the MODZCTA nuance
+      // stays in the layer name and the ZIP-codes list row below
+      { name: "zip", label: "ZIP", keys: ["modzcta"], primary: true },
+      { name: "label", label: "ZIP codes", keys: ["label"] },
+      { name: "pop", label: "Est. population", keys: ["pop_est"] }
+    ]
+  });
+
+  /* ---------- Borough / County (offline anchor) ----------
+   * 5 shoreline-clipped boroughs from Socrata gthc-hcne, county + FIPS added via
+   * the §6d.1 crosswalk. One shared cached loader serves this layer and, from
+   * Thread 4, Borough President and District Attorney (same 5 polygons). Water
+   * clicks fall outside every polygon and honestly resolve to no borough. */
+  var loadBoroughBoundaries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/borough-boundaries.json", {}, 2);
+  });
+  /* Bespoke rather than factory so the card can join the County Clerk from
+   * borough-officials.json (operator-verified; see the source's _verified
+   * note). NYC County Clerks are APPOINTED by the Appellate Division, so the
+   * row is labeled appointed — and only offices that publish the incumbent's
+   * name on their own nycourts.gov page get a name row (Bronx, Kings today);
+   * the rest carry the verifiable office/link rows only. loadBoroughOfficials
+   * is assigned later in this IIFE (Thread 4) — safe here because query/render
+   * run at click time, long after boot. */
+  registerLayer({
+    id: "borough",
+    group: "geography",
+    label: "Borough / County",
+    overlay: {
+      load: loadBoroughBoundaries,
+      style: { color: "#8C6A2E", weight: 2.5, fillColor: "#8C6A2E", fillOpacity: 0.04 }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["boroname"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      return Promise.all([
+        loadBoroughBoundaries(),
+        loadBoroughOfficials().catch(function () { return {}; })
+      ]).then(function (results) {
+        var geojson = results[0], officials = results[1];
+        var feature = findFeatureContaining(geojson, point);
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var borough = findPropCI(props, ["boroname"]);
+        var row = borough != null ? officials[String(borough)] : null;
+        return {
+          seq: seq,
+          borough: borough,
+          county: findPropCI(props, ["county"]),
+          countyfips: findPropCI(props, ["countyfips"]),
+          clerk: row ? row.clerk : null
+        };
+      });
+    },
+    render: function (result) {
+      // card-helpers vocabulary (engine-v1.0.10): borough identity as the
+      // intro, the appointed clerk as a badged person row, the office
+      // behind the expander (docs/CARD_RENDER_API.md in the reference fork).
+      var wrap = cardEl("div", "card-flush");
+      var noteBits = [];
+      if (result.county != null) noteBits.push(String(result.county) + " County");
+      if (result.countyfips != null) noteBits.push("FIPS " + String(result.countyfips));
+      wrap.appendChild(renderBodyIntro({
+        title: result.borough != null ? String(result.borough) : "Unknown",
+        note: noteBits.length ? noteBits.join(" · ") : null
+      }));
+      var clerk = result.clerk;
+      if (clerk && clerk.name) {
+        // appointed, not elected — the badge note keeps the card honest
+        var person = { name: String(clerk.name), badge: "County Clerk", note: "appointed" };
+        if (clerk.phone) person.phone = String(clerk.phone);
+        wrap.appendChild(renderPersonRows([person]));
+      }
+      if (clerk && clerk.address) {
+        wrap.appendChild(renderOfficeGroup({ offices: [{ label: "Clerk's Office", lines: [String(clerk.address)] }] }));
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var page = result.clerk ? safeHttpUrl(result.clerk.url) : null;
+      return page ? { label: "County Clerk’s Office (NY Courts)", url: page } : null;
+    },
+    pointOfInterest: function (result) {
+      if (!result.clerk || !result.clerk.address) return null;
+      return { label: "County Clerk\u2019s Office", address: String(result.clerk.address) };
+    }
+  });
+
+  /* ---------- NY Supreme Court Judicial District (offline anchor) ----------
+   * The 5 NYC judicial districts are 1:1 with the counties (1 Manhattan, 2
+   * Brooklyn, 11 Queens, 12 Bronx, 13 Staten Island), so the layer is the
+   * TIGERweb county geometry relabeled — no live source exists; the derivation
+   * IS the layer. Justices are elected countywide to 14-year terms; there is no
+   * clean machine-readable roster, so the card links to the court (never guess). */
+  var loadJudicialDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/judicial-districts.json", {}, 2);
   });
   registerPolygonLayer({
-    id: "police-district",
-    group: "safety",
-    label: "Police District",
-    loader: loadPoliceDistricts,
-    style: { color: "#0B3D2E", weight: 2, fillColor: "#1B7F5A", fillOpacity: 0.05 },
+    id: "judicial-district",
+    group: "political",
+    label: "NY Supreme Court Judicial District",
+    loader: loadJudicialDistricts,
+    style: { color: "#6B4E8C", weight: 2, fillColor: "#6B4E8C", fillOpacity: 0.05, dashArray: "7 3" },
+    pill: true, // district identifier in the header pill (Handoff 3 §5b)
     fields: [
-      { name: "district", label: "Police District", keys: ["district"], primary: true }
+      // label shortened so the pill reads "District 1" (the layer name above
+      // already says Judicial District)
+      { name: "district", label: "District", keys: ["district"], primary: true },
+      { name: "borough", label: "Borough / County", keys: ["borough"] },
+      { label: "How it's elected", value: "Justices are elected countywide to 14-year terms." }
     ],
     primaryLink: function () {
-      return { label: "SFPD district stations", url: "https://www.sanfranciscopolice.org/your-sfpd/police-stations" };
+      return { label: "NY State Supreme Court (Civil Term)", url: "https://www.nycourts.gov/courts/" };
     }
   });
-  /* ==== ENGINE:BEGIN haversine ==== */
-  /* ---------- great-circle distance in miles ---------- */
-  function haversineMiles(lat1, lng1, lat2, lng2) {
-    var R = 3958.8;
-    var toRad = function (d) { return (d * Math.PI) / 180; };
-    var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
 
-  function pointFeatureLatLng(feature) {
-    var g = feature && feature.geometry;
-    if (!g || g.type !== "Point") return null;
-    return { lat: g.coordinates[1], lng: g.coordinates[0] };
-  }
-
-  /* ==== ENGINE:END haversine ==== */
-  /* ---------- representative lat/lng for a polygon feature: the vertex-average
-   * of its exterior ring(s). Used to give Polygon/MultiPolygon features a single
-   * point for the nearest-N proximity pattern below (haversineMiles wants two
-   * points; pointFeatureLatLng only handles Point geometry). Not a true
-   * area-weighted centroid — no geometry library here (see LAYER_AREA_RANK note)
-   * — but plenty accurate for ranking nearby school-site footprints by distance. ---------- */
-  function polygonRepresentativeLatLng(feature) {
-    var g = feature && feature.geometry;
-    if (!g) return null;
-    var rings;
-    if (g.type === "Polygon") rings = [g.coordinates[0]];
-    else if (g.type === "MultiPolygon") rings = g.coordinates.map(function (poly) { return poly[0]; });
-    else return null;
-    var sumLat = 0, sumLng = 0, n = 0;
-    for (var r = 0; r < rings.length; r++) {
-      var ring = rings[r] || [];
-      for (var i = 0; i < ring.length; i++) {
-        sumLng += ring[i][0];
-        sumLat += ring[i][1];
-        n++;
-      }
+  /* ---------- Civil (Municipal) Court District (offline anchor) ----------
+   * 28 elected-judge districts from Socrata 7vpq-4bh4 (map-type: served via the
+   * v3 view route, not /resource/). No clean per-district judge roster, so the
+   * card links to the Civil Court directory rather than naming names. */
+  var loadMunicipalCourtDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/municipal-court-districts.json", {}, 2);
+  });
+  registerPolygonLayer({
+    id: "municipal-court",
+    group: "political",
+    label: "Civil Court (Municipal Court) District",
+    loader: loadMunicipalCourtDistricts,
+    style: { color: "#1E7A8C", weight: 2, fillColor: "#1E7A8C", fillOpacity: 0.05, dashArray: "4 4" },
+    fields: [
+      { name: "label", label: "District", keys: ["label"], primary: true },
+      { name: "borough", label: "Borough", keys: ["boro_name"] },
+      { label: "How it's elected", value: "Civil Court judges are elected by district." }
+    ],
+    primaryLink: function () {
+      return { label: "NYC Civil Court directory", url: "https://www.nycourts.gov/courts/nyc/civil/" };
     }
-    if (!n) return null;
-    return { lat: sumLat / n, lng: sumLng / n };
+  });
+
+
+  /* =========================================================================
+   * THREAD 2 — PUBLIC SAFETY (METRO_EXPANSION_PLAYBOOK §7 rows 4–8)
+   * NYPD Precinct (+ Sector sub-layer), Police Station / Firehouse (nearest 3),
+   * FDNY Battalion. Commanders/NCOs aren't in open data, so those cards surface
+   * only what each dataset actually contains and link to the official body;
+   * nypd-precinct-info.json ships as an empty placeholder until the Thread 5
+   * scrape lands, and the precinct card degrades honestly without it.
+   * ======================================================================= */
+
+  // Title-case an ALL-CAPS/loose string (FacDB names + addresses are uppercase).
+  function toTitleCase(s) {
+    return String(s).toLowerCase().replace(/\b([a-z])/g, function (m, c) { return c.toUpperCase(); });
   }
+  /* ==== ENGINE:BEGIN int-field ==== */
+  // Normalize a numeric-ish field to its integer string ("15.0" -> "15"); passes
+  // non-numeric values through and null/"" to null. (Socrata sometimes serves
+  // integer district numbers as floats.)
+  function intField(v) {
+    if (v == null || v === "") return null;
+    var n = parseInt(v, 10);
+    return isNaN(n) ? v : String(n);
+  }
+  /* ==== ENGINE:END int-field ==== */
+  // Ordinal for the NYPD per-precinct page slug (1 -> "1st", 13 -> "13th").
+  function ordinalSuffix(n) {
+    n = parseInt(n, 10);
+    var s = ["th", "st", "nd", "rd"], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  // Point layers (FacDB police stations, FDNY firehouses) serve NO geometry via
+  // the .geojson route — the coordinates live in latitude/longitude *properties*.
+  // Build a real Point FeatureCollection from the .json rows so both the overlay
+  // markers and the nearest-N query work. Reused by the school-site layer later.
+  /* ==== ENGINE:BEGIN socrata-point-loader ==== */
+  function makeSocrataPointLoader(datasetId, whereClause, latField, lngField) {
+    return makeCached(function () {
+      var q = "?$limit=1000" + (whereClause ? "&$where=" + encodeURIComponent(whereClause) : "");
+      var url = withAppToken(SOCRATA_HOST + "/resource/" + datasetId + ".json" + q);
+      return fetchJSONWithRetry(url, {}, 2).then(function (rows) {
+        var feats = [];
+        (rows || []).forEach(function (r) {
+          var lat = parseFloat(r[latField]), lng = parseFloat(r[lngField]);
+          if (isFinite(lat) && isFinite(lng)) {
+            feats.push({ type: "Feature", properties: r, geometry: { type: "Point", coordinates: [lng, lat] } });
+          }
+        });
+        return { type: "FeatureCollection", features: feats };
+      });
+    });
+  }
+  /* ==== ENGINE:END socrata-point-loader ==== */
+  // Declarative nearest-3 point layer (haversine, straight-line). `line(props)`
+  // formats one list item; `pick` isn't needed — the raw feature props are passed.
   /* ==== ENGINE:BEGIN nearest-point-factory ==== */
   function registerNearestPointLayer(opts) {
     var count = opts.count || 3;
@@ -6843,86 +6908,245 @@ function initSFExplorer() {
   }
   /* ==== ENGINE:END nearest-point-factory ==== */
 
-  /* =========================================================================
-   * THREAD 2 — SAFETY (point layers): Police & Fire stations, nearest 3.
-   * Police-district boundaries already registered in Thread 1. These two are
-   * the nearest-N haversine pattern (no containment test) — N stays small so
-   * "nearest as the crow flies" is honest and never implies routing.
-   * Dropped with reason (no honest SF analog in open data — never invent):
-   *   - police-beat / sector: SFPD publishes no current patrol-beat boundary
-   *     (the only "beats" dataset is Parking Control's, a different body).
-   *   - fire-battalion: SFFD organizes into battalions, but no battalion or
-   *     division boundary is published; battalion appears only inside the
-   *     live incident feed, not as a standalone polygon to classify against.
-   * ======================================================================= */
+  /* ---------- NYPD Precinct (78) ----------
+   * Boundary from Socrata y76i-bdw7 (`precinct`). Joins the same-origin
+   * nypd-precinct-info.json roster (commanding officer, keyed by precinct number
+   * — empty placeholder until Thread 5) and the FacDB station houses (address +
+   * map pin, keyed on `policeprct`) so the card carries real content even before
+   * the CO scrape. Oversight is non-elected (CCRB is appointed + citywide),
+   * labeled as such; the NYPD precinct page carries the CO + community council. */
+  var loadPolicePrecincts = makeCachedLoader("y76i-bdw7");
+  var loadPrecinctInfo = makeCached(function () { return fetchJSONWithRetry("data/app/nypd-precinct-info.json", {}, 2); });
+  var loadPoliceStationPoints = makeSocrataPointLoader("ji82-xba5", "factype='POLICE STATION'", "latitude", "longitude");
+  function policeStationsByPrecinct(gj) {
+    if (gj && gj.__byPrecinct) return gj.__byPrecinct;
+    var idx = {};
+    ((gj && gj.features) || []).forEach(function (f) {
+      var p = f.properties || {};
+      var k = p.policeprct != null ? String(parseInt(p.policeprct, 10)) : null;
+      if (k && !idx[k]) idx[k] = p;
+    });
+    if (gj) gj.__byPrecinct = idx;
+    return idx;
+  }
+  registerLayer({
+    id: "police-precinct",
+    group: "safety",
+    label: "NYPD Precinct",
+    // hover popup: same `precinct` property the card's query reads.
+    hoverName: function (feature) {
+      var pct = findPropCI(feature.properties || {}, ["precinct"]);
+      return (pct != null && pct !== "") ? String(parseInt(pct, 10)) : null;
+    },
+    // hover popup: name the commanding officer from the prefetched roster
+    // (same nypd-precinct-info.json join the card makes, keyed by precinct).
+    hoverOfficial: {
+      load: loadPrecinctInfo,
+      name: function (feature, roster) {
+        if (!roster) return null;
+        var pct = findPropCI(feature.properties || {}, ["precinct"]);
+        var num = (pct != null && pct !== "") ? parseInt(pct, 10) : null;
+        var row = num != null ? roster[String(num)] : null;
+        return row ? (row.commander || row.commanderName) : null;
+      }
+    },
+    overlay: {
+      load: loadPolicePrecincts,
+      style: { color: "#7A0A1C", weight: 1.5, fillColor: "#C8102E", fillOpacity: 0.06, dashArray: "2 6" }
+    },
+    query: function (point, seq) {
+      return Promise.all([
+        loadPolicePrecincts(),
+        loadPrecinctInfo().catch(function () { return {}; }),
+        loadPoliceStationPoints().catch(function () { return null; })
+      ]).then(function (r) {
+        var gj = r[0], info = r[1] || {}, stationGj = r[2];
+        var feature = findFeatureContaining(gj, point);
+        if (!feature) return null;
+        var pct = findPropCI(feature.properties || {}, ["precinct"]);
+        var num = (pct != null && pct !== "") ? parseInt(pct, 10) : null;
+        var row = (num != null && info) ? info[String(num)] : null;
+        var station = (num != null && stationGj) ? policeStationsByPrecinct(stationGj)[String(num)] : null;
+        return {
+          seq: seq,
+          precinct: num,
+          commander: row ? (row.commander || row.commanderName) : null,
+          phone: row ? row.phone : null,
+          sourceUrl: row ? (row.source_url || row.sourceUrl) : null,
+          stationName: station ? station.facname : null,
+          stationAddress: station ? station.address : null,
+          stationBoro: station ? station.boro : null
+        };
+      });
+    },
+    render: function (result) {
+      // 4a-shaped card: commander person row, the station house as an
+      // office block, CCRB as the oversight link row, precinct page in the
+      // footer (primaryLink), precinct number in the header pill.
+      var wrap = cardEl("div", "card-flush");
+      if (result.commander) {
+        wrap.appendChild(renderPersonRows([{ name: String(result.commander), badge: "Commanding Officer" }]));
+      }
+      if (result.stationAddress || result.phone) {
+        var stationLines = [];
+        if (result.stationAddress) {
+          stationLines.push((result.stationName ? toTitleCase(result.stationName) + " — " : "") + toTitleCase(result.stationAddress));
+        }
+        wrap.appendChild(renderOfficeGroup({
+          offices: [{ label: "Station house", lines: stationLines, phone: result.phone ? String(result.phone) : null }]
+        }));
+      }
+      wrap.appendChild(renderLinkRow({
+        note: "Civilian oversight — appointed, citywide",
+        links: [{ label: "CCRB", url: "https://www.nyc.gov/site/ccrb/index.page" }]
+      }));
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.precinct != null ? "Precinct " + String(result.precinct) : null;
+    },
+    primaryLink: function (result) {
+      if (result.precinct == null) return null;
+      var url = safeHttpUrl(result.sourceUrl) ||
+        ("https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/" + ordinalSuffix(result.precinct) + "-precinct.page");
+      return { label: "NYPD " + ordinalSuffix(result.precinct) + " Precinct", url: url };
+    },
+    pointOfInterest: function (result) {
+      if (!result.stationAddress) return null;
+      var addr = toTitleCase(result.stationAddress) + (result.stationBoro ? ", " + toTitleCase(result.stationBoro) : "");
+      var label = (result.precinct != null ? "NYPD " + ordinalSuffix(result.precinct) + " Precinct" : "Precinct") + " Station House";
+      return { label: label, address: addr };
+    },
+    onToggle: function (on) {
+      // cascade the sector sub-layer off when the precinct is turned off
+      if (!on && state.layersOn["police-sector"]) {
+        var box = document.getElementById("toggle-police-sector");
+        if (box && box.checked) box.click();
+      }
+    }
+  });
 
-  /* ---------- Police Stations (nearest 3). SFPD's 10 district station houses
-   * (DataSF "Police Stations", rwdu-9wb2). Its .geojson route serves real Point
-   * geometry, so the plain cached loader suffices — no point-loader needed. ---------- */
-  var loadPoliceStations = makeCachedLoader("rwdu-9wb2");
+  /* ---------- NYPD Sector (303, sub-selection of Precinct) ----------
+   * Sector geometry is unusually public for NYPD. `pct` is the parent precinct;
+   * no structured NCO roster exists, so the card names only the sector + patrol
+   * borough. subOf:"police-precinct" nests it and frames it with the precinct
+   * outline (same pattern as Chicago's police beats). */
+  var loadPoliceSectors = makeCachedLoader("5rqd-h5ci");
+  var PATROL_BOROUGH = {
+    PBMS: "Manhattan South", PBMN: "Manhattan North", PBBX: "Bronx",
+    PBBN: "Brooklyn North", PBBS: "Brooklyn South", PBQN: "Queens North",
+    PBQS: "Queens South", PBSI: "Staten Island"
+  };
+  registerLayer({
+    id: "police-sector",
+    group: "safety",
+    subOf: "police-precinct",
+    label: "NYPD Sector",
+    hoverName: function (feature) { return findPropCI(feature.properties || {}, ["sector"]) || null; },
+    overlay: {
+      load: loadPoliceSectors,
+      style: { color: "#7A0A1C", weight: 1, fillColor: "#E4572E", fillOpacity: 0.14, dashArray: null }
+    },
+    query: function (point, seq) {
+      return loadPoliceSectors().then(function (gj) {
+        var f = findFeatureContaining(gj, point);
+        if (!f) return null;
+        var p = f.properties || {};
+        return { seq: seq, sector: findPropCI(p, ["sector"]), pct: findPropCI(p, ["pct"]), patrolBoro: findPropCI(p, ["patrol_bor"]) };
+      });
+    },
+    // 4b compact: sector in the header, precinct + patrol borough as the
+    // meta line; no render() — the engine skips it for compact layers
+    compact: true,
+    cardIdentifier: function (result) {
+      return result.sector ? "Sector " + String(result.sector) : "Unknown";
+    },
+    cardMeta: function (result) {
+      var bits = [];
+      if (result.pct) bits.push("Precinct " + String(result.pct));
+      if (result.patrolBoro) bits.push(PATROL_BOROUGH[result.patrolBoro] || String(result.patrolBoro));
+      return bits.length ? bits.join(" · ") : null;
+    },
+    onToggle: function (on) {
+      var precinctRt = layerRuntime["police-precinct"];
+      if (on) {
+        if (!state.layersOn["police-precinct"]) {
+          var box = document.getElementById("toggle-police-precinct");
+          if (box && !box.checked) box.click();
+        }
+        precinctRt.outlineOnly = true;
+      } else {
+        precinctRt.outlineOnly = false;
+      }
+    }
+  });
 
+  /* ---------- Police Station (nearest 3) — FacDB `factype='POLICE STATION'` ---------- */
   registerNearestPointLayer({
     id: "police-station",
     group: "safety",
-    // bay-blue marker, distinct from Fire Station's International-Orange one
-    color: "#124F63",
-    fill: "#1D6F8B",
     label: "Police Station",
-    loader: loadPoliceStations,
-    intro: "Nearest stations, straight-line distance:",
-    line: function (props) {
-      var name = findPropCI(props, ["district_name", "company_name"]);
-      var address = findPropCI(props, ["address", "location_address"]);
-      var phone = findPropCI(props, ["telephone_number", "phone"]);
-      return (name ? String(name) : "Police station") +
-        (address ? " — " + String(address) : "") +
-        (phone ? " — " + String(phone) : "");
+    color: "#0B5394", fill: "#41B6E6",
+    loader: loadPoliceStationPoints,
+    intro: "Nearest NYPD station houses, straight-line distance:",
+    line: function (p) {
+      var name = findPropCI(p, ["facname"]);
+      var addr = findPropCI(p, ["address"]);
+      var pct = findPropCI(p, ["policeprct"]);
+      return (name ? toTitleCase(name) : "Police station") + (pct ? " (Precinct " + pct + ")" : "") + (addr ? " — " + toTitleCase(addr) : "");
     },
-    item: function (props) { // 4d two-line row: station over address + phone
-      var name = findPropCI(props, ["district_name", "company_name"]);
-      var address = findPropCI(props, ["address", "location_address"]);
-      var phone = findPropCI(props, ["telephone_number", "phone"]);
-      var note = (address ? String(address) : "") + (phone ? (address ? " — " : "") + String(phone) : "");
-      return { name: name ? String(name) : "Police station", note: note || undefined };
+    item: function (p) { // 4d two-line row: name over address
+      var name = findPropCI(p, ["facname"]);
+      var addr = findPropCI(p, ["address"]);
+      var pct = findPropCI(p, ["policeprct"]);
+      return {
+        name: (name ? toTitleCase(name) : "Police station") + (pct ? " (Precinct " + pct + ")" : ""),
+        note: addr ? toTitleCase(addr) : undefined
+      };
     }
   });
 
-  /* ---------- Fire Stations (nearest 3). SFFD's 44 active firehouses, filtered
-   * out of DataSF's City Facilities (nc68-ngbr): its .geojson route omits point
-   * geometry (coords live in latitude/longitude properties) and the dataset also
-   * carries HQ / training / a decommissioned "Old Fire Station", so we use the
-   * point loader with a WHERE that keeps only the numbered "Fire Station #N". ---------- */
-  var loadFireStations = makeSocrataPointLoader(
-    "nc68-ngbr",
-    "department_name='Fire Department' AND common_name like 'Fire Station #%'",
-    "latitude",
-    "longitude"
-  );
-
+  /* ---------- Firehouse (nearest 3) — Socrata hc8x-tcnd (219) ---------- */
+  var loadFirehouses = makeSocrataPointLoader("hc8x-tcnd", null, "latitude", "longitude");
   registerNearestPointLayer({
     id: "fire-station",
     group: "safety",
-    color: "#8E2A22",
-    fill: "#C0362C",
-    label: "Fire Station",
-    loader: loadFireStations,
-    intro: "Nearest stations, straight-line distance:",
-    line: function (props) {
-      var name = findPropCI(props, ["common_name"]);
-      var address = findPropCI(props, ["address"]);
-      return (name ? String(name) : "Fire station") +
-        (address ? " — " + String(address) : "");
+    label: "Firehouse",
+    color: "#B3261E", fill: "#E4572E",
+    loader: loadFirehouses,
+    intro: "Nearest FDNY firehouses, straight-line distance:",
+    line: function (p) {
+      var name = findPropCI(p, ["facilityname"]);
+      var addr = findPropCI(p, ["facilityaddress"]);
+      var boro = findPropCI(p, ["borough"]);
+      return (name ? String(name) : "Firehouse") + (addr ? " — " + toTitleCase(addr) : "") + (boro ? ", " + toTitleCase(boro) : "");
     },
-    item: function (props) { // 4d two-line row: station over address
-      var name = findPropCI(props, ["common_name"]);
-      var address = findPropCI(props, ["address"]);
-      return { name: name ? String(name) : "Fire station", note: address ? String(address) : undefined };
+    item: function (p) { // 4d two-line row: name over address
+      var name = findPropCI(p, ["facilityname"]);
+      var addr = findPropCI(p, ["facilityaddress"]);
+      var boro = findPropCI(p, ["borough"]);
+      var note = (addr ? toTitleCase(addr) : "") + (boro ? (addr ? ", " : "") + toTitleCase(boro) : "");
+      return { name: name ? String(name) : "Firehouse", note: note || undefined };
     }
   });
 
+  /* ---------- FDNY Battalion (49) — DCP ArcGIS (Socrata mirror is map-type) ---------- */
+  var FIRE_BATTALIONS_SERVICE = "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Fire_Battalions/FeatureServer/0";
+  var loadFireBattalions = makeCached(function () { return loadArcGISGeoJSON(FIRE_BATTALIONS_SERVICE); });
+  registerPolygonLayer({
+    id: "fire-battalion",
+    group: "safety",
+    label: "FDNY Battalion",
+    loader: loadFireBattalions,
+    style: { color: "#B3261E", weight: 2, fillColor: "#E4572E", fillOpacity: 0.05, dashArray: "6 3" },
+    fields: [
+      { name: "battalion", label: "FDNY Battalion", keys: ["firebn"], primary: true }
+    ]
+  });
+
   /* =========================================================================
-   * AMENITY POINT LAYERS — Post Office / Library / Voting
-   * Same nearest-N pattern as Police/Fire Stations above (haversine,
+   * AMENITY POINT LAYERS — Post Office / Library / Early Voting
+   * Same nearest-N pattern as Police Station / Firehouse above (haversine,
    * straight-line, N=3).
    * ======================================================================= */
 
@@ -6936,134 +7160,1001 @@ function initSFExplorer() {
     var url = USGS_POST_OFFICE_LAYER + "/query?geometry=" +
       [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
       "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
-      "&where=1%3D1&outFields=NAME,ADDRESS,CITY,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
+      "&where=1%3D1&outFields=NAME,ADDRESS,CITY,STATE,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
     return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
       if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from USGS structures layer 38");
       return gj;
     });
   });
-
   registerNearestPointLayer({
     id: "post-office",
     group: "geography",
-    color: "#4B2E83",
-    fill: "#B39DDB",
     label: "Post Office",
+    color: "#4B2E83", fill: "#B39DDB",
     loader: loadPostOffices,
     intro: "Nearest post offices (USGS National Map structures data), straight-line distance:",
-    line: function (props) {
-      var name = findPropCI(props, ["name"]);
-      var address = findPropCI(props, ["address"]);
-      var city = findPropCI(props, ["city"]);
-      var zip = findPropCI(props, ["zipcode", "zip"]);
-      return (name ? String(name) : "Post office") +
-        (address ? " — " + String(address) : "") +
-        (city ? ", " + String(city) : "") +
-        (zip ? " " + String(zip) : "");
+    line: function (p) {
+      var name = findPropCI(p, ["name"]);
+      var addr = findPropCI(p, ["address"]);
+      var city = findPropCI(p, ["city"]);
+      var zip = findPropCI(p, ["zipcode", "zip"]);
+      return (name ? String(name) : "Post office") + (addr ? " — " + String(addr) : "") + (city ? ", " + String(city) : "") + (zip ? " " + String(zip) : "");
     },
-    item: function (props) { // 4d two-line row: name over address
-      var name = findPropCI(props, ["name"]);
-      var address = findPropCI(props, ["address"]);
-      var city = findPropCI(props, ["city"]);
-      var zip = findPropCI(props, ["zipcode", "zip"]);
-      var note = (address ? String(address) : "") + (city ? (address ? ", " : "") + String(city) : "") + (zip ? " " + String(zip) : "");
+    item: function (p) { // 4d two-line row: name over address
+      var name = findPropCI(p, ["name"]);
+      var addr = findPropCI(p, ["address"]);
+      var city = findPropCI(p, ["city"]);
+      var zip = findPropCI(p, ["zipcode", "zip"]);
+      var note = (addr ? String(addr) : "") + (city ? (addr ? ", " : "") + String(city) : "") + (zip ? " " + String(zip) : "");
       return { name: name ? String(name) : "Post office", note: note || undefined };
     }
   });
 
-  /* ---------- Libraries (nearest 3) — SFPL locations carved out of DataSF's
-   * City Facilities via the fhhu-wqa7 filtered view. Like the Fire Station
-   * layer's parent dataset, its .geojson route omits point geometry, so the
-   * point loader reads the text latitude/longitude columns. dept_id 48 is the
-   * Public Library department (drops the view's ancillary leased rows); the
-   * explicit name exclusion drops SFPL's Library Support Services admin/
-   * technical-services building at 190 9th St — a dept-48 facility but not a
-   * public library location. Result: the Main Library + the 27 branches. ---------- */
-  var loadLibraries = makeSocrataPointLoader("fhhu-wqa7", "dept_id='48' AND common_name != 'Library Support Services'", "latitude", "longitude");
-
+  /* ---------- Libraries (nearest 3) — Socrata feuq-due4 (216: NYPL/BPL/QPL).
+   * Branch rows are slow-moving (last bulk refresh ~2016) but locations are
+   * near-static; the per-system datasets are the fresher alternates if hours
+   * are ever wanted. ---------- */
+  var loadLibraries = makeCachedLoader("feuq-due4");
   registerNearestPointLayer({
     id: "library",
     group: "geography",
-    color: "#8A5A00",
-    fill: "#F2B84B",
     label: "Library",
+    color: "#8A5A00", fill: "#F2B84B",
     loader: loadLibraries,
-    intro: "Nearest San Francisco Public Library locations, straight-line distance:",
-    line: function (props) {
-      var name = findPropCI(props, ["common_name", "name"]);
-      var address = findPropCI(props, ["address"]);
-      var zip = findPropCI(props, ["zip_code", "zip"]);
-      return (name ? String(name) : "Library") +
-        (address ? " — " + String(address) : "") +
-        (zip ? ", " + String(zip) : "");
+    intro: "Nearest public library branches (NYPL / BPL / QPL), straight-line distance:",
+    line: function (p) {
+      var name = findPropCI(p, ["name"]);
+      var system = findPropCI(p, ["system"]);
+      var housenum = findPropCI(p, ["housenum"]);
+      var street = findPropCI(p, ["streetname"]);
+      var zip = findPropCI(p, ["zip"]);
+      var addr = (housenum && street) ? String(housenum) + " " + String(street) : (street ? String(street) : "");
+      return (name ? String(name) : "Library") + (system ? " (" + String(system) + ")" : "") + (addr ? " — " + addr : "") + (zip ? ", " + String(zip) : "");
     },
-    item: function (props) { // 4d two-line row: branch over address
-      var name = findPropCI(props, ["common_name", "name"]);
-      var address = findPropCI(props, ["address"]);
-      var zip = findPropCI(props, ["zip_code", "zip"]);
-      var note = (address ? String(address) : "") + (zip ? (address ? ", " : "") + String(zip) : "");
-      return { name: name ? String(name) : "Library", note: note || undefined };
-    }
-  });
-
-  /* ---------- Voting Center & Ballot Drop-off (nearest 3) ----------
-   * SF is vote-by-mail-heavy and publishes no open point dataset (DataSF has
-   * only precinct polygons), so the layer reads the hand-curated
-   * data/app/early-voting-sites.json (network-first roster) transcribed from
-   * the Department of Elections pages: the City Hall Voting Center + the
-   * City's 37 official ballot drop boxes. Refresh the file each election
-   * TOGETHER WITH the election name in the intro below — the intro is what
-   * makes a stale list visibly stale on the card (each feature's `election`
-   * property records the same label for provenance but is not rendered). ---------- */
-  var loadVotingSites = makeCached(function () {
-    return fetchJSONWithRetry("data/app/early-voting-sites.json", {}, 2);
-  });
-
-  registerNearestPointLayer({
-    id: "early-voting",
-    group: "political",
-    color: "#7A1E5C",
-    fill: "#E060A8",
-    label: "Voting Center & Ballot Drop-off",
-    loader: loadVotingSites,
-    intro: "Official SF voting center and 24/7 ballot drop-off sites, as published by the Department of Elections for the June 2, 2026 primary (the Department describes the 37 drop boxes as recurring; boxes open ~29 days before each election — confirm current sites at sf.gov/return-your-ballot):",
-    line: function (props) {
-      var name = findPropCI(props, ["name"]);
-      var type = findPropCI(props, ["type"]);
-      var address = findPropCI(props, ["address"]);
-      // Card convention: surface the district identifier the source carries —
-      // drop-box features name their supervisor district (the voting center,
-      // serving the whole city, has none).
-      var supe = findPropCI(props, ["supervisorial_district"]);
-      return (name ? String(name) : "Voting site") +
-        (type === "drop-box" ? " (ballot drop-off)" : (type === "voting-center" ? " (voting center)" : "")) +
-        (address ? " — " + String(address) : "") +
-        (supe ? " — Supervisor District " + String(supe) : "");
-    },
-    item: function (props) { // 4d two-line row: site over address + district
-      var name = findPropCI(props, ["name"]);
-      var type = findPropCI(props, ["type"]);
-      var address = findPropCI(props, ["address"]);
-      var supe = findPropCI(props, ["supervisorial_district"]);
+    item: function (p) { // 4d two-line row: branch (system) over address
+      var name = findPropCI(p, ["name"]);
+      var system = findPropCI(p, ["system"]);
+      var housenum = findPropCI(p, ["housenum"]);
+      var street = findPropCI(p, ["streetname"]);
+      var zip = findPropCI(p, ["zip"]);
+      var addr = (housenum && street) ? String(housenum) + " " + String(street) : (street ? String(street) : "");
+      var note = addr + (zip ? (addr ? ", " : "") + String(zip) : "");
       return {
-        name: (name ? String(name) : "Voting site") +
-          (type === "drop-box" ? " (ballot drop-off)" : (type === "voting-center" ? " (voting center)" : "")),
-        note: (address ? String(address) : "") +
-          (supe ? (address ? " — " : "") + "Supervisor District " + String(supe) : "") || undefined
+        name: (name ? String(name) : "Library") + (system ? " (" + String(system) + ")" : ""),
+        note: note || undefined
       };
     }
   });
 
-  /* ==== ENGINE:BEGIN int-field ==== */
-  // Normalize a numeric-ish field to its integer string ("15.0" -> "15"); passes
-  // non-numeric values through and null/"" to null. (Socrata sometimes serves
-  // integer district numbers as floats.)
-  function intField(v) {
-    if (v == null || v === "") return null;
-    var n = parseInt(v, 10);
-    return isNaN(n) ? v : String(n);
+  /* ---------- Early Voting Sites (nearest 3) — NYS GIS Program Office
+   * elections service (same EbVsqZ18sv1kVJ3k org as NYS_Schools), layer 1
+   * "Early Voting Polling Sites NYC" (158, kept current per election cycle
+   * by the NYS/NYC Boards of Elections). HONESTY NOTE: unlike the rest of
+   * NY State, NYC assigns each voter one specific early-voting site — the
+   * nearest site is NOT necessarily yours, and the card says so, pointing
+   * at findmypollsite.vote.nyc as the authoritative lookup (same reason
+   * election-day layer 3 is deliberately not used). Paged loader: one page
+   * today, robust if the list ever passes the 1000 cap. ---------- */
+  var NYS_EARLY_VOTING_LAYER = "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/NYS_Elections_Districts_and_Polling_Locations/FeatureServer/1";
+  var loadEarlyVotingSites = makeCached(function () {
+    return loadArcGISPaged(NYS_EARLY_VOTING_LAYER,
+      "USER_Poll_Site_Name,USER_Poll_Site_Address,USER_City,USER_ZipCode,USER_County");
+  });
+  registerNearestPointLayer({
+    id: "early-voting",
+    group: "political",
+    label: "Early Voting Site",
+    color: "#7A1E5C", fill: "#E060A8",
+    loader: loadEarlyVotingSites,
+    intro: "Nearest early-voting sites, for reference (NYS/NYC Boards of Elections data). NYC assigns each voter a specific early-voting site, which may not be the nearest one — find yours and its hours at findmypollsite.vote.nyc:",
+    line: function (p) {
+      var name = findPropCI(p, ["user_poll_site_name", "name"]);
+      var addr = findPropCI(p, ["user_poll_site_address", "address"]);
+      var city = findPropCI(p, ["user_city", "city"]);
+      var zip = findPropCI(p, ["user_zipcode", "zipcode", "zip"]);
+      return (name ? String(name) : "Early-voting site") + (addr ? " — " + String(addr) : "") + (city ? ", " + String(city) : "") + (zip ? " " + String(zip) : "");
+    },
+    item: function (p) { // 4d two-line row: site over address
+      var name = findPropCI(p, ["user_poll_site_name", "name"]);
+      var addr = findPropCI(p, ["user_poll_site_address", "address"]);
+      var city = findPropCI(p, ["user_city", "city"]);
+      var zip = findPropCI(p, ["user_zipcode", "zipcode", "zip"]);
+      var note = (addr ? String(addr) : "") + (city ? (addr ? ", " : "") + String(city) : "") + (zip ? " " + String(zip) : "");
+      return { name: name ? String(name) : "Early-voting site", note: note || undefined };
+    }
+  });
+
+
+  /* =========================================================================
+   * THREAD 3 — SCHOOLS (METRO_EXPANSION_PLAYBOOK §7 rows 9–14)
+   * ES/MS/HS attendance zones (MS partial, HS sparse — honest choice-based
+   * empty states), Community School District, Community Education Council
+   * (parent-elected — the honest analog to an elected school board, which NYC
+   * lacks under mayoral control), and School sites (nearest 3; public/charter/
+   * private from NYSED). School-zone dataset IDs rotate each school year — see
+   * scripts/validate_sources.py (year_search) + the monthly validate-sources workflow.
+   * (registerSchoolZone / registerNearestPointLayer factories are hoisted.)
+   * ======================================================================= */
+
+  /* All three NYC zone levels share one GeoJSON schema — one fork-side wrapper
+   * wires the keys, the DBN "is there a zoned school" rule, and the profile
+   * builder so the shared registerSchoolZone factory stays city-agnostic. */
+  function registerNycZone(opts) {
+    opts.nameKeys = ["label", "sch_name", "short_name", "school_name", "schoolname", "name"];
+    opts.idKeys = ["dbn", "school_id", "schoolid"];
+    opts.districtKeys = ["schooldist", "zoned_dist"];
+    // addressKeys/gradeKeys deliberately unwired: the DOE zone datasets carry
+    // no school address or grade fields (verified against the SY2024-25 column
+    // list — dbn/label/schooldist/esid|msid|hsid only), so the factory's
+    // Address/Grades rows and its address map pin stay dormant here by design.
+    // If a future edition adds them, wire the keys and the pin lights up.
+    opts.requireId = true;
+    opts.profileLink = schoolProfileLink;
+    registerSchoolZone(opts);
   }
-  /* ==== ENGINE:END int-field ==== */
+
+  var MYSCHOOLS_MORE = { label: "MySchools", url: "https://www.myschools.nyc/" };
+
+  registerNycZone({
+    id: "es-zone", label: "Elementary School Zone", datasetId: "cmjf-yawu",
+    style: { color: "#2E7D5B", weight: 1.5, fillColor: "#7CC49B", fillOpacity: 0.12 },
+    emptyNote: "No zoned elementary school found for this point.",
+    moreLink: MYSCHOOLS_MORE
+  });
+  registerNycZone({
+    id: "ms-zone", label: "Middle School Zone", datasetId: "t26j-jbq7",
+    style: { color: "#1F6F5C", weight: 1.5, fillColor: "#5FB49C", fillOpacity: 0.12, dashArray: "5 3" },
+    emptyNote: "No zoned middle school here — much of NYC middle-school admission is choice-based.",
+    moreLink: MYSCHOOLS_MORE
+  });
+  registerNycZone({
+    id: "hs-zone", label: "High School Zone", datasetId: "ruu9-egea",
+    style: { color: "#155C4B", weight: 1.5, fillColor: "#4CA98F", fillOpacity: 0.12, dashArray: "2 4" },
+    emptyNote: "Most NYC high schools admit by application citywide, not by zone.",
+    moreLink: MYSCHOOLS_MORE
+  });
+
+  /* ---------- Community School District (32) — Socrata 8ugf-3d8u ----------
+   * Superintendents are appointed by the Chancellor (not elected), so the card
+   * links to the DOE directory rather than naming an officeholder. D75/D79 are
+   * citywide with no polygon and are not mappable. */
+  var loadSchoolDistricts = makeCached(function () {
+    return loadSocrataGeoJSON("8ugf-3d8u").then(function (gj) {
+      // schooldist arrives as a float string ("15.0"); normalize to "15" so the
+      // card (and the CEC join) read cleanly.
+      (gj.features || []).forEach(function (f) {
+        var p = f.properties || {};
+        if (p.schooldist != null) p.schooldist = intField(p.schooldist);
+      });
+      return gj;
+    });
+  });
+  registerPolygonLayer({
+    id: "school-district", group: "schools", label: "Community School District",
+    loader: loadSchoolDistricts,
+    style: { color: "#0B7285", weight: 2, fillColor: "#0B7285", fillOpacity: 0.05 },
+    pill: true, // district identifier in the header pill (Handoff 3 §5b)
+    fields: [
+      // label shortened so the pill reads "District 15" (the layer name above
+      // already says Community School District)
+      { name: "district", label: "District", keys: ["schooldist"], primary: true },
+      { label: "Superintendent", value: "Appointed by the Chancellor (not elected)." }
+    ],
+    primaryLink: function () {
+      return { label: "DOE superintendents", url: "https://www.schools.nyc.gov/about-us/leadership/superintendents" };
+    }
+  });
+
+  /* ---------- Community Education Council (CEC) — parent-elected ----------
+   * Shares the community-school-district geometry (one CEC per district). NYC
+   * has no elected school board (mayoral control); the CEC is the honest
+   * parent-elected analog, and this card says so and never calls itself a
+   * school board. Members ship as an empty placeholder until the Thread 5
+   * Playwright scrape (schools.nyc.gov WAF-blocks plain clients). */
+  var loadCecMembers = makeCached(function () { return fetchJSONWithRetry("data/app/cec-members.json", {}, 2); });
+  registerLayer({
+    id: "cec", group: "schools", label: "Community Education Council",
+    // hover popup: same "CEC n" identity the card's headline row shows.
+    hoverName: function (feature) {
+      var d = intField(findPropCI(feature.properties || {}, ["schooldist"]));
+      return d != null ? "CEC " + d : null;
+    },
+    overlay: { load: loadSchoolDistricts, style: { color: "#7048E8", weight: 2, fillColor: "#7048E8", fillOpacity: 0.05, dashArray: "6 3" } },
+    query: function (point, seq) {
+      return Promise.all([loadSchoolDistricts(), loadCecMembers().catch(function () { return {}; })]).then(function (r) {
+        var gj = r[0], roster = r[1] || {};
+        var feature = findFeatureContaining(gj, point);
+        if (!feature) return null;
+        var d = findPropCI(feature.properties || {}, ["schooldist"]);
+        var num = (d != null && d !== "") ? parseInt(d, 10) : null;
+        var row = num != null ? roster[String(num)] : null;
+        return { seq: seq, district: num, members: (row && row.members) ? row.members : [] };
+      });
+    },
+    render: function (result) {
+      // parent-elected members as person rows; the honesty note stays the
+      // intro — this card never calls itself a school board
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: "Community Education Council",
+        note: "The parent-elected council for this community school district — NYC's elected parent body (not a school board; the city has mayoral control)."
+      }));
+      var people = (result.members || []).filter(function (m) { return m && m.name; })
+        .map(function (m) { return { name: String(m.name) }; });
+      if (people.length) wrap.appendChild(renderPersonRows(people));
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.district != null ? "CEC " + String(result.district) : null;
+    },
+    primaryLink: function () {
+      return { label: "Community Education Councils", url: "https://www.schools.nyc.gov/get-involved/families/education-councils/community-education-councils/cec" };
+    },
+  });
+
+  /* ---------- School (nearest 3; public / charter / private) — NYSED ArcGIS ----------
+   * Points from the state's NYS_Schools FeatureServer, 5-NYC-county filter,
+   * outSR=4326 (native geometry is UTM 18N). Public (1591) exceeds the 1000-row
+   * transfer cap, so it pages; private (809) and charter (431) fit in one call. */
+  var NYSED_BASE = "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/NYS_Schools/FeatureServer/";
+  var NYC_SCHOOL_WHERE = "COUNTY_DESC IN ('BRONX','KINGS','NEW YORK','QUEENS','RICHMOND')";
+  function loadNysedLayerPaged(layerIndex, tagType) {
+    var PAGE = 1000, fields = "LEGAL_NAME,PHYSADDRLINE1,PHYSCITY,PHYSZIPCD5";
+    function page(offset, acc) {
+      var url = NYSED_BASE + layerIndex + "/query?where=" + encodeURIComponent(NYC_SCHOOL_WHERE) +
+        "&outFields=" + encodeURIComponent(fields) + "&outSR=4326&f=geojson&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        var feats = (gj && gj.features) || [];
+        feats.forEach(function (f) { (f.properties = f.properties || {}).school_type = tagType; });
+        acc = acc.concat(feats);
+        var more = gj && (gj.exceededTransferLimit || (gj.properties && gj.properties.exceededTransferLimit));
+        // feats.length > 0 (not === PAGE): a service that caps below PAGE still
+        // flags exceededTransferLimit on a short page, so === PAGE would stop
+        // early and silently drop schools. offset advances by feats.length, so a
+        // zero-row page terminates the loop.
+        if (more && feats.length > 0) return page(offset + feats.length, acc);
+        return acc;
+      });
+    }
+    return page(0, []);
+  }
+  var loadSchoolSites = makeCached(function () {
+    return Promise.all([loadNysedLayerPaged(2, "Public"), loadNysedLayerPaged(3, "Private"), loadNysedLayerPaged(4, "Charter")])
+      .then(function (rs) {
+        var feats = [];
+        rs.forEach(function (a) { feats = feats.concat(a); });
+        return { type: "FeatureCollection", features: feats };
+      });
+  });
+  /* School Location card rebuilt per Handoff 3 §8a/8b (Chicago's chips card is
+   * the reference implementation): type filter chips (Public/Charter/Private —
+   * the NYSED registry's own taxonomy, carried as the school_type tag the
+   * loader stamps), typed rows via renderNearestRows, display-only header
+   * suffix, and a footer that swaps to the hiding notice + Show all while
+   * filtered. Names/addresses arrive ALL-CAPS from NYSED — cardTitleCase
+   * normalizes them ("PS" stays caps via its keep-caps set). */
+  var NYC_SCHOOL_SITE_COUNT = 3;
+  var NYC_SCHOOL_CATS = ["Public", "Charter", "Private"];
+  var NYC_SCHOOL_CAT_META = {
+    Public:  { full: "Public",  color: "#2E7D5B" }, // the layer's own green
+    Charter: { full: "Charter", color: "#A15C00" },
+    Private: { full: "Private", color: "#6A3FA0" }
+  };
+  // filter selection persists across point selections AND page loads
+  // (sessionStorage — §8b "persist chip state per session"); a storage
+  // failure (private mode) degrades to in-memory only.
+  var NYC_SCHOOL_FILTER_KEY = "nyc-school-type-filter";
+  function loadSchoolTypeFilter() {
+    try {
+      var saved = JSON.parse(sessionStorage.getItem(NYC_SCHOOL_FILTER_KEY));
+      if (saved && typeof saved === "object") {
+        return { Public: saved.Public !== false, Charter: saved.Charter !== false, Private: saved.Private !== false };
+      }
+    } catch (e) { /* fall through to defaults */ }
+    return { Public: true, Charter: true, Private: true };
+  }
+  function saveSchoolTypeFilter() {
+    try { sessionStorage.setItem(NYC_SCHOOL_FILTER_KEY, JSON.stringify(schoolTypeFilter)); } catch (e) { /* display pref only */ }
+  }
+  var schoolTypeFilter = loadSchoolTypeFilter();
+  function schoolSiteCategory(props) {
+    // the loader stamps school_type = Public|Private|Charter per NYSED layer
+    var t = findPropCI(props || {}, ["school_type"]);
+    return NYC_SCHOOL_CAT_META[t] ? String(t) : "Public";
+  }
+
+  registerLayer({
+    id: "school-site", group: "schools",
+    label: "School (nearest " + NYC_SCHOOL_SITE_COUNT + ")",
+    color: "#2E7D5B", // legend/accent color (matches overlay.style below)
+    overlay: {
+      load: loadSchoolSites,
+      // flat base kept for moduleColor()/baseStyleFor; the per-feature styler
+      // paints each dot by type and hides filtered-off types. Explicit
+      // fillOpacity everywhere — dots must not inherit the polygon-oriented
+      // scaled fill.
+      style: { color: "#2E7D5B", weight: 1.5, fillColor: "#7CC49B", fillOpacity: 0.85 },
+      styleForFeature: function (feature) {
+        var cat = schoolSiteCategory(feature.properties);
+        if (!schoolTypeFilter[cat]) return { opacity: 0, fillOpacity: 0 };
+        var color = NYC_SCHOOL_CAT_META[cat].color;
+        return { color: color, fillColor: color, opacity: 1, fillOpacity: 0.85 };
+      },
+      pointToLayer: function (feature, latlng) {
+        var cat = schoolSiteCategory(feature.properties);
+        var meta = NYC_SCHOOL_CAT_META[cat];
+        var off = !schoolTypeFilter[cat];
+        var marker = L.circleMarker(latlng, {
+          radius: 5, weight: 1.5,
+          color: meta.color, fillColor: meta.color,
+          opacity: off ? 0 : 1, fillOpacity: off ? 0 : 0.85
+        });
+        // hover identity for the dots — same pattern as the nearest-point
+        // factory: the shared dark hover snapshot, gated to hover-capable
+        // devices; identity mirrors the card row (name + type + address).
+        if (hoverCapable) {
+          var token = null;
+          marker
+            .on("mouseover", function () {
+              var props = feature.properties || {};
+              var name = findPropCI(props, ["legal_name"]);
+              var addr = findPropCI(props, ["physaddrline1"]);
+              token = {
+                modId: "school-site",
+                label: (name ? cardTitleCase(String(name)) : "School") + " — " + meta.full,
+                address: addr ? cardTitleCase(String(addr)) : "",
+                latlng: latlng,
+                color: meta.color,
+                layerLabel: "School (nearest " + NYC_SCHOOL_SITE_COUNT + ")"
+              };
+              hoveredPoi = token;
+              updateHover();
+            })
+            .on("mouseout", function () {
+              if (hoveredPoi === token) {
+                hoveredPoi = null;
+                updateHover();
+              }
+            });
+        }
+        return marker;
+      }
+    },
+    query: function (point, seq) {
+      return loadSchoolSites().then(function (geojson) {
+        var features = (geojson && geojson.features) || [];
+        var clean = function (v) { var s = v == null ? "" : String(v).trim(); return s ? s : null; };
+        var withDistance = [];
+        for (var i = 0; i < features.length; i++) {
+          var latLng = pointFeatureLatLng(features[i]);
+          if (!latLng) continue;
+          var props = features[i].properties || {};
+          withDistance.push({
+            name: clean(findPropCI(props, ["legal_name"])),
+            category: schoolSiteCategory(props),
+            address: clean(findPropCI(props, ["physaddrline1"])),
+            distanceMi: haversineMiles(point.lat, point.lng, latLng.lat, latLng.lng)
+          });
+        }
+        if (!withDistance.length) return null;
+        withDistance.sort(function (a, b) { return a.distanceMi - b.distanceMi; });
+        // full sorted set (not just nearest 3) so the type chips re-slice
+        // the list client-side without re-querying
+        return { seq: seq, schools: withDistance };
+      });
+    },
+    render: function (result) {
+      var wrap = document.createElement("div");
+      wrap.className = "card-flush";
+
+      var counts = { Public: 0, Charter: 0, Private: 0 };
+      result.schools.forEach(function (s) { counts[s.category]++; });
+
+      // ---- type chips (§8a/8b) — pure toggles driving the list, the map
+      // dots, the header suffix, and the footer notice ----
+      var chipsWrap = document.createElement("div");
+      chipsWrap.className = "school-chips";
+      var chipEls = {};
+      NYC_SCHOOL_CATS.forEach(function (cat) {
+        var meta = NYC_SCHOOL_CAT_META[cat];
+        var chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "school-chip";
+        chip.setAttribute("aria-pressed", "false");
+        var dot = document.createElement("span");
+        dot.className = "school-chip-dot";
+        var txt = document.createElement("span");
+        txt.className = "school-chip-label";
+        txt.textContent = meta.full;
+        var count = document.createElement("span");
+        count.className = "school-chip-count";
+        count.textContent = String(counts[cat]);
+        chip.appendChild(dot);
+        chip.appendChild(txt);
+        chip.appendChild(count);
+        chip.addEventListener("click", function () {
+          schoolTypeFilter[cat] = !schoolTypeFilter[cat];
+          saveSchoolTypeFilter();
+          renderList();
+          var mod = getLayerById("school-site");
+          if (mod) restyleOverlayFeatures(mod); // repaint/hide dots to match
+        });
+        chipEls[cat] = { chip: chip, dot: dot };
+        chipsWrap.appendChild(chip);
+      });
+      wrap.appendChild(chipsWrap);
+
+      var rowsWrap = document.createElement("div");
+      rowsWrap.className = "school-nearest";
+      wrap.appendChild(rowsWrap);
+
+      // footer strip: the source footnote by default; the hiding notice +
+      // "Show all" reset while any type is toggled off
+      var footRow = document.createElement("div");
+      footRow.className = "school-footrow";
+      var footNote = document.createElement("div");
+      footNote.className = "school-footnote";
+      footRow.appendChild(footNote);
+      var showAll = document.createElement("button");
+      showAll.type = "button";
+      showAll.className = "school-show-all";
+      showAll.textContent = "Show all";
+      showAll.hidden = true;
+      showAll.addEventListener("click", function () {
+        NYC_SCHOOL_CATS.forEach(function (cat) { schoolTypeFilter[cat] = true; });
+        saveSchoolTypeFilter();
+        renderList();
+        var mod = getLayerById("school-site");
+        if (mod) restyleOverlayFeatures(mod);
+      });
+      footRow.appendChild(showAll);
+      wrap.appendChild(footRow);
+
+      // header suffix — display-only: the block label reads "School (all,
+      // incl. private · nearest 3)" or "(2 of 3 types · nearest 3)";
+      // mod.label (worksheet-canonical string) is untouched.
+      function updateHeaderSuffix(onCount) {
+        var labelEl = document.querySelector('label[for="toggle-school-site"]');
+        if (!labelEl) return;
+        var suffixText = (onCount === NYC_SCHOOL_CATS.length
+          ? "(all, incl. private · nearest " + NYC_SCHOOL_SITE_COUNT + ")"
+          : "(" + onCount + " of " + NYC_SCHOOL_CATS.length + " types · nearest " + NYC_SCHOOL_SITE_COUNT + ")");
+        labelEl.textContent = "School ";
+        var suffix = document.createElement("span");
+        suffix.className = "school-suffix";
+        suffix.textContent = suffixText;
+        labelEl.appendChild(suffix);
+      }
+
+      function renderList() {
+        rowsWrap.innerHTML = "";
+        var onCats = NYC_SCHOOL_CATS.filter(function (cat) { return schoolTypeFilter[cat]; });
+        NYC_SCHOOL_CATS.forEach(function (cat) {
+          var on = !!schoolTypeFilter[cat];
+          var meta = NYC_SCHOOL_CAT_META[cat];
+          var els = chipEls[cat];
+          els.chip.className = "school-chip" + (on ? " is-on" : "");
+          els.chip.setAttribute("aria-pressed", on ? "true" : "false");
+          if (on) {
+            els.chip.style.color = "color-mix(in srgb, " + meta.color + " 55%, #1f2937)";
+            els.chip.style.background = "color-mix(in srgb, " + meta.color + " 12%, transparent)";
+            els.chip.style.borderColor = "color-mix(in srgb, " + meta.color + " 35%, transparent)";
+            els.dot.style.background = meta.color;
+          } else {
+            els.chip.style.color = "";
+            els.chip.style.background = "";
+            els.chip.style.borderColor = "";
+            els.dot.style.background = "";
+          }
+        });
+        updateHeaderSuffix(onCats.length);
+        var shown = result.schools.filter(function (s) { return schoolTypeFilter[s.category]; }).slice(0, NYC_SCHOOL_SITE_COUNT);
+        if (!shown.length) {
+          var empty = document.createElement("p");
+          empty.className = "school-list-empty";
+          empty.textContent = "No schools of the selected type(s) nearby.";
+          rowsWrap.appendChild(empty);
+        } else {
+          rowsWrap.appendChild(renderNearestRows(shown.map(function (s) {
+            var meta = NYC_SCHOOL_CAT_META[s.category];
+            return {
+              name: s.name ? cardTitleCase(String(s.name)) : "School",
+              tag: { text: meta.full, color: meta.color },
+              note: s.address ? cardTitleCase(String(s.address)) : null,
+              dotColor: meta.color,
+              accentColor: meta.color,
+              distanceLabel: s.distanceMi.toFixed(2) + " mi"
+            };
+          })));
+        }
+        var hiddenCount = NYC_SCHOOL_CATS.reduce(function (sum, cat) {
+          return schoolTypeFilter[cat] ? sum : sum + counts[cat];
+        }, 0);
+        if (hiddenCount > 0) {
+          var offNames = NYC_SCHOOL_CATS.filter(function (cat) { return !schoolTypeFilter[cat]; })
+            .map(function (cat) { return NYC_SCHOOL_CAT_META[cat].full; });
+          footNote.textContent = "Hiding " + hiddenCount + " school" + (hiddenCount === 1 ? "" : "s") + " (" + offNames.join(", ") + ").";
+          showAll.hidden = false;
+        } else {
+          footNote.textContent = "Straight-line distance. Type from the NYSED school registry (public / charter / private).";
+          showAll.hidden = true;
+        }
+      }
+      renderList();
+      return wrap;
+    }
+  });
+
+
+  /* =========================================================================
+   * THREAD 4 — POLITICAL (METRO_EXPANSION_PLAYBOOK §7 rows 15–20, 23–24)
+   * City Council, Election District (subOf Assembly), Community District/Board
+   * (live chair + district-manager join), U.S. House + NY Senate + NY Assembly
+   * (TIGERweb + roster), Borough President + District Attorney (shared borough
+   * geometry). Officeholder rosters that need a scrape ship as empty placeholders
+   * until Thread 5 and the cards degrade to the official body; Congress ships a
+   * real roster (public congress-legislators, no scrape), and Community Board
+   * chair/district-manager come from a live Socrata dataset.
+   * ======================================================================= */
+
+  /* ---------- City Council District (51) — Socrata 872g-cjhh ---------- */
+  var loadCouncilDistricts = makeCachedLoader("872g-cjhh");
+  var loadCouncilMembers = makeCached(function () { return fetchJSONWithRetry("data/app/council-members.json", {}, 2); });
+  registerLayer({
+    id: "council", group: "political", label: "City Council District",
+    // hover popup: same `coundist` property the card's query reads.
+    hoverName: function (feature) {
+      return intField(findPropCI(feature.properties || {}, ["coundist"]));
+    },
+    // hover popup: name the council member from the prefetched roster
+    // (same council-members.json join the card makes, keyed by district).
+    hoverOfficial: {
+      load: loadCouncilMembers,
+      name: function (feature, roster) {
+        if (!roster) return null;
+        var d = intField(findPropCI(feature.properties || {}, ["coundist"]));
+        var row = d != null ? roster[d] : null;
+        return row ? row.name : null;
+      }
+    },
+    overlay: { load: loadCouncilDistricts, style: { color: "#5B2A86", weight: 2, fillColor: "#7048E8", fillOpacity: 0.06 } },
+    query: function (point, seq) {
+      return Promise.all([loadCouncilDistricts(), loadCouncilMembers().catch(function () { return {}; })]).then(function (r) {
+        var gj = r[0], roster = r[1] || {};
+        var f = findFeatureContaining(gj, point);
+        if (!f) return null;
+        var d = intField(findPropCI(f.properties || {}, ["coundist"]));
+        var row = d != null ? roster[d] : null;
+        return { seq: seq, district: d, member: row || null };
+      });
+    },
+    render: function (result) {
+      // council member as a badged person row (party badge when the roster
+      // carries it), district office behind the expander, council page in
+      // the footer, district number in the pill
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({ title: "New York City Council" }));
+      if (result.member) {
+        wrap.appendChild(renderPersonRows([{
+          name: String(result.member.name),
+          badge: result.member.party ? String(result.member.party) : "Council Member"
+        }]));
+        if (result.member.office) {
+          wrap.appendChild(renderOfficeGroup({
+            offices: [{ label: "District Office", lines: [String(result.member.office)] }]
+          }));
+        }
+      }
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return result.district != null ? "District " + String(result.district) : null;
+    },
+    primaryLink: function (result) {
+      // label follows the actual href — the directory fallback must not
+      // masquerade as the member's district page
+      if (result.district != null) {
+        return { label: "NYC Council District " + result.district, url: "https://council.nyc.gov/district-" + result.district + "/" };
+      }
+      return { label: "NYC Council directory", url: "https://council.nyc.gov/districts/" };
+    },
+    pointOfInterest: function (result) {
+      if (!result.member || !result.member.office) return null;
+      return { label: (result.member.name || "Council Member") + " — District Office", address: String(result.member.office) };
+    }
+  });
+
+  /* ---------- Community District / Community Board (59) — Socrata 5crt-au7u ----------
+   * `boro_cd` encodes borough + district ("410" = Queens CD 10). Live-joined to
+   * ruf7-3wgc (the only machine-readable CB roster) for the elected-adjacent
+   * board chair + district manager + office contacts. Board members themselves
+   * are BP/Council-appointed — the note says so. */
+  var loadCommunityDistricts = makeCachedLoader("5crt-au7u");
+  var loadCommunityBoardInfo = makeCached(function () { return loadSocrataJSON("ruf7-3wgc"); });
+  var BORO_NAME_BY_DIGIT = { 1: "Manhattan", 2: "Bronx", 3: "Brooklyn", 4: "Queens", 5: "Staten Island" };
+  function decodeBoroCd(v) {
+    if (v == null) return null;
+    var s = String(parseInt(v, 10));
+    if (s.length < 2) return null;
+    return { boro: BORO_NAME_BY_DIGIT[parseInt(s.charAt(0), 10)] || null, cd: parseInt(s.slice(1), 10) };
+  }
+  // Combine the CB office address lines (cb_office_address is usually a full
+  // "building, street, city, NY zip"; cb_address_line_2 adds a room/suite).
+  function cbOfficeAddress(info) {
+    var a = (info.cb_office_address || "").trim();
+    if (!a) return null;
+    var l2 = (info.cb_address_line_2 || "").trim();
+    return l2 ? a + ", " + l2 : a;
+  }
+  function communityBoardIndex(rows) {
+    if (rows && rows.__cbIdx) return rows.__cbIdx;
+    var idx = {};
+    (rows || []).forEach(function (row) {
+      var m = /(\d+)/.exec(row.community_board || "");
+      if (row.borough && m) idx[row.borough + "|" + parseInt(m[1], 10)] = row;
+    });
+    try { if (rows) rows.__cbIdx = idx; } catch (e) { /* frozen */ }
+    return idx;
+  }
+  registerLayer({
+    id: "community-district", group: "political", label: "Community District / Board",
+    // hover popup: same decoded "Borough CD n" identity the card headline shows.
+    hoverName: function (feature) {
+      var dec = decodeBoroCd(findPropCI(feature.properties || {}, ["boro_cd"]));
+      return dec ? ((dec.boro ? dec.boro + " " : "") + "CD " + dec.cd) : null;
+    },
+    // hover popup: name the board chair from the prefetched CB roster (same
+    // ruf7-3wgc join the card makes). "(Chair)" is kept so the name never
+    // reads as an elected district representative — the board is appointed.
+    hoverOfficial: {
+      load: loadCommunityBoardInfo,
+      name: function (feature, roster) {
+        if (!roster) return null;
+        var dec = decodeBoroCd(findPropCI(feature.properties || {}, ["boro_cd"]));
+        var row = (dec && dec.boro) ? communityBoardIndex(roster)[dec.boro + "|" + dec.cd] : null;
+        return (row && row.cb_chair) ? String(row.cb_chair) + " (Chair)" : null;
+      }
+    },
+    overlay: { load: loadCommunityDistricts, style: { color: "#B5179E", weight: 2, fillColor: "#F72585", fillOpacity: 0.05, dashArray: "5 3" } },
+    query: function (point, seq) {
+      return Promise.all([loadCommunityDistricts(), loadCommunityBoardInfo().catch(function () { return []; })]).then(function (r) {
+        var gj = r[0], rows = r[1] || [];
+        var f = findFeatureContaining(gj, point);
+        if (!f) return null;
+        var dec = decodeBoroCd(findPropCI(f.properties || {}, ["boro_cd"]));
+        if (!dec) return null;
+        var row = dec.boro ? communityBoardIndex(rows)[dec.boro + "|" + dec.cd] : null;
+        return { seq: seq, boro: dec.boro, cd: dec.cd, info: row || null };
+      });
+    },
+    render: function (result) {
+      // chair + district manager as badged person rows, the board office
+      // behind the expander, board contact as a link row; the appointed
+      // note stays — the board itself is not elected
+      var wrap = cardEl("div", "card-flush");
+      var i = result.info;
+      wrap.appendChild(renderBodyIntro({
+        title: "Community Board",
+        note: i && i.neighborhoods ? String(i.neighborhoods) : null
+      }));
+      if (i) {
+        var people = [];
+        if (i.cb_chair) people.push({ name: String(i.cb_chair), badge: "Board Chair", note: "appointed" });
+        if (i.cb_district_manager) people.push({ name: String(i.cb_district_manager), badge: "District Manager" });
+        if (people.length) wrap.appendChild(renderPersonRows(people));
+        var addr = cbOfficeAddress(i);
+        if (addr || i.cb_office_phone) {
+          wrap.appendChild(renderOfficeGroup({
+            offices: [{ label: "Board Office", lines: addr ? [addr] : [], phone: i.cb_office_phone ? String(i.cb_office_phone) : null }]
+          }));
+        }
+        var web = i.cb_website && i.cb_website.url ? safeHttpUrl(i.cb_website.url) : null;
+        if (i.cb_office_email || web) {
+          wrap.appendChild(renderLinkRow({
+            email: i.cb_office_email ? String(i.cb_office_email) : null,
+            links: web ? [{ label: "Website", url: web }] : []
+          }));
+        }
+      }
+      wrap.appendChild(renderBodyIntro({
+        note: "Board members are appointed by the Borough President and Council members (the board itself is not elected)."
+      }));
+      return wrap;
+    },
+    cardIdentifier: function (result) {
+      return (result.boro ? result.boro + " " : "") + "CD " + result.cd;
+    },
+    pointOfInterest: function (result) {
+      var addr = result.info ? cbOfficeAddress(result.info) : null;
+      if (!addr) return null;
+      return { label: (result.boro ? result.boro + " " : "") + "CB " + result.cd + " Office", address: addr };
+    }
+  });
+
+  /* ---------- U.S. House / NY Senate / NY Assembly — TIGERweb + roster ----------
+   * All three via registerIlgaChamber (TIGERweb boundary + same-origin roster).
+   * Congress ships a real roster built from congress-legislators; the two state
+   * chambers ship empty placeholders until the Thread 5 scrapes and degrade to
+   * the official directory. */
+  var loadCongressRoster = makeCached(function () { return fetchJSONWithRetry("data/app/congress-roster.json", {}, 2); });
+  // Geometry: pre-built same-origin (was a live ~1 MB-gzip TIGERweb fetch). Legislative
+  // districts are decadal — regenerate with scripts/build_legislative_boundaries.py on
+  // redistricting. (R2-2, back-ported from DistrictExplorer-CHI)
+  var loadCongressDistricts = makeCached(function () { return fetchJSONWithRetry("data/app/congress-districts.json", {}, 2); });
+  registerIlgaChamber({
+    id: "congress", label: "U.S. House District",
+    layerIndex: 0, // fallback only — loadDistricts (pre-built) is used when present
+    loadDistricts: loadCongressDistricts,
+    districtFields: ["cd119", "cd118", "cd", "cdfp"],
+    loadRoster: function () { return loadCongressRoster(); },
+    memberLabel: "U.S. Representative", capitolLabel: "D.C. Office",
+    districtPrefix: "NY-",
+    directoryUrl: "https://www.house.gov/representatives",
+    profileLabel: "Representative's website", directoryLabel: "House directory",
+    style: { color: "#1D3557", weight: 2, fillColor: "#457B9D", fillOpacity: 0.05, dashArray: "8 3" }
+  });
+  var loadNySenateMembers = makeCached(function () { return fetchJSONWithRetry("data/app/ny-senate-members.json", {}, 2); });
+  // Geometry: pre-built same-origin (was live TIGERweb layer 1). Regenerate with
+  // scripts/build_legislative_boundaries.py on redistricting. (R2-2)
+  var loadNySenateDistricts = makeCached(function () { return fetchJSONWithRetry("data/app/state-senate-districts.json", {}, 2); });
+  registerIlgaChamber({
+    id: "state-senate", label: "NY State Senate District",
+    layerIndex: 1, // fallback only — loadDistricts (pre-built) is used when present
+    loadDistricts: loadNySenateDistricts,
+    districtFields: ["sldu", "sldust"],
+    loadRoster: function () { return loadNySenateMembers(); },
+    memberLabel: "State Senator", capitolLabel: "Albany Office",
+    directoryUrl: "https://www.nysenate.gov/senators-committees",
+    profileLabel: "Senator's page", directoryLabel: "NY Senate directory",
+    style: { color: "#14532D", weight: 2, fillColor: "#2E7D5B", fillOpacity: 0.05, dashArray: "6 3" }
+  });
+  var loadNyAssemblyMembers = makeCached(function () { return fetchJSONWithRetry("data/app/ny-assembly-members.json", {}, 2); });
+  // Geometry: pre-built same-origin (was live TIGERweb layer 2). Regenerate with
+  // scripts/build_legislative_boundaries.py on redistricting. (R2-2)
+  var loadNyAssemblyDistricts = makeCached(function () { return fetchJSONWithRetry("data/app/state-assembly-districts.json", {}, 2); });
+  registerIlgaChamber({
+    id: "state-assembly", label: "NY State Assembly District",
+    layerIndex: 2, // fallback only — loadDistricts (pre-built) is used when present
+    loadDistricts: loadNyAssemblyDistricts,
+    districtFields: ["sldl", "sldlst"],
+    loadRoster: function () { return loadNyAssemblyMembers(); },
+    memberLabel: "Assembly Member", capitolLabel: "Albany Office",
+    directoryUrl: "https://nyassembly.gov/mem/",
+    profileLabel: "Member's page", directoryLabel: "NY Assembly directory",
+    style: { color: "#7C2D12", weight: 2, fillColor: "#C2410C", fillOpacity: 0.05, dashArray: "4 4" },
+    onToggle: function (on) {
+      // cascade the Election District sub-layer off when Assembly is turned off
+      if (!on && state.layersOn["election-district"]) {
+        var box = document.getElementById("toggle-election-district");
+        if (box && box.checked) box.click();
+      }
+    }
+  });
+
+  /* ---------- Election District (~4,200, sub-selection of Assembly) — DCP ArcGIS ----------
+   * The ballot-counting unit; `ElectDist` encodes AD*1000 + ED (23001 = AD 23,
+   * ED 1). Too many features for one Socrata/ArcGIS response, so the loader
+   * pages. subOf:"state-assembly" nests + frames it (same as police-sector). */
+  /* ==== ENGINE:BEGIN arcgis-paged-loader ==== */
+  function loadArcGISPaged(layerUrl, outFields) {
+    var PAGE = 1000;
+    function page(offset, acc) {
+      var url = layerUrl + "/query?where=1%3D1&outFields=" + encodeURIComponent(outFields || "*") +
+        "&outSR=4326&f=geojson&geometryPrecision=6&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        var feats = (gj && gj.features) || [];
+        acc = acc.concat(feats);
+        var more = gj && (gj.exceededTransferLimit || (gj.properties && gj.properties.exceededTransferLimit));
+        // Continue while the server flags more AND this page returned rows.
+        // Guarding on feats.length > 0 (not === PAGE) keeps this correct when a
+        // service caps below PAGE: such a service still sets exceededTransferLimit
+        // on a short page, so an === PAGE test would stop after one page and
+        // silently ship a truncated FeatureCollection. resultOffset advances by
+        // feats.length, so a zero-row page always terminates the loop.
+        if (more && feats.length > 0) return page(offset + feats.length, acc);
+        var out = { type: "FeatureCollection", features: acc };
+        // Same "200 but useless" guard the unpaged loaders apply: an Esri error
+        // envelope 200s carrying no usable geometry; without this makeCached
+        // would retain that empty response as a permanent success.
+        if (!hasUsableGeometry(out)) throw new Error("paged ArcGIS layer returned no usable geometry: " + layerUrl);
+        return out;
+      });
+    }
+    return page(0, []);
+  }
+  /* ==== ENGINE:END arcgis-paged-loader ==== */
+  var ELECTION_DISTRICTS_SERVICE = "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Election_Districts/FeatureServer/0";
+  var loadElectionDistricts = makeCached(function () { return loadArcGISPaged(ELECTION_DISTRICTS_SERVICE, "ElectDist"); });
+  function splitElectDist(v) {
+    if (v == null) return null;
+    var e = parseInt(v, 10);
+    if (isNaN(e)) return null;
+    return { ad: Math.floor(e / 1000), ed: e % 1000 };
+  }
+  registerLayer({
+    id: "election-district", group: "political", subOf: "state-assembly", label: "Election District",
+    hoverName: function (feature) {
+      var s = splitElectDist(findPropCI(feature.properties || {}, ["electdist"]));
+      return s ? ("AD " + s.ad + " · ED " + s.ed) : null;
+    },
+    overlay: { load: loadElectionDistricts, style: { color: "#3A0CA3", weight: 0.5, fillColor: "#4361EE", fillOpacity: 0.12, dashArray: null } },
+    query: function (point, seq) {
+      return loadElectionDistricts().then(function (gj) {
+        var f = findFeatureContaining(gj, point);
+        if (!f) return null;
+        var s = splitElectDist(findPropCI(f.properties || {}, ["electdist"]));
+        if (!s) return null;
+        return { seq: seq, ad: s.ad, ed: s.ed };
+      });
+    },
+    // 4b compact: the ballot-counting unit — ED in the header, its parent
+    // Assembly District as the meta line; the "what it is" context moved to
+    // the layer's identity being self-evident from the nesting under
+    // State Assembly District. No render() — the engine skips it.
+    compact: true,
+    cardIdentifier: function (result) {
+      return "ED " + String(result.ed);
+    },
+    cardMeta: function (result) {
+      return "AD " + String(result.ad);
+    },
+    onToggle: function (on) {
+      var parentRt = layerRuntime["state-assembly"];
+      if (on) {
+        if (!state.layersOn["state-assembly"]) {
+          var box = document.getElementById("toggle-state-assembly");
+          if (box && !box.checked) box.click();
+        }
+        if (parentRt) parentRt.outlineOnly = true;
+      } else if (parentRt) {
+        parentRt.outlineOnly = false;
+      }
+    }
+  });
+
+  /* ---------- Borough President + District Attorney — shared borough geometry ----------
+   * Both cover the 5 counties (the borough static anchor from Thread 1). The 10
+   * officeholders (5 BP + 5 DA) are operator-supplied in borough-officials.json
+   * (§11.3, hand-verified) — empty until then, so the card names no one and
+   * links to the NYC Green Book, the authoritative official directory. */
+  var loadBoroughOfficials = makeCached(function () { return fetchJSONWithRetry("data/app/borough-officials.json", {}, 2); });
+  var GREEN_BOOK_URL = "https://a856-gbol.nyc.gov/GBOLWebsite/GreenBook/index";
+  function registerBoroughOfficeLayer(opts) {
+    registerLayer({
+      id: opts.id, group: "political", label: opts.label,
+      // hover popup: the borough is the district identity here (same headline
+      // the card shows) …
+      hoverName: function (feature) {
+        var boro = findPropCI(feature.properties || {}, ["boroname"]);
+        return boro ? String(boro) : null;
+      },
+      // … and the officeholder comes from the prefetched borough-officials
+      // roster (empty placeholder until the §11.3 operator step → name omitted).
+      hoverOfficial: {
+        load: loadBoroughOfficials,
+        name: function (feature, roster) {
+          if (!roster) return null;
+          var boro = findPropCI(feature.properties || {}, ["boroname"]);
+          var row = boro ? roster[boro] : null;
+          return (row && row[opts.role]) ? row[opts.role].name : null;
+        }
+      },
+      overlay: { load: loadBoroughBoundaries, style: opts.style },
+      query: function (point, seq) {
+        return Promise.all([loadBoroughBoundaries(), loadBoroughOfficials().catch(function () { return {}; })]).then(function (r) {
+          var gj = r[0], officials = r[1] || {};
+          var f = findFeatureContaining(gj, point);
+          if (!f) return null;
+          var p = f.properties || {};
+          var boro = findPropCI(p, ["boroname"]);
+          var row = boro ? officials[boro] : null;
+          return { seq: seq, boro: boro, county: findPropCI(p, ["county"]), person: (row && row[opts.role]) || null };
+        });
+      },
+      render: function (result) {
+        // officeholder as a badged person row; borough identity in the
+        // header pill; the link follows the actual href (a Green Book
+        // fallback must not masquerade as the officeholder's own site)
+        var wrap = cardEl("div", "card-flush");
+        var noteBits = [];
+        if (opts.role === "da" && result.county) noteBits.push(String(result.county) + " County");
+        if (noteBits.length || !result.person) {
+          wrap.appendChild(renderBodyIntro({
+            title: result.boro ? String(result.boro) : "Unknown",
+            note: noteBits.length ? noteBits.join(" · ") : null
+          }));
+        }
+        if (result.person) {
+          wrap.appendChild(renderPersonRows([{ name: String(result.person.name), badge: opts.label }]));
+        }
+        return wrap;
+      },
+      cardIdentifier: function (result) {
+        return result.boro ? String(result.boro) : null;
+      },
+      primaryLink: function (result) {
+        var url = (result.person && result.person.url) ? safeHttpUrl(result.person.url) : null;
+        if (url) return { label: opts.label + " website", url: url };
+        return { label: "NYC Green Book", url: GREEN_BOOK_URL };
+      },
+    });
+  }
+  registerBoroughOfficeLayer({
+    id: "borough-president", label: "Borough President", role: "bp",
+    style: { color: "#7A5901", weight: 2.5, fillColor: "#B8860B", fillOpacity: 0.04 }
+  });
+  registerBoroughOfficeLayer({
+    id: "district-attorney", label: "District Attorney", role: "da",
+    style: { color: "#6B4E8C", weight: 2.5, fillColor: "#8C6A2E", fillOpacity: 0.04, dashArray: "3 3" }
+  });
+
+
+  /* =========================================================================
+   * GEO UTILITIES — nearest-N proximity (haversine) + representative points
+   * for point datasets (police/fire stations, school sites) that resolve by
+   * straight-line distance instead of point-in-polygon.
+   * ======================================================================= */
+
+  /* ==== ENGINE:BEGIN haversine ==== */
+  /* ---------- great-circle distance in miles ---------- */
+  function haversineMiles(lat1, lng1, lat2, lng2) {
+    var R = 3958.8;
+    var toRad = function (d) { return (d * Math.PI) / 180; };
+    var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function pointFeatureLatLng(feature) {
+    var g = feature && feature.geometry;
+    if (!g || g.type !== "Point") return null;
+    return { lat: g.coordinates[1], lng: g.coordinates[0] };
+  }
+
+  /* ==== ENGINE:END haversine ==== */
+  /* ---------- representative lat/lng for a polygon feature: the vertex-average
+   * of its exterior ring(s). Used to give Polygon/MultiPolygon features a single
+   * point for the nearest-N proximity pattern below (haversineMiles wants two
+   * points; pointFeatureLatLng only handles Point geometry). Not a true
+   * area-weighted centroid — no geometry library here (see LAYER_AREA_RANK note)
+   * — but plenty accurate for ranking nearby school-site footprints by distance. ---------- */
+  function polygonRepresentativeLatLng(feature) {
+    var g = feature && feature.geometry;
+    if (!g) return null;
+    var rings;
+    if (g.type === "Polygon") rings = [g.coordinates[0]];
+    else if (g.type === "MultiPolygon") rings = g.coordinates.map(function (poly) { return poly[0]; });
+    else return null;
+    var sumLat = 0, sumLng = 0, n = 0;
+    for (var r = 0; r < rings.length; r++) {
+      var ring = rings[r] || [];
+      for (var i = 0; i < ring.length; i++) {
+        sumLng += ring[i][0];
+        sumLat += ring[i][1];
+        n++;
+      }
+    }
+    if (!n) return null;
+    return { lat: sumLat / n, lng: sumLng / n };
+  }
+
+
+  /* =========================================================================
+   * SCHOOL-ZONE FACTORY — attendance-zone polygon + optional school-profile
+   * link. The profile-URL builder is city-specific (playbook §2) and is
+   * generalized off Chicago's cps.edu when the NYC school zones are built.
+   * ======================================================================= */
+
+  // NYC school-profile link, built from a DBN (e.g. "20K503") — MySchools is the
+  // DOE's own directory (§2: this URL builder is the city-specific part of the
+  // school-zone factory). Verified live: /en/schools/<dbn>/ returns 200.
+  function schoolProfileLink(dbn) {
+    // profile URLs are only ever built from a dataset-supplied DBN, never
+    // guessed from a name (school-zone-factory contract)
+    if (!dbn) return null;
+    return { label: "MySchools profile", url: "https://www.myschools.nyc/en/schools/" + encodeURIComponent(String(dbn)) + "/" };
+  }
 
   /* ==== ENGINE:BEGIN school-zone-factory ==== */
   function registerSchoolZone(opts) {
@@ -7157,6 +8248,10 @@ function initSFExplorer() {
     });
   }
   /* ==== ENGINE:END school-zone-factory ==== */
+
+
+
+
   /* ==== ENGINE:BEGIN cps-network-factory ==== */
   /* ---------- CPS Network (administrative region, not a single school) ----------
    * Confirmed via live sample: each polygon covers a whole CPS "Network"
@@ -7220,358 +8315,47 @@ function initSFExplorer() {
   }
   /* ==== ENGINE:END cps-network-factory ==== */
 
+
   /* =========================================================================
-   * THREAD 3 — SCHOOLS: SFUSD elementary attendance area + every school site.
-   * SF's governance differs from the reference on purpose:
-   *   - One unified district (SFUSD) with an AT-LARGE board -> the districted
-   *     school-board layer is dropped (recorded in Thread 0); no CPS-style
-   *     administrative "networks" exist, so registerCpsNetwork stays unused.
-   *   - Only ELEMENTARY attendance areas are published. SFUSD middle school is
-   *     a feeder pattern (no boundary dataset) and high school is citywide
-   *     choice (no zones) -> no middle/high zone layers (honest drop, recorded).
-   *   - Elementary assignment itself is a LOTTERY; the attendance area is only a
-   *     tiebreaker preference, never a guaranteed seat -> the zone card carries
-   *     that caveat, which is why it's a bespoke block, not registerSchoolZone.
+   * LEGISLATIVE-CHAMBER FACTORY — Census TIGERweb boundary joined to a
+   * same-origin roster file (the pattern for any state-legislature chamber;
+   * playbook §2). The comment tail below still describes Chicago's ILGA wiring
+   * as the worked example.
+   *  - Ward: Socrata polygon + Socrata roster, joined locally on ward number
+   *    (same shape as the polygon modules, but with a second
+   *    non-geo dataset fetched once and joined client-side).
+   *  - Congress: Census TIGERweb polygon (Esri REST, not Socrata) joined on
+   *    district number to a same-origin roster built from congress-legislators
+   *    (data/app/congress-roster.json — see that layer's comment).
+   *  - IL Senate / IL House: same TIGERweb pattern, but per the playbook,
+   *    Open States has no browser CORS, so instead of a roster join this
+   *    links out to ILGA's own directory — never guessed into a per-district
+   *    URL, since the session/GA numbering isn't reliably derivable client-side.
+   *  - School Board: the KML→GeoJSON conversion from §4 of the playbook,
+   *    served from the same-origin data/app/school-board-districts.json and
+   *    fetched lazily on first toggle (see that loader's comment); no roster
+   *    endpoint exists for this newly-elected body, so this links to the
+   *    district's official board page instead.
    * ======================================================================= */
-
-  /* ---------- SFUSD Elementary Attendance Area (point-in-polygon). 58 zones
-   * (DataSF "SFUSD School Attendance Areas", e6tr-sxwg — year-versioned 2024-25,
-   * so a Thread-5 freshness chore). Bespoke rather than the registerSchoolZone
-   * factory so the card can state the lottery caveat honestly. The dataset has
-   * no per-school address, so this layer drops no map pin (the School Location
-   * layer supplies addresses). ---------- */
-  var loadElementaryZones = makeCachedLoader("e6tr-sxwg");
-  var SFUSD_ENROLL_URL = "https://www.sfusd.edu/enroll";
-
-  registerLayer({
-    id: "elementary-attendance-area",
-    group: "schools",
-    label: "Elementary Attendance Area",
-    // hover popup: the zoned school name — same identity the card headline shows.
-    hoverName: function (feature) {
-      return findPropCI(feature.properties || {}, ["sch_lng_na", "aaname", "e_aa_name"]) || null;
-    },
-    overlay: {
-      load: loadElementaryZones,
-      style: { color: "#6A3FA0", weight: 1.5, fillColor: "#6A3FA0", fillOpacity: 0.06, dashArray: "4 3" }
-    },
-    query: function (point, seq) {
-      return loadElementaryZones().then(function (geojson) {
-        var feature = findFeatureContaining(geojson, point);
-        if (!feature) return null;
-        return { seq: seq, name: findPropCI(feature.properties || {}, ["sch_lng_na", "aaname", "e_aa_name"]) };
-      });
-    },
-    render: function (result) {
-      // zoned-school identity + the lottery caveat, stated as prominently as
-      // before — this attendance area is a tiebreaker, not a guaranteed seat
-      var wrap = cardEl("div", "card-flush");
-      wrap.appendChild(renderLinkRow({
-        title: result.name ? String(result.name) : "Unknown",
-        note: "San Francisco Unified (SFUSD)"
-      }));
-      wrap.appendChild(renderBodyIntro({
-        note: "SFUSD assigns elementary seats by lottery. This attendance area is a tiebreaker preference for the school above — not a guaranteed seat."
-      }));
-      return wrap;
-    },
-    primaryLink: function () {
-      return { label: "SFUSD enrollment", url: SFUSD_ENROLL_URL };
-    }
-  });
-
-  /* ---------- School Location — every active school, nearest 3 (not point-in-
-   * polygon). DataSF "Schools" (7e7j-59qk): 232 active public, charter AND
-   * private schools, PK-12, with real Point geometry. A click almost never lands
-   * on a school point, so we answer with the nearest 3 by straight-line distance
-   * (same haversine pattern as Police/Fire Stations). status='Active' drops the
-   * lone Pending (not-yet-open) row, so a "nearest school" is always a real one. ---------- */
-  var loadSchoolSites = makeSocrataPointLoader("7e7j-59qk", "status='Active'", "latitude", "longitude");
-
-  /* School Location card rebuilt per Handoff 3 §8a/8b (Chicago's chips card is
-   * the reference implementation): type filter chips (Public / Charter /
-   * Private — the DataSF Schools table's own charter_yesno/public_yesno
-   * taxonomy), typed rows via renderNearestRows carrying the school's grade
-   * range, display-only header suffix, and a footer that swaps to the hiding
-   * notice + Show all while filtered. SF names/addresses arrive mixed-case, so
-   * no cardTitleCase pass. */
-  var SF_SCHOOL_SITE_COUNT = 3;
-  var SF_SCHOOL_CATS = ["Public", "Charter", "Private"];
-  var SF_SCHOOL_CAT_META = {
-    Public:  { full: "Public",  color: "#0F6F6F" }, // the layer's own teal
-    Charter: { full: "Charter", color: "#A15C00" },
-    Private: { full: "Private", color: "#6A3FA0" }
-  };
-  // filter selection persists across point selections AND page loads
-  // (sessionStorage — §8b "persist chip state per session"); a storage failure
-  // (private mode) degrades to in-memory only.
-  var SF_SCHOOL_FILTER_KEY = "sf-school-type-filter";
-  function loadSchoolTypeFilter() {
-    try {
-      var saved = JSON.parse(sessionStorage.getItem(SF_SCHOOL_FILTER_KEY));
-      if (saved && typeof saved === "object") {
-        return { Public: saved.Public !== false, Charter: saved.Charter !== false, Private: saved.Private !== false };
-      }
-    } catch (e) { /* fall through to defaults */ }
-    return { Public: true, Charter: true, Private: true };
-  }
-  function saveSchoolTypeFilter() {
-    try { sessionStorage.setItem(SF_SCHOOL_FILTER_KEY, JSON.stringify(schoolTypeFilter)); } catch (e) { /* display pref only */ }
-  }
-  var schoolTypeFilter = loadSchoolTypeFilter();
-  function sfSchoolCategory(props) {
-    // charter_yesno / public_yesno arrive as real booleans from the .json feed
-    if (findPropCI(props || {}, ["charter_yesno"]) === true) return "Charter";
-    return findPropCI(props || {}, ["public_yesno"]) === false ? "Private" : "Public";
-  }
-  function sfSchoolGradeRange(props) {
-    var lo = findPropCI(props || {}, ["low_grade"]);
-    var hi = findPropCI(props || {}, ["high_grade"]);
-    if (lo == null || hi == null || lo === "" || hi === "") return null;
-    return String(lo) === String(hi) ? String(lo) : String(lo) + "–" + String(hi);
-  }
-
-  registerLayer({
-    id: "school-site", group: "schools",
-    label: "School Location (nearest " + SF_SCHOOL_SITE_COUNT + ")",
-    color: "#0F6F6F", // legend/accent color (matches overlay.style below)
-    overlay: {
-      load: loadSchoolSites,
-      // flat base kept for moduleColor()/baseStyleFor; the per-feature styler
-      // paints each dot by type and hides filtered-off types. Explicit
-      // fillOpacity everywhere — dots must not inherit the polygon-oriented
-      // scaled fill.
-      style: { color: "#0F6F6F", weight: 1.5, fillColor: "#4FB0A5", fillOpacity: 0.85 },
-      styleForFeature: function (feature) {
-        var cat = sfSchoolCategory(feature.properties);
-        if (!schoolTypeFilter[cat]) return { opacity: 0, fillOpacity: 0 };
-        var color = SF_SCHOOL_CAT_META[cat].color;
-        return { color: color, fillColor: color, opacity: 1, fillOpacity: 0.85 };
-      },
-      pointToLayer: function (feature, latlng) {
-        var cat = sfSchoolCategory(feature.properties);
-        var meta = SF_SCHOOL_CAT_META[cat];
-        var off = !schoolTypeFilter[cat];
-        var marker = L.circleMarker(latlng, {
-          radius: 5, weight: 1.5,
-          color: meta.color, fillColor: meta.color,
-          opacity: off ? 0 : 1, fillOpacity: off ? 0 : 0.85
-        });
-        // hover identity for the dots — same pattern as the nearest-point
-        // factory: the shared dark hover snapshot, gated to hover-capable
-        // devices; identity mirrors the card row (name + type + address).
-        if (hoverCapable) {
-          var token = null;
-          marker
-            .on("mouseover", function () {
-              var props = feature.properties || {};
-              var name = findPropCI(props, ["school", "school_name", "name"]);
-              var addr = findPropCI(props, ["street_address", "address"]);
-              token = {
-                modId: "school-site",
-                label: (name ? String(name) : "School") + " — " + meta.full,
-                address: addr ? String(addr) : "",
-                latlng: latlng,
-                color: meta.color,
-                layerLabel: "School Location (nearest " + SF_SCHOOL_SITE_COUNT + ")"
-              };
-              hoveredPoi = token;
-              updateHover();
-            })
-            .on("mouseout", function () {
-              if (hoveredPoi === token) {
-                hoveredPoi = null;
-                updateHover();
-              }
-            });
-        }
-        return marker;
-      }
-    },
-    query: function (point, seq) {
-      return loadSchoolSites().then(function (geojson) {
-        var features = (geojson && geojson.features) || [];
-        var clean = function (v) { var s = v == null ? "" : String(v).trim(); return s ? s : null; };
-        var withDistance = [];
-        for (var i = 0; i < features.length; i++) {
-          var latLng = pointFeatureLatLng(features[i]);
-          if (!latLng) continue;
-          var props = features[i].properties || {};
-          withDistance.push({
-            name: clean(findPropCI(props, ["school", "school_name", "name"])),
-            category: sfSchoolCategory(props),
-            grades: sfSchoolGradeRange(props),
-            address: clean(findPropCI(props, ["street_address", "address"])),
-            distanceMi: haversineMiles(point.lat, point.lng, latLng.lat, latLng.lng)
-          });
-        }
-        if (!withDistance.length) return null;
-        withDistance.sort(function (a, b) { return a.distanceMi - b.distanceMi; });
-        // full sorted set (not just nearest 3) so the type chips re-slice the
-        // list client-side without re-querying
-        return { seq: seq, schools: withDistance };
-      });
-    },
-    render: function (result) {
-      var wrap = document.createElement("div");
-      wrap.className = "card-flush";
-
-      var counts = { Public: 0, Charter: 0, Private: 0 };
-      result.schools.forEach(function (s) { counts[s.category]++; });
-
-      // ---- type chips (§8a/8b) — pure toggles driving the list, the map
-      // dots, the header suffix, and the footer notice ----
-      var chipsWrap = document.createElement("div");
-      chipsWrap.className = "school-chips";
-      var chipEls = {};
-      SF_SCHOOL_CATS.forEach(function (cat) {
-        var meta = SF_SCHOOL_CAT_META[cat];
-        var chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = "school-chip";
-        chip.setAttribute("aria-pressed", "false");
-        var dot = document.createElement("span");
-        dot.className = "school-chip-dot";
-        var txt = document.createElement("span");
-        txt.className = "school-chip-label";
-        txt.textContent = meta.full;
-        var count = document.createElement("span");
-        count.className = "school-chip-count";
-        count.textContent = String(counts[cat]);
-        chip.appendChild(dot);
-        chip.appendChild(txt);
-        chip.appendChild(count);
-        chip.addEventListener("click", function () {
-          schoolTypeFilter[cat] = !schoolTypeFilter[cat];
-          saveSchoolTypeFilter();
-          renderList();
-          var mod = getLayerById("school-site");
-          if (mod) restyleOverlayFeatures(mod); // repaint/hide dots to match
-        });
-        chipEls[cat] = { chip: chip, dot: dot };
-        chipsWrap.appendChild(chip);
-      });
-      wrap.appendChild(chipsWrap);
-
-      var rowsWrap = document.createElement("div");
-      rowsWrap.className = "school-nearest";
-      wrap.appendChild(rowsWrap);
-
-      // footer strip: the source footnote by default; the hiding notice +
-      // "Show all" reset while any type is toggled off
-      var footRow = document.createElement("div");
-      footRow.className = "school-footrow";
-      var footNote = document.createElement("div");
-      footNote.className = "school-footnote";
-      footRow.appendChild(footNote);
-      var showAll = document.createElement("button");
-      showAll.type = "button";
-      showAll.className = "school-show-all";
-      showAll.textContent = "Show all";
-      showAll.hidden = true;
-      showAll.addEventListener("click", function () {
-        SF_SCHOOL_CATS.forEach(function (cat) { schoolTypeFilter[cat] = true; });
-        saveSchoolTypeFilter();
-        renderList();
-        var mod = getLayerById("school-site");
-        if (mod) restyleOverlayFeatures(mod);
-      });
-      footRow.appendChild(showAll);
-      wrap.appendChild(footRow);
-
-      // header suffix — display-only: the block label reads "School Location
-      // (all, incl. private · nearest 3)" or "(2 of 3 types · nearest 3)";
-      // mod.label (worksheet-canonical string) is untouched.
-      function updateHeaderSuffix(onCount) {
-        var labelEl = document.querySelector('label[for="toggle-school-site"]');
-        if (!labelEl) return;
-        var suffixText = (onCount === SF_SCHOOL_CATS.length
-          ? "(all, incl. private · nearest " + SF_SCHOOL_SITE_COUNT + ")"
-          : "(" + onCount + " of " + SF_SCHOOL_CATS.length + " types · nearest " + SF_SCHOOL_SITE_COUNT + ")");
-        labelEl.textContent = "School Location ";
-        var suffix = document.createElement("span");
-        suffix.className = "school-suffix";
-        suffix.textContent = suffixText;
-        labelEl.appendChild(suffix);
-      }
-
-      function renderList() {
-        rowsWrap.innerHTML = "";
-        var onCats = SF_SCHOOL_CATS.filter(function (cat) { return schoolTypeFilter[cat]; });
-        SF_SCHOOL_CATS.forEach(function (cat) {
-          var on = !!schoolTypeFilter[cat];
-          var meta = SF_SCHOOL_CAT_META[cat];
-          var els = chipEls[cat];
-          els.chip.className = "school-chip" + (on ? " is-on" : "");
-          els.chip.setAttribute("aria-pressed", on ? "true" : "false");
-          if (on) {
-            els.chip.style.color = "color-mix(in srgb, " + meta.color + " 55%, #1f2937)";
-            els.chip.style.background = "color-mix(in srgb, " + meta.color + " 12%, transparent)";
-            els.chip.style.borderColor = "color-mix(in srgb, " + meta.color + " 35%, transparent)";
-            els.dot.style.background = meta.color;
-          } else {
-            els.chip.style.color = "";
-            els.chip.style.background = "";
-            els.chip.style.borderColor = "";
-            els.dot.style.background = "";
-          }
-        });
-        updateHeaderSuffix(onCats.length);
-        var shown = result.schools.filter(function (s) { return schoolTypeFilter[s.category]; }).slice(0, SF_SCHOOL_SITE_COUNT);
-        if (!shown.length) {
-          var empty = document.createElement("p");
-          empty.className = "school-list-empty";
-          empty.textContent = "No schools of the selected type(s) nearby.";
-          rowsWrap.appendChild(empty);
-        } else {
-          rowsWrap.appendChild(renderNearestRows(shown.map(function (s) {
-            var meta = SF_SCHOOL_CAT_META[s.category];
-            return {
-              name: s.name ? String(s.name) : "School",
-              tag: { text: meta.full + (s.grades ? " · " + s.grades : ""), color: meta.color },
-              note: s.address ? String(s.address) : null,
-              dotColor: meta.color,
-              accentColor: meta.color,
-              distanceLabel: s.distanceMi.toFixed(2) + " mi"
-            };
-          })));
-        }
-        var hiddenCount = SF_SCHOOL_CATS.reduce(function (sum, cat) {
-          return schoolTypeFilter[cat] ? sum : sum + counts[cat];
-        }, 0);
-        if (hiddenCount > 0) {
-          var offNames = SF_SCHOOL_CATS.filter(function (cat) { return !schoolTypeFilter[cat]; })
-            .map(function (cat) { return SF_SCHOOL_CAT_META[cat].full; });
-          footNote.textContent = "Hiding " + hiddenCount + " school" + (hiddenCount === 1 ? "" : "s") + " (" + offNames.join(", ") + ").";
-          showAll.hidden = false;
-        } else {
-          footNote.textContent = "Straight-line distance. Type from the DataSF school registry (public / charter / private).";
-          showAll.hidden = true;
-        }
-      }
-      renderList();
-      return wrap;
-    }
-  });
 
   /* ---------- generic cached-promise wrapper (Socrata-geojson-specific
    * makeCachedLoader above predates this; this variant memoizes any loader
    * function, used here for the roster/geometry JSON fetches and TIGERweb) ---------- */
-  /* ---------- fetch a Socrata dataset as plain JSON rows (not geometry) — for
-   * roster/attribute tables that have no geometry column ---------- */
+  /* ---------- fetch a Socrata dataset as plain JSON rows (not geometry) — used
+   * for roster tables like the alderman list, which have no geometry column ---------- */
   function loadSocrataJSON(datasetId) {
     var urls = [
       SOCRATA_HOST + "/resource/" + datasetId + ".json?$limit=1000",
       SOCRATA_HOST + "/api/v3/views/" + datasetId + "/query.json"
-    ];
+    ].map(withAppToken);
     return tryRoutes(urls, function (rows) { return Array.isArray(rows) && rows.length; }, datasetId + " rows");
   }
 
   /* ---------- Census TIGERweb Legislative MapServer (Esri REST, not Socrata) —
-   * layer 0 = Congressional, 1 = CA State Senate (SLDU), 2 = CA State Assembly (SLDL);
-   * filtered to California (STATE FIPS 06) so the payload stays small ---------- */
+   * layer 0 = Congressional, 1 = NY Senate (SLDU), 2 = NY Assembly (SLDL);
+   * filtered to New York (STATE FIPS 36) so the payload stays small ---------- */
   function loadTigerLayer(layerIndex) {
-    var where = encodeURIComponent("STATE='06'");
+    var where = encodeURIComponent("STATE='36'");
     // geometryPrecision=6 trims the statewide payload; outFields stays * so
     // extractDistrictNumber's name-field fallback keeps working across the
     // per-Congress/GA field renames the comment above documents.
@@ -7609,6 +8393,8 @@ function initSFExplorer() {
     return null;
   }
   /* ==== ENGINE:END extract-district-number ==== */
+
+
   /* ==== ENGINE:BEGIN office-helpers ==== */
   /* ---------- IL State Senate / IL State House — Open States has no browser
    * CORS (per playbook), so instead of a live roster join these look up the
@@ -7779,76 +8565,6 @@ function initSFExplorer() {
     });
   }
   /* ==== ENGINE:END chamber-factory ==== */
-
-  /* =========================================================================
-   * POLITICAL (legislative chambers): the state + federal districts containing
-   * the point, through the shared registerIlgaChamber factory. Ground truth at
-   * City Hall: U.S. House 11, CA Senate 11, CA Assembly 17.
-   *   - Geometry (Thread 5): pre-built, same-origin, SF-clipped decadal boundary
-   *     files under data/app/ (build_legislative_boundaries.py + the loadDistricts
-   *     hook) — turning the ~8-9 MB statewide TIGERweb fetch into a ~12-24 KB
-   *     same-origin cache-first load. The engine falls back to live
-   *     loadTigerLayer(layerIndex) if a fork ships no file, so layerIndex stays
-   *     as the documented fallback.
-   *   - Rosters (Thread 5): officeholder names ride scraped, same-origin
-   *     data/app/*-members.json rosters, joined by district number. A vacant
-   *     district or a roster-fetch failure degrades to "district number + chamber
-   *     directory" — the factory's empty-member path, so a name is never guessed.
-   * ======================================================================= */
-
-  // Pre-built, SF-clipped legislative geometry (data/app), fetched cache-first on
-  // first toggle. Regenerate on redistricting: build_legislative_boundaries.py.
-  var loadCongressDistricts = makeCached(function () { return fetchJSONWithRetry("data/app/congress-districts.json", {}, 2); });
-  var loadCaSenateDistricts = makeCached(function () { return fetchJSONWithRetry("data/app/ca-senate-districts.json", {}, 2); });
-  var loadCaAssemblyDistricts = makeCached(function () { return fetchJSONWithRetry("data/app/ca-assembly-districts.json", {}, 2); });
-
-  // Scraped, same-origin officeholder rosters (data/app), fetched lazily on first
-  // click and joined by district number. Refreshed weekly by the update-*-roster
-  // workflows; built by build_congress_roster.py / build_ca_legislature_roster.py.
-  var loadCongressRoster = makeCached(function () { return fetchJSONWithRetry("data/app/congress-roster.json", {}, 2); });
-  var loadCaSenateMembers = makeCached(function () { return fetchJSONWithRetry("data/app/ca-senate-members.json", {}, 2); });
-  var loadCaAssemblyMembers = makeCached(function () { return fetchJSONWithRetry("data/app/ca-assembly-members.json", {}, 2); });
-
-  registerIlgaChamber({
-    id: "congress",
-    label: "U.S. House District",
-    layerIndex: 0, // fallback only — loadDistricts (pre-built) is used when present
-    loadDistricts: loadCongressDistricts,
-    districtFields: ["cd119", "cd118", "cdfp", "cd"],
-    directoryUrl: "https://www.house.gov/representatives",
-    loadRoster: loadCongressRoster,
-    districtPrefix: "CA-",
-    memberLabel: "Representative", capitolLabel: "Washington Office",
-    profileLabel: "Member profile", directoryLabel: "House member directory",
-    style: { color: "#14181C", weight: 2, fillColor: "#1D6F8B", fillOpacity: 0.05, dashArray: "8 3" }
-  });
-
-  registerIlgaChamber({
-    id: "ca-senate",
-    label: "California State Senate District",
-    layerIndex: 1, // TIGERweb SLDU — fallback only; loadDistricts is used when present
-    loadDistricts: loadCaSenateDistricts,
-    districtFields: ["sldu", "sldust"],
-    directoryUrl: "https://www.senate.ca.gov/senators",
-    loadRoster: loadCaSenateMembers,
-    memberLabel: "State Senator", capitolLabel: "Capitol Office",
-    profileLabel: "Senator profile", directoryLabel: "CA Senate directory",
-    style: { color: "#4A2E8C", weight: 2, fillColor: "#4A2E8C", fillOpacity: 0.05, dashArray: "1 5" }
-  });
-
-  registerIlgaChamber({
-    id: "ca-assembly",
-    label: "California State Assembly District",
-    layerIndex: 2, // TIGERweb SLDL — fallback only; loadDistricts is used when present
-    loadDistricts: loadCaAssemblyDistricts,
-    districtFields: ["sldl", "sldlst"],
-    directoryUrl: "https://www.assembly.ca.gov/assemblymembers",
-    loadRoster: loadCaAssemblyMembers,
-    memberLabel: "Assemblymember", capitolLabel: "Capitol Office",
-    profileLabel: "Member profile", directoryLabel: "CA Assembly directory",
-    style: { color: "#8C2E4A", weight: 2, fillColor: "#8C2E4A", fillOpacity: 0.05, dashArray: "5 1 2 1" }
-  });
-
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -8408,12 +9124,11 @@ function initSFExplorer() {
 
   buildGroupsUI();
   applyStateFromHash(); // restore a shared #point=…&layers=… link, if present
-  // Out-of-scope wash: supervisor districts tile SF's land exactly (water-trimmed
-  // shoreline), so their dissolved outline is the coverage boundary. Passing the
-  // layer's own cached loader means one fetch serves both the wash and the
-  // supervisor card. Deferred to idle so the (decorative, self-catching) fetch
-  // stays off first paint (R2-3).
-  whenIdle(function () { drawOutOfScopeMask(loadSupervisorDistricts); });
+  // Out-of-scope wash: the five shoreline-clipped boroughs (offline anchor)
+  // are the coverage holes. Passing applyBoroughMarker's cached loader — and
+  // calling after applyStateFromHash — means a restored point's marker
+  // upgrade and the wash share one borough-boundaries fetch.
+  drawOutOfScopeMask(loadBoroughBoundaries);
 
   var verifiedEl = document.getElementById("verified-date");
   verifiedEl.textContent = "July 18, 2026";
@@ -8454,14 +9169,14 @@ function initSFExplorer() {
     cleanPoiAddress: cleanPoiAddress // exposed so the smoke test can regression-guard the office-pin address cleaner (a recurring break point) without any network call
   };
   /* ==== ENGINE:END exports ==== */
-  window.SFExplorer = EXPLORER_EXPORTS;
+  window.NycExplorer = EXPLORER_EXPORTS;
 }
 // Deferred Leaflet (above) executes before DOMContentLoaded, so L is ready by
 // the time this fires. Run immediately if the DOM is already parsed, else wait.
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initSFExplorer);
+  document.addEventListener("DOMContentLoaded", initNycExplorer);
 } else {
-  initSFExplorer();
+  initNycExplorer();
 }
 </script>
 <script>

@@ -20,8 +20,19 @@
 //
 //   node scripts/landing_test.mjs          # BASE_URL defaults to :8131
 import { chromium } from "playwright";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
 const BASE = process.env.BASE_URL || "http://localhost:8131";
+// The expected tags come from metros.json rather than a literal. They were
+// hardcoded as (il|nyc|sf) and went stale the moment R5 renamed the folders
+// to ny/ and ca/ — the test failed on a correct change, which is the failure
+// mode a gate must not have. metros.json is the same source the page is
+// generated from, so the two can only disagree if the generator is wrong.
+const FLEET = JSON.parse(readFileSync(
+  join(dirname(fileURLToPath(import.meta.url)), "..", "metros.json"), "utf8")).metros;
+const TAGS = FLEET.map((m) => m.tag).filter(Boolean);
 const failures = [];
 function check(name, ok, detail) {
   console.log(`  ${ok ? "PASS" : "FAIL"}  ${name}${detail ? "  — " + detail : ""}`);
@@ -53,8 +64,8 @@ try {
       cards.some((c) => c.name === "Illinois" && /\/il\/$/.test(c.href)),
       cards.find((c) => c.name === "Illinois")?.href);
     check("cards carry their instance tag",
-      cards.every((c) => /^\/ (il|nyc|sf)$/.test(c.tag || "")),
-      JSON.stringify(cards.map((c) => c.tag)));
+      cards.every((c) => TAGS.includes(String(c.tag || "").replace(/^\/\s*/, ""))),
+      JSON.stringify(cards.map((c) => c.tag)) + " vs metros.json " + JSON.stringify(TAGS));
 
     // Barlow must actually be applied, not silently falling back to system-ui.
     const font = await page.evaluate(() =>

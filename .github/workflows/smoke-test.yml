@@ -213,11 +213,11 @@ jobs:
       - name: Each instance's index validates
         run: |
           python3 scripts/validate_index.py il/index.html
-          python3 sf/scripts/validate_index.py sf/index.html
-          python3 nyc/scripts/validate_index.py nyc/index.html
+          python3 ca/scripts/validate_index.py ca/index.html
+          python3 ny/scripts/validate_index.py ny/index.html
 
       # ONE server, EVERY instance. Until R3 this ran il alone, which is what
-      # the repo had — sf and nyc were separate repos with their own CI. They
+      # the repo had — ca and ny were separate repos with their own CI. They
       # are folders here now, and an ungated folder is worse than an ungated
       # repo: it merges through this workflow while nothing looks at it. The
       # first run of this step found the defect that proves the point — both
@@ -238,8 +238,8 @@ jobs:
           # Run all three even if an early one fails, so a PR sees every broken
           # instance in one go rather than one per push.
           BASE_URL=http://localhost:8000/il/  node scripts/smoke_test.mjs     || status=1
-          BASE_URL=http://localhost:8000/sf/  node sf/scripts/smoke_test.mjs  || status=1
-          BASE_URL=http://localhost:8000/nyc/ node nyc/scripts/smoke_test.mjs || status=1
+          BASE_URL=http://localhost:8000/ca/  node ca/scripts/smoke_test.mjs  || status=1
+          BASE_URL=http://localhost:8000/ny/  node ny/scripts/smoke_test.mjs  || status=1
           # The root landing page and — the part that matters — its forwarding
           # guard, which is what keeps every already-distributed share link and
           # embed snippet built from the OLD root URL reaching the app. A regex

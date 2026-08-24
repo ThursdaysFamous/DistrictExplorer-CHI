@@ -12,7 +12,7 @@ San Francisco District Explorer: a single-file, dependency-light web app. Click 
 **Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
 `python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
 
-- Metro: San Francisco (`sf`) — https://sf.chidistricts.com/
+- Metro: San Francisco (`sf`) — https://districtry.com/ca/
 - Geocoders: address Photon (SF-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, serial >=1s queue)
 - Ground truth: 37.77927,-122.41924 (SF City Hall (Civic Center)) → supervisor-district 5; neighborhood Tenderloin; police-district NORTHERN. Negative point 37.74000,-122.59000 (Open Pacific west of Ocean Beach, beyond CA state waters - outside every layer, including the water-inclusive TIGERweb legislative chambers).
 - Layers: 16 registered (political 7, safety 3, schools 2, geography 4); `registerLayer(` floor 8. Debug namespace `window.SFExplorer`.
