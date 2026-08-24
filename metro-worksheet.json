@@ -2852,14 +2852,6 @@
       "file": "update-vermilion-county-board-roster.yml",
       "purpose": "Vermilion County Board roster (27 members across 9 districts) from the county's own members page, fetched with the intermediate certificate its server omits supplied by AIA and pinned by hash",
       "schedule": "Thu 22:00 UTC"
-    },
-    {
-      "file": "update-state-template.yml",
-      "purpose": "Regenerate + e2e-boot-test + push the state-expansion template repo (docs/EXPANSION_GUIDE.md §4.10)",
-      "schedule": "Tue 12:00 UTC",
-      "secrets": [
-        "ENGINE_DISPATCH_TOKEN"
-      ]
     }
   ],
   "geocoder": {

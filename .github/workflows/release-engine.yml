@@ -240,13 +240,3 @@ jobs:
               -f "client_payload[sha256]=$sha"
             echo "dispatched engine-release ($GITHUB_REF_NAME) to $sibling"
           done
-
-      # The state-expansion template repo is a generated artifact of this tree
-      # (scripts/build_state_template.py); regenerate it whenever the engine
-      # moves so "Use this template" always hands out the current release.
-      # Deliberately last and non-blocking dispatch: template refresh rides the
-      # release, it never gates it.
-      - name: Regenerate the state template
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run update-state-template.yml --ref main

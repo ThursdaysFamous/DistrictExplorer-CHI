@@ -60,13 +60,6 @@ jobs:
       - name: Coverage gaps match the guidebook
         run: python3 scripts/build_coverage_gaps.py --check
 
-      # The state-template build must stay derivable from this tree: an edit
-      # that adds unclassified index.html/sw.js lines, breaks a substitution
-      # anchor, or leaks reference-fork vocabulary into the emitted template
-      # fails HERE, in the PR that causes it (hermetic — no network).
-      - name: State template still derives from this tree
-        run: python3 scripts/build_state_template.py --check
-
       # The per-county completion table (docs/COUNTY_STATUS.md) is generated
       # from the coverage-ring lists, index.html's dispatch tables,
       # coverage-gaps.json and the commissioners roster. This is its drift
