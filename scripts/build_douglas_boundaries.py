@@ -105,9 +105,9 @@ MAX_OUTSIDE_M2 = 200000.0       # measured 92,043 — 0.009% of the county
 MIN_COVERED = 0.999
 
 
-def fail(msg):
-    print("douglas-boundaries: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("douglas-boundaries")
 
 
 def fetch_service(url, shape_fn):

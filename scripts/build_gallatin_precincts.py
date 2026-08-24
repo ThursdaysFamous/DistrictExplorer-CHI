@@ -102,9 +102,9 @@ MAX_OVERLAP_M2 = 1.0
 MIN_COVERED = 0.9999
 
 
-def fail(msg):
-    print("gallatin-precincts: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("gallatin-precincts")
 
 
 def main():

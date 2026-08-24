@@ -87,9 +87,9 @@ ANCHORS = [
 ]
 
 
-def fail(msg):
-    print("woodford-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("woodford-board")
 
 
 def fetch_townships():

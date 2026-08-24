@@ -43,9 +43,9 @@ OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "logan-precinct-polling.json")
 MIN_PRECINCTS = 27
 
 
-def fail(msg):
-    print("logan-precinct-polling: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("logan-precinct-polling")
 
 
 def clean(value):

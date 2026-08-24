@@ -133,9 +133,9 @@ ANCHORS = [
 ]
 
 
-def fail(msg):
-    print("ogle-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("ogle-board")
 
 
 def norm(value):

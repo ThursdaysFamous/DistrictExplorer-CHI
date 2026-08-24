@@ -70,9 +70,9 @@ STREET_RE = re.compile(
     r"blvd|hwy|way|circle|cir|place|pl|trail)\b", re.I)
 
 
-def fail(msg):
-    print("clinton-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("clinton-board-scraper")
 
 
 def get(url):

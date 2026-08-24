@@ -92,9 +92,9 @@ ISO_DATE_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 URL_RE = re.compile(r"https?://")
 
 
-def fail(msg):
-    print("build-coverage-gaps: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("build-coverage-gaps")
 
 
 def load_gaps():

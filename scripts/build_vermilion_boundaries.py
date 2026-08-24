@@ -121,9 +121,9 @@ MAX_OUTSIDE_M2 = 1500000.0      # measured 484,861 — 0.02% of the county
 MIN_COVERED = 0.999
 
 
-def fail(msg):
-    print("vermilion-boundaries: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("vermilion-boundaries")
 
 
 def fetch_service(url, shape_fn, key_fn):

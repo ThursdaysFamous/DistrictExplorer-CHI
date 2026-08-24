@@ -141,9 +141,9 @@ MIN_MEMBERS = 195
 MIN_TRUSTEES_PER_TOWNSHIP = 3
 
 
-def fail(msg):
-    print("build-township-officials: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("build-township-officials")
 
 
 def warn(msg):

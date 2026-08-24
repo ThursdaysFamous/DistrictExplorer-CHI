@@ -80,9 +80,9 @@ GIS_COUNT_RE = re.compile(r"<small>\s*(\d+)\s+records?\s*</small>", re.I)
 GIS_VALUE_RE = re.compile(r"class=ftrval>(.*?)</td>", re.S)
 
 
-def fail(msg):
-    print("richland-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("richland-board-scraper")
 
 
 def get(url):

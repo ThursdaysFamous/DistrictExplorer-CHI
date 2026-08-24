@@ -67,9 +67,9 @@ DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 SUFFIX_RE = re.compile(r"\b(jr|sr|ii|iii|iv)\b\.?$", re.I)
 
 
-def fail(msg):
-    print("douglas-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("douglas-board-roster")
 
 
 def surname(name):

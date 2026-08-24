@@ -94,9 +94,9 @@ STREET_RE = re.compile(
 X_ROLE, X_NAME, X_ADDRESS, X_MOBILE, X_CONTACT = 0, 1, 2, 3, 4
 
 
-def fail(msg):
-    print("franklin-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("franklin-board-scraper")
 
 
 def get(url):

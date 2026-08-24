@@ -145,9 +145,9 @@ PRINTED_POP = {"1": 3934, "2": 3966, "4": 3850, "8": 3649, "9": 3731,
                "12": 3870, "13": 3747, "21": 3660, "23": 3662}
 
 
-def fail(msg):
-    print("lasalle-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("lasalle-board")
 
 
 def fetch_precincts():

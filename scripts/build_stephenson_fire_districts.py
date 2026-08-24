@@ -150,9 +150,9 @@ ANCHORS = [
 ]
 
 
-def fail(msg):
-    print("stephenson-fire: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("stephenson-fire")
 
 
 def rings_of_feature(feature):

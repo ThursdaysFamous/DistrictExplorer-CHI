@@ -68,9 +68,9 @@ DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "data", "app")
 PARTY_LABEL = {"REP": "R", "DEM": "D", "IND": "I", "GRN": "G", "LIB": "L"}
 
 
-def fail(msg):
-    print("clark-board-roster: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("clark-board-roster")
 
 
 def display_name(raw):

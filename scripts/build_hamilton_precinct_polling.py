@@ -74,9 +74,9 @@ EXPECTED = {re.sub(r"\s+", " ", label.replace("#", "")).upper()
 EXPECTED_LOCATIONS = 13  # 12 rural + the shared McLeansboro gym, per the Clerk
 
 
-def fail(msg):
-    print("hamilton-precinct-polling: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("hamilton-precinct-polling")
 
 
 def clean(value):

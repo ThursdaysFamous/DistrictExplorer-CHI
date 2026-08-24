@@ -59,9 +59,9 @@ CHAIR_RE = re.compile(r"\bCHAIR(?:MAN|PERSON|WOMAN)?\b", re.I)
 STREET_RE = re.compile(r"\d+\s+\w+\s+(st|street|ave|avenue|rd|road|dr|drive|ln|lane|ct|court|blvd|hwy|highway)\b", re.I)
 
 
-def fail(msg):
-    print("mercer-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("mercer-board-scraper")
 
 
 def get(url):

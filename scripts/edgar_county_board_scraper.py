@@ -60,9 +60,9 @@ STREET_RE = re.compile(
     re.I)
 
 
-def fail(msg):
-    print("edgar-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("edgar-board-scraper")
 
 
 def get(url):

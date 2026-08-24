@@ -77,9 +77,9 @@ INT_RE = re.compile(r"^[\d,]+$")
 NO_CANDIDATE_RE = re.compile(r"^\s*no\s+candidate\s*$", re.I)
 
 
-def fail(msg):
-    print("douglas-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("douglas-board-scraper")
 
 
 def media(pattern):

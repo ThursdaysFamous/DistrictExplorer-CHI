@@ -60,9 +60,9 @@ def clean(fragment):
     return re.sub(r"\s+", " ", html_mod.unescape(TAG_RE.sub(" ", fragment or ""))).strip()
 
 
-def fail(msg):
-    print("hancock-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("hancock-board-scraper")
 
 
 def fetch(url):

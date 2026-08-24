@@ -101,9 +101,9 @@ PRINTED_POP = {"1": 17663, "2": 17364, "3": 17506}
 EXPECT_TOTAL_POP = 52533
 
 
-def fail(msg):
-    print("grundy-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("grundy-board")
 
 
 def fetch_precincts():

@@ -95,9 +95,9 @@ ALL_COUNTIES = (
 SLUG_OVERRIDES = {"De Witt": "dewitt"}
 
 
-def fail(msg):
-    print("build-county-status: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("build-county-status")
 
 
 def slug_of(name):

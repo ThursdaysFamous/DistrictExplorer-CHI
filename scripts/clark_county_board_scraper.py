@@ -75,9 +75,9 @@ PARTY_RE = re.compile(r"\((REP|DEM|IND|GRN|LIB)\)")
 MIN_DISTRICTS = 7
 
 
-def fail(msg):
-    print("clark-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("clark-board-scraper")
 
 
 def get(url, **kw):

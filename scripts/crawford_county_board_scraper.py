@@ -55,9 +55,9 @@ CHAIR_RE = re.compile(r"\bchair(?:man|person|woman)?\b", re.I)
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 
-def fail(msg):
-    print("crawford-board-scraper: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("crawford-board-scraper")
 
 
 def get(url):

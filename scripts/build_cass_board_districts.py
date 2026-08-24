@@ -78,9 +78,9 @@ EXPECT_PRECINCTS = 21
 MAX_POP_SPREAD = 0.20
 
 
-def fail(msg):
-    print("cass-board: FAIL — %s" % msg, file=sys.stderr)
-    sys.exit(1)
+from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+
+fail = make_fail("cass-board")
 
 
 def norm(name):
