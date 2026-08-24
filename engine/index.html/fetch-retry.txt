@@ -1,0 +1,42 @@
+  /* ---------- fetch JSON with retry + timeout. The abort timer stays armed
+   * through the body read, not just the headers — every caller parses JSON,
+   * and a response that stalls mid-body would otherwise hang its layer's
+   * "Loading…" card forever with the cached loader pinning the hung promise. ---------- */
+  function fetchJSONWithRetry(url, opts, retries) {
+    opts = opts || {};
+    retries = retries === undefined ? 2 : retries;
+    var timeoutMs = opts.timeoutMs || 9000;
+
+    function attempt(remaining) {
+      var controller = new AbortController();
+      var timer = setTimeout(function () { controller.abort(); }, timeoutMs);
+      return fetch(url, Object.assign({}, opts, { signal: controller.signal }))
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (json) {
+          clearTimeout(timer);
+          return json;
+        })
+        .catch(function (err) {
+          clearTimeout(timer);
+          if (remaining > 0) {
+            var delay = (retries - remaining + 1) * 500;
+            return new Promise(function (resolve) { setTimeout(resolve, delay); })
+              .then(function () { return attempt(remaining - 1); });
+          }
+          throw err;
+        });
+    }
+    return attempt(retries);
+  }
+
+  /* ---------- per-attempt timeout for the big whole-boundary remote layers
+   * (TIGERweb statewide legislative districts, Cook County political
+   * boundaries). Those payloads can't finish inside the 9 s default on a slow
+   * mobile link, so every attempt aborts mid-body and the layer can never
+   * load; a larger budget lets a slow-but-working download complete. Small
+   * layers (police districts/stations, Socrata rosters) keep the 9 s default. ---------- */
+  var REMOTE_GEOJSON_TIMEOUT_MS = 30000;
+

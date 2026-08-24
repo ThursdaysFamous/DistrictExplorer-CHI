@@ -1,0 +1,32 @@
+  /* ---------- one shared in-flight/cached promise per loader fn, so overlay.load()
+   * and query() never trigger two separate downloads of the same boundaries ---------- */
+  function makeCached(loadFn) {
+    var pending = null, value = null;
+    function load() {
+      if (!pending) {
+        pending = loadFn().then(function (result) {
+          value = result; // sync-readable via load.cached() from here on
+          return result;
+        }, function (err) {
+          pending = null; // let the next call (e.g. a Retry click) try again
+          throw err;
+        });
+      }
+      return pending;
+    }
+    // Synchronous cache introspection for the point-first query path
+    // (queryFeatureAt): the resolved value, or null while unloaded/in
+    // flight. Without this a query could not tell "cached, answer locally
+    // for free" from "still downloading, worth a small point query".
+    load.cached = function () { return value; };
+    return load;
+  }
+
+  function makeCachedLoader(datasetId) {
+    var load = makeCached(function () { return loadSocrataGeoJSON(datasetId); });
+    // Point-first companion (queryFeatureAt): the same dataset can say which
+    // feature holds a point server-side long before the full set downloads.
+    load.atPoint = function (point) { return loadSocrataPointGeoJSON(datasetId, point); };
+    return load;
+  }
+

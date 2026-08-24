@@ -1,0 +1,16 @@
+  function makeSocrataPointLoader(datasetId, whereClause, latField, lngField) {
+    return makeCached(function () {
+      var q = "?$limit=1000" + (whereClause ? "&$where=" + encodeURIComponent(whereClause) : "");
+      var url = withAppToken(SOCRATA_HOST + "/resource/" + datasetId + ".json" + q);
+      return fetchJSONWithRetry(url, {}, 2).then(function (rows) {
+        var feats = [];
+        (rows || []).forEach(function (r) {
+          var lat = parseFloat(r[latField]), lng = parseFloat(r[lngField]);
+          if (isFinite(lat) && isFinite(lng)) {
+            feats.push({ type: "Feature", properties: r, geometry: { type: "Point", coordinates: [lng, lat] } });
+          }
+        });
+        return { type: "FeatureCollection", features: feats };
+      });
+    });
+  }

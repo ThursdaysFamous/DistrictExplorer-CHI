@@ -1,0 +1,740 @@
+  var poiPinIconCache = {};
+  function poiPinIcon(color) {
+    if (poiPinIconCache[color]) return poiPinIconCache[color];
+    var icon = L.divIcon({
+      className: POI_PIN_CLASS,
+      html: '<svg viewBox="0 0 24 32" width="22" height="30" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45))">' +
+        '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z" fill="' + color + '" stroke="#ffffff" stroke-width="1.5"/>' +
+        '<circle cx="12" cy="12" r="4.2" fill="#ffffff"/>' +
+        "</svg>",
+      iconSize: [22, 30],
+      iconAnchor: [11, 30]
+    });
+    poiPinIconCache[color] = icon;
+    return icon;
+  }
+
+  // In-card twin of the map's POI pin — same teardrop + white eye, sized to sit
+  // inline on the address text so a card visually ties back to the pin dropped
+  // on the map. `color` is a layer theme value (internal), and the SVG is our
+  // own markup — neither is external data, so this is safe to inject as HTML.
+  function poiPinInlineSvg(color) {
+    return '<svg viewBox="0 0 24 32" width="11" height="14" aria-hidden="true">' +
+      '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z" fill="' + color + '" stroke="#ffffff" stroke-width="1.5"/>' +
+      '<circle cx="12" cy="12" r="4.2" fill="#ffffff"/>' +
+      "</svg>";
+  }
+
+  function clearLayerPoi(mod) {
+    var rt = layerRuntime[mod.id];
+    if (rt.poiMarker) { map.removeLayer(rt.poiMarker); rt.poiMarker = null; }
+    // if the pin being torn down is the one under the cursor, drop the stale
+    // reference so the hover popup stops trying to surface it. updateHover is
+    // defined later in the same scope (hoisted); guard in case of early calls.
+    if (hoveredPoi && hoveredPoi.modId === mod.id) {
+      hoveredPoi = null;
+      if (typeof updateHover === "function") updateHover();
+    }
+  }
+
+  function updateLayerPoi(mod, result, seq) {
+    if (!mod.pointOfInterest) return;
+    var poi = mod.pointOfInterest(result);
+    if (!poi || !poi.address) { clearLayerPoi(mod); return; }
+    var isCurrent = function () { return seq === state.sequence && !!state.layersOn[mod.id]; };
+    geocodePoiAddress(poi.address, isCurrent).then(function (coords) {
+      if (seq !== state.sequence) return; // a newer point was selected meanwhile
+      if (!state.layersOn[mod.id]) return; // toggled off while geocoding
+      clearLayerPoi(mod);
+      if (!coords) return; // couldn't geocode — address is still shown as text in the card
+      var rt = layerRuntime[mod.id];
+      // No per-pin white tooltip anymore: hovering the pin instead promotes it
+      // to the subject of the shared hover popup — a header block above this
+      // layer's row (see updateHover / hoverSnapshotNode). One marker mouseover records
+      // which pin is hovered; mouseout clears it (guarded so moving pin A -> B
+      // doesn't let A's mouseout wipe B). Works regardless of the Hover toggle,
+      // preserving the old always-available "hover a pin to identify it".
+      var poiLatLng = L.latLng(coords.lat, coords.lng);
+      rt.poiMarker = L.marker(poiLatLng, {
+        icon: poiPinIcon(moduleColor(mod)),
+        keyboard: false,
+        alt: poi.label + " location"
+      });
+      // Touch devices have no real hover state (see hoverCapable) — skip wiring
+      // the hover popup to this pin there so a tap can't pop it up unexpectedly.
+      if (hoverCapable) {
+        rt.poiMarker
+          .on("mouseover", function () {
+            hoveredPoi = {
+              modId: mod.id,
+              label: poi.label,
+              address: poi.address,
+              latlng: poiLatLng,
+              color: moduleColor(mod),
+              layerLabel: mod.label
+            };
+            updateHover();
+          })
+          .on("mouseout", function () {
+            if (hoveredPoi && hoveredPoi.modId === mod.id) {
+              hoveredPoi = null;
+              updateHover();
+            }
+          });
+      }
+      rt.poiMarker.addTo(map);
+    });
+  }
+
+  // Build one layer's sidebar block (head with toggle + card body) and wire
+  // its change handler. Returned detached so the caller can append it either
+  // at the group's top level or nested inside a parent block (sub-layers).
+  // baseIndex (top-level blocks only) is this card's position among its
+  // group's flex-ordered .group-cards siblings; see the checkbox handler below
+  // for how it's used to float checked cards to the top of the group.
+  // A card floats to the top of its group (order = baseIndex) while checked,
+  // and sinks back to its natural position among the other off cards
+  // (order = baseIndex + 1000) once unchecked. Shared by the initial render
+  // (always off — see checkbox.checked below) and the toggle handler so the
+  // two never drift out of sync with each other.
+  function cardOrder(baseIndex, checked) {
+    return baseIndex + (checked ? 0 : 1000);
+  }
+
+  function buildLayerBlock(mod, baseIndex) {
+    var block = document.createElement("div");
+    block.className = "layer-block";
+    // ties this card's accent border + dot to the same color used for the
+    // layer's map overlay/pins, so the sidebar reads as "this is the box
+    // for the blue layer" at a glance
+    block.style.setProperty("--layer-accent", moduleColor(mod));
+    if (typeof baseIndex === "number") block.style.order = String(cardOrder(baseIndex, false));
+
+    var head = document.createElement("div");
+    head.className = "layer-block-head";
+
+    var checkboxId = "toggle-" + mod.id;
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = checkboxId;
+    checkbox.checked = false;
+
+    var colorDot = document.createElement("span");
+    colorDot.className = "layer-color-dot";
+    colorDot.setAttribute("aria-hidden", "true");
+    colorDot.title = "Layer color on map";
+
+    var label = document.createElement("label");
+    label.setAttribute("for", checkboxId);
+    label.textContent = mod.label;
+
+    head.appendChild(checkbox);
+    head.appendChild(colorDot);
+    var compactValue = null, compactMeta = null, idPill = null;
+    if (mod.compact) {
+      // 4b name-only presentation (docs/CARD_RENDER_API.md): the header
+      // itself carries the result — the layer name becomes a small kicker
+      // over the matched value (mod.cardIdentifier), with mod.cardMeta
+      // right-aligned. render() is not called on success (runLayerQueryAt);
+      // the body below still serves the loading/error/empty states.
+      var stack = document.createElement("div");
+      stack.className = "card-compact-stack";
+      stack.appendChild(label);
+      compactValue = document.createElement("div");
+      compactValue.className = "card-compact-value";
+      compactValue.hidden = true;
+      stack.appendChild(compactValue);
+      head.appendChild(stack);
+      compactMeta = document.createElement("span");
+      compactMeta.className = "card-compact-meta";
+      compactMeta.hidden = true;
+      head.appendChild(compactMeta);
+    } else {
+      head.appendChild(label);
+    }
+    if (mod.stub) {
+      var badge = document.createElement("span");
+      badge.className = "stub-badge";
+      badge.textContent = "STUB";
+      badge.title = "Demonstration module — real data source lands in a later build thread.";
+      head.appendChild(badge);
+    }
+    if (!mod.compact) {
+      // header identifier pill ("District 6", "IL‑14") — populated per result
+      // from mod.cardIdentifier by setCardExtras, cleared by resetCardExtras
+      idPill = document.createElement("span");
+      idPill.className = "card-id-pill";
+      idPill.hidden = true;
+      head.appendChild(idPill);
+    }
+    block.appendChild(head);
+
+    var body = document.createElement("div");
+    body.id = "card-" + mod.id;
+    body.className = "layer-card-body state-off";
+    body.setAttribute("aria-live", "polite");
+    body.textContent = "Layer off.";
+    block.appendChild(body);
+
+    layerRuntime[mod.id].cardBody = body;
+    layerRuntime[mod.id].block = block;
+    // result-driven header/footer extras (docs/CARD_RENDER_API.md) — set by
+    // setCardExtras on a result, cleared by resetCardExtras on every other
+    // state so a stale pill/value can never outlive its result
+    layerRuntime[mod.id].idPill = idPill;
+    layerRuntime[mod.id].compactValue = compactValue;
+    layerRuntime[mod.id].compactMeta = compactMeta;
+    layerRuntime[mod.id].cardFooter = null;
+
+    checkbox.addEventListener("change", function () {
+      state.layersOn[mod.id] = checkbox.checked;
+      // Float this card to the top of its group's flex-ordered stack while
+      // it's on (so an active result never scrolls past a page of unchecked
+      // ones), and back to its natural position among the other off cards
+      // when it's switched off.
+      if (typeof baseIndex === "number") {
+        block.style.order = String(cardOrder(baseIndex, checkbox.checked));
+      }
+      if (checkbox.checked) trackEvent("layer/" + mod.id);
+      onLayerToggled(mod);
+      syncUrlHash();
+    });
+
+    return block;
+  }
+
+  // Recursively nest a layer's sub-selection blocks inside its block. Nesting
+  // recurses so a sub-layer that is itself a parent (County > Township >
+  // Precinct) renders as a multi-level tree; a layer with no subs terminates
+  // the recursion and a single-level nest (Ward > Ward Precinct, Police
+  // District > Beat) behaves exactly as before this was made recursive.
+  function appendSubLayerBlocks(parentBlock, parentMod) {
+    layers.forEach(function (sub) {
+      if (sub.subOf !== parentMod.id) return;
+      var subBlock = buildLayerBlock(sub);
+      subBlock.classList.add("layer-block-sub");
+      // a sub-selection is only offered once its parent is on; the parent
+      // starts off, so hide it until onLayerToggled reveals it (kept in sync
+      // by updateSubLayerVisibility whenever the parent toggles)
+      subBlock.hidden = !state.layersOn[parentMod.id];
+      appendSubLayerBlocks(subBlock, sub); // nest grandchildren under this sub
+      parentBlock.appendChild(subBlock);
+    });
+  }
+
+  // group id -> its sidebar <section>, so location-relevance can hide a whole
+  // group whose layers all fall out of coverage (see refreshGroupVisibility).
+  var groupSections = {};
+
+  function buildGroupsUI() {
+    var root = document.getElementById("groups-root");
+    GROUPS.forEach(function (group) {
+      var groupLayers = layers.filter(function (l) { return l.group === group.id; });
+      if (groupLayers.length === 0) return;
+
+      var section = document.createElement("section");
+      section.className = "group-section group-" + group.id;
+      section.setAttribute("aria-labelledby", "heading-" + group.id);
+      groupSections[group.id] = section;
+
+      var heading = document.createElement("h2");
+      heading.className = "group-heading";
+      heading.id = "heading-" + group.id;
+      heading.innerHTML = '<span class="dot" aria-hidden="true"></span>' + sanitize(group.label);
+      section.appendChild(heading);
+
+      // Flex column so each top-level card's inline `order` (set above, and
+      // updated on toggle) can float checked/active layers to the top of the
+      // group without reshuffling the DOM.
+      var cardsWrap = document.createElement("div");
+      cardsWrap.className = "group-cards";
+
+      // Top-level layers only; a sub-layer (mod.subOf) is rendered nested
+      // inside its parent's block below (recursively, for multi-level nests
+      // like Police Beat under Police District, or Precinct under Township
+      // under County), not as a sibling in the group.
+      var baseIndex = 0;
+      groupLayers.forEach(function (mod) {
+        if (mod.subOf) return;
+        var block = buildLayerBlock(mod, baseIndex++);
+        appendSubLayerBlocks(block, mod);
+        cardsWrap.appendChild(block);
+      });
+
+      section.appendChild(cardsWrap);
+      root.appendChild(section);
+    });
+  }
+
+  // Show a layer's sub-selection toggles only while the parent layer is on;
+  // hide them (and let the parent's onToggle cascade them off) when it's off.
+  // Routed through refreshLayerBlockHidden so the parent-off rule and the
+  // location-relevance rule (mod.coverage) compose instead of clobbering each
+  // other's writes to block.hidden.
+  function updateSubLayerVisibility(mod) {
+    layers.forEach(function (sub) {
+      if (sub.subOf !== mod.id) return;
+      refreshLayerBlockHidden(sub);
+      updateSubLayerVisibility(sub); // a grandchild's visibility also turns on this toggle
+    });
+  }
+
+  // Build a layer's Leaflet overlay from its raw geojson. Factored out so both
+  // the first (post-fetch) build and the P11 rebuild-on-re-toggle path produce an
+  // identical layer graph — same base style and optional point renderer.
+  function buildOverlayLayer(mod, geojson) {
+    // A layer with a per-feature styler paints each path from its own feature
+    // (School Location color-codes footprints by school type); everything else
+    // shares the one flat base style.
+    var styleFn = mod.overlay.styleForFeature
+      ? function (feature) { return baseStyleFor(mod, feature); }
+      : (baseStyleFor(mod) || undefined);
+    return L.geoJSON(geojson, {
+      style: styleFn,
+      pointToLayer: mod.overlay.pointToLayer // optional; used by point datasets (e.g. fire stations)
+    });
+  }
+
+  function onLayerToggled(mod) {
+    var rt = layerRuntime[mod.id];
+    var on = !!state.layersOn[mod.id];
+
+    updateSubLayerVisibility(mod); // reveal/hide this layer's sub-selection toggles
+
+    if (!on) {
+      clearLayerHighlight(mod); // revert style before hiding, so it doesn't linger if re-toggled with a different point later
+      clearLayerPoi(mod);
+      if (rt.overlayLayer) {
+        map.removeLayer(rt.overlayLayer);
+        // Release the Leaflet layer graph (P11) — ~2 MB of L.LatLng objects for a
+        // big layer, otherwise retained forever and unbounded across a long
+        // session. The raw geojson (rt.geojson) stays cached, so re-toggle rebuilds
+        // the layer from it synchronously (instant, no refetch) and query()'s
+        // shared geojson is untouched.
+        rt.overlayLayer = null;
+      }
+      rt.cardBody.className = "layer-card-body state-off";
+      rt.cardBody.textContent = "Layer off.";
+      resetCardExtras(mod); // pill/compact value/footer must not outlive the result
+      refreshActiveLayerOpacities(); // active count just dropped — remaining active layers get more opaque
+      // No reorderActiveLayers() here (P8): removing one layer leaves the
+      // survivors' relative z-order — which the stacking invariant already
+      // established — untouched, so there's nothing to restack. (Toggle-on and
+      // query-resolve still reorder, because those insert a layer that must land
+      // at its size rank.)
+      if (mod.onToggle) mod.onToggle(false); // let a layer react to being turned off (e.g. cascade its sub-layer)
+      rt.pinBtn = null; // the card was cleared, detaching its pin button
+      if (pinnedParentId === mod.id) { pinnedParentId = null; refreshAllPinButtons(); } // parent turned off — unpin
+      refreshRelationshipOutlines(); // a child (or the parent) just left the map
+      return;
+    }
+
+    // turning on: (1) build/attach the overlay, (2) run the query if a point exists
+    if (rt.geojson) {
+      // geometry already cached from an earlier toggle. The Leaflet layer graph is
+      // released on toggle-off (P11), so rebuild it synchronously from the cached
+      // geojson (no refetch) unless a re-entrant path already rebuilt it.
+      if (!rt.overlayLayer) rt.overlayLayer = buildOverlayLayer(mod, rt.geojson);
+      // out of coverage at the current point (mod.coverage): keep the graph but
+      // don't attach — setLayerRelevant reattaches when a point re-enters coverage
+      if (rt.relevant !== false) rt.overlayLayer.addTo(map);
+      refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
+      reorderActiveLayers();
+    } else if (!rt.overlayLoaded) {
+      rt.overlayLoaded = true; // mark immediately to avoid duplicate loads on rapid toggling
+      mod.overlay.load()
+        .then(function (geojson) {
+          rt.geojson = geojson;
+          rt.overlayLayer = buildOverlayLayer(mod, geojson);
+          // add only if the layer is STILL on — the user may have toggled it
+          // off while the geojson was downloading (the old unconditional
+          // .addTo(map) left orphaned boundaries on the map in that case) —
+          // and still in coverage at the current point (mod.coverage)
+          if (state.layersOn[mod.id] && rt.relevant !== false) rt.overlayLayer.addTo(map);
+          refreshActiveLayerOpacities(); // active count changed — rescale every active layer's fill
+          reorderActiveLayers();
+          // A point-first query (queryFeatureAt) may already have answered the
+          // card before this full geometry arrived — the query-resolve
+          // highlight pass then found no rt.geojson and cleared. Re-run it now
+          // the boundaries exist, so the selected district lights up the
+          // moment its layer finishes drawing — the same catch-up the county
+          // dispatcher does when a late county lands
+          // (drawAppendedCountyFeatures).
+          if (state.selectedPoint && state.layersOn[mod.id] && rt.relevant !== false) {
+            updateLayerHighlight(mod);
+            refreshRelationshipOutlines();
+          }
+        })
+        .catch(function (err) {
+          rt.overlayLoaded = false;
+          console.error("[" + mod.id + "] overlay load failed:", err);
+          // Don't fail silently. Before a point is picked, runLayerQuery below
+          // returns early, so without this the boundaries simply never appear
+          // and the user has no signal why — a silent stall of up to ~28 s.
+          // setCardError un-hides this layer's own card (it drops the state-off
+          // display:none) and adds a Retry that re-runs onLayerToggled, which
+          // re-attempts the load (overlayLoaded was just reset). Guard on the
+          // layer still being on: the user may have toggled it off mid-download,
+          // and the off-branch already owns the card in that case. If a point is
+          // selected, runLayerQuery reports the same failure in the same card —
+          // both paths say the same thing, last writer wins — UNLESS a
+          // point-first query already put a verified RESULT on the card for
+          // the current selection (rt.resultSeq): the user's answer must not
+          // be replaced by a boundaries error. The drawing just stays absent
+          // until a re-toggle or the next selection's Retry — the same
+          // recorded tradeoff the county dispatcher makes for a failed
+          // county (card/query keeps working, overlay waits for a reload).
+          if (state.layersOn[mod.id] && rt.resultSeq !== state.sequence) {
+            setCardError(mod, "Couldn't load this layer's boundaries. It won't affect other layers.");
+          }
+        });
+    }
+
+    runLayerQuery(mod);
+    prefetchHoverRoster(mod); // background-load this layer's officeholder roster for the hover popup
+    if (mod.onToggle) mod.onToggle(true); // let a layer react to being turned on (e.g. a sub-layer restyling its parent)
+  }
+
+  // Background-load a layer's officeholder roster on toggle-on so the hover popup
+  // can name the representative without a per-frame network request. The result
+  // is cached on the runtime (rt.roster) and read synchronously while hovering.
+  // Failure is swallowed here — the hover popup simply omits the name; the click
+  // card still surfaces the same roster failure with its own Retry.
+  function prefetchHoverRoster(mod) {
+    if (!mod.hoverOfficial || !mod.hoverOfficial.load) return;
+    var rt = layerRuntime[mod.id];
+    if (rt.roster) return; // already loaded (loaders are cached, but skip the extra call)
+    mod.hoverOfficial.load()
+      .then(function (data) { rt.roster = data; })
+      .catch(function () { /* hover omits the name; click card owns the error surface */ });
+  }
+
+  // Clear the result-driven header/footer extras (identifier pill, compact
+  // value/meta, shell-owned footer) — every non-result card state routes
+  // through here so a stale pill can never outlive its result. The footer is
+  // rebuilt per result by setCardExtras; the pin control re-appends itself
+  // there via appendPinControl on the next render.
+  function resetCardExtras(mod) {
+    var rt = layerRuntime[mod.id];
+    if (!rt) return;
+    if (rt.idPill) { rt.idPill.hidden = true; rt.idPill.textContent = ""; }
+    if (rt.compactValue) { rt.compactValue.hidden = true; rt.compactValue.textContent = ""; }
+    if (rt.compactMeta) { rt.compactMeta.hidden = true; rt.compactMeta.textContent = ""; }
+    if (rt.cardFooter) {
+      if (rt.cardFooter.parentNode) rt.cardFooter.parentNode.removeChild(rt.cardFooter);
+      rt.cardFooter = null;
+    }
+  }
+  // Populate the result-driven extras (docs/CARD_RENDER_API.md): the header
+  // identifier pill — or the compact value/meta lines — and the shell-owned
+  // footer holding mod.primaryLink. All fields are optional and presence-
+  // based: a module that declares none of them renders exactly as before.
+  function setCardExtras(mod, result) {
+    var rt = layerRuntime[mod.id];
+    resetCardExtras(mod);
+    var value, text;
+    if (mod.compact && rt.compactValue) {
+      value = mod.cardIdentifier ? mod.cardIdentifier(result) : null;
+      text = value === null || value === undefined ? "" : String(value);
+      rt.compactValue.textContent = text;
+      rt.compactValue.hidden = text === "";
+      var meta = mod.cardMeta ? mod.cardMeta(result) : null;
+      var metaText = meta === null || meta === undefined ? "" : String(meta);
+      rt.compactMeta.textContent = metaText;
+      rt.compactMeta.hidden = metaText === "";
+    } else if (rt.idPill && mod.cardIdentifier) {
+      value = mod.cardIdentifier(result);
+      text = value === null || value === undefined ? "" : String(value);
+      rt.idPill.textContent = text;
+      rt.idPill.hidden = text === "";
+    }
+    var link = mod.primaryLink ? mod.primaryLink(result) : null;
+    var linkEl = link ? cardExternalLink(link.label, link.url) : null;
+    // a compact card needs the footer even without a link — it is the only
+    // visible home for the pin control while the body is state-compact
+    if (linkEl || mod.compact) {
+      var footer = document.createElement("div");
+      footer.className = "card-footer";
+      if (linkEl) {
+        linkEl.className = "card-footer-link";
+        footer.appendChild(linkEl);
+      }
+      // directly after the body, before any nested sub-layer blocks
+      rt.block.insertBefore(footer, rt.cardBody.nextSibling);
+      rt.cardFooter = footer;
+    }
+  }
+  // An extras footer that ended up with no children (no link, and the pin
+  // control declined — e.g. a non-polygon layer) reads as a stray rule line.
+  function pruneEmptyCardFooter(mod) {
+    var rt = layerRuntime[mod.id];
+    if (rt.cardFooter && !rt.cardFooter.firstChild) {
+      if (rt.cardFooter.parentNode) rt.cardFooter.parentNode.removeChild(rt.cardFooter);
+      rt.cardFooter = null;
+    }
+  }
+  function setCardLoading(mod) {
+    var body = layerRuntime[mod.id].cardBody;
+    resetCardExtras(mod);
+    body.className = "layer-card-body";
+    body.innerHTML = '<div class="loading-row"><span class="spinner" aria-hidden="true"></span> Loading district data…</div>';
+  }
+  function setCardError(mod, message, seq) {
+    var body = layerRuntime[mod.id].cardBody;
+    resetCardExtras(mod);
+    body.innerHTML = "";
+    // A layer that declares a live data source (mod.dataSource) degrades to a
+    // calm, honest "the outage is upstream, not this tool" card rather than the
+    // generic red error — see renderSourceUnavailable. Both failure paths route
+    // here (the overlay-load catch and the query catch), so declaring the field
+    // covers a boundary-load and a query failure alike. A layer that declares
+    // nothing takes exactly the pre-existing generic path.
+    if (mod.dataSource) { renderSourceUnavailable(mod, body); return; }
+    body.className = "layer-card-body state-error";
+    var p = document.createElement("p");
+    p.style.margin = "0 0 6px";
+    p.textContent = message || "Couldn't load this layer.";
+    var retry = document.createElement("button");
+    retry.type = "button";
+    retry.className = "retry-btn";
+    retry.textContent = "Retry";
+    // retry through onLayerToggled, not runLayerQuery directly — the overlay
+    // load may also have failed, and only the toggle path re-attempts it
+    retry.addEventListener("click", function () { onLayerToggled(mod); });
+    body.appendChild(p);
+    body.appendChild(retry);
+  }
+
+  // Graceful degradation for a layer whose live data source is unreachable. A
+  // layer opts in with mod.dataSource = { label, lookup?: { url, text, label } };
+  // without it setCardError renders the generic message. Metro-agnostic: every
+  // city-specific string (the provider name, the official-lookup URL/label)
+  // comes from the layer's own declaration, so this block stays byte-identical
+  // across forks. Reuses the shared renderLinkRow + sanitize helpers and the
+  // same onLayerToggled-based Retry as the generic error card.
+  function renderSourceUnavailable(mod, body) {
+    var ds = mod.dataSource || {};
+    body.className = "layer-card-body"; // calm notice, not the red state-error
+    var notice = document.createElement("p");
+    notice.style.margin = "0 0 10px";
+    notice.style.color = "var(--slate)";
+    notice.style.lineHeight = "1.45";
+    notice.textContent = (ds.label ? ds.label + " — the source for this layer — isn't responding right now."
+                                   : "This layer's live data source isn't responding right now.") +
+      " This is an outage on the data provider's end, not this tool, and it doesn't affect the other layers.";
+    body.appendChild(notice);
+    if (ds.lookup && ds.lookup.url) {
+      body.appendChild(renderLinkRow({
+        title: ds.lookup.label || "In the meantime",
+        links: [{ label: ds.lookup.text || ds.lookup.url, url: ds.lookup.url }]
+      }));
+    }
+    var retry = document.createElement("button");
+    retry.type = "button";
+    retry.className = "retry-btn"; // styled by the shared .layer-card-body .retry-btn rule
+    retry.textContent = "Retry";
+    retry.addEventListener("click", function () { onLayerToggled(mod); });
+    body.appendChild(retry);
+  }
+
+  function setCardEmpty(mod) {
+    var body = layerRuntime[mod.id].cardBody;
+    resetCardExtras(mod);
+    body.className = "layer-card-body state-empty";
+    body.textContent = "This point isn't inside any district in this layer.";
+  }
+  function setCardResult(mod, resultEl) {
+    var body = layerRuntime[mod.id].cardBody;
+    body.className = "layer-card-body";
+    body.innerHTML = "";
+    body.appendChild(resultEl);
+  }
+
+  /* ---------- location relevance (mod.coverage) ----------
+   * A layer may declare an optional coverage test — mod.coverage(point) ->
+   * boolean | Promise<boolean> — true when the layer's data applies at the
+   * point (e.g. a city-scoped layer inside the city limits). Layers that
+   * declare nothing are untouched: every path below is a no-op for them,
+   * which is what keeps this capability additive across forks.
+   *
+   * Where the selected point falls outside a layer's coverage the layer
+   * HIDES: its toggle block, result card, map overlay, highlight, POI pin,
+   * hover-snapshot row, and relationship outlines are all suppressed and its
+   * query — with any boundary fetch the query would trigger — is skipped
+   * (an overlay fetched by an earlier toggle-on is detached, not deleted).
+   * state.layersOn is deliberately NOT mutated, so the layers= permalink
+   * survives an out-of-coverage detour and the layer reappears the moment
+   * a selected point re-enters its coverage. A coverage test that throws
+   * fails OPEN (treated as relevant): a coverage-geometry outage degrades
+   * to today's behavior — the layer runs and its own per-card failure
+   * isolation applies. ---------- */
+
+  function layerRelevance(mod, seq) {
+    if (!mod.coverage || !state.selectedPoint) return Promise.resolve(true);
+    var rt = layerRuntime[mod.id];
+    // memoized per selection: the block-visibility pass and the query dispatch
+    // share one coverage evaluation instead of racing two
+    if (rt.relevanceSeq === seq && rt.relevancePromise) return rt.relevancePromise;
+    rt.relevanceSeq = seq;
+    rt.relevancePromise = Promise.resolve()
+      .then(function () { return mod.coverage(state.selectedPoint); })
+      .then(function (inside) { return !!inside; },
+            function (err) {
+              console.error("[" + mod.id + "] coverage test failed (failing open):", err);
+              return true;
+            });
+    return rt.relevancePromise;
+  }
+
+  // The one writer of block.hidden: composes the two reasons a toggle block can
+  // be hidden — out of coverage at the selected point, or (for a sub-selection)
+  // its parent layer being off — so neither rule clobbers the other.
+  function refreshLayerBlockHidden(mod) {
+    var rt = layerRuntime[mod.id];
+    if (!rt || !rt.block) return;
+    var hidden = rt.relevant === false;
+    // a sub-selection hides when ANY ancestor in its subOf chain is off, so a
+    // multi-level nest (Precinct under Township under County) collapses fully
+    // when an upper level is toggled off, not only its direct parent.
+    for (var pid = mod.subOf; pid && !hidden; ) {
+      if (!state.layersOn[pid]) { hidden = true; break; }
+      var pm = getLayerById(pid);
+      pid = pm ? pm.subOf : null;
+    }
+    // don't strand keyboard focus inside a subtree that's about to leave the
+    // accessibility tree — release it before hiding
+    if (hidden && !rt.block.hidden && rt.block.contains(document.activeElement) &&
+        document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur();
+    }
+    rt.block.hidden = hidden;
+  }
+
+  // Hide a group's whole sidebar section when every top-level layer in it is
+  // out of coverage (e.g. the schools group outside the city) — an empty
+  // heading over nothing reads as broken, not as "not applicable here".
+  function refreshGroupVisibility() {
+    GROUPS.forEach(function (group) {
+      var section = groupSections[group.id];
+      if (!section) return;
+      var allHidden = true;
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].group !== group.id || layers[i].subOf) continue;
+        if (layerRuntime[layers[i].id].relevant !== false) { allHidden = false; break; }
+      }
+      section.hidden = allHidden;
+    });
+  }
+
+  function setLayerRelevant(mod, relevant) {
+    var rt = layerRuntime[mod.id];
+    if (rt.relevant === relevant) return;
+    rt.relevant = relevant;
+    refreshLayerBlockHidden(mod);
+    refreshGroupVisibility();
+    if (!relevant) {
+      // suppress every map artifact (the hidden block already covers the DOM):
+      // the same cleanup toggle-off performs, but state.layersOn is untouched
+      clearLayerHighlight(mod);
+      clearLayerPoi(mod);
+      if (rt.overlayLayer) {
+        map.removeLayer(rt.overlayLayer);
+        rt.overlayLayer = null; // release the Leaflet graph (P11); rt.geojson stays cached
+      }
+      refreshActiveLayerOpacities(); // one fewer visible fill — the rest get more opaque
+      refreshRelationshipOutlines();
+    } else {
+      if (state.layersOn[mod.id] && rt.geojson) {
+        // back in coverage with the layer still on — reattach from the cached
+        // geojson (addLayer is a no-op if it's already on the map); the dispatch,
+        // which shares this selection's memoized relevance, repopulates the card
+        if (!rt.overlayLayer) rt.overlayLayer = buildOverlayLayer(mod, rt.geojson);
+        rt.overlayLayer.addTo(map);
+        reorderActiveLayers();
+      }
+      refreshActiveLayerOpacities(); // a visible fill returned — rescale the stack
+      refreshRelationshipOutlines(); // an outline-eligible layer just came back
+    }
+  }
+
+  // Refresh every coverage-declaring layer's relevance for the current
+  // selection — including layers that are toggled OFF, whose sidebar toggle
+  // should also hide where they don't apply. Runs once per selection from
+  // runAllActiveLayerQueries; the per-layer dispatch shares the same memoized
+  // promise, so nothing is evaluated twice.
+  function updateAllLayerRelevance() {
+    var seq = state.sequence;
+    layers.forEach(function (mod) {
+      if (!mod.coverage) return; // additive: undeclared layers are never touched
+      layerRelevance(mod, seq).then(function (relevant) {
+        if (seq !== state.sequence) return; // stale — a newer point owns the UI
+        setLayerRelevant(mod, relevant);
+      });
+    });
+  }
+
+  function runLayerQuery(mod) {
+    if (!state.selectedPoint || !state.layersOn[mod.id]) return;
+    var seq = state.sequence;
+    if (!mod.coverage) { runLayerQueryAt(mod, seq); return; } // no coverage test: exactly the pre-relevance path
+    // Invalidate the card BEFORE awaiting the coverage test — a new selection
+    // must never leave the previous point's districts on display while a slow
+    // (or failing, ~28s retry schedule) coverage source settles. If the layer
+    // then resolves irrelevant, the loading card sits inside the hidden block.
+    setCardLoading(mod);
+    layerRelevance(mod, seq).then(function (relevant) {
+      if (seq !== state.sequence) return;  // stale — a newer point was selected while the test ran
+      if (!state.layersOn[mod.id]) return; // toggled off while the test ran
+      setLayerRelevant(mod, relevant);
+      if (relevant) runLayerQueryAt(mod, seq);
+      // out of coverage: block/card/overlay are hidden — no query, no fetch
+    });
+  }
+
+  function runLayerQueryAt(mod, seq) {
+    setCardLoading(mod);
+    Promise.resolve()
+      .then(function () { return mod.query(state.selectedPoint, seq); })
+      .then(function (result) {
+        if (seq !== state.sequence) return; // stale — a newer point was selected meanwhile
+        if (!state.layersOn[mod.id]) return; // toggled off while in flight
+        updateLayerHighlight(mod);
+        reorderActiveLayers(); // re-assert area-size stacking now this layer has painted (queries resolve in arbitrary order)
+        if (!result) { layerRuntime[mod.id].resultSeq = null; setCardEmpty(mod); clearLayerPoi(mod); refreshRelationshipOutlines(); return; }
+        // a verified result is now on display for this selection — the
+        // overlay-load failure path must not replace it with an error card
+        // (a point-first query can resolve before the full boundary download)
+        layerRuntime[mod.id].resultSeq = seq;
+        if (mod.compact) {
+          // 4b name-only card: the header carries the result (setCardExtras
+          // below); render() is skipped and the body hides until a non-result
+          // state needs it again (docs/CARD_RENDER_API.md).
+          var compactBody = layerRuntime[mod.id].cardBody;
+          compactBody.className = "layer-card-body state-compact";
+          compactBody.innerHTML = "";
+        } else {
+          setCardResult(mod, mod.render(result));
+        }
+        setCardExtras(mod, result); // identifier pill / compact value + footer link
+        appendPinControl(mod); // "Pin as parent" control on the card
+        pruneEmptyCardFooter(mod); // a footer that gained neither link nor pin goes away
+        updateLayerPoi(mod, result, seq);
+        refreshRelationshipOutlines(); // this layer may be a pinned parent's child, or the parent itself
+      })
+      .catch(function (err) {
+        if (seq !== state.sequence) return;
+        if (!state.layersOn[mod.id]) return;
+        console.error("[" + mod.id + "] query failed:", err);
+        layerRuntime[mod.id].resultSeq = null; // no result on display — the overlay error may own the card again
+        clearLayerHighlight(mod);
+        clearLayerPoi(mod);
+        setCardError(mod, "This layer's data source didn't respond. It won't affect other layers.", seq);
+      });
+  }
+
+  function runAllActiveLayerQueries() {
+    updateAllLayerRelevance(); // refresh which layers even apply at this point (mod.coverage)
+    layers.forEach(function (mod) {
+      if (state.layersOn[mod.id]) runLayerQuery(mod);
+    });
+  }

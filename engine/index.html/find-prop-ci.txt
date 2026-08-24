@@ -1,0 +1,83 @@
+  /* ---------- case-insensitive property lookup — Socrata field-name casing/
+   * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
+  function findPropCI(props, candidates) {
+    if (!props) return null;
+    var keys = Object.keys(props);
+    for (var c = 0; c < candidates.length; c++) {
+      for (var i = 0; i < keys.length; i++) {
+        if (keys[i].toLowerCase() === candidates[c]) return props[keys[i]];
+      }
+    }
+    return null;
+  }
+
+  function findFeatureContaining(geojson, point) {
+    if (!geojson) return null;
+    // Memoize the (point -> feature) scan on the geojson object itself. A single
+    // click runs this once inside the layer's query() and again in
+    // updateLayerHighlight(), both against the SAME cached geojson and the SAME
+    // state.selectedPoint object (a fresh object per selection — see
+    // setSelectedPoint), so the second call is a free cache hit instead of a
+    // second full point-in-polygon sweep (P7). Keyed by point-object identity,
+    // so a new selection (new point object) always rescans — AND by feature
+    // count, because an incrementally-drawn layer (the county union, a future
+    // paged loader) APPENDS into this same live object: a no-match memoized
+    // before a late area landed must not veto the rescan that would find the
+    // point's own district in the appended features. The cache is purely an
+    // optimization and never changes the answer.
+    var features = geojson.features || [];
+    var cache = geojson.__pointQueryCache;
+    if (cache && cache.point === point && cache.count === features.length) return cache.feature;
+    var found = null;
+    for (var i = 0; i < features.length; i++) {
+      // Cheap bounding-box reject before the full even-odd ray-cast: most
+      // features in a boundary set are nowhere near the point, and featureBBox
+      // memoizes per feature, so the linear scan's ray-casts collapse to the few
+      // candidates whose bbox contains the point (a production profile measured
+      // ~1.44 s in pointInRing). Answer-identical — a feature whose bbox excludes
+      // the point cannot contain it. (P7c / R2-6.)
+      var bb = featureBBox(features[i]);
+      if (point.lng < bb[0] || point.lng > bb[2] || point.lat < bb[1] || point.lat > bb[3]) continue;
+      if (pointInGeometry(point, features[i].geometry)) { found = features[i]; break; }
+    }
+    geojson.__pointQueryCache = { point: point, feature: found, count: features.length };
+    return found;
+  }
+
+  /* ---------- point-first feature resolution — the county dispatcher's
+   * "load from the selected point outward" pattern, generalized to every
+   * layer: resolve the feature containing `point`, sourcing geometry the
+   * fastest honest way available. With the full set already cached
+   * (load.cached — makeCached loaders) the answer is local, exactly as
+   * before. While the full set is still downloading, a loader that declares
+   * .atPoint(point) — a small remote "which feature holds this point"
+   * spatial query — answers from that, so a multi-MB boundary download (the
+   * rest of the state, the rest of the city) never delays the selected
+   * location's card; the full set keeps loading behind it for the overlay,
+   * the highlight, and every later click. The point query is advisory only:
+   * its features still pass the same local pointInGeometry test, and a
+   * failed OR empty point query defers to the full set — so a card answer
+   * can never disagree with what the drawn boundaries would say, and "no
+   * district here" is only ever concluded from the full set. A loader with
+   * neither hook takes exactly the pre-existing path (load, then contain),
+   * which is what keeps this default-on safe for every layer. ---------- */
+  function queryFeatureAt(load, point) {
+    var cached = load.cached ? load.cached() : null;
+    if (cached) return Promise.resolve(findFeatureContaining(cached, point));
+    // fire (or join) the shared full download either way — the overlay and
+    // every subsequent query ride this same cached promise
+    var full = load();
+    function fromFull() {
+      return full.then(function (geojson) { return findFeatureContaining(geojson, point); });
+    }
+    if (!load.atPoint) return fromFull();
+    // the full set is opportunistic on this path: its own consumers (the
+    // overlay load, later queries) surface its failure — don't let an
+    // unconsumed rejection escape as console noise when the point query wins
+    full.then(null, function () {});
+    return load.atPoint(point).then(function (geojson) {
+      var feature = findFeatureContaining(geojson, point);
+      return feature || fromFull();
+    }, fromFull);
+  }
+

@@ -1,0 +1,27 @@
+  /* ---------- sanitize: escape any external string before it touches innerHTML ---------- */
+  function sanitize(str) {
+    if (str === null || str === undefined) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  /* ---------- scheme allowlist for href values sourced from external data —
+   * sanitize() escapes quotes/angle brackets but a javascript:/data: URL
+   * contains neither, so it would otherwise pass straight into an href ---------- */
+  function safeHttpUrl(url) {
+    return /^https?:\/\//i.test(String(url || "")) ? String(url) : null;
+  }
+
+  /* ---------- GoatCounter custom event — no-op if the count script didn't
+   * load (blocked, offline, ad blocker), so analytics can never affect app
+   * behavior ---------- */
+  function trackEvent(path, title) {
+    if (window.goatcounter && typeof window.goatcounter.count === "function") {
+      window.goatcounter.count({ path: path, title: title || path, event: true });
+    }
+  }
+

@@ -1,0 +1,8 @@
+  // Normalize a numeric-ish field to its integer string ("15.0" -> "15"); passes
+  // non-numeric values through and null/"" to null. (Socrata sometimes serves
+  // integer district numbers as floats.)
+  function intField(v) {
+    if (v == null || v === "") return null;
+    var n = parseInt(v, 10);
+    return isNaN(n) ? v : String(n);
+  }

@@ -1,0 +1,108 @@
+  var poiGeocodeCache = {}; // address string -> {lat,lng} | null, avoids re-geocoding the same address
+
+  /* ---------- POI geocodes go through a serial, >=1s-spaced queue ----------
+   * Public geocoders throttle or outright cap clients at ~1 request/second.
+   * A single click runs every active layer's query in parallel, and each POI
+   * layer then geocodes its office address — up to ~9 requests firing at
+   * once, which a rate-limited endpoint would reject (429) so most pins would
+   * silently fail. Funnel the uncached ones through one queue that spaces
+   * network calls >=1s apart; cached addresses (and the separate search-box
+   * geocoder) never touch this. A per-call currency check skips the network
+   * entirely once the selection has moved on, so rapid clicking can't build
+   * an unbounded backlog. */
+  var POI_GEOCODE_SPACING_MS = 1000;
+  var poiGeocodeQueue = Promise.resolve();
+  function enqueuePoiGeocode(task) {
+    var run = poiGeocodeQueue.then(task);
+    // advance the queue one spacing interval after this task settles, whether
+    // it resolved or rejected, so the next network call stays >=1s behind.
+    var spaced = function () {
+      return new Promise(function (resolve) { setTimeout(resolve, POI_GEOCODE_SPACING_MS); });
+    };
+    poiGeocodeQueue = run.then(spaced, spaced);
+    return run;
+  }
+
+  // A geocode returns ZERO results when the query carries a secondary-unit
+  // fragment, so the office card silently drops its map pin. Two shapes recur:
+  //   own comma-part  — "250 Broadway, Suite 102"; "851 Grand Concourse, Room 118"
+  //   packed INTO the street with NO comma (the persistent one) —
+  //     "118 North Clark Street Room 230 Chicago"; "455 Golden Gate Ave. Suite
+  //     14800"; "88-11 Sutphin Blvd #106".
+  // Strip the unit fragment wherever it sits, leaving the street + city + ZIP
+  // that resolve to the building. This lives in the engine on purpose: fixing
+  // it here fixes every fork and every future data source, instead of teaching
+  // each roster builder to reformat addresses (the fragile per-source patch
+  // this replaces). Two guards the comma-part-only version lacked:
+  //   (1) the fragment must be preceded by street content (the `(\S)` capture),
+  //       so a LEADING primary number like "#10 Public Square" (a real clerk
+  //       address) is never mistaken for a unit and stripped;
+  //   (2) the token set excludes "fl"/"no" — they collide with the FL state
+  //       code ("Miami, FL 33131") and ordinals; "floor" as a full word is safe.
+  //
+  // Three further shapes were measured against the whole shipped roster corpus
+  // (388 addresses; 37 carry a unit fragment) and each defeated the numeric-only
+  // rules above, leaving 8 of those 37 unresolvable:
+  //   letter units — "115 West Court Street ROOM J Paris"; "…Avenue BUILDING B
+  //     Geneva"; "40W270 La Fox Rd., Suite B" (the number branch needs [0-9]);
+  //   PO boxes    — "1 Superman Square, Room 2A PO BOX 429 Metropolis" (not a
+  //     unit, but just as geocode-hostile, and it survives unit removal);
+  //   dash debris — "69 W. Washington St. - 6th Floor" cleaned to
+  //     "69 W. Washington St. -", whose trailing hyphen the collapse pass kept.
+  // The same `(\S)` guard governs all three, so a PO-box-only address (no
+  // street) is still left alone: it geocodes to nothing and the card honestly
+  // drops its pin, rather than dropping one on a city centroid.
+  function cleanPoiAddress(address) {
+    var s = String(address);
+    // "<n>th Floor" — the ordinal precedes the token
+    s = s.replace(/(\S)[,\s]+\d+(?:st|nd|rd|th)?\s+floors?\b\.?/gi, "$1 ");
+    // "<Unit> <number>" — the token precedes the unit number
+    s = s.replace(/(\S)[,\s]+(?:suite|ste|room|rm|unit|apt|apartment|building|bldg|floor|#)\.?\s*#?\s*[0-9][-0-9a-z]*/gi, "$1 ");
+    // "<Unit> <letter>" — "Room J", "Suite B", "Building B". Bounded to a single
+    // letter (plus optional digits, "Room A5") so it can only ever eat the unit
+    // designator, never the following word — the city name usually sits right
+    // after it, unpunctuated.
+    s = s.replace(/(\S)[,\s]+(?:suite|ste|room|rm|unit|apt|apartment|building|bldg)\.?\s*#?\s*[a-z]\d*(?![\w-])/gi, "$1 ");
+    // "PO Box <n>" in all its punctuations, once street content precedes it —
+    // including the parenthesized form the Kane municipal roster uses
+    // ("175 Water St., (P.O. Box 205), Burlington") and a trailing period
+    // ("P.O. Box 226. LEWISTOWN"), both of which survived the bare-token rule.
+    s = s.replace(/(\S)[,\s]+\(?\s*p\.?\s*o\.?\s*box\.?\s*#?\s*\d+\s*\.?\s*\)?/gi, "$1 ");
+    // collapse the comma/space debris a removal leaves behind
+    s = s.replace(/\s+/g, " ").replace(/\s+,/g, ",").replace(/,(?:\s*,)+/g, ",").replace(/^[\s,]+|[\s,]+$/g, "");
+    // a separator dash that lost the fragment it introduced ("St. - 6th Floor").
+    // Anchored to a comma or end-of-string so hyphenated names ("Winston-Salem")
+    // and hyphenated house numbers ("88-11 Sutphin Blvd") are untouched.
+    s = s.replace(/\s+[-–—]+\s*(?=,|$)/g, "").replace(/^[\s,]+|[\s,]+$/g, "");
+    return s || String(address); // never geocode an empty string
+  }
+
+  function geocodePoiAddress(address, isCurrent) {
+    if (Object.prototype.hasOwnProperty.call(poiGeocodeCache, address)) {
+      return Promise.resolve(poiGeocodeCache[address]);
+    }
+    return enqueuePoiGeocode(function () {
+      // a twin request for the same address queued in the same burst may have
+      // resolved while we waited our turn — reuse it instead of geocoding again.
+      if (Object.prototype.hasOwnProperty.call(poiGeocodeCache, address)) {
+        return poiGeocodeCache[address];
+      }
+      // the selection (or this layer) moved on while we were queued — don't
+      // spend a queued request whose result would just be discarded.
+      if (isCurrent && !isCurrent()) return null;
+      // poiGeocodeRequest is the fork's provider call, defined with its
+      // geocoder section: cleaned address -> Promise<{lat,lng} | null>. It
+      // rejects on transport failure so the miss is NOT cached below.
+      return poiGeocodeRequest(cleanPoiAddress(address))
+        .then(function (coords) {
+          poiGeocodeCache[address] = coords || null;
+          return coords || null;
+        })
+        .catch(function () {
+          // transient failure — deliberately NOT cached, so a later selection
+          // can retry after the network recovers. "Address not found" IS
+          // cached (as null, above) since that outcome is stable.
+          return null;
+        });
+    });
+  }

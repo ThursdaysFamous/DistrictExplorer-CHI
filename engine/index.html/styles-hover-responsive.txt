@@ -1,0 +1,153 @@
+
+  /* ---- hover explorer: a live popup that follows the cursor and names the
+     districts under it. pointer-events:none is load-bearing — the popup sits
+     directly under the cursor, so if it captured mouse events it would swallow
+     the map's mousemove/click underneath.
+
+     Handoff 4 (docs/design_handoff_hover_popup/, ids 9a/10a/10c): the dark
+     plate is retired. Hover and click now speak the same visual language —
+     this is the card surface, so a hovered stack reads as a preview of the
+     cards a click would open. Per-layer color is inline (JS can't be in CSS);
+     everything structural lives here. ---- */
+  .hover-popup { pointer-events: none; }
+  .hover-popup .leaflet-popup-content-wrapper {
+    background: #fff;
+    color: #111827;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px -10px rgba(20, 25, 40, 0.45), 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0;
+  }
+  .hover-popup .leaflet-popup-content { margin: 0; width: 324px; line-height: 1.3; }
+  .hover-popup .leaflet-popup-tip {
+    background: #fff;
+    box-shadow: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  /* Flipped below the cursor when there isn't room above (see fenceHoverPopup).
+     The tail moves to the top edge and points up — the two borders that were
+     the outer sides pointing down become the other two. Only the tail moves:
+     `.leaflet-popup`'s own margins are deliberately NOT swapped, so the card's
+     geometry is identical in both modes and fenceHoverPopup can measure once
+     and correct once. The unused 20px below is bare margin — nothing renders
+     there. */
+  .hover-popup.hover-below .leaflet-popup-tip-container { top: -19px; }
+  .hover-popup.hover-below .leaflet-popup-tip {
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  /* One row per containing layer, broad→granular. The layer name is the grey
+     LABEL and the officeholder is the primary line — the reverse of the old
+     popup, where the colored layer name outranked the person and the tinted
+     labels failed AA on near-black. Color is carried by the dot and pill only. */
+  .hover-snapshot { display: flex; flex-direction: column; }
+  .hover-row {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    gap: 0 10px;
+    padding: 9px 14px;
+    border-bottom: 1px solid #f1f3f7;
+  }
+  .hover-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; box-sizing: border-box; }
+  /* a layer whose map color is white/near-white would vanish on this surface */
+  .hover-dot-ring { background: #fff; border: 1.5px solid #b9c0cc; }
+  .hover-row-head { display: flex; align-items: center; gap: 8px; }
+  .hover-row-label { font-size: 11.5px; font-weight: 600; color: #6b7280; }
+  .hover-pill {
+    margin-left: auto;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+  .hover-row-who { grid-column: 2; font-size: 14px; font-weight: 700; color: #111827; }
+  .hover-foot { padding: 9px 14px; border-top: 1px solid #e8eaef; font-size: 11px; color: #9aa3b2; }
+
+  /* ---- a hovered POI pin becomes the popup's SUBJECT (10a) ---- */
+  .hover-poi { padding: 11px 14px; border-radius: 10px 10px 0 0; }
+  /* standalone: a pin whose layer has no polygon row (station/library dots) —
+     no stack to anchor to, so the header block is the whole popup (10c) */
+  .hover-poi-only { border-bottom: 0; padding-bottom: 12px; }
+  .hover-poi-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .hover-poi-main { display: flex; align-items: flex-start; gap: 9px; margin-top: 5px; }
+  /* the map marker's own glyph at half size — the card system carries no emoji,
+     so this replaces the old CSS 📍 on the address line too */
+  .hover-pin {
+    width: 13px; height: 13px; flex: none; margin-top: 3px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hover-pin-eye { width: 4.5px; height: 4.5px; border-radius: 50%; background: #fff; }
+  .hover-poi-text { min-width: 0; flex: 1; }
+  .hover-poi-name { font-size: 14.5px; font-weight: 700; color: #111827; line-height: 1.25; }
+  .hover-poi-addr { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+  .hover-pin-sm { width: 7px; height: 7px; flex: none; border-radius: 50% 50% 50% 0; background: #9aa3b2; transform: rotate(-45deg); }
+  .hover-poi-addr-text { font-size: 12px; color: #6b7280; }
+  .hover-poi .hover-pill { margin-left: 0; flex: none; }
+
+  /* With a pin promoted, the stack below de-emphasizes so it stays available
+     without competing — except the pin's OWN layer row, which keeps full
+     contrast and is tied to the header by the accent. Labels stay #6b7280:
+     #8b93a1 measures 3.09:1 and fails AA. */
+  .hover-has-poi .hover-row { padding: 8px 14px; }
+  .hover-has-poi .hover-dot { margin-top: 3px; }
+  .hover-has-poi .hover-row-who { font-size: 13.5px; font-weight: 600; color: #4b5563; }
+  .hover-row-own { border-left-width: 2px; border-left-style: solid; padding: 9px 14px 9px 12px; }
+  .hover-has-poi .hover-row-own .hover-row-label { color: #4b5563; }
+  .hover-has-poi .hover-row-own .hover-row-who { font-size: 14px; font-weight: 700; color: #111827; }
+
+  /* ---- pin-parent relationships: "Pin as parent" control on each card ---- */
+  .pin-parent-btn {
+    margin-top: 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    padding: 4px 10px;
+    background: #fff;
+    color: var(--accent-deep, #08406e);
+    border: 1px solid rgba(11, 83, 148, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .pin-parent-btn:hover { background: #EEF4F7; }
+  .pin-parent-btn.is-pinned {
+    background: var(--accent-deep, #08406e);
+    color: #fff;
+    border-color: var(--accent-deep, #08406e);
+  }
+
+  /* the relationship legend — sits at the top of the bottom-left stack, just
+     above the Hover toggle (see .map-bottom-left) */
+  .rel-legend {
+    background: #fff;
+    border-radius: 6px;
+    padding: 9px 11px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    max-width: 230px;
+  }
+  .rel-legend-head { margin-bottom: 4px; }
+  .rel-key { display: flex; align-items: center; }
+  .rel-sw { display: inline-block; width: 20px; height: 0; margin-right: 7px; flex: none; }
+  .rel-sw-parent { height: 0; border-top: 3px solid #14181C; }
+  .rel-sw-in { border-top: 3px solid #0B5394; }
+  .rel-sw-cross { border-top: 3px dashed #0B5394; }
+  .rel-note { opacity: 0.7; font-size: 11px; margin-top: 2px; }
+  .rel-unpin-btn {
+    margin-top: 8px;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    padding: 3px 9px;
+    background: #fff;
+    color: #7A0A1C;
+    border: 1px solid rgba(122, 10, 28, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .rel-unpin-btn:hover { background: #FBECEE; }

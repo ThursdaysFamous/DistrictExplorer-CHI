@@ -1,0 +1,390 @@
+  /* =========================================================================
+   * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
+   * follows the cursor and names the districts it's over. mousemove is throttled
+   * to one run per animation frame so scrubbing stays smooth; a monotonic
+   * hoverSeq guards against a fast mouse painting stale content. It's a pure
+   * read of already-loaded boundaries — no network request, and it never
+   * restyles the real overlays, so click-to-select is untouched. (Parent/child
+   * relationship OUTLINING is a separate, pinned feature — see PIN-PARENT
+   * RELATIONSHIPS below — so the outlines don't churn as the cursor moves.)
+   *
+   * The popup is a compact multi-layer civic snapshot: one row per
+   * active layer containing the cursor, broad→granular, each showing that
+   * layer's district identity for the spot. It is built entirely from
+   * already-loaded feature properties — it never fires a network request and
+   * never joins a roster, so it stays instant under a moving cursor.
+   * Officeholder/contact details remain on the network-backed click cards.
+   * ======================================================================= */
+
+  // Touch devices have no real hover state — Leaflet/mobile browsers can still
+  // synthesize a mousemove or marker mouseover from a tap, which used to pop the
+  // cursor-following snapshot up wherever the user tapped (colliding with the
+  // search bar). Gate the whole hover-explorer subsystem on genuine hover+fine-
+  // pointer support so touch users only ever get the tap → result-card flow.
+  var hoverCapable = !!(window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  var hoverActive = hoverCapable;     // on by default (where supported); toggled via the bottom-left button
+  var hoverRAF = null;        // pending requestAnimationFrame handle
+  var hoverLatLng = null;     // most recent cursor position (map coords)
+  var hoverPopup = null;      // single reused L.popup that follows the cursor
+  var hoverSeq = 0;           // bumped each update so stale rAF work can bail
+  // The POI pin the cursor is currently over, if any. Set by each pin marker's
+  // mouseover (see updateLayerPoi) so the hover snapshot can surface the pin's
+  // office address under its layer's row — replacing the old white per-pin
+  // tooltip. {modId, label, address, latlng, color, layerLabel} | null.
+  var hoveredPoi = null;
+
+  // The bare identity value for one feature (no layer label — the snapshot row
+  // prints that separately). A module may override via mod.hoverName(feature);
+  // otherwise prefer a human name, then a district number, over nothing.
+  function hoverValue(mod, feature) {
+    if (mod.hoverName) {
+      try { var custom = mod.hoverName(feature); if (custom) return String(custom); } catch (e) { /* fall through */ }
+    }
+    var props = feature.properties || {};
+    var name = findPropCI(props, HOVER_NAME_KEYS);
+    var num = extractDistrictNumber(props, HOVER_NUMBER_KEYS);
+    if (name && num) return String(name) + " (" + num + ")";
+    if (name) return String(name);
+    if (num) return String(num);
+    return "—"; // em dash — feature has no extractable identity
+  }
+
+  // Every active POLYGON layer whose geometry contains the point, ordered
+  // largest→smallest (LAYER_AREA_RANK order) so the returned list reads like a
+  // civic profile from broad to granular; the first entry is the "parent" the
+  // contained-child outlining keys off. Point datasets (police/fire stations)
+  // have no flat overlay.style and are skipped — findFeatureContaining wouldn't
+  // match their Point geometry anyway.
+  function hoverContainingLayers(point) {
+    var out = [];
+    for (var i = 0; i < LAYER_AREA_RANK.length; i++) {
+      var id = LAYER_AREA_RANK[i];
+      if (!state.layersOn[id]) continue;
+      var rt = layerRuntime[id];
+      if (!rt || !rt.geojson) continue;
+      if (rt.relevant === false) continue; // relevance-hidden at the selected point (mod.coverage) — hidden means hidden, on every surface
+      var mod = getLayerById(id);
+      if (!mod || !mod.overlay || !mod.overlay.style) continue;
+      var feature = findFeatureContaining(rt.geojson, point);
+      if (feature) out.push({ mod: mod, feature: feature });
+    }
+    return out;
+  }
+
+  // The name identifier for one feature — the officeholder/entity name that reads
+  // alongside the district number (alderperson, senator, commander, network chief,
+  // …). A module opts in via mod.hoverOfficial.name(feature, roster); the roster is
+  // whatever prefetchHoverRoster cached on toggle-on (null if it isn't loaded yet,
+  // in which case the name is simply omitted this frame — never a network call).
+  // Layers whose name lives in the geometry (schools, community areas) surface it
+  // through hoverValue instead and don't need this.
+  function hoverOfficialName(mod, feature) {
+    if (!mod.hoverOfficial || !mod.hoverOfficial.name) return null;
+    try {
+      var rt = layerRuntime[mod.id];
+      var name = mod.hoverOfficial.name(feature, rt ? rt.roster : null);
+      return name ? String(name) : null;
+    } catch (e) {
+      return null; // a bad roster row never breaks the snapshot
+    }
+  }
+
+  // Compact multi-layer civic snapshot for the hovered spot — one row per
+  // containing layer (broad→granular), each a color dot + layer label + value.
+  // The value is the layer's district identity (from already-loaded geometry) plus,
+  // when available, its name identifier (officeholder/entity) from the prefetched
+  // roster. No network request is fired here — an un-prefetched roster just drops
+  // the name; full officeholder/contact detail stays on the click cards.
+  // ---- layer color, made safe to print on a light surface (Handoff 4) ----
+  // The popup moved from a near-black plate to the card surface, so a layer's
+  // map color can no longer be used verbatim for text: the palette holds pale
+  // blues and near-whites that were legible on black and are not on white.
+  // These derive a printable pair from the same color the dot shows, so the
+  // row still reads as that layer without a second palette to maintain.
+  function hoverRgb(color) {
+    var hex = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(color || "").trim());
+    if (!hex) return null;
+    var h = hex[1];
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16) };
+  }
+  function hoverLuminance(c) {
+    // WCAG relative luminance.
+    var parts = [c.r, c.g, c.b].map(function (v) {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * parts[0] + 0.7152 * parts[1] + 0.0722 * parts[2];
+  }
+  function hoverContrastOnWhite(c) { return 1.05 / (hoverLuminance(c) + 0.05); }
+  // A dot needs only to be VISIBLE; near-white gets a ring instead of a fill.
+  function hoverDotIsInvisible(c) { return !c || hoverLuminance(c) > 0.75; }
+  // Pill text must clear AA for small bold text (4.5:1) against its own near-white
+  // tint, so a pale layer color is darkened toward black until it does. The tint
+  // keeps the ORIGINAL color, so the pill still reads as the layer's.
+  function hoverPillStyle(color) {
+    var rgb = hoverRgb(color);
+    if (hoverDotIsInvisible(rgb)) return { color: "#6b7280", background: "#f6f7f9" };
+    var text = { r: rgb.r, g: rgb.g, b: rgb.b };
+    var steps = 0;
+    while (hoverContrastOnWhite(text) < 4.5 && steps < 24) {
+      text = { r: Math.round(text.r * 0.9), g: Math.round(text.g * 0.9), b: Math.round(text.b * 0.9) };
+      steps += 1;
+    }
+    return {
+      color: "rgb(" + text.r + "," + text.g + "," + text.b + ")",
+      // a darkened color came from a pale one, which needs a touch more tint to
+      // read as a pill at all (the design's .14 vs .10)
+      background: "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + (steps ? 0.14 : 0.1) + ")"
+    };
+  }
+  function hoverTint(color, alpha) {
+    var rgb = hoverRgb(color);
+    if (!rgb) return "transparent";
+    return "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + alpha + ")";
+  }
+
+  function hoverDot(color, extraClass) {
+    var dot = cardEl("span", "hover-dot" + (extraClass ? " " + extraClass : ""));
+    if (hoverDotIsInvisible(hoverRgb(color))) dot.classList.add("hover-dot-ring");
+    else dot.style.background = color;
+    return dot;
+  }
+  function hoverPill(text, color) {
+    if (text === null || text === undefined || text === "") return null;
+    var pill = cardEl("span", "hover-pill", text);
+    var style = hoverPillStyle(color);
+    pill.style.color = style.color;
+    pill.style.background = style.background;
+    return pill;
+  }
+  // The map marker's own glyph, half size — used for the pin subject (10a).
+  function hoverPinGlyph(color) {
+    var pin = cardEl("span", "hover-pin");
+    pin.style.background = color;
+    pin.appendChild(cardEl("span", "hover-pin-eye"));
+    return pin;
+  }
+
+  // The promoted header block for a hovered pin: the pin is the subject, so it
+  // takes the slot the layer title holds in a card. `label` is the segment of
+  // the layer's line() before the first " — ", `address` the remainder — absent
+  // rather than empty when the feature carries none (never an orphan glyph).
+  function hoverPoiHeader(poi, standalone, pillText) {
+    var head = cardEl("div", "hover-poi" + (standalone ? " hover-poi-only" : ""));
+    if (!standalone) {
+      head.style.background = hoverTint(poi.color, 0.06);
+      head.style.borderBottom = "1px solid " + hoverTint(poi.color, 0.18);
+    }
+    var eyebrow = cardEl("div", "hover-poi-eyebrow", poi.layerLabel);
+    eyebrow.style.color = hoverPillStyle(poi.color).color;
+    head.appendChild(eyebrow);
+    var main = cardEl("div", "hover-poi-main");
+    main.appendChild(hoverPinGlyph(poi.color));
+    var text = cardEl("div", "hover-poi-text");
+    text.appendChild(cardEl("div", "hover-poi-name", poi.label));
+    if (poi.address) {
+      var addr = cardEl("div", "hover-poi-addr");
+      addr.appendChild(cardEl("span", "hover-pin-sm"));
+      addr.appendChild(cardEl("span", "hover-poi-addr-text", poi.address));
+      text.appendChild(addr);
+    }
+    main.appendChild(text);
+    var pill = hoverPill(pillText, poi.color);
+    if (pill) main.appendChild(pill);
+    head.appendChild(main);
+    return head;
+  }
+
+  // Compact multi-layer civic snapshot for the hovered spot — one row per
+  // containing layer (broad→granular), each a color dot + layer label + ID pill,
+  // with the officeholder as the row's primary line. The identity comes from
+  // already-loaded geometry and the prefetched roster; no network request is
+  // fired here — an un-prefetched roster just drops the name, and full
+  // officeholder/contact detail stays on the click cards.
+  function hoverSnapshotNode(rows, poi) {
+    var snap = cardEl("div", "hover-snapshot" + (poi ? " hover-has-poi" : ""));
+    // The pin's own layer row is what the promoted header ties to. Without one
+    // — a station/library/post-office dot, whose layer has no polygon footprint
+    // — there is nothing to anchor the stack to, so the header block IS the
+    // popup (10c) and the surrounding districts are left to the click cards.
+    var ownRow = null;
+    if (poi) {
+      for (var j = 0; j < rows.length; j++) {
+        if (rows[j].mod.id === poi.modId) { ownRow = rows[j]; break; }
+      }
+      // The pin's pill is its own layer's identifier, read from that row rather
+      // than carried on the token, so the pin and the row it sits on can never
+      // disagree. A nearest-N pin has no row and supplies its distance instead.
+      snap.appendChild(hoverPoiHeader(poi, !ownRow,
+        ownRow ? hoverValue(ownRow.mod, ownRow.feature) : poi.distanceLabel));
+      if (!ownRow) return snap;
+    }
+    for (var i = 0; i < rows.length; i++) {
+      var mod = rows[i].mod;
+      // The dot normally shows the layer's one color; a layer that color-codes its
+      // features (School Location, by school type) can override it per feature so
+      // the dot matches the footprint under the cursor.
+      var dotColor = moduleColor(mod);
+      if (mod.hoverDotColor) { try { dotColor = mod.hoverDotColor(rows[i].feature) || dotColor; } catch (e) { /* keep layer color */ } }
+      var isOwn = poi && rows[i] === ownRow;
+      var row = cardEl("div", "hover-row" + (isOwn ? " hover-row-own" : ""));
+      if (isOwn) {
+        row.style.borderLeftColor = dotColor;
+        row.style.background = hoverTint(dotColor, 0.05);
+      }
+      row.appendChild(hoverDot(dotColor));
+      var head = cardEl("div", "hover-row-head");
+      head.appendChild(cardEl("div", "hover-row-label", mod.label));
+      var pill = hoverPill(hoverValue(mod, rows[i].feature), dotColor);
+      if (pill) head.appendChild(pill);
+      row.appendChild(head);
+      var who = hoverOfficialName(mod, rows[i].feature);
+      if (who) row.appendChild(cardEl("div", "hover-row-who", who));
+      snap.appendChild(row);
+    }
+    // Naming the pin's layer is the honest footnote: clicking a pin opens THAT
+    // card, not the whole stack.
+    snap.appendChild(cardEl("div", "hover-foot",
+      poi ? "Click for the " + poi.layerLabel + " card" : "Click for full cards"));
+    return snap;
+  }
+
+  function clearHoverVisuals() {
+    hideHover();
+  }
+
+  function hideHover() {
+    if (hoverPopup) hoverPopup.close(); // idempotent; removes it from the map if open
+  }
+
+  // Leaflet's reserved tail strip (.leaflet-popup margin-bottom), the breathing
+  // room kept from the map edge, and how far the tail stays clear of the card's
+  // rounded corners.
+  var HOVER_TIP = 20;
+  var HOVER_EDGE = 8;
+  var HOVER_TAIL_INSET = 16;
+  var HOVER_TAIL_HALF = 20; // half of Leaflet's 40px tail container (its centering margin)
+  var HOVER_WIDTH = 324;    // the card width; must match .hover-popup .leaflet-popup-content
+  var HOVER_OFFSET_X = 0;
+  var HOVER_OFFSET_Y = -4;
+
+  // Keep the popup inside the map viewport. autoPan stays off by design —
+  // panning the map during a hover would move the very thing being inspected,
+  // and the popup follows the cursor, so it would chase itself — so instead of
+  // moving the MAP this moves the POPUP: clamp it horizontally, flip it below
+  // the cursor when there isn't room above, and slide the tail back so it still
+  // points at the spot being read.
+  //
+  // Measured rather than computed from the anchor: Leaflet's own placement
+  // already accounts for the tail strip, zoom animation and content size, so
+  // reading the rendered box and correcting by the delta stays right even if
+  // any of those change. Both reads happen before the single write, so this
+  // costs one layout pass per frame, not one per adjustment.
+  function fenceHoverPopup(latlng) {
+    var el = hoverPopup.getElement();
+    if (!el) return;
+    var frame = map.getContainer().getBoundingClientRect();
+    var box = el.getBoundingClientRect();
+    if (!box.width || !box.height) return; // not laid out yet — next frame catches it
+    var anchorY = frame.top + map.latLngToContainerPoint(latlng).y;
+
+    var dx = 0;
+    if (box.left < frame.left + HOVER_EDGE) dx = (frame.left + HOVER_EDGE) - box.left;
+    else if (box.right > frame.right - HOVER_EDGE) dx = (frame.right - HOVER_EDGE) - box.right;
+
+    // Flip below only when the popup genuinely doesn't fit above AND there is
+    // more room below — near the vertical middle of a short map, staying above
+    // and clamping reads better than flipping back and forth as the cursor moves.
+    var needed = box.height + HOVER_TIP + HOVER_EDGE;
+    var below = (anchorY - frame.top) < needed && (frame.bottom - anchorY) > (anchorY - frame.top);
+    var dy = 0;
+    if (below) dy = (anchorY + HOVER_TIP) - box.top;
+    else if (box.top < frame.top + HOVER_EDGE) dy = (frame.top + HOVER_EDGE) - box.top;
+
+    el.classList.toggle("hover-below", below);
+    hoverPopup.options.offset = L.point(HOVER_OFFSET_X + dx, HOVER_OFFSET_Y + dy);
+    hoverPopup.update();
+
+    // The tail is centered on the popup, so a horizontal clamp drags it off the
+    // cursor; shift it back by the same amount, stopping short of the corners.
+    var tail = el.querySelector(".leaflet-popup-tip-container");
+    if (tail) {
+      var reach = Math.max(0, box.width / 2 - HOVER_TAIL_INSET);
+      var shift = Math.max(-reach, Math.min(reach, dx));
+      tail.style.marginLeft = (-HOVER_TAIL_HALF - shift) + "px";
+    }
+  }
+
+  function showHover(latlng, content) {
+    if (!hoverPopup) {
+      hoverPopup = L.popup({
+        closeButton: false,
+        autoClose: false,
+        closeOnClick: false,
+        autoPan: false,          // never nudge the map as the popup nears an edge
+        className: "hover-popup",
+        // Leaflet's default maxWidth is 300 and it writes an inline width onto
+        // the content element, which beats the stylesheet — so the card's
+        // 324px would silently render at 300 without this.
+        maxWidth: HOVER_WIDTH,
+        offset: [HOVER_OFFSET_X, HOVER_OFFSET_Y]
+      });
+    }
+    // Reset to the unfenced placement first so each frame measures the natural
+    // box, not the previous frame's correction.
+    hoverPopup.options.offset = L.point(HOVER_OFFSET_X, HOVER_OFFSET_Y);
+    hoverPopup.setLatLng(latlng).setContent(content);
+    if (!hoverPopup.isOpen()) hoverPopup.openOn(map);
+    fenceHoverPopup(latlng);
+  }
+
+  function updateHover() {
+    hoverSeq += 1;
+    var poi = hoveredPoi;
+    // Explorer off AND no pin under the cursor → nothing to show. A pin still
+    // surfaces its address here even when the explorer is toggled off, since
+    // that popup is the pin's only identifier now (the white tooltip is gone).
+    if (!hoverActive && !poi) { clearHoverVisuals(); return; }
+    // when a pin is hovered, anchor the popup to the pin itself; otherwise it
+    // follows the cursor as before.
+    var latlng = poi ? poi.latlng : hoverLatLng;
+    if (!latlng) { clearHoverVisuals(); return; }
+    var rows = hoverContainingLayers({ lat: latlng.lat, lng: latlng.lng });
+    if (!rows.length && !poi) { clearHoverVisuals(); return; }
+    // the multi-layer snapshot follows the cursor every frame. (Parent/child
+    // outlining is no longer hover-driven — it's pinned from the sidebar cards;
+    // see the PIN-PARENT RELATIONSHIPS block below.)
+    showHover(latlng, hoverSnapshotNode(rows, poi));
+  }
+
+  var hoverToggleBtn = document.getElementById("hover-toggle");
+
+  if (hoverCapable) {
+    map.on("mousemove", function (e) {
+      if (!hoverActive) return;
+      hoverLatLng = e.latlng;
+      if (hoverRAF) return; // already scheduled for this frame — coalesce
+      hoverRAF = requestAnimationFrame(function () { hoverRAF = null; updateHover(); });
+    });
+    map.on("mouseout", function () { if (hoverActive) clearHoverVisuals(); });
+
+    // Bottom-left toggle (above the selected-point chip) that arms/disarms the
+    // hover explorer. It's a plain DOM button over the map, not a Leaflet control,
+    // so it stacks cleanly with the coordinate chip in .map-bottom-left.
+    var syncHoverToggle = function () {
+      hoverToggleBtn.textContent = hoverActive ? "Hover: on" : "Hover: off";
+      hoverToggleBtn.setAttribute("aria-pressed", hoverActive ? "true" : "false");
+    };
+    syncHoverToggle(); // reflect the default (on) in the button at boot
+    hoverToggleBtn.addEventListener("click", function () {
+      hoverActive = !hoverActive;
+      syncHoverToggle();
+      if (!hoverActive) clearHoverVisuals();
+      updateRelLegend(); // the pin legend shows only while hover is on
+    });
+  } else {
+    // Nothing to arm/disarm on a touch device — drop the toggle rather than
+    // show a control for a feature that can never fire.
+    hoverToggleBtn.hidden = true;
+  }

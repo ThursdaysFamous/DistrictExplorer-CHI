@@ -1,0 +1,7 @@
+  // Pause the selection-highlight drop-shadow during pan/zoom (see the
+  // .map-panning CSS rule): the filter's per-frame rasterization is the measured
+  // pan cost (R2-5). A class on the map container flips it off on move/zoom
+  // start and back on end; classList add/remove is idempotent so overlapping
+  // pan+zoom events are harmless.
+  map.on("movestart zoomstart", function () { map.getContainer().classList.add(PANNING_CLASS); });
+  map.on("moveend zoomend", function () { map.getContainer().classList.remove(PANNING_CLASS); });

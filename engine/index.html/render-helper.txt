@@ -1,0 +1,8 @@
+  /* ---------- renderFieldList (the legacy dt/dd row builder) was RETIRED in
+   * engine-v1.0.13. Every fleet-wide call site migrated to the card-helpers
+   * vocabulary (docs/CARD_RENDER_API.md); the factory legacy branches, the
+   * .result-row/.result-fields CSS, and the debug-namespace export were all
+   * removed in the same release. This fence is kept as a documented tombstone
+   * rather than deleted outright: the artifact builder rejects an empty fence
+   * pair, and removing the fence would force a cross-fork fence-set change
+   * (sibling pre-clean PRs) for no functional gain. ---------- */

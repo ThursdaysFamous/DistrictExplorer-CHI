@@ -89,6 +89,7 @@ jobs:
           python3 scripts/validate_index.py il/index.html
           python3 scripts/check_engine_parity.py il/index.html
           python3 scripts/check_engine_parity.py il/sw.js
+          python3 scripts/compose_app.py --check
 
       - uses: actions/setup-node@v4
         with:
@@ -170,6 +171,10 @@ jobs:
             --exclude='node_modules' \
             --exclude='package.json' \
             --exclude='package-lock.json' \
+            --exclude='engine' \
+            --exclude='metros.json' \
+            --exclude='metro-worksheet.json' \
+            --exclude='schema' \
             --exclude='CLAUDE.md' \
             ./ _site/
           echo "Published tree:" && find _site -type f | sort

@@ -1,0 +1,276 @@
+  /* =========================================================================
+   * DATA GAPS — the honest inventory of what this app cannot tell you, and an
+   * invitation to fix it.
+   *
+   * Why this exists as a first-class surface: the app's whole posture is that
+   * it never guesses officeholder data, so where no source exists a card
+   * quietly links the official body instead. That is honest per-card, but it
+   * left the SHAPE of the missing data invisible — a reader could not tell
+   * "this county publishes nothing" from "we didn't get round to it", and the
+   * distinction is the difference between a shrug and something they can help
+   * with. Nearly every gap here is a publisher problem, which means a reader
+   * who knows the local landscape is better placed to close it than we are.
+   *
+   * Data comes from data/app/coverage-gaps.json, emitted from the guidebook's
+   * gaps block by scripts/build_coverage_gaps.py — so the panel and the
+   * document of record cannot disagree (a drift gate enforces it). The file
+   * carries ONLY gaps a reader could act on: a missing or blocked source, or a
+   * shipped layer with a known hole. Layers that correctly don't apply
+   * somewhere are not gaps, and live outages are transient state the affected
+   * card already reports itself.
+   *
+   * Location awareness is the point of putting this in the app rather than in
+   * a README: with a point selected, the gaps that apply THERE come first. A
+   * gap names county outline slugs, and those outline files already ship for
+   * the coverage tests, so this costs no new geometry.
+   * ======================================================================= */
+  (function wireCoverageGaps() {
+    var modal = document.getElementById("gaps-modal");
+    var openBtn = document.getElementById("gaps-btn");
+    var closeBtn = document.getElementById("gaps-close");
+    var backdrop = document.getElementById("gaps-backdrop");
+    var body = document.getElementById("gaps-body");
+    if (!modal || !openBtn || !body) return;   // fork without the panel markup
+    var lastFocus = null;
+    var loadGaps = makeCached(function () {
+      return fetchJSONWithRetry("data/app/coverage-gaps.json", {}, 2);
+    });
+    // One cached loader per outline slug. The <slug>-county-outline.json naming
+    // convention IS the contract here, so a gap can reference any county whose
+    // outline ships without this needing a per-county branch.
+    var outlineCache = {};
+    function loadOutline(slug) {
+      if (!outlineCache[slug]) {
+        outlineCache[slug] = fetchJSONWithRetry("data/app/" + slug + "-county-outline.json", {}, 2);
+      }
+      return outlineCache[slug];
+    }
+
+    /* Two registers for the same fact. The BADGE is a two-word tag scanned at
+     * the left of a row; the HEADING is the sentence a reader would say out
+     * loud. Both are deliberately plain: "no-source" is the maintainer's word
+     * for it, and a reader asked to distinguish "no source" from "partial data"
+     * is being handed the project's vocabulary instead of an answer. */
+    var KIND_LABEL = {
+      "no-source": "not published",
+      "blocked": "publisher blocks us",
+      "data-quality": "partly published"
+    };
+    var KIND_HEADING = {
+      "no-source": "Nobody publishes this",
+      "blocked": "The publisher won't let us read it",
+      "data-quality": "Only part of it is published"
+    };
+    var KIND_ORDER = ["no-source", "blocked", "data-quality"];
+
+    /* Whether the pin sits inside the covered area at all, reusing the rings
+     * the scope mask already dissolved (coverageMaskRings). Returns true /
+     * false / null-for-unknown — null when the mask hasn't loaded, and the
+     * caller falls back to the wording that doesn't claim either way. Outside
+     * the covered area, "nothing missing where you clicked" would be exactly
+     * wrong: everything is. */
+    function pointInCoverage(point) {
+      if (!point || !coverageMaskRings || !coverageMaskRings.length) return null;
+      try {
+        return pointInGeometry(point, { type: "Polygon", coordinates: coverageMaskRings });
+      } catch (e) { return null; }
+    }
+
+    /* Which of a gap's counties contain the selected point. Resolves to false
+     * for a gap with no counties (nothing to test) and treats an outline that
+     * fails to load as "not here" — a gap still appears in the everywhere list,
+     * so a failed probe can never hide it entirely. */
+    function appliesHere(gap, point) {
+      var slugs = gap.counties || [];
+      if (!point || !slugs.length) return Promise.resolve(false);
+      return Promise.all(slugs.map(function (slug) {
+        return loadOutline(slug).then(function (geojson) {
+          return !!findFeatureContaining(geojson, point);
+        }, function () { return false; });
+      })).then(function (hits) {
+        return hits.some(Boolean);
+      });
+    }
+
+    function suggestUrl(gap) {
+      // GitHub issue FORMS prefill from query params named after field ids, so
+      // gap_id lands in the template's first field and the reporter never has
+      // to copy an identifier by hand.
+      return REPO_ISSUES + "?template=source-submission.yml" +
+        "&labels=source-submission" +
+        "&title=" + encodeURIComponent("source: " + gap.concept + " — " + gap.area) +
+        "&gap_id=" + encodeURIComponent(gap.id);
+    }
+
+    function gapNode(gap) {
+      var item = cardEl("div", "gap-item kind-" + gap.kind);
+      var head = cardEl("div", "gap-head");
+      var concept = cardEl("span", "gap-concept");
+      concept.textContent = gap.concept;
+      var area = cardEl("span", "gap-area");
+      area.textContent = gap.area;
+      var badge = cardEl("span", "gap-badge");
+      badge.textContent = KIND_LABEL[gap.kind] || gap.kind;
+      head.appendChild(concept);
+      head.appendChild(area);
+      head.appendChild(badge);
+      item.appendChild(head);
+
+      // ONE VISIBLE LINE PER GAP. `summary` says what a reader won't see here
+      // and roughly where; everything else waits behind the disclosure. This
+      // panel used to print the full research record inline — every measured
+      // host, status code and dated correction — which made the one surface
+      // whose job is to make absence legible the least legible thing in the
+      // app. The record still exists; it lives in the guidebook now (see
+      // scripts/build_coverage_gaps.py, which no longer emits `blocker`).
+      var summary = cardEl("p", "gap-summary");
+      summary.textContent = gap.summary;
+      item.appendChild(summary);
+
+      // Why and what-would-help are the two lines that stop a reader wasting
+      // effort: the cause, and what a submission would need to contain. They
+      // are collapsed because most readers open this panel to find out whether
+      // THEIR answer is affected, not to fix it — and the handful who want to
+      // fix it are the ones who will open a disclosure.
+      var more = document.createElement("details");
+      more.className = "gap-more";
+      var moreLabel = document.createElement("summary");
+      moreLabel.className = "gap-more-label";
+      moreLabel.textContent = "Why, and what would fix it";
+      more.appendChild(moreLabel);
+      [["Why", gap.why], ["What would fix it", gap.wanted]].forEach(function (pair) {
+        if (!pair[1]) return;
+        var p = cardEl("p", "gap-detail");
+        var b = document.createElement("b");
+        b.textContent = pair[0] + ": ";
+        p.appendChild(b);
+        p.appendChild(document.createTextNode(pair[1]));
+        more.appendChild(p);
+      });
+      var actions = cardEl("div", "gap-actions");
+      var link = document.createElement("a");
+      link.className = "gap-suggest";
+      link.href = suggestUrl(gap);
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "Suggest a source →";
+      actions.appendChild(link);
+      more.appendChild(actions);
+      item.appendChild(more);
+      return item;
+    }
+
+    /* One group = one <details>. Collapsed by default with its count in the
+     * heading, so the panel opens as a short table of contents rather than as
+     * a hundred stacked records; `open` is passed for the group a reader came
+     * for (the gaps where they clicked). */
+    function section(label, gaps, isOpen) {
+      var box = document.createElement("details");
+      box.className = "gaps-group";
+      if (isOpen) box.open = true;
+      var head = document.createElement("summary");
+      head.className = "gaps-section-label";
+      head.appendChild(cardEl("span", "gaps-section-text", label));
+      head.appendChild(cardEl("span", "gaps-section-count", String(gaps.length)));
+      box.appendChild(head);
+      gaps.forEach(function (g) { box.appendChild(gapNode(g)); });
+      return box;
+    }
+
+    function render() {
+      body.textContent = "";
+      var loading = cardEl("p", "gaps-empty");
+      loading.textContent = "Loading…";
+      body.appendChild(loading);
+      var point = state.selectedPoint;
+      loadGaps().then(function (data) {
+        // keyed by gap id (see build_coverage_gaps.py); display order is kind
+        // then area, so the unfixable-without-a-publisher ones lead
+        var order = { "no-source": 0, "blocked": 1, "data-quality": 2 };
+        var gaps = Object.keys(data || {}).map(function (k) { return data[k]; })
+          .sort(function (a, b) {
+            var d = (order[a.kind] || 9) - (order[b.kind] || 9);
+            return d !== 0 ? d : String(a.area).localeCompare(String(b.area));
+          });
+        return Promise.all(gaps.map(function (g) {
+          return appliesHere(g, point).then(function (here) { return { gap: g, here: here }; });
+        }));
+      }).then(function (rows) {
+        body.textContent = "";
+        if (!rows.length) {
+          var none = cardEl("p", "gaps-empty");
+          none.textContent = "No gaps are recorded right now.";
+          body.appendChild(none);
+          return;
+        }
+        var here = rows.filter(function (r) { return r.here; }).map(function (r) { return r.gap; });
+        var rest = rows.filter(function (r) { return !r.here; }).map(function (r) { return r.gap; });
+
+        // THE LEDE ANSWERS THE READER'S ACTUAL QUESTION FIRST — "does any of
+        // this affect the place I clicked?" — before the list of everything
+        // else. Getting it wrong is worse than saying nothing, so each branch
+        // is only claimed when it is provable:
+        //  - "nothing missing where you clicked" is TRUE only if some gap COULD
+        //    have matched the point. A fork that tags no gap with a county can
+        //    never match, so that phrasing would claim a clean point when the
+        //    gaps simply are not mappable.
+        //  - a point OUTSIDE the covered area is never told nothing is missing
+        //    there: out there EVERYTHING is.
+        //  - pointInCoverage's null (mask not loaded) falls through to the
+        //    wording that claims neither.
+        var mappable = rows.some(function (r) { return (r.gap.counties || []).length > 0; });
+        var inCoverage = point ? pointInCoverage(point) : null;
+        var lede = cardEl("p", "gaps-lede");
+        if (here.length) {
+          lede.textContent = here.length === 1
+            ? "One recorded gap affects the spot you clicked. Everything else is grouped below."
+            : here.length + " recorded gaps affect the spot you clicked. Everything else is grouped below.";
+        } else if (point && inCoverage === false) {
+          lede.textContent = "You clicked outside the area this app covers, so nothing there can be " +
+            "answered yet. These are the gaps recorded inside the covered area.";
+        } else if (point && mappable && inCoverage === true) {
+          lede.textContent = "Nothing recorded is missing where you clicked. These are the gaps elsewhere.";
+        } else {
+          lede.textContent = "Click a spot on the map first and this list will lead with the gaps that " +
+            "affect you. Otherwise, here is everything that is missing and why.";
+        }
+        body.appendChild(lede);
+
+        if (here.length) body.appendChild(section("Where you clicked", here, true));
+        // The rest is grouped by KIND rather than run together, because the
+        // three kinds ask different things of a reader: one needs a publisher
+        // to start publishing, one needs a publisher to stop refusing us, and
+        // one is a field missing from data we already have.
+        KIND_ORDER.forEach(function (kind) {
+          var group = rest.filter(function (g) { return g.kind === kind; });
+          if (!group.length) return;
+          body.appendChild(section(KIND_HEADING[kind] || kind, group, !here.length && rest.length <= 12));
+        });
+        var other = rest.filter(function (g) { return KIND_ORDER.indexOf(g.kind) === -1; });
+        if (other.length) body.appendChild(section("Other recorded gaps", other, false));
+      }).catch(function () {
+        body.textContent = "";
+        var err = cardEl("p", "gaps-empty");
+        err.textContent = "Couldn't load the gap list just now. It's also in the project's " +
+          "DATA_LAYER_GUIDEBOOK.md on GitHub.";
+        body.appendChild(err);
+      });
+    }
+
+    function open() {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      render();
+      if (closeBtn) closeBtn.focus();
+    }
+    function close() {
+      modal.hidden = true;
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    openBtn.addEventListener("click", open);
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    if (backdrop) backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !modal.hidden) close();
+    });
+  })();

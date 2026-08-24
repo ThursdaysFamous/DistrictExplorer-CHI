@@ -1,0 +1,245 @@
+  /* ---------- card-system row vocabulary (docs/CARD_RENDER_API.md) ----------
+   * Shared builders for the redesigned result cards (design refs in
+   * docs/design_handoff_county_board_card/ + docs/design_handoff_card_system/).
+   * The contract is enforced here so call sites can't regress it:
+   *   - callers pass DATA, never markup — no html fields exist on this
+   *     surface; every string lands via textContent;
+   *   - every external URL is scheme-checked through safeHttpUrl before it
+   *     becomes an href (a failed check drops the link, never renders it);
+   *   - mailto:/tel: hrefs are built HERE from a raw address/number — an
+   *     email address is never printed (the "Email" label is the link), and
+   *     a phone number displays with non-breaking hyphens while its tel:
+   *     href keeps only dialable characters.
+   * A render() returns one wrapper element with class "card-flush"; the
+   * styles-card-v2 rules key row padding/borders off that marker. */
+  function cardEl(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined && text !== null && text !== "") el.textContent = String(text);
+    return el;
+  }
+  function cardExternalLink(label, url) {
+    var safe = safeHttpUrl(url);
+    if (!safe) return null;
+    var a = document.createElement("a");
+    a.href = safe;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = String(label || safe);
+    return a;
+  }
+  function cardPhoneLink(phone) {
+    var dial = String(phone).replace(/[^\d+]/g, "");
+    if (!dial) return null;
+    var a = cardEl("a", "card-phone", String(phone).replace(/-/g, "‑"));
+    a.href = "tel:" + dial;
+    return a;
+  }
+  function cardContactLine(spec) {
+    // spec: { phone?, email?, links?: [{label, url}] } -> one wrapping line of
+    // phone / Email / external links separated by middots; null when empty.
+    var items = [];
+    if (spec.phone) {
+      var p = cardPhoneLink(spec.phone);
+      if (p) items.push(p);
+    }
+    if (spec.email) {
+      var e = document.createElement("a");
+      e.href = "mailto:" + String(spec.email);
+      e.textContent = "Email";
+      items.push(e);
+    }
+    (spec.links || []).forEach(function (l) {
+      var a = cardExternalLink(l.label, l.url);
+      if (a) items.push(a);
+    });
+    if (!items.length) return null;
+    var line = cardEl("div", "card-contact");
+    items.forEach(function (item, i) {
+      if (i) line.appendChild(cardEl("span", "card-sep", "·"));
+      line.appendChild(item);
+    });
+    return line;
+  }
+  function cardDetailsHint() {
+    var hint = cardEl("span", "card-details-hint");
+    hint.appendChild(cardEl("span", "card-details-hint-word", "details"));
+    return hint;
+  }
+  function cardTitleCase(str) {
+    // Handoff 3 §6a: normalize ALL-CAPS feed strings for display ("WATERS"
+    // -> "Waters", "700 S STATE ST" -> "700 S State St"). Single letters
+    // (grid directionals), tokens carrying digits, and a small keep-caps
+    // set (school types like "HS"/"PS", compound directionals, the fleet's
+    // state codes) pass through untouched — expanding abbreviations would
+    // be a guess, and guessing is worse (honesty rules).
+    if (str == null) return str;
+    var KEEP = { ES: 1, MS: 1, HS: 1, PS: 1, IS: 1, NE: 1, NW: 1, SE: 1, SW: 1, IL: 1, NY: 1, CA: 1, US: 1 };
+    return String(str).split(/\s+/).map(function (word) {
+      if (word.length < 2 || /\d/.test(word) || KEEP[word] === 1) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+  }
+  function cardGradeRange(str) {
+    // Handoff 3 §6a: collapse a contiguous comma-separated grade list to a
+    // range ("PK, K, 1, 2, ..., 8" -> "PK–8"). A gapped or unrecognized
+    // list renders unchanged — never imply coverage the data doesn't state.
+    if (str == null) return str;
+    var ladder = ["PE", "PK", "K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    var parts = String(str).split(",").map(function (p) { return p.trim().toUpperCase(); }).filter(Boolean);
+    if (parts.length < 2) return String(str).trim();
+    var start = ladder.indexOf(parts[0]);
+    if (start === -1) return String(str).trim();
+    for (var i = 1; i < parts.length; i++) {
+      if (ladder[start + i] !== parts[i]) return String(str).trim();
+    }
+    return parts[0] + "–" + parts[parts.length - 1];
+  }
+  function renderBodyIntro(spec) {
+    // { title?, note? } — the body-name + count line under the header.
+    var el = cardEl("div", "card-intro");
+    if (spec.title) el.appendChild(cardEl("div", "card-intro-title", spec.title));
+    if (spec.note) el.appendChild(cardEl("div", "card-intro-note", spec.note));
+    return el;
+  }
+  function renderPersonRows(people, opts) {
+    // people: [{ name, badge?, note?, phone?, email?, links?, details?:
+    // {label, items}, detailsOpen? }]. A person with details renders as a
+    // native <details> expander; absent fields render nothing (no
+    // placeholders, no guessed officeholders — honesty rules).
+    var tinted = opts && opts.tinted;
+    var frag = document.createDocumentFragment();
+    people.forEach(function (person) {
+      var row = cardEl(person.details ? "summary" : "div",
+        "card-person" + (tinted ? " card-tinted" : ""));
+      var line = cardEl("div", "card-person-line");
+      line.appendChild(cardEl("span", "card-person-name", person.name));
+      if (person.badge) line.appendChild(cardEl("span", "card-badge", person.badge));
+      if (person.note) line.appendChild(cardEl("span", "card-note", person.note));
+      if (person.details) line.appendChild(cardDetailsHint());
+      row.appendChild(line);
+      var contact = cardContactLine(person);
+      if (contact) row.appendChild(contact);
+      if (!person.details) {
+        row.classList.add("card-row-b");
+        frag.appendChild(row);
+        return;
+      }
+      var det = cardEl("details", "card-row-b" + (tinted ? " card-tinted" : ""));
+      if (person.detailsOpen === true) det.open = true; // expanders default closed unless a caller insists
+      det.appendChild(row);
+      var body = cardEl("div", "card-person-details");
+      body.appendChild(cardEl("span", "card-detail-label",
+        (person.details.label || "Details") + ": "));
+      body.appendChild(document.createTextNode((person.details.items || []).join(" · ")));
+      det.appendChild(body);
+      frag.appendChild(det);
+    });
+    return frag;
+  }
+  function renderSectionLabel(text) {
+    // the uppercase kicker divider ("COUNTYWIDE") before a tinted row group
+    return cardEl("div", "card-section-label", text);
+  }
+  function renderOfficeGroup(spec) {
+    // { label?, open?, offices: [{label, lines, phone?}] } — the kicker-
+    // labelled office blocks behind one <details> group (Handoff 2 §4a).
+    var det = cardEl("details", "card-office-group card-row-b");
+    if (spec.open === true) det.open = true; // expanders default closed
+    var summary = document.createElement("summary");
+    summary.appendChild(cardEl("span", null, spec.label || "Offices"));
+    summary.appendChild(cardDetailsHint());
+    det.appendChild(summary);
+    var list = cardEl("div", "card-office-list");
+    (spec.offices || []).forEach(function (office) {
+      var block = cardEl("div", "card-office");
+      if (office.label) block.appendChild(cardEl("div", "card-office-kicker", office.label));
+      (office.lines || []).forEach(function (line) {
+        block.appendChild(cardEl("div", "card-office-line", line));
+      });
+      if (office.phone) {
+        var phoneLink = cardPhoneLink(office.phone);
+        if (phoneLink) {
+          var phoneLine = cardEl("div", "card-office-line");
+          phoneLine.appendChild(phoneLink);
+          block.appendChild(phoneLine);
+        }
+      }
+      list.appendChild(block);
+    });
+    det.appendChild(list);
+    return det;
+  }
+  function renderNearestRows(items) {
+    // [{ name, note?, tag?: {text, color}, accentColor?, dotColor?,
+    //    distanceLabel? }] — nearest-N rows with distance pills (Handoff 2
+    // §4d + Handoff 3 §8a). tag renders as a colored 600-weight lead on the
+    // note line ("High · 9–12"); accentColor tints the distance pill with
+    // the same type color; the caller owns distance formatting.
+    var frag = document.createDocumentFragment();
+    items.forEach(function (item) {
+      var row = cardEl("div", "card-nearest card-row-b");
+      var main = cardEl("div", "card-nearest-main");
+      var nameEl = cardEl("div", "card-nearest-name", item.name);
+      if (item.dotColor) {
+        // optional identity dot (e.g. school-type color) ahead of the name
+        var dot = cardEl("span", "card-nearest-dot");
+        dot.setAttribute("aria-hidden", "true");
+        dot.style.background = String(item.dotColor);
+        nameEl.insertBefore(dot, nameEl.firstChild);
+      }
+      main.appendChild(nameEl);
+      if (item.tag || item.note) {
+        var noteEl = cardEl("div", "card-nearest-note");
+        if (item.tag && item.tag.text) {
+          var tagEl = cardEl("span", "card-nearest-tag", item.tag.text);
+          if (item.tag.color) tagEl.style.color = String(item.tag.color);
+          noteEl.appendChild(tagEl);
+        }
+        if (item.note) {
+          if (item.tag && item.tag.text) noteEl.appendChild(cardEl("span", "card-sep", " · "));
+          noteEl.appendChild(document.createTextNode(item.note));
+        }
+        main.appendChild(noteEl);
+      }
+      row.appendChild(main);
+      if (item.distanceLabel) {
+        var pill = cardEl("span", "card-distance", item.distanceLabel);
+        if (item.accentColor) {
+          pill.style.color = String(item.accentColor);
+          pill.style.background = "color-mix(in srgb, " + String(item.accentColor) + " 10%, transparent)";
+        }
+        row.appendChild(pill);
+      }
+      frag.appendChild(row);
+    });
+    return frag;
+  }
+  function renderLinkRow(spec) {
+    // { title?, note?, phone?, email?, links?: [{label, url}] } — a name +
+    // contact line (Handoff 2 §4c; note is a muted context line under the
+    // title, and phone/email serve office-like rows such as a CAPS desk,
+    // rendered under the same rules as a person's contact line).
+    var el = cardEl("div", "card-linkrow card-row-b");
+    if (spec.title) el.appendChild(cardEl("div", "card-linkrow-title", spec.title));
+    if (spec.note) el.appendChild(cardEl("div", "card-linkrow-note", spec.note));
+    var contact = cardContactLine({ phone: spec.phone, email: spec.email, links: spec.links });
+    if (contact) el.appendChild(contact);
+    return el;
+  }
+  function renderFieldStack(rows) {
+    // [{ label?, value, primary? }] — the generic left-aligned label-over-
+    // value stack for identity layers with no officeholder (the wave-3
+    // replacement for the right-aligned dt/dd rows). Data only: a link
+    // belongs in the module's primaryLink footer, never in a value.
+    var wrap = cardEl("div", "card-flush");
+    var stack = cardEl("div", "card-field-stack");
+    rows.forEach(function (row) {
+      var field = cardEl("div", "card-field");
+      if (row.label) field.appendChild(cardEl("div", "card-field-label", row.label));
+      field.appendChild(cardEl("div", "card-field-value" + (row.primary ? " card-field-primary" : ""), row.value));
+      stack.appendChild(field);
+    });
+    wrap.appendChild(stack);
+    return wrap;
+  }

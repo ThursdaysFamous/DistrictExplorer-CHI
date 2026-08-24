@@ -1,0 +1,16 @@
+  // expose a couple of things for later module threads / debugging, without
+  // polluting global scope beyond one namespace. The object is built here so
+  // the member list stays engine; the window property it lands on is fork-
+  // branded, so the assignment below stays outside the fence (twinned with
+  // each fork's smoke_test.mjs).
+  var EXPLORER_EXPORTS = {
+    state: state,
+    map: map, // debug/programmatic map control (lets tests drive panning, e.g. the metro-portal easter egg)
+    registerLayer: registerLayer,
+    setSelectedPoint: setSelectedPoint, // debug/programmatic point selection (also used by the smoke test)
+    sanitize: sanitize,
+    pointInGeometry: pointInGeometry,
+    fetchJSONWithRetry: fetchJSONWithRetry,
+    probeGeometryColumn: probeGeometryColumn,
+    cleanPoiAddress: cleanPoiAddress // exposed so the smoke test can regression-guard the office-pin address cleaner (a recurring break point) without any network call
+  };

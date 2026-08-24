@@ -1,0 +1,4 @@
+    <div class="footer-metros" id="footer-metros" hidden>
+      <span class="footer-metros-label">Explore another metro</span>
+      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
+    </div>

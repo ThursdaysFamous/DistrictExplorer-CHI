@@ -1,0 +1,92 @@
+  /* ---------- declarative factory for single-source polygon layers ----------
+   * The plain "load a boundary set, find the polygon containing the point, read
+   * a few properties, list them" shape recurs across layers with no async roster
+   * join. Rather than a near-identical query()/render() pair each time, describe
+   * the card as a `fields` list and let this build both from it. Layers that join
+   * a roster or a second source (Police District, Ward, Congress, Commissioner,
+   * CCPSA, …) keep their explicit registerLayer blocks — their multi-source,
+   * Promise.all query() doesn't fit this shape.
+   *
+   * opts: { id, group, label, loader, style, pointOfInterest?, coverage?,
+   *         subOf?, onToggle?, fields: [...] }
+   * Each field is one of:
+   *   { name, label, keys:[...], primary:true } — always shown; findPropCI(keys)
+   *        with an "Unknown" fallback. Conventionally the first field (headline).
+   *   { name, label, keys:[...] }               — shown only when findPropCI hits.
+   *   { label, value:"..." }                    — a fixed text row (e.g. a note).
+   *   { label, html:"..." }                     — a fixed html row (e.g. a link;
+   *        the caller certifies the html exactly as a hand-written render would).
+   * An optional `when(result)` on any field gates it on the extracted values
+   * (e.g. the IL Supreme Court "District 1 is all of Cook County" note). */
+  function registerPolygonLayer(opts) {
+    var load = opts.loader;
+    var keyedFields = opts.fields.filter(function (f) { return f.keys; });
+    var primaryField = keyedFields.filter(function (f) { return f.primary; })[0] || null;
+    registerLayer({
+      id: opts.id,
+      group: opts.group,
+      label: opts.label,
+      // hover popup reads the same primary field the card's headline row shows,
+      // so the two surfaces can never disagree on a district's identity
+      // (METRO_EXPANSION_PLAYBOOK §2 hover-parity rule, back-ported from NYC).
+      hoverName: primaryField ? function (feature) {
+        var v = findPropCI(feature.properties || {}, primaryField.keys);
+        return (v == null || v === "") ? null : String(v);
+      } : undefined,
+      overlay: { load: load, style: opts.style },
+      // point-first by default (queryFeatureAt): a loader that can answer a
+      // spatial point query does, while the full set downloads for the
+      // overlay; every other loader takes the load-then-contain path verbatim
+      query: function (point, seq) {
+        return queryFeatureAt(load, point).then(function (feature) {
+          if (!feature) return null;
+          var props = feature.properties || {};
+          var result = { seq: seq };
+          keyedFields.forEach(function (f) { result[f.name] = findPropCI(props, f.keys); });
+          return result;
+        });
+      },
+      render: function (result) {
+        var rows = [];
+        opts.fields.forEach(function (f) {
+          if (f.when && !f.when(result)) return;
+          if (f.keys) {
+            var val = result[f.name];
+            // with opts.pill the primary field renders as the header pill
+            // (cardIdentifier below), not as a body row
+            if (f.primary) { if (opts.pill !== true) rows.push({ label: f.label, value: val ? String(val) : "Unknown", primary: true }); }
+            else if (val) rows.push({ label: f.label, value: String(val) });
+          } else {
+            rows.push({ label: f.label, value: f.value });
+          }
+        });
+        return renderFieldStack(rows);
+      },
+      pointOfInterest: opts.pointOfInterest,
+      coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
+      subOf: opts.subOf,       // optional sub-selection parent (nests under it)
+      onToggle: opts.onToggle, // optional toggle reaction (e.g. a sub-layer framing its parent)
+      primaryLink: opts.primaryLink, // optional footer link (docs/CARD_RENDER_API.md) — link-only (4c) layers put their official site here
+      // 4b name-only presentation (docs/CARD_RENDER_API.md): a fork opts a
+      // layer in with opts.compact — the header then carries the primary
+      // field's value (same value hoverName shows, so the surfaces agree)
+      // with opts.compactMetaField's value right-aligned; render() above
+      // keeps serving unmigrated forks and the non-compact layers.
+      compact: opts.compact === true,
+      cardIdentifier: (opts.compact === true && primaryField) ? function (result) {
+        var v = result[primaryField.name];
+        return v ? String(v) : "Unknown";
+      } : ((opts.pill === true && primaryField) ? function (result) {
+        // opts.pill: the primary field's label + value as the header pill
+        // ("District 1", "Subcircuit 5") — same value hoverName shows
+        var v = result[primaryField.name];
+        return (primaryField.label ? primaryField.label + " " : "") + (v ? String(v) : "Unknown");
+      } : undefined),
+      cardMeta: (opts.compact === true && opts.compactMetaField) ? function (result) {
+        var v = result[opts.compactMetaField];
+        if (v === null || v === undefined || v === "") return null;
+        var metaField = keyedFields.filter(function (f) { return f.name === opts.compactMetaField; })[0];
+        return (metaField && metaField.label ? metaField.label + " " : "") + String(v);
+      } : undefined
+    });
+  }

@@ -1,0 +1,7 @@
+  /* ---------- global state ---------- */
+  var state = {
+    selectedPoint: null,   // {lat, lng}
+    sequence: 0,
+    layersOn: {}           // id -> boolean
+  };
+

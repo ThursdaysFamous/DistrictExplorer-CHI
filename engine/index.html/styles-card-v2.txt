@@ -1,0 +1,222 @@
+  /* ---- Card-system redesign (docs/CARD_RENDER_API.md; design refs in
+     docs/design_handoff_county_board_card/ + docs/design_handoff_card_system/).
+     The card vocabulary is the whole card surface now — the legacy
+     renderFieldList dt/dd table was retired in engine-v1.0.13. Palette is
+     scoped to the cards — the rest of the app keeps the existing token set. ---- */
+  .layer-block {
+    --card-accent: #1d5fd6;
+    --card-link: #1a56c4;
+    --card-link-hover: #123c8a;
+    --card-ink: #111827;
+    --card-ink-2: #374151;
+    --card-body-ink: #4b5563;
+    --card-muted: #6b7280;
+    --card-detail-ink: #5b6472;
+    --card-hint: #9aa3b2;
+    --card-sep: #c3c9d4;
+    --card-badge-bg: #e3edfb;
+    --card-pill-bg: #eef4fd;
+    --card-section-bg: #f8fafc;
+    --card-border: #e8eaef;
+    --card-row-border: #f1f3f7;
+    --card-btn-border: #c7d7f2;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    /* the left accent keeps each layer's own map color (the card-to-overlay
+       tie predating the redesign); the redesign blue is only the fallback */
+    border-left: 3px solid var(--layer-accent, var(--card-accent));
+    border-radius: 10px;
+    /* Handoff 3 §5a: the soft shadow also carries the layer's color */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+      0 3px 14px -4px color-mix(in srgb, var(--layer-accent, var(--card-accent)) 45%, transparent);
+  }
+  /* 4e state accents live on the card's left edge; :has() reads the body's
+     state class because the accent element (the block) is the body's parent. */
+  .layer-block:has(> .layer-card-body.state-error) { border-left-color: #c2410c; }
+  .layer-block:has(> .layer-card-body.state-empty) { border-left-color: #d1d5db; }
+  .layer-block-head {
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+  }
+  .layer-block-head label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--card-ink);
+  }
+  .layer-block-head input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--card-accent);
+  }
+  .layer-color-dot { width: 10px; height: 10px; border: none; }
+  .card-id-pill {
+    flex: none;
+    font-size: 13px;
+    font-weight: 600;
+    /* Handoff 3 §5a: the pill is tinted with the layer's own color */
+    color: var(--layer-accent, var(--card-link));
+    background: color-mix(in srgb, currentColor 9%, transparent);
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  /* 4b compact header: small layer-name kicker over the matched value, meta
+     (GEOID) right-aligned. The label element moves inside the stack, so the
+     16px header rule above is re-scoped back down here. */
+  .card-compact-stack { flex: 1; min-width: 0; }
+  .card-compact-stack label { display: block; font-size: 16px; font-weight: 700; color: var(--card-ink); }
+  /* with a value showing, the layer name shrinks to the 4b kicker; an idle
+     (off/empty) compact card keeps the full-size title like every other card */
+  .card-compact-stack:has(.card-compact-value:not([hidden])) label { font-size: 13px; font-weight: 600; color: var(--card-muted); }
+  .card-compact-value { font-size: 15px; font-weight: 700; color: var(--card-ink); }
+  .card-compact-meta { flex: none; margin-left: auto; font-size: 11.5px; color: var(--card-hint); font-variant-numeric: tabular-nums; }
+  .card-id-pill[hidden], .card-compact-value[hidden], .card-compact-meta[hidden] { display: none; }
+
+  .layer-card-body { padding: 14px 18px; font-size: 13px; border-top: 1px solid var(--card-border); }
+  .layer-card-body.state-compact { display: none; }
+  .layer-card-body.state-empty { color: var(--card-muted); font-style: normal; }
+  .layer-card-body.state-error { color: #7c2d12; }
+  .layer-card-body .retry-btn {
+    border: 1px solid var(--card-btn-border);
+    color: var(--card-link);
+    background: #fff;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .spinner { width: 16px; height: 16px; border-color: var(--card-btn-border); border-top-color: var(--card-accent); }
+
+  /* Card render() output: one wrapper with class card-flush; rows carry their
+     own padding, so the body's own padding falls away. (A body with no
+     card-flush marker — loading/error/empty states — keeps the padded layout
+     above.) */
+  .layer-card-body:has(> .card-flush) { padding: 0; }
+  .card-flush > .card-row-b { border-bottom: 1px solid var(--card-row-border); }
+  .card-flush > .card-row-b:last-child,
+  .card-flush > .card-row-b:has(+ .card-section-label) { border-bottom: none; }
+
+  .card-intro { padding: 14px 18px 6px; }
+  .card-intro-title { font-size: 14px; font-weight: 600; color: var(--card-ink-2); }
+  .card-intro-note { font-size: 12px; color: var(--card-muted); margin-top: 2px; }
+
+  .card-person { display: flex; flex-direction: column; gap: 2px; padding: 10px 18px; }
+  summary.card-person { cursor: pointer; list-style: none; }
+  summary.card-person::-webkit-details-marker, .card-office-group > summary::-webkit-details-marker { display: none; }
+  .card-person-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-person-name { font-size: 14.5px; font-weight: 700; color: var(--card-ink); }
+  .card-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--card-link);
+    background: var(--card-badge-bg);
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .card-note { font-size: 12px; color: var(--card-muted); }
+  .card-details-hint { margin-left: auto; font-size: 11px; color: var(--card-hint); }
+  .card-details-hint::after { content: " ▸"; }
+  details[open] > summary .card-details-hint::after { content: " ▾"; }
+  .card-contact { display: flex; flex-wrap: wrap; gap: 3px 9px; align-items: baseline; font-size: 12.5px; color: var(--card-body-ink); }
+  .card-contact a { color: var(--card-link); text-decoration: none; }
+  .card-contact a:hover { color: var(--card-link-hover); }
+  .card-contact a.card-phone { color: var(--card-body-ink); }
+  .card-phone { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .card-sep { color: var(--card-sep); }
+  .card-person-details { padding: 0 18px 12px; font-size: 12.5px; line-height: 1.5; color: var(--card-detail-ink); }
+  .card-person-details .card-detail-label { font-weight: 600; color: var(--card-ink-2); }
+  .card-tinted { background: var(--card-section-bg); }
+
+  .card-section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 18px 4px;
+    background: var(--card-section-bg);
+    border-top: 1px solid var(--card-border);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--card-muted);
+  }
+  .card-section-label::after { content: ""; flex: 1; height: 1px; background: var(--card-border); }
+
+  .card-office-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--card-ink-2);
+  }
+  .card-office-list { display: flex; flex-direction: column; gap: 8px; padding: 0 18px 12px; }
+  .card-office-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--card-muted); }
+  .card-office-line { font-size: 12.5px; line-height: 1.5; color: var(--card-body-ink); }
+  .card-office-line .card-phone { color: var(--card-body-ink); text-decoration: none; }
+
+  .card-nearest { display: flex; align-items: baseline; gap: 10px; padding: 10px 18px; }
+  .card-nearest-main { min-width: 0; flex: 1; }
+  .card-nearest-name { font-size: 14px; font-weight: 700; color: var(--card-ink); }
+  .card-nearest-dot { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: 0; }
+  .card-nearest-note { font-size: 12.5px; color: var(--card-body-ink); }
+  .card-nearest-tag { font-weight: 600; }
+  .card-nearest-note .card-sep { color: var(--card-sep); }
+  .card-distance {
+    flex: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--card-link);
+    background: var(--card-pill-bg);
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .card-linkrow { display: flex; flex-direction: column; gap: 2px; padding: 12px 18px; }
+  .card-linkrow-title { font-size: 14.5px; font-weight: 700; color: var(--card-ink); }
+  .card-linkrow-note { font-size: 12px; color: var(--card-muted); }
+  .card-field-stack { display: flex; flex-direction: column; gap: 9px; padding: 12px 18px; }
+  .card-field-label { font-size: 12px; font-weight: 600; color: var(--card-muted); }
+  .card-field-value { font-size: 13px; line-height: 1.5; color: var(--card-body-ink); }
+  .card-field-value.card-field-primary { font-size: 14.5px; font-weight: 700; color: var(--card-ink); }
+  /* the outage card composes a link row inside the padded legacy body */
+  .layer-card-body > .card-linkrow { padding: 8px 0 0; }
+
+  .card-footer { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-top: 1px solid var(--card-border); }
+  .card-footer .pin-parent-btn {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--card-link);
+    background: #fff;
+    border: 1px solid var(--card-btn-border);
+    border-radius: 8px;
+    padding: 6px 12px;
+  }
+  .card-footer .pin-parent-btn:hover { background: #f3f7fd; }
+  .card-footer-link { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--card-link); text-decoration: none; white-space: nowrap; }
+  .card-footer-link::after { content: " ↗"; }
+  .card-footer-link:hover { color: var(--card-link-hover); }
+
+  /* Mobile deltas (Handoff 1 §mobile) keyed to the cards column's own width,
+     not the viewport, so a narrow sidebar on a wide screen compacts too. */
+  .group-cards { container-type: inline-size; }
+  @container (max-width: 419px) {
+    .layer-block-head { gap: 10px; padding: 12px 14px; }
+    .layer-block-head label { font-size: 14.5px; }
+    .layer-block-head input[type="checkbox"] { width: 22px; height: 22px; }
+    .card-intro, .card-person, .card-nearest, .card-linkrow, .card-footer,
+    .card-office-group > summary { padding-left: 14px; padding-right: 14px; }
+    .card-person-details, .card-office-list { padding-left: 14px; padding-right: 14px; }
+    .card-section-label { padding-left: 14px; padding-right: 14px; }
+    .card-person { padding-top: 12px; padding-bottom: 12px; min-height: 44px; gap: 3px; }
+    .card-person-name, .card-nearest-name { font-size: 14px; }
+    .card-contact a, .card-contact .card-phone { padding: 4px 0; }
+    .card-details-hint-word { display: none; }
+  }

@@ -1,0 +1,9 @@
+  map.on("click", function (e) {
+    setSelectedPoint(e.latlng.lat, e.latlng.lng, { skipPan: true });
+  });
+
+  document.getElementById("kbd-select-btn").addEventListener("click", function () {
+    var c = map.getCenter();
+    setSelectedPoint(c.lat, c.lng, { skipPan: true });
+  });
+

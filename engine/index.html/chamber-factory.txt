@@ -1,0 +1,134 @@
+  function registerIlgaChamber(opts) {
+    // A TIGERweb legislative chamber (Congress / State Senate / State Assembly)
+    // joined to a same-origin roster keyed by district number. opts: { id, label,
+    // layerIndex, districtFields, loadRoster, memberLabel, style, directoryUrl,
+    // profileLabel?, directoryLabel?, capitolLabel?, districtPrefix? }. Member
+    // rows are { name, party?, url?, districtOffice?, capitolOffice? }; office fields only
+    // render when the roster supplies them (empty placeholder -> just the link).
+    // Metro-provided geometry loader wins; forks that haven't pre-built their
+    // chamber geometry fall back to the live TIGERweb fetch by layer index,
+    // unchanged. (opts.loadDistricts is a metro-specific value passed by the
+    // registration below — the engine only supplies the default.) R2-2.
+    var loadChamber = opts.loadDistricts || makeCached(function () { return loadTigerLayer(opts.layerIndex); });
+    // "IL‑14" where the concept is state-qualified (districtPrefix), plain
+    // "District 14" otherwise — one string shared by the header pill and the
+    // roster-less card body so the two can never disagree.
+    function districtLabel(result) {
+      if (!result || !result.district) return null;
+      return opts.districtPrefix
+        ? opts.districtPrefix + String(result.district)
+        : "District " + String(result.district);
+    }
+    // Split a roster office's raw lines (address lines + phone/fax lines
+    // mixed, exactly as scraped) into the renderOfficeGroup shape: the first
+    // phone-looking non-fax line becomes the tel:-linked phone (a leading
+    // "Phone:" prefix dropped); fax and every other line stay as text lines
+    // in scraped order, so no scraped detail is silently discarded.
+    function splitOfficeLines(lines) {
+      if (!lines || !lines.length) return null;
+      var office = { lines: [], phone: null };
+      lines.forEach(function (raw) {
+        var line = String(raw);
+        var phoneLike = /(?:phone|tel|\(\d{3}\)|\d{3}[-.\s]\d{4})/i.test(line) && !/fax/i.test(line);
+        if (phoneLike && !office.phone) {
+          office.phone = line.replace(/^\s*(?:phone|tel)[:.\s]*/i, "");
+        } else {
+          office.lines.push(line);
+        }
+      });
+      if (!office.lines.length && !office.phone) return null;
+      return office;
+    }
+    function memberProfileUrl(member) {
+      return member && member.url ? safeHttpUrl(member.url) : null;
+    }
+    registerLayer({
+      id: opts.id,
+      group: "political",
+      label: opts.label,
+      // hover popup: same district extraction the card's query uses (chamber-
+      // specific TIGERweb fields + the name-field regex fallback).
+      hoverName: function (feature) {
+        return extractDistrictNumber(feature.properties || {}, opts.districtFields);
+      },
+      overlay: { load: loadChamber, style: opts.style },
+      // boundary resolution is point-first by default (queryFeatureAt); the
+      // roster stays a whole-file fetch — it's the small half of the join
+      query: function (point, seq) {
+        return Promise.all([
+          queryFeatureAt(loadChamber, point),
+          opts.loadRoster().catch(function () { return {}; })
+        ]).then(function (results) {
+          var feature = results[0], roster = results[1];
+          if (!feature) return null;
+          var props = feature.properties || {};
+          var district = extractDistrictNumber(props, opts.districtFields);
+          var member = district != null ? roster[String(district)] : undefined;
+          return { seq: seq, district: district, member: member || null };
+        });
+      },
+      render: function (result) {
+        // 4a representative card (docs/CARD_RENDER_API.md): person row with a
+        // party badge, then the offices behind one <details> group. District
+        // identity lives in the header pill (cardIdentifier below).
+        var wrap = cardEl("div", "card-flush");
+        var member = result.member;
+        if (!member) {
+          // roster gap or roster-fetch failure: district identity + the
+          // official directory (primaryLink in the footer) — never an
+          // invented name (honesty rules).
+          wrap.appendChild(renderBodyIntro({ title: districtLabel(result) || "Unknown district" }));
+          return wrap;
+        }
+        var person = { name: String(member.name) };
+        if (member.party) person.badge = String(member.party);
+        // Label follows the actual href: only a roster-supplied member URL
+        // gets the per-member label — the directory fallback lives in the
+        // footer (primaryLink) and must not masquerade as the member's page.
+        var memberUrl = memberProfileUrl(member);
+        if (memberUrl) person.links = [{ label: opts.profileLabel || "Member profile", url: memberUrl }];
+        wrap.appendChild(renderPersonRows([person]));
+        // District office first (it's the local, on-map one this card pins),
+        // Springfield/D.C. second — same order the old key/value card used.
+        var offices = [];
+        var districtOffice = splitOfficeLines(member.districtOffice);
+        if (districtOffice) { districtOffice.label = "District Office"; offices.push(districtOffice); }
+        var capitolOffice = splitOfficeLines(member.capitolOffice || member.springfieldOffice);
+        if (capitolOffice) { capitolOffice.label = opts.capitolLabel || "Capitol Office"; offices.push(capitolOffice); }
+        if (offices.length) wrap.appendChild(renderOfficeGroup({ offices: offices }));
+        return wrap;
+      },
+      cardIdentifier: districtLabel,
+      primaryLink: function (result) {
+        // member.url is this factory's one external-URL sink; scheme-check it
+        // through safeHttpUrl like every other href, falling back to the
+        // trusted (hardcoded) directory URL when the roster supplies no
+        // usable http(s) link.
+        var memberUrl = memberProfileUrl(result.member);
+        var url = memberUrl || opts.directoryUrl || opts.ilgaUrl;
+        if (!url) return null;
+        return {
+          label: memberUrl ? (opts.profileLabel || "Member profile") : (opts.directoryLabel || "Member directory"),
+          url: url
+        };
+      },
+      pointOfInterest: function (result) {
+        var member = result.member;
+        if (!member) return null;
+        var address = officeAddressForGeocode(member.districtOffice);
+        if (!address) return null;
+        return { label: member.name, address: address };
+      },
+      // hover popup: name the senator / state representative from the prefetched
+      // roster (keyed by district number, same as the query).
+      hoverOfficial: {
+        load: opts.loadRoster,
+        name: function (feature, roster) {
+          if (!roster) return null;
+          var d = extractDistrictNumber(feature.properties || {}, opts.districtFields);
+          var member = d != null ? roster[String(d)] : null;
+          return member ? member.name : null;
+        }
+      }
+    });
+  }
