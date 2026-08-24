@@ -1,0 +1,81 @@
+{
+  "_comment": "Operator-maintained source for Borough President + District Attorney + County Clerk (METRO_EXPANSION_PLAYBOOK 11.3). Fill each name from the official BP/DA site and set url to that official page, then run scripts/build_borough_officials.py. Leave a name null to omit it (the card then links to the NYC Green Book instead of naming anyone). NEVER guess a name - these are elected offices and a wrong name is a real error.",
+  "_verified": "2026-07-13 - each name confirmed on the office's own official site (Queens BP canonical queensbp.nyc.gov; SI DA statenislandda.org); BP set cross-checked against Wikipedia. Re-verify before/after each election cycle. | County Clerks verified 2026-07-20 on each office's nycourts.gov page: only Bronx and Kings publish the incumbent's name there; the other three entries carry office/link data only (a name is NEVER filled from memory or third-party sources). NYC County Clerks are APPOINTED (by the Appellate Division), so the card labels the row appointed.",
+  "boroughs": {
+    "Manhattan": {
+      "bp": {
+        "name": "Brad Hoylman-Sigal",
+        "url": "https://www.manhattanbp.nyc.gov/"
+      },
+      "da": {
+        "name": "Alvin Bragg",
+        "url": "https://manhattanda.org/"
+      },
+      "clerk": {
+        "name": null,
+        "url": "https://www.nycourts.gov/courts/1st-judicial-district/new-york-county-clerks-office",
+        "address": "60 Centre Street, Room 161, New York, NY 10007"
+      }
+    },
+    "Bronx": {
+      "bp": {
+        "name": "Vanessa L. Gibson",
+        "url": "https://bronxboropres.nyc.gov/"
+      },
+      "da": {
+        "name": "Darcel D. Clark",
+        "url": "https://bronxda.nyc.gov/"
+      },
+      "clerk": {
+        "name": "Hon. Ischia Bravo",
+        "url": "https://www.nycourts.gov/courts/12th-judicial-district/bronx-county-clerks-office",
+        "address": "851 Grand Concourse, Room 118, Bronx, NY 10451"
+      }
+    },
+    "Brooklyn": {
+      "bp": {
+        "name": "Antonio Reynoso",
+        "url": "https://www.brooklynbp.nyc.gov/"
+      },
+      "da": {
+        "name": "Eric Gonzalez",
+        "url": "https://www.brooklynda.org/"
+      },
+      "clerk": {
+        "name": "Hon. Nancy T. Sunshine",
+        "url": "https://www.nycourts.gov/courts/2nd-judicial-district/kings-county-clerks-office",
+        "address": "360 Adams Street, Brooklyn, NY 11201"
+      }
+    },
+    "Queens": {
+      "bp": {
+        "name": "Donovan Richards Jr.",
+        "url": "https://www.queensbp.nyc.gov/"
+      },
+      "da": {
+        "name": "Melinda Katz",
+        "url": "https://queensda.org/"
+      },
+      "clerk": {
+        "name": null,
+        "url": "https://www.nycourts.gov/courts/11th-judicial-district/queens-county-clerks-office",
+        "address": "88-11 Sutphin Blvd #106, Jamaica, NY 11435",
+        "phone": "(718) 298-0601"
+      }
+    },
+    "Staten Island": {
+      "bp": {
+        "name": "Vito Fossella",
+        "url": "https://www.statenislandusa.com/"
+      },
+      "da": {
+        "name": "Michael E. McMahon",
+        "url": "https://www.statenislandda.org/"
+      },
+      "clerk": {
+        "name": null,
+        "url": "https://www.nycourts.gov/courts/13th-judicial-district/richmond-county-clerks-office"
+      }
+    }
+  }
+}

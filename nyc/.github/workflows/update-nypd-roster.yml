@@ -1,0 +1,60 @@
+name: Update NYPD precinct commanders
+
+# Weekly refresh of data/app/nypd-precinct-info.json (precinct commanding
+# officers) scraped from the nyc.gov precinct pages. Opens a PR, never commits to
+# main (METRO_EXPANSION_PLAYBOOK §9).
+
+on:
+  schedule:
+    - cron: "0 13 * * 2" # Tuesday 13:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every bot PR with
+      # zero checks. Both halves matter: the create fires `pull_request`, and
+      # the force-push onto the fixed bot/* branch fires `synchronize`. Falls
+      # back to github.token when the secret is absent, so the workflow still
+      # runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Scrape NYPD precinct commanders
+        env:
+          SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
+        run: python3 scripts/nypd_precinct_scraper.py
+      - name: Rebuild roster
+        run: python3 scripts/build_nypd_roster.py
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+      - name: Check for changes
+        id: diff
+        run: git diff --quiet -- data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          branch="bot/nypd-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/nypd-precinct-info.json
+          git commit -m "Update NYPD precinct commanders from nyc.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create --title "Update NYPD precinct commanders" \
+              --body "Automated weekly refresh of precinct commanding officers (\`scripts/nypd_precinct_scraper.py\` + \`build_nypd_roster.py\`). Review before merging." \
+              --base main --head "$branch"
+          fi

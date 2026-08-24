@@ -1,0 +1,69 @@
+name: Update NY Senate/Assembly roster
+
+# Weekly refresh of the NY State Senate + Assembly district cards' rosters
+# (data/app/ny-senate-members.json / ny-assembly-members.json) from the NY Senate
+# Open Legislation API. Opens a PR rather than committing to main — officeholder
+# data gets a human look before it ships (METRO_EXPANSION_PLAYBOOK §9).
+
+on:
+  schedule:
+    - cron: "0 13 * * 1" # Monday 13:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every bot PR with
+      # zero checks. Both halves matter: the create fires `pull_request`, and
+      # the force-push onto the fixed bot/* branch fires `synchronize`. Falls
+      # back to github.token when the secret is absent, so the workflow still
+      # runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Scrape NY legislature (Open Legislation API; offices via Open States)
+        env:
+          NYSENATE_API_KEY: ${{ secrets.NYSENATE_API_KEY }}
+          # Optional: district-office enrichment. Without it, senate/assembly ship
+          # names-only (no address guessed).
+          OPENSTATES_API_KEY: ${{ secrets.OPENSTATES_API_KEY }}
+        run: python3 scripts/ny_legislature_scraper.py
+
+      - name: Rebuild roster data files
+        run: python3 scripts/build_ny_roster.py
+
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py index.html
+
+      - name: Check for changes
+        id: diff
+        run: git diff --quiet -- data/app/ && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          branch="bot/ny-legislature-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/app/ny-senate-members.json data/app/ny-assembly-members.json
+          git commit -m "Update NY Senate/Assembly roster from Open Legislation"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create --title "Update NY Senate/Assembly roster" \
+              --body "Automated weekly refresh from the NY Senate Open Legislation API (\`scripts/ny_legislature_scraper.py\` + \`build_ny_roster.py\`). Review before merging — this changes data about real officeholders." \
+              --base main --head "$branch"
+          fi

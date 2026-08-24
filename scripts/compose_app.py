@@ -58,6 +58,7 @@ ENGINE_DIR = os.path.join(REPO_ROOT, "engine")
 INSTANCES = {
     "il": ["il/index.html", "il/sw.js"],
     "sf": ["sf/index.html", "sf/sw.js"],
+    "nyc": ["nyc/index.html", "nyc/sw.js"],
 }
 
 ENGINE_RE = re.compile(
