@@ -1481,6 +1481,20 @@ detail into `blocker`.
       "wanted": "Park and library district boundaries as map data — each of the eight districts holds its own, and none has been asked."
     },
     {
+      "id": "knox-precinct-geometry",
+      "concept": "Voting precincts",
+      "area": "Knox County",
+      "counties": [
+        "knox"
+      ],
+      "kind": "no-source",
+      "layer": "county-precinct",
+      "summary": "Knox County's voting precincts aren't drawn, though its five board districts are.",
+      "why": "Knox has two election authorities and both have redrawn their precincts since the last census, so the census map no longer matches either.",
+      "blocker": "Measured 23 Aug 2026 by the audit of SERVED counties with no precinct answer and no record explaining it \u2014 the Cass/Greene/Scott/Moultrie shape, where a county goes unbuilt for weeks while every guard stays green. That audit found four such counties; three of them (Hancock, Shelby, Warren) turned out to be buildable from data already in this repo and shipped the same day. Knox is the one that is genuinely blocked, and here is what it is blocked ON. KNOX HAS TWO ELECTION AUTHORITIES and each has moved off the census fabric. Census 2020 drew 52 voting districts here \u2014 21 named GALESBURG CITY plus a bare GALESBURG, and 30 others \u2014 while the City of Galesburg's Board of Election Commissioners now runs 20 precincts and the County Clerk's canvasses have reported 31, 32, 31, 28 and 29 across six years. Neither current fabric is the census one, so no dissolve of census geometry can answer for either half; that is the same test Vermilion fails and the opposite of what Hancock, Shelby and Warren pass. HALF OF IT IS ALREADY PUBLISHED, and this is where a submission could start: Galesburg publishes its 20 precincts as a public ArcGIS feature service (services1.arcgis.com/T5ar9pn3YeFZ47Wh, layer \"Galesburg Voting Precincts\"), Query-capable, empty licenseInfo, carrying PRECINCT, WARD, COUNTY and POLL. Nothing here ships it, because a county-precinct layer that answers inside Galesburg and stays silent across the rural county would leave a reader unable to tell which situation they were in \u2014 worse than answering nowhere. THE COUNTY HALF IS THE MISSING PIECE. The county's adopted district map is a vector PDF on which the thick ORANGE line is the precinct boundary, so the linework exists as vector paths; but those are LINES, not the filled path OBJECTS the Jackson method reads, and polygonising a line network is a different and much weaker operation than reading closed shapes. The county's website refuses this client while three of its other hosts answer (see the knox build log), so the ask route is open and has not been used for precincts.",
+      "wanted": "A current precinct map as data from Knox County \u2014 the Clerk's 28-29 precincts outside Galesburg are the missing half, since the city already publishes its 20."
+    },
+    {
       "id": "vermilion-precinct-geometry",
       "concept": "Voting precincts",
       "area": "Vermilion County",
@@ -5330,6 +5344,84 @@ rim. **This is the second consecutive county whose topology was called wrong fro
 head; read the ring count from `--check`.**
 
 Counties 88 → 89, dispatch entries 76 → 77, frontier 14 → 13, gap records unchanged at 105.
+
+
+### 2026-08-23, later: three served counties gain precincts nobody had recorded as missing — and the audit that found them
+
+The Vermilion build ended with an obvious next question: the ArcGIS org check had never been run
+against SERVED counties whose precinct layers are absent. Running it produced one county's worth of
+new sourcing and three counties' worth of something better — **work that was already possible with
+data sitting in this repo.**
+
+**THE AUDIT, and it is the repeatable part.** Cross-reference three lists that are each already
+authoritative: the counties in `DISPATCH_COUNTY_FIPS`, the `key:` entries under
+`registerCountyLayer({id: "county-precinct"})` in index.html, and the `layer: "county-precinct"`
+records in the gaps block. A county in the first list, absent from the second, with nothing in the
+third **is an absence nobody has explained.** That is exactly the Cass/Greene/Scott/Moultrie shape
+from 2026-08-21, and it recurs because no guard can fire on it: every count is right, every file
+present, every gate green, and the county is simply not there.
+
+Eleven served counties have no precinct entry. Seven carry a record saying why. **Four did not:
+Hancock, Knox, Shelby and Warren.**
+
+**Three of the four needed no new source at all.** In each, the fact that makes the county's board
+districts buildable is the *same* fact that makes its precincts buildable, and only the districts
+had been built:
+
+| county | what was already proven | what shipped |
+|---|---|---|
+| Hancock | census VTDs carry its 33 precinct names 33/33 (the Jasper test its district build already runs) | 33 precincts, each with its district |
+| Shelby | census VTDs carry the adopted map's 33 names 33/33 | 33 precincts; Shelbyville 5 names the **three** districts it spans |
+| Warren | 28 census units merge to the county's 26 by two nameable merges, each inside one district | 26 precincts under the county's own names |
+
+Each builder now emits both files from one run, so the two can never drift apart. **The districts
+files are byte-identical** — nothing about the existing product changed.
+
+Two details worth carrying:
+
+* **The county's spelling ships, and the census's rides along.** Hancock's census fabric contains a
+  TYPO (`MONTIBELLO IV` for Montebello 4) plus twelve roman/arabic differences. The county's name is
+  what a reader sees; the census's is kept on the feature as `censusName` so the precinct is still
+  findable in census products and the typo is visible rather than silently corrected. Warren does the
+  same with `censusUnits` on its two merged precincts.
+* **A split precinct ships WHOLE.** Shelby's district geometry cuts Shelbyville 5 three ways along
+  two landmarks the county names — but a voter in Shelbyville 5 is in Shelbyville 5. It ships as one
+  precinct naming Districts 8, 9 and 10, the Douglas rule extended from two districts to three.
+
+**KNOX IS THE ONE THAT IS GENUINELY BLOCKED, and now says so.** It has two election authorities and
+**both have moved off the census fabric**: Census 2020 drew 52 voting districts (21 `GALESBURG CITY`
+plus a bare `GALESBURG`, and 30 others) while Galesburg's Board of Election Commissioners now runs 20
+and the County Clerk's canvasses have reported 31, 32, 31, 28 and 29 across six years. No dissolve of
+census geometry answers for either half. **Half of it is already published** — Galesburg's 20
+precincts are a public feature service with empty `licenseInfo` — and nothing ships it, because a
+layer that answers inside the city and stays silent across the rural county leaves a reader unable to
+tell which situation they are in. The county half would need a line network polygonised out of a
+vector PDF, which is a weaker operation than reading the closed fill objects the Jackson method uses.
+
+### A camelCase candidate in `findPropCI` never matches, and it had shipped twice (2026-08-23)
+
+Found by browser-checking a field that should have rendered and did not.
+
+    function findPropCI(props, candidates) {
+      ...
+      if (keys[i].toLowerCase() === candidates[c]) return props[keys[i]];
+
+The KEY is lowercased; the CANDIDATE is compared verbatim. So `findPropCI(props, ["censusUnits"])`
+can never match anything, and returns null silently.
+
+**It was already shipped on two counties.** Jackson (2026-08-23) and Douglas (2026-08-23) both pass
+`["partialPrecincts"]`, so the line naming a district's SPLIT precincts — *"Partly in this district:
+Bourbon 2 — the county's district map cuts through these precincts"* — **had never rendered on either
+county's card since the day it shipped.** Those are the two counties whose whole reason for existing
+in this fleet is that they split precincts, and the card was quietly omitting exactly that.
+
+Nothing caught it and nothing could have: the property is present in the data, the lookup returns
+null, the field is conditional, and the card renders correctly without it. `validate_index.py` checks
+that files and layers exist, not that a conditional field ever fires.
+
+**The rule: every `findPropCI` candidate must be lowercase.** A repo-wide sweep confirms none remain.
+Worth a lint if a third instance appears — until then the cost of the guard exceeds the cost of the
+bug, but the bug is real and shipped twice in one day.
 
 
 ## Backlog — researched candidates, deliberately not (yet) built

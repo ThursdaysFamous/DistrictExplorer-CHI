@@ -50,7 +50,7 @@
 | Greene | 17061 | dispatch | at-large — County card | `county-precinct` | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
-| Hancock | 17067 | dispatch | districted | `county-board` | none |
+| Hancock | 17067 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Hardin | 17069 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `hardin-county-board` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
@@ -62,7 +62,7 @@
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
 | Kendall | 17093 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source); `plano-ward-officials` (no-source) |
-| Knox | 17095 | dispatch | districted | `county-board` | none |
+| Knox | 17095 | dispatch | districted | `county-board` | 1 — `knox-precinct-geometry` (no-source) |
 | LaSalle | 17099 | dispatch | districted | `county-board`, `county-precinct` | 5 — `county-board-office-addresses` (no-source); `lasalle-board-districts-stale` (no-source); `lasalle-municipal-wards` (no-source); `ogle-lasalle-special-districts` (no-source); `wenona-two-clerks-disagree` (data-quality) |
 | Lake | 17097 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `lake-municipal-names` (no-source); `park-city-wards` (no-source) |
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
@@ -96,7 +96,7 @@
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `municipal-website-dead-ends` (data-quality); `sangamon-park-library-districts` (no-source) |
 | Schuyler | 17169 | dispatch | at-large — County card | `county-precinct` | none |
 | Scott | 17171 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `scott-county-commissioners` (no-source) |
-| Shelby | 17173 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
+| Shelby | 17173 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
@@ -104,7 +104,7 @@
 | Union | 17181 | County card | at-large — County card | — | 1 — `captcha-county-commissioner-contact` (blocked) |
 | Vermilion | 17183 | dispatch | districted | `county-board` | 1 — `vermilion-precinct-geometry` (no-source) |
 | Wabash | 17185 | County card | at-large — County card | — | 1 — `wabash-precinct-geometry` (no-source) |
-| Warren | 17187 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `pass10-frontier-unasked` (no-source) |
+| Warren | 17187 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass10-frontier-unasked` (no-source) |
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 105 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 106 records in the Data gaps panel: `chicago-amenity-phones`.

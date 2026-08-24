@@ -8867,6 +8867,9 @@ function initChiExplorer() {
   var loadShelbyBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/shelby-county-board-districts.json", {}, 2);
   });
+  var loadShelbyPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/shelby-precincts.json", {}, 2);
+  });
   var loadShelbyBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/shelby-county-board-members.json", {}, 2);
   });
@@ -9762,6 +9765,9 @@ function initChiExplorer() {
   var loadWarrenBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/warren-county-board-districts.json", {}, 2);
   });
+  var loadWarrenPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/warren-precincts.json", {}, 2);
+  });
   var loadWarrenBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/warren-county-board-members.json", {}, 2);
   });
@@ -9788,6 +9794,9 @@ function initChiExplorer() {
   }
   var loadHancockBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/hancock-county-board-districts.json", {}, 2);
+  });
+  var loadHancockPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/hancock-precincts.json", {}, 2);
   });
   var loadHancockBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/hancock-county-board-members.json", {}, 2);
@@ -18805,7 +18814,7 @@ function initChiExplorer() {
               seq: seq,
               district: district,
               precincts: findPropCI(props, ["precincts"]),
-              partialPrecincts: findPropCI(props, ["partialPrecincts"]),
+              partialPrecincts: findPropCI(props, ["partialprecincts"]),
               entry: district != null ? results[1][String(district)] : null
             };
           });
@@ -18882,7 +18891,7 @@ function initChiExplorer() {
               seq: seq,
               district: district,
               precincts: findPropCI(props, ["precincts"]),
-              partialPrecincts: findPropCI(props, ["partialPrecincts"]),
+              partialPrecincts: findPropCI(props, ["partialprecincts"]),
               entry: district != null ? results[1][String(district)] : null
             };
           });
@@ -24237,6 +24246,164 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Jackson County Clerk — Voting & Elections (official)", url: "https://jacksoncounty-il.gov/340/Voting-Elections" };
+        }
+      },
+      // Shelby County — 33 precincts, the Census 2020 voting districts, which
+      // carry the county's adopted board-district map's own 33 precinct names
+      // 33/33 and sum to its exact 2020 population. That agreement is what makes
+      // the district dissolve legitimate, so the precincts were buildable from
+      // the day the districts shipped; the absence simply had no gap record.
+      // SHELBYVILLE 5 CARRIES THREE DISTRICTS. It wraps around the city of
+      // Shelbyville and the adopted plan divides it between 8, 9 and 10 along
+      // two landmarks the county names — but a PRECINCT is not divided, so it
+      // ships whole and says which three it spans rather than picking the
+      // largest piece. NO POLLING PLACE: a polling place is a roster fact.
+      {
+        key: "shelby",
+        coverage: shelbyCountyCoverage,
+        loadGeometry: loadShelbyPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadShelbyPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              boardDistricts: findPropCI(props, ["districts"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          var many = result.boardDistricts;
+          if (many && many.length) {
+            // Listed with commas and a final "and" so three reads as three.
+            var joined = many.length > 1
+              ? many.slice(0, -1).join(", ") + " and " + many[many.length - 1]
+              : String(many[0]);
+            fields.push({
+              label: "County Board District",
+              value: "This precinct is split between Districts " + joined +
+                " — the county's adopted plan divides it, so your precinct " +
+                "alone doesn't say which one you're in."
+            });
+          } else if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Shelby County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Shelby County Board (official)", url: "https://www.shelbycounty-il.gov/coboard.aspx" };
+        }
+      },
+      // Warren County — the county's own 26 precincts, named exactly as its
+      // precinct-map legend prints them. Census 2020 drew 28 voting districts
+      // here, so TWO are merged back to the county's fabric (Roseville 1 and 2
+      // into Roseville; Spring Grove-Alexis and -Gerlaw into Spring Grove) and
+      // each merged feature names the census units it is built from. Both merges
+      // sit wholly inside one district, which is the same fact that lets the
+      // districts be dissolved from census geometry at all. Nothing new was
+      // sourced; the absence simply had no gap record. NO POLLING PLACE.
+      {
+        key: "warren",
+        coverage: warrenCountyCoverage,
+        loadGeometry: loadWarrenPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadWarrenPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"]),
+              censusUnits: findPropCI(props, ["censusunits"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          if (result.censusUnits && result.censusUnits.length) {
+            fields.push({
+              label: "In census products",
+              value: "Drawn as " + result.censusUnits.join(" and ") +
+                " — the county runs them as one precinct."
+            });
+          }
+          fields.push({ label: "County", value: "Warren County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Warren County Board (official)", url: "https://www.warrencountyil.gov/county-board" };
+        }
+      },
+      // Hancock County — 33 precincts, the Census 2020 voting districts, which
+      // ARE the county's own fabric by measurement: they carry its 33 precinct
+      // names 33/33 as its certified results database prints them, and their
+      // POP100 sums to its exact 2020 population. Nothing new was sourced for
+      // this — the composition that draws the board districts already said which
+      // district each precinct belongs to, and the absence simply had no gap
+      // record explaining it (the Cass/Greene/Scott/Moultrie shape). THE
+      // COUNTY'S SPELLING SHIPS: thirteen census names differ, one of them a
+      // census TYPO (MONTIBELLO IV for Montebello 4), and the census's own name
+      // rides the feature rather than being corrected away silently. NO POLLING
+      // PLACE: a polling place is a roster fact.
+      {
+        key: "hancock",
+        coverage: hancockCountyCoverage,
+        loadGeometry: loadHancockPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadHancockPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Hancock County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Hancock County Clerk — election results (official)", url: "https://electionstats.hancockcounty-il.gov/" };
         }
       },
       // Douglas County — 17 precincts, the Census 2020 voting districts, whose

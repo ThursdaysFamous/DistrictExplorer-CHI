@@ -82,6 +82,7 @@ from build_metro_outline import (  # noqa: E402  (shared machinery — do not fo
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "data", "app", "shelby-county-board-districts.json")
+OUT_PRECINCTS = os.path.join(REPO_ROOT, "data", "app", "shelby-precincts.json")
 
 COBOARD_URL = "https://www.shelbycounty-il.gov/coboard.aspx"
 MAP_SOURCE = ("ShelbyCoIL_CountyBoardDistricts.pdf — the county's adopted 2021 plan "
@@ -612,6 +613,70 @@ def main():
         },
         "features": features,
     }
+    # ---- the precincts themselves -----------------------------------------
+    # Shelby's 33 precincts ARE the Census 2020 voting districts: the adopted
+    # map names all 33 and the layer carries them 33/33, which is what makes the
+    # dissolve above legitimate in the first place. Nothing new is sourced here;
+    # this absence simply had no gap record explaining it.
+    #
+    # SHELBYVILLE 5 SHIPS WHOLE AND CARRIES THREE DISTRICTS. The district
+    # geometry above cuts it into three pieces along the two landmarks the
+    # county names, but a PRECINCT is not cut — a voter in Shelbyville 5 is in
+    # Shelbyville 5. Ships with the list of districts it spans, so the card says
+    # which three it could be rather than picking the largest piece.
+    whole_district = {}
+    for district, names in COMPOSITION.items():
+        for member in names:
+            if not isinstance(member, tuple):
+                whole_district[norm(member)] = district
+    s5_districts = sorted((d for d, names in COMPOSITION.items()
+                           if any(isinstance(m, tuple) for m in names)), key=int)
+    if len(s5_districts) != len(PIECE_POP):
+        fail("%s is cut across %d districts, expected %d"
+             % (S5, len(s5_districts), len(PIECE_POP)))
+
+    precinct_features = []
+    for key in sorted(by_name):
+        props = {"name": title_case(key), "pop2020": pop_of[key]}
+        if key == S5:
+            props["districts"] = s5_districts
+        else:
+            props["district"] = whole_district[key]
+        precinct_features.append({"type": "Feature", "properties": props,
+                                  "geometry": round_geom(by_name[key])})
+    if len(precinct_features) != EXPECT_PRECINCTS:
+        fail("built %d precincts, expected %d"
+             % (len(precinct_features), EXPECT_PRECINCTS))
+    if sum(f["properties"]["pop2020"] for f in precinct_features) != COUNTY_POP_2020:
+        fail("the built precincts do not sum to the county's %d people"
+             % COUNTY_POP_2020)
+
+    precincts_payload = {
+        "type": "FeatureCollection",
+        "properties": {
+            "source": payload["properties"].get("source"),
+            "boardUrl": payload["properties"].get("boardUrl"),
+            "mapUrl": payload["properties"].get("mapUrl"),
+            "note": ("Shelby County's 33 voting precincts are the Census 2020 "
+                     "voting districts, which carry the adopted County Board "
+                     "map's own 33 precinct names 33/33 and sum to the county's "
+                     "exact 2020 population of 20,990 — the same agreement that "
+                     "lets the districts be dissolved from this fabric. "
+                     "Thirty-two carry a single County Board district. "
+                     "SHELBYVILLE 5 CARRIES THREE: it wraps around the city of "
+                     "Shelbyville and the adopted plan divides it between "
+                     "Districts 8, 9 and 10 along two landmarks the county "
+                     "names. The precinct itself is not divided — it ships whole "
+                     "and says which three districts it spans, because there the "
+                     "precinct alone does not determine the district. No polling "
+                     "place ships: a polling place is a roster fact rather than "
+                     "geometry (the Calhoun rule)."),
+        },
+        "features": precinct_features,
+    }
+    prec_body = json.dumps(precincts_payload, sort_keys=True,
+                           separators=(",", ":")) + "\n"
+
     body = json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n"
 
     print("shelby-board: 11 districts dissolved from 33 precincts; "
@@ -626,18 +691,27 @@ def main():
           "rounded overlap %.2f m2; %.4f%% vs the coverage outline; dam-reach "
           "bridge %.2f km" % (symdiff_m2, worst, outline_pct, bridge_km))
 
+    print("  precincts: %d shipped — 32 carrying one district, %s carrying the "
+          "three it spans (%s)"
+          % (len(precinct_features), title_case(S5), ", ".join(s5_districts)))
+
+    outputs = [(OUT_PATH, body), (OUT_PRECINCTS, prec_body)]
     if args.check:
-        if not os.path.exists(OUT_PATH):
-            fail("%s does not exist" % OUT_PATH)
-        with open(OUT_PATH, encoding="utf-8") as f:
-            if f.read() != body:
-                fail("%s differs from a fresh build" % OUT_PATH)
+        for path, want in outputs:
+            if not os.path.exists(path):
+                fail("%s does not exist" % path)
+            with open(path, encoding="utf-8") as f:
+                if f.read() != want:
+                    fail("%s differs from a fresh build" % path)
         print("  --check OK — matches a fresh build")
         return
-    with open(OUT_PATH, "w", encoding="utf-8") as f:
-        f.write(body)
-    print("  wrote %s (%s bytes)"
-          % (os.path.relpath(OUT_PATH, REPO_ROOT), "{:,}".format(len(body))))
+    for path, want in outputs:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(want)
+    print("  wrote %s"
+          % ", ".join("%s (%s bytes)"
+                      % (os.path.relpath(path, REPO_ROOT), "{:,}".format(len(want)))
+                      for path, want in outputs))
 
 
 if __name__ == "__main__":
