@@ -87,23 +87,10 @@
   ]
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "@id": "https://districtry.com/ny/#faq",
-  "isPartOf": { "@id": "https://districtry.com/ny/#website" },
-  "mainEntity": [
-    { "@type": "Question", "name": "What district am I in?", "acceptedAnswer": { "@type": "Answer", "text": "Enter your address or ZIP code in the search box, or click your location on the map above, and the tool lists every district that contains that exact point — your City Council district, community district and board, NYPD precinct, school district, New York State Senate and Assembly districts, U.S. House district, and more — along with who represents you in each one." } },
-    { "@type": "Question", "name": "How do I find out what City Council district I'm in?", "acceptedAnswer": { "@type": "Answer", "text": "Search your address or click your location on the map above. The tool shows your New York City Council district and who represents it, along with every other civic district that covers that exact point." } },
-    { "@type": "Question", "name": "How many City Council districts does New York City have?", "acceptedAnswer": { "@type": "Answer", "text": "New York City has 51 City Council districts, each represented by a Council Member." } },
-    { "@type": "Question", "name": "What NYPD precinct am I in?", "acceptedAnswer": { "@type": "Answer", "text": "New York City is divided into 78 NYPD precincts, each split into smaller sectors. Select any address above to see the precinct that covers it, plus the nearest police station." } },
-    { "@type": "Question", "name": "What is a community district or community board?", "acceptedAnswer": { "@type": "Answer", "text": "New York City has 59 community districts, each served by a community board that advises on land use, the city budget, and local services. The tool shows which community district contains any point you pick." } },
-    { "@type": "Question", "name": "Who represents me in Albany and in Congress?", "acceptedAnswer": { "@type": "Answer", "text": "Pick a location to see your U.S. House district, New York State Senate district, and New York State Assembly district, along with the people currently holding those seats." } },
-    { "@type": "Question", "name": "Is this an official government tool?", "acceptedAnswer": { "@type": "Answer", "text": "No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official." } }
-  ]
-}
-</script>
+<!-- The FAQPage structured data moved to faq.html WITH its questions. FAQ
+     markup must describe content the page actually shows, so leaving it
+     here once the section left would be a schema violation rather than a
+     leftover. -->
 <link rel="manifest" href="manifest.webmanifest">
 <!-- ==== GENERATED:BEGIN head-theme ==== -->
 <meta name="theme-color" content="#6d3fd1">
@@ -3718,40 +3705,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <div class="flag-stripe" aria-hidden="true"></div>
 
-<section class="faq-section" aria-labelledby="faq-heading">
-  <h2 id="faq-heading">Common questions about New York City districts</h2>
-  <details>
-    <summary>What district am I in?</summary>
-    <p>Enter your address or ZIP code in the search box, or click your location on the map above,
-      and the tool lists every district that contains that exact point — your City Council district,
-      community district and board, NYPD precinct, school district, New York State Senate and
-      Assembly districts, U.S. House district, and more — along with who represents you in each one.</p>
-  </details>
-  <details>
-    <summary>How do I find out what City Council district I'm in?</summary>
-    <p>Search your address or click your location on the map above. The tool shows your New York City Council district and who represents it, along with every other civic district that covers that exact point.</p>
-  </details>
-  <details>
-    <summary>How many City Council districts does New York City have?</summary>
-    <p>New York City has 51 City Council districts, each represented by a Council Member.</p>
-  </details>
-  <details>
-    <summary>What NYPD precinct am I in?</summary>
-    <p>New York City is divided into 78 NYPD precincts, each split into smaller sectors. Select any address above to see the precinct that covers it, plus the nearest police station.</p>
-  </details>
-  <details>
-    <summary>What is a community district or community board?</summary>
-    <p>New York City has 59 community districts, each served by a community board that advises on land use, the city budget, and local services. The tool shows which community district contains any point you pick.</p>
-  </details>
-  <details>
-    <summary>Who represents me in Albany and in Congress?</summary>
-    <p>Pick a location to see your U.S. House district, New York State Senate district, and New York State Assembly district, along with the people currently holding those seats.</p>
-  </details>
-  <details>
-    <summary>Is this an official government tool?</summary>
-    <p>No. It draws on public data sources that disclaim legal precision, so always confirm district assignments and officeholders with the relevant government office before relying on them for anything official.</p>
-  </details>
-</section>
+<!-- The common-questions section is now faq.html, linked from the masthead.
+     One copy, not two: the same nine answers on two URLs would be duplicate
+     content competing with itself. -->
 
 <div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
