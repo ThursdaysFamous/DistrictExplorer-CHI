@@ -183,6 +183,7 @@ const GEOMETRY_URLS = [
   "./data/app/mercer-county-board-districts.json",
   "./data/app/mercer-county-outline.json",
   "./data/app/mercer-precincts.json",
+  "./data/app/il-state-outline.json",
   "./data/app/metro-outline.json",
   "./data/app/monroe-county-outline.json",
   "./data/app/montgomery-county-board-districts.json",

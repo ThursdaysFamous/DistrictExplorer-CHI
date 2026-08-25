@@ -63,9 +63,31 @@ hole renders identically and answers False to every containment test inside it.
 it AND Macon/Montgomery — shipped as the 49th dispatched county; Edwards keeps
 the file a MultiPolygon, exercising the same nesting.)
 
+THE SECOND OUTPUT IS THE STATE RING (data/app/il-state-outline.json). The wash
+is three zones, not two: inside the served counties everything answers, OUTSIDE
+ILLINOIS nothing does, and in between — unserved Illinois — the statewide layers
+(county, township, municipality, school district, ZIP) still answer. Telling
+those two apart needs Illinois' own boundary, and the coverage key on the map
+names all three, so the key is only honest if the ring it describes is drawn.
+
+WHY IT IS PRE-BUILT RATHER THAN FETCHED. The rebrand preview queried TIGERweb
+for the state at boot. Measured, that answer is 332 KB over 19,789 vertices —
+four times the 83 KB school-board fetch this very builder exists to have removed
+from the critical chain for this very wash. Pre-dissolved and simplified it is
+an order of magnitude smaller, and it is the same service, the same session and
+the same simplifier as the county half.
+
+SAME TOLERANCE AS THE COUNTY DISSOLVE, DELIBERATELY. Where a served county
+fronts the state line — Jo Daviess, Rock Island and Mercer on the Mississippi,
+Massac, Pulaski and Hardin on the Ohio — the two rings trace the SAME river, and
+the violet band between them should be nothing at all there. Simplified at
+different tolerances the two would diverge by their difference and open slivers
+of "unserved Illinois" along the rivers; at equal tolerance they diverge by at
+most a tolerance and the band stays shut.
+
 Usage:
-    python3 build_metro_outline.py                 # writes data/app/metro-outline.json
-    python3 build_metro_outline.py --check         # verify the shipped file, write nothing
+    python3 build_metro_outline.py                 # writes both outline files
+    python3 build_metro_outline.py --check         # verify the shipped files, write nothing
 """
 
 import argparse
@@ -78,6 +100,11 @@ import requests
 
 TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
+# Layer 0 of the SAME MapServer is states where layer 1 is counties, so the
+# state ring costs no new host, no new service and no new entry in
+# validate_sources.py's manifest — that MapServer is already on it.
+TIGERWEB_STATE = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+                  "State_County/MapServer/0/query")
 
 # ==== TEMPLATE:BEGIN outline-county-config ====
 # The counties the app serves: the original seven (Cook, DuPage, Will, Lake,
@@ -863,6 +890,7 @@ assert not _UNLISTED, (
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "metro-outline.json")
+STATE_OUT_PATH = os.path.join(REPO_ROOT, "il", "data", "app", "il-state-outline.json")
 WORKSHEET = os.path.join(REPO_ROOT, "metro-worksheet.json")
 
 HEADERS = {"User-Agent": "DistrictExplorer-CHI metro-outline builder"}
@@ -1427,6 +1455,28 @@ def fetch_counties():
     return feats
 
 
+def fetch_state():
+    """Illinois itself, from layer 0 of the same MapServer.
+
+    STATE_FIPS rather than STUSAB so the query keys on the same field the
+    county half already uses; one feature is expected and anything else means
+    the service moved."""
+    resp = requests.get(TIGERWEB_STATE, headers=HEADERS, timeout=REQUEST_TIMEOUT, params={
+        "where": "STATE='%s'" % STATE_FIPS,
+        "outFields": "NAME",
+        "returnGeometry": "true",
+        "outSR": "4326",
+        "f": "geojson",
+    })
+    resp.raise_for_status()
+    feats = (resp.json() or {}).get("features") or []
+    if len(feats) != 1:
+        print("FATAL: TIGERweb returned %d state features, expected 1 — the query "
+              "or the service changed" % len(feats), file=sys.stderr)
+        sys.exit(1)
+    return feats[0]
+
+
 def rings_of(feature):
     geom = feature.get("geometry") or {}
     if geom.get("type") == "Polygon":
@@ -1553,6 +1603,104 @@ def validate(rings):
     return problems
 
 
+# Anchors for the STATE ring. The county anchors above already name 103 places
+# and every one of them is in Illinois, so the state ring is checked against
+# them rather than against a second hand-built list — INSIDE (served county
+# seats) and OUTSIDE (unserved Illinois county seats) must ALL fall inside it.
+# That is the check worth having: the 13 unserved seats are exactly the places
+# the middle zone exists for, so this asserts the violet "statewide layers
+# only" band actually covers them instead of merely existing.
+#
+# NON_ILLINOIS names the anchors above that are NOT in Illinois. Adding an
+# out-of-state anchor to OUTSIDE without naming it here FAILS this build rather
+# than passing quietly, which is the point: a new anchor has to be classified.
+NON_ILLINOIS = {"Milwaukee (WI)"}
+
+# And the other three sides, so the ring is bounded everywhere rather than only
+# to the north. Each is a real place across a different border of Illinois.
+STATE_OUTSIDE = {
+    "St. Louis (MO)": (38.6270, -90.1994),      # across the Mississippi, west
+    "Davenport (IA)": (41.5236, -90.5776),      # across the Mississippi, north-west
+    "Indianapolis (IN)": (39.7684, -86.1581),   # east
+    "Paducah (KY)": (37.0834, -88.6000),        # across the Ohio, south
+    "Milwaukee (WI)": (43.0389, -87.9065),      # north, shared with OUTSIDE above
+}
+
+
+_STALE_NON_IL = NON_ILLINOIS - set(OUTSIDE)
+assert not _STALE_NON_IL, (
+    "NON_ILLINOIS names %s, which OUTSIDE no longer carries — an exemption for an "
+    "anchor that is gone silently stops exempting anything, and the next "
+    "out-of-state anchor added to OUTSIDE would be asserted to be in Illinois"
+    % ", ".join(sorted(_STALE_NON_IL)))
+
+
+def containment_problems(coverage_rings, state_rings):
+    """The served counties are Illinois counties, so their outline cannot reach
+    outside the state ring — checked as ENVELOPES, not vertex by vertex.
+
+    Vertex-exact containment is the wrong test and would fail honestly: along
+    the Mississippi and the Ohio the two rings trace the SAME river and are
+    simplified independently, so coverage vertices legitimately land up to a
+    tolerance or two outside the state ring there. The envelope catches what is
+    actually worth catching — the two files swapped, or one of them rebuilt for
+    the wrong place — which would invert the wash rather than nudge it. The
+    slack is two simplifier tolerances, the most the shared borders can drift."""
+    slack = 2 * SIMPLIFY_TOLERANCE_M / 111320.0
+
+    def envelope(rings):
+        pts = [p for r in rings for p in r]
+        return (min(p[0] for p in pts), min(p[1] for p in pts),
+                max(p[0] for p in pts), max(p[1] for p in pts))
+
+    cw, cs, ce, cn = envelope(coverage_rings)
+    sw, ss, se, sn = envelope(state_rings)
+    problems = []
+    for label, cov, st, inside in (("west", cw, sw, True), ("south", cs, ss, True),
+                                   ("east", ce, se, False), ("north", cn, sn, False)):
+        past = (cov < st - slack) if inside else (cov > st + slack)
+        if past:
+            problems.append(
+                "the coverage outline reaches %.4f on the %s but the state ring "
+                "stops at %.4f — the served area cannot leave Illinois, so one of "
+                "the two files is for the wrong place" % (cov, label, st))
+    return problems
+
+
+def validate_state(rings):
+    problems = []
+    for label, (lat, lng) in sorted(INSIDE.items()):
+        if not point_in_rings(lat, lng, rings):
+            problems.append("%s is a served county seat and must be INSIDE the "
+                            "state ring" % label)
+    for label, (lat, lng) in sorted(OUTSIDE.items()):
+        if label in NON_ILLINOIS:
+            continue
+        if not point_in_rings(lat, lng, rings):
+            problems.append("%s is an unserved ILLINOIS county seat and must be "
+                            "INSIDE the state ring — the middle zone of the wash "
+                            "exists for exactly these places" % label)
+    for label, (lat, lng) in sorted(STATE_OUTSIDE.items()):
+        if point_in_rings(lat, lng, rings):
+            problems.append("%s is not in Illinois and must be OUTSIDE the state "
+                            "ring" % label)
+    return problems
+
+
+def build_state_geojson(rings):
+    polys = group_rings(rings)
+    geometry = ({"type": "Polygon", "coordinates": polys[0]} if len(polys) == 1
+                else {"type": "MultiPolygon", "coordinates": polys})
+    return {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "properties": {"name": "Illinois"},
+            "geometry": geometry,
+        }],
+    }
+
+
 def group_rings(rings):
     """Nest each ring under the ring that encloses it — outers, then their holes.
 
@@ -1641,8 +1789,9 @@ def build_geojson(rings):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--out", default=OUT_PATH)
+    ap.add_argument("--state-out", default=STATE_OUT_PATH)
     ap.add_argument("--check", action="store_true",
-                    help="validate the shipped file instead of rebuilding")
+                    help="validate the shipped files instead of rebuilding")
     args = ap.parse_args()
 
     if args.check:
@@ -1652,6 +1801,16 @@ def main():
         # reads the file the same way whether or not the served area is one region.
         rings = rings_of(shipped["features"][0])
         problems = validate(rings) + check_envelopes(rings)
+
+        with open(args.state_out) as f:
+            shipped_state = json.load(f)
+        state_rings = rings_of(shipped_state["features"][0])
+        problems += validate_state(state_rings)
+        # The served area is Illinois counties, so it cannot leave Illinois.
+        # Checked on the SHIPPED pair rather than on fresh geometry: it is the
+        # two files that have to agree, and they are simplified separately.
+        problems += containment_problems(rings, state_rings)
+
         for p in problems:
             print("FAIL: %s" % p, file=sys.stderr)
         if problems:
@@ -1659,10 +1818,20 @@ def main():
         print("metro-outline: OK — %d ring(s), %d vertices, all %d inside / %d outside "
               "anchors correct" % (len(rings), sum(len(r) for r in rings),
                                    len(INSIDE), len(OUTSIDE)), file=sys.stderr)
+        print("il-state-outline: OK — %d ring(s), %d vertices, all %d Illinois "
+              "anchors inside / %d out-of-state anchors outside"
+              % (len(state_rings), sum(len(r) for r in state_rings),
+                 len(INSIDE) + len(OUTSIDE) - len(NON_ILLINOIS), len(STATE_OUTSIDE)),
+              file=sys.stderr)
         return
 
     rings = [simplify(r) for r in dissolve(fetch_counties())]
-    problems = validate(rings) + check_envelopes(rings)
+    # Same simplifier and the same tolerance as the counties — see the module
+    # docstring: the two rings share the river borders and must not drift apart.
+    state_rings = [simplify(r) for r in rings_of(fetch_state())]
+
+    problems = (validate(rings) + check_envelopes(rings) + validate_state(state_rings)
+                + containment_problems(rings, state_rings))
     for p in problems:
         print("FATAL: %s" % p, file=sys.stderr)
     if problems:
@@ -1676,6 +1845,15 @@ def main():
     size = os.path.getsize(args.out)
     print("wrote %s: %d ring(s), %d vertices, %.1f KB"
           % (args.out, len(rings), sum(len(r) for r in rings), size / 1024.0),
+          file=sys.stderr)
+
+    with open(args.state_out, "w") as f:
+        json.dump(build_state_geojson(state_rings), f, separators=(",", ":"))
+        f.write("\n")
+    state_size = os.path.getsize(args.state_out)
+    print("wrote %s: %d ring(s), %d vertices, %.1f KB"
+          % (args.state_out, len(state_rings),
+             sum(len(r) for r in state_rings), state_size / 1024.0),
           file=sys.stderr)
 
 

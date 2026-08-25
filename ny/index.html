@@ -2772,6 +2772,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
   .districtry-panel-foot p { margin: 0 0 6px; }
   .districtry-panel-foot .footer-meta { font-size: 11px; color: var(--slate-soft); margin: 0 0 6px; }
+  /* The verified date is a <strong>, and .footer-meta strong is a PRE-REBRAND
+     rule that paints it #fff for the old dark page footer. The skin moved that
+     block into the light results panel and restyled .footer-meta without
+     following it down to the strong, so the one fact the line exists to state
+     has been rendering white on white in the default theme — present in the
+     DOM, read out by a screen reader, and invisible to everyone else. Dark
+     mode hid the bug by making the old colour the right one. */
+  .districtry-panel-foot .footer-meta strong { color: var(--ink); }
   .dpf-links { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 8px; }
   .dpf-links a { color: var(--accent-deep); text-decoration: none; }
   .dpf-links a:hover { text-decoration: underline; }
@@ -2941,6 +2949,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-radius: 0;
     padding: 0;
     margin: 0;
+    /* Fill the bar, which is what makes the popover rule below mean what it
+       says. The popover is anchored to the CHIP (position:relative above), so
+       its left:0/right:0 resolve against whatever the chip is wide — and a
+       content-width chip is about 190px, so "clamped to the panel's width"
+       clamped it to the Share button and its coordinates instead, truncating
+       the permalink it exists to hand over. The counts keep their edge: with
+       the chip absorbing the free space there is none left for their
+       margin-left:auto to take, so they still sit hard right. */
+    flex: 1 1 auto;
+    min-width: 0;
   }
   .districtry-panel-head .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: var(--dst-brand-line); }
   /* The share popover opens UPWARD off the chip because the chip used to sit
@@ -3612,7 +3630,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="rel-legend" id="rel-legend" hidden aria-live="polite"></div>
       <button type="button" class="hover-toggle-btn" id="hover-toggle" aria-pressed="true"
         title="Hover explorer — show the districts under your cursor as you move the mouse">Hover: on</button>
-      <div class="selected-point-chip" id="point-chip" hidden></div>
     </div>
 
     <div class="map-tile-banner" id="tile-banner" role="status" aria-live="polite" hidden>
@@ -3622,6 +3639,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </section>
 
   <section class="results-col" id="results-col" aria-label="Civic profile results" aria-live="polite">
+    <!-- The results panel's header bar: the selected point and its Share
+         control on the left, the layer count flush right. The chip used to
+         float at the map's bottom-left, stacked under the Hover toggle, which
+         put the one control that hands this view to somebody else on top of
+         the view it was handing over — and left the reader's own coordinates
+         competing with the map for the corner. Here it reads as what it is:
+         the heading of the answer, and the thing you press to share that
+         answer. .districtry-panel-head styles it, and the engine's share
+         popover opens DOWNWARD from this slot (it opens upward off the chip
+         everywhere else, which anchored at a panel top would have put the
+         card above the viewport). -->
+    <div class="districtry-panel-head">
+      <div class="selected-point-chip" id="point-chip" hidden></div>
+      <span class="districtry-stats" id="districtry-stats"></span>
+    </div>
     <div id="main-content" tabindex="-1"></div>
     <div id="empty-state" class="empty-state">
       <svg class="star-outline" viewBox="0 0 100 100" aria-hidden="true">
@@ -3774,6 +3806,13 @@ function initNycExplorer() {
   // Brand identity as worksheet data — never read from an ENGINE block
   // without a typeof guard (forks that have not opted in do not define it).
   var METRO_BRAND = { appName: "districtry New York City", productName: "districtry", instanceTag: "ny" };
+  // Names for the bands of the out-of-scope wash (ENGINE scope-mask builds
+  // the key from these). `region` is the MIDDLE band and is present only for
+  // an instance whose full coverage is a proper subset of a wider region its
+  // statewide layers still answer in; it also requires that instance's boot
+  // to hand drawOutOfScopeMask() the region geometry, because the key names
+  // only the bands that were actually drawn.
+  var COVERAGE_KEY = { outside: "Outside New York City" };
   /* Sibling District Explorer deployments — one canonical list shared by every
    * metro fork. When a new metro launches, add its entry to every fork's
    * worksheet and regenerate (Conversion 3 will source this list from the
@@ -4277,13 +4316,35 @@ function initNycExplorer() {
    * district overlay, highlight and marker stays on top, and pointer-events
    * stay off so clicks fall through to the map.
    *
-   * drawOutOfScopeMask(loadCoverageGeometry) is called once from BOOT (fork
-   * code): each metro passes an existing cached GeoJSON loader whose
-   * features tile the metro exactly, with shared edges topology-preserved —
-   * coincident coordinates are what lets the dissolve below cancel interior
-   * edges (the playbook's §4 offline anchors qualify). If the fetch fails
-   * the wash is skipped silently — it is a hint, not data, and the owning
-   * layer's own error/Retry surfaces the failure. */
+   * drawOutOfScopeMask(loadCoverageGeometry, loadRegionGeometry) is called
+   * once from BOOT (fork code): each metro passes an existing cached GeoJSON
+   * loader whose features tile the metro exactly, with shared edges
+   * topology-preserved — coincident coordinates are what lets the dissolve
+   * below cancel interior edges (the playbook's §4 offline anchors qualify).
+   * If the fetch fails the wash is skipped silently — it is a hint, not data,
+   * and the owning layer's own error/Retry surfaces the failure.
+   *
+   * THE WASH IS UP TO THREE BANDS, and which ones exist is a fact about the
+   * instance rather than a setting. Everywhere outside the coverage geometry
+   * is washed; an instance whose full coverage is a proper SUBSET of a wider
+   * region its statewide layers still answer in passes that region's geometry
+   * as the second argument, and the strip between the two is washed
+   * differently — "you still get something here" rather than "nothing here".
+   * Illinois is the only such instance today: its county layers cover 89
+   * counties while county/township/municipality/school-district/ZIP answer
+   * anywhere in the state. Wisconsin's coverage IS its state and San
+   * Francisco's and New York City's have no wider region in play, so all
+   * three pass one argument and get two bands.
+   *
+   * AND THE WASH GETS A KEY. It is the app's only claim about where it stops
+   * answering, and until the key shipped it made that claim in a colour with
+   * nothing to read it against. buildCoverageKey() below names the bands that
+   * were ACTUALLY PAINTED — never the ones an instance meant to paint — so a
+   * region ring that is declared but fails to load degrades to a two-band
+   * wash AND a two-band key together, instead of a key describing a strip
+   * that is not on the map. The words come from COVERAGE_KEY in the METRO
+   * config (read through a typeof guard: an instance that has not opted in
+   * draws the wash and builds no key, exactly as before the key existed). */
   var scopeMaskPane = map.createPane("scope-mask");
   scopeMaskPane.style.zIndex = "350"; // tile pane is 200, overlay pane 400
   scopeMaskPane.style.pointerEvents = "none";
@@ -4363,9 +4424,133 @@ function initNycExplorer() {
   // fail safe, never as "outside".
   var coverageMaskRings = null;
 
-  function drawOutOfScopeMask(loadCoverageGeometry) {
+  // The wash's own layers land on districtryCoverageLayers, which is declared
+  // with the theme controller that restyles them (ENGINE districtry-theme) —
+  // the skin darkens the out-of-coverage band on a dark ground where it greys
+  // it on a light one. Declared there rather than here because the controller
+  // is what reads it; this is where it gets filled.
+
+  // Convert a GeoJSON ring ([lng,lat] pairs) to Leaflet's [lat,lng].
+  function ringToLatLng(ring) {
+    var out = [];
+    for (var i = 0; i < ring.length; i++) out.push([ring[i][1], ring[i][0]]);
+    return out;
+  }
+
+  // The region's outer boundary as one Leaflet ring, or null. Only the LARGEST
+  // outer ring is taken: a region with offshore islands would otherwise draw a
+  // glow around each one, and the band is about where the region's answers
+  // stop, not about its coastline inventory.
+  function regionOuterRing(geo) {
+    var feats = (geo && geo.features) || [];
+    var biggest = null;
+    for (var f = 0; f < feats.length; f++) {
+      var geom = feats[f].geometry;
+      if (!geom) continue;
+      var polys = geom.type === "Polygon" ? [geom.coordinates]
+                : geom.type === "MultiPolygon" ? geom.coordinates : [];
+      for (var p = 0; p < polys.length; p++) {
+        var outer = polys[p][0];
+        if (outer && outer.length > 3 && (!biggest || outer.length > biggest.length)) {
+          biggest = outer;
+        }
+      }
+    }
+    return biggest ? ringToLatLng(biggest) : null;
+  }
+
+  /* ---------- the coverage key ----------
+   * A <details> rather than a <div>, and that is a layout decision rather
+   * than a stylistic one: on desktop it is open and reads as a legend card,
+   * but below 768px .map-bottom-left becomes a slim static strip under a
+   * short map, where an open key would be pinned to the screen for the whole
+   * page. Closed it is a ~32px chip and the bands survive one tap away.
+   *
+   * Built with textContent throughout — the labels are our own config rather
+   * than scraped text, but the app renders every string that way and a key is
+   * not the place to make an exception.
+   *
+   * `bands` is what the draw actually painted, in reading order from the
+   * inside out. Only the LAST one ("outside") is guaranteed. */
+  function buildCoverageKey(bands) {
+    var host = document.querySelector(".map-bottom-left");
+    if (!host || !bands.length || document.querySelector(".districtry-map-legend")) return;
+
+    var key = document.createElement("details");
+    key.className = "districtry-map-legend";
+
+    var summary = document.createElement("summary");
+    summary.className = "dml-kicker";
+    summary.appendChild(document.createTextNode("Coverage"));
+
+    // The collapsed chip: the same swatches with no words, so a closed key
+    // still says "this is about those colours on the map".
+    var mini = document.createElement("span");
+    mini.className = "dml-mini";
+    mini.setAttribute("aria-hidden", "true");
+    var items = document.createElement("div");
+    items.className = "dml-items";
+
+    for (var i = 0; i < bands.length; i++) {
+      var band = bands[i];
+      // A rule before the outside band, once there is something above it to
+      // separate: inside the region and beyond it are different claims.
+      if (band.rule) {
+        var rule = document.createElement("span");
+        rule.className = "dml-rule";
+        items.appendChild(rule);
+      }
+      var item = document.createElement("span");
+      item.className = "dml-item";
+      var sw = document.createElement("span");
+      sw.className = band.swatch;
+      item.appendChild(sw);
+      var label = document.createElement("span");
+      label.className = "dml-label";
+      label.textContent = band.label;
+      item.appendChild(label);
+      if (band.sub) {
+        var sub = document.createElement("span");
+        sub.className = "dml-sub";
+        sub.textContent = band.sub;
+        item.appendChild(sub);
+      }
+      items.appendChild(item);
+      var chip = document.createElement("span");
+      chip.className = band.swatch;
+      mini.appendChild(chip);
+    }
+
+    summary.appendChild(mini);
+    key.appendChild(summary);
+    key.appendChild(items);
+
+    /* Open on desktop, closed on a phone — the DEFAULT only. A click on the
+       summary is unambiguous intent and, unlike the `toggle` event, fires
+       only for the reader; once they have opened or put the key away the
+       viewport stops having an opinion, so crossing the breakpoint cannot
+       silently reopen it. */
+    var phone = window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
+    if (!phone) key.setAttribute("open", "");
+    summary.addEventListener("click", function () {
+      key.setAttribute("data-dst-user-set", "1");
+    });
+
+    // First in the bottom-left stack: the key explains the whole map, the
+    // controls below it act on one thing each.
+    host.insertBefore(key, host.firstChild);
+  }
+
+  function drawOutOfScopeMask(loadCoverageGeometry, loadRegionGeometry) {
     if (typeof loadCoverageGeometry !== "function") return;
-    loadCoverageGeometry().then(function (geo) {
+    // Optional in both senses — an instance may declare no region, and a
+    // declared one may fail to load. Either way this resolves null and the
+    // wash degrades to two bands rather than failing.
+    var regionP = typeof loadRegionGeometry === "function"
+      ? loadRegionGeometry().catch(function () { return null; })
+      : Promise.resolve(null);
+    Promise.all([loadCoverageGeometry(), regionP]).then(function (loaded) {
+      var geo = loaded[0], regionGeo = loaded[1];
       var feats = (geo && geo.features) || [];
       if (!feats.length) return;
       var outline = coverageOutlineRings(feats);
@@ -4385,19 +4570,67 @@ function initNycExplorer() {
       coverageMaskRings = outline;
       // Outer ring spans several world copies so panning far east/west at
       // low zoom never slips out from under the wash.
-      var rings = [[[-89, -720], [89, -720], [89, 720], [-89, 720]]];
-      for (var j = 0; j < outline.length; j++) {
-        var src = outline[j], hole = [];
-        for (var v = 0; v < src.length; v++) hole.push([src[v][1], src[v][0]]);
-        rings.push(hole);
+      var world = [[-89, -720], [89, -720], [89, 720], [-89, 720]];
+      var covLatLng = [];
+      for (var j = 0; j < outline.length; j++) covLatLng.push(ringToLatLng(outline[j]));
+
+      var region = regionOuterRing(regionGeo);
+      var c = districtryCoverageLayers;
+      var ck = typeof COVERAGE_KEY !== "undefined" ? COVERAGE_KEY : null;
+      var bands = [];
+
+      /* NOT ONE COLOUR IS NAMED HERE. Every band's fill and stroke comes from
+         styleDistrictryCoverage() below, which already owns both themes'
+         values and is the only thing that may change them on a toggle. Naming
+         the light ones here too would be two copies of one palette, and the
+         out-of-coverage band's opacity is not even a constant — it lifts when
+         there is no region ring to sit inside, which is a fact this function
+         has not finished establishing yet at the point the layers are made.
+         So they are built INVISIBLE (fillOpacity/opacity 0) and painted a few
+         statements later, in the same synchronous block, before a frame can
+         render. The widths and the blur class stay: those are geometry, and
+         the skin has no opinion about them. */
+      if (region) {
+        // Three bands. Leaflet fills even-odd, so each polygon's later rings
+        // read as holes: world minus the region is everything outside it, and
+        // the region minus the coverage rings is the strip between.
+        c.outMask = L.polygon([world, region], {
+          pane: "scope-mask", stroke: false, fillOpacity: 0, interactive: false
+        }).addTo(map);
+        c.pending = L.polygon([region].concat(covLatLng), {
+          pane: "scope-mask", stroke: false, fillOpacity: 0, interactive: false
+        }).addTo(map);
+        // The region edge itself, as a blurred wide line under a hairline —
+        // the glow says "this boundary means something" without the weight of
+        // a border the app does not own.
+        var closed = region.concat([region[0]]);
+        c.glow = L.polyline(closed, {
+          pane: "scope-mask", className: "dst-glow",
+          weight: 9, opacity: 0, interactive: false
+        }).addTo(map);
+        c.stateLine = L.polyline(closed, {
+          pane: "scope-mask", weight: 1.5, opacity: 0.9, interactive: false
+        }).addTo(map);
+        if (ck && ck.region) {
+          bands.push({ swatch: "dml-glow", label: ck.region.edge });
+          bands.push({ swatch: "dml-sw dml-pending", label: ck.region.label, sub: ck.region.sub });
+        }
+      } else {
+        c.outMask = L.polygon([world].concat(covLatLng), {
+          pane: "scope-mask", stroke: false, fillOpacity: 0, interactive: false
+        }).addTo(map);
+        // Read by styleDistrictryCoverage: with no region ring to sit inside,
+        // one band carries the whole claim and is drawn lighter for it.
+        c.fallbackMask = true;
       }
-      L.polygon(rings, {
-        pane: "scope-mask",
-        stroke: false,
-        fillColor: "#3E4C59",
-        fillOpacity: 0.18,
-        interactive: false
-      }).addTo(map);
+      if (ck) bands.push({ swatch: "dml-sw dml-out", label: ck.outside, rule: bands.length > 0 });
+
+      // Paints every band above, and does it HERE rather than at boot because
+      // the wash draws at IDLE: a dark-mode reader would otherwise watch it
+      // come up in its light-ground colours and keep them until the next
+      // toggle. Runs before the browser can paint the invisible versions.
+      styleDistrictryCoverage(districtryTheme() === "dark");
+      buildCoverageKey(bands);
     }).catch(function () { /* decorative — skip the wash, never surface an error */ });
   }
   /* ==== ENGINE:END scope-mask ==== */
@@ -4752,6 +4985,14 @@ function initNycExplorer() {
       btn.setAttribute("aria-expanded", "true");
       document.addEventListener("keydown", onKeydown, true);
       document.addEventListener("pointerdown", onOutside, true);
+      /* Anchored at the top of a scrolling results panel the card can open
+         below the fold — on a 390x844 phone it opens 295px tall against about
+         255px of room. `nearest` scrolls the least that makes it whole and
+         does nothing at all when it already fits, so the desktop case is
+         untouched. An engine that predates the options object coerces it to
+         truthy and aligns to the top of the scroll box, which is a worse
+         choice than `nearest` and still a correct one. */
+      try { popover.scrollIntoView({ block: "nearest" }); } catch (e) {}
       linkInput.focus();
       trackEvent("share-open");
     }
@@ -6316,6 +6557,7 @@ function initNycExplorer() {
       }
       if (checkbox.checked) trackEvent("layer/" + mod.id);
       onLayerToggled(mod);
+      syncPanelStats();
       syncUrlHash();
     });
 
@@ -6383,6 +6625,7 @@ function initNycExplorer() {
       section.appendChild(cardsWrap);
       root.appendChild(section);
     });
+    syncPanelStats(); // the panel head's count, now that there are toggles to count
   }
 
   // Show a layer's sub-selection toggles only while the parent layer is on;
@@ -6743,6 +6986,33 @@ function initNycExplorer() {
       }
       section.hidden = allHidden;
     });
+    syncPanelStats();
+  }
+
+  /* The results panel's header count, across from the Share button.
+   *
+   * BOTH numbers are relevance-aware, and the denominator is the reason this
+   * is not simply layers.length: outside a layer's coverage the app HIDES it
+   * outright — no toggle, no card, no overlay — so a reader in a county the
+   * local layers do not reach can see 21 toggles while the app registers 39.
+   * Telling them "2 of 39" would count 18 layers they have no way to turn on
+   * and read as a failure rather than as the honest edge of the data. The
+   * numerator is activeLayerCount(), which the opacity scaler already uses
+   * for the same reason: on-and-hidden is not on.
+   *
+   * Called from refreshGroupVisibility (every relevance change), from
+   * onLayerToggled (every tick) and once at the end of buildGroupsUI, which
+   * between them cover every way either number moves. No-ops in an instance
+   * whose panel head has no counts element. */
+  function syncPanelStats() {
+    var el = document.getElementById("districtry-stats");
+    if (!el) return;
+    var shown = layers.filter(function (l) {
+      var rt = layerRuntime[l.id];
+      return !l.subOf && (!rt || rt.relevant !== false);
+    }).length;
+    el.textContent = activeLayerCount() + " of " + shown +
+      (shown === 1 ? " layer on" : " layers on");
   }
 
   function setLayerRelevant(mod, relevant) {
@@ -10086,14 +10356,14 @@ function initNycExplorer() {
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4CA1FB", "#0B7285": "#49BED8", "#14181C": "#696F76",
     "#14532D": "#5AA872", "#155C4B": "#58AE96", "#1D3557": "#6689BA", "#1E7A8C": "#53C4DD",
-    "#1F6F5C": "#5ABEA3", "#2E7D5B": "#63C99B", "#3A0CA3": "#8178FE", "#3E4C59": "#879BAD",
-    "#4361EE": "#9BB4FD", "#457B9D": "#7AC1EF", "#4B2E83": "#9C79EF", "#4CA98F": "#70EAC8",
-    "#4E6E9C": "#89B4F3", "#5B2A86": "#B172F0", "#5FB49C": "#81F2D2", "#6A3FA0": "#B886FE",
-    "#6B4E8C": "#B992E7", "#6B7280": "#ADB6C9", "#7048E8": "#B0A7FE", "#7A0A1C": "#E8595F",
-    "#7A1E5C": "#E063B2", "#7A5901": "#CDA040", "#7C2D12": "#E27451", "#7CC49B": "#9EFDC7",
-    "#8A5A00": "#E09E3C", "#8C6A2E": "#DBAD5E", "#A15C00": "#F99B38", "#B3261E": "#FE8171",
-    "#B5179E": "#FE79E3", "#B8860B": "#FEC141", "#C2410C": "#FF9776", "#C8102E": "#FE8B89",
-    "#E4572E": "#FDB5A0", "#F72585": "#FDB1C7"};
+    "#1F6F5C": "#5ABEA3", "#2E7D5B": "#63C99B", "#3A0CA3": "#8178FE", "#4361EE": "#9BB4FD",
+    "#457B9D": "#7AC1EF", "#4B2E83": "#9C79EF", "#4CA98F": "#70EAC8", "#4E6E9C": "#89B4F3",
+    "#5B2A86": "#B172F0", "#5FB49C": "#81F2D2", "#6A3FA0": "#B886FE", "#6B4E8C": "#B992E7",
+    "#6B7280": "#ADB6C9", "#7048E8": "#B0A7FE", "#7A0A1C": "#E8595F", "#7A1E5C": "#E063B2",
+    "#7A5901": "#CDA040", "#7C2D12": "#E27451", "#7CC49B": "#9EFDC7", "#8A5A00": "#E09E3C",
+    "#8C6A2E": "#DBAD5E", "#A15C00": "#F99B38", "#B3261E": "#FE8171", "#B5179E": "#FE79E3",
+    "#B8860B": "#FEC141", "#C2410C": "#FF9776", "#C8102E": "#FE8B89", "#E4572E": "#FDB5A0",
+    "#F72585": "#FDB1C7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

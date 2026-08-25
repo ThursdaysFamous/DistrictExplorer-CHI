@@ -260,6 +260,14 @@
   }
   .districtry-panel-foot p { margin: 0 0 6px; }
   .districtry-panel-foot .footer-meta { font-size: 11px; color: var(--slate-soft); margin: 0 0 6px; }
+  /* The verified date is a <strong>, and .footer-meta strong is a PRE-REBRAND
+     rule that paints it #fff for the old dark page footer. The skin moved that
+     block into the light results panel and restyled .footer-meta without
+     following it down to the strong, so the one fact the line exists to state
+     has been rendering white on white in the default theme — present in the
+     DOM, read out by a screen reader, and invisible to everyone else. Dark
+     mode hid the bug by making the old colour the right one. */
+  .districtry-panel-foot .footer-meta strong { color: var(--ink); }
   .dpf-links { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 8px; }
   .dpf-links a { color: var(--accent-deep); text-decoration: none; }
   .dpf-links a:hover { text-decoration: underline; }
@@ -429,6 +437,16 @@
     border-radius: 0;
     padding: 0;
     margin: 0;
+    /* Fill the bar, which is what makes the popover rule below mean what it
+       says. The popover is anchored to the CHIP (position:relative above), so
+       its left:0/right:0 resolve against whatever the chip is wide — and a
+       content-width chip is about 190px, so "clamped to the panel's width"
+       clamped it to the Share button and its coordinates instead, truncating
+       the permalink it exists to hand over. The counts keep their edge: with
+       the chip absorbing the free space there is none left for their
+       margin-left:auto to take, so they still sit hard right. */
+    flex: 1 1 auto;
+    min-width: 0;
   }
   .districtry-panel-head .selected-point-chip .copy-link-btn { color: var(--accent-deep); border-color: var(--dst-brand-line); }
   /* The share popover opens UPWARD off the chip because the chip used to sit

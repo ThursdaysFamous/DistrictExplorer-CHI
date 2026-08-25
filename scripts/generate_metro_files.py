@@ -174,6 +174,30 @@ def render_metro_config(w):
         a("  // Brand identity as worksheet data — never read from an ENGINE block")
         a("  // without a typeof guard (forks that have not opted in do not define it).")
         a("  var METRO_BRAND = { %s };" % ", ".join(fields))
+    # The words on the coverage key. Same inertness rule as brand and
+    # poi_geocode_bbox above: emitted ONLY when the worksheet opts in, so an
+    # instance without the key sees a byte-identical region and simply draws the
+    # wash with no legend, exactly as before the key existed. The engine reads it
+    # through a typeof guard for that reason. The BANDS are engine and the same
+    # everywhere; what a reader calls them is not, and it is not derivable —
+    # Chicago's METRO_NAME is "Chicago" while its coverage is 89 Illinois
+    # counties, so a generated "Outside " + METRO_NAME would be plainly wrong.
+    if "coverage_key" in w:
+        ck = w["coverage_key"]
+        fields = ["outside: %s" % js_str(ck["outside"])]
+        if "region" in ck:
+            r = ck["region"]
+            rf = ["edge: %s" % js_str(r["edge"]), "label: %s" % js_str(r["label"])]
+            if "sub" in r:
+                rf.append("sub: %s" % js_str(r["sub"]))
+            fields.append("region: { %s }" % ", ".join(rf))
+        a("  // Names for the bands of the out-of-scope wash (ENGINE scope-mask builds")
+        a("  // the key from these). `region` is the MIDDLE band and is present only for")
+        a("  // an instance whose full coverage is a proper subset of a wider region its")
+        a("  // statewide layers still answer in; it also requires that instance's boot")
+        a("  // to hand drawOutOfScopeMask() the region geometry, because the key names")
+        a("  // only the bands that were actually drawn.")
+        a("  var COVERAGE_KEY = { %s };" % ", ".join(fields))
     a("  /* Sibling District Explorer deployments — one canonical list shared by every")
     a("   * metro fork. When a new metro launches, add its entry to every fork's")
     a("   * worksheet and regenerate (Conversion 3 will source this list from the")

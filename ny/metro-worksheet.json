@@ -623,6 +623,9 @@
     { "layer": "municipal-court", "expected": "1" }
   ],
   "negative_point": { "lat": 40.72, "lng": -74.04, "note": "Hudson River, New Jersey waters — outside every anchor geometry (the East River is inside the county-derived judicial districts, so mid-river points there are only borough-negative)" },
+  "coverage_key": {
+    "outside": "Outside New York City"
+  },
   "data_files": {
     "geometry": [
       { "file": "borough-boundaries.json", "min_features": 5, "max_features": 5 },

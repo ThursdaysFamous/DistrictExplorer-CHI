@@ -287,6 +287,14 @@
       btn.setAttribute("aria-expanded", "true");
       document.addEventListener("keydown", onKeydown, true);
       document.addEventListener("pointerdown", onOutside, true);
+      /* Anchored at the top of a scrolling results panel the card can open
+         below the fold — on a 390x844 phone it opens 295px tall against about
+         255px of room. `nearest` scrolls the least that makes it whole and
+         does nothing at all when it already fits, so the desktop case is
+         untouched. An engine that predates the options object coerces it to
+         truthy and aligns to the top of the scroll box, which is a worse
+         choice than `nearest` and still a correct one. */
+      try { popover.scrollIntoView({ block: "nearest" }); } catch (e) {}
       linkInput.focus();
       trackEvent("share-open");
     }

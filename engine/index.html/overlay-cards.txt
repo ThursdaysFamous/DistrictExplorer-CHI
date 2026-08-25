@@ -197,6 +197,7 @@
       }
       if (checkbox.checked) trackEvent("layer/" + mod.id);
       onLayerToggled(mod);
+      syncPanelStats();
       syncUrlHash();
     });
 
@@ -264,6 +265,7 @@
       section.appendChild(cardsWrap);
       root.appendChild(section);
     });
+    syncPanelStats(); // the panel head's count, now that there are toggles to count
   }
 
   // Show a layer's sub-selection toggles only while the parent layer is on;
@@ -624,6 +626,33 @@
       }
       section.hidden = allHidden;
     });
+    syncPanelStats();
+  }
+
+  /* The results panel's header count, across from the Share button.
+   *
+   * BOTH numbers are relevance-aware, and the denominator is the reason this
+   * is not simply layers.length: outside a layer's coverage the app HIDES it
+   * outright — no toggle, no card, no overlay — so a reader in a county the
+   * local layers do not reach can see 21 toggles while the app registers 39.
+   * Telling them "2 of 39" would count 18 layers they have no way to turn on
+   * and read as a failure rather than as the honest edge of the data. The
+   * numerator is activeLayerCount(), which the opacity scaler already uses
+   * for the same reason: on-and-hidden is not on.
+   *
+   * Called from refreshGroupVisibility (every relevance change), from
+   * onLayerToggled (every tick) and once at the end of buildGroupsUI, which
+   * between them cover every way either number moves. No-ops in an instance
+   * whose panel head has no counts element. */
+  function syncPanelStats() {
+    var el = document.getElementById("districtry-stats");
+    if (!el) return;
+    var shown = layers.filter(function (l) {
+      var rt = layerRuntime[l.id];
+      return !l.subOf && (!rt || rt.relevant !== false);
+    }).length;
+    el.textContent = activeLayerCount() + " of " + shown +
+      (shown === 1 ? " layer on" : " layers on");
   }
 
   function setLayerRelevant(mod, relevant) {
