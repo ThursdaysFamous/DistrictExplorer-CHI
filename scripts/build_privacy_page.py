@@ -55,7 +55,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # a failure in any of the three therefore surfaces under `build-landing-page:`,
 # which is the module that owns those files rather than a mislabelled error.
 from build_landing_page import (  # noqa: E402
-    FAVICON, FONTFACE, MANIFEST, TOKENS,
+    FALLBACK_FACE, FAVICON, FONTFACE, MANIFEST, TOKENS,
     load_mark, parse_token_block, read, token_css,
 )
 
@@ -67,18 +67,23 @@ CONTACT = "adam@overberg.co"
 REPO_URL = "https://github.com/ThursdaysFamous/districtry"
 
 LIGHT_TOKENS = [
-    "brand-600", "brand-700", "brand-tint", "brand-border",
+    "brand-600", "brand-700", "brand-warm", "brand-tint", "brand-border",
     "paper", "surface", "surface-2", "ink", "ink-2", "ink-3", "muted", "faint",
     "border", "border-soft",
     "font-heading", "font-heading-weight", "font-body",
     "radius-card", "shadow-card",
 ]
 DARK_TOKENS = [
-    "brand-tint", "brand-chip", "brand-border",
+    "brand-700", "brand-warm", "brand-tint", "brand-chip", "brand-border",
     "paper", "surface", "surface-2", "ink", "ink-2", "ink-3", "muted", "faint",
     "border", "border-soft", "shadow-card",
 ]
-DARK_EXTRA = {"brand-600": "brand", "brand-700": "brand"}
+# --brand-700 and --brand-warm now EXIST in the token file's dark tier, so the
+# dark block takes them by name. They used to be aliased to --brand here, which
+# is how this page came to serve #a78bfa where the app serves #c4b0ff for the
+# same role on the same brand — the alias was a stand-in for a missing token and
+# outlived it.
+DARK_EXTRA = {"brand-600": "brand"}
 
 # The front door is measured too, and its row is not filler: it is the only
 # surface here that contacts nobody and stores nothing, which is a fact a reader
@@ -879,7 +884,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
         "site": SITE,
         "brand": light["brand-600"].strip(),
         "favicon": esc(favicon_uri),
-        "fontface": fontface,
+        "fontface": fontface + "\n" + FALLBACK_FACE,
         "light": token_css(LIGHT_TOKENS, light, ":root"),
         "dark": token_css(DARK_TOKENS, dark, '[data-theme="dark"]', DARK_EXTRA,
                           indent="    "),

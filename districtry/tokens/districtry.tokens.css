@@ -18,6 +18,14 @@
   --brand-tint: #efe9fc;      /* pills, checked-tint */
   --brand-chip: #e7defa;      /* role chips */
   --brand-border: #d4c4f4;    /* outlined buttons */
+  /* The mark's magenta polygon, promoted from a per-consumer literal to a
+     CHROME token. It was reachable only as --layer-muni, which is tier 3 —
+     map data — and this tier's own rule is that brand violet never paints map
+     data, so borrowing in the other direction was the same mistake mirrored.
+     A distinct second hue is REQUIRED, not preferred: the app paints four
+     group dots and violet in two slots would make two of them identical. */
+  --brand-warm: #b0316e;      /* focus ring, Public Safety dot, disclaimer rule */
+  --brand-warm-deep: #8f2659;
 
   /* — tier 2: chrome (neutral paper + inks) — */
   --paper: #f4f2ee;           /* app ground */
@@ -49,9 +57,15 @@
   --layer-special: #5c6bc0;
 
   /* — type (Industry) — */
-  --font-heading: "Barlow Condensed", system-ui, sans-serif;
+  /* The stacks the app actually ships, not a tidier version of them. 'Barlow
+     Fallback' is a real face — local('Arial') with ascent/descent/size
+     overrides — that holds the metrics while the webfont loads, and it was in
+     the apps and in none of the other eleven surfaces. A design system that
+     states a thinner stack than the product uses is not the source of truth
+     for type; it is a second opinion. */
+  --font-heading: 'Barlow Condensed', sans-serif;
   --font-heading-weight: 600;
-  --font-body: "Barlow", system-ui, sans-serif;
+  --font-body: 'Barlow', 'Barlow Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* — spacing (Industry) — */
   --space-1: 3.4px;
@@ -68,6 +82,14 @@
 
 [data-theme="dark"] {
   --brand: #a78bfa;
+  /* Both of these were MISSING, and every consumer invented its own answer:
+     the app lifted --brand-700 to #c4b0ff and the warm hue to #e879b9 so they
+     read off a dark ground, while the root pages fell back to --brand and
+     shipped a different link colour on the same brand. A ramp that stops at
+     the light tier is not a source of truth, it is a suggestion. */
+  --brand-700: #c4b0ff;
+  --brand-warm: #e879b9;
+  --brand-warm-deep: #f0a5cd;
   --brand-tint: rgba(167, 139, 250, 0.16);
   --brand-chip: rgba(167, 139, 250, 0.22);
   --brand-border: rgba(167, 139, 250, 0.38);
