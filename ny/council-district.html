@@ -71,7 +71,6 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23ffffff'/%3E%3Crect width='21' height='64' fill='%2312305C'/%3E%3Crect x='43' width='21' height='64' fill='%23FF6319'/%3E%3C/svg%3E" />
 
 <style>
-.districtry-mark { width: 34px; height: 34px; flex: 0 0 auto; }
 /* Self-hosted subset of index.html's faces — only the weights this page uses
    (display 900, body 400/600), same files, same unicode-ranges. */
 @font-face {
@@ -123,9 +122,30 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Palette + type tokens: the same values index.html's :root carries. This page
-   is deliberately standalone — no shared stylesheet, no build step — so it
-   restates the tokens rather than importing them. */
+/* ==== ENGINE:BEGIN styles-subpage ==== */
+/* ============================================================================
+   THE SUB-PAGE SHELL — one copy, spliced into every page that is not the app.
+
+   WHY THIS FILE EXISTS. There were four diverged copies of this stylesheet
+   across thirteen files, and the divergence is what produced the defects it
+   fixes. The FAQ pages were carrying the PRIVACY page's island — .tldr,
+   table.flow, .nope, code.k, none of which a FAQ uses — and no <details> or
+   <summary> rules at all, so nine designed accordions rendered as raw browser
+   disclosure triangles. Meanwhile every header said, in a comment, that it was
+   "the same dark bookend index.html opens with". The app stopped opening with
+   one at the rebrand: its masthead is --panel, a surface that flips. The
+   sub-pages kept the pre-rebrand bar.
+
+   THE DARK-MODE BUG WAS ONE TOKEN USED FOR THE WRONG JOB. `background:
+   var(--ink)` reads as "the dark bookend" in light mode and is a coincidence:
+   --ink is the TEXT token, and in dark mode it flips to #ece9f4. Twelve of the
+   thirteen pages therefore served a near-white bar with #fff text on it —
+   measured at 1.20:1 against WCAG AA's 4.5:1, which is not "hard to read", it
+   is invisible. The footer measured 1.26:1. A surface is never a text token,
+   and the shell below has no `background: var(--ink)` anywhere.
+   ========================================================================== */
+
+/* ---- tokens: the same values index.html's :root carries ---- */
 :root {
   --accent: #6d3fd1;
   --accent-deep: #5730ab;
@@ -139,36 +159,54 @@
   --line-strong: #c9c5d4;
   --font-display: 'Barlow Condensed', sans-serif;
   --font-body: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --focus-ring: 3px solid var(--accent-warm);
+  /* The reading column. Full-bleed bars, constrained contents — the header,
+     the body and the footer all measure the same, so the page has one edge
+     rather than three. A page that carries a wide table (the layer matrix)
+     widens this for itself AFTER the fence; nothing else needs to. */
+  --shell: 820px;
+  --shell-pad: 24px;
 }
-/* Dark tier, from districtry/tokens/districtry.tokens.css. These pages are
-   reached FROM the app, which has a theme toggle — a reader who picked dark and
-   clicked "Common questions" should not be handed a white page. The boot script
-   in <head> sets data-theme before first paint from the same
+/* ---- dark tier, from districtry/tokens/districtry.tokens.css ----
+   These pages are reached FROM the app, which has a theme toggle. The boot
+   script in <head> sets data-theme before first paint from the same
    localStorage key the app writes, so the choice carries across pages. */
 :root[data-theme="dark"] {
   --accent: #a78bfa;
-  --accent-deep: #c4b5fd;
+  --accent-deep: #c4b0ff;
   --accent-warm: #fd88b8;
   --ink: #ece9f4;
   --slate: #b6b1c4;
-  --slate-soft: #9a94ab;
+  --slate-soft: #8f8a9e;
   --paper: #15131b;
   --panel: #201d29;
-  --line: rgba(236, 233, 244, 0.1);
-  --line-strong: rgba(236, 233, 244, 0.22);
+  --line: rgba(236, 233, 244, 0.12);
+  --line-strong: rgba(236, 233, 244, 0.24);
 }
 
 * { box-sizing: border-box; }
+
+/* Sticky footer. Without it a short page — the FAQ is nine collapsed rows —
+   ends its footer wherever the content happens to stop, leaving a few hundred
+   pixels of bare page beneath it on a desktop viewport (measured: 407px at
+   1728x1117). The footer is a bookend, so it belongs at the bottom. */
+html { min-height: 100%; }
 body {
   margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-text-size-adjust: 100%;
 }
+main { flex: 1 0 auto; }
+
 a { color: var(--accent-deep); }
 :focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
 
@@ -176,59 +214,78 @@ a { color: var(--accent-deep); }
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--ink);
+  background: var(--accent-deep);
   color: #fff;
   padding: 10px 16px;
   z-index: 1000;
-  border-radius: 0 0 6px 0;
+  border-radius: 0 0 8px 0;
 }
 .skip-link:focus { left: 0; }
 
-.flag-stripe {
-  height: 10px;
-  background: linear-gradient(
-    to bottom,
-    var(--accent) 0 30%,
-    #fff 30% 70%,
-    var(--accent) 70% 100%
-  );
+/* The Chicago flag stripe is retired brand. The app hides it; these pages went
+   on drawing it, recoloured, as a violet/white/violet band under every header.
+   Recoloured it means nothing — it is a city's flag or it is decoration. */
+.flag-stripe { display: none; }
+
+/* ---- the shared measure ----
+   main centers with its own PADDING rather than by giving its children
+   `margin-inline: auto`, because a child's margin is not safe ground: the very
+   next rule here is `main > section { margin: … }`, and a margin SHORTHAND
+   silently resets the inline margins the measure depends on. That is not
+   hypothetical — it is what the first draft of this file did, and it put the
+   text column at 0..820 while the header centered at 310..1130. Padding cannot
+   be clobbered by a component's margin, so the measure holds whatever a page
+   puts inside it. The two bar-inners have no component rules of their own and
+   keep the simpler form. */
+main {
+  padding-inline: max(var(--shell-pad), calc((100% - var(--shell)) / 2));
+}
+.masthead-inner,
+.footer-inner {
+  width: min(100% - (var(--shell-pad) * 2), var(--shell));
+  margin-inline: auto;
 }
 
-/* ---- masthead: the same dark bookend index.html opens with ---- */
+/* ---- masthead: what the app actually wears ----
+   --panel and --ink, the same pair index.html's masthead uses, so walking from
+   the map to a sub-page does not change the chrome. The accent rule under it is
+   the one flourish and it is a single token, legible in both tiers. */
 header.masthead {
-  background: var(--ink);
-  color: #fff;
-  padding: 18px 20px 22px;
+  background: var(--panel);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  box-shadow: inset 0 -3px 0 0 var(--accent);
+  padding: 20px 0 22px;
 }
 .masthead-inner {
-  max-width: 1100px;
-  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 10px 28px;
+  gap: 14px 28px;
 }
 h1.title { margin: 0; min-width: 0; }
-.title-row { display: flex; align-items: center; gap: 14px; }
-.masthead-star { width: 34px; height: 34px; flex: none; }
+.title-row { display: flex; align-items: center; gap: 13px; }
+.masthead-star { display: none; }   /* the Chicago star, same story as the stripe */
+.districtry-mark { width: 34px; height: 34px; flex: 0 0 auto; }
 .title-text {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(28px, 4vw, 40px);
-  letter-spacing: 0.01em;
-  line-height: 0.95;
+  font-size: clamp(27px, 3.4vw, 37px);
+  letter-spacing: 0.005em;
+  line-height: 1;
   text-transform: uppercase;
+  color: var(--ink);
 }
 h1.title small {
   display: block;
   font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 14px;
   text-transform: none;
   letter-spacing: 0;
-  color: #C9D4DB;
-  margin-top: 6px;
+  color: var(--slate);
+  margin-top: 7px;
 }
 .masthead-actions {
   display: flex;
@@ -237,68 +294,123 @@ h1.title small {
   justify-content: flex-end;
   gap: 8px;
   margin-left: auto;
-  padding-top: 5px;
 }
 .masthead-actions a {
   display: inline-flex;
   align-items: center;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
   line-height: 1;
-  letter-spacing: 0.005em;
   white-space: nowrap;
-  color: #C9D4DB;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(217,225,231,0.16);
-  border-radius: 10px;
-  padding: 9px 15px;
+  color: var(--slate);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 9px 16px;
   text-decoration: none;
-  transition: background .14s ease, border-color .14s ease, color .14s ease, transform .14s ease;
+  transition: color .14s ease, border-color .14s ease, background .14s ease;
 }
 .masthead-actions a:hover,
 .masthead-actions a:focus-visible {
-  color: #fff;
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(217,225,231,0.38);
-  transform: translateY(-1px);
+  color: var(--accent-deep);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
-.masthead-actions a:active { transform: translateY(0); }
+.masthead-actions a.is-primary {
+  color: #fff;
+  background: var(--accent-deep);
+  border-color: var(--accent-deep);
+}
+.masthead-actions a.is-primary:hover,
+.masthead-actions a.is-primary:focus-visible {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+/* The mark is three multiplied translucent polygons over a dark "d". Multiply
+   on a dark surface erases it, which is why the sub-page mark washed out in
+   dark mode while the app's did not — the app carries this treatment and these
+   pages never received it. */
+:root[data-theme="dark"] .districtry-mark g { mix-blend-mode: screen !important; }
+/* !important is load-bearing, not defensive: each <g> carries
+   style="mix-blend-mode:multiply" INLINE, and an inline style beats a
+   stylesheet rule. Without it the dark override silently loses and the
+   three polygons multiply themselves into the dark panel — the mark
+   renders as a bare white "d" on a smudge. The polygon FILLS need no
+   !important because those are presentation attributes, which CSS
+   outranks. The app carries the same !important for the same reason. */
+:root[data-theme="dark"] .districtry-mark g:nth-of-type(1) polygon { fill: #a78bfa; }
+:root[data-theme="dark"] .districtry-mark g:nth-of-type(2) polygon { fill: #6ea8ff; }
+:root[data-theme="dark"] .districtry-mark g:nth-of-type(3) polygon { fill: #e879b9; }
+:root[data-theme="dark"] .districtry-mark circle,
+:root[data-theme="dark"] .districtry-mark line { stroke: #ece9f4; }
+
 @media (prefers-reduced-motion: reduce) {
   .masthead-actions a { transition: none; }
-  .masthead-actions a:hover { transform: none; }
 }
-@media (max-width: 900px) {
-  header.masthead { padding: 12px 16px 14px; }
-  .masthead-star { width: 24px; height: 24px; }
-  .title-text { font-size: 22px; }
-  h1.title small { font-size: 12px; margin-top: 3px; }
-  .masthead-inner { gap: 10px; }
-  .masthead-actions {
-    justify-content: flex-start;
-    margin-left: 0;
-    padding-top: 2px;
-    width: 100%;
-    gap: 6px;
-  }
-  .masthead-actions a { font-size: 12px; padding: 8px 13px; border-radius: 9px; }
+@media (max-width: 700px) {
+  :root { --shell-pad: 18px; }
+  header.masthead { padding: 15px 0 16px; }
+  .districtry-mark { width: 27px; height: 27px; }
+  .title-text { font-size: 23px; }
+  h1.title small { font-size: 13px; margin-top: 4px; }
+  .masthead-actions { justify-content: flex-start; margin-left: 0; width: 100%; gap: 6px; }
+  .masthead-actions a { font-size: 12.5px; padding: 8px 13px; }
 }
 
 /* ---- page body ---- */
-main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 10px; }
-section { margin: 0 0 34px; }
+main { padding-block: 40px 56px; }
+main > section { margin-block: 0 40px; }
+main > section:last-child { margin-block-end: 0; }
 h2 {
   font-family: var(--font-display);
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 24px;
+  font-size: 26px;
   letter-spacing: 0.01em;
+  line-height: 1.1;
   color: var(--ink);
-  margin: 0 0 6px;
+  margin: 0 0 14px;
 }
-p { max-width: 74ch; }
-.lede { max-width: 74ch; color: var(--slate); margin: 0 0 14px; font-size: 16px; }
+h3 { font-size: 17px; margin: 26px 0 6px; }
+p { margin: 0 0 14px; }
+.lede { color: var(--slate); margin: 0 0 20px; font-size: 17px; }
 .lede strong { color: var(--ink); }
 
+/* ---- the accordion the FAQ pages were designed with and never got ---- */
+main details {
+  border-top: 1px solid var(--line);
+}
+main details:last-of-type { border-bottom: 1px solid var(--line); }
+main summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 2px;
+  font-weight: 600;
+  font-size: 16.5px;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+main summary::-webkit-details-marker { display: none; }
+main summary::after {
+  content: "+";
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--accent);
+}
+main details[open] summary::after { content: "\2013"; }
+main summary:hover { color: var(--accent-deep); }
+main details > *:not(summary) { color: var(--slate); }
+main details p { margin: 0 0 18px; max-width: 68ch; }
+main details p:first-of-type { margin-top: -2px; }
+
+/* ---- shared components ---- */
 .cta {
   display: inline-flex;
   align-items: center;
@@ -310,73 +422,136 @@ p { max-width: 74ch; }
   border-radius: 10px;
   padding: 13px 22px;
   text-decoration: none;
-  margin: 4px 0 10px;
+  margin: 6px 0 12px;
 }
-.cta:hover, .cta:focus-visible { background: #0a4a84; }
+.cta:hover, .cta:focus-visible { background: var(--accent); color: #fff; }
 .cta-note { font-size: 13px; color: var(--slate-soft); margin: 4px 0 0; }
 
 .answer-card {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 18px 20px;
-  max-width: 78ch;
-  margin: 0 0 16px;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin: 0 0 18px;
 }
-.answer-card p { margin: 0 0 10px; }
 .answer-card p:last-child { margin-bottom: 0; }
 
 .disclaimer {
   border-left: 3px solid var(--accent-warm);
-  padding: 12px 16px;
-  background: rgba(200,16,46,0.08);
-  border-radius: 0 6px 6px 0;
-  margin: 0 0 16px;
-  max-width: 78ch;
-  line-height: 1.55;
+  padding: 14px 18px;
+  background: color-mix(in srgb, var(--accent-warm) 9%, transparent);
+  border-radius: 0 8px 8px 0;
+  margin: 0 0 18px;
 }
+.disclaimer p:last-child { margin-bottom: 0; }
 
 .related {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 10px;
-  max-width: 900px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
 }
 .related li {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 11px 14px;
+  border-radius: 10px;
+  padding: 13px 16px;
 }
 .related a { font-weight: 600; text-decoration: none; }
 .related a:hover { text-decoration: underline; }
-.related span { display: block; font-size: 13px; color: var(--slate); margin-top: 3px; }
+.related span { display: block; font-size: 13.5px; color: var(--slate); margin-top: 4px; }
 
-/* ---- footer: index.html's dark bookend, trimmed to this page's links ---- */
-footer.site-footer {
-  background: var(--ink);
-  padding: 30px 20px 40px;
-  font-size: 12.5px;
-  color: #C9D4DB;
+.tldr {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-deep);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+  margin: 0 0 24px;
 }
-.footer-inner { max-width: 1100px; margin: 0 auto; }
+.tldr ul { margin: 10px 0 0; padding-left: 20px; }
+.tldr li { margin: 0 0 7px; }
+.tldr li:last-child { margin-bottom: 0; }
+
+.flow-table-wrap { overflow-x: auto; max-width: 100%; margin: 0 0 18px; }
+table.flow {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 620px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14.5px;
+}
+table.flow th, table.flow td {
+  text-align: left;
+  vertical-align: top;
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--line);
+}
+table.flow thead th {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line-strong);
+}
+table.flow tbody tr:last-child td { border-bottom: 0; }
+table.flow td.who { font-weight: 600; white-space: nowrap; }
+table.flow td.who a { text-decoration: none; }
+table.flow td.who a:hover { text-decoration: underline; }
+table.flow td small { display: block; color: var(--slate-soft); font-size: 12.5px; margin-top: 3px; font-weight: 400; }
+
+.nope { list-style: none; margin: 0 0 18px; padding: 0; }
+.nope li { position: relative; padding: 0 0 0 26px; margin: 0 0 9px; }
+.nope li::before {
+  content: "\2715";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: var(--accent-warm);
+  font-weight: 700;
+}
+
+code.k {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+.updated { font-size: 13.5px; color: var(--slate-soft); margin: 0 0 24px; }
+
+/* ---- footer: a quiet band, not an inverted bar ----
+   It used to be `background: var(--ink)` with a hardcoded #C9D4DB on top, which
+   is how it reached 1.26:1 in dark mode. Both halves are tokens now. */
+footer.site-footer {
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  padding: 30px 0 40px;
+  font-size: 14px;
+  color: var(--slate);
+  flex: 0 0 auto;
+}
+footer.site-footer p { margin: 0 0 16px; max-width: 74ch; }
+footer.site-footer a { color: var(--accent-deep); }
 .footer-links {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 24px;
+  gap: 10px 26px;
 }
 .footer-links a {
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-deep);
   text-decoration: none;
 }
-.footer-links a:hover { color: #fff; text-decoration: underline; }
-footer.site-footer p { max-width: 78ch; margin: 0 0 14px; line-height: 1.55; }
-footer.site-footer a { color: var(--accent); }
+.footer-links a:hover { color: var(--accent); text-decoration: underline; }
+/* ==== ENGINE:END styles-subpage ==== */
 </style>
 <script>
   /* Same key and same precedence as the app's own boot, so the theme a reader
@@ -414,7 +589,6 @@ footer.site-footer a { color: var(--accent); }
     </div>
   </div>
 </header>
-<div class="flag-stripe" aria-hidden="true"></div>
 
 <main id="page-main" tabindex="-1">
 
@@ -473,7 +647,6 @@ footer.site-footer a { color: var(--accent); }
 
 </main>
 
-<div class="flag-stripe" aria-hidden="true"></div>
 <footer class="site-footer">
   <div class="footer-inner">
     <p>districtry New York City answers one question: which civic districts contain the point you picked, and who

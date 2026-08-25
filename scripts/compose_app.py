@@ -61,6 +61,29 @@ INSTANCES = {
     "ny": ["ny/index.html", "ny/sw.js"],
 }
 
+# The sub-pages — every published page that is not the app. They compose the
+# same way the apps do, and they were added here because the alternative had
+# already been tried by accident: thirteen hand-kept copies of one stylesheet,
+# which diverged into four variants, of which three were wrong. `root` is a
+# pseudo-instance for the pages that sit at the repo root rather than inside an
+# instance folder.
+SUBPAGES = {
+    "root": ["privacy.html"],
+    "il": ["il/faq.html", "il/sources.html", "il/police-district.html",
+           "il/school-board.html", "il/county-board.html"],
+    "ny": ["ny/faq.html", "ny/sources.html", "ny/council-district.html",
+           "ny/community-board.html"],
+    "ca": ["ca/faq.html", "ca/sources.html", "ca/supervisor-district.html"],
+}
+
+# Blocks whose ONE source is engine/shared/<name>.txt rather than
+# engine/<filename>/<name>.txt. A block belongs here when more than one FILENAME
+# carries it: the sub-page shell is spliced into eight distinct basenames, and
+# keying it by filename would put eight copies back where this file just removed
+# thirteen. Resolution stays deterministic — a shared name never also resolves
+# per-filename.
+SHARED_BLOCKS = {"styles-subpage"}
+
 ENGINE_RE = re.compile(
     r"^[ \t]*(?:/\*|<!--|#|//)?[ \t]*==== ENGINE:(BEGIN|END) "
     r"([a-z0-9][a-z0-9-]*) ====[ \t]*(?:\*/|-->)?[ \t]*$"
@@ -141,7 +164,22 @@ def scan(text, label):
 
 
 def block_path(fname, name):
+    if name in SHARED_BLOCKS:
+        return os.path.join(ENGINE_DIR, "shared", name + ".txt")
     return os.path.join(ENGINE_DIR, fname, name + ".txt")
+
+
+def targets(ids):
+    """[(instance, relative path)] for every file the given ids own — apps first,
+    then sub-pages. `root` owns sub-pages only, which is why it is not in
+    INSTANCES."""
+    out = []
+    for i in ids:
+        for rel in INSTANCES.get(i, []):
+            out.append((i, rel))
+        for rel in SUBPAGES.get(i, []):
+            out.append((i, rel))
+    return out
 
 
 def splice(text, label):
@@ -165,10 +203,10 @@ def splice(text, label):
 
 
 def do_extract(instance):
-    if instance not in INSTANCES:
+    if instance not in INSTANCES and instance not in SUBPAGES:
         fail("unknown instance %r" % instance)
     total = 0
-    for rel in INSTANCES[instance]:
+    for _i, rel in targets([instance]):
         text = read(os.path.join(REPO_ROOT, rel))
         fences, _ = scan(text, rel)
         fname = os.path.basename(rel)
@@ -198,28 +236,28 @@ def main():
         do_extract(args.extract_from)
         return
 
-    ids = args.instance or sorted(INSTANCES)
-    unknown = [i for i in ids if i not in INSTANCES]
+    known = set(INSTANCES) | set(SUBPAGES)
+    ids = args.instance or sorted(known)
+    unknown = [i for i in ids if i not in known]
     if unknown:
         fail("unknown instance(s): %s" % ", ".join(unknown))
     if not os.path.isdir(ENGINE_DIR):
         fail("engine/ does not exist — run --extract-from <instance> once to create it")
 
     drift, checked = [], 0
-    for instance in ids:
-        for rel in INSTANCES[instance]:
-            target = os.path.join(REPO_ROOT, rel)
-            current = read(target)
-            composed = splice(current, rel)
-            checked += 1
-            if args.check:
-                if current != composed:
-                    drift.append((rel, current, composed))
-            elif current != composed:
-                write(target, composed)
-                print("compose-app: %s — engine blocks recomposed" % rel)
-            else:
-                print("compose-app: %s — already matches the shared engine" % rel)
+    for _instance, rel in targets(ids):
+        target = os.path.join(REPO_ROOT, rel)
+        current = read(target)
+        composed = splice(current, rel)
+        checked += 1
+        if args.check:
+            if current != composed:
+                drift.append((rel, current, composed))
+        elif current != composed:
+            write(target, composed)
+            print("compose-app: %s — engine blocks recomposed" % rel)
+        else:
+            print("compose-app: %s — already matches the shared engine" % rel)
 
     if args.check:
         if drift:
@@ -235,6 +273,9 @@ def main():
                  "an instance file is not the source." % len(drift))
         print("compose-app: OK — %d file(s) across %d instance(s) carry exactly the "
               "shared engine" % (checked, len(ids)))
+    else:
+        print("compose-app: %d file(s) composed across %d instance(s)"
+              % (checked, len(ids)))
 
 
 if __name__ == "__main__":
