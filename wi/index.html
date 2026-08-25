@@ -4870,12 +4870,16 @@ function initWisconsinExplorer() {
 
   /* ==== ENGINE:END permalink ==== */
   /* ==== ENGINE:BEGIN selection-controls ==== */
+  // Selecting a place a SIBLING serves hands the reader over, with the point,
+  // instead of drawing empty cards for it here (ENGINE metro-portal).
   map.on("click", function (e) {
+    if (handoffSelection(e.latlng.lat, e.latlng.lng, "map-click")) return;
     setSelectedPoint(e.latlng.lat, e.latlng.lng, { skipPan: true });
   });
 
   document.getElementById("kbd-select-btn").addEventListener("click", function () {
     var c = map.getCenter();
+    if (handoffSelection(c.lat, c.lng, "kbd-select")) return;
     setSelectedPoint(c.lat, c.lng, { skipPan: true });
   });
 
@@ -5382,17 +5386,36 @@ function initWisconsinExplorer() {
    * retired card's copy; callers may still pass them and they are ignored.) */
   function offerMetroPortal(metro, opts) {
     opts = opts || {};
-    if (!metro || metroHandedOff) return;
+    if (!metro || metroHandedOff) return false;
     var here = opts.point || null;
     // NEVER hand off a place this instance also answers for. Fleet bboxes
     // meet at shared borders — the Illinois line runs through both Chicago's
     // box and Wisconsin's — and a silent redirect on both sides of that strip
     // would bounce a reader back and forth with nothing on screen to stop it.
     // The card's "Stay" button used to be that stop; this is.
-    if (here && pointInMetroBbox(here.lat, here.lng, METRO_BBOX)) return;
+    if (here && pointInMetroBbox(here.lat, here.lng, METRO_BBOX)) return false;
     metroHandedOff = true;
     trackEvent("metro-portal-go/" + metro.id, opts.source || "wander");
     window.location.href = metroPortalUrl(metro, here, map.getZoom());
+    return true;
+  }
+
+  /* A SELECTION on a place this instance does not serve, but a sibling does:
+   * a map click, or the keyboard "select the centre" button. Returns true when
+   * the reader has been sent onward, so the caller stops — selecting a point we
+   * are navigating away from just builds cards nobody will see.
+   *
+   * Panning already hands off on `moveend`, but only when the CENTRE crosses.
+   * A reader looking at Illinois can click Wisconsin near the top of the map
+   * without the centre ever leaving Illinois, which is exactly the case this
+   * covers: the click carries the point, so they arrive with it selected
+   * rather than merely somewhere in the neighbourhood. */
+  function handoffSelection(lat, lng, source) {
+    if (metroHandedOff) return false;
+    if (pointInMetroBbox(lat, lng, METRO_BBOX)) return false;  // we serve it; no handoff
+    var metro = siblingMetroAt(lat, lng);
+    if (!metro) return false;                                  // nobody serves it; the app says so honestly
+    return offerMetroPortal(metro, { point: { lat: lat, lng: lng }, source: source || "select" });
   }
 
   map.on("moveend", function () {
