@@ -132,8 +132,11 @@ GEOCODERS = {
 
 # FLEET CLAIMS — stated once on the page, and required to be identical. The
 # tuple is what the measurement must return for EVERY app that has a map.
+# `metro-portal/` (the sibling-metro CARD was shown) left the vocabulary on
+# 2026-08-25 when the card did: the handoff is a silent redirect now, so the
+# only portal event an app can send is the departure itself.
 EXPECTED_EVENTS = ["address-search", "geolocate", "geolocate-success", "layer/",
-                   "metro-portal-go/", "metro-portal/", "select", "share-native",
+                   "metro-portal-go/", "select", "share-native",
                    "share-open"]
 EXPECTED_COORD_EVENTS = ["geolocate-success", "select"]
 COORD_DECIMALS = 2

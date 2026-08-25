@@ -244,4 +244,4 @@
   }
   .geo-status.err { color: var(--err); }
 
-  /* ---------- sibling-metro portal (easter egg — see ENGINE metro-portal) ---------- */
+  /* ---------- sibling-metro handoff (see ENGINE metro-portal) ---------- */
