@@ -60,7 +60,8 @@ try {
         name: e.querySelector("b")?.textContent,
         tag: e.querySelector(".card-tag")?.textContent?.trim(),
       })));
-    check("every fleet place is listed", cards.length === 3, JSON.stringify(cards.map(c => c.name)));
+    check("every fleet place is listed", cards.length === FLEET.length,
+      JSON.stringify(cards.map(c => c.name)) + " vs metros.json " + FLEET.length);
     check("Illinois card points at /il/",
       cards.some((c) => c.name === "Illinois" && /\/il\/$/.test(c.href)),
       cards.find((c) => c.name === "Illinois")?.href);

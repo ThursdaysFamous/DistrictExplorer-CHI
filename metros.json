@@ -51,6 +51,23 @@
       "tag": "ca",
       "landing_name": "San Francisco",
       "blurb": "Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them."
+    },
+    {
+      "id": "wisconsin",
+      "explorer_name": "districtry Wisconsin",
+      "label": "Wisconsin",
+      "url": "https://districtry.com/wi/",
+      "emoji": "🧀",
+      "repo": "ThursdaysFamous/districtry",
+      "bbox": {
+        "minLng": -92.89,
+        "minLat": 42.49,
+        "maxLng": -86.25,
+        "maxLat": 47.31
+      },
+      "tag": "wi",
+      "landing_name": "Wisconsin",
+      "blurb": "72 counties. Cities, villages and towns, school districts, ZIP codes, and the Assembly, Senate and U.S. House seats — and who holds them."
     }
   ]
 }

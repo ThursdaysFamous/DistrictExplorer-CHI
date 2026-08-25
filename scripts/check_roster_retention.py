@@ -202,9 +202,20 @@ def git_show(ref, name, rel_dir_first=None):
     """The roster's content at `ref`, or None if it is not there under any
     known layout. `rel_dir_first` is the directory the file lives in NOW, so a
     sibling instance's roster is looked up where it actually is rather than
-    under Illinois's path."""
-    candidates = ([rel_dir_first] if rel_dir_first else []) + [
-        d for d in APP_REL_DIRS if d != rel_dir_first]
+    under Illinois's path.
+
+    The R2.3 fallbacks apply ONLY to Illinois's lineage: il/data/app is the
+    directory that moved (from the repo root), so only a file living there now
+    may be looked up under its old home. Any other instance's file absent at
+    the base is genuinely NEW — falling through would compare it against
+    Illinois's same-named file, which is exactly what happened the day the
+    fourth instance landed: wi's brand-new 8-district congress-roster.json
+    resolved against IL's 17 at the base and read as a roster collapse."""
+    if rel_dir_first is None or rel_dir_first in APP_REL_DIRS:
+        candidates = ([rel_dir_first] if rel_dir_first else []) + [
+            d for d in APP_REL_DIRS if d != rel_dir_first]
+    else:
+        candidates = [rel_dir_first]
     for rel_dir in candidates:
         try:
             out = subprocess.run(["git", "show", "%s:%s/%s" % (ref, rel_dir, name)],

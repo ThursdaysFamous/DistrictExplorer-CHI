@@ -76,6 +76,7 @@ INSTANCE_WORKSHEET = {
     "il": "metro-worksheet.json",
     "ca": "ca/metro-worksheet.json",
     "ny": "ny/metro-worksheet.json",
+    "wi": "wi/metro-worksheet.json",
 }
 FONTFACE = os.path.join(REPO_ROOT, "fonts", "barlow-fontface.css")
 OUT = os.path.join(REPO_ROOT, "index.html")

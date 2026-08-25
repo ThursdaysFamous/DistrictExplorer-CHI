@@ -1,0 +1,97 @@
+# Pinned dependencies for the scraper pipeline (playbook R10 — heuristic HTML
+# parsers are exactly the code that breaks on silent dependency drift).
+# Used by the weekly roster workflows:
+#   .github/workflows/update-ilga-roster.yml   (requests + beautifulsoup4)
+#   .github/workflows/update-cpd-roster.yml     (+ playwright for the Cloudflare
+#                                                managed-challenge fetch, R11)
+# build_congress_roster.py uses only the stdlib and needs none of these.
+#
+# playwright also requires a matching browser build; the CPD workflow runs
+# `python3 -m playwright install --with-deps chromium`, which fetches the
+# Chromium that matches the version pinned here.
+requests==2.33.1
+beautifulsoup4==4.15.0
+playwright==1.61.0
+
+# Pinned EXPLICITLY, though requests already depends on it, because one scraper
+# uses it directly rather than through requests: colesco.illinois.gov serves an
+# incomplete certificate chain (leaf only, no intermediate), so
+# scripts/coles_county_board_scraper.py builds a verification bundle out of
+# certifi's roots plus the intermediate it fetches from the leaf's AIA URI and
+# checks against a pinned hash. A direct import belongs on a direct pin —
+# scripts/validate_workflow_deps.py fails the build otherwise, which is the
+# check working.
+certifi==2026.7.22
+
+# PDF text extraction for the municipal-officials scrapers whose county source
+# is a published document rather than a page or an API (DuPage's DMMC
+# directory, Kane's and Kendall's clerk yearbooks). Layout mode is required,
+# not optional: those documents are multi-column, and a line-flattened
+# extraction glues the right-hand column onto the left.
+pypdf==6.14.2
+
+# Word-POSITION extraction for LaSalle's municipality-officials directory.
+# pypdf (above) flattens a page to text, which is enough for the documents whose
+# columns survive line order. LaSalle's does not: its six columns interleave with
+# a left-hand hall-address block that has its own line rhythm, so a flattened
+# line mixes an official's title with a fragment of the village's address, and
+# the y-gap distribution has no empty band a row-splitter could use. That parser
+# works from each word's x/y instead, which pdfplumber exposes directly
+# (extract_words) and pypdf does not. See
+# scripts/lasalle_municipal_officials_scraper.py for the geometry it relies on.
+pdfplumber==0.11.10
+
+# Conversion 2 (docs/MECHANIZATION_PLAYBOOK.md): worksheet validation in
+# scripts/generate_metro_files.py. The generator is otherwise stdlib-only;
+# validate_index.py deliberately stays stdlib and does NOT import this.
+jsonschema==4.26.0
+
+# Geometric union for scripts/build_lasalle_board_districts.py (and its monthly
+# --check in validate-sources.yml). LaSalle's county precinct fabric does not
+# share exact vertex chains along interior edges, so build_metro_outline's
+# edge-cancellation dissolve() cannot dissolve it — measured: district 16's four
+# precincts left a spurious 3-segment ring. shapely's unary_union does real
+# geometric union; the builder then re-verifies the SHIPPED GeoJSON with the
+# repo's own point_in_rings, so the two implementations cross-check.
+shapely==2.1.2
+
+# Coordinate transform for scripts/build_mcdonough_precincts.py. McDonough's
+# precinct geometry is only obtainable from its GIS host's /identify endpoint,
+# and identify IGNORES outSR: it answers in the service's native wkid 102672
+# (EPSG:3436, NAD83 / Illinois West, US survey feet) no matter what is asked
+# for, so the reprojection cannot be pushed to the server the way every other
+# county's can. A hand-rolled Transverse Mercator inverse was considered and
+# rejected — civic boundaries are not the place to debug projection math.
+pyproj==3.7.2
+
+# Washington County's Blue Book is a Word 97 binary .doc, and LibreOffice — which
+# IS installed in the runner image — refuses to load it ("source file could not
+# be loaded"). olefile opens the OLE2 container so the scraper can walk the
+# document's own piece table, which is the only way to recover the text in
+# document order with its encodings intact.
+olefile==0.47
+
+# Ogle County's GIS Coordinator supplied its precincts as a plain shapefile
+# (the county publishes no boundary service), so the builder reads .shp/.dbf
+# directly out of the archived zip.
+pyshp==2.3.1
+
+# Montgomery County's GIS office sent its board districts and precincts as an
+# ESRI FILE GEODATABASE rather than a shapefile — a first in this fleet. pyogrio
+# reads it through GDAL's /vsizip/ handler straight out of the archived zip, so
+# what ships is built from the bytes the county sent with no hand conversion in
+# between. pyshp (above) cannot read a .gdb at all; it is a directory of binary
+# tables, not a .shp/.dbf pair. See scripts/build_montgomery_boundaries.py.
+pyogrio==0.13.0
+
+# TEXT-BLOCK and word-POSITION extraction for Clark County's certified election
+# canvasses (scripts/clark_county_board_scraper.py). Clark publishes no
+# machine-readable board page — its only board document is a scan — so the
+# roster is read out of the Clerk's "Statement of Votes Cast" PDFs, where a
+# contest owns an x-range and each candidate is one multi-line text BLOCK
+# ("REX E. GOBLE  (REP)") inside it. pypdf flattens the page and loses the
+# columns; pdfplumber gives words with positions but no block grouping, and
+# re-deriving the cells by clustering x was measured to split "REX E." from
+# "GOBLE". PyMuPDF's get_text("dict") returns the county's own cells directly,
+# which is the difference between a parsed name and half of one.
+pymupdf==1.28.2
