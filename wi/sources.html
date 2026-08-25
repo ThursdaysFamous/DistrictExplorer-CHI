@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<title>Sources &amp; data layers — Wisconsin District Explorer</title>
+<meta name="description" content="Every layer in the Wisconsin District Explorer and where its data comes from: the boundary publisher, the officeholder roster, and the ground each layer actually answers on." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://wi.chidistricts.com/sources.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Wisconsin District Explorer" />
+<meta property="og:title" content="Sources &amp; data layers — Wisconsin District Explorer" />
+<meta property="og:description" content="One row per layer: the publisher the boundary comes from, where the names on the card come from, and where the layer answers at all." />
+<meta property="og:url" content="https://wi.chidistricts.com/sources.html" />
+<meta property="og:image" content="https://wi.chidistricts.com/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Sources &amp; data layers — Wisconsin District Explorer" />
+<meta name="twitter:description" content="Every layer in the Wisconsin District Explorer and where its data comes from." />
+<meta name="twitter:image" content="https://wi.chidistricts.com/og-image.png" />
+
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b3d91">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2341B6E6'/%3E%3Cpolygon points='32,6 36,25.07 54.52,19 40,32 54.52,45 36,38.93 32,58 28,38.93 9.48,45 24,32 9.48,19 28,25.07' fill='%23C8102E'/%3E%3C/svg%3E" />
+
+<style>
+/* Self-hosted subset of index.html's faces — only the weights this page uses
+   (display 900, body 400/600, mono 400), same files, same unicode-ranges. */
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(fonts/big-shoulders-display-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(fonts/big-shoulders-display-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-400-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/inter-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/inter-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Palette + type tokens: the same values index.html's :root carries. This page
+   is deliberately standalone — no shared stylesheet, no build step — so it
+   restates the tokens rather than importing them. */
+:root {
+  --accent: #41B6E6;
+  --accent-deep: #0B5394;
+  --accent-warm: #C8102E;
+  --ink: #14181C;
+  --slate: #55626C;
+  --slate-soft: #87929B;
+  --paper: #F4F7F9;
+  --panel: #FFFFFF;
+  --line: #D9E1E7;
+  --line-strong: #B9C6CE;
+  --font-display: 'Big Shoulders Display', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --focus-ring: 3px solid var(--accent-warm);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent-deep); }
+:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 16px;
+  z-index: 1000;
+  border-radius: 0 0 6px 0;
+}
+.skip-link:focus { left: 0; }
+
+.flag-stripe {
+  height: 10px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent) 0 30%,
+    #fff 30% 70%,
+    var(--accent) 70% 100%
+  );
+}
+
+/* ---- masthead: the same dark bookend index.html opens with ---- */
+header.masthead {
+  background: var(--ink);
+  color: #fff;
+  padding: 18px 20px 22px;
+}
+.masthead-inner {
+  max-width: 1800px;   /* the app's masthead grid — pins the pills to the same
+                          right edge a reader just saw on the map page */
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 28px;
+}
+h1.title { margin: 0; min-width: 0; }
+.title-row { display: flex; align-items: center; gap: 14px; }
+.masthead-star { width: 34px; height: 34px; flex: none; }
+.title-text {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 40px);
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+h1.title small {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #C9D4DB;
+  margin-top: 6px;
+}
+/* Pinned right of the wordmark, matching index.html's masthead exactly: one
+   pill spec, the gaps control carrying the primary weight on both pages so the
+   same affordance looks the same wherever a reader meets it. */
+.masthead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+  padding-top: 5px;
+}
+.masthead-actions a {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  color: #C9D4DB;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(217,225,231,0.16);
+  border-radius: 10px;
+  padding: 9px 15px;
+  text-decoration: none;
+  transition: background .14s ease, border-color .14s ease, color .14s ease, transform .14s ease;
+}
+.masthead-actions a:hover,
+.masthead-actions a:focus-visible {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(217,225,231,0.38);
+  transform: translateY(-1px);
+}
+.masthead-actions a.is-primary {
+  color: #EAF4FA;
+  background: rgba(65,182,230,0.16);
+  border-color: rgba(65,182,230,0.42);
+}
+.masthead-actions a.is-primary:hover,
+.masthead-actions a.is-primary:focus-visible {
+  color: #fff;
+  background: rgba(65,182,230,0.28);
+  border-color: var(--accent);
+}
+.masthead-actions a:active { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .masthead-actions a { transition: none; }
+  .masthead-actions a:hover { transform: none; }
+}
+@media (max-width: 900px) {
+  header.masthead { padding: 12px 16px 14px; }
+  .masthead-star { width: 24px; height: 24px; }
+  .title-text { font-size: 22px; }
+  h1.title small { font-size: 12px; margin-top: 3px; }
+  .masthead-inner { gap: 10px; }
+  .masthead-actions {
+    justify-content: flex-start;
+    margin-left: 0;
+    padding-top: 2px;
+    width: 100%;
+    gap: 6px;
+  }
+  .masthead-actions a { font-size: 12px; padding: 8px 13px; border-radius: 9px; }
+}
+
+/* ---- page body ---- */
+main { max-width: 1800px; margin: 0 auto; padding: 28px 20px 10px; }
+section { margin: 0 0 34px; }
+h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 24px;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 0 0 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+}
+.lede { max-width: 74ch; color: var(--slate); margin: 0 0 14px; }
+.lede strong { color: var(--ink); }
+
+.disclaimer {
+  border-left: 3px solid var(--accent-warm);
+  padding: 12px 16px;
+  background: rgba(200,16,46,0.08);
+  border-radius: 0 6px 6px 0;
+  margin: 0 0 16px;
+  max-width: 78ch;
+  line-height: 1.55;
+}
+.verified {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--slate);
+  margin: 0 0 6px;
+}
+.verified strong { color: var(--ink); }
+
+/* ---- upstream publisher credits ---- */
+.credit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+.credit-list li {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 14px;
+}
+.credit-list a { font-weight: 600; text-decoration: none; }
+.credit-list a:hover { text-decoration: underline; }
+.credit-note {
+  display: block;
+  font-size: 13px;
+  color: var(--slate);
+  margin-top: 3px;
+}
+
+/* ---- the layer matrix ---- */
+.matrix-lede { max-width: 78ch; color: var(--slate); margin: 0 0 14px; }
+.matrix-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 30px;
+}
+.matrix-nav a {
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accent-deep);
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 5px 13px;
+}
+.matrix-nav a:hover { border-color: var(--accent-deep); background: rgba(11,83,148,0.06); }
+
+.matrix-group { scroll-margin-top: 12px; }
+.matrix-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--slate-soft);
+}
+.matrix-blurb { color: var(--slate); margin: 0 0 12px; max-width: 74ch; }
+
+/* Wide by nature — five columns of provenance. It scrolls inside its own box
+   rather than pushing the page sideways, and collapses to stacked rows below
+   the breakpoint (see the media query). */
+.matrix-wrap {
+  overflow-x: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+table.matrix {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13.5px;
+}
+table.matrix th,
+table.matrix td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+}
+table.matrix thead th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+table.matrix tbody tr:last-child th,
+table.matrix tbody tr:last-child td { border-bottom: none; }
+table.matrix tbody tr:target { background: rgba(65,182,230,0.12); }
+table.matrix tbody th[scope="row"] {
+  min-width: 170px;
+  font-weight: 600;
+  background: rgba(244,247,249,0.6);
+}
+.layer-name { display: block; }
+table.matrix code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--slate);
+  word-break: break-all;
+}
+.src-list { list-style: none; margin: 0; padding: 0; }
+.src-list li + li { margin-top: 5px; }
+.src-list a { text-decoration: none; }
+.src-list a:hover { text-decoration: underline; }
+.matrix-none { color: var(--slate-soft); }
+
+/* Under ~880px a five-column provenance table is unreadable at any zoom, so
+   each row becomes its own stacked card and the column headers are reprinted
+   per cell from data-label. */
+@media (max-width: 880px) {
+  .matrix-wrap { border: none; background: none; border-radius: 0; overflow-x: visible; }
+  table.matrix, table.matrix tbody, table.matrix tr, table.matrix th, table.matrix td { display: block; }
+  table.matrix thead { position: absolute; left: -9999px; }
+  table.matrix tbody tr {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    padding: 4px 0;
+  }
+  table.matrix th,
+  table.matrix td { border-bottom: none; padding: 8px 14px; }
+  table.matrix tbody th[scope="row"] {
+    background: none;
+    font-size: 15px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+    min-width: 0;
+  }
+  table.matrix td::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--slate-soft);
+    margin-bottom: 2px;
+  }
+}
+
+/* ---- footer: index.html's dark bookend, trimmed to this page's links ---- */
+footer.site-footer {
+  background: var(--ink);
+  padding: 30px 20px 40px;
+  font-size: 12.5px;
+  color: #C9D4DB;
+}
+.footer-inner { max-width: 1800px; margin: 0 auto; }
+.footer-inner h2 {
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin: 0 0 12px;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(217,225,231,0.15);
+}
+.footer-links a {
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+.footer-links a:hover { color: #fff; text-decoration: underline; }
+footer.site-footer p { max-width: 78ch; margin: 0 0 10px; line-height: 1.55; }
+footer.site-footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<a href="#sources-main" class="skip-link">Skip to the layer matrix</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <h1 class="title">
+      <span class="title-row">
+        <svg class="masthead-star" viewBox="0 0 100 100" aria-hidden="true">
+          <polygon fill="var(--accent-warm)" points="50,3 57.6,39.2 92.9,27.5 65,50 92.9,72.5 57.6,60.8 50,97 42.4,60.8 7.1,72.5 35,50 7.1,27.5 42.4,39.2" />
+        </svg>
+        <span class="title-text">Sources &amp; Data Layers</span>
+      </span>
+      <small>Every layer in the Wisconsin District Explorer, and exactly where its data comes from.</small>
+    </h1>
+    <div class="masthead-actions">
+      <a href="./">← Back to the map</a>
+      <a class="is-primary" href="./#gaps">🧩 What data is missing?</a>
+    </div>
+  </div>
+</header>
+<div class="flag-stripe" aria-hidden="true"></div>
+
+<main id="sources-main" tabindex="-1">
+
+  <section class="page-intro">
+    <p class="lede">This app is a reader over other people's data. It draws no boundary of its own
+      and names no officeholder it cannot cite, so the useful question about any answer it gives is
+      <strong>who published this, and when</strong>. That is what this page is for: the publishers the
+      app credits as a whole, then one row per layer naming the source behind that layer specifically.</p>
+    <div class="disclaimer">
+      <strong>Not for legal or official use.</strong> Boundary and roster data come from public sources
+      that explicitly disclaim legal precision. Always confirm district assignments and officeholders
+      with the relevant government office before relying on them for anything official.
+    </div>
+    <!-- ==== GENERATED:BEGIN sources-verified ==== -->
+        <p class="verified">Data last verified: <strong>August 24, 2026</strong></p>
+    <!-- ==== GENERATED:END sources-verified ==== -->
+    <p class="lede">Where a source publishes nothing, the app says so rather than guessing — the
+      <a href="./#gaps">missing-data panel</a> on the map is the standing list of what nobody publishes
+      yet, and what would close each gap.</p>
+  </section>
+
+  <section class="credits">
+    <h2>Who publishes the data</h2>
+    <p class="lede">The upstream publishers this app depends on, across all layers. Per-layer
+      provenance is in the matrix below.</p>
+    <!-- ==== GENERATED:BEGIN source-credits ==== -->
+      <ul class="credit-list">
+        <li>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors (Nominatim &amp; Photon/Komoot)</a>
+          <span class="credit-note">Address search and the office-address pins.</span>
+        </li>
+        <li>
+          <a href="https://tigerweb.geo.census.gov" target="_blank" rel="noopener">U.S. Census TIGERweb</a>
+          <span class="credit-note">The national boundary service behind every starter layer: counties, county subdivisions, municipalities, school districts, and the congressional districts.</span>
+        </li>
+        <li>
+          <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener">unitedstates/congress-legislators</a>
+          <span class="credit-note">The public-domain roster of sitting members of Congress, including district and D.C. offices.</span>
+        </li>
+      </ul>
+    <!-- ==== GENERATED:END source-credits ==== -->
+  </section>
+
+  <section class="matrix-section">
+    <h2>The layer matrix</h2>
+    <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
+      <p class="matrix-lede">5 layers — 1 political and legislative, 1 schools, 3 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <nav class="matrix-nav" aria-label="Jump to a layer group">
+        <a href="#political">Political &amp; legislative</a>
+        <a href="#schools">Schools</a>
+        <a href="#geography">Geography &amp; amenities</a>
+      </nav>
+
+      <section class="matrix-group" id="political">
+        <h2>Political &amp; legislative <span class="matrix-count">1 layer</span></h2>
+        <p class="matrix-blurb">Districts that elect somebody — from your ward to your seat in Congress.</p>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <thead>
+              <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
+            </thead>
+            <tbody>
+              <tr id="layer-us-house">
+                <th scope="row"><span class="layer-name">U.S. House</span><code>us-house</code></th>
+                <td data-label="What it answers">The U.S. House district covering the point, and the representative holding it.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/0" target="_blank" rel="noopener">U.S. Census TIGERweb — Legislative, layer 0 (congressional districts), pre-built for the state and shipped with the app</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">congress-roster.json, rebuilt weekly by CI from the public-domain unitedstates/congress-legislators dataset — including each member's district office and Washington office.</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="matrix-group" id="schools">
+        <h2>Schools <span class="matrix-count">1 layer</span></h2>
+        <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <thead>
+              <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
+            </thead>
+            <tbody>
+              <tr id="layer-school-district-unified">
+                <th scope="row"><span class="layer-name">School District (Unified)</span><code>school-district-unified</code></th>
+                <td data-label="What it answers">The unified (K-12) school district serving the point.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/0" target="_blank" rel="noopener">U.S. Census TIGERweb — School, layer 0, pre-built for the state and shipped with the app</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">No roster is joined; the card names the district.</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="matrix-group" id="geography">
+        <h2>Geography &amp; amenities <span class="matrix-count">3 layers</span></h2>
+        <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <thead>
+              <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
+            </thead>
+            <tbody>
+              <tr id="layer-county">
+                <th scope="row"><span class="layer-name">County</span><code>county</code></th>
+                <td data-label="What it answers">Which county contains the point.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — State_County, layer 1, pre-built for the state and shipped with the app</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">No roster is joined yet; growing this card is the fork's first expansion (docs/EXPANSION_GUIDE.md Part 2).</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+              <tr id="layer-county-subdivision">
+                <th scope="row"><span class="layer-name">County Subdivision</span><code>county-subdivision</code></th>
+                <td data-label="What it answers">The township or county subdivision containing the point.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — Places / county subdivisions, layer 1</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">No roster is joined; the card names the subdivision.</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+              <tr id="layer-municipality">
+                <th scope="row"><span class="layer-name">Municipality</span><code>municipality</code></th>
+                <td data-label="What it answers">The city, village or town containing the point — or that it sits in unincorporated county.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4" target="_blank" rel="noopener">U.S. Census TIGERweb — Places, layer 4</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">No roster is joined yet; municipal officials are a per-county build (docs/EXPANSION_GUIDE.md Part 2.4).</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    <!-- ==== GENERATED:END layer-matrix ==== -->
+  </section>
+
+</main>
+
+<div class="flag-stripe" aria-hidden="true"></div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <h2>About this page</h2>
+    <p>This page is generated from the same list of layers the app itself is built from, so a layer
+      cannot ship without a row here and a row here cannot outlive its layer. If a source above has
+      moved, gone dark, or is simply wrong, that is a bug worth reporting.</p>
+    <p>Found a source the app is missing? Every accepted one is credited by name in
+      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-WI/blob/main/docs/SOURCE_CREDITS.md" target="_blank" rel="noopener">SOURCE_CREDITS.md</a>.
+      There's no cash bounty — the credit is the reward.</p>
+    <div class="footer-links">
+      <a href="./">← Back to the map</a>
+      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-WI" target="_blank" rel="noopener">View source on GitHub</a>
+      <a href="https://github.com/ThursdaysFamous/DistrictExplorer-WI/issues/new" target="_blank" rel="noopener">Report a bug</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

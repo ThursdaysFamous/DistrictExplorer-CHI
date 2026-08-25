@@ -1,0 +1,362 @@
+[
+  {
+    "name": "Adams County",
+    "fips3": "001",
+    "geoid": "55001"
+  },
+  {
+    "name": "Ashland County",
+    "fips3": "003",
+    "geoid": "55003"
+  },
+  {
+    "name": "Barron County",
+    "fips3": "005",
+    "geoid": "55005"
+  },
+  {
+    "name": "Bayfield County",
+    "fips3": "007",
+    "geoid": "55007"
+  },
+  {
+    "name": "Brown County",
+    "fips3": "009",
+    "geoid": "55009"
+  },
+  {
+    "name": "Buffalo County",
+    "fips3": "011",
+    "geoid": "55011"
+  },
+  {
+    "name": "Burnett County",
+    "fips3": "013",
+    "geoid": "55013"
+  },
+  {
+    "name": "Calumet County",
+    "fips3": "015",
+    "geoid": "55015"
+  },
+  {
+    "name": "Chippewa County",
+    "fips3": "017",
+    "geoid": "55017"
+  },
+  {
+    "name": "Clark County",
+    "fips3": "019",
+    "geoid": "55019"
+  },
+  {
+    "name": "Columbia County",
+    "fips3": "021",
+    "geoid": "55021"
+  },
+  {
+    "name": "Crawford County",
+    "fips3": "023",
+    "geoid": "55023"
+  },
+  {
+    "name": "Dane County",
+    "fips3": "025",
+    "geoid": "55025"
+  },
+  {
+    "name": "Dodge County",
+    "fips3": "027",
+    "geoid": "55027"
+  },
+  {
+    "name": "Door County",
+    "fips3": "029",
+    "geoid": "55029"
+  },
+  {
+    "name": "Douglas County",
+    "fips3": "031",
+    "geoid": "55031"
+  },
+  {
+    "name": "Dunn County",
+    "fips3": "033",
+    "geoid": "55033"
+  },
+  {
+    "name": "Eau Claire County",
+    "fips3": "035",
+    "geoid": "55035"
+  },
+  {
+    "name": "Florence County",
+    "fips3": "037",
+    "geoid": "55037"
+  },
+  {
+    "name": "Fond du Lac County",
+    "fips3": "039",
+    "geoid": "55039"
+  },
+  {
+    "name": "Forest County",
+    "fips3": "041",
+    "geoid": "55041"
+  },
+  {
+    "name": "Grant County",
+    "fips3": "043",
+    "geoid": "55043"
+  },
+  {
+    "name": "Green County",
+    "fips3": "045",
+    "geoid": "55045"
+  },
+  {
+    "name": "Green Lake County",
+    "fips3": "047",
+    "geoid": "55047"
+  },
+  {
+    "name": "Iowa County",
+    "fips3": "049",
+    "geoid": "55049"
+  },
+  {
+    "name": "Iron County",
+    "fips3": "051",
+    "geoid": "55051"
+  },
+  {
+    "name": "Jackson County",
+    "fips3": "053",
+    "geoid": "55053"
+  },
+  {
+    "name": "Jefferson County",
+    "fips3": "055",
+    "geoid": "55055"
+  },
+  {
+    "name": "Juneau County",
+    "fips3": "057",
+    "geoid": "55057"
+  },
+  {
+    "name": "Kenosha County",
+    "fips3": "059",
+    "geoid": "55059"
+  },
+  {
+    "name": "Kewaunee County",
+    "fips3": "061",
+    "geoid": "55061"
+  },
+  {
+    "name": "La Crosse County",
+    "fips3": "063",
+    "geoid": "55063"
+  },
+  {
+    "name": "Lafayette County",
+    "fips3": "065",
+    "geoid": "55065"
+  },
+  {
+    "name": "Langlade County",
+    "fips3": "067",
+    "geoid": "55067"
+  },
+  {
+    "name": "Lincoln County",
+    "fips3": "069",
+    "geoid": "55069"
+  },
+  {
+    "name": "Manitowoc County",
+    "fips3": "071",
+    "geoid": "55071"
+  },
+  {
+    "name": "Marathon County",
+    "fips3": "073",
+    "geoid": "55073"
+  },
+  {
+    "name": "Marinette County",
+    "fips3": "075",
+    "geoid": "55075"
+  },
+  {
+    "name": "Marquette County",
+    "fips3": "077",
+    "geoid": "55077"
+  },
+  {
+    "name": "Menominee County",
+    "fips3": "078",
+    "geoid": "55078"
+  },
+  {
+    "name": "Milwaukee County",
+    "fips3": "079",
+    "geoid": "55079"
+  },
+  {
+    "name": "Monroe County",
+    "fips3": "081",
+    "geoid": "55081"
+  },
+  {
+    "name": "Oconto County",
+    "fips3": "083",
+    "geoid": "55083"
+  },
+  {
+    "name": "Oneida County",
+    "fips3": "085",
+    "geoid": "55085"
+  },
+  {
+    "name": "Outagamie County",
+    "fips3": "087",
+    "geoid": "55087"
+  },
+  {
+    "name": "Ozaukee County",
+    "fips3": "089",
+    "geoid": "55089"
+  },
+  {
+    "name": "Pepin County",
+    "fips3": "091",
+    "geoid": "55091"
+  },
+  {
+    "name": "Pierce County",
+    "fips3": "093",
+    "geoid": "55093"
+  },
+  {
+    "name": "Polk County",
+    "fips3": "095",
+    "geoid": "55095"
+  },
+  {
+    "name": "Portage County",
+    "fips3": "097",
+    "geoid": "55097"
+  },
+  {
+    "name": "Price County",
+    "fips3": "099",
+    "geoid": "55099"
+  },
+  {
+    "name": "Racine County",
+    "fips3": "101",
+    "geoid": "55101"
+  },
+  {
+    "name": "Richland County",
+    "fips3": "103",
+    "geoid": "55103"
+  },
+  {
+    "name": "Rock County",
+    "fips3": "105",
+    "geoid": "55105"
+  },
+  {
+    "name": "Rusk County",
+    "fips3": "107",
+    "geoid": "55107"
+  },
+  {
+    "name": "St. Croix County",
+    "fips3": "109",
+    "geoid": "55109"
+  },
+  {
+    "name": "Sauk County",
+    "fips3": "111",
+    "geoid": "55111"
+  },
+  {
+    "name": "Sawyer County",
+    "fips3": "113",
+    "geoid": "55113"
+  },
+  {
+    "name": "Shawano County",
+    "fips3": "115",
+    "geoid": "55115"
+  },
+  {
+    "name": "Sheboygan County",
+    "fips3": "117",
+    "geoid": "55117"
+  },
+  {
+    "name": "Taylor County",
+    "fips3": "119",
+    "geoid": "55119"
+  },
+  {
+    "name": "Trempealeau County",
+    "fips3": "121",
+    "geoid": "55121"
+  },
+  {
+    "name": "Vernon County",
+    "fips3": "123",
+    "geoid": "55123"
+  },
+  {
+    "name": "Vilas County",
+    "fips3": "125",
+    "geoid": "55125"
+  },
+  {
+    "name": "Walworth County",
+    "fips3": "127",
+    "geoid": "55127"
+  },
+  {
+    "name": "Washburn County",
+    "fips3": "129",
+    "geoid": "55129"
+  },
+  {
+    "name": "Washington County",
+    "fips3": "131",
+    "geoid": "55131"
+  },
+  {
+    "name": "Waukesha County",
+    "fips3": "133",
+    "geoid": "55133"
+  },
+  {
+    "name": "Waupaca County",
+    "fips3": "135",
+    "geoid": "55135"
+  },
+  {
+    "name": "Waushara County",
+    "fips3": "137",
+    "geoid": "55137"
+  },
+  {
+    "name": "Winnebago County",
+    "fips3": "139",
+    "geoid": "55139"
+  },
+  {
+    "name": "Wood County",
+    "fips3": "141",
+    "geoid": "55141"
+  }
+]

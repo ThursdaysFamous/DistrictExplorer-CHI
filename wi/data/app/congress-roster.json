@@ -1,0 +1,122 @@
+{
+  "1": {
+    "name": "Bryan Steil",
+    "party": "Republican",
+    "url": "https://steil.house.gov",
+    "capitolOffice": [
+      "1526 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-3031"
+    ],
+    "districtOffice": [
+      "20 S Main St, Suite 10",
+      "Janesville, WI 53545-3959",
+      "Phone: 608-752-4050"
+    ]
+  },
+  "2": {
+    "name": "Mark Pocan",
+    "party": "Democrat",
+    "url": "https://pocan.house.gov",
+    "capitolOffice": [
+      "1026 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-2906"
+    ],
+    "districtOffice": [
+      "10 E. Doty St., Suite 405",
+      "Madison, WI 53703",
+      "Phone: 608-258-9800"
+    ]
+  },
+  "3": {
+    "name": "Derrick Van Orden",
+    "party": "Republican",
+    "url": "https://vanorden.house.gov",
+    "capitolOffice": [
+      "1513 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-5506"
+    ],
+    "districtOffice": [
+      "210 7th St S, Suite 204",
+      "La Crosse, WI 54601",
+      "Phone: 608-782-2558"
+    ]
+  },
+  "4": {
+    "name": "Gwen Moore",
+    "party": "Democrat",
+    "url": "https://gwenmoore.house.gov",
+    "capitolOffice": [
+      "2252 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4572"
+    ],
+    "districtOffice": [
+      "250 East Wisconsin, Suite 950",
+      "Milwaukee, WI 53202",
+      "Phone: 414-297-1140"
+    ]
+  },
+  "5": {
+    "name": "Scott Fitzgerald",
+    "party": "Republican",
+    "url": "https://fitzgerald.house.gov",
+    "capitolOffice": [
+      "2444 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-5101"
+    ],
+    "districtOffice": [
+      "175 E Wisconsin Ave, H (2nd Floor)",
+      "Oconomowoc, WI 53066",
+      "Phone: 262-784-1111"
+    ]
+  },
+  "6": {
+    "name": "Glenn Grothman",
+    "party": "Republican",
+    "url": "https://grothman.house.gov",
+    "capitolOffice": [
+      "1211 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-2476"
+    ],
+    "districtOffice": [
+      "525 N Peters Ave, Suite 700",
+      "Fond du Lac, WI 54937",
+      "Phone: 920-907-0624"
+    ]
+  },
+  "7": {
+    "name": "Thomas P. Tiffany",
+    "party": "Republican",
+    "url": "https://tiffany.house.gov",
+    "capitolOffice": [
+      "451 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-3365"
+    ],
+    "districtOffice": [
+      "2620 Stewart Avenue, Suite 312",
+      "Wausau, WI 54401",
+      "Phone: 715-298-9344"
+    ]
+  },
+  "8": {
+    "name": "Tony Wied",
+    "party": "Republican",
+    "url": "https://wied.house.gov",
+    "capitolOffice": [
+      "424 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-5665"
+    ],
+    "districtOffice": [
+      "1702 Scheuring Rd, Suite B",
+      "De Pere, WI 54115",
+      "Phone: 920-301-4500"
+    ]
+  }
+}
