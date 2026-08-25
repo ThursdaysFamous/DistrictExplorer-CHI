@@ -1,0 +1,362 @@
+{
+ "55001": {
+  "county": "Adams",
+  "seats": 20,
+  "url": "https://www.co.adams.wi.us/"
+ },
+ "55003": {
+  "county": "Ashland",
+  "seats": 21,
+  "url": "https://ashlandcountywi.gov/"
+ },
+ "55005": {
+  "county": "Barron",
+  "seats": 29,
+  "url": "https://co.barron.wi.us/"
+ },
+ "55007": {
+  "county": "Bayfield",
+  "seats": 13,
+  "url": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "55009": {
+  "county": "Brown",
+  "seats": 26,
+  "url": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "55011": {
+  "county": "Buffalo",
+  "seats": 14,
+  "url": "https://www.buffalocountywi.gov/"
+ },
+ "55013": {
+  "county": "Burnett",
+  "seats": 21,
+  "url": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "55015": {
+  "county": "Calumet",
+  "seats": 21,
+  "url": "https://calumetcounty.org/"
+ },
+ "55017": {
+  "county": "Chippewa",
+  "seats": 21,
+  "url": "https://chippewacountywi.gov/"
+ },
+ "55019": {
+  "county": "Clark",
+  "seats": 29,
+  "url": "https://www.clarkcountywi.gov/"
+ },
+ "55021": {
+  "county": "Columbia",
+  "seats": 28,
+  "url": "https://www.co.columbia.wi.us/ColumbiaCounty/"
+ },
+ "55023": {
+  "county": "Crawford",
+  "seats": 17,
+  "url": "https://www.crawfordcountywi.gov/"
+ },
+ "55025": {
+  "county": "Dane",
+  "seats": 37,
+  "url": "https://board.danecounty.gov/Supervisors"
+ },
+ "55027": {
+  "county": "Dodge",
+  "seats": 33,
+  "url": "https://co.dodge.wi.us/"
+ },
+ "55029": {
+  "county": "Door",
+  "seats": 21,
+  "url": "https://co.door.wi.gov/"
+ },
+ "55031": {
+  "county": "Douglas",
+  "seats": 21,
+  "url": "https://douglascountywi.gov/"
+ },
+ "55033": {
+  "county": "Dunn",
+  "seats": 29,
+  "url": "https://dunncountywi.gov/supervisors"
+ },
+ "55035": {
+  "county": "Eau Claire",
+  "seats": 29,
+  "url": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "55037": {
+  "county": "Florence",
+  "seats": 12,
+  "url": "https://www.florencecountywi.com/"
+ },
+ "55039": {
+  "county": "Fond Du Lac",
+  "seats": 25,
+  "url": "http://fdlco.wi.gov/"
+ },
+ "55041": {
+  "county": "Forest",
+  "seats": 21,
+  "url": "https://co.forest.wi.gov/"
+ },
+ "55043": {
+  "county": "Grant",
+  "seats": 17,
+  "url": "https://co.grant.wi.gov/"
+ },
+ "55045": {
+  "county": "Green",
+  "seats": 31,
+  "url": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "55047": {
+  "county": "Green Lake",
+  "seats": 19,
+  "url": "https://www.greenlakecountywi.gov/"
+ },
+ "55049": {
+  "county": "Iowa",
+  "seats": 21,
+  "url": "https://www.iowacountywi.gov/"
+ },
+ "55051": {
+  "county": "Iron",
+  "seats": 15,
+  "url": "https://www.co.iron.wi.gov/"
+ },
+ "55053": {
+  "county": "Jackson",
+  "seats": 19,
+  "url": "https://www.co.jackson.wi.us/"
+ },
+ "55055": {
+  "county": "Jefferson",
+  "seats": 30,
+  "url": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "55057": {
+  "county": "Juneau",
+  "seats": 21,
+  "url": "https://www.co.juneau.wi.gov/"
+ },
+ "55059": {
+  "county": "Kenosha",
+  "seats": 23,
+  "url": "https://www.kenoshacountywi.gov/142/County-Board-Supervisor-Districts"
+ },
+ "55061": {
+  "county": "Kewaunee",
+  "seats": 20,
+  "url": "https://kewauneeco.com/"
+ },
+ "55063": {
+  "county": "La Crosse",
+  "seats": 30,
+  "url": "https://lacrossecounty.org/"
+ },
+ "55065": {
+  "county": "Lafayette",
+  "seats": 16,
+  "url": "https://lafayettecountywi.org/"
+ },
+ "55067": {
+  "county": "Langlade",
+  "seats": 21,
+  "url": "https://www.co.langlade.wi.us/"
+ },
+ "55069": {
+  "county": "Lincoln",
+  "seats": 22,
+  "url": "https://co.lincoln.wi.us/"
+ },
+ "55071": {
+  "county": "Manitowoc",
+  "seats": 25,
+  "url": "https://manitowoccountywi.gov/"
+ },
+ "55073": {
+  "county": "Marathon",
+  "seats": 38,
+  "url": "https://marathoncounty.gov/"
+ },
+ "55075": {
+  "county": "Marinette",
+  "seats": 30,
+  "url": "https://www.marinettecountywi.gov/county_board/"
+ },
+ "55077": {
+  "county": "Marquette",
+  "seats": 17,
+  "url": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "55078": {
+  "county": "Menominee",
+  "seats": 5,
+  "url": "https://www.co.menominee.wi.us/"
+ },
+ "55079": {
+  "county": "Milwaukee",
+  "seats": 18,
+  "url": "https://county.milwaukee.gov/EN"
+ },
+ "55081": {
+  "county": "Monroe",
+  "seats": 16,
+  "url": "https://co.monroe.wi.us/"
+ },
+ "55083": {
+  "county": "Oconto",
+  "seats": 31,
+  "url": "https://www.ocontocountywi.gov/307/County-Board-Supervisory-District-Maps"
+ },
+ "55085": {
+  "county": "Oneida",
+  "seats": 21,
+  "url": "https://www.oneidacountywi.gov/"
+ },
+ "55087": {
+  "county": "Outagamie",
+  "seats": 36,
+  "url": "https://www.outagamie.gov/"
+ },
+ "55089": {
+  "county": "Ozaukee",
+  "seats": 26,
+  "url": "https://ozaukeecounty.gov/2206/Supervisory-District-Maps"
+ },
+ "55091": {
+  "county": "Pepin",
+  "seats": 12,
+  "url": "https://www.co.pepin.wi.us/"
+ },
+ "55093": {
+  "county": "Pierce",
+  "seats": 17,
+  "url": "https://co.pierce.wi.us/"
+ },
+ "55095": {
+  "county": "Polk",
+  "seats": 15,
+  "url": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "55097": {
+  "county": "Portage",
+  "seats": 25,
+  "url": "https://www.co.portage.wi.gov/"
+ },
+ "55099": {
+  "county": "Price",
+  "seats": 13,
+  "url": "https://co.price.wi.us/"
+ },
+ "55101": {
+  "county": "Racine",
+  "seats": 21,
+  "url": "https://racinecounty.gov/"
+ },
+ "55103": {
+  "county": "Richland",
+  "seats": 21,
+  "url": "https://richlandcountywi.gov/"
+ },
+ "55105": {
+  "county": "Rock",
+  "seats": 29,
+  "url": "https://co.rock.wi.us/"
+ },
+ "55107": {
+  "county": "Rusk",
+  "seats": 19,
+  "url": "https://ruskcountywi.gov/"
+ },
+ "55109": {
+  "county": "St Croix",
+  "seats": 19,
+  "url": "https://sccwi.gov/"
+ },
+ "55111": {
+  "county": "Sauk",
+  "seats": 31,
+  "url": "https://www.co.sauk.wi.us/"
+ },
+ "55113": {
+  "county": "Sawyer",
+  "seats": 15,
+  "url": "https://www.sawyercounty.gov/"
+ },
+ "55115": {
+  "county": "Shawano",
+  "seats": 27,
+  "url": "https://shawanocountywi.gov/"
+ },
+ "55117": {
+  "county": "Sheboygan",
+  "seats": 25,
+  "url": "https://sheboygancounty.com/"
+ },
+ "55119": {
+  "county": "Taylor",
+  "seats": 17,
+  "url": "https://co.taylor.wi.us/"
+ },
+ "55121": {
+  "county": "Trempealeau",
+  "seats": 17,
+  "url": "https://co.trempealeau.wi.us/"
+ },
+ "55123": {
+  "county": "Vernon",
+  "seats": 19,
+  "url": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "55125": {
+  "county": "Vilas",
+  "seats": 21,
+  "url": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "55127": {
+  "county": "Walworth",
+  "seats": 11,
+  "url": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "55129": {
+  "county": "Washburn",
+  "seats": 21,
+  "url": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "55131": {
+  "county": "Washington",
+  "seats": 21,
+  "url": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "55133": {
+  "county": "Waukesha",
+  "seats": 25,
+  "url": "https://www.waukeshacounty.gov/waukesha-county-board/"
+ },
+ "55135": {
+  "county": "Waupaca",
+  "seats": 27,
+  "url": "https://www.waupacacounty-wi.gov/"
+ },
+ "55137": {
+  "county": "Waushara",
+  "seats": 11,
+  "url": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "55139": {
+  "county": "Winnebago",
+  "seats": 36,
+  "url": "https://www.winnebagocountywi.gov/703/County-Board-of-Supervisors"
+ },
+ "55141": {
+  "county": "Wood",
+  "seats": 19,
+  "url": "https://woodcountywi.gov/CountyBoard/"
+ }
+}

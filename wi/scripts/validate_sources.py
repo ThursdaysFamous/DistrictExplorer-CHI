@@ -124,6 +124,40 @@ PROVENANCE = [
         "source_url": "https://data.openstates.org/people/current/wi.csv",
         "note": "Assembly roster from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
     },
+    {
+        "layer": "county-board",
+        "app_file": "county-supervisory-districts.json",
+        "source_url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_County_Supervisory_Districts_Current/FeatureServer/0",
+        "note": (
+            "Supervisory districts for all 72 counties, pre-built by "
+            "wi/scripts/build_wi_supervisory_districts.py from LTSB's statewide aggregate of "
+            "county filings under Wis. Stat. 5.15(4)(br)1. The layer is REPUBLISHED each 15 "
+            "January and 15 July, so re-run the builder after a submission window: its own "
+            "gates (feature count, 1..n numbering per county, ward reconciliation) are what "
+            "catch a county whose filing changed or broke."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-supervisory-districts.json",
+        "source_url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3",
+        "note": (
+            "Trempealeau County's own adopted plan, shipped in place of LTSB's file for that "
+            "county alone (LTSB merges its districts 15 and 17; the county still elects "
+            "seventeen). If this service ever stops answering, the builder fails rather than "
+            "silently falling back to the merged geometry."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-directory.json",
+        "source_url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0",
+        "note": (
+            "The ward layer is not shipped; it is the independent witness the district "
+            "builder reconciles against (every ward names a district that exists, every "
+            "district owns a ward). Listed so its disappearance is noticed."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.

@@ -5793,6 +5793,7 @@ function initWisconsinExplorer() {
     "school-district-secondary", // Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead
     "school-district-unified", // Unified (K-12) school districts; pre-built from TIGERweb at bootstrap
     "school-district-elementary", // Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory
+    "county-board",      // County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town
     "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
     "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
@@ -8191,6 +8192,100 @@ function initWisconsinExplorer() {
     compact: true, compactMetaField: "geoid" // 4b name-only card
   });
 
+  /* ---------- 12. County Board Supervisory District ----------
+   * Every county's board districts, statewide, from one pre-built file
+   * (wi/scripts/build_wi_supervisory_districts.py). Wisconsin is the only
+   * state in the fleet where this is one fetch instead of one build per
+   * county: Wis. Stat. 5.15(4)(br)1 makes every county file its current
+   * supervisory boundaries with the Legislative Technology Services Bureau
+   * each 15 January and 15 July, and LTSB publishes the aggregate openly.
+   *
+   * Trempealeau's 17 districts come from the COUNTY's own service instead —
+   * LTSB's July 2026 file merges its districts 15 and 17 into one, which the
+   * county's own board page (seventeen supervisors, districts 1 through 17)
+   * and its own published plan both contradict. The builder's docstring
+   * carries the whole measurement.
+   *
+   * NO SUPERVISOR IS NAMED. Wisconsin publishes no statewide roster of
+   * county supervisors — the only source for the person holding a seat is
+   * that county's own page, 72 of them — so the card gives the district and
+   * links the county's board, per the honesty rules, and the gap is recorded
+   * in the Data gaps panel rather than filled with a guess. ---------- */
+  var loadSupervisoryDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/county-supervisory-districts.json", {}, 2);
+  });
+  var loadCountyBoardDirectory = makeCached(function () {
+    return fetchJSONWithRetry("data/app/county-board-directory.json", {}, 2);
+  });
+
+  registerLayer({
+    id: "county-board",
+    group: "political",
+    label: "County Board District",
+    overlay: {
+      load: loadSupervisoryDistricts,
+      // solid green, light fill — the only political layer drawn inside a
+      // county, so it reads against County's grey and the chambers' dashes
+      style: { color: "#1B5E3F", weight: 1.5, fillColor: "#2E9E6B", fillOpacity: 0.06 }
+    },
+    hoverName: function (feature) {
+      // same two properties the card's header and County row read, so hover
+      // and card cannot disagree about which district this is
+      var props = feature.properties || {};
+      var num = findPropCI(props, ["superid"]);
+      if (num == null || num === "") return null;
+      var county = findPropCI(props, ["cnty_name"]);
+      return (county ? String(county) + " " : "") + "District " + String(num);
+    },
+    query: function (point, seq) {
+      // The directory is a small same-origin file and its failure is not this
+      // layer's failure: a district with no link still answers the question
+      // the reader asked, so a directory miss degrades to a card with no
+      // footer link rather than an error card.
+      return Promise.all([
+        queryFeatureAt(loadSupervisoryDistricts, point),
+        loadCountyBoardDirectory().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var fips = findPropCI(props, ["cnty_fips"]);
+        var entry = (parts[1] && fips != null) ? parts[1][String(fips)] : null;
+        return {
+          seq: seq,
+          district: findPropCI(props, ["superid"]),
+          county: findPropCI(props, ["cnty_name"]),
+          seats: entry ? entry.seats : null,
+          countyUrl: entry ? entry.url : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.district != null && result.district !== ""
+        ? "District " + String(result.district) : "Unknown district";
+    },
+    render: function (result) {
+      var rows = [];
+      rows.push({
+        label: "County",
+        value: result.county ? String(result.county) + " County" : "Unknown county",
+        primary: true
+      });
+      if (result.seats) {
+        rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+      }
+      return renderFieldStack(rows);
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.countyUrl);
+      if (!url) return null;
+      return {
+        label: (result.county ? String(result.county) + " County board" : "County board"),
+        url: url
+      };
+    }
+  });
+
   /* ---------- 2. County Subdivision — live TIGERweb ----------
    * Cribbed from the CHI reference township module minus its per-county
    * officials join: the card names the subdivision only (honesty rules — no
@@ -9125,7 +9220,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "municipality", "zip-code", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "municipality", "zip-code", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;

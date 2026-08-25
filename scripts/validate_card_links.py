@@ -143,8 +143,14 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
 AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html",
                   "privacy.html", "il/faq.html", "ny/index.html", "ny/faq.html", "ny/sources.html",
-                  "ca/index.html", "ca/faq.html", "ca/sources.html"]
+                  "ca/index.html", "ca/faq.html", "ca/sources.html",
+                  "wi/index.html", "wi/faq.html", "wi/sources.html"]
 APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
+# One data/app per instance. This used to be APP_DATA_DIR alone, which meant
+# the gate watched Illinois's roster URLs and nobody else's — a sibling could
+# ship a card link to a dead host and every check here stayed green.
+APP_DATA_DIRS = [os.path.join(REPO_ROOT, inst, "data", "app")
+                 for inst in ("il", "ny", "ca", "wi")]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 
@@ -344,6 +350,7 @@ def from_app_data(directory):
     """
     out = collections.defaultdict(list)
     authored = set()
+    rel_dir = os.path.relpath(directory, REPO_ROOT).replace(os.sep, "/")
     for path in sorted(glob.glob(os.path.join(directory, "*.json"))):
         name = os.path.basename(path)
         try:
@@ -362,7 +369,7 @@ def from_app_data(directory):
                 for i, v in enumerate(node):
                     walk(v, where + "/" + str(i), key)
             elif isinstance(node, str) and node.startswith(("http://", "https://")):
-                out[node].append("data/app/%s%s" % (name, where))
+                out[node].append("%s/%s%s" % (rel_dir, name, where))
                 if key not in PUBLISHED_KEYS:
                     authored.add(node)
 
@@ -378,9 +385,19 @@ def collect():
     """
     cites = collections.defaultdict(list)
     index_urls, prefixes = from_pages(AUTHORED_PAGES)
-    app_urls, authored = from_app_data(APP_DATA_DIR)
-    authored |= set(index_urls)
-    for source in (index_urls, app_urls):
+    authored = set(index_urls)
+    sources = [index_urls]
+    # EVERY instance's data/app, not just Illinois's. The gate's whole premise
+    # is that a new county is covered the day it ships with nothing to update —
+    # which held only for the instance whose directory was hardcoded here.
+    # Wisconsin's county-board-directory alone carries 72 county URLs that
+    # render on cards, and they were invisible to this script until this list
+    # replaced the single path.
+    for directory in APP_DATA_DIRS:
+        app_urls, app_authored = from_app_data(directory)
+        authored |= app_authored
+        sources.append(app_urls)
+    for source in sources:
         for url, where in source.items():
             cites[url].extend(where)
     origin = {u: (AUTHORED if u in authored else PUBLISHED) for u in cites}

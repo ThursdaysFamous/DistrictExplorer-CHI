@@ -62,6 +62,15 @@ jobs:
           python3 scripts/build_coverage_gaps.py --check
           python3 scripts/build_coverage_gaps.py --check --metro wisconsin --out wi/data/app/coverage-gaps.json
 
+      # Wisconsin's county-board-directory.json carries each county's board
+      # SIZE, and it reads that number back from the shipped supervisory
+      # geometry rather than restating it — so the only way the two can
+      # disagree is if one is rebuilt and the other is not. This is that gate.
+      # Local files only: the builder's --check re-derives the seat counts from
+      # data/app and compares, and fetches nothing.
+      - name: WI county board directory matches the shipped districts
+        run: python3 wi/scripts/build_wi_county_board_directory.py --check
+
       # districtry/tokens/districtry.tokens.css is the ONE source of the brand
       # surface, and this is what makes that true rather than aspirational. The
       # fleet was carrying one palette under two vocabularies and four hand-kept

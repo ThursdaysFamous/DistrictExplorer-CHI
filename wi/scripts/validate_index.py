@@ -88,7 +88,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 8
+MIN_REGISTER_LAYER = 9
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -97,8 +97,8 @@ MIN_REGISTER_LAYER = 8
 EXPECT_LAYER_IDS = [
     "us-house", "wi-senate", "wi-assembly", "county",
     "school-district-secondary", "school-district-unified",
-    "school-district-elementary", "county-subdivision", "municipality",
-    "zip-code", "post-office",
+    "school-district-elementary", "county-board", "county-subdivision",
+    "municipality", "zip-code", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -109,6 +109,7 @@ GEOMETRY_FILES = {
     "school-districts-unified.json": (369, 369),  # The state's unified school districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap).
     "wi-senate-districts.json": (34, 34),  # The 33 State Senate districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "wi-assembly-districts.json": (100, 100),  # The 99 State Assembly districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
+    "county-supervisory-districts.json": (1590, 1590),  # Every county board supervisory district in the state — 1,573 from LTSB's statewide aggregate plus Trempealeau's own 17, built by wi/scripts/build_wi_supervisory_districts.py (numbering, ward-reconciliation and 10,000-in-state-point agreement gates).
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -117,6 +118,7 @@ ROSTER_FILES = {
     "wi-senate-members.json": 31,  # State Senate roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (33 seats).
     "wi-assembly-members.json": 94,  # State Assembly roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (99 seats).
     "coverage-gaps.json": 1,  # The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps.
+    "county-board-directory.json": 72,  # One row per county: board size read back from the shipped geometry, plus the county's own official page for the card's footer link. Built by wi/scripts/build_wi_county_board_directory.py; not a roster of people — Wisconsin publishes none statewide.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at
