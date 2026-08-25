@@ -8044,6 +8044,7 @@ function initChiExplorer() {
         var key = normCountyName(base);
         return {
           seq: seq,
+          key: key,
           name: findPropCI(props, ["name"]),
           geoid: findPropCI(props, ["geoid"]),
           clerk: countyClerkFor(feature, roster),
@@ -8071,6 +8072,18 @@ function initChiExplorer() {
             offices: [{ label: "Clerk's Office", lines: [String(clerk.address)] }]
           }));
         }
+      } else if (result.key === "PEORIA") {
+        // Peoria elects no county clerk: ISBE lists its election authority as
+        // the appointed Peoria County Election Commission (an EXECUTIVE
+        // DIRECTOR title, not a clerk), which build_county_clerk_roster.py
+        // deliberately excludes from the clerk roster rather than mislabel it.
+        // Say so instead of leaving the card blank — primaryLink below points
+        // to the Commission itself.
+        wrap.appendChild(renderFieldStack([{
+          label: "Election Authority",
+          value: "Peoria elects no county clerk. Elections here are run by the " +
+            "appointed Peoria County Election Commission."
+        }]));
       }
       // At-large county board: rendered here rather than on county-board,
       // because there is no district to answer with — these members represent
@@ -8126,7 +8139,10 @@ function initChiExplorer() {
       }
       return wrap;
     },
-    primaryLink: function () {
+    primaryLink: function (result) {
+      if (result && result.key === "PEORIA") {
+        return { label: "Peoria County Election Commission (official)", url: "https://www.peoriaelections.gov/" };
+      }
       return { label: "ISBE election-authority directory", url: "https://www.elections.il.gov/ElectionOperations/ElectionAuthorities.aspx" };
     },
     pointOfInterest: function (result) {
