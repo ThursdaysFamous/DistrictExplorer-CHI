@@ -28,16 +28,16 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/13th-precinct.page"
 },
 "14": {
-"commander": null,
-"source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/14th-precinct.page"
+"commander": "Deputy Inspector Christopher Treubig",
+"source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/midtown-south-precinct.page"
 },
 "17": {
 "commander": "Captain Allen Kirmss",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/17th-precinct.page"
 },
 "18": {
-"commander": null,
-"source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/18th-precinct.page"
+"commander": "Deputy Inspector Maggie Clamp",
+"source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/midtown-north-precinct.page"
 },
 "19": {
 "commander": "Deputy Inspector Noreen E. Lazarus",
@@ -48,8 +48,8 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/20th-precinct.page"
 },
 "22": {
-"commander": null,
-"source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/22nd-precinct.page"
+"commander": "Deputy Inspector Timothy V. Magliente",
+"source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/central-park-precinct.page"
 },
 "23": {
 "commander": "Deputy Inspector Anthony M, Lavino",
@@ -84,7 +84,7 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/33rd-precinct.page"
 },
 "34": {
-"commander": "&nbsp;Inspector John Portalatin",
+"commander": "Inspector John Portalatin",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/34th-precinct.page"
 },
 "40": {
@@ -96,11 +96,11 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/41st-precinct.page"
 },
 "42": {
-"commander": null,
+"commander": "Deputy Inspector Emmanuel Kwo",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/42nd-precinct.page"
 },
 "43": {
-"commander": "&nbsp;Deputy Inspector Tawee Theanthong",
+"commander": "Deputy Inspector Tawee Theanthong",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/43rd-precinct.page"
 },
 "44": {
@@ -108,11 +108,11 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/44th-precinct.page"
 },
 "45": {
-"commander": "Captain Anderson Ortiz",
+"commander": "Deputy Inspector Anderson Ortiz",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/45th-precinct.page"
 },
 "46": {
-"commander": "Deputy Inspector Juan Moran",
+"commander": "Deputy Inspector Eric J. Carrasquillo",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/46th-precinct.page"
 },
 "47": {
@@ -240,7 +240,7 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/102nd-precinct.page"
 },
 "103": {
-"commander": "Captain Genienne King",
+"commander": "Deputy Inspector Genienne King",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/103rd-precinct.page"
 },
 "104": {
@@ -248,7 +248,7 @@
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/104th-precinct.page"
 },
 "105": {
-"commander": "&nbsp;Deputy Inspector Douglas Moodie",
+"commander": "Deputy Inspector Douglas Moodie",
 "source_url": "https://www.nyc.gov/site/nypd/bureaus/patrol/precincts/105th-precinct.page"
 },
 "106": {
