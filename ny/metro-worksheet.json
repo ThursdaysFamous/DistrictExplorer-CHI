@@ -38,7 +38,9 @@
     { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City",
       "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
     { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
-      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } }
+      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
+    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
+      "bbox": { "minLng": -93.09, "minLat": 42.29, "maxLng": -86.04, "maxLat": 47.51 } }
   ],
   "hover_number_keys": [
     ["district", "dist_num", "dist", "district_number", "district_no"],
@@ -646,7 +648,7 @@
     ]
   },
   "sw": {
-    "cache_name": "nyc-district-explorer-shell-v10",
+    "cache_name": "nyc-district-explorer-shell-v11",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
