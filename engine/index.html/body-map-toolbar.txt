@@ -1,0 +1,19 @@
+    <div class="search-shell">
+      <form id="geocode-form" class="search-row" role="search">
+        <!-- Neutral by design. The label and placeholder are rewritten at boot
+             from SEARCH_PLACEHOLDER (engine/index.html/geocoder-shell.txt) when
+             the instance's worksheet sets one; an instance that does not set it
+             still ships a correct box rather than a wrong one. -->
+        <label for="geocode-input" class="visually-hidden">Search an address</label>
+        <input type="text" id="geocode-input" placeholder="Search an address" autocomplete="off" />
+        <button type="submit">Search</button>
+      </form>
+      <div class="search-extra" id="search-extra">
+        <button type="button" id="locate-btn" class="locate-btn">📍 Use my current location</button>
+        <div id="geo-status" class="geo-status" aria-live="polite"></div>
+        <ul id="geocode-results" role="listbox" aria-label="Address matches"></ul>
+        <button type="button" id="kbd-select-btn" class="kbd-select-btn">
+          ⌨ Keyboard / screen-reader users: select the point currently centered on the map
+        </button>
+      </div>
+    </div>

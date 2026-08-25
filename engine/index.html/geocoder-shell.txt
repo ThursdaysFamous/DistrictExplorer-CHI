@@ -8,6 +8,21 @@
    * away mid-interaction. Hover/focus-within (CSS) handle the rest. */
   var searchShellEl = document.querySelector(".search-shell");
   var geocodeInputEl = document.getElementById("geocode-input");
+
+  /* The words in the box. The shared toolbar markup ships a NEUTRAL default
+   * ("Search an address"), which is correct everywhere and wrong nowhere, and
+   * an instance sharpens it through the config rather than by editing shared
+   * markup — the rule that keeps a city name out of an ENGINE block. Both
+   * surfaces move together: the placeholder a sighted reader sees and the
+   * visually-hidden <label> a screen reader announces, which is why the label
+   * is written here rather than left to drift out of step with the box beside
+   * it. typeof guard because the key is optional; an instance that never sets
+   * it keeps the default and loses nothing. */
+  if (typeof SEARCH_PLACEHOLDER === "string" && SEARCH_PLACEHOLDER) {
+    geocodeInputEl.setAttribute("placeholder", SEARCH_PLACEHOLDER);
+    var geocodeLabelEl = document.querySelector('label[for="geocode-input"]');
+    if (geocodeLabelEl) geocodeLabelEl.textContent = SEARCH_PLACEHOLDER;
+  }
   // Set true the moment a search result is chosen so the shell collapses back
   // to just the input row — the "Selected: …" status plus the type-ahead
   // controls otherwise stay open over the map (the input still holds the typed

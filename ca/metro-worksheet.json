@@ -563,7 +563,8 @@
   "geocoder": {
     "address": "Photon (SF-bounded type-ahead)",
     "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
-    "poi": "Nominatim (office-address pin lookup, serial >=1s queue)"
+    "poi": "Nominatim (office-address pin lookup, serial >=1s queue)",
+    "search_placeholder": "Search a San Francisco address"
   },
   "palette": {
     "accent": "#6d3fd1",

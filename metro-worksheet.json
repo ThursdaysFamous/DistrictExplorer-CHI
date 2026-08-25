@@ -2829,7 +2829,8 @@
   "geocoder": {
     "address": "Photon (Chicago-bounded type-ahead)",
     "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
-    "poi": "Nominatim (office-address pin lookup, Illinois-bounded, serial >=1s queue)"
+    "poi": "Nominatim (office-address pin lookup, Illinois-bounded, serial >=1s queue)",
+    "search_placeholder": "Search an Illinois address"
   },
   "palette": {
     "accent": "#6d3fd1",

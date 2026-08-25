@@ -3635,21 +3635,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <!-- ==== GENERATED:END masthead-brand ==== -->
     </h1>
     <div class="map-toolbar">
-      <div class="search-shell">
-        <form id="geocode-form" class="search-row" role="search">
-          <label for="geocode-input" class="visually-hidden">Search an Illinois address</label>
-          <input type="text" id="geocode-input" placeholder="Search an Illinois address" autocomplete="off" />
-          <button type="submit">Search</button>
-        </form>
-        <div class="search-extra" id="search-extra">
-          <button type="button" id="locate-btn" class="locate-btn">📍 Use my current location</button>
-          <div id="geo-status" class="geo-status" aria-live="polite"></div>
-          <ul id="geocode-results" role="listbox" aria-label="Address matches"></ul>
-          <button type="button" id="kbd-select-btn" class="kbd-select-btn">
-            ⌨ Keyboard / screen-reader users: select the point currently centered on the map
-          </button>
-        </div>
+<!-- ==== ENGINE:BEGIN body-map-toolbar ==== -->
+    <div class="search-shell">
+      <form id="geocode-form" class="search-row" role="search">
+        <!-- Neutral by design. The label and placeholder are rewritten at boot
+             from SEARCH_PLACEHOLDER (engine/index.html/geocoder-shell.txt) when
+             the instance's worksheet sets one; an instance that does not set it
+             still ships a correct box rather than a wrong one. -->
+        <label for="geocode-input" class="visually-hidden">Search an address</label>
+        <input type="text" id="geocode-input" placeholder="Search an address" autocomplete="off" />
+        <button type="submit">Search</button>
+      </form>
+      <div class="search-extra" id="search-extra">
+        <button type="button" id="locate-btn" class="locate-btn">📍 Use my current location</button>
+        <div id="geo-status" class="geo-status" aria-live="polite"></div>
+        <ul id="geocode-results" role="listbox" aria-label="Address matches"></ul>
+        <button type="button" id="kbd-select-btn" class="kbd-select-btn">
+          ⌨ Keyboard / screen-reader users: select the point currently centered on the map
+        </button>
       </div>
+    </div>
+<!-- ==== ENGINE:END body-map-toolbar ==== -->
     </div>
 
     <!-- Chicago-owned masthead action row: the two "about the data" doors, in
@@ -3873,6 +3879,7 @@ function initChiExplorer() {
   var SOCRATA_APP_TOKEN = "";
   var REPO_ISSUES = "https://github.com/ThursdaysFamous/districtry/issues/new";
   var FEEDBACK_SUBJECT = "districtry Illinois feedback";
+  var SEARCH_PLACEHOLDER = "Search an Illinois address";
   // Brand identity as worksheet data — never read from an ENGINE block
   // without a typeof guard (forks that have not opted in do not define it).
   var METRO_BRAND = { appName: "districtry Illinois", productName: "districtry", instanceTag: "il" };
@@ -5628,6 +5635,21 @@ function initChiExplorer() {
    * away mid-interaction. Hover/focus-within (CSS) handle the rest. */
   var searchShellEl = document.querySelector(".search-shell");
   var geocodeInputEl = document.getElementById("geocode-input");
+
+  /* The words in the box. The shared toolbar markup ships a NEUTRAL default
+   * ("Search an address"), which is correct everywhere and wrong nowhere, and
+   * an instance sharpens it through the config rather than by editing shared
+   * markup — the rule that keeps a city name out of an ENGINE block. Both
+   * surfaces move together: the placeholder a sighted reader sees and the
+   * visually-hidden <label> a screen reader announces, which is why the label
+   * is written here rather than left to drift out of step with the box beside
+   * it. typeof guard because the key is optional; an instance that never sets
+   * it keeps the default and loses nothing. */
+  if (typeof SEARCH_PLACEHOLDER === "string" && SEARCH_PLACEHOLDER) {
+    geocodeInputEl.setAttribute("placeholder", SEARCH_PLACEHOLDER);
+    var geocodeLabelEl = document.querySelector('label[for="geocode-input"]');
+    if (geocodeLabelEl) geocodeLabelEl.textContent = SEARCH_PLACEHOLDER;
+  }
   // Set true the moment a search result is chosen so the shell collapses back
   // to just the input row — the "Selected: …" status plus the type-ahead
   // controls otherwise stay open over the map (the input still holds the typed
