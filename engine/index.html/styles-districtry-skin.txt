@@ -268,6 +268,21 @@
      DOM, read out by a screen reader, and invisible to everyone else. Dark
      mode hid the bug by making the old colour the right one. */
   .districtry-panel-foot .footer-meta strong { color: var(--ink); }
+  /* The independence statement is a FACT, not a warning, so it takes the panel
+     foot's ordinary tone rather than the disclaimer's emphasis — a second alarm
+     reads as a second problem. It sits in .districtry-panel-foot and NOT in
+     <footer class="site-footer">, which this skin sets display:none: the first
+     draft of this line went into that footer, where it was real in the DOM,
+     inherited a 0x0 box, and would never have been seen by a reader or a
+     reviewer. Added 2026-08-25, after Safe Browsing flagged the day-old
+     districtry.com under "Deceptive pages" — nothing on the site was deceptive
+     and nothing was compromised, but no page said who runs it or that it is
+     unofficial, so a classifier had nothing to tell an independent civic
+     reference from an impersonation of one. */
+  .dpf-independence { color: var(--slate-soft); }
+  .dpf-independence strong { color: var(--ink); font-weight: 650; }
+  .dpf-independence a { color: var(--accent-deep); text-decoration: none; }
+  .dpf-independence a:hover { text-decoration: underline; }
   .dpf-links { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 8px; }
   .dpf-links a { color: var(--accent-deep); text-decoration: none; }
   .dpf-links a:hover { text-decoration: underline; }

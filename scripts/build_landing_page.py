@@ -97,6 +97,23 @@ NOTICE = {
              "districtry.com/il, and every link below goes straight there."),
 }
 
+# The independence line, and it earns its place rather than decorating the page.
+# On 2026-08-25 Google Safe Browsing flagged districtry.com under "Deceptive
+# pages" — a day-old domain that had just absorbed a mass redirect from an
+# established site, asks for a home address, and renders county seals and
+# "who represents you", while saying NOWHERE who runs it or that it is
+# unofficial. Nothing on the site was deceptive and nothing was compromised
+# (every deployed byte matched the repo), but a classifier had no way to tell
+# an independent civic reference from an impersonation of one, because the page
+# never said. This is the site saying it, above the fold, in its own words.
+INDEPENDENCE = (
+    "districtry is an independent, unofficial project. It is not a government "
+    "service and is not affiliated with, endorsed by, or operated by any "
+    "government agency. It asks for an address only to place a point on the "
+    "map — there is no account, no sign-in, and it never asks for personal "
+    "or financial information."
+)
+
 # Where a forwarded visit goes. The Illinois app is what lived at this root
 # before R2.3, so it is the only instance whose old links can be in the wild.
 FORWARD_TO = "/il/"
@@ -239,6 +256,10 @@ def render_notice():
         '    </aside>\n'
         % (html.escape(NOTICE["heading"]), html.escape(NOTICE["body"]))
     )
+
+
+def render_independence():
+    return ('    <p class="independence">%s</p>\n' % html.escape(INDEPENDENCE))
 
 
 def render_cards(metros):
@@ -462,6 +483,13 @@ h1 {
 }
 .notice-b { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-3); max-width: 52em; }
 
+/* Stated plainly and early, never as a warning banner — it is a fact about who
+   this is, not an alarm. See INDEPENDENCE for why it is above the fold. */
+.independence {
+  margin: 18px 0 0; max-width: 52em; font-size: 13.5px; line-height: 1.55;
+  color: var(--muted);
+}
+
 h2 {
   font: var(--font-heading-weight) 15px/1 var(--font-heading);
   letter-spacing: .09em; text-transform: uppercase;
@@ -519,7 +547,7 @@ footer .foot-links { margin-top: 12px; }
     <h1>Every district that covers a point, and who represents it.</h1>
     <p class="lede">%(desc)s</p>
 
-%(notice)s
+%(notice)s%(independence)s
     <h2>Choose a place</h2>
     <div class="cards">
 %(cards)s
@@ -550,6 +578,14 @@ footer .foot-links { margin-top: 12px; }
          boundaries and rosters. It is not a legal record of any district line,
          and it never guesses at who holds a seat — where no verifiable roster
          exists, it links the official body instead.</p>
+      <p>It is an <b>independent, unofficial project</b> — not a government service, and
+         not affiliated with or endorsed by any government agency. Boundary data and
+         officeholder names come from the public sources each place names on its sources
+         page; seals and logos shown beside a county belong to that county and indicate
+         whose district you are looking at, not any endorsement of this site.</p>
+      <p>Built and run by <a href="https://overberg.co/" target="_blank" rel="noopener">Adam
+         Overberg</a>. The whole thing is open source — every line that produced this page
+         is public.</p>
       <p>Each place above names its own sources on its sources page.</p>
       <p class="foot-links"><a href="privacy.html">Privacy</a> ·
          <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a> ·
@@ -573,6 +609,7 @@ footer .foot-links { margin-top: 12px; }
         "cards": render_cards(metros),
         "mark": load_mark(),
         "notice": render_notice(),
+        "independence": render_independence(),
     }
 
 
