@@ -27,3 +27,8 @@ deployment guide for all future expansion), `docs/ENGINE_SYNC.md`,
   audit, consolidated into `EXPANSION_GUIDE.md` Part 1 + Appendix A.
 - `MECHANIZATION_PLAYBOOK.md` — conversions 1–3 (engine artifact, generated
   config, reverse parity), completed 2026-07-13; the metro-#3 gate is open.
+- `ROOT_README_2026-08-25.md` — the repo-root `README.md` as it stood on
+  25 August 2026, superseded the same day by a ground-up rewrite that leads
+  with the fleet (three live instances, one shared engine) rather than
+  Illinois alone. Kept for provenance; nothing in it needs consulting — the
+  live `README.md` and `docs/COUNTY_STATUS.md` are current.
