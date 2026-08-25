@@ -60,6 +60,19 @@ jobs:
       - name: Coverage gaps match the guidebook
         run: python3 scripts/build_coverage_gaps.py --check
 
+      # districtry/tokens/districtry.tokens.css is the ONE source of the brand
+      # surface, and this is what makes that true rather than aspirational. The
+      # fleet was carrying one palette under two vocabularies and four hand-kept
+      # copies; the copies had already diverged on three values, including a
+      # dark link colour that differed between the root pages and the app. It
+      # checks every consumer through an explicit alias table — a consumer keeps
+      # its own NAMES, never its own values — and covers the metric-matched
+      # fallback face, which four surfaces named in --font-body and never
+      # defined. Runs BEFORE compose_app because it writes what that splices.
+      # Stdlib only.
+      - name: Brand tokens have one source
+        run: python3 scripts/build_brand_tokens.py --check
+
       # There is ONE copy of each engine block, under engine/, and every
       # instance's index.html/sw.js is composed from it (R3). This is that
       # invariant's gate: an ENGINE fence hand-edited inside an instance file,

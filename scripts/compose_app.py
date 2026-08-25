@@ -82,7 +82,7 @@ SUBPAGES = {
 # keying it by filename would put eight copies back where this file just removed
 # thirteen. Resolution stays deterministic — a shared name never also resolves
 # per-filename.
-SHARED_BLOCKS = {"styles-subpage"}
+SHARED_BLOCKS = {"styles-subpage", "tokens-brand"}
 
 ENGINE_RE = re.compile(
     r"^[ \t]*(?:/\*|<!--|#|//)?[ \t]*==== ENGINE:(BEGIN|END) "
