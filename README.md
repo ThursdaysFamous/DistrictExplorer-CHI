@@ -14,15 +14,15 @@ This is the reference implementation of a fleet that now lives in ONE repo: Illi
 
 Pick a point. The app runs a point-in-district lookup across every layer you have toggled on and builds a "civic profile" for that location. 39 layers ship today; layers are location-aware, so city-only layers hide outside Chicago, county-scoped layers appear only inside the counties that publish them, and the statewide layers work anywhere in Illinois.
 
-Coverage started as the seven Chicago-metro counties and has grown to **89 counties** (as of 23 August 2026; the generated [county status table](docs/COUNTY_STATUS.md) is always current) — north to the Wisconsin line, west to the Mississippi, and south through the Metro East to the Missouri border. Growth followed county adjacency until August 2026 and now follows published data wherever it surfaces: Effingham County, the first detached addition, joined on the strength of its own GIS; Hamilton County followed a day later when its Clerk answered one email in four minutes, and stopped being detached once Jefferson County — which borders both it and the mainland — shipped; Effingham itself stopped being detached the same way a week later, when Shelby County joined between it and the mainland, and the Edwards–Wabash island merged back when White County joined. No island stands today: the fourth and last, Massac County on the Ohio River at the far south of the state, was detached for part of a single day before Johnson County joined on its mainland side the same evening. What the served area does carry is four holes — unserved ground entirely enclosed by served counties. Two are single counties (Bureau, and Christian since Shelby's arrival enclosed it) and two are blocks: Clay, Fayette, Jasper, Marion and Wayne, sealed in when Richland joined, and Champaign, Ford and Piatt, sealed in when Vermilion did. A hole is not permanent — Knox was one until it joined on 22 August as the 80th county and its ring closed. Gallatin, the 76th, is the county that was never missing: it had been recorded as unreachable for seventeen days when the truth was that its server omits one certificate from its TLS handshake — a browser repairs that silently and no automated client does. Six consolidated layers (County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct) span every county that publishes the data and pick the right county's source automatically; where a county elects its board countywide instead of by district, its commissioners appear on the County card, because there is no district to draw.
+Coverage started as the seven Chicago-metro counties and has grown to **89 counties** (as of 25 August 2026 — 77 through their own dispatch entries, 2 through a shipped judicial circuit, and 10 through the County card alone; the generated [county status table](docs/COUNTY_STATUS.md) is always current) — north to the Wisconsin line, west to the Mississippi, and south through the Metro East to the Missouri border. Growth followed county adjacency until August 2026 and now follows published data wherever it surfaces: Johnson, Perry, Union and Williamson joined on certified election returns published by a third-party results vendor with no county board page read at all, and Douglas and Vermilion shipped from a public ArcGIS Online organization that carried dozens of the county's own layers even though the county's own web map viewer only ever named one of them. No island stands today: the served area has gone disjoint four separate times as coverage grew outward from adjacency (Effingham, Hamilton, Edwards–Wabash, and finally Massac County on the Ohio River at the far south of the state), and each time a neighboring county's join reattached it to the mainland — Massac's detachment lasted part of a single day before Johnson County closed it that same evening. What the served area does carry is four holes — unserved ground entirely enclosed by served counties, confirmed by `scripts/build_metro_outline.py --check` (5 rings: one outer boundary plus these four). Two are single counties (Bureau, and Christian since Shelby's arrival enclosed it) and two are blocks sealed shut by a single county's join: Clay, Fayette, Jasper, Marion and Wayne when Richland joined, and Champaign, Ford and Piatt when Vermilion did. A hole is not permanent — Knox was one until it joined as the 80th county and its ring closed. Six consolidated layers (County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct) span every county that publishes the data and pick the right county's source automatically — a judicial circuit's boundary can cover more than one county, so a county can be served through a neighbor's shipped circuit without a subcircuit layer of its own; where a county elects its board countywide instead of by district, its commissioners appear on the County card, because there is no district to draw.
 
-Where a county publishes nothing, the app says so rather than guessing: the **Data gaps** panel lists every recorded absence — 111 as of 21 August 2026 — each naming the specific artifact its publisher would have to release.
+Where a county publishes nothing, the app says so rather than guessing: the **Data gaps** panel lists every recorded absence — 105 as of 25 August 2026 — each naming the specific artifact its publisher would have to release.
 
 | Group | Layer | What you get |
 |---|---|---|
 | **Political** | City Ward | Ward number, alderman, office phone + address |
 | | Ward Precinct | Precinct number (a sub-selection of City Ward — turning it on drops the ward to an outline and fills it with its precincts) |
-| | County Board District | Your county-legislature seat, dispatched across **62 counties** — Cook's Commissioner district (live officeholder join, office pin) through the collar counties to the downstate additions. Depth follows what each county publishes: members with party, phone, e-mail and profile links where a roster exists (most), name-only where it doesn't. Some counties' boards ride their own GIS; most are weekly-scraped and open a PR for human review. Where a county publishes no boundary at all, the district is DERIVED from its own published composition (whole townships or whole precincts) and the build proves the partition and population balance. Counties that elect their board **countywide** have no district and appear on the County card instead — nineteen of them (Monroe, Randolph, Pike, Brown, Calhoun, Putnam, Schuyler, Hamilton, Edwards, Greene, Morgan, Moultrie, Wabash, Massac, Saline, Gallatin, Union, Williamson, Alexander), each verified at-large from a certified election document or the county's own election authority in writing — never from a page that merely omits districts |
+| | County Board District | Your county-legislature seat, dispatched across **61 counties** — Cook's Commissioner district (live officeholder join, office pin) through the collar counties to the downstate additions. Depth follows what each county publishes: members with party, phone, e-mail and profile links where a roster exists (most), name-only where it doesn't. Some counties' boards ride their own GIS; most are weekly-scraped and open a PR for human review. Where a county publishes no boundary at all, the district is DERIVED from its own published composition (whole townships or whole precincts) and the build proves the partition and population balance. Counties that elect their board **countywide** have no district and appear on the County card instead — nineteen of them (Monroe, Randolph, Pike, Brown, Calhoun, Putnam, Schuyler, Hamilton, Edwards, Greene, Morgan, Moultrie, Wabash, Massac, Saline, Gallatin, Union, Williamson, Alexander), each verified at-large from a certified election document or the county's own election authority in writing — never from a page that merely omits districts |
 | | U.S. House District | District (IL-N), representative, party, D.C. phone, website |
 | | IL State Senate District | Senator, party, Springfield + district offices, ILGA page |
 | | IL State House District | State representative, party, offices, ILGA page |
@@ -30,7 +30,7 @@ Where a county publishes nothing, the app says so rather than guessing: the **Da
 | | IL Supreme Court District | District under PA 102-0011 (District 1 = Cook County) |
 | | Cook County Board of Review District | District under PA 102-0012 (property-tax appeals) |
 | | Early Voting Site (nearest 3) | Official early-voting sites for the current cycle — site, ward, address, distance (hand-curated per election from chicagoelections.gov; each site also hosts a secured ballot drop box) |
-| | Judicial Subcircuit | Your judicial subcircuit, picked by county — Cook (20, with the Circuit Court's Municipal District + courthouse), Will (12th Cir.), DuPage (18th), Lake (19th), Kane (16th), or McHenry (22nd) — Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; each card links its circuit's court. (Kendall's 23rd Circuit has no subcircuits under the act, so the layer hides there) |
+| | Judicial Subcircuit | Your judicial subcircuit, picked by county — Cook (20, with the Circuit Court's Municipal District + courthouse), Will (12th Cir.), DuPage (18th), Lake (19th), Kane (16th), McHenry (22nd), Winnebago (17th, shared with Boone), Madison (3rd, shared with Bond), or Sangamon (7th, shared with Greene, Jersey, Macoupin, Morgan & Scott) — Kane and McHenry pre-built from the enacted PA 102-0693 shapefile; each card links its circuit's court. Bond and Jersey have no board layer of their own and are served through their circuit alone. (Kendall's 23rd Circuit has no subcircuits under the act, so the layer hides there) |
 | **Public Safety** | Police District | CPD district number and name, commander, CAPS unit phone/email, station address + phone, district map link |
 | | Police Beat | Beat number (a sub-selection of Police District — turning it on drops the district to an outline and fills it with its beats) |
 | | CCPSA District Council | The three elected District Councilors for that police district (name + role) and links to each Councilor's profile + the council page |
@@ -71,88 +71,114 @@ python3 -m http.server 8000
 # then open http://localhost:8000/
 ```
 
-Most layers fetch live data from public APIs at runtime, so they need an internet connection. Layers with no public API ship same-origin files under `data/app/` that the page fetches on first toggle: the Elected School Board, IL Supreme Court, and Board of Review boundaries; the pre-built U.S. House / IL Senate / IL House district geometry; Kane's 16th-Circuit and McHenry's 22nd-Circuit judicial subcircuits (Kane's county services are locked and McHenry publishes none, so the enacted PA 102-0693 shapefile ships pre-built); the Will, DuPage, Lake, Kane, McHenry, and Kendall county outlines used for coverage tests; and the hand-curated early-voting site list. With the service worker installed the boundary files are cached (cache-first), so once a layer has loaded it keeps working offline; the officeholder rosters and the early-voting list are cached network-first so a returning visitor always gets the latest.
+Cook and the collar counties mostly fetch live data from public APIs at runtime, so they need an internet connection. Most of the downstate counties publish no live API at all — no GIS, sometimes no county website a machine can read — so their boundaries are pre-built once (often derived from Census voting districts, election canvasses, or a county's own GIS export) and shipped as same-origin files under `il/data/app/`, fetched on first toggle. That directory holds 271 files today: 194 boundary/geometry files, served cache-first by the service worker (`il/sw.js`) since boundaries change roughly once a decade, so once a layer has loaded it keeps working offline; and 77 officeholder-roster files, served network-first so a returning visitor always gets the latest roster rather than a stale one. `docs/COUNTY_STATUS.md` and [`il/sources.html`](https://districtry.com/il/sources.html) name what backs each county's layers.
 
 ## Architecture
 
 Stable core + pluggable layer modules, all inside `index.html`. The full contract and build history live in [`docs/BUILD_PLAYBOOK_1.md`](docs/BUILD_PLAYBOOK_1.md); the primary deployment guide for all future expansion (new counties, statewide growth, new metro forks, new concepts) is [`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md).
 
 - **Core**: Leaflet map, click-to-select + Photon/Nominatim geocoder (debounced, Chicago-bounded), global `{selectedPoint, sequence}` state where a monotonic sequence counter discards stale async results, shared `sanitize` / `pointInGeometry` / `fetchJSONWithRetry` utilities, layer registry + result-card framework with per-layer failure isolation, selected-boundary highlight, URL-hash permalinks.
-- **Modules**: each layer registers `{id, group, label, overlay:{load, style}, query(point, seq), render(result)}`. Overlays lazy-load on first toggle and are cached; `query` runs a local point-in-polygon test against the cached boundaries (or nearest-N haversine for station/school/amenity layers). Layers can declare a `coverage(point)` test — outside their coverage they hide instead of erroring.
+- **Modules**: each layer registers `{id, group, label, overlay:{load, style}, query(point, seq), render(result)}`. Overlays lazy-load on first toggle and are cached; `query` runs a local point-in-polygon test against the cached boundaries (or nearest-N haversine for station/school/amenity layers). Layers can declare a `coverage(point)` test — outside their coverage they hide instead of erroring. The six cross-county concepts (County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct) register through one `registerCountyLayer` dispatcher each — a single toggle holding a per-county entry table, whose combined coverage is the OR of its counties' tests — so adding a county to a shipped concept is a dispatch-table entry, not a new layer.
 - **Result cards**: cards open with the layer name, then the district identifier, then — wherever a verifiable source exists — the officeholder(s), office location, contact info, and a link to more detail, in that order. Layers whose concept has no representative (a ZIP, a community area) omit the roster rows rather than padding them.
 - **Honesty rules**: external strings are sanitized or rendered via `textContent`; officeholder data is never guessed — where no verifiable roster source exists, cards link to the official body instead.
 
 ### Data sources
 
-The reader-facing version of this is **[districtry.com/il/sources.html](https://districtry.com/il/sources.html)** (`il/sources.html`): the same credits, plus a **layer matrix** giving each of the app's layers its own row — what it answers, the publisher its boundary comes from, where the names on its card come from, and the ground it answers on. It is generated from `metro-worksheet.json`'s `layers[].source`, off the same list that drives the layer registry, so it cannot fall behind the app. The table below stays as the maintainer's summary, grouped by publisher rather than by layer.
+The reader-facing version of this is **[districtry.com/il/sources.html](https://districtry.com/il/sources.html)** (`il/sources.html`): the same credits, plus a **layer matrix** giving each of the app's layers its own row — what it answers, the publisher its boundary comes from, where the names on its card come from, and the ground it answers on. It is generated from `metro-worksheet.json`'s `layers[].source`, off the same list that drives the layer registry, so it cannot fall behind the app. The table below stays as the maintainer's summary, grouped by publisher rather than by layer — it covers the Chicago-metro sources; the several dozen downstate county GIS hosts, results platforms, and county-run scrapers behind the rest of the fleet are cataloged per-county in `docs/COUNTY_STATUS.md` and per-layer on the sources page above, not enumerated here.
+
+Downstate, three commercial election-results platforms carry certified canvasses for dozens of Illinois counties each and back a meaningful share of the fleet's boards and precincts where no county GIS exists: `il-<county>.pollresults.net` / `.accessliberty.com`, `platinumelectionresults.com`, and `results.gbsvote.com` / `results.enr.clarityelections.com`. A county's own certified canvass — not the vendor — is always the cited source; the platform is only the delivery mechanism.
 
 | Source | Used for |
 |---|---|
 | [Chicago Data Portal](https://data.cityofchicago.org) (Socrata) | Wards + aldermen roster, ward precincts, library locations, CPS zones + networks, community areas |
 | CPD ArcGIS (`services2.arcgis.com/t3tlzCPfmaQzSWAk`) | Police district boundaries, police beat boundaries, police station roster, school locations |
-| [chicagopolice.org](https://www.chicagopolice.org) per-district pages (scraped weekly by CI) | Police district commander, CAPS unit phone/email, station address (`data/app/cpd-district-info.json`) |
-| [ccpsa.chicago.gov](https://ccpsa.chicago.gov) per-council pages (scraped weekly by CI) | CCPSA District Council elected Councilors — name + role per police district (`data/app/ccpsa-district-councils.json`); boundaries reuse the CPD police-district geometry |
+| [chicagopolice.org](https://www.chicagopolice.org) per-district pages (scraped weekly by CI) | Police district commander, CAPS unit phone/email, station address (`il/data/app/cpd-district-info.json`) |
+| [ccpsa.chicago.gov](https://ccpsa.chicago.gov) per-council pages (scraped weekly by CI) | CCPSA District Council elected Councilors — name + role per police district (`il/data/app/ccpsa-district-councils.json`); boundaries reuse the CPD police-district geometry |
 | Cook County GIS (`gis.cookcountyil.gov/traditional/rest/services`) | Cook County Commissioner district boundaries + live officeholder table (the County Board layer's Cook entry); the Clerk's library, fire-protection, and park tax-agency tilings (the Library / Fire Protection / Park District layers' Cook entries); the Clerk's current suburban voting precincts (`precinctHistorical` L0, the Voting Precinct layer's Cook entry); the Clerk's current TIF tiling (`clerkTaxDistricts` L18) and the MWRD boundary (`politicalBoundary` L21) |
-| [U.S. Census TIGERweb](https://tigerweb.geo.census.gov) | Live statewide layers (County, Township, Municipality, the three School District layers, ZIP/ZCTA) plus the pre-built U.S. House / IL Senate / IL House boundaries (`data/app/*-districts.json`) |
+| [U.S. Census TIGERweb](https://tigerweb.geo.census.gov) | Live statewide layers (County, Township, Municipality, the three School District layers, ZIP/ZCTA) plus the pre-built U.S. House / IL Senate / IL House boundaries (`il/data/app/*-districts.json`) |
 | Will County ArcGIS | Judicial subcircuits, Board districts, fire protection districts, park districts, library districts, voting precincts |
 | DuPage County ArcGIS (`services.arcgis.com/neJvtQ4PXvnQ86MJ`) | Judicial subcircuits, Board districts, fire protection districts, special police districts, park districts, library districts, voting precincts |
 | Lake County ArcGIS (`services3.arcgis.com/HESxeTbDliKKvec2`) | Judicial subcircuits, Board districts (incl. member + contact), fire protection districts, park districts, library districts, voting precincts |
-| [lakecountyil.gov](https://www.lakecountyil.gov/2336/Board-Members) (scraped weekly by CI, Internet Archive fallback) | Lake County Board leadership tags — Chair/Vice-Chair (`data/app/lake-county-board-roles.json`) |
+| [lakecountyil.gov](https://www.lakecountyil.gov/2336/Board-Members) (scraped weekly by CI, Internet Archive fallback) | Lake County Board leadership tags — Chair/Vice-Chair (`il/data/app/lake-county-board-roles.json`) |
 | Kane County ArcGIS (`services1.arcgis.com/oRKmdBXD6EbdmVgJ`, the `KaneCo_IL_*` family) | Board districts (incl. member names), fire/park/library districts (incl. officer + office contact), voting precincts |
 | McHenry County ArcGIS (`services1.arcgis.com/6iYC5AXXYapRVNzl`) | Board districts (district numbers only), fire/library districts, voting precincts |
 | Kendall County ArcGIS Enterprise (`maps.co.kendall.il.us/server`) | Board districts, fire/park/library tax-code tilings, voting precincts + polling places, townships |
-| [willcountyillinois.gov](https://willcountyillinois.gov) (scraped weekly by CI) | Will County Board member roster (`data/app/will-county-board-members.json`) |
-| [kanecountyil.gov](https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx) SharePoint list API (scraped weekly by CI) | Kane County Board member roster incl. party, office phones, emails, and the countywide Chair (`data/app/kane-county-board-members.json`) |
-| [kendallcountyil.gov](https://www.kendallcountyil.gov/county-board/board-members) (hand-verified; weekly CI refresh attempts — the county blocks automated fetch) | Kendall County Board member roster (`data/app/kendall-county-board-members.json`) |
-| [mchenrycountyil.gov](https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members) (hand-verified; weekly CI refresh attempts — the county blocks automated fetch) | McHenry County Board member roster incl. the countywide Chairman (`data/app/mchenry-county-board-members.json`) |
-| [dupagecounty.gov](https://www.dupagecounty.gov) (scraped weekly by CI) | DuPage County Board member roster + countywide Chair (`data/app/dupage-county-board-members.json`) |
-| [unitedstates/congress-legislators](https://github.com/unitedstates/congress-legislators) (rebuilt weekly by CI) | U.S. House roster — IL's 17 reps only, `data/app/congress-roster.json` |
-| [ilga.gov](https://www.ilga.gov) (scraped weekly by CI) | IL Senate/House member rosters (`data/app/il-{senate,house}-members.json`) |
-| ERSB shapefile (`ERSB_20_Sub_District_Map_FA1_SB_15`) | Elected School Board sub-districts (`data/app/school-board-*.json`) |
-| PA 102-0011 / PA 102-0012 shapefiles | IL Supreme Court + Cook County Board of Review districts (`data/app/*.json`) |
+| [willcountyillinois.gov](https://willcountyillinois.gov) (scraped weekly by CI) | Will County Board member roster (`il/data/app/will-county-board-members.json`) |
+| [kanecountyil.gov](https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx) SharePoint list API (scraped weekly by CI) | Kane County Board member roster incl. party, office phones, emails, and the countywide Chair (`il/data/app/kane-county-board-members.json`) |
+| [kendallcountyil.gov](https://www.kendallcountyil.gov/county-board/board-members) (hand-verified; weekly CI refresh attempts — the county blocks automated fetch) | Kendall County Board member roster (`il/data/app/kendall-county-board-members.json`) |
+| [mchenrycountyil.gov](https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members) (hand-verified; weekly CI refresh attempts — the county blocks automated fetch) | McHenry County Board member roster incl. the countywide Chairman (`il/data/app/mchenry-county-board-members.json`) |
+| [dupagecounty.gov](https://www.dupagecounty.gov) (scraped weekly by CI) | DuPage County Board member roster + countywide Chair (`il/data/app/dupage-county-board-members.json`) |
+| [unitedstates/congress-legislators](https://github.com/unitedstates/congress-legislators) (rebuilt weekly by CI) | U.S. House roster — IL's 17 reps only, `il/data/app/congress-roster.json` |
+| [ilga.gov](https://www.ilga.gov) (scraped weekly by CI) | IL Senate/House member rosters (`il/data/app/il-{senate,house}-members.json`) |
+| ERSB shapefile (`ERSB_20_Sub_District_Map_FA1_SB_15`) | Elected School Board sub-districts (`il/data/app/school-board-*.json`) |
+| PA 102-0011 / PA 102-0012 shapefiles | IL Supreme Court + Cook County Board of Review districts (`il/data/app/*.json`) |
 | [USGS The National Map](https://www.usgs.gov/programs/national-geospatial-program/national-map) structures layers 38 / 51 / 53 | Post office, fire station, and police station locations, metro-wide (live bbox queries; public domain) |
-| [chicagoelections.gov](https://chicagoelections.gov) (hand-transcribed per election) | Early-voting sites (`data/app/early-voting-sites.json`) — no open point dataset exists, so the official list is curated by hand each election |
+| [chicagoelections.gov](https://chicagoelections.gov) (hand-transcribed per election) | Early-voting sites (`il/data/app/early-voting-sites.json`) — no open point dataset exists, so the official list is curated by hand each election |
 | [Nominatim / Photon / OpenStreetMap](https://www.openstreetmap.org/copyright) | Address search + school-address pins |
 
-The app-data boundary layers in `data/app/` are topology-preserving simplifications (mapshaper) of the official shapefiles; the full-precision GeoJSON conversions are kept in `data/` and the untouched originals in `data/source/raw/`. The simplified copies agreed with full precision on 100% of 2,000 random in-city test points.
+The app-data boundary layers in `il/data/app/` are topology-preserving simplifications (mapshaper) of the official shapefiles; the full-precision GeoJSON conversions are kept in `il/data/` and the untouched originals in `il/data/source/raw/`. The simplified copies agreed with full precision on 100% of 2,000 random in-city test points.
 
 ## Repository layout
 
+The fleet lives in one repo. Each metro is a self-contained instance folder — its own app, service worker, data, sub-pages, `README.md`, `CLAUDE.md`, `docs/` and `scripts/` — and the repo root holds only what genuinely is fleet-wide: the shared engine, the manifest that lists the metros, and a handful of pages published at the bare domain.
+
 ```
-index.html                          the entire app (styles, core, all layer modules)
-metro-worksheet.json                per-fork facts; regenerates the GENERATED regions
-metros.json                         the fleet manifest (which metro forks exist) — master copy
-sw.js                               service worker (cache-first geometry, network-first rosters)
-data/app/                           app-data files the page fetches (boundary geometry + officeholder rosters)
-data/ · data/source/ · data/source/raw/   full-precision conversions and untouched originals
-scripts/generate_metro_files.py     renders the GENERATED regions from metro-worksheet.json
-scripts/ilga_scraper.py + build_il_roster.py          IL Senate/House roster pair
-scripts/build_congress_roster.py                      U.S. House roster (congress-legislators)
-scripts/cpd_district_scraper.py + build_cpd_roster.py CPD commander/contact pair (Playwright for Cloudflare)
-scripts/ccpsa_scraper.py + build_ccpsa_roster.py      CCPSA District Council roster pair
-scripts/will_county_board_scraper.py + build_will_county_board_roster.py   Will County Board roster pair
-scripts/build_legislative_boundaries.py               pre-builds the IL-clipped chamber geometry from TIGERweb
-scripts/build_embedded_boundaries.py                  simplifies data/*.geojson into data/app/*.json (occasional operator step)
-sources.html                        the public sources page — credits + one provenance row per layer (GENERATED)
-scripts/validate_index.py           static merge gate: app parses, all layers registered, all data/app files complete,
-                                    sources page covers every layer and is linked from the app
-scripts/validate_sources.py         source-freshness gate (dataset ids resolve, newer editions flagged)
-scripts/check_engine_parity.py      engine-fence lint (the release channel retired in R2.1 — one repo, one engine)
-scripts/fleet_status.py             weekly fleet-status aggregator (runs here, reports on every fork)
-scripts/smoke_test.mjs              Playwright boot/behaviour smoke test (runs on every PR)
-.github/workflows/                  weekly roster refreshes (PR for human review), per-PR smoke test,
-                                    monthly validate-sources, weekly fleet-status, Pages deploy
-docs/                               the expansion guide, fleet layer guidebook, redistricting runbook, archives
+index.html · sw.js                  the FLEET LANDING PAGE (GENERATED from metros.json) and its
+                                    service-worker kill switch — not the app; see il/ below
+county-board.html, police-district.html,
+school-board.html                   thin redirect stubs for old chidistricts.com URLs, forwarding
+                                    to their il/ equivalent (search-equity holdovers, not live pages)
+privacy.html                        ONE privacy page for every instance (GENERATED, measures each
+                                    app's shipped index.html rather than trusting a worksheet)
+metros.json                         the fleet manifest — one entry per metro (id, url, landing blurb);
+                                    editing this and regenerating is how a new metro is added
+engine/                             the ONE shared copy of the metro-agnostic engine (fenced blocks +
+                                    sub-page shell), spliced into every instance by compose_app.py
+scripts/                            fleet-wide builders/gates (compose_app.py, generate_metro_files.py,
+                                    build_landing_page.py, build_privacy_page.py, build_county_status.py,
+                                    fleet_status.py, and the shared IL data-pipeline scripts — see il/scripts/)
+docs/                               the expansion guide, fleet layer guidebook, dev-process log, archives
+schema/metro-worksheet.schema.json  validates every instance's metro-worksheet.json before it's used
+districtry/                         brand source: design canvases, tokens (districtry.tokens.css), icons
+fonts/                              the landing page's own self-hosted Barlow (distinct from il/fonts/)
 WATCH.md                            the redistricting watch calendar (when to look; the runbook is what to do)
+CNAME · sitemap.xml · robots.txt    districtry.com, GitHub Pages custom domain + SEO plumbing
+
+il/                                 ILLINOIS — the reference implementation (this README covers it)
+  index.html                        the entire app: styles, core, all layer modules — composed from
+                                    engine/ plus this instance's own METRO config and layer modules
+  sw.js                             service worker (cache-first geometry, network-first rosters)
+  metro-worksheet.json              this instance's per-fork facts; regenerates its GENERATED regions
+  sources.html, faq.html, county-board.html,
+  police-district.html, school-board.html   sub-pages — composed the same way as index.html
+  data/app/                         271 files the page fetches: boundary geometry (cache-first) +
+                                    officeholder rosters (network-first)
+  data/ · data/source/raw/          full-precision conversions and untouched originals
+  scripts/                          IL-specific scrapers/builders — one scraper+builder pair per roster
+                                    (ilga_scraper.py, build_congress_roster.py, cpd_district_scraper.py,
+                                    the ~80 county-board/precinct/fire/park/library builders, etc.),
+                                    plus this instance's own validate_index.py and smoke_test.mjs
+  docs/                             COUNTY_STATUS.md (generated per-county completion table),
+                                    DATA_LAYER_GUIDEBOOK.md (fleet layer inventory), EXPANSION_GUIDE.md
+                                    (the primary deployment guide for new counties/concepts), BUILD_PLAYBOOK_1.md
+
+ny/                                 NEW YORK CITY — same shape as il/, imported from the retired NYC fork
+ca/                                 SAN FRANCISCO — same shape as il/, imported from the retired SF fork
+
+.github/workflows/                  weekly roster refreshes (PR for human review, never auto-committed),
+                                    the per-PR smoke-test.yml (all the gates below), monthly
+                                    validate-sources, weekly fleet-status, Pages deploy
 ```
 
 ## Validation
 
-Gates that run in CI:
+`smoke-test.yml` runs on every pull request and covers every instance, not just Illinois. Roughly in order:
 
-- **Static gate** (`scripts/validate_index.py`, wired into the weekly roster workflows between regeneration and the PR): the inline script passes `node --check`, every layer is still registered (37 ids), no dataset is embedded inline, and every `data/app/` file is present and complete (20 school-board districts, 59 + 118 IL legislators, 17 U.S. House reps, 5 + 3 court/board districts, the Will and DuPage county-board rosters, the early-voting list). A bad data regeneration can't reach `main` unreviewed.
-- **Behaviour gate** (`scripts/smoke_test.mjs`, run on every pull request by `.github/workflows/smoke-test.yml`): a real Chromium boot via Playwright asserts the app comes up, registers all 39 layers, classifies a known downtown point against known ground truth (school board 12, IL Supreme Court 1, Board of Review 3) including the school-board member-roster join, and degrades to an isolated error card + Retry when a data source fails.
-- **Drift + freshness gates**: `generate_metro_files.py --check` (GENERATED regions match the worksheet), `check_engine_parity.py` (engine fences intact), monthly `validate_sources.py` (upstream datasets haven't gone stale — WARN/FAIL opens a tracking issue rather than editing anything), and the weekly `fleet_status.py` run, which also diffs every fork's layer roster against `docs/DATA_LAYER_GUIDEBOOK.md`.
+- **Composition and generation drift gates** (all stdlib-only Python, run before anything is installed): `generate_metro_files.py --check` (every `GENERATED:BEGIN/END` region — in `index.html`, `sw.js`, `sources.html`, `README.md`, `CLAUDE.md`, and more — matches what `metro-worksheet.json` renders); `compose_app.py --check` (every instance's `index.html`/`sw.js`/sub-pages carry the shared `engine/` blocks byte-for-byte, with no fence hand-edited in place); `build_brand_tokens.py --check` (the brand palette has one source, `districtry/tokens/districtry.tokens.css`); `build_coverage_gaps.py --check`, `build_county_status.py --check`, `build_dark_map_palette.py --check`, `build_landing_page.py --check`, `build_privacy_page.py --check` (this one *measures* each shipped app rather than trusting a manifest — it regexes each `index.html` for what it actually does), and `build_manifests.py --check` (the installable web-app manifest matches the brand keys and points at an icon that actually exists).
+- **Static merge gate** (`scripts/validate_index.py`, run once per instance — `il/`, `ny/`, `ca/`): each instance's inline script passes `node --check`, every layer id it declares is still registered (39 for Illinois today), no dataset is embedded inline, every `data/app/*.json` file is present and shape-checked, and the sources page covers every registered layer and is linked from the app.
+- **Other stdlib gates**: `validate_shell_continuations.py` (a `#` comment inside a backslash-continued shell line silently truncates the command — caught a real deploy outage), `validate_workflow_deps.py` (every script a workflow runs imports only under what that workflow actually installs), `backfill_board_seats.py --check` (a roster whose scraper is blocked still carries an honest seat count), and `check_roster_retention.py --base <PR base SHA>` (compares every roster field against the same file at the PR's base and fails when a field — like a whole county's e-mail column going silently empty — stops being published; this is why the checkout uses `fetch-depth: 0`).
+- **Behaviour gate** (`scripts/smoke_test.mjs`, once per instance, served together from one local static server): a real Chromium boot via Playwright asserts each app comes up, registers all its layers, classifies a known point against known ground truth (Illinois: school board 12, IL Supreme Court 1, Board of Review 3, including the school-board member-roster join), and degrades to an isolated error card + Retry when a data source fails. Alongside it, `landing_test.mjs` asserts the root fleet landing page and its old-URL forwarding both work in a real browser, and `page_consistency_test.mjs` checks every page in `sitemap.xml` carries the same brand and standing links.
+- **Monthly / weekly, not per-PR**: `validate_sources.py` (upstream dataset ids still resolve; a newer-year Socrata edition is flagged) and `validate_card_links.py` (every URL a card or roster actually renders still resolves), folded into one tracking issue on WARN/FAIL rather than editing anything; the weekly `fleet_status.py` run, which diffs every instance's layer roster and gaps file against `docs/DATA_LAYER_GUIDEBOOK.md`.
 
 ## Not for legal or official use
 
