@@ -8206,16 +8206,24 @@ function initWisconsinExplorer() {
    * and its own published plan both contradict. The builder's docstring
    * carries the whole measurement.
    *
-   * NO SUPERVISOR IS NAMED. Wisconsin publishes no statewide roster of
-   * county supervisors — the only source for the person holding a seat is
-   * that county's own page, 72 of them — so the card gives the district and
-   * links the county's board, per the honesty rules, and the gap is recorded
-   * in the Data gaps panel rather than filled with a guess. ---------- */
+   * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
+   * Wisconsin publishes no statewide roster, so the people come from each
+   * county's own page: 20 of the 72 publish a district-keyed member list a
+   * parser can read (437 seats), and the other 52 do not — three publish
+   * district MAPS with no name on them, and the rest are unreadable or
+   * publish prose. A district in an unnamed county keeps the honest card:
+   * the district, and a link to the county board. A seat the county itself
+   * says is empty renders as VACANT, which is a fact rather than a gap
+   * (wi/scripts/wi_county_board_scraper.py records what each county
+   * publishes). ---------- */
   var loadSupervisoryDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/county-supervisory-districts.json", {}, 2);
   });
   var loadCountyBoardDirectory = makeCached(function () {
     return fetchJSONWithRetry("data/app/county-board-directory.json", {}, 2);
+  });
+  var loadCountyBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/county-board-members.json", {}, 2);
   });
 
   registerLayer({
@@ -8244,19 +8252,23 @@ function initWisconsinExplorer() {
       // footer link rather than an error card.
       return Promise.all([
         queryFeatureAt(loadSupervisoryDistricts, point),
-        loadCountyBoardDirectory().catch(function () { return null; })
+        loadCountyBoardDirectory().catch(function () { return null; }),
+        loadCountyBoardMembers().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
         var props = feature.properties || {};
         var fips = findPropCI(props, ["cnty_fips"]);
         var entry = (parts[1] && fips != null) ? parts[1][String(fips)] : null;
+        var superFips = findPropCI(props, ["super_fips"]);
+        var member = (parts[2] && superFips != null) ? parts[2][String(superFips)] : null;
         return {
           seq: seq,
           district: findPropCI(props, ["superid"]),
           county: findPropCI(props, ["cnty_name"]),
           seats: entry ? entry.seats : null,
-          countyUrl: entry ? entry.url : null
+          countyUrl: entry ? entry.url : null,
+          member: member || null
         };
       });
     },
@@ -8271,13 +8283,28 @@ function initWisconsinExplorer() {
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
       });
+      var member = result.member;
+      if (member && member.vacant) {
+        // The county says nobody holds this seat. Saying so is the honest
+        // answer; omitting the row would read as "we could not find out".
+        rows.push({ label: "Supervisor", value: "Vacant" });
+      } else if (member && member.name) {
+        rows.push({
+          label: member.role ? "Supervisor (" + String(member.role) + ")" : "Supervisor",
+          value: String(member.name)
+        });
+      }
       if (result.seats) {
         rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
       }
       return renderFieldStack(rows);
     },
     primaryLink: function (result) {
-      var url = safeHttpUrl(result.countyUrl);
+      // Prefer the page the supervisor's own name was read from, so a reader
+      // checking the name lands where it is published rather than on the
+      // county's front door.
+      var member = result.member;
+      var url = safeHttpUrl((member && member.sourceUrl) || result.countyUrl);
       if (!url) return null;
       return {
         label: (result.county ? String(result.county) + " County board" : "County board"),

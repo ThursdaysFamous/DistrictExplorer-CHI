@@ -212,7 +212,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "None — no supervisor is named. Wisconsin publishes no statewide roster of county supervisors; the only source for a seat's holder is that county's own page, so the card links the county board (county-board-directory.json, 72 verified URLs) rather than guessing a name. The gap is recorded in the Data gaps panel.",
+        "people": "For 20 of the 72 counties, the supervisor holding the district, from that county's own board page (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 52 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -399,11 +399,16 @@
         "file": "county-board-directory.json",
         "min_keys": 72,
         "note": "One row per county: board size read back from the shipped geometry, plus the county's own official page for the card's footer link. Built by wi/scripts/build_wi_county_board_directory.py; not a roster of people — Wisconsin publishes none statewide."
+      },
+      {
+        "file": "county-board-members.json",
+        "min_keys": 400,
+        "note": "County board supervisors for the 20 counties that publish a district-keyed member list (437 seats). Built by wi/scripts/build_wi_county_board_roster.py from each county's own page and checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 52 counties name nobody — their cards link the county board instead."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v2",
+    "cache_name": "districtry-wi-shell-v3",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -428,6 +433,11 @@
       "file": "update-wi-legislature-roster.yml",
       "purpose": "Wisconsin Senate + Assembly rosters (Open States wi.csv)",
       "schedule": "Tue 13:30 UTC"
+    },
+    {
+      "file": "update-wi-county-board-roster.yml",
+      "purpose": "County board supervisors for the 20 counties that publish a member list",
+      "schedule": "Thu 14:30 UTC"
     }
   ],
   "geocoder": {
