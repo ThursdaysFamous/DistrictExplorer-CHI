@@ -752,6 +752,14 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # READ THE RING COUNT FROM --check, NEVER FROM A MAP IN
                      # YOUR HEAD.
                      "183",
+                     # Wayne — 2026-08-25, closing one county out of the
+                     # Clay/Fayette/Jasper/Marion/Wayne five-county enclave.
+                     # Composition settled for weeks by two agreeing sources;
+                     # held back by population balance until the Clerk
+                     # confirmed the plan is current (build_wayne_boundaries.py).
+                     # READ THE RING COUNT FROM --check, NEVER FROM A MAP IN
+                     # YOUR HEAD.
+                     "191",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -863,6 +871,14 @@ DISPATCH_COUNTY_FIPS = {
     # own canvasses have reported since 2022
     # (scripts/build_vermilion_boundaries.py).
     "vermilion": "183",
+    # Wayne joins 2026-08-25 as a full board + precinct dispatch entry. Its
+    # composition was settled for weeks by two agreeing sources (the county's
+    # own board page; certified 2024 General returns grouped by precinct) and
+    # held back anyway by population balance — District 3 runs 32.4% over the
+    # per-district ideal, past this project's usual 30% ceiling — until the
+    # Clerk confirmed by e-mail that the plan is current rather than stale
+    # (scripts/build_wayne_boundaries.py).
+    "wayne": "191",
 }
 # ==== TEMPLATE:END outline-county-config ====
 
@@ -1228,6 +1244,15 @@ INSIDE = {
     # The county draws its own board districts and publishes them, so no
     # dissolve was ever needed (scripts/build_vermilion_boundaries.py).
     "Danville (Vermilion)": (40.1245, -87.6300),
+    # Fairfield (Wayne) — moved up from OUTSIDE on 2026-08-25. Wayne held the
+    # Hamilton-Effingham corridor open while those were islands; both merged
+    # in (Shelby 2026-08-11, White 2026-08-17), after which Wayne sat as a
+    # deep NOTCH bordered by served Jefferson, Hamilton, White, Edwards and
+    # (since 2026-08-23) Richland, with only Clay and Marion keeping it off
+    # the enclave list. Composition settled for weeks by two agreeing
+    # sources; held back by population balance until the Clerk confirmed the
+    # plan is current (scripts/build_wayne_boundaries.py).
+    "Fairfield (Wayne)": (38.3798, -88.3724),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -1390,14 +1415,6 @@ OUTSIDE = {
     # obtained the Beacon export and Menard moved up to INSIDE. The reasoning
     # this list records is about what can be DERIVED, which was never the same
     # question as what a county will send.)
-    # Wayne held the Hamilton–Effingham corridor open while those were
-    # islands; both have since merged in (Shelby 2026-08-11, White
-    # 2026-08-17), and Wayne is now a deep NOTCH in the mainland's southern
-    # edge — bordered by served Jefferson, Hamilton, White and Edwards, with
-    # only Clay and Marion keeping it off the enclave list (Richland stood in
-    # that sentence until it shipped on 2026-08-23 and now borders Wayne as
-    # served ground). This anchor is what proves the notch stays washed.
-    "Fairfield (Wayne)": (38.3798, -88.3724),
     # Champaign, Ford and Piatt — ENCLOSED 2026-08-23 by Vermilion's join, the
     # fleet's second multi-county enclave. Ford's every other neighbour
     # (Iroquois, Kankakee, Livingston, McLean, Vermilion) is served and
