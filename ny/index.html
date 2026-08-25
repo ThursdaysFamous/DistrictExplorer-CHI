@@ -3706,6 +3706,37 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <p class="empty-state-lede">See your City Council district, community board, NYPD precinct, community school district, borough, U.S. House and New York State districts — plus who represents you.</p>
     </div>
     <div id="groups-root" hidden></div>
+    <!-- The results-panel foot: the document footer below is hidden by the
+         districtry skin (see the footer-elimination note inside the
+         styles-districtry-skin fence), so its load-bearing elements —
+         #verified-date, #feedback-btn and the metro-links fence — live HERE,
+         where a reader can still see them. The fence is moved VERBATIM, so the
+         engine splice stays a no-op; placement is the one thing the fences
+         deliberately do not pin. Ported from the Chicago reference
+         implementation. -->
+    <div class="districtry-panel-foot" id="districtry-panel-foot">
+      <p><strong>Not for legal or official use.</strong> Boundary and roster data come from public
+      sources that disclaim legal precision — confirm with the relevant government office before
+      relying on them for anything official.</p>
+      <div class="footer-meta" id="footer-meta">
+        <span>Data last verified: <strong id="verified-date"></strong></span>
+      </div>
+      <div class="dpf-links">
+        <a href="./sources.html">Every layer, and where its data comes from →</a>
+        <a href="https://geosearch.planninglabs.nyc" target="_blank" rel="noopener">Geocoding © NYC Planning (GeoSearch)</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
+        <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
+      </div>
+      <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
+    <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
+    <div class="footer-metros" id="footer-metros" hidden>
+      <span class="footer-metros-label">Explore another metro</span>
+      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
+    </div>
+    <!-- ==== ENGINE:END metro-links-html ==== -->
+    </div>
   </section>
 </main>
 
@@ -3724,9 +3755,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       explicitly disclaim legal precision. Always confirm district assignments and officeholders with the
       relevant government office before relying on them for anything official.
     </div>
-    <div class="footer-meta" id="footer-meta">
-      <span>Data last verified: <strong id="verified-date"></strong></span>
-    </div>
     <div class="footer-sources" id="footer-sources">
       <span class="footer-sources-label">Sources</span>
       <a href="https://geosearch.planninglabs.nyc" target="_blank" rel="noopener">Geocoding © NYC Planning (GeoSearch)</a>
@@ -3740,14 +3768,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map (post offices)</a>
       <a href="https://gis.ny.gov" target="_blank" rel="noopener">Early-voting sites © NYS ITS Geospatial Services / NYS &amp; NYC Boards of Elections</a>
     </div>
-    <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
-    <div class="footer-metros" id="footer-metros" hidden>
-      <span class="footer-metros-label">Explore another metro</span>
-      <!-- sibling District Explorer links injected at boot from METRO_EXPLORERS -->
-    </div>
-    <!-- ==== ENGINE:END metro-links-html ==== -->
     <div class="footer-links">
-      <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
       <!-- The gaps-html ENGINE fence moved to the masthead action row; see the
            comment there for why the move costs no engine release. -->
       <a href="../privacy.html">Privacy</a>

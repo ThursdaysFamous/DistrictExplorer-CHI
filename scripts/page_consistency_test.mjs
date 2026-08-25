@@ -147,6 +147,23 @@ try {
           return { over, box: [Math.round(a.top), Math.round(a.left)],
                    map: [Math.round(m.top), Math.round(m.left)] };
         })(),
+        // The app's two standing footer facts, measured as pixels: the date
+        // the data was last verified, and the way to report a problem with it.
+        // The skin hides `footer.site-footer` (the links moved to the
+        // masthead), so an app that leaves these inside that husk RENDERS them
+        // and shows them to nobody. Chicago relocated them into the
+        // results-panel foot at the redesign; NY and SF did not, and shipped
+        // for weeks with an invisible verified date and no reachable feedback
+        // button — past every gate in this repo, because parity of the SHARED
+        // engine was checked and parity of what a reader can SEE was not.
+        // Anchored to the map so sub-pages (which have neither) skip it.
+        appFoot: (() => {
+          if (!document.getElementById("map")) return null;
+          const seen = (el) => !!el && el.getClientRects().length > 0 &&
+                               getComputedStyle(el).visibility !== "hidden";
+          return { date: seen(document.getElementById("verified-date")),
+                   feedback: seen(document.getElementById("feedback-btn")) };
+        })(),
         canonical: !!document.querySelector("link[rel=canonical]"),
         ogTitle: !!document.querySelector('meta[property="og:title"]'),
         links: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href") || ""),
@@ -160,6 +177,11 @@ try {
         check(path, `search sits beside the map, not on it (${scheme})`,
               !info.search.over,
               `search@${info.search.box} overlaps map@${info.search.map}`);
+      }
+
+      if (info.appFoot) {
+        check(path, `verified date is visible to a reader (${scheme})`, info.appFoot.date);
+        check(path, `feedback button is reachable (${scheme})`, info.appFoot.feedback);
       }
 
       // A surface is never a text token. `background: var(--ink)` reads as a
