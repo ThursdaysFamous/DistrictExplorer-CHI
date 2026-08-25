@@ -300,6 +300,9 @@
     "lng": -92.97,
     "note": "off the northwest corner of Wisconsin — outside the state and every starter layer"
   },
+  "coverage_key": {
+    "outside": "Outside Wisconsin"
+  },
   "data_files": {
     "geometry": [
       {

@@ -1617,6 +1617,11 @@ contract, never pass HTML).
    live fetch *you* performed.
 6. **Pick ≥3 offline anchors + ground truth** (§4.5), including the scope-mask tiler and
    the negative point.
+   6a. **Decide the wash's BANDS and name them** (§4.5.1): two bands or three, then a
+   `coverage_key` in the worksheet. A three-band instance also owes the wider region's
+   ring — built, not fetched — passed as the second argument to `drawOutOfScopeMask`.
+   Skipping this leaves the map's only claim about where the app stops answering stated
+   in a colour with nothing to read it against.
 7. **Map the pipeline** per roster (Part 6.3): engine ladder rung, count floors — and
    **land the cheapest real roster during the module threads**, not the pipeline thread
    (real data flushes factory paths placeholders never exercise).
@@ -1713,6 +1718,50 @@ the dataset, and the water-inclusive layer's positive answer is legally correct.
 **Exactly-one-list invariant:** every `data/app/` file appears in exactly one of
 `GEOMETRY_URLS`/`ROSTER_URLS` (in neither = never cached; wrong list = wrong freshness) —
 machine-checked in `validate_index.py`; bump `CACHE_NAME` on any list change.
+
+### 4.5.1 The coverage key — decide the instance's BANDS, then name them
+
+The wash has a legend, and the legend is worksheet data. Two decisions, in this order.
+
+**First, how many bands does this instance have?** A wash is two bands by default —
+inside coverage, and outside it. It is **three** only when full coverage is a proper
+SUBSET of a wider region whose layers still answer throughout, and the middle band says
+"you still get something here" rather than "nothing here". Answer it by looking at what
+the instance's own layers cover, not by whether a state exists:
+
+| Instance | Coverage geometry | Bands | Why |
+|---|---|---|---|
+| Illinois | the served counties | **3** | county/township/municipality/school-district/ZIP answer statewide; the county layers do not |
+| Wisconsin | `metro-outline.json` **is** the state outline | 2 | coverage *is* the region — there is nothing in between |
+| San Francisco | the 11 supervisor districts | 2 | no wider region in play |
+| New York City | the 5 boroughs | 2 | same |
+
+A two-band key is not a degraded key. Until it shipped the grey was unexplained in every
+instance, and one row saying "Outside New York City" is the whole of what that map claims.
+
+**Second, name them.** Add `coverage_key` to the instance's worksheet — `outside` is
+required, `region` (`edge`, `label`, `sub`) only for a three-band instance — and
+regenerate; `generate_metro_files.py` emits `COVERAGE_KEY` into the metro-config region.
+**Do not try to derive the words.** Chicago's `METRO_NAME` is "Chicago" while its coverage
+is 89 Illinois counties, so `"Outside " + METRO_NAME` is wrong in exactly the instance
+that most needs the key. Omit the whole object and the engine's `typeof` guard draws the
+wash with no key, byte-identically to before — the same inertness rule `brand` and
+`poi_geocode_bbox` follow.
+
+**A three-band instance owes GEOMETRY as well as words.** The middle band needs the wider
+region's ring, passed as the second argument at boot —
+`drawOutOfScopeMask(loadCoverageGeometry, loadRegionGeometry)`. Build it, do not fetch it:
+Illinois' ring live from TIGERweb is **332 KB over 19,789 vertices**, four times the fetch
+§4.5 above exists to have removed for this same decorative wash. It is the second output
+of `build_metro_outline.py`, from layer 0 of the same MapServer as the county dissolve.
+**Simplify it at the same tolerance as the coverage outline** — where a served county
+fronts the region's edge the two rings trace the same line, and simplified apart they open
+slivers of a false middle band along it.
+
+The key renders only the bands the draw actually produced, so a declared `region` whose
+geometry fails to load degrades the wash and the key together rather than leaving a label
+over a band that is not on the map. Declaring `region` without wiring the geometry
+therefore gets you a two-band key and no error — check the map, not the worksheet.
 
 ## 4.6 Platforms, sources, geocoding
 

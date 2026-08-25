@@ -904,6 +904,14 @@
     "lng": -87.1,
     "note": "Lake Michigan, Indiana waters — outside all three anchor layers"
   },
+  "coverage_key": {
+    "outside": "Outside Illinois",
+    "region": {
+      "edge": "Illinois",
+      "label": "Statewide layers only",
+      "sub": "County board and local districts not sourced yet"
+    }
+  },
   "data_files": {
     "geometry": [
       {
@@ -1623,6 +1631,12 @@
         "min_features": 24,
         "max_features": 24,
         "note": "Mercer County's 24 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be: the names match its 24 precinct names 24/24 and their POP100 sums to its exact 2020 population (15,699). Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct — no precinct is split. NO POLLING PLACE ships: nothing the county publishes pairs precincts with buildings as data (scripts/build_mercer_boundaries.py)."
+      },
+      {
+        "file": "il-state-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Illinois itself, from layer 0 of the same TIGERweb MapServer the coverage outline comes from and simplified by the same scripts/build_metro_outline.py at the same tolerance. It draws the MIDDLE band of the out-of-scope wash — inside Illinois but outside the served counties, where the statewide layers (county, township, municipality, school district, ZIP) still answer and the county-level ones do not. Illinois is the only instance in the fleet with a middle band: Wisconsin's coverage IS its state, and San Francisco and New York City have no wider region in play. PRE-BUILT RATHER THAN FETCHED, and that is measured: the rebrand preview queried TIGERweb for this at boot, which is 332 KB over 19,789 vertices — four times the school-board fetch metro-outline.json exists to have removed from the critical chain for this very wash. Same tolerance as the county dissolve on purpose: the two rings trace the same rivers where a served county fronts the state line, and simplified apart they would open slivers of false \"unserved Illinois\" along the Mississippi and the Ohio."
       },
       {
         "file": "metro-outline.json",

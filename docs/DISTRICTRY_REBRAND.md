@@ -341,6 +341,102 @@ is preview-local today. If the three-zone treatment is adopted into production, 
 this copy travel with it, and the wording becomes a fork-owned string — worth a worksheet key so
 NYC/SF can say "Statewide layers only" about their own states without an engine release.
 
+**ADOPTED 2026-08-25 — and the note above turned out to be the whole specification.** It named
+the worksheet key, it named who the key was for, and it was written three days before the thing
+it describes went missing. See "The coverage key, and the wash it reads" below.
+
+## The coverage key, and the wash it reads (operator-reported, 2026-08-25)
+
+**The rebrand shipped the key's CSS, its phone behaviour and its theme controller, and never
+shipped the key.** `R4.2b` adopted the skin as an appended override island — 36 of 39 hunks
+outside every ENGINE fence, which is why it was safe — and the island is CSS. The legend itself
+was built in JavaScript, by the preview's own coverage script, and that script was not part of
+the island. So production went out with 27 rules for `.districtry-map-legend`, a
+`dstSyncLegendDisclosure()` whose `querySelector` returned null on every call, a `.dst-glow` blur
+class nothing wore, and a `styleDistrictryCoverage()` writing into a `districtryCoverageLayers`
+that nothing ever filled — while `drawOutOfScopeMask` went on painting the pre-rebrand flat grey
+it had always painted. Every gate stayed green, because no gate anywhere asks whether a rule has
+a subject.
+
+**The three-zone wash went missing with it, and that is why the key could not simply be pasted
+back.** A key naming a violet "Statewide layers only" band over a map that draws one flat grey is
+worse than no key. So the two are one change: the wash draws the bands and the key names *the
+bands that were actually painted* — `buildCoverageKey()` is handed what the draw produced, never
+what the instance intended, so a region ring that is declared and fails to load degrades the wash
+and the key together.
+
+**Illinois is the only three-band instance in the fleet, and that is a measurement rather than a
+policy.** A middle band exists only where full coverage is a proper SUBSET of a wider region the
+statewide layers still answer in. Illinois qualifies: its county layers cover the served counties
+while county, township, municipality, school district and ZIP answer anywhere in the state.
+Wisconsin's `metro-outline.json` **is** the Wisconsin state outline — coverage *is* the region, so
+there is nothing in between — and San Francisco and New York City have no wider region in play.
+All three pass one geometry and get two bands and a one-row key, which is not a degraded key: the
+grey was unexplained in all four apps until now.
+
+**The words are a worksheet key, exactly as the note above predicted.** `coverage_key.outside`
+names the outer band; the optional `coverage_key.region` (`edge`, `label`, `sub`) names the middle
+one. It is **not derivable** and that is the reason it is data: Chicago's `METRO_NAME` is
+"Chicago" while its coverage is 89 Illinois counties, so a generated `"Outside " + METRO_NAME`
+would be plainly wrong in the one instance that most needs the key. Absent, the generator emits
+nothing and the engine's `typeof` guard draws the wash with no key — the same inertness rule
+`brand` and `poi_geocode_bbox` follow.
+
+**The state ring is PRE-BUILT, and the preview's own version is the counter-example.** The
+preview queried TIGERweb for Illinois at boot. Measured, that answer is **332 KB over 19,789
+vertices** — four times the 83 KB school-board fetch `build_metro_outline.py` exists to have
+removed from the critical chain, for this very wash. It is now the second output of that same
+builder, from layer 0 of the same MapServer the county dissolve uses (so no new host, no new
+service, nothing new for `validate_sources.py`), simplified by the same Douglas-Peucker at the
+**same tolerance** — deliberately, because where a served county fronts the state line the two
+rings trace the same river, and simplified apart they would open slivers of false "unserved
+Illinois" along the Mississippi and the Ohio.
+
+**The key names bands, and only bands.** The preview's fourth row was a blue dot for "Selected
+point", and it does not survive: the selected marker is `#1d5fd6` in Illinois but a red star in
+San Francisco, an orange pin in New York City and an amber star in Wisconsin — and inside Chicago
+Illinois itself swaps to the flag star in flag red. One hardcoded swatch could not be right in
+more than one of those. `.dml-rule` earns its keep as the separator between the region bands and
+the outside band instead; `.dml-dot` is now unused and is left in the skin rather than swept,
+because an instance that gives every point one marker could still want that row.
+
+## The share control comes off the map (operator-reported, 2026-08-25)
+
+The same shape, on the same day. `.districtry-panel-head` shipped in the skin — with a comment
+describing "coords + Share on the left, the counts flush right" and a rule aiming the share
+popover DOWNWARD because "the chip used to sit at the map's bottom-left" — and the markup that
+would have created that bar never shipped. `#point-chip` stayed in `.map-bottom-left`, so the one
+control that hands this view to someone else sat on top of the view it was handing over, and the
+reader's own coordinates competed with the map for the corner.
+
+Three things had to be true for the move to be an improvement rather than a relocation:
+
+- **The popover had to stop clamping to the chip.** The skin's rule sets `left:0; right:0` and
+  says it clamps to the panel's width. It does not: the popover is anchored to
+  `.selected-point-chip`, so it clamped to a content-width chip — about 190px — and truncated the
+  permalink it exists to hand over. The chip now fills the bar (`flex: 1 1 auto`), which is what
+  makes that rule mean what it already said. The counts keep their edge: with the chip absorbing
+  the free space there is none left for their `margin-left:auto` to take.
+- **It had to survive a phone.** Anchored at the top of a scrolling panel the card opens 295px
+  tall against about 255px of room on a 390x844 phone. Opening it now calls
+  `scrollIntoView({block: "nearest"})`, which scrolls the least that makes it whole and does
+  nothing when it already fits, so desktop is untouched. (`block: "nearest"` matters; an earlier
+  draft guarded the call on `scrollIntoView.length !== 0`, which is always false — optional
+  parameters do not count toward `Function.length` — so the guard silently skipped it.)
+- **The counts had to be worth printing.** `.districtry-stats` reads "N of M layers on", and
+  **both** numbers are relevance-aware. `M` is not `layers.length`: outside a layer's coverage the
+  app hides it outright, so a reader in a county the local layers do not reach sees 21 toggles
+  while the app registers 39, and "2 of 39" would count 18 layers they have no way to turn on.
+  The numerator is `activeLayerCount()`, which the opacity scaler already uses for the same
+  reason — on-and-hidden is not on. Downtown Chicago reads "2 of 32", and 32 is the figure this
+  project's own notes give for what Chicago resolves.
+
+**The lesson both halves share:** a CSS rule with no subject is invisible to every gate in this
+repo, and a comment describing markup is not markup. When a rebrand lands as an override island,
+the island's JavaScript is the part that gets left behind — CSS drifts loudly the moment anyone
+looks at the page, and a `querySelector` that returns null looks exactly like a feature nobody
+turned on.
+
 ## Skin review items — RESOLVED (2026-08-20)
 
 The three items left open when Stage B shipped, each investigated before deciding. Two were the
@@ -1355,3 +1451,14 @@ and the title column unchanged at 371px — the switch adds a caret, not a row.
 - Root filename collisions to avoid: `manifest.webmanifest`, `og-image.png`,
   `icons/icon-192/512.png` are SHELL_URLS-pinned — districtry assets keep distinct names/paths
   until the adoption step swaps them in place.
+- **A skin hunk that styles something is not the same as shipping it.** The coverage key and the
+  panel head both shipped as CSS with no markup and stayed that way through a release, because
+  nothing in this repo fails when a rule has no subject. When adopting a design that adds an
+  element rather than restyling one, adopt the JavaScript that builds it in the same change, and
+  open the page.
+- **A legend may only name what was drawn.** `buildCoverageKey()` takes the bands the draw
+  produced, not the bands the worksheet declares. A label with no geometry behind it is a claim
+  the map does not support, which is the honesty rule applied to chrome.
+- **Engine blocks are edited in `engine/`, never in an instance file.** `compose_app.py --check`
+  is what notices; it is also what caught this work editing all four `index.html` files directly.
+  Edit `engine/index.html/<block>.txt` and recompose.

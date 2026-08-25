@@ -503,6 +503,29 @@
       "pattern": "^[A-Za-z][A-Za-z0-9]*$",
       "description": "window.<name> debug namespace, twinned with the smoke test."
     },
+    "coverage_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Opts this instance into the COVERAGE KEY — the legend that reads the out-of-scope wash on the map. The wash is the app's only claim about where it stops answering, and without a key it makes that claim in a colour with nothing to read it against. The BANDS are engine and identical everywhere; only their names differ, which is what this key supplies. Absent = the wash still draws and no key is built, so an instance that has not opted in sees a byte-identical metro-config region.",
+      "required": ["outside"],
+      "properties": {
+        "outside": {
+          "type": "string",
+          "description": "Names the washed band OUTSIDE this instance's coverage, in the reader's terms (e.g. \"Outside Illinois\", \"Outside San Francisco\"). NOT derivable from metro_name: Chicago's metro_name is \"Chicago\" while its coverage is 89 Illinois counties, so \"Outside Chicago\" would be plainly wrong."
+        },
+        "region": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "The MIDDLE band, for an instance whose full coverage is a proper SUBSET of a wider region its statewide layers still answer in. Illinois is the only one today: its county layers cover 89 counties while county/township/municipality/school-district/ZIP answer anywhere in the state. Omit it when coverage IS the whole region (Wisconsin) or there is no wider region in play (San Francisco, New York City) — then the wash is two bands and the key names two. Declaring this also requires the instance's boot to pass the region geometry to drawOutOfScopeMask(); a label with no geometry draws no band, and the key names only bands that were drawn.",
+          "required": ["edge", "label"],
+          "properties": {
+            "edge": { "type": "string", "description": "Names the glowing region boundary itself (e.g. \"Illinois\")." },
+            "label": { "type": "string", "description": "Names the middle band — what a reader still gets there (e.g. \"Statewide layers only\")." },
+            "sub": { "type": "string", "description": "Optional second line saying what is MISSING there (e.g. \"County board and local districts not sourced yet\")." }
+          }
+        }
+      }
+    },
     "brand": {
       "type": "object",
       "additionalProperties": false,
