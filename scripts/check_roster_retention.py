@@ -64,7 +64,39 @@ import subprocess
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
+# EVERY INSTANCE'S ROSTERS, NOT JUST ILLINOIS'S. This pointed at il/data/app
+# alone, and on 2026-08-25 that let through a bot PR which stripped `party`,
+# `capitolOffice` and `districtOffice` from ALL 213 New York legislators —
+# names only, 63 senators and 150 assemblymembers — while this gate reported
+# "222 roster files, no field lost its records" and CI went green. It was
+# counting Illinois's files and had never once opened ny/data/app or
+# ca/data/app.
+#
+# That is precisely the failure this gate was built for ("seven rows in, seven
+# rows out, guard satisfied, contact gone") happening TO the gate, and it is the
+# fifth instance-blind check found in a single day. The directories are
+# DISCOVERED from the generator's instance table rather than listed, so a fourth
+# instance is covered the day it lands.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from generate_metro_files import INSTANCES
+except ImportError:  # pragma: no cover
+    INSTANCES = {"il": {"app": "il"}}
+
+
+def app_data_dirs():
+    """(relative, absolute) for every instance roster directory that exists."""
+    out = []
+    for tag in sorted(INSTANCES):
+        rel = os.path.join(INSTANCES[tag]["app"], "data", "app")
+        full = os.path.join(REPO_ROOT, rel)
+        if os.path.isdir(full):
+            out.append((rel, full))
+    if not out:  # the pre-R2.3 layout, when the app WAS the repo root
+        legacy = os.path.join(REPO_ROOT, "data", "app")
+        if os.path.isdir(legacy):
+            out.append(("data/app", legacy))
+    return out
 
 # A field on a single record is one person's phone number; losing it is
 # turnover. Two is where "the source stopped saying this" becomes the more
@@ -160,13 +192,20 @@ def groups_of(payload):
 # the vacuity guard below fails every PR with the wrong diagnosis (it would say
 # "shallow clone"). The move PR itself passes either way; the breakage would
 # have arrived on the NEXT PR, which is the worst possible timing.
+# Fallbacks for a file whose directory MOVED between the base ref and now — the
+# R2.3 root-to-il/ move is the reason this list exists. Tried after the file's
+# own directory, never instead of it.
 APP_REL_DIRS = ("il/data/app", "data/app")
 
 
-def git_show(ref, name):
+def git_show(ref, name, rel_dir_first=None):
     """The roster's content at `ref`, or None if it is not there under any
-    known layout."""
-    for rel_dir in APP_REL_DIRS:
+    known layout. `rel_dir_first` is the directory the file lives in NOW, so a
+    sibling instance's roster is looked up where it actually is rather than
+    under Illinois's path."""
+    candidates = ([rel_dir_first] if rel_dir_first else []) + [
+        d for d in APP_REL_DIRS if d != rel_dir_first]
+    for rel_dir in candidates:
         try:
             out = subprocess.run(["git", "show", "%s:%s/%s" % (ref, rel_dir, name)],
                                  cwd=REPO_ROOT, capture_output=True, check=False)
@@ -246,10 +285,12 @@ def main():
     args = ap.parse_args()
 
     findings, checked, skipped = [], 0, []
-    for path in sorted(os.listdir(APP_DATA_DIR)):
+    scanned_dirs = app_data_dirs()
+    for rel_dir, data_dir in scanned_dirs:
+      for path in sorted(os.listdir(data_dir)):
         if not path.endswith(".json"):
             continue
-        full = os.path.join(APP_DATA_DIR, path)
+        full = os.path.join(data_dir, path)
         try:
             with open(full, encoding="utf-8") as f:
                 new = json.load(f)
@@ -257,14 +298,18 @@ def main():
             continue
         if not records_in(new):
             continue                      # geometry-only file: nothing to retain
-        old = git_show(args.base, path)
+        old = git_show(args.base, path, rel_dir)
         if old is None:
             skipped.append(path)          # new file, or absent at the base ref
             continue
         checked += 1
-        rows, old_recs, new_recs = compare(path, old, new)
+        # Reported with its directory: two instances can ship a file of the
+        # same name (congress-roster.json is in all three), and a finding that
+        # does not say WHICH one sends a reader to the wrong file.
+        label = "%s/%s" % (rel_dir, path)
+        rows, old_recs, new_recs = compare(label, old, new)
         for sev, msg in rows:
-            findings.append((sev, path, msg))
+            findings.append((sev, label, msg))
 
     # A gate that compares NOTHING passes every time, which is the exact shape
     # of failure this whole check exists to catch — so it refuses to be vacuous.
