@@ -321,6 +321,23 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R4/R6 — SHIPPED (2026-08-25): Wisconsin lands IN PLACE as `wi/`, the first state through the
+  post-consolidation route.** The archived fork's `claude/bootstrap-wisconsin` branch (518d336) —
+  the tree the retired §4.10 template route proved end to end — was imported as a folder and
+  retrofitted to everything that shipped since: the composer's engine fences (it was 4 short of
+  57), the brand-as-data regions, the shared sub-page shell, the generated manifest, the
+  instance-aware dark palette, and the toolbar/search fence. The starter five layers grew to
+  eleven (both chambers with Open States rosters and the 2,000-point agreement gate at 100.00%,
+  the school pair, ZCTA, post offices), and the instance registered in every table the
+  consolidation left: `generate_metro_files`/`compose_app`/`build_landing_page`/`build_manifests`/
+  `vendor_leaflet` plus `metros.json` (whose `--sync-fleet` also finally swept the stale
+  chidistricts sibling URLs out of il/ny/ca's portals). One sibling defect was found and
+  deliberately NOT copied: the shared skin hides `footer.site-footer`, and ny/ca never relocated
+  its three boot-bound elements (`#verified-date`, `#feedback-btn`, the metro-links fence), so
+  both currently hide their verified date, feedback button and fleet links — wi carries il's
+  `districtry-panel-foot` relocation instead, and the siblings' fix is left for its own change.
+  The `DistrictExplorer-WI` fork is already archived; nothing points at it any more.
+
 - **R6 (part 5) — SHIPPED (2026-08-25): the roster retention gate was blind to two thirds of the
   fleet, and a real bot PR proved it.** With `NYSENATE_API_KEY` added, the relocated NY legislature
   refresh was dispatched — its first run ever in this repo. It succeeded, opened PR #502, and CI

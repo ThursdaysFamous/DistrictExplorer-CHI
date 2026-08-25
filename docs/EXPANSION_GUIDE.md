@@ -1853,6 +1853,12 @@ Wisconsin's own domain within minutes; and a placeholder sweep must never police
 data/, because the real world contains the reference fork's vocabulary — found by the
 School City of EAST CHICAGO, Indiana.
 
+**Route closed out 2026-08-25: Wisconsin, the state this route was proven on, shipped IN PLACE
+as `wi/` — the archived fork's bootstrap branch imported as a folder, retrofitted to the
+composer/brand/sub-page architecture, grown to eleven layers, and registered across the
+instance tables.** The in-place procedure this section deferred to now has a worked example:
+the `wi/` import commits on this repo's history are the reference for state N+1.
+
 ---
 
 # PART 5 — Path D: a new concept/layer in an existing deployment

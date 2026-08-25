@@ -119,6 +119,21 @@ Hoffmann v. NYIRC forced a redraw and the legislature's new congressional map wa
 SF's per-date calendar lives in the SF fork's `WATCH.md` (per-metro file); this master runbook
 holds the response procedure.
 
+### WI (11 layers)
+
+| Layer | Exposure class | Enacting authority | What breaks |
+|---|---|---|---|
+| US Congress (WI) | Decennial | WI Legislature (court history: 2022 maps litigated) | geometry (pre-built statewide rebuild), roster join |
+| WI Senate / Assembly | Decennial + PROVEN mid-decade (2024 remap after Clarke v. WEC) | WI Legislature / WI Supreme Court | geometry (wi/scripts/build_legislative_boundaries.py rebuild + agreement gate), roster join, both smoke anchors |
+| County / CouSub / Municipality | TIGER-rolling | Census Bureau vintage | pre-built `state-counties.json` on rebuild; live layers self-update |
+| School districts (3 tilings) | Annual-ish TIGER updates | WI DPI consolidations → TIGER | pre-built unified file; live layers self-update; a consolidation moves the unified/paired seam |
+| ZIP codes | USPS-driven, not census | USPS | occasional |
+| Post offices | Facility churn | USPS → USGS structures | occasional |
+
+WI's per-date calendar lives in `wi/WATCH.md` — including the standing mid-decade note: Wisconsin's
+legislative maps have moved off the census cycle before, so a court-ordered remap is a live trigger
+here in a way it is not in most states.
+
 ---
 
 ## The detection layer (executable NOW)
@@ -286,3 +301,12 @@ metro-worksheet.json and hand-edits fail `--check`.
 Cross-reference: when any of these changes, execute the 14-step response procedure above and update
 the fork's metro-worksheet.json so MECHANIZATION_PLAYBOOK Conversion 2's `--check` gate and
 Conversion 3's fleet-status stay green.
+
+### WI — layer → authority → next-map source → last enactment/effective
+
+| Layer | Enacting authority | Next map published at | Last enactment / effective |
+|---|---|---|---|
+| US Congress (WI, 8) | WI Legislature | TIGERweb Legislative layer 0 | 2022 map (SCOWIS-selected, Johnson v. WEC), effective 2022 |
+| WI Senate (33) / Assembly (99) | WI Legislature (2024 remap signed after Clarke v. WEC) | TIGERweb Legislative layers 1/2 | 2024 maps, effective the 2024 general — a MID-DECADE change; watch for more |
+| County subdivisions / places / school districts | Census Bureau (TIGER vintage) | TIGERweb (live layers self-update) | rolling |
+

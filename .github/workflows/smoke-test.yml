@@ -58,7 +58,9 @@ jobs:
       # guidebook without regenerating (or the reverse) fails here rather than
       # shipping a panel that disagrees with the document of record. Stdlib only.
       - name: Coverage gaps match the guidebook
-        run: python3 scripts/build_coverage_gaps.py --check
+        run: |
+          python3 scripts/build_coverage_gaps.py --check
+          python3 scripts/build_coverage_gaps.py --check --metro wisconsin --out wi/data/app/coverage-gaps.json
 
       # districtry/tokens/districtry.tokens.css is the ONE source of the brand
       # surface, and this is what makes that true rather than aspirational. The
@@ -253,6 +255,7 @@ jobs:
           python3 scripts/validate_index.py il/index.html
           python3 ca/scripts/validate_index.py ca/index.html
           python3 ny/scripts/validate_index.py ny/index.html
+          python3 wi/scripts/validate_index.py wi/index.html
 
       # ONE server, EVERY instance. Until R3 this ran il alone, which is what
       # the repo had — ca and ny were separate repos with their own CI. They
@@ -278,6 +281,7 @@ jobs:
           BASE_URL=http://localhost:8000/il/  node scripts/smoke_test.mjs     || status=1
           BASE_URL=http://localhost:8000/ca/  node ca/scripts/smoke_test.mjs  || status=1
           BASE_URL=http://localhost:8000/ny/  node ny/scripts/smoke_test.mjs  || status=1
+          BASE_URL=http://localhost:8000/wi/  node wi/scripts/smoke_test.mjs  || status=1
           # The root landing page and — the part that matters — its forwarding
           # guard, which is what keeps every already-distributed share link and
           # embed snippet built from the OLD root URL reaching the app. A regex

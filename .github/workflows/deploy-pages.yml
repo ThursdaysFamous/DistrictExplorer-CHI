@@ -185,6 +185,7 @@ jobs:
             ny/data/source ny/icons/source 'ny/data/*.geojson'
             ca/data/source ca/icons/source 'ca/data/*.geojson'
             ny/scripts ny/docs ny/.github ca/scripts ca/docs ca/.github
+            wi/data/state wi/scripts 'wi/data/*.geojson'
             fonts/barlow-fontface.css
             node_modules package.json package-lock.json
             engine metros.json metro-worksheet.json schema CLAUDE.md
@@ -209,7 +210,7 @@ jobs:
           # redirected visitor. The old guard asserted their ABSENCE; publishing
           # them means asserting their PRESENCE, or the same silent failure the
           # il/index.html check exists to prevent happens to the siblings.
-          for published in ny ca; do
+          for published in ny ca wi; do
             test -f "_site/$published/index.html" || { echo "::error::assemble produced no $published/index.html"; exit 1; }
           done
           echo "Published tree:" && find _site -type f | sort
