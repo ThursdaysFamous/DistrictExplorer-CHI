@@ -88,8 +88,27 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # DISPATCH_COUNTY_FIPS, and the outline is REGENERATED here, never patched.
 # BOTH must stay plain literal assignments at module top: validate_index.py
 # reads them via ast.literal_eval without importing.
-METRO_COUNTY_FIPS = ()
+# The counties whose county board card names a SUPERVISOR. Wisconsin's
+# district geometry is statewide — every county gets its district — so the
+# coverage ring here answers the narrower question the wash exists to answer:
+# where does the app stop giving you the WHOLE answer? Inside the ring the
+# card names the person; in the rest of Wisconsin it names the district and
+# links the county board, which is a real answer and is why that band is a
+# partial wash rather than the outside one.
+#
+# THE RULE: when a county's roster ships, add its FIPS here WITH ITS INSIDE
+# ANCHOR and drop its OUTSIDE anchor, in the same change. The mask is a claim
+# about coverage, so it has to track the roster or it lies in one direction or
+# the other — the reference instance greyed out four counties whose layers were
+# answering because this list was not updated with them.
+METRO_COUNTY_FIPS = (
+    "007", "009", "013", "033", "035", "043", "045", "055",
+    "077", "095", "097", "123", "125", "127", "129", "131",
+    "133", "137", "139", "141",
+)
 STATE_FIPS = "55"
+# No dispatch entries: county-board is ONE statewide layer here, not a
+# per-county dispatcher, so no county is keyed into it by id.
 DISPATCH_COUNTY_FIPS = {}
 
 _UNLISTED = sorted(set(DISPATCH_COUNTY_FIPS.values()) - set(METRO_COUNTY_FIPS))
@@ -116,8 +135,85 @@ SIMPLIFY_TOLERANCE_M = 25
 # when the fork's first county joins, add its anchor here and OUTSIDE anchors
 # for the unserved neighbours (the reference repo's file shows the discipline
 # at fleet scale, including why every enclave carries its own outside anchor).
-INSIDE = {}
-OUTSIDE = {}
+# One INSIDE anchor per served county and one OUTSIDE anchor per unserved
+# county — ring closure alone is not proof a dissolve kept every county.
+# Representative points taken from the shipped TIGER county geometry.
+INSIDE = {
+    "Bayfield": (46.6808, -91.18773),
+    "Brown": (44.46004, -87.97772),
+    "Burnett": (45.89865, -92.36377),
+    "Dunn": (44.94602, -91.89321),
+    "Eau Claire": (44.72335, -91.28595),
+    "Grant": (42.85909, -90.76231),
+    "Green": (42.67898, -89.60243),
+    "Jefferson": (43.02123, -88.77694),
+    "Marquette": (43.81242, -89.39817),
+    "Polk": (45.46886, -92.41908),
+    "Portage": (44.46479, -89.47499),
+    "Vernon": (43.57669, -90.77139),
+    "Vilas": (46.07816, -89.43616),
+    "Walworth": (42.66748, -88.54125),
+    "Washburn": (45.8978, -91.78707),
+    "Washington": (43.36763, -88.22925),
+    "Waukesha": (43.01882, -88.30439),
+    "Waushara": (44.11364, -89.24186),
+    "Winnebago": (44.06844, -88.64513),
+    "Wood": (44.46637, -90.02113),
+}
+OUTSIDE = {
+    "Adams": (43.94586, -89.77671),
+    "Ashland": (46.64701, -90.68578),
+    "Barron": (45.42366, -91.84865),
+    "Buffalo": (44.31089, -91.72133),
+    "Calumet": (44.06871, -88.22361),
+    "Chippewa": (45.07456, -91.28766),
+    "Clark": (44.72754, -90.61921),
+    "Columbia": (43.46157, -89.30349),
+    "Crawford": (43.20611, -90.88776),
+    "Dane": (43.06959, -89.42476),
+    "Dodge": (43.41296, -88.7031),
+    "Door": (45.06344, -86.98152),
+    "Douglas": (46.52585, -91.92275),
+    "Florence": (45.86728, -88.37551),
+    "Fond du Lac": (43.74103, -88.5229),
+    "Forest": (45.72458, -88.86156),
+    "Green Lake": (43.80746, -89.02684),
+    "Iowa": (43.0113, -90.13346),
+    "Iron": (46.38983, -90.34647),
+    "Jackson": (44.33432, -90.74153),
+    "Juneau": (43.94612, -90.13402),
+    "Kenosha": (42.5743, -87.66848),
+    "Kewaunee": (44.50222, -87.3097),
+    "La Crosse": (43.90784, -91.12764),
+    "Lafayette": (42.66023, -90.1317),
+    "Langlade": (45.24922, -89.05229),
+    "Lincoln": (45.33767, -89.73536),
+    "Manitowoc": (44.11033, -87.53102),
+    "Marathon": (44.90091, -89.76945),
+    "Marinette": (45.28025, -88.00346),
+    "Menominee": (44.98678, -88.73481),
+    "Milwaukee": (43.01735, -87.58072),
+    "Monroe": (43.94362, -90.61172),
+    "Oconto": (45.02524, -88.30368),
+    "Oneida": (45.68206, -89.54525),
+    "Outagamie": (44.41639, -88.46364),
+    "Ozaukee": (43.36679, -87.60391),
+    "Pepin": (44.54575, -92.08728),
+    "Pierce": (44.70099, -92.4242),
+    "Price": (45.68002, -90.36068),
+    "Racine": (42.72811, -87.68021),
+    "Richland": (43.36279, -90.42886),
+    "Rock": (42.66871, -89.07199),
+    "Rusk": (45.46562, -91.10925),
+    "Sauk": (43.39419, -89.89645),
+    "Sawyer": (45.89772, -91.10962),
+    "Shawano": (44.80705, -88.7373),
+    "Sheboygan": (43.71856, -87.63869),
+    "St. Croix": (45.03443, -92.45383),
+    "Taylor": (45.20651, -90.48556),
+    "Trempealeau": (44.28859, -91.34782),
+    "Waupaca": (44.46164, -88.98014),
+}
 
 
 def fetch_counties():
