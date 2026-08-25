@@ -260,6 +260,8 @@ const GEOMETRY_URLS = [
   "./data/app/douglas-county-board-districts.json",
   "./data/app/vermilion-county-board-districts.json",
   "./data/app/douglas-precincts.json",
+  "./data/app/wayne-county-board-districts.json",
+  "./data/app/wayne-precincts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -343,6 +345,7 @@ const ROSTER_URLS = [
   "./data/app/jackson-county-board-members.json",
   "./data/app/douglas-county-board-members.json",
   "./data/app/vermilion-county-board-members.json",
+  "./data/app/wayne-county-board-members.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

@@ -10348,6 +10348,38 @@ function initChiExplorer() {
   var loadRichlandBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/richland-county-board-members.json", {}, 2);
   });
+  /* Wayne (the 90th county, 2026-08-25) — composition settled for weeks by two
+   * agreeing sources (the county's own board page; certified 2024 General
+   * returns grouped by which board candidate each precinct voted on), and held
+   * back for weeks anyway by population balance: District 3 (Lamard 1-2,
+   * Jasper 1-2) runs 32.4% over the per-district ideal, past this project's
+   * usual 30% mis-assignment ceiling. Both sources agree on D3 exactly, so the
+   * open question was never which precincts — it was whether the plan is
+   * current. Clerk Elizabeth Woodrow answered directly, 2026-08-25: "Nothing
+   * has changed with this map for years." The ceiling is raised for this
+   * county alone, with the measured deviation recorded rather than the
+   * default silently widened (build_wayne_boundaries.py). The board page also
+   * omits Fairfield 1 and Fairfield 2 from District 7 entirely; the certified
+   * 2024 General's District 7 contest, run on both Fairfield ballots, supplies
+   * them. The roster is scraped weekly from the same board page the
+   * composition was read from, which re-verifies both at once. */
+  var loadWayneCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wayne-county-outline.json", {}, 2);
+  });
+  function wayneCountyCoverage(point) {
+    return loadWayneCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadWaynePrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wayne-precincts.json", {}, 2);
+  });
+  var loadWayneBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wayne-county-board-districts.json", {}, 2);
+  });
+  var loadWayneBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wayne-county-board-members.json", {}, 2);
+  });
   /* Jackson (the 87th county, 2026-08-23) — the first county served whose board
    * districts SPLIT precincts. Its own certified 2024 General canvass reports
    * three of its 56 precincts TWICE, under two districts each with their
@@ -19926,6 +19958,75 @@ function initChiExplorer() {
           }
         }
       },
+      // Wayne County — 7 districts electing TWO members each (14 seats),
+      // dissolved from the Census 2020 voting districts per a composition the
+      // county's own board page states and its certified 2024 General
+      // corroborates precinct-by-precinct (build_wayne_boundaries.py).
+      // District 3 (Lamard 1-2, Jasper 1-2) runs 32.4% over the per-district
+      // ideal — held for weeks past this project's usual 30% ceiling until the
+      // Clerk confirmed the plan is current rather than stale. District 7's
+      // page listing omits Fairfield 1 and Fairfield 2; the certified returns
+      // supply them. The roster is scraped weekly from the same board page.
+      {
+        key: "wayne",
+        coverage: wayneCountyCoverage,
+        loadGeometry: loadWayneBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadWayneBoardDistricts(),
+            loadWayneBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Wayne County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          if (result.precincts && result.precincts.length) {
+            wrap.appendChild(renderFieldStack([
+              { label: "Precincts", value: result.precincts.join(", ") }
+            ]));
+          }
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Wayne County Board (official)", url: "https://waynecountyil.gov/wayne-county-board/" };
+        },
+        hoverOfficial: {
+          load: loadWayneBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Jackson County — 7 districts electing TWO members each (14 seats), and
       // the first county served whose districts SPLIT precincts. Fifty-three of
       // its 56 precincts take their district from the county's certified 2024
@@ -25334,6 +25435,49 @@ function initChiExplorer() {
         },
         primaryLink: function () {
           return { label: "Richland County Clerk — Elections (official)", url: "https://richlandcounty.illinois.gov/county-clerk-recorder/elections/" };
+        }
+      },
+      // Wayne County — 27 precincts, the Census 2020 voting districts, whose
+      // names match the county's own 27/27 (one spelling aliased: Massillon,
+      // census MASSILON) and whose POP100 sums to its exact 2020 population.
+      // The board district rides ON the feature — the composition is
+      // whole-precinct, so no spatial join is needed. NO POLLING PLACE:
+      // nothing the county publishes pairs its precincts with buildings as
+      // data.
+      {
+        key: "wayne",
+        coverage: wayneCountyCoverage,
+        loadGeometry: loadWaynePrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadWaynePrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            return {
+              seq: seq,
+              name: findPropCI(props, ["name"]),
+              boardDistrict: findPropCI(props, ["district"])
+            };
+          });
+        },
+        render: function (result) {
+          var fields = [];
+          if (result.boardDistrict != null && result.boardDistrict !== "") {
+            fields.push({ label: "County Board District",
+                          value: "District " + String(result.boardDistrict) });
+          }
+          fields.push({ label: "County", value: "Wayne County" });
+          return renderFieldStack(fields);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return { label: "Wayne County Clerk — Voting and Elections (official)", url: "https://waynecountyil.gov/voting-and-elections/" };
         }
       },
       // Jackson County — 56 precincts, the Census 2020 voting districts, whose
