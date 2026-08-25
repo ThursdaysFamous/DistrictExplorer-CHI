@@ -321,6 +321,36 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **R6 (part 5) — SHIPPED (2026-08-25): the roster retention gate was blind to two thirds of the
+  fleet, and a real bot PR proved it.** With `NYSENATE_API_KEY` added, the relocated NY legislature
+  refresh was dispatched — its first run ever in this repo. It succeeded, opened PR #502, and CI
+  went GREEN on a diff that **stripped `party`, `capitolOffice` and `districtOffice` from all 213
+  New York legislators** — 63 senators and 150 assemblymembers reduced to names only.
+  **`check_roster_retention.py` reported "222 roster files, no field lost its records" while that
+  sat in front of it.** Its `APP_DATA_DIR` was `il/data/app` and it iterated exactly one
+  directory: it had never opened `ny/data/app` or `ca/data/app` in its life. That is the failure
+  this gate exists to catch — "seven rows in, seven rows out, guard satisfied, contact gone" —
+  happening TO the gate, and it is the FIFTH instance-blind check found in two days, after
+  `fleet_status`, `validate_workflow_deps`, `build_dark_map_palette` and the provenance extractor.
+  The directories are now DISCOVERED from the generator's instance table, so a fourth instance is
+  covered the day it lands, and `git_show` resolves a file against its OWN directory first (with
+  the old paths kept as fallbacks for the R2.3 move) so a sibling's roster is looked up where it
+  actually is. Findings name the directory too, because three instances ship a
+  `congress-roster.json` and a finding that does not say which one sends a reader to the wrong
+  file. Coverage: 222 files to **233**.
+  **Verified against the PR it missed**, not against a hypothetical: the fixed gate names all six
+  vanished fields and exits 1, where the shipped one exited 0.
+  **The data loss itself is a MISSING SECOND SECRET, not a bug.** `ny_legislature_scraper.py`
+  takes party and both office blocks from OpenStates; `NYSENATE_API_KEY` alone makes the refresh
+  RUN, and without `OPENSTATES_API_KEY` it degrades to names only — which the workflow's own
+  comment predicted and which nothing enforced. PR #502 must not be merged as it stands.
+  **A separate finding from the same dispatch:** the CEC refresh also ran green and wrote
+  nothing — `0 councils with members`, so the builder's count guard kept the `{}` placeholder.
+  The empty CEC roster was NOT merely a workflow that had never run: running it does not fix it,
+  because the scraper extracts nothing from what the source now serves. The guard doing its job is
+  why that file is empty rather than wrong, and it is why the FAQ and sources pages say no
+  verifiable roster is published.
+
 - **R6 (part 4) — SHIPPED (2026-08-24): every page in the sitemap now carries the same brand,
   and an AUDIT rather than an impression decided what was wrong with them.** The pass began by
   driving all seventeen sitemap URLs in a browser and printing one row each — font, theme, mark,
