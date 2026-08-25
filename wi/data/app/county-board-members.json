@@ -1,0 +1,2633 @@
+{
+ "5500701": {
+  "county": "Bayfield",
+  "district": 1,
+  "name": "Steve Sandstrom",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500702": {
+  "county": "Bayfield",
+  "district": 2,
+  "name": "Jamie Tucker",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500703": {
+  "county": "Bayfield",
+  "district": 3,
+  "name": "Larry Fickbohm",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500704": {
+  "county": "Bayfield",
+  "district": 4,
+  "name": "Charly Ray",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500705": {
+  "county": "Bayfield",
+  "district": 5,
+  "name": "Jan Lee",
+  "role": "Chair",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500706": {
+  "county": "Bayfield",
+  "district": 6,
+  "name": "Jeffrey Olsen",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500707": {
+  "county": "Bayfield",
+  "district": 7,
+  "name": "Dennis M. Pocernich",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500708": {
+  "county": "Bayfield",
+  "district": 8,
+  "name": "Fred Strand",
+  "role": "Vice-Chair",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500709": {
+  "county": "Bayfield",
+  "district": 9,
+  "name": "Jeff Holte",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500710": {
+  "county": "Bayfield",
+  "district": 10,
+  "name": "Marty Milanowski",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500711": {
+  "county": "Bayfield",
+  "district": 11,
+  "name": "Jackie Roguski",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500712": {
+  "county": "Bayfield",
+  "district": 12,
+  "name": "James A. Crandall",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500713": {
+  "county": "Bayfield",
+  "district": 13,
+  "name": "Sue Rosa",
+  "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"
+ },
+ "5500901": {
+  "county": "Brown",
+  "district": 1,
+  "name": "Megan Martens",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500902": {
+  "county": "Brown",
+  "district": 2,
+  "name": "Rachel Maes",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500903": {
+  "county": "Brown",
+  "district": 3,
+  "name": "Andy Nicholson",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500904": {
+  "county": "Brown",
+  "district": 4,
+  "name": "Emily Jacobson",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500905": {
+  "county": "Brown",
+  "district": 5,
+  "name": "Dan Theno",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500906": {
+  "county": "Brown",
+  "district": 6,
+  "name": "Eric Vanden Heuvel",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500907": {
+  "county": "Brown",
+  "district": 7,
+  "name": "Sam Dunlop",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500908": {
+  "county": "Brown",
+  "district": 8,
+  "name": "Megan Borchardt",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500909": {
+  "county": "Brown",
+  "district": 9,
+  "name": "Patrick Evans",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500910": {
+  "county": "Brown",
+  "district": 10,
+  "name": "John Vander Leest",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500911": {
+  "county": "Brown",
+  "district": 11,
+  "name": "Patrick Buckley",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500912": {
+  "county": "Brown",
+  "district": 12,
+  "name": "Kevin Gannon",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500913": {
+  "county": "Brown",
+  "district": 13,
+  "name": "Jr., Norbert Dantinne",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500914": {
+  "county": "Brown",
+  "district": 14,
+  "name": "Christopher Welch",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500915": {
+  "county": "Brown",
+  "district": 15,
+  "name": "Terry Rentmeester",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500916": {
+  "county": "Brown",
+  "district": 16,
+  "name": "Dave Kaster",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500917": {
+  "county": "Brown",
+  "district": 17,
+  "name": "John Van Dyck",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500918": {
+  "county": "Brown",
+  "district": 18,
+  "name": "Katie Mc Donald",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500919": {
+  "county": "Brown",
+  "district": 19,
+  "name": "Andrea Gage",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500920": {
+  "county": "Brown",
+  "district": 20,
+  "name": "Devon Coenen",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500921": {
+  "county": "Brown",
+  "district": 21,
+  "name": "Stephen Przybelski",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500922": {
+  "county": "Brown",
+  "district": 22,
+  "name": "Richard Van Lanen",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500923": {
+  "county": "Brown",
+  "district": 23,
+  "name": "Dixon Wolfe",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500924": {
+  "county": "Brown",
+  "district": 24,
+  "name": "Ross Toellner",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500925": {
+  "county": "Brown",
+  "district": 25,
+  "name": "Thomas Lund",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5500926": {
+  "county": "Brown",
+  "district": 26,
+  "name": "James Pyle",
+  "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
+ },
+ "5501301": {
+  "county": "Burnett",
+  "district": 1,
+  "name": "Brent Blomberg",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501302": {
+  "county": "Burnett",
+  "district": 2,
+  "name": "Lee Moyer",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501303": {
+  "county": "Burnett",
+  "district": 3,
+  "name": "Rick Lindberg",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501304": {
+  "county": "Burnett",
+  "district": 4,
+  "name": "Ramona C. Moody",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501305": {
+  "county": "Burnett",
+  "district": 5,
+  "name": "Bruce Java",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501306": {
+  "county": "Burnett",
+  "district": 6,
+  "name": "Bob Rombach",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501307": {
+  "county": "Burnett",
+  "district": 7,
+  "name": "Duke Tucker",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501308": {
+  "county": "Burnett",
+  "district": 8,
+  "name": "Charles Awe",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501309": {
+  "county": "Burnett",
+  "district": 9,
+  "name": "Chuck Anderson",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501310": {
+  "county": "Burnett",
+  "district": 10,
+  "name": "Edgar Peterson",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501311": {
+  "county": "Burnett",
+  "district": 11,
+  "name": "Charlie Weis",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501312": {
+  "county": "Burnett",
+  "district": 12,
+  "name": "Christopher Sybers",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501313": {
+  "county": "Burnett",
+  "district": 13,
+  "name": "Patti Hurd",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501314": {
+  "county": "Burnett",
+  "district": 14,
+  "name": "Emmett Byrne",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501315": {
+  "county": "Burnett",
+  "district": 15,
+  "name": "Karen M. Laqua Anderson",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501316": {
+  "county": "Burnett",
+  "district": 16,
+  "name": "Emily Gall",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501317": {
+  "county": "Burnett",
+  "district": 17,
+  "name": "Duane I. Johnson",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501318": {
+  "county": "Burnett",
+  "district": 18,
+  "name": "Don Taylor",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501319": {
+  "county": "Burnett",
+  "district": 19,
+  "name": "Craig M. Conroy",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501320": {
+  "county": "Burnett",
+  "district": 20,
+  "name": "Gerald G. Pardun",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5501321": {
+  "county": "Burnett",
+  "district": 21,
+  "name": "Randy Shimanski",
+  "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5503301": {
+  "county": "Dunn",
+  "district": 1,
+  "name": "Tim Lauffer",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503302": {
+  "county": "Dunn",
+  "district": 2,
+  "name": "John Wurtzler",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503303": {
+  "county": "Dunn",
+  "district": 3,
+  "name": "Albert Kelly",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503304": {
+  "county": "Dunn",
+  "district": 4,
+  "name": "Ronald P. Score",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503305": {
+  "county": "Dunn",
+  "district": 5,
+  "name": "Gary Stene",
+  "role": "Vice Chair",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503306": {
+  "county": "Dunn",
+  "district": 6,
+  "name": "Dustin Shackleton",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503307": {
+  "county": "Dunn",
+  "district": 7,
+  "name": "Gary Bjork",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503308": {
+  "county": "Dunn",
+  "district": 8,
+  "name": "Luke Wilsey",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503309": {
+  "county": "Dunn",
+  "district": 9,
+  "name": "Samuel Thompson",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503310": {
+  "county": "Dunn",
+  "district": 10,
+  "name": "Donald Gjestson",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503311": {
+  "county": "Dunn",
+  "district": 11,
+  "name": "Michelle Bachand",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503312": {
+  "county": "Dunn",
+  "district": 12,
+  "name": "Mike Kneer",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503313": {
+  "county": "Dunn",
+  "district": 13,
+  "name": "Monica Berrier",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503314": {
+  "county": "Dunn",
+  "district": 14,
+  "name": "Agnes Welsch",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503315": {
+  "county": "Dunn",
+  "district": 15,
+  "name": "Barbara Lyon",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503316": {
+  "county": "Dunn",
+  "district": 16,
+  "name": "Tom Wagner",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503317": {
+  "county": "Dunn",
+  "district": 17,
+  "name": "Kelly McCullough",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503318": {
+  "county": "Dunn",
+  "district": 18,
+  "name": "Sheila Stori",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503319": {
+  "county": "Dunn",
+  "district": 19,
+  "name": "Cody Gentz",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503320": {
+  "county": "Dunn",
+  "district": 20,
+  "name": "Spencer Berndt",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503321": {
+  "county": "Dunn",
+  "district": 21,
+  "name": "Diane L. Morehouse",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503322": {
+  "county": "Dunn",
+  "district": 22,
+  "name": "Andrew Hagen",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503323": {
+  "county": "Dunn",
+  "district": 23,
+  "name": "Mark Thomas",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503324": {
+  "county": "Dunn",
+  "district": 24,
+  "name": "Randy L. Prochnow",
+  "role": "Chair",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503325": {
+  "county": "Dunn",
+  "district": 25,
+  "name": "Tom Gilbert",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503326": {
+  "county": "Dunn",
+  "district": 26,
+  "name": "Larry R. Bjork",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503327": {
+  "county": "Dunn",
+  "district": 27,
+  "name": "Robert Bauer",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503328": {
+  "county": "Dunn",
+  "district": 28,
+  "name": "Tim Lienau",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503329": {
+  "county": "Dunn",
+  "district": 29,
+  "name": "David Styer",
+  "sourceUrl": "https://dunncountywi.gov/supervisors"
+ },
+ "5503501": {
+  "county": "Eau Claire",
+  "district": 1,
+  "name": "Caleb Aichele",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503502": {
+  "county": "Eau Claire",
+  "district": 2,
+  "name": "Deirdre Jenkins",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503503": {
+  "county": "Eau Claire",
+  "district": 3,
+  "name": "Joe Knight",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503504": {
+  "county": "Eau Claire",
+  "district": 4,
+  "name": "Stella Pagonis",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503505": {
+  "county": "Eau Claire",
+  "district": 5,
+  "name": "Larry Hoekstra",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503506": {
+  "county": "Eau Claire",
+  "district": 6,
+  "name": "Dane Zook",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503507": {
+  "county": "Eau Claire",
+  "district": 7,
+  "name": "Gregory Banchy",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503508": {
+  "county": "Eau Claire",
+  "district": 8,
+  "name": "Cory Sisk",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503509": {
+  "county": "Eau Claire",
+  "district": 9,
+  "name": "Allen Myren",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503510": {
+  "county": "Eau Claire",
+  "district": 10,
+  "name": "Nancy Coffey",
+  "role": "Chair",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503511": {
+  "county": "Eau Claire",
+  "district": 11,
+  "name": "Michele Skinner",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503512": {
+  "county": "Eau Claire",
+  "district": 12,
+  "name": "Brett Geboy",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503513": {
+  "county": "Eau Claire",
+  "district": 13,
+  "name": "Connie Russell",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503514": {
+  "county": "Eau Claire",
+  "district": 14,
+  "name": "Kirk Dahl",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503515": {
+  "county": "Eau Claire",
+  "district": 15,
+  "name": "Nick Smiar",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503516": {
+  "county": "Eau Claire",
+  "district": 16,
+  "name": "David Hirsch",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503517": {
+  "county": "Eau Claire",
+  "district": 17,
+  "name": "Ray French",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503518": {
+  "county": "Eau Claire",
+  "district": 18,
+  "name": "Kurt Carlson",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503519": {
+  "county": "Eau Claire",
+  "district": 19,
+  "name": "Gerald Wilkie",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503520": {
+  "county": "Eau Claire",
+  "district": 20,
+  "name": "John Folstad",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503521": {
+  "county": "Eau Claire",
+  "district": 21,
+  "name": "Steve Spina",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503522": {
+  "county": "Eau Claire",
+  "district": 22,
+  "name": "Philip Swanhorst",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503523": {
+  "county": "Eau Claire",
+  "district": 23,
+  "name": "Sam Gibson",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503524": {
+  "county": "Eau Claire",
+  "district": 24,
+  "name": "Heather DeLuka",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503525": {
+  "county": "Eau Claire",
+  "district": 25,
+  "name": "Christy Tomczak",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503526": {
+  "county": "Eau Claire",
+  "district": 26,
+  "name": "Tami Schraufgnagel",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503527": {
+  "county": "Eau Claire",
+  "district": 27,
+  "name": "Loralee Clark",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503528": {
+  "county": "Eau Claire",
+  "district": 28,
+  "name": "Jim Schumacher",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5503529": {
+  "county": "Eau Claire",
+  "district": 29,
+  "name": "Bob Swanson",
+  "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
+ },
+ "5504301": {
+  "county": "Grant",
+  "district": 1,
+  "name": "Gary Ranum",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504302": {
+  "county": "Grant",
+  "district": 2,
+  "name": "Brian Johnsrud",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504303": {
+  "county": "Grant",
+  "district": 3,
+  "name": "Gary Kjos",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504304": {
+  "county": "Grant",
+  "district": 4,
+  "name": "Robert Keeney",
+  "role": "County Chairman",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504305": {
+  "county": "Grant",
+  "district": 5,
+  "name": "Lynn Kirschbaum",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504306": {
+  "county": "Grant",
+  "district": 6,
+  "name": "Joseph Mumm",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504307": {
+  "county": "Grant",
+  "district": 7,
+  "name": "JoAnn Wiederholt",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504308": {
+  "county": "Grant",
+  "district": 8,
+  "name": "Patrick Schroeder",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504309": {
+  "county": "Grant",
+  "district": 9,
+  "name": "James McCartney",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504310": {
+  "county": "Grant",
+  "district": 10,
+  "name": "Carol Beals",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504311": {
+  "county": "Grant",
+  "district": 11,
+  "name": "Diane Nelson",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504312": {
+  "county": "Grant",
+  "district": 12,
+  "name": "Kathy Kopp",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504313": {
+  "county": "Grant",
+  "district": 13,
+  "name": "Roger Lange",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504314": {
+  "county": "Grant",
+  "district": 14,
+  "name": "Dan Durley",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504315": {
+  "county": "Grant",
+  "district": 15,
+  "name": "John Beinborn",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504316": {
+  "county": "Grant",
+  "district": 16,
+  "name": "Michael Timmerman",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504317": {
+  "county": "Grant",
+  "district": 17,
+  "name": "Brian Lucey",
+  "sourceUrl": "https://co.grant.wi.gov/"
+ },
+ "5504501": {
+  "county": "Green",
+  "district": 1,
+  "name": "Jim Brown",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504502": {
+  "county": "Green",
+  "district": 2,
+  "name": "Melissa Even",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504503": {
+  "county": "Green",
+  "district": 3,
+  "name": "Joseph Snow",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504504": {
+  "county": "Green",
+  "district": 4,
+  "name": "Jerry Guth",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504505": {
+  "county": "Green",
+  "district": 5,
+  "name": "Peg Sheaffe",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504506": {
+  "county": "Green",
+  "district": 6,
+  "name": "Michael Furgal",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504507": {
+  "county": "Green",
+  "district": 7,
+  "name": "Paula Vestin",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504508": {
+  "county": "Green",
+  "district": 8,
+  "name": "Nicole Wilcox",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504509": {
+  "county": "Green",
+  "district": 9,
+  "name": "Amy Jo Walter",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504510": {
+  "county": "Green",
+  "district": 10,
+  "name": "Larry Kranig",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504511": {
+  "county": "Green",
+  "district": 11,
+  "name": "David Tschudy",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504512": {
+  "county": "Green",
+  "district": 12,
+  "name": "William Burchard",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504513": {
+  "county": "Green",
+  "district": 13,
+  "name": "Dawn Leach",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504514": {
+  "county": "Green",
+  "district": 14,
+  "name": "Kristi Leonard",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504515": {
+  "county": "Green",
+  "district": 15,
+  "name": "Jane Skelton",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504516": {
+  "county": "Green",
+  "district": 16,
+  "name": "Isaiah Carlson",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504517": {
+  "county": "Green",
+  "district": 17,
+  "name": "Dennis Schwartz",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504518": {
+  "county": "Green",
+  "district": 18,
+  "name": "Paul Hardenstine",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504519": {
+  "county": "Green",
+  "district": 19,
+  "name": "Franz Mussared Varga",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504520": {
+  "county": "Green",
+  "district": 20,
+  "name": "Casey Jones",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504521": {
+  "county": "Green",
+  "district": 21,
+  "name": "Russ Torkelson",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504522": {
+  "county": "Green",
+  "district": 22,
+  "name": "Harvey W. Kubly",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504523": {
+  "county": "Green",
+  "district": 23,
+  "name": "Susan Knox",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504524": {
+  "county": "Green",
+  "district": 24,
+  "name": "Erica Roth",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504525": {
+  "county": "Green",
+  "district": 25,
+  "name": "Todd Larson",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504526": {
+  "county": "Green",
+  "district": 26,
+  "name": "Pat Silver",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504527": {
+  "county": "Green",
+  "district": 27,
+  "name": "Steve Donovan",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504528": {
+  "county": "Green",
+  "district": 28,
+  "name": "Sam Rikkers",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504529": {
+  "county": "Green",
+  "district": 29,
+  "name": "Mark Gundlach",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504530": {
+  "county": "Green",
+  "district": 30,
+  "name": "Dawn Sass",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504531": {
+  "county": "Green",
+  "district": 31,
+  "name": "Kathy Pennington",
+  "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5505501": {
+  "county": "Jefferson",
+  "district": 1,
+  "name": "Jenifer Quimby",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505502": {
+  "county": "Jefferson",
+  "district": 2,
+  "name": "Gary Skalitzky",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505503": {
+  "county": "Jefferson",
+  "district": 3,
+  "name": "Robert Preuss",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505504": {
+  "county": "Jefferson",
+  "district": 4,
+  "name": "Francine Gies",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505505": {
+  "county": "Jefferson",
+  "district": 5,
+  "name": "James Braughler",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505506": {
+  "county": "Jefferson",
+  "district": 6,
+  "name": "Kerry Kneser",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505507": {
+  "county": "Jefferson",
+  "district": 7,
+  "name": "Dwayne Morris",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505508": {
+  "county": "Jefferson",
+  "district": 8,
+  "name": "Michael Wineke",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505509": {
+  "county": "Jefferson",
+  "district": 9,
+  "name": "Bruce Degner",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505510": {
+  "county": "Jefferson",
+  "district": 10,
+  "name": "Mark Groose",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505511": {
+  "county": "Jefferson",
+  "district": 11,
+  "name": "Elizabeth Hafften",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505512": {
+  "county": "Jefferson",
+  "district": 12,
+  "name": "Matthew Tracy",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505513": {
+  "county": "Jefferson",
+  "district": 13,
+  "name": "Michael Foster",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505514": {
+  "county": "Jefferson",
+  "district": 14,
+  "name": "Kirk Lund",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505515": {
+  "county": "Jefferson",
+  "district": 15,
+  "name": "Steve Nass",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505516": {
+  "county": "Jefferson",
+  "district": 16,
+  "name": "Meg Turville-Heitz",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505517": {
+  "county": "Jefferson",
+  "district": 17,
+  "name": "Phil Ristow",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505518": {
+  "county": "Jefferson",
+  "district": 18,
+  "name": "Brandon White",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505519": {
+  "county": "Jefferson",
+  "district": 19,
+  "name": "David Drayna",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505520": {
+  "county": "Jefferson",
+  "district": 20,
+  "name": "Kathi Cauley",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505521": {
+  "county": "Jefferson",
+  "district": 21,
+  "name": "John Kannard",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505522": {
+  "county": "Jefferson",
+  "district": 22,
+  "name": "Blane Poulson",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505523": {
+  "county": "Jefferson",
+  "district": 23,
+  "name": "George Jaeckel",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505524": {
+  "county": "Jefferson",
+  "district": 24,
+  "name": "Roger Lindl",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505525": {
+  "county": "Jefferson",
+  "district": 25,
+  "name": "Matthew Foelker",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505526": {
+  "county": "Jefferson",
+  "district": 26,
+  "name": "Amanda Golson",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505527": {
+  "county": "Jefferson",
+  "district": 27,
+  "name": "Joan Callan",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505528": {
+  "county": "Jefferson",
+  "district": 28,
+  "name": "Anthony Gulig",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505529": {
+  "county": "Jefferson",
+  "district": 29,
+  "name": "Amanda Kaiser",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5505530": {
+  "county": "Jefferson",
+  "district": 30,
+  "name": "Walt Christensen",
+  "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
+ },
+ "5507701": {
+  "county": "Marquette",
+  "district": 1,
+  "name": "Abby Swan",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507702": {
+  "county": "Marquette",
+  "district": 2,
+  "name": "Dennis Fenner",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507703": {
+  "county": "Marquette",
+  "district": 3,
+  "name": "Kris Bergh",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507704": {
+  "county": "Marquette",
+  "district": 4,
+  "name": "John Bennett",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507705": {
+  "county": "Marquette",
+  "district": 5,
+  "name": "Kari Olstadt",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507706": {
+  "county": "Marquette",
+  "district": 6,
+  "name": "Dave Kappel",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507707": {
+  "county": "Marquette",
+  "district": 7,
+  "name": "Ken Borzick",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507708": {
+  "county": "Marquette",
+  "district": 8,
+  "name": "Mike Raddatz",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507709": {
+  "county": "Marquette",
+  "district": 9,
+  "name": "Gary Sorensen",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507710": {
+  "county": "Marquette",
+  "district": 10,
+  "name": "Mary P Walters",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507711": {
+  "county": "Marquette",
+  "district": 11,
+  "name": "Lance Achterberg",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507712": {
+  "county": "Marquette",
+  "district": 12,
+  "name": "Chuck Bornhoeft",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507713": {
+  "county": "Marquette",
+  "district": 13,
+  "name": "Eli Schmudlach",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507714": {
+  "county": "Marquette",
+  "district": 14,
+  "name": "John Larkin",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507715": {
+  "county": "Marquette",
+  "district": 15,
+  "name": "Peggy Krause",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507716": {
+  "county": "Marquette",
+  "district": 16,
+  "name": "Scott Kempley",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5507717": {
+  "county": "Marquette",
+  "district": 17,
+  "name": "Judi Nigbor",
+  "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
+ },
+ "5509501": {
+  "county": "Polk",
+  "district": 1,
+  "name": "Brad Olson",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509502": {
+  "county": "Polk",
+  "district": 2,
+  "name": "Doug Route",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509503": {
+  "county": "Polk",
+  "district": 3,
+  "name": "Jim Bethke",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509504": {
+  "county": "Polk",
+  "district": 4,
+  "name": "Pam Garvey",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509505": {
+  "county": "Polk",
+  "district": 5,
+  "name": "Scott Gilbertson",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509506": {
+  "county": "Polk",
+  "district": 6,
+  "name": "Adam Jarchow",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509507": {
+  "county": "Polk",
+  "district": 7,
+  "name": "Sharon Kelly",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509508": {
+  "county": "Polk",
+  "district": 8,
+  "name": "Jeremy Hall",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509509": {
+  "county": "Polk",
+  "district": 9,
+  "name": "Kim O'Connell",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509510": {
+  "county": "Polk",
+  "district": 10,
+  "name": "Alice Moris",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509511": {
+  "county": "Polk",
+  "district": 11,
+  "name": "Jay Luke",
+  "role": "2Nd Vice Chair",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509512": {
+  "county": "Polk",
+  "district": 12,
+  "name": "Fran Duncanson",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509513": {
+  "county": "Polk",
+  "district": 13,
+  "name": "Russ Arcand",
+  "role": "Chair",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509514": {
+  "county": "Polk",
+  "district": 14,
+  "name": "Keith Karpenski",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509515": {
+  "county": "Polk",
+  "district": 15,
+  "name": "John Bonneprise",
+  "role": "1St Vice Chair",
+  "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5509701": {
+  "county": "Portage",
+  "district": 1,
+  "name": "Doug Stingle",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509702": {
+  "county": "Portage",
+  "district": 2,
+  "name": "Landon Elgersma",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509703": {
+  "county": "Portage",
+  "district": 3,
+  "name": "Janell Wehr",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509704": {
+  "county": "Portage",
+  "district": 4,
+  "name": "Nathan Sandwick",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509705": {
+  "county": "Portage",
+  "district": 5,
+  "name": "David J. Wysocki",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509706": {
+  "county": "Portage",
+  "district": 6,
+  "name": "Joe Bachman",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509707": {
+  "county": "Portage",
+  "district": 7,
+  "name": "Dave Ladick",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509708": {
+  "county": "Portage",
+  "district": 8,
+  "name": "Dax Burroughs",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509709": {
+  "county": "Portage",
+  "district": 9,
+  "name": "Jonathan Schlice",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509710": {
+  "county": "Portage",
+  "district": 10,
+  "name": "Bob Gifford",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509711": {
+  "county": "Portage",
+  "district": 11,
+  "name": "Stan Potocki",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509712": {
+  "county": "Portage",
+  "district": 12,
+  "name": "Mike Splinter",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509713": {
+  "county": "Portage",
+  "district": 13,
+  "name": "Robin Falk",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509714": {
+  "county": "Portage",
+  "district": 14,
+  "name": "Chris Randazzo",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509715": {
+  "county": "Portage",
+  "district": 15,
+  "name": "Nancy Eggleston",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509716": {
+  "county": "Portage",
+  "district": 16,
+  "name": "Steve Fritz",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509717": {
+  "county": "Portage",
+  "district": 17,
+  "name": "Suzanne Oehlke",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509718": {
+  "county": "Portage",
+  "district": 18,
+  "name": "Larry Raikowski",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509719": {
+  "county": "Portage",
+  "district": 19,
+  "name": "Scott Soik",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509720": {
+  "county": "Portage",
+  "district": 20,
+  "name": "Greg Hakala",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509721": {
+  "county": "Portage",
+  "district": 21,
+  "name": "Jeanne Dodge",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509722": {
+  "county": "Portage",
+  "district": 22,
+  "name": "Matt Jacowski",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509723": {
+  "county": "Portage",
+  "district": 23,
+  "name": "Barry Jacowski",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509724": {
+  "county": "Portage",
+  "district": 24,
+  "name": "Steve Cieslewicz",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5509725": {
+  "county": "Portage",
+  "district": 25,
+  "name": "Travis Bassett",
+  "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5512301": {
+  "county": "Vernon",
+  "district": 1,
+  "name": "Will Beitlich",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512302": {
+  "county": "Vernon",
+  "district": 2,
+  "name": "David Strudthoff",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512303": {
+  "county": "Vernon",
+  "district": 3,
+  "name": "Lorn Goede",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512304": {
+  "county": "Vernon",
+  "district": 4,
+  "name": "Kevin Walleser",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512305": {
+  "county": "Vernon",
+  "district": 5,
+  "name": "Bruce Kilmer",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512306": {
+  "county": "Vernon",
+  "district": 6,
+  "name": "John Pedretti",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512307": {
+  "county": "Vernon",
+  "district": 7,
+  "name": "Nathaniel Slack",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512308": {
+  "county": "Vernon",
+  "district": 8,
+  "name": "David Eggen",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512309": {
+  "county": "Vernon",
+  "district": 9,
+  "name": "Martha Olson",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512310": {
+  "county": "Vernon",
+  "district": 10,
+  "name": "Frank Easterday",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512311": {
+  "county": "Vernon",
+  "district": 11,
+  "name": "Charles Jacobson",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512312": {
+  "county": "Vernon",
+  "district": 12,
+  "name": "Scott Champion",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512313": {
+  "county": "Vernon",
+  "district": 13,
+  "name": "Alycann Taylor",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512314": {
+  "county": "Vernon",
+  "district": 14,
+  "name": "Wayde Lawler",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512315": {
+  "county": "Vernon",
+  "district": 15,
+  "name": "Sandy Schweiger",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512316": {
+  "county": "Vernon",
+  "district": 16,
+  "name": "Paul Wilson",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512317": {
+  "county": "Vernon",
+  "district": 17,
+  "name": "Greg Lawton",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512318": {
+  "county": "Vernon",
+  "district": 18,
+  "name": "Patrick Sullivan",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512319": {
+  "county": "Vernon",
+  "district": 19,
+  "name": "Kay Stanek",
+  "sourceUrl": "https://www.vernoncountywi.gov/government/county_board_of_supervisors/index.php"
+ },
+ "5512501": {
+  "county": "Vilas",
+  "district": 1,
+  "name": "Phil Desautels",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512502": {
+  "county": "Vilas",
+  "district": 2,
+  "name": "Richard Logan",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512503": {
+  "county": "Vilas",
+  "district": 3,
+  "name": "Thomas Petrusky",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512504": {
+  "county": "Vilas",
+  "district": 4,
+  "name": "Michael MacKenzie",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512505": {
+  "county": "Vilas",
+  "district": 5,
+  "name": "Ann Konopacky",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512506": {
+  "county": "Vilas",
+  "district": 6,
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php",
+  "vacant": true
+ },
+ "5512507": {
+  "county": "Vilas",
+  "district": 7,
+  "name": "Michael Rayala",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512508": {
+  "county": "Vilas",
+  "district": 8,
+  "name": "Tom Maulson",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512509": {
+  "county": "Vilas",
+  "district": 9,
+  "name": "Robert Hanson",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512510": {
+  "county": "Vilas",
+  "district": 10,
+  "name": "Joseph Wildcat Sr",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512511": {
+  "county": "Vilas",
+  "district": 11,
+  "name": "Marvin Anderson",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512512": {
+  "county": "Vilas",
+  "district": 12,
+  "name": "Carolyn Ritter",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512513": {
+  "county": "Vilas",
+  "district": 13,
+  "name": "Lake Edwards",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512514": {
+  "county": "Vilas",
+  "district": 14,
+  "name": "Jane Van Wormer",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512515": {
+  "county": "Vilas",
+  "district": 15,
+  "name": "Joe Muehlbach",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512516": {
+  "county": "Vilas",
+  "district": 16,
+  "name": "Daniel Swiecichowski",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512517": {
+  "county": "Vilas",
+  "district": 17,
+  "name": "Holly Tomlanovich",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512518": {
+  "county": "Vilas",
+  "district": 18,
+  "name": "Aron Houdini",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512519": {
+  "county": "Vilas",
+  "district": 19,
+  "name": "Gerald Burkett",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512520": {
+  "county": "Vilas",
+  "district": 20,
+  "name": "Patrick Weber",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512521": {
+  "county": "Vilas",
+  "district": 21,
+  "name": "Dan Kramer",
+  "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
+ },
+ "5512701": {
+  "county": "Walworth",
+  "district": 1,
+  "name": "Rick Stacey",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512702": {
+  "county": "Walworth",
+  "district": 2,
+  "name": "Joseph H. Schaefer II",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512703": {
+  "county": "Walworth",
+  "district": 3,
+  "name": "Brian Holt",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512704": {
+  "county": "Walworth",
+  "district": 4,
+  "name": "Tyler Schneider",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512705": {
+  "county": "Walworth",
+  "district": 5,
+  "name": "Bud Wojcik",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512706": {
+  "county": "Walworth",
+  "district": 6,
+  "name": "Kathy Ingersoll",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512707": {
+  "county": "Walworth",
+  "district": 7,
+  "name": "Joanne Laufenberg",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512708": {
+  "county": "Walworth",
+  "district": 8,
+  "name": "Dennis G. Karbowski",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512709": {
+  "county": "Walworth",
+  "district": 9,
+  "name": "Susan M. Pruessing",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512710": {
+  "county": "Walworth",
+  "district": 10,
+  "name": "Kenneth H. Monroe",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512711": {
+  "county": "Walworth",
+  "district": 11,
+  "name": "Sheila T. Reiff",
+  "sourceUrl": "https://co.walworth.wi.us/534/Board-of-Supervisors"
+ },
+ "5512901": {
+  "county": "Washburn",
+  "district": 1,
+  "name": "Jerry Smith",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512902": {
+  "county": "Washburn",
+  "district": 2,
+  "name": "Linda Featherly",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512903": {
+  "county": "Washburn",
+  "district": 3,
+  "name": "Lolita Olson",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512904": {
+  "county": "Washburn",
+  "district": 4,
+  "name": "Sandy Johnson",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512905": {
+  "county": "Washburn",
+  "district": 5,
+  "name": "David Droste",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512906": {
+  "county": "Washburn",
+  "district": 6,
+  "name": "Jennifer Butterfield",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512907": {
+  "county": "Washburn",
+  "district": 7,
+  "name": "Hank Graber",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512908": {
+  "county": "Washburn",
+  "district": 8,
+  "name": "Tim Kessler",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512909": {
+  "county": "Washburn",
+  "district": 9,
+  "name": "Fred Hassani",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512910": {
+  "county": "Washburn",
+  "district": 10,
+  "name": "Bob Olsgard",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512911": {
+  "county": "Washburn",
+  "district": 11,
+  "name": "Angela Pank",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512912": {
+  "county": "Washburn",
+  "district": 12,
+  "name": "Scott Perlick",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512913": {
+  "county": "Washburn",
+  "district": 13,
+  "name": "George Cusick",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512914": {
+  "county": "Washburn",
+  "district": 14,
+  "name": "Joe Hoy",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512915": {
+  "county": "Washburn",
+  "district": 15,
+  "name": "Kelly Cupp",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512916": {
+  "county": "Washburn",
+  "district": 16,
+  "name": "Jocelyn Ford",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512917": {
+  "county": "Washburn",
+  "district": 17,
+  "name": "Kasey King",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512918": {
+  "county": "Washburn",
+  "district": 18,
+  "name": "Ben Dryden",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512919": {
+  "county": "Washburn",
+  "district": 19,
+  "name": "Randi Swanson",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512920": {
+  "county": "Washburn",
+  "district": 20,
+  "name": "Stephen Smith",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5512921": {
+  "county": "Washburn",
+  "district": 21,
+  "name": "Clint Stariha",
+  "sourceUrl": "https://co.washburn.wi.us/county-board-supervisors/"
+ },
+ "5513101": {
+  "county": "Washington",
+  "district": 1,
+  "name": "Joseph R. Vespalec",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513102": {
+  "county": "Washington",
+  "district": 2,
+  "name": "Marietta Bailey",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513103": {
+  "county": "Washington",
+  "district": 3,
+  "name": "Denis Kelling",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513104": {
+  "county": "Washington",
+  "district": 4,
+  "name": "Christopher Bossert",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513105": {
+  "county": "Washington",
+  "district": 5,
+  "name": "Nicholas Stewart",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513106": {
+  "county": "Washington",
+  "district": 6,
+  "name": "Doug Neumann",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513107": {
+  "county": "Washington",
+  "district": 7,
+  "name": "Anne Trautner",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513108": {
+  "county": "Washington",
+  "district": 8,
+  "name": "John Schodron",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513109": {
+  "county": "Washington",
+  "district": 9,
+  "name": "Brian Krebs",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513110": {
+  "county": "Washington",
+  "district": 10,
+  "name": "Kenneth Mikulec",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513111": {
+  "county": "Washington",
+  "district": 11,
+  "name": "James Burg",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513112": {
+  "county": "Washington",
+  "district": 12,
+  "name": "Tina Pridemore",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513113": {
+  "county": "Washington",
+  "district": 13,
+  "name": "Brian Gallitz",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513114": {
+  "county": "Washington",
+  "district": 14,
+  "name": "Pamela Konrath",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513115": {
+  "county": "Washington",
+  "district": 15,
+  "name": "Jeremiah Moll",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513116": {
+  "county": "Washington",
+  "district": 16,
+  "name": "Stephanie Lietzau-Erdman",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513117": {
+  "county": "Washington",
+  "district": 17,
+  "name": "Carroll Merry",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513118": {
+  "county": "Washington",
+  "district": 18,
+  "name": "Jeffrey Schleif",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513119": {
+  "county": "Washington",
+  "district": 19,
+  "name": "Tony Thoma",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513120": {
+  "county": "Washington",
+  "district": 20,
+  "name": "Michael Schwab",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513121": {
+  "county": "Washington",
+  "district": 21,
+  "name": "Robert Hartwig",
+  "sourceUrl": "https://www.washcowisco.gov/departments/county_board"
+ },
+ "5513301": {
+  "county": "Waukesha",
+  "district": 1,
+  "name": "Steve Styza",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513302": {
+  "county": "Waukesha",
+  "district": 2,
+  "name": "Wayne Euclide",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513303": {
+  "county": "Waukesha",
+  "district": 3,
+  "name": "John G. Gscheidmeier",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513304": {
+  "county": "Waukesha",
+  "district": 4,
+  "name": "Jim Batzko",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513305": {
+  "county": "Waukesha",
+  "district": 5,
+  "name": "Timothy Dondlinger",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513306": {
+  "county": "Waukesha",
+  "district": 6,
+  "name": "Jeremy Walz",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513307": {
+  "county": "Waukesha",
+  "district": 7,
+  "name": "Jacob LaFontain",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513308": {
+  "county": "Waukesha",
+  "district": 8,
+  "name": "Johnny Koremenos",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513309": {
+  "county": "Waukesha",
+  "district": 9,
+  "name": "James A. Heinrich",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513310": {
+  "county": "Waukesha",
+  "district": 10,
+  "name": "Terry Thieme",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513311": {
+  "county": "Waukesha",
+  "district": 11,
+  "name": "Christine M. Howard",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513312": {
+  "county": "Waukesha",
+  "district": 12,
+  "name": "Peter M. Wolff",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513313": {
+  "county": "Waukesha",
+  "district": 13,
+  "name": "John D. Leisemann",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513314": {
+  "county": "Waukesha",
+  "district": 14,
+  "name": "Jack Nissen",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513315": {
+  "county": "Waukesha",
+  "district": 15,
+  "name": "Robert L. Kolb",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513316": {
+  "county": "Waukesha",
+  "district": 16,
+  "name": "Michael A. Crowley",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513317": {
+  "county": "Waukesha",
+  "district": 17,
+  "name": "Brian Meier",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513318": {
+  "county": "Waukesha",
+  "district": 18,
+  "name": "Larry Nelson",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513319": {
+  "county": "Waukesha",
+  "district": 19,
+  "name": "Darryl J. Enriquez",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513320": {
+  "county": "Waukesha",
+  "district": 20,
+  "name": "Thomas J. Schellinger",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513321": {
+  "county": "Waukesha",
+  "district": 21,
+  "name": "Joseph O'Brien",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513322": {
+  "county": "Waukesha",
+  "district": 22,
+  "name": "Michael Gryczka",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513323": {
+  "county": "Waukesha",
+  "district": 23,
+  "name": "Keith Hammitt",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513324": {
+  "county": "Waukesha",
+  "district": 24,
+  "name": "Deb Schroeder",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513325": {
+  "county": "Waukesha",
+  "district": 25,
+  "name": "Darlene M. Johnson",
+  "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
+ },
+ "5513701": {
+  "county": "Waushara",
+  "district": 1,
+  "name": "Jeff Haase",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513702": {
+  "county": "Waushara",
+  "district": 2,
+  "name": "Bart Peterson",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513703": {
+  "county": "Waushara",
+  "district": 3,
+  "name": "Ed Delgado",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513704": {
+  "county": "Waushara",
+  "district": 4,
+  "name": "Jay Johnson",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513705": {
+  "county": "Waushara",
+  "district": 5,
+  "name": "John Jarvis",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513706": {
+  "county": "Waushara",
+  "district": 6,
+  "name": "David T. Bosshard",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513707": {
+  "county": "Waushara",
+  "district": 7,
+  "name": "Patrick King",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513708": {
+  "county": "Waushara",
+  "district": 8,
+  "name": "George Peterman",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513709": {
+  "county": "Waushara",
+  "district": 9,
+  "name": "Jesse A. Urban",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513710": {
+  "county": "Waushara",
+  "district": 10,
+  "name": "Mike Semrow",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513711": {
+  "county": "Waushara",
+  "district": 11,
+  "name": "Upcoming Meetings",
+  "sourceUrl": "https://www.wausharacountywi.gov/13370/county-board-of-supervisors"
+ },
+ "5513901": {
+  "county": "Winnebago",
+  "district": 1,
+  "name": "Rachael Dowling",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513902": {
+  "county": "Winnebago",
+  "district": 2,
+  "name": "Kristl Laux",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513903": {
+  "county": "Winnebago",
+  "district": 3,
+  "name": "Tanya Keech",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513904": {
+  "county": "Winnebago",
+  "district": 4,
+  "name": "Dean Spoehr",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513905": {
+  "county": "Winnebago",
+  "district": 5,
+  "name": "Shiloh Ramos",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513906": {
+  "county": "Winnebago",
+  "district": 6,
+  "name": "Lucas Reinke",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513907": {
+  "county": "Winnebago",
+  "district": 7,
+  "name": "Kate Hancock-Cooke",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513908": {
+  "county": "Winnebago",
+  "district": 8,
+  "name": "Jim Wise",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513909": {
+  "county": "Winnebago",
+  "district": 9,
+  "name": "Devin Moonin",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513910": {
+  "county": "Winnebago",
+  "district": 10,
+  "name": "Chris Rosenow",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513911": {
+  "county": "Winnebago",
+  "district": 11,
+  "name": "Tim Paterson",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513912": {
+  "county": "Winnebago",
+  "district": 12,
+  "name": "Maribeth Gabert",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513913": {
+  "county": "Winnebago",
+  "district": 13,
+  "name": "Steven Binder",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513914": {
+  "county": "Winnebago",
+  "district": 14,
+  "name": "Richard Norenberg",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513915": {
+  "county": "Winnebago",
+  "district": 15,
+  "name": "Amber Lyn Gilbertson",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513916": {
+  "county": "Winnebago",
+  "district": 16,
+  "name": "Casen J. Frassetto",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513917": {
+  "county": "Winnebago",
+  "district": 17,
+  "name": "Caden McCartney",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513918": {
+  "county": "Winnebago",
+  "district": 18,
+  "name": "James Ponzer",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513919": {
+  "county": "Winnebago",
+  "district": 19,
+  "name": "Bob Poeschl",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513920": {
+  "county": "Winnebago",
+  "district": 20,
+  "name": "Timothy Macho",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513921": {
+  "county": "Winnebago",
+  "district": 21,
+  "name": "John Hinz",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513922": {
+  "county": "Winnebago",
+  "district": 22,
+  "name": "Cullen M. Bettin",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513923": {
+  "county": "Winnebago",
+  "district": 23,
+  "name": "Brenda Pluchinsky",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513924": {
+  "county": "Winnebago",
+  "district": 24,
+  "name": "Andy Buck",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513925": {
+  "county": "Winnebago",
+  "district": 25,
+  "name": "Karen D. Powers",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513926": {
+  "county": "Winnebago",
+  "district": 26,
+  "name": "Conley Hanson",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513927": {
+  "county": "Winnebago",
+  "district": 27,
+  "name": "Carl Schulze",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513928": {
+  "county": "Winnebago",
+  "district": 28,
+  "name": "Robert Gustafson",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513929": {
+  "county": "Winnebago",
+  "district": 29,
+  "name": "George Bureau",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513930": {
+  "county": "Winnebago",
+  "district": 30,
+  "name": "Matthew Woods",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513931": {
+  "county": "Winnebago",
+  "district": 31,
+  "name": "Brian Noe",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513932": {
+  "county": "Winnebago",
+  "district": 32,
+  "name": "Frank Frassetto",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513933": {
+  "county": "Winnebago",
+  "district": 33,
+  "sourceUrl": "https://www.winnebagocountywi.gov/703",
+  "vacant": true
+ },
+ "5513934": {
+  "county": "Winnebago",
+  "district": 34,
+  "name": "Tim O'Brien",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513935": {
+  "county": "Winnebago",
+  "district": 35,
+  "name": "Douglas Nelson",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5513936": {
+  "county": "Winnebago",
+  "district": 36,
+  "name": "Howard Miller",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
+ },
+ "5514101": {
+  "county": "Wood",
+  "district": 1,
+  "name": "Wayne A. Schulz",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514102": {
+  "county": "Wood",
+  "district": 2,
+  "name": "Donna Rozar",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514103": {
+  "county": "Wood",
+  "district": 3,
+  "name": "Tom Buttke",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514104": {
+  "county": "Wood",
+  "district": 4,
+  "name": "Russell J. Perlock",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514105": {
+  "county": "Wood",
+  "district": 5,
+  "name": "Timothy W. Hovendick",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514106": {
+  "county": "Wood",
+  "district": 6,
+  "name": "Allen W. Breu",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514107": {
+  "county": "Wood",
+  "district": 7,
+  "name": "William Voight",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514108": {
+  "county": "Wood",
+  "district": 8,
+  "name": "Jake Hahn",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514109": {
+  "county": "Wood",
+  "district": 9,
+  "name": "Paul Goldberg",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514110": {
+  "county": "Wood",
+  "district": 10,
+  "name": "Lee P. Thao",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514111": {
+  "county": "Wood",
+  "district": 11,
+  "name": "Jeff Penzkover",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514112": {
+  "county": "Wood",
+  "district": 12,
+  "name": "Laura Valenstein",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514113": {
+  "county": "Wood",
+  "district": 13,
+  "name": "Linda Casper",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514114": {
+  "county": "Wood",
+  "district": 14,
+  "name": "Dennis Polach",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514115": {
+  "county": "Wood",
+  "district": 15,
+  "name": "Bill Clendenning",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514116": {
+  "county": "Wood",
+  "district": 16,
+  "name": "Lance A. Pliml",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514117": {
+  "county": "Wood",
+  "district": 17,
+  "name": "Joseph H. Zurfluh",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514118": {
+  "county": "Wood",
+  "district": 18,
+  "name": "Brad R. Hamilton",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ },
+ "5514119": {
+  "county": "Wood",
+  "district": 19,
+  "name": "Bill L. Leichtnam",
+  "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
+ }
+}

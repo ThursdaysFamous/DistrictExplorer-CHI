@@ -28,3 +28,6 @@ dist/
 
 # Claude Code agent worktrees — transient, harness-managed
 .claude/worktrees/
+
+# Scraper intermediate cache (stage-1 output, never committed)
+scripts/.cache/

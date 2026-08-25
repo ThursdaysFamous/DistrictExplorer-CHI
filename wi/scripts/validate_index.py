@@ -119,6 +119,7 @@ ROSTER_FILES = {
     "wi-assembly-members.json": 94,  # State Assembly roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (99 seats).
     "coverage-gaps.json": 1,  # The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps.
     "county-board-directory.json": 72,  # One row per county: board size read back from the shipped geometry, plus the county's own official page for the card's footer link. Built by wi/scripts/build_wi_county_board_directory.py; not a roster of people — Wisconsin publishes none statewide.
+    "county-board-members.json": 400,  # County board supervisors for the 20 counties that publish a district-keyed member list (437 seats). Built by wi/scripts/build_wi_county_board_roster.py from each county's own page and checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 52 counties name nobody — their cards link the county board instead.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at

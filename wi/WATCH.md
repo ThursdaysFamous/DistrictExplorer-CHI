@@ -13,6 +13,7 @@ checkpoint with a stale date is a checkpoint that didn't happen.
 |---|---|---|---|
 | Weekly (Mon 13:30 UTC) | U.S. House (WI) roster refresh | `.github/workflows/update-wi-congress-roster.yml` → PR on change | Review + merge the PR; a week with a surprise diff is worth a look at the source |
 | Weekly (Tue 13:30 UTC) | WI Senate + Assembly roster refresh (Open States wi.csv) | `.github/workflows/update-wi-legislature-roster.yml` → PR on change | Review + merge the PR — especially after a Wisconsin general (November, even years) and each January seating |
+| Weekly (Thu 14:30 UTC) | County board supervisors, 20 counties | `.github/workflows/update-wi-county-board-roster.yml` → PR on change | Review + merge. **A county DISAPPEARING from the roster is the signal that matters**: the scraper reads each county with its direction pinned, so a page that has reshaped fails its count guard and is skipped rather than shipping a shifted roster. Go and re-read that county's page |
 
 ---
 
@@ -30,7 +31,7 @@ checkpoint with a stale date is a checkpoint that didn't happen.
 | When | What | Last done |
 |---|---|---|
 | After each Wisconsin general (November, even years) and any special election | The chamber rosters turn over; the weekly Open States refresh picks it up, but verify the first post-election PR against the Legislature's own directory before merging | 2026-08-25 (initial build: 33/33 + 99/99) |
-| After each **spring election (April, even years)** | County supervisors are elected to two-year terms then. This instance ships no supervisor names — there is no statewide roster — so nothing turns over automatically; what to check is that `county-board-directory.json`'s 72 county links still resolve, since counties commonly reorganise their board pages right after a seating | 2026-08-25 (72/72 links verified: 58 answer 200, 11 refuse datacenter clients, 2 answer 503, Taylor sits behind a captcha) |
+| After each **spring election (April, even years)** | County supervisors are elected to two-year terms then, so the 20 shipped rosters turn over at once. The weekly run picks it up, but verify the first post-seating PR against a couple of counties' own pages before merging — this is also when counties reorganise their board pages, which is what breaks the pinned reading direction | 2026-08-25 (20 counties, 437 seats: 435 named, 2 vacant; 72/72 county links verified) |
 
 ---
 
