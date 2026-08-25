@@ -104,19 +104,39 @@ FORWARD_TO = "/il/"
 # CHECKED dependency: rename one upstream and this build fails by name instead
 # of emitting a page with a broken custom property.
 LIGHT_TOKENS = [
-    "brand-600", "brand-700", "brand-tint", "brand-border",
+    "brand-600", "brand-700", "brand-warm", "brand-tint", "brand-border",
     "paper", "surface", "ink", "ink-3", "muted", "faint", "border",
     "font-heading", "font-heading-weight", "font-body",
     "radius-card", "shadow-card",
 ]
 DARK_TOKENS = [
-    "brand-tint", "brand-border",
+    "brand-700", "brand-warm", "brand-tint", "brand-border",
     "paper", "surface", "ink", "ink-3", "muted", "faint", "border",
     "shadow-card",
 ]
-# The dark block re-points --brand rather than --brand-600/700, so the page's
-# link colours take these two explicitly.
-DARK_EXTRA = {"brand-600": "brand", "brand-700": "brand"}
+# --brand-700 and --brand-warm now EXIST in the token file's dark tier, so the
+# dark block takes them by name. They used to be aliased to --brand here, which
+# is how this page came to serve #a78bfa where the app serves #c4b0ff for the
+# same role on the same brand — the alias was a stand-in for a missing token and
+# outlived it.
+DARK_EXTRA = {"brand-600": "brand"}
+
+
+# The metric-matched fallback the body stack names. A real face with no
+# download — local('Arial') plus overrides computed with fontTools — so the page
+# holds its line metrics while Barlow loads instead of reflowing on swap. It
+# lived in the three apps only, while every other surface NAMED it in
+# --font-body and did not define it, which is a stack that silently falls
+# through to -apple-system. scripts/build_brand_tokens.py --check keeps the
+# copies identical. Recompute if the body family or its version changes.
+FALLBACK_FACE = """@font-face {
+  font-family: 'Barlow Fallback';
+  src: local('Arial');
+  ascent-override: 100.00%;
+  descent-override: 20.00%;
+  line-gap-override: 0.00%;
+  size-adjust: 101.66%;
+}"""
 
 
 def fail(msg):
@@ -545,7 +565,7 @@ footer .foot-links { margin-top: 12px; }
         "forward": FORWARD_TO,
         "brand": light["brand-600"].strip(),
         "favicon": html.escape(favicon_uri, quote=True),
-        "fontface": fontface,
+        "fontface": fontface + "\n" + FALLBACK_FACE,
         "light": token_css(LIGHT_TOKENS, light, ":root"),
         "dark": token_css(DARK_TOKENS, dark, '[data-theme="dark"]', DARK_EXTRA,
                           indent="    "),

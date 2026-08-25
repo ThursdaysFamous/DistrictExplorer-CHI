@@ -191,11 +191,20 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 /* ==== SELF-HOSTED FONTS:END ==== */
+@font-face {
+  font-family: 'Barlow Fallback';
+  src: local('Arial');
+  ascent-override: 100.00%;
+  descent-override: 20.00%;
+  line-gap-override: 0.00%;
+  size-adjust: 101.66%;
+}
 
 :root {
   color-scheme: light dark;
   --brand-600: #6d3fd1;
   --brand-700: #5730ab;
+  --brand-warm: #b0316e;
   --brand-tint: #efe9fc;
   --brand-border: #d4c4f4;
   --paper: #f4f2ee;
@@ -205,14 +214,16 @@
   --muted: #6b7280;
   --faint: #9aa3b2;
   --border: #e8e7ef;
-  --font-heading: "Barlow Condensed", system-ui, sans-serif;
+  --font-heading: 'Barlow Condensed', sans-serif;
   --font-heading-weight: 600;
-  --font-body: "Barlow", system-ui, sans-serif;
+  --font-body: 'Barlow', 'Barlow Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius-card: 10px;
   --shadow-card: 0 1px 3px rgba(23, 22, 28, 0.06);
 }
 @media (prefers-color-scheme: dark) {
   :root {
+    --brand-700: #c4b0ff;
+    --brand-warm: #e879b9;
     --brand-tint: rgba(167, 139, 250, 0.16);
     --brand-border: rgba(167, 139, 250, 0.38);
     --paper: #15131b;
@@ -224,7 +235,6 @@
     --border: rgba(236, 233, 244, 0.1);
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
     --brand-600: #a78bfa;
-    --brand-700: #a78bfa;
   }
 }
 
