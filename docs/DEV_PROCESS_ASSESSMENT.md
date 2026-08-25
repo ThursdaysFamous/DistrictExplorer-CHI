@@ -321,6 +321,25 @@ fragment-boundary information the composer needs. Leave them where they are; R3 
 
 ## Stage log
 
+- **SHIPPED (2026-08-25): NY and SF were showing their verified date and feedback button to
+  nobody.** The districtry skin hides `footer.site-footer` — the links moved to the masthead at
+  the redesign — and its own note says the three load-bearing elements inside that husk
+  (`#verified-date`, `#feedback-btn`, the `metro-links-html` fence) must be RELOCATED rather than
+  hidden with it. Chicago relocated them. NY and SF never did, so both rendered the elements and
+  painted them at zero pixels: measured in a browser, `verified-date` and `feedback-btn` were
+  HIDDEN on `/ny/` and `/ca/` and visible on `/il/` and `/wi/`. A reader could not see when the
+  data was last checked and had no way to report a problem — for the whole life of both
+  instances. Both now carry the panel foot, with the fence moved VERBATIM so `compose_app
+  --check` stays a no-op, and each instance's `sw.cache_name` bumped.
+  **The gate is the point.** This is the fourth defect in three days whose whole cause was that
+  nothing COMPARED the instances — after the pre-rebrand sub-pages, the floating search box, and
+  the instance-blind retention gate. `page_consistency_test.mjs` now measures both elements as
+  pixels on any page carrying a map, in both themes; the check was proven by restoring NY's
+  defective file, which produced four failures naming `/ny/`, and passes on the fix. The metro
+  links stay hidden by design in the panel foot (`.districtry-panel-foot .footer-metros`) on all
+  four — the masthead's metro switcher replaced them, which the first reading of this defect got
+  wrong before measuring.
+
 - **R4/R6 — SHIPPED (2026-08-25): Wisconsin lands IN PLACE as `wi/`, the first state through the
   post-consolidation route.** The archived fork's `claude/bootstrap-wisconsin` branch (518d336) —
   the tree the retired §4.10 template route proved end to end — was imported as a folder and
