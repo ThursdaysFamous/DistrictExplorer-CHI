@@ -48,6 +48,8 @@ const GEOMETRY_URLS = [
   "./data/app/state-counties.json",
   "./data/app/congress-districts.json",
   "./data/app/school-districts-unified.json",
+  "./data/app/wi-senate-districts.json",
+  "./data/app/wi-assembly-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -55,6 +57,8 @@ const GEOMETRY_URLS = [
 // as an offline fallback. Same freshness rule as the shell.
 const ROSTER_URLS = [
   "./data/app/congress-roster.json",
+  "./data/app/wi-senate-members.json",
+  "./data/app/wi-assembly-members.json",
   "./data/app/coverage-gaps.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */

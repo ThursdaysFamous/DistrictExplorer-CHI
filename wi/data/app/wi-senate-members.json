@@ -1,0 +1,179 @@
+{
+  "1": {
+    "name": "André Jacque",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2019/legislators/senate/1941"
+  },
+  "2": {
+    "name": "Eric Wimberger",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2021/legislators/senate/2246"
+  },
+  "3": {
+    "name": "Tim Carpenter",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1501"
+  },
+  "4": {
+    "name": "Dora Drake",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2263"
+  },
+  "5": {
+    "name": "Rob Hutton",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1562"
+  },
+  "6": {
+    "name": "LaTonya Johnson",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1643",
+    "districtOffice": [
+      "WI",
+      "Phone: 414-313-1241"
+    ]
+  },
+  "7": {
+    "name": "Chris Larson",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1511"
+  },
+  "8": {
+    "name": "Jodi Habush Sinykin",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/senate/2839"
+  },
+  "9": {
+    "name": "Devin LeMahieu",
+    "party": "Republican",
+    "url": "https://devinforsenate.com/"
+  },
+  "10": {
+    "name": "Rob Stafsholt",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1635"
+  },
+  "11": {
+    "name": "Steve Nass",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1519"
+  },
+  "12": {
+    "name": "Mary Felzkowski",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1549"
+  },
+  "13": {
+    "name": "John Jagler",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1564"
+  },
+  "14": {
+    "name": "Sarah Keyeski",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/senate/2840"
+  },
+  "15": {
+    "name": "Mark Spreitzer",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1613"
+  },
+  "16": {
+    "name": "Melissa Ratcliff",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2546"
+  },
+  "17": {
+    "name": "Howard Marklein",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1516"
+  },
+  "18": {
+    "name": "Kristin Dassler-Alfheim",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/senate/2841"
+  },
+  "19": {
+    "name": "Rachael Cabral-Guevara",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2254"
+  },
+  "20": {
+    "name": "Dan Feyen",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1644",
+    "districtOffice": [
+      "400 University Drive Suite D4, Fond du Lac, WI 54935",
+      "Phone: 920-952-7001"
+    ]
+  },
+  "21": {
+    "name": "Van Wanggaard",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1531"
+  },
+  "22": {
+    "name": "Bob Wirch",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1532",
+    "districtOffice": [
+      "WI",
+      "Phone: 262-694-7379"
+    ]
+  },
+  "23": {
+    "name": "Jesse James",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1937"
+  },
+  "24": {
+    "name": "Patrick Testin",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1645"
+  },
+  "25": {
+    "name": "Romaine Quinn",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1601"
+  },
+  "26": {
+    "name": "Kelda Roys",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2021/legislators/senate/2252"
+  },
+  "27": {
+    "name": "Dianne Hesselbein",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1559"
+  },
+  "28": {
+    "name": "Julian Bradley",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2021/legislators/senate/2245"
+  },
+  "29": {
+    "name": "Cory Tomczyk",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2023/legislators/senate/2567"
+  },
+  "30": {
+    "name": "Jamie Wall",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/senate/2842"
+  },
+  "31": {
+    "name": "Jeff Smith",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2019/legislators/senate/1944"
+  },
+  "32": {
+    "name": "Brad Pfaff",
+    "party": "Democratic",
+    "url": "https://docs.legis.wisconsin.gov/2021/legislators/senate/2247"
+  },
+  "33": {
+    "name": "Chris Kapenga",
+    "party": "Republican",
+    "url": "https://docs.legis.wisconsin.gov/2017/legislators/senate/1510"
+  }
+}

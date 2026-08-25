@@ -5646,10 +5646,16 @@ function initWisconsinExplorer() {
   // GENERATED from the worksheet's layers[] (area_rank order + rank notes).
   var LAYER_AREA_RANK = [
     "us-house",          // Congressional districts — the largest districts a state carries below the state itself
+    "wi-senate",         // 33 State Senate districts, each the union of three whole Assembly districts
+    "wi-assembly",       // 99 State Assembly districts; three nest exactly inside each Senate district
     "county",            // Counties, pre-built from TIGERweb at bootstrap; the fork's offline anchor layer
+    "school-district-secondary", // Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead
     "school-district-unified", // Unified (K-12) school districts; pre-built from TIGERweb at bootstrap
-    "county-subdivision", // Townships / county subdivisions (TIGERweb CouSub, live)
-    "municipality"       // Incorporated places (TIGERweb Places, live); unincorporated points say so
+    "school-district-elementary", // Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory
+    "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
+    "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
+    "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
+    "post-office"        // Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8167,6 +8173,184 @@ function initWisconsinExplorer() {
     style: { color: "#14181C", weight: 2, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "8 3" }
   });
 
+  /* ---------- 6-7. Wisconsin State Senate + State Assembly ----------
+   * The two chambers through the shared ENGINE chamber factory, the ca-senate/
+   * ca-assembly pattern statewide: pre-built TIGERweb Legislative geometry
+   * (wi/scripts/build_legislative_boundaries.py — fetch, simplify, 2,000-point
+   * agreement gate) joined by district number to same-origin Open States
+   * rosters (wi/scripts/build_wi_legislature_roster.py, refreshed weekly by
+   * update-wi-legislature-roster.yml as a reviewed PR). Each file carries the
+   * chamber's real districts plus TIGERweb's ZZ water pseudo-district over
+   * the Great Lakes; ZZ has no district number, so a lake click gets the
+   * honest no-district card. A roster miss degrades to the district number +
+   * the legislature's own directory — never an invented name. ---------- */
+  var loadWiSenateDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-senate-districts.json", {}, 2);
+  });
+  var loadWiSenateMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-senate-members.json", {}, 2);
+  });
+  var loadWiAssemblyDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-assembly-districts.json", {}, 2);
+  });
+  var loadWiAssemblyMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-assembly-members.json", {}, 2);
+  });
+
+  registerIlgaChamber({
+    id: "wi-senate",
+    label: "Wisconsin State Senate District",
+    layerIndex: 1, // TIGERweb SLDU — fallback only; loadDistricts is used when present
+    loadDistricts: loadWiSenateDistricts,
+    districtFields: ["sldu", "sldust"],
+    directoryUrl: "https://legis.wisconsin.gov/senate/",
+    loadRoster: loadWiSenateMembers,
+    memberLabel: "State Senator", capitolLabel: "Capitol Office",
+    profileLabel: "Senator profile", directoryLabel: "WI Senate directory",
+    style: { color: "#4A2E8C", weight: 2, fillColor: "#4A2E8C", fillOpacity: 0.05, dashArray: "1 5" }
+  });
+
+  registerIlgaChamber({
+    id: "wi-assembly",
+    label: "Wisconsin State Assembly District",
+    layerIndex: 2, // TIGERweb SLDL — fallback only; loadDistricts is used when present
+    loadDistricts: loadWiAssemblyDistricts,
+    districtFields: ["sldl", "sldlst"],
+    directoryUrl: "https://legis.wisconsin.gov/assembly/",
+    loadRoster: loadWiAssemblyMembers,
+    memberLabel: "Representative", capitolLabel: "Capitol Office",
+    profileLabel: "Member profile", directoryLabel: "WI Assembly directory",
+    style: { color: "#8C2E4A", weight: 2, fillColor: "#8C2E4A", fillOpacity: 0.05, dashArray: "5 1 2 1" }
+  });
+
+  /* ---------- 8-9. School District (Union High / Elementary) ----------
+   * TIGER's school tilings are mutually exclusive: unified (K-12) territory
+   * never overlaps the elementary + union-high pairs, so exactly one of the
+   * Unified card and this pair resolves for any Wisconsin point — in unified
+   * territory these two honestly read "no result", never a guess. Live
+   * TIGERweb with the point-first hook, the Illinois statewide pattern
+   * (Wisconsin's paired districts are its union high school districts and
+   * their K-8 feeders). ---------- */
+  var loadWiSchoolSecondary = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "School/MapServer", 1,
+    "GEOID,NAME,STATE", "union high school districts");
+  var loadWiSchoolElementary = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "School/MapServer", 2,
+    "GEOID,NAME,STATE", "elementary school districts");
+
+  registerPolygonLayer({
+    id: "school-district-secondary",
+    group: "schools",
+    label: "School District (Union High)",
+    loader: loadWiSchoolSecondary,
+    style: { color: "#5E3A8C", weight: 1.5, fillColor: "#8163AE", fillOpacity: 0.05, dashArray: "10 4" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ],
+    compact: true, compactMetaField: "geoid" // 4b name-only card
+  });
+
+  registerPolygonLayer({
+    id: "school-district-elementary",
+    group: "schools",
+    label: "School District (Elementary)",
+    loader: loadWiSchoolElementary,
+    style: { color: "#B26A00", weight: 1.5, fillColor: "#D19133", fillOpacity: 0.05, dashArray: "3 3" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ],
+    compact: true, compactMetaField: "geoid" // 4b name-only card
+  });
+
+  /* ---------- 10. ZIP Code (statewide ZCTA) ----------
+   * The Illinois statewide pattern: TIGERweb's ZCTA layer has NO STATE field
+   * (ZCTAs cross state lines), so it can't use the STATE='55' filter the
+   * other statewide loaders rely on — it's fetched by a Wisconsin bounding
+   * envelope instead, server-generalized with maxAllowableOffset (~55 m).
+   * ZCTAs are the Census Bureau's approximation of USPS ZIP delivery areas,
+   * not the postal boundaries themselves — the caveat every ZCTA-based tool
+   * carries. ---------- */
+  var WI_BBOX_ENVELOPE = { xmin: -93.09, ymin: 42.29, xmax: -86.04, ymax: 47.51 };
+  var loadZipCodes = makeCached(function () {
+    var url = TIGERWEB_SERVICES + "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query" +
+      "?where=" + encodeURIComponent("1=1") +
+      "&geometry=" + encodeURIComponent(JSON.stringify(WI_BBOX_ENVELOPE)) +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=ZCTA5&returnGeometry=true&outSR=4326&f=geojson" +
+      "&geometryPrecision=4&maxAllowableOffset=0.0005";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb ZCTA layer returned no usable geometry");
+        return geojson;
+      });
+  });
+  // point-first hook (queryFeatureAt): one ZCTA instead of the statewide
+  // envelope set. No STATE filter here for the same reason the full load
+  // can't use one — the point filter narrows harder than the envelope anyway.
+  loadZipCodes.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(TIGERWEB_SERVICES + "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11", point, "ZCTA5");
+  };
+
+  registerPolygonLayer({
+    id: "zip-code",
+    group: "geography",
+    label: "ZIP Code",
+    loader: loadZipCodes,
+    // dotted outline (distinct pattern from County Subdivision's long dash) + different hue
+    style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" },
+    fields: [
+      { name: "zip", label: "ZIP Code", keys: ["zcta5", "zip", "zip_code", "zipcode", "zcta5ce10"], primary: true }
+    ],
+    compact: true // 4b name-only card (no meta field — the ZIP is the value)
+  });
+
+  /* ---------- 11. Post Offices (nearest 3) — USGS National Map ----------
+   * structures layer 38, the fleet's post-office source. Country-wide, so the
+   * METRO_BBOX envelope (the whole state here) is mandatory; f=geojson serves
+   * lowercase property names (name/address/city/state/zipcode). CORS-open;
+   * public domain ("USGS The National Map"). ---------- */
+  var USGS_POST_OFFICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38";
+  var loadPostOffices = makeCached(function () {
+    var url = USGS_POST_OFFICE_LAYER + "/query?geometry=" +
+      [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&where=1%3D1&outFields=NAME,ADDRESS,CITY,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+      if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from USGS structures layer 38");
+      return gj;
+    });
+  });
+
+  registerNearestPointLayer({
+    id: "post-office",
+    group: "geography",
+    color: "#4B2E83",
+    fill: "#B39DDB",
+    label: "Post Office",
+    loader: loadPostOffices,
+    intro: "Nearest post offices (USGS National Map structures data), straight-line distance:",
+    line: function (props) {
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      return (name ? String(name) : "Post office") +
+        (address ? " — " + String(address) : "") +
+        (city ? ", " + String(city) : "") +
+        (zip ? " " + String(zip) : "");
+    },
+    item: function (props) { // 4d two-line row: name over address
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      var note = (address ? String(address) : "") + (city ? (address ? ", " : "") + String(city) : "") + (zip ? " " + String(zip) : "");
+      return { name: name ? String(name) : "Post office", note: note || undefined };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — factory crib sheet
    * Every factory named below is ENGINE (byte-identical across forks) and is
@@ -8771,7 +8955,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "school-district-unified", "county", "county-subdivision", "municipality"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "municipality", "zip-code", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -8863,10 +9047,12 @@ function initWisconsinExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#2F6B3A": "#6FBE7B", "#3E4C59": "#899DB0",
-    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4C8F59": "#83DC93",
-    "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880",
-    "#B0316E": "#FD88B8", "#D06A9C": "#FFBDDA"};
+  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#2F6B3A": "#6FBE7B",
+    "#3E4C59": "#899DB0", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
+    "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE",
+    "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8C2E4A": "#F47294", "#A98B6C": "#F3CBA1",
+    "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA",
+    "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

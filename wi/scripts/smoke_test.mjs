@@ -35,11 +35,11 @@ if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leafle
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 // ==== GENERATED:BEGIN smoke-config ====
 const POINT = "44.89804,-89.75782"; // inside Marathon County
-const OFFLINE = ["county", "us-house", "school-district-unified"];
-const EXPECT_DISTRICT = { "county": "Marathon County", "us-house": "7", "school-district-unified": "Marathon City School District" };
+const OFFLINE = ["county", "us-house", "school-district-unified", "wi-senate", "wi-assembly"];
+const EXPECT_DISTRICT = { "county": "Marathon County", "us-house": "7", "school-district-unified": "Marathon City School District", "wi-senate": "29", "wi-assembly": "86" };
 const NEGATIVE_POINT = "47.39000,-92.97000"; // off the northwest corner of Wisconsin — outside the state and every starter layer
 const APP_NAME = "districtry Wisconsin";
-const EXPECT_LAYERS = 5;
+const EXPECT_LAYERS = 11;
 // ==== GENERATED:END smoke-config ====
 // Fork-specific smoke-test constants (the reference repo hoists its own set
 // here). The template's CHI-scenario checks are dropped at build time, so the

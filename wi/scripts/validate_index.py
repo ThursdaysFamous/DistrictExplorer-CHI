@@ -95,8 +95,10 @@ MIN_REGISTER_LAYER = 8
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "county", "school-district-unified", "county-subdivision",
-    "municipality",
+    "us-house", "wi-senate", "wi-assembly", "county",
+    "school-district-secondary", "school-district-unified",
+    "school-district-elementary", "county-subdivision", "municipality",
+    "zip-code", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -105,11 +107,15 @@ GEOMETRY_FILES = {
     "state-counties.json": (72, 72),  # Every county in the state, pre-built from TIGERweb by bootstrap_state.py (bounds tightened to the real count at bootstrap).
     "congress-districts.json": (8, 8),  # The state's U.S. House districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap).
     "school-districts-unified.json": (369, 369),  # The state's unified school districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap).
+    "wi-senate-districts.json": (34, 34),  # The 33 State Senate districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
+    "wi-assembly-districts.json": (100, 100),  # The 99 State Assembly districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
 }
 
 # file -> minimum key count (officeholder rosters).
 ROSTER_FILES = {
-    "congress-roster.json": 8,  # U.S. House roster for the state, built from unitedstates/congress-legislators by bootstrap_state.py and refreshed weekly by update-congress-roster.yml (min tightened at bootstrap).
+    "congress-roster.json": 8,  # U.S. House roster for the state, built from unitedstates/congress-legislators by bootstrap_state.py and refreshed weekly by update-wi-congress-roster.yml (min tightened at bootstrap).
+    "wi-senate-members.json": 31,  # State Senate roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (33 seats).
+    "wi-assembly-members.json": 94,  # State Assembly roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (99 seats).
     "coverage-gaps.json": 1,  # The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps.
 }
 

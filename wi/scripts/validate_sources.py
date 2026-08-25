@@ -100,6 +100,30 @@ PROVENANCE = [
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/0",
         "note": "Unified school districts pre-built from TIGERweb by bootstrap_state.py.",
     },
+    {
+        "layer": "wi-senate",
+        "app_file": "wi-senate-districts.json",
+        "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1",
+        "note": "State Senate districts pre-built from TIGERweb by wi/scripts/build_legislative_boundaries.py; redraws each decennial cycle (WATCH.md).",
+    },
+    {
+        "layer": "wi-senate",
+        "app_file": "wi-senate-members.json",
+        "source_url": "https://data.openstates.org/people/current/wi.csv",
+        "note": "Senate roster from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
+    },
+    {
+        "layer": "wi-assembly",
+        "app_file": "wi-assembly-districts.json",
+        "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2",
+        "note": "State Assembly districts pre-built from TIGERweb by wi/scripts/build_legislative_boundaries.py; redraws each decennial cycle (WATCH.md).",
+    },
+    {
+        "layer": "wi-assembly",
+        "app_file": "wi-assembly-members.json",
+        "source_url": "https://data.openstates.org/people/current/wi.csv",
+        "note": "Assembly roster from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
+    },
 ]
 
 # Live endpoints the app queries at runtime.
@@ -111,6 +135,22 @@ ENDPOINTS = [
     {
         "layer": "municipality",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4/query?where=STATE%3D%2755%27&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "school-district-secondary",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/1/query?where=STATE%3D%2755%27&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "school-district-elementary",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/2/query?where=STATE%3D%2755%27&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "zip-code",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11?f=json",
+    },
+    {
+        "layer": "post-office",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38?f=json",
     },
 ]
 
