@@ -17,11 +17,11 @@ Wisconsin District Explorer: a single-file, dependency-light web app. Click a po
 **Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
 `python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
 
-- Metro: Wisconsin (`wisconsin`) — https://wi.chidistricts.com/
+- Metro: Wisconsin (`wisconsin`) — https://districtry.com/wi/
 - Geocoders: address Photon (Wisconsin-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Wisconsin-bounded, serial >=1s queue)
 - Ground truth: 44.89804,-89.75782 (inside Marathon County) → county Marathon County; us-house 7; school-district-unified Marathon City School District. Negative point 47.39000,-92.97000 (off the northwest corner of Wisconsin — outside the state and every starter layer).
 - Layers: 5 registered (political 1, schools 1, geography 3); `registerLayer(` floor 8. Debug namespace `window.WisconsinExplorer`.
-- Scheduled workflows: `update-congress-roster.yml` (Mon 13:00 UTC).
+- Scheduled workflows: `update-wi-congress-roster.yml` (Mon 13:30 UTC); `update-wi-legislature-roster.yml` (Tue 13:30 UTC).
 - Source registry: `scripts/validate_sources.py` (machine-checked monthly)
 <!-- ==== GENERATED:END metro-facts ==== -->
 

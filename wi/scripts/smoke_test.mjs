@@ -38,6 +38,7 @@ const POINT = "44.89804,-89.75782"; // inside Marathon County
 const OFFLINE = ["county", "us-house", "school-district-unified"];
 const EXPECT_DISTRICT = { "county": "Marathon County", "us-house": "7", "school-district-unified": "Marathon City School District" };
 const NEGATIVE_POINT = "47.39000,-92.97000"; // off the northwest corner of Wisconsin — outside the state and every starter layer
+const APP_NAME = "districtry Wisconsin";
 const EXPECT_LAYERS = 5;
 // ==== GENERATED:END smoke-config ====
 // Fork-specific smoke-test constants (the reference repo hoists its own set

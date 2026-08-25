@@ -59,6 +59,7 @@ INSTANCES = {
     "il": ["il/index.html", "il/sw.js"],
     "ca": ["ca/index.html", "ca/sw.js"],
     "ny": ["ny/index.html", "ny/sw.js"],
+    "wi": ["wi/index.html", "wi/sw.js"],
 }
 
 # The sub-pages — every published page that is not the app. They compose the
@@ -74,6 +75,7 @@ SUBPAGES = {
     "ny": ["ny/faq.html", "ny/sources.html", "ny/council-district.html",
            "ny/community-board.html"],
     "ca": ["ca/faq.html", "ca/sources.html", "ca/supervisor-district.html"],
+    "wi": ["wi/faq.html", "wi/sources.html"],
 }
 
 # Blocks whose ONE source is engine/shared/<name>.txt rather than
