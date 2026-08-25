@@ -327,7 +327,12 @@
     "note": "off the northwest corner of Wisconsin — outside the state and every starter layer"
   },
   "coverage_key": {
-    "outside": "Outside Wisconsin"
+    "outside": "Outside Wisconsin",
+    "region": {
+      "edge": "Wisconsin",
+      "label": "District shown, supervisor not named",
+      "sub": "The county doesn't publish who holds it"
+    }
   },
   "data_files": {
     "geometry": [
@@ -335,7 +340,7 @@
         "file": "metro-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "State outline dissolved from TIGERweb by bootstrap_state.py; drives the out-of-scope wash."
+        "note": "The dissolved outline of the counties whose county board card NAMES a supervisor (wi/scripts/build_metro_outline.py, anchor-verified inside and outside). Regenerate whenever a county's roster ships — the wash is a claim about coverage and has to track it."
       },
       {
         "file": "state-counties.json",
@@ -372,6 +377,12 @@
         "min_features": 1590,
         "max_features": 1590,
         "note": "Every county board supervisory district in the state — 1,573 from LTSB's statewide aggregate plus Trempealeau's own 17, built by wi/scripts/build_wi_supervisory_districts.py (numbering, ward-reconciliation and 10,000-in-state-point agreement gates)."
+      },
+      {
+        "file": "wi-state-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring."
       }
     ],
     "rosters": [
@@ -408,7 +419,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v3",
+    "cache_name": "districtry-wi-shell-v4",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

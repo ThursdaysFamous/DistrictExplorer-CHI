@@ -3744,7 +3744,7 @@ function initWisconsinExplorer() {
   // statewide layers still answer in; it also requires that instance's boot
   // to hand drawOutOfScopeMask() the region geometry, because the key names
   // only the bands that were actually drawn.
-  var COVERAGE_KEY = { outside: "Outside Wisconsin" };
+  var COVERAGE_KEY = { outside: "Outside Wisconsin", region: { edge: "Wisconsin", label: "District shown, supervisor not named", sub: "The county doesn't publish who holds it" } };
   /* Sibling District Explorer deployments — one canonical list shared by every
    * metro fork. When a new metro launches, add its entry to every fork's
    * worksheet and regenerate (Conversion 3 will source this list from the
@@ -8113,6 +8113,13 @@ function initWisconsinExplorer() {
   var loadMetroOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/metro-outline.json", {}, 2);
   });
+  // The wash's REGION geometry — the whole state. Wisconsin's statewide layers
+  // and its county board DISTRICTS answer everywhere inside this; what stops
+  // at the coverage ring above is the supervisor's NAME. Two geometries, so
+  // the wash draws three bands and says which is which.
+  var loadStateOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-state-outline.json", {}, 2);
+  });
 
   /* ---------- Census TIGERweb loaders ----------
    * Cribbed from the CHI reference implementation's Legislative-MapServer
@@ -9268,7 +9275,7 @@ function initWisconsinExplorer() {
   // bootstrap. It marks where coverage genuinely ends (the cards already hide
   // an out-of-coverage layer outright), and it skips silently on any error —
   // it is a hint, not data; regenerate the file, never hand-edit it.
-  whenIdle(function () { drawOutOfScopeMask(loadMetroOutline); });
+  whenIdle(function () { drawOutOfScopeMask(loadMetroOutline, loadStateOutline); });
 
   var verifiedEl = document.getElementById("verified-date");
   // sources.html prints the same date at the top of the layer matrix. Two

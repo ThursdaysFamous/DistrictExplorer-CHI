@@ -103,13 +103,14 @@ EXPECT_LAYER_IDS = [
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
 GEOMETRY_FILES = {
-    "metro-outline.json": (1, 1),  # State outline dissolved from TIGERweb by bootstrap_state.py; drives the out-of-scope wash.
+    "metro-outline.json": (1, 1),  # The dissolved outline of the counties whose county board card NAMES a supervisor (wi/scripts/build_metro_outline.py, anchor-verified inside and outside). Regenerate whenever a county's roster ships — the wash is a claim about coverage and has to track it.
     "state-counties.json": (72, 72),  # Every county in the state, pre-built from TIGERweb by bootstrap_state.py (bounds tightened to the real count at bootstrap).
     "congress-districts.json": (8, 8),  # The state's U.S. House districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap).
     "school-districts-unified.json": (369, 369),  # The state's unified school districts, pre-built from TIGERweb by bootstrap_state.py (bounds tightened at bootstrap).
     "wi-senate-districts.json": (34, 34),  # The 33 State Senate districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "wi-assembly-districts.json": (100, 100),  # The 99 State Assembly districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "county-supervisory-districts.json": (1590, 1590),  # Every county board supervisory district in the state — 1,573 from LTSB's statewide aggregate plus Trempealeau's own 17, built by wi/scripts/build_wi_supervisory_districts.py (numbering, ward-reconciliation and 10,000-in-state-point agreement gates).
+    "wi-state-outline.json": (1, 1),  # The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring.
 }
 
 # file -> minimum key count (officeholder rosters).
