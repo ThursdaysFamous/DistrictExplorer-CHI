@@ -1980,8 +1980,7 @@
         "file": "wayne-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Wayne County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Wayne County coverage outline — the coverage test for the county's board and precinct dispatch entries (wayneCountyCoverage). Shipped 2026-08-04 as gap-location geometry by the pass-13 detached-counties sweep, when Wayne read as source-less; promoted to a coverage outline on 2026-08-25 when the county joined as the 90th served county, so index.html now names it literally and it is no longer a dynamic reference."
       },
       {
         "file": "white-county-outline.json",
@@ -2096,6 +2095,18 @@
         "min_features": 17,
         "max_features": 17,
         "note": "Douglas County's 17 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be against the county's OWN VotingDistricts feature service rather than a transcribed list: 17/17 names, and POP100 summing to its exact 2020 population of 19,740. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Most features carry their County Board district; TWO carry a LIST of two instead — Bourbon 2 and Bowdre are split between districts, which the county states twice over: its own district layer cuts through them, and its certified 2022 General counts nineteen precinct-slots across seven districts in a county of seventeen precincts. For those two the precinct genuinely does not determine the district and the card says which two it could be rather than picking the larger share. NO POLLING PLACE ships (the Calhoun rule; scripts/build_douglas_boundaries.py)."
+      },
+      {
+        "file": "wayne-county-board-districts.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "Wayne County's 7 County Board districts, each electing TWO members (14 seats), dissolved from Census 2020 voting districts per a composition TWO SOURCES AGREE ON: the county's own board page states outright which precincts make up each district, and the county's certified 5 November 2024 General — 27 precinct-level results grouped by which board candidate each precinct voted on — partitions the same 27 precincts into the same seven groups. THE ONE DIFFERENCE IS THE COUNTY SEAT: the board page's District 7 lists only Merriam and Golden Gate, five precincts short of the ballots' 27, and the two it omits — Fairfield 1 and Fairfield 2 — voted in District 7's contest on that same certified ballot, so the page is incomplete rather than the ballots wrong. WHY THIS SAT AS A GAP FOR WEEKS AFTER THE COMPOSITION WAS SETTLED: population, not provenance. Against a 2,311 ideal the seven districts run 1,863 (D6) to 3,060 (D3) — D3 alone deviates 32.4%, past this project's usual 30% mis-assignment ceiling, and both sources agree on D3's composition exactly. Clerk Elizabeth Woodrow was asked directly whether the plan is current or has moved since it was drawn; her reply, 2026-08-25: \"Nothing has changed with this map for years.\" The ceiling is raised for this county alone, with the measured 32.4% recorded rather than the default silently widened (scripts/build_wayne_boundaries.py; --check is the drift gate)."
+      },
+      {
+        "file": "wayne-precincts.json",
+        "min_features": 27,
+        "max_features": 27,
+        "note": "Wayne County's 27 voting precincts — the Census 2020 voting districts, which ARE the county's own fabric and are measured to be: the names match the county's own 27/27 (one spelling aliased, Massillon/Massilon) and their POP100 sums to its exact 2020 population of 16,179. Bounds are an EQUALITY because the fabric is the county's whole precinct list. Each feature carries its census GEOID, POP100 and its County Board district, which is whole-precinct — no precinct is split between districts. NO POLLING PLACE ships: nothing the county publishes pairs its precincts with buildings as data (the Calhoun rule; scripts/build_wayne_boundaries.py)."
       }
     ],
     "rosters": [
@@ -2476,6 +2487,11 @@
         "file": "vermilion-county-board-members.json",
         "min_keys": 9,
         "note": "Vermilion County Board members keyed by district (9 districts x 3 members = 27 seats). PEOPLE COME FROM THE COUNTY'S OWN MEMBERS PAGE, reached by supplying the intermediate certificate the county's server omits — chased from the AIA URI the county's own leaf certificate names, pinned by SHA-256, and NEVER by disabling verification. NOT from the county's district layer, whose attribute table carries three Name/Party/Elected/Email sets per district and is a 2018 snapshot on a retired e-mail domain: the Coles rule holds, an attribute table on a boundary layer is a snapshot of whenever that layer was published. FOUR TRAPS IN ONE TABLE, each handled rather than absorbed: ONE NAME IS INVERTED (twenty-six rows read \"First Last\" and one reads \"Auter, Tara\"), so the comma form is flipped and the flip is PRINTED on every run rather than becoming a silent edit to somebody's name; ROLES RIDE THE NAME CELL (\"Steve Miller (Chairman)\"), split to their own field because leaving them in ships a name nobody is called; ONE E-MAIL CELL CARRIES A PHONE TOO, so the cell is tokenised rather than taken whole; and SURNAMES ARE NOT KEYS, because District 4 seats two McFaddens. The board office's own address and phone ride each district's roster block, so a card for a member with no direct line still says where to reach the board. The county's own \"Elected/Appointed\" year ships as \"on the board since\", labelled that way because the county does not say which of the two it was. The board LANDING page's staff table is never read for members: it lists the HR director and the office manager alongside the chairman."
+      },
+      {
+        "file": "wayne-county-board-members.json",
+        "min_keys": 7,
+        "note": "Wayne County Board members keyed by district (7 districts x 2 members = 14 seats). Scraped weekly from the county's own board page — the SAME page the district composition was read from, so re-scraping it every week is this county's redistricting tripwire (the builder fails if a district's re-read precinct list stops matching the shipped composition; District 7 is checked as the known subset, since the page has never named Fairfield 1 or Fairfield 2). Each district's paragraph names two members with an optional Chairman or Vice Chairman title — Daryl Hargrave (D1) and Gene Kollak (D7) hold the two titles the page states. No e-mail, phone, party or term is published, so none ships."
       }
     ]
   },
@@ -2826,6 +2842,11 @@
       "file": "update-vermilion-county-board-roster.yml",
       "purpose": "Vermilion County Board roster (27 members across 9 districts) from the county's own members page, fetched with the intermediate certificate its server omits supplied by AIA and pinned by hash",
       "schedule": "Thu 22:00 UTC"
+    },
+    {
+      "file": "update-wayne-county-board-roster.yml",
+      "purpose": "Wayne County Board roster (14 members across 7 districts) from the county's own board page + the redistricting tripwire: the same run re-reads the per-district precinct list from that page and fails if it stops matching the shipped dissolve (District 7 checked as the known page/canvass subset, since the page never names Fairfield 1 or Fairfield 2)",
+      "schedule": "Fri 21:00 UTC"
     }
   ],
   "geocoder": {
