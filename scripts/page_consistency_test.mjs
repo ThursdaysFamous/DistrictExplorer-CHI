@@ -64,6 +64,21 @@ const lum = (rgb) => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
+// WCAG relative luminance + contrast, for the check below. This is a different
+// calculation from `lum` above and both are wanted: `lum` answers "is this
+// ground dark or light", which wants a cheap perceptual number, and this
+// answers "can the text on it be read", which is a defined ratio with a
+// defined threshold.
+const rel = (rgb) => {
+  const [r, g, b] = (rgb.match(/\d+/g) || [255, 255, 255]).map(Number);
+  const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+};
+const contrast = (fg, bg) => {
+  const a = rel(fg), b = rel(bg);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+};
+
 const browser = await chromium.launch();
 try {
   for (const path of paths) {
@@ -91,6 +106,23 @@ try {
         font: getComputedStyle(document.body).fontFamily.split(",")[0].replace(/['"]/g, ""),
         bg: getComputedStyle(document.body).backgroundColor,
         mark: !!document.querySelector(".districtry-mark, .logo-mark"),
+        // The bars, measured rather than assumed. This page's whole subject is
+        // whether two documents look like the same product, and it was passing
+        // twelve pages whose header was a near-white bar carrying #fff text.
+        bars: [["header", "header.masthead, .masthead, header"],
+               ["footer", "footer.site-footer, footer"]].map(([role, sel]) => {
+          const el = document.querySelector(sel);
+          if (!el) return { role, missing: true };
+          // Only what a reader SEES. getComputedStyle happily returns colours
+          // for a display:none element, and the first draft of this check
+          // failed all three apps on their footers — which the app skin hides,
+          // because the links moved to the masthead. A contrast finding on an
+          // invisible bar is noise, and noise is how a gate stops being read.
+          if (!el.getClientRects().length) return { role, missing: true };
+          const txt = el.querySelector("h1, h2, p, a") || el;
+          return { role, bg: getComputedStyle(el).backgroundColor,
+                   fg: getComputedStyle(txt).color };
+        }),
         canonical: !!document.querySelector("link[rel=canonical]"),
         ogTitle: !!document.querySelector('meta[property="og:title"]'),
         links: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href") || ""),
@@ -99,6 +131,22 @@ try {
       check(path, `brand typeface (${scheme})`, info.font === "Barlow", info.font);
       check(path, `paints a ${scheme} ground`, (lum(info.bg) < 90) === (scheme === "dark"), info.bg);
       check(path, `carries the mark (${scheme})`, info.mark);
+
+      // A surface is never a text token. `background: var(--ink)` reads as a
+      // deliberate dark bar in light mode and is a coincidence — --ink is the
+      // TEXT colour, so in dark mode it flips and the bar turns near-white with
+      // white text on it. Twelve of thirteen sub-pages shipped that way,
+      // measured at 1.20:1 against WCAG AA's 4.5:1, past every gate in this
+      // repo including this one. 4.5 is the body-text threshold; a masthead
+      // title is large text, whose bar is 3:1, so the stricter number is used
+      // deliberately — nothing here needs to sit between them.
+      for (const bar of info.bars) {
+        if (bar.missing) continue;
+        if (/rgba\(0, 0, 0, 0\)|transparent/.test(bar.bg)) continue;  // inherits the ground
+        const c = contrast(bar.fg, bar.bg);
+        check(path, `${bar.role} text is readable on its own bar (${scheme})`,
+              c >= 4.5, `${c.toFixed(2)}:1 — ${bar.fg} on ${bar.bg}`);
+      }
       check(path, "canonical", info.canonical);
       check(path, "og:title", info.ogTitle);
 

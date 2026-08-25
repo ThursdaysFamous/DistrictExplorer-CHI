@@ -222,25 +222,57 @@ a { color: var(--brand-700); }
 }
 .skip-link:focus { left: 0; }
 
-.masthead { background: var(--surface); border-bottom: 1px solid var(--border); }
-.masthead-inner {
-  max-width: 940px; margin: 0 auto; padding: 26px 20px 22px;
-  display: flex; flex-wrap: wrap; gap: 14px 24px;
-  align-items: flex-end; justify-content: space-between;
+/* The masthead wears what engine/shared/styles-subpage.txt gives the twelve
+   instance sub-pages — uppercase display title, pill actions, one accent rule
+   under the bar — written in THIS page's token vocabulary rather than that
+   one's. The two vocabularies are a real fork (the root pages speak
+   --surface/--brand-*, the instance pages speak --panel/--accent) and merging
+   them is a separate job; what a reader notices between two sub-pages is the
+   header treatment, and that is now the same on all thirteen. */
+.masthead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: inset 0 -3px 0 0 var(--brand-600);
 }
-.masthead h1 { margin: 0; font: var(--font-heading-weight) 34px/1.05 var(--font-heading); }
-.title-row { display: flex; align-items: center; gap: 12px; }
-.logo-mark { width: 38px; height: 38px; flex: 0 0 auto; color: var(--ink); }
+.masthead-inner {
+  max-width: 940px; margin: 0 auto; padding: 22px 20px 24px;
+  display: flex; flex-wrap: wrap; gap: 14px 24px;
+  align-items: center; justify-content: space-between;
+}
+.masthead h1 { margin: 0; min-width: 0; }
+.title-text {
+  font: var(--font-heading-weight) clamp(27px, 3.4vw, 37px)/1 var(--font-heading);
+  text-transform: uppercase; letter-spacing: 0.005em; color: var(--ink);
+}
+.title-row { display: flex; align-items: center; gap: 13px; }
+.logo-mark { width: 34px; height: 34px; flex: 0 0 auto; color: var(--ink); }
 .mk-blend { mix-blend-mode: multiply; }
 :root[data-theme="dark"] .mk-blend { mix-blend-mode: screen; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .mk-blend { mix-blend-mode: screen; }
 }
 .masthead h1 small {
-  display: block; margin-top: 8px;
-  font: 400 15px/1.5 var(--font-body); color: var(--muted); max-width: 54ch;
+  display: block; margin-top: 7px;
+  font: 400 14px/1.5 var(--font-body); color: var(--muted); max-width: 54ch;
+  text-transform: none; letter-spacing: 0;
 }
-.masthead-actions { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; }
+.masthead-actions {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: flex-end; gap: 8px; margin-left: auto;
+}
+.masthead-actions a {
+  display: inline-flex; align-items: center;
+  font: 600 13.5px/1 var(--font-body); white-space: nowrap;
+  color: var(--muted); background: transparent;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 9px 16px; text-decoration: none;
+  transition: color .14s ease, border-color .14s ease, background .14s ease;
+}
+.masthead-actions a:hover, .masthead-actions a:focus-visible {
+  color: var(--brand-700); border-color: var(--brand-600);
+  background: var(--brand-tint);
+}
+@media (prefers-reduced-motion: reduce) { .masthead-actions a { transition: none; } }
 
 main { max-width: 940px; margin: 0 auto; padding: 8px 20px 56px; }
 section { margin: 34px 0 0; }
@@ -289,8 +321,11 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
 .footer-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; }
 
 @media (max-width: 640px) {
-  .masthead h1 { font-size: 27px; }
-  .masthead-inner { padding: 20px 16px 18px; }
+  .title-text { font-size: 23px; }
+  .logo-mark { width: 27px; height: 27px; }
+  .masthead-inner { padding: 16px 16px 17px; }
+  .masthead-actions { justify-content: flex-start; margin-left: 0; width: 100%; gap: 6px; }
+  .masthead-actions a { font-size: 12.5px; padding: 8px 13px; }
   main { padding: 4px 16px 44px; }
 }
 </style>
@@ -302,7 +337,7 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
 <header class="masthead">
   <div class="masthead-inner">
     <h1>
-      <span class="title-row"><svg class="logo-mark" viewBox="0 0 96 96" aria-hidden="true"><g class="mk-blend"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g class="mk-blend"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g class="mk-blend"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="currentColor" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="currentColor" stroke-width="11"></line></svg><span>Privacy</span></span>
+      <span class="title-row"><svg class="logo-mark" viewBox="0 0 96 96" aria-hidden="true"><g class="mk-blend"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g class="mk-blend"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g class="mk-blend"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="currentColor" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="currentColor" stroke-width="11"></line></svg><span class="title-text">Privacy</span></span>
       <small>What districtry stores, what leaves your browser, and what it never collects.</small>
     </h1>
     <div class="masthead-actions">
