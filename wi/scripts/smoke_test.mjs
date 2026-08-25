@@ -32,6 +32,13 @@ const VENDORED_LEAFLET =
     : null;
 if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
 
+// Every same-origin file this test reads resolves against the INSTANCE, not
+// the process CWD — smoke-test.yml runs all four instances from the repo
+// root, and a CWD-relative read silently resolves against whatever directory
+// you happen to be in (the ENOENT the ca/ny imports hit at R3). Anchoring
+// costs one line and cannot drift.
+const INSTANCE_DIR = dirname(dirname(fileURLToPath(import.meta.url)));
+
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 // ==== GENERATED:BEGIN smoke-config ====
 const POINT = "44.89804,-89.75782"; // inside Marathon County
@@ -206,7 +213,7 @@ try {
   {
     const context = await browser.newContext({ serviceWorkers: "block" });
     const page = await booted(context, BASE);
-    const shipped = JSON.parse(readFileSync("data/app/coverage-gaps.json", "utf8"));
+    const shipped = JSON.parse(readFileSync(join(INSTANCE_DIR, "data/app/coverage-gaps.json"), "utf8"));
     const expected = Object.keys(shipped).length;
 
     async function openGaps() {
