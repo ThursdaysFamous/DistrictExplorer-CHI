@@ -119,12 +119,13 @@ Hoffmann v. NYIRC forced a redraw and the legislature's new congressional map wa
 SF's per-date calendar lives in the SF fork's `WATCH.md` (per-metro file); this master runbook
 holds the response procedure.
 
-### WI (11 layers)
+### WI (12 layers)
 
 | Layer | Exposure class | Enacting authority | What breaks |
 |---|---|---|---|
 | US Congress (WI) | Decennial | WI Legislature (court history: 2022 maps litigated) | geometry (pre-built statewide rebuild), roster join |
 | WI Senate / Assembly | Decennial + PROVEN mid-decade (2024 remap after Clarke v. WEC) | WI Legislature / WI Supreme Court | geometry (wi/scripts/build_legislative_boundaries.py rebuild + agreement gate), roster join, both smoke anchors |
+| County board districts | **SEMIANNUAL — the fleet's fastest-moving boundary** | each county board; filed with LTSB under Wis. Stat. 5.15(4)(br)1 on 15 Jan / 15 Jul | geometry (`wi/scripts/build_wi_supervisory_districts.py` rebuild), the county-board smoke anchor, and `county-board-directory.json`'s seat counts, which are read back from the geometry. Unlike every other row here this one has a KNOWN NEXT DATE rather than a trigger to watch for, and a county may change its board's size at any filing — the builder's 1,589-feature guard is meant to fail on that and be re-read, not raised reflexively |
 | County / CouSub / Municipality | TIGER-rolling | Census Bureau vintage | pre-built `state-counties.json` on rebuild; live layers self-update |
 | School districts (3 tilings) | Annual-ish TIGER updates | WI DPI consolidations → TIGER | pre-built unified file; live layers self-update; a consolidation moves the unified/paired seam |
 | ZIP codes | USPS-driven, not census | USPS | occasional |

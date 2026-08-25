@@ -27,7 +27,7 @@
 // template starts at -v1: the app shell, icons, and the starter data
 // files bootstrap_state.py builds.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-wi-shell-v1";
+const CACHE_NAME = "districtry-wi-shell-v2";
 
 const SHELL_URLS = [
   "./",
@@ -50,6 +50,7 @@ const GEOMETRY_URLS = [
   "./data/app/school-districts-unified.json",
   "./data/app/wi-senate-districts.json",
   "./data/app/wi-assembly-districts.json",
+  "./data/app/county-supervisory-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -60,6 +61,7 @@ const ROSTER_URLS = [
   "./data/app/wi-senate-members.json",
   "./data/app/wi-assembly-members.json",
   "./data/app/coverage-gaps.json",
+  "./data/app/county-board-directory.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */
