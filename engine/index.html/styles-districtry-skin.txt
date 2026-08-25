@@ -329,7 +329,6 @@
      as the HOVER state of three violet buttons, so each flashed Chicago navy
      on approach. Same class as the flag stripe and the star — a city color
      written as a literal, not a token. */
-  .metro-portal-go:hover,
   .feedback-actions .btn-primary:hover { background: var(--accent-deep); }
   .share-copy-btn:hover { background: var(--dst-brand-tint-soft); }
   .masthead .search-extra {
@@ -846,7 +845,6 @@
   [data-theme="dark"] #geocode-results button:focus-visible,
   [data-theme="dark"] .locate-btn:hover,
   [data-theme="dark"] .kbd-select-btn:hover,
-  [data-theme="dark"] .metro-portal-stay:hover,
   [data-theme="dark"] .share-popover-close:hover,
   [data-theme="dark"] .feedback-actions .btn-secondary:hover,
   [data-theme="dark"] .pin-parent-btn:hover,

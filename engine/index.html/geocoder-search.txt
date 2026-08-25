@@ -57,7 +57,7 @@
       clearTimeout(debounceTimer);
       if (inFlightController) inFlightController.abort();
       trackEvent("metro-portal-go/" + metro.id, "search");
-      window.location.href = metroPortalUrl(metro, { lat: parseFloat(r.lat), lng: parseFloat(r.lon) });
+      window.location.href = metroPortalUrl(metro, { lat: parseFloat(r.lat), lng: parseFloat(r.lon) }, map.getZoom());
     });
     li.appendChild(btn);
     return li;
