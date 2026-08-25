@@ -1627,6 +1627,14 @@ STATE_OUTSIDE = {
 }
 
 
+_STALE_NON_IL = NON_ILLINOIS - set(OUTSIDE)
+assert not _STALE_NON_IL, (
+    "NON_ILLINOIS names %s, which OUTSIDE no longer carries — an exemption for an "
+    "anchor that is gone silently stops exempting anything, and the next "
+    "out-of-state anchor added to OUTSIDE would be asserted to be in Illinois"
+    % ", ".join(sorted(_STALE_NON_IL)))
+
+
 def containment_problems(coverage_rings, state_rings):
     """The served counties are Illinois counties, so their outline cannot reach
     outside the state ring — checked as ENVELOPES, not vertex by vertex.
