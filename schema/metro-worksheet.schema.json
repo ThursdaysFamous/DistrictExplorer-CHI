@@ -439,6 +439,10 @@
         },
         "poi": {
           "type": "string"
+        },
+        "search_placeholder": {
+          "type": "string",
+          "description": "The words in the search box and in its visually-hidden label. OPTIONAL: the shared toolbar ships a neutral default (\"Search an address\"), so a new instance is correct before anyone writes this and setting it is a refinement rather than a step that can be forgotten. Not derivable from metro_name — Chicago's box says \"an Illinois address\", not \"a Chicago address\", and the article changes with the name."
         }
       }
     },

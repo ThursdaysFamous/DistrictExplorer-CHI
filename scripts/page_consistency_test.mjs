@@ -123,6 +123,30 @@ try {
           return { role, bg: getComputedStyle(el).backgroundColor,
                    fg: getComputedStyle(txt).color };
         }),
+        // The search box against the map, measured as rectangles. An app page
+        // puts its search in the masthead toolbar BESIDE the layer pills; NY
+        // and SF shipped it floating over the map instead, because the CSS for
+        // both placements is shared and identical (`.masthead .map-toolbar {
+        // position: static }` — a DESCENDANT selector) while the markup that
+        // decides which one applies is per-instance, and only Chicago's was
+        // ever moved. Nothing compared them, so it came back.
+        //
+        // Geometry, not markup: "is the toolbar inside the masthead" would pass
+        // a toolbar that is inside the masthead and still painted over the map
+        // by a position rule, and it would fail a future layout that solves
+        // this a different and perfectly good way. What must never be true is
+        // that the search covers the thing you are meant to click.
+        search: (() => {
+          const box = document.querySelector(".search-shell") ||
+                      document.getElementById("geocode-input");
+          const map = document.getElementById("map");
+          if (!box || !map) return null;          // sub-pages have neither
+          const a = box.getBoundingClientRect(), m = map.getBoundingClientRect();
+          const over = !(a.right <= m.left || a.left >= m.right ||
+                         a.bottom <= m.top || a.top >= m.bottom);
+          return { over, box: [Math.round(a.top), Math.round(a.left)],
+                   map: [Math.round(m.top), Math.round(m.left)] };
+        })(),
         canonical: !!document.querySelector("link[rel=canonical]"),
         ogTitle: !!document.querySelector('meta[property="og:title"]'),
         links: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href") || ""),
@@ -131,6 +155,12 @@ try {
       check(path, `brand typeface (${scheme})`, info.font === "Barlow", info.font);
       check(path, `paints a ${scheme} ground`, (lum(info.bg) < 90) === (scheme === "dark"), info.bg);
       check(path, `carries the mark (${scheme})`, info.mark);
+
+      if (info.search) {
+        check(path, `search sits beside the map, not on it (${scheme})`,
+              !info.search.over,
+              `search@${info.search.box} overlaps map@${info.search.map}`);
+      }
 
       // A surface is never a text token. `background: var(--ink)` reads as a
       // deliberate dark bar in light mode and is a coincidence — --ink is the

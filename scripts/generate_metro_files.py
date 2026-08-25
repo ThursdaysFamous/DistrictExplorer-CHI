@@ -152,6 +152,13 @@ def render_metro_config(w):
     a("  var SOCRATA_APP_TOKEN = %s;" % js_str(w["socrata_app_token"]))
     a("  var REPO_ISSUES = %s;" % js_str(w["repo_issues"]))
     a("  var FEEDBACK_SUBJECT = %s;" % js_str(w["feedback_subject"]))
+    # The words in the search box. Emitted ONLY when the worksheet opts in, the
+    # same inertness rule poi_geocode_bbox and brand follow, so an instance
+    # without the key sees a byte-identical region — and the shared toolbar's
+    # own neutral default stands. The engine reads it through a typeof guard.
+    if w.get("geocoder", {}).get("search_placeholder"):
+        a("  var SEARCH_PLACEHOLDER = %s;"
+          % js_str(w["geocoder"]["search_placeholder"]))
     # Brand-as-data (docs/DEV_PROCESS_ASSESSMENT.md, R1). Same inertness rule as
     # poi_geocode_bbox above: emitted ONLY when the worksheet opts in, so a fork
     # without the key sees a byte-identical region. Engine code may read this

@@ -673,7 +673,8 @@
   "geocoder": {
     "address": "GeoSearch (NYC-bounded type-ahead, geosearch.planninglabs.nyc)",
     "unbounded": "Photon (whole-coverage, sibling-metro lookup)",
-    "poi": "GeoSearch (office-address pin lookup)"
+    "poi": "GeoSearch (office-address pin lookup)",
+    "search_placeholder": "Search a New York City address"
   },
   "palette": {
     "accent": "#6d3fd1",
