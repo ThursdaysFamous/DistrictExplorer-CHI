@@ -369,10 +369,50 @@
       }
     },
     {
+      "id": "school-site",
+      "label": "School Location, incl. private",
+      "group": "schools",
+      "area_rank": 17,
+      "rank_note": "Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points",
+      "source": {
+        "answers": "The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.",
+        "boundary": [
+          {
+            "label": "Wisconsin DPI — Public Schools layer (2,138 placed sites of 2,290 records; the 152 records DPI publishes with no location and no address are statewide virtual programs and don't ship on a proximity card), pre-built by wi/scripts/build_wi_school_sites.py",
+            "url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/Wisconsin_Public_Schools/FeatureServer/20"
+          },
+          {
+            "label": "Wisconsin DPI — Private Schools layer (828 sites), same builder",
+            "url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Private_Schools/FeatureServer/2"
+          }
+        ],
+        "people": "Not an elected office — no officeholder is named. DPI's own licence terms ride with the data and are why the card claims proximity only: \"intended for your reference use only … no guarantee of accuracy is made … not to be used for any land transactions, financial decisions, taxation, surveying, or other similar uses.\"",
+        "applies": "Wisconsin — statewide."
+      }
+    },
+    {
+      "id": "library",
+      "label": "Library",
+      "group": "geography",
+      "area_rank": 18,
+      "rank_note": "Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points",
+      "source": {
+        "answers": "The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.",
+        "boundary": [
+          {
+            "label": "Wisconsin DPI — Public Libraries and Branches layer (482 outlets from the annual public library system data), pre-built by wi/scripts/build_wi_libraries.py",
+            "url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Public_Libraries_and_Branches/FeatureServer/6"
+          }
+        ],
+        "people": "Not an elected office — Wisconsin library boards are appointed (Wis. Stat. 43.54), which is why this concept ships as library locations rather than as a library-district card. DPI's reference-use licence rides with the data, as on the school layer.",
+        "applies": "Wisconsin — statewide."
+      }
+    },
+    {
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 17,
+      "area_rank": 19,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -501,6 +541,18 @@
         "min_features": 1,
         "max_features": 1,
         "note": "The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring."
+      },
+      {
+        "file": "school-sites.json",
+        "min_features": 2850,
+        "max_features": 3500,
+        "note": "Every placed school site in the state, public and private (2,966 at build: 2,138 + 828), pre-built from the DPI org's two school layers by wi/scripts/build_wi_school_sites.py — its gates page past the 2,000-record cap, skip only DPI's placeless virtual-program rows, and witness every point against the layer's own coordinate attributes. Amenity points, not officeholder data: cache-first is fine, and the range tolerates DPI's school-year rotation (WATCH.md)."
+      },
+      {
+        "file": "library-sites.json",
+        "min_features": 460,
+        "max_features": 560,
+        "note": "Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file."
       }
     ],
     "rosters": [
@@ -552,7 +604,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v7",
+    "cache_name": "districtry-wi-shell-v8",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

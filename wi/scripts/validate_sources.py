@@ -284,6 +284,51 @@ PROVENANCE = [
             "the roster has a manifest row at all."
         ),
     },
+    {
+        "layer": "school-site",
+        "app_file": "school-sites.json",
+        "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/Wisconsin_Public_Schools/FeatureServer/20",
+        "note": (
+            "Public school sites from DPI's own ArcGIS org (2,290 records, "
+            "2,138 placed — the rest are placeless virtual programs), "
+            "pre-built by wi/scripts/build_wi_school_sites.py. An OPERATOR "
+            "rebuild after DPI's school-year rotation (WATCH.md); the builder "
+            "pages past the service's 2,000-record cap and asserts the total."
+        ),
+    },
+    {
+        "layer": "school-site",
+        "app_file": "school-sites.json",
+        "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Private_Schools/FeatureServer/2",
+        "note": (
+            "Private school sites (828) from the same DPI org — the same "
+            "builder, which encodes the per-layer attribute renames "
+            "(LATITUDE/LONGITUDE here against the public layer's LAT/LON)."
+        ),
+    },
+    {
+        "layer": "school-site",
+        "app_file": "school-sites.json",
+        "source_url": "https://www.arcgis.com/sharing/rest/content/items/d383fe81275e46f2a5a5c4f1a0c2eb85?f=json",
+        "note": (
+            "The DPI school directory's AGO catalog item — the successor "
+            "watch: DPI rotates the directory around each school year, and "
+            "this item dying or renaming is the signal a successor item "
+            "shipped (the Socrata newer-edition pattern, AGO edition)."
+        ),
+    },
+    {
+        "layer": "library",
+        "app_file": "library-sites.json",
+        "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Public_Libraries_and_Branches/FeatureServer/6",
+        "note": (
+            "Public library outlets (482, branches included) from DPI's AGO "
+            "org, pre-built by wi/scripts/build_wi_libraries.py — whose bbox "
+            "gate holds the line on the layer's measured trap: its LAT/LONG "
+            "attributes are Web Mercator meters despite their names, so only "
+            "the outSR=4326 geometry is ever read."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.

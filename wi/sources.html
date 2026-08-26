@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">17 layers — 6 political and legislative, 2 public safety, 3 schools, 6 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">19 layers — 6 political and legislative, 2 public safety, 4 schools, 7 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -993,7 +993,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">3 layers</span></h2>
+        <h2>Schools <span class="matrix-count">4 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1034,13 +1034,25 @@ table.matrix code {
                 <td data-label="Who it names">No roster is joined; the card names the district.</td>
                 <td data-label="Where it applies">Wisconsin — the paired (non-unified) school territory; unified territory answers on the Unified card.</td>
               </tr>
+              <tr id="layer-school-site">
+                <th scope="row"><span class="layer-name">School Location, incl. private</span><code>school-site</code></th>
+                <td data-label="What it answers">The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/Wisconsin_Public_Schools/FeatureServer/20" target="_blank" rel="noopener">Wisconsin DPI — Public Schools layer (2,138 placed sites of 2,290 records; the 152 records DPI publishes with no location and no address are statewide virtual programs and don't ship on a proximity card), pre-built by wi/scripts/build_wi_school_sites.py</a></li>
+                    <li><a href="https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Private_Schools/FeatureServer/2" target="_blank" rel="noopener">Wisconsin DPI — Private Schools layer (828 sites), same builder</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">Not an elected office — no officeholder is named. DPI's own licence terms ride with the data and are why the card claims proximity only: &quot;intended for your reference use only … no guarantee of accuracy is made … not to be used for any land transactions, financial decisions, taxation, surveying, or other similar uses.&quot;</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">6 layers</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">7 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1101,6 +1113,17 @@ table.matrix code {
                   </ul>
                 </td>
                 <td data-label="Who it names">A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement).</td>
+                <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+              <tr id="layer-library">
+                <th scope="row"><span class="layer-name">Library</span><code>library</code></th>
+                <td data-label="What it answers">The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Public_Libraries_and_Branches/FeatureServer/6" target="_blank" rel="noopener">Wisconsin DPI — Public Libraries and Branches layer (482 outlets from the annual public library system data), pre-built by wi/scripts/build_wi_libraries.py</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">Not an elected office — Wisconsin library boards are appointed (Wis. Stat. 43.54), which is why this concept ships as library locations rather than as a library-district card. DPI's reference-use licence rides with the data, as on the school layer.</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-post-office">
