@@ -8353,6 +8353,9 @@ function initWisconsinExplorer() {
   var loadWiCountyClerks = makeCached(function () {
     return fetchJSONWithRetry("data/app/wi-county-clerks.json", {}, 2);
   });
+  var loadWiCountyOfficers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-county-officers.json", {}, 2);
+  });
 
   registerLayer({
     id: "county",
@@ -8373,18 +8376,22 @@ function initWisconsinExplorer() {
       // to the identity card this layer shipped with at launch.
       return Promise.all([
         queryFeatureAt(loadStateCounties, point),
-        loadWiCountyClerks().catch(function () { return null; })
+        loadWiCountyClerks().catch(function () { return null; }),
+        loadWiCountyOfficers().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
         var props = feature.properties || {};
         var geoid = findPropCI(props, ["geoid"]);
         var clerk = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
+        var officers = (parts[2] && geoid != null) ? parts[2][String(geoid)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
           geoid: geoid,
-          clerk: clerk || null
+          clerk: clerk || null,
+          officers: officers || null,
+          officersEdition: officers ? officers.asOf : null
         };
       });
     },
@@ -8421,6 +8428,62 @@ function initWisconsinExplorer() {
             label: "Elections",
             value: String(clerk.electionNote)
           }]));
+        }
+      }
+      // The other county officers (phase 4): sourced from the Wisconsin Blue
+      // Book's own county-officer tables and DATED — no second publisher for
+      // these offices measures open, so the card states the edition rather
+      // than implying the weekly-verified currency the clerk row has. The
+      // executive's elected-vs-appointed label comes from the book's own
+      // type code (CE elected; CA/AC/CM appointed); "Appointed to fill a
+      // vacancy" is the book's A code, never a party.
+      if (result.officers) {
+        var o = result.officers;
+        function officerRow(entry, badge) {
+          if (!entry || !entry.name) return null;
+          var person = { name: String(entry.name), badge: badge };
+          var bits = [];
+          if (entry.party) bits.push(String(entry.party));
+          if (entry.note) bits.push(String(entry.note));
+          if (entry.appointed) bits.push("Appointed");
+          if (bits.length) person.note = bits.join(" · ");
+          return person;
+        }
+        var rows = [
+          officerRow(o.sheriff, "Sheriff"),
+          officerRow(o.districtAttorney, "District Attorney"),
+          o.executive ? officerRow(o.executive, String(o.executive.title)) : null,
+          o.chair ? officerRow(o.chair, "Board Chair") : null,
+          officerRow(o.treasurer, "Treasurer"),
+          officerRow(o.clerkOfCircuitCourt, "Clerk of Circuit Court"),
+          officerRow(o.registerOfDeeds, "Register of Deeds"),
+          o.coroner ? officerRow(o.coroner, String(o.coroner.title || "Coroner")) : null
+        ].filter(function (p) { return p; });
+        if (o.chair && o.chair.seats && rows.length) {
+          // Menominee ships no seat count: the Blue Book and the state's own
+          // supervisory geometry disagree (7 vs 5, pinned in the builder),
+          // and the card claims neither number.
+          for (var ri = 0; ri < rows.length; ri++) {
+            if (rows[ri].badge === "Board Chair") {
+              rows[ri].note = (rows[ri].note ? rows[ri].note + " · " : "") +
+                "Chairs the " + String(o.chair.seats) + "-supervisor board";
+            }
+          }
+        }
+        if (rows.length) {
+          wrap.appendChild(renderSectionLabel("County officers"));
+          wrap.appendChild(renderPersonRows(rows));
+          var extras = [];
+          if (o.districtAttorney && o.districtAttorney.sharedUnit) {
+            extras.push({ label: "Prosecutorial unit", value: String(o.districtAttorney.sharedUnit) });
+          }
+          extras.push({
+            label: "As of",
+            value: String(result.officersEdition || "Wisconsin Blue Book") +
+              " — the most recent open statewide publication of these offices; " +
+              "appointments and vacancies since then may not appear."
+          });
+          wrap.appendChild(renderFieldStack(extras));
         }
       }
       return wrap;

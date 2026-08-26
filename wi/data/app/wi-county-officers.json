@@ -1,0 +1,2741 @@
+{
+ "55001": {
+  "county": "Adams",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "John West",
+   "seats": 20
+  },
+  "executive": {
+   "name": "Cynthia Haggard",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Kara Dolezal",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Miranda Christensen",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "Julie Schnolis",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Rebecca Maki-Wallander",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Brent R York",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Bethany Spaw",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55003": {
+  "county": "Ashland",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Gary A Mertig",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Dan Grady",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Tracey Hoglund",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Lexi Pierce",
+   "party": "Independent"
+  },
+  "registerOfDeeds": {
+   "name": "Julie Gleeson",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Blake Gross",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Brian Zupke",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Barbara Beeksma",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55005": {
+  "county": "Barron",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Louie Okey",
+   "seats": 29
+  },
+  "executive": {
+   "name": "Jeff French",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Samantha Sommerfeld",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Sharon Millermon",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Margo Katterhagen",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Brian Wright",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Chris Fitzgerald",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Nate Dunston",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55007": {
+  "county": "Bayfield",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Dennis M Pocernich",
+   "seats": 13
+  },
+  "executive": {
+   "name": "Mark Abeles-Allison",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Jenna Galligan",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Deidre Zifko",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Dan Heffner",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Kimberly Lawton",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Tony Williams",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Thomas Renz",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55009": {
+  "county": "Brown",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Patrick J Buckley",
+   "seats": 26
+  },
+  "executive": {
+   "name": "Troy J Streckenbach",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Raymond Suennen",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "John A Vander Leest",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Cheryl A Berken",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "David L Lasee",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Todd J Delain",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Dr Elizabeth Douglas",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55011": {
+  "county": "Buffalo",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Dennis Bork",
+   "seats": 14
+  },
+  "executive": {
+   "name": "Lee Engfer",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Tina Anibas",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Julie Vollmer",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Leslie Sendelbach",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Tom Bilski",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Michael Osmond",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Cindy Giese",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55013": {
+  "county": "Burnett",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Donald Taylor",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Nathan Ehalt",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Bobbi Jo Wickman",
+   "party": "Independent"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Jacqueline O Baasch",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Jeanne Taylor",
+   "party": "Independent"
+  },
+  "districtAttorney": {
+   "name": "Kevin Schmidt",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Tracy Finch",
+   "party": "Independent"
+  },
+  "coroner": {
+   "name": "Jalene Scovell",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55015": {
+  "county": "Calumet",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Alice Connors",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Todd Romenesko",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Mike Schlaak",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "LeAnne Karls",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Tamara Alten",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Nathan F Haberman",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Brett Bowe",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Michael Klaeser",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55017": {
+  "county": "Chippewa",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Chuck Hull",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Andy Albarado",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Patricia Schimmel",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Nathan A Liedl",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Melanie K McManus",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Wade C Newell",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Travis Hakes",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Ronald Patten",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55019": {
+  "county": "Clark",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tom Wilcox",
+   "seats": 29
+  },
+  "executive": null,
+  "treasurer": {
+   "name": "Renee Schoen",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Heather Bravener",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Mary Denk",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Melissa Inlow",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Kerry Kirn",
+   "note": "Appointed to fill a vacancy"
+  },
+  "coroner": {
+   "name": "Clarissa Rochester",
+   "party": "Independent",
+   "title": "Coroner"
+  }
+ },
+ "55021": {
+  "county": "Columbia",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Darren W Schroeder",
+   "seats": 28
+  },
+  "executive": {
+   "name": "Susan Moll",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Stacy L Opalewski",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Julie Kayartz",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Christine Clark",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Brenda Yaskal",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Roger Brandner",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Pamela Stock",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55023": {
+  "county": "Crawford",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tom Cornford",
+   "seats": 17
+  },
+  "executive": {
+   "name": "Dan McWilliams",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Deanne Lutz",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Nancy Dowling",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Melissa Nagel",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Andrew Burdick",
+   "note": "Appointed to fill a vacancy"
+  },
+  "sheriff": {
+   "name": "Dale McCullick",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Joe Morovits",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55025": {
+  "county": "Dane",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Patrick Miles",
+   "seats": 37
+  },
+  "executive": {
+   "name": "Melissa Agard",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Adam Gallagher",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Jeff Okazaki",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "Kristi Chlebowski",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Ismael R Ozanne",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Kalvin Barrett",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Cristina Figueroa Soto",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55027": {
+  "county": "Dodge",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Dave Frohling",
+   "seats": 33
+  },
+  "executive": {
+   "name": "Cameron Clapper",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Kris Keith",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Kelly Enright",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Denise Lepple",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Andrea Will",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Dale J Schmidt",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Patrick Schoebel",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55029": {
+  "county": "Door",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "David Englebert",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Ken Pabich",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Ryan Schley",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Connie DeFere",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Carey Petersilka",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Colleen Nordin",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Tammy Sternard",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Elizabeth Douglas",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55031": {
+  "county": "Douglas",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Mark Liebaert",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Dave Sletten",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Amy Tyson",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Michele L Wick",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Darcie Burbul",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Mark Fruehauf",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Matt Izzard",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Sheila Keup",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55033": {
+  "county": "Dunn",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Kelly McCullough",
+   "seats": 29
+  },
+  "executive": {
+   "name": "Kris Korpela",
+   "title": "County Manager",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Lynn Niggemann",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Katie Schalley",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Heather Kuhn",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Andrea Nodolf",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Kevin Bygd",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Marcie Rosas",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55035": {
+  "county": "Eau Claire",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Nancy Coffey",
+   "seats": 29
+  },
+  "executive": {
+   "name": "Kathryn Schauf",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Glenda J Lyons",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Cherie Norberg",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "Tina Pommier",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Peter J Rindal",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Dave Riewestahl",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Marcie Rosas",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55037": {
+  "county": "Florence",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Chad Hedmark",
+   "seats": 12
+  },
+  "executive": {
+   "name": "Donna Trudell",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Donna Liebergen",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Jessica McCoy",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Carol Demko",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Michael Scholke",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Teresa Chrisman",
+   "note": "Appointed to fill a vacancy"
+  },
+  "coroner": {
+   "name": "Jeff Rickaby",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55039": {
+  "county": "Fond du Lac",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Steven Abel",
+   "seats": 25
+  },
+  "executive": {
+   "name": "Sam Kaufman",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Brenda A Schneider",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Michelle Weber",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "James M Krebs",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Eric Toney",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Ryan F Waldschmidt",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Adam Covach",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55041": {
+  "county": "Forest",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Ronald Skallerud",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Nora Matuszewski",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Christy Conley",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Penny Carter",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Cortney Britten Cleereman",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Alex Seifert",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Jeffery Marvin",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Vacant",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55043": {
+  "county": "Grant",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Robert C Keeney",
+   "seats": 17
+  },
+  "executive": {
+   "name": "Nate Dreckman",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Carrie Eastlick",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Tina McDonald",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Andrea Noethe",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Ryan Kieler",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Craig Reukauf",
+   "note": "Appointed to fill a vacancy"
+  },
+  "coroner": {
+   "name": "Phyllis Fuerstenberg",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55045": {
+  "county": "Green",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jerry Guth",
+   "seats": 31
+  },
+  "executive": {
+   "name": "Arianna L Voegeli",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Jayne Butts",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Melanie Leutenegger",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Deanna Miller",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Craig Nolen",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Cody Kanable",
+   "note": "Appointed to fill a vacancy"
+  },
+  "coroner": {
+   "name": "Monica Hack",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55047": {
+  "county": "Green Lake",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "David Abendroth",
+   "seats": 19
+  },
+  "executive": {
+   "name": "Jason Jerome",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Jessica McLean",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Amy Thoma",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Renee Thiem-Korth",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Gerise Laspisa",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Mark Podoll",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Thomas Wastart II",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55049": {
+  "county": "Iowa",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "John M Meyers",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Larry Bierke",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Debi Heisner",
+   "party": "Independent"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Lia Leahy",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Taylor Campbell",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Zachary P Leigh",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Michael Peterson",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Wendell F Hamlin",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55051": {
+  "county": "Iron",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Larry Youngs",
+   "seats": 15
+  },
+  "executive": {
+   "name": "Roxanne Lutgen",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Clara Maki",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Karen Ransanici",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Brancy Rowe",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Matthew Tingstad",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Paul Samardich",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Robert Barnabo",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55053": {
+  "county": "Jackson",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jeff Amo",
+   "seats": 19
+  },
+  "executive": {
+   "name": "Cindy M Altman",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Tabitha Chonka-Michaud",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Jean Sahr",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Rebecca Franks",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Emily Hynek",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Duane Waldera",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Bonnie Kindschy",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55055": {
+  "county": "Jefferson",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Steven J Nass",
+   "seats": 30
+  },
+  "executive": {
+   "name": "Michael Luckey",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Kelly M Stade",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Cindy Hamre Incha",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Staci M Hoffman",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Monica J Hall",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Travis Maze",
+   "note": "Appointed to fill a vacancy"
+  },
+  "coroner": {
+   "name": "Nichol Donovan",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55057": {
+  "county": "Juneau",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Timothy Cottingham",
+   "seats": 21
+  },
+  "executive": null,
+  "treasurer": {
+   "name": "Denise Giebel",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Alecia Kast",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Stacy Havill",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kenneth Hamm",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Andrew Zobal",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Myron Oestreich",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55059": {
+  "county": "Kenosha",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Monica M Yuhas",
+   "seats": 23
+  },
+  "executive": {
+   "name": "Samantha Kerkman",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Teri Jacobson",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Rebecca Matoska-Mentink",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Jennifer Mack",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Xavier Solis",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "David W Zoerner",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Patrice Hall",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55061": {
+  "county": "Kewaunee",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Daniel A Olson",
+   "seats": 20
+  },
+  "executive": {
+   "name": "Jeremy Kral",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Michelle Dax",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Rebecca Deterville",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Germaine Bertrand",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Andrew Naze",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Matthew Joski",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Rory Groessl",
+   "party": "Independent",
+   "title": "Coroner"
+  }
+ },
+ "55063": {
+  "county": "La Crosse",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tina Tryggestad",
+   "seats": 30
+  },
+  "executive": {
+   "name": "Jane Klekamp",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Amy Twitchell",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Tammy Pedretti",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Robin L Kadrmas",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Tim Gruenke",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "John Siegel",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Elizabeth Lubinski",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55065": {
+  "county": "Lafayette",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jack Sauer",
+   "seats": 16
+  },
+  "executive": {
+   "name": "Jack Sauer",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Lisa Black",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Trisha Rowe",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Cathy Paulson",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Morgan Johanning",
+   "note": "Appointed to fill a vacancy"
+  },
+  "sheriff": {
+   "name": "Reginald Gill",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Linda Gebhardt",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55067": {
+  "county": "Langlade",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Ben Pierce",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Jason Hilger",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Tammy Wilhelm",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Tina M Wild",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Brenda Sue Mayr",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kelly Hays",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Mark Westen",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Larry Shadick",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55069": {
+  "county": "Lincoln",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jesse Boyd",
+   "seats": 22
+  },
+  "executive": {
+   "name": "Renee Krueger",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Robbin Gigl",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Thomas Barker",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Sarah Koss",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kristopher Ellis",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Ken Schneider",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Valerie Caylor",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55071": {
+  "county": "Manitowoc",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tyler Martell",
+   "seats": 25
+  },
+  "executive": {
+   "name": "Bob Ziegelbauer",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Kathy Reissmann",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "April R Higgins",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Kristi L Tuesburg",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Jacalyn LaBre",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Daniel Hartwig",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Curtis Green",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55073": {
+  "county": "Marathon",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Kurt Gibbs",
+   "seats": 38
+  },
+  "executive": {
+   "name": "Lance Leonhard",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Connie Beyersdorff",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Kelly Schremp",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Jennifer Lemmer",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kyle Mayo",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Chad Billeb",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Jessica Blahnik",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55075": {
+  "county": "Marinette",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "John M Guarisco",
+   "seats": 30
+  },
+  "executive": {
+   "name": "John Lefebvre",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Bev A Noffke",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Carrie Brazeau",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Renee Miller",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "DeShea D Morrow",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Randy Miller",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Kalynn Van Ermen",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55077": {
+  "county": "Marquette",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Ken Borzick",
+   "seats": 17
+  },
+  "executive": {
+   "name": "Ron Barger",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Jody Myers",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Shari Rudolph",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Nicole Ziebell",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Clifford Burdon",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Joseph Konrath",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Amanda Thoma",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55078": {
+  "county": "Menominee",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Ben Warrington"
+  },
+  "executive": {
+   "name": "Catherine Walter",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Lona Tourtillott",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Delsy Kakwich",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Renata Maulson"
+  },
+  "districtAttorney": {
+   "name": "Gregory Parker",
+   "party": "Republican",
+   "sharedUnit": "Menominee and Shawano counties comprise a single prosecutorial unit served by one district attorney (Wis. Stat. ch. 978)."
+  },
+  "sheriff": {
+   "name": "Rebecca Smith",
+   "party": "Independent"
+  },
+  "coroner": {
+   "name": "Patrick Roberts",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55079": {
+  "county": "Milwaukee",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Marcelia Nicholson",
+   "seats": 18
+  },
+  "executive": {
+   "name": "David Crowley",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "David Cullen",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Anna Hodges",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Israel Ramón",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Kent Lovern",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Denita R Ball",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Wieslawa Tlomak",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55081": {
+  "county": "Monroe",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Cedric Schnitzler",
+   "seats": 16
+  },
+  "executive": {
+   "name": "Tina Osterberg",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Mindy Hemmersbach",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Laura Endres",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Deb Brandt",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kevin Croninger",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Wesley D Revels",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Robert Smith",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55083": {
+  "county": "Oconto",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Alan Sleeter",
+   "seats": 31
+  },
+  "executive": {
+   "name": "Richard Heath",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Tanya Peterson",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Trisha L LeFebre",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Laurie Wusterbarth",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Hannah N Schuchart",
+   "note": "Appointed to fill a vacancy"
+  },
+  "sheriff": {
+   "name": "Todd Skarban",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Elizabeth Douglas",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55085": {
+  "county": "Oneida",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Scott Holewinski",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Tracy Hartman",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Tara Ostermann",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Brenda Behrle",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Kyle Franson",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Jillian Pfeifer",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Grady Hartman",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Vacant",
+   "title": "Coroner"
+  }
+ },
+ "55087": {
+  "county": "Outagamie",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Dan Gabrielson",
+   "seats": 36
+  },
+  "executive": {
+   "name": "Tom Nelson",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Rochelle Oskey",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Barb Bocik",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Sarah R Van Camp",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Melinda Tempelis",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Clint C Kriewaldt",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Douglas A Bartelt",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55089": {
+  "county": "Ozaukee",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Lee Schlenvogt",
+   "seats": 26
+  },
+  "executive": {
+   "name": "Jason Dzwinel",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Sandra Tretow",
+   "note": "Appointed to fill a vacancy"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Connie Mueller",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Jennifer Laurin",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Benjamin Lindsay",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Christy Knowles",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Whitney Feiertag",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55091": {
+  "county": "Pepin",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tom Milliren",
+   "seats": 12
+  },
+  "executive": {
+   "name": "Karen Amsrud",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Patricia Scharr",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Audrey Lieffring",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Lisa Traun",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Jon D Seifert",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Joel D Wener",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Jeff Doughty",
+   "note": "Appointed to fill a vacancy",
+   "title": "Coroner"
+  }
+ },
+ "55093": {
+  "county": "Pierce",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jon Aubart",
+   "seats": 17
+  },
+  "executive": {
+   "name": "Jason Matthys",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Kathy Fuchs",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Kerry Feuerhelm",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Angela Hoven",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Halle Hatch",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Chad Koranda",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "John Worsing",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55095": {
+  "county": "Polk",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jay Luke",
+   "seats": 15
+  },
+  "executive": {
+   "name": "Emil Norby",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Amanda Nissen",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Sharon Jorgenson",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Sally Spanel",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Jeffrey L Kemp",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Brent A Waak",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Jamie Holscher",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55097": {
+  "county": "Portage",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Ray Reser",
+   "seats": 25
+  },
+  "executive": {
+   "name": "John Pavelski",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Pamela R Przybelski",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Lisa M Roth",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Cynthia A Wisinski",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Cass Cousins",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Michael Lukas",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Heather Schultz",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55099": {
+  "county": "Price",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Brian Ernst",
+   "seats": 13
+  },
+  "executive": {
+   "name": "Nicholas Trimner",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Renee Leinfelder",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Lisa Walcisak",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Sylvia Kerner",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Matthew McElroy",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Brian Schmidt",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "James Dalbesio, III",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55101": {
+  "county": "Racine",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tom Kramer",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Ralph Malicki",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Jeff Latus",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Amy Vanderhoef",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "Karie Pope",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Patricia J Hanson",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Christopher Schmaling",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Kristan Binninger",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55103": {
+  "county": "Richland",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "David Turk",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Tricia Clements",
+   "title": "Executive / administrator"
+  },
+  "treasurer": {
+   "name": "Ashley Mott",
+   "note": "Appointed to fill a vacancy"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Stacy Kleist",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Susan Triggs",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Jennifer M Harper",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Clay Porter",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "James C Rossing",
+   "party": "Independent",
+   "title": "Coroner"
+  }
+ },
+ "55105": {
+  "county": "Rock",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Kevin Leavy",
+   "seats": 29
+  },
+  "executive": {
+   "name": "John Light",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Michelle Roettger",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Amanda Nelson",
+   "party": "Democrat"
+  },
+  "registerOfDeeds": {
+   "name": "Sandy Disrud",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Jason Sanders",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Curt Fell",
+   "party": "Democrat"
+  },
+  "coroner": {
+   "name": "Agnieszka Rogalska",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55107": {
+  "county": "Rusk",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Philip Unterschuetz",
+   "seats": 19
+  },
+  "executive": {
+   "name": "Ashley Heath",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Missy Kroening",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Lori Gorsegner",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Mary Berg",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "John Cabranes",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Phil Grassmann",
+   "note": "Appointed to fill a vacancy"
+  },
+  "coroner": {
+   "name": "Annette Grotzinger",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55109": {
+  "county": "St. Croix",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Bob Long",
+   "seats": 19
+  },
+  "executive": {
+   "name": "Ken Witt",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Denise Anderson",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Kristi Severson",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Beth Pabst",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Karl Anderson",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Scott Knudson",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Tina Forrest",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55111": {
+  "county": "Sauk",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tim McCumber",
+   "seats": 31
+  },
+  "executive": {
+   "name": "Lisa Wilson",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Jessica Machovec",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Carrie Wastlick",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Brent Bailey",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Michael X Albrecht",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Chip Meister",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Greg L Hahn",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55113": {
+  "county": "Sawyer",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Ron Kinsley",
+   "seats": 15
+  },
+  "executive": {
+   "name": "Vacant",
+   "title": "Executive / administrator"
+  },
+  "treasurer": {
+   "name": "Brian Lehner",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Marge Kelsey",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Rachel Thompson",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Bruce R Poquette",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Doug Mrotek",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "John Froemel",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55115": {
+  "county": "Shawano",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Thomas Kautza",
+   "seats": 27
+  },
+  "executive": {
+   "name": "James Davel",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Debra Wallace",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Ethan Schmidt",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Amy Dillenburg",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Gregory Parker",
+   "party": "Republican",
+   "sharedUnit": "Menominee and Shawano counties comprise a single prosecutorial unit served by one district attorney (Wis. Stat. ch. 978)."
+  },
+  "sheriff": {
+   "name": "George Lenzner",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Brian Westfahl",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55117": {
+  "county": "Sheboygan",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Keith Abler",
+   "seats": 25
+  },
+  "executive": {
+   "name": "Alayne Krause",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Laura Henning-Lorenz",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Christine Koenig",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Ellen Schleicher",
+   "party": "Democrat"
+  },
+  "districtAttorney": {
+   "name": "Joel Urmanski",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Matt Spence",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Desarae Rohde",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55119": {
+  "county": "Taylor",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jim Metz",
+   "seats": 17
+  },
+  "executive": {
+   "name": "Nicole Hager",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Sarah Holtz",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Jill Scheithauer",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Jaymi S Kohn",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kristi Tlusty",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Corey J Dassow",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Scott Perrin",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55121": {
+  "county": "Trempealeau",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "John Aasen",
+   "seats": 17
+  },
+  "executive": {
+   "name": "Rebecca Glewen",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Michelle Rose",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Mary Lee",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Susan Ackerman"
+  },
+  "districtAttorney": {
+   "name": "John Sacia",
+   "party": "Democrat"
+  },
+  "sheriff": {
+   "name": "Brett Semingson",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Bonnie Kindschy",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ },
+ "55123": {
+  "county": "Vernon",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Lorn Goede",
+   "seats": 19
+  },
+  "executive": {
+   "name": "Cassandra Hanan",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Karen DeLap",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Sheila Olson",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Lindsey Formanek",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Timothy Gaskell",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Roy R Torgerson",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Betty Nigh",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55125": {
+  "county": "Vilas",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Gerald Burkett",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Kimberly Olkowski",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Paulette Sarnicki",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Beth Soltow",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Sherry Bierman",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Karl Hayes",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Joseph A Fath",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Cambrya Hurlburt",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55127": {
+  "county": "Walworth",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Rick Stacey",
+   "seats": 11
+  },
+  "executive": {
+   "name": "Mark W Luberda",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Valerie Etzel",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Michele Jacobs",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Kathy Kostock",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Zeke Wiedenfeld",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Dave Gerber",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Gina Carver",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55129": {
+  "county": "Washburn",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Tim Kessler",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Darci Peckman-Krueger",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Nicole Tims",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Shannon Anderson",
+   "party": "Independent"
+  },
+  "registerOfDeeds": {
+   "name": "Jessica Hedinger",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Aaron Marcoux",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "Dennis Stuart",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Angela Pank",
+   "party": "Republican",
+   "title": "Coroner"
+  }
+ },
+ "55131": {
+  "county": "Washington",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Jeffrey Schleif",
+   "seats": 21
+  },
+  "executive": {
+   "name": "Joshua Schoemann",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Scott M Henke",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Sherry Coykendall",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Lisa Budish",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Barry Braatz",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Martin Schulteis",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Debbie Stodola",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55133": {
+  "county": "Waukesha",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "James A Heinrich",
+   "seats": 25
+  },
+  "executive": {
+   "name": "Paul Farrow",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Jennifer Grant",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Monica Paz",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "James Behrend",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Lesli Boese",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Eric J Severson",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Lynda Biedrzycki",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55135": {
+  "county": "Waupaca",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "David Morack",
+   "seats": 27
+  },
+  "executive": {
+   "name": "Amanda Welch",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Mark Sether",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Yvette Kienert",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Jeremy Schoenike",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Kat Turner",
+   "note": "Appointed to fill a vacancy"
+  },
+  "sheriff": {
+   "name": "Timothy R Wilz",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Catherine Wegener",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55137": {
+  "county": "Waushara",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "John Jarvis",
+   "seats": 11
+  },
+  "executive": {
+   "name": "Megan Kapp",
+   "title": "County Administrator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Jessica Jaeger",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Katrina Rasmussen",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Heather Schwersenska",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Matthew Leusink",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Walter Zuehlke",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Amanda Thoma",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55139": {
+  "county": "Winnebago",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Thomas J Egan",
+   "seats": 36
+  },
+  "executive": {
+   "name": "Gordon Hintz",
+   "title": "County Executive"
+  },
+  "treasurer": {
+   "name": "Amber Hoppa",
+   "party": "Republican"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Desiree Bongers",
+   "note": "Appointed to fill a vacancy"
+  },
+  "registerOfDeeds": {
+   "name": "Susan Snyder",
+   "note": "Appointed to fill a vacancy"
+  },
+  "districtAttorney": {
+   "name": "Eric Sparr",
+   "party": "Independent"
+  },
+  "sheriff": {
+   "name": "John Matz",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Cheryl Brehmer",
+   "title": "Medical Examiner (appointed)"
+  }
+ },
+ "55141": {
+  "county": "Wood",
+  "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
+  "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+  "chair": {
+   "name": "Lance A Pliml",
+   "seats": 19
+  },
+  "executive": {
+   "name": "Lance A Pliml",
+   "title": "Administrative Coordinator",
+   "appointed": true
+  },
+  "treasurer": {
+   "name": "Heather Gehrt",
+   "party": "Democrat"
+  },
+  "clerkOfCircuitCourt": {
+   "name": "Kimberly A Stimac",
+   "party": "Republican"
+  },
+  "registerOfDeeds": {
+   "name": "Tiffany Ringer",
+   "party": "Republican"
+  },
+  "districtAttorney": {
+   "name": "Jonathan Barnett",
+   "party": "Republican"
+  },
+  "sheriff": {
+   "name": "Shawn Becker",
+   "party": "Republican"
+  },
+  "coroner": {
+   "name": "Dave Patton",
+   "party": "Democrat",
+   "title": "Coroner"
+  }
+ }
+}
