@@ -5789,6 +5789,7 @@ function initWisconsinExplorer() {
     "us-house",          // Congressional districts — the largest districts a state carries below the state itself
     "wi-senate",         // 33 State Senate districts, each the union of three whole Assembly districts
     "wi-assembly",       // 99 State Assembly districts; three nest exactly inside each Senate district
+    "wi-circuit-court",  // 69 circuits — 66 single counties plus three statutory two-county unions, so marginally broader than the county fabric
     "county",            // Counties, pre-built from TIGERweb at bootstrap; the fork's offline anchor layer
     "school-district-secondary", // Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead
     "school-district-unified", // Unified (K-12) school districts; pre-built from TIGERweb at bootstrap
@@ -8323,6 +8324,122 @@ function initWisconsinExplorer() {
     }
   });
 
+  /* ---------- 16. Circuit Court — derived county unions + wicourts bench ----------
+   * No agency publishes circuit geometry (measured: the ArcGIS catalog answers
+   * zero, LTSB's org carries no court layer), and this app never draws a
+   * boundary no agency publishes — so the shipped file draws NO NEW LINE:
+   * every circuit is a union of whole counties from the same one-fetch
+   * TIGERweb county file the County layer ships, composed under a DOUBLE
+   * WITNESS that agrees exactly — Wis. Stat. 753.06 (66 one-county circuits
+   * plus Buffalo+Pepin, Florence+Forest, Menominee+Shawano) and wicourts.gov's
+   * own circuit listing. build_wi_circuit_courts.py carries the derivation and
+   * its gates; the weekly roster scrape re-asserts the composition against
+   * wicourts on every run, which is this layer's redistricting tripwire.
+   *
+   * THE BENCH: wicourts' judges table (authoritative, weekly) enriched with
+   * each judge's branch and direct phone from the contact directory. Everyone
+   * is titled Judge — appointees filling vacancies are indistinguishable from
+   * elected judges in any wicourts source, so the card claims neither; the
+   * only role shown is the one wicourts itself prints ("Chief Judge", the
+   * judicial administrative district's). No e-mail ships because none exists
+   * anywhere on wicourts (measured). A roster miss degrades to the circuit +
+   * the directory link — never an invented name. ---------- */
+  var loadCircuitCourts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-circuit-courts.json", {}, 2);
+  });
+  var loadCircuitJudges = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-circuit-judges.json", {}, 2);
+  });
+
+  registerLayer({
+    id: "wi-circuit-court",
+    group: "political",
+    label: "Circuit Court",
+    overlay: {
+      load: loadCircuitCourts,
+      // deep violet, the crib's judicial hue — distinct from every chamber dash
+      style: { color: "#4A2E8C", weight: 1.5, fillColor: "#4A2E8C", fillOpacity: 0.05, dashArray: "6 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // The roster is a small same-origin file and its failure is not this
+      // layer's failure: the circuit still answers, so a roster miss degrades
+      // to an identity card with the directory link.
+      return Promise.all([
+        queryFeatureAt(loadCircuitCourts, point),
+        loadCircuitJudges().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var key = findPropCI(props, ["circuit"]);
+        var entry = (parts[1] && key != null) ? parts[1][String(key)] : null;
+        return {
+          seq: seq,
+          name: findPropCI(props, ["name"]),
+          counties: findPropCI(props, ["counties"]),
+          entry: entry || null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.name != null ? String(result.name) : "Unknown circuit";
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      var entry = result.entry;
+      var isMerged = result.counties && String(result.counties).indexOf(",") !== -1;
+      if (isMerged) {
+        // only the three statutory two-county circuits carry this row — a
+        // single-county circuit's county is already the card's own name
+        wrap.appendChild(renderFieldStack([
+          { label: "Counties", value: String(result.counties), primary: true }
+        ]));
+      }
+      if (entry && entry.judges && entry.judges.length) {
+        var people = entry.judges.map(function (j) {
+          return {
+            name: String(j.name),
+            badge: j.role ? String(j.role) : null,
+            note: j.branch ? "Branch " + String(j.branch) : null,
+            phone: j.phone ? String(j.phone) : null
+          };
+        });
+        if (people.length > 8) {
+          // Milwaukee seats 47 — the bench goes behind one expander so the
+          // card stays a card (expanders default closed, fleet convention)
+          var det = cardEl("details", "card-row-b");
+          var summary = document.createElement("summary");
+          summary.appendChild(cardEl("span", null, String(people.length) + " judges"));
+          summary.appendChild(cardDetailsHint());
+          det.appendChild(summary);
+          det.appendChild(renderPersonRows(people));
+          wrap.appendChild(det);
+        } else {
+          wrap.appendChild(renderPersonRows(people));
+        }
+      }
+      if (entry && entry.courthouses && entry.courthouses.length) {
+        wrap.appendChild(renderOfficeGroup({
+          label: entry.courthouses.length > 1 ? "Courthouses" : "Courthouse",
+          offices: entry.courthouses.map(function (c) {
+            return { label: String(c.county) + " County", lines: (c.lines || []).map(String) };
+          })
+        }));
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var entry = result.entry;
+      var url = safeHttpUrl(entry && entry.sourceUrl);
+      if (url) return { label: "Clerk of Circuit Court", url: url };
+      return { label: "WI circuit courts directory", url: "https://www.wicourts.gov/courts/circuit/index.htm" };
+    }
+  });
+
   /* ---------- 2. County Subdivision — live TIGERweb ----------
    * Cribbed from the CHI reference township module minus its per-county
    * officials join: the card names the subdivision only (honesty rules — no
@@ -9474,7 +9591,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "ward", "municipality", "zip-code", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "wi-circuit-court", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "ward", "municipality", "zip-code", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;

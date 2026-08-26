@@ -123,10 +123,32 @@
       }
     },
     {
+      "id": "wi-circuit-court",
+      "label": "Circuit Court",
+      "group": "political",
+      "area_rank": 4,
+      "rank_note": "69 circuits — 66 single counties plus three statutory two-county unions, so marginally broader than the county fabric",
+      "source": {
+        "answers": "The circuit court whose bench serves the point — Wisconsin's trial court of general jurisdiction — with every judge on that bench, their branch and direct phone where the court system publishes them, and the courthouse.",
+        "boundary": [
+          {
+            "label": "Derived county unions — no agency publishes circuit geometry (measured), so no new line is drawn: each circuit is a union of whole counties from the shipped TIGERweb county file, composed under a double witness that agrees exactly — Wis. Stat. 753.06 (one circuit per county except Buffalo+Pepin, Florence+Forest, Menominee+Shawano) and the court system's own circuit listing, re-asserted by every weekly roster run",
+            "url": "https://docs.legis.wisconsin.gov/statutes/statutes/753/06"
+          },
+          {
+            "label": "Wisconsin Court System — the circuit listing the composition is cross-witnessed against",
+            "url": "https://www.wicourts.gov/courts/circuit/judges.htm"
+          }
+        ],
+        "people": "wi-circuit-judges.json, rebuilt weekly by CI from wicourts.gov's judges table (the bench) joined with its contact directory (branch, direct phone, courthouse). Everyone is titled Judge — appointees filling vacancies are indistinguishable from elected judges in any wicourts source, so the card claims neither; no judge e-mail exists anywhere on wicourts, so none ships.",
+        "applies": "Wisconsin — statewide, all 72 counties across 69 circuits."
+      }
+    },
+    {
       "id": "county",
       "label": "County",
       "group": "geography",
-      "area_rank": 4,
+      "area_rank": 5,
       "rank_note": "Counties, pre-built from TIGERweb at bootstrap; the fork's offline anchor layer",
       "source": {
         "answers": "Which county contains the point.",
@@ -144,7 +166,7 @@
       "id": "school-district-secondary",
       "label": "School District (Union High)",
       "group": "schools",
-      "area_rank": 5,
+      "area_rank": 6,
       "rank_note": "Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead",
       "source": {
         "answers": "The union high school district serving the point, where elementary and high school districts are separate.",
@@ -162,7 +184,7 @@
       "id": "school-district-unified",
       "label": "School District (Unified)",
       "group": "schools",
-      "area_rank": 6,
+      "area_rank": 7,
       "rank_note": "Unified (K-12) school districts; pre-built from TIGERweb at bootstrap",
       "source": {
         "answers": "The unified (K-12) school district serving the point.",
@@ -180,7 +202,7 @@
       "id": "school-district-elementary",
       "label": "School District (Elementary)",
       "group": "schools",
-      "area_rank": 7,
+      "area_rank": 8,
       "rank_note": "Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory",
       "source": {
         "answers": "The elementary school district serving the point, where elementary and high school districts are separate.",
@@ -198,7 +220,7 @@
       "id": "county-board",
       "label": "County Board District",
       "group": "political",
-      "area_rank": 8,
+      "area_rank": 9,
       "rank_note": "County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town",
       "source": {
         "answers": "The county board supervisory district covering the point, how many districts that county's board has, and a link to the board itself.",
@@ -220,7 +242,7 @@
       "id": "county-subdivision",
       "label": "County Subdivision",
       "group": "geography",
-      "area_rank": 9,
+      "area_rank": 10,
       "rank_note": "Towns / county subdivisions (TIGERweb CouSub, live)",
       "source": {
         "answers": "The town or county subdivision containing the point.",
@@ -238,7 +260,7 @@
       "id": "municipality",
       "label": "Municipality",
       "group": "geography",
-      "area_rank": 10,
+      "area_rank": 11,
       "rank_note": "Incorporated places (TIGERweb Places, live); unincorporated points say so",
       "source": {
         "answers": "The city, village or town containing the point — or that it sits in unincorporated county.",
@@ -256,7 +278,7 @@
       "id": "zip-code",
       "label": "ZIP Code",
       "group": "geography",
-      "area_rank": 11,
+      "area_rank": 12,
       "rank_note": "Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized",
       "source": {
         "answers": "The ZIP Code Tabulation Area containing the point — the Census Bureau's approximation of USPS ZIP delivery areas, not the postal boundaries themselves.",
@@ -274,7 +296,7 @@
       "id": "ward",
       "label": "Municipal Ward",
       "group": "geography",
-      "area_rank": 12,
+      "area_rank": 13,
       "rank_note": "7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points",
       "source": {
         "answers": "The municipal ward containing the point — the unit Wisconsin elections are administered by and every supervisory and aldermanic district is composed from — plus which county board district and, in cities that elect alders by district, which aldermanic district it belongs to.",
@@ -292,7 +314,7 @@
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
-      "area_rank": 13,
+      "area_rank": 14,
       "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
@@ -310,7 +332,7 @@
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
-      "area_rank": 14,
+      "area_rank": 15,
       "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
@@ -328,7 +350,7 @@
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 15,
+      "area_rank": 16,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -343,7 +365,7 @@
       }
     }
   ],
-  "min_register_layer": 10,
+  "min_register_layer": 11,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -353,6 +375,10 @@
     {
       "layer": "county",
       "expected": "Marathon County"
+    },
+    {
+      "layer": "wi-circuit-court",
+      "expected": "Marathon County Circuit Court"
     },
     {
       "layer": "us-house",
@@ -433,6 +459,12 @@
         "note": "Every county board supervisory district in the state — 1,573 from LTSB's statewide aggregate plus Trempealeau's own 17, built by wi/scripts/build_wi_supervisory_districts.py (numbering, ward-reconciliation and 10,000-in-state-point agreement gates)."
       },
       {
+        "file": "wi-circuit-courts.json",
+        "min_features": 69,
+        "max_features": 69,
+        "note": "The 69 circuit courts as county unions — 66 single counties plus the three statutory two-county circuits (Wis. Stat. 753.06), dissolved from the shipped county file by wi/scripts/build_wi_circuit_courts.py under its partition, merge and containment gates. Rebuild only if the county file or the statute moves."
+      },
+      {
         "file": "wi-state-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -469,11 +501,16 @@
         "file": "county-board-members.json",
         "min_keys": 400,
         "note": "County board supervisors for the 20 counties that publish a district-keyed member list (437 seats). Built by wi/scripts/build_wi_county_board_roster.py from each county's own page and checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 52 counties name nobody — their cards link the county board instead."
+      },
+      {
+        "file": "wi-circuit-judges.json",
+        "min_keys": 69,
+        "note": "The circuit-court bench — every circuit's judges with branch and direct phone where wicourts publishes them, plus the courthouse — keyed by the same circuit keys the geometry carries. Built by wi/scripts/build_wi_circuit_court_roster.py from the wicourts scrape; refreshed weekly by update-wi-circuit-court-roster.yml, whose composition assertion doubles as the circuit map's redistricting tripwire."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v4",
+    "cache_name": "districtry-wi-shell-v5",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -503,6 +540,11 @@
       "file": "update-wi-county-board-roster.yml",
       "purpose": "County board supervisors for the 20 counties that publish a member list",
       "schedule": "Thu 14:30 UTC"
+    },
+    {
+      "file": "update-wi-circuit-court-roster.yml",
+      "purpose": "Circuit court bench from wicourts.gov (also asserts the statutory circuit composition)",
+      "schedule": "Wed 15:30 UTC"
     },
     {
       "file": "wi-validate-sources.yml",
