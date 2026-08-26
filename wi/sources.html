@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">27 layers — 7 political and legislative, 7 public safety, 5 schools, 8 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">28 layers — 7 political and legislative, 8 public safety, 5 schools, 8 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -969,7 +969,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="safety">
-        <h2>Public safety <span class="matrix-count">7 layers</span></h2>
+        <h2>Public safety <span class="matrix-count">8 layers</span></h2>
         <p class="matrix-blurb">Who answers a call at this address, and where they answer it from.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1032,6 +1032,18 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">None shipped, deliberately: MPD publishes each district's captain only behind an access control this project does not defeat, and a name that cannot be re-verified weekly does not ship — the card links the district pages instead (gap mpd-district-leadership).</td>
                 <td data-label="Where it applies">City of Milwaukee only — the layer hides everywhere else.</td>
+              </tr>
+              <tr id="layer-mpd-squad-area">
+                <th scope="row"><span class="layer-name">Milwaukee Police Squad Area</span><code>mpd-squad-area</code></th>
+                <td data-label="What it answers">The Milwaukee Police Department squad area — the patrol/beat subdivision — covering the point, with its parent district. A squad's NUMBER encodes its district (the hundreds digit), and the builder verifies that against the shipped district layer rather than asserting it. No officeholder: a patrol area elects no one. Outside Milwaukee the layer hides, and its toggle nests under the district layer exactly as the reference instance's police beats do.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD/MPD_geography/MapServer/1" target="_blank" rel="noopener">City of Milwaukee — MPD squad areas, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py; each squad is sample-verified inside its hundreds-digit district against the shipped district file</a></li>
+                    <li><a href="https://data.milwaukee.gov/dataset/milwaukee-police-department-squad-areas" target="_blank" rel="noopener">City of Milwaukee open data — the same squad areas as a shapefile (CC-BY), the build-time witness: keys and area shares must agree between the two city surfaces before the file ships</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">None, deliberately: a patrol area elects no one and MPD publishes no per-squad roster this project can verify.</td>
+                <td data-label="Where it applies">City of Milwaukee only — the layer hides everywhere else, and its toggle shows only while the Police District layer is on.</td>
               </tr>
               <tr id="layer-police-station">
                 <th scope="row"><span class="layer-name">Police Station</span><code>police-station</code></th>

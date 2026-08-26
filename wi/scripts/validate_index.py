@@ -100,8 +100,9 @@ EXPECT_LAYER_IDS = [
     "school-district-unified", "school-district-elementary", "ems-service",
     "law-service", "fire-service", "county-board", "county-subdivision",
     "municipality", "zip-code", "mpd-district", "mps-school-board",
-    "aldermanic-district", "ward", "milwaukee-neighborhoods",
-    "police-station", "fire-station", "school-site", "library", "post-office",
+    "mpd-squad-area", "aldermanic-district", "ward",
+    "milwaukee-neighborhoods", "police-station", "fire-station",
+    "school-site", "library", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -126,6 +127,7 @@ GEOMETRY_FILES = {
     "law-service-areas.json": (639, 639),  # 639 law-enforcement dispatch areas — the OEC's 3,083 effective NG911 LawEnforcementBoundary polygons dissolved per agency; plain -dissolve, never -dissolve2, so the concurrent-jurisdiction overlaps the counties filed survive (measured). Same builder and gates as the fire file.
     "psap-areas.json": (95, 95),  # 95 public safety answering points — the OEC's 205 effective NG911 PSAPBoundary polygons dissolved per agency (11 future-dated Expire rows KEPT, the case that proves the drop-by-date rule; 3 expired dropped). Same builder and gates as the fire/law files; an operator rebuild watched by the monthly source report.
     "ems-service-areas.json": (579, 579),  # 579 EMS dispatch areas — the OEC's 2,443 effective NG911 EmergencyMedicalServicesBoundary polygons dissolved per agency (34 expired rows dropped by date). Same builder and gates as the other three NG911 files; an operator rebuild watched by the monthly source report.
+    "mpd-squad-areas.json": (25, 25),  # Milwaukee's 25 MPD squad areas — the city's own CC-BY layer server-reprojected, witnessed against the CKAN shapefile's area shares AND sample-verified inside their hundreds-digit districts (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints.
 }
 
 # file -> minimum key count (officeholder rosters).
