@@ -519,6 +519,21 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "ward",
+        "app_file": "mke-polling-places.json",
+        "source_url": "https://data.milwaukee.gov/dataset/voting-wards",
+        "note": (
+            "Milwaukee's ward -> polling place pairing (CC-BY), pre-built by "
+            "build_mke_polling_places.py: the CSV is the pairing of record "
+            "(CR-terminated rows — measured), the city's own REST ward layer "
+            "witnesses every pair, its places layer supplies the points "
+            "(one place carries null geometry — pinned tolerance), and the "
+            "ward set is gated EQUAL to LTSB's Milwaukee wards. Rebuilt per "
+            "election (WATCH.md row), never weekly; the resource's "
+            "last_modified moving is the signal."
+        ),
+    },
+    {
         "layer": "tid-district",
         "app_file": "tid-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8",

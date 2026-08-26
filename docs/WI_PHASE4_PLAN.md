@@ -169,7 +169,19 @@ taken on (up to 72 sites × 7 offices), so it lands in TRANCHES — each
 tranche a reviewed PR with its own measured ledger, the board-roster
 precedent exactly.
 
-## PR 3 — Milwaukee polling places on the ward card (city-scoped enrichment)
+## PR 3 — Milwaukee polling places on the ward card (city-scoped enrichment) — DELIVERED 2026-08-26
+
+Shipped as planned: all 356 Milwaukee wards carry their polling place —
+name, address, the city's entrance/parking guidance behind an expander,
+the pairing dated to the dataset edition, and MyVote linked as the
+confirmation route. The key witness held exactly: the city's ward
+numbers ARE LTSB's, 1-356 with no gaps, and the CSV pairing agreed with
+the city's own REST layer 356/356. Two traps recorded: the CSV's rows
+are bare-CR terminated, and the city's places layer carries exactly one
+place (Starms Early Childhood Center) with null geometry — its two
+wards ship name + address only, pinned at tolerance one. The gap
+narrowed to statewide-minus-Milwaukee; the WEC attempt (PR 5) is still
+what could close it.
 
 The `ward-polling-places` gap records the statewide block (WEC Cloudflare)
 and names the city-scoped opening. Measured: Milwaukee's `voting-wards`
