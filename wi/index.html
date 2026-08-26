@@ -3582,6 +3582,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <svg class="star-outline" viewBox="0 0 100 100" aria-hidden="true">
         <path fill="none" stroke="var(--accent-deep)" stroke-width="4" id="star-path-empty"></path>
       </svg>
+      <svg class="districtry-empty-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.20"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.18"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.16"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#9aa3b2" stroke-width="9"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#9aa3b2" stroke-width="9"></line></svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
       <p class="empty-state-lede">See your county, city, village or town, school districts, Wisconsin Senate and Assembly districts, ZIP code, and U.S. House district — plus who represents you.</p>
@@ -9029,8 +9030,15 @@ function initWisconsinExplorer() {
     id: "aldermanic-district",
     group: "political",
     label: "Aldermanic District",
-    subOf: "county-subdivision", // districts number within their municipality,
-    // and CouSub is the tiling that carries every municipality
+    // deliberately NO subOf: districts do number within their municipality
+    // (the ward's containment logic), but a subOf toggle renders NESTED under
+    // its parent and appears only while the parent layer is on — which buried
+    // this roster-carrying political layer inside the geography group's
+    // County Subdivision block (measured: the sidebar counted 18 of 20 with
+    // this and ward the invisible two). A reader looking for their alderperson
+    // gets a top-level Political toggle, the same standing the reference
+    // instances give their council layers; ward keeps its nesting, which its
+    // plan chose deliberately for a layer that elects no one.
     overlay: {
       load: loadAldermanicDistricts,
       // warm sienna — a municipal-politics hue, distinct from the violet
