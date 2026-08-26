@@ -493,6 +493,30 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "tid-district",
+        "app_file": "tid-districts.json",
+        "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8",
+        "note": (
+            "The city's own Tax Incremental Districts layer (79 active; "
+            "field TID + NAME + create date), server-reprojected and "
+            "pre-built by wi/scripts/build_milwaukee_city_layers.py — "
+            "dissolved TIDs drop by date. TIDs are created and closed by "
+            "Common Council action, so the count here moves; a change is "
+            "the operator's rebuild trigger."
+        ),
+    },
+    {
+        "layer": "tid-district",
+        "app_file": "tid-districts.json",
+        "source_url": "https://data.milwaukee.gov/dataset/tax-incremental-districts-tid",
+        "note": (
+            "The same districts as the city's CKAN shapefile (CC-BY) — the "
+            "build-time WITNESS, scoped to the city's own STATUS flag "
+            "because the shapefile keeps all 56 retired TIDs the live "
+            "layer omits (0.007% max share difference at first build)."
+        ),
+    },
+    {
         "layer": "fire-service",
         "app_file": "fire-service-areas.json",
         "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3",
