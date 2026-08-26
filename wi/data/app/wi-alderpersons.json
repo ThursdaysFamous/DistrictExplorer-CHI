@@ -1,0 +1,445 @@
+{
+ "31000": {
+  "members": {
+   "01": {
+    "email": "Jennifer.Grant@greenbaywi.gov",
+    "name": "Jennifer Grant",
+    "phone": "920-510-6861",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=70"
+   },
+   "02": {
+    "email": "Jim.Hutchison@greenbaywi.gov",
+    "name": "Jim Hutchison",
+    "phone": "920-819-8015",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=73"
+   },
+   "03": {
+    "email": "Bill.Morgan@greenbaywi.gov",
+    "name": "Bill Morgan",
+    "phone": "920-217-8424",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=77"
+   },
+   "04": {
+    "email": "Jon.Shelton@greenbaywi.gov",
+    "name": "Jon Shelton",
+    "phone": "920-977-4911",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=90"
+   },
+   "05": {
+    "email": "doug.orlowski@greenbaywi.gov",
+    "name": "Doug Orlowski",
+    "phone": "920-391-5600",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=131"
+   },
+   "06": {
+    "email": "Joey.Prestley@greenbaywi.gov",
+    "name": "Joey Prestley",
+    "phone": "920-238-3969",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=132"
+   },
+   "07": {
+    "email": "Alyssa.Proffitt@greenbaywi.gov",
+    "name": "Alyssa Proffitt",
+    "phone": "920-536-1901",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=93"
+   },
+   "08": {
+    "email": "jim.ridderbush@greenbaywi.gov",
+    "name": "Jim Ridderbush",
+    "phone": "920-498-9257",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=94"
+   },
+   "09": {
+    "email": "Ben.Debaker@greenbaywi.gov",
+    "name": "Ben DeBaker",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=133"
+   },
+   "10": {
+    "email": "Ben.Delie@greenbaywi.gov",
+    "name": "Ben Delie",
+    "phone": "920-639-1017",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=96"
+   },
+   "11": {
+    "email": "Melinda.Eck@greenbaywi.gov",
+    "name": "Melinda Eck",
+    "phone": "920-621-9827",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=98"
+   },
+   "12": {
+    "email": "Kathy.Hinkfuss@greenbaywi.gov",
+    "name": "Kathy Hinkfuss",
+    "phone": "920-366-6325",
+    "url": "https://www.greenbaywi.gov/m/directory/employee?eid=134"
+   }
+  },
+  "municipality": "Green Bay",
+  "seats": 12,
+  "sourceUrl": "https://www.greenbaywi.gov/m/directory"
+ },
+ "39225": {
+  "members": {
+   "01": {
+    "name": "Eric J. Haugaard"
+   },
+   "02": {
+    "name": "Bill Siel"
+   },
+   "03": {
+    "name": "Jan Michalski"
+   },
+   "04": {
+    "name": "Rex Davenport"
+   },
+   "05": {
+    "name": "Rocco J. Lamacchia, Sr."
+   },
+   "06": {
+    "name": "Brandi Ferree"
+   },
+   "07": {
+    "name": "Kelly MacKay"
+   },
+   "08": {
+    "name": "Peni Keeling"
+   },
+   "09": {
+    "name": "Keith W. Rosenberg"
+   },
+   "10": {
+    "name": "Anthony Kennedy"
+   },
+   "11": {
+    "name": "Rollin Pizzala"
+   },
+   "12": {
+    "name": "Ruth Dyson"
+   },
+   "13": {
+    "name": "Curt Wilson"
+   },
+   "14": {
+    "name": "Daniel L. Prozanski, Jr.",
+    "note": "Elected April 2026 (certified by the Kenosha County Board of Canvassers)"
+   },
+   "15": {
+    "name": "Julia Metallo"
+   },
+   "16": {
+    "name": "Dominic Ruffalo"
+   },
+   "17": {
+    "name": "Art DeBaere"
+   }
+  },
+  "municipality": "Kenosha",
+  "seats": 17,
+  "sourceUrl": "https://gis-city.kenosha.org/server/rest/services/Organizational_Layers/Districts_ElectedRepresentation/FeatureServer/150"
+ },
+ "48000": {
+  "members": {
+   "02": {
+    "email": "district2@cityofmadison.com",
+    "name": "Will Ochowicz",
+    "url": "https://www.cityofmadison.com/council/district2"
+   },
+   "03": {
+    "email": "district3@cityofmadison.com",
+    "name": "Derek Field",
+    "url": "https://www.cityofmadison.com/council/district3"
+   },
+   "04": {
+    "email": "district4@cityofmadison.com",
+    "name": "Michael E. Verveer",
+    "url": "https://www.cityofmadison.com/council/district4"
+   },
+   "05": {
+    "email": "district5@cityofmadison.com",
+    "name": "Regina M. Vidaver",
+    "url": "https://www.cityofmadison.com/council/district5"
+   },
+   "06": {
+    "email": "district6@cityofmadison.com",
+    "name": "Davy Mayer",
+    "url": "https://www.cityofmadison.com/council/district6"
+   },
+   "07": {
+    "email": "district7@cityofmadison.com",
+    "name": "Badri Lankella",
+    "url": "https://www.cityofmadison.com/council/district7"
+   },
+   "08": {
+    "email": "district8@cityofmadison.com",
+    "name": "Ellen Zhang",
+    "url": "https://www.cityofmadison.com/council/district8"
+   },
+   "09": {
+    "email": "district9@cityofmadison.com",
+    "name": "Joann Pritchett",
+    "url": "https://www.cityofmadison.com/council/district9"
+   },
+   "10": {
+    "email": "district10@cityofmadison.com",
+    "name": "Yannette Figueroa Cole",
+    "url": "https://www.cityofmadison.com/council/district10"
+   },
+   "11": {
+    "email": "district11@cityofmadison.com",
+    "name": "Bill Tishler",
+    "url": "https://www.cityofmadison.com/council/district11"
+   },
+   "12": {
+    "email": "district12@cityofmadison.com",
+    "name": "Julia Matthews",
+    "url": "https://www.cityofmadison.com/council/district12"
+   },
+   "13": {
+    "email": "district13@cityofmadison.com",
+    "name": "Tag Evers",
+    "url": "https://www.cityofmadison.com/council/district13"
+   },
+   "14": {
+    "email": "district14@cityofmadison.com",
+    "name": "Noah L. Lieberman",
+    "url": "https://www.cityofmadison.com/council/district14"
+   },
+   "15": {
+    "email": "district15@cityofmadison.com",
+    "name": "Dina Nina Martinez-Rutherford",
+    "url": "https://www.cityofmadison.com/council/district15"
+   },
+   "16": {
+    "email": "district16@cityofmadison.com",
+    "name": "Sean O&#039;Brien",
+    "url": "https://www.cityofmadison.com/council/district16"
+   },
+   "17": {
+    "email": "district17@cityofmadison.com",
+    "name": "Sabrina V. Madison",
+    "url": "https://www.cityofmadison.com/council/district17"
+   },
+   "18": {
+    "email": "district18@cityofmadison.com",
+    "name": "Carmella Glenn",
+    "url": "https://www.cityofmadison.com/council/district18"
+   },
+   "19": {
+    "email": "district19@cityofmadison.com",
+    "name": "John P. Guequierre",
+    "url": "https://www.cityofmadison.com/council/district19"
+   },
+   "20": {
+    "email": "district20@cityofmadison.com",
+    "name": "Barbara Harrington-McKinney",
+    "url": "https://www.cityofmadison.com/council/district20"
+   }
+  },
+  "municipality": "Madison",
+  "seats": 20,
+  "sourceUrl": "https://www.cityofmadison.com/council/council-members",
+  "vacantDistricts": [
+   1
+  ]
+ },
+ "53000": {
+  "members": {
+   "01": {
+    "name": "Andrea M Pratt"
+   },
+   "02": {
+    "name": "Mark Chambers, Jr"
+   },
+   "03": {
+    "name": "Alex Brower"
+   },
+   "04": {
+    "name": "Robert Bauman"
+   },
+   "05": {
+    "name": "Lamont Westmoreland"
+   },
+   "06": {
+    "name": "Milele A Coggs"
+   },
+   "07": {
+    "name": "DiAndre Jackson"
+   },
+   "08": {
+    "name": "JoCasta Zamarripa"
+   },
+   "09": {
+    "name": "Larresa Taylor"
+   },
+   "10": {
+    "name": "Sharlen P Moore"
+   },
+   "11": {
+    "name": "Peter Burgelis"
+   },
+   "12": {
+    "name": "Jose G Perez"
+   },
+   "13": {
+    "name": "Scott Spiker"
+   },
+   "14": {
+    "name": "Marina Dimitrijevic"
+   },
+   "15": {
+    "name": "Russell W Stamper, II"
+   }
+  },
+  "municipality": "Milwaukee",
+  "seats": 15,
+  "sourceUrl": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/election/alderman/MapServer/0"
+ },
+ "66000": {
+  "members": {
+   "01": {
+    "name": "Malik Frazier",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-1/"
+   },
+   "02": {
+    "name": "Alyson Weiss",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/02-district/"
+   },
+   "03": {
+    "name": "Olivia Turquoise Davis",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/03-district/"
+   },
+   "04": {
+    "name": "David L. Maack",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/04-district/"
+   },
+   "05": {
+    "name": "Jens Jorgensen",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-5/"
+   },
+   "06": {
+    "name": "Sandy Weidner",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-6/"
+   },
+   "07": {
+    "name": "Maurice Horton",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-7/"
+   },
+   "08": {
+    "name": "Brittany Hodges",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-8/"
+   },
+   "09": {
+    "name": "Grace Allen",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-9/"
+   },
+   "10": {
+    "name": "Sam Peete",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-10/"
+   },
+   "11": {
+    "name": "Mary Land",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-11/"
+   },
+   "12": {
+    "name": "Rocco DeMark",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-12/"
+   },
+   "13": {
+    "name": "Renee Kelly",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-13/"
+   },
+   "14": {
+    "name": "Marlo Harmon",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-14/"
+   },
+   "15": {
+    "name": "Nathan Pabon",
+    "url": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/district-15/"
+   }
+  },
+  "municipality": "Racine",
+  "seats": 15,
+  "sourceUrl": "https://cityofracinewi.gov/government/city-leadership/common-council/cityalderman/"
+ },
+ "84250": {
+  "members": {
+   "01": {
+    "email": "alddist1@waukesha-wi.gov",
+    "name": "Mike Chrisien",
+    "phone": "1-262-875-4860"
+   },
+   "02": {
+    "email": "alddist2@waukesha-wi.gov",
+    "name": "Jim Evert",
+    "phone": "1-262-354-4649"
+   },
+   "03": {
+    "email": "alddist3@waukesha-wi.gov",
+    "name": "Doreen Wigderson",
+    "phone": "1-262-352-6209"
+   },
+   "04": {
+    "email": "alddist4@waukesha-wi.gov",
+    "name": "Joe Pieper",
+    "phone": "1-262-896-0454"
+   },
+   "05": {
+    "email": "alddist5@waukesha-wi.gov",
+    "name": "Steve Van Trieste",
+    "phone": "1-262-309-7251"
+   },
+   "06": {
+    "email": "alddist6@waukesha-wi.gov",
+    "name": "Jack Wells",
+    "phone": "1-262-290-5103"
+   },
+   "07": {
+    "email": "alddist7@waukesha-wi.gov",
+    "name": "Daniel J. Manion",
+    "phone": "1-262-542-5550"
+   },
+   "08": {
+    "email": "alddist8@waukesha-wi.gov",
+    "name": "Elizabeth Moltzan",
+    "phone": "1-262-349-4078"
+   },
+   "09": {
+    "email": "alddist9@waukesha-wi.gov",
+    "name": "Paul Wuteska",
+    "phone": "1-262-271-2563"
+   },
+   "10": {
+    "email": "alddist10@waukesha-wi.gov",
+    "name": "Mike Anderson",
+    "phone": "1-262-289-2739"
+   },
+   "11": {
+    "email": "alddist11@waukesha-wi.gov",
+    "name": "Erik Helgestad",
+    "phone": "1-262-264-8517"
+   },
+   "12": {
+    "email": "alddist12@waukesha-wi.gov",
+    "name": "Dale Matthews",
+    "phone": "1-262-236-5332"
+   },
+   "13": {
+    "email": "alddist13@waukesha-wi.gov",
+    "name": "Eileen Micklitz",
+    "phone": "1-262-454-2176"
+   },
+   "14": {
+    "email": "alddist14@waukesha-wi.gov",
+    "name": "Rick Lemke",
+    "phone": "1-262-442-2580"
+   },
+   "15": {
+    "email": "alddist15@waukesha-wi.gov",
+    "name": "Rico Camacho",
+    "phone": "1-414-405-6347"
+   }
+  },
+  "municipality": "Waukesha",
+  "seats": 15,
+  "sourceUrl": "https://www.waukesha-wi.gov/about_the_common_council/index.php"
+ }
+}

@@ -6,7 +6,7 @@
 
 A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. One instance of the [districtry](https://districtry.com/) fleet, serving at **[districtry.com/wi/](https://districtry.com/wi/)** — the first state to expand **in place** as a folder of the consolidated repo rather than as a fork.
 
-Nineteen statewide layers — thirteen from national publishers, six from state sources:
+Twenty statewide layers — thirteen from national publishers, seven from state sources:
 
 | Group | Layer | Source |
 |---|---|---|
@@ -16,6 +16,7 @@ Nineteen statewide layers — thirteen from national publishers, six from state 
 | | Court of Appeals District (4) | County unions under the same double-witness discipline (Wis. Stat. 752.11 + the court system's own lists) — judges elected by district, all sixteen named with phones and chambers, refreshed weekly by CI |
 | | Circuit Court (69) | County unions under a double witness (Wis. Stat. 753.06 + the court system's own listing) — geometry derived, never drawn — with the full bench from wicourts.gov: 261 judges, branch and direct phone where published, courthouse per circuit, refreshed weekly by CI |
 | | County Board District (1,590) | Wisconsin LTSB's statewide aggregate of every county's twice-yearly filing (Wis. Stat. 5.15(4)(br)1), pre-built; Trempealeau County's 17 from the county's own service; supervisors named in the 22 counties that publish a district-keyed member list (20 board pages + the Milwaukee and Racine county GIS layers), refreshed weekly by CI |
+| | Aldermanic District (838) | Derived ward unions — LTSB's coded city and village wards dissolved on the statewide municipality key, cross-witnessed against the state's own pre-dissolve edition; alderpersons named in six big cities from their own witnessed surfaces, refreshed weekly by CI; ten incomplete county filings recorded as gaps rather than drawn as fragments |
 | **Public Safety** | Police Station / Fire Station | USGS National Map structures, nearest three each — a proximity fact, never a claim about which agency serves the point |
 | **Schools** | School District — Unified / Union High / Elementary | TIGERweb School layers 0/1/2; the tilings are mutually exclusive, so exactly one of Unified and the pair answers for any point |
 | | School Location (2,966) | Wisconsin DPI's own school directory, public and private, nearest three — a proximity fact, never an enrollment claim; DPI's placeless virtual-program rows deliberately don't ship on a proximity card |
@@ -27,7 +28,7 @@ Nineteen statewide layers — thirteen from national publishers, six from state 
 | | Library (482) | Wisconsin DPI's public-library directory — main libraries and branches with address and phone, nearest three; statewide, where the fleet's reference instance answers this for one city only |
 | | Post Office | USGS National Map structures, nearest three |
 
-These nineteen are the full phase-2 plan delivered ([`docs/WI_PHASE2_PLAN.md`](../docs/WI_PHASE2_PLAN.md) — municipal wards, both court tiers, station, school and library points, the county clerk on the county card, and the legislature's own office data). Everything beyond them is this instance's next growth, added layer by layer as Wisconsin's publishers are proven out, following the repo's [`docs/EXPANSION_GUIDE.md`](../docs/EXPANSION_GUIDE.md). What no publisher answers — the county-supervisor roster in the 50 counties that publish none — is recorded in the app's Data gaps panel rather than papered over.
+Nineteen of these are the full phase-2 plan delivered ([`docs/WI_PHASE2_PLAN.md`](../docs/WI_PHASE2_PLAN.md) — municipal wards, both court tiers, station, school and library points, the county clerk on the county card, and the legislature's own office data); the twentieth, the aldermanic layer, opens phase 3. Everything beyond them is this instance's next growth, added layer by layer as Wisconsin's publishers are proven out, following the repo's [`docs/EXPANSION_GUIDE.md`](../docs/EXPANSION_GUIDE.md). What no publisher answers — the county-supervisor roster in the 50 counties that publish none, the council rosters beyond the six big cities, the ten cities whose ward filings can't compose their districts — is recorded in the app's Data gaps panel rather than papered over.
 
 ## Running it
 

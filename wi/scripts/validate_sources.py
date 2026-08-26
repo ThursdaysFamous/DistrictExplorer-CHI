@@ -329,6 +329,64 @@ PROVENANCE = [
             "the outSR=4326 geometry is ever read."
         ),
     },
+    {
+        "layer": "aldermanic-district",
+        "app_file": "aldermanic-districts.json",
+        "source_url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0",
+        "note": (
+            "The dissolve source — the coded city/village wards of LTSB's "
+            "statewide layer, dissolved on COUSUBFP+ALDERID by "
+            "wi/scripts/build_wi_aldermanic_districts.py (an OPERATOR rebuild "
+            "each Jan/Jul filing window, WATCH.md). Same endpoint the ward "
+            "layer queries live; this row ties the pre-built file to it."
+        ),
+    },
+    {
+        "layer": "aldermanic-district",
+        "app_file": "aldermanic-districts.json",
+        "source_url": "https://mapservices.legis.wisconsin.gov/arcgis/rest/services/BAS_Collection/BAS_Live_Collection_Alderpersons/FeatureServer/0",
+        "note": (
+            "The composition WITNESS — the state's own pre-dissolved working "
+            "set, a different filing edition that must agree key for key "
+            "(867/867 at first build). Never the source: no stated terms and "
+            "it mutates mid-collection."
+        ),
+    },
+    {
+        "layer": "aldermanic-district",
+        "app_file": "wi-alderpersons.json",
+        "source_url": "https://www.cityofmadison.com/council/council-members",
+        "note": (
+            "One representative roster page of the six the weekly scrape "
+            "reads (wi_alderperson_scraper.py carries the full table) — the "
+            "scrape already fails loudly per city; this row exists so the "
+            "FILE has a manifest row and a dead index page is noticed."
+        ),
+    },
+    {
+        "layer": "aldermanic-district",
+        "app_file": "wi-alderpersons.json",
+        "source_url": "https://gis-city.kenosha.org/server/rest/services/Organizational_Layers/Districts_ElectedRepresentation/FeatureServer/150",
+        "note": (
+            "Kenosha's roster layer (REP_AREA='D' rows; each district appears "
+            "twice, one row named and one N/A). Its currency is WITNESSED "
+            "against the county's certified spring canvass, which caught the "
+            "layer stale on one seat at first build — the item's modified "
+            "date is the VIEW definition's, never the data's."
+        ),
+    },
+    {
+        "layer": "aldermanic-district",
+        "app_file": "wi-alderpersons.json",
+        "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/election/alderman/MapServer/0",
+        "note": (
+            "Milwaukee's roster layer (ALDERPERSON attribute, 15/15). The "
+            "host drops ~1 in 4-8 requests with TCP resets — the scraper "
+            "retries and falls back to the same data's CKAN shapefile — and "
+            "the roster is witnessed against the city's Legistar API "
+            "(webapi.legistar.com/v1/milwaukee, body 1) every run."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.
