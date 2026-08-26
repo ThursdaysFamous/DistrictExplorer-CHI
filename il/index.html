@@ -22639,7 +22639,9 @@ function initChiExplorer() {
         coverage: monroeCountyCoverage,
         loader: loadMonroeFire,
         fields: [
-          { name: "name", label: "Fire District", keys: ["dxFireName"], primary: true },
+          // findPropCI candidates are LOWERCASE (it lowercases the feature's
+          // own keys before comparing) — this matches the loader's dxFireName
+          { name: "name", label: "Fire District", keys: ["dxfirename"], primary: true },
           { label: "County", value: "Monroe County" }
         ]
       })
