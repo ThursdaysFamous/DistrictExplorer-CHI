@@ -49,13 +49,19 @@ jobs:
       - name: Rebuild the circuit court roster
         run: python3 wi/scripts/build_wi_circuit_court_roster.py
 
+      # The history page's stat tiles are MEASURED from this data — regenerate
+      # it in the same run so the smoke gate's build_history_page --check stays
+      # green on this PR (a tile that drifted from the data it counts fails CI)
+      - name: Regenerate the history page
+        run: python3 scripts/build_history_page.py
+
       - name: Validate app + data files
         run: python3 wi/scripts/validate_index.py wi/index.html
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- wi/data/app/wi-circuit-judges.json; then
+          if git diff --quiet -- wi/data/app/wi-circuit-judges.json wi/history.html; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -72,7 +78,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add wi/data/app/wi-circuit-judges.json
+          git add wi/data/app/wi-circuit-judges.json wi/history.html
           git commit -m "Update WI circuit court bench from wicourts.gov"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

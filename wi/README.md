@@ -48,4 +48,4 @@ The gates, generated regions, engine composition and data pipeline are documente
 
 ## Honesty rules
 
-Officeholder data is never guessed: a vacant or unsourced seat degrades to the district number and the official body's own directory. Every layer carries a provenance row on [sources.html](https://districtry.com/wi/sources.html), and what the app *cannot* answer is recorded in its Data gaps panel rather than papered over. Not for legal or official use.
+Officeholder data is never guessed: a vacant or unsourced seat degrades to the district number and the official body's own directory. Every layer carries a provenance row on [sources.html](https://districtry.com/wi/sources.html), the deployment's own record — measured stat tiles plus a dated changelog — lives on [history.html](https://districtry.com/wi/history.html), and what the app *cannot* answer is recorded in its Data gaps panel rather than papered over. Not for legal or official use.

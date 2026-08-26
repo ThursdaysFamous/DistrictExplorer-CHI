@@ -145,6 +145,13 @@ jobs:
       - name: Privacy page matches what the apps actually do
         run: python3 scripts/build_privacy_page.py --check
 
+      # The deployment-history pages (opt-in per instance): the stat tiles are
+      # MEASURED from the shipped data files, so any change that moves a number
+      # regenerates the page or fails here — a history page that has drifted
+      # from the data it describes is worse than no history page.
+      - name: History pages match the instances' own data
+        run: python3 scripts/build_history_page.py --check
+
       # The web app manifest is the surface NO other gate could see, and it
       # rotted for exactly that reason: after the rebrand every generated
       # surface said districtry while il/manifest.webmanifest still read
