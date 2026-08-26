@@ -3724,8 +3724,8 @@ function initWisconsinExplorer() {
   // reach of the fork's WIDEST layer, not the metro: a card that can name an
   // address outside METRO_BBOX needs that address to be geocodable, and a
   // bound tighter than the data silently drops those pins no matter how
-  // clean the address is. Chicago's county-clerk card answers statewide, so
-  // this is Illinois.
+  // clean the address is. Set from the worksheet's poi_geocode_bbox — widen
+  // it there whenever a layer's cards start naming farther-away offices.
   var POI_GEOCODE_BBOX = { minLng: -93.09, minLat: 42.29, maxLng: -86.04, maxLat: 47.51 };
   var SOCRATA_HOST = "https://data.invalid";
   // Socrata app token: some metros' portals throttle anonymous requests. It is

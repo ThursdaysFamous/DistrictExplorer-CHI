@@ -88,7 +88,7 @@
     },
     {
       "id": "wi-senate",
-      "label": "WI Senate",
+      "label": "Wisconsin State Senate District",
       "group": "political",
       "area_rank": 2,
       "rank_note": "33 State Senate districts, each the union of three whole Assembly districts",
@@ -100,13 +100,13 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1"
           }
         ],
-        "people": "wi-senate-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party, official page, district and Capitol offices.",
+        "people": "wi-senate-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).",
         "applies": "Wisconsin — statewide."
       }
     },
     {
       "id": "wi-assembly",
-      "label": "WI Assembly",
+      "label": "Wisconsin State Assembly District",
       "group": "political",
       "area_rank": 3,
       "rank_note": "99 State Assembly districts; three nest exactly inside each Senate district",
@@ -118,7 +118,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2"
           }
         ],
-        "people": "wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party, official page, district and Capitol offices.",
+        "people": "wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -449,6 +449,11 @@
       "file": "update-wi-county-board-roster.yml",
       "purpose": "County board supervisors for the 20 counties that publish a member list",
       "schedule": "Thu 14:30 UTC"
+    },
+    {
+      "file": "wi-validate-sources.yml",
+      "purpose": "source freshness (WI manifest: TIGERweb, LTSB supervisory + ward witness, rosters)",
+      "schedule": "1st of month 13:00 UTC"
     }
   ],
   "geocoder": {
@@ -501,6 +506,16 @@
         "label": "USGS The National Map",
         "url": "https://www.usgs.gov/programs/national-geospatial-program/national-map",
         "note": "The public-domain structures layer behind the nearest-post-office list."
+      },
+      {
+        "label": "Wisconsin Legislative Technology Services Bureau (LTSB)",
+        "url": "https://gis-ltsb.hub.arcgis.com/",
+        "note": "The statewide county board supervisory districts — LTSB's open aggregate of every county's twice-yearly boundary filing under Wis. Stat. 5.15(4)(br)1."
+      },
+      {
+        "label": "Trempealeau County",
+        "url": "https://co.trempealeau.wi.us/",
+        "note": "The county's own adopted 2021-2031 supervisory district plan, shipped in place of LTSB's file for that county alone."
       }
     ]
   },

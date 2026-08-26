@@ -850,6 +850,14 @@ table.matrix code {
           <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a>
           <span class="credit-note">The public-domain structures layer behind the nearest-post-office list.</span>
         </li>
+        <li>
+          <a href="https://gis-ltsb.hub.arcgis.com/" target="_blank" rel="noopener">Wisconsin Legislative Technology Services Bureau (LTSB)</a>
+          <span class="credit-note">The statewide county board supervisory districts — LTSB's open aggregate of every county's twice-yearly boundary filing under Wis. Stat. 5.15(4)(br)1.</span>
+        </li>
+        <li>
+          <a href="https://co.trempealeau.wi.us/" target="_blank" rel="noopener">Trempealeau County</a>
+          <span class="credit-note">The county's own adopted 2021-2031 supervisory district plan, shipped in place of LTSB's file for that county alone.</span>
+        </li>
       </ul>
 <!-- ==== GENERATED:END source-credits ==== -->
   </section>
@@ -885,25 +893,25 @@ table.matrix code {
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-wi-senate">
-                <th scope="row"><span class="layer-name">WI Senate</span><code>wi-senate</code></th>
+                <th scope="row"><span class="layer-name">Wisconsin State Senate District</span><code>wi-senate</code></th>
                 <td data-label="What it answers">The Wisconsin State Senate district covering the point, and the senator holding it.</td>
                 <td data-label="Boundary source">
                   <ul class="src-list">
                     <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — Legislative, layer 1 (state upper chamber), pre-built for the state and shipped with the app</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">wi-senate-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party, official page, district and Capitol offices.</td>
+                <td data-label="Who it names">wi-senate-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-wi-assembly">
-                <th scope="row"><span class="layer-name">WI Assembly</span><code>wi-assembly</code></th>
+                <th scope="row"><span class="layer-name">Wisconsin State Assembly District</span><code>wi-assembly</code></th>
                 <td data-label="What it answers">The Wisconsin State Assembly district covering the point, and the representative holding it.</td>
                 <td data-label="Boundary source">
                   <ul class="src-list">
                     <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2" target="_blank" rel="noopener">U.S. Census TIGERweb — Legislative, layer 2 (state lower chamber), pre-built for the state and shipped with the app</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party, official page, district and Capitol offices.</td>
+                <td data-label="Who it names">wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-county-board">

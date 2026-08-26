@@ -2,66 +2,54 @@
 """
 Metro Outline Builder (the scope mask's coverage geometry)
 ==========================================================
-Builds data/app/metro-outline.json — the dissolved outline of the counties the
-app actually serves — from Census TIGERweb. "Serves" means at least one
-county-specific layer answers there, which is deliberately broader than "has
-its own dispatch entries": METRO_COUNTY_FIPS below also carries the secondary
-counties of shipped judicial circuits and the AT-LARGE counties whose only
-county-specific answer is the County card's board section (no dispatch entry
-at all — see DISPATCH_COUNTY_FIPS, which they deliberately do NOT appear in).
-This paragraph used to quote the counts and went stale within a tranche; the
-live numbers and the per-county roll-up are GENERATED from the two lists below
-into docs/COUNTY_STATUS.md, so no prose — this docstring included — quotes
-them by hand anymore. The served area is NOT required to be one connected
-region (contiguity was retired as a shipping gate 2026-08-04 — see the policy
-note above METRO_COUNTY_FIPS): a county joins whenever a county-keyed layer
-answers in it, wherever it sits.
+Builds data/app/metro-outline.json — for Wisconsin, the dissolved outline of
+the counties whose county-board SUPERVISOR ROSTER ships — from Census TIGERweb.
+Wisconsin's wash means something narrower than the reference fork's: every WI
+layer answers statewide (the region ring, wi-state-outline.json, is the state),
+so the coverage band claims only "the supervisor holding your district is
+NAMED here". METRO_COUNTY_FIPS below is therefore the roster counties, and
+DISPATCH_COUNTY_FIPS stays empty on purpose — this instance has no per-county
+dispatch layers (its own comment says why). The served area is NOT required to
+be one connected region (contiguity was retired as a shipping gate 2026-08-04
+in the reference fork, and Wisconsin's 20-county ring was born disjoint —
+9 rings on day one).
 
-THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE LAYERS.
-Research passes 2 and 3 shipped LaSalle, Kankakee, Boone and Grundy layers
-without revisiting this list, and the wash went on greying out all four — it
-told a Kankakee user "beyond here only the statewide layers answer" while five
-Kankakee layers were answering. Nothing failed, because the anchors only assert
-the counties already listed. So: **when a county gains a dispatch entry, add it
-here and give it an INSIDE anchor in the same change** (§2.5 step 1). The
-OUTSIDE list is the other half of that guard — a county named there can never
-be quietly served, because shipping it would fail this build.
+THE COUNTY LIST HERE IS A CLAIM ABOUT COVERAGE, SO IT HAS TO TRACK THE ROSTER.
+The reference fork learned this the hard way: it shipped four counties' layers
+without revisiting its list, and the wash went on greying them out — nothing
+failed, because the anchors only assert the counties already listed. So: **when
+a county's supervisor roster ships, add its FIPS here and give it an INSIDE
+anchor in the same change, and delete its OUTSIDE anchor** (the rule #523's
+commit message states). The OUTSIDE list is the other half of that guard — a
+county named there can never be quietly served, because shipping it would fail
+this build.
 
 Why this exists: the out-of-scope wash (index.html, ENGINE `scope-mask`) marks
-where the app's full coverage ends. In the reference fork it was once driven by a city-limits
-tiling, i.e. the CITY limits, which greyed out all six collar counties
-and suburban Cook. That understated coverage badly: a collar point resolves
-17-21 of the 39 layers (county board, precincts, judicial subcircuits, fire /
-park / library districts, municipal officials with named officeholders, the
-legislative trio, township, ZIP, school districts) against the city's 32. The
-honest boundary is the metro edge, beyond which only the statewide layers
-answer.
+where the app's fullest answer ends. An unexplained grey band understates what
+the app does — in Wisconsin's case the difference between "nothing here" and
+"everything but the supervisor's name here" — so the wash and its legend
+(COVERAGE_KEY) say exactly which claim is being made.
 
-It also removes a boot cost: the old call downloaded and parsed the full
-20-district school-board GeoJSON on every load — 669 ms in PSI's critical chain
-(docs/OPTIMIZATION_PLAYBOOK.md) — to paint a decorative wash. This file is one
-small pre-dissolved feature.
+It also keeps a boot cost out: painting the wash from a live boundary fetch
+cost the reference fork 669 ms in PSI's critical chain
+(docs/OPTIMIZATION_PLAYBOOK.md) before it pre-built. This file is one small
+pre-dissolved feature.
 
-WHY A BUILD STEP RATHER THAN THE EXISTING COUNTY OUTLINES: the app's in-browser
-dissolve cancels an interior border only when the two neighbours' rings share
-EXACT coordinates. data/app/*-county-outline.json were simplified
-independently, so they don't — DuPage and Kendall share 2 vertices where a real
-border runs — and Cook has no outline file at all. A single TIGERweb query
-returns topologically consistent geometry (Cook/DuPage share 2,034 exact
-vertices), which is what makes the dissolve sound.
+WHY A BUILD STEP RATHER THAN PER-COUNTY OUTLINES (reference-fork lesson kept
+verbatim in spirit): the in-browser dissolve cancels an interior border only
+when the two neighbours' rings share EXACT coordinates, and independently
+simplified per-county files don't. A single TIGERweb query returns
+topologically consistent geometry, which is what makes the dissolve sound.
 
 The dissolve mirrors the app's `coverageOutlineRings` exactly: a segment walked
 by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
 edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
-Effingham exercised that path on 2026-08-04 (the first island, §2.5.1 checklist):
-the shipped file became a MultiPolygon whose second polygon was the island's own
-OUTER ring — verified by anchor, not by eye, because an island mis-nested as a
-hole renders identically and answers False to every containment test inside it.
-(Effingham merged back into the mainland on 2026-08-11 when Shelby — bordering
-it AND Macon/Montgomery — shipped as the 49th dispatched county; Edwards keeps
-the file a MultiPolygon, exercising the same nesting.)
+Wisconsin's 20 roster counties exercise that path from day one: the shipped
+file is a MultiPolygon of 9 separate regions, each verified by anchor, not by
+eye — a region mis-nested as a hole renders identically and answers False to
+every containment test inside it (the reference fork's island lesson).
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json

@@ -21,7 +21,7 @@ checkpoint with a stale date is a checkpoint that didn't happen.
 
 | When | What | Last done |
 |---|---|---|
-| Shortly after **15 January** and **15 July** | Wis. Stat. 5.15(4)(br)1 makes every county file its current supervisory district boundaries with LTSB on those two dates, and LTSB republishes the statewide layer. Re-run `wi/scripts/build_wi_supervisory_districts.py`: its gates (1,589 features, 72 counties, 1..n numbering per county, ward reconciliation) are what catch a county whose plan changed or whose filing broke. A count change is expected news, not a failure — read it, then move the expected number | 2026-08-25 (July 2026 filing; 1,590 districts shipped) |
+| Shortly after **15 January** and **15 July** | Wis. Stat. 5.15(4)(br)1 makes every county file its current supervisory district boundaries with LTSB on those two dates, and LTSB republishes the statewide layer. Re-run `wi/scripts/build_wi_supervisory_districts.py`: its gates (1,589 LTSB features raw — the SHIPPED file is 1,590, −16 LTSB Trempealeau +17 from the county's own service — 72 counties, 1..n numbering per county, ward reconciliation) are what catch a county whose plan changed or whose filing broke. A count change is expected news, not a failure — read it, then move the expected number | 2026-08-25 (July 2026 filing; 1,590 districts shipped) |
 | Same run | Re-check **Trempealeau**, the one county whose geometry comes from its own service rather than LTSB's. If a future LTSB filing restores its district 15, drop the override and ship the statewide file whole — the builder will tell you, because the override's own guards fail if the county's layer stops publishing 17 districts numbered 1..17 | 2026-08-25 (LTSB still merges 15 into 17) |
 
 ---
