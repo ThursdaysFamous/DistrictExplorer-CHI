@@ -50,13 +50,19 @@ jobs:
       - name: Rebuild the county clerk roster
         run: python3 wi/scripts/build_wi_county_clerk_roster.py
 
+      # phase 4 PR 2: the counties whose own officer pages measure open are
+      # re-read weekly — office phone/e-mail/link, plus a name witness that
+      # supersedes the book where a county has visibly moved past it
+      - name: Scrape county officer contact pages
+        run: python3 wi/scripts/wi_county_officer_contact_scraper.py
+
       - name: Rebuild the county officer roster
         # phase 4: the scraper above also parses the Blue Book's other
         # county-officer tables into its second intermediate; this builder
-        # gates the chair-seats witness and the Menominee pin, and reconciles
-        # the board chair against the weekly board roster (the Thursday
-        # workflow rebuilds this file too — whichever runs after a change
-        # ships it)
+        # gates the chair-seats witness and the Menominee pin, reconciles
+        # the board chair against the weekly board roster, and merges the
+        # contact scrape (the Thursday workflow rebuilds this file too —
+        # whichever runs after a change ships it)
         run: python3 wi/scripts/build_wi_county_officer_roster.py
 
       - name: Validate app + data files

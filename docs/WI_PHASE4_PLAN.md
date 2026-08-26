@@ -92,7 +92,17 @@ sentences carry that merge more honestly than a near-duplicate county layer
 draws it. (NYC's `district-attorney` layer exists because boroughs ≠ its
 other tilings; Wisconsin's units ARE the county fabric minus one seam.)
 
-## PR 2 — The county-by-county officer scrape (NEXT: contact + currency, the attrition route)
+## PR 2 — The county-by-county officer scrape (contact + currency, the attrition route) — TRANCHE 1 DELIVERED 2026-08-26
+
+Tranche 1 shipped ten counties (Brown, Burnett, Dane, Eau Claire, Green,
+Walworth, Washington, Waukesha, Winnebago, Wood — 53 offices checked
+weekly) and paid for itself on the first measurement: Waukesha's own page
+records that the Blue Book's County Executive Paul Farrow died in office
+(the interim, Tom Farley, now ships from that page, with a builder pin
+refusing the stale name even if the scrape fails), and Walworth's medical
+examiner had turned over. Tranche 2 leads: Portage/Jefferson URL shapes,
+Wood's DA/courts/deeds paths, Dane's courts/ME surfaces, Bayfield's
+sub-directory enumeration, and the remaining 12 roster counties.
 
 The officer rows ship dated and contact-free because no STATEWIDE second
 publisher measures open — but that is a fact about aggregators, not about

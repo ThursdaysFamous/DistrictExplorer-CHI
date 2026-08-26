@@ -8450,7 +8450,21 @@ function initWisconsinExplorer() {
           if (entry.party) bits.push(String(entry.party));
           if (entry.note) bits.push(String(entry.note));
           if (entry.appointed) bits.push("Appointed");
+          if (entry.source === "county-page") {
+            // the county's own page named this officer where the Blue Book
+            // names someone else — the fresher county source ships, and
+            // the row says where the name came from
+            bits.push("Per the county's own page");
+          }
           if (bits.length) person.note = bits.join(" · ");
+          // contact + office link ride only where the contact scrape
+          // witnessed this officer on the county's own page
+          if (entry.phone) person.phone = String(entry.phone);
+          if (entry.email) person.email = String(entry.email);
+          if (entry.url) {
+            var officeUrl = safeHttpUrl(entry.url);
+            if (officeUrl) person.links = [{ label: "Office page", url: officeUrl }];
+          }
           return person;
         }
         var rows = [
@@ -8497,6 +8511,12 @@ function initWisconsinExplorer() {
             // rather than naming someone the county no longer seats.
             extras.push({ label: "Board Chair", value: String(o.chair.reason) });
           }
+          if (o.executive && o.executive.withheld && o.executive.reason) {
+            // the STALE_EXEC pin: the book's executive is measurably out of
+            // office and the county page could not be read this build —
+            // state the absence rather than shipping the stale name
+            extras.push({ label: "Executive", value: String(o.executive.reason) });
+          }
           if (o.districtAttorney && o.districtAttorney.sharedUnit) {
             extras.push({ label: "Prosecutorial unit", value: String(o.districtAttorney.sharedUnit) });
           }
@@ -8506,6 +8526,10 @@ function initWisconsinExplorer() {
           if (chairSuperseded) {
             asOfNote += " The board chair is the exception: it is read weekly " +
               "from the county's own board page.";
+          }
+          if (o.contactChecked) {
+            asOfNote += " The rows showing a phone number or office-page " +
+              "link are checked weekly against the county's own pages.";
           }
           extras.push({ label: "As of", value: asOfNote });
           wrap.appendChild(renderFieldStack(extras));
