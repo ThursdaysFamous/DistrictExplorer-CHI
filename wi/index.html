@@ -9196,17 +9196,20 @@ function initWisconsinExplorer() {
         wrap.appendChild(renderSectionLabel("Citywide"));
         wrap.appendChild(renderPersonRows([directorRow(result.atLarge, true)], { tinted: true }));
       }
-      if (result.office) {
-        var contact = cardContactLine({
+      // the office contact renders through renderLinkRow, never as a bare
+      // cardContactLine: the linkrow container carries the card's row
+      // padding, and a raw contact line dropped into card-flush sits flush
+      // against the card edge (shipped that way at first build — the phone
+      // number's opening paren clipped on the card border)
+      if (result.office && (result.office.phone || result.office.email ||
+          safeHttpUrl(result.office.contactUrl))) {
+        wrap.appendChild(renderSectionLabel("Board office"));
+        wrap.appendChild(renderLinkRow({
           phone: result.office.phone ? String(result.office.phone) : null,
           email: result.office.email ? String(result.office.email) : null,
           links: safeHttpUrl(result.office.contactUrl)
             ? [{ label: "Contact form", url: safeHttpUrl(result.office.contactUrl) }] : []
-        });
-        if (contact) {
-          wrap.appendChild(renderSectionLabel("Board office"));
-          wrap.appendChild(contact);
-        }
+        }));
       }
       return wrap;
     },
