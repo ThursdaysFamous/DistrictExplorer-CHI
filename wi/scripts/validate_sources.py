@@ -186,6 +186,28 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "wi-court-of-appeals",
+        "app_file": "wi-court-of-appeals-districts.json",
+        "source_url": "https://www.wicourts.gov/courts/appeals/index.htm",
+        "note": (
+            "The four appellate districts as county unions under a double witness "
+            "— Wis. Stat. 752.11 (unchanged since 1977) and this appeals page, "
+            "whose county lists the weekly roster scrape re-asserts. Rebuild with "
+            "wi/scripts/build_wi_court_of_appeals.py only if either witness moves."
+        ),
+    },
+    {
+        "layer": "wi-court-of-appeals",
+        "app_file": "wi-court-of-appeals-roster.json",
+        "source_url": "https://www.wicourts.gov/contact/Court_of_Appeals.html",
+        "note": (
+            "The sixteen-judge bench (4/4/3/5, gated) with roles, phones and "
+            "chambers — read from this page's CONTENT blocks, never the judges "
+            "index's stale nav list; refreshed weekly by "
+            "update-wi-court-of-appeals-roster.yml."
+        ),
+    },
+    {
         "layer": "county-board",
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
