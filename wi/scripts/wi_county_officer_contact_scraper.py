@@ -34,16 +34,27 @@ each page PINNED, and writes an intermediate the officers builder merges:
     the builder refuses to ship the book's name for this county even
     when this scrape fails (STALE_EXEC there).
 
-MEASURED REFUSALS AND MISSES (tranche 2 work, not silently skipped):
+MEASURED REFUSALS AND MISSES (tranche 3 work, not silently skipped):
 county.milwaukee.gov and racinecounty.gov answer 403 to this client
-(their board rosters ship from their GIS layers for the same reason);
-Bayfield's directory.aspx is an 84KB index of sub-directories, not a
-staff list; Portage's and Jefferson's department URL shapes are
-unresolved; Waukesha's medical-examiner page deliberately names no
-person; Dane's treasurer subdomain is a payment portal naming nobody,
-its medical-examiner subdomain does not answer, and its clerk-of-courts
-page is unlocated. A county below its pinned floor is SKIPPED with a
-loud line, never shipped partial-silent.
+(their board rosters ship from their GIS layers for the same reason).
+BAYFIELD's CivicPlus pages render as ~1KB JS shells to a non-JS client,
+it has no /Directory staff list, and its directory.aspx carries no staff
+rows. VILAS publishes department pages that name no officer (3-7KB
+stubs). DANE's medical-examiner and clerk-of-courts subdomains do not
+resolve from this network (proxy 502), and its treasurer subdomain is a
+payment portal naming nobody. DUNN's administration page does not name
+the county manager, dunncountysheriff.com is a JS shell, and its
+DA/deeds/examiner pages 404 at every conventional path — so Dunn ships
+its two witnessed offices only. JEFFERSON's own homepage links no
+sheriff page and the conventional path 404s. GRANT publishes no
+coroner/medical-examiner page at either conventional path. MARQUETTE's
+DA page is a 1KB shell and its treasurer page is unlocated (finance
+sits under administration). VERNON's DA page is a 2KB stub naming no
+one and its clerk-of-courts page 404s (both spellings). WASHBURN's
+clerk-of-courts page 404s (both spellings). WAUSHARA publishes a County
+Clerk page but no clerk-of-courts page. Waukesha's medical-examiner
+page deliberately names no person. A county below its pinned floor is
+SKIPPED with a loud line, never shipped partial-silent.
 """
 
 import json
@@ -94,13 +105,14 @@ COUNTIES = {
         "registerOfDeeds": "https://www.browncountywi.gov/departments/register-of-deeds/general-information/",
         "coroner": "https://www.browncountywi.gov/departments/medical-examiner/",
         "executive": "https://www.browncountywi.gov/government/county-executive/"}},
-    "Washington": {"mode": "pages", "floor": 5, "offices": {
+    "Washington": {"mode": "pages", "floor": 6, "offices": {
         "executive": "https://www.washcowisco.gov/departments/county_executive",
         "districtAttorney": "https://www.washcowisco.gov/departments/district_attorney",
         "treasurer": "https://www.washcowisco.gov/departments/county_treasurer",
         "registerOfDeeds": "https://www.washcowisco.gov/departments/register_of_deeds",
         "coroner": "https://www.washcowisco.gov/departments/medical_examiner",
-        "clerkOfCircuitCourt": "https://www.washcowisco.gov/departments/clerk_of_circuit_court"}},
+        "clerkOfCircuitCourt": "https://www.washcowisco.gov/departments/clerk_of_circuit_court",
+        "sheriff": "https://www.washcowisco.gov/elected_officials/sheriff_s_office"}},
     "Eau Claire": {"mode": "pages", "floor": 4, "offices": {
         "sheriff": "https://eauclairecounty.gov/departments/sheriff/index.php",
         "districtAttorney": "https://eauclairecounty.gov/departments/district_attorney/index.php",
@@ -108,23 +120,75 @@ COUNTIES = {
         "treasurer": "https://eauclairecounty.gov/departments/treasurer/index.php",
         "registerOfDeeds": "https://eauclairecounty.gov/departments/register_of_deeds/index.php"}},
     # woodcountywi.gov resets connections intermittently — the fetch
-    # retries carry it; DA / clerk of courts / register of deeds URL
-    # shapes are unresolved (tranche 2)
-    "Wood": {"mode": "pages", "floor": 2, "offices": {
+    # retries carry it; its paths ABBREVIATE (DA, ROD, Courts), which is
+    # why the conventional guesses 404'd in tranche 1
+    "Wood": {"mode": "pages", "floor": 4, "offices": {
         "sheriff": "https://woodcountywi.gov/Departments/Sheriff/",
         "treasurer": "https://woodcountywi.gov/Departments/Treasurer/",
-        "coroner": "https://woodcountywi.gov/Departments/Coroner/"}},
+        "coroner": "https://woodcountywi.gov/Departments/Coroner/",
+        "clerkOfCircuitCourt": "https://woodcountywi.gov/Departments/Courts/",
+        "registerOfDeeds": "https://woodcountywi.gov/Departments/ROD/"}},
     # Dane publishes per-office SUBDOMAINS, not paths
     "Dane": {"mode": "pages", "floor": 3, "offices": {
         "sheriff": "https://danesheriff.com/",
         "executive": "https://exec.danecounty.gov/",
         "districtAttorney": "https://da.danecounty.gov/",
         "registerOfDeeds": "https://rod.danecounty.gov/"}},
-    "Waukesha": {"mode": "pages", "floor": 2, "offices": {
+    "Waukesha": {"mode": "pages", "floor": 3, "offices": {
         "districtAttorney": "https://www.waukeshacounty.gov/district-attorney/",
         "treasurer": "https://www.waukeshacounty.gov/treasurer/",
-        "registerOfDeeds": "https://www.waukeshacounty.gov/register-of-deeds/"},
+        "registerOfDeeds": "https://www.waukeshacounty.gov/register-of-deeds/",
+        "sheriff": "https://www.waukeshacounty.gov/sheriff/"},
         "interim_exec": "https://www.waukeshacounty.gov/county-executive/"},
+    "Grant": {"mode": "pages", "floor": 5, "offices": {
+        "sheriff": "https://www.co.grant.wi.gov/grant-county-sheriffs-office/",
+        "districtAttorney": "https://www.co.grant.wi.gov/district-attorney/",
+        "treasurer": "https://www.co.grant.wi.gov/county-treasurer/",
+        "clerkOfCircuitCourt": "https://www.co.grant.wi.gov/clerk-of-court/",
+        "registerOfDeeds": "https://www.co.grant.wi.gov/register-of-deeds/",
+        "executive": "https://www.co.grant.wi.gov/county-administrator/"}},
+    "Jefferson": {"mode": "pages", "floor": 5, "offices": {
+        "executive": "https://www.jeffersoncountywi.gov/administration/index.php",
+        "treasurer": "https://www.jeffersoncountywi.gov/county_treasurer/index.php",
+        "clerkOfCircuitCourt": "https://www.jeffersoncountywi.gov/courts___legal_services/clerk_of_courts/index.php",
+        "districtAttorney": "https://www.jeffersoncountywi.gov/courts___legal_services/district_attorney/index.php",
+        "coroner": "https://www.jeffersoncountywi.gov/medical_examiner/index.php",
+        "registerOfDeeds": "https://www.jeffersoncountywi.gov/register_of_deeds/index.php"}},
+    "Marquette": {"mode": "pages", "floor": 4, "offices": {
+        "executive": "https://www.marquettecountywi.gov/administration/",
+        "clerkOfCircuitCourt": "https://www.marquettecountywi.gov/clerk-of-courts/",
+        "coroner": "https://www.marquettecountywi.gov/medical-examiner/",
+        "sheriff": "https://www.marquettecountywi.gov/sheriff/",
+        "registerOfDeeds": "https://www.marquettecountywi.gov/register-of-deeds/"}},
+    "Polk": {"mode": "pages", "floor": 4, "offices": {
+        "sheriff": "https://www.polkcountywi.gov/government/elected_officials/sheriff/index.php",
+        "clerkOfCircuitCourt": "https://www.polkcountywi.gov/government/elected_officials/clerk_of_courts/index.php",
+        "registerOfDeeds": "https://www.polkcountywi.gov/government/elected_officials/register_of_deeds/index.php",
+        "districtAttorney": "https://www.polkcountywi.gov/government/divisions_and_departments/public_safety_public_works/district_attorney/index.php",
+        "treasurer": "https://www.polkcountywi.gov/government/elected_officials/treasurer/index.php"}},
+    "Vernon": {"mode": "pages", "floor": 3, "offices": {
+        "coroner": "https://www.vernoncountywi.gov/departments/county_coroner/index.php",
+        "treasurer": "https://www.vernoncountywi.gov/departments/county_treasurer/index.php",
+        "registerOfDeeds": "https://www.vernoncountywi.gov/departments/register_of_deeds/index.php",
+        "sheriff": "https://www.vernoncountywi.gov/departments/sheriff_s_office/index.php"}},
+    "Washburn": {"mode": "pages", "floor": 4, "offices": {
+        "executive": "https://co.washburn.wi.us/departments/administration-personnel/",
+        "treasurer": "https://co.washburn.wi.us/departments/county-treasurer/",
+        "districtAttorney": "https://co.washburn.wi.us/departments/district-attorney/",
+        "registerOfDeeds": "https://co.washburn.wi.us/departments/register-of-deeds/",
+        "sheriff": "https://www.washburnsheriff.org/"}},
+    "Waushara": {"mode": "pages", "floor": 5, "offices": {
+        "districtAttorney": "https://www.wausharacountywi.gov/12718/district-attorney",
+        "registerOfDeeds": "https://www.wausharacountywi.gov/12726/register-of-deeds",
+        "sheriff": "https://www.wausharacountywi.gov/12727/sheriffs-office",
+        "treasurer": "https://www.wausharacountywi.gov/12730/treasurer",
+        "coroner": "https://www.wausharacountywi.gov/41436/medical-examiner",
+        "executive": "https://www.wausharacountywi.gov/12681/administration"}},
+    # Dunn ships THIN on purpose: only two of its surfaces name their
+    # officer to a non-JS client (the docstring carries the rest)
+    "Dunn": {"mode": "pages", "floor": 2, "offices": {
+        "clerkOfCircuitCourt": "https://dunncountywi.gov/clerkofcourts",
+        "treasurer": "https://dunncountywi.gov/treasurer"}},
     "Winnebago": {"mode": "civicplus", "floor": 5,
                   "url": "https://www.winnebagocountywi.gov/directory.aspx"},
     "Burnett": {"mode": "civicplus", "floor": 5,
@@ -133,6 +197,8 @@ COUNTIES = {
               "url": "https://greencountywi.org/directory.aspx"},
     "Walworth": {"mode": "civicplus", "floor": 5,
                  "url": "https://co.walworth.wi.us/directory.aspx"},
+    "Portage": {"mode": "civicplus", "floor": 5,
+                "url": "https://www.co.portage.wi.gov/Directory"},
 }
 
 TAG_STRIP = re.compile(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>")
@@ -322,9 +388,9 @@ def main():
               file=sys.stderr)
         time.sleep(1)
 
-    if len(out) < 6:
+    if len(out) < 14:
         raise SystemExit("only %d counties resolved — the tranche floor is "
-                         "6; something structural broke" % len(out))
+                         "14; something structural broke" % len(out))
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)

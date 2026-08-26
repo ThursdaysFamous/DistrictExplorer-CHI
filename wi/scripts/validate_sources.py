@@ -507,12 +507,14 @@ PROVENANCE = [
             "open — except the BOARD CHAIR, reconciled weekly against "
             "county-board-members.json (a chair the county's own page marks "
             "supersedes the book's; a book chair absent from a complete "
-            "roster is withheld with the reason on the card) — and, tranche "
-            "1 of the per-county scrape, ten counties' own officer pages "
+            "roster is withheld with the reason on the card) — and, via the "
+            "per-county scrape (tranches 1-2), nineteen counties' own "
+            "officer pages "
             "(wi_county_officer_contact_scraper.py): contact and a "
             "per-office name witness, superseding the book where a county "
             "moved past it (Waukesha's interim executive after the book's "
-            "died in office; Walworth's medical-examiner turnover). The "
+            "died in office; Portage's new county executive; Walworth's "
+            "medical-examiner turnover). The "
             "2027-28 edition moves this URL — the biennium row in WATCH.md."
         ),
     },
