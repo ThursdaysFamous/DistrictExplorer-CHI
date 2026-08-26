@@ -101,8 +101,8 @@ EXPECT_LAYER_IDS = [
     "law-service", "fire-service", "county-board", "county-subdivision",
     "municipality", "zip-code", "mpd-district", "mps-school-board",
     "mpd-squad-area", "aldermanic-district", "ward",
-    "milwaukee-neighborhoods", "police-station", "fire-station",
-    "school-site", "library", "post-office",
+    "milwaukee-neighborhoods", "tid-district", "police-station",
+    "fire-station", "school-site", "library", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -128,6 +128,7 @@ GEOMETRY_FILES = {
     "psap-areas.json": (95, 95),  # 95 public safety answering points — the OEC's 205 effective NG911 PSAPBoundary polygons dissolved per agency (11 future-dated Expire rows KEPT, the case that proves the drop-by-date rule; 3 expired dropped). Same builder and gates as the fire/law files; an operator rebuild watched by the monthly source report.
     "ems-service-areas.json": (579, 579),  # 579 EMS dispatch areas — the OEC's 2,443 effective NG911 EmergencyMedicalServicesBoundary polygons dissolved per agency (34 expired rows dropped by date). Same builder and gates as the other three NG911 files; an operator rebuild watched by the monthly source report.
     "mpd-squad-areas.json": (25, 25),  # Milwaukee's 25 MPD squad areas — the city's own CC-BY layer server-reprojected, witnessed against the CKAN shapefile's area shares AND sample-verified inside their hundreds-digit districts (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints.
+    "tid-districts.json": (79, 79),  # Milwaukee's 79 active Tax Incremental Districts — the city's own CC-BY layer server-reprojected, dissolved TIDs dropped by date, witnessed against the CKAN shapefile's area shares scoped to the city's own STATUS flag (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints.
 }
 
 # file -> minimum key count (officeholder rosters).

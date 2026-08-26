@@ -10,6 +10,14 @@ queued behind the MPS board build, with the same two-surface machinery
   data/app/milwaukee-neighborhoods.json  the city's 190 named neighborhoods
                                          (planning/special_districts layer 4,
                                          field NEIGHBORHD)
+  data/app/tid-districts.json            the city's 79 active Tax
+                                         Incremental Districts (planning/
+                                         special_districts layer 8, key TID
+                                         + NAME + create year) — the only
+                                         layer here that does NOT tile the
+                                         city: most of Milwaukee is in no
+                                         TID and the app's standard empty
+                                         state answers there
   data/app/mpd-squad-areas.json          the 25 MPD squad areas — the beat
                                          analog (MPD/MPD_geography layer 1,
                                          field SQUADAREA), whose HUNDREDS
@@ -43,6 +51,7 @@ verbatim on the feature as NAME_RAW so nothing is lost.
 An OPERATOR rebuild; the monthly source report watches both endpoints.
 """
 
+import datetime
 import json
 import os
 import re
@@ -100,7 +109,56 @@ LAYERS = [
                             "DISTRICT": str(int(a["SQUADAREA"]) // 100)},
         "verify": "squads_in_districts",
     },
+    {
+        # TIDs do NOT tile the city — most of Milwaukee is in no TID, and
+        # the app's standard empty state is the honest answer there. The
+        # layer carries only ACTIVE districts (every DISSOLVE_DATE is null
+        # at first build; the effective() filter below drops any that gain
+        # a past one, the NG911 date discipline). CREATE_DATE is
+        # year-granular in the source and ships as the year alone.
+        "out": "tid-districts.json",
+        "rest": ("https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning"
+                 "/special_districts/MapServer/8"),
+        "shp": ("https://data.milwaukee.gov/dataset/dba70269-a380-40cc-8f4e-95f1477f8086"
+                "/resource/5431d388-4693-4e67-ae01-318eef43e1ee/download/tid.zip"),
+        "key": "TID",
+        # the shapefile's DBF truncates its key to DistrictNu ("DistrictNumber");
+        # same numbers, different column name — the witness pairs on it. The
+        # shapefile also keeps every DISSOLVED district (135 rows: 79 at
+        # STATUS 1, 56 at STATUS 0 — 15 of those with no dissolve date
+        # recorded, which is why the STATUS flag is the filter and the date
+        # is not); the witness is scoped to the city's own active flag
+        "shp_key": "DistrictNu",
+        "shp_filter": lambda row: row.get("STATUS") == "1",
+        "expect_n": 79,
+        "out_fields": "TID,NAME,CREATE_DATE,DISSOLVE_DATE",
+        "effective": "tid_effective",
+        "props": lambda a: {k: v for k, v in {
+            "TID": str(a["TID"]),
+            "NAME": str(a.get("NAME") or "").strip() or None,
+            "CREATED": tid_year(a.get("CREATE_DATE")),
+        }.items() if v},
+    },
 ]
+
+
+def tid_year(ms):
+    if not ms:
+        return None
+    return str(datetime.datetime.fromtimestamp(ms / 1000, datetime.timezone.utc).year)
+
+
+def tid_effective(feats):
+    """Drop a TID whose DISSOLVE_DATE has passed — a dissolved district no
+    longer diverts anyone's increment. All 79 are active at first build."""
+    now_ms = datetime.datetime.now(datetime.timezone.utc).timestamp() * 1000
+    keep = [f for f in feats
+            if not (f["properties"].get("DISSOLVE_DATE")
+                    and f["properties"]["DISSOLVE_DATE"] < now_ms)]
+    if len(keep) != len(feats):
+        print("tid-districts.json: dropped %d dissolved TID(s) by date"
+              % (len(feats) - len(keep)))
+    return keep
 
 
 def squads_in_districts(out_feats):
@@ -153,10 +211,13 @@ def neighborhood_case(raw):
 
 
 def build(layer):
-    url = (layer["rest"] + "/query?where=1%3D1&outFields=" + layer["key"] +
-           "&outSR=4326&geometryPrecision=6&f=geojson")
+    url = (layer["rest"] + "/query?where=1%3D1&outFields="
+           + layer.get("out_fields", layer["key"])
+           + "&outSR=4326&geometryPrecision=6&f=geojson")
     gj = json.loads(fetch(url))
     feats = gj.get("features") or []
+    if layer.get("effective"):
+        feats = globals()[layer["effective"]](feats)
     by_key = {}
     for f in feats:
         k = str(f["properties"].get(layer["key"])).strip()
@@ -187,7 +248,8 @@ def build(layer):
         return re.sub(r"\s+", "", str(k)).upper()
     witness = {}
     for k, v in shp_areas(fetch(layer["shp"], binary=True),
-                          key_field=layer["key"]).items():
+                          key_field=layer.get("shp_key", layer["key"]),
+                          row_filter=layer.get("shp_filter")).items():
         witness[kfold(k)] = (str(k).strip(), v)
     rest_by_fold = {kfold(k): k for k in by_key}
     if sorted(witness) != sorted(rest_by_fold):

@@ -515,10 +515,32 @@
       }
     },
     {
+      "id": "tid-district",
+      "label": "Tax Incremental District (TID)",
+      "group": "geography",
+      "area_rank": 24,
+      "rank_note": "79 active tax incremental districts — small finance-overlay slices, below the neighborhood fabric's average and above the amenity points; the one city layer that does not tile the city",
+      "source": {
+        "answers": "The active Tax Incremental District (Wis. Stat. 66.1105) containing the point, with its number and creation year — a municipal finance overlay that elects no one, the reference instance's tif-district concept under Wisconsin's own name. Most of Milwaukee is in no TID, and the card's standard empty state says exactly that; outside Milwaukee the layer hides.",
+        "boundary": [
+          {
+            "label": "City of Milwaukee — Tax Incremental Districts, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py; the live layer serves only ACTIVE districts, and the builder drops any that gain a past dissolve date",
+            "url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8"
+          },
+          {
+            "label": "City of Milwaukee open data — the same districts as a shapefile (CC-BY), the build-time witness scoped to the city's own STATUS flag, because the shapefile keeps all 56 retired TIDs the live layer omits",
+            "url": "https://data.milwaukee.gov/dataset/tax-incremental-districts-tid"
+          }
+        ],
+        "people": "None, deliberately: a TID elects no one — it is a finance overlay adopted by the Common Council, whose members the aldermanic layer already names.",
+        "applies": "City of Milwaukee only — the layer hides everywhere else, and inside the city most points are honestly in no TID."
+      }
+    },
+    {
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
-      "area_rank": 24,
+      "area_rank": 25,
       "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
@@ -536,7 +558,7 @@
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
-      "area_rank": 25,
+      "area_rank": 26,
       "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
@@ -554,7 +576,7 @@
       "id": "school-site",
       "label": "School Location, incl. private",
       "group": "schools",
-      "area_rank": 26,
+      "area_rank": 27,
       "rank_note": "Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.",
@@ -576,7 +598,7 @@
       "id": "library",
       "label": "Library",
       "group": "geography",
-      "area_rank": 27,
+      "area_rank": 28,
       "rank_note": "Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.",
@@ -594,7 +616,7 @@
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 28,
+      "area_rank": 29,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -789,6 +811,12 @@
         "min_features": 25,
         "max_features": 25,
         "note": "Milwaukee's 25 MPD squad areas — the city's own CC-BY layer server-reprojected, witnessed against the CKAN shapefile's area shares AND sample-verified inside their hundreds-digit districts (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints."
+      },
+      {
+        "file": "tid-districts.json",
+        "min_features": 79,
+        "max_features": 79,
+        "note": "Milwaukee's 79 active Tax Incremental Districts — the city's own CC-BY layer server-reprojected, dissolved TIDs dropped by date, witnessed against the CKAN shapefile's area shares scoped to the city's own STATUS flag (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints."
       }
     ],
     "rosters": [
@@ -850,7 +878,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v15",
+    "cache_name": "districtry-wi-shell-v16",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
