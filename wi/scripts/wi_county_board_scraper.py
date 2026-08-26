@@ -265,6 +265,128 @@ def fetch(url, timeout=45):
     raise RuntimeError("could not fetch %s (%s)" % (url, last))
 
 
+# COUNTIES WHOSE ROSTER RIDES THEIR OWN ARCGIS LAYER, NOT A PAGE. The
+# "blocked county SITE is not a blocked county" lesson, applied at home:
+# county.milwaukee.gov and racinecounty.com both refuse automated clients
+# (a Cloudflare challenge and an Akamai deny — the county-officials gap
+# record carries the measurements), and both counties turned out to publish
+# their board ON THEIR OWN GIS instead, supervisor names as attributes on
+# the district features. Currency is measured, not assumed: Milwaukee's
+# layer was data-edited 2026-06-29 and Racine's 2026-04-23 — both after the
+# April 2026 spring election that reseated every board — and Milwaukee is
+# additionally WITNESSED on every run against the county's own Legistar web
+# API (body 138, "Milwaukee County Board of Supervisors"): the layer's name
+# set and Legistar's current-office set must agree exactly, or the county
+# fails loudly. Legistar is a witness and never a source — its OData date
+# filter is silently ignored server-side (filter client-side) and its end
+# dates can be aspirational.
+#
+# Outagamie is DELIBERATELY not here: its board moved to outagamie.gov,
+# which answered one probe on 2026-08-25 and refused every later one
+# (HTTP 403 across UAs) — the gap record carries both measurements, and a
+# roster this client cannot re-verify weekly does not ship.
+ARCGIS_COUNTIES = [
+    {
+        "fips": "55079", "name": "Milwaukee", "seats": 18,
+        "layer": ("https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/"
+                   "services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"),
+        "fields": {"district": "District_Nbr", "name": "Sup_Name",
+                    "email": "Email_Addr", "url": "Website_Url"},
+        "source_url": ("https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/"
+                        "services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"),
+        "witness": {"client": "milwaukeecounty", "body_id": 138},
+    },
+    {
+        "fips": "55101", "name": "Racine", "seats": 21,
+        "layer": ("https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/"
+                   "services/County_Board_of_Supervisors_WFL1/FeatureServer/0"),
+        "fields": {"district": "DISTRICTID", "name": "REPNAME", "email": "Contact"},
+        "source_url": ("https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/"
+                        "services/County_Board_of_Supervisors_WFL1/FeatureServer/0"),
+    },
+]
+
+
+def _fetch_json(url):
+    req = urllib.request.Request(url, headers=UA)
+    ctx = ssl.create_default_context()
+    with urllib.request.urlopen(req, timeout=45, context=ctx) as r:
+        return json.load(r)
+
+
+def _fold_person(name):
+    """First + last token, diacritics stripped: the layer prints
+    'Caroline Gómez-Tom' and 'Sheldon A. Wasserman' where Legistar prints
+    'Caroline Gomez-Tom' and 'Sheldon Wasserman' — same people, three
+    styling axes (accents, middle initials, hyphens), so the witness match
+    folds all three rather than failing on typography."""
+    import unicodedata
+    flat = unicodedata.normalize("NFKD", str(name))
+    flat = "".join(ch for ch in flat if not unicodedata.combining(ch))
+    toks = [t for t in re.split(r"[^A-Za-z]+", flat.lower()) if len(t) > 1]
+    if not toks:
+        return ""
+    return toks[0] + "|" + toks[-1]
+
+
+def scrape_arcgis_county(spec):
+    """District -> member rows read as ATTRIBUTES off the county's own layer."""
+    fields = spec["fields"]
+    out_fields = ",".join(v for v in fields.values())
+    data = _fetch_json(spec["layer"] + "/query?where=1%3D1&outFields=" +
+                       out_fields + "&returnGeometry=false&f=json")
+    feats = data.get("features") or []
+    rows = {}
+    for f in feats:
+        a = f.get("attributes") or {}
+        d = a.get(fields["district"])
+        member = a.get(fields["name"])
+        if d is None or not member:
+            continue
+        d = int(str(d).strip())
+        member = str(member).strip()
+        role = None
+        # Milwaukee packs the officer's ROLE into the name field for its two
+        # officers ("Chairwoman Marcelia Nicholson-Bovell") — the measured
+        # trap; the role moves to its own field, never ships inside a name.
+        rm = re.match(r"^(Chairwoman|Chairman|Chairperson|Chair|Vice[- ]?Chair(?:woman|man)?|1st Vice[- ]?Chair(?:woman|man)?|2nd Vice[- ]?Chair(?:woman|man)?)\s+(.+)$", member, re.I)
+        if rm:
+            role = rm.group(1).strip()
+            member = rm.group(2).strip()
+        email = a.get(fields.get("email")) if fields.get("email") else None
+        if email:
+            # Milwaukee packs its addresses as "mailto:x@y?subject=" — unwrap
+            email = re.sub(r"^mailto:", "", str(email)).split("?")[0].strip() or None
+        entry = {"name": member, "vacant": False, "role": role}
+        if email:
+            entry["email"] = email
+        if fields.get("url") and a.get(fields["url"]):
+            entry["url"] = str(a[fields["url"]]).strip()
+        rows[d] = entry
+    if set(rows) != set(range(1, spec["seats"] + 1)):
+        missing = sorted(set(range(1, spec["seats"] + 1)) - set(rows))
+        raise RuntimeError("%s: layer resolved %d of %d districts (missing %s)"
+                           % (spec["name"], len(rows), spec["seats"], missing))
+    witness = spec.get("witness")
+    if witness:
+        recs = _fetch_json("https://webapi.legistar.com/v1/%s/officerecords"
+                           "?$filter=OfficeRecordBodyId+eq+%d&$top=400"
+                           % (witness["client"], witness["body_id"]))
+        # end-date filtering is CLIENT-side: the server ignores date filters,
+        # and the cutoff is TODAY — an April term-end must not count as current
+        today = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
+        current = {_fold_person(r["OfficeRecordFullName"]) for r in recs
+                   if (r.get("OfficeRecordEndDate") or "9999") > today}
+        layer_names = {_fold_person(v["name"]) for v in rows.values()}
+        if layer_names != current:
+            raise RuntimeError(
+                "%s: the GIS layer and the Legistar witness disagree on the bench "
+                "(layer-only: %s; legistar-only: %s) — do not ship either side"
+                % (spec["name"], sorted(layer_names - current),
+                   sorted(current - layer_names)))
+    return {str(d): rows[d] for d in sorted(rows)}
+
+
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
     lines = to_lines(fetch(url))
@@ -301,16 +423,23 @@ def main():
     scraped_at = os.environ.get("SCRAPED_AT") or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
     counties, failures = {}, []
-    for fips, name, seats, strategy, url in COUNTIES:
+    jobs = [(c["fips"], c["name"], c["seats"], "arcgis", c) for c in ARCGIS_COUNTIES]
+    jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
+    for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
             continue
         try:
-            districts = scrape_county(fips, name, seats, strategy, url)
+            if strategy == "arcgis":
+                districts = scrape_arcgis_county(src)
+                source_url = src["source_url"]
+            else:
+                districts = scrape_county(fips, name, seats, strategy, src)
+                source_url = src
         except Exception as e:      # noqa: BLE001 - one county never fails the run
             failures.append("%s (%s): %s" % (name, fips, e))
             print("  MISS %-12s %s" % (name, e), file=sys.stderr)
             continue
-        counties[fips] = {"county": name, "seats": seats, "source_url": url,
+        counties[fips] = {"county": name, "seats": seats, "source_url": source_url,
                           "scraped_at": scraped_at, "districts": districts}
         vac = sum(1 for d in districts.values() if d["vacant"])
         print("  ok   %-12s %d seats%s" % (name, seats, " (%d vacant)" % vac if vac else ""),
