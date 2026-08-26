@@ -2766,6 +2766,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .dpf-independence a { color: var(--accent-deep); text-decoration: none; }
   .dpf-independence a:hover { text-decoration: underline; }
   .dpf-links { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 8px; }
+  /* The support line is the one thing in this foot a reader is being ASKED to
+     act on, so it is not a seventh equal item in .dpf-links — which is exactly
+     what it was: "💛 Support this project", one of six, in a panel foot, on a
+     project whose landing page never mentioned funding at all. Quiet, not loud:
+     a civic tool that nags is a civic tool people stop opening. */
+  .dpf-support {
+    margin: 0 0 8px; padding: 7px 9px;
+    background: var(--dst-brand-tint-soft);
+    border: 1px solid var(--dst-brand-line);
+    border-radius: 7px;
+    color: var(--slate-soft);
+  }
+  .dpf-support a { color: var(--accent-deep); text-decoration: none; }
+  .dpf-support a:hover { text-decoration: underline; }
   .dpf-links a { color: var(--accent-deep); text-decoration: none; }
   .dpf-links a:hover { text-decoration: underline; }
   .districtry-panel-foot .footer-link-btn {
@@ -3683,9 +3697,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Geocoding © OpenStreetMap contributors</a>
         <a href="../privacy.html">Privacy</a>
         <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">💛 Support this project</a>
+        <a href="../sponsorship.html">Sponsorship</a>
         <a href="https://overberg.co" target="_blank" rel="noopener">overberg.co</a>
       </div>
+      <p class="dpf-support">Unfunded and run at personal cost. <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">Sponsor it on GitHub</a> to keep the rosters current — it buys no placement and no influence over any answer here (<a href="../sponsorship.html">policy</a>).</p>
       <button type="button" id="feedback-btn" class="footer-link-btn">💬 Report a bug or leave a comment</button>
     <!-- ==== ENGINE:BEGIN metro-links-html ==== -->
     <div class="footer-metros" id="footer-metros" hidden>
