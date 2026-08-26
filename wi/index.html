@@ -5800,6 +5800,7 @@ function initWisconsinExplorer() {
     "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
     "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
+    "mps-school-board",  // Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer
     "aldermanic-district", // 838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "police-station",    // Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points
@@ -9110,6 +9111,110 @@ function initWisconsinExplorer() {
     }
   });
 
+  /* ---------- 21. MPS School Board — the fleet's second elected school board ----------
+   * City-scoped (Wisconsin's first coverage-gated layer): statute names the
+   * districted minority of Wisconsin school boards exactly — MPS (ch. 119,
+   * eight numbered districts + one at-large director) and Racine Unified,
+   * whose geometry is PDF-only and stays the recorded gap rusd-school-board.
+   * Geometry is the city's own layer, reprojected by the city's own server
+   * and witnessed at build time against the CKAN shapefile's area shares
+   * (wi/scripts/build_mps_school_board_districts.py — the flaky
+   * milwaukeemaps host is fetched at BUILD TIME only, never here). The
+   * roster is the district's own directors page, cross-witnessed against
+   * the board index's committee lists (mps_school_board_scraper.py, weekly
+   * CI). Outside the MPS tiling — anywhere that isn't Milwaukee — the layer
+   * hides entirely, the ERSB precedent. ---------- */
+  var loadMpsBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mps-school-board-districts.json", {}, 2);
+  });
+  var loadMpsBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mps-school-board-members.json", {}, 2);
+  });
+  function milwaukeeCoverage(point) {
+    // the MPS tiling IS the city for this layer's purposes; a load failure
+    // rejects through to the engine's fail-open, so an outage never hides
+    // the toggle for a Milwaukee reader
+    return loadMpsBoardDistricts().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  registerLayer({
+    id: "mps-school-board",
+    group: "schools",
+    label: "MPS School Board District",
+    coverage: milwaukeeCoverage,
+    overlay: {
+      load: loadMpsBoardDistricts,
+      // the reference instance's elected-school-board green, kept for parity
+      style: { color: "#2E8C6A", weight: 2, fillColor: "#2E8C6A", fillOpacity: 0.05, dashArray: "2 2" }
+    },
+    hoverName: function (feature) {
+      var d = findPropCI(feature.properties || {}, ["district"]);
+      return d != null ? "MPS Board District " + String(d) : null;
+    },
+    query: function (point, seq) {
+      // the roster is a small same-origin file and its failure is not this
+      // layer's failure: the district still answers, identity-only
+      return Promise.all([
+        queryFeatureAt(loadMpsBoardDistricts, point),
+        loadMpsBoardMembers().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var district = String(findPropCI(feature.properties || {}, ["district"]));
+        var roster = parts[1];
+        return {
+          seq: seq,
+          district: district,
+          member: roster && roster.members ? roster.members[district] || null : null,
+          atLarge: roster && roster.members ? roster.members.AL || null : null,
+          office: roster ? roster.office || null : null,
+          sourceUrl: roster ? roster.sourceUrl : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return "MPS Board District " + result.district;
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      function directorRow(entry, atLarge) {
+        var person = { name: String(entry.name), badge: entry.role ? String(entry.role) : "Director" };
+        var bits = [];
+        if (atLarge) bits.push("Elected citywide");
+        if (entry.termExpires) bits.push("Term expires " + String(entry.termExpires));
+        if (bits.length) person.note = bits.join(" · ");
+        return person;
+      }
+      if (result.member) {
+        wrap.appendChild(renderPersonRows([directorRow(result.member, false)]));
+      }
+      if (result.atLarge) {
+        wrap.appendChild(renderSectionLabel("Citywide"));
+        wrap.appendChild(renderPersonRows([directorRow(result.atLarge, true)], { tinted: true }));
+      }
+      if (result.office) {
+        var contact = cardContactLine({
+          phone: result.office.phone ? String(result.office.phone) : null,
+          email: result.office.email ? String(result.office.email) : null,
+          links: safeHttpUrl(result.office.contactUrl)
+            ? [{ label: "Contact form", url: safeHttpUrl(result.office.contactUrl) }] : []
+        });
+        if (contact) {
+          wrap.appendChild(renderSectionLabel("Board office"));
+          wrap.appendChild(contact);
+        }
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.sourceUrl);
+      if (url) return { label: "Board directors", url: url };
+      return { label: "Milwaukee Board of School Directors", url: "https://www.milwaukeepublicschools.org/about/board" };
+    }
+  });
+
   /* ---------- 10. ZIP Code (statewide ZCTA) ----------
    * The Illinois statewide pattern: TIGERweb's ZCTA layer has NO STATE field
    * (ZCTAs cross state lines), so it can't use the STATE='55' filter the
@@ -9952,7 +10057,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10045,13 +10150,13 @@ function initWisconsinExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
-    "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
-    "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
-    "#5B2A86": "#B375F2", "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63",
-    "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294",
-    "#8C6D1F": "#DEB452", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880",
-    "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#C9A227": "#FEE195", "#D06A9C": "#FFBDDA",
-    "#D19133": "#FED7A7"};
+    "#1B7A3D": "#58CD7A", "#2E8C6A": "#62DAAC", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B",
+    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1",
+    "#4C8F59": "#83DC93", "#5B2A86": "#B375F2", "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE",
+    "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241",
+    "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1",
+    "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#C9A227": "#FEE195",
+    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

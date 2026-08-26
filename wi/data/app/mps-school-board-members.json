@@ -1,0 +1,48 @@
+{
+ "members": {
+  "1": {
+   "name": "Marva Herndon",
+   "termExpires": "April 2027"
+  },
+  "2": {
+   "name": "Erika Siemsen",
+   "termExpires": "April 2027"
+  },
+  "3": {
+   "name": "Darryl L. Jackson",
+   "termExpires": "April 2027"
+  },
+  "4": {
+   "name": "Dr. James Ferguson",
+   "role": "Vice President",
+   "termExpires": "April 2029"
+  },
+  "5": {
+   "name": "Christopher Fons",
+   "termExpires": "April 2029"
+  },
+  "6": {
+   "name": "Mimi Reza",
+   "termExpires": "April 2029"
+  },
+  "7": {
+   "name": "Dr. Kate Vannoy",
+   "termExpires": "April 2029"
+  },
+  "8": {
+   "name": "Megan O'Halloran",
+   "termExpires": "April 2027"
+  },
+  "AL": {
+   "name": "Missy Zombor",
+   "role": "President",
+   "termExpires": "April 2027"
+  }
+ },
+ "office": {
+  "contactUrl": "https://milwaukeepublicschools.justfoia.com/Forms/Launch/405e1169-4e24-429e-a608-58ee8ed8f8c0",
+  "email": "governance@milwaukeepublicschools.org",
+  "phone": "(414) 475-8284"
+ },
+ "sourceUrl": "https://www.milwaukeepublicschools.org/about/board/directors"
+}
