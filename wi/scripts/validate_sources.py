@@ -504,8 +504,11 @@ PROVENANCE = [
             "shipped supervisory geometry (Menominee's 7-vs-5 pinned), the "
             "shared Menominee/Shawano DA footnote encoded. Shipped DATED "
             "(April 2025): no second publisher for these offices measures "
-            "open. The 2027-28 edition moves this URL — the biennium row in "
-            "WATCH.md."
+            "open — except the BOARD CHAIR, reconciled weekly against "
+            "county-board-members.json (a chair the county's own page marks "
+            "supersedes the book's; a book chair absent from a complete "
+            "roster is withheld with the reason on the card). The 2027-28 "
+            "edition moves this URL — the biennium row in WATCH.md."
         ),
     },
     {

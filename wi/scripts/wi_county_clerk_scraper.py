@@ -395,6 +395,12 @@ def main():
     print("officers intermediate: %d counties -> %s" % (len(officers), OFFICERS_OUT),
           file=sys.stderr)
 
+    if "--officers-only" in argv:
+        # The county-board workflow re-runs ONLY the Blue Book officer parse —
+        # the dated base its chair reconciliation supersedes — and has no use
+        # for the association's 12-minute Crawl-delay-10 clerk crawl below.
+        return
+
     wcca = crawl_wcca(cache_dir)
     # association slugs title-case differently for multiword counties —
     # fold-match onto BASENAME; the association writes "Saint Croix" where

@@ -29,6 +29,32 @@ at 7 where the state's own LTSB aggregate carries 5 districts numbered
 1-5 — two state publications disagreeing — so Menominee's chair ships
 WITHOUT a seat count and any drift in the exception fails the build.
 
+THE CHAIR IS ALSO RECONCILED AGAINST THE WEEKLY BOARD ROSTER, because a
+chair is the one officer who is also a supervisor, and Wisconsin boards
+elect their chair at the organizational meeting after each April
+election — a cycle an April-2025 snapshot cannot see. Measured on
+2026-08-26, six of the 22 roster counties had visibly moved past the
+book: three chairs had rotated (the county's own page marks a different
+supervisor as chair), two had left their boards entirely, and one had
+changed her surname. So, per county, in order:
+
+  * the county's own board page MARKS a chair (a role containing "chair"
+    and not "vice") -> that name ships, sourced to the page — the same
+    rule the clerk row already follows, the fresher county source
+    superseding the book;
+  * no marked chair, and the book's chair still sits on the board
+    (surname + first initial against the roster — initials, nicknames
+    and case vary across the two publishers, so a full-name fold would
+    wrongly evict Burnett's Don/Donald Taylor) -> the dated book row
+    ships as before;
+  * no marked chair and the book's chair is ABSENT from a COMPLETE
+    roster -> the name is WITHHELD, with the reason on the card:
+    naming someone the county's own roster no longer seats fails the
+    honesty rules, and inventing the successor would too.
+
+The 50 counties with no published roster keep the dated book row — there
+is nothing to reconcile against. Every decision prints on the build log.
+
 The Menominee/Shawano DA rows carry the book's own footnote — one
 prosecutorial unit, one district attorney (Wis. Stat. ch. 978) — and the
 builder writes that sentence onto both counties' entries.
@@ -44,6 +70,7 @@ RAW = os.path.join(SCRIPT_DIR, ".cache", "wi_county_officers_raw.json")
 OUT = os.path.join(REPO_ROOT, "data", "app", "wi-county-officers.json")
 COUNTIES = os.path.join(REPO_ROOT, "data", "app", "state-counties.json")
 DIRECTORY = os.path.join(REPO_ROOT, "data", "app", "county-board-directory.json")
+MEMBERS = os.path.join(REPO_ROOT, "data", "app", "county-board-members.json")
 
 EXEC_LABELS = {
     "CE": ("County Executive", False),
@@ -60,9 +87,50 @@ SHARED_DA_NOTE = ("Menominee and Shawano counties comprise a single "
                   "prosecutorial unit served by one district attorney "
                   "(Wis. Stat. ch. 978).")
 
+WITHHELD_REASON = ("Not named: the Blue Book (April 2025) lists a chair who no "
+                   "longer appears on the county's own supervisor roster, and "
+                   "that roster does not mark a successor. The County Board "
+                   "District card names the sitting supervisors.")
+
 
 def fold(name):
     return "".join(ch for ch in name.lower() if ch.isalpha())
+
+
+def marks_chair(role):
+    # "Chair", "Chairwoman", "County Chairman" mark the chair; "Vice Chair",
+    # "Vice-Chair", "1st/2nd Vice Chair" never do (Polk marks all three
+    # officers, and its 2nd Vice Chair is the Blue Book's chair — rotated).
+    f = fold(role or "")
+    return "chair" in f and "vice" not in f
+
+
+assert marks_chair("County Chairman") and marks_chair("Chairwoman")
+assert not marks_chair("1St Vice Chair") and not marks_chair("Vice-Chair")
+
+
+_SUFFIXES = {"jr", "sr", "ii", "iii", "iv"}
+
+
+def surname_initial(name):
+    parts = [p for p in "".join(ch if ch.isalpha() or ch.isspace() else " "
+                                for ch in name).split()]
+    while len(parts) > 1 and parts[-1].lower() in _SUFFIXES:
+        parts.pop()
+    if not parts:
+        return None
+    return (parts[0][0].lower(), parts[-1].lower())
+
+
+def on_board(bb_name, roster_names):
+    # Presence test for the book's chair among the county's sitting
+    # supervisors. Deliberately LOOSE — surname + first initial — because the
+    # two publishers style the same person apart (Donald/Don Taylor, Steven
+    # J/Steve Nass, Tom/THOMAS KRAMER, Robert C/Robert Keeney). A false match
+    # keeps the dated book row (today's behavior); a false miss would wrongly
+    # WITHHOLD a sitting chair, which is the worse error.
+    key = surname_initial(bb_name)
+    return key is not None and any(surname_initial(n) == key for n in roster_names)
 
 
 def officer(cell, vacancy_note=True):
@@ -88,8 +156,18 @@ def main():
     directory = json.load(open(DIRECTORY))
     seats_by_fold = {fold(v["county"]): v["seats"] for v in directory.values()}
 
+    # The weekly board roster, grouped by county GEOID (its keys are
+    # GEOID + zero-padded district). The board builder already refuses a
+    # county whose scrape disagrees with the shipped geometry's seat count,
+    # so a county present here is a COMPLETE roster — which is what makes
+    # absence from it evidence rather than a scrape artifact.
+    board_by_geoid = {}
+    for key, rec in json.load(open(MEMBERS)).items():
+        board_by_geoid.setdefault(key[:5], []).append(rec)
+
     out_counties = {}
     mismatches = {}
+    superseded, confirmed, withheld = [], [], []
     for base, entry in counties_by_base.items():
         geoid = geoid_by_base[base]
         chair = dict(entry["chair"])
@@ -99,6 +177,41 @@ def main():
         if chair["seats"] != dir_seats:
             mismatches[base] = {"blueBook": chair["seats"], "geometry": dir_seats}
             chair.pop("seats")  # two state publications disagree: claim neither
+
+        roster = board_by_geoid.get(str(geoid))
+        if roster:
+            if len(roster) != dir_seats:
+                raise SystemExit(
+                    "%s: board roster carries %d seats against the directory's %d "
+                    "— the board builder's own gate should have caught this"
+                    % (base, len(roster), dir_seats))
+            marked = [r for r in roster
+                      if r.get("name") and marks_chair(r.get("role"))]
+            if len(marked) > 1:
+                raise SystemExit("%s: board page marks %d chairs: %s" %
+                                 (base, len(marked),
+                                  [r["name"] for r in marked]))
+            sitting = [r["name"] for r in roster if r.get("name")]
+            if marked:
+                page = marked[0]
+                superseded.append("%s: %s -> %s" % (base, chair.get("name"),
+                                                    page["name"]))
+                new_chair = {"name": page["name"],
+                             "source": "county-board-page"}
+                if page.get("sourceUrl"):
+                    new_chair["sourceUrl"] = page["sourceUrl"]
+                if "seats" in chair:
+                    new_chair["seats"] = chair["seats"]
+                chair = new_chair
+            elif on_board(chair.get("name", ""), sitting):
+                confirmed.append(base)
+            else:
+                withheld.append("%s (Blue Book chair: %s)" %
+                                (base, chair.get("name")))
+                new_chair = {"withheld": True, "reason": WITHHELD_REASON}
+                if "seats" in chair:
+                    new_chair["seats"] = chair["seats"]
+                chair = new_chair
 
         exec_cell = entry["executive"]
         executive = None
@@ -147,16 +260,36 @@ def main():
     n_da = sum(1 for c in out_counties.values() if c["districtAttorney"])
     n_sheriff = sum(1 for c in out_counties.values() if c["sheriff"])
     n_chair = sum(1 for c in out_counties.values() if c["chair"].get("name"))
-    if n_da != 72 or n_sheriff != 72 or n_chair != 72:
-        raise SystemExit("floors: chair %d, DA %d, sheriff %d — all must be 72"
-                         % (n_chair, n_da, n_sheriff))
+    if n_da != 72 or n_sheriff != 72 or n_chair + len(withheld) != 72:
+        raise SystemExit("floors: chair %d named + %d withheld, DA %d, sheriff "
+                         "%d — DA/sheriff must be 72 and every county's chair "
+                         "must be named or explained"
+                         % (n_chair, len(withheld), n_da, n_sheriff))
+    if len(withheld) > 6:
+        raise SystemExit(
+            "%d chairs withheld — measured state is 2 (Portage, Winnebago, "
+            "2026-08-26) and a spike this size is more likely a name-matching "
+            "or scrape defect than %d boards evicting their Blue Book chairs "
+            "at once. Re-measure county by county, then raise this cap "
+            "deliberately:\n  %s" % (len(withheld), len(withheld),
+                                     "\n  ".join(withheld)))
+
+    for line in superseded:
+        print("chair superseded by the county's own page — " + line,
+              file=sys.stderr)
+    for line in withheld:
+        print("chair WITHHELD — " + line, file=sys.stderr)
 
     with open(OUT, "w") as f:
         json.dump(out_counties, f, indent=1, ensure_ascii=False)
         f.write("\n")
     print("wrote %s — 72 counties, 7 offices each; chair seats witnessed against "
           "the shipped geometry (71 agree; Menominee pinned 7-vs-5); shared DA "
-          "note on Menominee and Shawano" % os.path.relpath(OUT, REPO_ROOT),
+          "note on Menominee and Shawano; chairs reconciled against the weekly "
+          "board roster (%d from county pages, %d confirmed dated, %d withheld, "
+          "%d counties with no roster to check)"
+          % (os.path.relpath(OUT, REPO_ROOT), len(superseded), len(confirmed),
+             len(withheld), 72 - len(board_by_geoid)),
           file=sys.stderr)
 
 
