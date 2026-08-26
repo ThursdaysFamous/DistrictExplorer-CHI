@@ -27,7 +27,7 @@
 // template starts at -v1: the app shell, icons, and the starter data
 // files bootstrap_state.py builds.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-wi-shell-v11";
+const CACHE_NAME = "districtry-wi-shell-v12";
 
 const SHELL_URLS = [
   "./",
@@ -37,6 +37,8 @@ const SHELL_URLS = [
   "./icons/apple-touch-icon.png",
   "./icons/icon-maskable-512.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js",
+  "./vendor/leaflet-maplibre-gl.js",
 ];
 
 // Boundary geometry (data/app/*.json, fetched lazily on first toggle).

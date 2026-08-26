@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-# Vendor Leaflet locally for the headless smoke tests.
+# Vendor Leaflet + MapLibre GL locally for the headless smoke tests.
 #
-# Why this exists: each instance's index.html loads Leaflet from
-# cdnjs.cloudflare.com. In the Claude Code web/sandbox environment the browser
-# (Playwright's Chromium) cannot reach that CDN — it does not use the agent
-# HTTPS proxy, so every request resets (ERR_CONNECTION_RESET → "L is not
-# defined" → the app never boots). curl *can* reach the CDN through the proxy,
-# so we fetch Leaflet here and let each instance's smoke_test.mjs serve it
-# same-origin via page.route(). Production and GitHub Actions CI are unaffected:
+# Why this exists: each instance's index.html loads Leaflet and MapLibre GL
+# (the vector-basemap renderer) from cdnjs.cloudflare.com. In the Claude Code
+# web/sandbox environment the browser (Playwright's Chromium) cannot reach that
+# CDN — it does not use the agent HTTPS proxy, so every request resets
+# (ERR_CONNECTION_RESET → "L is not defined" → the app never boots). curl *can*
+# reach the CDN through the proxy, so we fetch both libraries here and let each
+# instance's smoke_test.mjs serve them same-origin via page.route(). (The
+# maplibre-gl-leaflet bridge needs no vendoring: it is committed same-origin at
+# <instance>/vendor/, so the static server already serves it.) Production and GitHub Actions CI are unaffected:
 # they hit the real CDN and never see these dirs (they are gitignored and absent
 # unless this script has run).
 #
@@ -69,16 +71,18 @@ for id in "${wanted[@]}"; do
 
   [ -f "$index" ] || fail "$id: ${rest%%:*} does not exist"
 
-  # Mirror the exact URLs the app requests, so the vendored copy can never drift
-  # from the instance's pinned Leaflet version.
-  mapfile -t urls < <(grep -oE 'https://cdnjs\.cloudflare\.com/[^"]*leaflet\.(js|css)' "$index" | sort -u)
+  # Mirror the exact URLs the app requests, so the vendored copies can never
+  # drift from the instance's pinned Leaflet / MapLibre versions. (The pattern
+  # also matches the re-inline curl commands in index.html's CSS comments —
+  # harmless: the extra .css fetches land beside the ones the tests serve.)
+  mapfile -t urls < <(grep -oE 'https://cdnjs\.cloudflare\.com/[^"]*/(leaflet|maplibre-gl)[^"/]*\.(js|css)' "$index" | sort -u)
   if [ "${#urls[@]}" -eq 0 ]; then
     fail "$id: no Leaflet CDN URL in ${rest%%:*} — is that still the app file?"
   fi
 
   mkdir -p "$out"
   for url in "${urls[@]}"; do
-    name="${url##*/}"   # leaflet.js / leaflet.css
+    name="${url##*/}"   # leaflet.js / leaflet.css / maplibre-gl.min.js / …
     if curl -fsS --max-time 30 -o "$out/$name" "$url"; then
       echo "vendor_leaflet: $id — fetched $name ($(wc -c <"$out/$name") bytes)"
     else

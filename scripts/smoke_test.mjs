@@ -31,6 +31,13 @@ const VENDORED_LEAFLET =
     ? { js: readFileSync(join(VENDOR_DIR, "leaflet.js")), css: readFileSync(join(VENDOR_DIR, "leaflet.css")) }
     : null;
 if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
+// MapLibre GL (the vector-basemap renderer) rides the same vendor dir: absent,
+// the app's own raster fallback keeps the boot alive, so this one is optional
+// where Leaflet's pair is required.
+const VENDORED_MAPLIBRE = existsSync(join(VENDOR_DIR, "maplibre-gl.min.js"))
+  ? { js: readFileSync(join(VENDOR_DIR, "maplibre-gl.min.js")) }
+  : null;
+if (VENDORED_MAPLIBRE) console.log("  (serving MapLibre GL from scripts/vendor/leaflet — CDN unreachable in this env)");
 
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 // ==== GENERATED:BEGIN smoke-config ====
@@ -111,6 +118,10 @@ async function booted(context, url, routeFn) {
       r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_LEAFLET.js }));
     await page.route("**/cdnjs.cloudflare.com/**/leaflet.css", (r) =>
       r.fulfill({ status: 200, contentType: "text/css", body: VENDORED_LEAFLET.css }));
+  }
+  if (VENDORED_MAPLIBRE) {
+    await page.route("**/cdnjs.cloudflare.com/**/maplibre-gl.min.js", (r) =>
+      r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_MAPLIBRE.js }));
   }
   if (routeFn) await routeFn(page);
   await page.goto(url, { waitUntil: "domcontentloaded" });
@@ -820,16 +831,21 @@ try {
     const page = await booted(context, `${BASE}#point=${POINT}&layers=${OFFLINE[0]}`);
     await page.waitForFunction(() => !!window[EXPORTS_NAME] && !!window[EXPORTS_NAME].setTheme,
       null, { timeout: QUERY_TIMEOUT }).catch(() => {});
-    const read = () => page.evaluate(() => {
+    const read = () => page.evaluate((n) => {
       const path = document.querySelector("#map path");
+      // The vector basemap is a GL canvas with no tile <img> whose src names
+      // its style, so the basemap kind comes from the debug namespace; the
+      // raster-fallback img sampler stays for a boot that fell back.
+      const base = window[n] && window[n].basemap ? window[n].basemap() : null;
       return {
         attr: document.documentElement.getAttribute("data-theme"),
         ground: getComputedStyle(document.body).backgroundColor,
         meta: document.querySelector('meta[name="theme-color"]')?.content,
-        tiles: (document.querySelector(".leaflet-tile-pane img")?.src || "").match(/(light|dark)_all/)?.[1] || null,
+        tiles: (document.querySelector(".leaflet-tile-pane img")?.src || "").match(/(light|dark)_all/)?.[1]
+          || (base ? (base.kind === "dark_all" ? "dark" : "light") : null),
         stroke: path ? path.getAttribute("stroke") : null,
       };
-    });
+    }, EXPORTS_NAME);
     await page.evaluate((n) => window[n].setTheme("light", false), EXPORTS_NAME);
     await page.waitForTimeout(400);
     const light = await read();

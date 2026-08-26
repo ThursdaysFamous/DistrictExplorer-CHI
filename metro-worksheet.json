@@ -2510,7 +2510,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v3",
+    "cache_name": "districtry-il-shell-v4",
     "shell_urls": [
       "./",
       "./sources.html",
@@ -2524,7 +2524,9 @@
       "./icons/seals/kane.png",
       "./icons/seals/lake.png",
       "./icons/seals/will.png",
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js",
+      "./vendor/leaflet-maplibre-gl.js"
     ]
   },
   "data_sources": {
