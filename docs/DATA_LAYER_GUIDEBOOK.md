@@ -54,7 +54,7 @@ in the researched-but-unbuilt backlog.
   "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "mwrd", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "judicial-subcircuit", "county-board", "ccbr", "fire-district", "dupage-county-special-police", "park-district", "library-district", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "county-precinct", "tif-district", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"],
-  "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "milwaukee-neighborhoods", "fire-service", "law-service", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"]
+  "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "milwaukee-neighborhoods", "fire-service", "law-service", "ems-service", "psap-area", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"]
 }
 ```
 <!-- ==== GUIDEBOOK:END coverage-map ==== -->
@@ -1795,6 +1795,30 @@ detail into `blocker`.
       "why": "The statewide layer is the Office of Emergency Communications' aggregate of each county 911 authority's own filing, and it can only carry what a county files — no other statewide publisher of who-serves-here boundaries exists.",
       "blocker": "MEASURED 2026-08-26 with the same per-authority provisioning-polygon sampling the fire gap records (recomputed and gated on every build): Iowa, Vilas and Walworth file no law boundaries, Langlade has no provisioning boundary at all, and Polk's law filing covers about 60% of its provisioned area. Jefferson — dark on the fire layer — files its law boundaries in full.",
       "wanted": "The missing or completed law-boundary filings reaching the OEC aggregate — the state's roughly weekly refresh carries them the moment a county files."
+    },
+    {
+      "id": "ng911-psap-filings",
+      "concept": "911 answering points",
+      "area": "Iowa, Langlade, Vilas and Walworth counties",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "psap-area",
+      "summary": "In four counties the 911-answering-point card can name no dispatch center, because those 911 authorities' PSAP-boundary filings are absent from the state's NG911 aggregate.",
+      "why": "The statewide layer is the Office of Emergency Communications' aggregate of each county 911 authority's own filing, and it can only carry what a county files — no other statewide publisher of call-routing boundaries exists.",
+      "blocker": "MEASURED 2026-08-26 with the same per-authority provisioning-polygon sampling the fire and law gaps record (recomputed and gated on every build of wi/scripts/build_wi_ng911_service_areas.py): Iowa, Vilas and Walworth file no PSAP boundaries, and Langlade has no provisioning boundary at all. Jefferson and Polk — each short on one of the other two tilings — file their PSAP boundaries in full.",
+      "wanted": "The missing counties' PSAP-boundary filings reaching the OEC aggregate — the state's roughly weekly refresh carries them the moment a county files."
+    },
+    {
+      "id": "ng911-ems-filings",
+      "concept": "EMS service areas",
+      "area": "Iowa, Jefferson, Langlade, Vilas and Walworth counties",
+      "counties": [],
+      "kind": "data-quality",
+      "layer": "ems-service",
+      "summary": "In five counties the EMS card can name no service, because their 911 authorities' EMS-boundary filings are absent from the state's NG911 aggregate.",
+      "why": "The statewide layer is the Office of Emergency Communications' aggregate of each county 911 authority's own filing, and it can only carry what a county files — no other statewide publisher of who-is-dispatched-here boundaries exists.",
+      "blocker": "MEASURED 2026-08-26 with the same per-authority provisioning-polygon sampling the other NG911 gaps record (recomputed and gated on every build of wi/scripts/build_wi_ng911_service_areas.py): Iowa, Vilas and Walworth file no EMS boundaries, Jefferson files law and PSAP but neither fire nor EMS, and Langlade has no provisioning boundary at all — the EMS absence list is the fire list exactly. Polk, partial on law, files EMS in full.",
+      "wanted": "The missing counties' EMS-boundary filings reaching the OEC aggregate — the state's roughly weekly refresh carries them the moment a county files."
     }
   ]
 }
@@ -1857,7 +1881,7 @@ v1.0.6) · **CountyDispatch** `registerCountyLayer` (CHI fork-level dispatcher: 
 concept layer holding a per-county entry table — see
 `docs/EXPANSION_GUIDE.md` Part 2; adding a county is a table entry, not a layer).
 
-Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 25** layers.
+Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 27** layers.
 
 ---
 
@@ -1920,6 +1944,8 @@ entries with per-office source URLs, and label appointed clerks as appointed. (�
 | Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | NO HONEST ANALOG — the SF Police Commission (Charter §4.109) and Department of Police Accountability are appointed (Mayor + Board of Supervisors), citywide, no districts; NYC's labeled-link-row precedent is the upgrade path if oversight links are ever wanted on the card | NO HONEST ANALOG |
 | Fire-service boundary | SHIPPED `fire-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + McHenry + Kendall suburban Fire *Protection* Districts; Cook PRE-BUILT from the Clerk's L17 tax-agency tiling with road voids closed (102 empty voids measured raw; the Clerk's seven double-claimed pairs, Orland∩Mokena at 57 acres, ship in both exactly as the live layer answers) and DuPage/McHenry/Kendall name-only, Lake carries office contact, Kane names each district's chief + contact) · Kankakee 17 (identity-only — the county declares contact columns and populates none) · Madison 42 (the fleet's first contact-bearing fire entry: dept head 39/42, address 41/42, phone 41/42) · DeKalb 18 · Lee 22 (NG911 service areas) · Rock Island 17 (PRE-BUILT from the county's tax-agency tiling by build_parcel_fabric_districts.py — the parcel fabric excludes road right-of-way, so the raw layer was a lattice of 37-107 ft voids; the builder closes them at 75 ft, ships ground both neighbours' closings reach in neither, and the 60 ft snap still answers perimeter roads while refusing between-district seams) · Sangamon 29 FPDs + Springfield's corporate area (FireDistrictEtc L2 — 226 fragments grouped per district at load; the Springfield card states the city is served by its own Fire Department, not an FPD. The 2026-08-16 fabric survey measured this fabric INTERLEAVED, not void-carved — 168 of its sibling gaps are another district's territory and only 2 are dead ground, so it stays live-fetched and the snap covers the two dead spots) · St. Clair 44 (CentralSquare/DATA/8, the county's CAD folder — identity-only, with the source's unstated taxing-vs-dispatch status carried as a caveat on every card) · Stephenson 15 (GEOREFERENCED from the county's own 2014 vector-PDF map — the fleet's second measured boundary, hydrography-fitted to 11.5 m median; 2014-vintage caveat on every card) · Macon 17 (PRE-BUILT with road voids closed — 1,318 empty voids measured raw 2026-08-16, the fleet's worst; names verbatim) · Effingham 17 (the org's dissolved tiling, names matching the county's own fire-protection-district list; the zone literally named 'None' is excluded in the loader) · Hamilton 3 (the county's own layer; an unnamed ~0.4 km² sliver excluded — most of the county sits in no district, and the empty state says so) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published | SHIPPED `fire-service` (2026-08-26) — the recorded NG911 route delivered: Wisconsin OEC's statewide aggregate of every county's FireBoundary filing (licence "free and open for use by the public", ~weekly), 3,009 effective polygons dissolved to 1,046 department areas by build_wi_ng911_service_areas.py, exactly the "who responds here" operational shape this cell predicted (never the IL taxing shape — the card says so and names no officeholder). THE DISSOLVE KEY IS DsplayName+Agency_ID, never the bare name: two unrelated "Rome Fire Department"s file ~100 miles apart while Appleton Fire files under two counties' authorities. Expired rows drop by DATE (37 at first build); plain `-dissolve`, never `-dissolve2`, whose mosaic-flattening silently deletes real overlaps (measured on the law layer). Five counties' filings are absent (gap `ng911-fire-filings`; Langlade files no NG911 data at all) — the card explains absence in-state rather than hiding, and the builder re-measures the absences inside the counties' own provisioning polygons every run |
 | Township police-service tax district | SHIPPED `dupage-county-special-police` (unincorporated-area township tax districts that fund supplemental DuPage County Sheriff patrol; card links the elected Sheriff, coverage-gated) | NO HONEST ANALOG — NYC has no townships | NO HONEST ANALOG — SF has no townships | NO HONEST ANALOG — no Illinois-style township police-service tax district |
+| 911 answering point (PSAP) | NO HONEST ANALOG — Chicago's 911 is answered citywide by a single center (the city's own Office of Emergency Management and Communications), so there is no boundary to draw | NO HONEST ANALOG — one consolidated citywide system (NYPD-operated, two redundant PSAC facilities with no published geographic split) | NO HONEST ANALOG — one citywide center (the Department of Emergency Management) | SHIPPED `psap-area` (95, 2026-08-26) — the fleet's first PSAP layer and a concept only a statewide instance can carry: 95 answering points from the OEC's NG911 PSAPBoundary tiling (205 effective polygons), same builder, dissolve pair, and name-set gate as the fire/law layers. THE TILING THAT PROVES THE DATE FILTER: 11 of its rows carry FUTURE Expire dates — still-effective filings a drop-anything-with-Expire filter would delete — which is why the builder drops expired rows by date, never by presence. Its rare overlaps ship as filed (a county PSAP over a city PD's own dispatch, ~0.1% of points); absences are gap `ng911-psap-filings` |
+| EMS / ambulance service area | NO HONEST ANALOG — Chicago's EMS is the Fire Department's, one citywide provider with no service-area boundary to draw | NO HONEST ANALOG — FDNY EMS, one citywide system | NO HONEST ANALOG — the Fire Department's citywide EMS | SHIPPED `ems-service` (579, 2026-08-26) — the OEC's NG911 EmergencyMedicalServicesBoundary tiling (2,443 effective polygons; 34 expired rows dropped by date), same builder, dissolve pair and name-set gate as the other three NG911 layers. The tiling that RE-PROVES the pair key on ambulance services: regional providers (Emplify, Tri State) file under several counties' authorities, and a few EMS Agency_IDs are not even county domains (BVEM files under BVEM1/BVEM2) — the pair keys them all correctly. Essentially no cross-name overlap (1 same-name multi-hit in 3,000 points); absences are gap `ng911-ems-filings`, the fire list exactly |
 | Police / fire station points | SHIPPED `police-station` · `fire-station` (both metro-wide from USGS National Map structures L53/L51 as of 2026-07 — replaced the city-gated CPD/CFD point sets after a completeness check: 22/22 CPD stations, 91/92 CFD houses; the CPD source still feeds the police-district card's station rows) | SHIPPED (city sources) | SHIPPED (city sources) | SHIPPED `police-station` · `fire-station` (both statewide from USGS National Map structures L53/L51 — 807 / 1,743 in the state envelope, the reference fork's exact pattern and colour pairs, no coverage function so border readers see the genuinely nearest stations; ghost-record caveat measured and carried — the cards present proximity, never a service claim; better LOCAL sources exist and deliberately do not replace the statewide layer: Milwaukee's MFD Stations layer is richer but county-scoped, its MPD_stations layer strictly poorer than USGS) |
 
 Note the fire-boundary concept is not equivalent across forks: NYC maps *operational*
@@ -5651,14 +5677,14 @@ an operator scope decision — statewide layers first, Milwaukee city-scoped wor
   and mapshaper's `-dissolve2` proved wrong for the job — its mosaic
   flattening deletes the law layer's real concurrent-jurisdiction overlaps.
   What the aggregate does not carry is gaps `ng911-fire-filings` /
-  `ng911-law-filings` (five authorities, re-measured every build). THE SAME
-  SERVICE CARRIES TWO MORE MEASURED CANDIDATES, unshipped and queued:
-  **EmergencyMedicalServicesBoundary** (layer 2, 2,477 polygons — the
-  ambulance analog of the shipped pair, same schema and dissolve) and
-  **PSAPBoundary** (layer 6, 208 polygons over 98 dispatch centers —
-  "which 911 center answers your call", the smallest and most distinctive;
-  11 of its rows carry FUTURE Expire dates, so its effective-row filter
-  matters in a way fire/law's does not).
+  `ng911-law-filings` (five authorities, re-measured every build). The
+  service's **PSAPBoundary** tiling followed as the fifth phase-3 build
+  (`psap-area`, 2026-08-26 — the safety matrix's new 911-answering-point
+  row carries the record, including the 11 future-dated Expire rows that
+  prove the builder's drop-by-date rule), and its **EMS tiling** as the
+  sixth (`ems-service`, 2026-08-26 — the new EMS matrix row carries the
+  record). ALL FOUR NG911 TILINGS NOW SHIP; nothing of this entry remains
+  queued.
 - **WEC Cloudflare block** — one CPD-style Playwright-from-CI attempt owed before
   the block is filed permanent (it gates statewide polling places, early-voting
   lists, and the municipal-clerks bulk file).
@@ -9019,7 +9045,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `library` | Library | geography | NearestPt | Socrata `fhhu-wqa7` (support facility excluded) | — |
 | `early-voting` | Voting Center & Ballot Drop-off | political | NearestPt | hand-curated `early-voting-sites.json` (incl. 37 drop boxes; WATCH.md row) | — |
 
-### Wisconsin — 25 layers
+### Wisconsin — 27 layers
 
 | id | label | group | pattern | source | roster / join | coverage |
 |---|---|---|---|---|---|---|
@@ -9042,6 +9068,8 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `zip-code` | ZIP Code | geography | Polygon | live TIGERweb ZCTA by state envelope | — | — |
 | `fire-service` | Fire Service Area | safety | Bespoke | pre-built `fire-service-areas.json` — OEC NG911 FireBoundary (statewide, ~weekly, "free and open" licence), 3,009 effective polygons dissolved to 1,046 agency areas on the DsplayName+Agency_ID pair; expired rows dropped by date, plain `-dissolve` (never `-dissolve2`), 100.000% name-set agreement gate (build_wi_ng911_service_areas.py; operator rebuild) | — (a dispatch area elects no one; the card says so and links the OEC portal) | statewide; five counties' filing absences are gap `ng911-fire-filings`, explained on-card rather than hidden |
 | `law-service` | Law Enforcement Service Area | safety | Bespoke | pre-built `law-service-areas.json` — same builder and gates, LawEnforcementBoundary: 3,083 effective polygons to 639 agency areas; the card renders EVERY agency filed at a point (sheriff/PD concurrent jurisdiction, ~0.5% of points) | — (same posture) | statewide; absences are gap `ng911-law-filings` |
+| `ems-service` | EMS Service Area | safety | Bespoke | pre-built `ems-service-areas.json` — OEC NG911 EmergencyMedicalServicesBoundary: 2,443 effective polygons to 579 services, same builder/pair/gates; regional ambulance providers re-prove the pair key (some EMS Agency_IDs are not county domains) | — (same no-officeholder posture) | statewide; absences are gap `ng911-ems-filings` |
+| `psap-area` | 911 Answering Point (PSAP) | safety | Bespoke | pre-built `psap-areas.json` — OEC NG911 PSAPBoundary: 205 effective polygons to 95 answering points, same builder/pair/gates as fire/law; the tiling with FUTURE-dated Expire rows (11 kept — the case that proves the drop-by-date rule) | — (same no-officeholder posture) | statewide; absences are gap `ng911-psap-filings` |
 | `mpd-district` | Police District (Milwaukee) | safety | Polygon | pre-built `mpd-districts.json` — the city's own MPD_geography layer (districts 1-7) server-reprojected, witnessed against the CKAN shapefile's area shares at 0.04% max difference (build_milwaukee_city_layers.py; operator rebuild) | — (captains are gap `mpd-district-leadership` — city.milwaukee.gov's Cloudflare challenge; the card links MPD's district pages) | `milwaukeeCoverage` — hides outside Milwaukee |
 | `milwaukee-neighborhoods` | Neighborhood (Milwaukee) | geography | Polygon | pre-built `milwaukee-neighborhoods.json` — the city's own 190 neighborhoods server-reprojected, witnessed against the CKAN shapefile on a space-folded key (the two city copies spell one neighborhood apart; 0.007% max share difference) (build_milwaukee_city_layers.py; operator rebuild) | — (identity-only, compact card; names title-cased from the city's all-caps values, raw kept as NAME_RAW) | `milwaukeeCoverage` — hides outside Milwaukee |
 | `police-station` | Police Station | safety | NearestPt | USGS National Map L53, live by state envelope (807) | — | — |

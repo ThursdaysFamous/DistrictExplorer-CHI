@@ -96,12 +96,12 @@ MIN_REGISTER_LAYER = 16
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
     "wi-court-of-appeals", "us-house", "wi-senate", "wi-assembly",
-    "wi-circuit-court", "county", "school-district-secondary",
-    "school-district-unified", "school-district-elementary", "law-service",
-    "fire-service", "county-board", "county-subdivision", "municipality",
-    "zip-code", "mpd-district", "mps-school-board", "aldermanic-district",
-    "ward", "milwaukee-neighborhoods", "police-station", "fire-station",
-    "school-site", "library", "post-office",
+    "wi-circuit-court", "county", "psap-area", "school-district-secondary",
+    "school-district-unified", "school-district-elementary", "ems-service",
+    "law-service", "fire-service", "county-board", "county-subdivision",
+    "municipality", "zip-code", "mpd-district", "mps-school-board",
+    "aldermanic-district", "ward", "milwaukee-neighborhoods",
+    "police-station", "fire-station", "school-site", "library", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -124,6 +124,8 @@ GEOMETRY_FILES = {
     "library-sites.json": (460, 560),  # Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file.
     "fire-service-areas.json": (1046, 1046),  # 1,046 fire-department dispatch areas — the OEC's 3,009 effective NG911 FireBoundary polygons dissolved per agency by wi/scripts/build_wi_ng911_service_areas.py (expired rows dropped by date; filing-absence and 100.000% name-set agreement gates). An operator rebuild; the monthly source report watches the layer counts.
     "law-service-areas.json": (639, 639),  # 639 law-enforcement dispatch areas — the OEC's 3,083 effective NG911 LawEnforcementBoundary polygons dissolved per agency; plain -dissolve, never -dissolve2, so the concurrent-jurisdiction overlaps the counties filed survive (measured). Same builder and gates as the fire file.
+    "psap-areas.json": (95, 95),  # 95 public safety answering points — the OEC's 205 effective NG911 PSAPBoundary polygons dissolved per agency (11 future-dated Expire rows KEPT, the case that proves the drop-by-date rule; 3 expired dropped). Same builder and gates as the fire/law files; an operator rebuild watched by the monthly source report.
+    "ems-service-areas.json": (579, 579),  # 579 EMS dispatch areas — the OEC's 2,443 effective NG911 EmergencyMedicalServicesBoundary polygons dissolved per agency (34 expired rows dropped by date). Same builder and gates as the other three NG911 files; an operator rebuild watched by the monthly source report.
 }
 
 # file -> minimum key count (officeholder rosters).
