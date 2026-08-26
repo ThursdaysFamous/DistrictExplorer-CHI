@@ -8,6 +8,9 @@ the phase-2 research recorded and the guidebook backlog queued:
                                     point (FireBoundary, layer 3)
   data/app/law-service-areas.json   which law-enforcement agency serves a
                                     point (LawEnforcementBoundary, layer 4)
+  data/app/psap-areas.json          which PSAP — public safety answering
+                                    point — answers a 911 call placed at
+                                    the point (PSAPBoundary, layer 6)
 
 SOURCE. The OEC publishes every county's NG911 GIS filing as one public
 feature service (org WI_OEC_GIS, item 593d0da225b24601ad0c21598ef52fb0,
@@ -40,8 +43,9 @@ superseded history, and a FUTURE Expire date is a still-effective row
 that must ship. The drop is computed against the clock each run.
 
 WHAT THE DATA DOES NOT COVER IS MEASURED AND PINNED. Five authorities'
-filings are absent or partial (Iowa, Vilas and Walworth file neither
-layer; Jefferson files law but not fire; Polk's law filing covers ~60%),
+filings are absent or partial (Iowa, Vilas and Walworth file none of the
+three tilings; Jefferson files law and PSAP but not fire; Polk's law
+filing covers ~60% while its fire and PSAP file in full),
 and LANGLADE COUNTY HAS NO PROVISIONING BOUNDARY AT ALL — 72 provisioning
 polygons where the other 71 counties plus the City of Milwaukee each
 carry one. Every rate is recomputed per run inside the counties' own
@@ -76,12 +80,21 @@ OEC = ("https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services"
 FIRE = OEC + "/3"
 LAW = OEC + "/4"
 PROVISIONING = OEC + "/5"
+PSAP = OEC + "/6"
 
 LAYERS = [
     {"name": "fire", "url": FIRE, "out": "fire-service-areas.json",
      "min_rows": 2800, "min_agencies": 950},
     {"name": "law", "url": LAW, "out": "law-service-areas.json",
      "min_rows": 2900, "min_agencies": 600},
+    # PSAP is the tiling where the date filter EARNS its by-date form: 11 of
+    # its 208 raw rows carried FUTURE Expire dates at first measurement —
+    # still-effective rows a drop-anything-with-Expire filter would delete.
+    # 205 effective rows over 95 answering points; its rare overlaps
+    # (a county PSAP and a city PD's own dispatch both filed, ~0.1% of
+    # points) render like law's, every center at the point.
+    {"name": "psap", "url": PSAP, "out": "psap-areas.json",
+     "min_rows": 190, "min_agencies": 88},
 ]
 
 # Filing absences, pinned exactly as measured 2026-08-26 (40 seeded sample
@@ -90,10 +103,10 @@ LAYERS = [
 # set of layers that authority has NOT (fully) filed. Mirrored by the gap
 # records ng911-fire-filings / ng911-law-filings — retire both together.
 UNFILED = {
-    "iowacounty.org": {"fire", "law"},
-    "vilascountywi.gov": {"fire", "law"},
-    "co.walworth.wi.us": {"fire", "law"},
-    "jeffersoncountywi.gov": {"fire"},
+    "iowacounty.org": {"fire", "law", "psap"},
+    "vilascountywi.gov": {"fire", "law", "psap"},
+    "co.walworth.wi.us": {"fire", "law", "psap"},
+    "jeffersoncountywi.gov": {"fire"},    # law and PSAP file in full
     "polkcountywi.gov": {"law"},          # partial: ~60% covered at pin time
 }
 EXPECT_PROVISIONING = 72   # 71 counties + the City of Milwaukee; Langlade absent
@@ -169,7 +182,7 @@ def sample_inside(geom, n, seed):
     return pts
 
 
-def gate_filings(fire_feats, law_feats):
+def gate_filings(feats_by_layer):
     """Recompute per-authority coverage inside the provisioning polygons and
     refuse the build if it disagrees with the pinned UNFILED map."""
     prov = fetch_layer(PROVISIONING, "DiscrpAgID")
@@ -183,7 +196,7 @@ def gate_filings(fire_feats, law_feats):
         raise RuntimeError("Langlade County now carries a provisioning polygon — "
                            "its no-provisioning record (and the gap records) are "
                            "stale; re-measure")
-    models = {"fire": _model(fire_feats, "KEY"), "law": _model(law_feats, "KEY")}
+    models = {name: _model(feats, "KEY") for name, feats in feats_by_layer.items()}
     computed = {}
     for i, f in enumerate(prov):
         agid = (f["properties"].get("DiscrpAgID") or "").strip()
@@ -297,7 +310,7 @@ def main():
     built = {}
     for layer in LAYERS:
         built[layer["name"]] = build(layer, check_only)
-    n_prov = gate_filings(built["fire"][0], built["law"][0])
+    n_prov = gate_filings({name: pair[0] for name, pair in built.items()})
     print("gates: filing absences match the pinned UNFILED map across all %d "
           "provisioning authorities (Langlade still absent)" % n_prov,
           file=sys.stderr)

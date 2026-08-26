@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">25 layers — 7 political and legislative, 5 public safety, 5 schools, 8 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">26 layers — 7 political and legislative, 6 public safety, 5 schools, 8 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -969,7 +969,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="safety">
-        <h2>Public safety <span class="matrix-count">5 layers</span></h2>
+        <h2>Public safety <span class="matrix-count">6 layers</span></h2>
         <p class="matrix-blurb">Who answers a call at this address, and where they answer it from.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -977,6 +977,17 @@ table.matrix code {
               <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
             </thead>
             <tbody>
+              <tr id="layer-psap-area">
+                <th scope="row"><span class="layer-name">911 Answering Point (PSAP)</span><code>psap-area</code></th>
+                <td data-label="What it answers">The PSAP — public safety answering point — that answers a 911 call placed at the point, per the state's NG911 dataset (the rare overlaps ship exactly as filed). A dispatch-routing fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — three counties, plus provisioning-less Langlade, recorded as gap ng911-psap-filings — the card says so instead of hiding.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://wi-oec.maps.arcgis.com/home/item.html?id=593d0da225b24601ad0c21598ef52fb0" target="_blank" rel="noopener">Wisconsin Office of Emergency Communications — NG911 PSAPBoundary (statewide aggregate of every county's filing, updated roughly weekly; licence: “This data is free and open for use by the public”), per-agency dissolve pre-built by wi/scripts/build_wi_ng911_service_areas.py on the DsplayName+Agency_ID pair with a 4,000-point name-set agreement gate — the tiling whose FUTURE-dated Expire rows prove the builder's drop-by-date rule</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">None, deliberately: an answering point elects no one, and the NG911 schema names centers, never people.</td>
+                <td data-label="Where it applies">Statewide, minus the measured filing absences the Data gaps panel lists.</td>
+              </tr>
               <tr id="layer-law-service">
                 <th scope="row"><span class="layer-name">Law Enforcement Service Area</span><code>law-service</code></th>
                 <td data-label="What it answers">The law-enforcement agency (or agencies — concurrent jurisdiction ships exactly as filed) dispatched at the point, per the state's NG911 dataset. A response-area fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — four counties, plus Polk's partial filing, recorded as gap ng911-law-filings — the card says so instead of hiding.</td>

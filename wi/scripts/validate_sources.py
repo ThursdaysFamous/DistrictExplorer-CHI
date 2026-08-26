@@ -495,6 +495,18 @@ PROVENANCE = [
             "absences are gap ng911-law-filings."
         ),
     },
+    {
+        "layer": "psap-area",
+        "app_file": "psap-areas.json",
+        "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/6",
+        "note": (
+            "The same service's PSAPBoundary layer, same builder and gates — "
+            "205 effective polygons to 95 answering points at first build. "
+            "The tiling with FUTURE-dated Expire rows (11 kept), which is "
+            "why the builder drops expired rows by date, never by presence; "
+            "absences are gap ng911-psap-filings."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.
@@ -524,6 +536,10 @@ ENDPOINTS = [
     {
         "layer": "law-service",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4/query?where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "psap-area",
+        "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/6/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         # The ward layer queries this live (point-first + paged overlay). The
