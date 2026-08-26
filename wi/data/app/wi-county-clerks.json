@@ -1,0 +1,1096 @@
+{
+ "55001": {
+  "address": [
+   "401 Adams Street",
+   "Suite 9",
+   "Friendship WI 53934"
+  ],
+  "county": "Adams",
+  "email": "liana.glavin@co.adams.wi.us",
+  "fax": "(608) 339-4514",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Liana Glavin",
+  "party": "Republican",
+  "phone": "(608) 339-4200",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/adams-county/",
+  "website": "https://www.co.adams.wi.us/government"
+ },
+ "55003": {
+  "address": [
+   "201 W Main Street",
+   "Room 202",
+   "Ashland WI 54806"
+  ],
+  "county": "Ashland",
+  "email": "heather.schutte@ashlandcountywi.gov",
+  "fax": "715-682-7032",
+  "hours": "8:00 a.m. to 4:00 p.m.",
+  "name": "Heather W. Schutte",
+  "party": "Democrat",
+  "phone": "715-682-7000",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/ashland-county/",
+  "website": "https://ashlandcountywi.gov/"
+ },
+ "55005": {
+  "address": [
+   "335 East Monroe Avenue",
+   "Room 2130",
+   "Barron WI 54812"
+  ],
+  "county": "Barron",
+  "email": "jessica.hodek@co.barron.wi.us",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Jessica Hodek",
+  "party": "Republican",
+  "phone": "715-537-6200",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/barron-county/",
+  "website": "https://www.barroncountywi.gov/"
+ },
+ "55007": {
+  "address": [
+   "117 E 5th St",
+   "P.O. Box 878",
+   "Washburn WI 54891"
+  ],
+  "county": "Bayfield",
+  "email": "lynn.divine@bayfieldcounty.wi.gov",
+  "fax": "715-373-6153",
+  "hours": "8:00 a.m. to 4:00 p.m.",
+  "name": "Lynn Divine",
+  "party": "Democrat",
+  "phone": "715-373-6100",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/bayfield-county/",
+  "website": "https://www.bayfieldcounty.wi.gov/"
+ },
+ "55009": {
+  "address": [
+   "305 E Walnut St",
+   "P.O. Box 23600",
+   "Green Bay WI 54305"
+  ],
+  "county": "Brown",
+  "email": "patrick.moynihan@browncountywi.gov",
+  "fax": "(920) 448-4498",
+  "hours": "Counter Service Hours: Monday-Thursday 7:30a – 4:30, Friday 7:30a – 11a",
+  "name": "Patrick W. Moynihan, Jr.",
+  "party": "Republican",
+  "phone": "(920) 448-4016",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/brown-county/",
+  "website": "https://www.browncountywi.gov/"
+ },
+ "55011": {
+  "address": [
+   "407 S 2nd St",
+   "P.O. Box 58",
+   "Alma WI 54610"
+  ],
+  "appointed": true,
+  "county": "Buffalo",
+  "email": "Lisa.Schmitt@buffalocountywi.gov",
+  "fax": "608-685-6284",
+  "hours": "8:00 – 4:00 Monday – Thursday 8:00 – Noon Fridays",
+  "name": "Lisa Schmitt",
+  "phone": "608-685-6209",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/buffalo-county/",
+  "website": "https://www.buffalocountywi.gov/"
+ },
+ "55013": {
+  "address": [
+   "7410 County Rd. K",
+   "#105",
+   "Siren WI 54872"
+  ],
+  "county": "Burnett",
+  "email": "whinrichs@burnettcounty.org",
+  "fax": "715-349-2169",
+  "hours": "8:30 a.m. to 4:30 p.m.",
+  "name": "Wanda R. Hinrichs",
+  "party": "Democrat",
+  "phone": "715-349-2173",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/burnett-county/",
+  "website": "https://www.burnettcountywi.gov/"
+ },
+ "55015": {
+  "address": [
+   "206 Court Street",
+   "Chilton WI 53014"
+  ],
+  "county": "Calumet",
+  "email": "beth.leary@calumetcounty.gov",
+  "fax": "920-849-1469",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Beth Leary",
+  "phone": "920-849-1458",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/calumet-county/",
+  "website": "https://www.co.calumet.wi.us/"
+ },
+ "55017": {
+  "address": [
+   "711 N Bridge St",
+   "Chippewa Falls WI 54729"
+  ],
+  "county": "Chippewa",
+  "email": "jsadler@chippewacountywi.gov",
+  "fax": "715-726-7987",
+  "hours": "Monday – Thursday, 7:30 am to 4:30 pm, Fridays 7:30 am to 11:30 am",
+  "name": "Jaclyn Sadler",
+  "party": "Democrat",
+  "phone": "715-726-7985",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/chippewa-county/",
+  "website": "https://www.co.chippewa.wi.us/"
+ },
+ "55019": {
+  "address": [
+   "517 Court Street",
+   "Neillsville WI 54456"
+  ],
+  "county": "Clark",
+  "email": "christina.jensen@co.clark.wi.us",
+  "fax": "715-743-5154",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Christina M. Jensen",
+  "party": "Republican",
+  "phone": "715-743-5148",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/clark-county/",
+  "website": "https://www.clarkcountywi.com/"
+ },
+ "55021": {
+  "address": [
+   "112 E. Edgewater Street",
+   "Portage WI 53901"
+  ],
+  "county": "Columbia",
+  "email": "county.clerk@columbiacountywi.gov",
+  "fax": "608-742-9602",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Lisa I. Black",
+  "phone": "608-742-9654",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/columbia-county/",
+  "website": "https://www.co.columbia.wi.us/"
+ },
+ "55023": {
+  "address": [
+   "225 N Beaumont Rd",
+   "Suite 210",
+   "Prairie du Chien WI 53821"
+  ],
+  "county": "Crawford",
+  "email": "rfisher@co.crawford.wi.gov",
+  "fax": "608-326-0213",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Robin Fisher",
+  "phone": "608-326-0201",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/crawford-county/",
+  "website": "https://www.crawfordcountywi.org/"
+ },
+ "55025": {
+  "address": [
+   "210 Martin Luther King, Jr. Blvd.",
+   "Rm. 106 A",
+   "Madison WI 53703"
+  ],
+  "county": "Dane",
+  "email": "mcdonell@countyofdane.com",
+  "fax": "(608) 266-4361",
+  "hours": "7:45 a.m. to 4:30 p.m.",
+  "name": "Scott McDonell",
+  "party": "Democrat",
+  "phone": "(608) 266-4121",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/dane-county/",
+  "website": "https://www.countyofdane.com"
+ },
+ "55027": {
+  "address": [
+   "127 E Oak Street",
+   "Juneau WI 53039"
+  ],
+  "county": "Dodge",
+  "email": "dvanegtern@co.dodge.wi.us",
+  "fax": "920-386-4292",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Danielle Van Egtern",
+  "party": "Republican",
+  "phone": "920-386-3605",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/dodge-county/",
+  "website": "https://www.co.dodge.wi.gov/"
+ },
+ "55029": {
+  "address": [
+   "421 Nebraska Street",
+   "Sturgeon Bay WI 54235"
+  ],
+  "county": "Door",
+  "email": "jlau@co.door.wi.gov",
+  "fax": "920-746-2330",
+  "hours": "7:00 a.m. to 4:30 p.m.",
+  "name": "Jill M. Lau",
+  "party": "Republican",
+  "phone": "920-746-2200",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/door-county/",
+  "website": "https://www.co.door.wi.gov/"
+ },
+ "55031": {
+  "address": [
+   "1313 Belknap Street",
+   "#101",
+   "Superior WI 54880"
+  ],
+  "county": "Douglas",
+  "email": "kaci.lundgren@douglascountywi.gov",
+  "fax": "715-395-1421",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Kaci Lundgren",
+  "party": "Democrat",
+  "phone": "715-395-1568",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/douglas-county/",
+  "website": "www.douglascountywi.gov"
+ },
+ "55033": {
+  "address": [
+   "3001 US Highway 12 East",
+   "Suite 102B",
+   "Menomonie WI 54751"
+  ],
+  "county": "Dunn",
+  "email": "amercil@dunncountywi.gov",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Andrew D. Mercil",
+  "party": "Democrat",
+  "phone": "715-232-1677",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/dunn-county/",
+  "website": "https://dunncountywi.gov/"
+ },
+ "55035": {
+  "address": [
+   "721 Oxford Avenue",
+   "Eau Claire WI 54703"
+  ],
+  "county": "Eau Claire",
+  "email": "sue.mcdonald@eauclairecounty.gov",
+  "fax": "715-831-5802",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Sue McDonald",
+  "party": "Democrat",
+  "phone": "715-839-4803",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/eau-claire-county/",
+  "website": "https://www.eauclairecounty.gov/"
+ },
+ "55037": {
+  "address": [
+   "501 Lake St",
+   "P.O. Box 410",
+   "Florence WI 54121"
+  ],
+  "county": "Florence",
+  "email": "dtrudell@florencecountywi.gov",
+  "fax": "715-528-4762",
+  "hours": "8:30 a.m. to 12:00 noon | 12:30 p.m. to 4:00 p.m.",
+  "name": "Donna Trudell",
+  "party": "Republican",
+  "phone": "715-528-3201",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/florence-county/",
+  "website": "https://www.florencecountywi.com/"
+ },
+ "55039": {
+  "address": [
+   "160 S Macy Street",
+   "P.O. Box 1557",
+   "Fond du Lac WI 54935"
+  ],
+  "county": "Fond du Lac",
+  "email": "lisa.freiberg@fdlco.wi.gov",
+  "fax": "920-929-3293",
+  "hours": "7:45 a.m. to 4:30 p.m.",
+  "name": "Lisa Freiberg",
+  "party": "Republican",
+  "phone": "920-929-3008",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/fond-du-lac-county/",
+  "website": "https://www.fdlco.wi.gov/"
+ },
+ "55041": {
+  "address": [
+   "200 E Madison Street",
+   "Crandon WI 54520"
+  ],
+  "county": "Forest",
+  "email": "nmatuszewski@co.forest.wi.us",
+  "fax": "715-478-5175",
+  "hours": "8:30 a.m. to 4:30 p.m.",
+  "name": "Nora Matuszewski",
+  "party": "Republican",
+  "phone": "715-478-2422",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/forest-county/",
+  "website": "http://www.co.forest.wi.gov/"
+ },
+ "55043": {
+  "address": [
+   "111 S Jefferson Street",
+   "P.O. Box 529",
+   "Lancaster WI 53813"
+  ],
+  "county": "Grant",
+  "email": "twhite@co.grant.wi.gov",
+  "fax": "608-723-4048",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Tonya A. White",
+  "party": "Republican",
+  "phone": "608-723-2675",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/grant-county/",
+  "website": "http://www.co.grant.wi.gov/"
+ },
+ "55045": {
+  "address": [
+   "1016 16th Avenue",
+   "Monroe WI 53566"
+  ],
+  "county": "Green",
+  "email": "avoegeli@greencountywi.org",
+  "fax": "608-328-2835",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Arianna L. Voegeli",
+  "party": "Democrat",
+  "phone": "608-328-9430",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/green-county/",
+  "website": "https://www.greencountywi.org"
+ },
+ "55047": {
+  "address": [
+   "571 County Road A",
+   "Green Lake WI 54941"
+  ],
+  "county": "Green Lake",
+  "email": "sstobbe@greenlakecountywi.gov",
+  "fax": "920-294-4009",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Samantha Stobbe",
+  "phone": "920-294-4005",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/green-lake-county/",
+  "website": "https://www.greenlakecountywi.gov/"
+ },
+ "55049": {
+  "address": [
+   "222 N Iowa Street",
+   "Dodgeville WI 53533"
+  ],
+  "county": "Iowa",
+  "email": "Megan.Currie@iowacounty.org",
+  "fax": "608-935-3024",
+  "hours": "8:30 a.m. to 4:30 p.m.",
+  "name": "Megan Currie",
+  "party": "Democrat",
+  "phone": "608-935-0399",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/iowa-county/",
+  "website": "www.iowacountywi.gov"
+ },
+ "55051": {
+  "address": [
+   "300 Taconite Street",
+   "Suite 101",
+   "Hurley WI 53534"
+  ],
+  "county": "Iron",
+  "email": "clerk@ironcountywi.org",
+  "fax": "715-561-2928",
+  "hours": "8:00 a.m. to 4:00 p.m.",
+  "name": "Christan Brandt",
+  "party": "Republican",
+  "phone": "715-561-3375",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/iron-county/",
+  "website": "http://www.co.iron.wi.gov/"
+ },
+ "55053": {
+  "address": [
+   "307 Main Street",
+   "Black River Falls WI 54615"
+  ],
+  "county": "Jackson",
+  "email": "melissa.Windsor@jacksoncountywi.gov",
+  "fax": "715-284-0278",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Melissa Windsor",
+  "phone": "715-284-0268",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/jackson-county/",
+  "website": "https://www.co.jackson.wi.us/"
+ },
+ "55055": {
+  "address": [
+   "311 S. Center Avenue",
+   "Jefferson WI 54549"
+  ],
+  "county": "Jefferson",
+  "email": "audreym@jeffersoncountywi.gov",
+  "fax": "920-674-7368",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Audrey A. McGraw",
+  "party": "Republican",
+  "phone": "920-674-7144",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/jefferson-county/",
+  "website": "https://www.jeffersoncountywi.gov/"
+ },
+ "55057": {
+  "address": [
+   "220 East State Street",
+   "Room 112",
+   "Mauston WI 53948"
+  ],
+  "county": "Juneau",
+  "email": "ttreptow@juneaucountywi.gov",
+  "fax": "608-847-9402",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Terri Treptow",
+  "party": "Republican",
+  "phone": "608-847-9300",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/juneau-county/",
+  "website": "https://www.co.juneau.wi.gov/"
+ },
+ "55059": {
+  "address": [
+   "1010 56th Street",
+   "Kenosha WI 53140"
+  ],
+  "county": "Kenosha",
+  "email": "regi.waligora@kenoshacounty.org",
+  "fax": "262-653-2564",
+  "hours": "8:00 a.m. to 5:00 p.m.",
+  "name": "Regi Waligora",
+  "party": "Democrat",
+  "phone": "262-653-2477",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/kenosha-county/",
+  "website": "https://www.kenoshacounty.org/"
+ },
+ "55061": {
+  "address": [
+   "810 Lincoln Street",
+   "Kewaunee WI 54216"
+  ],
+  "county": "Kewaunee",
+  "email": "annoye.jamie@kewauneeco.org",
+  "fax": "920-388-7195",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Jamie Annoye",
+  "party": "Democrat",
+  "phone": "920-388-7133",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/kewaunee-county/",
+  "website": "https://www.kewauneeco.org/"
+ },
+ "55063": {
+  "address": [
+   "212 6th Street N",
+   "Room 1500",
+   "La Crosse WI 54601"
+  ],
+  "county": "La Crosse",
+  "email": "gdankmeyer@lacrossecounty.org",
+  "fax": "(608) 785-9741",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Ginny Dankmeyer",
+  "party": "Democrat",
+  "phone": "(608) 785-9581",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/la-crosse-county/",
+  "website": "https://www.lacrossecounty.org/"
+ },
+ "55065": {
+  "address": [
+   "626 Main St",
+   "Darlington WI 53530"
+  ],
+  "county": "Lafayette",
+  "email": "carla.jacobson@lafayettecountywi.org",
+  "fax": "608-776-8893",
+  "hours": "Mon-Thurs: 7:30 a.m. to 4:30 p.m. Friday: 7:30 a.m. to 2:00 p.m.",
+  "name": "Carla Jacobson",
+  "party": "Republican",
+  "phone": "608-776-4850",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/lafayette-county/",
+  "website": "https://www.lafayettecountywi.org/"
+ },
+ "55067": {
+  "address": [
+   "800 Clermont Street",
+   "Antigo WI 54409"
+  ],
+  "county": "Langlade",
+  "email": "jnagel@co.langlade.wi.us",
+  "fax": "715-627-6303",
+  "hours": "8:30 a.m. to 4:30 p.m.",
+  "name": "Judy Nagel",
+  "party": "Republican",
+  "phone": "715-627-6201",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/langlade-county/",
+  "website": "https://www.co.langlade.wi.us/"
+ },
+ "55069": {
+  "address": [
+   "801 N Sales Street",
+   "Suite 201",
+   "Merrill WI 54452"
+  ],
+  "county": "Lincoln",
+  "email": "chris.marlowe@co.lincoln.wi.us",
+  "fax": "715-539-8054",
+  "hours": "Monday – Thursday 8:00 a.m. to 4:30 p.m. Fridays 8:00 a.m. – 1:00 p.m.",
+  "name": "Chris Marlowe",
+  "phone": "715-539-1019",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/lincoln-county/",
+  "website": "https://co.lincoln.wi.us/"
+ },
+ "55071": {
+  "address": [
+   "1010 S. 8th St.",
+   "Manitowoc WI 54220"
+  ],
+  "county": "Manitowoc",
+  "email": "jessicabackus@manitowoccountywi.gov",
+  "hours": "M: 8:30 a.m. to 5:00 p.m. | Tu – F 4:30 p.m. to 4:30 p.m.",
+  "name": "Jessica Backus",
+  "party": "Republican",
+  "phone": "(920) 683-4004",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/manitowoc-county/",
+  "website": "https://manitowoccountywi.gov/"
+ },
+ "55073": {
+  "address": [
+   "500 Forest Street",
+   "Wausau WI 54403"
+  ],
+  "county": "Marathon",
+  "email": "kim.trueblood@marathoncounty.gov",
+  "fax": "715-261-1515",
+  "hours": "Monday – Thursday: 7:30 – 4:30 Friday: 7:30 – noon",
+  "name": "Kim Trueblood",
+  "party": "Republican",
+  "phone": "715-261-1501",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/marathon-county/",
+  "website": "https://www.marathoncounty.gov/"
+ },
+ "55075": {
+  "address": [
+   "1926 Hall Avenue",
+   "Marinette WI 54143"
+  ],
+  "county": "Marinette",
+  "email": "Bobbie.Borkowski@marinettecountywi.gov",
+  "fax": "715-732-7532",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "BobbieJean Borkowski",
+  "phone": "715-732-7406",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/marinette-county/",
+  "website": "https://www.marinettecountywi.gov/"
+ },
+ "55077": {
+  "address": [
+   "77 W Park Street",
+   "Montello WI 53949"
+  ],
+  "county": "Marquette",
+  "email": "klloyd@marquettecountywi.gov",
+  "fax": "608-297-7606",
+  "name": "Kiley L. Lloyd",
+  "party": "Republican",
+  "phone": "608-297-3016",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/marquette-county/",
+  "website": "https://www.marquettecountywi.gov"
+ },
+ "55078": {
+  "address": [
+   "P.O. Box 279",
+   "Keshena WI 54135"
+  ],
+  "county": "Menominee",
+  "email": "mwayka@co.menominee.wi.us",
+  "fax": "715-799-1322",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Misty Wayka",
+  "party": "Democrat",
+  "phone": "715-799-3311",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/menominee-county/",
+  "website": "https://www.co.menominee.wi.us/"
+ },
+ "55079": {
+  "address": [
+   "901 North 9th Street",
+   "Rm 105",
+   "Milwaukee WI 53233"
+  ],
+  "county": "Milwaukee",
+  "electionNote": "Elections in Milwaukee County are run by the appointed county Election Commission, not the county clerk (Wis. Stat. 7.20).",
+  "electionUrl": "https://county.milwaukee.gov/EN/Election-Commission",
+  "email": "george.christenson@milwaukeecountywi.gov",
+  "fax": "414-278-4075",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "George L. Christenson",
+  "party": "Democrat",
+  "phone": "414-278-4067",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/milwaukee-county/",
+  "website": "https://county.milwaukee.gov/"
+ },
+ "55081": {
+  "address": [
+   "202 South K St",
+   "Room 1",
+   "Sparta WI 54656"
+  ],
+  "county": "Monroe",
+  "email": "sbohl@co.monroe.wi.us",
+  "fax": "608-269-8747",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Shelley R. Bohl",
+  "party": "Republican",
+  "phone": "608-269-8705",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/monroe-county/",
+  "website": "https://www.co.monroe.wi.us/"
+ },
+ "55083": {
+  "address": [
+   "301 Washington Street",
+   "Oconto WI 54153"
+  ],
+  "county": "Oconto",
+  "email": "Kim.pytleski@ocontocountywi.gov",
+  "fax": "920-834-6805",
+  "hours": "8:00 a.m. to 4:00 p.m.",
+  "name": "Kimberly K. Pytleski",
+  "phone": "920-834-6806",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/oconto-county/",
+  "website": "https://www.ocontocountywi.gov"
+ },
+ "55085": {
+  "address": [
+   "P.O. Box 400",
+   "Rhinelander WI 54501"
+  ],
+  "county": "Oneida",
+  "email": "thartman@co.oneida.wi.us",
+  "fax": "715-369-6230",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Tracy Hartman",
+  "party": "Republican",
+  "phone": "715-369-6125",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/oneida-county/",
+  "website": "https://www.co.oneida.wi.us/"
+ },
+ "55087": {
+  "address": [
+   "320 S Walnut St",
+   "Administrative Building",
+   "Appleton WI 54911"
+  ],
+  "county": "Outagamie",
+  "email": "Kelly.Gerrits@outagamie.org",
+  "fax": "920-832-2200",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Kelly Gerrits",
+  "party": "Republican",
+  "phone": "920-832-5077",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/outagamie-county/",
+  "website": "https://www.outagamie.org/"
+ },
+ "55089": {
+  "address": [
+   "121 W Main St",
+   "P.O. Box 994",
+   "Port Washington WI 53074"
+  ],
+  "county": "Ozaukee",
+  "email": "kkretlow@ozaukeecounty.gov",
+  "fax": "262-284-8100",
+  "hours": "M-F: 8:00 a.m. to 4:30 p.m.; Marriage & Passport Applications Monday-Friday 8:00am – 4:30 pm; Please contact the office directly for services available. Appointments are required.",
+  "name": "Kellie Kretlow",
+  "party": "Republican",
+  "phone": "262-284-8110",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/ozaukee-county/",
+  "website": "https://www.co.ozaukee.wi.us/"
+ },
+ "55091": {
+  "address": [
+   "740 7th Avenue W",
+   "P.O. Box 39",
+   "Durand WI 54736"
+  ],
+  "county": "Pepin",
+  "email": "countyclerk@co.pepin.wi.us",
+  "fax": "715-672-8677",
+  "hours": "Monday – Thursday 8:00 a.m.-5:00 p.m. Fridays- 8:00 a.m.- 11:30 a.m.",
+  "name": "Audrey Bauer",
+  "party": "Republican",
+  "phone": "715-672-8857",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/pepin-county/",
+  "website": "https://www.co.pepin.wi.us/"
+ },
+ "55093": {
+  "address": [
+   "414 W Main St",
+   "P.O. Box 119",
+   "Ellsworth WI 54011"
+  ],
+  "county": "Pierce",
+  "email": "jamie.feuerhelm@co.pierce.wi.us",
+  "fax": "715-273-6861",
+  "hours": "8:00 a.m. to 5:00 p.m.",
+  "name": "Jamie R. Feuerhelm",
+  "party": "Independent",
+  "phone": "715-273-6744",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/pierce-county/",
+  "website": "https://www.co.pierce.wi.us/"
+ },
+ "55095": {
+  "address": [
+   "100 Polk County Plaza",
+   "Suite 110",
+   "Balsam Lake WI 54810"
+  ],
+  "county": "Polk",
+  "email": "countyclerk@polkcountywi.gov",
+  "hours": "8:30 a.m. to 4:30 p.m.",
+  "name": "Shabana Lundeen",
+  "party": "Republican",
+  "phone": "715-485-9209",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/polk-county/",
+  "website": "https://www.polkcountywi.gov/"
+ },
+ "55097": {
+  "address": [
+   "1516 Church Street",
+   "Stevens Point WI 54481"
+  ],
+  "county": "Portage",
+  "email": "davism@co.portage.wi.gov",
+  "fax": "715-346-1486",
+  "hours": "7:30 a.m. to 4:30 p.m.",
+  "name": "Maria N. Davis",
+  "party": "Democrat",
+  "phone": "715-346-1351",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/portage-county/",
+  "website": "https://www.co.portage.wi.gov/"
+ },
+ "55099": {
+  "address": [
+   "126 Cherry St. Rm 106",
+   "Phillips WI 54555"
+  ],
+  "county": "Price",
+  "email": "meredith.hueckman@pricecounty.wi.gov",
+  "fax": "715-339-3089",
+  "hours": "Monday – Thursday 8:00 a.m. to 4:30 p.m. and Fridays 8:00 a.m. – 12:00 p.m.",
+  "name": "Meredith Hueckman",
+  "party": "Republican",
+  "phone": "715-339-5130",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/price-county/",
+  "website": "https://co.price.wi.us/"
+ },
+ "55101": {
+  "address": [
+   "730 Wisconsin Avenue",
+   "Racine WI 53403"
+  ],
+  "county": "Racine",
+  "email": "Wendy.christensen@racinecounty.gov",
+  "fax": "262-636-3491",
+  "hours": "8:00 a.m. to 5:00 p.m.",
+  "name": "Wendy M. Christensen",
+  "party": "Republican",
+  "phone": "262-636-3482",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/racine-county/",
+  "website": "https://www.racinecounty.gov"
+ },
+ "55103": {
+  "address": [
+   "P.O. Box 310",
+   "Richland Center WI 53581"
+  ],
+  "county": "Richland",
+  "email": "jeffrey.harrison@co.richland.wi.us",
+  "fax": "608-647-6134",
+  "name": "Jeffrey Harrison",
+  "phone": "608-647-2197",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/richland-county/",
+  "website": "https://co.richland.wi.us/"
+ },
+ "55105": {
+  "address": [
+   "51 S Main Street",
+   "Janesville WI 53545"
+  ],
+  "county": "Rock",
+  "email": "tollefson@co.rock.wi.us",
+  "fax": "608-757-5662",
+  "hours": "8:00 a.m. to 5:00 p.m.",
+  "name": "Lisa Tollefson",
+  "party": "Democrat",
+  "phone": "608-757-5660",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/rock-county/",
+  "website": "https://www.co.rock.wi.us/"
+ },
+ "55107": {
+  "address": [
+   "311 Miner Ave East",
+   "Suite C150",
+   "Ladysmith WI 54848"
+  ],
+  "county": "Rusk",
+  "email": "cmeyer@ruskcountywi.us",
+  "fax": "715-532-2237",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Connie Meyer",
+  "party": "Republican",
+  "phone": "715-532-2100",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/rusk-county/",
+  "website": "https://ruskcounty.org/"
+ },
+ "55109": {
+  "address": [
+   "1101 Carmichael Road",
+   "Hudson WI 54016"
+  ],
+  "county": "St. Croix",
+  "email": "christine.hines@sccwi.gov",
+  "fax": "715-381-4400",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Christine Hines",
+  "party": "Republican",
+  "phone": "715-386-4610",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/saint-croix-county/",
+  "website": "https://sccwi.gov/"
+ },
+ "55111": {
+  "address": [
+   "505 Broadway",
+   "Room #144",
+   "Baraboo WI 53913"
+  ],
+  "county": "Sauk",
+  "email": "becky.evert@saukcountywi.gov",
+  "fax": "608-355-3522",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Becky Evert",
+  "party": "Republican",
+  "phone": "608-355-3523",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/sauk-county/",
+  "website": "https://www.co.sauk.wi.us/"
+ },
+ "55113": {
+  "address": [
+   "10610 Main Street",
+   "Suite 10",
+   "Hayward WI 54843"
+  ],
+  "county": "Sawyer",
+  "email": "liz.klein@sawyercountygov.org",
+  "fax": "715-634-3666",
+  "hours": "8:00 a.m. to 4:00 p.m.",
+  "name": "Liz Klein",
+  "phone": "715-634-4866",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/sawyer-county/",
+  "website": "https://www.sawyercountygov.org/"
+ },
+ "55115": {
+  "address": [
+   "311 N. Main St.",
+   "Shawano WI 54166"
+  ],
+  "county": "Shawano",
+  "email": "raymond.rigsby@shawanocountywi.gov",
+  "fax": "715-524-5157",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Raymond Rigsby",
+  "phone": "715-526-9150",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/shawano-county/",
+  "website": "https://www.co.shawano.wi.us/"
+ },
+ "55117": {
+  "address": [
+   "508 New York Avenue",
+   "Sheboygan WI 53081"
+  ],
+  "county": "Sheboygan",
+  "email": "jon.dolson@sheboygancounty.com",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Jon Dolson",
+  "party": "Republican",
+  "phone": "920-459-3003",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/sheboygan-county/",
+  "website": "https://www.sheboygancounty.com/"
+ },
+ "55119": {
+  "address": [
+   "224 South 2nd St",
+   "Medford WI 54451"
+  ],
+  "county": "Taylor",
+  "email": "andria.farrand@co.taylor.wi.us",
+  "fax": "715-748-1415",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Andria M. Farrand",
+  "party": "Republican",
+  "phone": "715-748-1460",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/taylor-county/",
+  "website": "https://co.taylor.wi.us"
+ },
+ "55121": {
+  "address": [
+   "18600 Hobson Street",
+   "2nd Floor",
+   "Whitehall WI 54773"
+  ],
+  "county": "Trempealeau",
+  "email": "mary.martin@co.trempealeau.wi.us",
+  "fax": "715-538-4210",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Mary Martin",
+  "party": "Republican",
+  "phone": "715-538-2311",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/trempealeau-county/",
+  "website": "https://co.trempealeau.wi.us/"
+ },
+ "55123": {
+  "address": [
+   "Courthouse Annex",
+   "400 Courthouse Square, Suite 108",
+   "Viroqua, WI 54665"
+  ],
+  "county": "Vernon",
+  "email": "jerry.pedretti@vernoncountywi.gov",
+  "hours": "8:30 a.m. to 4:30 p.m.",
+  "name": "Jerry Pedretti",
+  "party": "Republican",
+  "phone": "608-637-5380",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/vernon-county/",
+  "website": "www.vernoncountywi.gov"
+ },
+ "55125": {
+  "address": [
+   "330 Court Street",
+   "Eagle River WI 54521"
+  ],
+  "county": "Vilas",
+  "email": "kiolko@vilascountywi.gov",
+  "fax": "715-479-3605",
+  "hours": "8:00 a.m. to 4:00 p.m.",
+  "name": "Kim Olkowski",
+  "party": "Republican",
+  "phone": "715-479-3602",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/vilas-county/",
+  "website": "https://www.vilascountywi.gov/"
+ },
+ "55127": {
+  "address": [
+   "100 West Walworth Street",
+   "P.O. Box 1001",
+   "Elkhorn WI 53121"
+  ],
+  "appointed": true,
+  "county": "Walworth",
+  "email": "spike@co.walworth.wi.us",
+  "fax": "262-741-4287",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Susi Pike",
+  "phone": "262-741-4241",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/walworth-county/",
+  "website": "https://www.co.walworth.wi.us/"
+ },
+ "55129": {
+  "address": [
+   "10 4th Avenue",
+   "P.O. Box 639",
+   "Shell Lake WI 54871"
+  ],
+  "county": "Washburn",
+  "email": "aswearin@washburncounty.wi.gov",
+  "fax": "715-468-4725",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Alicia Swearingen",
+  "party": "Republican",
+  "phone": "715-468-4603",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/washburn-county/",
+  "website": "https://www.co.washburn.wi.us/"
+ },
+ "55131": {
+  "address": [
+   "432 E Washington St",
+   "West Bend WI 53095"
+  ],
+  "county": "Washington",
+  "email": "ashley.reichert@washcowisco.gov",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Ashley Reichert",
+  "party": "Republican",
+  "phone": "262-335-4301",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/washington-county/",
+  "website": "https://www.washcowisco.gov/"
+ },
+ "55133": {
+  "address": [
+   "515 W Moreland Blvd",
+   "#120",
+   "Waukesha WI 53188"
+  ],
+  "county": "Waukesha",
+  "email": "gmaxwell@waukeshacounty.gov",
+  "fax": "262-548-7722",
+  "hours": "M, T, Th, F: 8:00 a.m. to 4:30 p.m.; W: 8:00 a.m. to 6:30 p.m.",
+  "name": "Georgia Maxwell",
+  "phone": "262-548-7010",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/waukesha-county/",
+  "website": "https://www.waukeshacounty.gov/"
+ },
+ "55135": {
+  "address": [
+   "811 Harding St",
+   "Waupaca WI 54981"
+  ],
+  "county": "Waupaca",
+  "email": "kristy.opperman@co.waupaca.wi.us",
+  "fax": "715-258-6212",
+  "hours": "7:30 a.m. to 4:00 p.m.",
+  "name": "Kristy Opperman",
+  "party": "Republican",
+  "phone": "715-258-6200",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/waupaca-county/",
+  "website": "https://www.waupacacounty-wi.gov/"
+ },
+ "55137": {
+  "address": [
+   "380 S. Townline Rd.",
+   "Wautoma WI 54982"
+  ],
+  "county": "Waushara",
+  "email": "desiree.acantilado@wausharacountywi.gov",
+  "fax": "920-787-0425",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Desiree Acantilado",
+  "party": "Republican",
+  "phone": "920-787-0442",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/waushara-county/",
+  "website": "https://www.co.waushara.wi.us/"
+ },
+ "55139": {
+  "address": [
+   "112 Otter Avenue",
+   "Room 103",
+   "Oshkosh WI 54901"
+  ],
+  "county": "Winnebago",
+  "email": "jabarthels@winnebagocountywi.gov",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Julie Barthels",
+  "party": "Republican",
+  "phone": "920-232-3430",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/winnebago-county/",
+  "website": "https://www.winnebagocountywi.gov/"
+ },
+ "55141": {
+  "address": [
+   "400 Market Street",
+   "P.O. Box 8095",
+   "Wisconsin Rapids WI 54494"
+  ],
+  "county": "Wood",
+  "email": "trent.miner@woodcountywi.gov",
+  "hours": "8:00 a.m. to 4:30 p.m.",
+  "name": "Trent Miner",
+  "party": "Republican",
+  "phone": "715-421-8460",
+  "sourceUrl": "https://wisconsincountyclerks.org/counties/wood-county/",
+  "website": "https://woodcountywi.gov/"
+ }
+}

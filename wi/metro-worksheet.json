@@ -122,7 +122,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1"
           }
         ],
-        "people": "wi-senate-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).",
+        "people": "wi-senate-members.json, rebuilt weekly by CI — the Open States current-people export (name, party) merged with the Legislature's own senate index page (Madison office room, phone, fax, e-mail, the current session link; the member's home Voting Address is refused by construction and the build proves it).",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -140,7 +140,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2"
           }
         ],
-        "people": "wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).",
+        "people": "wi-assembly-members.json, rebuilt weekly by CI — the Open States current-people export (name, party) merged with the Legislature's own assembly index page (Madison office room, phones, fax, e-mail, the current session link; the member's home Voting Address is refused by construction and the build proves it).",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -173,14 +173,14 @@
       "area_rank": 6,
       "rank_note": "Counties, pre-built from TIGERweb at bootstrap; the fork's offline anchor layer",
       "source": {
-        "answers": "Which county contains the point.",
+        "answers": "Which county contains the point, the county clerk who holds its records and — outside Milwaukee — runs its elections, with the clerk's office, hours and contact.",
         "boundary": [
           {
             "label": "U.S. Census TIGERweb — State_County, layer 1, pre-built for the state and shipped with the app",
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1"
           }
         ],
-        "people": "No roster is joined yet; growing this card is the fork's first expansion (docs/EXPANSION_GUIDE.md Part 2).",
+        "people": "wi-county-clerks.json, rebuilt weekly by CI from the Wisconsin Blue Book's county-officers table (a state publication carrying each clerk's party-or-appointed code) CROSS-GATED against wisconsincountyclerks.org, the clerks' own association (office, hours, phone, fax, e-mail) — WEC's own surfaces refuse automated clients, so the two open publishers witness each other; a name they disagree on ships from the association with the party withheld. Milwaukee's card also states that its elections are run by the APPOINTED county Election Commission (Wis. Stat. 7.20), linked and labeled, its members unnamed because its hosts refuse automation.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -256,7 +256,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 20 of the 72 counties, the supervisor holding the district, from that county's own board page (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 52 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 22 of the 72 counties, the supervisor holding the district — 20 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 50 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -387,7 +387,7 @@
       }
     }
   ],
-  "min_register_layer": 12,
+  "min_register_layer": 13,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -531,8 +531,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 400,
-        "note": "County board supervisors for the 20 counties that publish a district-keyed member list (437 seats). Built by wi/scripts/build_wi_county_board_roster.py from each county's own page and checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 52 counties name nobody — their cards link the county board instead."
+        "min_keys": 455,
+        "note": "County board supervisors for the 22 counties that publish a district-keyed member list a client can read (476 seats) — 20 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 50 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -543,11 +543,16 @@
         "file": "wi-court-of-appeals-roster.json",
         "min_keys": 4,
         "note": "The Court of Appeals bench — sixteen judges keyed by district with role, direct phone and chambers, the 4/4/3/5 seat split gated at scrape time. Built by wi/scripts/build_wi_coa_roster.py; refreshed weekly by update-wi-court-of-appeals-roster.yml, whose composition assertion is the appeals map's redistricting tripwire."
+      },
+      {
+        "file": "wi-county-clerks.json",
+        "min_keys": 72,
+        "note": "All 72 county clerks — name, party-or-appointed per the Blue Book's own legend, office, hours, phone, fax, e-mail — keyed by county GEOID. Built by wi/scripts/build_wi_county_clerk_roster.py from the two cross-gating open publishers; refreshed weekly by update-wi-county-clerk-roster.yml. Milwaukee's entry carries the statutory election-commission note."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v6",
+    "cache_name": "districtry-wi-shell-v7",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -575,7 +580,7 @@
     },
     {
       "file": "update-wi-county-board-roster.yml",
-      "purpose": "County board supervisors for the 20 counties that publish a member list",
+      "purpose": "County board supervisors for the 22 counties that publish a readable member list",
       "schedule": "Thu 14:30 UTC"
     },
     {
@@ -587,6 +592,11 @@
       "file": "update-wi-court-of-appeals-roster.yml",
       "purpose": "Court of Appeals bench from wicourts.gov (asserts the 752.11 composition + seat split)",
       "schedule": "Wed 16:30 UTC"
+    },
+    {
+      "file": "update-wi-county-clerk-roster.yml",
+      "purpose": "County clerks from the Blue Book × the clerks' association (cross-gated; crawl-delay honored)",
+      "schedule": "Fri 14:30 UTC"
     },
     {
       "file": "wi-validate-sources.yml",

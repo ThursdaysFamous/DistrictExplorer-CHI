@@ -61,15 +61,17 @@ def load_rows(path):
     return list(csv.DictReader(io.StringIO(text)))
 
 
-def first_url(links):
-    # Open States `links` packs the member's official page(s); pull the first
-    # http(s) URL out however it's serialized. The engine scheme-checks this
-    # via safeHttpUrl before it ever becomes an href, so a stray value
+def current_url(links):
+    # Open States `links` packs the member's official page(s) in session
+    # order, OLDEST FIRST — taking the first match shipped a senator's 2019
+    # page for a year (the measured defect docs/WI_PHASE2_PLAN.md PR 6
+    # records), so the LAST url is the current one. The engine scheme-checks
+    # this via safeHttpUrl before it ever becomes an href, so a stray value
     # degrades to the chamber directory.
     if not links:
         return None
-    m = re.search(r"https?://[^\s,;'\"\]}]+", links)
-    return m.group(0) if m else None
+    found = re.findall(r"https?://[^\s,;'\"\]}]+", links)
+    return found[-1] if found else None
 
 
 # Put an embedded unit designator on its own comma-part so the app's
@@ -100,7 +102,7 @@ def office(address, voice):
     return lines
 
 
-def resolve(rows, chamber):
+def resolve(rows, chamber, offices):
     roster = {}
     for r in rows:
         if (r.get("current_chamber") or "").strip() != chamber:
@@ -110,7 +112,14 @@ def resolve(rows, chamber):
         if not district or not name:
             continue
         member = {"name": name, "party": (r.get("current_party") or "").strip() or None}
-        url = first_url(r.get("links"))
+        # The CSV's email column is filled 132/132 for Wisconsin and was
+        # DISCARDED for the instance's first weeks (the second measured
+        # defect); the legislature's own page overrides it below where both
+        # exist, since that is the address the member's office publishes.
+        email = (r.get("email") or "").strip()
+        if email and "@" in email:
+            member["email"] = email
+        url = current_url(r.get("links"))
         if url:
             member["url"] = url
         dist = office(r.get("district_address"), r.get("district_voice"))
@@ -119,6 +128,26 @@ def resolve(rows, chamber):
         cap = office(r.get("capitol_address"), r.get("capitol_voice"))
         if cap:
             member["capitolOffice"] = cap
+
+        # The docs.legis enrichment (wi_legislature_scraper.py): the Madison
+        # office room, phones, fax, e-mail and the CURRENT session link —
+        # everything the Open States export measures 0/132 on for Wisconsin.
+        # Fields merge individually; a missing enrichment leaves the Open
+        # States base untouched, so a scraper outage degrades rather than
+        # emptying the roster.
+        enrich = offices.get(district) if offices else None
+        if enrich:
+            if enrich.get("url"):
+                member["url"] = enrich["url"]
+            if enrich.get("email"):
+                member["email"] = enrich["email"]
+            cap_lines = list(enrich.get("capitolOffice") or [])
+            for phone in enrich.get("phones") or []:
+                cap_lines.append("Phone: " + phone)
+            if enrich.get("fax"):
+                cap_lines.append("Fax: " + enrich["fax"])
+            if cap_lines:
+                member["capitolOffice"] = cap_lines
         roster[district] = member
     return roster
 
@@ -147,10 +176,21 @@ def main():
     out_dir = sys.argv[2] if len(sys.argv) == 3 else DEFAULT_OUT_DIR
     rows = load_rows(src_path)
 
+    # docs.legis office enrichment (wi_legislature_scraper.py's intermediate);
+    # absent file = degrade to the Open States base, never fail the build.
+    offices_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                ".cache", "wi_legislature_offices.json")
+    offices_all = {}
+    if os.path.exists(offices_path):
+        with open(offices_path) as f:
+            offices_all = json.load(f)
+    chamber_offices = {"upper": offices_all.get("senate") or {},
+                       "lower": offices_all.get("assembly") or {}}
+
     os.makedirs(out_dir, exist_ok=True)
     failed = False
     for chamber, cfg in CHAMBERS.items():
-        roster = resolve(rows, chamber)
+        roster = resolve(rows, chamber, chamber_offices.get(chamber))
         if len(roster) < cfg["expected"]:
             print(
                 f"WARNING: resolved {len(roster)} WI {cfg['label']} districts "
@@ -160,6 +200,18 @@ def main():
             )
             failed = True
             continue
+        # The legislature's page prints each member's HOME address under
+        # "Voting Address"; the scraper never reads that span, and this
+        # asserts on the BUILT payload that nothing shaped like it survived
+        # (every shipped capitol line is the Capitol's own room/box/phone).
+        for d, m in roster.items():
+            for line in m.get("capitolOffice") or []:
+                low = line.lower()
+                if not any(tok in low for tok in ("room", "state capitol", "po box",
+                                                   "madison", "phone:", "fax:")):
+                    raise SystemExit("capitol office for district %s carries a "
+                                     "non-Capitol line (%r) — a home address "
+                                     "cannot ship" % (d, line))
         out_path = os.path.join(out_dir, cfg["out"])
         write_json(out_path, roster)
         print(f"Wrote {out_path} ({len(roster)} districts)", file=sys.stderr)

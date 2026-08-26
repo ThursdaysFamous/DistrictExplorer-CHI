@@ -913,7 +913,7 @@ table.matrix code {
                     <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — Legislative, layer 1 (state upper chamber), pre-built for the state and shipped with the app</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">wi-senate-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).</td>
+                <td data-label="Who it names">wi-senate-members.json, rebuilt weekly by CI — the Open States current-people export (name, party) merged with the Legislature's own senate index page (Madison office room, phone, fax, e-mail, the current session link; the member's home Voting Address is refused by construction and the build proves it).</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-wi-assembly">
@@ -924,7 +924,7 @@ table.matrix code {
                     <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/2" target="_blank" rel="noopener">U.S. Census TIGERweb — Legislative, layer 2 (state lower chamber), pre-built for the state and shipped with the app</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).</td>
+                <td data-label="Who it names">wi-assembly-members.json, rebuilt weekly by CI — the Open States current-people export (name, party) merged with the Legislature's own assembly index page (Madison office room, phones, fax, e-mail, the current session link; the member's home Voting Address is refused by construction and the build proves it).</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-wi-circuit-court">
@@ -948,7 +948,7 @@ table.matrix code {
                     <li><a href="https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3" target="_blank" rel="noopener">Trempealeau County — the county's own adopted 2021-2031 plan, shipped in place of LTSB's file for that county alone, which merges its districts 15 and 17 into one and so drops a district the county still elects</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">For 20 of the 72 counties, the supervisor holding the district, from that county's own board page (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 52 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.</td>
+                <td data-label="Who it names">For 22 of the 72 counties, the supervisor holding the district — 20 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 50 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.</td>
                 <td data-label="Where it applies">Wisconsin — statewide, all 72 counties.</td>
               </tr>
             </tbody>
@@ -1050,13 +1050,13 @@ table.matrix code {
             <tbody>
               <tr id="layer-county">
                 <th scope="row"><span class="layer-name">County</span><code>county</code></th>
-                <td data-label="What it answers">Which county contains the point.</td>
+                <td data-label="What it answers">Which county contains the point, the county clerk who holds its records and — outside Milwaukee — runs its elections, with the clerk's office, hours and contact.</td>
                 <td data-label="Boundary source">
                   <ul class="src-list">
                     <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — State_County, layer 1, pre-built for the state and shipped with the app</a></li>
                   </ul>
                 </td>
-                <td data-label="Who it names">No roster is joined yet; growing this card is the fork's first expansion (docs/EXPANSION_GUIDE.md Part 2).</td>
+                <td data-label="Who it names">wi-county-clerks.json, rebuilt weekly by CI from the Wisconsin Blue Book's county-officers table (a state publication carrying each clerk's party-or-appointed code) CROSS-GATED against wisconsincountyclerks.org, the clerks' own association (office, hours, phone, fax, e-mail) — WEC's own surfaces refuse automated clients, so the two open publishers witness each other; a name they disagree on ships from the association with the party withheld. Milwaukee's card also states that its elections are run by the APPOINTED county Election Commission (Wis. Stat. 7.20), linked and labeled, its members unnamed because its hosts refuse automation.</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
               </tr>
               <tr id="layer-county-subdivision">

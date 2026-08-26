@@ -110,7 +110,18 @@ PROVENANCE = [
         "layer": "wi-senate",
         "app_file": "wi-senate-members.json",
         "source_url": "https://data.openstates.org/people/current/wi.csv",
-        "note": "Senate roster from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
+        "note": "Senate roster base (name, party) from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
+    },
+    {
+        "layer": "wi-senate",
+        "app_file": "wi-senate-members.json",
+        "source_url": "https://docs.legis.wisconsin.gov/2025/legislators/senate",
+        "note": (
+            "The Legislature's own senate index — the office/phone/fax/e-mail "
+            "enrichment (wi_legislature_scraper.py). SESSION-SCOPED URL: the "
+            "/2025/ biennium path must be bumped each odd-year January "
+            "(WATCH.md row) — this row going dead is that bump coming due."
+        ),
     },
     {
         "layer": "wi-assembly",
@@ -122,7 +133,16 @@ PROVENANCE = [
         "layer": "wi-assembly",
         "app_file": "wi-assembly-members.json",
         "source_url": "https://data.openstates.org/people/current/wi.csv",
-        "note": "Assembly roster from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
+        "note": "Assembly roster base (name, party) from the Open States current-people export; refreshed weekly by update-wi-legislature-roster.yml.",
+    },
+    {
+        "layer": "wi-assembly",
+        "app_file": "wi-assembly-members.json",
+        "source_url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly",
+        "note": (
+            "The Legislature's own assembly index — the office enrichment; "
+            "same session-scoped-path caveat as the senate row."
+        ),
     },
     {
         "layer": "county-board",
@@ -208,11 +228,54 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "county",
+        "app_file": "wi-county-clerks.json",
+        "source_url": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+        "note": (
+            "The Blue Book county-officers excerpt the clerk roster's names and "
+            "party-or-appointed codes come from. A NEW BIENNIAL EDITION is the "
+            "drift to watch: the 2027-28 book will publish under a new path, and "
+            "the scraper's URL follows it by hand (WATCH.md row)."
+        ),
+    },
+    {
+        "layer": "county",
+        "app_file": "wi-county-clerks.json",
+        "source_url": "https://wisconsincountyclerks.org/wisconsin-counties/",
+        "note": (
+            "The clerks' association's county index (72 per-county pages) — the "
+            "roster's contact half and its currency witness; crawled weekly at "
+            "the robots-declared 10-second delay by wi_county_clerk_scraper.py."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46",
+        "note": (
+            "Milwaukee's 18 supervisors as attributes on the county's own LIO "
+            "layer (Sup_Name/Email_Addr/Website_Url) — the blocked-site-is-not-"
+            "a-blocked-county route; witnessed per run against the county's "
+            "Legistar API (body 138), which is a witness, never a source."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0",
+        "note": (
+            "Racine's 21 supervisors with e-mails on the county's own AGO org "
+            "(REPNAME/Contact, edited post-April-2026) — same route as "
+            "Milwaukee, no witness needed: the layer is the county's only "
+            "machine-readable roster and its edit date is the currency fact."
+        ),
+    },
+    {
         "layer": "county-board",
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 20 counties' own board pages, scraped weekly by "
+            "The supervisor roster — 20 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
             "One representative page is probed here — Brown, the largest launch-set "

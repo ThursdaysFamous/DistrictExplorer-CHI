@@ -8187,21 +8187,99 @@ function initWisconsinExplorer() {
   var loadStateCounties = makeCached(function () {
     return fetchJSONWithRetry("data/app/state-counties.json", {}, 2);
   });
+  // The clerk roster (phase 2, docs/WI_PHASE2_PLAN.md PR 5): all 72 clerks
+  // from the Blue Book's county-officers table CROSS-GATED against the
+  // clerks' own association — WEC's surfaces are Cloudflare-challenged
+  // (measured), so the state's two open publishers witness each other
+  // instead. Keyed by GEOID, the same value this card reads off its feature.
+  var loadWiCountyClerks = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-county-clerks.json", {}, 2);
+  });
 
-  registerPolygonLayer({
+  registerLayer({
     id: "county",
     group: "geography",
     label: "County",
-    loader: loadStateCounties,
-    // solid, slightly heavier stroke — the broadest local boundary on the map
-    style: { color: "#444B54", weight: 2, fillColor: "#6B7280", fillOpacity: 0.04 },
-    fields: [
-      // hoverName derives from these same keys (hover-parity by construction):
-      // TIGER NAME is the full "Cook County", BASENAME the bare "Cook" fallback.
-      { name: "name", label: "County", keys: ["name", "basename"], primary: true },
-      { name: "geoid", label: "FIPS", keys: ["geoid"] }
-    ],
-    compact: true, compactMetaField: "geoid" // 4b name-only card
+    overlay: {
+      load: loadStateCounties,
+      // solid, slightly heavier stroke — the broadest local boundary on the map
+      style: { color: "#444B54", weight: 2, fillColor: "#6B7280", fillOpacity: 0.04 }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name", "basename"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // The roster is a small same-origin file and its failure is not this
+      // layer's failure: the county still answers, so a roster miss degrades
+      // to the identity card this layer shipped with at launch.
+      return Promise.all([
+        queryFeatureAt(loadStateCounties, point),
+        loadWiCountyClerks().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var geoid = findPropCI(props, ["geoid"]);
+        var clerk = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
+        return {
+          seq: seq,
+          name: findPropCI(props, ["name"]),
+          geoid: geoid,
+          clerk: clerk || null
+        };
+      });
+    },
+    render: function (result) {
+      // Card convention: identity → officeholder → office → contact → link.
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown county",
+        note: result.geoid != null ? "FIPS " + String(result.geoid) : null
+      }));
+      var clerk = result.clerk;
+      if (clerk && clerk.name) {
+        var person = { name: String(clerk.name), badge: "County Clerk" };
+        // The Blue Book's own legend: A-Appointed; D-Democrat; I-Independent;
+        // R-Republican. Appointed is a FLAG, never a party — the honesty
+        // rules require an appointed officer labeled as appointed — and a
+        // county where the two sources disagreed on the name carries neither.
+        if (clerk.appointed) person.note = "Appointed";
+        else if (clerk.party) person.note = String(clerk.party);
+        if (clerk.phone) person.phone = String(clerk.phone);
+        if (clerk.email) person.email = String(clerk.email);
+        wrap.appendChild(renderPersonRows([person]));
+        if (clerk.address && clerk.address.length) {
+          var office = { label: "Clerk's Office", lines: clerk.address.map(String) };
+          if (clerk.hours) office.lines = office.lines.concat(["Hours: " + String(clerk.hours)]);
+          wrap.appendChild(renderOfficeGroup({ offices: [office] }));
+        }
+        if (clerk.electionNote) {
+          // Milwaukee, by statute (Wis. Stat. 7.20(1)): election duties sit
+          // with an APPOINTED county Election Commission, whose own roster
+          // lives behind hosts that refuse automation — so the card states
+          // the fact and links the body, naming nobody unverified.
+          wrap.appendChild(renderFieldStack([{
+            label: "Elections",
+            value: String(clerk.electionNote)
+          }]));
+        }
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var clerk = result.clerk;
+      if (clerk && clerk.electionUrl) {
+        var commission = safeHttpUrl(clerk.electionUrl);
+        if (commission) return { label: "Milwaukee County Election Commission", url: commission };
+      }
+      var url = safeHttpUrl(clerk && (clerk.website || clerk.sourceUrl));
+      if (!url) return null;
+      return {
+        label: result.name ? String(result.name) + " website" : "County website",
+        url: url
+      };
+    }
   });
 
   /* ---------- 12. County Board Supervisory District ----------

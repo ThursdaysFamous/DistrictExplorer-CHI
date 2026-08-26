@@ -1283,6 +1283,151 @@
   "name": "Judi Nigbor",
   "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
  },
+ "5507901": {
+  "county": "Milwaukee",
+  "district": 1,
+  "email": "Anne.OConnor@milwaukeecountywi.gov",
+  "name": "Anne O'Connor",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Anne-Oconnor-1st-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507902": {
+  "county": "Milwaukee",
+  "district": 2,
+  "email": "Willie.Johnson@milwaukeecountywi.gov",
+  "name": "Willie Johnson, Jr.",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Willie-Johnson-Jr.-2nd-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507903": {
+  "county": "Milwaukee",
+  "district": 3,
+  "email": "Sheldon.Wasserman@milwaukeecountywi.gov",
+  "name": "Sheldon A. Wasserman",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Sheldon-A.-Wasserman-3rd-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507904": {
+  "county": "Milwaukee",
+  "district": 4,
+  "email": "jack.eckblad@milwaukeecountywi.gov",
+  "name": "Jack Eckblad",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Jack-Eckblad-4th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507905": {
+  "county": "Milwaukee",
+  "district": 5,
+  "email": "Leevan.Roundtree@milwaukeecountywi.gov",
+  "name": "LeeVan D. Roundtree Jr.",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Leevan-Roundree-5th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507906": {
+  "county": "Milwaukee",
+  "district": 6,
+  "email": "Shawn.rolland@milwaukeecountywi.gov",
+  "name": "Shawn Rolland",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Shawn-Rolland-6th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507907": {
+  "county": "Milwaukee",
+  "district": 7,
+  "email": "Felesia.Martin@milwaukeecountywi.gov",
+  "name": "Felesia A. Martin",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Felesia-A-Martin-7th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507908": {
+  "county": "Milwaukee",
+  "district": 8,
+  "email": "Steven.shea@milwaukeecountywi.gov",
+  "name": "Steven Shea",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Steven-Shea-8th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507909": {
+  "county": "Milwaukee",
+  "district": 9,
+  "email": "Patti.logsdon@milwaukeecountywi.gov",
+  "name": "Patti Logsdon",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Patti-Logsdon-9th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507910": {
+  "county": "Milwaukee",
+  "district": 10,
+  "email": "Marcelia.Nicholson@milwaukeecountywi.gov",
+  "name": "Marcelia Nicholson-Bovell",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Marcelia-Nicholson-10th-District",
+  "role": "Chairwoman",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507911": {
+  "county": "Milwaukee",
+  "district": 11,
+  "email": "Kathleen.vincent@milwaukeecountywi.gov",
+  "name": "Kathleen Vincent",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Kathleen-Vincent-11th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507912": {
+  "county": "Milwaukee",
+  "district": 12,
+  "email": "JuanMiguel.Martinez@milwaukeecountywi.gov",
+  "name": "Juan Miguel Martinez",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Juan-Miguel-Martinez-12th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507913": {
+  "county": "Milwaukee",
+  "district": 13,
+  "email": "Priscilla.CoggsJones@milwaukeecountywi.gov",
+  "name": "Priscilla E. Coggs-Jones",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Priscilla-Coggs-Jones-13th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507914": {
+  "county": "Milwaukee",
+  "district": 14,
+  "email": "Caroline.GomezTom@milwaukeecountywi.gov",
+  "name": "Caroline G\u00f3mez-Tom",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Caroline-Gmez-Tom-14th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507915": {
+  "county": "Milwaukee",
+  "district": 15,
+  "email": "Sky.capriolo@milwaukeecountywi.gov",
+  "name": "Sky Z. Capriolo",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Sky-Capriolo-15th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507916": {
+  "county": "Milwaukee",
+  "district": 16,
+  "email": "Justin.bielinski@milwaukeecountywi.gov",
+  "name": "Justin Bielinski",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Justin-Bielinski-16th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507917": {
+  "county": "Milwaukee",
+  "district": 17,
+  "email": "Steve.Taylor@milwaukeecountywi.gov",
+  "name": "Steve F. Taylor",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Board-Members/Steve-F.-Taylor-17th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
+ "5507918": {
+  "county": "Milwaukee",
+  "district": 18,
+  "email": "Deanna.Alexander@milwaukeecountywi.gov",
+  "name": "Deanna Alexander",
+  "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Deanna-Alexander-18th-District",
+  "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
+ },
  "5509501": {
   "county": "Polk",
   "district": 1,
@@ -1525,6 +1670,153 @@
   "district": 25,
   "name": "Travis Bassett",
   "sourceUrl": "https://www.co.portage.wi.gov/171/County-Board"
+ },
+ "5510101": {
+  "county": "Racine",
+  "district": 1,
+  "email": "Velena.Coleman@racinecounty.gov",
+  "name": "VALENA LENA COLEMAN",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510102": {
+  "county": "Racine",
+  "district": 2,
+  "email": "Renee.Kelly@racinecounty.gov",
+  "name": "RENEE KELLY",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510103": {
+  "county": "Racine",
+  "district": 3,
+  "email": "Monte.Osterman@racinecounty.gov",
+  "name": "MONTE OSTERMAN",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510104": {
+  "county": "Racine",
+  "district": 4,
+  "email": "mkb@racinecounty.gov",
+  "name": "MELISSA KAPRELIAN",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510105": {
+  "county": "Racine",
+  "district": 5,
+  "email": "Jody.Spencer@racinecounty.gov",
+  "name": "JODY SPENCER",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510106": {
+  "county": "Racine",
+  "district": 6,
+  "email": "QA.Shakoor@racinecounty.gov",
+  "name": "Q.A. SHAKOOR, II",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510107": {
+  "county": "Racine",
+  "district": 7,
+  "email": "Ernie.Rossi@racinecounty.gov",
+  "name": "ERNIE ROSSI",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510108": {
+  "county": "Racine",
+  "district": 8,
+  "email": "Brett.Nielsen@racinecounty.gov",
+  "name": "BRETT A. NIELSEN",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510109": {
+  "county": "Racine",
+  "district": 9,
+  "email": "Eric.Hopkins@racinecounty.gov",
+  "name": "ERIC L. HOPKINS",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510110": {
+  "county": "Racine",
+  "district": 10,
+  "email": "Tony.Veranth@racinecounty.gov",
+  "name": "TONY VERANTH",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510111": {
+  "county": "Racine",
+  "district": 11,
+  "email": "Robert.Miller@racinecounty.gov",
+  "name": "ROBERT N. MILLER",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510112": {
+  "county": "Racine",
+  "district": 12,
+  "email": "Don.Trottier@racinecounty.gov",
+  "name": "DONALD J. TROTTIER",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510113": {
+  "county": "Racine",
+  "district": 13,
+  "email": "Tom.Kramer@racinecounty.gov",
+  "name": "THOMAS KRAMER",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510114": {
+  "county": "Racine",
+  "district": 14,
+  "email": "James.Hoffman@racinecounty.gov",
+  "name": "JAMES (JAYME) M. HOFFMAN",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510115": {
+  "county": "Racine",
+  "district": 15,
+  "email": "John.Wisch@racinecounty.gov",
+  "name": "JOHN A. WISCH",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510116": {
+  "county": "Racine",
+  "district": 16,
+  "email": "Scott.Maier@racinecounty.gov",
+  "name": "SCOTT MAIER",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510117": {
+  "county": "Racine",
+  "district": 17,
+  "email": "Thomas.Weatherston@racinecounty.gov",
+  "name": "THOMAS WEATHERSTON",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510118": {
+  "county": "Racine",
+  "district": 18,
+  "email": "Troy.McReynolds@racinecounty.gov",
+  "name": "TROY MCREYNOLDS",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510119": {
+  "county": "Racine",
+  "district": 19,
+  "email": "Greg.Horeth@racinecounty.gov",
+  "name": "GREG HORETH",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510120": {
+  "county": "Racine",
+  "district": 20,
+  "email": "Tom.Preusker@racinecounty.gov",
+  "name": "TOM PREUSKER",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
+ },
+ "5510121": {
+  "county": "Racine",
+  "district": 21,
+  "email": "Taylor.Wishau@racinecounty.gov",
+  "name": "TAYLOR M. WISHAU",
+  "sourceUrl": "https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/services/County_Board_of_Supervisors_WFL1/FeatureServer/0"
  },
  "5512301": {
   "county": "Vernon",

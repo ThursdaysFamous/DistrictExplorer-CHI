@@ -31,8 +31,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 18      # 20 publish one; the floor tolerates two going dark at once
-MIN_SEATS = 400        # 437 today
+MIN_COUNTIES = 20      # 22 ship one (20 pages + 2 county GIS layers); tolerates two dark
+MIN_SEATS = 455        # 476 today (437 page-scraped + Milwaukee 18 + Racine 21)
 
 
 def main():
@@ -80,6 +80,13 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
+                # the two county-GIS rosters carry contact on the feature —
+                # fields the page-scraped counties never publish; each rides
+                # only where its county published it
+                if member.get("email"):
+                    row["email"] = member["email"]
+                if member.get("url"):
+                    row["profileUrl"] = member["url"]
             roster[key] = row
             total += 1
 
