@@ -8434,6 +8434,10 @@ function initWisconsinExplorer() {
       // Book's own county-officer tables and DATED — no second publisher for
       // these offices measures open, so the card states the edition rather
       // than implying the weekly-verified currency the clerk row has. The
+      // one exception is the BOARD CHAIR, the only officer who is also a
+      // supervisor: the builder reconciles it against the weekly board
+      // roster (supersede / confirm / withhold), and this render surfaces
+      // whichever decision shipped in the data. The
       // executive's elected-vs-appointed label comes from the book's own
       // type code (CE elected; CA/AC/CM appointed); "Appointed to fill a
       // vacancy" is the book's A code, never a party.
@@ -8470,19 +8474,40 @@ function initWisconsinExplorer() {
             }
           }
         }
+        // Chair reconciliation (the builder's, surfaced honestly): boards
+        // elect their chair each April organizational meeting, which an
+        // April-2025 snapshot cannot see, so where the county's own board
+        // page marks a chair that name shipped instead and the row says so.
+        var chairSuperseded = o.chair && o.chair.source === "county-board-page";
+        if (chairSuperseded) {
+          for (var rj = 0; rj < rows.length; rj++) {
+            if (rows[rj].badge === "Board Chair") {
+              rows[rj].note = (rows[rj].note ? rows[rj].note + " · " : "") +
+                "From the county's own board page (verified weekly)";
+            }
+          }
+        }
         if (rows.length) {
           wrap.appendChild(renderSectionLabel("County officers"));
           wrap.appendChild(renderPersonRows(rows));
           var extras = [];
+          if (o.chair && o.chair.withheld && o.chair.reason) {
+            // Portage/Winnebago shape: the dated chair left the board and
+            // the county's roster marks no successor — state the absence
+            // rather than naming someone the county no longer seats.
+            extras.push({ label: "Board Chair", value: String(o.chair.reason) });
+          }
           if (o.districtAttorney && o.districtAttorney.sharedUnit) {
             extras.push({ label: "Prosecutorial unit", value: String(o.districtAttorney.sharedUnit) });
           }
-          extras.push({
-            label: "As of",
-            value: String(result.officersEdition || "Wisconsin Blue Book") +
-              " — the most recent open statewide publication of these offices; " +
-              "appointments and vacancies since then may not appear."
-          });
+          var asOfNote = String(result.officersEdition || "Wisconsin Blue Book") +
+            " — the most recent open statewide publication of these offices; " +
+            "appointments and vacancies since then may not appear.";
+          if (chairSuperseded) {
+            asOfNote += " The board chair is the exception: it is read weekly " +
+              "from the county's own board page.";
+          }
+          extras.push({ label: "As of", value: asOfNote });
           wrap.appendChild(renderFieldStack(extras));
         }
       }

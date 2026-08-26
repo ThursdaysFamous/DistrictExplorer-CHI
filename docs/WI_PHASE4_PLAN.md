@@ -1,8 +1,11 @@
 # districtry Wisconsin — Deployment Phase 4 (the officeholders phase + the second city tier)
 
-Status: **PROPOSED** — every source below was fetched and measured on 2026-08-26
-(the appendix is the ledger). Phases 1–3 are delivered: 29 layers as of
-2026-08-26, the phase-3 backlog fully cleared (`docs/DATA_LAYER_GUIDEBOOK.md`).
+Status: **IN PROGRESS** — every source below was fetched and measured on
+2026-08-26 (the appendix is the ledger). PR 1 is DELIVERED (2026-08-26, with
+its 1b follow-up the same day); PR 2 was slotted next by the operator after
+1b's measurement showed what per-county pages are worth. Phases 1–3 are
+delivered: 29 layers as of 2026-08-26, the phase-3 backlog fully cleared
+(`docs/DATA_LAYER_GUIDEBOOK.md`).
 Phase 4 is smaller than its predecessors by design: the cheap boundary wins are
 taken, so this phase spends its effort where Wisconsin still says nothing —
 **who holds the county offices**, **where you vote**, and **the second city
@@ -25,7 +28,20 @@ office card; recorded, not built).
 
 ---
 
-## PR 1 — County officers on the county card (no new layer)
+## PR 1 — County officers on the county card (no new layer) — DELIVERED 2026-08-26
+
+Shipped as planned (#543), plus a same-day **1b follow-up** the first
+measurement forced: the board chair is the one officer who is also a
+supervisor, and cross-checking the shipped file against the weekly
+`county-board-members.json` found SIX of the 22 roster counties visibly past
+the book's April 2025 snapshot — three rotated chairs (Bayfield, Dunn, Polk),
+two chairs off their boards entirely (Portage, Winnebago), one changed
+surname (Milwaukee). The builder now reconciles per county: a chair the
+county's own page marks supersedes the book's (the clerk precedent — the
+fresher county source wins, said on the card), a book chair absent from a
+complete roster is WITHHELD with the reason stated, and both the Thursday
+board workflow and the Friday clerk workflow rebuild the officers file so
+the decision ships the same week it moves.
 
 The county card names the clerk today. The same Blue Book PDF the clerk
 scraper already parses (`210_officials_and_employees.pdf`, cached) carries
@@ -76,7 +92,48 @@ sentences carry that merge more honestly than a near-duplicate county layer
 draws it. (NYC's `district-attorney` layer exists because boroughs ≠ its
 other tilings; Wisconsin's units ARE the county fabric minus one seam.)
 
-## PR 2 — Milwaukee polling places on the ward card (city-scoped enrichment)
+## PR 2 — The county-by-county officer scrape (NEXT: contact + currency, the attrition route)
+
+The officer rows ship dated and contact-free because no STATEWIDE second
+publisher measures open — but that is a fact about aggregators, not about
+the 72 counties, and 1b just proved what a county's own page is worth: it
+is both the fresher NAME witness and the only source of office contact.
+This step works the same attrition model as the county-board roster (22
+counties and counting, each page shape pinned, per-county floors, weekly
+CI): a per-county scrape of each county's own officer/department pages —
+sheriff, DA, treasurer, clerk of circuit court, register of deeds,
+executive, coroner/ME — shipping counties as they prove out and
+gap-recording the rest.
+
+What a scraped county gains, in order of value:
+
+1. **Contact on the officer rows** — office phone, address, and the
+   office's own page link (the card convention's missing half; today the
+   reader is handed the county website and left to navigate).
+2. **A per-county currency upgrade**: a county page naming its sheriff is
+   a second witness for that NAME, so the row's "As of" can state the
+   county's own page beside the book for scraped counties — the dated
+   caveat narrows county by county instead of all at once.
+3. **Divergences surface weekly** — a county page naming a DIFFERENT
+   person than the book is the chair-reconciliation case generalized:
+   print it, ship the county's name, withhold the book's party code
+   (the clerk rule), never smooth it.
+
+Order of attack, from what is already measured: the 22 board-roster
+counties are proven-readable sites with pinned shapes — extend those
+scrapers' reach to the officer pages first; then the phase-2 clerk-directory
+counties (Dane/Brown/Waukesha measured); then the frontier, county by
+county, recording each refusal (the EXPECTED_UNREACHABLE hosts — Rock's
+LAN-only portal, the Cloudflare-fronted counties — are known no's going
+in). Floors per county per office; a county ships only what its own page
+publishes; nothing is invented for the counties that publish nothing —
+they keep the dated Blue Book row and join the standing gap record.
+Scale honestly stated: this is the largest roster effort the instance has
+taken on (up to 72 sites × 7 offices), so it lands in TRANCHES — each
+tranche a reviewed PR with its own measured ledger, the board-roster
+precedent exactly.
+
+## PR 3 — Milwaukee polling places on the ward card (city-scoped enrichment)
 
 The `ward-polling-places` gap records the statewide block (WEC Cloudflare)
 and names the city-scoped opening. Measured: Milwaukee's `voting-wards`
@@ -93,7 +150,7 @@ The gap record narrows to "statewide minus Milwaukee" rather than closing.
 Election-cycle churn: polling places move per election — WATCH.md row, and
 the card states the pairing's edition.
 
-## PR 3 — The Madison city tier (tid-district's second city + neighborhood associations)
+## PR 4 — The Madison city tier (tid-district's second city + neighborhood associations)
 
 Measured on the city's own server (maps.cityofmadison.com, catalogued in
 its open-data portal):
@@ -116,7 +173,7 @@ its open-data portal):
   text for the source block, the DPI-licence precedent), and a
   `madisonCoverage` test built from the city's corporate-limit layer.
 
-## PR 4 — The WEC Playwright-from-CI attempt (a measurement, not a layer)
+## PR 5 — The WEC Playwright-from-CI attempt (a measurement, not a layer)
 
 The standing follow-up phase 2 recorded and three gap records wait on: one
 CPD-style Playwright challenge attempt against elections.wi.gov / MyVote
@@ -130,7 +187,7 @@ from "one attempt owed" to "attempted from CI on <date>, refused", and the
 ask ledger takes over. Either way a three-week-old "owed" comes off the
 books.
 
-## PR 5 (stretch) — Technical college districts, identity-only
+## PR 6 (stretch) — Technical college districts, identity-only
 
 DPI's own org publishes "Technical College Districts, Wisconsin" (measured
 present; same org and licence posture as the shipped school-site/library
@@ -144,8 +201,9 @@ phase's stretch item, cut first.
 
 ## Order and scope calls
 
-Recommended order: PR 1 (highest reader value per hour), PR 2, PR 4 (its
-outcome may spawn follow-ups), PR 3, PR 5 if wanted. Three calls are made
+Recommended order: PR 1 (delivered), PR 2 in tranches (slotted next by the
+operator, 2026-08-26), PR 3, PR 5 (its outcome may spawn follow-ups), PR 4,
+PR 6 if wanted. Three calls are made
 above rather than left open — DA on the county card (not a layer), dated
 Blue Book-only officer rows (not waiting for second sources that measure
 closed), Madison associations under their honest name — each reversible if

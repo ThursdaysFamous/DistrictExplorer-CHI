@@ -53,7 +53,10 @@ jobs:
       - name: Rebuild the county officer roster
         # phase 4: the scraper above also parses the Blue Book's other
         # county-officer tables into its second intermediate; this builder
-        # gates the chair-seats witness and the Menominee pin
+        # gates the chair-seats witness and the Menominee pin, and reconciles
+        # the board chair against the weekly board roster (the Thursday
+        # workflow rebuilds this file too — whichever runs after a change
+        # ships it)
         run: python3 wi/scripts/build_wi_county_officer_roster.py
 
       - name: Validate app + data files
@@ -62,7 +65,7 @@ jobs:
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- wi/data/app/wi-county-clerks.json; then
+          if git diff --quiet -- wi/data/app/wi-county-clerks.json wi/data/app/wi-county-officers.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -77,7 +80,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add wi/data/app/wi-county-clerks.json
+          git add wi/data/app/wi-county-clerks.json wi/data/app/wi-county-officers.json
           git commit -m "Update WI county clerks from the Blue Book and the clerks' association"
           git push -u origin "$branch" --force
           if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then

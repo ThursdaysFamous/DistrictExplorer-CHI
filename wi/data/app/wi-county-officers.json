@@ -119,7 +119,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Dennis M Pocernich",
+   "name": "Jan Lee",
+   "source": "county-board-page",
+   "sourceUrl": "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors",
    "seats": 13
   },
   "executive": {
@@ -612,7 +614,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Kelly McCullough",
+   "name": "Randy L. Prochnow",
+   "source": "county-board-page",
+   "sourceUrl": "https://dunncountywi.gov/supervisors",
    "seats": 29
   },
   "executive": {
@@ -651,6 +655,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Nancy Coffey",
+   "source": "county-board-page",
+   "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php",
    "seats": 29
   },
   "executive": {
@@ -802,7 +808,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Robert C Keeney",
+   "name": "Robert Keeney",
+   "source": "county-board-page",
+   "sourceUrl": "https://co.grant.wi.gov/",
    "seats": 17
   },
   "executive": {
@@ -1526,7 +1534,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Marcelia Nicholson",
+   "name": "Marcelia Nicholson-Bovell",
+   "source": "county-board-page",
+   "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46",
    "seats": 18
   },
   "executive": {
@@ -1830,7 +1840,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Jay Luke",
+   "name": "Russ Arcand",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php",
    "seats": 15
   },
   "executive": {
@@ -1868,7 +1880,8 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Ray Reser",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 25
   },
   "executive": {
@@ -2667,7 +2680,8 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Thomas J Egan",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 36
   },
   "executive": {
