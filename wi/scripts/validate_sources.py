@@ -469,6 +469,32 @@ PROVENANCE = [
             "ships; 0.007% max share difference at first build)."
         ),
     },
+    {
+        "layer": "fire-service",
+        "app_file": "fire-service-areas.json",
+        "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3",
+        "note": (
+            "The OEC's statewide NG911 FireBoundary aggregate (updated "
+            "roughly weekly; licence \"free and open for use by the "
+            "public\"), dissolved per agency on the DsplayName+Agency_ID "
+            "pair by wi/scripts/build_wi_ng911_service_areas.py — 3,009 "
+            "effective polygons to 1,046 department areas at first build, "
+            "expired rows dropped by date, filing absences pinned (gap "
+            "ng911-fire-filings)."
+        ),
+    },
+    {
+        "layer": "law-service",
+        "app_file": "law-service-areas.json",
+        "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4",
+        "note": (
+            "The same service's LawEnforcementBoundary layer, same builder "
+            "and gates — 3,083 effective polygons to 639 agency areas at "
+            "first build. Plain -dissolve, never -dissolve2, so the "
+            "concurrent sheriff/PD overlaps the counties filed survive; "
+            "absences are gap ng911-law-filings."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.
@@ -486,6 +512,18 @@ ENDPOINTS = [
     {
         "layer": "fire-station",
         "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        # The NG911 pair is PRE-BUILT, but the OEC refreshes the service
+        # roughly weekly and a count change here is the operator's rebuild
+        # trigger (WATCH.md); the service going dark is the failure. The
+        # counts move a little week to week — expected news, not drift.
+        "layer": "fire-service",
+        "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3/query?where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "law-service",
+        "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         # The ward layer queries this live (point-first + paged overlay). The

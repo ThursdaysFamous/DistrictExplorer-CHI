@@ -5796,6 +5796,8 @@ function initWisconsinExplorer() {
     "school-district-secondary", // Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead
     "school-district-unified", // Unified (K-12) school districts; pre-built from TIGERweb at bootstrap
     "school-district-elementary", // Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory
+    "law-service",       // 639 dissolved law-enforcement dispatch areas statewide — sheriffs' unincorporated territory keeps the average above the county-board fabric
+    "fire-service",      // 1,046 dissolved fire-department response areas statewide — denser than the law layer (town departments), broader than the county-board fabric
     "county-board",      // County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town
     "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
     "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
@@ -9274,6 +9276,110 @@ function initWisconsinExplorer() {
     compact: true // 4b name-only card — a neighborhood elects no one
   });
 
+  /* ---------- 24-25. NG911 service areas — fire and law, statewide ----------
+   * The route the phase-2 research recorded: the state Office of Emergency
+   * Communications aggregates every county's NG911 GIS filing into one
+   * public feature service ("free and open for use by the public", updated
+   * roughly weekly), and wi/scripts/build_wi_ng911_service_areas.py
+   * pre-builds the per-agency dissolve — 3,009 fire polygons into 1,046
+   * department areas, 3,083 law polygons into 639 agency areas at first
+   * build. These are RESPONSE areas ("who is dispatched here"), never
+   * taxing districts and never electing bodies, so the cards name no
+   * officeholder — the guidebook calls this the NYC operational shape.
+   *
+   * THE QUERY COLLECTS EVERY CONTAINING FEATURE, not the first: law
+   * jurisdictions genuinely overlap (a sheriff and a municipal PD both
+   * filed over ~0.5% of points — concurrent jurisdiction in the county's
+   * own filing), and every agency at the point renders. A cross-county
+   * agency ships as one feature per filing authority with the same NAME;
+   * the de-dupe below keeps its card to one row.
+   *
+   * ABSENCE IS EXPLAINED, NEVER HIDDEN: five authorities' filings are
+   * absent or partial and Langlade County files nothing at all (measured,
+   * pinned in the builder, recorded as gaps ng911-fire-filings /
+   * ng911-law-filings), so inside Wisconsin a no-polygon point renders an
+   * explanation instead of the generic empty state — no coverage() gate,
+   * because hiding the toggle would hide the gap itself. ---------- */
+  var loadFireServiceAreas = makeCached(function () {
+    return fetchJSONWithRetry("data/app/fire-service-areas.json", {}, 2);
+  });
+  var loadLawServiceAreas = makeCached(function () {
+    return fetchJSONWithRetry("data/app/law-service-areas.json", {}, 2);
+  });
+  function registerNg911ServiceLayer(opts) {
+    registerLayer({
+      id: opts.id,
+      group: "safety",
+      label: opts.label,
+      hoverName: function (feature) {
+        var v = (feature.properties || {}).NAME;
+        return v ? String(v) : null;
+      },
+      overlay: { load: opts.loader, style: opts.style },
+      query: function (point, seq) {
+        return Promise.all([opts.loader(), loadStateCounties()]).then(function (parts) {
+          var names = [];
+          var feats = (parts[0] && parts[0].features) || [];
+          for (var i = 0; i < feats.length; i++) {
+            var bb = featureBBox(feats[i]);
+            if (point.lng < bb[0] || point.lng > bb[2] || point.lat < bb[1] || point.lat > bb[3]) continue;
+            if (pointInGeometry(point, feats[i].geometry)) {
+              var n = String((feats[i].properties || {}).NAME || "");
+              if (n && names.indexOf(n) === -1) names.push(n);
+            }
+          }
+          if (names.length) return { seq: seq, names: names };
+          // no service polygon: inside Wisconsin that is a filing gap (or
+          // open Great Lakes water) and the card says so; outside the
+          // state the standard empty state is the honest answer
+          var county = findFeatureContaining(parts[1], point);
+          if (!county) return null;
+          return { seq: seq, names: [] };
+        });
+      },
+      render: function (result) {
+        if (!result.names.length) {
+          return renderFieldStack([
+            { label: opts.label, value: "Not in the statewide NG911 dataset", primary: true },
+            { label: "Why", value: "The state aggregates each county 911 authority's own filing, and no " +
+              opts.noun + " boundary is filed at this point — a few counties' filings are absent " +
+              "(the Data gaps panel lists them), and open water carries none." }
+          ]);
+        }
+        var rows = [{ label: opts.label, value: result.names[0], primary: true }];
+        for (var i = 1; i < result.names.length; i++) {
+          rows.push({ label: "Also filed at this point", value: result.names[i] });
+        }
+        if (result.names.length > 1) {
+          rows.push({ label: "Overlap", value: "More than one agency's filed service area covers this " +
+            "point — concurrent jurisdiction exactly as the county filed it." });
+        }
+        rows.push({ label: "About", value: "A dispatch service area from the state's NG911 dataset — " +
+          "who responds here, not a taxing district and not an elected body." });
+        return renderFieldStack(rows);
+      },
+      primaryLink: function () {
+        return { label: "Wisconsin NG911 GIS data (OEC)",
+                 url: "https://wisconsin-oec-data-portal-wi-oec.hub.arcgis.com/" };
+      }
+    });
+  }
+  registerNg911ServiceLayer({
+    id: "fire-service",
+    label: "Fire Service Area",
+    noun: "fire service",
+    loader: loadFireServiceAreas,
+    // the reference instance's fire-district red, kept for parity
+    style: { color: "#B0342A", weight: 1.5, fillColor: "#D0564C", fillOpacity: 0.05, dashArray: "5 3" }
+  });
+  registerNg911ServiceLayer({
+    id: "law-service",
+    label: "Law Enforcement Service Area",
+    noun: "law-enforcement",
+    loader: loadLawServiceAreas,
+    style: { color: "#2F5D8C", weight: 1.5, fillColor: "#4A7BB0", fillOpacity: 0.05, dashArray: "5 3" }
+  });
+
   /* ---------- 10. ZIP Code (statewide ZCTA) ----------
    * The Illinois statewide pattern: TIGERweb's ZCTA layer has NO STATE field
    * (ZCTAs cross state lines), so it can't use the STATE='55' filter the
@@ -10116,7 +10222,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "fire-service", "law-service", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10209,13 +10315,14 @@ function initWisconsinExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
-    "#1B7A3D": "#58CD7A", "#2E8C6A": "#62DAAC", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B",
-    "#3D6B49": "#7EBC8D", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
-    "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9",
-    "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
-    "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452",
-    "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880",
-    "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#C8102E": "#FE928F", "#C9A227": "#FEE195",
+    "#1B7A3D": "#58CD7A", "#2E8C6A": "#62DAAC", "#2E9E6B": "#5BEAA5", "#2F5D8C": "#6EACED",
+    "#2F6B3A": "#6FBE7B", "#3D6B49": "#7EBC8D", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
+    "#4A2E8C": "#9B7CFD", "#4A7BB0": "#90C4FD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
+    "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9", "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE",
+    "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241",
+    "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452", "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666",
+    "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C",
+    "#B26A00": "#FFB15F", "#C8102E": "#FE928F", "#C9A227": "#FEE195", "#D0564C": "#FEB1A7",
     "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */

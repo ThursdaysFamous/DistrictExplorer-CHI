@@ -88,7 +88,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 15
+MIN_REGISTER_LAYER = 16
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -97,10 +97,10 @@ MIN_REGISTER_LAYER = 15
 EXPECT_LAYER_IDS = [
     "wi-court-of-appeals", "us-house", "wi-senate", "wi-assembly",
     "wi-circuit-court", "county", "school-district-secondary",
-    "school-district-unified", "school-district-elementary", "county-board",
-    "county-subdivision", "municipality", "zip-code", "mpd-district",
-    "mps-school-board", "aldermanic-district", "ward",
-    "milwaukee-neighborhoods", "police-station", "fire-station",
+    "school-district-unified", "school-district-elementary", "law-service",
+    "fire-service", "county-board", "county-subdivision", "municipality",
+    "zip-code", "mpd-district", "mps-school-board", "aldermanic-district",
+    "ward", "milwaukee-neighborhoods", "police-station", "fire-station",
     "school-site", "library", "post-office",
 ]
 
@@ -122,6 +122,8 @@ GEOMETRY_FILES = {
     "mps-school-board-districts.json": (8, 8),  # Milwaukee's eight MPS board districts, the city's own layer server-reprojected and witnessed at build time against the CKAN shapefile's area shares (wi/scripts/build_mps_school_board_districts.py). Redraws each decennial census (adopted 2022-02-25); an operator rebuild.
     "aldermanic-districts.json": (838, 838),  # Every aldermanic (and village trustee) district the ward fabric composes completely — coded city/village wards dissolved on the statewide municipality key by wi/scripts/build_wi_aldermanic_districts.py under its completeness, BAS-witness and point-agreement gates (838 districts, 155 municipalities; ten incomplete submissions excluded on the record). Rebuild after each Jan/Jul filing window; a count change is expected news.
     "library-sites.json": (460, 560),  # Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file.
+    "fire-service-areas.json": (1046, 1046),  # 1,046 fire-department dispatch areas — the OEC's 3,009 effective NG911 FireBoundary polygons dissolved per agency by wi/scripts/build_wi_ng911_service_areas.py (expired rows dropped by date; filing-absence and 100.000% name-set agreement gates). An operator rebuild; the monthly source report watches the layer counts.
+    "law-service-areas.json": (639, 639),  # 639 law-enforcement dispatch areas — the OEC's 3,083 effective NG911 LawEnforcementBoundary polygons dissolved per agency; plain -dissolve, never -dissolve2, so the concurrent-jurisdiction overlaps the counties filed survive (measured). Same builder and gates as the fire file.
 }
 
 # file -> minimum key count (officeholder rosters).
