@@ -5951,6 +5951,7 @@ function initWisconsinExplorer() {
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
     "mpd-district",      // Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer
     "mps-school-board",  // Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer
+    "mpd-squad-area",    // The 25 MPD patrol squad areas — a twenty-fifth of the city each, nested inside the seven police districts (subOf), between the MPS board's eighths and the aldermanic fabric
     "aldermanic-district", // 838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "milwaukee-neighborhoods", // The city's 190 named neighborhoods — an identity fabric, not an electing body; below the ward layer's statewide average, above the amenity points
@@ -9423,6 +9424,55 @@ function initWisconsinExplorer() {
     compact: true // 4b name-only card — a neighborhood elects no one
   });
 
+  /* MPD squad areas — the beat analog, the reference instance's police-beat
+   * shape point for point: subOf the district (the toggle nests and the
+   * squad only shows while the district layer is on), a compact card whose
+   * header carries the squad with the district as the meta line, and the
+   * parent dropped to outline-only while squads carry the interior fill.
+   * The squad NUMBER encodes its district (hundreds digit, 120-750 over
+   * districts 1-7) — a structural fact the builder GATES against the
+   * shipped district file rather than merely asserting. No officeholder:
+   * a patrol area elects no one. */
+  var loadMpdSquadAreas = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mpd-squad-areas.json", {}, 2);
+  });
+  registerPolygonLayer({
+    id: "mpd-squad-area",
+    group: "safety",
+    subOf: "mpd-district",
+    label: "Milwaukee Police Squad Area",
+    coverage: milwaukeeCoverage,
+    loader: loadMpdSquadAreas,
+    // the reference instance's beat treatment: same red family as the
+    // district, a shade brighter, solid thin outline + visible fill
+    style: { color: "#7A0A1C", weight: 1, fillColor: "#E4572E", fillOpacity: 0.14 },
+    fields: [
+      // findPropCI candidates are matched against LOWERCASED feature keys,
+      // so they are written lowercase whatever case the file ships
+      { name: "squad", label: "Squad area", keys: ["squad"], primary: true },
+      { name: "district", label: "District", keys: ["district"] }
+    ],
+    compact: true,
+    compactMetaField: "district",
+    onToggle: function (on) {
+      var districtRt = layerRuntime["mpd-district"];
+      if (on) {
+        // a sub-selection needs its parent visible — turn the district on
+        // (as the outline frame) if it isn't already; box.click() runs the
+        // normal toggle path (overlay load + query + hash sync)
+        if (!state.layersOn["mpd-district"]) {
+          var box = document.getElementById("toggle-mpd-district");
+          if (box && !box.checked) box.click();
+        }
+        districtRt.outlineOnly = true;
+      } else {
+        districtRt.outlineOnly = false;
+      }
+      var districtMod = getLayerById("mpd-district");
+      if (districtMod && districtRt.overlayLayer) updateLayerHighlight(districtMod);
+    }
+  });
+
   /* ---------- 24-27. NG911 service areas — fire, law, EMS and PSAP, statewide ----------
    * The route the phase-2 research recorded: the state Office of Emergency
    * Communications aggregates every county's NG911 GIS filing into one
@@ -10397,7 +10447,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "mpd-squad-area", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10495,12 +10545,12 @@ function initWisconsinExplorer() {
     "#2E9E6B": "#5BEAA5", "#2F5D8C": "#6EACED", "#2F6B3A": "#6FBE7B", "#3D6B49": "#7EBC8D",
     "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4A7BB0": "#90C4FD",
     "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9",
-    "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
-    "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452",
-    "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880",
-    "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#B45309": "#FEA16D",
-    "#C8102E": "#FE928F", "#C9A227": "#FEE195", "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA",
-    "#D19133": "#FED7A7", "#D97706": "#FEC9A1"};
+    "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0A1C": "#EB5B61", "#7A0B1E": "#EA5C63",
+    "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294",
+    "#8C6D1F": "#DEB452", "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1",
+    "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F",
+    "#B45309": "#FEA16D", "#C8102E": "#FE928F", "#C9A227": "#FEE195", "#D0564C": "#FEB1A7",
+    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7", "#D97706": "#FEC9A1", "#E4572E": "#FFBCA9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

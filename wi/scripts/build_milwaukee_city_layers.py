@@ -10,6 +10,16 @@ queued behind the MPS board build, with the same two-surface machinery
   data/app/milwaukee-neighborhoods.json  the city's 190 named neighborhoods
                                          (planning/special_districts layer 4,
                                          field NEIGHBORHD)
+  data/app/mpd-squad-areas.json          the 25 MPD squad areas — the beat
+                                         analog (MPD/MPD_geography layer 1,
+                                         field SQUADAREA), whose HUNDREDS
+                                         DIGIT IS THE DISTRICT (120-140 in
+                                         District 1 ... 720-750 in District
+                                         7): a structural fact the build
+                                         GATES by sampling each squad
+                                         against the shipped district file,
+                                         the Richland two-layers-compose-
+                                         each-other check in city form
 
 Both are CC-BY city datasets published twice over — the measured-flaky
 milwaukeemaps ArcGIS service (fetched at BUILD TIME with retries, server-
@@ -41,6 +51,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_mps_school_board_districts import (  # noqa: E402
     fetch, geom_area, shp_areas, BBOX)
+from build_wi_supervisory_districts import (  # noqa: E402
+    _bbox, _point_in_geometry)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -71,7 +83,62 @@ LAYERS = [
         "props": lambda a: {"NAME": neighborhood_case(a["NEIGHBORHD"]),
                             "NAME_RAW": str(a["NEIGHBORHD"]).strip()},
     },
+    {
+        "out": "mpd-squad-areas.json",
+        "rest": ("https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD"
+                 "/MPD_geography/MapServer/1"),
+        "shp": ("https://data.milwaukee.gov/dataset/3216a1e4-4286-4247-a0c2-95551d5d268e"
+                "/resource/1afe1cae-c409-43f0-a381-27dcaf519eec/download/mpd_squad_area.zip"),
+        "key": "SQUADAREA",
+        "expect_n": 25,
+        # SQUAD carries the display form the compact card's header shows;
+        # the city's own integer ships beside it, and DISTRICT is the
+        # hundreds digit — verified against the shipped district file below,
+        # never merely asserted
+        "props": lambda a: {"SQUAD": "Squad " + str(a["SQUADAREA"]),
+                            "SQUAD_RAW": str(a["SQUADAREA"]),
+                            "DISTRICT": str(int(a["SQUADAREA"]) // 100)},
+        "verify": "squads_in_districts",
+    },
 ]
+
+
+def squads_in_districts(out_feats):
+    """The squad numbering ENCODES the district (hundreds digit), and the
+    city publishes both layers independently — so the claim is checkable and
+    is therefore a GATE: 60 seeded sample points inside each squad must land
+    >= 97% inside the district its number names, against the mpd-districts
+    file this same script builds. Run after the districts entry, which the
+    LAYERS order guarantees."""
+    import random
+    with open(os.path.join(APP_DATA, "mpd-districts.json")) as f:
+        districts = {feat["properties"]["DISTRICT"]: feat["geometry"]
+                     for feat in json.load(f)["features"]}
+    for feat in out_feats:
+        p = feat["properties"]
+        num, want = p["SQUAD_RAW"], p["DISTRICT"]
+        if want not in districts:
+            raise SystemExit("squad %s names district %s, which the district "
+                             "file does not carry" % (num, want))
+        rng = random.Random(int(num))
+        bb = _bbox(feat["geometry"])
+        pts, tries = [], 0
+        while len(pts) < 60 and tries < 12000:
+            tries += 1
+            pt = (rng.uniform(bb[0], bb[2]), rng.uniform(bb[1], bb[3]))
+            if _point_in_geometry(pt, feat["geometry"]):
+                pts.append(pt)
+        if not pts:
+            raise SystemExit("no sample points landed inside squad %s" % num)
+        hit = sum(1 for pt in pts if _point_in_geometry(pt, districts[want]))
+        share = 100.0 * hit / len(pts)
+        if share < 97:
+            raise SystemExit("squad %s sits only %.1f%% inside District %s — "
+                             "the hundreds-digit rule broke; re-measure before "
+                             "shipping" % (num, share, want))
+    print("mpd-squad-areas.json: all %d squads verified inside their "
+          "hundreds-digit district (>= 97%% of sampled points each)"
+          % len(out_feats))
 
 LOW_WORDS = {"of", "the", "and", "at", "on", "in"}
 
@@ -152,6 +219,8 @@ def build(layer):
     out_feats = [{"type": "Feature", "geometry": by_key[k]["geometry"],
                   "properties": layer["props"](by_key[k]["properties"])}
                  for k in sorted(by_key)]
+    if layer.get("verify"):
+        globals()[layer["verify"]](out_feats)  # a failed gate refuses the write
     compact = json.dumps({"type": "FeatureCollection", "features": out_feats},
                          separators=(",", ":"), ensure_ascii=False)
     path = os.path.join(APP_DATA, layer["out"])

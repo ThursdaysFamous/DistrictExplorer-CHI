@@ -458,6 +458,29 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "mpd-squad-area",
+        "app_file": "mpd-squad-areas.json",
+        "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD/MPD_geography/MapServer/1",
+        "note": (
+            "The city's own MPD squad-area layer (field SQUADAREA, 25 "
+            "squads — the beat analog), server-reprojected and pre-built by "
+            "wi/scripts/build_milwaukee_city_layers.py. A squad's number "
+            "encodes its district (hundreds digit), which the builder "
+            "sample-verifies against the shipped district file."
+        ),
+    },
+    {
+        "layer": "mpd-squad-area",
+        "app_file": "mpd-squad-areas.json",
+        "source_url": "https://data.milwaukee.gov/dataset/milwaukee-police-department-squad-areas",
+        "note": (
+            "The same squad areas as the city's CKAN shapefile (CC-BY) — "
+            "the build-time WITNESS: all 25 keys and their area shares must "
+            "agree between the two city surfaces before the file ships "
+            "(0.02% max share difference at first build)."
+        ),
+    },
+    {
         "layer": "milwaukee-neighborhoods",
         "app_file": "milwaukee-neighborhoods.json",
         "source_url": "https://data.milwaukee.gov/dataset/neighborhoods",
