@@ -507,6 +507,18 @@ PROVENANCE = [
             "absences are gap ng911-psap-filings."
         ),
     },
+    {
+        "layer": "ems-service",
+        "app_file": "ems-service-areas.json",
+        "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2",
+        "note": (
+            "The same service's EmergencyMedicalServicesBoundary layer, same "
+            "builder and gates — 2,443 effective polygons to 579 services at "
+            "first build. Regional ambulance providers re-prove the "
+            "DsplayName+Agency_ID pair key (some EMS Agency_IDs are not "
+            "county domains); absences are gap ng911-ems-filings."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.
@@ -540,6 +552,10 @@ ENDPOINTS = [
     {
         "layer": "psap-area",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/6/query?where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "ems-service",
+        "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         # The ward layer queries this live (point-first + paged overlay). The

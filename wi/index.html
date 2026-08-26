@@ -5797,6 +5797,7 @@ function initWisconsinExplorer() {
     "school-district-secondary", // Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead
     "school-district-unified", // Unified (K-12) school districts; pre-built from TIGERweb at bootstrap
     "school-district-elementary", // Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory
+    "ems-service",       // 579 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric
     "law-service",       // 639 dissolved law-enforcement dispatch areas statewide — sheriffs' unincorporated territory keeps the average above the county-board fabric
     "fire-service",      // 1,046 dissolved fire-department response areas statewide — denser than the law layer (town departments), broader than the county-board fabric
     "county-board",      // County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town
@@ -9277,16 +9278,18 @@ function initWisconsinExplorer() {
     compact: true // 4b name-only card — a neighborhood elects no one
   });
 
-  /* ---------- 24-26. NG911 service areas — fire, law and PSAP, statewide ----------
+  /* ---------- 24-27. NG911 service areas — fire, law, EMS and PSAP, statewide ----------
    * The route the phase-2 research recorded: the state Office of Emergency
    * Communications aggregates every county's NG911 GIS filing into one
    * public feature service ("free and open for use by the public", updated
    * roughly weekly), and wi/scripts/build_wi_ng911_service_areas.py
    * pre-builds the per-agency dissolve — 3,009 fire polygons into 1,046
-   * department areas, 3,083 law polygons into 639 agency areas, and 205
-   * PSAP polygons into 95 answering points at first build (PSAP is the
-   * tiling with FUTURE-dated Expire rows, which is why the builder drops
-   * expired rows by date, never by presence). These are RESPONSE areas
+   * department areas, 3,083 law polygons into 639 agency areas, 2,443 EMS
+   * polygons into 579 services, and 205 PSAP polygons into 95 answering
+   * points at first build (PSAP is the tiling with FUTURE-dated Expire
+   * rows, which is why the builder drops expired rows by date, never by
+   * presence; EMS re-proves the pair key on regional ambulance services
+   * filing under several counties' authorities). These are RESPONSE areas
    * ("who is dispatched here" / "who answers the call"), never taxing
    * districts and never electing bodies, so the cards name no
    * officeholder — the guidebook calls this the NYC operational shape.
@@ -9312,6 +9315,9 @@ function initWisconsinExplorer() {
   });
   var loadPsapAreas = makeCached(function () {
     return fetchJSONWithRetry("data/app/psap-areas.json", {}, 2);
+  });
+  var loadEmsServiceAreas = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ems-service-areas.json", {}, 2);
   });
   function registerNg911ServiceLayer(opts) {
     registerLayer({
@@ -9386,6 +9392,14 @@ function initWisconsinExplorer() {
     about: "A dispatch service area from the state's NG911 dataset — who responds here, not a taxing district and not an elected body.",
     loader: loadLawServiceAreas,
     style: { color: "#2F5D8C", weight: 1.5, fillColor: "#4A7BB0", fillOpacity: 0.05, dashArray: "5 3" }
+  });
+  registerNg911ServiceLayer({
+    id: "ems-service",
+    label: "EMS Service Area",
+    noun: "EMS",
+    about: "A dispatch service area from the state's NG911 dataset — the emergency medical service dispatched here, not a taxing district and not an elected body.",
+    loader: loadEmsServiceAreas,
+    style: { color: "#B45309", weight: 1.5, fillColor: "#D97706", fillOpacity: 0.05, dashArray: "5 3" }
   });
   registerNg911ServiceLayer({
     id: "psap-area",
@@ -10238,7 +10252,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "fire-service", "law-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10338,8 +10352,9 @@ function initWisconsinExplorer() {
     "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
     "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452",
     "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880",
-    "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#C8102E": "#FE928F",
-    "#C9A227": "#FEE195", "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
+    "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#B45309": "#FEA16D",
+    "#C8102E": "#FE928F", "#C9A227": "#FEE195", "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA",
+    "#D19133": "#FED7A7", "#D97706": "#FEC9A1"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

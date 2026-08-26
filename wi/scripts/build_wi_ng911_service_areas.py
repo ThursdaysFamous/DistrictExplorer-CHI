@@ -11,6 +11,10 @@ the phase-2 research recorded and the guidebook backlog queued:
   data/app/psap-areas.json          which PSAP — public safety answering
                                     point — answers a 911 call placed at
                                     the point (PSAPBoundary, layer 6)
+  data/app/ems-service-areas.json   which emergency medical service is
+                                    dispatched at the point
+                                    (EmergencyMedicalServicesBoundary,
+                                    layer 2)
 
 SOURCE. The OEC publishes every county's NG911 GIS filing as one public
 feature service (org WI_OEC_GIS, item 593d0da225b24601ad0c21598ef52fb0,
@@ -44,8 +48,8 @@ that must ship. The drop is computed against the clock each run.
 
 WHAT THE DATA DOES NOT COVER IS MEASURED AND PINNED. Five authorities'
 filings are absent or partial (Iowa, Vilas and Walworth file none of the
-three tilings; Jefferson files law and PSAP but not fire; Polk's law
-filing covers ~60% while its fire and PSAP file in full),
+four tilings; Jefferson files law and PSAP but neither fire nor EMS;
+Polk's law filing covers ~60% while its other three file in full),
 and LANGLADE COUNTY HAS NO PROVISIONING BOUNDARY AT ALL — 72 provisioning
 polygons where the other 71 counties plus the City of Milwaukee each
 carry one. Every rate is recomputed per run inside the counties' own
@@ -77,6 +81,7 @@ APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 OEC = ("https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services"
        "/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer")
+EMS = OEC + "/2"
 FIRE = OEC + "/3"
 LAW = OEC + "/4"
 PROVISIONING = OEC + "/5"
@@ -95,6 +100,14 @@ LAYERS = [
     # points) render like law's, every center at the point.
     {"name": "psap", "url": PSAP, "out": "psap-areas.json",
      "min_rows": 190, "min_agencies": 88},
+    # EMS re-proves the pair key on ambulance services: regional providers
+    # (Emplify, Tri State) file under multiple counties' authorities, and a
+    # few EMS Agency_IDs are not county domains at all (BVEM files under
+    # BVEM1/BVEM2) — the pair still keys them correctly. 2,443 effective
+    # rows over 579 services at first measurement, with essentially no
+    # cross-name overlap (1 same-name multi-hit in 3,000 points).
+    {"name": "ems", "url": EMS, "out": "ems-service-areas.json",
+     "min_rows": 2300, "min_agencies": 530},
 ]
 
 # Filing absences, pinned exactly as measured 2026-08-26 (40 seeded sample
@@ -103,10 +116,10 @@ LAYERS = [
 # set of layers that authority has NOT (fully) filed. Mirrored by the gap
 # records ng911-fire-filings / ng911-law-filings — retire both together.
 UNFILED = {
-    "iowacounty.org": {"fire", "law", "psap"},
-    "vilascountywi.gov": {"fire", "law", "psap"},
-    "co.walworth.wi.us": {"fire", "law", "psap"},
-    "jeffersoncountywi.gov": {"fire"},    # law and PSAP file in full
+    "iowacounty.org": {"fire", "law", "psap", "ems"},
+    "vilascountywi.gov": {"fire", "law", "psap", "ems"},
+    "co.walworth.wi.us": {"fire", "law", "psap", "ems"},
+    "jeffersoncountywi.gov": {"fire", "ems"},  # law and PSAP file in full
     "polkcountywi.gov": {"law"},          # partial: ~60% covered at pin time
 }
 EXPECT_PROVISIONING = 72   # 71 counties + the City of Milwaukee; Langlade absent
