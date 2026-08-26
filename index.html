@@ -330,6 +330,16 @@ footer a:hover { color: var(--brand-700); }
 footer p { margin: 0 0 8px; max-width: 46em; }
 /* The front door had no links at all — no way to reach the privacy page
    or the source from the page most visitors land on first. */
+/* The support line is the one thing in this footer a reader is being ASKED to
+   act on, so it does not sit in the flat link row where it reads as a seventh
+   equal item. It was exactly that before: one of six links, in an app footer,
+   on a page that never mentioned funding at all. */
+footer .support {
+  margin: 14px 0 0; padding: 12px 14px; max-width: 46em;
+  background: var(--brand-tint); border: 1px solid var(--brand-border);
+  border-radius: var(--radius-card); color: var(--ink-3);
+}
+footer .support b { color: var(--ink); }
 footer .foot-links { margin-top: 12px; }
 
 @media (max-width: 560px) {
@@ -418,7 +428,13 @@ footer .foot-links { margin-top: 12px; }
          Overberg</a>. The whole thing is open source — every line that produced this page
          is public.</p>
       <p>Each place above names its own sources on its sources page.</p>
+      <p class="support"><b>This project is unfunded and run at personal cost.</b> If it is useful
+         to you, <a href="https://github.com/sponsors/ThursdaysFamous" target="_blank" rel="noopener">sponsoring
+         it on GitHub</a> keeps the rosters current — that is where the ongoing work is. Sponsorship
+         buys no placement and no influence over any answer here; the
+         <a href="sponsorship.html">sponsorship policy</a> says so in detail.</p>
       <p class="foot-links"><a href="privacy.html">Privacy</a> ·
+         <a href="sponsorship.html">Sponsorship</a> ·
          <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a> ·
          <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">Source on GitHub</a></p>
     </footer>
