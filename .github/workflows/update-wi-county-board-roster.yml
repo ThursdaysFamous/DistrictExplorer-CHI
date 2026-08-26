@@ -61,6 +61,12 @@ jobs:
       - name: Re-parse the Blue Book officer tables
         run: python3 wi/scripts/wi_county_clerk_scraper.py --officers-only
 
+      # phase 4 PR 2: the counties whose own officer pages measure open are
+      # re-read weekly — office phone/e-mail/link, plus a name witness that
+      # supersedes the book where a county has visibly moved past it
+      - name: Scrape county officer contact pages
+        run: python3 wi/scripts/wi_county_officer_contact_scraper.py
+
       - name: Rebuild the county officer roster
         run: python3 wi/scripts/build_wi_county_officer_roster.py
 

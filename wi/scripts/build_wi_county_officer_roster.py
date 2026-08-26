@@ -58,6 +58,22 @@ is nothing to reconcile against. Every decision prints on the build log.
 The Menominee/Shawano DA rows carry the book's own footnote — one
 prosecutorial unit, one district attorney (Wis. Stat. ch. 978) — and the
 builder writes that sentence onto both counties' entries.
+
+CONTACT + CURRENCY, COUNTY BY COUNTY (phase 4 PR 2 tranche 1): where
+wi_county_officer_contact_scraper.py has read a county's own officer
+pages (run it FIRST — its intermediate is this builder's input; both
+weekly workflows do), each witnessed office gains the office page URL and
+the phone/e-mail found beside the officer's own name, and a name the
+county's page carries that DISAGREES with the book's supersedes it — the
+county's name ships, the book's party code is withheld (the clerk rule),
+and the divergence prints. The first run proved the route on its biggest
+case: Waukesha's own page records that County Executive Paul Farrow —
+the Blue Book's row — DIED IN OFFICE, with Interim County Executive Tom
+Farley sworn in 2026-07-30. STALE_EXEC pins that protection into the
+builder itself: even when the contact scrape is absent or its extraction
+fails, Waukesha's executive is WITHHELD with the reason stated rather
+than ever again shipping the deceased officeholder's name. The pin lasts
+until the next Blue Book edition re-bases the file.
 """
 
 import json
@@ -71,6 +87,7 @@ OUT = os.path.join(REPO_ROOT, "data", "app", "wi-county-officers.json")
 COUNTIES = os.path.join(REPO_ROOT, "data", "app", "state-counties.json")
 DIRECTORY = os.path.join(REPO_ROOT, "data", "app", "county-board-directory.json")
 MEMBERS = os.path.join(REPO_ROOT, "data", "app", "county-board-members.json")
+CONTACTS = os.path.join(SCRIPT_DIR, ".cache", "wi_county_officer_contacts_raw.json")
 
 EXEC_LABELS = {
     "CE": ("County Executive", False),
@@ -91,6 +108,19 @@ WITHHELD_REASON = ("Not named: the Blue Book (April 2025) lists a chair who no "
                    "longer appears on the county's own supervisor roster, and "
                    "that roster does not mark a successor. The County Board "
                    "District card names the sitting supervisors.")
+
+# Counties whose Blue Book EXECUTIVE is measurably no longer in office
+# (the county's own page is the measurement). The contact scrape normally
+# supersedes with the county's current name; this pin is the backstop —
+# if the scrape is absent or its extraction fails, the executive is
+# WITHHELD with this reason rather than the stale name shipping again.
+# Remove an entry only when a new Blue Book edition re-bases the file.
+STALE_EXEC = {
+    "Waukesha": ("Not named: the county's own website records that the Blue "
+                 "Book's April 2025 county executive died in office, and this "
+                 "build could not read the interim executive's name from that "
+                 "page. The county's website names the interim executive."),
+}
 
 
 def fold(name):
@@ -249,6 +279,76 @@ def main():
             "coroner": coroner,
         }
 
+    # ---- contact + currency merge (the per-county scrape's yield) ----
+    contacts = json.load(open(CONTACTS)) if os.path.exists(CONTACTS) else None
+    if contacts is None:
+        print("WARNING: no contact intermediate (%s) — officer rows ship "
+              "without contact; run wi_county_officer_contact_scraper.py "
+              "first" % os.path.relpath(CONTACTS, REPO_ROOT), file=sys.stderr)
+    n_contact, n_diverged = 0, 0
+    for geoid, centry in (contacts or {}).items():
+        entry = out_counties[geoid]
+        checked = 0
+        for office, c in centry["offices"].items():
+            if "supersede" in c:
+                s = c["supersede"]
+                executive = {"name": s["name"], "title": s["title"],
+                             "source": "county-page"}
+                if s.get("appointed"):
+                    executive["appointed"] = True
+                if c.get("url"):
+                    executive["url"] = c["url"]
+                if c.get("phone"):
+                    executive["phone"] = c["phone"]
+                entry["executive"] = executive
+                print("%s/executive superseded by the county's own page: %s"
+                      % (centry["county"], s["name"]), file=sys.stderr)
+                n_diverged += 1
+                checked += 1
+                continue
+            rec = entry.get(office)
+            if not rec or not rec.get("name"):
+                continue
+            if "name" in c and \
+               surname_initial(c["name"]) != surname_initial(rec["name"]):
+                # the county's directory names a different person: the
+                # county's name ships, the book's party code is withheld
+                # (the clerk rule), the office title is kept
+                print("%s/%s diverges — book %r, county page %r; the "
+                      "county's name ships" % (centry["county"], office,
+                                               rec["name"], c["name"]),
+                      file=sys.stderr)
+                new_rec = {"name": c["name"], "source": "county-page"}
+                if rec.get("title"):
+                    new_rec["title"] = rec["title"]
+                if rec.get("sharedUnit"):
+                    new_rec["sharedUnit"] = rec["sharedUnit"]
+                rec = new_rec
+                entry[office] = rec
+                n_diverged += 1
+            elif "name" in c:
+                rec["name"] = c["name"]  # the fuller/fresher county form
+            if c.get("url"):
+                rec["url"] = c["url"]
+            if c.get("phone"):
+                rec["phone"] = c["phone"]
+            if c.get("email"):
+                rec["email"] = c["email"]
+            rec["checked"] = True
+            checked += 1
+            n_contact += 1
+        entry["contactChecked"] = checked
+
+    for base, reason in STALE_EXEC.items():
+        geoid = str(geoid_by_base[base])
+        entry = out_counties[geoid]
+        ex = entry.get("executive")
+        if not ex or ex.get("source") != "county-page":
+            entry["executive"] = {"withheld": True, "reason": reason}
+            print("%s/executive WITHHELD (STALE_EXEC pin): the scrape did "
+                  "not supersede and the book's name is measurably stale"
+                  % base, file=sys.stderr)
+
     if mismatches != SEAT_EXCEPTIONS:
         raise SystemExit(
             "chair seat counts vs shipped geometry moved off the pinned exception "
@@ -287,9 +387,11 @@ def main():
           "the shipped geometry (71 agree; Menominee pinned 7-vs-5); shared DA "
           "note on Menominee and Shawano; chairs reconciled against the weekly "
           "board roster (%d from county pages, %d confirmed dated, %d withheld, "
-          "%d counties with no roster to check)"
+          "%d counties with no roster to check); officer contact from %d "
+          "counties' own pages (%d offices checked, %d names superseded)"
           % (os.path.relpath(OUT, REPO_ROOT), len(superseded), len(confirmed),
-             len(withheld), 72 - len(board_by_geoid)),
+             len(withheld), 72 - len(board_by_geoid),
+             len(contacts or {}), n_contact, n_diverged),
           file=sys.stderr)
 
 
