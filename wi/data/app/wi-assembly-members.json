@@ -2,496 +2,1485 @@
   "1": {
     "name": "Joel Kitchens",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1572"
+    "email": "Rep.Kitchens@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/01/kitchens",
+    "capitolOffice": [
+      "Room 314 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9101",
+      "Phone: (888) 482-0001",
+      "Fax: (608) 282-3601"
+    ]
   },
   "2": {
     "name": "Shae Sortwell",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1932"
+    "email": "Rep.Sortwell@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/02/Sortwell",
+    "capitolOffice": [
+      "Room 214 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9102",
+      "Phone: (888) 534-0002",
+      "Fax: (608) 282-3602"
+    ]
   },
   "3": {
     "name": "Ron Tusler",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1632"
+    "email": "Rep.Tusler@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/03/tusler",
+    "capitolOffice": [
+      "Room 22 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9103",
+      "Phone: (888) 534-0003",
+      "Fax: (608) 282-3603"
+    ]
   },
   "4": {
     "name": "David Steffen",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1614"
+    "email": "Rep.Steffen@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/04/steffen",
+    "capitolOffice": [
+      "Room 323 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9104",
+      "Phone: (888) 534-0004",
+      "Fax: (608) 282-3604"
+    ]
   },
   "5": {
     "name": "Joy Goeben",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2542"
+    "email": "Rep.Goeben@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/05/Goeben",
+    "capitolOffice": [
+      "Room 209 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9105",
+      "Phone: (888) 534-0005",
+      "Fax: (608) 282-3605"
+    ]
   },
   "6": {
     "name": "Elijah Behnke",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2396"
+    "email": "Rep.Behnke@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/06/behnke",
+    "capitolOffice": [
+      "Room 219 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9106",
+      "Phone: (888) 529-0006",
+      "Fax: (608) 282-3606"
+    ]
   },
   "7": {
     "name": "Karen Kirsch",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2878"
+    "email": "Rep.Kirsch@legis.wisconsin.gov",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2878",
+    "capitolOffice": [
+      "Room 15 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9107",
+      "Phone: (888) 529-0007",
+      "Fax: (608) 282-3607"
+    ]
   },
   "8": {
     "name": "Sylvia Ortiz-Velez",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2262"
+    "email": "Rep.Ortiz-Velez@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/08/ortiz-velez",
+    "capitolOffice": [
+      "Room 307 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9108",
+      "Phone: (888) 534-0008",
+      "Fax: (608) 282-3608"
+    ]
   },
   "9": {
     "name": "Priscilla Prado",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2879"
+    "email": "Rep.Prado@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/09/prado",
+    "capitolOffice": [
+      "Room 5 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9109",
+      "Phone: (888) 534-0009",
+      "Fax: (608) 262-3609"
+    ]
   },
   "10": {
     "name": "Darrin Madison",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2536"
+    "email": "Rep.Madison@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/10/madison/",
+    "capitolOffice": [
+      "Room 21 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9110",
+      "Phone: (888) 534-0010",
+      "Fax: (608) 282-3610"
+    ]
   },
   "11": {
     "name": "Sequanna Taylor",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2880"
+    "email": "Rep.Taylor@legis.wisconsin.gov",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2880",
+    "capitolOffice": [
+      "Room 16 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9111",
+      "Phone: (888) 534-0011",
+      "Fax: (608) 282-3611"
+    ]
   },
   "12": {
     "name": "Russell Goodwin",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2906"
+    "email": "Rep.Goodwin@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/12/goodwin",
+    "capitolOffice": [
+      "Room 8 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9112",
+      "Phone: (888) 534-0012",
+      "Fax: (608) 282-3612"
+    ]
   },
   "13": {
     "name": "Robyn Vining",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1945"
+    "email": "Rep.Vining@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/13/vining",
+    "capitolOffice": [
+      "Room 104 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9113",
+      "Phone: (888) 534-0013",
+      "Fax: (608) 282-3613"
+    ]
   },
   "14": {
     "name": "Angelito Tenorio",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2881"
+    "email": "Rep.Tenorio@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/14/tenorio",
+    "capitolOffice": [
+      "Room 11 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9114",
+      "Phone: (888) 534-0014",
+      "Fax: (608) 282-3614"
+    ]
   },
   "15": {
     "name": "Adam Neylon",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1592"
+    "email": "Rep.Neylon@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/15/neylon",
+    "capitolOffice": [
+      "Room 204 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9115",
+      "Phone: (888) 534-0015",
+      "Fax: (608) 282-3615"
+    ]
   },
   "16": {
     "name": "Kalan Haywood",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1929"
+    "email": "Rep.Haywood@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/16/haywood",
+    "capitolOffice": [
+      "Room 119 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9116",
+      "Phone: (888) 534-0016",
+      "Fax: (608) 282-3616"
+    ]
   },
   "17": {
     "name": "Supreme Moore Omokunde",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2265"
+    "email": "Rep.MooreOmokunde@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/17/moore-omokunde",
+    "capitolOffice": [
+      "Room 6 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9117",
+      "Phone: (888) 534-0017",
+      "Fax: (608) 282-3617"
+    ]
   },
   "18": {
     "name": "Margaret Arney",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2882"
+    "email": "Rep.Arney@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/18/arney",
+    "capitolOffice": [
+      "Room 303 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9118",
+      "Phone: (888) 534-0018",
+      "Fax: (608) 282-3618"
+    ]
   },
   "19": {
     "name": "Ryan Clancy",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2538"
+    "email": "Rep.Clancy@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/19/clancy",
+    "capitolOffice": [
+      "Room 21 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9119",
+      "Phone: (888) 534-0019",
+      "Fax: (608) 282-3619"
+    ]
   },
   "20": {
     "name": "Christine Sinicki",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1610"
+    "email": "Rep.Sinicki@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/20/sinicki",
+    "capitolOffice": [
+      "Room 114 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9120",
+      "Phone: (888) 534-0020",
+      "Fax: (608) 282-3620"
+    ]
   },
   "21": {
     "name": "Jessie Rodriguez",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1604"
+    "email": "Rep.Rodriguez@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/21/rodriguez",
+    "capitolOffice": [
+      "Room 306 East",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9121",
+      "Phone: (888) 534-0021",
+      "Fax: (608) 282-3621"
+    ]
   },
   "22": {
     "name": "Paul Melotik",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2690"
+    "email": "Rep.Melotik@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/22/melotik/",
+    "capitolOffice": [
+      "Room 308 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9122",
+      "Phone: (888) 534-0022",
+      "Fax: (608) 282-3622"
+    ]
   },
   "23": {
     "name": "Deb Andraca",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2266"
+    "email": "Rep.Andraca@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/23/andraca",
+    "capitolOffice": [
+      "Room 109 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9123",
+      "Phone: (888) 534-0023",
+      "Fax: (608) 282-3623"
+    ]
   },
   "24": {
     "name": "Dan Knodl",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1574"
+    "email": "Rep.Knodl@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/24/knodl",
+    "capitolOffice": [
+      "Room 221 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9124",
+      "Phone: (888) 529-0024",
+      "Fax: (608) 282-3629"
+    ]
   },
   "25": {
     "name": "Paul Tittl",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1622"
+    "email": "Rep.Tittl@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/25/tittl",
+    "capitolOffice": [
+      "Room 218 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9125",
+      "Phone: (888) 529-0025",
+      "Fax: (608) 282-3625"
+    ]
   },
   "26": {
     "name": "Joe Sheehan",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2883"
+    "email": "Rep.Sheehan@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/26/sheehan",
+    "capitolOffice": [
+      "Room 20 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9126",
+      "Phone: (888) 529-0026",
+      "Fax: (608) 282-3626"
+    ]
   },
   "27": {
     "name": "Lindee Brill",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2884"
+    "email": "Rep.Brill@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/27/brill",
+    "capitolOffice": [
+      "Room 409 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9127",
+      "Phone: (888) 529-0027",
+      "Fax: (608) 282-3627"
+    ]
   },
   "28": {
     "name": "Rob Kreibich",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2885"
+    "email": "Rep.Kreibich@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/28/kreibich",
+    "capitolOffice": [
+      "Room 107 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9128",
+      "Phone: (888) 529-0028",
+      "Fax: (608) 282-3628"
+    ]
   },
   "29": {
     "name": "Treig Pronschinske",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1642"
+    "email": "Rep.Pronschinske@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/29/Pronschinske",
+    "capitolOffice": [
+      "Room 103 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9129",
+      "Phone: (888) 529-0029",
+      "Fax: (608) 282-3629"
+    ]
   },
   "30": {
     "name": "Shannon Zimmerman",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1636"
+    "email": "Rep.Zimmerman@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/30/zimmerman",
+    "capitolOffice": [
+      "Room 324 East",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9130",
+      "Phone: (888) 529-0030",
+      "Fax: (608) 282-3630"
+    ]
   },
   "31": {
     "name": "Tyler August",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1534"
+    "email": "Rep.August@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/31/august/",
+    "capitolOffice": [
+      "Room 115 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9131",
+      "Phone: (888) 529-0031",
+      "Fax: (608) 282-3631"
+    ]
   },
   "32": {
     "name": "Amanda Nedweski",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2551"
+    "email": "Rep.Nedweski@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/32/Nedweski",
+    "capitolOffice": [
+      "Room 208 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9132",
+      "Phone: (888) 529-0032",
+      "Fax: (608) 282-3632"
+    ]
   },
   "33": {
     "name": "Robin Vos",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1626"
+    "email": "Rep.Vos@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/33/vos/",
+    "capitolOffice": [
+      "Room 217 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9133",
+      "Phone: (888) 529-0033",
+      "Fax: (608) 282-3633"
+    ]
   },
   "34": {
     "name": "Rob Swearingen",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1618"
+    "email": "Rep.Swearingen@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/34/swearingen",
+    "capitolOffice": [
+      "Room 123 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9134",
+      "Phone: (888) 534-0034",
+      "Fax: (608) 282-3634"
+    ]
   },
   "35": {
     "name": "Calvin Callahan",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2260"
+    "email": "Rep.Callahan@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/35/callahan",
+    "capitolOffice": [
+      "Room 127 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9135",
+      "Phone: (888) 534-0035",
+      "Fax: (608) 282-3635"
+    ]
   },
   "36": {
     "name": "Jeff Mursau",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1589"
+    "email": "Rep.Mursau@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/36/mursau/",
+    "capitolOffice": [
+      "Room 113 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9136",
+      "Phone: (888) 534-0036",
+      "Fax: (608) 282-3636"
+    ]
   },
   "37": {
     "name": "Mark Born",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1541"
+    "email": "Rep.Born@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/37/born",
+    "capitolOffice": [
+      "Room 308 East",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9137",
+      "Phone: (888) 534-0037",
+      "Fax: (608) 282-3637"
+    ]
   },
   "38": {
     "name": "Will Penterman",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2398"
+    "email": "Rep.Penterman@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/38/penterman",
+    "capitolOffice": [
+      "Room 207 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9138",
+      "Phone: (888) 534-0038",
+      "Fax: (608) 282-3638"
+    ]
   },
   "39": {
     "name": "Alex Dallman",
     "party": "Republican",
-    "url": "https://alexdallman.com/"
+    "email": "Rep.Dallman@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/39/dallman",
+    "capitolOffice": [
+      "Room 320 East",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9139",
+      "Phone: (888) 534-0039",
+      "Fax: (608) 282-3639"
+    ]
   },
   "40": {
     "name": "Karen DeSanto",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2886"
+    "email": "Rep.DeSanto@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/40/desanto",
+    "capitolOffice": [
+      "Room 7 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9140",
+      "Phone: (888) 947-0040",
+      "Fax: (608) 282-3640"
+    ]
   },
   "41": {
     "name": "Tony Kurtz",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1935"
+    "email": "Rep.Kurtz@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/41/Kurtz",
+    "capitolOffice": [
+      "Room 304 East",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9141",
+      "Phone: (888) 534-0041",
+      "Fax: (608) 282-3641"
+    ]
   },
   "42": {
     "name": "Maureen McCarville",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2887"
+    "email": "Rep.McCarville@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/42/mccarville",
+    "capitolOffice": [
+      "Room 11 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9142",
+      "Phone: (888) 534-0042",
+      "Fax: (608) 282-3642"
+    ]
   },
   "43": {
     "name": "Brienne Brown",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2888"
+    "email": "Rep.Brown@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/43/brown",
+    "capitolOffice": [
+      "Room 9 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9143",
+      "Phone: (888) 534-0043",
+      "Fax: (608) 282-3643"
+    ]
   },
   "44": {
     "name": "Ann Roe",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2889"
+    "email": "Rep.Roe@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/44/roe",
+    "capitolOffice": [
+      "Room 320 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9144",
+      "Phone: (888) 947-0044",
+      "Fax: (608) 282-3644"
+    ]
   },
   "45": {
     "name": "Clint Anderson",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2559"
+    "email": "Rep.CAnderson@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/45/anderson",
+    "capitolOffice": [
+      "Room 17 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9145",
+      "Phone: (888) 534-0045",
+      "Fax: (608) 282-3645"
+    ]
   },
   "46": {
     "name": "Joan Fitzgerald",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2890"
+    "email": "Rep.Fitzgerald@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/46/fitzgerald",
+    "capitolOffice": [
+      "Room 11 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9146",
+      "Phone: (888) 534-0046",
+      "Fax: (608) 282-3646"
+    ]
   },
   "47": {
     "name": "Randy Udell",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2891"
+    "email": "Rep.Udell@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/47/udell",
+    "capitolOffice": [
+      "Room 19 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9147",
+      "Phone: (888) 302-0047",
+      "Fax: (608) 282-3647"
+    ]
   },
   "48": {
     "name": "Andrew Hysell",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2892"
+    "email": "Rep.Hysell@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/48/hysell",
+    "capitolOffice": [
+      "Room 304 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9148",
+      "Phone: (888) 534-0048",
+      "Fax: (608) 282-3648"
+    ]
   },
   "49": {
     "name": "Travis Tranel",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1623"
+    "email": "Rep.Tranel@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/49/tranel/",
+    "capitolOffice": [
+      "Room 302 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9149",
+      "Phone: (888) 872-0049",
+      "Fax: (608) 282-3649"
+    ]
   },
   "50": {
     "name": "Jenna Jacobson",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2545"
+    "email": "Rep.Jacobson@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/50/jacobson/",
+    "capitolOffice": [
+      "Room 128 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9150",
+      "Phone: (888) 534-0050",
+      "Fax: (608) 282-3650"
+    ]
   },
   "51": {
     "name": "Todd Novak",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1593"
+    "email": "Rep.Novak@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/51/novak",
+    "capitolOffice": [
+      "Room 310 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9151",
+      "Phone: (888) 534-0051",
+      "Fax: (608) 282-3651"
+    ]
   },
   "52": {
     "name": "Lee Snodgrass",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2267"
+    "email": "Rep.Snodgrass@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/52/snodgrass",
+    "capitolOffice": [
+      "Room 120 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9152",
+      "Phone: (888) 529-0052",
+      "Fax: (608) 282-3652"
+    ]
   },
   "53": {
     "name": "Dean Kaufert",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2852"
+    "email": "Rep.Kaufert@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/53/kaufert",
+    "capitolOffice": [
+      "Room 223 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9153",
+      "Phone: (888) 534-0053",
+      "Fax: (608) 282-3653"
+    ]
   },
   "54": {
     "name": "Lori Palmeri",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2547"
+    "email": "Rep.Palmeri@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/54/Palmeri",
+    "capitolOffice": [
+      "Room 15 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9154",
+      "Phone: (888) 534-0054"
+    ]
   },
   "55": {
     "name": "Gus Gustafson",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2550"
+    "email": "Rep.Gustafson@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/55/gustafson/",
+    "capitolOffice": [
+      "Room 316 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9155",
+      "Phone: (888) 534-0055",
+      "Fax: (608) 282-3655"
+    ]
   },
   "56": {
     "name": "Dave Murphy",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1588"
+    "email": "Rep.Murphy@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/56/murphy",
+    "capitolOffice": [
+      "Room 318 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9156",
+      "Phone: (888) 534-0056",
+      "Fax: (608) 282-3656"
+    ]
   },
   "57": {
     "name": "Kevin Petersen",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1598"
+    "email": "Rep.Petersen@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/57/petersen",
+    "capitolOffice": [
+      "Room 309 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9157",
+      "Phone: (888) 534-0057",
+      "Fax: (608) 282-3657"
+    ]
   },
   "58": {
     "name": "Rick Gundrum",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1780"
+    "email": "Rep.Gundrum@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/58/gundrum",
+    "capitolOffice": [
+      "Room 312 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9158",
+      "Phone: (888) 534-0058",
+      "Fax: (608) 282-3658"
+    ]
   },
   "59": {
     "name": "Rob Brooks",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1545"
+    "email": "Rep.Rob.Brooks@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/59/brooks",
+    "capitolOffice": [
+      "Room 216 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9159",
+      "Phone: (888) 534-0059",
+      "Fax: (608) 282-3659"
+    ]
   },
   "60": {
     "name": "Jerry O'Connor",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2549"
+    "email": "Rep.O'Connor@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/60/oconnor/",
+    "capitolOffice": [
+      "Room 109 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9160",
+      "Phone: (888) 534-0060",
+      "Fax: (608) 282-3660"
+    ]
   },
   "61": {
     "name": "Bob Donovan",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2555"
+    "email": "Rep.Donovan@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/61/donovan/",
+    "capitolOffice": [
+      "Room 3 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9161",
+      "Phone: (888) 529-0061",
+      "Fax: (608) 282-3661"
+    ]
   },
   "62": {
     "name": "Angelina Cruz",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2893"
+    "email": "Rep.Cruz@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/62/cruz",
+    "capitolOffice": [
+      "Room 111 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9162",
+      "Phone: (888) 534-0062",
+      "Fax: (608) 282-3662"
+    ]
   },
   "63": {
     "name": "Bob Wittke",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1936"
+    "email": "Rep.Wittke@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/63/wittke/",
+    "capitolOffice": [
+      "Room 129 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9163",
+      "Phone: (888) 534-0063",
+      "Fax: (608) 282-3663"
+    ]
   },
   "64": {
     "name": "Tip McGuire",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/2075"
+    "email": "Rep.McGuire@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/64/mcguire",
+    "capitolOffice": [
+      "Room 321 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9164",
+      "Phone: (888) 534-0064",
+      "Fax: (608) 282-3664"
+    ]
   },
   "65": {
     "name": "Ben DeSmidt",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2894"
+    "email": "Rep.DeSmidt@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/65/desmidt",
+    "capitolOffice": [
+      "Room 18 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9165",
+      "Phone: (888) 534-0065",
+      "Fax: (608) 282-3665"
+    ]
   },
   "66": {
     "name": "Greta Neubauer",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1782"
+    "email": "Rep.Neubauer@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/66/neubauer",
+    "capitolOffice": [
+      "Room 201 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9166",
+      "Phone: (888) 534-0066",
+      "Fax: (608) 282-3666"
+    ]
   },
   "67": {
     "name": "Dave Armstrong",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2268"
+    "email": "Rep.Armstrong@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/67/armstrong",
+    "capitolOffice": [
+      "Room 220 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9167",
+      "Phone: (888) 534-0067",
+      "Fax: (608) 282-3667"
+    ]
   },
   "68": {
     "name": "Rob Summerfield",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1639"
+    "email": "Rep.Summerfield@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/68/summerfield",
+    "capitolOffice": [
+      "Room 119 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9168",
+      "Phone: (888) 534-0068",
+      "Fax: (608) 282-3668"
+    ]
   },
   "69": {
     "name": "Karen Hurd",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2552"
+    "email": "Rep.Hurd@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/69/hurd/",
+    "capitolOffice": [
+      "Room 321 East",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9169",
+      "Phone: (888) 534-0069",
+      "Fax: (608) 282-3669"
+    ]
   },
   "70": {
     "name": "Nancy VanderMeer",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1624"
+    "email": "Rep.VanderMeer@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/70/vandermeer",
+    "capitolOffice": [
+      "Room 13 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9170",
+      "Phone: (888) 534-0070",
+      "Fax: (608) 282-3670"
+    ]
   },
   "71": {
     "name": "Vinnie Miresse",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2895"
+    "email": "Rep.Miresse@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/71/miresse",
+    "capitolOffice": [
+      "Room 112 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9171",
+      "Phone: (888) 534-0071",
+      "Fax: (608) 282-3671"
+    ]
   },
   "72": {
     "name": "Scott Krug",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1579"
+    "email": "Rep.Krug@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/72/krug/",
+    "capitolOffice": [
+      "Room 315 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9172",
+      "Phone: (888) 529-0072",
+      "Fax: (608) 282-3672"
+    ]
   },
   "73": {
     "name": "Angela Stroud",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2896"
+    "email": "Rep.Stroud@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/73/stroud",
+    "capitolOffice": [
+      "Room 9 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9173",
+      "Phone: (888) 534-0073",
+      "Fax: (608) 282-3673"
+    ]
   },
   "74": {
     "name": "Chanz Green",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2558"
+    "email": "Rep.Green@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/74/green/",
+    "capitolOffice": [
+      "Room 125 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9174",
+      "Phone: (888) 534-0074",
+      "Fax: (608) 282-3674"
+    ]
   },
   "75": {
     "name": "Duke Tucker",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2897"
+    "email": "Rep.Tucker@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/75/tucker",
+    "capitolOffice": [
+      "Room 418 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9175",
+      "Phone: (888) 534-0075",
+      "Fax: (608) 282-3675"
+    ]
   },
   "76": {
     "name": "Francesca Hong",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2261"
+    "email": "Rep.Hong@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/76/hong",
+    "capitolOffice": [
+      "Room 122 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9176",
+      "Phone: (888) 534-0076",
+      "Fax: (608) 282-3676"
+    ]
   },
   "77": {
     "name": "Renuka Mayadev",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2898"
+    "email": "Rep.Mayadev@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/77/mayadev",
+    "capitolOffice": [
+      "Room 10 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9177",
+      "Phone: (888) 534-0077",
+      "Fax: (608) 282-3677"
+    ]
   },
   "78": {
     "name": "Shelia Stubbs",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1931"
+    "email": "Rep.Stubbs@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/78/stubbs",
+    "capitolOffice": [
+      "Room 7 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9178",
+      "Phone: (888) 534-0078",
+      "Fax: (608) 282-3678"
+    ]
   },
   "79": {
     "name": "Lisa Subeck",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1617"
+    "email": "Rep.Subeck@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/79/subeck",
+    "capitolOffice": [
+      "Room 113 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9179",
+      "Phone: (888) 534-0079",
+      "Fax: (608) 282-3679"
+    ]
   },
   "80": {
     "name": "Mike Bare",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2554"
+    "email": "Rep.Bare@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/80/Bare/",
+    "capitolOffice": [
+      "Room 306 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9180",
+      "Phone: (888) 534-0080",
+      "Fax: (608) 282-3680"
+    ]
   },
   "81": {
     "name": "Alex Joers",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2553"
+    "email": "Rep.Joers@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/81/joers",
+    "capitolOffice": [
+      "Room 107 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9181",
+      "Phone: (888) 534-0081",
+      "Fax: (608) 282-3681"
+    ]
   },
   "82": {
     "name": "Scott Allen",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1533"
+    "email": "Rep.Allen@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/82/allen",
+    "capitolOffice": [
+      "Room 105 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9182",
+      "Phone: (888) 534-0082",
+      "Fax: (608) 282-3682"
+    ]
   },
   "83": {
     "name": "Dave Maxey",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2023/legislators/assembly/2537"
+    "email": "Rep.Maxey@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/83/maxey/",
+    "capitolOffice": [
+      "Room 4 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9183",
+      "Phone: (888) 534-0083",
+      "Fax: (608) 282-3683"
+    ]
   },
   "84": {
     "name": "Chuck Wichgers",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1640"
+    "email": "Rep.Wichgers@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/84/wichgers/",
+    "capitolOffice": [
+      "Room 306 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9184",
+      "Phone: (888) 534-0084",
+      "Fax: (608) 282-3684"
+    ]
   },
   "85": {
     "name": "Pat Snyder",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1641"
+    "email": "Rep.Snyder@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/85/snyder",
+    "capitolOffice": [
+      "Room 307 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9185",
+      "Phone: (888) 534-0085",
+      "Fax: (608) 282-3685"
+    ]
   },
   "86": {
     "name": "John Spiros",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1612"
+    "email": "Rep.Spiros@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/86/spiros/",
+    "capitolOffice": [
+      "Room 212 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9186",
+      "Phone: (888) 534-0086",
+      "Fax: (608) 282-3686"
+    ]
   },
   "87": {
     "name": "Brent Jacobson",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2899"
+    "email": "Rep.Brent.Jacobson@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/87/jacobson",
+    "capitolOffice": [
+      "Room 420 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9187",
+      "Phone: (888) 534-0087",
+      "Fax: (608) 282-3687"
+    ]
   },
   "88": {
     "name": "Ben Franklin",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2900"
+    "email": "Rep.Franklin@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/88/franklin",
+    "capitolOffice": [
+      "Room 304 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9188",
+      "Phone: (888) 534-0088",
+      "Fax: (608) 282-3688"
+    ]
   },
   "89": {
     "name": "Ryan Spaude",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2901"
+    "email": "Rep.Spaude@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/89/spaude",
+    "capitolOffice": [
+      "Room 17 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9189",
+      "Phone: (888) 534-0089",
+      "Fax: (608) 282-3689"
+    ]
   },
   "90": {
     "name": "Amaad Rivera-Wagner",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2902"
+    "email": "Rep.Rivera-Wagner@legis.wisconsin.gov",
+    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2902",
+    "capitolOffice": [
+      "Room 18 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9190",
+      "Phone: (888) 534-0090",
+      "Fax: (608) 282-3690"
+    ]
   },
   "91": {
     "name": "Jodi Emerson",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1939"
+    "email": "Rep.Emerson@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/91/emerson",
+    "capitolOffice": [
+      "Room 322 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9191",
+      "Phone: (888) 534-0091",
+      "Fax: (608) 282-3691"
+    ]
   },
   "92": {
     "name": "Clint Moses",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2021/legislators/assembly/2253"
+    "email": "Rep.Moses@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/92/moses",
+    "capitolOffice": [
+      "Room 12 West",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9192",
+      "Phone: (888) 534-0092",
+      "Fax: (608) 282-3692"
+    ]
   },
   "93": {
     "name": "Christian Phelps",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2903"
+    "email": "Rep.Phelps@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/93/phelps",
+    "capitolOffice": [
+      "Room 126 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9193",
+      "Phone: (888) 534-0093",
+      "Fax: (608) 282-3693"
+    ]
   },
   "94": {
     "name": "Steve Doyle",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1551"
+    "email": "Rep.Doyle@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/94/doyle",
+    "capitolOffice": [
+      "Room 124 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9194",
+      "Phone: (888) 534-0094",
+      "Fax: (608) 282-3694"
+    ]
   },
   "95": {
     "name": "Jill Billings",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1540"
+    "email": "Rep.Billings@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/95/billings",
+    "capitolOffice": [
+      "Room 118 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9195",
+      "Phone: (888) 534-0095",
+      "Fax: (608) 282-3695"
+    ]
   },
   "96": {
     "name": "Tara Johnson",
     "party": "Democratic",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2904"
+    "email": "Rep.Johnson@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/96/johnson",
+    "capitolOffice": [
+      "Room 8 West",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9196",
+      "Phone: (888) 534-0096",
+      "Fax: (608) 282-3696"
+    ]
   },
   "97": {
     "name": "Cindi Duchow",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2017/legislators/assembly/1552"
+    "email": "Rep.Duchow@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/97/Duchow",
+    "capitolOffice": [
+      "Room 210 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9197",
+      "Phone: (888) 534-0097",
+      "Fax: (608) 282-3697"
+    ]
   },
   "98": {
     "name": "Jim Piwowarczyk",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2025/legislators/assembly/2905"
+    "email": "Rep.Piwowarczyk@legis.wisconsin.gov",
+    "url": "https://legis.wisconsin.gov/assembly/98/piwowarczyk",
+    "capitolOffice": [
+      "Room 412 North",
+      "State Capitol",
+      "PO Box 8953",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9198",
+      "Phone: (888) 534-0098",
+      "Fax: (608) 282-3698"
+    ]
   },
   "99": {
     "name": "Barbara Dittrich",
     "party": "Republican",
-    "url": "https://docs.legis.wisconsin.gov/2019/legislators/assembly/1934"
+    "email": "Rep.Dittrich@legis.wisconsin.gov",
+    "url": "http://legis.wisconsin.gov/assembly/99/Dittrich",
+    "capitolOffice": [
+      "Room 317 North",
+      "State Capitol",
+      "PO Box 8952",
+      "Madison, WI 53708",
+      "Phone: (608) 237-9199",
+      "Phone: (888) 534-0099",
+      "Fax: (608) 282-3699"
+    ]
   }
 }
