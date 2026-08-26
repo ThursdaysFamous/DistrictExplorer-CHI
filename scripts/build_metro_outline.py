@@ -760,6 +760,19 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # READ THE RING COUNT FROM --check, NEVER FROM A MAP IN
                      # YOUR HEAD.
                      "191",
+                     # Clay — 2026-08-26, the county whose gap record was the
+                     # hinge of the four-county Clay/Fayette/Jasper/Marion
+                     # enclave. The composition is the county's own board
+                     # page; the split of Clay City between districts A and B
+                     # is drawn at the village's corporate limits, the line
+                     # Clerk Britton stated in writing (2026-08-24), and the
+                     # +39.8% Harter V deviation shipped only after she
+                     # confirmed "These are the current maps" (2026-08-26;
+                     # build_clay_boundaries.py). Its join SPLITS the enclave:
+                     # Clay was the block's connective county, so Jasper is
+                     # enclosed alone and Fayette-Marion as a pair. READ THE
+                     # RING COUNT FROM --check, NEVER FROM A MAP IN YOUR HEAD.
+                     "025",
                      # judicial-subcircuit secondary counties (see below)
                      "005", "083", "061", "137", "171")
 STATE_FIPS = "17"
@@ -879,6 +892,17 @@ DISPATCH_COUNTY_FIPS = {
     # Clerk confirmed by e-mail that the plan is current rather than stale
     # (scripts/build_wayne_boundaries.py).
     "wayne": "191",
+    # Clay joins 2026-08-26 as a BOARD-ONLY dispatch entry — 14 lettered
+    # districts of one member each, composed from the county's own board page
+    # with the Clay City precinct split at the village's corporate limits as
+    # the Clerk described the line, and the fleet's largest accepted
+    # population deviation (+39.8%, Harter V) shipped only after she
+    # confirmed the plan is current. NO PRECINCT ENTRY: the county's two
+    # surfaces disagree on the precinct count — its board page names Clay
+    # City twice where ISBE's certified 2026 returns list it once — so a
+    # precinct card would overstate what is known
+    # (scripts/build_clay_boundaries.py).
+    "clay": "025",
 }
 # ==== TEMPLATE:END outline-county-config ====
 
@@ -1253,6 +1277,18 @@ INSIDE = {
     # sources; held back by population balance until the Clerk confirmed the
     # plan is current (scripts/build_wayne_boundaries.py).
     "Fairfield (Wayne)": (38.3798, -88.3724),
+    # Flora (Clay) — moved up from OUTSIDE on 2026-08-26, the day Clay shipped
+    # as the 91st served county. It held the four-county
+    # Clay/Fayette/Jasper/Marion hole's own ground from Richland's join
+    # onward; the guard failed the build until this point was promoted, which
+    # is that list's whole job. Clay was the block's connective county, so
+    # its join SPLITS the hole — Jasper alone, Fayette-Marion as a pair —
+    # and Newton, Vandalia and Salem stay OUTSIDE to prove both remnants
+    # unwashed. The build itself was unlocked by two Clerk e-mails: the
+    # village-limits line through Clay City (2026-08-24) and "These are the
+    # current maps" (2026-08-26), which released the fleet's largest accepted
+    # population deviation (scripts/build_clay_boundaries.py).
+    "Flora (Clay)": (38.6688, -88.4759),
     # judicial-subcircuit secondary counties
     "Greenville (Bond, 3rd Circuit)": (38.8923, -89.4131),
     "Jerseyville (Jersey, 7th Circuit)": (39.1200, -90.3284),
@@ -1328,18 +1364,19 @@ OUTSIDE = {
     # itself shipped on 2026-08-23 and Tuscola moved up to INSIDE, so PIATT is
     # the frontier this corner now leaves — measured shut by the CCGISC licence
     # rather than by a missing source.)
-    # Flora (Clay) and Lawrenceville (Lawrence) — the two successors Richland's
-    # join calls for (2026-08-23). Olney stood here until Richland shipped, and
-    # the guard failed the build until it was moved up to INSIDE, exactly as
-    # designed. Richland leaves four unserved neighbours: Jasper and Wayne are
-    # already anchored below, and these are the other two.
+    # Lawrenceville (Lawrence) — one of the two successors Richland's join
+    # called for (2026-08-23; Flora, the other, moved up to INSIDE on
+    # 2026-08-26 when Clay itself shipped). Olney stood here until Richland
+    # shipped, and the guard failed the build until it was moved up to INSIDE,
+    # exactly as designed.
     #
-    # CLAY is MEASURED shut rather than unexamined — Clay City is split between
-    # board districts A and B — and it is now part of the fleet's first
-    # MULTI-COUNTY enclave: Clay, Fayette, Jasper, Marion and Wayne are one
-    # contiguous unserved block, and Richland's join sealed it. Each of the five
-    # is anchored here (Flora, Vandalia, Newton, Salem, Fairfield), so the whole
-    # hole is proven unwashed rather than only its rim.
+    # THE MULTI-COUNTY HOLE CLAY LEFT BEHIND: Clay was the five-county
+    # Clay/Fayette/Jasper/Marion/Wayne block's connective county, and its join
+    # (after Wayne's on 2026-08-25) SPLITS what remained — Jasper is enclosed
+    # alone, Fayette-Marion as a pair, and each of the three is still anchored
+    # here (Newton, Vandalia, Salem), so both holes are proven unwashed rather
+    # than only their rims. Read the ring count from --check, never from this
+    # comment.
     #
     # LAWRENCE IS THE INTERESTING ONE, and it is why this anchor exists.
     # Richland's join leaves it with NO unserved Illinois neighbour at all —
@@ -1351,7 +1388,6 @@ OUTSIDE = {
     # boundary, which the dissolve walks around rather than closing over. This
     # anchor is what proves the notch stays unwashed; the ring count is read
     # from --check, never reasoned about here.
-    "Flora (Clay)": (38.6688, -88.4759),
     "Lawrenceville (Lawrence)": (38.7263, -87.6873),
     # Oquawka (Henderson) — the successor Warren's join calls for. Warren left
     # the OUTSIDE list on 2026-08-21 when its own board page and precinct-map

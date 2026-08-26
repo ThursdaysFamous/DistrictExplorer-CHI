@@ -10717,6 +10717,37 @@ function initChiExplorer() {
   var loadWayneBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/wayne-county-board-members.json", {}, 2);
   });
+  /* Clay (the 91st county, 2026-08-26) — 14 lettered districts of one member
+   * each, composed from the Census 2020 voting districts per the composition
+   * the county's own board page states letter by letter, and the first county
+   * in the fleet whose split precinct is drawn at a line the CLERK DESCRIBED
+   * IN WRITING: the census carries one Clay City voting district where the
+   * county runs districts A and B through it, and Clerk Amy Britton's e-mail
+   * of 2026-08-24 settles the line as the village's own corporate limits
+   * ("Clay City Dist A is located within the Village limits"), which the
+   * census place boundary draws exactly — 108 blocks, none straddling
+   * (build_clay_boundaries.py). Population held the build past that answer:
+   * District J (Harter V) runs +39.8% against the ideal, the fleet's largest
+   * accepted deviation, shipped only after the Clerk confirmed "These are
+   * the current maps" (2026-08-26). The roster is scraped weekly from the
+   * same pages the composition was read from, which re-verifies both at
+   * once. NO PRECINCT ENTRY: the county's two surfaces disagree on the
+   * precinct COUNT (its board page names Clay City twice, ISBE's certified
+   * 2026 returns once), so a precinct card would overstate what is known. */
+  var loadClayCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clay-county-outline.json", {}, 2);
+  });
+  function clayCountyCoverage(point) {
+    return loadClayCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadClayBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clay-county-board-districts.json", {}, 2);
+  });
+  var loadClayBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clay-county-board-members.json", {}, 2);
+  });
   /* Jackson (the 87th county, 2026-08-23) — the first county served whose board
    * districts SPLIT precincts. Its own certified 2024 General canvass reports
    * three of its 56 precincts TWICE, under two districts each with their
@@ -20406,6 +20437,79 @@ function initChiExplorer() {
         },
         hoverOfficial: {
           load: loadWayneBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
+      // Clay County — 14 LETTERED districts (A-N) electing ONE member each,
+      // composed from the Census 2020 voting districts per the county's own
+      // board page. Districts A and B divide the Clay City precinct at the
+      // Village of Clay City's corporate limits — the line the Clerk stated
+      // in writing (2026-08-24), drawn from the census place boundary with
+      // every block sorting cleanly to one side (build_clay_boundaries.py).
+      // District J (Harter V) runs +39.8% against the per-district ideal, the
+      // fleet's largest accepted deviation, shipped only after the Clerk
+      // confirmed the plan is current ("These are the current maps",
+      // 2026-08-26). The roster is scraped weekly from the same pages.
+      {
+        key: "clay",
+        coverage: clayCountyCoverage,
+        loadGeometry: loadClayBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadClayBoardDistricts(),
+            loadClayBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Clay County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts", value: result.precincts.join(", ") });
+          }
+          if (result.district === "A" || result.district === "B") {
+            fields.push({ label: "Note", value: "Districts A and B divide the Clay City precinct at the Village of Clay City's corporate limits — District A is the village, District B the unincorporated remainder with Stanford, as the County Clerk described the line." });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Clay County Board (official)", url: "https://claycounty.illinois.gov/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadClayBoardMembers,
           name: function (feature, roster) {
             if (!roster) return null;
             var d = findPropCI(feature.properties || {}, ["district"]);

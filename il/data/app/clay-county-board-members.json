@@ -1,0 +1,130 @@
+{
+  "A": {
+    "members": [
+      {
+        "name": "Terry Woodrow",
+        "phone": "618.838.9111"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "B": {
+    "members": [
+      {
+        "name": "Rod Franklin",
+        "phone": "618.838.0753"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "C": {
+    "members": [
+      {
+        "name": "Joe Goodman",
+        "phone": "618.508.2489",
+        "role": "Chairman"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "D": {
+    "members": [
+      {
+        "name": "Janice Brooks",
+        "phone": "618.665.3889"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "E": {
+    "members": [
+      {
+        "name": "Troy Britton",
+        "phone": "618.838.9395"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "F": {
+    "members": [
+      {
+        "name": "Tara Bangert",
+        "phone": "618.676.4788"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "G": {
+    "members": [
+      {
+        "name": "Mary Cisne",
+        "phone": "618.508.1464"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "H": {
+    "members": [
+      {
+        "name": "Terry Hronec",
+        "phone": "708.359.2135"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "I": {
+    "members": [
+      {
+        "name": "Kelly Colclasure",
+        "phone": "618.599.9824"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "J": {
+    "members": [
+      {
+        "name": "Jeremy Kohn",
+        "phone": "618.843.9149"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "K": {
+    "members": [
+      {
+        "name": "David Johnson",
+        "phone": "618.662.4777"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "L": {
+    "members": [
+      {
+        "name": "Cory Hodges",
+        "phone": "314.971.4995"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "M": {
+    "members": [
+      {
+        "name": "Barb Mcgrew",
+        "phone": "618.843.2098",
+        "role": "Vice Chairman"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  },
+  "N": {
+    "members": [
+      {
+        "name": "Troy Leonard",
+        "phone": "618.662.2913"
+      }
+    ],
+    "sourceUrl": "https://claycounty.illinois.gov/county-board/members/"
+  }
+}
