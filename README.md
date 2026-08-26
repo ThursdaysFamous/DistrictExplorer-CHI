@@ -14,7 +14,7 @@ This repo publishes four instances of the same app, one per place, each its own 
 
 | Metro | Live at | Covers |
 |---|---|---|
-| **Illinois** (reference implementation) | [districtry.com/il/](https://districtry.com/il/) | 89 counties — wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats |
+| **Illinois** (reference implementation) | [districtry.com/il/](https://districtry.com/il/) | 90 counties — wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats |
 | **New York City** | [districtry.com/ny/](https://districtry.com/ny/) | Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them |
 | **San Francisco** | [districtry.com/ca/](https://districtry.com/ca/) | Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them |
 | **Wisconsin** | [districtry.com/wi/](https://districtry.com/wi/) | 72 counties — cities, villages and towns, school districts, ZIP codes, and the Assembly, Senate and U.S. House seats, with who holds them |

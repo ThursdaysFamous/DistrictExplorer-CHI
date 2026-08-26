@@ -40,6 +40,7 @@ Usage:
 """
 
 import argparse
+import glob
 import ast
 import json
 import os
@@ -400,6 +401,106 @@ def render(d):
     return "\n".join(lines)
 
 
+def visible_text(html):
+    """The page with its comments and scripts removed — what a reader sees.
+
+    The phrase this gate looks for is not rare inside the app's own source. A
+    build note in il/index.html describes the election-results vendor that
+    serves "34 Illinois counties", which is true, unrelated, and invisible to a
+    reader; scanning raw bytes flagged it as a stale coverage claim. A gate that
+    cries wolf on a correct comment is a gate people learn to skip.
+    """
+    html = re.sub(r"(?s)<!--.*?-->", " ", html)
+    html = re.sub(r"(?s)<script\b[^>]*>.*?</script>", " ", html)
+    html = re.sub(r"(?s)<style\b[^>]*>.*?</style>", " ", html)
+    return html
+
+
+def check_published_counts(served):
+    """Every reader-facing claim about how many Illinois counties are served
+    must equal the number this script derives.
+
+    WHY THIS EXISTS. The count lived in five places at once — metros.json's
+    blurb (which the root landing page renders), README's table, and a
+    cross-link on two sibling instances' SEO pages — and none of them was
+    derived from anything. On 2026-08-26 all of them said 89 while this
+    script, which computes the number from the coverage-ring lists, said 90.
+    A generated document and a CI gate were both correct and every published
+    surface was wrong, because nothing compared them.
+
+    WHAT IT SCANS, AND WHY THAT SHAPE. metros.json's Illinois blurb by key,
+    plus any HTML that says "<n> Illinois counties" or, in that blurb's own
+    form, "<n> counties." HTML is the reader-facing surface by definition, so
+    a page added later is covered without touching this list. Markdown, code
+    comments and the schema are NOT scanned: their mentions are explanatory
+    ("its coverage is 89 Illinois counties, so 'Outside Chicago' would be
+    wrong"), sometimes historical, and forcing them to move with the count
+    would make every county launch edit prose that was never a claim about
+    today. README is scanned because its table IS a claim about today.
+
+    Wisconsin's own "72 counties" is untouched: it never says "Illinois", and
+    the bare "<n> counties." form is only read out of metros.json's il entry.
+    """
+    bad = []
+
+    # 1. the fleet manifest's Illinois blurb — what the landing page renders
+    with open(os.path.join(REPO_ROOT, "metros.json"), encoding="utf-8") as f:
+        fleet = json.load(f)
+    entries = fleet if isinstance(fleet, list) else fleet.get("metros", [])
+    for e in entries:
+        if e.get("tag") != "il":
+            continue
+        m = re.match(r"\s*(\d+)\s+counties\b", e.get("blurb", ""))
+        if not m:
+            bad.append("metros.json: the il blurb no longer opens with "
+                       "'<n> counties' — this gate reads it there")
+        elif int(m.group(1)) != served:
+            bad.append("metros.json: il blurb says %s counties, derived is %d"
+                       % (m.group(1), served))
+
+    # 2. every reader-facing page, plus README's table
+    # README's fleet table states the count without the word "Illinois", so the
+    # phrase scan below cannot see it. It is a claim about today, so it is read
+    # by its own row rather than left uncovered — the first draft of this gate
+    # claimed to scan README and did not.
+    readme = os.path.join(REPO_ROOT, "README.md")
+    with open(readme, encoding="utf-8") as f:
+        for line in f:
+            if not line.lstrip().startswith("| **Illinois**"):
+                continue
+            m = re.search(r"\|\s*(\d+)\s+counties\b", line)
+            if not m:
+                bad.append("README.md: the Illinois row no longer states "
+                           "'<n> counties' — this gate reads it there")
+            elif int(m.group(1)) != served:
+                bad.append("README.md: Illinois row says %s counties, derived is %d"
+                           % (m.group(1), served))
+            break
+
+    targets = sorted(glob.glob(os.path.join(REPO_ROOT, "*.html")) +
+                     glob.glob(os.path.join(REPO_ROOT, "*", "*.html")))
+    for path in targets:
+        rel = os.path.relpath(path, REPO_ROOT)
+        # The noindexed rebrand preview under districtry/ is excluded. Matched
+        # on the RELATIVE path's first component: the repo directory is itself
+        # named districtry, so testing the absolute path for os.sep+districtry
+        # +os.sep silently skipped every file in the repo — the first draft of
+        # this gate did exactly that and passed a deliberately broken page.
+        if rel.split(os.sep)[0] == "districtry":
+            continue
+        # engine/index.html is a DIRECTORY — the per-fence store compose_app.py
+        # splices from — not a page. The glob cannot tell.
+        if not os.path.isfile(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            text = visible_text(f.read())
+        for m in re.finditer(r"(\d+)\s+Illinois\s+counties", text):
+            if int(m.group(1)) != served:
+                bad.append("%s: says %s Illinois counties, derived is %d"
+                           % (rel, m.group(1), served))
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true",
@@ -432,7 +533,11 @@ def main():
                  "generated, never hand-edited — rerun "
                  "python3 scripts/build_county_status.py"
                  % (len(shipped), len(payload)))
-        print("build-county-status: OK — %s" % summary)
+        stale = check_published_counts(len(d["served"]))
+        if stale:
+            fail("%d published count(s) disagree with the derived %d:\n  - %s"
+                 % (len(stale), len(d["served"]), "\n  - ".join(stale)))
+        print("build-county-status: OK — %s; published counts agree" % summary)
         return
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:

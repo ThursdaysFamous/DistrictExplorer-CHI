@@ -140,11 +140,17 @@ assert not marks_chair("1St Vice Chair") and not marks_chair("Vice-Chair")
 
 
 _SUFFIXES = {"jr", "sr", "ii", "iii", "iv"}
+# leading honorifics are not first names: the book prints "Dr Elizabeth
+# Douglas" where Oconto's directory prints "Dr. Elizabeth Douglas" — and a
+# county page without the title must still match either form
+_HONORIFICS = {"dr", "mr", "mrs", "ms", "hon", "rev"}
 
 
 def surname_initial(name):
     parts = [p for p in "".join(ch if ch.isalpha() or ch.isspace() else " "
                                 for ch in name).split()]
+    while len(parts) > 1 and parts[0].lower() in _HONORIFICS:
+        parts.pop(0)
     while len(parts) > 1 and parts[-1].lower() in _SUFFIXES:
         parts.pop()
     if not parts:
@@ -163,8 +169,23 @@ def on_board(bb_name, roster_names):
     return key is not None and any(surname_initial(n) == key for n in roster_names)
 
 
+# The book prints "Vacant" in an empty office's cell and the first parse
+# shipped it as a person's name (measured: Sawyer's executive, Forest's
+# and Oneida's coroners). A vacancy is the absence of an officer, never
+# an officer called Vacant.
+def is_vacant(name):
+    return fold(name or "") == "vacant"
+
+
+# When the county's own directory names (or fills) an executive, its own
+# title decides the elected-vs-appointed label — same rule as the book's
+# CE/CA/AC/CM codes.
+APPOINTED_EXEC_TITLES = {"County Administrator", "Administrative Coordinator",
+                         "County Manager", "Interim County Executive"}
+
+
 def officer(cell, vacancy_note=True):
-    if not cell or not cell.get("name"):
+    if not cell or not cell.get("name") or is_vacant(cell["name"]):
         return None
     out = {"name": cell["name"]}
     code = cell.get("code")
@@ -243,9 +264,11 @@ def main():
                     new_chair["seats"] = chair["seats"]
                 chair = new_chair
 
+        chair = {k: v for k, v in chair.items()
+                 if not (k == "name" and is_vacant(v))}
         exec_cell = entry["executive"]
         executive = None
-        if exec_cell and exec_cell.get("name"):
+        if exec_cell and exec_cell.get("name") and not is_vacant(exec_cell["name"]):
             title, appointed = EXEC_LABELS[exec_cell.get("code")]
             executive = {"name": exec_cell["name"], "title": title}
             if appointed is True:
@@ -308,6 +331,24 @@ def main():
                 continue
             rec = entry.get(office)
             if not rec or not rec.get("name"):
+                if office == "executive" and c.get("name") and c.get("title"):
+                    # the county's own directory names an executive the book
+                    # leaves BLANK (Sawyer's cell literally prints "Vacant"):
+                    # the page's name fills the office, its own title decides
+                    # the label, appointed forms labeled so
+                    executive = {"name": c["name"], "title": c["title"],
+                                 "source": "county-page"}
+                    if c["title"] in APPOINTED_EXEC_TITLES:
+                        executive["appointed"] = True
+                    if c.get("url"):
+                        executive["url"] = c["url"]
+                    entry["executive"] = executive
+                    print("%s/executive FILLED from the county's own page: %s "
+                          "(%s) — the book names nobody"
+                          % (centry["county"], c["name"], c["title"]),
+                          file=sys.stderr)
+                    n_diverged += 1
+                    checked += 1
                 continue
             if "name" in c and \
                surname_initial(c["name"]) != surname_initial(rec["name"]):
@@ -319,7 +360,13 @@ def main():
                                                rec["name"], c["name"]),
                       file=sys.stderr)
                 new_rec = {"name": c["name"], "source": "county-page"}
-                if rec.get("title"):
+                if office == "executive" and c.get("title"):
+                    # the page's own title labels the person it names —
+                    # the book's title belonged to the book's person
+                    new_rec["title"] = c["title"]
+                    if c["title"] in APPOINTED_EXEC_TITLES:
+                        new_rec["appointed"] = True
+                elif rec.get("title"):
                     new_rec["title"] = rec["title"]
                 if rec.get("sharedUnit"):
                     new_rec["sharedUnit"] = rec["sharedUnit"]

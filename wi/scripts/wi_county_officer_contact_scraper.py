@@ -199,6 +199,127 @@ COUNTIES = {
                  "url": "https://co.walworth.wi.us/directory.aspx"},
     "Portage": {"mode": "civicplus", "floor": 5,
                 "url": "https://www.co.portage.wi.gov/Directory"},
+    # ---- tranche 3 (2026-08-26): the non-roster-county sweep — every URL
+    # below was witness-tested live before pinning; floors sit one under
+    # the measured office count so one flaky page cannot drop a county ----
+    "Adams": {"mode": "pages", "floor": 4, "offices": {
+        "clerkOfCircuitCourt": "https://www.co.adams.wi.us/departments/clerk-of-circuit-court",
+        "coroner": "https://www.co.adams.wi.us/departments/medical-examiner",
+        "districtAttorney": "https://www.co.adams.wi.us/departments/district-attorney",
+        "executive": "https://www.co.adams.wi.us/departments/county-administrator",
+        "registerOfDeeds": "https://www.co.adams.wi.us/departments/register-of-deeds"
+    }},
+    "Ashland": {"mode": "pages", "floor": 3, "offices": {
+        "clerkOfCircuitCourt": "https://ashlandcountywi.gov/circuit_court",
+        "districtAttorney": "https://ashlandcountywi.gov/district_attorney",
+        "executive": "https://ashlandcountywi.gov/administration",
+        "treasurer": "https://ashlandcountywi.gov/treasurer"
+    }},
+    "Buffalo": {"mode": "pages", "floor": 4, "offices": {
+        "clerkOfCircuitCourt": "https://www.buffalocountywi.gov/departments/clerk-of-courts/",
+        "coroner": "https://www.buffalocountywi.gov/departments/coroner/",
+        "districtAttorney": "https://www.buffalocountywi.gov/departments/district-attorney-corporation-counsel/",
+        "executive": "https://www.buffalocountywi.gov/departments/county-administration/",
+        "registerOfDeeds": "https://www.buffalocountywi.gov/departments/register-of-deeds/"
+    }},
+    "Clark": {"mode": "pages", "floor": 3, "offices": {
+        "clerkOfCircuitCourt": "https://www.clarkcountywi.gov/clerk-of-courts",
+        "coroner": "https://www.clarkcountywi.gov/corner",
+        "districtAttorney": "https://www.clarkcountywi.gov/da",
+        "registerOfDeeds": "https://www.clarkcountywi.gov/register-of-deeds"
+    }},
+    "Columbia": {"mode": "pages", "floor": 2, "offices": {
+        "registerOfDeeds": "https://www.co.columbia.wi.us/ColumbiaCounty/registerofdeeds/VitalRecords/tabid/375/Default.aspx",
+        "sheriff": "https://www.co.columbia.wi.us/columbiacounty/sheriff/SheriffsOfficeHomePage/tabid/551/Default.aspx"
+    }},
+    "Florence": {"mode": "pages", "floor": 4, "offices": {
+        "clerkOfCircuitCourt": "https://www.florencecountywi.com/departments/clerk-of-courts/",
+        "coroner": "https://www.florencecountywi.com/departments/coroner/",
+        "registerOfDeeds": "https://www.florencecountywi.com/departments/register-of-deeds/",
+        "sheriff": "https://www.florencecountywi.com/departments/sheriff/",
+        "treasurer": "https://www.florencecountywi.com/departments/treasurer/"
+    }},
+    "Juneau": {"mode": "pages", "floor": 2, "offices": {
+        "clerkOfCircuitCourt": "https://www.co.juneau.wi.gov/departments/clerk_of_court/index.php",
+        "districtAttorney": "https://www.co.juneau.wi.gov/departments/district_attorney/staff_directory.php",
+        "sheriff": "https://www.co.juneau.wi.gov/departments/sheriff_s_office/index.php"
+    }},
+    "Langlade": {"mode": "pages", "floor": 5, "offices": {
+        "clerkOfCircuitCourt": "https://www.co.langlade.wi.us/departments/clerk-of-circuit-court/",
+        "coroner": "https://www.co.langlade.wi.us/departments/coroner/",
+        "districtAttorney": "https://www.co.langlade.wi.us/departments/district-attorney/",
+        "registerOfDeeds": "https://www.co.langlade.wi.us/departments/register-of-deeds/",
+        "sheriff": "https://www.co.langlade.wi.us/departments/sheriffs-office/",
+        "treasurer": "https://www.co.langlade.wi.us/departments/county-treasurer/"
+    }},
+    "Manitowoc": {"mode": "pages", "floor": 3, "offices": {
+        "coroner": "https://manitowoccountywi.gov/departments/coroner/",
+        "districtAttorney": "https://manitowoccountywi.gov/departments/district-attorney/",
+        "registerOfDeeds": "https://manitowoccountywi.gov/departments/register-of-deeds/",
+        "sheriff": "https://manitowoccountywi.gov/departments/sheriff/"
+    }},
+    "Marinette": {"mode": "pages", "floor": 5, "offices": {
+        "clerkOfCircuitCourt": "https://www.marinettecountywi.gov/departments/clerk-of-circuit-court/",
+        "coroner": "https://www.marinettecountywi.gov/departments/medical-examiner/",
+        "districtAttorney": "https://www.marinettecountywi.gov/departments/district-attorney/",
+        "registerOfDeeds": "https://www.marinettecountywi.gov/departments/register-of-deeds/",
+        "sheriff": "https://www.marinettecountywi.gov/departments/office-of-sheriff/",
+        "treasurer": "https://www.marinettecountywi.gov/departments/treasurer/"
+    }},
+    "Oneida": {"mode": "pages", "floor": 3, "offices": {
+        "districtAttorney": "https://www.oneidacountywi.gov/departments/da/",
+        "registerOfDeeds": "https://www.oneidacountywi.gov/departments/rd/",
+        "sheriff": "https://www.oneidacountywi.gov/departments/sd/",
+        "treasurer": "https://www.oneidacountywi.gov/departments/tr/"
+    }},
+    "Pepin": {"mode": "pages", "floor": 2, "offices": {
+        "coroner": "https://www.co.pepin.wi.us/coroner",
+        "sheriff": "https://www.co.pepin.wi.us/sheriff",
+        "treasurer": "https://www.co.pepin.wi.us/treasurer"
+    }},
+    "Sauk": {"mode": "pages", "floor": 6, "offices": {
+        "clerkOfCircuitCourt": "https://www.co.sauk.wi.us/clerkofcourts",
+        "coroner": "https://www.co.sauk.wi.us/coroner",
+        "districtAttorney": "https://www.co.sauk.wi.us/districtattorney",
+        "executive": "https://www.co.sauk.wi.us/countyadministration",
+        "registerOfDeeds": "https://www.co.sauk.wi.us/registerofdeeds",
+        "sheriff": "https://www.co.sauk.wi.us/sheriffsoffice",
+        "treasurer": "https://www.co.sauk.wi.us/treasurer"
+    }},
+    "Trempealeau": {"mode": "pages", "floor": 4, "offices": {
+        "clerkOfCircuitCourt": "https://co.trempealeau.wi.us/departments/administrative_departments/clerk_of_court/index.php",
+        "coroner": "https://co.trempealeau.wi.us/departments/court___legal_departments/county_coroner.php",
+        "districtAttorney": "https://co.trempealeau.wi.us/departments/court___legal_departments/district_attorney/index.php",
+        "registerOfDeeds": "https://co.trempealeau.wi.us/departments/court___legal_departments/register_of_deeds/index.php",
+        "treasurer": "https://co.trempealeau.wi.us/departments/administrative_departments/treasurer/index.php"
+    }},
+    "Waupaca": {"mode": "pages", "floor": 4, "offices": {
+        "clerkOfCircuitCourt": "https://www.waupacacounty-wi.gov/departments/government_departments/clerk_of_courts/clerk_of_circuit_courts.php",
+        "districtAttorney": "https://www.waupacacounty-wi.gov/departments/government_departments/district_attorney/index.php",
+        "registerOfDeeds": "https://www.waupacacounty-wi.gov/departments/register_of_deeds/index.php",
+        "sheriff": "https://www.waupacacounty-wi.gov/departments/sheriff_s_office/index2.php",
+        "treasurer": "https://www.waupacacounty-wi.gov/departments/government_departments/county_treasurer/index.php"
+    }},
+    "Calumet": {"mode": "civicplus", "floor": 5,
+        "url": "https://calumetcounty.org/Directory"},
+    "Chippewa": {"mode": "civicplus", "floor": 5,
+        "url": "https://chippewacountywi.gov/Directory"},
+    "Douglas": {"mode": "civicplus", "floor": 4,
+        "url": "https://douglascountywi.gov/Directory"},
+    "Iron": {"mode": "civicplus", "floor": 5,
+        "url": "https://www.co.iron.wi.gov/Directory"},
+    "Kenosha": {"mode": "civicplus", "floor": 5,
+        "url": "https://www.kenoshacountywi.gov/Directory"},
+    "Oconto": {"mode": "civicplus", "floor": 5,
+        "url": "https://www.ocontocountywi.gov/Directory"},
+    "Ozaukee": {"mode": "civicplus", "floor": 5,
+        "url": "https://ozaukeecounty.gov/Directory"},
+    "Price": {"mode": "civicplus", "floor": 4,
+        "url": "https://co.price.wi.us/Directory"},
+    "Sawyer": {"mode": "civicplus", "floor": 4,
+        "url": "https://www.sawyercounty.gov/Directory"},
+    "St. Croix": {"mode": "civicplus", "floor": 5,
+        "url": "https://sccwi.gov/Directory"},
 }
 
 TAG_STRIP = re.compile(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>")
@@ -305,7 +426,10 @@ def scrape_civicplus(county, cfg, book):
             seg = re.sub(r"^%s County " % re.escape(county), "", seg)
             for office, allowed in TITLE_SETS.items():
                 if seg in allowed:
-                    found.setdefault(office, set()).add(name)
+                    # the matched title segment rides along: the builder
+                    # uses it to label an executive the book has wrong
+                    # (or, for Sawyer, calls "Vacant")
+                    found.setdefault(office, {})[name] = seg
     out = {}
     for office, names in found.items():
         # The same person can be listed twice ("Eric Sparr" / "Eric D.
@@ -325,7 +449,8 @@ def scrape_civicplus(county, cfg, book):
                                           sorted(names)), file=sys.stderr)
             continue
         best = max(list(groups.values())[0], key=len)  # fullest form ships
-        out[office] = {"url": cfg["url"], "name": best}
+        out[office] = {"url": cfg["url"], "name": best,
+                       "title": names[best]}
     return out
 
 
@@ -388,9 +513,9 @@ def main():
               file=sys.stderr)
         time.sleep(1)
 
-    if len(out) < 14:
+    if len(out) < 32:
         raise SystemExit("only %d counties resolved — the tranche floor is "
-                         "14; something structural broke" % len(out))
+                         "32; something structural broke" % len(out))
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)

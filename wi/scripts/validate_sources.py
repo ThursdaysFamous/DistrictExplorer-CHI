@@ -508,7 +508,7 @@ PROVENANCE = [
             "county-board-members.json (a chair the county's own page marks "
             "supersedes the book's; a book chair absent from a complete "
             "roster is withheld with the reason on the card) — and, via the "
-            "per-county scrape (tranches 1-2), nineteen counties' own "
+            "per-county scrape (tranches 1-3), forty-four counties' own "
             "officer pages "
             "(wi_county_officer_contact_scraper.py): contact and a "
             "per-office name witness, superseding the book where a county "
