@@ -239,10 +239,46 @@
       }
     },
     {
+      "id": "law-service",
+      "label": "Law Enforcement Service Area",
+      "group": "safety",
+      "area_rank": 10,
+      "rank_note": "639 dissolved law-enforcement dispatch areas statewide — sheriffs' unincorporated territory keeps the average above the county-board fabric",
+      "source": {
+        "answers": "The law-enforcement agency (or agencies — concurrent jurisdiction ships exactly as filed) dispatched at the point, per the state's NG911 dataset. A response-area fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — four counties, plus Polk's partial filing, recorded as gap ng911-law-filings — the card says so instead of hiding.",
+        "boundary": [
+          {
+            "label": "Wisconsin Office of Emergency Communications — NG911 LawEnforcementBoundary (statewide aggregate of every county's filing, updated roughly weekly; licence: “This data is free and open for use by the public”), per-agency dissolve pre-built by wi/scripts/build_wi_ng911_service_areas.py on the DsplayName+Agency_ID pair with a 4,000-point name-set agreement gate",
+            "url": "https://wi-oec.maps.arcgis.com/home/item.html?id=593d0da225b24601ad0c21598ef52fb0"
+          }
+        ],
+        "people": "None, deliberately: a dispatch service area elects no one, and the NG911 schema names agencies, never people.",
+        "applies": "Statewide, minus the measured filing absences the Data gaps panel lists."
+      }
+    },
+    {
+      "id": "fire-service",
+      "label": "Fire Service Area",
+      "group": "safety",
+      "area_rank": 11,
+      "rank_note": "1,046 dissolved fire-department response areas statewide — denser than the law layer (town departments), broader than the county-board fabric",
+      "source": {
+        "answers": "The fire department dispatched at the point, per the state's NG911 dataset — the guidebook's operational shape (who responds here), never a fire protection district and never an elected body, so the card names no officeholder. Where a county 911 authority has not filed — five counties, recorded as gap ng911-fire-filings — the card says so instead of hiding.",
+        "boundary": [
+          {
+            "label": "Wisconsin Office of Emergency Communications — NG911 FireBoundary (statewide aggregate of every county's filing, updated roughly weekly; licence: “This data is free and open for use by the public”), per-agency dissolve pre-built by wi/scripts/build_wi_ng911_service_areas.py on the DsplayName+Agency_ID pair with a 4,000-point name-set agreement gate",
+            "url": "https://wi-oec.maps.arcgis.com/home/item.html?id=593d0da225b24601ad0c21598ef52fb0"
+          }
+        ],
+        "people": "None, deliberately: a dispatch service area elects no one, and the NG911 schema names agencies, never people.",
+        "applies": "Statewide, minus the measured filing absences the Data gaps panel lists."
+      }
+    },
+    {
       "id": "county-board",
       "label": "County Board District",
       "group": "political",
-      "area_rank": 10,
+      "area_rank": 12,
       "rank_note": "County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town",
       "source": {
         "answers": "The county board supervisory district covering the point, how many districts that county's board has, and a link to the board itself.",
@@ -264,7 +300,7 @@
       "id": "county-subdivision",
       "label": "County Subdivision",
       "group": "geography",
-      "area_rank": 11,
+      "area_rank": 13,
       "rank_note": "Towns / county subdivisions (TIGERweb CouSub, live)",
       "source": {
         "answers": "The town or county subdivision containing the point.",
@@ -282,7 +318,7 @@
       "id": "municipality",
       "label": "Municipality",
       "group": "geography",
-      "area_rank": 12,
+      "area_rank": 14,
       "rank_note": "Incorporated places (TIGERweb Places, live); unincorporated points say so",
       "source": {
         "answers": "The city, village or town containing the point — or that it sits in unincorporated county.",
@@ -300,7 +336,7 @@
       "id": "zip-code",
       "label": "ZIP Code",
       "group": "geography",
-      "area_rank": 13,
+      "area_rank": 15,
       "rank_note": "Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized",
       "source": {
         "answers": "The ZIP Code Tabulation Area containing the point — the Census Bureau's approximation of USPS ZIP delivery areas, not the postal boundaries themselves.",
@@ -318,7 +354,7 @@
       "id": "mpd-district",
       "label": "Milwaukee Police District",
       "group": "safety",
-      "area_rank": 14,
+      "area_rank": 16,
       "rank_note": "Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer",
       "source": {
         "answers": "The Milwaukee Police Department district covering the point. No captain is named: the city's site refuses automated readers, so district leadership cannot be verified here — the card links MPD's own district pages, which carry it, and the Data gaps panel records the measurement. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).",
@@ -340,7 +376,7 @@
       "id": "mps-school-board",
       "label": "MPS School Board District",
       "group": "schools",
-      "area_rank": 15,
+      "area_rank": 17,
       "rank_note": "Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer",
       "source": {
         "answers": "The Milwaukee Public Schools board district covering the point, its elected director, and the at-large director the whole city elects — with each seat's term expiration and the Board office's contact. Statute names Wisconsin's districted school boards exactly (most elect at large): MPS and Racine Unified, whose geometry no publisher ships as data — the Data gaps panel records it.",
@@ -362,7 +398,7 @@
       "id": "aldermanic-district",
       "label": "Aldermanic District",
       "group": "political",
-      "area_rank": 16,
+      "area_rank": 18,
       "rank_note": "838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from",
       "source": {
         "answers": "The aldermanic district (in the nine villages that elect trustees by district, the trustee district) covering the point, in the 155 cities and villages whose ward filings compose their districts completely — and, in Milwaukee, Madison, Green Bay, Kenosha, Racine and Waukesha, the alderperson holding the seat.",
@@ -384,7 +420,7 @@
       "id": "ward",
       "label": "Municipal Ward",
       "group": "geography",
-      "area_rank": 17,
+      "area_rank": 19,
       "rank_note": "7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points",
       "source": {
         "answers": "The municipal ward containing the point — the unit Wisconsin elections are administered by and every supervisory and aldermanic district is composed from — plus which county board district and, in cities that elect alders by district, which aldermanic district it belongs to.",
@@ -402,7 +438,7 @@
       "id": "milwaukee-neighborhoods",
       "label": "Milwaukee Neighborhood",
       "group": "geography",
-      "area_rank": 18,
+      "area_rank": 20,
       "rank_note": "The city's 190 named neighborhoods — an identity fabric, not an electing body; below the ward layer's statewide average, above the amenity points",
       "source": {
         "answers": "The named Milwaukee neighborhood containing the point — the city's own neighborhood fabric, an identity answer with no officeholder because a neighborhood elects no one. Outside Milwaukee the layer hides; no statewide neighborhood publisher exists.",
@@ -424,7 +460,7 @@
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
-      "area_rank": 19,
+      "area_rank": 21,
       "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
@@ -442,7 +478,7 @@
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
-      "area_rank": 20,
+      "area_rank": 22,
       "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
@@ -460,7 +496,7 @@
       "id": "school-site",
       "label": "School Location, incl. private",
       "group": "schools",
-      "area_rank": 21,
+      "area_rank": 23,
       "rank_note": "Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.",
@@ -482,7 +518,7 @@
       "id": "library",
       "label": "Library",
       "group": "geography",
-      "area_rank": 22,
+      "area_rank": 24,
       "rank_note": "Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.",
@@ -500,7 +536,7 @@
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 23,
+      "area_rank": 25,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -515,7 +551,7 @@
       }
     }
   ],
-  "min_register_layer": 15,
+  "min_register_layer": 16,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -665,6 +701,18 @@
         "min_features": 460,
         "max_features": 560,
         "note": "Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file."
+      },
+      {
+        "file": "fire-service-areas.json",
+        "min_features": 1046,
+        "max_features": 1046,
+        "note": "1,046 fire-department dispatch areas — the OEC's 3,009 effective NG911 FireBoundary polygons dissolved per agency by wi/scripts/build_wi_ng911_service_areas.py (expired rows dropped by date; filing-absence and 100.000% name-set agreement gates). An operator rebuild; the monthly source report watches the layer counts."
+      },
+      {
+        "file": "law-service-areas.json",
+        "min_features": 639,
+        "max_features": 639,
+        "note": "639 law-enforcement dispatch areas — the OEC's 3,083 effective NG911 LawEnforcementBoundary polygons dissolved per agency; plain -dissolve, never -dissolve2, so the concurrent-jurisdiction overlaps the counties filed survive (measured). Same builder and gates as the fire file."
       }
     ],
     "rosters": [
@@ -726,7 +774,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v11",
+    "cache_name": "districtry-wi-shell-v12",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

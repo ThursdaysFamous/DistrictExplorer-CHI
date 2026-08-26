@@ -6,7 +6,7 @@
 
 A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. One instance of the [districtry](https://districtry.com/) fleet, serving at **[districtry.com/wi/](https://districtry.com/wi/)** — the first state to expand **in place** as a folder of the consolidated repo rather than as a fork.
 
-Twenty-three layers — thirteen from national publishers, seven from state sources, and three from a city's own:
+Twenty-five layers — thirteen from national publishers, nine from state sources, and three from a city's own:
 
 | Group | Layer | Source |
 |---|---|---|
@@ -18,6 +18,7 @@ Twenty-three layers — thirteen from national publishers, seven from state sour
 | | County Board District (1,590) | Wisconsin LTSB's statewide aggregate of every county's twice-yearly filing (Wis. Stat. 5.15(4)(br)1), pre-built; Trempealeau County's 17 from the county's own service; supervisors named in the 22 counties that publish a district-keyed member list (20 board pages + the Milwaukee and Racine county GIS layers), refreshed weekly by CI |
 | | Aldermanic District (838) | Derived ward unions — LTSB's coded city and village wards dissolved on the statewide municipality key, cross-witnessed against the state's own pre-dissolve edition; alderpersons named in six big cities from their own witnessed surfaces, refreshed weekly by CI; ten incomplete county filings recorded as gaps rather than drawn as fragments |
 | **Public Safety** | Police District — Milwaukee (7) | The city's own MPD districts layer, witnessed against the city's open-data shapefile; shown only inside Milwaukee. District captains publish only on pages that refuse automated readers, so the card links MPD's own district pages rather than naming anyone — a recorded gap |
+| | Fire Service Area (1,046) / Law Enforcement Service Area (639) | The state Office of Emergency Communications' NG911 aggregate of every county's own filing, dissolved per agency — who is dispatched at the point, never a taxing district and never an elected body. Where an agency's jurisdiction overlaps another's, the card shows both, exactly as the county filed it; the few counties whose filings are absent are recorded gaps and the card says so |
 | | Police Station / Fire Station | USGS National Map structures, nearest three each — a proximity fact, never a claim about which agency serves the point |
 | **Schools** | School District — Unified / Union High / Elementary | TIGERweb School layers 0/1/2; the tilings are mutually exclusive, so exactly one of Unified and the pair answers for any point |
 | | School Location (2,966) | Wisconsin DPI's own school directory, public and private, nearest three — a proximity fact, never an enrollment claim; DPI's placeless virtual-program rows deliberately don't ship on a proximity card |
@@ -31,7 +32,7 @@ Twenty-three layers — thirteen from national publishers, seven from state sour
 | | Library (482) | Wisconsin DPI's public-library directory — main libraries and branches with address and phone, nearest three; statewide, where the fleet's reference instance answers this for one city only |
 | | Post Office | USGS National Map structures, nearest three |
 
-Nineteen of these are the full phase-2 plan delivered ([`docs/WI_PHASE2_PLAN.md`](../docs/WI_PHASE2_PLAN.md) — municipal wards, both court tiers, station, school and library points, the county clerk on the county card, and the legislature's own office data); the other four are phase 3 so far — the aldermanic layer, the MPS school board, and Milwaukee's police districts and neighborhoods, the city-scoped tier the phase-2 record queued. Everything beyond them is this instance's next growth, added layer by layer as Wisconsin's publishers are proven out, following the repo's [`docs/EXPANSION_GUIDE.md`](../docs/EXPANSION_GUIDE.md). What no publisher answers — the county-supervisor roster in the 50 counties that publish none, the council rosters beyond the six big cities, the ten cities whose ward filings can't compose their districts — is recorded in the app's Data gaps panel rather than papered over.
+Nineteen of these are the full phase-2 plan delivered ([`docs/WI_PHASE2_PLAN.md`](../docs/WI_PHASE2_PLAN.md) — municipal wards, both court tiers, station, school and library points, the county clerk on the county card, and the legislature's own office data); the other six are phase 3 so far — the aldermanic layer, the MPS school board, Milwaukee's police districts and neighborhoods, and the statewide NG911 fire and law-enforcement service areas the phase-2 record queued. Everything beyond them is this instance's next growth, added layer by layer as Wisconsin's publishers are proven out, following the repo's [`docs/EXPANSION_GUIDE.md`](../docs/EXPANSION_GUIDE.md). What no publisher answers — the county-supervisor roster in the 50 counties that publish none, the council rosters beyond the six big cities, the ten cities whose ward filings can't compose their districts — is recorded in the app's Data gaps panel rather than papered over.
 
 ## Running it
 
