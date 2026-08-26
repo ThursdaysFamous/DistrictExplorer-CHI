@@ -1,0 +1,2562 @@
+{
+ "adams": {
+  "counties": [
+   "Adams County"
+  ],
+  "courthouses": [
+   {
+    "county": "Adams",
+    "lines": [
+     "Courthouse",
+     "401 Adams St Ste 6",
+     "Friendship, WI 53934-0200"
+    ]
+   },
+   {
+    "county": "Adams",
+    "lines": [
+     "Courthouse",
+     "401 Adams St Ste 14",
+     "Friendship, WI 53934-0200"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Daniel G. Wood",
+    "phone": "(608) 339-4215"
+   },
+   {
+    "branch": "2",
+    "name": "Tania M. Bonnett",
+    "phone": "(608) 339-4215"
+   }
+  ],
+  "sourceUrl": "https://www.co.adams.wi.us/departments/clerk-of-circuit-court"
+ },
+ "ashland": {
+  "counties": [
+   "Ashland County"
+  ],
+  "courthouses": [
+   {
+    "county": "Ashland",
+    "lines": [
+     "Courthouse",
+     "201 Main St W",
+     "Ashland, WI 54806-1652"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Kelly J. McKnight",
+    "phone": "(715) 682-7013"
+   }
+  ],
+  "sourceUrl": "https://co.ashland.wi.us/circuit_court"
+ },
+ "barron": {
+  "counties": [
+   "Barron County"
+  ],
+  "courthouses": [
+   {
+    "county": "Barron",
+    "lines": [
+     "Justice Center",
+     "1420 State Hwy 25 N",
+     "Barron, WI 54812-3006"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "James C. Babler",
+    "phone": "(715) 537-6262"
+   },
+   {
+    "branch": "2",
+    "name": "Samuel Lawton",
+    "phone": "(715) 537-6399"
+   },
+   {
+    "branch": "3",
+    "name": "Maureen Boyle",
+    "phone": "(715) 537-6142"
+   }
+  ],
+  "sourceUrl": "https://www.barroncountywi.gov/index.asp?Type=B_BASIC&SEC=%7B472F1AB3-BF6D-4A92-8F36-532AD7D51C8E%7D"
+ },
+ "bayfield": {
+  "counties": [
+   "Bayfield County"
+  ],
+  "courthouses": [
+   {
+    "county": "Bayfield",
+    "lines": [
+     "Courthouse",
+     "117 E 5th St",
+     "PO Box 536",
+     "Washburn, WI 54891-0536"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "John P. Anderson",
+    "phone": "(715) 373-6118",
+    "role": "Chief Judge"
+   }
+  ],
+  "sourceUrl": "https://www.bayfieldcounty.wi.gov/133/Clerk-of-Courts"
+ },
+ "brown": {
+  "counties": [
+   "Brown County"
+  ],
+  "courthouses": [
+   {
+    "county": "Brown",
+    "lines": [
+     "Courthouse",
+     "100 S Jefferson St",
+     "PO Box 23600",
+     "Green Bay, WI 54305-3600"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Donald R. Zuidmulder",
+    "phone": "(920) 448-4136"
+   },
+   {
+    "branch": "2",
+    "name": "Thomas J. Walsh",
+    "phone": "(920) 448-4112"
+   },
+   {
+    "branch": "3",
+    "name": "Tammy Jo Hock",
+    "phone": "(920) 448-4115"
+   },
+   {
+    "branch": "4",
+    "name": "Samantha S. Wagner",
+    "phone": "(920) 448-4116"
+   },
+   {
+    "branch": "5",
+    "name": "Marc A. Hammer",
+    "phone": "(920) 448-4118"
+   },
+   {
+    "branch": "6",
+    "name": "John P. Zakowski",
+    "phone": "(920) 448-4120"
+   },
+   {
+    "branch": "7",
+    "name": "Timothy A. Hinkfuss",
+    "phone": "(920) 448-4121"
+   },
+   {
+    "branch": "8",
+    "name": "Beau G. Liegeois",
+    "phone": "(920) 448-4129"
+   }
+  ],
+  "sourceUrl": "https://www.browncountywi.gov/departments/clerk-of-circuit-court/general-information/"
+ },
+ "buffalo-pepin": {
+  "counties": [
+   "Buffalo County",
+   "Pepin County"
+  ],
+  "courthouses": [
+   {
+    "county": "Buffalo",
+    "lines": [
+     "Courthouse",
+     "407 2nd St S",
+     "Alma, WI 54610-9753"
+    ]
+   },
+   {
+    "county": "Pepin",
+    "lines": [
+     "Government Center",
+     "740 7th Ave W",
+     "PO Box 39",
+     "Durand, WI 54736-0039"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Thomas W. Clark",
+    "phone": "(608) 685-6202"
+   }
+  ],
+  "sourceUrl": "https://www.buffalocounty.com/150/Clerk-of-Courts"
+ },
+ "burnett": {
+  "counties": [
+   "Burnett County"
+  ],
+  "courthouses": [
+   {
+    "county": "Burnett",
+    "lines": [
+     "Government Center",
+     "7410 Co Rd K #115",
+     "Siren, WI 54872-9043"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Melissia R. Mogen",
+    "phone": "(715) 349-2149"
+   }
+  ],
+  "sourceUrl": "https://www.burnettcountywi.gov/238/Clerk-of-Courts-Register-in-Probate"
+ },
+ "calumet": {
+  "counties": [
+   "Calumet County"
+  ],
+  "courthouses": [
+   {
+    "county": "Calumet",
+    "lines": [
+     "Courthouse",
+     "206 Court St",
+     "Chilton, WI 53014-1198"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Jeffrey S. Froehlich",
+    "phone": "(920) 849-1465 Ext. 3501"
+   },
+   {
+    "branch": "2",
+    "name": "Carey J. Reed",
+    "phone": "(920) 849-1465 Ext. 3512"
+   }
+  ],
+  "sourceUrl": "https://www.co.calumet.wi.us/129/Clerk-of-Circuit-Court"
+ },
+ "chippewa": {
+  "counties": [
+   "Chippewa County"
+  ],
+  "courthouses": [
+   {
+    "county": "Chippewa",
+    "lines": [
+     "Courthouse",
+     "711 N Bridge St",
+     "Chippewa Falls, WI 54729-1876"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Steven H. Gibbs",
+    "phone": "(715) 726-7781"
+   },
+   {
+    "branch": "2",
+    "name": "James M. Isaacson",
+    "phone": "(715) 726-7783"
+   },
+   {
+    "branch": "3",
+    "name": "Benjamin J. Lane",
+    "phone": "(715) 738-7300"
+   }
+  ],
+  "sourceUrl": "https://www.co.chippewa.wi.us/government/clerk-of-courts"
+ },
+ "clark": {
+  "counties": [
+   "Clark County"
+  ],
+  "courthouses": [
+   {
+    "county": "Clark",
+    "lines": [
+     "Courthouse",
+     "517 Court St",
+     "Neillsville, WI 54456-1904"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Lyndsey Brunette",
+    "phone": "(715) 743-5172"
+   },
+   {
+    "branch": "2",
+    "name": "William Bratcher",
+    "phone": "(715) 743-5282"
+   }
+  ],
+  "sourceUrl": "https://www.clarkcountywi.com/clerk-of-courts"
+ },
+ "columbia": {
+  "counties": [
+   "Columbia County"
+  ],
+  "courthouses": [
+   {
+    "county": "Columbia",
+    "lines": [
+     "Administration Building",
+     "400 DeWitt St",
+     "PO Box 587",
+     "Portage, WI 53901-0587"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Todd J. Hepler",
+    "phone": "(608) 742-9619"
+   },
+   {
+    "branch": "3",
+    "name": "Roger Klopp",
+    "phone": "(608) 742-9633"
+   },
+   {
+    "name": "W. Andrew Voigt"
+   }
+  ],
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/clerkofcourts/clerkofcourtshome/tabid/2064/default.aspx"
+ },
+ "crawford": {
+  "counties": [
+   "Crawford County"
+  ],
+  "courthouses": [
+   {
+    "county": "Crawford",
+    "lines": [
+     "Courthouse",
+     "220 N Beaumont Rd",
+     "Prairie du Chien, WI 53821-1405"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Lukas L. Steiner",
+    "phone": "(608) 326-0205"
+   }
+  ],
+  "sourceUrl": "https://www.crawfordcountywi.gov/departments/clerkofcourt"
+ },
+ "dane": {
+  "counties": [
+   "Dane County"
+  ],
+  "courthouses": [
+   {
+    "county": "Dane",
+    "lines": [
+     "Courthouse",
+     "215 S Hamilton St",
+     "Madison, WI 53703"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Benjamin Jones",
+    "phone": "(608) 266-4231"
+   },
+   {
+    "branch": "2",
+    "name": "Payal Khandhar",
+    "phone": "(608) 266-4234"
+   },
+   {
+    "branch": "4",
+    "name": "Everett Mitchell",
+    "phone": "(608) 266-4351"
+   },
+   {
+    "branch": "5",
+    "name": "Nicholas McNamara",
+    "phone": "(608) 266-9095"
+   },
+   {
+    "branch": "6",
+    "name": "Nia Trammell",
+    "phone": "(608) 266-4321"
+   },
+   {
+    "branch": "7",
+    "name": "Mario D. White",
+    "phone": "(608) 266-4700"
+   },
+   {
+    "branch": "8",
+    "name": "Stephanie R. Hilton",
+    "phone": "(608) 266-4325"
+   },
+   {
+    "branch": "9",
+    "name": "Jacob B. Frost",
+    "phone": "(608) 266-4009"
+   },
+   {
+    "branch": "10",
+    "name": "Ryan D. Nilsestuen",
+    "phone": "(608) 266-4460"
+   },
+   {
+    "branch": "11",
+    "name": "Ellen K. Berz",
+    "phone": "(608) 266-4377"
+   },
+   {
+    "branch": "12",
+    "name": "Ann M. Peacock",
+    "phone": "(608) 266-4194"
+   },
+   {
+    "branch": "13",
+    "name": "Julie Genovese",
+    "phone": "(608) 266-4186",
+    "role": "Chief Judge"
+   },
+   {
+    "branch": "14",
+    "name": "John D. Hyland",
+    "phone": "(608) 266-4200"
+   },
+   {
+    "branch": "15",
+    "name": "Stephen Ehlke",
+    "phone": "(608) 267-2517"
+   },
+   {
+    "branch": "16",
+    "name": "Rhonda L. Lanford",
+    "phone": "(608) 267-1566"
+   },
+   {
+    "branch": "17",
+    "name": "David Conway",
+    "phone": "(608) 266-4937"
+   },
+   {
+    "name": "Dianne Schlipper"
+   }
+  ],
+  "sourceUrl": "https://courts.countyofdane.com/"
+ },
+ "dodge": {
+  "counties": [
+   "Dodge County"
+  ],
+  "courthouses": [
+   {
+    "county": "Dodge",
+    "lines": [
+     "Justice Facility",
+     "210 W Center St",
+     "Juneau, WI 53039-1091"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Shawn Woller",
+    "phone": "(920) 386-4014"
+   },
+   {
+    "branch": "3",
+    "name": "Chad Wozniak",
+    "phone": "(920) 386-3805"
+   },
+   {
+    "name": "Kristine A. Snow",
+    "phone": "(920) 386-4050"
+   },
+   {
+    "name": "Martin J. De Vries"
+   }
+  ],
+  "sourceUrl": "https://www.co.dodge.wi.gov/departments/departments-a-d/clerk-of-courts"
+ },
+ "door": {
+  "counties": [
+   "Door County"
+  ],
+  "courthouses": [
+   {
+    "county": "Door",
+    "lines": [
+     "Justice Center",
+     "1209 S Duluth Ave",
+     "Sturgeon Bay, WI 54235"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Jennifer Moeller",
+    "phone": "(920) 746-2204"
+   },
+   {
+    "branch": "2",
+    "name": "David L. Weber",
+    "phone": "(920) 746-2280"
+   }
+  ],
+  "sourceUrl": "https://www.co.door.wi.gov/181/Clerk-of-Circuit-Court"
+ },
+ "douglas": {
+  "counties": [
+   "Douglas County"
+  ],
+  "courthouses": [
+   {
+    "county": "Douglas",
+    "lines": [
+     "Courthouse",
+     "1313 Belknap St",
+     "Superior, WI 54880-2769"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Kelly J. Thimm",
+    "phone": "(715) 395-1471"
+   },
+   {
+    "branch": "2",
+    "name": "George Glonek",
+    "phone": "(715) 395-1207"
+   }
+  ],
+  "sourceUrl": "https://www.douglascountywi.org/170/Clerk-of-Courts"
+ },
+ "dunn": {
+  "counties": [
+   "Dunn County"
+  ],
+  "courthouses": [
+   {
+    "county": "Dunn",
+    "lines": [
+     "Judicial Center",
+     "615 Stokke Pkwy Ste 1300",
+     "Menomonie, WI 54751"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "James Peterson",
+    "phone": "(715) 232-1449"
+   },
+   {
+    "branch": "2",
+    "name": "Christina M. Mayer",
+    "phone": "(715) 232-1449"
+   },
+   {
+    "branch": "3",
+    "name": "Luke M. Wagner",
+    "phone": "(715) 232-1449"
+   }
+  ],
+  "sourceUrl": "https://www.co.dunn.wi.us/clerkofcourts"
+ },
+ "eau-claire": {
+  "counties": [
+   "Eau Claire County"
+  ],
+  "courthouses": [
+   {
+    "county": "Eau Claire",
+    "lines": [
+     "Courthouse",
+     "721 Oxford Ave",
+     "Eau Claire, WI 54703-5481"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "John F. Manydeeds",
+    "phone": "(715) 839-7023"
+   },
+   {
+    "branch": "2",
+    "name": "Douglas J. Hoffer",
+    "phone": "(715) 839-7732"
+   },
+   {
+    "branch": "3",
+    "name": "Emily M. Long",
+    "phone": "(715) 839-6149"
+   },
+   {
+    "branch": "4",
+    "name": "Jon M. Theisen",
+    "phone": "(715) 839-4779"
+   },
+   {
+    "branch": "5",
+    "name": "Sarah Harless",
+    "phone": "(715) 839-6170"
+   },
+   {
+    "branch": "6",
+    "name": "Beverly Wickstrom",
+    "phone": "(715) 839-6170"
+   }
+  ],
+  "sourceUrl": "https://www.co.eau-claire.wi.us/our-government/departments-and-facilities/department-directory/clerk-of-courts"
+ },
+ "florence-forest": {
+  "counties": [
+   "Florence County",
+   "Forest County"
+  ],
+  "courthouses": [
+   {
+    "county": "Florence",
+    "lines": [
+     "Courthouse",
+     "501 Lake Ave",
+     "PO Box 410",
+     "Florence, WI 54121-0410"
+    ]
+   },
+   {
+    "county": "Forest",
+    "lines": [
+     "Courthouse",
+     "200 E Madison St",
+     "Crandon, WI 54520-1414"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Robert A. Kennedy"
+   }
+  ],
+  "sourceUrl": "https://www.florencecountywi.com/departments/?department=df6dc4c111eb"
+ },
+ "fond-du-lac": {
+  "counties": [
+   "Fond du Lac County"
+  ],
+  "courthouses": [
+   {
+    "county": "Fond du Lac",
+    "lines": [
+     "Government Center",
+     "160 S Macy St",
+     "Fond du Lac, WI 54935-4241"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Anthony C. Nehls",
+    "phone": "(920) 929-3072"
+   },
+   {
+    "branch": "2",
+    "name": "Laura J. Lavey",
+    "phone": "(920) 929-3071"
+   },
+   {
+    "branch": "3",
+    "name": "Andrew J. Christenson",
+    "phone": "(920) 929-3188"
+   },
+   {
+    "branch": "4",
+    "name": "Tricia L. Walker",
+    "phone": "(920) 929-3189"
+   },
+   {
+    "branch": "5",
+    "name": "Douglas R. Edelstein",
+    "phone": "(920) 929-7053"
+   }
+  ],
+  "sourceUrl": "https://www.fdlco.wi.gov/departments/departments-a-e/clerk-of-courts"
+ },
+ "grant": {
+  "counties": [
+   "Grant County"
+  ],
+  "courthouses": [
+   {
+    "county": "Grant",
+    "lines": [
+     "Courthouse",
+     "130 W Maple St",
+     "Lancaster, WI 53813"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Craig R. Day"
+   },
+   {
+    "name": "Lisa A. Riniker"
+   }
+  ],
+  "sourceUrl": "http://www.co.grant.wi.gov/localgov_departments_details.asp?deptid=408&locid=147"
+ },
+ "green": {
+  "counties": [
+   "Green County"
+  ],
+  "courthouses": [
+   {
+    "county": "Green",
+    "lines": [
+     "Justice Center",
+     "2841 6th St",
+     "Monroe, WI 53566"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Faun M. Phillipson",
+    "phone": "(608) 328-9566"
+   },
+   {
+    "branch": "2",
+    "name": "Jane E. Bucher",
+    "phone": "(608) 328-9573"
+   }
+  ],
+  "sourceUrl": "https://www.greencountywi.org/160/Clerk-of-Circuit-Court"
+ },
+ "green-lake": {
+  "counties": [
+   "Green Lake County"
+  ],
+  "courthouses": [
+   {
+    "county": "Green Lake",
+    "lines": [
+     "Justice Center",
+     "571 County Road A",
+     "Green Lake, WI 54941-3188"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Mark T. Slate",
+    "phone": "(920) 294-4044"
+   }
+  ],
+  "sourceUrl": "https://www.greenlakecountywi.gov/departments/clerk-of-courts/"
+ },
+ "iowa": {
+  "counties": [
+   "Iowa County"
+  ],
+  "courthouses": [
+   {
+    "county": "Iowa",
+    "lines": [
+     "Courthouse",
+     "222 N Iowa St",
+     "Dodgeville, WI 53533-1548"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Matthew C. Allen",
+    "phone": "(608) 935-0347"
+   }
+  ],
+  "sourceUrl": "https://www.iowacounty.org/departments/ClerkofCourts"
+ },
+ "iron": {
+  "counties": [
+   "Iron County"
+  ],
+  "courthouses": [
+   {
+    "county": "Iron",
+    "lines": [
+     "Courthouse",
+     "300 Taconite St",
+     "Hurley, WI 54534-1546"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Anthony J. Stella Jr.",
+    "phone": "(715) 561-3434"
+   }
+  ],
+  "sourceUrl": "https://www.co.iron.wi.gov/250/Clerk-of-Courts"
+ },
+ "jackson": {
+  "counties": [
+   "Jackson County"
+  ],
+  "courthouses": [
+   {
+    "county": "Jackson",
+    "lines": [
+     "Courthouse",
+     "307 Main St",
+     "Black River Falls, WI 54615-0609"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Anna Becker",
+    "phone": "(715) 284-0213"
+   },
+   {
+    "branch": "2",
+    "name": "Daniel S. Diehn",
+    "phone": "(715) 670-0514"
+   }
+  ],
+  "sourceUrl": "https://www.co.jackson.wi.us/?SEC=92715347-A9EE-4EEE-8D7D-98FCBDE68F90"
+ },
+ "jefferson": {
+  "counties": [
+   "Jefferson County"
+  ],
+  "courthouses": [
+   {
+    "county": "Jefferson",
+    "lines": [
+     "Courthouse",
+     "311 S Center Ave",
+     "Jefferson, WI 53549"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "William V. Gruber",
+    "phone": "(920) 674-7178"
+   },
+   {
+    "branch": "2",
+    "name": "Theresa A. Beck",
+    "phone": "(920) 674-7151"
+   },
+   {
+    "branch": "4",
+    "name": "Bennett J. Brantmeier",
+    "phone": "(920) 674-7217"
+   },
+   {
+    "name": "Robert F. Dehring Jr."
+   }
+  ],
+  "sourceUrl": "https://www.jeffersoncountywi.gov/departments/clerk_of_courts/index.php"
+ },
+ "juneau": {
+  "counties": [
+   "Juneau County"
+  ],
+  "courthouses": [
+   {
+    "county": "Juneau",
+    "lines": [
+     "Justice Center",
+     "200 Oak Street",
+     "Mauston, WI 53948"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Stacy A. Smith",
+    "phone": "(608) 847-9351"
+   },
+   {
+    "branch": "2",
+    "name": "Paul S. Curran",
+    "phone": "(608) 847-9567"
+   }
+  ],
+  "sourceUrl": "https://www.co.juneau.wi.gov/departments/clerk_of_court/index.php"
+ },
+ "kenosha": {
+  "counties": [
+   "Kenosha County"
+  ],
+  "courthouses": [
+   {
+    "county": "Kenosha",
+    "lines": [
+     "Courthouse",
+     "912 56th St",
+     "Kenosha, WI 53140-3736"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Gerad T. Dougvillo",
+    "phone": "(262) 653-2581"
+   },
+   {
+    "branch": "2",
+    "name": "Jason A. Rossell",
+    "phone": "(262) 653-2663"
+   },
+   {
+    "branch": "3",
+    "name": "Heather Iverson",
+    "phone": "(262) 653-2579"
+   },
+   {
+    "branch": "4",
+    "name": "David O. Hughes",
+    "phone": "(262) 653-2791"
+   },
+   {
+    "branch": "5",
+    "name": "David P. Wilk",
+    "phone": "(262) 653-2739"
+   },
+   {
+    "branch": "6",
+    "name": "Angelina Gabriele",
+    "phone": "(262) 653-2712"
+   },
+   {
+    "branch": "7",
+    "name": "Jodi L. Meier",
+    "phone": "(262) 653-2469"
+   },
+   {
+    "branch": "8",
+    "name": "Chad G. Kerkman",
+    "phone": "(262) 653-2659"
+   }
+  ],
+  "sourceUrl": "https://www.kenoshacounty.org/118/Clerk-of-Courts"
+ },
+ "kewaunee": {
+  "counties": [
+   "Kewaunee County"
+  ],
+  "courthouses": [
+   {
+    "county": "Kewaunee",
+    "lines": [
+     "Courthouse",
+     "613 Dodge St",
+     "Kewaunee, WI 54216-1398"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Jeffrey R. Wisnicky",
+    "phone": "(920) 388-7142"
+   }
+  ],
+  "sourceUrl": "https://www.kewauneeco.org/departments/clerk-of-circuit-court/"
+ },
+ "la-crosse": {
+  "counties": [
+   "La Crosse County"
+  ],
+  "courthouses": [
+   {
+    "county": "La Crosse",
+    "lines": [
+     "Law Enforcement Center",
+     "333 Vine St",
+     "La Crosse, WI 54601-3296"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "2",
+    "name": "Elliott Levine",
+    "phone": "(608) 785-9587"
+   },
+   {
+    "branch": "3",
+    "name": "Mark A Huesmann",
+    "phone": "(608) 785-9773"
+   },
+   {
+    "branch": "4",
+    "name": "Scott L. Horne",
+    "phone": "(608) 785-9851",
+    "role": "Chief Judge"
+   },
+   {
+    "branch": "5",
+    "name": "Gloria L. Doyle",
+    "phone": "(608) 785-5880"
+   },
+   {
+    "name": "Joe Veenstra"
+   }
+  ],
+  "sourceUrl": "https://www.lacrossecounty.org/Court/"
+ },
+ "lafayette": {
+  "counties": [
+   "Lafayette County"
+  ],
+  "courthouses": [
+   {
+    "county": "Lafayette",
+    "lines": [
+     "Courthouse",
+     "626 Main St",
+     "Darlington, WI 53530-1396"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Jenna Gill",
+    "phone": "(608) 776-4811"
+   }
+  ],
+  "sourceUrl": "https://www.lafayettecountywi.org/coc"
+ },
+ "langlade": {
+  "counties": [
+   "Langlade County"
+  ],
+  "courthouses": [
+   {
+    "county": "Langlade",
+    "lines": [
+     "Courthouse",
+     "800 Clermont St",
+     "Antigo, WI 54409-1985"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "John B. Rhode",
+    "phone": "(715) 627-6221"
+   }
+  ],
+  "sourceUrl": "https://www.co.langlade.wi.us/departments/clerk-of-circuit-court/"
+ },
+ "lincoln": {
+  "counties": [
+   "Lincoln County"
+  ],
+  "courthouses": [
+   {
+    "county": "Lincoln",
+    "lines": [
+     "Courthouse",
+     "1110 E Main St",
+     "Merrill, WI 54452-2579"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Galen Bayne-Allison",
+    "phone": "(715) 536-0343"
+   },
+   {
+    "branch": "2",
+    "name": "Jessica Fehrenbach",
+    "phone": "(715) 536-0416"
+   }
+  ],
+  "sourceUrl": "https://co.lincoln.wi.us/clerk-courts"
+ },
+ "manitowoc": {
+  "counties": [
+   "Manitowoc County"
+  ],
+  "courthouses": [
+   {
+    "county": "Manitowoc",
+    "lines": [
+     "Courthouse",
+     "1010 S 8th St",
+     "Manitowoc, WI 54221-2000"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Mark R. Rohrer",
+    "phone": "(920) 683-2758"
+   },
+   {
+    "branch": "2",
+    "name": "Jerilyn M. Dietz",
+    "phone": "(920) 683-4042"
+   },
+   {
+    "branch": "3",
+    "name": "Robert P. Dewane",
+    "phone": "(920) 683-4022"
+   },
+   {
+    "branch": "4",
+    "name": "Anthony Lambrecht",
+    "phone": "(920) 683-6160"
+   }
+  ],
+  "sourceUrl": "https://manitowoccountywi.gov/departments/clerk-of-circuit-court/"
+ },
+ "marathon": {
+  "counties": [
+   "Marathon County"
+  ],
+  "courthouses": [
+   {
+    "county": "Marathon",
+    "lines": [
+     "Courthouse",
+     "500 Forest St",
+     "Wausau, WI 54403-5568"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Suzanne C. O'Neill",
+    "phone": "(715) 261-1335"
+   },
+   {
+    "branch": "2",
+    "name": "Rick Cveykus",
+    "phone": "(715) 261-1350"
+   },
+   {
+    "branch": "3",
+    "name": "Michael D. Hughes",
+    "phone": "(715) 261-1360"
+   },
+   {
+    "branch": "4",
+    "name": "Gregory J. Strasser",
+    "phone": "(715) 261-1370"
+   },
+   {
+    "branch": "5",
+    "name": "Michael K. Moran",
+    "phone": "(715) 261-1381"
+   },
+   {
+    "branch": "6",
+    "name": "Scott M. Corbett",
+    "phone": "(715) 261-1346"
+   }
+  ],
+  "sourceUrl": "https://www.marathoncounty.gov/about-us/departments/clerk-of-courts"
+ },
+ "marinette": {
+  "counties": [
+   "Marinette County"
+  ],
+  "courthouses": [
+   {
+    "county": "Marinette",
+    "lines": [
+     "Courthouse",
+     "1926 Hall Ave",
+     "Marinette, WI 54143-1717"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Peggy Miller",
+    "phone": "(715) 732-7465"
+   },
+   {
+    "branch": "2",
+    "name": "James A. Morrison",
+    "phone": "(715) 732-7470"
+   }
+  ],
+  "sourceUrl": "https://www.marinettecounty.com/departments/clerk-of-circuit-court/general-information/"
+ },
+ "marquette": {
+  "counties": [
+   "Marquette County"
+  ],
+  "courthouses": [
+   {
+    "county": "Marquette",
+    "lines": [
+     "Courthouse",
+     "77 W Park St",
+     "PO Box 749",
+     "Montello, WI 53949-0749"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Chad A. Hendee",
+    "phone": "(608) 297-3009"
+   }
+  ],
+  "sourceUrl": "http://www.co.marquette.wi.us/departments/clerk-of-courts"
+ },
+ "menominee-shawano": {
+  "counties": [
+   "Menominee County",
+   "Shawano County"
+  ],
+  "courthouses": [
+   {
+    "county": "Menominee",
+    "lines": [
+     "Courthouse",
+     "W3269 Courthouse Ln",
+     "PO Box 279",
+     "Keshena, WI 54135-0279"
+    ]
+   },
+   {
+    "county": "Shawano",
+    "lines": [
+     "Courthouse",
+     "311 N Main St",
+     "Shawano, WI 54166-2198"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Katherine Sloma",
+    "phone": "(715) 526-9352"
+   },
+   {
+    "branch": "2",
+    "name": "William F. Kussel Jr.",
+    "phone": "(715) 526-9328"
+   }
+  ],
+  "sourceUrl": "https://www.co.menominee.wi.us/departments/?department=fc7a717f2fdd"
+ },
+ "milwaukee": {
+  "counties": [
+   "Milwaukee County"
+  ],
+  "courthouses": [
+   {
+    "county": "Milwaukee",
+    "lines": [
+     "Courthouse",
+     "901 N 9th St",
+     "Milwaukee, WI 53233-1425"
+    ]
+   },
+   {
+    "county": "Milwaukee",
+    "lines": [
+     "Safety Building",
+     "821 W State St",
+     "Milwaukee, WI 53233-1427"
+    ]
+   },
+   {
+    "county": "Milwaukee",
+    "lines": [
+     "Vel Phillips Youth & Family Justice Center",
+     "10201 W Watertown Plank Rd",
+     "Wauwatosa, WI 53226-3532"
+    ]
+   },
+   {
+    "county": "Milwaukee",
+    "lines": [
+     "Criminal Justice Facility",
+     "949 N 9th St",
+     "Milwaukee, WI 53233-1425"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Jack L. Davila",
+    "phone": "(414) 278-4521"
+   },
+   {
+    "branch": "3",
+    "name": "Katie B. Kegel",
+    "phone": "(414) 278-4775"
+   },
+   {
+    "branch": "4",
+    "name": "Michael J. Hanrahan",
+    "phone": "(414) 278-5102"
+   },
+   {
+    "branch": "5",
+    "name": "Kristela L. Cervera",
+    "phone": "(414) 278-4498"
+   },
+   {
+    "branch": "6",
+    "name": "John Remington",
+    "phone": "(414) 454-4298"
+   },
+   {
+    "branch": "7",
+    "name": "Susan M. Roth",
+    "phone": "(414) 278-4523"
+   },
+   {
+    "branch": "8",
+    "name": "William Sosnay",
+    "phone": "(414) 278-4514"
+   },
+   {
+    "branch": "10",
+    "name": "Michelle A. Havas",
+    "phone": "(414) 278-4496"
+   },
+   {
+    "branch": "11",
+    "name": "David C. Swanson",
+    "phone": "(414) 278-4772"
+   },
+   {
+    "branch": "12",
+    "name": "David L. Borowski",
+    "phone": "(414) 278-4472"
+   },
+   {
+    "branch": "13",
+    "name": "Ana Berrios-Schroeder",
+    "phone": "(414) 278-5316"
+   },
+   {
+    "branch": "14",
+    "name": "Amber Raffeet August",
+    "phone": "(414) 257-7220"
+   },
+   {
+    "branch": "16",
+    "name": "Brittany C. Grayson",
+    "phone": "(414) 257-7753"
+   },
+   {
+    "branch": "17",
+    "name": "Carolina Maria Stark",
+    "phone": "(414) 278-4500"
+   },
+   {
+    "branch": "18",
+    "name": "Ronnie V. Murray II",
+    "phone": "(414) 257-7098"
+   },
+   {
+    "branch": "19",
+    "name": "Kori Ashley",
+    "phone": "(414) 278-5153"
+   },
+   {
+    "branch": "20",
+    "name": "Joseph R. Wall",
+    "phone": "(414) 278-4504"
+   },
+   {
+    "branch": "21",
+    "name": "Cynthia M. Davis",
+    "phone": "(414) 278-4474"
+   },
+   {
+    "branch": "22",
+    "name": "Timothy M. Witkowiak",
+    "phone": "(414) 278-4506"
+   },
+   {
+    "branch": "23",
+    "name": "Jorge R. Fragoso",
+    "phone": "(414) 278-4596"
+   },
+   {
+    "branch": "24",
+    "name": "Raphael Ramos",
+    "phone": "(414) 278-4582"
+   },
+   {
+    "branch": "25",
+    "name": "Nidhi Kashyap",
+    "phone": "(414) 257-7753"
+   },
+   {
+    "branch": "26",
+    "name": "William S. Pocan",
+    "phone": "(414) 278-4512"
+   },
+   {
+    "branch": "27",
+    "name": "Kevin E. Martens",
+    "phone": "(414) 278-4476"
+   },
+   {
+    "branch": "28",
+    "name": "Mark A. Sanders",
+    "phone": "(414) 278-5340"
+   },
+   {
+    "branch": "29",
+    "name": "Rebecca A. Kiefer",
+    "phone": "(414) 278-4764"
+   },
+   {
+    "branch": "30",
+    "name": "Jonathan D. Richards",
+    "phone": "(414) 278-4470"
+   },
+   {
+    "branch": "31",
+    "name": "Owen Piotrowski",
+    "phone": "(414) 278-4548"
+   },
+   {
+    "branch": "32",
+    "name": "Laura Gramling Perez",
+    "phone": "(414) 257-7121"
+   },
+   {
+    "branch": "33",
+    "name": "Carl Ashley",
+    "phone": "(414) 278-5116",
+    "role": "Chief Judge"
+   },
+   {
+    "branch": "35",
+    "name": "Frederick C. Rosa",
+    "phone": "(414) 278-4560"
+   },
+   {
+    "branch": "36",
+    "name": "Laura Crivello",
+    "phone": "(414) 278-4478"
+   },
+   {
+    "branch": "38",
+    "name": "Tanner Kilander",
+    "phone": "(414) 278-5393"
+   },
+   {
+    "branch": "39",
+    "name": "Jane V. Carroll",
+    "phone": "(414) 257-7150"
+   },
+   {
+    "branch": "40",
+    "name": "Danielle L. Shelton",
+    "phone": "(414) 278-4898"
+   },
+   {
+    "branch": "41",
+    "name": "Lena Taylor",
+    "phone": "(414) 278-4901"
+   },
+   {
+    "branch": "42",
+    "name": "Reyna Morales",
+    "phone": "(414) 278-4519"
+   },
+   {
+    "branch": "43",
+    "name": "Marisabel Cabrera",
+    "phone": "(414) 278-4480"
+   },
+   {
+    "branch": "45",
+    "name": "Jean Marie Kies",
+    "phone": "(414) 278-4554"
+   },
+   {
+    "branch": "46",
+    "name": "Anderson Gansner",
+    "phone": "(414) 278-4490"
+   },
+   {
+    "name": "Gwen Connolly"
+   },
+   {
+    "name": "T. Christopher Dee"
+   },
+   {
+    "name": "Paul R. Van Grunsven"
+   },
+   {
+    "name": "Milton L. Childs Sr."
+   },
+   {
+    "name": "Jonathan D. Watts"
+   },
+   {
+    "name": "Glenn H. Yamahiro"
+   },
+   {
+    "name": "Kristy Yang"
+   }
+  ],
+  "sourceUrl": "https://county.milwaukee.gov/EN/Courts/Clerk-of-Courts"
+ },
+ "monroe": {
+  "counties": [
+   "Monroe County"
+  ],
+  "courthouses": [
+   {
+    "county": "Monroe",
+    "lines": [
+     "Justice Center",
+     "112 S Court St",
+     "Sparta, WI 54656-1765"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Todd Ziegler",
+    "phone": "(608) 269-8700"
+   },
+   {
+    "branch": "2",
+    "name": "Mark L. Goodman",
+    "phone": "(608) 269-8926"
+   },
+   {
+    "branch": "3",
+    "name": "Richard Radcliffe",
+    "phone": "(608) 269-8875"
+   }
+  ],
+  "sourceUrl": "http://www.co.monroe.wi.us/departments/clerk-of-courts/"
+ },
+ "oconto": {
+  "counties": [
+   "Oconto County"
+  ],
+  "courthouses": [
+   {
+    "county": "Oconto",
+    "lines": [
+     "Courthouse",
+     "301 Washington St",
+     "Oconto, WI 54153-1621"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Hannah N. Schuchart",
+    "phone": "(920) 834-6837"
+   },
+   {
+    "branch": "2",
+    "name": "Jay N. Conley",
+    "phone": "(920) 834-6837"
+   }
+  ],
+  "sourceUrl": "https://www.co.oconto.wi.us/departments/?department=9a9dd3db7712"
+ },
+ "oneida": {
+  "counties": [
+   "Oneida County"
+  ],
+  "courthouses": [
+   {
+    "county": "Oneida",
+    "lines": [
+     "Courthouse",
+     "1 S Oneida Ave",
+     "PO Box 400",
+     "Rhinelander, WI 54501-0400"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Michael W. Schiek",
+    "phone": "(715) 369-6157"
+   },
+   {
+    "branch": "2",
+    "name": "Mary Sowinski",
+    "phone": "(715) 369-6200"
+   }
+  ],
+  "sourceUrl": "https://www.co.oneida.wi.us/departments/cc/"
+ },
+ "outagamie": {
+  "counties": [
+   "Outagamie County"
+  ],
+  "courthouses": [
+   {
+    "county": "Outagamie",
+    "lines": [
+     "Justice Center",
+     "320 S Walnut St",
+     "Appleton, WI 54911-5918"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Whitney Healy",
+    "phone": "(920) 832-5152"
+   },
+   {
+    "branch": "2",
+    "name": "Emily I. Lonergan",
+    "phone": "(920) 832-5153"
+   },
+   {
+    "branch": "3",
+    "name": "Kyle J. Sargent",
+    "phone": "(920) 832-5245"
+   },
+   {
+    "branch": "4",
+    "name": "Yadira Rein",
+    "phone": "(920) 832-5602"
+   },
+   {
+    "branch": "5",
+    "name": "Carrie A. Schneider",
+    "phone": "(920) 832-1550",
+    "role": "Chief Judge"
+   },
+   {
+    "branch": "6",
+    "name": "Vincent Biskupic",
+    "phone": "(920) 832-6038"
+   },
+   {
+    "branch": "7",
+    "name": "Mark G. Schroeder",
+    "phone": "(920) 832-4727"
+   }
+  ],
+  "sourceUrl": "https://www.outagamie.org/government/departments-a-e/clerk-of-circuit-courts"
+ },
+ "ozaukee": {
+  "counties": [
+   "Ozaukee County"
+  ],
+  "courthouses": [
+   {
+    "county": "Ozaukee",
+    "lines": [
+     "Courthouse",
+     "1201 S Spring St",
+     "PO Box 994",
+     "Port Washington, WI 53074-0994"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Adam Y. Gerol",
+    "phone": "(262) 284-8357"
+   },
+   {
+    "branch": "2",
+    "name": "Steven M. Cain",
+    "phone": "(262) 284-8415"
+   },
+   {
+    "branch": "3",
+    "name": "Sandy A. Williams",
+    "phone": "(262) 284-8362"
+   }
+  ],
+  "sourceUrl": "https://www.co.ozaukee.wi.us/181/Clerk-of-Circuit-Courts"
+ },
+ "pierce": {
+  "counties": [
+   "Pierce County"
+  ],
+  "courthouses": [
+   {
+    "county": "Pierce",
+    "lines": [
+     "Courthouse",
+     "414 W Main St",
+     "Ellsworth, WI 54011"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Elizabeth Rohl",
+    "phone": "(715) 273-3531"
+   }
+  ],
+  "sourceUrl": "https://www.co.pierce.wi.us/departments/circuit_court/index.php"
+ },
+ "polk": {
+  "counties": [
+   "Polk County"
+  ],
+  "courthouses": [
+   {
+    "county": "Polk",
+    "lines": [
+     "Justice Center",
+     "1005 W Main St",
+     "Balsam Lake, WI 54810"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Jeffery L. Anderson"
+   },
+   {
+    "name": "Daniel J. Tolan"
+   }
+  ],
+  "sourceUrl": "https://www.polkcountywi.gov/government/elected_officials/clerk_of_courts/index.php"
+ },
+ "portage": {
+  "counties": [
+   "Portage County"
+  ],
+  "courthouses": [
+   {
+    "county": "Portage",
+    "lines": [
+     "Courthouse",
+     "1516 Church St",
+     "Stevens Point, WI 54481-3598"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Michael D. Zell",
+    "phone": "(715) 346-1355"
+   },
+   {
+    "branch": "3",
+    "name": "Patricia Baker",
+    "phone": "(715) 346-1244",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Louis J. Molepske Jr."
+   }
+  ],
+  "sourceUrl": "https://www.co.portage.wi.gov/186/Clerk-of-Courts"
+ },
+ "price": {
+  "counties": [
+   "Price County"
+  ],
+  "courthouses": [
+   {
+    "county": "Price",
+    "lines": [
+     "Courthouse",
+     "126 Cherry St",
+     "Phillips, WI 54555-1249"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Mark T. Fuhr",
+    "phone": "(715) 339-3315"
+   }
+  ],
+  "sourceUrl": "https://co.price.wi.us/193/Clerk-of-Circuit-Court"
+ },
+ "racine": {
+  "counties": [
+   "Racine County"
+  ],
+  "courthouses": [
+   {
+    "county": "Racine",
+    "lines": [
+     "Courthouse",
+     "730 Wisconsin Ave",
+     "Racine, WI 53403-1238"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Wynne Laufenberg",
+    "phone": "(262) 636-3875",
+    "role": "Chief Judge"
+   },
+   {
+    "branch": "2",
+    "name": "Eugene A. Gasiorkiewicz",
+    "phone": "(262) 636-3131"
+   },
+   {
+    "branch": "3",
+    "name": "Jessica Lynott",
+    "phone": "(262) 636-3957"
+   },
+   {
+    "branch": "5",
+    "name": "Kristin M. Cafferty",
+    "phone": "(262) 636-3313"
+   },
+   {
+    "branch": "6",
+    "name": "David W. Paulson",
+    "phone": "(262) 636-3134"
+   },
+   {
+    "branch": "7",
+    "name": "Jamie McClendon",
+    "phone": "(262) 636-3159"
+   },
+   {
+    "branch": "8",
+    "name": "Faye M. Flancher",
+    "phone": "(262) 636-3842"
+   },
+   {
+    "branch": "9",
+    "name": "Robert S. Repischak",
+    "phone": "(262) 636-3146"
+   },
+   {
+    "branch": "10",
+    "name": "Timothy D. Boyle",
+    "phone": "(262) 636-3867"
+   },
+   {
+    "name": "Scott P. Craig",
+    "phone": "(262) 636-3151"
+   }
+  ],
+  "sourceUrl": "https://www.racinecounty.gov/departments/clerk-of-circuit-court-5279"
+ },
+ "richland": {
+  "counties": [
+   "Richland County"
+  ],
+  "courthouses": [
+   {
+    "county": "Richland",
+    "lines": [
+     "Courthouse",
+     "181 W Seminary St",
+     "PO Box 655",
+     "Richland Center, WI 53581-0655"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Lisa A. McDougal",
+    "phone": "(608) 647-2626"
+   }
+  ],
+  "sourceUrl": "https://justice.co.richland.wi.us/"
+ },
+ "rock": {
+  "counties": [
+   "Rock County"
+  ],
+  "courthouses": [
+   {
+    "county": "Rock",
+    "lines": [
+     "Courthouse",
+     "51 S Main St - 5th Fl",
+     "Janesville, WI 53545-3978"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Karl Hanson",
+    "phone": "(608) 743-2261"
+   },
+   {
+    "branch": "2",
+    "name": "Derrick A. Grubb",
+    "phone": "(608) 743-2254"
+   },
+   {
+    "branch": "3",
+    "name": "Jeffrey S. Kuglitsch",
+    "phone": "(608) 743-2249"
+   },
+   {
+    "branch": "4",
+    "name": "Ashley J. Morse",
+    "phone": "(608) 743-2242"
+   },
+   {
+    "branch": "5",
+    "name": "Michael A. Haakenson",
+    "phone": "(608) 743-2237"
+   },
+   {
+    "branch": "6",
+    "name": "John M. Wood",
+    "phone": "(608) 743-2229"
+   },
+   {
+    "branch": "7",
+    "name": "Sara. Gehrig-Woodman",
+    "phone": "(608) 743-2233"
+   }
+  ],
+  "sourceUrl": "https://www.co.rock.wi.us/departments/circuit-court"
+ },
+ "rusk": {
+  "counties": [
+   "Rusk County"
+  ],
+  "courthouses": [
+   {
+    "county": "Rusk",
+    "lines": [
+     "Courthouse",
+     "311 Miner Ave E",
+     "Ladysmith, WI 54848-1862"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Annette M. Barna",
+    "phone": "(715) 532-2150"
+   }
+  ],
+  "sourceUrl": "https://ruskcounty.org/court"
+ },
+ "sauk": {
+  "counties": [
+   "Sauk County"
+  ],
+  "courthouses": [
+   {
+    "county": "Sauk",
+    "lines": [
+     "Courthouse",
+     "515 Oak St",
+     "Baraboo, WI 53913-2496"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Michael P. Screnock",
+    "phone": "(608) 355-3214"
+   },
+   {
+    "branch": "2",
+    "name": "Wendy J. N. Klicko",
+    "phone": "(608) 355-3218"
+   },
+   {
+    "branch": "3",
+    "name": "Blake Duren",
+    "phone": "(608) 355-3222"
+   }
+  ],
+  "sourceUrl": "https://www.co.sauk.wi.us/clerkofcourts"
+ },
+ "sawyer": {
+  "counties": [
+   "Sawyer County"
+  ],
+  "courthouses": [
+   {
+    "county": "Sawyer",
+    "lines": [
+     "Courthouse",
+     "10610 Main Suite 244",
+     "Hayward, WI 54843-6586"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "John M. Yackel",
+    "phone": "(715) 634-4886"
+   },
+   {
+    "branch": "2",
+    "name": "Monica M. Isham",
+    "phone": "(715) 638-3403"
+   }
+  ],
+  "sourceUrl": "https://www.sawyercountygov.org/164/Circuit-Court"
+ },
+ "sheboygan": {
+  "counties": [
+   "Sheboygan County"
+  ],
+  "courthouses": [
+   {
+    "county": "Sheboygan",
+    "lines": [
+     "Courthouse",
+     "615 N 6th St",
+     "Sheboygan, WI 53081-4692"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Samantha R. Bastil",
+    "phone": "(920) 459-0308"
+   },
+   {
+    "branch": "2",
+    "name": "Natasha Torry",
+    "phone": "(920) 459-3085"
+   },
+   {
+    "branch": "3",
+    "name": "Angela Sutkiewicz",
+    "phone": "(920) 459-0532"
+   },
+   {
+    "branch": "4",
+    "name": "Rebecca L. Persick",
+    "phone": "(920) 459-0393"
+   },
+   {
+    "branch": "5",
+    "name": "George A. Limbeck",
+    "phone": "(920) 459-3798"
+   }
+  ],
+  "sourceUrl": "https://www.sheboygancounty.com/departments/departments-a-e/clerk-of-circuit-courts"
+ },
+ "st-croix": {
+  "counties": [
+   "St. Croix County"
+  ],
+  "courthouses": [
+   {
+    "county": "St. Croix",
+    "lines": [
+     "Government Center",
+     "1101 Carmichael Rd",
+     "Hudson, WI 54016-7710"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Scott J. Nordstrand",
+    "phone": "(715) 386-4613"
+   },
+   {
+    "branch": "2",
+    "name": "Brian T. Smestad",
+    "phone": "(715) 386-4612"
+   },
+   {
+    "branch": "3",
+    "name": "Scott R. Needham",
+    "phone": "(715) 386-4611"
+   },
+   {
+    "name": "R. Michael Waterman"
+   }
+  ],
+  "sourceUrl": "https://www.sccwi.gov/292/Clerk-of-Courts"
+ },
+ "taylor": {
+  "counties": [
+   "Taylor County"
+  ],
+  "courthouses": [
+   {
+    "county": "Taylor",
+    "lines": [
+     "Courthouse",
+     "224 S Second St",
+     "Medford, WI 54451-1899"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Ann Knox-Bauer",
+    "phone": "(715) 748-1435"
+   }
+  ],
+  "sourceUrl": "https://co.taylor.wi.us/departments/clerk-of-courts/"
+ },
+ "trempealeau": {
+  "counties": [
+   "Trempealeau County"
+  ],
+  "courthouses": [
+   {
+    "county": "Trempealeau",
+    "lines": [
+     "Courthouse",
+     "36245 Main St",
+     "PO Box 67",
+     "Whitehall, WI 54773-0067"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Rian W. Radtke",
+    "phone": "(715) 538-2311"
+   }
+  ],
+  "sourceUrl": "https://co.trempealeau.wi.us/departments/administrative_departments/clerk_of_court/index.php"
+ },
+ "vernon": {
+  "counties": [
+   "Vernon County"
+  ],
+  "courthouses": [
+   {
+    "county": "Vernon",
+    "lines": [
+     "Courthouse",
+     "400 Courthouse Square",
+     "Suite 115",
+     "Viroqua, WI 54665-1553"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Timothy Gaskell",
+    "phone": "(608) 637-5364"
+   }
+  ],
+  "sourceUrl": "https://www.vernoncounty.org/departments/courts/index.php"
+ },
+ "vilas": {
+  "counties": [
+   "Vilas County"
+  ],
+  "courthouses": [
+   {
+    "county": "Vilas",
+    "lines": [
+     "Courthouse",
+     "330 Court St",
+     "Eagle River, WI 54521"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Martha J. Milanowski",
+    "phone": "(715) 479-3638"
+   },
+   {
+    "branch": "2",
+    "name": "Daniel L. Overbey",
+    "phone": "(715) 479-3732"
+   }
+  ],
+  "sourceUrl": "https://www.vilascountywi.gov/departments/court___legal/clerk_of_circuit_court/index.php"
+ },
+ "walworth": {
+  "counties": [
+   "Walworth County"
+  ],
+  "courthouses": [
+   {
+    "county": "Walworth",
+    "lines": [
+     "Judicial Center",
+     "1800 County Rd NN",
+     "PO Box 1001",
+     "Elkhorn, WI 53121-1001"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "2",
+    "name": "Daniel S. Johnson",
+    "phone": "(262) 741-7052"
+   },
+   {
+    "branch": "3",
+    "name": "Kristine E. Drettwan",
+    "phone": "(262) 741-7005"
+   },
+   {
+    "branch": "4",
+    "name": "Samuel T. Berg",
+    "phone": "(262) 741-7023"
+   },
+   {
+    "name": "Estee Scholz"
+   }
+  ],
+  "sourceUrl": "https://www.co.walworth.wi.us/151/Clerk-of-Circuit-Court"
+ },
+ "washburn": {
+  "counties": [
+   "Washburn County"
+  ],
+  "courthouses": [
+   {
+    "county": "Washburn",
+    "lines": [
+     "Courthouse",
+     "10 Fourth Ave",
+     "PO Box 339",
+     "Shell Lake, WI 54871-0339"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "name": "Angeline E. Winton-Roe",
+    "phone": "(715) 468-4647"
+   }
+  ],
+  "sourceUrl": "https://www.co.washburn.wi.us/departments/clerk-of-circuit-court/"
+ },
+ "washington": {
+  "counties": [
+   "Washington County"
+  ],
+  "courthouses": [
+   {
+    "county": "Washington",
+    "lines": [
+     "Courthouse",
+     "484 Rolfs Avenue",
+     "West Bend, WI 53090"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "2",
+    "name": "Grant Scaife",
+    "phone": "(262) 335-4345"
+   },
+   {
+    "branch": "4",
+    "name": "Sandra J. Giernoth",
+    "phone": "(262) 335-4351"
+   },
+   {
+    "name": "Ryan J. Hetzel",
+    "phone": "(262) 335-4348"
+   },
+   {
+    "name": "Michael S. Kenitz",
+    "phone": "(262) 335-4358"
+   }
+  ],
+  "sourceUrl": "https://www.washcowisco.gov/departments/clerk_of_circuit_court"
+ },
+ "waukesha": {
+  "counties": [
+   "Waukesha County"
+  ],
+  "courthouses": [
+   {
+    "county": "Waukesha",
+    "lines": [
+     "Courthouse",
+     "515 W Moreland Blvd",
+     "Waukesha, WI 53188-2428"
+    ]
+   },
+   {
+    "county": "Waukesha",
+    "lines": [
+     "Juvenile Center",
+     "521 Riverview Ave",
+     "Waukesha, WI 53188-2428"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "K. Scott Wagner",
+    "phone": "(262) 548-7482"
+   },
+   {
+    "branch": "2",
+    "name": "Jennifer Dorow",
+    "phone": "(262) 548-7538"
+   },
+   {
+    "branch": "7",
+    "name": "Cody J. Horlacher",
+    "phone": "(262) 548-7541"
+   },
+   {
+    "branch": "8",
+    "name": "Michael P. Maxwell",
+    "phone": "(262) 548-7539"
+   },
+   {
+    "branch": "9",
+    "name": "Michael Aprahamian",
+    "phone": "(262) 548-7481"
+   },
+   {
+    "branch": "12",
+    "name": "Jack Pitzo",
+    "phone": "(262) 548-7503"
+   },
+   {
+    "name": "William Domina"
+   },
+   {
+    "name": "J. Arthur Melvin III"
+   },
+   {
+    "name": "Paul Bugenhagen Jr.",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Hon David W. Maas"
+   },
+   {
+    "name": "Ralph M. Ramirez"
+   },
+   {
+    "name": "Zach Wittchow"
+   }
+  ],
+  "sourceUrl": "https://www.waukeshacounty.gov/coc"
+ },
+ "waupaca": {
+  "counties": [
+   "Waupaca County"
+  ],
+  "courthouses": [
+   {
+    "county": "Waupaca",
+    "lines": [
+     "Courthouse",
+     "811 Harding St",
+     "Waupaca, WI 54981-2087"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Troy L. Nielsen",
+    "phone": "(715) 258-6430"
+   },
+   {
+    "branch": "2",
+    "name": "Vicki Clussman",
+    "phone": "(715) 258-6425"
+   },
+   {
+    "branch": "3",
+    "name": "Diane L. Meulemans",
+    "phone": "(715) 258-6437"
+   }
+  ],
+  "sourceUrl": "https://www.co.waupaca.wi.us/departments/government_departments/clerk_of_courts/clerk_of_circuit_courts.php"
+ },
+ "waushara": {
+  "counties": [
+   "Waushara County"
+  ],
+  "courthouses": [
+   {
+    "county": "Waushara",
+    "lines": [
+     "Courthouse",
+     "380 S. Townline Road",
+     "Wautoma, WI 54982-0508"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Guy D. Dutcher",
+    "phone": "(920) 787-0439"
+   },
+   {
+    "branch": "2",
+    "name": "Scott Blader",
+    "phone": "(920) 787-0448"
+   }
+  ],
+  "sourceUrl": "https://www.co.waushara.wi.us/pview.aspx?id=12715"
+ },
+ "winnebago": {
+  "counties": [
+   "Winnebago County"
+  ],
+  "courthouses": [
+   {
+    "county": "Winnebago",
+    "lines": [
+     "Courthouse",
+     "415 Jackson St",
+     "PO Box 2808",
+     "Oshkosh, WI 54903-2808"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Michael Rust",
+    "phone": "(920) 236-4811"
+   },
+   {
+    "branch": "2",
+    "name": "Scott C. Woldt",
+    "phone": "(920) 236-4828"
+   },
+   {
+    "branch": "3",
+    "name": "Bryan D. Keberlein",
+    "phone": "(920) 236-4835"
+   },
+   {
+    "branch": "4",
+    "name": "Michael Gibbs",
+    "phone": "(920) 236-4868"
+   },
+   {
+    "branch": "5",
+    "name": "John A. Jorgensen",
+    "phone": "(920) 236-4866"
+   },
+   {
+    "branch": "6",
+    "name": "Daniel J. Bissett",
+    "phone": "(920) 236-4912"
+   }
+  ],
+  "sourceUrl": "https://www.co.winnebago.wi.us/clerk-courts"
+ },
+ "wood": {
+  "counties": [
+   "Wood County"
+  ],
+  "courthouses": [
+   {
+    "county": "Wood",
+    "lines": [
+     "Courthouse",
+     "400 Market St",
+     "PO Box 8095",
+     "Wisconsin Rapids, WI 54494-8095"
+    ]
+   }
+  ],
+  "judges": [
+   {
+    "branch": "1",
+    "name": "Gregory Jerabek",
+    "phone": "(715) 421-8520"
+   },
+   {
+    "branch": "2",
+    "name": "Nicholas J. Brazeau Jr.",
+    "phone": "(715) 421-8518"
+   },
+   {
+    "branch": "3",
+    "name": "Emily Nolan-Plutchak",
+    "phone": "(715) 421-8415"
+   },
+   {
+    "name": "Timothy Gebert"
+   }
+  ],
+  "sourceUrl": "http://www.co.wood.wi.us/Departments/Courts/"
+ }
+}

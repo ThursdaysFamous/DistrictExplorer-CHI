@@ -1,0 +1,103 @@
+{
+ "1": {
+  "chambers": [
+   "330 E Kilbourn Ave Ste 1020",
+   "Milwaukee, WI  53202-3161"
+  ],
+  "judges": [
+   {
+    "name": "M. Joseph Donald",
+    "phone": "(414) 227-5160",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Pedro A. Colon",
+    "phone": "(414) 227-4682",
+    "role": "Presiding Judge"
+   },
+   {
+    "name": "Sara J. Geenen",
+    "phone": "(414) 227-4683"
+   },
+   {
+    "name": "Nathan A. Petrashek",
+    "phone": "(414) 227-4684"
+   }
+  ]
+ },
+ "2": {
+  "chambers": [
+   "2727 N Grandview Blvd Ste 300",
+   "Waukesha, WI  53188-1671"
+  ],
+  "judges": [
+   {
+    "name": "Mark D. Gundrum",
+    "phone": "(262) 521-5372",
+    "role": "Presiding Judge"
+   },
+   {
+    "name": "Shelley Grogan",
+    "phone": "(262) 521-5232"
+   },
+   {
+    "name": "Maria S. Lazar",
+    "phone": "(262) 521-5233"
+   },
+   {
+    "name": "Anthony F. Lococo",
+    "phone": "(262) 521-5234"
+   }
+  ]
+ },
+ "3": {
+  "chambers": [
+   "2100 Stewart Ave Ste 310",
+   "Wausau, WI  54401"
+  ],
+  "judges": [
+   {
+    "name": "Lisa K. Stark",
+    "phone": "(715) 845-4664",
+    "role": "Presiding Judge"
+   },
+   {
+    "name": "Thomas M. Hruz",
+    "phone": "(715) 845-6404"
+   },
+   {
+    "name": "Greg Gill",
+    "phone": "(715) 845-6634"
+   }
+  ]
+ },
+ "4": {
+  "chambers": [
+   "2921 Landmark Pl Ste 415",
+   "Madison, WI  53713-4248"
+  ],
+  "judges": [
+   {
+    "name": "Rachel A. Graham",
+    "phone": "(608) 266-9338",
+    "role": "Presiding Judge"
+   },
+   {
+    "name": "Joanne F. Kloppenburg",
+    "phone": "(608) 267-3100"
+   },
+   {
+    "name": "Brian W. Blanchard",
+    "phone": "(608) 266-9362"
+   },
+   {
+    "name": "Jennifer E. Nashold",
+    "phone": "(608) 266-9361"
+   },
+   {
+    "name": "Todd Ziegler",
+    "phone": "(608) 266-9360"
+   }
+  ]
+ }
+}

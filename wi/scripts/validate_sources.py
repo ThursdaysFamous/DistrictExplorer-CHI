@@ -161,6 +161,53 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "wi-circuit-court",
+        "app_file": "wi-circuit-courts.json",
+        "source_url": "https://www.wicourts.gov/courts/circuit/judges.htm",
+        "note": (
+            "The 69 circuits as county unions under a double witness — Wis. Stat. "
+            "753.06 and this wicourts listing, which the weekly roster scrape "
+            "re-asserts (its failure is the redistricting tripwire). Cite the "
+            "statute by per-subsection URLs when re-verifying: the chapter page "
+            "lazy-loads and one fetch truncates at 52 of 63 entries (measured). "
+            "Rebuild with wi/scripts/build_wi_circuit_courts.py only if the "
+            "county file or the statute moves."
+        ),
+    },
+    {
+        "layer": "wi-circuit-court",
+        "app_file": "wi-circuit-judges.json",
+        "source_url": "https://www.wicourts.gov/contact/Circuit_Courts.html",
+        "note": (
+            "The bench's enrichment source (branch, direct phone, courthouse), "
+            "joined onto the judges table by wi_circuit_judges_scraper.py + "
+            "build_wi_circuit_court_roster.py; refreshed weekly by "
+            "update-wi-circuit-court-roster.yml."
+        ),
+    },
+    {
+        "layer": "wi-court-of-appeals",
+        "app_file": "wi-court-of-appeals-districts.json",
+        "source_url": "https://www.wicourts.gov/courts/appeals/index.htm",
+        "note": (
+            "The four appellate districts as county unions under a double witness "
+            "— Wis. Stat. 752.11 (unchanged since 1977) and this appeals page, "
+            "whose county lists the weekly roster scrape re-asserts. Rebuild with "
+            "wi/scripts/build_wi_court_of_appeals.py only if either witness moves."
+        ),
+    },
+    {
+        "layer": "wi-court-of-appeals",
+        "app_file": "wi-court-of-appeals-roster.json",
+        "source_url": "https://www.wicourts.gov/contact/Court_of_Appeals.html",
+        "note": (
+            "The sixteen-judge bench (4/4/3/5, gated) with roles, phones and "
+            "chambers — read from this page's CONTENT blocks, never the judges "
+            "index's stale nav list; refreshed weekly by "
+            "update-wi-court-of-appeals-roster.yml."
+        ),
+    },
+    {
         "layer": "county-board",
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",

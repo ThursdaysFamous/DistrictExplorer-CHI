@@ -88,18 +88,18 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 10
+MIN_REGISTER_LAYER = 12
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "wi-senate", "wi-assembly", "county",
-    "school-district-secondary", "school-district-unified",
-    "school-district-elementary", "county-board", "county-subdivision",
-    "municipality", "zip-code", "ward", "police-station", "fire-station",
-    "post-office",
+    "wi-court-of-appeals", "us-house", "wi-senate", "wi-assembly",
+    "wi-circuit-court", "county", "school-district-secondary",
+    "school-district-unified", "school-district-elementary", "county-board",
+    "county-subdivision", "municipality", "zip-code", "ward",
+    "police-station", "fire-station", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -111,6 +111,8 @@ GEOMETRY_FILES = {
     "wi-senate-districts.json": (34, 34),  # The 33 State Senate districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "wi-assembly-districts.json": (100, 100),  # The 99 State Assembly districts plus TIGERweb's ZZ water pseudo-district, pre-built by wi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "county-supervisory-districts.json": (1590, 1590),  # Every county board supervisory district in the state — 1,573 from LTSB's statewide aggregate plus Trempealeau's own 17, built by wi/scripts/build_wi_supervisory_districts.py (numbering, ward-reconciliation and 10,000-in-state-point agreement gates).
+    "wi-circuit-courts.json": (69, 69),  # The 69 circuit courts as county unions — 66 single counties plus the three statutory two-county circuits (Wis. Stat. 753.06), dissolved from the shipped county file by wi/scripts/build_wi_circuit_courts.py under its partition, merge and containment gates. Rebuild only if the county file or the statute moves.
+    "wi-court-of-appeals-districts.json": (4, 4),  # The four Court of Appeals districts as county unions (Wis. Stat. 752.11 + the court system's own lists agreeing county for county), dissolved by wi/scripts/build_wi_court_of_appeals.py under one-ring contiguity and 72-county containment gates.
     "wi-state-outline.json": (1, 1),  # The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring.
 }
 
@@ -122,6 +124,8 @@ ROSTER_FILES = {
     "coverage-gaps.json": 1,  # The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps.
     "county-board-directory.json": 72,  # One row per county: board size read back from the shipped geometry, plus the county's own official page for the card's footer link. Built by wi/scripts/build_wi_county_board_directory.py; not a roster of people — Wisconsin publishes none statewide.
     "county-board-members.json": 400,  # County board supervisors for the 20 counties that publish a district-keyed member list (437 seats). Built by wi/scripts/build_wi_county_board_roster.py from each county's own page and checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 52 counties name nobody — their cards link the county board instead.
+    "wi-circuit-judges.json": 69,  # The circuit-court bench — every circuit's judges with branch and direct phone where wicourts publishes them, plus the courthouse — keyed by the same circuit keys the geometry carries. Built by wi/scripts/build_wi_circuit_court_roster.py from the wicourts scrape; refreshed weekly by update-wi-circuit-court-roster.yml, whose composition assertion doubles as the circuit map's redistricting tripwire.
+    "wi-court-of-appeals-roster.json": 4,  # The Court of Appeals bench — sixteen judges keyed by district with role, direct phone and chambers, the 4/4/3/5 seat split gated at scrape time. Built by wi/scripts/build_wi_coa_roster.py; refreshed weekly by update-wi-court-of-appeals-roster.yml, whose composition assertion is the appeals map's redistricting tripwire.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at

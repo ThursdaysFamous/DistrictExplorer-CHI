@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">15 layers — 4 political and legislative, 2 public safety, 3 schools, 6 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">17 layers — 6 political and legislative, 2 public safety, 3 schools, 6 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -874,7 +874,7 @@ table.matrix code {
       </nav>
 
       <section class="matrix-group" id="political">
-        <h2>Political &amp; legislative <span class="matrix-count">4 layers</span></h2>
+        <h2>Political &amp; legislative <span class="matrix-count">6 layers</span></h2>
         <p class="matrix-blurb">Districts that elect somebody — from your ward to your seat in Congress.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -882,6 +882,18 @@ table.matrix code {
               <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
             </thead>
             <tbody>
+              <tr id="layer-wi-court-of-appeals">
+                <th scope="row"><span class="layer-name">Court of Appeals District</span><code>wi-court-of-appeals</code></th>
+                <td data-label="What it answers">The Court of Appeals district whose judges hear appeals from the point's circuit court, with all of that district's judges — elected by district — their direct phones, and the district's chambers.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://docs.legis.wisconsin.gov/statutes/statutes/752/11" target="_blank" rel="noopener">Derived county unions — no agency publishes appellate geometry (measured), so no new line is drawn: each district is a union of whole counties from the shipped TIGERweb county file under a double witness that agrees county for county — Wis. Stat. 752.11(1), unchanged since 1977, and the court system's own appeals page, whose lists the weekly roster run re-asserts</a></li>
+                    <li><a href="https://www.wicourts.gov/courts/appeals/index.htm" target="_blank" rel="noopener">Wisconsin Court System — the appeals-district listing the composition is cross-witnessed against</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">wi-court-of-appeals-roster.json, rebuilt weekly by CI from wicourts.gov's contact page — the content blocks, never the judges index's nav menu, which is a stale former-judge list (6 of 16 names wrong when measured). The 4/4/3/5 seat split is gated, so a vacancy is read by a human rather than shipped silently; no judge e-mail exists on the host, so none ships.</td>
+                <td data-label="Where it applies">Wisconsin — statewide, all 72 counties across 4 districts.</td>
+              </tr>
               <tr id="layer-us-house">
                 <th scope="row"><span class="layer-name">U.S. House</span><code>us-house</code></th>
                 <td data-label="What it answers">The U.S. House district covering the point, and the representative holding it.</td>
@@ -914,6 +926,18 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">wi-assembly-members.json, rebuilt weekly by CI from the Open States current-people export (wi.csv) — name, party and official page (the export carries no office fields for Wisconsin, so none ship yet).</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+              <tr id="layer-wi-circuit-court">
+                <th scope="row"><span class="layer-name">Circuit Court</span><code>wi-circuit-court</code></th>
+                <td data-label="What it answers">The circuit court whose bench serves the point — Wisconsin's trial court of general jurisdiction — with every judge on that bench, their branch and direct phone where the court system publishes them, and the courthouse.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://docs.legis.wisconsin.gov/statutes/statutes/753/06" target="_blank" rel="noopener">Derived county unions — no agency publishes circuit geometry (measured), so no new line is drawn: each circuit is a union of whole counties from the shipped TIGERweb county file, composed under a double witness that agrees exactly — Wis. Stat. 753.06 (one circuit per county except Buffalo+Pepin, Florence+Forest, Menominee+Shawano) and the court system's own circuit listing, re-asserted by every weekly roster run</a></li>
+                    <li><a href="https://www.wicourts.gov/courts/circuit/judges.htm" target="_blank" rel="noopener">Wisconsin Court System — the circuit listing the composition is cross-witnessed against</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">wi-circuit-judges.json, rebuilt weekly by CI from wicourts.gov's judges table (the bench) joined with its contact directory (branch, direct phone, courthouse). Everyone is titled Judge — appointees filling vacancies are indistinguishable from elected judges in any wicourts source, so the card claims neither; no judge e-mail exists anywhere on wicourts, so none ships.</td>
+                <td data-label="Where it applies">Wisconsin — statewide, all 72 counties across 69 circuits.</td>
               </tr>
               <tr id="layer-county-board">
                 <th scope="row"><span class="layer-name">County Board District</span><code>county-board</code></th>
