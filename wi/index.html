@@ -5797,6 +5797,7 @@ function initWisconsinExplorer() {
     "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
     "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
+    "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "post-office"        // Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
@@ -8412,6 +8413,148 @@ function initWisconsinExplorer() {
     }
   });
 
+  /* ---------- 13. Municipal Ward — live LTSB ----------
+   * The ballot sub-unit every Wisconsin district is composed from: 7,161
+   * wards, statewide, from the same LTSB "Current" service the supervisory
+   * builder already reconciles against at build time (every ward names a
+   * SUPER_FIPS; here the ward finally gets its own card). Filed by every
+   * county each 15 January and 15 July under Wis. Stat. 5.15(4)(br) and
+   * republished into this stable URL, so currency is the item's lastEditDate,
+   * never the edition in a title.
+   *
+   * LIVE, NOT PRE-BUILT, and the numbers are why: at full precision the
+   * statewide set measures ~85 MB (11.9 KB/feature sampled 2026-08-25), so
+   * the click path is the engine's one-ward point query (a few KB) and the
+   * overlay pages the statewide set with server generalization
+   * (maxAllowableOffset ~55 m + 4-decimal coordinates + minimal outFields),
+   * measured at ~4.6 MB extrapolated from four 500-feature samples — the
+   * same weight as the supervisory overlay the app already carries. The
+   * paging loop mirrors the ENGINE loadArcGISPaged contract (continue while
+   * exceededTransferLimit and rows arrived; offset advances by rows), which
+   * that fence's own comments explain; it lives fork-side only because the
+   * engine helper cannot pass generalization parameters.
+   *
+   * TWO TRAPS THE RESEARCH RECORDED, ENCODED HERE: the clerk-submitted LABEL
+   * is case-inconsistent across counties ("Adams - C - 0001" vs
+   * "LAONA - T - 0003"), so the display name is COMPOSED from CTV + MCD_NAME
+   * + int(WARDID) instead; and ALDERID "00" is the no-aldermanic-districts
+   * placeholder (all towns and villages, plus at-large cities), so it never
+   * renders as a district.
+   *
+   * A ward elects no officeholder — it is the unit election administration
+   * assigns — and NO POLLING PLACE ships: the state aggregates them only
+   * behind MyVote, whose every route (site and API alike) sits behind a
+   * Cloudflare challenge this project does not defeat, so the card links
+   * that lookup instead and the Data gaps panel carries the measurement
+   * (gap ward-polling-places). ---------- */
+  var LTSB_WARDS_LAYER = "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0";
+  var WARD_OUT_FIELDS = "WARDID,MCD_NAME,CTV,CNTY_NAME,SUPERID,ALDERID";
+  var loadWards = makeCached(function () {
+    var PAGE = 2000; // the hosted layer's own maxRecordCount — 4 pages statewide
+    function page(offset, acc) {
+      var url = LTSB_WARDS_LAYER + "/query?where=1%3D1" +
+        "&outFields=" + encodeURIComponent(WARD_OUT_FIELDS) +
+        "&outSR=4326&f=geojson&geometryPrecision=4&maxAllowableOffset=0.0005" +
+        "&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        var feats = (gj && gj.features) || [];
+        acc = acc.concat(feats);
+        var more = gj && (gj.exceededTransferLimit || (gj.properties && gj.properties.exceededTransferLimit));
+        if (more && feats.length > 0) return page(offset + feats.length, acc);
+        var out = { type: "FeatureCollection", features: acc };
+        if (!hasUsableGeometry(out)) throw new Error("LTSB ward layer returned no usable geometry");
+        return out;
+      });
+    }
+    return page(0, []);
+  });
+  loadWards.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(LTSB_WARDS_LAYER, point, WARD_OUT_FIELDS);
+  };
+
+  // "C" -> "City of Madison", "V" -> "Village of ...", "T" -> "Town of ..." —
+  // the composed name the card, hover and highlight all share.
+  function wardPlaceName(props) {
+    var ctv = String(findPropCI(props, ["ctv"]) || "").toUpperCase();
+    var mcd = findPropCI(props, ["mcd_name"]);
+    if (mcd == null || mcd === "") return null;
+    var prefix = ctv === "C" ? "City of " : ctv === "V" ? "Village of " : ctv === "T" ? "Town of " : "";
+    return prefix + String(mcd);
+  }
+  function wardNumber(props) {
+    var raw = findPropCI(props, ["wardid"]);
+    if (raw == null || raw === "") return null;
+    var n = parseInt(String(raw), 10);
+    return isNaN(n) ? String(raw) : String(n);
+  }
+
+  registerLayer({
+    id: "ward",
+    group: "geography",
+    label: "Municipal Ward",
+    subOf: "county-subdivision", // WARDID numbers within the MCD, and CouSub
+    // (unlike Places) contains the towns, so it is the parent that holds
+    // every ward — the containment-with-numbering bar, IL's county-precinct
+    // shape (docs/EXPANSION_GUIDE.md Part 5, nesting determination)
+    overlay: {
+      load: loadWards,
+      // fine dotted amber — the smallest containment fabric on the map, kept
+      // visually below its county-subdivision parent's long brown dash
+      style: { color: "#8C6D1F", weight: 1, fillColor: "#C9A227", fillOpacity: 0.04, dashArray: "1 3" }
+    },
+    hoverName: function (feature) {
+      var props = feature.properties || {};
+      var place = wardPlaceName(props);
+      var num = wardNumber(props);
+      if (num == null) return place;
+      return (place ? place + " — " : "") + "Ward " + num;
+    },
+    query: function (point, seq) {
+      return queryFeatureAt(loadWards, point).then(function (feature) {
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var alder = findPropCI(props, ["alderid"]);
+        return {
+          seq: seq,
+          ward: wardNumber(props),
+          place: wardPlaceName(props),
+          county: findPropCI(props, ["cnty_name"]),
+          superid: findPropCI(props, ["superid"]),
+          // "00" is LTSB's no-aldermanic-districts placeholder — never a district
+          alderid: (alder != null && String(alder) !== "" && String(alder) !== "00") ? String(alder) : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.ward != null ? "Ward " + String(result.ward) : "Unknown ward";
+    },
+    render: function (result) {
+      var rows = [];
+      rows.push({
+        label: "Municipality",
+        value: result.place ? String(result.place) : "Unknown municipality",
+        primary: true
+      });
+      if (result.county) {
+        rows.push({ label: "County", value: String(result.county) + " County" });
+      }
+      if (result.superid != null && String(result.superid) !== "") {
+        // the same value the county-board card answers for this point — a
+        // cross-reference, stated here because the ward is what composes it
+        rows.push({ label: "County board district", value: "District " + String(parseInt(String(result.superid), 10) || result.superid) });
+      }
+      if (result.alderid != null) {
+        rows.push({ label: "Aldermanic district", value: "District " + String(parseInt(result.alderid, 10) || result.alderid) });
+      }
+      return renderFieldStack(rows);
+    },
+    primaryLink: function () {
+      // The polling-place answer this card honestly cannot carry (see the
+      // module comment): the state's own lookup, for the reader to ask there.
+      return { label: "Find your polling place — MyVote Wisconsin", url: "https://myvote.wi.gov/" };
+    }
+  });
+
   /* ---------- 4. School District (Unified) ----------
    * Geometry pre-built at bootstrap (TIGERweb School layer 0, STATE-filtered,
    * written to data/app/school-districts-unified.json) and served
@@ -9254,7 +9397,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "municipality", "zip-code", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "ward", "municipality", "zip-code", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;

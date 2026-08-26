@@ -280,6 +280,17 @@ EXPECTED_UNREACHABLE = {
         "incomplete TLS chain (leaf only, no intermediate) — NOT a block: the site "
         "answers HTTP 200 to a client that supplies the missing issuer, which the "
         "board roster scraper does by AIA with a pinned hash",
+    # THE FIRST WISCONSIN ENTRY. The wi ward card links MyVote as the honest
+    # polling-place answer it cannot carry as data (gap ward-polling-places).
+    # Measured 2026-08-25: HTTP 403 with `Cf-Mitigated: challenge` on every
+    # path — the site AND its API routes — to curl with full browser headers
+    # and WebFetch alike; browsers pass. A challenge is an access control and
+    # is not defeated; if this host ever answers again, the WARN is the news
+    # that a statewide polling-place source may have opened.
+    "myvote.wi.gov":
+        "Cloudflare managed JS challenge (Cf-Mitigated: challenge) on every path "
+        "including the API routes — the wi ward card links it for readers; "
+        "browsers pass, automation is refused",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map
