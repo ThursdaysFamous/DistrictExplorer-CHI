@@ -421,6 +421,54 @@ PROVENANCE = [
             "surfaces must name the same directors)."
         ),
     },
+    {
+        "layer": "mpd-district",
+        "app_file": "mpd-districts.json",
+        "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD/MPD_geography/MapServer/2",
+        "note": (
+            "The city's own MPD districts layer (field POLICE, districts 1-7), "
+            "server-reprojected and pre-built by "
+            "wi/scripts/build_milwaukee_city_layers.py — the same measured-"
+            "flaky host as the MPS/alderman layers, build-time only, retried. "
+            "District CAPTAINS live only behind city.milwaukee.gov's "
+            "Cloudflare challenge, which is why the card names no one."
+        ),
+    },
+    {
+        "layer": "mpd-district",
+        "app_file": "mpd-districts.json",
+        "source_url": "https://data.milwaukee.gov/dataset/milwaukee-police-district",
+        "note": (
+            "The same districts as the city's CKAN shapefile (CC-BY) — the "
+            "build-time WITNESS: districts 1-7 and their area shares must "
+            "agree between the two city surfaces before the file ships "
+            "(0.04% max share difference at first build)."
+        ),
+    },
+    {
+        "layer": "milwaukee-neighborhoods",
+        "app_file": "milwaukee-neighborhoods.json",
+        "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/4",
+        "note": (
+            "The city's own neighborhoods layer (field NEIGHBORHD, 190 "
+            "polygons), server-reprojected and pre-built by "
+            "wi/scripts/build_milwaukee_city_layers.py. Names publish "
+            "ALL-CAPS and ship title-cased, the raw value kept on each "
+            "feature as NAME_RAW."
+        ),
+    },
+    {
+        "layer": "milwaukee-neighborhoods",
+        "app_file": "milwaukee-neighborhoods.json",
+        "source_url": "https://data.milwaukee.gov/dataset/neighborhoods",
+        "note": (
+            "The same neighborhoods as the city's CKAN shapefile (CC-BY) — "
+            "the build-time WITNESS on a space-insensitive key fold, because "
+            "the city's two surfaces spell one neighborhood apart (service "
+            "MCGOVERN PARK, shapefile MC GOVERN PARK — the service spelling "
+            "ships; 0.007% max share difference at first build)."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.

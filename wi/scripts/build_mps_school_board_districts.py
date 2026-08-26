@@ -97,10 +97,11 @@ def geom_area(geom, scale_x=1.0):
     return total
 
 
-def shp_areas(zip_bytes):
-    """District -> area in the shapefile's own native plane units, read
-    straight from the .shp record polygons (rings per record; the DBF rows
-    pair by record order)."""
+def shp_areas(zip_bytes, key_field="SCHOOL"):
+    """key -> area in the shapefile's own native plane units, read straight
+    from the .shp record polygons (rings per record; the DBF rows pair by
+    record order). Shared with the other Milwaukee city-layer builders,
+    which pass their own key column."""
     z = zipfile.ZipFile(io.BytesIO(zip_bytes))
     dbf = z.read(next(n for n in z.namelist() if n.lower().endswith(".dbf")))
     shp = z.read(next(n for n in z.namelist() if n.lower().endswith(".shp")))
@@ -150,7 +151,7 @@ def shp_areas(zip_bytes):
     if len(areas) != len(rows):
         raise SystemExit("shapefile carries %d shapes against %d DBF rows"
                          % (len(areas), len(rows)))
-    return {row["SCHOOL"]: a for row, a in zip(rows, areas)}
+    return {row[key_field]: a for row, a in zip(rows, areas)}
 
 
 def main():

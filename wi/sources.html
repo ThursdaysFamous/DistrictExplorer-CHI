@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">21 layers — 7 political and legislative, 2 public safety, 5 schools, 7 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">23 layers — 7 political and legislative, 3 public safety, 5 schools, 8 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -969,7 +969,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="safety">
-        <h2>Public safety <span class="matrix-count">2 layers</span></h2>
+        <h2>Public safety <span class="matrix-count">3 layers</span></h2>
         <p class="matrix-blurb">Who answers a call at this address, and where they answer it from.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -977,6 +977,18 @@ table.matrix code {
               <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
             </thead>
             <tbody>
+              <tr id="layer-mpd-district">
+                <th scope="row"><span class="layer-name">Milwaukee Police District</span><code>mpd-district</code></th>
+                <td data-label="What it answers">The Milwaukee Police Department district covering the point. No captain is named: the city's site refuses automated readers, so district leadership cannot be verified here — the card links MPD's own district pages, which carry it, and the Data gaps panel records the measurement. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD/MPD_geography/MapServer/2" target="_blank" rel="noopener">City of Milwaukee — MPD districts, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py</a></li>
+                    <li><a href="https://data.milwaukee.gov/dataset/milwaukee-police-district" target="_blank" rel="noopener">City of Milwaukee open data — the same districts as a shapefile (CC-BY), the build-time witness: keys and area shares must agree between the two city surfaces before the file ships</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">None shipped, deliberately: MPD publishes each district's captain only behind an access control this project does not defeat, and a name that cannot be re-verified weekly does not ship — the card links the district pages instead (gap mpd-district-leadership).</td>
+                <td data-label="Where it applies">City of Milwaukee only — the layer hides everywhere else.</td>
+              </tr>
               <tr id="layer-police-station">
                 <th scope="row"><span class="layer-name">Police Station</span><code>police-station</code></th>
                 <td data-label="What it answers">The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.</td>
@@ -1076,7 +1088,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">7 layers</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">8 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1138,6 +1150,18 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement).</td>
                 <td data-label="Where it applies">Wisconsin — statewide.</td>
+              </tr>
+              <tr id="layer-milwaukee-neighborhoods">
+                <th scope="row"><span class="layer-name">Milwaukee Neighborhood</span><code>milwaukee-neighborhoods</code></th>
+                <td data-label="What it answers">The named Milwaukee neighborhood containing the point — the city's own neighborhood fabric, an identity answer with no officeholder because a neighborhood elects no one. Outside Milwaukee the layer hides; no statewide neighborhood publisher exists.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/4" target="_blank" rel="noopener">City of Milwaukee — Neighborhoods, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py; names ship title-cased from the city's all-caps values with the raw value kept on the feature, and the build-time shapefile witness caught the city's own two copies spelling one neighborhood apart</a></li>
+                    <li><a href="https://data.milwaukee.gov/dataset/neighborhoods" target="_blank" rel="noopener">City of Milwaukee open data — the same neighborhoods as a shapefile (CC-BY), the build-time witness</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">A neighborhood elects no one — the card names the place and stops there.</td>
+                <td data-label="Where it applies">City of Milwaukee only — the layer hides everywhere else.</td>
               </tr>
               <tr id="layer-library">
                 <th scope="row"><span class="layer-name">Library</span><code>library</code></th>
