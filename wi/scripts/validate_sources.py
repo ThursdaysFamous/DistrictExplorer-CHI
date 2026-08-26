@@ -183,6 +183,16 @@ ENDPOINTS = [
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1/query?where=STATE%3D%2755%27&returnCountOnly=true&f=json",
     },
     {
+        # Nearest-3 station layers, live by the state envelope (WI plus the
+        # border-state stations a reader near the line genuinely wants).
+        "layer": "police-station",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "fire-station",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
         # The ward layer queries this live (point-first + paged overlay). The
         # count moves with each Jan/July filing window (7,138 Jan 2026 -> 7,161
         # July 2026) — a change is expected news; the layer going unreachable

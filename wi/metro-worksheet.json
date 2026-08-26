@@ -289,10 +289,46 @@
       }
     },
     {
+      "id": "police-station",
+      "label": "Police Station",
+      "group": "safety",
+      "area_rank": 13,
+      "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
+      "source": {
+        "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
+        "boundary": [
+          {
+            "label": "USGS National Map — structures, layer 53 (Law Enforcement), live by state envelope; public domain. The envelope deliberately reaches past the state line, so a reader near the border sees the genuinely nearest stations",
+            "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53"
+          }
+        ],
+        "people": "Not an elected office — no officeholder is named. The dataset is the same national source the fleet's reference instance ships, ghost records and all: a station USGS has not yet retired can appear, which is why the card presents nearest stations rather than 'your' station.",
+        "applies": "Wisconsin — statewide (plus border-state stations the envelope catches, which is correct behaviour near the state line)."
+      }
+    },
+    {
+      "id": "fire-station",
+      "label": "Fire Station",
+      "group": "safety",
+      "area_rank": 14,
+      "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
+      "source": {
+        "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
+        "boundary": [
+          {
+            "label": "USGS National Map — structures, layer 51 (Fire Stations / EMS Stations), live by state envelope; public domain. Same envelope-past-the-border behaviour as the police layer",
+            "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51"
+          }
+        ],
+        "people": "Not an elected office — no officeholder is named. One ghost record is on the measured record (a department defunct since 2020 still listed), which is why the card presents nearest stations rather than a service claim; the statewide who-responds-here boundary is a separately recorded concept.",
+        "applies": "Wisconsin — statewide (plus border-state stations the envelope catches)."
+      }
+    },
+    {
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 13,
+      "area_rank": 15,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",

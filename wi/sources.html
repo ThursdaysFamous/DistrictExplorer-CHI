@@ -865,9 +865,10 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">13 layers — 4 political and legislative, 3 schools, 6 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">15 layers — 4 political and legislative, 2 public safety, 3 schools, 6 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
+        <a href="#safety">Public safety</a>
         <a href="#schools">Schools</a>
         <a href="#geography">Geography &amp; amenities</a>
       </nav>
@@ -925,6 +926,42 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">For 20 of the 72 counties, the supervisor holding the district, from that county's own board page (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 52 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.</td>
                 <td data-label="Where it applies">Wisconsin — statewide, all 72 counties.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="matrix-group" id="safety">
+        <h2>Public safety <span class="matrix-count">2 layers</span></h2>
+        <p class="matrix-blurb">Who answers a call at this address, and where they answer it from.</p>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <thead>
+              <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
+            </thead>
+            <tbody>
+              <tr id="layer-police-station">
+                <th scope="row"><span class="layer-name">Police Station</span><code>police-station</code></th>
+                <td data-label="What it answers">The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53" target="_blank" rel="noopener">USGS National Map — structures, layer 53 (Law Enforcement), live by state envelope; public domain. The envelope deliberately reaches past the state line, so a reader near the border sees the genuinely nearest stations</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">Not an elected office — no officeholder is named. The dataset is the same national source the fleet's reference instance ships, ghost records and all: a station USGS has not yet retired can appear, which is why the card presents nearest stations rather than 'your' station.</td>
+                <td data-label="Where it applies">Wisconsin — statewide (plus border-state stations the envelope catches, which is correct behaviour near the state line).</td>
+              </tr>
+              <tr id="layer-fire-station">
+                <th scope="row"><span class="layer-name">Fire Station</span><code>fire-station</code></th>
+                <td data-label="What it answers">The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51" target="_blank" rel="noopener">USGS National Map — structures, layer 51 (Fire Stations / EMS Stations), live by state envelope; public domain. Same envelope-past-the-border behaviour as the police layer</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">Not an elected office — no officeholder is named. One ghost record is on the measured record (a department defunct since 2020 still listed), which is why the card presents nearest stations rather than a service claim; the statewide who-responds-here boundary is a separately recorded concept.</td>
+                <td data-label="Where it applies">Wisconsin — statewide (plus border-state stations the envelope catches).</td>
               </tr>
             </tbody>
           </table>

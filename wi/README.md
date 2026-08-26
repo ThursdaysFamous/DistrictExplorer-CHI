@@ -6,7 +6,7 @@
 
 A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. One instance of the [districtry](https://districtry.com/) fleet, serving at **[districtry.com/wi/](https://districtry.com/wi/)** — the first state to expand **in place** as a folder of the consolidated repo rather than as a fork.
 
-Thirteen statewide layers — eleven from national publishers, two from state ones:
+Fifteen statewide layers — thirteen from national publishers, two from state ones:
 
 | Group | Layer | Source |
 |---|---|---|
@@ -14,6 +14,7 @@ Thirteen statewide layers — eleven from national publishers, two from state on
 | | WI Senate District (33) | TIGERweb Legislative boundary (pre-built, 2,000-point agreement gate) + the [Open States](https://openstates.org) roster, refreshed weekly by CI |
 | | WI Assembly District (99) | Same pair as the Senate — boundary pre-built, roster from Open States |
 | | County Board District (1,590) | Wisconsin LTSB's statewide aggregate of every county's twice-yearly filing (Wis. Stat. 5.15(4)(br)1), pre-built; Trempealeau County's 17 from the county's own service; supervisors named in the 20 counties that publish a district-keyed member list, refreshed weekly by CI |
+| **Public Safety** | Police Station / Fire Station | USGS National Map structures, nearest three each — a proximity fact, never a claim about which agency serves the point |
 | **Schools** | School District — Unified / Union High / Elementary | TIGERweb School layers 0/1/2; the tilings are mutually exclusive, so exactly one of Unified and the pair answers for any point |
 | **Geography** | County | TIGERweb State_County, pre-built — the app's offline anchor |
 | | County Subdivision | TIGERweb CouSub, live (Wisconsin's towns) |

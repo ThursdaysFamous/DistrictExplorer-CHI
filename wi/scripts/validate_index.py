@@ -98,7 +98,8 @@ EXPECT_LAYER_IDS = [
     "us-house", "wi-senate", "wi-assembly", "county",
     "school-district-secondary", "school-district-unified",
     "school-district-elementary", "county-board", "county-subdivision",
-    "municipality", "zip-code", "ward", "post-office",
+    "municipality", "zip-code", "ward", "police-station", "fire-station",
+    "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
