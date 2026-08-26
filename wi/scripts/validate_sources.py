@@ -11,11 +11,11 @@ silently supersedes with a new one:
     year under a BRAND NEW dataset id (…SY2526 → …SY2627), so the id hardcoded
     in index.html keeps returning last year's boundaries long after a newer one
     exists. Nothing errors; the data just quietly goes stale.
-  * The three shapefile-derived boundary layers (school board, IL Supreme
-    Court, Cook County Board of Review) were downloaded once from decennial
-    redistricting sources with no API. They change ~once a decade, so the check
-    there is provenance: is the source we cite still reachable, and a reminder
-    to re-verify.
+  * Pre-built boundary layers (in this instance: the TIGERweb-derived district
+    files and LTSB's supervisory districts, which are REPUBLISHED each 15
+    January and 15 July) were downloaded at build time. The check there is
+    provenance: is the source we cite still reachable, and a reminder to
+    re-verify after each publication window.
 
 This script does NOT edit index.html or any data file — swapping a dataset id
 is a judgement call (the "newer" dataset may have a different schema), so, like
@@ -31,7 +31,7 @@ What it checks (findings carry a severity — FAIL, WARN, or OK):
      edition than the one in use.                                         [WARN]
   3. Shapefile provenance: the cited source URL is reachable and the built
      data/app file is present.                             [WARN / FAIL if gone]
-  4. Live service endpoints (CPD ArcGIS, Census TIGERweb): reachable.      [WARN]
+  4. Live service endpoints (Census TIGERweb, USGS structures): reachable.  [WARN]
 
 Exit status: 0 when nothing needs a human (OK or WARN only), 1 on any FAIL.
 Newer-edition detection is deliberately WARN, not FAIL — the current dataset
@@ -63,8 +63,8 @@ APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 
 HTTP_TIMEOUT = 25
 
-# STATE-TEMPLATE SCAFFOLD — the freshness gate's source manifest, seeded with
-# the five starter layers' sources. Every layer this fork adds gets its rows
+# The freshness gate's source manifest for the Wisconsin instance. Every layer
+# this instance adds gets its rows
 # here in the same change (CLAUDE.md's conventions; the reference repo's
 # validate_sources.py shows a mature manifest's full shape, including
 # year-search patterns and the `blocked` inversion).
@@ -86,7 +86,7 @@ PROVENANCE = [
         "layer": "us-house",
         "app_file": "congress-roster.json",
         "source_url": "https://unitedstates.github.io/congress-legislators/legislators-current.json",
-        "note": "Delegation roster from the public-domain congress-legislators project; refreshed weekly by update-congress-roster.yml.",
+        "note": "Delegation roster from the public-domain congress-legislators project; refreshed weekly by update-wi-congress-roster.yml.",
     },
     {
         "layer": "county",
@@ -156,6 +156,20 @@ PROVENANCE = [
             "The ward layer is not shipped; it is the independent witness the district "
             "builder reconciles against (every ward names a district that exists, every "
             "district owns a ward). Listed so its disappearance is noticed."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
+        "note": (
+            "The supervisor roster — 20 counties' own board pages, scraped weekly by "
+            "update-wi-county-board-roster.yml with each county's reading direction "
+            "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
+            "One representative page is probed here — Brown, the largest launch-set "
+            "board at 26 seats — because the weekly scrape already fails loudly per "
+            "county; this row exists so the FILE's disappearance is noticed and so "
+            "the roster has a manifest row at all."
         ),
     },
 ]
@@ -377,8 +391,8 @@ def check_endpoints(findings, offline):
                          "renamed or retired" % (res, e["url"]))
 
 
-# STATE-TEMPLATE SCAFFOLD — municipal ward boundary sources (none in the
-# starter set; grown when this fork ships a ward/municipal-district layer).
+# Municipal ward boundary sources (none shipped yet; grown when this instance
+# ships its ward layer — docs/WI_PHASE2_PLAN.md PR 1).
 WARD_SOURCES = []
 
 

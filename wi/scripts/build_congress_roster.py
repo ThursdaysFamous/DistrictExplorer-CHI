@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 """
-Build the IL U.S. House roster (district -> current officeholder + offices) as a
-same-origin app-data file, so the congress card no longer downloads the full
-national roster to every browser.
+Build this state's U.S. House roster (district -> current officeholder +
+offices) as a same-origin app-data file, so the congress card no longer
+downloads the full national roster to every browser. The state comes from
+data/state/state.json (Wisconsin: USPS WI, 8 seats), which overrides the
+reference fork's inert IL defaults below — one script, parameterized by data.
 
-index.html used to fetch unitedstates/congress-legislators'
+The reference fork's index.html used to fetch unitedstates/congress-legislators'
 legislators-current.json (~1.5 MB, all ~538 members with every term each has
-ever served) at click time and filter it client-side for the one matching IL
+ever served) at click time and filter it client-side for the one matching
 representative — using a few hundred bytes of a multi-megabyte payload. This
-script does that filtering once at build time and writes IL's 17 reps to
+script does that filtering once at build time and writes this state's reps to
 data/app/congress-roster.json (a few KB), which index.html fetches lazily on
 first click (same-origin, no CORS, no third-party host dependency at runtime).
 
 Each entry now carries the two offices the card renders through the shared
-chamber factory (registerIlgaChamber), matching the IL Senate / House cards:
+chamber factory (registerIlgaChamber), matching this fork's chamber cards:
 
   - capitolOffice  the Washington, D.C. office (room + building, city, phone),
                    from the legislator's current term.

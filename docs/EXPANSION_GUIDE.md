@@ -1732,7 +1732,7 @@ the instance's own layers cover, not by whether a state exists:
 | Instance | Coverage geometry | Bands | Why |
 |---|---|---|---|
 | Illinois | the served counties | **3** | county/township/municipality/school-district/ZIP answer statewide; the county layers do not |
-| Wisconsin | `metro-outline.json` **is** the state outline | 2 | coverage *is* the region — there is nothing in between |
+| Wisconsin | the counties whose supervisor ROSTER ships (`metro-outline.json`); `wi-state-outline.json` is the region ring | **3** | every layer answers statewide — the middle band means "district shown, supervisor not named", a narrower claim than the other three instances' middle/outer bands make (it was 2 bands at launch, when coverage *was* the state outline; #523 split them the day the roster shipped) |
 | San Francisco | the 11 supervisor districts | 2 | no wider region in play |
 | New York City | the 5 boroughs | 2 | same |
 
@@ -1904,7 +1904,8 @@ School City of EAST CHICAGO, Indiana.
 
 **Route closed out 2026-08-25: Wisconsin, the state this route was proven on, shipped IN PLACE
 as `wi/` — the archived fork's bootstrap branch imported as a folder, retrofitted to the
-composer/brand/sub-page architecture, grown to eleven layers, and registered across the
+composer/brand/sub-page architecture, grown to twelve layers by day's end (eleven from
+national publishers plus the LTSB county-board layer, #520/#522), and registered across the
 instance tables.** The in-place procedure this section deferred to now has a worked example:
 the `wi/` import commits on this repo's history are the reference for state N+1.
 

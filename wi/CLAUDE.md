@@ -8,9 +8,6 @@ districtry Wisconsin: a single-file, dependency-light web app. Click a point in 
 
 **There is no build step, no framework, and no server-side code.** The app — styles, engine, and layer modules — lives inline in `index.html`. `sw.js` is the service worker; `data/app/*.json` are runtime-fetched data files; `data/state/` is the bootstrap's state config (`build_congress_roster.py` reads its FIPS/USPS/seat count — it ships in the repo and is excluded from the Pages deploy). `sources.html` carries the generated per-layer provenance matrix; `faq.html` the ten common questions, mirrored exactly in its FAQPage JSON-LD.
 
-**Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
-`python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
-
 <!-- ==== GENERATED:BEGIN metro-facts ==== -->
 **Metro facts** (generated from `metro-worksheet.json` — edit the worksheet and run
 `python3 scripts/generate_metro_files.py`; hand-edits here fail CI):
@@ -19,7 +16,7 @@ districtry Wisconsin: a single-file, dependency-light web app. Click a point in 
 - Geocoders: address Photon (Wisconsin-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Wisconsin-bounded, serial >=1s queue)
 - Ground truth: 44.89804,-89.75782 (inside Marathon County) → county Marathon County; us-house 7; school-district-unified Marathon City School District; wi-senate 29; wi-assembly 86; county-board 35. Negative point 47.39000,-92.97000 (off the northwest corner of Wisconsin — outside the state and every starter layer).
 - Layers: 12 registered (political 4, schools 3, geography 5); `registerLayer(` floor 9. Debug namespace `window.WisconsinExplorer`.
-- Scheduled workflows: `update-wi-congress-roster.yml` (Mon 13:30 UTC); `update-wi-legislature-roster.yml` (Tue 13:30 UTC); `update-wi-county-board-roster.yml` (Thu 14:30 UTC).
+- Scheduled workflows: `update-wi-congress-roster.yml` (Mon 13:30 UTC); `update-wi-legislature-roster.yml` (Tue 13:30 UTC); `update-wi-county-board-roster.yml` (Thu 14:30 UTC); `wi-validate-sources.yml` (1st of month 13:00 UTC).
 - Source registry: `scripts/validate_sources.py` (machine-checked monthly)
 <!-- ==== GENERATED:END metro-facts ==== -->
 
