@@ -92,12 +92,20 @@ sentences carry that merge more honestly than a near-duplicate county layer
 draws it. (NYC's `district-attorney` layer exists because boroughs ≠ its
 other tilings; Wisconsin's units ARE the county fabric minus one seam.)
 
-## PR 2 — The county-by-county officer scrape (contact + currency, the attrition route) — TRANCHES 1-2 DELIVERED 2026-08-26
+## PR 2 — The county-by-county officer scrape (contact + currency, the attrition route) — TRANCHES 1-3 DELIVERED 2026-08-26
 
-Nineteen counties ship (103 offices checked weekly): tranche 1's Brown,
-Burnett, Dane, Eau Claire, Green, Walworth, Washington, Waukesha,
-Winnebago and Wood, joined in tranche 2 by Dunn, Grant, Jefferson,
-Marquette, Polk, Portage, Vernon, Washburn and Waushara. The route paid
+FORTY-FOUR counties ship (233 offices checked weekly): tranches 1-2's
+nineteen roster counties, joined by tranche 3's sweep of the non-roster
+frontier — Adams, Ashland, Buffalo, Calumet, Chippewa, Clark, Columbia,
+Douglas, Florence, Iron, Juneau, Kenosha, Langlade, Manitowoc,
+Marinette, Oconto, Oneida, Ozaukee, Pepin, Price, Sauk, Sawyer,
+St. Croix, Trempealeau and Waupaca. Tranche 3 added seven more
+turnovers the book cannot see (Calumet's and St. Croix's clerks of
+court, Iron's administrator and register of deeds, Oconto's treasurer,
+Price's medical examiner, and Sawyer's administrator FILLED where the
+book's cell literally prints "Vacant" — a word the builder now refuses
+to ship as anyone's name, which also cleaned Forest's and Oneida's
+coroner rows). The route paid
 for itself twice over on executives alone: Waukesha's own page records
 that the Blue Book's County Executive Paul Farrow died in office (interim
 Tom Farley ships, with a builder pin refusing the stale name even if the
@@ -106,15 +114,21 @@ name County Executive Eric Olson where the book has John Pavelski.
 Walworth's medical examiner had turned over too. Tranche 2 also resolved
 tranche 1's open URL shapes (Washington's sheriff under
 /elected_officials/, Wood's abbreviated DA/ROD/Courts paths, Waukesha's
-/sheriff/, Portage's CivicPlus /Directory). Tranche 3 leads, each
+/sheriff/, Portage's CivicPlus /Directory). The remaining leads, each
 measured and recorded in the scraper docstring: Bayfield (JS-shell
 pages), Vilas (officer-less stubs), Dane's courts/examiner subdomains
 (unresolvable from this network — worth one CI-side probe), Dunn's five
 unwitnessed offices, Jefferson's unlocated sheriff page, Grant's absent
 coroner page, Marquette's DA shell and unlocated treasurer, Vernon's DA
 stub and absent courts page, Washburn's absent courts page, Waushara's
-absent courts page — plus the non-roster 50 counties, which need the
-same homepage-sweep measurement from scratch.
+absent courts page. The 28 unscraped counties are characterized:
+eleven sites refuse this client outright (403s — La Crosse, Lafayette,
+Lincoln, Marathon, Monroe, Outagamie, Rock, Sheboygan join Milwaukee
+and Racine; hard connection resets — Barron, Shawano; Forest answers
+on retry but links no witnessable page), and the rest load but publish
+nothing a non-JS client can witness (Crawford, Dodge, Door,
+Fond du Lac, Green Lake, Iowa, Jackson, Kewaunee, Menominee, Pierce,
+Richland, Rusk, Taylor).
 
 The officer rows ship dated and contact-free because no STATEWIDE second
 publisher measures open — but that is a fact about aggregators, not about
