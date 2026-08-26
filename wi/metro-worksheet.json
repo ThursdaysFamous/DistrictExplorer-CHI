@@ -180,7 +180,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1"
           }
         ],
-        "people": "wi-county-clerks.json, rebuilt weekly by CI from the Wisconsin Blue Book's county-officers table (a state publication carrying each clerk's party-or-appointed code) CROSS-GATED against wisconsincountyclerks.org, the clerks' own association (office, hours, phone, fax, e-mail) — WEC's own surfaces refuse automated clients, so the two open publishers witness each other; a name they disagree on ships from the association with the party withheld. Milwaukee's card also states that its elections are run by the APPOINTED county Election Commission (Wis. Stat. 7.20), linked and labeled, its members unnamed because its hosts refuse automation. PHASE 4: the card also names the county's OTHER officers — sheriff, district attorney, executive/administrator (the Blue Book's own CE/CA/AC/CM code decides the elected-vs-appointed label), board chair, treasurer, clerk of circuit court, register of deeds, and coroner or medical examiner — from the same Blue Book's officer tables (wi-county-officers.json), shipped DATED (April 2025) because no second publisher for these offices measures open. The chair column's supervisor count is witnessed against the shipped supervisory geometry (71 of 72 agree; Menominee's 7-vs-5 disagreement between two state publications is pinned and the card claims neither), and the Menominee/Shawano rows carry the book's own shared-prosecutorial-unit footnote (Wis. Stat. ch. 978). The BOARD CHAIR \u2014 the one officer who is also a supervisor, elected by each board at its April organizational meeting \u2014 is additionally reconciled weekly against county-board-members.json: a chair the county's own board page marks supersedes the book's (sourced and said on the card), a book chair absent from a complete county roster is withheld with the reason stated, and the 50 counties publishing no roster keep the dated book row. The county-by-county officer scrape (wi_county_officer_contact_scraper.py) reads FORTY-FOUR counties' own officer pages weekly \u2014 every county except the twenty-eight whose surfaces measure shut or unwitnessable (Barron, Bayfield, Crawford, Dodge, Door, Fond du Lac, Forest, Green Lake, Iowa, Jackson, Kewaunee, La Crosse, Lafayette, Lincoln, Marathon, Menominee, Milwaukee, Monroe, Outagamie, Pierce, Racine, Richland, Rock, Rusk, Shawano, Sheboygan, Taylor, Vilas \u2014 each characterized in the scraper's docstring) \u2014 adding office phone/e-mail/page links where the page witnesses the shipped name (surname as a whole word plus first-initial nearby; substring matching measured false-positive on 'Community Block Grant' vs Jennifer Grant), superseding the book where a county has visibly moved past it: the first run found Waukesha's own page recording that County Executive Paul Farrow died in office (Interim County Executive Tom Farley ships, and a builder pin refuses the stale name even when the scrape fails) and Walworth's medical examiner turned over; tranche 2's found a SECOND executive the book no longer has right \u2014 Portage's own directory and executive-office page both name County Executive Eric Olson where the book has John Pavelski. Milwaukee and Racine county sites refuse this client (403 \u2014 the same reason their board rosters ship from GIS layers), Tranche 3's sweep of the non-roster counties added twenty-five more counties and seven more turnovers the book cannot see (Calumet's and St. Croix's clerks of court, Iron's administrator and register of deeds, Oconto's treasurer, Price's medical examiner \u2014 and Sawyer's administrator FILLED where the book's cell literally prints Vacant, a word the builder now refuses to ship as anyone's name).",
+        "people": "wi-county-clerks.json, rebuilt weekly by CI from the Wisconsin Blue Book's county-officers table (a state publication carrying each clerk's party-or-appointed code) CROSS-GATED against wisconsincountyclerks.org, the clerks' own association (office, hours, phone, fax, e-mail) — WEC's own surfaces refuse automated clients, so the two open publishers witness each other; a name they disagree on ships from the association with the party withheld. Milwaukee's card also states that its elections are run by the APPOINTED county Election Commission (Wis. Stat. 7.20), linked and labeled, its members unnamed because its hosts refuse automation. PHASE 4: the card also names the county's OTHER officers — sheriff, district attorney, executive/administrator (the Blue Book's own CE/CA/AC/CM code decides the elected-vs-appointed label), board chair, treasurer, clerk of circuit court, register of deeds, and coroner or medical examiner — from the same Blue Book's officer tables (wi-county-officers.json), shipped DATED (April 2025) because no second publisher for these offices measures open. The chair column's supervisor count is witnessed against the shipped supervisory geometry (71 of 72 agree; Menominee's 7-vs-5 disagreement between two state publications is pinned and the card claims neither), and the Menominee/Shawano rows carry the book's own shared-prosecutorial-unit footnote (Wis. Stat. ch. 978). The BOARD CHAIR — the one officer who is also a supervisor, elected by each board at its April organizational meeting — is additionally reconciled weekly against county-board-members.json: a chair the county's own board page marks supersedes the book's (sourced and said on the card), a book chair absent from a complete county roster is withheld with the reason stated, and the 50 counties publishing no roster keep the dated book row. The county-by-county officer scrape (wi_county_officer_contact_scraper.py) reads FORTY-FOUR counties' own officer pages weekly — every county except the twenty-eight whose surfaces measure shut or unwitnessable (Barron, Bayfield, Crawford, Dodge, Door, Fond du Lac, Forest, Green Lake, Iowa, Jackson, Kewaunee, La Crosse, Lafayette, Lincoln, Marathon, Menominee, Milwaukee, Monroe, Outagamie, Pierce, Racine, Richland, Rock, Rusk, Shawano, Sheboygan, Taylor, Vilas — each characterized in the scraper's docstring) — adding office phone/e-mail/page links where the page witnesses the shipped name (surname as a whole word plus first-initial nearby; substring matching measured false-positive on 'Community Block Grant' vs Jennifer Grant), superseding the book where a county has visibly moved past it: the first run found Waukesha's own page recording that County Executive Paul Farrow died in office (Interim County Executive Tom Farley ships, and a builder pin refuses the stale name even when the scrape fails) and Walworth's medical examiner turned over; tranche 2's found a SECOND executive the book no longer has right — Portage's own directory and executive-office page both name County Executive Eric Olson where the book has John Pavelski. Milwaukee and Racine county sites refuse this client (403 — the same reason their board rosters ship from GIS layers), Tranche 3's sweep of the non-roster counties added twenty-five more counties and seven more turnovers the book cannot see (Calumet's and St. Croix's clerks of court, Iron's administrator and register of deeds, Oconto's treasurer, Price's medical examiner — and Sawyer's administrator FILLED where the book's cell literally prints Vacant, a word the builder now refuses to ship as anyone's name).",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -883,7 +883,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v21",
+    "cache_name": "districtry-wi-shell-v22",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1063,5 +1063,57 @@
         "maxLat": 47.31
       }
     }
-  ]
+  ],
+  "history_page": {
+    "file": "history.html",
+    "intro": "districtry Wisconsin launched on 25 August 2026 and has grown through four planned phases since. This page is its honest record: what the deployment ships, what it re-checks on a schedule, and the corrections its own machinery has caught along the way.",
+    "metrics": [
+      {
+        "label": "counties whose officers are checked weekly against their own pages",
+        "file": "data/app/wi-county-officers.json",
+        "metric": "count-nonzero:contactChecked",
+        "note": "of 72 — the rest carry dated rows from the state Blue Book, each absence characterized"
+      },
+      {
+        "label": "officer rows verified weekly",
+        "file": "data/app/wi-county-officers.json",
+        "metric": "sum:contactChecked",
+        "note": "sheriffs, DAs, treasurers, clerks of court, registers of deeds, executives, examiners"
+      },
+      {
+        "label": "county-board seats tracked weekly",
+        "file": "data/app/county-board-members.json",
+        "metric": "keys",
+        "note": "in the 22 counties that publish a district-keyed roster"
+      },
+      {
+        "label": "circuit courts with their full bench named",
+        "file": "data/app/wi-circuit-judges.json",
+        "metric": "keys",
+        "note": "every judge, refreshed weekly from the court system's own directory"
+      }
+    ],
+    "entries": [
+      {
+        "date": "2026-08-26",
+        "title": "The county card learns to check itself",
+        "body": "Phase 4 put every county officer on the county card — sheriff, district attorney, treasurer, clerk of circuit court, register of deeds, board chair, executive, and coroner or medical examiner, from the state's own Blue Book with elected-vs-appointed labels taken from the book's own codes — and then built the machinery that checks the book against the counties' own websites every week. The first runs earned it: Waukesha's page recorded that the book's county executive had died in office (the interim now ships from the county's page, and the builder refuses to ever regress to the stale name), Portage's pages named a different executive, seven more offices had turned over, and Sawyer's executive cell — which literally prints \"Vacant\" — had been shipping as a person's name. By the end of the day, 44 of 72 counties' officer rows carried weekly-verified contact and names; the other 28 counties' sites either refuse automated readers or publish nothing verifiable, each with its reason on record. The chair column also caught two state publications disagreeing about Menominee's board size (7 seats against 5 districts) — the card claims neither number."
+      },
+      {
+        "date": "2026-08-26",
+        "title": "Milwaukee's city tier and the 911 map",
+        "body": "Phase 3 added ten layers. Statewide: 838 city and village council districts dissolved from the state's own ward filings, and the complete NG911 tier — which fire, law enforcement, and ambulance service covers a point, and which 911 center answers the call — from the state Office of Emergency Communications' aggregate of every county's own filing. Milwaukee got its own tier: the elected MPS school board, police districts and squad areas, the city's official neighborhoods, and its tax incremental districts. Counties whose 911 filings are absent or partial are re-measured on every build and recorded as gaps rather than papered over."
+      },
+      {
+        "date": "2026-08-26",
+        "title": "Courts, wards, and who holds the county offices",
+        "body": "Phase 2 added seven layers: circuit courts and the court of appeals (both benches scraped weekly from the court system itself, under a double witness of statute and the courts' own directory), the state's live 7,161-ward layer, nearest police and fire stations, and statewide school and library locations. The county card gained every county's clerk — name, office, hours, phone, and e-mail — from the Blue Book cross-checked against the clerks' own association, and both legislative chambers gained the legislature's own office and contact data."
+      },
+      {
+        "date": "2026-08-25",
+        "title": "Launch",
+        "body": "Wisconsin shipped as the fleet's fourth instance and its first to grow in place rather than as a separate fork: twelve statewide layers on day one, including all 1,590 county supervisory districts in a single fetch — possible because Wisconsin law (Wis. Stat. 5.15(4)(br)) makes every county file its boundaries with the legislature's technology bureau twice a year, and the bureau publishes the aggregate openly."
+      }
+    ]
+  }
 }
