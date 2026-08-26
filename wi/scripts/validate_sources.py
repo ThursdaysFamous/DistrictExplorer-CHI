@@ -493,6 +493,22 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "county",
+        "app_file": "wi-county-officers.json",
+        "source_url": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
+        "note": (
+            "The Blue Book's OTHER county-officer tables (phase 4): chair, "
+            "executive/administrator (CE/CA/AC/CM typed), treasurer, clerk of "
+            "circuit court, register of deeds, DA, sheriff, coroner/ME — "
+            "layout-aware x-position parse, chair-seats witness against the "
+            "shipped supervisory geometry (Menominee's 7-vs-5 pinned), the "
+            "shared Menominee/Shawano DA footnote encoded. Shipped DATED "
+            "(April 2025): no second publisher for these offices measures "
+            "open. The 2027-28 edition moves this URL — the biennium row in "
+            "WATCH.md."
+        ),
+    },
+    {
         "layer": "tid-district",
         "app_file": "tid-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8",

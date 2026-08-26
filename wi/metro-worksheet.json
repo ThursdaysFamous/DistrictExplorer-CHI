@@ -180,7 +180,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1"
           }
         ],
-        "people": "wi-county-clerks.json, rebuilt weekly by CI from the Wisconsin Blue Book's county-officers table (a state publication carrying each clerk's party-or-appointed code) CROSS-GATED against wisconsincountyclerks.org, the clerks' own association (office, hours, phone, fax, e-mail) — WEC's own surfaces refuse automated clients, so the two open publishers witness each other; a name they disagree on ships from the association with the party withheld. Milwaukee's card also states that its elections are run by the APPOINTED county Election Commission (Wis. Stat. 7.20), linked and labeled, its members unnamed because its hosts refuse automation.",
+        "people": "wi-county-clerks.json, rebuilt weekly by CI from the Wisconsin Blue Book's county-officers table (a state publication carrying each clerk's party-or-appointed code) CROSS-GATED against wisconsincountyclerks.org, the clerks' own association (office, hours, phone, fax, e-mail) — WEC's own surfaces refuse automated clients, so the two open publishers witness each other; a name they disagree on ships from the association with the party withheld. Milwaukee's card also states that its elections are run by the APPOINTED county Election Commission (Wis. Stat. 7.20), linked and labeled, its members unnamed because its hosts refuse automation. PHASE 4: the card also names the county's OTHER officers — sheriff, district attorney, executive/administrator (the Blue Book's own CE/CA/AC/CM code decides the elected-vs-appointed label), board chair, treasurer, clerk of circuit court, register of deeds, and coroner or medical examiner — from the same Blue Book's officer tables (wi-county-officers.json), shipped DATED (April 2025) because no second publisher for these offices measures open. The chair column's supervisor count is witnessed against the shipped supervisory geometry (71 of 72 agree; Menominee's 7-vs-5 disagreement between two state publications is pinned and the card claims neither), and the Menominee/Shawano rows carry the book's own shared-prosecutorial-unit footnote (Wis. Stat. ch. 978).",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -874,11 +874,16 @@
         "file": "wi-alderpersons.json",
         "min_keys": 6,
         "note": "The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
+      },
+      {
+        "file": "wi-county-officers.json",
+        "min_keys": 72,
+        "note": "72 counties x 7 offices from the Blue Book's county-officer tables (build_wi_county_officer_roster.py; layout-aware x-position parse, chair-seats witness, Menominee pin, shared-DA footnote). Dated April 2025 on every card; refreshed weekly with the clerk scrape."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v16",
+    "cache_name": "districtry-wi-shell-v17",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

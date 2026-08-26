@@ -57,6 +57,7 @@ except ImportError:
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 DEFAULT_OUT = os.path.join(SCRIPT_DIR, ".cache", "wi_county_clerks_raw.json")
+OFFICERS_OUT = os.path.join(SCRIPT_DIR, ".cache", "wi_county_officers_raw.json")
 COUNTIES_FILE = os.path.join(REPO_ROOT, "data", "app", "state-counties.json")
 
 BLUE_BOOK_URL = ("https://docs.legis.wisconsin.gov/misc/lrb/blue_book/"
@@ -214,6 +215,163 @@ def crawl_wcca(cache_dir):
     return pages
 
 
+def parse_officer_tables(pdf_path, names):
+    """The Blue Book's OTHER county-officer tables (phase 4): board chair
+    with the county's supervisor count, executive/administrator (typed
+    CE/CA/AC — the code decides the elected-vs-appointed label), treasurer,
+    clerk of circuit court, register of deeds, district attorney, sheriff,
+    and coroner/medical examiner. The SURVEYOR column is parsed and
+    deliberately not emitted: surveyors are appointed unless a party is
+    shown, one is appointed by a multi-county commission (the table's own
+    footnote 2), and a mostly-appointed niche office earns a card row only
+    when a reader would act on it.
+
+    THE PARSE IS LAYOUT-AWARE, NOT LINE-AWARE: three name columns with no
+    delimiters are ambiguous as text the moment a code is absent (Richland's
+    executive prints no type code, so "Tricia Clements Ashley Mott (A)" has
+    two readings) — but each data column starts at exactly its own header
+    label's x0, page margin shifts included, so words bucket by position.
+    Table segments start and end MID-PAGE (the clerks-table lesson), so
+    pages are scanned for each table's header-label pair independently.
+
+    The Menominee/Shawano rows carry the book's own footnote 1 — "Menominee
+    and Shawano counties comprise a single prosecutorial unit, served by a
+    single district attorney" — and the parse GATES that both rows are
+    marked and name the same DA."""
+    if pdfplumber is None:
+        raise SystemExit("pdfplumber is required (wi/scripts/requirements.txt pins it)")
+    prefixes = []
+    for base in names:
+        prefixes.append((base, base))
+        stripped = base.replace(".", "")
+        if stripped != base:
+            prefixes.append((stripped, base))
+    prefixes.sort(key=lambda p: len(p[0]), reverse=True)
+
+    # (table, col2 anchor label, col3 anchor labels) — anchors are the header
+    # words whose x0 positions ARE the column boundaries on that page
+    TABLES = [
+        ("chair", "Executive,", ("Treasurer",)),
+        ("courts", "Register", ("Surveyor1", "Surveyor")),
+        ("law", "Sheriff", ("Coroner/medical",)),
+    ]
+    # the table's own legend (p620): X-Not applicable; A-Appointed to fill a
+    # vacancy; AC-Administrative coordinator; CA-County administrator;
+    # CE-County executive; CM-County manager (Dunn, the state's one
+    # manager-plan county); D/I/R parties. CE is the only ELECTED type.
+    CODE_VOCAB = {
+        ("chair", 2): {"CE", "CA", "AC", "CM"},
+        ("chair", 3): {"A", "D", "I", "R"},
+        ("courts", 1): {"A", "D", "I", "R"},
+        ("courts", 2): {"A", "D", "I", "R"},
+        ("law", 1): {"A", "D", "I", "R"},
+        ("law", 2): {"A", "D", "I", "R"},
+        ("law", 3): {"A", "D", "I", "R", "ME"},
+    }
+
+    def split_cell(tokens, table, col):
+        text = " ".join(t for t, _x in tokens).strip()
+        if not text or text == "X":       # the book's "X-Not applicable"
+            return None
+        m = re.match(r"^(?P<name>.+?)\s*\((?P<code>[A-Z]{1,2})\)\s*\d?$", text)
+        if m:
+            code = m.group("code")
+            vocab = CODE_VOCAB.get((table, col))
+            if vocab is not None and code not in vocab:
+                raise SystemExit("officer table %s col %d: code %r outside the "
+                                 "legend's vocabulary in %r" % (table, col, code, text))
+            return {"name": m.group("name").strip(), "code": code}
+        return {"name": re.sub(r"\d$", "", text).strip(), "code": None}
+
+    tables = {"chair": {}, "courts": {}, "law": {}}
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            words = page.extract_words()
+            for table, c2label, c3labels in TABLES:
+                # the header wraps onto two lines, so the two anchors sit up
+                # to one line apart (measured: "Executive," at top 88 with
+                # "Treasurer" at 96) — pair within 15pt, and cut the data
+                # bands below the LOWER anchor so no header line leaks in
+                c2 = next((w for w in words if w["text"] == c2label), None)
+                c3 = next((w for w in words
+                           if w["text"] in c3labels and c2 is not None
+                           and abs(w["top"] - c2["top"]) < 15), None)
+                if c2 is None or c3 is None:
+                    continue
+                col2x, col3x = c2["x0"], c3["x0"]
+                header_top = max(c2["top"], c3["top"])
+                # cluster rows by tolerance, never by round(top): a row's
+                # words can straddle an integer boundary (measured — the
+                # Menominee1 label sat at top 428.5 with the rest of its row
+                # at 429.6, and rounding stranded the county name alone)
+                below = sorted((w for w in words if w["top"] > header_top + 4),
+                               key=lambda w: w["top"])
+                bands = []
+                for w in below:
+                    if bands and w["top"] - bands[-1][0] <= 3:
+                        bands[-1][1].append(w)
+                    else:
+                        bands.append((w["top"], [w]))
+                for _top, band in bands:
+                    band.sort(key=lambda w: w["x0"])
+                    joined = " ".join(w["text"] for w in band)
+                    hit = next((p for p in prefixes
+                                if re.match(re.escape(p[0]) + r"\d? ", joined)), None)
+                    if hit is None or hit[1] in tables[table]:
+                        continue
+                    n_county_words = len(hit[0].split())
+                    footnoted = bool(re.match(re.escape(hit[0]) + r"\d ", joined))
+                    rest = band[n_county_words:]
+                    cols = {1: [], 2: [], 3: []}
+                    for w in rest:
+                        if w["x0"] >= col3x - 3:
+                            cols[3].append((w["text"], w["x0"]))
+                        elif w["x0"] >= col2x - 3:
+                            cols[2].append((w["text"], w["x0"]))
+                        else:
+                            cols[1].append((w["text"], w["x0"]))
+                    tables[table][hit[1]] = {
+                        "footnoted": footnoted,
+                        "cols": {c: split_cell(cols[c], table, c) for c in (1, 2, 3)},
+                    }
+    for table in tables:
+        if len(tables[table]) != len(names):
+            missing = sorted(set(names) - set(tables[table]))
+            raise SystemExit("officer table %r parsed %d of %d counties (missing %s) — "
+                             "the layout moved; re-measure the anchors"
+                             % (table, len(tables[table]), len(names), missing[:6]))
+
+    out = {}
+    for base in names:
+        chair_cell = tables["chair"][base]["cols"][1]
+        m = re.match(r"^(?P<name>.+?)\s*\((?P<seats>\d+)\)$",
+                     (chair_cell or {}).get("name", "") +
+                     (" (%s)" % chair_cell["code"] if chair_cell and chair_cell.get("code") else ""))
+        if chair_cell is None or m is None:
+            raise SystemExit("%s: chair cell %r carries no '(seats)' count" % (base, chair_cell))
+        law = tables["law"][base]
+        out[base] = {
+            "chair": {"name": m.group("name").strip(), "seats": int(m.group("seats"))},
+            "executive": tables["chair"][base]["cols"][2],
+            "treasurer": tables["chair"][base]["cols"][3],
+            "clerkOfCircuitCourt": tables["courts"][base]["cols"][1],
+            "registerOfDeeds": tables["courts"][base]["cols"][2],
+            "districtAttorney": dict(law["cols"][1] or {}, shared=law["footnoted"]),
+            "sheriff": law["cols"][2],
+            "coroner": law["cols"][3],
+        }
+
+    shared = sorted(b for b in out if out[b]["districtAttorney"].get("shared"))
+    if shared != ["Menominee", "Shawano"]:
+        raise SystemExit("DA footnote marks %s, expected exactly Menominee and "
+                         "Shawano — the shared-unit footnote moved" % shared)
+    if person_key(out["Menominee"]["districtAttorney"]["name"]) != \
+       person_key(out["Shawano"]["districtAttorney"]["name"]):
+        raise SystemExit("Menominee and Shawano name different DAs — the shared "
+                         "prosecutorial unit reading broke; re-measure")
+    return out
+
+
 def main():
     argv = sys.argv[1:]
     out_path = argv[argv.index("--out") + 1] if "--out" in argv else DEFAULT_OUT
@@ -228,6 +386,14 @@ def main():
     if not os.path.exists(pdf_path) or os.path.getsize(pdf_path) < 100000:
         open(pdf_path, "wb").write(fetch(BLUE_BOOK_URL, binary=True))
     blue = parse_blue_book(pdf_path, names)
+
+    officers = parse_officer_tables(pdf_path, names)
+    with open(OFFICERS_OUT, "w") as f:
+        json.dump({"edition": "Wisconsin Blue Book 2025–26 (April 2025)",
+                   "sourceUrl": BLUE_BOOK_URL,
+                   "counties": officers}, f, indent=1, ensure_ascii=False)
+    print("officers intermediate: %d counties -> %s" % (len(officers), OFFICERS_OUT),
+          file=sys.stderr)
 
     wcca = crawl_wcca(cache_dir)
     # association slugs title-case differently for multiword counties —
