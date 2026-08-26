@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">20 layers — 7 political and legislative, 2 public safety, 4 schools, 7 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">21 layers — 7 political and legislative, 2 public safety, 5 schools, 7 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -1005,7 +1005,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">4 layers</span></h2>
+        <h2>Schools <span class="matrix-count">5 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1045,6 +1045,18 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">No roster is joined; the card names the district.</td>
                 <td data-label="Where it applies">Wisconsin — the paired (non-unified) school territory; unified territory answers on the Unified card.</td>
+              </tr>
+              <tr id="layer-mps-school-board">
+                <th scope="row"><span class="layer-name">MPS School Board District</span><code>mps-school-board</code></th>
+                <td data-label="What it answers">The Milwaukee Public Schools board district covering the point, its elected director, and the at-large director the whole city elects — with each seat's term expiration and the Board office's contact. Statute names Wisconsin's districted school boards exactly (most elect at large): MPS and Racine Unified, whose geometry no publisher ships as data — the Data gaps panel records it.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/AGO/MPS_School_Districts/MapServer/1" target="_blank" rel="noopener">City of Milwaukee — MPS Board Districts, the city's own ArcGIS layer, reprojected by the city's own server and pre-built by wi/scripts/build_mps_school_board_districts.py; the districts were adopted 25 February 2022 (the district's directors page states it) and redraw each census</a></li>
+                    <li><a href="https://data.milwaukee.gov/dataset/milwaukee-public-school-board-districts" target="_blank" rel="noopener">City of Milwaukee open data — the same districts as a shapefile (CC-BY), the build-time witness: every district's share of the city must agree between the two before the file ships</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">mps-school-board-members.json, rebuilt weekly by CI from the district's own directors page (one heading per seat: the at-large president and districts 1-8), cross-witnessed against the board index's committee lists — two surfaces the district maintains separately must name the same directors. The Board's shared contact form and office phone ride the card; outside Milwaukee the layer hides entirely.</td>
+                <td data-label="Where it applies">City of Milwaukee only — the layer hides everywhere else (the MPS tiling is the coverage test).</td>
               </tr>
               <tr id="layer-school-site">
                 <th scope="row"><span class="layer-name">School Location, incl. private</span><code>school-site</code></th>

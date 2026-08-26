@@ -6,7 +6,7 @@
 
 A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. One instance of the [districtry](https://districtry.com/) fleet, serving at **[districtry.com/wi/](https://districtry.com/wi/)** — the first state to expand **in place** as a folder of the consolidated repo rather than as a fork.
 
-Twenty statewide layers — thirteen from national publishers, seven from state sources:
+Twenty-one layers — thirteen from national publishers, seven from state sources, and one from a city's own:
 
 | Group | Layer | Source |
 |---|---|---|
@@ -20,6 +20,7 @@ Twenty statewide layers — thirteen from national publishers, seven from state 
 | **Public Safety** | Police Station / Fire Station | USGS National Map structures, nearest three each — a proximity fact, never a claim about which agency serves the point |
 | **Schools** | School District — Unified / Union High / Elementary | TIGERweb School layers 0/1/2; the tilings are mutually exclusive, so exactly one of Unified and the pair answers for any point |
 | | School Location (2,966) | Wisconsin DPI's own school directory, public and private, nearest three — a proximity fact, never an enrollment claim; DPI's placeless virtual-program rows deliberately don't ship on a proximity card |
+| | MPS School Board District (8) | Milwaukee's own layer, witnessed against the city's open-data shapefile — the state's only districted school boards are Milwaukee's and Racine Unified's, and Racine's unpublished boundaries are a recorded gap; all nine directors named from the district's own page, refreshed weekly by CI; shown only inside Milwaukee |
 | **Geography** | County | TIGERweb State_County, pre-built — the app's offline anchor; names the county clerk (party or appointed, office, hours, contact) from the Blue Book cross-gated against the clerks' own association, refreshed weekly by CI; Milwaukee's card states that its elections sit with the appointed county Election Commission |
 | | County Subdivision | TIGERweb CouSub, live (Wisconsin's towns) |
 | | Municipality | TIGERweb Places, live (cities and villages; unincorporated points say so) |

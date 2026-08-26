@@ -387,6 +387,40 @@ PROVENANCE = [
             "(webapi.legistar.com/v1/milwaukee, body 1) every run."
         ),
     },
+    {
+        "layer": "mps-school-board",
+        "app_file": "mps-school-board-districts.json",
+        "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/AGO/MPS_School_Districts/MapServer/1",
+        "note": (
+            "Milwaukee's own MPS board-district layer, server-reprojected and "
+            "pre-built by wi/scripts/build_mps_school_board_districts.py (the "
+            "same measured-flaky host as the alderman layer — build-time only, "
+            "retried). Adopted 2022-02-25; redraws each census (WATCH.md)."
+        ),
+    },
+    {
+        "layer": "mps-school-board",
+        "app_file": "mps-school-board-districts.json",
+        "source_url": "https://data.milwaukee.gov/dataset/milwaukee-public-school-board-districts",
+        "note": (
+            "The same districts as the city's CKAN shapefile (CC-BY) — the "
+            "build-time WITNESS: districts 1-8 and their area shares must "
+            "agree between the two city surfaces before the file ships "
+            "(0.04% max share difference at first build)."
+        ),
+    },
+    {
+        "layer": "mps-school-board",
+        "app_file": "mps-school-board-members.json",
+        "source_url": "https://www.milwaukeepublicschools.org/about/board/directors",
+        "note": (
+            "The district's own directors page — one heading per seat, the "
+            "at-large president plus districts 1-8 — scraped weekly by "
+            "update-mps-school-board-roster.yml and witnessed against the "
+            "board index's committee lists (two separately maintained "
+            "surfaces must name the same directors)."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.

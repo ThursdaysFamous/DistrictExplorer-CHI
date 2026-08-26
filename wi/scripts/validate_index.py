@@ -88,7 +88,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 14
+MIN_REGISTER_LAYER = 15
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -98,9 +98,9 @@ EXPECT_LAYER_IDS = [
     "wi-court-of-appeals", "us-house", "wi-senate", "wi-assembly",
     "wi-circuit-court", "county", "school-district-secondary",
     "school-district-unified", "school-district-elementary", "county-board",
-    "county-subdivision", "municipality", "zip-code", "aldermanic-district",
-    "ward", "police-station", "fire-station", "school-site", "library",
-    "post-office",
+    "county-subdivision", "municipality", "zip-code", "mps-school-board",
+    "aldermanic-district", "ward", "police-station", "fire-station",
+    "school-site", "library", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -116,6 +116,7 @@ GEOMETRY_FILES = {
     "wi-court-of-appeals-districts.json": (4, 4),  # The four Court of Appeals districts as county unions (Wis. Stat. 752.11 + the court system's own lists agreeing county for county), dissolved by wi/scripts/build_wi_court_of_appeals.py under one-ring contiguity and 72-county containment gates.
     "wi-state-outline.json": (1, 1),  # The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring.
     "school-sites.json": (2850, 3500),  # Every placed school site in the state, public and private (2,966 at build: 2,138 + 828), pre-built from the DPI org's two school layers by wi/scripts/build_wi_school_sites.py — its gates page past the 2,000-record cap, skip only DPI's placeless virtual-program rows, and witness every point against the layer's own coordinate attributes. Amenity points, not officeholder data: cache-first is fine, and the range tolerates DPI's school-year rotation (WATCH.md).
+    "mps-school-board-districts.json": (8, 8),  # Milwaukee's eight MPS board districts, the city's own layer server-reprojected and witnessed at build time against the CKAN shapefile's area shares (wi/scripts/build_mps_school_board_districts.py). Redraws each decennial census (adopted 2022-02-25); an operator rebuild.
     "aldermanic-districts.json": (838, 838),  # Every aldermanic (and village trustee) district the ward fabric composes completely — coded city/village wards dissolved on the statewide municipality key by wi/scripts/build_wi_aldermanic_districts.py under its completeness, BAS-witness and point-agreement gates (838 districts, 155 municipalities; ten incomplete submissions excluded on the record). Rebuild after each Jan/Jul filing window; a count change is expected news.
     "library-sites.json": (460, 560),  # Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file.
 }
@@ -131,6 +132,7 @@ ROSTER_FILES = {
     "wi-circuit-judges.json": 69,  # The circuit-court bench — every circuit's judges with branch and direct phone where wicourts publishes them, plus the courthouse — keyed by the same circuit keys the geometry carries. Built by wi/scripts/build_wi_circuit_court_roster.py from the wicourts scrape; refreshed weekly by update-wi-circuit-court-roster.yml, whose composition assertion doubles as the circuit map's redistricting tripwire.
     "wi-court-of-appeals-roster.json": 4,  # The Court of Appeals bench — sixteen judges keyed by district with role, direct phone and chambers, the 4/4/3/5 seat split gated at scrape time. Built by wi/scripts/build_wi_coa_roster.py; refreshed weekly by update-wi-court-of-appeals-roster.yml, whose composition assertion is the appeals map's redistricting tripwire.
     "wi-county-clerks.json": 72,  # All 72 county clerks — name, party-or-appointed per the Blue Book's own legend, office, hours, phone, fax, e-mail — keyed by county GEOID. Built by wi/scripts/build_wi_county_clerk_roster.py from the two cross-gating open publishers; refreshed weekly by update-wi-county-clerk-roster.yml. Milwaukee's entry carries the statutory election-commission note.
+    "mps-school-board-members.json": 3,  # The nine Milwaukee Board of School Directors (at-large president + districts 1-8, keyed to the geometry's DISTRICT values) with roles, term expirations and the Board office's contact, under {members, office, sourceUrl}. Built by wi/scripts/build_mps_school_board_roster.py from the district's own directors page with the committee-list witness; refreshed weekly by update-mps-school-board-roster.yml.
     "wi-alderpersons.json": 6,  # The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml.
 }
 
