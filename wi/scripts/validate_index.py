@@ -99,7 +99,7 @@ EXPECT_LAYER_IDS = [
     "wi-circuit-court", "county", "school-district-secondary",
     "school-district-unified", "school-district-elementary", "county-board",
     "county-subdivision", "municipality", "zip-code", "ward",
-    "police-station", "fire-station", "post-office",
+    "police-station", "fire-station", "school-site", "library", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -114,6 +114,8 @@ GEOMETRY_FILES = {
     "wi-circuit-courts.json": (69, 69),  # The 69 circuit courts as county unions — 66 single counties plus the three statutory two-county circuits (Wis. Stat. 753.06), dissolved from the shipped county file by wi/scripts/build_wi_circuit_courts.py under its partition, merge and containment gates. Rebuild only if the county file or the statute moves.
     "wi-court-of-appeals-districts.json": (4, 4),  # The four Court of Appeals districts as county unions (Wis. Stat. 752.11 + the court system's own lists agreeing county for county), dissolved by wi/scripts/build_wi_court_of_appeals.py under one-ring contiguity and 72-county containment gates.
     "wi-state-outline.json": (1, 1),  # The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring.
+    "school-sites.json": (2850, 3500),  # Every placed school site in the state, public and private (2,966 at build: 2,138 + 828), pre-built from the DPI org's two school layers by wi/scripts/build_wi_school_sites.py — its gates page past the 2,000-record cap, skip only DPI's placeless virtual-program rows, and witness every point against the layer's own coordinate attributes. Amenity points, not officeholder data: cache-first is fine, and the range tolerates DPI's school-year rotation (WATCH.md).
+    "library-sites.json": (460, 560),  # Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -464,7 +466,13 @@ def check_negative_point(repo_root, app_dir):
     for fname in GEOMETRY_FILES:
         gj = json.load(open(os.path.join(app_dir, fname)))
         for feat in gj.get("features", []):
-            if _point_in_geometry(lng, lat, feat["geometry"]):
+            geom = feat.get("geometry") or {}
+            if geom.get("type") not in ("Polygon", "MultiPolygon"):
+                # amenity-point files (school-sites, library-sites) ride the
+                # geometry list for their cache policy, but a point cannot
+                # contain the negative point — nothing to assert here
+                continue
+            if _point_in_geometry(lng, lat, geom):
                 fail(
                     "negative point %.5f,%.5f is INSIDE a feature of data/app/%s (%r) — "
                     "it must miss every anchor geometry; pick a new negative point in the "

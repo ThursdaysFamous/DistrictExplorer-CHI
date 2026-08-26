@@ -5802,6 +5802,8 @@ function initWisconsinExplorer() {
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "police-station",    // Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points
     "fire-station",      // Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it
+    "school-site",       // Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points
+    "library",           // Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points
     "post-office"        // Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
@@ -9153,6 +9155,82 @@ function initWisconsinExplorer() {
     }
   });
 
+  /* ---------- 18-19. Schools + Libraries (nearest 3) — Wisconsin DPI ----------
+   * The Department of Public Instruction's own ArcGIS org, pre-built into two
+   * same-origin files by wi/scripts/build_wi_school_sites.py and
+   * build_wi_libraries.py (each builder's docstring carries the measured
+   * traps: the public layer's 2,000-record page cap, per-layer coordinate
+   * attribute renames, and the libraries layer's LAT/LONG attributes that are
+   * Web Mercator meters despite their names). DPI's licence is a
+   * reference-use disclaimer — shipped verbatim on the sources page — which
+   * is why both cards present proximity and nothing stronger: never "your"
+   * school (enrollment is the district's call, plus statewide open
+   * enrollment) and never a library service-area claim (WI library boards
+   * are appointed, s. 43.54 — no district card is honest here, so the
+   * concept ships as locations, statewide where the reference instance's
+   * library card is city-scoped). The school file skips DPI's placeless
+   * virtual-program rows (no geometry AND no address, 152 of 2,290 measured
+   * 2026-08-26) because a nearest-3 card lists places; virtual schools with
+   * a real campus ship like any other. ---------- */
+  var loadSchoolSites = makeCached(function () {
+    return fetchJSONWithRetry("data/app/school-sites.json", {}, 2);
+  });
+  var loadLibrarySites = makeCached(function () {
+    return fetchJSONWithRetry("data/app/library-sites.json", {}, 2);
+  });
+
+  registerNearestPointLayer({
+    id: "school-site",
+    group: "schools",
+    color: "#1B7A3D",
+    fill: "#63B57F",
+    // deliberately NO district prefix — the set spans public and private
+    // (the factory appends "(nearest 3)", so the label stays paren-free)
+    label: "School Location, incl. private",
+    loader: loadSchoolSites,
+    intro: "Nearest schools (Wisconsin DPI directory — public and private), straight-line distance:",
+    line: function (props) {
+      var name = props.name ? String(props.name) : "School";
+      var address = props.address ? String(props.address) : "";
+      return name + (address ? " — " + address : "");
+    },
+    item: function (props) { // 4d two-line row: kind + grades lead the note
+      var tagBits = [];
+      if (props.kind) tagBits.push(String(props.kind));
+      if (props.grades) tagBits.push(String(props.grades));
+      return {
+        name: props.name ? String(props.name) : "School",
+        tag: tagBits.length ? { text: tagBits.join(" · ") } : undefined,
+        note: props.address ? String(props.address) : undefined
+      };
+    }
+  });
+
+  registerNearestPointLayer({
+    id: "library",
+    group: "geography",
+    color: "#8A5A00",
+    fill: "#F2B84B",
+    label: "Library",
+    loader: loadLibrarySites,
+    intro: "Nearest public library locations (Wisconsin DPI directory — main libraries and branches), straight-line distance:",
+    line: function (props) {
+      var name = props.name ? String(props.name) : "Library";
+      var address = props.address ? String(props.address) : "";
+      var phone = props.phone ? String(props.phone) : "";
+      return name + (address ? " — " + address : "") + (phone ? " — " + phone : "");
+    },
+    item: function (props) { // 4d two-line row: name over address · phone
+      var bits = [];
+      if (props.address) bits.push(String(props.address));
+      if (props.phone) bits.push(String(props.phone));
+      return {
+        name: props.name ? String(props.name) : "Library",
+        note: bits.join(" · ") || undefined
+      };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — factory crib sheet
    * Every factory named below is ENGINE (byte-identical across forks) and is
@@ -9757,7 +9835,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "wi-circuit-court", "wi-court-of-appeals", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "county", "county-subdivision", "ward", "municipality", "zip-code", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "wi-circuit-court", "wi-court-of-appeals", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9850,12 +9928,12 @@ function initWisconsinExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
-    "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
-    "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#5B2A86": "#B375F2",
-    "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
-    "#8163AE": "#CAAAFF", "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452", "#A98B6C": "#F3CBA1",
-    "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#C9A227": "#FEE195",
-    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
+    "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
+    "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
+    "#5B2A86": "#B375F2", "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63",
+    "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294",
+    "#8C6D1F": "#DEB452", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880", "#B0316E": "#FD88B8",
+    "#B26A00": "#FFB15F", "#C9A227": "#FEE195", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same
