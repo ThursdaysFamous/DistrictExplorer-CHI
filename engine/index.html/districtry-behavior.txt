@@ -1,0 +1,177 @@
+  /* ==== map legibility: stacked highlights hold a constant composite ====
+     One highlight leaves 68% of the basemap showing, and that is the look the
+     app already has with a single layer on — so that is the number held. Each
+     of n stacked highlights takes alpha = 1 - 0.68^(1/n), which composites to
+     exactly 68% at ANY n. The rule is one sentence: the stack never costs more
+     than one layer's worth. (n = 1 yields 0.32, so a single layer is untouched.)
+
+     Counted off the DOM rather than off activeLayerCount(), because what
+     matters is how many highlights are actually PAINTED — an outline-only
+     layer contributes no fill, and a layer whose region does not contain the
+     point contributes none either. */
+  var DST_HL_TARGET = 0.68;
+  var dstHlQueued = false;
+  function dstUpdateHighlightAlpha() {
+    dstHlQueued = false;
+    var pane = document.querySelector(".leaflet-overlay-pane");
+    if (!pane) return;
+    var n = pane.querySelectorAll("path.region-highlight").length;
+    var root = document.documentElement;
+    var alpha = n > 1 ? 1 - Math.pow(DST_HL_TARGET, 1 / n) : 0.32;
+    root.style.setProperty("--dst-hl-fill", alpha.toFixed(4));
+    /* The outline is SIGNAL, not decoration — each one is a different district
+       the reader may want to trace — so it tapers rather than vanishing, and
+       floors at 2.25px. That still reads as heavier than a faded sibling,
+       which the engine draws at weight-0.5 and opacity 0.18. Stroke opacity is
+       deliberately left at 1: thinning the line keeps it legible where dimming
+       it would not. */
+    root.style.setProperty("--dst-hl-weight", Math.max(2.25, 4 - (n - 1) * 0.45).toFixed(2) + "px");
+    root.style.setProperty("--dst-hl-shadow",
+      n <= 1 ? "drop-shadow(0 5px 7px rgba(20, 24, 28, 0.5)) drop-shadow(0 1px 2px rgba(20, 24, 28, 0.35))"
+      : n === 2 ? "drop-shadow(0 3px 5px rgba(20, 24, 28, 0.28))"
+      : "none");
+  }
+  function dstQueueHighlightAlpha() {
+    if (dstHlQueued) return;
+    dstHlQueued = true;
+    /* a burst of setStyle calls during one sweep costs a single recompute */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(dstUpdateHighlightAlpha);
+    else setTimeout(dstUpdateHighlightAlpha, 0);
+  }
+  (function () {
+    var pane = document.querySelector(".leaflet-overlay-pane");
+    if (!pane || !window.MutationObserver) return;
+    /* class changes are how the engine marks and unmarks a highlight
+       (subLayer._path.classList.add(HIGHLIGHT_CLASS)); childList covers a
+       layer being toggled on or off. Setting a custom property on <html>
+       mutates nothing inside the pane, so this cannot feed itself. */
+    new MutationObserver(dstQueueHighlightAlpha).observe(pane, {
+      childList: true, subtree: true, attributes: true, attributeFilter: ["class"]
+    });
+    dstUpdateHighlightAlpha();
+  })();
+  /* ==== C: lead with the answers ======================================
+     Collapse the layers the reader has not picked, but ONLY when they have
+     picked something — see the CSS above for why an unconditional version
+     would have handed a first-time visitor an empty panel. */
+  function dstLayerCounts() {
+    var root = document.getElementById("groups-root");
+    if (!root) return null;
+    return {
+      all: root.querySelectorAll(".layer-block").length,
+      on: root.querySelectorAll('input[type="checkbox"]:checked').length
+    };
+  }
+  function dstSyncLayerChooser() {
+    var col = document.querySelector(".results-col");
+    var btn = document.querySelector(".dst-layer-toggle");
+    var counts = dstLayerCounts();
+    if (!col || !btn || !counts) return;
+    /* nothing on -> nothing to collapse to, so the control has no meaning */
+    if (!counts.on) {
+      col.classList.remove("dst-collapsed");
+      btn.hidden = true;
+      return;
+    }
+    btn.hidden = false;
+    var collapsed = col.classList.contains("dst-collapsed");
+    btn.textContent = collapsed
+      ? "Show all " + counts.all + " layers"
+      : "Show only my " + counts.on + (counts.on === 1 ? " layer" : " layers");
+    btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  }
+  (function () {
+    var root = document.getElementById("groups-root");
+    var col = document.querySelector(".results-col");
+    if (!root || !col) return;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "dst-layer-toggle";
+    btn.hidden = true;
+    root.parentNode.insertBefore(btn, root.nextSibling);
+    btn.addEventListener("click", function () {
+      col.classList.toggle("dst-collapsed");
+      dstSyncLayerChooser();
+    });
+    /* a tick anywhere in the list changes both counts and, when it is the
+       first one, whether the control means anything at all */
+    root.addEventListener("change", function (e) {
+      if (e.target && e.target.type === "checkbox") {
+        /* the first layer a reader turns on is the moment there is something
+           to lead with, so that is when the panel collapses to it */
+        if (!col.classList.contains("dst-collapsed") && dstLayerCounts().on === 1 && dstIsPhone()) {
+          col.classList.add("dst-collapsed");
+        }
+        dstSyncLayerChooser();
+      }
+    });
+    /* a permalink arrives with layers already on: lead with them */
+    if (dstIsPhone() && (dstLayerCounts() || {}).on) col.classList.add("dst-collapsed");
+    dstSyncLayerChooser();
+  })();
+  /* ==== phone layout (mobile review, 2026-08-21) ======================== */
+  function dstIsPhone() {
+    return !!(window.matchMedia && window.matchMedia("(max-width: 767px)").matches);
+  }
+  /* The legend is authored open, which is what desktop wants. On a phone it is
+     pinned inside the sticky map column, so it starts closed. Driven here
+     rather than in CSS because `open` is an attribute, not a style. */
+  function dstSyncLegendDisclosure() {
+    var legend = document.querySelector(".districtry-map-legend");
+    /* Now that the legend is collapsible at every width this sets only the
+       DEFAULT: once the reader has opened or closed it themselves, the
+       viewport stops having an opinion. Without that, crossing the
+       breakpoint would silently reopen a legend someone put away. */
+    if (!legend || legend.getAttribute("data-dst-user-set") === "1") return;
+    if (dstIsPhone()) legend.removeAttribute("open");
+    else legend.setAttribute("open", "");
+  }
+  /* The four "about the data" doors move between the masthead and the top of
+     the results panel as the viewport crosses the breakpoint. They are moved,
+     never duplicated: two copies of #gaps-btn would break the engine's
+     getElementById binding. Order is preserved by re-inserting before the
+     theme toggle's separator on the way back. */
+  function dstPlaceDoors() {
+    var actions = document.querySelector(".masthead-actions");
+    var foot = document.querySelector(".districtry-panel-foot");
+    if (!actions || !foot) return;
+    var doors = document.querySelector(".districtry-doors");
+    if (dstIsPhone()) {
+      if (!doors) {
+        doors = document.createElement("div");
+        doors.className = "districtry-doors";
+        /* The panel FOOT, not the panel head. Measured: the four doors are a
+           107px block at 375px, and at the top of the panel they sit between
+           the reader's coordinates and the reader's answer — on a 393x852
+           phone that is the difference between 48px of the first card showing
+           and 155px of it. The cost is real and named: "What data is missing?"
+           loses on mobile the promoted position it was deliberately given in
+           the masthead. */
+        foot.insertBefore(doors, foot.firstChild);
+      }
+      var move = actions.querySelectorAll("#gaps-btn, .masthead-action-link");
+      for (var i = 0; i < move.length; i++) doors.appendChild(move[i]);
+    } else if (doors) {
+      var sep = actions.querySelector(".districtry-toggle-sep");
+      var back = doors.querySelectorAll("#gaps-btn, .masthead-action-link");
+      for (var j = 0; j < back.length; j++) actions.insertBefore(back[j], sep);
+      doors.parentNode.removeChild(doors);
+    }
+  }
+  function dstApplyPhoneLayout() {
+    dstPlaceDoors();
+    dstSyncLegendDisclosure();
+    /* crossing INTO the phone layout with layers already on should lead
+       with them; crossing out leaves the class harmless (the CSS that
+       reads it is inside the mobile media query). */
+    var col = document.querySelector(".results-col");
+    var counts = dstLayerCounts();
+    if (col && counts && dstIsPhone() && counts.on) col.classList.add("dst-collapsed");
+    dstSyncLayerChooser();
+  }
+  dstApplyPhoneLayout();
+  if (window.matchMedia) {
+    var dstPhoneMQ = window.matchMedia("(max-width: 767px)");
+    if (dstPhoneMQ.addEventListener) dstPhoneMQ.addEventListener("change", dstApplyPhoneLayout);
+    else if (dstPhoneMQ.addListener) dstPhoneMQ.addListener(dstApplyPhoneLayout);
+  }

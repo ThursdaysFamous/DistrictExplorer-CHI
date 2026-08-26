@@ -235,12 +235,13 @@ rather than re-running the failed sibling run.
 > in the changelog. A changelog that promises a clean adoption and doesn't
 > deliver one costs every sibling a red CI run and a manual repair.
 
-## Current ENGINE block inventory (54 in index.html + 2 in sw.js)
+## Current ENGINE block inventory (58 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
-`brand-names`, `cached-loaders`, `card-helpers`, `chamber-factory`,
-`coverage-gaps`,
-`cps-network-factory`, `exports`, `extract-district-number`, `feedback`,
+`body-map-toolbar`, `brand-names`, `cached-loaders`, `card-helpers`,
+`chamber-factory`, `coverage-gaps`,
+`cps-network-factory`, `districtry-behavior`, `districtry-theme`,
+`exports`, `extract-district-number`, `feedback`,
 `fetch-retry`, `find-prop-ci`, `gaps-html`, `gaps-modal-html`,
 `geocoder-search`, `geocoder-shell`, `geolocation`, `groups`, `haversine`,
 `hover-explorer`, `int-field`, `layer-registry`, `map-chrome-classes`,
@@ -250,11 +251,30 @@ index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
 `polygon-factory`, `probe-geometry-column`, `relationship-pinning`,
 `render-helper`, `sanitize`, `school-zone-factory`, `scope-mask`,
 `selection-controls`, `socrata-loader`, `socrata-point-loader`, `state`,
-`styles-app`, `styles-card-v2`, `styles-core`, `styles-footer`,
-`styles-hover-responsive`, `styles-markers`, `styles-sibling-result`.
+`styles-app`, `styles-card-v2`, `styles-core`, `styles-districtry-skin`,
+`styles-footer`, `styles-hover-responsive`, `styles-markers`,
+`styles-sibling-result`.
 (Count and list re-synced against `check_engine_parity.py` output while
 adding the two card blocks — the previous list said 45 but had drifted,
-missing `map-chrome-classes`, `map-pan-filter`, and `styles-markers`.)
+missing `map-chrome-classes`, `map-pan-filter`, and `styles-markers`.
+Re-synced again 2026-08-26 while promoting `districtry-behavior`: the list
+had drifted a second time, missing `body-map-toolbar`, `districtry-theme`
+and `styles-districtry-skin` — the skin blocks that shipped with the
+redesign. The count line is a claim `check_engine_parity.py` can refute;
+re-run it whenever a fence is added.)
+
+(`districtry-behavior` — promoted 2026-08-26 — is the skin's companion
+JS: highlight-alpha compositing for stacked selections, the mobile
+"show only my layers" collapse, the legend's phone-default disclosure,
+and `dstPlaceDoors`, which moves the masthead's four "about the data"
+doors into the results-panel foot below 768px. It was born as unfenced
+Chicago tail code in the 2026-08-21 mobile review while the skin CSS
+that DEPENDS on it went into the engine — so every other instance
+rendered the masthead doors absolutely-positioned over the brand on
+phones with nothing relocating them, which is exactly the drift class
+this file exists to prevent. The block is DOM-generic (engine-skin class
+names only); it sits at the tail of the init function, after the
+`districtry-theme` fence.)
 
 (`card-helpers` + `styles-card-v2` are the card-system redesign surface —
 docs/CARD_RENDER_API.md. `renderFieldList` and its `.result-row` CSS were
