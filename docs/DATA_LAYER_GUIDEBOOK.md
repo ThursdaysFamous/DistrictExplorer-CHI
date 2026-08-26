@@ -54,7 +54,7 @@ in the researched-but-unbuilt backlog.
   "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "mwrd", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "judicial-subcircuit", "county-board", "ccbr", "fire-district", "dupage-county-special-police", "park-district", "library-district", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "county-precinct", "tif-district", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"],
-  "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"]
+  "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "milwaukee-neighborhoods", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"]
 }
 ```
 <!-- ==== GUIDEBOOK:END coverage-map ==== -->
@@ -1759,6 +1759,18 @@ detail into `blocker`.
       "why": "Statute names exactly two districted school boards in the state. Milwaukee's ships because its city publishes real geometry; Racine Unified publishes its election districts only as map documents no program can read as boundaries.",
       "blocker": "MEASURED 2026-08-25 (the phase-2 research pass) and unchanged at ship time: RUSD's nine election districts (Wis. Stat. 120.42(1)(d)2) are published solely as ArcMap-generated PDFs on the district's site — no feature service, no shapefile, no CKAN presence, and Racine's own city/county GIS surfaces carry aldermanic and supervisory layers but nothing for RUSD. The honest routes, in order: a Jackson-style vector-path extraction IF the PDFs carry real path objects (unverified — step one is checking for paths, and a raster scan stays shut), or asking RUSD for the boundary file; never a raster trace. The roster side is open — RUSD's board page is readable — so geometry is the whole blocker.",
       "wanted": "RUSD's nine election-district boundaries as data — a shapefile or feature service from the district, or its map republished with coordinates."
+    },
+    {
+      "id": "mpd-district-leadership",
+      "concept": "Police district leadership",
+      "area": "City of Milwaukee",
+      "counties": [],
+      "kind": "blocked",
+      "layer": "mpd-district",
+      "summary": "The police-district card names your MPD district but not its captain — MPD publishes each district's leadership only on pages that refuse automated readers, so the card links MPD's own district pages instead.",
+      "why": "A name this project cannot re-verify on a schedule does not ship, and the only publisher of MPD's district captains is the city's own website, which refuses every automated client this project can send.",
+      "blocker": "MEASURED 2026-08-26. city.milwaukee.gov sits behind a Cloudflare managed challenge (the same access control its aldermanic pages showed on 2026-08-25 — recorded in EXPECTED_UNREACHABLE, never defeated), and the captain names appear nowhere else the city publishes: not on the MPD_geography GIS layer this project ships (its only attribute is the district number), not in the CKAN dataset's fields, and not on data.milwaukee.gov in any other dataset. Browsers pass the challenge, so the card's link serves readers; automation is refused, so no roster can be witnessed weekly.",
+      "wanted": "MPD's district leadership published anywhere automated readers can verify — a column on the city's own GIS layer, a CKAN dataset, or an open roster page — pairing each district 1-7 with its commanding officer."
     }
   ]
 }
@@ -1821,7 +1833,7 @@ v1.0.6) · **CountyDispatch** `registerCountyLayer` (CHI fork-level dispatcher: 
 concept layer holding a per-county entry table — see
 `docs/EXPANSION_GUIDE.md` Part 2; adding a county is a table entry, not a layer).
 
-Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 21** layers.
+Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 23** layers.
 
 ---
 
@@ -1879,7 +1891,7 @@ entries with per-office source URLs, and label appointed clerks as appointed. (�
 
 | Concept | Chicago | NYC | SF | Wisconsin |
 |---|---|---|---|---|
-| Police district / precinct | SHIPPED `police-district` (22) | SHIPPED `police-precinct` (78) | SHIPPED `police-district` (10) | NO HONEST ANALOG — a statewide instance: policing is ~500 municipal and 72 county agencies with no statewide boundary publisher |
+| Police district / precinct | SHIPPED `police-district` (22) | SHIPPED `police-precinct` (78) | SHIPPED `police-district` (10) | SHIPPED `mpd-district` (7, 2026-08-26) — city-scoped on `milwaukeeCoverage`, which REVISITS the recorded statewide drop with the frame Chicago's own layer uses (the drop's reason stands statewide: ~500 municipal and 72 county agencies, no statewide boundary publisher — the NG911 LawEnforcementBoundary dissolve stays the statewide candidate). Geometry is the city's own MPD_geography layer witnessed against the CKAN shapefile's area shares (0.04% max difference); district CAPTAINS are gap `mpd-district-leadership` — city.milwaukee.gov's Cloudflare challenge is an access control, so the card links MPD's district pages and names no one |
 | Police subdivision (beat / sector) | SHIPPED `police-beat` | SHIPPED `police-sector` | NO HONEST ANALOG — SFPD publishes no patrol-beat boundary (the only "beats" dataset is Parking Control's) | NO HONEST ANALOG — same reason |
 | Elected police oversight | SHIPPED `ccpsa-district-council` | NO HONEST ANALOG — CCRB is appointed/citywide; oversight story lives as labeled link rows on the precinct card | NO HONEST ANALOG — the SF Police Commission (Charter §4.109) and Department of Police Accountability are appointed (Mayor + Board of Supervisors), citywide, no districts; NYC's labeled-link-row precedent is the upgrade path if oversight links are ever wanted on the card | NO HONEST ANALOG |
 | Fire-service boundary | SHIPPED `fire-district` (consolidated CountyDispatch: Cook + Will + DuPage + Lake + Kane + McHenry + Kendall suburban Fire *Protection* Districts; Cook PRE-BUILT from the Clerk's L17 tax-agency tiling with road voids closed (102 empty voids measured raw; the Clerk's seven double-claimed pairs, Orland∩Mokena at 57 acres, ship in both exactly as the live layer answers) and DuPage/McHenry/Kendall name-only, Lake carries office contact, Kane names each district's chief + contact) · Kankakee 17 (identity-only — the county declares contact columns and populates none) · Madison 42 (the fleet's first contact-bearing fire entry: dept head 39/42, address 41/42, phone 41/42) · DeKalb 18 · Lee 22 (NG911 service areas) · Rock Island 17 (PRE-BUILT from the county's tax-agency tiling by build_parcel_fabric_districts.py — the parcel fabric excludes road right-of-way, so the raw layer was a lattice of 37-107 ft voids; the builder closes them at 75 ft, ships ground both neighbours' closings reach in neither, and the 60 ft snap still answers perimeter roads while refusing between-district seams) · Sangamon 29 FPDs + Springfield's corporate area (FireDistrictEtc L2 — 226 fragments grouped per district at load; the Springfield card states the city is served by its own Fire Department, not an FPD. The 2026-08-16 fabric survey measured this fabric INTERLEAVED, not void-carved — 168 of its sibling gaps are another district's territory and only 2 are dead ground, so it stays live-fetched and the snap covers the two dead spots) · St. Clair 44 (CentralSquare/DATA/8, the county's CAD folder — identity-only, with the source's unstated taxing-vs-dispatch status carried as a caveat on every card) · Stephenson 15 (GEOREFERENCED from the county's own 2014 vector-PDF map — the fleet's second measured boundary, hydrography-fitted to 11.5 m median; 2014-vintage caveat on every card) · Macon 17 (PRE-BUILT with road voids closed — 1,318 empty voids measured raw 2026-08-16, the fleet's worst; names verbatim) · Effingham 17 (the org's dissolved tiling, names matching the county's own fire-protection-district list; the zone literally named 'None' is excluded in the loader) · Hamilton 3 (the county's own layer; an unnamed ~0.4 km² sliver excluded — most of the county sits in no district, and the empty state says so) | SHIPPED `fire-battalion` (operational battalions, 49) | NO HONEST ANALOG — SFFD battalions exist but no boundary is published | NOT SHIPPED — fire districts are municipal/joint with no statewide *district* publisher, but the statewide *service-boundary* publisher exists and is measured (2026-08-25): Wisconsin OEC's NG911 GIS feature service (org `WI_OEC_GIS`, ~weekly) carries FireBoundary (3,046 polygons) and LawEnforcementBoundary (3,101) with agency `DsplayName` — per-ESN sub-polygons needing a per-agency dissolve, answering "who responds here" (the NYC operational shape, not the IL taxing shape). Recorded route, `docs/WI_PHASE2_PLAN.md` phase-3 follow-ups |
@@ -1908,7 +1920,7 @@ which the never-guess rule excludes as a source.
 
 | Concept | Chicago | NYC | SF | Wisconsin |
 |---|---|---|---|---|
-| Neighborhood / community area | SHIPPED `community-area` (77) | SHIPPED `neighborhood` (NTA, ~262) | SHIPPED `neighborhood` (41) | NOT SHIPPED — no statewide neighborhood publisher; Milwaukee publishes 190 city neighborhoods (data.milwaukee.gov CKAN, CC-BY) — the recorded phase-3 city-scoped candidate (`docs/WI_PHASE2_PLAN.md`) |
+| Neighborhood / community area | SHIPPED `community-area` (77) | SHIPPED `neighborhood` (NTA, ~262) | SHIPPED `neighborhood` (41) | SHIPPED `milwaukee-neighborhoods` (190, 2026-08-26) — city-scoped on `milwaukeeCoverage`; no statewide neighborhood publisher exists, so this is the Milwaukee CKAN candidate the phase-2 record queued, shipped identity-only (compact card) exactly as the siblings' neighborhood layers. Names publish ALL-CAPS and ship title-cased with the raw value kept as NAME_RAW; the build-time witness caught the city's own two copies spelling one neighborhood apart (service MCGOVERN PARK, shapefile MC GOVERN PARK — the service spelling ships) |
 | ZIP code | SHIPPED `zip-code` (ZCTA) | SHIPPED `zip-code` (MODZCTA) | SHIPPED `zip-code` (ZCTA) | SHIPPED `zip-code` (ZCTA by state envelope, live TIGERweb) |
 | County | SHIPPED `county` (statewide IL) | SHIPPED `borough` (= county) | n/a — city and county are coterminous (recorded) | SHIPPED `county` (statewide WI, pre-built — the offline anchor; carries the clerk roster since phase 2, see the county-clerk row) |
 | Township / municipality | SHIPPED `township` · `municipality` (statewide IL; the municipality card names the municipal government — head of government, board, other elected officers, hall contact — for 592 municipalities across thirty counties incl. Chicago's citywide officers, county-sourced and joined by place GEOID. **The township card names the township government since 2026-08-19** — supervisor (Cicero: president), four trustees, clerk/assessor/collector/highway commissioner, hall contact — for Cook's 29 townships from the Clerk's directory TWNSP type, joined by county-subdivision GEOID (township-officials.json, weekly CI); a township in an uncovered county keeps the identity-only card, and the concept grows county-by-county exactly as the municipal roster did — Tazewell holds the next recorded sources (its GIS's 153 township-official rows + its yearbook's township section, with a one-seat GIS-vs-website drift to tie-break), a dozen shipped yearbook scrapers already bound their township sections out additively, and De Witt's clerk-sent list is recorded as gap `dewitt-township-officials`) | n/a | n/a | SHIPPED `county-subdivision` · `municipality` (statewide, live TIGERweb CouSub/Places — Wisconsin's towns ride `county-subdivision`); both identity-only, no officials join yet (see the municipal-governing-body row) |
@@ -5594,11 +5606,17 @@ an operator scope decision — statewide layers first, Milwaukee city-scoped wor
   is `AGO/MPS_School_Districts/1` rather than the `election_geography/3`
   alias noted here, and the "9 h3 headings" page survived a site redesign
   with its structure intact. What remains lives as gap `rusd-school-board`.
-- **Milwaukee city layers** — `mpd-district` (CKAN CC-BY, 7 districts, WKID 32054;
-  captains not shippable, city site Cloudflare-challenged; shipping it formally
-  revisits the safety-matrix police drop with the city-scoped frame, Chicago's own
-  pattern) and `milwaukee-neighborhoods` (CKAN CC-BY, 190). MPD squad areas
-  (sublayer 1 — the beat analog) and the city TID dataset queue behind them.
+- ~~**Milwaukee city layers**~~ **SHIPPED 2026-08-26**, the third phase-3
+  build: `mpd-district` (7) and `milwaukee-neighborhoods` (190), both on
+  `milwaukeeCoverage` — the safety-matrix police cell and the neighborhood
+  cell carry the records, including where this entry's own notes moved under
+  measurement: the geometry ships from the city's ArcGIS layers server-
+  reprojected (`outSR=4326` — no WKID 32054 client math anywhere) with the
+  CKAN shapefiles as the build-time area-share WITNESS rather than the
+  source, and the witness caught the city's two copies spelling one
+  neighborhood apart. The captains stay unshippable as predicted, now gap
+  `mpd-district-leadership`. MPD squad areas (sublayer 1 — the beat analog)
+  and the city TID dataset remain the queued candidates.
 - **NG911 fire/law service boundaries** — the safety-matrix fire cell's measured
   statewide source (WI_OEC_GIS; per-agency dissolve required).
 - **WEC Cloudflare block** — one CPD-style Playwright-from-CI attempt owed before
@@ -8961,7 +8979,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `library` | Library | geography | NearestPt | Socrata `fhhu-wqa7` (support facility excluded) | — |
 | `early-voting` | Voting Center & Ballot Drop-off | political | NearestPt | hand-curated `early-voting-sites.json` (incl. 37 drop boxes; WATCH.md row) | — |
 
-### Wisconsin — 21 layers
+### Wisconsin — 23 layers
 
 | id | label | group | pattern | source | roster / join | coverage |
 |---|---|---|---|---|---|---|
@@ -8982,6 +9000,8 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `ward` | Municipal Ward | geography | Bespoke | live LTSB WI Municipal Wards (Current), 7,161 — point-first + paged generalized overlay (~4.6 MB measured); `subOf: county-subdivision` | — (a ward elects no one; card cross-references SUPERID/ALDERID and links MyVote — gap `ward-polling-places`) | — |
 | `municipality` | Municipality | geography | Bespoke | live TIGERweb Places | — (identity-only) | — |
 | `zip-code` | ZIP Code | geography | Polygon | live TIGERweb ZCTA by state envelope | — | — |
+| `mpd-district` | Police District (Milwaukee) | safety | Polygon | pre-built `mpd-districts.json` — the city's own MPD_geography layer (districts 1-7) server-reprojected, witnessed against the CKAN shapefile's area shares at 0.04% max difference (build_milwaukee_city_layers.py; operator rebuild) | — (captains are gap `mpd-district-leadership` — city.milwaukee.gov's Cloudflare challenge; the card links MPD's district pages) | `milwaukeeCoverage` — hides outside Milwaukee |
+| `milwaukee-neighborhoods` | Neighborhood (Milwaukee) | geography | Polygon | pre-built `milwaukee-neighborhoods.json` — the city's own 190 neighborhoods server-reprojected, witnessed against the CKAN shapefile on a space-folded key (the two city copies spell one neighborhood apart; 0.007% max share difference) (build_milwaukee_city_layers.py; operator rebuild) | — (identity-only, compact card; names title-cased from the city's all-caps values, raw kept as NAME_RAW) | `milwaukeeCoverage` — hides outside Milwaukee |
 | `police-station` | Police Station | safety | NearestPt | USGS National Map L53, live by state envelope (807) | — | — |
 | `fire-station` | Fire Station | safety | NearestPt | USGS National Map L51, live by state envelope (1,743) | — | — |
 | `library` | Library (nearest 3) | geography | NearestPt | pre-built `library-sites.json` — DPI's WI_Public_Libraries_and_Branches L6, 482 outlets with address + phone (build_wi_libraries.py; the layer's LAT/LONG attributes are mercator meters — geometry only) | — (boards appointed, s. 43.54 — locations, not a district card) | — |

@@ -98,8 +98,9 @@ EXPECT_LAYER_IDS = [
     "wi-court-of-appeals", "us-house", "wi-senate", "wi-assembly",
     "wi-circuit-court", "county", "school-district-secondary",
     "school-district-unified", "school-district-elementary", "county-board",
-    "county-subdivision", "municipality", "zip-code", "mps-school-board",
-    "aldermanic-district", "ward", "police-station", "fire-station",
+    "county-subdivision", "municipality", "zip-code", "mpd-district",
+    "mps-school-board", "aldermanic-district", "ward",
+    "milwaukee-neighborhoods", "police-station", "fire-station",
     "school-site", "library", "post-office",
 ]
 
@@ -116,6 +117,8 @@ GEOMETRY_FILES = {
     "wi-court-of-appeals-districts.json": (4, 4),  # The four Court of Appeals districts as county unions (Wis. Stat. 752.11 + the court system's own lists agreeing county for county), dissolved by wi/scripts/build_wi_court_of_appeals.py under one-ring contiguity and 72-county containment gates.
     "wi-state-outline.json": (1, 1),  # The Wisconsin state outline — the coverage wash's REGION band, marking where the statewide layers and the county board DISTRICTS still answer even though no supervisor is named. Split out from metro-outline.json when that became the 20-county roster ring.
     "school-sites.json": (2850, 3500),  # Every placed school site in the state, public and private (2,966 at build: 2,138 + 828), pre-built from the DPI org's two school layers by wi/scripts/build_wi_school_sites.py — its gates page past the 2,000-record cap, skip only DPI's placeless virtual-program rows, and witness every point against the layer's own coordinate attributes. Amenity points, not officeholder data: cache-first is fine, and the range tolerates DPI's school-year rotation (WATCH.md).
+    "mpd-districts.json": (7, 7),  # Milwaukee's seven police districts, the city's own CC-BY layer server-reprojected and witnessed against the CKAN shapefile's area shares (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints.
+    "milwaukee-neighborhoods.json": (190, 190),  # The city's 190 named neighborhoods, same builder and witness — which caught the city's two copies spelling one neighborhood apart (the service spelling ships, the divergence prints every build). Names title-cased for display with the raw all-caps value kept on the feature.
     "mps-school-board-districts.json": (8, 8),  # Milwaukee's eight MPS board districts, the city's own layer server-reprojected and witnessed at build time against the CKAN shapefile's area shares (wi/scripts/build_mps_school_board_districts.py). Redraws each decennial census (adopted 2022-02-25); an operator rebuild.
     "aldermanic-districts.json": (838, 838),  # Every aldermanic (and village trustee) district the ward fabric composes completely — coded city/village wards dissolved on the statewide municipality key by wi/scripts/build_wi_aldermanic_districts.py under its completeness, BAS-witness and point-agreement gates (838 districts, 155 municipalities; ten incomplete submissions excluded on the record). Rebuild after each Jan/Jul filing window; a count change is expected news.
     "library-sites.json": (460, 560),  # Every public library outlet in the state (482 at build), pre-built from the DPI org's libraries layer by wi/scripts/build_wi_libraries.py — whose bbox gate is what catches that layer's measured trap (its LAT/LONG attributes are Web Mercator meters; only the outSR=4326 geometry is real). Same cache posture and annual rotation as the school file.

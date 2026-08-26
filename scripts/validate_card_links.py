@@ -291,6 +291,11 @@ EXPECTED_UNREACHABLE = {
         "Cloudflare managed JS challenge (Cf-Mitigated: challenge) on every path "
         "including the API routes — the wi ward card links it for readers; "
         "browsers pass, automation is refused",
+    "city.milwaukee.gov":
+        "Cloudflare challenge (measured 2026-08-25 in the WI phase-2 research and "
+        "unchanged) — the wi mpd-district card links MPD's own district pages for "
+        "readers; browsers pass, automation is refused, and the captain names "
+        "behind it are why that card names no one (gap mpd-district-leadership)",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map
