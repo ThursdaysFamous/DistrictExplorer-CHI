@@ -933,7 +933,13 @@
   /* ---- Leaflet's own chrome (leaflet.css is inlined in this app, so these
      are ordinary literals in the same stylesheet, not a third-party file) */
   [data-theme="dark"] .leaflet-container { background: #15131b; }
-  [data-theme="dark"] .leaflet-tile { filter: brightness(1.35) saturate(0.92); }
+  /* the dark basemap lift applies to BOTH basemap kinds — the vector GL
+     canvas and the raster fallback tiles — because the generated
+     dark-map-palette is derived against the LIFTED ground (~#232323, see
+     scripts/build_dark_map_palette.py); a canvas left unfiltered would sit
+     the overlays on a ground ~9 units darker than their derivation assumed */
+  [data-theme="dark"] .leaflet-tile,
+  [data-theme="dark"] .maplibregl-canvas { filter: brightness(1.35) saturate(0.92); }
   [data-theme="dark"] .leaflet-bar a { background-color: var(--dst-raised); color: var(--ink); border-bottom-color: rgba(236, 233, 244, 0.12); }
   [data-theme="dark"] .leaflet-bar a:hover,
   [data-theme="dark"] .leaflet-bar a:focus { background-color: var(--dst-raised-hover); color: var(--ink); }

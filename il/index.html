@@ -3484,7 +3484,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* ---- Leaflet's own chrome (leaflet.css is inlined in this app, so these
      are ordinary literals in the same stylesheet, not a third-party file) */
   [data-theme="dark"] .leaflet-container { background: #15131b; }
-  [data-theme="dark"] .leaflet-tile { filter: brightness(1.35) saturate(0.92); }
+  /* the dark basemap lift applies to BOTH basemap kinds — the vector GL
+     canvas and the raster fallback tiles — because the generated
+     dark-map-palette is derived against the LIFTED ground (~#232323, see
+     scripts/build_dark_map_palette.py); a canvas left unfiltered would sit
+     the overlays on a ground ~9 units darker than their derivation assumed */
+  [data-theme="dark"] .leaflet-tile,
+  [data-theme="dark"] .maplibregl-canvas { filter: brightness(1.35) saturate(0.92); }
   [data-theme="dark"] .leaflet-bar a { background-color: var(--dst-raised); color: var(--ink); border-bottom-color: rgba(236, 233, 244, 0.12); }
   [data-theme="dark"] .leaflet-bar a:hover,
   [data-theme="dark"] .leaflet-bar a:focus { background-color: var(--dst-raised-hover); color: var(--ink); }
@@ -4444,6 +4450,7 @@ function initChiExplorer() {
   map.on("movestart zoomstart", function () { map.getContainer().classList.add(PANNING_CLASS); });
   map.on("moveend zoomend", function () { map.getContainer().classList.remove(PANNING_CLASS); });
   /* ==== ENGINE:END map-pan-filter ==== */
+  /* ==== ENGINE:BEGIN basemap ==== */
   /* ---------- basemap: CARTO vector (MapLibre GL), raster fallback ----------
    * CARTO began watermarking its keyless RASTER tiles "API KEY REQUIRED" in
    * 2026-08; its VECTOR basemaps are the service CARTO itself recommends and
@@ -4527,11 +4534,18 @@ function initChiExplorer() {
    * event CARRYING A TILE — a tile that actually arrived. NOT "idle": idle
    * fires when the map merely SETTLES, and a map that settled into every
    * tile having errored would hide the banner it just earned. One vector
-   * case skips the debounce entirely: an error before the style has ever
-   * loaded is a single failed style.json, not one tile of many — the whole
-   * basemap is down and there will never be four signals. Raster failures
-   * arrive per-tile as Leaflet "tileerror"/"tileload" exactly as they
-   * always did. */
+   * case skips the debounce entirely: an error while a REQUESTED STYLE has
+   * not yet arrived is a single failed style.json, not one tile of many —
+   * the whole basemap is down and there will never be four signals. That
+   * window is gated on "styledata" (the style document arrived),
+   * deliberately NOT on "load": load waits for every initial tile, glyph
+   * and sprite besides, so keying on it would hand a lone flaky tile during
+   * first paint the full basemap-down banner. And a theme flip re-opens the
+   * window (baseStyleRequested below, called by the theme controller before
+   * setStyle), because a failed theme style is the boot case over again —
+   * one fetch, no second signal, while the canvas quietly keeps the old
+   * cartography. Raster failures arrive per-tile as Leaflet
+   * "tileerror"/"tileload" exactly as they always did. */
   var tileBanner = document.getElementById("tile-banner");
   var tileErrorCount = 0;
   var tileErrorResetTimer = null;
@@ -4551,12 +4565,13 @@ function initChiExplorer() {
     tileErrorCount = 0;
     if (tileBanner && !tileBanner.hidden) tileBanner.hidden = true; // tiles are flowing again
   }
+  var glStyleArrived = false;
+  function baseStyleRequested() { glStyleArrived = false; }
   if (baseIsVector) {
     var glBase = baseTiles.getMaplibreMap();
-    var glStyleLoaded = false;
-    glBase.on("load", function () { glStyleLoaded = true; });
+    glBase.on("styledata", function () { glStyleArrived = true; });
     glBase.on("error", function () {
-      if (!glStyleLoaded) {
+      if (!glStyleArrived) {
         if (!tileBannerDismissed && tileBanner) tileBanner.hidden = false;
         return;
       }
@@ -4575,6 +4590,7 @@ function initChiExplorer() {
       if (tileBanner) tileBanner.hidden = true;
     });
   }
+  /* ==== ENGINE:END basemap ==== */
 
   /* ==== ENGINE:BEGIN scope-mask ==== */
   /* ---------- out-of-scope wash (coverage indicator) ----------
@@ -27575,7 +27591,14 @@ function initChiExplorer() {
          fallback swaps its tile template exactly as it always did */
       if (baseIsVector) {
         var glTheme = baseTiles.getMaplibreMap();
-        if (glTheme) glTheme.setStyle(baseStyleUrl(kind));
+        if (glTheme) {
+          /* re-open the style-arrival window first: a theme style that fails
+             to fetch is one error with no second signal, and the banner's
+             pre-arrival fast path is what surfaces it (see the tile-failure
+             notice block) */
+          baseStyleRequested();
+          glTheme.setStyle(baseStyleUrl(kind));
+        }
       } else {
         baseTiles.setUrl(baseRasterUrl(kind));
       }

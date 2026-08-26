@@ -235,10 +235,10 @@ rather than re-running the failed sibling run.
 > in the changelog. A changelog that promises a clean adoption and doesn't
 > deliver one costs every sibling a red CI run and a manual repair.
 
-## Current ENGINE block inventory (58 in index.html + 2 in sw.js)
+## Current ENGINE block inventory (59 in index.html + 2 in sw.js)
 
 index.html: `app-token`, `arcgis-loader`, `arcgis-paged-loader`,
-`body-map-toolbar`, `brand-names`, `cached-loaders`, `card-helpers`,
+`basemap`, `body-map-toolbar`, `brand-names`, `cached-loaders`, `card-helpers`,
 `chamber-factory`, `coverage-gaps`,
 `cps-network-factory`, `districtry-behavior`, `districtry-theme`,
 `exports`, `extract-district-number`, `feedback`,
@@ -262,6 +262,17 @@ had drifted a second time, missing `body-map-toolbar`, `districtry-theme`
 and `styles-districtry-skin` — the skin blocks that shipped with the
 redesign. The count line is a claim `check_engine_parity.py` can refute;
 re-run it whenever a fence is added.)
+
+(`basemap` — promoted 2026-08-26, the day the basemap went vector: the
+CARTO-vector-with-raster-fallback boot, the WebGL2 probe and half-added-layer
+unwind, and the dual tile-failure banner wiring, all previously a 5-line
+unfenced raster block and now ~140 shared lines the fenced `districtry-theme`
+and `exports` blocks reach into (`baseTiles`, `baseIsVector`, `baseStyleUrl`,
+`baseRasterUrl`, `baseStyleRequested`). Fenced for the same reason
+`districtry-behavior` was: shared code that fenced code depends on must not
+sit where no gate watches it. The MapLibre canvas-scaffold CSS stays unfenced
+beside the inlined Leaflet CSS on the same footing — third-party support
+rules, byte-stable, with the re-inline command in the comment.)
 
 (`districtry-behavior` — promoted 2026-08-26 — is the skin's companion
 JS: highlight-alpha compositing for stacked selections, the mobile

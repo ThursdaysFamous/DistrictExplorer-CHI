@@ -1,0 +1,139 @@
+  /* ---------- basemap: CARTO vector (MapLibre GL), raster fallback ----------
+   * CARTO began watermarking its keyless RASTER tiles "API KEY REQUIRED" in
+   * 2026-08; its VECTOR basemaps are the service CARTO itself recommends and
+   * are key-free. The map stays a Leaflet map — every layer module, overlay
+   * and interaction is Leaflet — and only the basemap is a MapLibre GL
+   * canvas, bridged by the vendored maplibre-gl-leaflet plugin (the GL map
+   * is non-interactive, in the tile pane, driven by Leaflet). The raster URL
+   * survives as the FALLBACK for a browser without WebGL2 (MapLibre GL 5's
+   * floor) or a failed GL script load: a watermarked basemap that still
+   * answers civic questions beats a blank page. Both paths share one
+   * identity — baseTiles is whichever layer is live, baseIsVector which kind
+   * — and the theme controller flips styles through the same pair of URL
+   * builders. If a CARTO API key ever lands, append ?key=... inside
+   * baseStyleUrl/baseRasterUrl and nothing else moves. */
+  var BASE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>';
+  // kind stays the raster pair ("light_all" | "dark_all") — it is the theme
+  // key districtryTileKind already tracks, and the vector styles are the same
+  // cartography under CARTO's GL names (Positron / Dark Matter).
+  function baseStyleUrl(kind) {
+    return "https://basemaps.cartocdn.com/gl/" +
+      (kind === "dark_all" ? "dark-matter" : "positron") + "-gl-style/style.json";
+  }
+  function baseRasterUrl(kind) {
+    return "https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png";
+  }
+  function webgl2Available() {
+    // MapLibre GL 5 requires WebGL2. Probe BEFORE constructing: the plugin
+    // creates its GL map inside onAdd, and Leaflet attaches a layer's
+    // getEvents() handlers before onAdd runs — a constructor throw there
+    // would leave move handlers attached that dereference a GL map that
+    // never existed, breaking every later pan.
+    try {
+      var probe = document.createElement("canvas");
+      return !!(window.WebGL2RenderingContext && probe.getContext("webgl2"));
+    } catch (e) { return false; }
+  }
+  var baseIsVector = !!(window.maplibregl && L.maplibreGL && webgl2Available());
+  var baseTiles;
+  if (baseIsVector) {
+    try {
+      baseTiles = L.maplibreGL({
+        style: baseStyleUrl("light_all"),
+        attributionControl: { customAttribution: BASE_ATTRIBUTION }
+      });
+      baseTiles.addTo(map);
+    } catch (e) {
+      // A throw mid-addTo (a WebGL context the probe granted but the real
+      // canvas refused) leaves the layer half-registered — see the probe
+      // comment above. Unwind by hand, then fall through to raster.
+      if (baseTiles) {
+        try { map.off(baseTiles.getEvents(), baseTiles); } catch (e2) {}
+        try {
+          var glContainer = baseTiles.getContainer && baseTiles.getContainer();
+          if (glContainer && glContainer.parentNode) glContainer.parentNode.removeChild(glContainer);
+        } catch (e2) {}
+        try { delete map._layers[L.Util.stamp(baseTiles)]; } catch (e2) {}
+        baseTiles._map = null;
+      }
+      baseTiles = null;
+      baseIsVector = false;
+    }
+  }
+  if (!baseIsVector) {
+    baseTiles = L.tileLayer(baseRasterUrl("light_all"), {
+      maxZoom: 19,
+      subdomains: "abcd",
+      attribution: BASE_ATTRIBUTION
+    }).addTo(map);
+  }
+
+  /* ---------- base-map tile-failure notice (R6) ----------
+   * The app boots and stays usable offline (SW shell + same-origin data/app),
+   * but the basemap comes from a CDN — an outage otherwise leaves a silent
+   * gray map with no explanation. Failure signals are debounced: only surface
+   * the banner after several failures in a short window (a single transient
+   * hiccup shouldn't flash it), and hide it the moment the basemap loads
+   * again (the CDN recovered). Manual dismiss latches for the session — the
+   * user has acknowledged the base map is down. Vector failures arrive as
+   * MapLibre "error" events (style, tile, glyph and sprite fetches alike —
+   * each one is the basemap failing to arrive), recovery as a "sourcedata"
+   * event CARRYING A TILE — a tile that actually arrived. NOT "idle": idle
+   * fires when the map merely SETTLES, and a map that settled into every
+   * tile having errored would hide the banner it just earned. One vector
+   * case skips the debounce entirely: an error while a REQUESTED STYLE has
+   * not yet arrived is a single failed style.json, not one tile of many —
+   * the whole basemap is down and there will never be four signals. That
+   * window is gated on "styledata" (the style document arrived),
+   * deliberately NOT on "load": load waits for every initial tile, glyph
+   * and sprite besides, so keying on it would hand a lone flaky tile during
+   * first paint the full basemap-down banner. And a theme flip re-opens the
+   * window (baseStyleRequested below, called by the theme controller before
+   * setStyle), because a failed theme style is the boot case over again —
+   * one fetch, no second signal, while the canvas quietly keeps the old
+   * cartography. Raster failures arrive per-tile as Leaflet
+   * "tileerror"/"tileload" exactly as they always did. */
+  var tileBanner = document.getElementById("tile-banner");
+  var tileErrorCount = 0;
+  var tileErrorResetTimer = null;
+  var tileBannerDismissed = false;
+  var TILE_ERROR_THRESHOLD = 4;
+
+  function baseTileTrouble() {
+    if (tileBannerDismissed) return;
+    tileErrorCount += 1;
+    if (tileErrorResetTimer) clearTimeout(tileErrorResetTimer);
+    // if errors stop arriving, let the running count decay so a slow trickle of
+    // one-off failures over minutes never accumulates into a false alarm
+    tileErrorResetTimer = setTimeout(function () { tileErrorCount = 0; }, 4000);
+    if (tileErrorCount >= TILE_ERROR_THRESHOLD && tileBanner) tileBanner.hidden = false;
+  }
+  function baseTileRecovered() {
+    tileErrorCount = 0;
+    if (tileBanner && !tileBanner.hidden) tileBanner.hidden = true; // tiles are flowing again
+  }
+  var glStyleArrived = false;
+  function baseStyleRequested() { glStyleArrived = false; }
+  if (baseIsVector) {
+    var glBase = baseTiles.getMaplibreMap();
+    glBase.on("styledata", function () { glStyleArrived = true; });
+    glBase.on("error", function () {
+      if (!glStyleArrived) {
+        if (!tileBannerDismissed && tileBanner) tileBanner.hidden = false;
+        return;
+      }
+      baseTileTrouble();
+    });
+    glBase.on("sourcedata", function (e) { if (e && e.tile) baseTileRecovered(); });
+  } else {
+    baseTiles.on("tileerror", baseTileTrouble);
+    baseTiles.on("tileload", baseTileRecovered);
+  }
+
+  var tileBannerDismiss = document.getElementById("tile-banner-dismiss");
+  if (tileBannerDismiss) {
+    tileBannerDismiss.addEventListener("click", function () {
+      tileBannerDismissed = true;
+      if (tileBanner) tileBanner.hidden = true;
+    });
+  }
