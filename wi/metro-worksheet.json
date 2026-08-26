@@ -488,7 +488,7 @@
             "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0"
           }
         ],
-        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement).",
+        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement). INSIDE MILWAUKEE the card now carries the pairing (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) \u2014 name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -879,11 +879,16 @@
         "file": "wi-county-officers.json",
         "min_keys": 72,
         "note": "72 counties x 7 offices from the Blue Book's county-officer tables (build_wi_county_officer_roster.py; layout-aware x-position parse, chair-seats witness, Menominee pin, shared-DA footnote). Dated April 2025 on every card; refreshed weekly with the clerk scrape."
+      },
+      {
+        "file": "mke-polling-places.json",
+        "min_keys": 356,
+        "note": "Milwaukee ward -> polling place pairing (build_mke_polling_places.py; CC-BY city dataset, ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed against the city's own REST layer, places pointed and bbox-gated). Dated per dataset edition; rebuilt per election, not weekly."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v22",
+    "cache_name": "districtry-wi-shell-v23",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1094,6 +1099,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-26",
+        "title": "Milwaukee wards learn where they vote",
+        "body": "The ward card now names the polling place for every one of Milwaukee's 356 wards — the building, its address, and the city's own entrance and parking guidance — from the city's open ward-to-polling-place dataset, with the pairing's date stated on the card and the state's MyVote lookup linked for confirmation. The build only shipped because three surfaces agree: the city's spreadsheet, the city's own map layer stating the same pairing per ward, and the state ward file whose numbers turn out to match the city's exactly, 1 through 356. Outside Milwaukee the honest answer is unchanged: the state's lookup refuses automated readers, so the card links it rather than guessing, and that gap stays on the record."
+      },
       {
         "date": "2026-08-26",
         "title": "The county card learns to check itself",
