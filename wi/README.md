@@ -6,7 +6,7 @@
 
 A single-file, dependency-light web app: one `index.html`, Leaflet for the map, no build step, no framework, no server-side code. One instance of the [districtry](https://districtry.com/) fleet, serving at **[districtry.com/wi/](https://districtry.com/wi/)** — the first state to expand **in place** as a folder of the consolidated repo rather than as a fork.
 
-Twelve statewide layers — eleven from national publishers, and the first from a state one:
+Thirteen statewide layers — eleven from national publishers, two from state ones:
 
 | Group | Layer | Source |
 |---|---|---|
@@ -18,6 +18,7 @@ Twelve statewide layers — eleven from national publishers, and the first from 
 | **Geography** | County | TIGERweb State_County, pre-built — the app's offline anchor |
 | | County Subdivision | TIGERweb CouSub, live (Wisconsin's towns) |
 | | Municipality | TIGERweb Places, live (cities and villages; unincorporated points say so) |
+| | Municipal Ward (7,161) | Wisconsin LTSB's live statewide ward layer — the ballot sub-unit every district is composed from; the card cross-references the county board district and, where a city elects by district, the aldermanic district, and links MyVote for the polling place |
 | | ZIP Code | TIGERweb ZCTA by state envelope, live |
 | | Post Office | USGS National Map structures, nearest three |
 

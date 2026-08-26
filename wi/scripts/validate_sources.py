@@ -153,9 +153,11 @@ PROVENANCE = [
         "app_file": "county-board-directory.json",
         "source_url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0",
         "note": (
-            "The ward layer is not shipped; it is the independent witness the district "
-            "builder reconciles against (every ward names a district that exists, every "
-            "district owns a ward). Listed so its disappearance is noticed."
+            "The ward layer is BOTH the independent witness the district builder "
+            "reconciles against (every ward names a district that exists, every "
+            "district owns a ward) AND, since phase 2, the live source behind the "
+            "shipped `ward` card (its own ENDPOINTS row below). Listed here so its "
+            "disappearance fails the supervisory build's provenance too."
         ),
     },
     {
@@ -179,6 +181,14 @@ ENDPOINTS = [
     {
         "layer": "county-subdivision",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1/query?where=STATE%3D%2755%27&returnCountOnly=true&f=json",
+    },
+    {
+        # The ward layer queries this live (point-first + paged overlay). The
+        # count moves with each Jan/July filing window (7,138 Jan 2026 -> 7,161
+        # July 2026) — a change is expected news; the layer going unreachable
+        # or answering zero is the drift this row exists to catch.
+        "layer": "ward",
+        "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "municipality",

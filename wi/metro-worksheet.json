@@ -271,10 +271,28 @@
       }
     },
     {
+      "id": "ward",
+      "label": "Municipal Ward",
+      "group": "geography",
+      "area_rank": 12,
+      "rank_note": "7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points",
+      "source": {
+        "answers": "The municipal ward containing the point — the unit Wisconsin elections are administered by and every supervisory and aldermanic district is composed from — plus which county board district and, in cities that elect alders by district, which aldermanic district it belongs to.",
+        "boundary": [
+          {
+            "label": "Wisconsin Legislative Technology Services Bureau — WI Municipal Wards (Current): the statewide aggregate of every county's twice-yearly ward filing under Wis. Stat. 5.15(4)(br), queried live (the point query fetches one ward; the map overlay pages the statewide set server-generalized)",
+            "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0"
+          }
+        ],
+        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement).",
+        "applies": "Wisconsin — statewide."
+      }
+    },
+    {
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 12,
+      "area_rank": 13,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -289,7 +307,7 @@
       }
     }
   ],
-  "min_register_layer": 9,
+  "min_register_layer": 10,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
