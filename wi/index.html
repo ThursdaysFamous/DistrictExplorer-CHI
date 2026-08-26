@@ -5799,6 +5799,7 @@ function initWisconsinExplorer() {
     "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
     "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
+    "aldermanic-district", // 838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "police-station",    // Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points
     "fire-station",      // Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it
@@ -8993,6 +8994,114 @@ function initWisconsinExplorer() {
     compact: true, compactMetaField: "geoid" // 4b name-only card
   });
 
+  /* ---------- 20. Aldermanic District — derived ward unions + city rosters ----------
+   * No publisher ships a statewide aldermanic layer; LTSB's ward fabric
+   * carries each ward's district id, and wi/scripts/
+   * build_wi_aldermanic_districts.py dissolves the coded city/village wards
+   * on the statewide municipality key (COUSUBFP + ALDERID — never the
+   * county-qualified ALDER_FIPS, which splits cross-county cities), cross-
+   * witnessed against the state's own BAS pre-dissolve edition. 838
+   * districts in 155 municipalities ship; ten measurably incomplete
+   * submissions (Appleton the flagship) are excluded on the record, so
+   * everywhere else the honest no-district answer IS the answer. The roster
+   * (wi-alderpersons.json, weekly CI) covers the six big cities with a
+   * verified witnessed route; the other municipalities' councils are a
+   * recorded gap, and their cards stay identity-only rather than guessing.
+   * In the nine villages that elect trustees by district the officer is a
+   * trustee, and the card says so. ---------- */
+  var loadAldermanicDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/aldermanic-districts.json", {}, 2);
+  });
+  var loadAlderpersons = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-alderpersons.json", {}, 2);
+  });
+  function alderDistrictWord(props) {
+    return String(findPropCI(props, ["ctv"]) || "").toUpperCase() === "V"
+      ? "Trustee District" : "Aldermanic District";
+  }
+  function alderDistrictLabel(props) {
+    var raw = findPropCI(props, ["alderid"]);
+    var n = parseInt(String(raw), 10);
+    return alderDistrictWord(props) + " " + (isNaN(n) ? String(raw) : String(n));
+  }
+
+  registerLayer({
+    id: "aldermanic-district",
+    group: "political",
+    label: "Aldermanic District",
+    subOf: "county-subdivision", // districts number within their municipality,
+    // and CouSub is the tiling that carries every municipality
+    overlay: {
+      load: loadAldermanicDistricts,
+      // warm sienna — a municipal-politics hue, distinct from the violet
+      // judicial pair and the amber ward dots beneath it
+      style: { color: "#A0522D", weight: 1.5, fillColor: "#A0522D", fillOpacity: 0.05, dashArray: "4 2" }
+    },
+    hoverName: function (feature) {
+      var props = feature.properties || {};
+      var place = wardPlaceName(props);
+      return place ? place + " — " + alderDistrictLabel(props) : null;
+    },
+    query: function (point, seq) {
+      // the roster is a small same-origin file and its failure is not this
+      // layer's failure: the district still answers, identity-only
+      return Promise.all([
+        queryFeatureAt(loadAldermanicDistricts, point),
+        loadAlderpersons().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var cousub = findPropCI(props, ["cousubfp"]);
+        var alderid = findPropCI(props, ["alderid"]);
+        var city = (parts[1] && cousub != null) ? parts[1][String(cousub)] : null;
+        var member = (city && city.members && alderid != null)
+          ? city.members[String(alderid)] : null;
+        var vacant = false;
+        if (city && !member && city.vacantDistricts) {
+          var n = parseInt(String(alderid), 10);
+          vacant = city.vacantDistricts.indexOf(n) !== -1;
+        }
+        return { seq: seq, props: props, city: city || null,
+                 member: member || null, vacant: vacant };
+      });
+    },
+    cardIdentifier: function (result) {
+      var place = wardPlaceName(result.props);
+      return (place ? place + " — " : "") + alderDistrictLabel(result.props);
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      var isTrustee = alderDistrictWord(result.props) === "Trustee District";
+      if (result.member) {
+        var person = {
+          name: String(result.member.name),
+          badge: isTrustee ? "Trustee" : "Alderperson",
+          phone: result.member.phone ? String(result.member.phone) : null,
+          email: result.member.email ? String(result.member.email) : null
+        };
+        if (result.member.note) person.note = String(result.member.note);
+        var profile = safeHttpUrl(result.member.url);
+        if (profile) person.links = [{ label: "Profile", url: profile }];
+        wrap.appendChild(renderPersonRows([person]));
+      } else if (result.vacant) {
+        // Madison's District 1 at first build — the city's own directory
+        // says vacant, so the card says vacant rather than nothing
+        wrap.appendChild(renderFieldStack([
+          { label: "Seat", value: "Vacant (per the city's own council directory)", primary: true }
+        ]));
+      }
+      // no roster city -> identity-only card: the council rosters beyond the
+      // six verified cities are a recorded data gap, never a guess
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.city && result.city.sourceUrl);
+      if (url) return { label: "Council roster", url: url };
+      return null;
+    }
+  });
+
   /* ---------- 10. ZIP Code (statewide ZCTA) ----------
    * The Illinois statewide pattern: TIGERweb's ZCTA layer has NO STATE field
    * (ZCTAs cross state lines), so it can't use the STATE='55' filter the
@@ -9835,7 +9944,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "wi-circuit-court", "wi-court-of-appeals", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "police-station", "fire-station", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9932,8 +10041,9 @@ function initWisconsinExplorer() {
     "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
     "#5B2A86": "#B375F2", "#5E3A8C": "#B283F5", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63",
     "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294",
-    "#8C6D1F": "#DEB452", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880", "#B0316E": "#FD88B8",
-    "#B26A00": "#FFB15F", "#C9A227": "#FEE195", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
+    "#8C6D1F": "#DEB452", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880",
+    "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#C9A227": "#FEE195", "#D06A9C": "#FFBDDA",
+    "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

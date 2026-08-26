@@ -46,7 +46,7 @@ const OFFLINE = ["county", "wi-circuit-court", "wi-court-of-appeals", "us-house"
 const EXPECT_DISTRICT = { "county": "Marathon County", "wi-circuit-court": "Marathon County Circuit Court", "wi-court-of-appeals": "Court of Appeals District III", "us-house": "7", "school-district-unified": "Marathon City School District", "wi-senate": "29", "wi-assembly": "86", "county-board": "35" };
 const NEGATIVE_POINT = "47.39000,-92.97000"; // off the northwest corner of Wisconsin — outside the state and every starter layer
 const APP_NAME = "districtry Wisconsin";
-const EXPECT_LAYERS = 19;
+const EXPECT_LAYERS = 20;
 // ==== GENERATED:END smoke-config ====
 // Fork-specific smoke-test constants (the reference repo hoists its own set
 // here). The template's CHI-scenario checks are dropped at build time, so the

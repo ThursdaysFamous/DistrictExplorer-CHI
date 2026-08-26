@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">19 layers — 6 political and legislative, 2 public safety, 4 schools, 7 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">20 layers — 7 political and legislative, 2 public safety, 4 schools, 7 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -874,7 +874,7 @@ table.matrix code {
       </nav>
 
       <section class="matrix-group" id="political">
-        <h2>Political &amp; legislative <span class="matrix-count">6 layers</span></h2>
+        <h2>Political &amp; legislative <span class="matrix-count">7 layers</span></h2>
         <p class="matrix-blurb">Districts that elect somebody — from your ward to your seat in Congress.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -950,6 +950,18 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">For 22 of the 72 counties, the supervisor holding the district — 20 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 50 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.</td>
                 <td data-label="Where it applies">Wisconsin — statewide, all 72 counties.</td>
+              </tr>
+              <tr id="layer-aldermanic-district">
+                <th scope="row"><span class="layer-name">Aldermanic District</span><code>aldermanic-district</code></th>
+                <td data-label="What it answers">The aldermanic district (in the nine villages that elect trustees by district, the trustee district) covering the point, in the 155 cities and villages whose ward filings compose their districts completely — and, in Milwaukee, Madison, Green Bay, Kenosha, Racine and Waukesha, the alderperson holding the seat.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0" target="_blank" rel="noopener">Derived ward unions — no publisher ships a statewide aldermanic layer, so no new line is drawn: LTSB's statewide ward layer carries each ward's district id (ALDERID), and wi/scripts/build_wi_aldermanic_districts.py dissolves the coded city/village wards on the statewide municipality key. Cross-witnessed against the state's own BAS pre-dissolve, a different filing edition agreeing on all 867 district keys; ten municipalities whose submissions are measurably incomplete (Appleton the flagship) are excluded on the record rather than drawn as fragments</a></li>
+                    <li><a href="https://mapservices.legis.wisconsin.gov/arcgis/rest/services/BAS_Collection/BAS_Live_Collection_Alderpersons/FeatureServer/0" target="_blank" rel="noopener">LTSB BAS Live Collection — Alderpersons: the state's own pre-dissolved working set, the composition witness (never the source: no stated terms, mutates mid-collection)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">wi-alderpersons.json, rebuilt weekly by CI for the six big cities with a verified route — Milwaukee's own GIS witnessed against the city's Legistar API, Madison's per-district council pages (the vacant seat named as vacant), Green Bay's staff directory, Kenosha's GIS witnessed against the county's certified April 2026 canvass (which caught and corrected one stale seat), and the Racine and Waukesha council pages. The other 149 municipalities' councils are a recorded gap, never a guess.</td>
+                <td data-label="Where it applies">Wisconsin — the 155 cities and villages that elect council members by district and file complete ward coding; everywhere else the card honestly reports no district.</td>
               </tr>
             </tbody>
           </table>

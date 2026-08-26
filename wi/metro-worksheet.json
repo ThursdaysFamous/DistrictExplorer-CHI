@@ -315,10 +315,32 @@
       }
     },
     {
+      "id": "aldermanic-district",
+      "label": "Aldermanic District",
+      "group": "political",
+      "area_rank": 14,
+      "rank_note": "838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from",
+      "source": {
+        "answers": "The aldermanic district (in the nine villages that elect trustees by district, the trustee district) covering the point, in the 155 cities and villages whose ward filings compose their districts completely — and, in Milwaukee, Madison, Green Bay, Kenosha, Racine and Waukesha, the alderperson holding the seat.",
+        "boundary": [
+          {
+            "label": "Derived ward unions — no publisher ships a statewide aldermanic layer, so no new line is drawn: LTSB's statewide ward layer carries each ward's district id (ALDERID), and wi/scripts/build_wi_aldermanic_districts.py dissolves the coded city/village wards on the statewide municipality key. Cross-witnessed against the state's own BAS pre-dissolve, a different filing edition agreeing on all 867 district keys; ten municipalities whose submissions are measurably incomplete (Appleton the flagship) are excluded on the record rather than drawn as fragments",
+            "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0"
+          },
+          {
+            "label": "LTSB BAS Live Collection — Alderpersons: the state's own pre-dissolved working set, the composition witness (never the source: no stated terms, mutates mid-collection)",
+            "url": "https://mapservices.legis.wisconsin.gov/arcgis/rest/services/BAS_Collection/BAS_Live_Collection_Alderpersons/FeatureServer/0"
+          }
+        ],
+        "people": "wi-alderpersons.json, rebuilt weekly by CI for the six big cities with a verified route — Milwaukee's own GIS witnessed against the city's Legistar API, Madison's per-district council pages (the vacant seat named as vacant), Green Bay's staff directory, Kenosha's GIS witnessed against the county's certified April 2026 canvass (which caught and corrected one stale seat), and the Racine and Waukesha council pages. The other 149 municipalities' councils are a recorded gap, never a guess.",
+        "applies": "Wisconsin — the 155 cities and villages that elect council members by district and file complete ward coding; everywhere else the card honestly reports no district."
+      }
+    },
+    {
       "id": "ward",
       "label": "Municipal Ward",
       "group": "geography",
-      "area_rank": 14,
+      "area_rank": 15,
       "rank_note": "7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points",
       "source": {
         "answers": "The municipal ward containing the point — the unit Wisconsin elections are administered by and every supervisory and aldermanic district is composed from — plus which county board district and, in cities that elect alders by district, which aldermanic district it belongs to.",
@@ -336,7 +358,7 @@
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
-      "area_rank": 15,
+      "area_rank": 16,
       "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
@@ -354,7 +376,7 @@
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
-      "area_rank": 16,
+      "area_rank": 17,
       "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
@@ -372,7 +394,7 @@
       "id": "school-site",
       "label": "School Location, incl. private",
       "group": "schools",
-      "area_rank": 17,
+      "area_rank": 18,
       "rank_note": "Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.",
@@ -394,7 +416,7 @@
       "id": "library",
       "label": "Library",
       "group": "geography",
-      "area_rank": 18,
+      "area_rank": 19,
       "rank_note": "Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.",
@@ -412,7 +434,7 @@
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 19,
+      "area_rank": 20,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -427,7 +449,7 @@
       }
     }
   ],
-  "min_register_layer": 13,
+  "min_register_layer": 14,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -549,6 +571,12 @@
         "note": "Every placed school site in the state, public and private (2,966 at build: 2,138 + 828), pre-built from the DPI org's two school layers by wi/scripts/build_wi_school_sites.py — its gates page past the 2,000-record cap, skip only DPI's placeless virtual-program rows, and witness every point against the layer's own coordinate attributes. Amenity points, not officeholder data: cache-first is fine, and the range tolerates DPI's school-year rotation (WATCH.md)."
       },
       {
+        "file": "aldermanic-districts.json",
+        "min_features": 838,
+        "max_features": 838,
+        "note": "Every aldermanic (and village trustee) district the ward fabric composes completely — coded city/village wards dissolved on the statewide municipality key by wi/scripts/build_wi_aldermanic_districts.py under its completeness, BAS-witness and point-agreement gates (838 districts, 155 municipalities; ten incomplete submissions excluded on the record). Rebuild after each Jan/Jul filing window; a count change is expected news."
+      },
+      {
         "file": "library-sites.json",
         "min_features": 460,
         "max_features": 560,
@@ -600,11 +628,16 @@
         "file": "wi-county-clerks.json",
         "min_keys": 72,
         "note": "All 72 county clerks — name, party-or-appointed per the Blue Book's own legend, office, hours, phone, fax, e-mail — keyed by county GEOID. Built by wi/scripts/build_wi_county_clerk_roster.py from the two cross-gating open publishers; refreshed weekly by update-wi-county-clerk-roster.yml. Milwaukee's entry carries the statutory election-commission note."
+      },
+      {
+        "file": "wi-alderpersons.json",
+        "min_keys": 6,
+        "note": "The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v8",
+    "cache_name": "districtry-wi-shell-v9",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -649,6 +682,11 @@
       "file": "update-wi-county-clerk-roster.yml",
       "purpose": "County clerks from the Blue Book × the clerks' association (cross-gated; crawl-delay honored)",
       "schedule": "Fri 14:30 UTC"
+    },
+    {
+      "file": "update-wi-alderperson-roster.yml",
+      "purpose": "Alderpersons for the six big cities (Milwaukee GIS × Legistar witness, Madison district pages, Green Bay directory, Kenosha GIS × certified canvass, Racine, Waukesha)",
+      "schedule": "Thu 15:30 UTC"
     },
     {
       "file": "wi-validate-sources.yml",
