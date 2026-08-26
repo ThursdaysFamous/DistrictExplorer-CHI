@@ -4200,22 +4200,30 @@ function initWisconsinExplorer() {
    * canvas, bridged by the vendored maplibre-gl-leaflet plugin (the GL map
    * is non-interactive, in the tile pane, driven by Leaflet). The raster URL
    * survives as the FALLBACK for a browser without WebGL2 (MapLibre GL 5's
-   * floor) or a failed GL script load: a watermarked basemap that still
-   * answers civic questions beats a blank page. Both paths share one
-   * identity — baseTiles is whichever layer is live, baseIsVector which kind
-   * — and the theme controller flips styles through the same pair of URL
-   * builders. If a CARTO API key ever lands, append ?key=... inside
-   * baseStyleUrl/baseRasterUrl and nothing else moves. */
+   * floor) or a failed GL script load — and with the key below it is no
+   * longer watermarked, so the fallback answers civic questions on the same
+   * cartography as everyone else. Both paths share one identity — baseTiles
+   * is whichever layer is live, baseIsVector which kind — and the theme
+   * controller flips styles through the same pair of URL builders. */
   var BASE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>';
+  // CARTO Basemaps API key, issued 2026-08-26 for districtry.com (the whole
+  // fleet is one site, so one key). Client-side by design — CARTO's free tier
+  // is enforced by domain + quota (5M tile requests/month across raster and
+  // vector), not key secrecy, in exchange for the visible OSM + CARTO
+  // attribution above. It de-watermarks the raster fallback today; the
+  // vector service does not require it yet, but carries it so the announced
+  // extension of the requirement is a change nobody notices.
+  var BASE_CARTO_KEY = "cb1_269e_1_18eecdd74aaa4bac77940fa4";
   // kind stays the raster pair ("light_all" | "dark_all") — it is the theme
   // key districtryTileKind already tracks, and the vector styles are the same
   // cartography under CARTO's GL names (Positron / Dark Matter).
   function baseStyleUrl(kind) {
     return "https://basemaps.cartocdn.com/gl/" +
-      (kind === "dark_all" ? "dark-matter" : "positron") + "-gl-style/style.json";
+      (kind === "dark_all" ? "dark-matter" : "positron") + "-gl-style/style.json" +
+      "?key=" + BASE_CARTO_KEY;
   }
   function baseRasterUrl(kind) {
-    return "https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png";
+    return "https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png?key=" + BASE_CARTO_KEY;
   }
   function webgl2Available() {
     // MapLibre GL 5 requires WebGL2. Probe BEFORE constructing: the plugin
