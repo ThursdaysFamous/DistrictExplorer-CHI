@@ -11798,9 +11798,11 @@ function initChiExplorer() {
    * What they do contribute is precincts. Monroe's polling list keys its 16
    * sites by a COMMA-SEPARATED precinct list ("1, 4, 35, 37"); every token is
    * a bare integer matching the precinct layer's own PRECINCT value exactly,
-   * so the expansion is deterministic — unlike St. Clair's prose labels, which
-   * remain a recorded gap. The list still names 12 precinct numbers the
-   * current 25-precinct layer no longer has (the county re-precincted); those
+   * so the expansion is deterministic — unlike St. Clair's prose labels,
+   * which stayed a recorded gap until the Clerk's office sent a per-precinct
+   * table on 2026-08-26 (see loadStClairPolling). The list still names 12
+   * precinct numbers the current 25-precinct layer no longer has (the
+   * county re-precincted); those
    * simply go unused, and every current precinct resolves (25/25 measured).
    *
    * Randolph publishes no polling assignment at all — its precinct layer's
@@ -13113,6 +13115,19 @@ function initChiExplorer() {
   });
   var loadStClairPrecincts = makeCached(function () {
     return loadStClairLayer(18, "prec_name2", "precincts");
+  });
+  /* St. Clair's polling assignment, added 2026-08-26 from the table the
+   * Clerk's Election Department sent by e-mail — one row per precinct, which
+   * the county's published grouped labels ("Belleville9,10, 12 & 16") never
+   * were (scripts/build_stclair_precinct_polling.py; the transcribed table is
+   * archived under data/source/raw/). Keys are the precinct layer's own
+   * prec_name2 strings, so the lookup is exact. Two Clerk caveats ride the
+   * rows as notes: East St. Louis runs its own Board of Elections (its one
+   * feature carries the explanation instead of a blank), and Centreville
+   * 2/5/7/8 are set to move to the new Cahokia High School pending a County
+   * Board vote. */
+  var loadStClairPolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/st-clair-precinct-polling.json", {}, 2);
   });
 
   /* ---------- DeKalb — the notch the ring had been wrapped around ---------
@@ -23867,12 +23882,14 @@ function initChiExplorer() {
           };
         }
       },
-      // St. Clair (150). Identity + board district only: the county publishes
-      // 103 polling places, but keyed by a COMBINED human label
-      // ("Belleville9,10, 12 & 16") rather than by precinct id, so joining them
-      // means parsing prose into a set — recorded as a gap rather than guessed
-      // at. `bdnum` on the precinct is NOT the board district (23/150 agreement,
-      // no better than chance), so the board row is the spatial join.
+      // St. Clair (150). Identity + board district + polling place — the
+      // polling half arrived 2026-08-26 as a one-row-per-precinct table from
+      // the Clerk's Election Department (see loadStClairPolling), which the
+      // county's published grouped labels ("Belleville9,10, 12 & 16") never
+      // safely supplied. `bdnum` on the precinct is NOT the board district
+      // (23/150 agreement, no better than chance), so the board row is the
+      // spatial join. The one East St Louis feature renders the Clerk's
+      // own-board-of-elections explanation instead of a blank polling row.
       {
         key: "st-clair",
         coverage: stClairCountyCoverage,
@@ -23884,7 +23901,8 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadStClairPrecincts(),
-            loadStClairCountyBoard().catch(function () { return null; })
+            loadStClairCountyBoard().catch(function () { return null; }),
+            loadStClairPolling().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -23897,16 +23915,29 @@ function initChiExplorer() {
               }
             }
             var name = findPropCI(feature.properties || {}, ["prec_name2"]);
+            name = name != null && String(name).trim() ? String(name).trim() : null;
+            var polling = null;
+            if (results[2] && results[2].precincts && name != null) {
+              polling = results[2].precincts[name] || null;
+            }
             return {
               seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null,
-              boardDistrict: boardDistrict
+              name: name,
+              boardDistrict: boardDistrict,
+              pollingPlace: polling && polling.place,
+              pollingAddress: polling && polling.address,
+              pollingNote: polling && polling.note
             };
           });
         },
         render: function (result) {
           var fields = [];
           if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          if (result.pollingNote) fields.push({ label: "Note", value: String(result.pollingNote) });
           fields.push({ label: "County", value: "St. Clair County" });
           return renderFieldStack(fields);
         },

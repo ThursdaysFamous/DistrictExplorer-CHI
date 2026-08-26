@@ -349,6 +349,7 @@ const ROSTER_URLS = [
   "./data/app/douglas-county-board-members.json",
   "./data/app/vermilion-county-board-members.json",
   "./data/app/wayne-county-board-members.json",
+  "./data/app/st-clair-precinct-polling.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

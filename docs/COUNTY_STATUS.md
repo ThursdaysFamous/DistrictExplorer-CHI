@@ -97,7 +97,7 @@
 | Schuyler | 17169 | dispatch | at-large — County card | `county-precinct` | none |
 | Scott | 17171 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `scott-county-commissioners` (no-source) |
 | Shelby | 17173 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
-| St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
+| St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
 | Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 103 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 102 records in the Data gaps panel: `chicago-amenity-phones`.
