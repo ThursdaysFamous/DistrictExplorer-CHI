@@ -37,6 +37,13 @@ const VENDORED_LEAFLET =
     ? { js: readFileSync(join(VENDOR_DIR, "leaflet.js")), css: readFileSync(join(VENDOR_DIR, "leaflet.css")) }
     : null;
 if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
+// MapLibre GL (the vector-basemap renderer) rides the same vendor dir: absent,
+// the app's own raster fallback keeps the boot alive, so this one is optional
+// where Leaflet's pair is required.
+const VENDORED_MAPLIBRE = existsSync(join(VENDOR_DIR, "maplibre-gl.min.js"))
+  ? { js: readFileSync(join(VENDOR_DIR, "maplibre-gl.min.js")) }
+  : null;
+if (VENDORED_MAPLIBRE) console.log("  (serving MapLibre GL from scripts/vendor/leaflet — CDN unreachable in this env)");
 
 // Disk reads are anchored to THIS SCRIPT, never to the process CWD. While each
 // instance was its own repo, "data/app/…" was correct because you ran the smoke
@@ -55,6 +62,7 @@ const NEGATIVE_POINT = "37.74000,-122.59000"; // Open Pacific west of Ocean Beac
 const APP_NAME = "districtry San Francisco";
 const EXPECT_LAYERS = 16; // Thread-5: legislative chambers now pre-built SF-clipped geometry (data/app); supervisor-district is a bespoke roster-joined registerLayer; 11 layers total; + 3 amenity nearest-point layers (post-office, library, early-voting) = 14; + bart-director + election-precinct (parity-debt closures, 2026-07) = 16
 // ==== GENERATED:END smoke-config ====
+const EXPORTS_NAME = "SFExplorer"; // the fork's window debug namespace
 const BOOT_TIMEOUT = 45000; // Leaflet + first paint on a cold CI runner
 const QUERY_TIMEOUT = 25000;
 
@@ -65,13 +73,20 @@ function check(name, ok, detail) {
 }
 
 function routeLeaflet(page) {
-  if (!VENDORED_LEAFLET) return Promise.resolve();
-  return Promise.all([
-    page.route("**/cdnjs.cloudflare.com/**/leaflet.js", (r) =>
-      r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_LEAFLET.js })),
-    page.route("**/cdnjs.cloudflare.com/**/leaflet.css", (r) =>
-      r.fulfill({ status: 200, contentType: "text/css", body: VENDORED_LEAFLET.css })),
-  ]);
+  const routes = [];
+  if (VENDORED_LEAFLET) {
+    routes.push(
+      page.route("**/cdnjs.cloudflare.com/**/leaflet.js", (r) =>
+        r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_LEAFLET.js })),
+      page.route("**/cdnjs.cloudflare.com/**/leaflet.css", (r) =>
+        r.fulfill({ status: 200, contentType: "text/css", body: VENDORED_LEAFLET.css })));
+  }
+  if (VENDORED_MAPLIBRE) {
+    routes.push(
+      page.route("**/cdnjs.cloudflare.com/**/maplibre-gl.min.js", (r) =>
+        r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_MAPLIBRE.js })));
+  }
+  return Promise.all(routes);
 }
 
 // Redesigned cards (engine-v1.0.10, docs/CARD_RENDER_API.md in the reference
@@ -328,6 +343,58 @@ try {
       hiddenAfterDismiss = await page.evaluate(() => { const el = document.getElementById("tile-banner"); return !!el && el.hidden; });
     }
     check("tile failure shows dismissible banner", shown && hiddenAfterDismiss === true, `shown=${shown} hiddenAfterDismiss=${hiddenAfterDismiss}`);
+    await context.close();
+  }
+
+  // 6. Dark mode (R4.2) — the one function the re-skin ADDS, so it is the one
+  //    that has no prior behaviour to fall back on if it breaks. Asserted
+  //    through the surfaces a CSS-only check cannot see: the theme attribute,
+  //    the ground the page actually paints, the theme-color meta the OS chrome
+  //    reads, the basemap tile URL, and the derived layer palette repainting a
+  //    live overlay. Driven via the debug namespace rather than a click, so
+  //    this tests the controller and not the button's hit box.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const page = await context.newPage();
+    await routeLeaflet(page);
+    await page.goto(`${BASE}#point=${POINT}&layers=${OFFLINE[0]}`, { waitUntil: "domcontentloaded" });
+    await page.waitForFunction((n) => !!window[n], EXPORTS_NAME, { timeout: BOOT_TIMEOUT });
+    await page.waitForFunction((n) => !!window[n] && !!window[n].setTheme,
+      EXPORTS_NAME, { timeout: QUERY_TIMEOUT }).catch(() => {});
+    const read = () => page.evaluate((n) => {
+      const path = document.querySelector("#map path");
+      // The vector basemap is a GL canvas with no tile <img> whose src names
+      // its style, so the basemap kind comes from the debug namespace; the
+      // raster-fallback img sampler stays for a boot that fell back.
+      const base = window[n] && window[n].basemap ? window[n].basemap() : null;
+      return {
+        attr: document.documentElement.getAttribute("data-theme"),
+        ground: getComputedStyle(document.body).backgroundColor,
+        meta: document.querySelector('meta[name="theme-color"]')?.content,
+        tiles: (document.querySelector(".leaflet-tile-pane img")?.src || "").match(/(light|dark)_all/)?.[1]
+          || (base ? (base.kind === "dark_all" ? "dark" : "light") : null),
+        stroke: path ? path.getAttribute("stroke") : null,
+      };
+    }, EXPORTS_NAME);
+    await page.evaluate((n) => window[n].setTheme("light", false), EXPORTS_NAME);
+    await page.waitForTimeout(400);
+    const light = await read();
+    await page.evaluate((n) => window[n].setTheme("dark", false), EXPORTS_NAME);
+    await page.waitForTimeout(600);
+    const dark = await read();
+
+    check("dark mode flips the theme attribute and the painted ground",
+      light.attr === "light" && dark.attr === "dark" && light.ground !== dark.ground,
+      `${light.attr}/${light.ground} -> ${dark.attr}/${dark.ground}`);
+    check("dark mode moves theme-color (the OS chrome reads it)",
+      !!light.meta && !!dark.meta && light.meta !== dark.meta,
+      `${light.meta} -> ${dark.meta}`);
+    check("dark mode swaps the basemap tiles",
+      light.tiles === null || dark.tiles === null || (light.tiles === "light" && dark.tiles === "dark"),
+      `${light.tiles} -> ${dark.tiles}`);
+    check("dark mode repaints a live overlay from the derived palette",
+      light.stroke === null || dark.stroke === null || light.stroke !== dark.stroke,
+      `${light.stroke} -> ${dark.stroke}`);
     await context.close();
   }
 } finally {

@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v3";
+const CACHE_NAME = "districtry-il-shell-v4";
 
 const SHELL_URLS = [
   "./",
@@ -59,6 +59,8 @@ const SHELL_URLS = [
   "./icons/seals/lake.png",
   "./icons/seals/will.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js",
+  "./vendor/leaflet-maplibre-gl.js",
 ];
 
 // Boundary geometry (data/app/*.json, fetched lazily on first toggle).

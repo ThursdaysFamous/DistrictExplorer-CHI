@@ -12,5 +12,6 @@
     pointInGeometry: pointInGeometry,
     fetchJSONWithRetry: fetchJSONWithRetry,
     probeGeometryColumn: probeGeometryColumn,
-    cleanPoiAddress: cleanPoiAddress // exposed so the smoke test can regression-guard the office-pin address cleaner (a recurring break point) without any network call
+    cleanPoiAddress: cleanPoiAddress, // exposed so the smoke test can regression-guard the office-pin address cleaner (a recurring break point) without any network call
+    basemap: function () { return { kind: districtryTileKind, vector: baseIsVector }; } // which basemap kind is live + which theme style it shows — the vector canvas has no tile <img> whose src a test could read
   };

@@ -66,7 +66,23 @@
     var kind = dark ? "dark_all" : "light_all";
     if (kind !== districtryTileKind) {
       districtryTileKind = kind;
-      baseTiles.setUrl("https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png");
+      /* the basemap follows the theme through the same URL builders the boot
+         block used, on whichever basemap kind boot settled on: the vector
+         layer swaps its GL style (Positron <-> Dark Matter), the raster
+         fallback swaps its tile template exactly as it always did */
+      if (baseIsVector) {
+        var glTheme = baseTiles.getMaplibreMap();
+        if (glTheme) {
+          /* re-open the style-arrival window first: a theme style that fails
+             to fetch is one error with no second signal, and the banner's
+             pre-arrival fast path is what surfaces it (see the tile-failure
+             notice block) */
+          baseStyleRequested();
+          glTheme.setStyle(baseStyleUrl(kind));
+        }
+      } else {
+        baseTiles.setUrl(baseRasterUrl(kind));
+      }
     }
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? "#15131b" : "#6d3fd1");

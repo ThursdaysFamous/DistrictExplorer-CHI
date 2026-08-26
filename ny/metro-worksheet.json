@@ -651,7 +651,7 @@
     ]
   },
   "sw": {
-    "cache_name": "nyc-district-explorer-shell-v12",
+    "cache_name": "nyc-district-explorer-shell-v13",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -659,7 +659,9 @@
       "./icons/app/icon-512.png",
       "./icons/app/apple-touch-icon.png",
       "./icons/app/icon-maskable-512.png",
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js",
+      "./vendor/leaflet-maplibre-gl.js"
     ]
   },
   "data_sources": {

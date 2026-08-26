@@ -569,7 +569,7 @@ app disagreed, the canvas won on appearance and the app won on structure.
 | Brand | `--accent #6d3fd1`, `--accent-deep #5730ab` | `#a78bfa`, **`#c4b0ff`** |
 | Warm slot (Safety dot + focus ring) | `#b0316e` | `#e879b9` |
 | Card data tier | `--card-accent #1d5fd6` | `#6ea8ff` |
-| Basemap | CARTO `light_all` | CARTO `dark_all` + `brightness(1.35) saturate(.92)` |
+| Basemap | CARTO Positron (vector; raster `light_all` fallback) | CARTO Dark Matter (vector; raster `dark_all` fallback) + `brightness(1.35) saturate(.92)` on either kind's surface |
 | Selection marker | circle `#1d5fd6` | circle `#6ea8ff` (Chicago's flag star stays flag red) |
 | Coverage wash | grey outside IL, violet "data coming" | near-black outside IL, lifted violet |
 
@@ -641,7 +641,7 @@ the ones already in force, so light mode is unchanged by the refactor.
 
 Behaviour, in real Chromium: OS-light-no-choice → light; OS-dark-no-choice → dark with the
 attribute already set before body paint; the toggle flips, persists, and survives reload against a
-contrary OS setting; tiles swap to `dark_all`; `theme-color` follows; the choice carries between
+contrary OS setting; the basemap swaps to the dark cartography (Dark Matter on the vector path, `dark_all` on the raster fallback — both lifted by the same filter the dark palette was derived against); `theme-color` follows; the choice carries between
 the app and the FAQ page. No non-network console errors in either theme (the `ERR_CONNECTION_RESET`
 lines are the sandbox's blocked live APIs, identical in both).
 

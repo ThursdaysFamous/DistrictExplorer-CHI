@@ -35,6 +35,13 @@ const VENDORED_LEAFLET =
     ? { js: readFileSync(join(VENDOR_DIR, "leaflet.js")), css: readFileSync(join(VENDOR_DIR, "leaflet.css")) }
     : null;
 if (VENDORED_LEAFLET) console.log("  (serving Leaflet from scripts/vendor/leaflet — CDN unreachable in this env)");
+// MapLibre GL (the vector-basemap renderer) rides the same vendor dir: absent,
+// the app's own raster fallback keeps the boot alive, so this one is optional
+// where Leaflet's pair is required.
+const VENDORED_MAPLIBRE = existsSync(join(VENDOR_DIR, "maplibre-gl.min.js"))
+  ? { js: readFileSync(join(VENDOR_DIR, "maplibre-gl.min.js")) }
+  : null;
+if (VENDORED_MAPLIBRE) console.log("  (serving MapLibre GL from scripts/vendor/leaflet — CDN unreachable in this env)");
 
 // Disk reads are anchored to THIS SCRIPT, never to the process CWD. While each
 // instance was its own repo, "data/app/…" was correct because you ran the smoke
@@ -70,6 +77,10 @@ async function booted(context, url, routeFn) {
       r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_LEAFLET.js }));
     await page.route("**/cdnjs.cloudflare.com/**/leaflet.css", (r) =>
       r.fulfill({ status: 200, contentType: "text/css", body: VENDORED_LEAFLET.css }));
+  }
+  if (VENDORED_MAPLIBRE) {
+    await page.route("**/cdnjs.cloudflare.com/**/maplibre-gl.min.js", (r) =>
+      r.fulfill({ status: 200, contentType: "application/javascript", body: VENDORED_MAPLIBRE.js }));
   }
   if (routeFn) await routeFn(page);
   await page.goto(url, { waitUntil: "domcontentloaded" });

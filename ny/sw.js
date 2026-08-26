@@ -27,7 +27,7 @@
 // geometry anchors (borough / judicial-district / municipal-court) to
 // GEOMETRY_URLS below; the Thread 5 pipeline filled ROSTER_URLS.
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "nyc-district-explorer-shell-v12";
+const CACHE_NAME = "nyc-district-explorer-shell-v13";
 
 const SHELL_URLS = [
   "./",
@@ -37,6 +37,8 @@ const SHELL_URLS = [
   "./icons/app/apple-touch-icon.png",
   "./icons/app/icon-maskable-512.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js",
+  "./vendor/leaflet-maplibre-gl.js",
 ];
 
 // Boundary geometry (data/app/*.json, fetched lazily on first toggle).
