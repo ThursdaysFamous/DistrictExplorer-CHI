@@ -11853,6 +11853,42 @@ function initChiExplorer() {
       return precincts;
     });
   });
+  /* Monroe's fire tiling (26 shapes over 8 districts, added 2026-08-26).
+   * The county's layer labels each shape only FIRE_DIST (an abbreviation)
+   * plus a Zone number — "MVFD 2" — which is why it sat recorded rather
+   * than shipped for three weeks. Both halves of the answer came from the
+   * county itself: its GIS/Mapping & Platting department confirmed by
+   * e-mail (2026-08-25) that the eight expansions below are correct AND
+   * that the shapes are the fire protection districts themselves, not
+   * response or dispatch zones. So the card names the DISTRICT and never
+   * the zone number, whose meaning the county did not state. Red Bud and
+   * New Athens are neighbouring-county departments whose territory reaches
+   * into Monroe — the Lee "BUREAU CO/OHIO FIRE" shape. An abbreviation
+   * outside this county-confirmed key ships as the county wrote it rather
+   * than as a guess. */
+  var MONROE_FIRE_NAMES = {
+    CVFD: "Columbia Volunteer Fire Department",
+    WVFD: "Waterloo Community Fire Protection District",
+    VVFD: "Valmeyer Volunteer Fire Department",
+    MVFD: "Maeystown Volunteer Fire Department",
+    HVFD: "Hecker Volunteer Fire Department",
+    PDRVFD: "Prairie du Rocher Community Fire Department",
+    RBVFD: "Red Bud Fire Department",
+    NAVFD: "New Athens Volunteer Fire Department"
+  };
+  var loadMonroeFire = makeCached(function () {
+    return loadSimpleFeatureLayer(MONROE_GIS, "Fire_Districts", 0, "FIRE_DIST",
+                                  "Monroe County fire districts")
+      .then(function (geojson) {
+        (geojson.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var abbrev = findPropCI(props, ["fire_dist"]);
+          var key = abbrev == null ? "" : String(abbrev).trim().toUpperCase();
+          props.dxFireName = MONROE_FIRE_NAMES[key] || (key || null);
+        });
+        return geojson;
+      });
+  });
   var loadRandolphPrecincts = makeCached(function () {
     return loadSimpleFeatureLayer(RANDOLPH_GIS, "VotingPrecincts", 1, "name,precinctid",
                                   "Randolph County precincts");
@@ -22471,6 +22507,21 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Fire District", keys: ["name"], primary: true },
           { label: "County", value: "Hamilton County" }
+        ]
+      }),
+      // Monroe — 26 shapes the county labels only by abbreviation + zone
+      // ("MVFD 2"). The county's GIS/Mapping department confirmed the eight
+      // abbreviation expansions by e-mail (2026-08-25) and that the shapes
+      // ARE the fire protection districts, not response zones — see
+      // MONROE_FIRE_NAMES beside the loader. Several shapes carry one
+      // district; the card and hover name the district, never the zone.
+      polygonCountyEntry({
+        key: "monroe",
+        coverage: monroeCountyCoverage,
+        loader: loadMonroeFire,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["dxFireName"], primary: true },
+          { label: "County", value: "Monroe County" }
         ]
       })
     ]
