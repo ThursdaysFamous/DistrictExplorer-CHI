@@ -9659,31 +9659,100 @@ function initWisconsinExplorer() {
    * mpd-district REVISITS A RECORDED DROP with the city-scoped frame: the
    * safety matrix's Wisconsin police cell was a drop because no STATEWIDE
    * boundary publisher exists — exactly as the reference instance's
-   * police-district layer is city-scoped. THE CARD NAMES NO CAPTAIN:
-   * city.milwaukee.gov sits behind a Cloudflare challenge this project does
-   * not defeat, so district leadership is unverifiable here and the card
-   * links MPD's own district pages instead (readers' browsers pass; the gap
-   * record mpd-district-leadership carries the measurement). ---------- */
+   * police-district layer is city-scoped. THE CARD NAMES THE CAPTAIN since
+   * the 2026-08-27 recon measured the phase-3 block as SANDBOX-SIDE: the
+   * city's per-district pages answer the weekly workflow's runners plain,
+   * so each district's commanding officer ships from the city's own page
+   * (data/app/mpd-district-captains.json, refreshed weekly by
+   * update-mpd-captains-roster.yml with the bot-PR review path — all 7 at
+   * first build, D4's via the scraper's second measured markup shape). A
+   * district whose page names nobody renders that fact rather than a
+   * guess, and a roster-fetch miss degrades the card to its pre-roster
+   * link-only shape. ---------- */
   var loadMpdDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/mpd-districts.json", {}, 2);
+  });
+  var loadMpdCaptains = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mpd-district-captains.json", {}, 2);
   });
   var loadMilwaukeeNeighborhoods = makeCached(function () {
     return fetchJSONWithRetry("data/app/milwaukee-neighborhoods.json", {}, 2);
   });
 
-  registerPolygonLayer({
+  registerLayer({
     id: "mpd-district",
     group: "safety",
     label: "Milwaukee Police District",
     coverage: milwaukeeCoverage,
-    loader: loadMpdDistricts,
-    // the reference instance's police-district crimson, kept for parity
-    style: { color: "#9C0B24", weight: 1.5, fillColor: "#C8102E", fillOpacity: 0.06, dashArray: "2 6" },
-    fields: [
-      { name: "district", label: "Police District", keys: ["district"], primary: true },
-      { label: "Leadership", value: "MPD publishes each district's captain only on pages that refuse automated readers, so no name is shown here — the district pages below carry the current leadership." }
-    ],
-    primaryLink: function () {
+    overlay: {
+      load: loadMpdDistricts,
+      // the reference instance's police-district crimson, kept for parity
+      style: { color: "#9C0B24", weight: 1.5, fillColor: "#C8102E", fillOpacity: 0.06, dashArray: "2 6" }
+    },
+    // same hover the polygon factory derived: the primary field's raw value
+    hoverName: function (feature) {
+      var v = findPropCI(feature.properties || {}, ["district"]);
+      return (v == null || v === "") ? null : String(v);
+    },
+    query: function (point, seq) {
+      return queryFeatureAt(loadMpdDistricts, point).then(function (feature) {
+        if (!feature) return null;
+        var result = {
+          seq: seq,
+          district: findPropCI(feature.properties || {}, ["district"]),
+          captain: null,       // the district's roster record, when it loads
+          rosterLoaded: false  // distinguishes a null record from a fetch miss
+        };
+        return loadMpdCaptains().catch(function () { return null; })
+          .then(function (roster) {
+            if (roster) {
+              result.rosterLoaded = true;
+              result.captain = roster[String(result.district)] || null;
+            }
+            return result;
+          });
+      });
+    },
+    render: function (result) {
+      var rows = [];
+      rows.push({
+        label: "Police District",
+        value: result.district != null ? String(result.district) : "Unknown",
+        primary: true
+      });
+      var rec = result.captain;
+      if (rec && rec.name) {
+        rows.push({
+          label: "Commanding officer",
+          value: (rec.rank ? String(rec.rank) + " " : "") + String(rec.name)
+        });
+      } else if (result.rosterLoaded) {
+        // the weekly scrape read the city's page and found no ranked name —
+        // a measured absence, never a guess
+        rows.push({
+          label: "Commanding officer",
+          value: "Not named on the city's own district page — the district page below carries current leadership."
+        });
+      } else {
+        // roster fetch miss: the pre-roster card, link-only
+        rows.push({
+          label: "Leadership",
+          value: "The district page below carries the current leadership."
+        });
+      }
+      if (rec && rec.phone) {
+        rows.push({ label: "District phone", value: String(rec.phone) });
+      }
+      return renderFieldStack(rows);
+    },
+    primaryLink: function (result) {
+      // the district's OWN page when the roster supplies it (the same page
+      // the captain was read from — builder-gated to the city's district
+      // path), the index otherwise
+      var rec = result && result.captain;
+      if (rec && rec.sourceUrl) {
+        return { label: "MPD District " + String(result.district) + " page", url: String(rec.sourceUrl) };
+      }
       return { label: "MPD district pages", url: "https://city.milwaukee.gov/police/Police-Districts" };
     }
   });

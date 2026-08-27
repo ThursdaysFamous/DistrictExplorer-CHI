@@ -411,7 +411,7 @@
       "area_rank": 19,
       "rank_note": "Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer",
       "source": {
-        "answers": "The Milwaukee Police Department district covering the point. No captain is named: the city's site refuses automated readers, so district leadership cannot be verified here — the card links MPD's own district pages, which carry it, and the Data gaps panel records the measurement. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).",
+        "answers": "The Milwaukee Police Department district covering the point, with its commanding officer named from the city's own per-district page and the district's phone from the city Directory \u2014 checked weekly. A district whose page names no officer would say so on the card rather than guessing. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).",
         "boundary": [
           {
             "label": "City of Milwaukee — MPD districts, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py",
@@ -422,7 +422,7 @@
             "url": "https://data.milwaukee.gov/dataset/milwaukee-police-district"
           }
         ],
-        "people": "None shipped, deliberately: MPD publishes each district's captain only behind an access control this project does not defeat, and a name that cannot be re-verified weekly does not ship — the card links the district pages instead (gap mpd-district-leadership).",
+        "people": "Each district's commanding officer from the city's OWN per-district page (city.milwaukee.gov/police/districts/District-1..7), with the district phone paired from the city Directory page's tel: links \u2014 scraped weekly by update-mpd-captains-roster.yml (mpd_captains_scraper.py, the heading-anchored parse whose rank pattern tolerates District 2's measured 'Captai n' markup split; floors: all 7 districts, at least 6 named, a name under two districts refuses; TWO measured markup shapes \u2014 the officer h3, and District 4's empty h3 with the name in the contact block's own paragraph link). The phase-3 record said the city refuses automated readers \u2014 TRUE OF THE SANDBOX ONLY, measured 2026-08-27: the pages answer the weekly workflow's runners plain, which is the scraper's vantage. A district whose page names nobody ships null and its card states the absence.",
         "applies": "City of Milwaukee only — the layer hides everywhere else."
       }
     },
@@ -679,7 +679,7 @@
       }
     }
   ],
-  "min_register_layer": 18,
+  "min_register_layer": 19,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -962,6 +962,11 @@
         "note": "Milwaukee ward -> polling place pairing (build_mke_polling_places.py; CC-BY city dataset, ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed against the city's own REST layer, places pointed and bbox-gated). Dated per dataset edition; rebuilt per election, not weekly."
       },
       {
+        "file": "mpd-district-captains.json",
+        "min_keys": 7,
+        "note": "MPD district captains roster (mpd_captains_scraper.py + build_mpd_captains_roster.py from the city's own per-district pages; keys exactly 1-7, >=6 named, name implies rank, sourceUrl pinned to the city's district path). Refreshed weekly by update-mpd-captains-roster.yml as a reviewed bot PR."
+      },
+      {
         "file": "madison-polling-places.json",
         "min_keys": 130,
         "note": "Madison ward -> polling place pairing (build_madison_polling_places.py; the city's open-data polling layer is one point per ward, ward keys gated equal to LTSB's Madison wards AND the city's own ward layer, points bbox-gated). The layer publishes no edition date, so records are dated as read; rebuilt per election, not weekly."
@@ -969,7 +974,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v26",
+    "cache_name": "districtry-wi-shell-v27",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1185,6 +1190,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "The police district card learns its captains' names",
+        "body": "Milwaukee's police-district card now names each district's commanding officer and phone number, read weekly from the city's own per-district pages \u2014 the first roster in this deployment whose source can only be reached from the project's scheduled infrastructure, never from a development machine, so the first copy was carried over from the weekly check's own verified run. All seven districts name their captain, and getting the seventh took reading the city's markup three ways: District 2's page splits the word Captain in half, the phone directory hides the district number in a way that once keyed every phone to District 2, and District 4 leaves its officer heading empty with the name in a link below it \u2014 each caught and pinned before any name shipped, so a page naming nobody would say so on the card rather than guess. Names never publish without review: every weekly change arrives as a proposed update a person reads first."
+      },
       {
         "date": "2026-08-27",
         "title": "Madison wards learn where they vote",
