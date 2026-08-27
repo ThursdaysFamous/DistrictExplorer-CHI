@@ -1,0 +1,54 @@
+name: WI — WEC + MPD recon capture (one-shot)
+
+# The follow-through on wi-wec-probe.yml's 2026-08-27 measurement (the
+# Cloudflare block was sandbox-side): the probe answered "can this project
+# look?", and this recon answers "what is there to see?" — capturing WEC's
+# data-ish pages (do statewide polling-place / early-voting /
+# municipal-clerk files exist AS DATA? gap ward-polling-places waits on
+# exactly this) and MPD's district pages (so the captains scraper — gap
+# mpd-district-leadership — can be written against real page structure).
+# The development sandbox cannot read these hosts, so the job log's
+# EXTRACT blocks and the step summary are the channels the findings come
+# back through; the full HTML uploads as the run artifact.
+#
+# workflow_dispatch only, deliberately absent from the worksheet's
+# scheduled workflows[] list — a recon is not a schedule. Writes nothing
+# to the repo. Same contract as the probe: no evasion, a real browser
+# only where a plain client is refused, bounded page caps, ~1s politeness
+# delay per host. Absence and refusal are measurements and exit 0.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    # ~24 capped page fetches with per-host politeness delays, at most one
+    # 120s challenge window; bounded so a hung fetch dies visibly.
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install recon dependencies
+        run: pip install -c wi/scripts/requirements.txt requests playwright
+
+      - name: Install Chromium for Playwright
+        run: python3 -m playwright install --with-deps chromium
+
+      - name: Capture WEC data pages + MPD district pages
+        run: python3 wi/scripts/wi_wec_recon.py --out-dir wi-recon-capture
+
+      - name: Upload capture artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wi-recon-capture
+          path: wi-recon-capture/
+          if-no-files-found: warn
