@@ -173,6 +173,17 @@ jobs:
       - name: Install manifests match the brand keys
         run: python3 scripts/build_manifests.py --check
 
+      # The favicon is the one branded asset whose audience is a CRAWLER, and it
+      # was the one nobody could see was broken: every page carried the mark
+      # inline as a data: URI, which renders perfectly in a browser tab and is
+      # invisible to Googlebot-Image, so districtry.com showed the generic globe
+      # beside its search result. /favicon.ico 404'd too. This checks that the
+      # root pages name a favicon that is a real, existing, square file — not a
+      # data: URI — because "it looks right in my tab" is exactly the evidence
+      # that misled here. Stdlib only.
+      - name: Home page declares a favicon a crawler can fetch
+        run: python3 scripts/validate_favicon.py
+
       # A `#` comment between two backslash-continued lines does not annotate
       # the command, it TERMINATES it — bash joins the continuation first. Six
       # lines of well-meant explanation inside the deploy's rsync invocation

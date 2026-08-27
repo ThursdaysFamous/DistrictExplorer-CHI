@@ -57,6 +57,20 @@ import urllib.parse
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST = os.path.join(REPO_ROOT, "metros.json")
 TOKENS = os.path.join(REPO_ROOT, "districtry", "tokens", "districtry.tokens.css")
+# WHY THE FAVICON IS A FILE AND NOT A data: URI ANY MORE. It was inlined here
+# — one fewer request, no flash — and that cost the site its logo in Google
+# results. Google's rule is blunt: "Googlebot-Image must be able to crawl the
+# favicon file", and there is no file to crawl in a data: URI. districtry.com
+# showed the generic globe next to its result, and /favicon.ico 404'd too, so
+# the fallback every browser requests unprompted was also missing.
+#
+# Four declarations, because they answer to different consumers: the SVG for
+# modern browsers, a 192px PNG well above Google's 48px recommendation, the ICO
+# for the unprompted /favicon.ico request, and apple-touch-icon (which Google
+# also accepts) for iOS. Google reads the favicon from the HOME PAGE and applies
+# it per HOSTNAME, so this page governs every path under districtry.com — the
+# apps keep their own inline mark for their own tabs and it changes nothing for
+# search. The URLs must stay put: Google asks that a favicon URL be stable.
 FAVICON = os.path.join(REPO_ROOT, "districtry", "icons", "favicon.svg")
 # The 5c mark is lifted from the app rather than restated, so the geometry has
 # one source. The favicon above is the SIMPLIFIED one-polygon fallback the brand
@@ -362,7 +376,10 @@ def build():
 <meta name="description" content="%(desc)s" />
 <link rel="canonical" href="%(canonical)s" />
 <meta name="theme-color" content="%(brand)s" />
-<link rel="icon" href="%(favicon)s" type="image/svg+xml" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="robots" content="index, follow" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="districtry" />
