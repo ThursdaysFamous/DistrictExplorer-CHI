@@ -318,6 +318,32 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "wtcs-district",
+        "app_file": "wtcs-districts.json",
+        "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Technical_College_Regions_2019/FeatureServer/0",
+        "note": (
+            "The 16 WTCS districts from DPI's own AGO org (the school-site "
+            "and library builds' org, same reference-use licence), "
+            "server-generalized and pre-built by "
+            "wi/scripts/build_wi_wtcs_districts.py under five gates — the "
+            "seat witness (each college's home city inside its own "
+            "district) and the Lake-Winnebago-only hole rule among them. "
+            "The '2019' in the service name is a title, not a vintage: the "
+            "content carries Northwood, the 2021 rename. Boards appointed "
+            "(Wis. Stat. 38.08) — identity-only."
+        ),
+    },
+    {
+        "layer": "wtcs-district",
+        "app_file": "wtcs-districts.json",
+        "source_url": "https://www.arcgis.com/sharing/rest/content/items/0fdad1436fc04ebf85ba7839dad3ab79?f=json",
+        "note": (
+            "The WTCS-districts AGO catalog item — the successor watch, the "
+            "school-directory pattern: this item dying or renaming is the "
+            "signal a successor item shipped."
+        ),
+    },
+    {
         "layer": "library",
         "app_file": "library-sites.json",
         "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Public_Libraries_and_Branches/FeatureServer/6",

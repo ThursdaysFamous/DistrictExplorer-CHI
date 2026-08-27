@@ -109,10 +109,28 @@
       }
     },
     {
+      "id": "wtcs-district",
+      "label": "Technical College District",
+      "group": "schools",
+      "area_rank": 3,
+      "rank_note": "16 WTCS districts tiling the state's land (avg ~10,600 km\u00b2) \u2014 between the U.S. House districts and the State Senate; Lake Winnebago and the Great Lakes are honestly inside none",
+      "source": {
+        "answers": "The Wisconsin Technical College System district containing the point \u2014 the technical college your property tax funds (Wis. Stat. ch. 38). Identity-only, deliberately: the district board is APPOINTED (Wis. Stat. 38.08), not elected, and the card says so and names no one.",
+        "boundary": [
+          {
+            "label": "Wisconsin DPI \u2014 Technical College Districts (the shipped school-site and library builds' own org, same reference-use licence), pre-built by wi/scripts/build_wi_wtcs_districts.py under five gates: exactly 16, a seat witness pinning each college's home city inside its own district, no overlaps, and the union's one lawful hole being Lake Winnebago \u2014 the layer's 2019 title notwithstanding, the content is current (it carries Northwood, the 2021 rename)",
+            "url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Technical_College_Regions_2019/FeatureServer/0"
+          }
+        ],
+        "people": "None, deliberately: the board is appointed under Wis. Stat. 38.08, so there is no officeholder a voter elects \u2014 the card links the system's own site instead.",
+        "applies": "Statewide \u2014 every land point sits in exactly one district; open water (the Great Lakes, Lake Winnebago) honestly in none."
+      }
+    },
+    {
       "id": "wi-senate",
       "label": "Wisconsin State Senate District",
       "group": "political",
-      "area_rank": 3,
+      "area_rank": 4,
       "rank_note": "33 State Senate districts, each the union of three whole Assembly districts",
       "source": {
         "answers": "The Wisconsin State Senate district covering the point, and the senator holding it.",
@@ -130,7 +148,7 @@
       "id": "wi-assembly",
       "label": "Wisconsin State Assembly District",
       "group": "political",
-      "area_rank": 4,
+      "area_rank": 5,
       "rank_note": "99 State Assembly districts; three nest exactly inside each Senate district",
       "source": {
         "answers": "The Wisconsin State Assembly district covering the point, and the representative holding it.",
@@ -148,7 +166,7 @@
       "id": "wi-circuit-court",
       "label": "Circuit Court",
       "group": "political",
-      "area_rank": 5,
+      "area_rank": 6,
       "rank_note": "69 circuits — 66 single counties plus three statutory two-county unions, so marginally broader than the county fabric",
       "source": {
         "answers": "The circuit court whose bench serves the point — Wisconsin's trial court of general jurisdiction — with every judge on that bench, their branch and direct phone where the court system publishes them, and the courthouse.",
@@ -170,7 +188,7 @@
       "id": "county",
       "label": "County",
       "group": "geography",
-      "area_rank": 6,
+      "area_rank": 7,
       "rank_note": "Counties, pre-built from TIGERweb at bootstrap; the fork's offline anchor layer",
       "source": {
         "answers": "Which county contains the point, the county clerk who holds its records and — outside Milwaukee — runs its elections, with the clerk's office, hours and contact.",
@@ -188,7 +206,7 @@
       "id": "psap-area",
       "label": "911 Answering Point (PSAP)",
       "group": "safety",
-      "area_rank": 7,
+      "area_rank": 8,
       "rank_note": "95 public safety answering points statewide — most counties are one PSAP, so the average sits just under the county fabric and well above the school tilings",
       "source": {
         "answers": "The PSAP — public safety answering point — that answers a 911 call placed at the point, per the state's NG911 dataset (the rare overlaps ship exactly as filed). A dispatch-routing fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — three counties, plus provisioning-less Langlade, recorded as gap ng911-psap-filings — the card says so instead of hiding.",
@@ -206,7 +224,7 @@
       "id": "school-district-secondary",
       "label": "School District (Union High)",
       "group": "schools",
-      "area_rank": 8,
+      "area_rank": 9,
       "rank_note": "Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead",
       "source": {
         "answers": "The union high school district serving the point, where elementary and high school districts are separate.",
@@ -224,7 +242,7 @@
       "id": "school-district-unified",
       "label": "School District (Unified)",
       "group": "schools",
-      "area_rank": 9,
+      "area_rank": 10,
       "rank_note": "Unified (K-12) school districts; pre-built from TIGERweb at bootstrap",
       "source": {
         "answers": "The unified (K-12) school district serving the point.",
@@ -242,7 +260,7 @@
       "id": "school-district-elementary",
       "label": "School District (Elementary)",
       "group": "schools",
-      "area_rank": 10,
+      "area_rank": 11,
       "rank_note": "Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory",
       "source": {
         "answers": "The elementary school district serving the point, where elementary and high school districts are separate.",
@@ -260,7 +278,7 @@
       "id": "ems-service",
       "label": "EMS Service Area",
       "group": "safety",
-      "area_rank": 11,
+      "area_rank": 12,
       "rank_note": "579 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric",
       "source": {
         "answers": "The emergency medical service dispatched at the point, per the state's NG911 dataset — a response-area fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — four counties plus provisioning-less Langlade, recorded as gap ng911-ems-filings — the card says so instead of hiding.",
@@ -278,7 +296,7 @@
       "id": "law-service",
       "label": "Law Enforcement Service Area",
       "group": "safety",
-      "area_rank": 12,
+      "area_rank": 13,
       "rank_note": "639 dissolved law-enforcement dispatch areas statewide — sheriffs' unincorporated territory keeps the average above the county-board fabric",
       "source": {
         "answers": "The law-enforcement agency (or agencies — concurrent jurisdiction ships exactly as filed) dispatched at the point, per the state's NG911 dataset. A response-area fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — four counties, plus Polk's partial filing, recorded as gap ng911-law-filings — the card says so instead of hiding.",
@@ -296,7 +314,7 @@
       "id": "fire-service",
       "label": "Fire Service Area",
       "group": "safety",
-      "area_rank": 13,
+      "area_rank": 14,
       "rank_note": "1,046 dissolved fire-department response areas statewide — denser than the law layer (town departments), broader than the county-board fabric",
       "source": {
         "answers": "The fire department dispatched at the point, per the state's NG911 dataset — the guidebook's operational shape (who responds here), never a fire protection district and never an elected body, so the card names no officeholder. Where a county 911 authority has not filed — five counties, recorded as gap ng911-fire-filings — the card says so instead of hiding.",
@@ -314,7 +332,7 @@
       "id": "county-board",
       "label": "County Board District",
       "group": "political",
-      "area_rank": 14,
+      "area_rank": 15,
       "rank_note": "County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town",
       "source": {
         "answers": "The county board supervisory district covering the point, how many districts that county's board has, and a link to the board itself.",
@@ -336,7 +354,7 @@
       "id": "county-subdivision",
       "label": "County Subdivision",
       "group": "geography",
-      "area_rank": 15,
+      "area_rank": 16,
       "rank_note": "Towns / county subdivisions (TIGERweb CouSub, live)",
       "source": {
         "answers": "The town or county subdivision containing the point.",
@@ -354,7 +372,7 @@
       "id": "municipality",
       "label": "Municipality",
       "group": "geography",
-      "area_rank": 16,
+      "area_rank": 17,
       "rank_note": "Incorporated places (TIGERweb Places, live); unincorporated points say so",
       "source": {
         "answers": "The city, village or town containing the point — or that it sits in unincorporated county.",
@@ -372,7 +390,7 @@
       "id": "zip-code",
       "label": "ZIP Code",
       "group": "geography",
-      "area_rank": 17,
+      "area_rank": 18,
       "rank_note": "Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized",
       "source": {
         "answers": "The ZIP Code Tabulation Area containing the point — the Census Bureau's approximation of USPS ZIP delivery areas, not the postal boundaries themselves.",
@@ -390,7 +408,7 @@
       "id": "mpd-district",
       "label": "Milwaukee Police District",
       "group": "safety",
-      "area_rank": 18,
+      "area_rank": 19,
       "rank_note": "Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer",
       "source": {
         "answers": "The Milwaukee Police Department district covering the point. No captain is named: the city's site refuses automated readers, so district leadership cannot be verified here — the card links MPD's own district pages, which carry it, and the Data gaps panel records the measurement. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).",
@@ -412,7 +430,7 @@
       "id": "mps-school-board",
       "label": "MPS School Board District",
       "group": "schools",
-      "area_rank": 19,
+      "area_rank": 20,
       "rank_note": "Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer",
       "source": {
         "answers": "The Milwaukee Public Schools board district covering the point, its elected director, and the at-large director the whole city elects — with each seat's term expiration and the Board office's contact. Statute names Wisconsin's districted school boards exactly (most elect at large): MPS and Racine Unified, whose geometry no publisher ships as data — the Data gaps panel records it.",
@@ -434,7 +452,7 @@
       "id": "mpd-squad-area",
       "label": "Milwaukee Police Squad Area",
       "group": "safety",
-      "area_rank": 20,
+      "area_rank": 21,
       "rank_note": "The 25 MPD patrol squad areas — a twenty-fifth of the city each, nested inside the seven police districts (subOf), between the MPS board's eighths and the aldermanic fabric",
       "source": {
         "answers": "The Milwaukee Police Department squad area — the patrol/beat subdivision — covering the point, with its parent district. A squad's NUMBER encodes its district (the hundreds digit), and the builder verifies that against the shipped district layer rather than asserting it. No officeholder: a patrol area elects no one. Outside Milwaukee the layer hides, and its toggle nests under the district layer exactly as the reference instance's police beats do.",
@@ -456,7 +474,7 @@
       "id": "aldermanic-district",
       "label": "Aldermanic District",
       "group": "political",
-      "area_rank": 21,
+      "area_rank": 22,
       "rank_note": "838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from",
       "source": {
         "answers": "The aldermanic district (in the nine villages that elect trustees by district, the trustee district) covering the point, in the 155 cities and villages whose ward filings compose their districts completely — and, in Milwaukee, Madison, Green Bay, Kenosha, Racine and Waukesha, the alderperson holding the seat.",
@@ -478,7 +496,7 @@
       "id": "ward",
       "label": "Municipal Ward",
       "group": "geography",
-      "area_rank": 22,
+      "area_rank": 23,
       "rank_note": "7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points",
       "source": {
         "answers": "The municipal ward containing the point — the unit Wisconsin elections are administered by and every supervisory and aldermanic district is composed from — plus which county board district and, in cities that elect alders by district, which aldermanic district it belongs to.",
@@ -496,7 +514,7 @@
       "id": "milwaukee-neighborhoods",
       "label": "Milwaukee Neighborhood",
       "group": "geography",
-      "area_rank": 23,
+      "area_rank": 24,
       "rank_note": "The city's 190 named neighborhoods — an identity fabric, not an electing body; below the ward layer's statewide average, above the amenity points",
       "source": {
         "answers": "The named Milwaukee neighborhood containing the point — the city's own neighborhood fabric, an identity answer with no officeholder because a neighborhood elects no one. Outside Milwaukee the layer hides; no statewide neighborhood publisher exists.",
@@ -518,7 +536,7 @@
       "id": "tid-district",
       "label": "Tax Incremental District (TID)",
       "group": "geography",
-      "area_rank": 25,
+      "area_rank": 26,
       "rank_note": "93 active tax incremental districts across two cities (Milwaukee 79, Madison 14) — small finance-overlay slices, below the neighborhood fabrics' averages and above the amenity points; the one city layer that does not tile its cities",
       "source": {
         "answers": "The active Tax Incremental District (Wis. Stat. 66.1105) containing the point, with its number and creation year — a municipal finance overlay that elects no one, the reference instance's tif-district concept under Wisconsin's own name. Two cities share the toggle, each with its own builder witness. Most of Milwaukee and Madison is in no TID, and the card's standard empty state says exactly that; outside the two cities the layer hides.",
@@ -552,7 +570,7 @@
       "id": "madison-neighborhood-assoc",
       "label": "Neighborhood Association (Madison)",
       "group": "geography",
-      "area_rank": 24,
+      "area_rank": 25,
       "rank_note": "116 active city-registered association boundaries averaging 1.1 km² — just below Milwaukee's neighborhood fabric (1.3 km²) and above the TID slices; they nest and overlap by design, so the card collects every association at the point",
       "source": {
         "answers": "Every city-registered association whose boundary covers the point — Madison's official neighborhood fabric IS its registry, which also records condominium, resident, homeowners, business and property-owners associations in the same layer, so each row states its classification. Registrations genuinely nest (five condo/resident polygons sit wholly inside a neighborhood association's), which is why the card lists all of them rather than the first.",
@@ -570,7 +588,7 @@
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
-      "area_rank": 26,
+      "area_rank": 27,
       "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
@@ -588,7 +606,7 @@
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
-      "area_rank": 27,
+      "area_rank": 28,
       "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
@@ -606,7 +624,7 @@
       "id": "school-site",
       "label": "School Location, incl. private",
       "group": "schools",
-      "area_rank": 28,
+      "area_rank": 29,
       "rank_note": "Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.",
@@ -628,7 +646,7 @@
       "id": "library",
       "label": "Library",
       "group": "geography",
-      "area_rank": 29,
+      "area_rank": 30,
       "rank_note": "Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.",
@@ -646,7 +664,7 @@
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 30,
+      "area_rank": 31,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -661,7 +679,7 @@
       }
     }
   ],
-  "min_register_layer": 17,
+  "min_register_layer": 18,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -699,6 +717,10 @@
     {
       "layer": "county-board",
       "expected": "35"
+    },
+    {
+      "layer": "wtcs-district",
+      "expected": "Northcentral Technical College District"
     }
   ],
   "negative_point": {
@@ -843,6 +865,12 @@
         "note": "Milwaukee's 25 MPD squad areas — the city's own CC-BY layer server-reprojected, witnessed against the CKAN shapefile's area shares AND sample-verified inside their hundreds-digit districts (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints."
       },
       {
+        "file": "wtcs-districts.json",
+        "min_features": 16,
+        "max_features": 16,
+        "note": "The 16 Wisconsin Technical College System districts — DPI's own layer, server-generalized (~55 m) and pre-built under five gates: seat witness (each college's home city inside its own district), no overlaps, and the union's one lawful hole being Lake Winnebago (wi/scripts/build_wi_wtcs_districts.py, operator rebuild). Boards appointed (Wis. Stat. 38.08) — identity-only by design."
+      },
+      {
         "file": "madison-tid-districts.json",
         "min_features": 14,
         "max_features": 14,
@@ -936,7 +964,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v24",
+    "cache_name": "districtry-wi-shell-v25",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1147,6 +1175,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "The technical college district joins the map, honest about what nobody elects",
+        "body": "A new statewide layer answers which of Wisconsin's sixteen technical college districts your point funds through its property tax — and states plainly that the district's board is appointed under state law, not elected, so the card names no officeholder rather than inventing one. The geometry is the state education department's own, shipped only after five checks passed: exactly sixteen districts, each containing its own college's home city, none overlapping, and the map's one true hole being Lake Winnebago — which belongs to no district, so a reader clicking the lake correctly finds nothing. Two earlier drafts of that last check failed against reference maps that count the Great Lakes as part of the state, a reminder that even the checking has to be checked."
+      },
       {
         "date": "2026-08-27",
         "title": "Madison joins the city tier, and the state closes two districts the city's map still draws",

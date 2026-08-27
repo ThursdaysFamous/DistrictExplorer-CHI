@@ -49,11 +49,11 @@ const INSTANCE_DIR = dirname(dirname(fileURLToPath(import.meta.url)));
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 // ==== GENERATED:BEGIN smoke-config ====
 const POINT = "44.89804,-89.75782"; // inside Marathon County
-const OFFLINE = ["county", "wi-circuit-court", "wi-court-of-appeals", "us-house", "school-district-unified", "wi-senate", "wi-assembly", "county-board"];
-const EXPECT_DISTRICT = { "county": "Marathon County", "wi-circuit-court": "Marathon County Circuit Court", "wi-court-of-appeals": "Court of Appeals District III", "us-house": "7", "school-district-unified": "Marathon City School District", "wi-senate": "29", "wi-assembly": "86", "county-board": "35" };
+const OFFLINE = ["county", "wi-circuit-court", "wi-court-of-appeals", "us-house", "school-district-unified", "wi-senate", "wi-assembly", "county-board", "wtcs-district"];
+const EXPECT_DISTRICT = { "county": "Marathon County", "wi-circuit-court": "Marathon County Circuit Court", "wi-court-of-appeals": "Court of Appeals District III", "us-house": "7", "school-district-unified": "Marathon City School District", "wi-senate": "29", "wi-assembly": "86", "county-board": "35", "wtcs-district": "Northcentral Technical College District" };
 const NEGATIVE_POINT = "47.39000,-92.97000"; // off the northwest corner of Wisconsin — outside the state and every starter layer
 const APP_NAME = "districtry Wisconsin";
-const EXPECT_LAYERS = 30;
+const EXPECT_LAYERS = 31;
 // ==== GENERATED:END smoke-config ====
 // Fork-specific smoke-test constants (the reference repo hoists its own set
 // here). The template's CHI-scenario checks are dropped at build time, so the

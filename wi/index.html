@@ -5956,6 +5956,7 @@ function initWisconsinExplorer() {
   var LAYER_AREA_RANK = [
     "wi-court-of-appeals", // Four appellate districts — the broadest sub-state boundary the app draws, above the eight congressional districts
     "us-house",          // Congressional districts — the largest districts a state carries below the state itself
+    "wtcs-district",     // 16 WTCS districts tiling the state's land (avg ~10,600 km²) — between the U.S. House districts and the State Senate; Lake Winnebago and the Great Lakes are honestly inside none
     "wi-senate",         // 33 State Senate districts, each the union of three whole Assembly districts
     "wi-assembly",       // 99 State Assembly districts; three nest exactly inside each Senate district
     "wi-circuit-court",  // 69 circuits — 66 single counties plus three statutory two-county unions, so marginally broader than the county fabric
@@ -9574,6 +9575,57 @@ function initWisconsinExplorer() {
     }
   });
 
+  /* ---------- Technical College District (WTCS) — statewide, identity-only ----------
+   * Every point in Wisconsin sits in exactly one of the sixteen Wisconsin
+   * Technical College System districts and funds it through its property
+   * tax — but the district BOARD IS APPOINTED (Wis. Stat. 38.08), not
+   * elected, so this card states the district and the appointed board and
+   * NAMES NO ONE: inventing an electoral story here is the harm the
+   * honesty rules exist to prevent. Geometry is DPI's own layer under a
+   * five-gate build (wi/scripts/build_wi_wtcs_districts.py — the seat
+   * witness pins each college's home city inside its own district, and
+   * the union's one lawful hole is Lake Winnebago, honestly inside no
+   * district, so a reader clicking the lake gets the standard empty
+   * state and that is the true answer). ---------- */
+  var loadWtcsDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wtcs-districts.json", {}, 2);
+  });
+  registerLayer({
+    id: "wtcs-district",
+    group: "schools",
+    label: "Technical College District",
+    hoverName: function (feature) {
+      var v = (feature.properties || {}).NAME;
+      return v ? String(v) : null;
+    },
+    overlay: {
+      load: loadWtcsDistricts,
+      // a teal apart from the school-district greens, dashed like the
+      // other derived/administrative tilings
+      style: { color: "#1F7A8C", weight: 2, fillColor: "#3D95A6", fillOpacity: 0.05, dashArray: "6 3" }
+    },
+    query: function (point, seq) {
+      return queryFeatureAt(loadWtcsDistricts, point).then(function (feature) {
+        if (!feature) return null;
+        var p = feature.properties || {};
+        return { seq: seq, name: String(p.NAME || ""), abbrev: String(p.ABBREV || "") };
+      });
+    },
+    render: function (result) {
+      return renderFieldStack([
+        { label: "District", value: result.name, primary: true },
+        { label: "Board", value: "Appointed, not elected — Wis. Stat. 38.08 seats the district " +
+          "board by appointment committee, so this card names no officeholder." },
+        { label: "About", value: "The technical college district your point funds through its " +
+          "property tax (Wis. Stat. ch. 38)." }
+      ]);
+    },
+    primaryLink: function () {
+      return { label: "Wisconsin Technical College System",
+               url: "https://www.wtcs.edu/" };
+    }
+  });
+
   /* ---------- 22-23. Milwaukee city layers — MPD districts + neighborhoods ----------
    * Both city-scoped on the same milwaukeeCoverage the MPS board uses, both
    * CC-BY city datasets pre-built by wi/scripts/build_milwaukee_city_layers.py
@@ -10805,7 +10857,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "mpd-squad-area", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "madison-neighborhood-assoc", "tid-district", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "mpd-squad-area", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "wtcs-district", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "madison-neighborhood-assoc", "tid-district", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10899,17 +10951,18 @@ function initWisconsinExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#0F766E": "#50C7BC", "#14181C": "#696F76",
-    "#14A38F": "#41EED2", "#1B5E3F": "#5FB387", "#1B7A3D": "#58CD7A", "#2E8C6A": "#62DAAC",
-    "#2E9E6B": "#5BEAA5", "#2F5D8C": "#6EACED", "#2F6B3A": "#6FBE7B", "#2F6B5E": "#6EBDAA",
-    "#3D6B49": "#7EBC8D", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
-    "#4A7BB0": "#90C4FD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#4E8F80": "#83DAC5",
-    "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9", "#5E3A8C": "#B283F5", "#6A4A93": "#BC91F6",
-    "#6B7280": "#B1BBCE", "#7A0A1C": "#EB5B61", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
-    "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452",
-    "#8E6BB8": "#D3B3FE", "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1",
-    "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F",
-    "#B45309": "#FEA16D", "#C8102E": "#FE928F", "#C9A227": "#FEE195", "#D0564C": "#FEB1A7",
-    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7", "#D97706": "#FEC9A1", "#E4572E": "#FFBCA9"};
+    "#14A38F": "#41EED2", "#1B5E3F": "#5FB387", "#1B7A3D": "#58CD7A", "#1F7A8C": "#58C8E1",
+    "#2E8C6A": "#62DAAC", "#2E9E6B": "#5BEAA5", "#2F5D8C": "#6EACED", "#2F6B3A": "#6FBE7B",
+    "#2F6B5E": "#6EBDAA", "#3D6B49": "#7EBC8D", "#3D95A6": "#6CDEF5", "#41B6E6": "#C6EBFE",
+    "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4A7BB0": "#90C4FD", "#4B2E83": "#9E7BF1",
+    "#4C8F59": "#83DC93", "#4E8F80": "#83DAC5", "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9",
+    "#5E3A8C": "#B283F5", "#6A4A93": "#BC91F6", "#6B7280": "#B1BBCE", "#7A0A1C": "#EB5B61",
+    "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241",
+    "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452", "#8E6BB8": "#D3B3FE", "#9C0B24": "#FE6B6E",
+    "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880", "#B0316E": "#FD88B8",
+    "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#B45309": "#FEA16D", "#C8102E": "#FE928F",
+    "#C9A227": "#FEE195", "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7",
+    "#D97706": "#FEC9A1", "#E4572E": "#FFBCA9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

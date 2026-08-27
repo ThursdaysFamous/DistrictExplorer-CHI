@@ -309,7 +309,7 @@ and `mpd-district-leadership`, both matrix cells, the backlog entry, the
 county-officers cell's sheriffs note), the regenerated wisconsin
 coverage-gaps, and the history page's changelog.
 
-## PR 6 (stretch) — Technical college districts, identity-only
+## PR 6 (stretch) — Technical college districts, identity-only — DELIVERED 2026-08-27
 
 DPI's own org publishes "Technical College Districts, Wisconsin" (measured
 present; same org and licence posture as the shipped school-site/library
@@ -318,6 +318,28 @@ appendix) — so if it ships, it ships as an identity + labeled-appointed
 card (the WTCS district your point funds through its property tax), never
 with invented officeholders. Honest but low-reader-value: proposed as the
 phase's stretch item, cut first.
+
+DELIVERED as `wtcs-district`, the fleet's new technical/community-college
+concept row, and the build is five gates rather than a count
+(`wi/scripts/build_wi_wtcs_districts.py`): exactly 16; names/abbrevs
+distinct; a SEAT WITNESS pinning each college's home city inside its own
+district (verified 16/16 against the fetched geometry before pinning);
+overlaps under 1e-3 deg²; and the union's ONE lawful interior hole being
+Lake Winnebago, required present — the lake belongs to no district and
+the standard empty state there is the true answer. Two failed gate drafts
+are the delivery's recorded lesson: sampling the state outline "found" 43
+holes that were all Great Lakes water, and the TIGER school-district
+fabric carries the same territorial water — TEST A TILING'S INTEGRITY
+FROM ITS OWN UNION, never from a water-bearing reference. The geometry
+ships server-generalized (~55 m — full precision is 9.2 MB for sixteen
+features; 316 KB shipped) with sliver tolerances measured at that
+precision; the layer's "2019" title is the LTSB vintage lesson again
+(the content carries Northwood, the 2021 rename). wtcs.edu was
+unreachable from the sandbox at first build (proxy 502 — a sandbox-side
+fact per PR 5's lesson), so the monthly report watches the DPI layer and
+its AGO catalog item instead. The Marathon anchor gains the layer
+("Northcentral Technical College District"). Phase 4 is COMPLETE: every
+planned PR delivered, nothing cut.
 
 ---
 
