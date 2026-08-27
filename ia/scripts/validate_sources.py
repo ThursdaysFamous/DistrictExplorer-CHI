@@ -30,8 +30,7 @@ What it checks (findings carry a severity — FAIL, WARN, or OK):
      edition than the one in use.                                         [WARN]
   3. Shapefile provenance: the cited source URL is reachable and the built
      data/app file is present.                             [WARN / FAIL if gone]
-  4. Live service endpoints (none in this instance's first PR — every layer
-     ships pre-built; grown as later layers add live TIGERweb reads).      [WARN]
+  4. Live service endpoints (Census TIGERweb): reachable.                  [WARN]
 
 Exit status: 0 when nothing needs a human (OK or WARN only), 1 on any FAIL.
 Newer-edition detection is deliberately WARN, not FAIL — the current dataset
@@ -222,10 +221,13 @@ PROVENANCE = [
     },
 ]
 
-# Live endpoints the app queries at runtime. Empty in this PR — every layer
-# ships pre-built; grown as a later phase adds a live TIGERweb read
-# (county-subdivision, municipality, zip-code — the WI/IL pattern).
-ENDPOINTS = []
+# Live endpoints the app queries at runtime.
+ENDPOINTS = [
+    {
+        "layer": "county-subdivision",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1/query?where=STATE%3D%2719%27&returnCountOnly=true&f=json",
+    },
+]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 

@@ -834,7 +834,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">6 layers — 4 political and legislative, 1 schools, 1 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">7 layers — 4 political and legislative, 1 schools, 2 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#schools">Schools</a>
@@ -929,7 +929,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">1 layer</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">2 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -947,6 +947,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names"><span class="matrix-none">—</span></td>
                 <td data-label="Where it applies">Iowa — statewide.</td>
+              </tr>
+              <tr id="layer-county-subdivision">
+                <th scope="row"><span class="layer-name">County Subdivision</span><code>county-subdivision</code></th>
+                <td data-label="What it answers">The civil township, or incorporated-city subdivision record, covering the point — and its type.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1" target="_blank" rel="noopener">U.S. Census TIGERweb — Places / county subdivisions, layer 1, queried live at runtime (no builder script, no committed data/app file)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">Iowa's civil townships are governed by elected trustees, a clerk and an assessor (Iowa Code ch. 359, ASSERTED) — no statewide roster of township officers was found in the research pass, so the card states that plainly rather than guessing. The 62 incorporated-city subdivision records and the one unorganized-territory record are Census Bureau bookkeeping constructs, not separate governments, so no roster claim applies to them at all.</td>
+                <td data-label="Where it applies">Iowa — statewide, all 1,663 records.</td>
               </tr>
             </tbody>
           </table>
