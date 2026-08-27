@@ -97,22 +97,50 @@ Traps, below).
 
 ---
 
-## PR 0 — scaffold and bootstrap
+## PR 0 — scaffold + four national-tier layers
+
+> **Corrected 2026-08-27, in the same change that shipped it.** This document originally planned PR 0
+> as a layer-less scaffold, deferring the first layer to a separate "PR 1". Direct verification of
+> `schema/metro-worksheet.schema.json` against that plan, done while starting the implementation,
+> found it unbuildable: `layers` requires `minItems: 1` and `anchors` requires `minItems: 3` (each
+> anchor must reference a real registered layer id), independently confirmed by
+> `scripts/build_landing_page.py`'s `instance_layer_count()`, which refuses an empty `layers[]`. A
+> layer-less scaffold cannot pass `generate_metro_files.py --check` — the PR's own CI gate — so it was
+> never a shippable PR 0. This section folds the originally-separate "PR 0" (scaffold only) and "PR
+> 1–4" (four layers, below) into the single PR that actually shipped: the scaffold bundled with the
+> four simplest, most uniform phase-1 layers — `county`, `us-house`, `ia-senate`, `ia-house` — all
+> pre-built, statewide, and TIGERweb-sourced. The project's own convention is to fix a wrong record in
+> the same change that disproves it, not as separate follow-up work; the old separate PR 1/2/3/4
+> headings below are retired along with the layer-less PR 0 they depended on. PR numbering for
+> everything from `county-supervisor` onward (still "PR 5") is unchanged — only the four PRs this
+> section absorbs are renumbered, so every downstream cross-reference elsewhere in this document and
+> in `ia/CLAUDE.md`/the guidebook's Iowa section (both of which cite "phase 1 PR 5" for
+> `county-supervisor`) still resolves.
 
 Creates `ia/` from the `wi/` shape (§0.1: a new state follows Wisconsin's structure, not Illinois's
 root-scripts structure) — `index.html` composed by `scripts/compose_app.py` from `engine/` with an
 `ia/` `METRO:BEGIN config` block, `sw.js`, `CLAUDE.md`, `WATCH.md`, `ia/metro-worksheet.json` filled
-per §2.1 with the values in the Worksheet section below, and `ia/scripts/` scaffolded with
-`validate_index.py` + `smoke_test.mjs` (both carrying `GENERATED:BEGIN validator-config`/
-`smoke-config` regions, empty until PR 1 registers a layer) + `validate_sources.py` (empty manifest).
+per §2.1, and `ia/scripts/` scaffolded with `validate_index.py` + `smoke_test.mjs` (both carrying
+`GENERATED:BEGIN validator-config`/`smoke-config` regions populated from the worksheet's four layers
+from the start, not left empty) + `validate_sources.py` (9 PROVENANCE rows across the four layers).
 
 **Fleet registration, done dark in this PR** (§2.4's day-one list, run mechanically, all gated by
-`--check`):
-- `metros.json` gains the `iowa`/`ia` entry (full JSON in the Worksheet section).
+`--check`) — **with one resolved design decision that departs from the original plan**: direct
+verification of `render_cards()` (`scripts/build_landing_page.py`) and `sync_fleet()`
+(`scripts/generate_metro_files.py`) showed neither filters a dark/unpublished fork — every
+`metros.json` entry renders as a live, clickable landing-page card regardless of the Pages deploy
+excludes. Adding `iowa` to `metros.json` in this PR, even with `ia/` excluded from the deploy, would
+therefore publish a card linking to a 404. **So, unlike the original plan text (and unlike the
+`metros.json` JSON shown in the Worksheet section below, which is the entry a later go-live PR adds),
+this PR does NOT touch `metros.json` and does NOT run `--sync-fleet`.**
+`ia/metro-worksheet.json`'s `metro_explorers` is instead hand-seeded with the four existing siblings'
+entries (copied from any current worksheet's array), which is exactly what `--sync-fleet` would
+produce once `iowa` is added — deferred to the go-live PR (still "PR 10").
 - `scripts/generate_metro_files.py` `INSTANCES` gains an `ia` row; `scripts/compose_app.py`
   `INSTANCES`/`SUBPAGES` gain `ia` rows.
 - `scripts/build_landing_page.py` `INSTANCE_WORKSHEET` gains the `ia` → `ia/metro-worksheet.json`
-  mapping (the build hard-fails without it once `ia` is in `metros.json`).
+  mapping — needed even while `ia` stays out of `metros.json`, since this is what lets a later
+  `instance_layer_count("ia")` call resolve once `iowa` is eventually added.
 - `scripts/build_manifests.py`, `scripts/build_history_page.py`, `scripts/build_brand_tokens.py`
   (`FACE_CARRIERS`) each gain their `ia` row.
 - `scripts/vendor_leaflet.sh` bash `INSTANCES` array gains
@@ -124,14 +152,40 @@ per §2.1 with the values in the Worksheet section below, and `ia/scripts/` scaf
   — **CI runs against `ia/` from PR 0 onward**, not after a dark period, so a broken layer is caught
   the day it lands rather than at go-live.
 - `.github/workflows/deploy-pages.yml` EXCLUDES gains one blanket line, `ia/**` — nothing half-built
-  publishes; PR 10 (go-live) narrows this to the granular exclude set the other three instances use.
+  publishes, and (per the resolved decision above) `ia` staying out of `metros.json` means the
+  fleet-status/landing-page machinery never expects it live either; PR 10 (go-live) narrows the
+  exclude to the granular set the other three instances use and adds the `metros.json` entry together.
 - **`.github/workflows/ia-validate-sources.yml` is created in this PR**, cloned from
   `wi-validate-sources.yml` (monthly, staggered cron, its own tracking issue). Wisconsin's equivalent
   workflow did not exist on day one — its own phase-2 plan recorded this as discrepancy #4 ("the
   workflow existed complete and nothing scheduled it"). Iowa does not repeat it.
 - **`history_page` is set in the worksheet from this PR**, not backfilled later (Wisconsin's `history_page`
   key was added only in phase 4, with three phases of changelog entries written after the fact from
-  git history). Entry 1: "Launched — the national tier plus the statewide supervisor-district fabric."
+  git history). Entry 1: "Launched — the national tier: county, U.S. House, Iowa Senate, Iowa House."
+
+**The four layers**, all pre-built and TIGERweb-sourced (`ia/scripts/build_state_counties.py` for
+`county`, `ia/scripts/build_legislative_boundaries.py` for the three chambers — `DEFAULT_TARGETS` must
+list all three explicitly, unlike Wisconsin's builder, which omits `us-house` because WI's
+`congress-districts.json` came from the now-deleted bootstrap script; Iowa has no such bootstrap step):
+
+- **`us-house` (4)**: TIGERweb `Legislative/MapServer/0`, `STATE='19'` — VERIFIED, count 4. Roster:
+  `unitedstates/congress-legislators` (`legislators-current.json`, CC0), the fleet-standard loader
+  every instance already carries. Weekly workflow `update-ia-congress-roster.yml` (Mon 14:30 UTC).
+- **`ia-senate` (50)** and **`ia-house` (100)**: TIGERweb `Legislative/1` and `/2`, `STATE='19'` —
+  VERIFIED. Each Senate district contains exactly 2 House districts (ASSERTED — Iowa Code
+  42.4-adjacent apportionment provision; the build gate proves it structurally against the shipped
+  geometry rather than trusting the citation). Roster ships with both boundaries, in this same PR
+  (rule 4): `data.openstates.org/people/current/ia.csv` (VERIFIED, same column shape as Wisconsin's
+  `wi.csv`) merged with each member's own `legis.iowa.gov` profile page (VERIFIED server-rendered
+  plain HTML, name/district/party/county/email plus a per-member page carrying Capitol phone —
+  Iowa's site has no single listing page with every member's contact block the way Wisconsin's does,
+  so each of the ~149 current members needs its own page fetch). One weekly workflow,
+  `update-ia-legislature-roster.yml`, feeds both layers' rosters (Tue 14:30 UTC). Floors set from the
+  verified 50+100 seat counts.
+- **`county` (99)**: TIGERweb `State_County/MapServer/1`, `STATE='19'` — VERIFIED, count 99. Identity
+  card only in phase 1 (no statewide auditor roster yet — that ships in phase 2 alongside `precinct`).
+
+`min_register_layer` → 4.
 
 **Localization sweep** (§2.7), run at the end of this PR and again before go-live: grep the new tree
 for `wisconsin`, `Wisconsin`, `WisconsinExplorer`, `Marathon`, `LTSB`, the `🧀` emoji, and Wisconsin's
@@ -142,38 +196,6 @@ whole repo, rather than confined to the new tree, returns false positives from
 **County, Wisconsin** (see Traps).
 
 ---
-
-## PR 1 — `us-house`: 4 districts
-
-TIGERweb `Legislative/MapServer/0`, `STATE='19'` — **VERIFIED, re-fetched this session: count 4**.
-Roster: `unitedstates/congress-legislators` (`legislators-current.json`, CC0), the fleet-standard
-loader every instance already carries — no new code, just an `ia` worksheet row and the weekly
-workflow `update-ia-congress-roster.yml` (Mon 13:30 UTC, staggered after Wisconsin's Mon 13:30 slot
-lands — actual minute offset decided at PR time against the live cron table). Bookkeeping: worksheet
-entry, area rank slot, sidebar rank, `validate_sources.py` row, `min_register_layer` → 1.
-
-## PR 2 — `ia-senate` (50) and PR 3 — `ia-house` (100)
-
-TIGERweb `Legislative/1` and `/2`, `STATE='19'` — **VERIFIED, this session's fetch confirmed layer 0
-(=4); layers 1/2 were confirmed by the research pass the same day (50/100) and are re-checked as part
-of this PR's own build gate, not re-asserted here.** Nesting: each Senate district contains exactly 2
-House districts (ASSERTED — Iowa Code 42.4-adjacent apportionment provision; the build gate proves
-it structurally against the shipped geometry rather than trusting the citation).
-
-**Roster ships with both boundaries, in the same PRs** (rule 4): `data.openstates.org/people/current/ia.csv`
-— VERIFIED reachable this session's research pass, same column shape as Wisconsin's `wi.csv` (id, name,
-current_party, current_district, current_chamber, email, capitol/district address and voice, links) —
-merged with `legis.iowa.gov/legislators/senate` and `/house`, VERIFIED server-rendered plain HTML
-tables (name, district, party, county, email) with per-member profile pages carrying more, exactly the
-enrichment role Wisconsin's `docs.legis.wisconsin.gov` pages played for `wi_legislature_scraper.py`.
-One weekly workflow, `update-ia-legislature-roster.yml`, feeds both layers' rosters (Tue 13:30 UTC).
-Floors set from the verified 50+100 seat counts, not guessed. `min_register_layer` → 3.
-
-## PR 4 — `county`: 99
-
-TIGERweb `State_County/MapServer/1`, `STATE='19'` — **VERIFIED, re-fetched this session's research
-pass, count 99.** Identity card only in phase 1 (no statewide auditor roster yet — that ships in phase
-2 alongside `precinct`). `min_register_layer` → 4.
 
 ## PR 5 — `county-supervisor`: the flagship, 266 features / 99 counties
 
@@ -389,16 +411,19 @@ or "refuses this project" from a sandbox 403 alone — every block gets one CI-s
    `BASE_URL=http://localhost:8000/ia/ node ia/scripts/smoke_test.mjs` — `EXPECT_LAYERS` asserted
    exactly, ground truth classifies against the Marshalltown anchor point, the negative point misses
    every anchor. `BASE_URL=http://localhost:8000 node scripts/landing_test.mjs` and
-   `node scripts/page_consistency_test.mjs` once `ia` is in `metros.json` (PR 0 onward).
+   `node scripts/page_consistency_test.mjs` don't exercise `ia/` until go-live (PR 10) — `ia` stays
+   out of `metros.json` through phase 1, per PR 0's resolved design decision.
 9. Every builder proves its own gates on a real run before its data file is committed;
-   `check_roster_retention.py --base origin/main` before every push once a roster exists (PR 2
-   onward).
+   `check_roster_retention.py --base origin/main` before every push once a roster exists (PR 0
+   onward — `congress-roster.json` and both chamber rosters ship in PR 0 itself).
 
 ---
 
 ## Worksheet and fleet values
 
-**`metros.json` entry** (added dark in PR 0, live at PR 10):
+**`metros.json` entry** (per PR 0's resolved design decision above, **not** added dark in PR 0 —
+`render_cards()`/`sync_fleet()` render every entry live regardless of the deploy exclude, so this
+entry ships only at go-live, still "PR 10"):
 ```json
 { "id": "iowa", "explorer_name": "districtry Iowa", "label": "Iowa",
   "url": "https://districtry.com/ia/", "emoji": "🌽",
@@ -434,12 +459,19 @@ plan 1 (at-large), so its one supervisor-district feature is the stable record. 
 adds `ia-judicial-district` and `community-college`. Alternates if Marshalltown fails validation at
 build time: Boone, Carroll (both ASSERTED plan-1 mid-size counties, to be confirmed).
 
-**Negative point: lat 43.75, lng −93.37** — inside Minnesota, roughly 25 km north of the Iowa border
-near Albert Lea, chosen deliberately against the **land** border rather than a river. Carter Lake, Iowa
-sits **west** of the Missouri River inside the Omaha river bend, so "across the Missouri" is not safely
-outside Iowa; both the Missouri and Big Sioux river borders carry oxbow/avulsion irregularities. The
-Minnesota land border has none of that. Validate at build time against every shipped layer, per the
-standard negative-point contract.
+**Negative point: lat 43.65, lng −93.37** — inside Minnesota, near Albert Lea and comfortably north of
+the Iowa border (~43.50), chosen deliberately against the **land** border rather than a river. Carter
+Lake, Iowa sits **west** of the Missouri River inside the Omaha river bend, so "across the Missouri" is
+not safely outside Iowa; both the Missouri and Big Sioux river borders carry oxbow/avulsion
+irregularities. The Minnesota land border has none of that. **Corrected 2026-08-27, caught by the
+behaviour gate**: an original choice of lat 43.75 sat outside this instance's own `permalink_gate`
+(`maxLat: 43.70`, a strict `<` comparison in the engine's hash-point validator), so the point was
+silently rejected at selection time — every layer's card stayed on its unqueried "Layer off."
+placeholder rather than genuinely querying and reporting no match, which the smoke test's negative-point
+check (expecting the honest empty state, not a stuck placeholder) caught. lat 43.65 sits inside the
+gate with margin on both sides. Validate at build time against every shipped layer, per the standard
+negative-point contract — including against `permalink_gate` itself, not only against the shipped
+boundaries.
 
 ---
 

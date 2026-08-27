@@ -61,6 +61,7 @@ jobs:
         run: |
           python3 scripts/build_coverage_gaps.py --check
           python3 scripts/build_coverage_gaps.py --check --metro wisconsin --out wi/data/app/coverage-gaps.json
+          python3 scripts/build_coverage_gaps.py --check --metro iowa --out ia/data/app/coverage-gaps.json
 
       # Wisconsin's county-board-directory.json carries each county's board
       # SIZE, and it reads that number back from the shipped supervisory
@@ -281,6 +282,7 @@ jobs:
           python3 ca/scripts/validate_index.py ca/index.html
           python3 ny/scripts/validate_index.py ny/index.html
           python3 wi/scripts/validate_index.py wi/index.html
+          python3 ia/scripts/validate_index.py ia/index.html
 
       # ONE server, EVERY instance. Until R3 this ran il alone, which is what
       # the repo had — ca and ny were separate repos with their own CI. They
@@ -307,6 +309,7 @@ jobs:
           BASE_URL=http://localhost:8000/ca/  node ca/scripts/smoke_test.mjs  || status=1
           BASE_URL=http://localhost:8000/ny/  node ny/scripts/smoke_test.mjs  || status=1
           BASE_URL=http://localhost:8000/wi/  node wi/scripts/smoke_test.mjs  || status=1
+          BASE_URL=http://localhost:8000/ia/  node ia/scripts/smoke_test.mjs  || status=1
           # The root landing page and — the part that matters — its forwarding
           # guard, which is what keeps every already-distributed share link and
           # embed snippet built from the OLD root URL reaching the app. A regex
