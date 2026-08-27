@@ -5977,7 +5977,8 @@ function initWisconsinExplorer() {
     "aldermanic-district", // 838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "milwaukee-neighborhoods", // The city's 190 named neighborhoods — an identity fabric, not an electing body; below the ward layer's statewide average, above the amenity points
-    "tid-district",      // 79 active tax incremental districts — small finance-overlay slices, below the neighborhood fabric's average and above the amenity points; the one city layer that does not tile the city
+    "madison-neighborhood-assoc", // 116 active city-registered association boundaries averaging 1.1 km² — just below Milwaukee's neighborhood fabric (1.3 km²) and above the TID slices; they nest and overlap by design, so the card collects every association at the point
+    "tid-district",      // 93 active tax incremental districts across two cities (Milwaukee 79, Madison 14) — small finance-overlay slices, below the neighborhood fabrics' averages and above the amenity points; the one city layer that does not tile its cities
     "police-station",    // Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points
     "fire-station",      // Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it
     "school-site",       // Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points
@@ -9676,35 +9677,157 @@ function initWisconsinExplorer() {
     }
   });
 
+  /* ---------- Madison city tier (phase 4 PR 4) ----------
+   * madisonCoverage is the corporate limits dissolved from the CITY'S OWN
+   * ward fabric (wi/scripts/build_madison_city_layers.py — a 4-part
+   * MultiPolygon whose 76 holes are the enclaves: Maple Bluff, Shorewood
+   * Hills, the town islands). A load failure rejects through to the
+   * engine's fail-open, the milwaukeeCoverage posture. ---------- */
+  var loadMadisonOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-outline.json", {}, 2);
+  });
+  function madisonCoverage(point) {
+    return loadMadisonOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
   /* Tax Incremental Districts — the reference instance's tif-district
    * concept under Wisconsin's own name (Wis. Stat. 66.1105 calls them
-   * TIDs): the city's 79 ACTIVE districts, a finance overlay that elects
-   * no one. UNLIKE EVERY OTHER MILWAUKEE LAYER THIS ONE DOES NOT TILE THE
-   * CITY — most of Milwaukee is in no TID, and the engine's standard
-   * empty state ("isn't inside any district in this layer") is exactly
-   * the honest answer there, so nothing overrides it. The builder drops
-   * dissolved districts by date and witnesses against the CKAN shapefile
-   * scoped to the city's own STATUS flag (the shapefile keeps all 56
-   * retired TIDs; the live layer serves only the 79 active). */
-  var loadTidDistricts = makeCached(function () {
+   * TIDs): a finance overlay that elects no one, and the ONE city layer
+   * that does not tile its cities — most of Milwaukee and Madison is in
+   * no TID, and the engine's standard empty state ("isn't inside any
+   * district in this layer") is exactly the honest answer there, so
+   * nothing overrides it. TWO CITIES SHARE THE TOGGLE, each with its own
+   * builder witness, exactly as counties join concepts in IL:
+   *   Milwaukee — 79 active districts, the live layer witnessed against
+   *   the CKAN shapefile scoped to the city's own STATUS flag (the
+   *   shapefile keeps all 56 retired TIDs; build_milwaukee_city_layers.py).
+   *   Madison — 14 active districts under a THREE-SURFACE agreement
+   *   (build_madison_city_layers.py): the city's GIS layer mixes district
+   *   polygons with half-mile planning buffers (the HALFMILERULE flag
+   *   separates the concepts) and still draws two districts the state
+   *   closed, so what ships is layer ∩ DOR's certified active list, with
+   *   the city program page supplying display names. TID 55 (Voit Farm)
+   *   is active with no published geometry — gap madison-tid-undrawn, so
+   *   an empty answer inside that area is the layer's recorded blind spot,
+   *   not a fact. */
+  var loadMkeTidDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/tid-districts.json", {}, 2);
+  });
+  var loadMadisonTidDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-tid-districts.json", {}, 2);
+  });
+  var loadTidDistricts = makeCached(function () {
+    // both are small same-origin files shipped together; either failing is
+    // the layer's failure (Retry in its own card), never a silent half-map
+    return Promise.all([loadMkeTidDistricts(), loadMadisonTidDistricts()])
+      .then(function (parts) {
+        return { type: "FeatureCollection",
+                 features: parts[0].features.concat(parts[1].features) };
+      });
   });
   registerPolygonLayer({
     id: "tid-district",
     group: "geography",
     label: "Tax Incremental District (TID)",
-    coverage: milwaukeeCoverage,
+    coverage: function (point) {
+      return milwaukeeCoverage(point).then(function (inMke) {
+        return inMke || madisonCoverage(point);
+      });
+    },
     loader: loadTidDistricts,
     // the reference instance's tif-district purple, kept for parity
     style: { color: "#6A4A93", weight: 2, fillColor: "#8E6BB8", fillOpacity: 0.10, dashArray: "4 3" },
     fields: [
       { name: "name", label: "TID", keys: ["name"], primary: true },
       { name: "tid", label: "District number", keys: ["tid"] },
-      { name: "created", label: "Created", keys: ["created"] }
+      { name: "created", label: "Created", keys: ["created"] },
+      // Madison features carry CITY; Milwaukee's predate the field and the
+      // row simply doesn't render there until that file's next rebuild
+      { name: "city", label: "City", keys: ["city"] }
     ],
-    primaryLink: function () {
+    primaryLink: function (result) {
+      if (result && result.city === "Madison") {
+        return { label: "City TIF program (plans and maps)",
+                 url: "https://www.cityofmadison.com/dpced/economic-development/tif" };
+      }
       return { label: "City TID data (open data portal)",
                url: "https://data.milwaukee.gov/dataset/tax-incremental-districts-tid" };
+    }
+  });
+
+  /* Neighborhood Associations (Madison) — the city's REGISTERED
+   * association boundaries under their honest name: Madison's official
+   * neighborhood fabric IS its registry, which also records condominium,
+   * resident, homeowners, business and property-owners associations in
+   * the same layer, so the card states each row's classification.
+   * Milwaukee's official neighborhoods stay their own layer — different
+   * concepts are not merged for tidiness. THE QUERY COLLECTS EVERY
+   * CONTAINING FEATURE (the NG911 pattern), because associations
+   * genuinely nest — five condo/resident polygons sit wholly inside a
+   * neighborhood association's, and two neighborhood associations
+   * overlap each other (measured 2026-08-27) — so first-match would hide
+   * real registrations. Only the city's Active rows ship
+   * (build_madison_city_layers.py). */
+  var loadMadisonAssocs = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-neighborhood-assocs.json", {}, 2);
+  });
+  registerLayer({
+    id: "madison-neighborhood-assoc",
+    group: "geography",
+    label: "Neighborhood Association (Madison)",
+    coverage: madisonCoverage,
+    overlay: {
+      load: loadMadisonAssocs,
+      // a sibling hue to the Milwaukee neighborhood green, one step bluer,
+      // so the two city fabrics read as kin without colliding
+      style: { color: "#2F6B5E", weight: 1.5, fillColor: "#4E8F80", fillOpacity: 0.06, dashArray: "5 3" }
+    },
+    hoverName: function (feature) {
+      var v = (feature.properties || {}).NAME;
+      return v ? String(v) : null;
+    },
+    query: function (point, seq) {
+      return loadMadisonAssocs().then(function (geojson) {
+        var assocs = [];
+        var feats = (geojson && geojson.features) || [];
+        for (var i = 0; i < feats.length; i++) {
+          var bb = featureBBox(feats[i]);
+          if (point.lng < bb[0] || point.lng > bb[2] || point.lat < bb[1] || point.lat > bb[3]) continue;
+          if (pointInGeometry(point, feats[i].geometry)) {
+            var p = feats[i].properties || {};
+            assocs.push({ name: String(p.NAME || ""), cls: String(p.CLASS || ""),
+                          web: p.WEB ? String(p.WEB) : null });
+          }
+        }
+        if (!assocs.length) return null;
+        // neighborhood associations first, then the nested condo/resident/
+        // business registrations, each stated as what it is
+        assocs.sort(function (a, b) {
+          var an = a.cls === "Neighborhood Association" ? 0 : 1;
+          var bn = b.cls === "Neighborhood Association" ? 0 : 1;
+          return an - bn || a.name.localeCompare(b.name);
+        });
+        return { seq: seq, assocs: assocs };
+      });
+    },
+    render: function (result) {
+      var rows = [{ label: "Association", value: result.assocs[0].name, primary: true },
+                  { label: "Type", value: result.assocs[0].cls }];
+      for (var i = 1; i < result.assocs.length; i++) {
+        rows.push({ label: "Also registered here",
+                    value: result.assocs[i].name + " (" + result.assocs[i].cls + ")" });
+      }
+      rows.push({ label: "About", value: "A city-registered association boundary, not a unit of " +
+        "government — where registrations nest, every association covering this point is listed." });
+      return renderFieldStack(rows);
+    },
+    primaryLink: function (result) {
+      var url = result && result.assocs[0] && safeHttpUrl(result.assocs[0].web);
+      if (url) return { label: "Association profile (city site)", url: url };
+      return { label: "City neighborhood associations",
+               url: "https://www.cityofmadison.com/dpced/planning/neighborhoods" };
     }
   });
 
@@ -10682,7 +10805,7 @@ function initWisconsinExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "mpd-squad-area", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "tid-district", "library", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "wi-senate", "wi-assembly", "county-board", "aldermanic-district", "wi-circuit-court", "wi-court-of-appeals", "mpd-district", "mpd-squad-area", "fire-service", "law-service", "ems-service", "psap-area", "police-station", "fire-station", "mps-school-board", "school-district-secondary", "school-district-unified", "school-district-elementary", "school-site", "county", "county-subdivision", "ward", "municipality", "zip-code", "milwaukee-neighborhoods", "madison-neighborhood-assoc", "tid-district", "library", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10777,16 +10900,16 @@ function initWisconsinExplorer() {
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#0F766E": "#50C7BC", "#14181C": "#696F76",
     "#14A38F": "#41EED2", "#1B5E3F": "#5FB387", "#1B7A3D": "#58CD7A", "#2E8C6A": "#62DAAC",
-    "#2E9E6B": "#5BEAA5", "#2F5D8C": "#6EACED", "#2F6B3A": "#6FBE7B", "#3D6B49": "#7EBC8D",
-    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4A7BB0": "#90C4FD",
-    "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9",
-    "#5E3A8C": "#B283F5", "#6A4A93": "#BC91F6", "#6B7280": "#B1BBCE", "#7A0A1C": "#EB5B61",
-    "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D", "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241",
-    "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452", "#8E6BB8": "#D3B3FE", "#9C0B24": "#FE6B6E",
-    "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1", "#B02E2E": "#FE8880", "#B0316E": "#FD88B8",
-    "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F", "#B45309": "#FEA16D", "#C8102E": "#FE928F",
-    "#C9A227": "#FEE195", "#D0564C": "#FEB1A7", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7",
-    "#D97706": "#FEC9A1", "#E4572E": "#FFBCA9"};
+    "#2E9E6B": "#5BEAA5", "#2F5D8C": "#6EACED", "#2F6B3A": "#6FBE7B", "#2F6B5E": "#6EBDAA",
+    "#3D6B49": "#7EBC8D", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
+    "#4A7BB0": "#90C4FD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#4E8F80": "#83DAC5",
+    "#5B2A86": "#B375F2", "#5C8F6B": "#95D9A9", "#5E3A8C": "#B283F5", "#6A4A93": "#BC91F6",
+    "#6B7280": "#B1BBCE", "#7A0A1C": "#EB5B61", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
+    "#8163AE": "#CAAAFF", "#8A5A00": "#E4A241", "#8C2E4A": "#F47294", "#8C6D1F": "#DEB452",
+    "#8E6BB8": "#D3B3FE", "#9C0B24": "#FE6B6E", "#A0522D": "#FE9666", "#A98B6C": "#F3CBA1",
+    "#B02E2E": "#FE8880", "#B0316E": "#FD88B8", "#B0342A": "#FF8B7C", "#B26A00": "#FFB15F",
+    "#B45309": "#FEA16D", "#C8102E": "#FE928F", "#C9A227": "#FEE195", "#D0564C": "#FEB1A7",
+    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7", "#D97706": "#FEC9A1", "#E4572E": "#FFBCA9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

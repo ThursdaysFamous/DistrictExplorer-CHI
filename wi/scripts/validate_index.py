@@ -88,7 +88,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 16
+MIN_REGISTER_LAYER = 17
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -101,8 +101,8 @@ EXPECT_LAYER_IDS = [
     "law-service", "fire-service", "county-board", "county-subdivision",
     "municipality", "zip-code", "mpd-district", "mps-school-board",
     "mpd-squad-area", "aldermanic-district", "ward",
-    "milwaukee-neighborhoods", "tid-district", "police-station",
-    "fire-station", "school-site", "library", "post-office",
+    "milwaukee-neighborhoods", "madison-neighborhood-assoc", "tid-district",
+    "police-station", "fire-station", "school-site", "library", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -128,6 +128,9 @@ GEOMETRY_FILES = {
     "psap-areas.json": (95, 95),  # 95 public safety answering points — the OEC's 205 effective NG911 PSAPBoundary polygons dissolved per agency (11 future-dated Expire rows KEPT, the case that proves the drop-by-date rule; 3 expired dropped). Same builder and gates as the fire/law files; an operator rebuild watched by the monthly source report.
     "ems-service-areas.json": (579, 579),  # 579 EMS dispatch areas — the OEC's 2,443 effective NG911 EmergencyMedicalServicesBoundary polygons dissolved per agency (34 expired rows dropped by date). Same builder and gates as the other three NG911 files; an operator rebuild watched by the monthly source report.
     "mpd-squad-areas.json": (25, 25),  # Milwaukee's 25 MPD squad areas — the city's own CC-BY layer server-reprojected, witnessed against the CKAN shapefile's area shares AND sample-verified inside their hundreds-digit districts (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints.
+    "madison-tid-districts.json": (14, 14),  # Madison's active Tax Incremental Districts — the city's open-data layer intersected with DOR's certified active list under a three-surface agreement (the GIS layer's HALFMILERULE flag drops its 9 planning buffers, DOR closes the layer's two stale districts, the city program page supplies names; wi/scripts/build_madison_city_layers.py, operator rebuild). TID 55 (Voit Farm) is active with no published geometry — gap madison-tid-undrawn — so the count is 14, not DOR's 15.
+    "madison-neighborhood-assocs.json": (100, 141),  # Madison's ACTIVE city-registered association boundaries (116 at first build of the city's 141 rows — the city's own STATUS flag is the filter; the Inactive are lapsed registrations). Same builder, operator rebuild.
+    "madison-outline.json": (1, 1),  # The City of Madison corporate limits — the city's own 137-ward fabric dissolved to one MultiPolygon (4 parts, enclave holes kept: Maple Bluff, Shorewood Hills, the town islands). madisonCoverage's ground; same builder.
     "tid-districts.json": (79, 79),  # Milwaukee's 79 active Tax Incremental Districts — the city's own CC-BY layer server-reprojected, dissolved TIDs dropped by date, witnessed against the CKAN shapefile's area shares scoped to the city's own STATUS flag (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints.
 }
 

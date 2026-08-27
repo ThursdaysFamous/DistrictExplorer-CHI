@@ -558,6 +558,66 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "tid-district",
+        "app_file": "madison-tid-districts.json",
+        "source_url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA_PLANNING/MapServer/8",
+        "note": (
+            "Madison's own TIF Districts layer — 25 rows of TWO concepts "
+            "(16 district polygons + 9 half-mile planning buffers, the "
+            "HALFMILERULE flag separating them; every row TIF_STATUS 'A'). "
+            "wi/scripts/build_madison_city_layers.py ships layer ∩ DOR's "
+            "certified active list (14 at first build): the layer still "
+            "draws state-closed TID 39/47 and has not drawn active TID 55 "
+            "(gap madison-tid-undrawn) — every delta is pinned and a pin "
+            "mismatch fails the build."
+        ),
+    },
+    {
+        "layer": "tid-district",
+        "app_file": "madison-tid-districts.json",
+        "source_url": "https://www.cityofmadison.com/dpced/economic-development/tif",
+        "note": (
+            "The city's TIF program page — Madison display names come from "
+            "its 'Current TIF Plans and Maps' listing, which the builder "
+            "GATES equal to DOR's active set (the two authorities agreed "
+            "15/15 at first build where the GIS layer disagreed three ways)."
+        ),
+    },
+    {
+        "layer": "tid-district",
+        "app_file": "madison-tid-districts.json",
+        "source_url": "https://www.revenue.wi.gov/Pages/Report/tid-active.aspx",
+        "note": (
+            "DOR's certified annual Active-TID workbook (tid100wi-<year>; "
+            "the builder tries the current year then the prior) — the "
+            "authority on which Madison TIDs exist. A new annual edition "
+            "is the operator's rebuild trigger (WATCH.md)."
+        ),
+    },
+    {
+        "layer": "madison-neighborhood-assoc",
+        "app_file": "madison-neighborhood-assocs.json",
+        "source_url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/12",
+        "note": (
+            "Madison's registered-association layer (141 rows; only the "
+            "city's STATUS 'Active' 116 ship, classification kept per row "
+            "because the registry holds six association kinds that nest). "
+            "Same builder; the city's Data Policy is a reference-use "
+            "disclaimer with attribution 'City of Madison, Wisconsin'."
+        ),
+    },
+    {
+        "layer": "madison-neighborhood-assoc",
+        "app_file": "madison-outline.json",
+        "source_url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/11",
+        "note": (
+            "The city's own ward fabric (137 at first build), dissolved to "
+            "the corporate-limits MultiPolygon that grounds madisonCoverage "
+            "— enclaves (Maple Bluff, Shorewood Hills, town islands) stay "
+            "holes. Re-run the builder if the city re-wards."
+        ),
+    },
+    {
         "layer": "fire-service",
         "app_file": "fire-service-areas.json",
         "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3",
@@ -624,6 +684,25 @@ ENDPOINTS = [
     {
         "layer": "fire-station",
         "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        # The Madison pair is PRE-BUILT; a count change here is the
+        # operator's rebuild trigger (WATCH.md). The TIF layer's 25 counts
+        # BOTH concepts (districts + half-mile buffers), so read a move as
+        # "something changed", never as the district count itself.
+        "layer": "tid-district",
+        "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA_PLANNING/MapServer/8/query?where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "madison-neighborhood-assoc",
+        "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/12/query?where=1%3D1&returnCountOnly=true&f=json",
+    },
+    {
+        # madisonCoverage's ground: the city's ward fabric (137 at first
+        # build) — a count change means the city re-warded; re-run the
+        # Madison builder so the outline follows.
+        "layer": "madison-neighborhood-assoc",
+        "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/11/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         # The NG911 pair is PRE-BUILT, but the OEC refreshes the service

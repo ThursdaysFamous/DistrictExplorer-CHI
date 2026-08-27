@@ -198,7 +198,7 @@ The gap record narrows to "statewide minus Milwaukee" rather than closing.
 Election-cycle churn: polling places move per election — WATCH.md row, and
 the card states the pairing's edition.
 
-## PR 4 — The Madison city tier (tid-district's second city + neighborhood associations)
+## PR 4 — The Madison city tier (tid-district's second city + neighborhood associations) — DELIVERED 2026-08-27
 
 Measured on the city's own server (maps.cityofmadison.com, catalogued in
 its open-data portal):
@@ -220,6 +220,36 @@ its open-data portal):
   program (the portal catalogues these as open data; capture the terms
   text for the source block, the DPI-licence precedent), and a
   `madisonCoverage` test built from the city's corporate-limit layer.
+
+DELIVERED 2026-08-27, and the measurement rewrote the plan's own ledger
+twice. The "25 TIF rows" were TWO CONCEPTS in one layer — 16 district
+polygons and 9 half-mile planning buffers, all TIF_STATUS 'A', separated
+only by the HALFMILERULE flag (one buffer even carries a real TIF_NO), so
+the planned status-flag filter alone would have shipped buffers as
+districts. And the city's surfaces disagree: the layer draws TID 39 and
+47, which DOR's certified 2026 active list (tid100wi-2026.xlsx — the
+authority, agreeing with the city's own Economic Development program page
+15/15) says closed early, and omits TID 55 (Voit Farm, base 2025), which
+is active and undrawn — gap `madison-tid-undrawn`, pinned in
+`wi/scripts/build_madison_city_layers.py` alongside KNOWN_CLOSED_IN_LAYER
+so any delta change fails the build for a human look. Shipped: 14
+districts = layer ∩ DOR, names from the program page (which corrects the
+layer on six, materially on two — TID 50 "State and Lake" not "State St",
+TID 54 "Pennsylvania Ave" not "Northside"), CREATED from DOR's Base Yr.
+The 141 associations split 116 Active / 25 Inactive across SIX
+classifications (condo, resident, homeowners, business, property-owners
+associations ride the same registry), and they NEST — five polygons
+wholly inside a neighborhood association's, two neighborhood
+associations overlapping — so `madison-neighborhood-assoc` collects
+EVERY containing feature (the NG911 pattern) with each row's
+classification stated and the city profile linked. `madisonCoverage` is
+the city's own 137-ward fabric dissolved to the corporate limits
+(4 parts, enclave holes kept). Licence captured: the city's Data Policy
+reference-use disclaimer + the "City of Madison, Wisconsin" attribution.
+No `madison-polling` shipped here, but the same OPEN_DATA service
+carries Polling Places (/4) and Wards (/11) — recorded as the NEXT
+city-scoped polling candidate after Milwaukee's, following the PR 3
+pattern.
 
 ## PR 5 — The WEC Playwright-from-CI attempt (a measurement, not a layer) — DELIVERED 2026-08-27, THE BLOCK WAS SANDBOX-SIDE
 
