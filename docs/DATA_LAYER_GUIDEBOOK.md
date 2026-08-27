@@ -55,7 +55,7 @@ in the researched-but-unbuilt backlog.
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"],
   "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "mpd-squad-area", "milwaukee-neighborhoods", "tid-district", "fire-service", "law-service", "ems-service", "psap-area", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"],
-  "iowa": ["us-house", "ia-senate", "county", "ia-house", "county-supervisor"]
+  "iowa": ["us-house", "ia-senate", "county", "ia-house", "county-supervisor", "school-district-unified"]
 }
 ```
 <!-- ==== GUIDEBOOK:END coverage-map ==== -->
@@ -1891,7 +1891,7 @@ v1.0.6) · **CountyDispatch** `registerCountyLayer` (CHI fork-level dispatcher: 
 concept layer holding a per-county entry table — see
 `docs/EXPANSION_GUIDE.md` Part 2; adding a county is a table entry, not a layer).
 
-Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 5** layers.
+Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 6** layers.
 
 ---
 
@@ -1974,7 +1974,7 @@ which the never-guess rule excludes as a source.
 | Elementary attendance zone | SHIPPED `cps-elementary` | SHIPPED `es-zone` | SHIPPED `elementary-attendance-area` (bespoke — card carries the lottery-tiebreaker caveat) | SHIPPED `school-district-elementary` (TIGERweb School layer 2, live) | n/a — TIGERweb School layers 1/2 (secondary/elementary) return ZERO features for Iowa (measured, STATE='19'); the state runs unified districts only |
 | Middle / high attendance zone | SHIPPED `cps-middle` · `cps-high` | SHIPPED `ms-zone` · `hs-zone` | NO HONEST ANALOG — SFUSD publishes only elementary areas; MS is feeder-pattern, HS is citywide choice | SHIPPED `school-district-secondary` (union high, TIGERweb School layer 1, live) | n/a — same measured zero |
 | School admin region / network | SHIPPED `cps-network` · `cps-hs-network` | SHIPPED `school-district` (32 CSDs) | NO HONEST ANALOG — one undivided district, no sub-regions | NO HONEST ANALOG — no sub-district network tier | n/a |
-| Statewide school-district identity | SHIPPED `school-district-{unified,secondary,elementary}` (TIGERweb, coverage-gated) | n/a | n/a | SHIPPED `school-district-unified` (369, pre-built TIGERweb) | NOT SHIPPED — `school-district-unified` (TIGERweb: 325; the Dept. of Education's own layer counts 324 — a one-district reconciliation to be named at build); a later phase-1 PR |
+| Statewide school-district identity | SHIPPED `school-district-{unified,secondary,elementary}` (TIGERweb, coverage-gated) | n/a | n/a | SHIPPED `school-district-unified` (369, pre-built TIGERweb) | SHIPPED `school-district-unified` (324) — TIGERweb's 325 dissolved one district: Orient-Macksburg merged into Nodaway Valley for the 2026-2027 school year, ahead of TIGERweb's federal vintage, resolved by diffing the Dept. of Education's own school-year-versioned layers and spatially sampling the dissolved district's old boundary against the current one (all 10 samples landed in Nodaway Valley — a clean, whole absorption). Identity-only, no roster, exactly the WI precedent |
 | School site points | SHIPPED `school-site` | SHIPPED `school-site` | SHIPPED `school-site` | SHIPPED `school-site` (DPI's own two AGO layers pre-built: 2,138 placed public + 828 private = 2,966; DPI's 152 placeless virtual-program rows — no geometry AND no address — don't ship on a proximity card, and the builder fails if a no-geometry row ever carries an address) | NOT SHIPPED — Dept. of Education's `IowaSchoolBldgs` layer (1,321 points, verified); phase 2 |
 
 ### Geography / amenities
@@ -9367,7 +9367,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `library` | Library (nearest 3) | geography | NearestPt | pre-built `library-sites.json` — DPI's WI_Public_Libraries_and_Branches L6, 482 outlets with address + phone (build_wi_libraries.py; the layer's LAT/LONG attributes are mercator meters — geometry only) | — (boards appointed, s. 43.54 — locations, not a district card) | — |
 | `post-office` | Post Office | geography | NearestPt | USGS National Map L38 | — | — |
 
-### Iowa — 5 layers
+### Iowa — 6 layers
 
 | id | label | group | pattern | source | roster / join |
 |---|---|---|---|---|---|
@@ -9376,6 +9376,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `county` | County | geography | Bespoke | pre-built (TIGERweb State_County, 99 — offline anchor) | — (identity-only; no statewide roster of county officers exists yet — the county AUDITOR route is phase 2) |
 | `ia-house` | Iowa House District | political | Chamber | pre-built (TIGERweb L2, 100 districts) | `ia-house-members.json` (same pair as the Senate) |
 | `county-supervisor` | County Supervisor District | political | Bespoke | pre-built (Iowa Legislature ArcGIS org, `CountySupervisorDistricts`, vintage 2024-01-30, PLANTYPE-aware — 270 features across 98 of 99 counties; Black Hawk's 5 districts overridden with its own hosted GIS, vintage 2026-02-24; Story and Johnson each ship as one county-level `TRANSITIONING` feature carrying their SOS-approved plan's facts, no GIS service found for either; Jones County entirely absent from the state aggregate, gap `jones-county-supervisor`) | `ia-county-board-directory.json` (board size read back from the shipped geometry + each county's own site from the Iowa State Association of Counties' member directory, operator-rebuilt) — no statewide roster of supervisors exists |
+| `school-district-unified` | School District (Unified) | schools | Polygon | pre-built (TIGERweb School L0, 325 dissolved to 324 — Orient-Macksburg merged into Nodaway Valley for 2026-2027, ahead of TIGERweb's federal vintage, witnessed by name against the Dept. of Education's own current layer) | — (identity-only; boards elected at-large or by director district depending on the district, no statewide member roster exists) |
 
 Iowa's flagship layer, `county-supervisor`, is the first in the fleet built around a
 mid-decade statewide redistricting statute: **Senate File 75** (signed 2025-04-11) forces
@@ -9403,8 +9404,30 @@ domain convention (Story and Johnson are `<name>countyiowa.gov`, Black Hawk is
 `blackhawkcounty.iowa.gov`), so guessing a pattern would have silently shipped dead links
 for whichever counties don't follow it — the Iowa State Association of Counties' own
 99-page member directory (`ia_county_directory_scraper.py`) supplied every county's real
-site instead, one verified page per county. See `docs/IA_EXPANSION_PLAN.md` for the
-phased plan beyond this layer.
+site instead, one verified page per county.
+
+`school-district-unified` PROVED THE STATE'S OWN "CURRENT" LAYER OVER FEDERAL VINTAGE
+THE SAME WAY THE FLAGSHIP DID. TIGERweb School layer 0 carries 325 Iowa unified
+districts; the same shared Iowa GIS organization `county-supervisor` reads also hosts
+the Dept. of Education's own `CurrentIowaSchoolDistricts` (324) alongside a full run of
+SCHOOL-YEAR-VERSIONED layers back to 2017-2018 — and `CurrentIowaSchoolDistricts` and
+the newest, `IowaSchoolDistricts2026_2027`, were BOTH edited within two minutes of each
+other on the day this layer was built, confirming they are one current answer kept in
+sync rather than two competing ones. Diffing that current layer's name list against the
+previous year's (`IowaSchoolDistricts2025_2026`, 325, last edited 2026-02-24) found
+exactly one absence and nothing added: **Orient-Macksburg Community School District**
+dissolved for the 2026-2027 school year. Spatially sampling ten points across its old
+TIGERweb boundary (the centroid plus nine points inset from evenly-spaced vertices)
+against the current layer put every one inside **Nodaway Valley Community School
+District** — a clean, whole absorption, not a split — so the builder dissolves
+TIGERweb's two polygons into one (mapshaper `-dissolve` on a shared key, `copy-fields`
+carrying Nodaway Valley's own identity forward) rather than inventing a merged-district
+name neither publisher uses. The DE layer's naming is its own trap: it drops
+"Community"/"School District" everywhere but keeps "Independent" for MARION INDEPENDENT
+while dropping it for WEST BURLINGTON's own "WEST BURLINGTON" — not a rule, so the one
+irregular case ships as a recorded exception rather than a broader regex risking a
+silent mismatch elsewhere. See `docs/IA_EXPANSION_PLAN.md` for the phased plan beyond
+this layer.
 
 
 ---

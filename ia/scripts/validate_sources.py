@@ -200,6 +200,26 @@ PROVENANCE = [
             "since Iowa publishes no statewide one."
         ),
     },
+    {
+        "layer": "school-district-unified",
+        "app_file": "ia-school-districts.json",
+        "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/0",
+        "note": (
+            "324 unified school districts (325 TIGERweb features, one "
+            "dissolved into a neighbor — WATCH.md tracks the reconciliation) "
+            "pre-built by ia/scripts/build_ia_school_districts.py."
+        ),
+    },
+    {
+        "layer": "school-district-unified",
+        "app_file": "ia-school-districts.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CurrentIowaSchoolDistricts/FeatureServer/0",
+        "note": (
+            "Iowa Dept. of Education's own current district layer — the "
+            "name-set witness the builder checks its dissolve against, never "
+            "the geometry source."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime. Empty in this PR — every layer
