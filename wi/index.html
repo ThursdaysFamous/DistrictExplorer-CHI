@@ -9026,6 +9026,14 @@ function initWisconsinExplorer() {
    * (gap ward-polling-places). ---------- */
   var LTSB_WARDS_LAYER = "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0";
   var WARD_OUT_FIELDS = "WARDID,MCD_NAME,CTV,CNTY_NAME,SUPERID,ALDERID";
+  // Milwaukee's ward -> polling place pairing (phase 4 PR 3): pre-built by
+  // wi/scripts/build_mke_polling_places.py from the city's CC-BY dataset,
+  // ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed
+  // against the city's own REST layer. Fetched only when a Milwaukee ward
+  // is selected; a miss degrades the card to its pre-pairing shape.
+  var loadMkePollingPlaces = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mke-polling-places.json", {}, 2);
+  });
   var loadWards = makeCached(function () {
     var PAGE = 2000; // the hosted layer's own maxRecordCount — 4 pages statewide
     function page(offset, acc) {
@@ -9091,16 +9099,44 @@ function initWisconsinExplorer() {
         if (!feature) return null;
         var props = feature.properties || {};
         var alder = findPropCI(props, ["alderid"]);
-        return {
+        var result = {
           seq: seq,
           ward: wardNumber(props),
           place: wardPlaceName(props),
           county: findPropCI(props, ["cnty_name"]),
           superid: findPropCI(props, ["superid"]),
           // "00" is LTSB's no-aldermanic-districts placeholder — never a district
-          alderid: (alder != null && String(alder) !== "" && String(alder) !== "00") ? String(alder) : null
+          alderid: (alder != null && String(alder) !== "" && String(alder) !== "00") ? String(alder) : null,
+          polling: null
         };
+        // Milwaukee only: the city publishes its ward -> polling place
+        // pairing (CC-BY) and its ward numbers ARE LTSB's — measured and
+        // gated in build_mke_polling_places.py. The rest of the state stays
+        // gap `ward-polling-places` (WEC's surfaces refuse automation), so
+        // this card's MyVote primaryLink remains every other ward's answer.
+        // A pairing-fetch failure degrades to the pre-PR-3 card.
+        if (result.place === "City of Milwaukee" && result.ward != null) {
+          return loadMkePollingPlaces().catch(function () { return null; })
+            .then(function (places) {
+              var rec = places ? places[String(result.ward)] : null;
+              if (rec) result.polling = rec;
+              return result;
+            });
+        }
+        return result;
       });
+    },
+    pointOfInterest: function (result) {
+      // the engine geocodes the address for the pin; the record's own
+      // lat/lng exists in the data for future use, but the shared POI path
+      // keeps one pin pipeline (two wards' place ships without a point —
+      // the city's layer carries it with null geometry — and the address
+      // string covers those identically)
+      if (!result || !result.polling) return null;
+      return {
+        label: String(result.polling.name),
+        address: String(result.polling.address) + ", Milwaukee, WI"
+      };
     },
     cardIdentifier: function (result) {
       return result.ward != null ? "Ward " + String(result.ward) : "Unknown ward";
@@ -9123,11 +9159,43 @@ function initWisconsinExplorer() {
       if (result.alderid != null) {
         rows.push({ label: "Aldermanic district", value: "District " + String(parseInt(result.alderid, 10) || result.alderid) });
       }
-      return renderFieldStack(rows);
+      if (!result.polling) return renderFieldStack(rows);
+      // Milwaukee's ward -> polling place pairing (phase 4 PR 3): the place
+      // and address visible, the city's own entrance/parking guidance behind
+      // one expander, and the pairing DATED — polling places move election
+      // to election, so the card states the dataset edition and the MyVote
+      // primaryLink stays as the reader's confirmation route.
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderFieldStack(rows));
+      wrap.appendChild(renderSectionLabel("Polling place"));
+      var p = result.polling;
+      var lines = [String(p.address)];
+      var office = { label: String(p.name), lines: lines };
+      var details = [];
+      if (p.mainEntrance) details.push(String(p.mainEntrance));
+      if (p.accessibleEntrance) details.push(String(p.accessibleEntrance));
+      if (p.mainParking) details.push(String(p.mainParking));
+      if (p.accessibleParking) details.push(String(p.accessibleParking));
+      wrap.appendChild(renderOfficeGroup({
+        label: "Where to vote",
+        open: true,
+        offices: details.length
+          ? [office, { label: "Entrances & parking", lines: details }]
+          : [office]
+      }));
+      wrap.appendChild(renderFieldStack([{
+        label: "As of",
+        value: "City of Milwaukee voting-wards dataset, " + String(p.asOf) +
+          " — polling places can change between elections; confirm at " +
+          "MyVote Wisconsin (linked below) before you go."
+      }]));
+      return wrap;
     },
     primaryLink: function () {
-      // The polling-place answer this card honestly cannot carry (see the
-      // module comment): the state's own lookup, for the reader to ask there.
+      // Statewide, the polling answer this card honestly cannot carry (gap
+      // ward-polling-places — WEC's surfaces refuse automation); inside
+      // Milwaukee it is the reader's confirmation route for the dated
+      // pairing above. Either way: the state's own lookup.
       return { label: "Find your polling place — MyVote Wisconsin", url: "https://myvote.wi.gov/" };
     }
   });
