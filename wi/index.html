@@ -9021,11 +9021,12 @@ function initWisconsinExplorer() {
    * renders as a district.
    *
    * A ward elects no officeholder — it is the unit election administration
-   * assigns — and NO POLLING PLACE ships: the state aggregates them only
-   * behind MyVote, whose every route (site and API alike) sits behind a
-   * Cloudflare challenge this project does not defeat, so the card links
-   * that lookup instead and the Data gaps panel carries the measurement
-   * (gap ward-polling-places). ---------- */
+   * assigns — and STATEWIDE no polling place ships: the state aggregates
+   * the pairing only behind MyVote, whose every route (site and API alike)
+   * sits behind a Cloudflare challenge this project does not defeat, so the
+   * card links that lookup and the Data gaps panel carries the measurement
+   * (gap ward-polling-places). The exceptions are the cities that publish
+   * their OWN pairing — Milwaukee and Madison, the loaders below. ---------- */
   var LTSB_WARDS_LAYER = "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0";
   var WARD_OUT_FIELDS = "WARDID,MCD_NAME,CTV,CNTY_NAME,SUPERID,ALDERID";
   // Milwaukee's ward -> polling place pairing (phase 4 PR 3): pre-built by
@@ -9035,6 +9036,13 @@ function initWisconsinExplorer() {
   // is selected; a miss degrades the card to its pre-pairing shape.
   var loadMkePollingPlaces = makeCached(function () {
     return fetchJSONWithRetry("data/app/mke-polling-places.json", {}, 2);
+  });
+  // Madison's, the second city (build_madison_polling_places.py): the city's
+  // open-data server publishes the pairing as ONE layer — a polling point
+  // per ward, 137 rows — gated equal to LTSB's Madison wards AND the city's
+  // own ward layer. Same fetch-on-selection, same degrade-on-miss contract.
+  var loadMadisonPollingPlaces = makeCached(function () {
+    return fetchJSONWithRetry("data/app/madison-polling-places.json", {}, 2);
   });
   var loadWards = makeCached(function () {
     var PAGE = 2000; // the hosted layer's own maxRecordCount — 4 pages statewide
@@ -9111,14 +9119,19 @@ function initWisconsinExplorer() {
           alderid: (alder != null && String(alder) !== "" && String(alder) !== "00") ? String(alder) : null,
           polling: null
         };
-        // Milwaukee only: the city publishes its ward -> polling place
-        // pairing (CC-BY) and its ward numbers ARE LTSB's — measured and
-        // gated in build_mke_polling_places.py. The rest of the state stays
-        // gap `ward-polling-places` (WEC's surfaces refuse automation), so
-        // this card's MyVote primaryLink remains every other ward's answer.
-        // A pairing-fetch failure degrades to the pre-PR-3 card.
-        if (result.place === "City of Milwaukee" && result.ward != null) {
-          return loadMkePollingPlaces().catch(function () { return null; })
+        // Two cities publish their own ward -> polling place pairing —
+        // Milwaukee (CC-BY dataset) and Madison (the city's open-data
+        // polling layer) — and both ward numberings ARE LTSB's, measured
+        // and gated in each builder. The rest of the state stays gap
+        // `ward-polling-places` (WEC's interior data pages re-challenge
+        // even a cleared browser — the 2026-08-27 recon), so this card's
+        // MyVote primaryLink remains every other ward's answer. A
+        // pairing-fetch failure degrades to the pre-pairing card.
+        var loadPolling = result.place === "City of Milwaukee" ? loadMkePollingPlaces
+          : result.place === "City of Madison" ? loadMadisonPollingPlaces
+            : null;
+        if (loadPolling && result.ward != null) {
+          return loadPolling().catch(function () { return null; })
             .then(function (places) {
               var rec = places ? places[String(result.ward)] : null;
               if (rec) result.polling = rec;
@@ -9135,9 +9148,13 @@ function initWisconsinExplorer() {
       // the city's layer carries it with null geometry — and the address
       // string covers those identically)
       if (!result || !result.polling) return null;
+      // the pairing only ever fills inside a city whose composed place name
+      // the card already holds ("City of Milwaukee" / "City of Madison"),
+      // so that name minus its prefix is the geocoder's city hint
       return {
         label: String(result.polling.name),
-        address: String(result.polling.address) + ", Milwaukee, WI"
+        address: String(result.polling.address) + ", " +
+          String(result.place || "").replace(/^City of /, "") + ", WI"
       };
     },
     cardIdentifier: function (result) {
@@ -9162,10 +9179,10 @@ function initWisconsinExplorer() {
         rows.push({ label: "Aldermanic district", value: "District " + String(parseInt(result.alderid, 10) || result.alderid) });
       }
       if (!result.polling) return renderFieldStack(rows);
-      // Milwaukee's ward -> polling place pairing (phase 4 PR 3): the place
-      // and address visible, the city's own entrance/parking guidance behind
-      // one expander, and the pairing DATED — polling places move election
-      // to election, so the card states the dataset edition and the MyVote
+      // A city's ward -> polling place pairing (Milwaukee or Madison): the
+      // place and address visible, any entrance/parking guidance behind one
+      // expander, and the pairing DATED — polling places move election to
+      // election, so the card states the source edition and the MyVote
       // primaryLink stays as the reader's confirmation route.
       var wrap = cardEl("div", "card-flush");
       wrap.appendChild(renderFieldStack(rows));
@@ -9185,9 +9202,14 @@ function initWisconsinExplorer() {
           ? [office, { label: "Entrances & parking", lines: details }]
           : [office]
       }));
+      // each city's source is named honestly: Milwaukee's dataset carries an
+      // edition date; Madison's layer publishes none, so its asOf is the day
+      // the build read it and the wording says so
       wrap.appendChild(renderFieldStack([{
         label: "As of",
-        value: "City of Milwaukee voting-wards dataset, " + String(p.asOf) +
+        value: (result.place === "City of Madison"
+          ? "City of Madison polling-places layer, read " + String(p.asOf)
+          : "City of Milwaukee voting-wards dataset, " + String(p.asOf)) +
           " — polling places can change between elections; confirm at " +
           "MyVote Wisconsin (linked below) before you go."
       }]));

@@ -506,7 +506,7 @@
             "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0"
           }
         ],
-        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement). INSIDE MILWAUKEE the card now carries the pairing (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) \u2014 name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections.",
+        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement). INSIDE MILWAUKEE the card now carries the pairing (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) \u2014 name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections. MADISON is the second city: its open-data server publishes the pairing as ONE layer \u2014 a polling point per ward, 137 rows \u2014 whose ward keys are gated equal to LTSB's Madison wards AND the city's own ward layer (wi/scripts/build_madison_polling_places.py, madison-polling-places.json); the layer publishes no edition date, so each build dates the pairing as the day it was read.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -960,11 +960,16 @@
         "file": "mke-polling-places.json",
         "min_keys": 356,
         "note": "Milwaukee ward -> polling place pairing (build_mke_polling_places.py; CC-BY city dataset, ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed against the city's own REST layer, places pointed and bbox-gated). Dated per dataset edition; rebuilt per election, not weekly."
+      },
+      {
+        "file": "madison-polling-places.json",
+        "min_keys": 130,
+        "note": "Madison ward -> polling place pairing (build_madison_polling_places.py; the city's open-data polling layer is one point per ward, ward keys gated equal to LTSB's Madison wards AND the city's own ward layer, points bbox-gated). The layer publishes no edition date, so records are dated as read; rebuilt per election, not weekly."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v25",
+    "cache_name": "districtry-wi-shell-v26",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1180,6 +1185,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "Madison wards learn where they vote",
+        "body": "The ward card now names the polling place for each of Madison's 137 wards \u2014 the building, its address, and a map pin \u2014 the second city to gain the pairing after Milwaukee. Madison publishes it as one layer on the city's own open-data server: a polling point per ward, carrying the ward number, the building name, and the street address. The build shipped because the ward numbering agrees three ways \u2014 the polling layer, the city's own ward boundary layer, and the state ward file all name the same 137 wards exactly \u2014 and because every point lands inside Madison. One honesty note is stated on the card: the city's layer publishes no edition date, so the pairing is dated as the day it was read, and the state's MyVote lookup stays linked as the confirmation route. Outside these two cities the answer is unchanged: the statewide pairing sits behind surfaces that refuse automated readers, now an open ask to the state's election commission."
+      },
       {
         "date": "2026-08-27",
         "title": "Three careful visits to locked doors, and what each one proved",

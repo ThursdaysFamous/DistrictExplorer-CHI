@@ -151,6 +151,7 @@ ROSTER_FILES = {
     "wi-alderpersons.json": 6,  # The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml.
     "wi-county-officers.json": 72,  # 72 counties x 7 offices from the Blue Book's county-officer tables (build_wi_county_officer_roster.py; layout-aware x-position parse, chair-seats witness, Menominee pin, shared-DA footnote). Dated April 2025 on every card; refreshed weekly with the clerk scrape.
     "mke-polling-places.json": 356,  # Milwaukee ward -> polling place pairing (build_mke_polling_places.py; CC-BY city dataset, ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed against the city's own REST layer, places pointed and bbox-gated). Dated per dataset edition; rebuilt per election, not weekly.
+    "madison-polling-places.json": 130,  # Madison ward -> polling place pairing (build_madison_polling_places.py; the city's open-data polling layer is one point per ward, ward keys gated equal to LTSB's Madison wards AND the city's own ward layer, points bbox-gated). The layer publishes no edition date, so records are dated as read; rebuilt per election, not weekly.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at
