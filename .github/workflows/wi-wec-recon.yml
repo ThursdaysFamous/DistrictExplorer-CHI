@@ -43,6 +43,16 @@ jobs:
         run: python3 -m playwright install --with-deps chromium
 
       - name: Capture WEC data pages + MPD district pages
+        env:
+          # the probe measured the challenge clearing in 3.7s; 120 was CPD's
+          # legacy number and the first dispatch burned it per page
+          WEC_CHALLENGE_WAIT_S: "30"
+          # hard wall-clock budget: after this the script skips remaining
+          # pages and writes its inventory, so something always comes back
+          RECON_BUDGET_S: "900"
+          # unbuffered stdout: the first dispatch lost every EXTRACT block
+          # to block-buffering when the timeout killed the process
+          PYTHONUNBUFFERED: "1"
         run: python3 wi/scripts/wi_wec_recon.py --out-dir wi-recon-capture
 
       - name: Upload capture artifact
