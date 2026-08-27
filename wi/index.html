@@ -8318,7 +8318,7 @@ function initWisconsinExplorer() {
    * from national publishers — Census TIGERweb boundaries plus the
    * public-domain unitedstates/congress-legislators roster — parameterized
    * by state FIPS. Nothing here is state-specific beyond that one token;
-   * grow this fork per docs/EXPANSION_GUIDE.md §4.3 (statewide growth) and
+   * grow this fork per docs/EXPANSION_GUIDE.md §2.2.1 (statewide growth) and
    * Part 2 (the per-county build) — see the GROWING THIS FORK crib block at
    * the end of this section.
    * ======================================================================= */
@@ -8968,7 +8968,7 @@ function initWisconsinExplorer() {
     // reference instance nests the same TIGER layer the same way — il/'s
     // `township`, labelled "Township / County Subdivision", subOf "county" —
     // and both layers sit in `geography`, so the cross-group nesting ban
-    // (docs/EXPANSION_GUIDE.md Part 5) does not bite. The cost is stated
+    // (docs/EXPANSION_GUIDE.md Part 4) does not bite. The cost is stated
     // rather than discovered: subOf hides a child whenever ANY ancestor is
     // off, and `ward` is subOf this layer, so County off now takes the ward
     // card and its polling place with it — the same three-deep chain the
@@ -9242,7 +9242,7 @@ function initWisconsinExplorer() {
     subOf: "county-subdivision", // WARDID numbers within the MCD, and CouSub
     // (unlike Places) contains the towns, so it is the parent that holds
     // every ward — the containment-with-numbering bar, IL's county-precinct
-    // shape (docs/EXPANSION_GUIDE.md Part 5, nesting determination)
+    // shape (docs/EXPANSION_GUIDE.md Part 4, nesting determination)
     overlay: {
       load: loadWards,
       // fine dotted amber — the smallest containment fabric on the map, kept
@@ -10548,7 +10548,7 @@ function initWisconsinExplorer() {
    * Every factory named below is ENGINE (byte-identical across forks) and is
    * already in this file — one commented example each. The procedure (source
    * ladder, roster rules, worksheet + sources.html row per layer) lives in
-   * docs/EXPANSION_GUIDE.md §4.3 and Part 2; the CHI reference repo holds a
+   * docs/EXPANSION_GUIDE.md §2.2.1 and Part 2; the CHI reference repo holds a
    * working example of each (plus registerCpsNetwork-style admin-region
    * cards, which are portal-specific).
    * ======================================================================= */
@@ -11143,7 +11143,7 @@ function initWisconsinExplorer() {
   /* =========================================================================
    * BOOT
    * ======================================================================= */
-  // Sidebar order (docs/EXPANSION_GUIDE.md Part 5 "Sidebar placement
+  // Sidebar order (docs/EXPANSION_GUIDE.md Part 4 "Sidebar placement
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.

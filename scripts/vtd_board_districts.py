@@ -1,7 +1,7 @@
 """
 Shared machinery for counties whose board districts are UNIONS OF WHOLE
 PRECINCTS and whose precinct fabric is still the Census 2020 voting-district
-fabric — the "canvass route" of docs/EXPANSION_GUIDE.md §2.5.1.
+fabric — the "canvass route" of docs/EXPANSION_GUIDE.md §3.5.1.
 
 WHY THIS MODULE EXISTS. Clark shipped the route on 2026-08-18 with every step
 inline in scripts/build_clark_boundaries.py. The 34-county sweep of the

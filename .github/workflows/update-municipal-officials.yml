@@ -6,7 +6,7 @@ name: Update municipal officials roster
 # rather than committing directly to main — officeholder data should get a
 # human look before it ships.
 #
-# All seven metro counties are sourced (docs/EXPANSION_GUIDE.md Part 2.4), plus
+# All seven metro counties are sourced (docs/EXPANSION_GUIDE.md §3.4), plus
 # every county the app has since taken on, each at the depth its county actually
 # publishes:
 #   Cook       — Clerk's Directory of Elected Officials JSON API (full body)
@@ -358,7 +358,7 @@ jobs:
         continue-on-error: true
         run: python3 scripts/galesburg_council_scraper.py --out /tmp/galesburg_council.json
 
-      # The bounded per-city exception (docs/EXPANSION_GUIDE.md Part 2.4): the
+      # The bounded per-city exception (docs/EXPANSION_GUIDE.md §3.4): the
       # Will ward cities' own sites carry per-seat contact the Clerk's directory
       # doesn't, and supply Lockport and Wilmington, which that directory omits
       # entirely. Contact-only for cities the county already covers.
@@ -370,7 +370,7 @@ jobs:
       # Skokie's four district trustees + two at-large are published as
       # municipality-wide by the Cook Clerk, with no district on any of them,
       # while Cook GIS carries the four district polygons. The village settles
-      # it (docs/EXPANSION_GUIDE.md Part 2.4).
+      # it (docs/EXPANSION_GUIDE.md §3.4).
       - name: Scrape Skokie's trustee district assignments
         id: scrape_skokie
         continue-on-error: true

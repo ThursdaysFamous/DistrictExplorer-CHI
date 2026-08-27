@@ -631,7 +631,7 @@ def main():
 
     # 2c. LAYER_SIDEBAR_RANK covers every registered id exactly once, and
     # nothing else — same contract as 2b for the sidebar display order
-    # (docs/EXPANSION_GUIDE.md Part 5 "Sidebar placement standard"): the boot
+    # (docs/EXPANSION_GUIDE.md Part 4 "Sidebar placement standard"): the boot
     # sort deliberately sinks an unranked id to the end instead of throwing,
     # so this check is the only place a rank/registry drift fails loudly.
     m = re.search(r"var LAYER_SIDEBAR_RANK = \[(.*?)\];", html, re.DOTALL)

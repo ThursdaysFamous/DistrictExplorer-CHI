@@ -91,7 +91,7 @@ Cook and the collar counties mostly fetch live data from public APIs at runtime,
 
 ## How it's built
 
-Each instance is a stable core plus pluggable layer modules, all inside one `index.html`. The full module contract and build history live in [`docs/BUILD_PLAYBOOK_1.md`](docs/BUILD_PLAYBOOK_1.md); [`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md) is the primary guide for adding a county, a statewide layer, a new concept, or a new metro.
+Each instance is a stable core plus pluggable layer modules, all inside one `index.html`. The full module contract and build history live in [`docs/BUILD_PLAYBOOK_1.md`](docs/BUILD_PLAYBOOK_1.md); [`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md) — the State Expansion Guide — is the primary guide for standing up a new state instance, deepening one county by county, or adding a new concept.
 
 - **Core**: Leaflet map, click-to-select + Photon/Nominatim geocoder (debounced, metro-bounded), global `{selectedPoint, sequence}` state where a monotonic sequence counter discards stale async results once a newer point is selected, shared `sanitize` / `pointInGeometry` / `fetchJSONWithRetry` utilities, the layer registry + result-card framework with per-layer failure isolation, selected-boundary highlight, URL-hash permalinks.
 - **Layer modules**: each layer registers `{id, group, label, overlay:{load, style}, query(point, seq), render(result)}`. Overlays lazy-load on first toggle and are cached; `query` runs a local point-in-polygon test against the cached boundaries (or nearest-N haversine for station/school/amenity layers). A layer can declare a `coverage(point)` test — outside it, the layer hides rather than erroring. The six cross-county concepts (County Board, Judicial Subcircuit, Fire Protection District, Park District, Library District, Voting Precinct) each register through one `registerCountyLayer` dispatcher — a single toggle holding a per-county entry table, whose coverage is the OR of its counties' — so adding a county to a shipped concept is a dispatch-table entry, not a new layer.
@@ -188,7 +188,7 @@ ca/                                  SAN FRANCISCO — same shape as il/
 
 ## Expanding it
 
-[`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md) is the primary guide for adding a county, growing a statewide layer, porting a new metro, or adding a new concept — start there. [`docs/DATA_LAYER_GUIDEBOOK.md`](docs/DATA_LAYER_GUIDEBOOK.md) is the fleet-wide layer inventory (what exists where, recorded parity debts, the backlog). Officeholder data is never guessed and a county is never added on a hunch — every roster and every boundary in this repo traces to a named, checkable public source.
+[`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md) — the State Expansion Guide — is the primary guide for standing up a new state instance, deepening one county by county and city by city, or adding a new concept; its Part 5 collects what Illinois's 91 counties and Wisconsin's four phases taught. Start there. [`docs/DATA_LAYER_GUIDEBOOK.md`](docs/DATA_LAYER_GUIDEBOOK.md) is the fleet-wide layer inventory (what exists where, recorded parity debts, the backlog). Officeholder data is never guessed and a county is never added on a hunch — every roster and every boundary in this repo traces to a named, checkable public source.
 
 ## Not for legal or official use
 

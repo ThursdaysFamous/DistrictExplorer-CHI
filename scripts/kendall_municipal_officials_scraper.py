@@ -10,7 +10,7 @@ VILLAGE OFFICIALS sections.
 Why this source: Kendall's open GeoData portal carries boundaries but no
 officials dataset, and the Kane/Kendall Council of Mayors publishes no member
 roster, so the Clerk's yearbook is the county's own record and rung 2 of the
-source ladder (docs/EXPANSION_GUIDE.md Part 2.4).
+source ladder (docs/EXPANSION_GUIDE.md §3.4).
 
 DEPTH: head of government + elected clerk/treasurer. The yearbook prints no
 trustees or aldermen, so this county ships a `head` with no `board` — an

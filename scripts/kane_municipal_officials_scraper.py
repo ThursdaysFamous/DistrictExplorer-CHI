@@ -12,7 +12,7 @@ published record of who holds each local office, and its "Cities and Village
 Officials" section covers every Kane municipality in one document. Kane's
 county GIS carries municipal boundaries but no officials data, and no council
 of governments publishes a competing roster, so this is rung 2 of the source
-ladder (docs/EXPANSION_GUIDE.md Part 2.4).
+ladder (docs/EXPANSION_GUIDE.md §3.4).
 
 DEPTH: head of government + municipal clerk only. The guide does NOT print
 trustees or aldermen, so this county ships a `head` with no `board` — an
@@ -23,7 +23,7 @@ The PDF is a text PDF with a stable two-column visual layout, so it is parsed
 in pypdf's layout mode: each entry is anchored by its "<Name> ... www.site"
 header line, and the fields below it are matched positionally. A
 line-flattened extraction glues the right-hand column onto the left and is
-NOT usable here (docs/EXPANSION_GUIDE.md Part 2.4, PDF-parse lessons).
+NOT usable here (docs/EXPANSION_GUIDE.md §3.4, PDF-parse lessons).
 
 Scope note: the same guide prints Township, Park/Library District, and School
 District sections. Only the municipal section is parsed here — the township

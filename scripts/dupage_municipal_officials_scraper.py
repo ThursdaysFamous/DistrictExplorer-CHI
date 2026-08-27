@@ -13,7 +13,7 @@ listings but no officeholder roster, and the county GIS carries municipal
 boundaries with zero officials data). DMMC — the council of governments whose
 members are the municipalities themselves — is the only verified source naming
 DuPage mayors and village presidents, which makes this rung 3 of the source
-ladder (docs/EXPANSION_GUIDE.md Part 2.4).
+ladder (docs/EXPANSION_GUIDE.md §3.4).
 
 DEPTH: head of government only. The directory prints no trustees or aldermen,
 so this county ships a `head` with no `board`, and the Municipality card links
@@ -39,7 +39,7 @@ pypdf layout mode with the column boundaries derived from the entry headers'
 own x-positions (never hardcoded — the edition's layout may shift). Kerning
 splits long tokens with runs of spaces inside a single value
 ("www.burr       -ridge.gov"), so URLs are rejoined by stripping internal
-whitespace (docs/EXPANSION_GUIDE.md Part 2.4, PDF-parse lessons).
+whitespace (docs/EXPANSION_GUIDE.md §3.4, PDF-parse lessons).
 
 The PDF's URL is date-stamped per edition
 (.../2026/05/Membership-Directory-25-26-5.12.2026.pdf) and DOES change, so it

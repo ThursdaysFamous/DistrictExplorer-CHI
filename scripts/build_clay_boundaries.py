@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build data/app/clay-county-board-districts.json — Clay County's 14 lettered
-County Board districts (one member each; docs/EXPANSION_GUIDE.md Part 2;
+County Board districts (one member each; docs/EXPANSION_GUIDE.md Part 3;
 scripts/vtd_board_districts.py holds the shared machinery).
 
 THE COMPOSITION IS THE COUNTY'S OWN, IN PLAIN HTML. claycounty.illinois.gov's

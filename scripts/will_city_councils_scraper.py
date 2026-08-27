@@ -8,7 +8,7 @@ reading each city's own official site.
 
 WHY A PER-CITY SOURCE HERE, DELIBERATELY
 ----------------------------------------
-The source ladder (docs/EXPANSION_GUIDE.md Part 2.4) puts individual municipal
+The source ladder (docs/EXPANSION_GUIDE.md §3.4) puts individual municipal
 sites below the link-only floor precisely so nobody scrapes 30+ heterogeneous
 sites by default. This is the deliberate, bounded exception it allows, taken
 for one reason: these are the cities whose seats the `ward` layer answers, so

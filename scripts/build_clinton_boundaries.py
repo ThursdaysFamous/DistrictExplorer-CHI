@@ -2,7 +2,7 @@
 """
 Build data/app/clinton-county-board-districts.json — Clinton County's 5 County
 Board districts, composed from the county's own certified election returns
-(docs/EXPANSION_GUIDE.md §2.5.1, the canvass route; scripts/vtd_board_districts.py
+(docs/EXPANSION_GUIDE.md §3.5.1, the canvass route; scripts/vtd_board_districts.py
 holds the machinery).
 
 SECOND COUNTY FROM THE PLATINUM VENDOR, found the same day as Franklin.

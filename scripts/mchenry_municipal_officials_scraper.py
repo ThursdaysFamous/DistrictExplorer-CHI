@@ -9,7 +9,7 @@ from the County Clerk's annual County Yearbook, "Cities & Villages" page.
 Why this source: McHenry's county GIS carries municipal boundaries with no
 officials data, and no council of governments publishes a member roster, so
 the Clerk's yearbook is the county's own record and rung 2 of the source
-ladder (docs/EXPANSION_GUIDE.md Part 2.4).
+ladder (docs/EXPANSION_GUIDE.md §3.4).
 
 DEPTH: head of government + elected clerk/treasurer. The yearbook prints no
 trustees or aldermen, so this county ships a `head` with no `board` — an
