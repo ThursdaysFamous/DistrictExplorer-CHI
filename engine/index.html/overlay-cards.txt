@@ -555,7 +555,13 @@
     var body = layerRuntime[mod.id].cardBody;
     resetCardExtras(mod);
     body.className = "layer-card-body state-empty";
-    body.textContent = "This point isn't inside any district in this layer.";
+    // A layer may explain its OWN empty state via mod.emptyNote, because for
+    // some layers "not inside any district here" is a FACT ABOUT THE PLACE
+    // rather than a miss. A point outside every incorporated municipality is
+    // in unincorporated territory — that is the answer, not the absence of
+    // one — and the generic sentence reads as though the app had failed to
+    // find something. Layers that declare nothing keep the generic wording.
+    body.textContent = mod.emptyNote || "This point isn't inside any district in this layer.";
   }
   function setCardResult(mod, resultEl) {
     var body = layerRuntime[mod.id].cardBody;

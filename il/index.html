@@ -7299,7 +7299,13 @@ function initChiExplorer() {
     var body = layerRuntime[mod.id].cardBody;
     resetCardExtras(mod);
     body.className = "layer-card-body state-empty";
-    body.textContent = "This point isn't inside any district in this layer.";
+    // A layer may explain its OWN empty state via mod.emptyNote, because for
+    // some layers "not inside any district here" is a FACT ABOUT THE PLACE
+    // rather than a miss. A point outside every incorporated municipality is
+    // in unincorporated territory — that is the answer, not the absence of
+    // one — and the generic sentence reads as though the app had failed to
+    // find something. Layers that declare nothing keep the generic wording.
+    body.textContent = mod.emptyNote || "This point isn't inside any district in this layer.";
   }
   function setCardResult(mod, resultEl) {
     var body = layerRuntime[mod.id].cardBody;
@@ -8109,7 +8115,7 @@ function initChiExplorer() {
    * Promise.all query() doesn't fit this shape.
    *
    * opts: { id, group, label, loader, style, pointOfInterest?, coverage?,
-   *         subOf?, onToggle?, fields: [...] }
+   *         subOf?, emptyNote?, onToggle?, fields: [...] }
    * Each field is one of:
    *   { name, label, keys:[...], primary:true } — always shown; findPropCI(keys)
    *        with an "Unknown" fallback. Conventionally the first field (headline).
@@ -8166,6 +8172,7 @@ function initChiExplorer() {
       pointOfInterest: opts.pointOfInterest,
       coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
       subOf: opts.subOf,       // optional sub-selection parent (nests under it)
+      emptyNote: opts.emptyNote, // optional: this layer's own words for an empty result
       onToggle: opts.onToggle, // optional toggle reaction (e.g. a sub-layer framing its parent)
       primaryLink: opts.primaryLink, // optional footer link (docs/CARD_RENDER_API.md) — link-only (4c) layers put their official site here
       // 4b name-only presentation (docs/CARD_RENDER_API.md): a fork opts a

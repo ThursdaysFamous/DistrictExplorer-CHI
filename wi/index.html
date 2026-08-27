@@ -5983,8 +5983,8 @@ function initWisconsinExplorer() {
     "law-service",       // 639 dissolved law-enforcement dispatch areas statewide — sheriffs' unincorporated territory keeps the average above the county-board fabric
     "fire-service",      // 1,046 dissolved fire-department response areas statewide — denser than the law layer (town departments), broader than the county-board fabric
     "county-board",      // County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town
-    "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live)
-    "municipality",      // Incorporated places (TIGERweb Places, live); unincorporated points say so
+    "county-subdivision", // Towns / county subdivisions (TIGERweb CouSub, live) — 1,925 records tiling the state: 1,242 towns, 452 village and 219 city records, and 12 Great-Lakes water records; nested under County, which each subdivision belongs to by construction
+    "municipality",      // Incorporated places (TIGERweb Places, live) — 608 in Wisconsin, 190 cities + 418 villages and not one of the state's 1,242 towns; a point in a town gets the layer's own words for unincorporated
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
     "mpd-district",      // Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer
     "mps-school-board",  // Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer
@@ -6979,7 +6979,13 @@ function initWisconsinExplorer() {
     var body = layerRuntime[mod.id].cardBody;
     resetCardExtras(mod);
     body.className = "layer-card-body state-empty";
-    body.textContent = "This point isn't inside any district in this layer.";
+    // A layer may explain its OWN empty state via mod.emptyNote, because for
+    // some layers "not inside any district here" is a FACT ABOUT THE PLACE
+    // rather than a miss. A point outside every incorporated municipality is
+    // in unincorporated territory — that is the answer, not the absence of
+    // one — and the generic sentence reads as though the app had failed to
+    // find something. Layers that declare nothing keep the generic wording.
+    body.textContent = mod.emptyNote || "This point isn't inside any district in this layer.";
   }
   function setCardResult(mod, resultEl) {
     var body = layerRuntime[mod.id].cardBody;
@@ -7751,7 +7757,7 @@ function initWisconsinExplorer() {
    * Promise.all query() doesn't fit this shape.
    *
    * opts: { id, group, label, loader, style, pointOfInterest?, coverage?,
-   *         subOf?, onToggle?, fields: [...] }
+   *         subOf?, emptyNote?, onToggle?, fields: [...] }
    * Each field is one of:
    *   { name, label, keys:[...], primary:true } — always shown; findPropCI(keys)
    *        with an "Unknown" fallback. Conventionally the first field (headline).
@@ -7808,6 +7814,7 @@ function initWisconsinExplorer() {
       pointOfInterest: opts.pointOfInterest,
       coverage: opts.coverage, // optional location-relevance test (see overlay-cards)
       subOf: opts.subOf,       // optional sub-selection parent (nests under it)
+      emptyNote: opts.emptyNote, // optional: this layer's own words for an empty result
       onToggle: opts.onToggle, // optional toggle reaction (e.g. a sub-layer framing its parent)
       primaryLink: opts.primaryLink, // optional footer link (docs/CARD_RENDER_API.md) — link-only (4c) layers put their official site here
       // 4b name-only presentation (docs/CARD_RENDER_API.md): a fork opts a
@@ -8932,9 +8939,20 @@ function initWisconsinExplorer() {
    * Cribbed from the CHI reference township module minus its per-county
    * officials join: the card names the subdivision only (honesty rules — no
    * roster source, no guessed officeholder). TIGER NAME carries the honest
-   * civil-division type suffix ("Homer township", "Carbondale city"); in
-   * states with no township government the subdivisions are UTs/CCDs and the
-   * suffix says so. ---------- */
+   * civil-division type suffix ("Adams town", "Wauwatosa city").
+   *
+   * IN WISCONSIN THE SUBDIVISIONS ARE THE MUNICIPALITIES, which is why the
+   * card states each one's TYPE rather than leaving a reader to infer it.
+   * Measured 2026-08-27: 1,925 records tiling the state — 1,242 towns, 452
+   * village records, 219 city records, and 12 "County subdivisions not
+   * defined" (the Great Lakes water in the twelve lakeshore counties). The
+   * 671 city/village records answer for 608 municipalities, because 58 cross
+   * a county line and get one record per county — the same 58 the Elections
+   * Commission's polling file labels "MULTIPLE COUNTIES", two publishers
+   * agreeing. So a city or village appears HERE and on the City or Village
+   * card both, with the same name, and the type row is what tells a reader
+   * why they are seeing it twice; a town appears here alone, and the type
+   * row says that too. ---------- */
   var loadCountySubdivisions = tigerStatewideLoader(
     TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 1,
     "GEOID,NAME,BASENAME,STATE,COUNTY,LSADC", "county subdivisions");
@@ -8958,9 +8976,18 @@ function initWisconsinExplorer() {
       return queryFeatureAt(loadCountySubdivisions, point).then(function (feature) {
         if (!feature) return null;
         var props = feature.properties || {};
+        var name = findPropCI(props, ["name"]);
+        var base = findPropCI(props, ["basename"]);
         return {
           seq: seq,
-          name: findPropCI(props, ["name"]),
+          name: name,
+          // the civil-division type, taken from what TIGER's own NAME carries
+          // beyond its BASENAME ("Adams" + " town") rather than from LSADC,
+          // so the card can never disagree with the name printed above it
+          kind: (name != null && base != null &&
+                 String(name).indexOf(String(base)) === 0)
+            ? String(name).slice(String(base).length).trim().toLowerCase()
+            : null,
           geoid: findPropCI(props, ["geoid"])
         };
       });
@@ -8971,15 +8998,44 @@ function initWisconsinExplorer() {
         title: result.name != null ? String(result.name) : "Unknown subdivision",
         note: result.geoid != null ? "GEOID " + String(result.geoid) : null
       }));
+      var KIND_NOTE = {
+        town: "Town — unincorporated. Wisconsin towns are not cities or " +
+          "villages, so this point is in no incorporated municipality.",
+        village: "Village — an incorporated municipality, so it also answers " +
+          "on the City or Village card.",
+        city: "City — an incorporated municipality, so it also answers on the " +
+          "City or Village card."
+      };
+      // no row rather than a guessed one: the twelve "County subdivisions not
+      // defined" records are the Great Lakes water and are none of the three
+      if (result.kind && KIND_NOTE[result.kind]) {
+        wrap.appendChild(renderFieldStack([
+          { label: "Type", value: KIND_NOTE[result.kind] }
+        ]));
+      }
       return wrap;
     }
   });
 
-  /* ---------- 3. Municipality — live TIGERweb ----------
+  /* ---------- 3. City or Village — live TIGERweb ----------
    * Cribbed from the CHI reference municipality module minus its
-   * municipal-officials join. Incorporated places only: a point outside every
-   * place gets the engine's null-result card, which here honestly means
-   * "unincorporated" — never suppressed, never guessed at. ---------- */
+   * municipal-officials join. INCORPORATED PLACES ONLY, which is why this
+   * layer is no longer labelled "Municipality": Wis. Stat. 5.02(11) defines a
+   * municipality as "city, town or village", and TIGER's Places layer carries
+   * 608 Wisconsin records (190 cities + 418 villages) and NOT ONE of the
+   * state's 1,242 towns. So the old label promised the statutory set and
+   * delivered two thirds of it, and — measured 2026-08-27 at the Town of
+   * Adams — the app contradicted itself in two cards at once: the ward card
+   * said "Municipality: Town of Adams" (correct, and the wording the Elections
+   * Commission's own file uses) while this card said the point was "not inside
+   * any district in this layer". Both statements cannot be read together.
+   *
+   * The id stays `municipality` — it is in shipped `layers=` permalinks and
+   * renaming it would break other people's links — and the LABEL carries the
+   * correction. The empty state now says what being outside every place MEANS
+   * (mod.emptyNote, the engine hook this change added) instead of reading like
+   * a lookup that failed: a point in a town is unincorporated, which is an
+   * answer, and County Subdivision is the card that names the town. ---------- */
   var loadPlaces = tigerStatewideLoader(
     TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 4,
     "GEOID,NAME,BASENAME,STATE,LSADC", "incorporated places");
@@ -8987,7 +9043,12 @@ function initWisconsinExplorer() {
   registerLayer({
     id: "municipality",
     group: "geography",
-    label: "Municipality",
+    label: "City or Village",
+    // the honest words for "outside every incorporated place in Wisconsin",
+    // which is a fact about the place and not a failed lookup
+    emptyNote: "This point is not in a city or village. Wisconsin's towns are " +
+      "unincorporated, so a point in one sits in no municipality of this kind — " +
+      "the County Subdivision card names the town it is in.",
     overlay: {
       load: loadPlaces,
       // tight magenta dots; an empty card here honestly means "unincorporated"
@@ -9001,7 +9062,7 @@ function initWisconsinExplorer() {
       // point-first (queryFeatureAt): one place polygon instead of the
       // statewide incorporated-places download
       return queryFeatureAt(loadPlaces, point).then(function (feature) {
-        if (!feature) return null; // unincorporated — the engine renders the honest empty card
+        if (!feature) return null; // unincorporated — the engine renders this layer's own emptyNote
         var props = feature.properties || {};
         return {
           seq: seq,
@@ -9013,7 +9074,7 @@ function initWisconsinExplorer() {
     render: function (result) {
       var wrap = cardEl("div", "card-flush");
       wrap.appendChild(renderBodyIntro({
-        title: result.name != null ? String(result.name) : "Unknown municipality",
+        title: result.name != null ? String(result.name) : "Unknown place",
         note: result.geoid != null ? "FIPS " + String(result.geoid) : null
       }));
       return wrap;
