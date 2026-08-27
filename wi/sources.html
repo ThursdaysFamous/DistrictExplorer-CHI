@@ -865,7 +865,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">30 layers — 7 political and legislative, 8 public safety, 5 schools, 10 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">31 layers — 7 political and legislative, 8 public safety, 6 schools, 10 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -1073,7 +1073,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">5 layers</span></h2>
+        <h2>Schools <span class="matrix-count">6 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1081,6 +1081,17 @@ table.matrix code {
               <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
             </thead>
             <tbody>
+              <tr id="layer-wtcs-district">
+                <th scope="row"><span class="layer-name">Technical College District</span><code>wtcs-district</code></th>
+                <td data-label="What it answers">The Wisconsin Technical College System district containing the point — the technical college your property tax funds (Wis. Stat. ch. 38). Identity-only, deliberately: the district board is APPOINTED (Wis. Stat. 38.08), not elected, and the card says so and names no one.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Technical_College_Regions_2019/FeatureServer/0" target="_blank" rel="noopener">Wisconsin DPI — Technical College Districts (the shipped school-site and library builds' own org, same reference-use licence), pre-built by wi/scripts/build_wi_wtcs_districts.py under five gates: exactly 16, a seat witness pinning each college's home city inside its own district, no overlaps, and the union's one lawful hole being Lake Winnebago — the layer's 2019 title notwithstanding, the content is current (it carries Northwood, the 2021 rename)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">None, deliberately: the board is appointed under Wis. Stat. 38.08, so there is no officeholder a voter elects — the card links the system's own site instead.</td>
+                <td data-label="Where it applies">Statewide — every land point sits in exactly one district; open water (the Great Lakes, Lake Winnebago) honestly in none.</td>
+              </tr>
               <tr id="layer-school-district-secondary">
                 <th scope="row"><span class="layer-name">School District (Union High)</span><code>school-district-secondary</code></th>
                 <td data-label="What it answers">The union high school district serving the point, where elementary and high school districts are separate.</td>
