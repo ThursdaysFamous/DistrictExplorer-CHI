@@ -5687,6 +5687,20 @@ function initChiExplorer() {
             "answered yet. These are the gaps recorded inside the covered area.";
         } else if (point && mappable && inCoverage === true) {
           lede.textContent = "Nothing recorded is missing where you clicked. These are the gaps elsewhere.";
+        } else if (point) {
+          // A POINT IS SELECTED, SO NEVER TELL THIS READER TO CLICK: they just
+          // did, and for a year this branch did exactly that — measured in
+          // Wisconsin, whose ten gaps all shipped with empty `counties`, so
+          // `mappable` was false and a reader standing on Milwaukee City Hall
+          // was told to click a spot on the map. Two ways to land here, and
+          // only one of them can explain itself: no gap names a county (nothing
+          // can be tested against the point), or the coverage mask has not
+          // loaded (we cannot tell whether they are inside it). Neither may
+          // claim their spot is clean.
+          lede.textContent = mappable
+            ? "Here is everything that is missing and why."
+            : "These gaps aren't mapped to particular places, so this list can't lead with the " +
+              "ones that affect you. Here is everything that is missing and why.";
         } else {
           lede.textContent = "Click a spot on the map first and this list will lead with the gaps that " +
             "affect you. Otherwise, here is everything that is missing and why.";

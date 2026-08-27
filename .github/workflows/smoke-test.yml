@@ -71,6 +71,15 @@ jobs:
       - name: WI county board directory matches the shipped districts
         run: python3 wi/scripts/build_wi_county_board_directory.py --check
 
+      # Wisconsin's 72 county containment outlines are SLICED from the same
+      # state-counties.json the county card renders, so the two can only
+      # disagree if one is rebuilt and the other is not — and a stale outline
+      # silently mis-answers "does this gap apply where you clicked" rather
+      # than failing. Local files only; the builder's own containment and
+      # exclusivity gates re-run on every check.
+      - name: WI county outlines match the shipped county fabric
+        run: python3 wi/scripts/build_wi_county_outlines.py --check
+
       # districtry/tokens/districtry.tokens.css is the ONE source of the brand
       # surface, and this is what makes that true rather than aspirational. The
       # fleet was carrying one palette under two vocabularies and four hand-kept

@@ -116,9 +116,36 @@ def known_layer_ids(w):
     return {l["id"] for l in w["layers"]}
 
 
-def shipped_outline_slugs():
+def shipped_outline_slugs(app_data_dir=None):
+    d = app_data_dir or APP_DATA_DIR
+    if not os.path.isdir(d):
+        return None
     return {f[: -len("-county-outline.json")]
-            for f in os.listdir(APP_DATA_DIR) if f.endswith("-county-outline.json")}
+            for f in os.listdir(d) if f.endswith("-county-outline.json")}
+
+
+def sibling_surfaces(out_path):
+    """The layer ids and outline slugs of the instance an --out path points
+    into, so a sibling's file is validated against ITS OWN app rather than
+    against nothing.
+
+    This is the hole that shipped a broken panel. Both per-fork checks used to
+    be skipped whenever `--metro` named someone else, because the only
+    worksheet and data dir this script knew were Illinois's. So Wisconsin's
+    gaps were emitted for weeks with never a slug or layer id checked — and
+    when all ten shipped with EMPTY counties, nothing said so. An instance
+    laid out like this repo's own (`<root>/data/app/coverage-gaps.json`
+    beside `<root>/metro-worksheet.json`) is now measured against itself; a
+    path shaped like anything else falls back to skipping, exactly as before.
+    """
+    app_dir = os.path.dirname(os.path.abspath(out_path))
+    inst = os.path.dirname(os.path.dirname(app_dir))
+    ws = os.path.join(inst, "metro-worksheet.json")
+    if not (os.path.basename(app_dir) == "app" and os.path.exists(ws)):
+        return None, None
+    with open(ws, encoding="utf-8") as f:
+        sibling = json.load(f)
+    return known_layer_ids(sibling), shipped_outline_slugs(app_dir)
 
 
 def reader_problems(where, e):
@@ -216,13 +243,28 @@ def main():
              "empty, so the absence is deliberate rather than an oversight."
              % (metro, list(gaps)))
 
-    # Layer ids and outline slugs are per-fork, so those two checks only apply to
-    # this repo's own metro. Emitting a sibling's file still validates everything
-    # that is fork-independent (ids, kinds, required fields).
+    # Layer ids and outline slugs are per-fork. This repo's own metro measures
+    # against this repo; a sibling measures against the instance its --out path
+    # points into (sibling_surfaces), and only an unrecognizable path skips.
     own = metro == w["this_metro"]
-    problems = validate(entries,
-                        known_layer_ids(w) if own else None,
-                        shipped_outline_slugs() if own else None)
+    if own:
+        layer_ids, outlines = known_layer_ids(w), shipped_outline_slugs()
+    else:
+        layer_ids, outlines = sibling_surfaces(out_path)
+    problems = validate(entries, layer_ids, outlines)
+
+    # LOCATION AWARENESS IS THE PANEL'S WHOLE POINT, so an instance that ships
+    # county outlines and tags no gap with one has a dead "Where you clicked"
+    # section and does not know it. That is not hypothetical: Wisconsin shipped
+    # exactly that state — ten gaps, every `counties` array empty — and the
+    # panel told a reader who had clicked to click. Every other guard passed.
+    mappable = sum(1 for e in entries if (e.get("counties") or []))
+    if outlines and entries and not mappable:
+        problems.append(
+            "%s ships %d county outline(s) and not one of its %d gaps names a "
+            "county, so the panel can never lead with the gaps that apply where "
+            "a reader clicked. Tag the gaps whose area maps to counties."
+            % (metro, len(outlines), len(entries)))
     if problems:
         for p in problems:
             print("  %s" % p, file=sys.stderr)
@@ -243,14 +285,17 @@ def main():
             fail("data/app/coverage-gaps.json differs from the guidebook's gaps block "
                  "(%d vs %d bytes). Edit the guidebook, then regenerate."
                  % (len(shipped), len(payload)))
-        print("build-coverage-gaps: OK — shipped file matches the guidebook (%s: %d gaps, %s)"
-              % (metro, len(entries), summary))
+        print("build-coverage-gaps: OK — shipped file matches the guidebook "
+              "(%s: %d gaps, %s; %d mapped to counties)"
+              % (metro, len(entries), summary, mappable))
         return
 
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(payload)
-    print("build-coverage-gaps: wrote %s — %s: %d gaps (%s), %d bytes"
-          % (os.path.relpath(out_path, REPO_ROOT), metro, len(entries), summary, len(payload)))
+    print("build-coverage-gaps: wrote %s — %s: %d gaps (%s), %d mapped to "
+          "counties, %d bytes"
+          % (os.path.relpath(out_path, REPO_ROOT), metro, len(entries), summary,
+             mappable, len(payload)))
 
 
 if __name__ == "__main__":

@@ -62,7 +62,14 @@ import math
 import os
 import sys
 
-import requests
+# `requests` is imported INSIDE the one function that fetches, not at module
+# scope: this module's pure-geometry helpers (simplify, rings_of,
+# point_in_rings) are shared machinery other Wisconsin builders import rather
+# than fork, and the county-outline slicer among them never touches the
+# network — it slices the shipped county fabric. A module-scope import made
+# that offline builder carry a dependency it does not use, which
+# validate_workflow_deps.py refuses to let a workflow install for a script
+# that never fetches.
 
 TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
             "State_County/MapServer/1/query")
@@ -207,6 +214,7 @@ OUTSIDE = {
 def fetch_counties():
     where = "STATE='%s' AND COUNTY IN (%s)" % (
         STATE_FIPS, ",".join("'%s'" % c for c in METRO_COUNTY_FIPS))
+    import requests  # noqa: PLC0415 (see the module header)
     resp = requests.get(TIGERWEB, headers=HEADERS, timeout=REQUEST_TIMEOUT, params={
         "where": where,
         "outFields": "NAME,GEOID",
