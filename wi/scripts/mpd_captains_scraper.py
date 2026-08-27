@@ -21,7 +21,12 @@ Bratchett" (D3), and D2's measured trap: the heading renders "Captai n
 Erin E. Mejia", markup splitting the word "Captain" itself, so the rank
 pattern tolerates whitespace BETWEEN ANY TWO LETTERS of the rank word
 and the parse is anchored to headings, never to a substring search of
-the page. The district index (/police/districts) and the city Directory
+the page. DISTRICT 4 IS THE SECOND MEASURED SHAPE (capture, run
+33039934068): its officer heading is EMPTY (<h3>&nbsp;</h3>) and the
+ranked name lives in the large-font paragraph link under the same
+"MPD District 4" h2 — so when no h3 matches, the parse falls back to
+that h2's own contact block (bounded at its first <hr>), still never
+the page at large. The district index (/police/districts) and the city Directory
 page (/Directory/police/Police-Districts.htm) are the witnesses: the
 index must list all seven districts — it names them in H4 headings
 ("District One".."District Seven", measured), one level below anything
@@ -175,6 +180,28 @@ def main():
                 rank = clean_rank(m.group("rank"))
                 name = re.sub(r"\s+", " ", m.group("name")).strip()
                 break
+        if not name:
+            # District 4's measured shape (capture, run 33039934068): the
+            # officer heading exists and is EMPTY (<h3>&nbsp;</h3>), and the
+            # ranked name sits in the large-font paragraph link under the
+            # same "MPD District <n>" h2 — so this fallback scans ONLY the
+            # contact block that h2 opens (up to its first <hr>), paragraph
+            # by paragraph, never the whole page. "Captain's Office" cannot
+            # match: the rank pattern requires whitespace then a capitalized
+            # name after the rank word.
+            block = re.search(r"(?i)<h2[^>]*>\s*MPD\s+District\s+%d\s*</h2>"
+                              r"([\s\S]*?)<hr" % n, html)
+            if block:
+                for pm in re.finditer(r"<(?:p|a)[^>]*>([\s\S]*?)</(?:p|a)>",
+                                      block.group(1), re.IGNORECASE):
+                    text = re.sub(r"\s+", " ",
+                                  html_mod.unescape(re.sub(r"<[^>]+>", " ",
+                                                           pm.group(1)))).strip()
+                    m = RANK_RE.match(text)
+                    if m:
+                        rank = clean_rank(m.group("rank"))
+                        name = re.sub(r"\s+", " ", m.group("name")).strip()
+                        break
         if name:
             if name in names_seen:
                 raise SystemExit("%r appears under districts %d and %d — a "

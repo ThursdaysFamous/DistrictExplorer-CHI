@@ -46,21 +46,6 @@ jobs:
       - name: Scrape the city's per-district pages
         run: python3 wi/scripts/mpd_captains_scraper.py --out /tmp/mpd_captains.json
 
-      # TEMP (branch-only diagnostic): capture District 4's raw page once —
-      # the scrape ships it null and only the page itself can say whether
-      # that is a vacancy or a markup shape the parser misses. Uses the
-      # scraper's own fetch: a bare curl of the same URL draws a challenge
-      # page the requests client does not (measured on the first capture).
-      - name: Capture District 4 page
-        if: always()
-        run: |
-          python3 - <<'PYEOF'
-          import sys
-          sys.path.insert(0, 'wi/scripts')
-          from mpd_captains_scraper import fetch, DISTRICT_URL
-          open('/tmp/d4.html', 'w').write(fetch(DISTRICT_URL % 4))
-          PYEOF
-
       # the raw scrape rides each run as an artifact: it is the diagnostic
       # for a failed build, and it is how the FIRST roster reached the tree
       # at all — the sandbox cannot fetch the city, so the initial data file
@@ -71,9 +56,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mpd-captains-scrape
-          path: |
-            /tmp/mpd_captains.json
-            /tmp/d4.html
+          path: /tmp/mpd_captains.json
           if-no-files-found: ignore
           retention-days: 30
 
