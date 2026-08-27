@@ -5627,6 +5627,52 @@ recorded as a candidate rather than made in passing.
 
 Every entry cites where it's recorded and the blocker.
 
+### The Wisconsin ask ledger — opened 2026-08-27, nine asks DRAFTED, none sent
+
+Wisconsin's frontier is no longer software. Every remaining gap is a
+publisher question, and Illinois has repeatedly shown that a gap reading
+exactly like "no source exists" turns into a shipped layer when somebody
+simply writes to the office that holds it (Ogle's precinct shapefile
+arrived by return e-mail; Clay's split precinct was settled by two
+sentences from its Clerk). So the same ledger opens here.
+
+NINE DRAFTS SIT IN THE OPERATOR'S MAILBOX, UNSENT — they are drafted, not
+asked, and nothing below may be recorded as a measurement until a reply
+comes back:
+
+- **WEC (elections@wi.gov)** — does the Commission publish the statewide
+  ward-to-polling-place pairing as a file? This is the one the recon could
+  not answer from CI: the front page clears a real browser and every
+  interior data page re-challenges it, so whether the file exists is
+  unreadable from here. The draft also asks after a municipal clerk
+  directory and in-person absentee site lists, the two other WEC-shaped
+  gaps. **THE ADDRESS IS UNVERIFIED FROM THIS PROJECT'S VANTAGE**: it comes
+  from this repo's own record, elections.wi.gov answers 403 here, and the
+  Blue Book's officers section lists the commissioners without e-mail
+  addresses — so a human must confirm it before sending.
+- **Eight county clerks** — the district-to-supervisor pairing for the
+  eight largest boards with no readable roster: Marathon (38 seats), Dane
+  (37), Outagamie (36), Dodge (33), Oconto (31), Sauk (31), La Crosse (30),
+  Marinette (30). 266 unnamed seats between them, out of the 50 counties in
+  gap `county-officials`. THE ADDRESSES ARE THIS PROJECT'S OWN SHIPPED DATA
+  — `wi-county-clerks.json`, scraped from the clerks' own association — so
+  every one is a contact the app already publishes on a card, not a guess.
+  The tranche was chosen by BOARD SIZE, which is the count of unnamed
+  supervisors and NOT a population ranking (the Census API was unreachable
+  when the tranche was cut; say seats, not people).
+- Outagamie's carries a **second ask**: all 50 Appleton wards filed under
+  that county carry no aldermanic district code, which is the whole reason
+  the state's sixth-largest city has no council districts on the map (gap
+  `aldermanic-incomplete-filings`). Coding them at a future 15 Jan / 15 Jul
+  filing would close it with no change at this end.
+
+The remaining 42 no-roster counties are ready to draft the same way and
+deliberately were not: a first tranche that gets answers teaches how to
+word the rest, and forty-two cold e-mails sent at once teaches nothing.
+NOT YET DRAFTED, and each needs a verified address first: Racine Unified
+(gap `rusd-school-board`), the City of Madison (TID 55's geometry), and the
+five county 911 authorities whose NG911 filings are absent.
+
 ### NYC and SF gap panels cannot lead with local gaps (recorded 2026-08-27)
 
 Found while fixing Wisconsin's, and recorded rather than quietly left: `nyc`
