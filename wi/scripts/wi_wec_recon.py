@@ -49,6 +49,16 @@ non-zero exit means the recon itself failed to run.
 
 Usage:
     python3 wi/scripts/wi_wec_recon.py --out-dir wi-recon-capture
+
+THE DISPATCH WORKFLOW THAT RAN THIS IS RETIRED (2026-08-27). It was a
+one-shot: it ran, its finding is recorded in the guidebook with the run
+ids above, and a dispatch-only workflow that will never fire again is
+dead weight in the workflow list. THIS SCRIPT STAYS because the finding
+is a measurement somebody may need to re-take — access granted from CI
+has been withdrawn before — and re-taking it means re-adding a
+workflow_dispatch workflow that pip-installs the deps below and runs
+this file. It CANNOT be re-run from a development sandbox: the whole
+point of the original run was that the vantage is what differs.
 """
 
 import argparse
