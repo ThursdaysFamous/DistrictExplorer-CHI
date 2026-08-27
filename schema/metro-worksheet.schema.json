@@ -308,6 +308,10 @@
               },
               "note": {
                 "type": "string"
+              },
+              "dynamic_reference": {
+                "type": "boolean",
+                "description": "True when the app references this file DYNAMICALLY (URL built from a slug at runtime, e.g. the ward card's <slug>-polling-places.json contract) — exempts it from validate_index's literal-reference check only; existence/shape checks still apply. Already allowed on geometry entries; rosters need it too, because a per-county roster is addressed the same way a per-county outline is."
               }
             }
           }

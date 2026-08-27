@@ -168,7 +168,10 @@ jobs:
       #
       # 1. App files only. It is the ONLY thing standing between "app files" and
       #    "app files + 5 MB of build inputs". Keep il/data/app IN and
-      #    il/data/source + il/data/*.geojson OUT when either moves.
+      #    il/data/source + il/data/*.geojson OUT when either moves. wi/data/source
+      #    joined that list when the Wisconsin Elections Commission's polling
+      #    workbook was committed there — a 318 KB .xlsx build input the app
+      #    never serves.
       #
       # 2. Imported instances are NOT published yet. sf/ and nyc/ live in this
       #    repo so they can share the engine and the tooling, but each still
@@ -185,7 +188,7 @@ jobs:
             ny/data/source ny/icons/source 'ny/data/*.geojson'
             ca/data/source ca/icons/source 'ca/data/*.geojson'
             ny/scripts ny/docs ny/.github ca/scripts ca/docs ca/.github
-            wi/data/state wi/scripts 'wi/data/*.geojson'
+            wi/data/state wi/data/source wi/scripts 'wi/data/*.geojson'
             fonts/barlow-fontface.css
             node_modules package.json package-lock.json
             engine metros.json metro-worksheet.json schema CLAUDE.md

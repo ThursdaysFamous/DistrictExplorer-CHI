@@ -591,6 +591,43 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "ward",
+        "app_file": "milwaukee-polling-places.json",
+        "app_file_pattern": "\"-polling-places.json\"",
+        "source_url": "https://elections.wi.gov/elections",
+        # THE INVERSION IS THE POINT HERE, not a way to quiet a warning. This
+        # host sits behind a Cloudflare managed challenge that answers a plain
+        # client 403 from every vantage measured — the sandbox and GitHub's own
+        # runners alike (2026-08-27) — and a challenge is an access control this
+        # project does not defeat. So unreachable is the EXPECTED state and
+        # reports OK; becoming REACHABLE is the WARN, and it is the one a human
+        # can act on: a plain 200 here would mean the published November list is
+        # finally fetchable and the per-election refresh can stop being an
+        # e-mail. Without this flag the monthly issue would carry the same
+        # no-op WARN forever, which is how a report stops being read.
+        "blocked": ("Cloudflare managed challenge (Cf-Mitigated: challenge) to plain "
+                    "clients from every measured vantage; the file itself came from "
+                    "the Commission by e-mail and is committed at wi/data/source/wec/"),
+        "note": (
+            "THE STATEWIDE pairing, and the one PROVENANCE row here whose "
+            "source_url is NOT where the file came from — it is where the "
+            "Commission says the published edition WILL be. The build input "
+            "is a workbook the Wisconsin Elections Commission sent directly "
+            "(help-desk ticket 123582, 2026-08-27), committed at "
+            "wi/data/source/wec/ precisely because the provisional edition "
+            "has no address: \"I can't provide any direct links for the "
+            "attachments at this time, as it isn't published there for "
+            "November yet, but that is where it would be\". So this row's URL "
+            "is what the monthly check watches for the FINAL edition, and the "
+            "2026-09-17 WATCH.md row is what acts on it. "
+            "wi/scripts/build_wi_polling_places.py writes 72 per-county "
+            "files, of which this one stands for all 72 (they build, gate "
+            "and refresh together); it pairs 7,131 of LTSB's 7,161 wards, "
+            "floors that rate at 99%, and refuses a ward claimed by two "
+            "places. PROVISIONAL until the September re-pull clears the flag."
+        ),
+    },
+    {
         "layer": "tid-district",
         "app_file": "tid-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8",
@@ -873,10 +910,18 @@ def check_manifest_matches_app(html, findings):
                          "out of sync with the app (update scripts/validate_sources.py)"
                          % d["id"])
     for p in PROVENANCE:
-        if ("data/app/" + p["app_file"]) not in html:
+        # A file the app addresses by a slug built at RUNTIME has no literal to
+        # find — the ward card's <county>-polling-places.json is fetched as
+        # "data/app/" + slug + "-polling-places.json", the same contract the
+        # gaps panel uses for its county outlines and the same exemption
+        # validate_index.py grants via `dynamic_reference`. The entry names the
+        # suffix instead, and the drift check looks for THAT: a card that
+        # stopped fetching the family at all still fails here.
+        needle = p.get("app_file_pattern") or ("data/app/" + p["app_file"])
+        if needle not in html:
             findings.add(FAIL, p["layer"],
-                         "index.html no longer references data/app/%s — manifest drift"
-                         % p["app_file"])
+                         "index.html no longer references %s — manifest drift"
+                         % needle)
 
 
 # ---- check 2: Socrata datasets resolve, keep their name, aren't superseded ---

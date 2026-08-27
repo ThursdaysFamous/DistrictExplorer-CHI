@@ -6288,7 +6288,9 @@ function initSFExplorer() {
   /* ---------- optional per-module "point of interest" pin (e.g. a school's
    * street address) — a small marker placed at a geocoded location,
    * independent of the polygon highlight above. A module opts in by
-   * exposing mod.pointOfInterest(result) => {label, address} | null. ---------- */
+   * exposing mod.pointOfInterest(result) => {label, address} | null. The
+ * return may also carry lat/lng, in which case the geocoder is skipped
+ * and the publisher's own coordinate places the pin. ---------- */
   // a layer's theme color — from its polygon style, its point-marker style
   // (police/fire stations, which use pointToLayer instead of a flat style
   // object), or an explicit mod.color fallback for anything with neither.
@@ -6455,7 +6457,19 @@ function initSFExplorer() {
     var poi = mod.pointOfInterest(result);
     if (!poi || !poi.address) { clearLayerPoi(mod); return; }
     var isCurrent = function () { return seq === state.sequence && !!state.layersOn[mod.id]; };
-    geocodePoiAddress(poi.address, isCurrent).then(function (coords) {
+    // A layer that ALREADY KNOWS where the place is says so, and the geocoder
+    // is skipped: `pointOfInterest` may return lat/lng beside the address.
+    // Publishers increasingly ship the coordinate with the address (an
+    // election authority's polling-place list, a district's own facility
+    // layer), and asking Nominatim to re-derive it is both slower and worse —
+    // a rural "1104 County Road C" geocodes to the road, or to nothing, while
+    // the authority's own point is the building. The address still renders as
+    // the card's text either way; a layer that supplies no coordinate behaves
+    // exactly as it did before this branch existed.
+    var located = (isFinite(poi.lat) && isFinite(poi.lng) && poi.lat !== null && poi.lng !== null)
+      ? Promise.resolve({ lat: Number(poi.lat), lng: Number(poi.lng) })
+      : geocodePoiAddress(poi.address, isCurrent);
+    located.then(function (coords) {
       if (seq !== state.sequence) return; // a newer point was selected meanwhile
       if (!state.layersOn[mod.id]) return; // toggled off while geocoding
       clearLayerPoi(mod);

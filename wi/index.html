@@ -6299,7 +6299,9 @@ function initWisconsinExplorer() {
   /* ---------- optional per-module "point of interest" pin (e.g. a school's
    * street address) — a small marker placed at a geocoded location,
    * independent of the polygon highlight above. A module opts in by
-   * exposing mod.pointOfInterest(result) => {label, address} | null. ---------- */
+   * exposing mod.pointOfInterest(result) => {label, address} | null. The
+ * return may also carry lat/lng, in which case the geocoder is skipped
+ * and the publisher's own coordinate places the pin. ---------- */
   // a layer's theme color — from its polygon style, its point-marker style
   // (police/fire stations, which use pointToLayer instead of a flat style
   // object), or an explicit mod.color fallback for anything with neither.
@@ -6464,7 +6466,19 @@ function initWisconsinExplorer() {
     var poi = mod.pointOfInterest(result);
     if (!poi || !poi.address) { clearLayerPoi(mod); return; }
     var isCurrent = function () { return seq === state.sequence && !!state.layersOn[mod.id]; };
-    geocodePoiAddress(poi.address, isCurrent).then(function (coords) {
+    // A layer that ALREADY KNOWS where the place is says so, and the geocoder
+    // is skipped: `pointOfInterest` may return lat/lng beside the address.
+    // Publishers increasingly ship the coordinate with the address (an
+    // election authority's polling-place list, a district's own facility
+    // layer), and asking Nominatim to re-derive it is both slower and worse —
+    // a rural "1104 County Road C" geocodes to the road, or to nothing, while
+    // the authority's own point is the building. The address still renders as
+    // the card's text either way; a layer that supplies no coordinate behaves
+    // exactly as it did before this branch existed.
+    var located = (isFinite(poi.lat) && isFinite(poi.lng) && poi.lat !== null && poi.lng !== null)
+      ? Promise.resolve({ lat: Number(poi.lat), lng: Number(poi.lng) })
+      : geocodePoiAddress(poi.address, isCurrent);
+    located.then(function (coords) {
       if (seq !== state.sequence) return; // a newer point was selected meanwhile
       if (!state.layersOn[mod.id]) return; // toggled off while geocoding
       clearLayerPoi(mod);
@@ -9035,12 +9049,18 @@ function initWisconsinExplorer() {
    * renders as a district.
    *
    * A ward elects no officeholder — it is the unit election administration
-   * assigns — and STATEWIDE no polling place ships: the state aggregates
-   * the pairing only behind MyVote, whose every route (site and API alike)
-   * sits behind a Cloudflare challenge this project does not defeat, so the
-   * card links that lookup and the Data gaps panel carries the measurement
-   * (gap ward-polling-places). The exceptions are the cities that publish
-   * their OWN pairing — Milwaukee and Madison, the loaders below. ---------- */
+   * assigns — and what it DOES answer is where you vote. That answer used to
+   * stop at two cities: MyVote aggregates the statewide pairing and every one
+   * of its routes sits behind a Cloudflare challenge this project does not
+   * defeat, so 1,844 municipalities got a link. THE CHALLENGE WAS NEVER A
+   * REFUSAL BY THE AGENCY BEHIND IT — asked directly, the Wisconsin Elections
+   * Commission sent the file, and the pairing now answers for 7,131 of the
+   * state's 7,161 wards. Three sources feed it in preference order, and the
+   * card names whichever one answered: Milwaukee's own CC-BY dataset, Madison's
+   * own polling layer, then the Commission's statewide list — provisional
+   * until its November edition publishes, and said so in prose. The 30 wards
+   * the Commission's file omits, and the provisional status itself, are the
+   * Data gaps panel's `ward-polling-places` record. ---------- */
   var LTSB_WARDS_LAYER = "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0";
   var WARD_OUT_FIELDS = "WARDID,MCD_NAME,CTV,CNTY_NAME,SUPERID,ALDERID";
   // Milwaukee's ward -> polling place pairing (phase 4 PR 3): pre-built by
@@ -9090,11 +9110,55 @@ function initWisconsinExplorer() {
     var prefix = ctv === "C" ? "City of " : ctv === "V" ? "Village of " : ctv === "T" ? "Town of " : "";
     return prefix + String(mcd);
   }
+  // "0011" -> "11", "011A" -> "11A". LTSB zero-pads WARDID to four characters
+  // and 26 wards carry a LETTER — Wauwatosa's 2A/2B, Green Bay's 11A, the Town
+  // of Middleton's 4A. parseInt drops that letter, which was not cosmetic:
+  // Green Bay's ward 11A rendered as "Ward 11" beside the real ward 11, and in
+  // Wauwatosa — which has no plain wards 2, 4, 6, 7, 8, 12 or 24 at all —
+  // seven pairs of distinct wards each collapsed onto one identifier. Found
+  // building the statewide polling pairing, where the same collapse would have
+  // sent one ward's voters to the other's polling place.
   function wardNumber(props) {
     var raw = findPropCI(props, ["wardid"]);
     if (raw == null || raw === "") return null;
-    var n = parseInt(String(raw), 10);
-    return isNaN(n) ? String(raw) : String(n);
+    var m = /^0*(\d+)([A-Za-z]*)$/.exec(String(raw).trim());
+    return m ? m[1] + m[2].toUpperCase() : String(raw);
+  }
+
+  // The statewide ward -> polling place pairing
+  // (wi/scripts/build_wi_polling_places.py), ONE FILE PER COUNTY: the reader
+  // fetches ~9 KB for the county they clicked in rather than ~950 KB for the
+  // state. The slug is the same one the Data gaps panel already computes for
+  // <slug>-county-outline.json, so one county name addresses both files.
+  var countyPollingCache = {};
+  function loadCountyPolling(slug) {
+    if (!countyPollingCache[slug]) {
+      countyPollingCache[slug] = fetchJSONWithRetry(
+        "data/app/" + slug + "-polling-places.json", {}, 2);
+    }
+    return countyPollingCache[slug];
+  }
+  function countyPollingSlug(name) {
+    return String(name || "").toLowerCase().replace(/[.']/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  // THE ONE NORMALIZATION, and build_wi_polling_places.py runs the same three
+  // rules on the same LTSB attributes to write its keys: uppercase, delete
+  // . ' and -, collapse whitespace. Change it here and change it there, or
+  // every ward in the state misses.
+  function pollingMuniKey(name) {
+    return String(name || "").toUpperCase().replace(/[.'\-]/g, "")
+      .replace(/\s+/g, " ").trim();
+  }
+  // Contract condition 5: a polling place is true for ONE election, so the
+  // pairing names its election and retires itself once that date is past. A
+  // card still showing November's places in December is not stale data, it is
+  // a wrong answer — past the date the card falls back to the MyVote link it
+  // carried before this pairing existed, with no redeploy needed.
+  function pollingElectionPassed(src) {
+    if (!src || !src.electionDate) return false;
+    var d = new Date(String(src.electionDate) + "T23:59:59");
+    return isFinite(d.getTime()) && d.getTime() < Date.now();
   }
 
   registerLayer({
@@ -9131,45 +9195,79 @@ function initWisconsinExplorer() {
           superid: findPropCI(props, ["superid"]),
           // "00" is LTSB's no-aldermanic-districts placeholder — never a district
           alderid: (alder != null && String(alder) !== "" && String(alder) !== "00") ? String(alder) : null,
-          polling: null
+          polling: null,
+          // set only when the record came from the Commission's statewide file
+          // — it is what makes the card say "provisional" and name the election
+          pollingSource: null
         };
-        // Two cities publish their own ward -> polling place pairing —
-        // Milwaukee (CC-BY dataset) and Madison (the city's open-data
-        // polling layer) — and both ward numberings ARE LTSB's, measured
-        // and gated in each builder. The rest of the state stays gap
-        // `ward-polling-places` (WEC's interior data pages re-challenge
-        // even a cleared browser — the 2026-08-27 recon), so this card's
-        // MyVote primaryLink remains every other ward's answer. A
-        // pairing-fetch failure degrades to the pre-pairing card.
-        var loadPolling = result.place === "City of Milwaukee" ? loadMkePollingPlaces
-          : result.place === "City of Madison" ? loadMadisonPollingPlaces
-            : null;
-        if (loadPolling && result.ward != null) {
-          return loadPolling().catch(function () { return null; })
-            .then(function (places) {
-              var rec = places ? places[String(result.ward)] : null;
-              if (rec) result.polling = rec;
+        // WHERE THE POLLING PLACE COMES FROM, in preference order. Two cities
+        // publish their OWN pairing and stay first — Milwaukee (CC-BY dataset,
+        // with entrance and parking guidance no statewide file carries) and
+        // Madison (the city's open-data polling layer) — because the
+        // municipality runs the election. Everything else, and anything either
+        // city file misses, falls to the Wisconsin Elections Commission's
+        // statewide list, which the Commission sent directly after being asked
+        // (its website's Cloudflare challenge was never a refusal by the
+        // agency behind it — wi/scripts/build_wi_polling_places.py records the
+        // whole arrangement). That file is PROVISIONAL until the Commission
+        // publishes its November edition, and the card says so in prose.
+        // Any fetch failure degrades to the pre-pairing card.
+        if (result.ward == null) return result;
+        function withCountyPolling() {
+          var slug = countyPollingSlug(result.county);
+          if (!slug) return result;
+          return loadCountyPolling(slug).catch(function () { return null; })
+            .then(function (file) {
+              if (seq !== state.sequence) return result;
+              if (!file || pollingElectionPassed(file._source)) return result;
+              var key = String(findPropCI(props, ["ctv"]) || "").toUpperCase() +
+                "|" + pollingMuniKey(findPropCI(props, ["mcd_name"])) +
+                "|" + String(result.ward);
+              var rec = file[key];
+              if (rec) {
+                result.polling = rec;
+                result.pollingSource = file._source || null;
+              }
               return result;
             });
         }
-        return result;
+        var cityPolling = result.place === "City of Milwaukee" ? loadMkePollingPlaces
+          : result.place === "City of Madison" ? loadMadisonPollingPlaces
+            : null;
+        if (cityPolling) {
+          return cityPolling().catch(function () { return null; })
+            .then(function (places) {
+              if (seq !== state.sequence) return result;
+              var rec = places ? places[String(result.ward)] : null;
+              if (rec) { result.polling = rec; return result; }
+              return withCountyPolling();
+            });
+        }
+        return withCountyPolling();
       });
     },
     pointOfInterest: function (result) {
-      // the engine geocodes the address for the pin; the record's own
-      // lat/lng exists in the data for future use, but the shared POI path
-      // keeps one pin pipeline (two wards' place ships without a point —
-      // the city's layer carries it with null geometry — and the address
-      // string covers those identically)
       if (!result || !result.polling) return null;
-      // the pairing only ever fills inside a city whose composed place name
-      // the card already holds ("City of Milwaukee" / "City of Madison"),
-      // so that name minus its prefix is the geocoder's city hint
-      return {
-        label: String(result.polling.name),
-        address: String(result.polling.address) + ", " +
-          String(result.place || "").replace(/^City of /, "") + ", WI"
-      };
+      var p = result.polling;
+      // The Commission's addresses are already complete ("1980 11TH AVE,
+      // FRIENDSHIP, WI 53934"); the two city files carry a bare street line,
+      // so those get the municipality appended as the geocoder's hint.
+      var address = String(p.address);
+      if (!/,\s*WI\b/i.test(address)) {
+        address += ", " + String(result.place || "")
+          .replace(/^(City|Village|Town) of /, "") + ", WI";
+      }
+      var poi = { label: String(p.name), address: address };
+      // The Commission's file and Madison's layer both ship the building's own
+      // coordinate, so the engine skips the geocoder and pins the building
+      // itself — which matters most exactly where geocoding is worst, on the
+      // rural "1104 COUNTY ROAD C" addresses that resolve to a road or to
+      // nothing. Milwaukee's dataset carries no point and still geocodes.
+      if (p.lat != null && p.lng != null && isFinite(p.lat) && isFinite(p.lng)) {
+        poi.lat = p.lat;
+        poi.lng = p.lng;
+      }
+      return poi;
     },
     cardIdentifier: function (result) {
       return result.ward != null ? "Ward " + String(result.ward) : "Unknown ward";
@@ -9216,17 +9314,30 @@ function initWisconsinExplorer() {
           ? [office, { label: "Entrances & parking", lines: details }]
           : [office]
       }));
-      // each city's source is named honestly: Milwaukee's dataset carries an
-      // edition date; Madison's layer publishes none, so its asOf is the day
-      // the build read it and the wording says so
-      wrap.appendChild(renderFieldStack([{
-        label: "As of",
-        value: (result.place === "City of Madison"
+      // Each source is named honestly, and the statewide one names its
+      // ELECTION and its provisional status in the reader's own sentence —
+      // never a badge, never behind an expander. Milwaukee's dataset carries
+      // an edition date; Madison's layer publishes none, so its asOf is the
+      // day the build read it and the wording says so.
+      var src = result.pollingSource;
+      var asOf;
+      if (src) {
+        asOf = String(src.publisher) + " list for the " + String(src.election) +
+          ", read " + String(src.asOf) + ". " +
+          (src.provisional
+            ? "This list is provisional: the Commission had not published its " +
+              "November edition when this was built, so a place here can still " +
+              "change. "
+            : "") +
+          "Confirm at MyVote Wisconsin (linked below) before you go.";
+      } else {
+        asOf = (result.place === "City of Madison"
           ? "City of Madison polling-places layer, read " + String(p.asOf)
           : "City of Milwaukee voting-wards dataset, " + String(p.asOf)) +
           " — polling places can change between elections; confirm at " +
-          "MyVote Wisconsin (linked below) before you go."
-      }]));
+          "MyVote Wisconsin (linked below) before you go.";
+      }
+      wrap.appendChild(renderFieldStack([{ label: "As of", value: asOf }]));
       return wrap;
     },
     primaryLink: function () {

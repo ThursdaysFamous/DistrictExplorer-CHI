@@ -506,7 +506,7 @@
             "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0"
           }
         ],
-        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. No polling place is shown: Wisconsin aggregates polling places only behind a state lookup that refuses automated clients, so the card links that lookup rather than shipping data this project cannot verify (the Data gaps panel records the measurement). INSIDE MILWAUKEE the card now carries the pairing (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) \u2014 name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections. MADISON is the second city: its open-data server publishes the pairing as ONE layer \u2014 a polling point per ward, 137 rows \u2014 whose ward keys are gated equal to LTSB's Madison wards AND the city's own ward layer (wi/scripts/build_madison_polling_places.py, madison-polling-places.json); the layer publishes no edition date, so each build dates the pairing as the day it was read.",
+        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. The card DOES name your polling place, from three sources in preference order. STATEWIDE it is the Wisconsin Elections Commission's own list, which the Commission sent on request after its website's Cloudflare challenge had been recorded as a block — a challenge on a website is not a refusal by the agency behind it (wi/scripts/build_wi_polling_places.py, 3,623 reporting units, 2,475 places, shipped as 72 per-county files; 7,131 of LTSB's 7,161 wards paired, 99.58%). That list is PROVISIONAL until the Commission publishes its November edition, and the card says so in the reader's own sentence, names the election, dates the pull, and RETIRES the pairing once the election date has passed — a per-election list that outlives its election looks current and is not. The 29 wards in 12 municipalities the Commission's file omits fall back to the MyVote lookup and are the Data gaps panel's `ward-polling-places` record. THE TWO CITIES THAT PUBLISH THEIR OWN PAIRING STAY FIRST, because the municipality runs the election. INSIDE MILWAUKEE (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) \u2014 name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections. MADISON is the second city: its open-data server publishes the pairing as ONE layer \u2014 a polling point per ward, 137 rows \u2014 whose ward keys are gated equal to LTSB's Madison wards AND the city's own ward layer (wi/scripts/build_madison_polling_places.py, madison-polling-places.json); the layer publishes no edition date, so each build dates the pairing as the day it was read.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -1474,11 +1474,443 @@
         "file": "madison-polling-places.json",
         "min_keys": 130,
         "note": "Madison ward -> polling place pairing (build_madison_polling_places.py; the city's open-data polling layer is one point per ward, ward keys gated equal to LTSB's Madison wards AND the city's own ward layer, points bbox-gated). The layer publishes no edition date, so records are dated as read; rebuilt per election, not weekly."
+      },
+      {
+        "file": "adams-polling-places.json",
+        "min_keys": 35,
+        "note": "Adams County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 39 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "ashland-polling-places.json",
+        "min_keys": 36,
+        "note": "Ashland County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 41 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "barron-polling-places.json",
+        "min_keys": 81,
+        "note": "Barron County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 90 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "bayfield-polling-places.json",
+        "min_keys": 36,
+        "note": "Bayfield County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 41 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "brown-polling-places.json",
+        "min_keys": 189,
+        "note": "Brown County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 210 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "buffalo-polling-places.json",
+        "min_keys": 24,
+        "note": "Buffalo County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 27 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "burnett-polling-places.json",
+        "min_keys": 36,
+        "note": "Burnett County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 40 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "calumet-polling-places.json",
+        "min_keys": 57,
+        "note": "Calumet County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 64 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "chippewa-polling-places.json",
+        "min_keys": 91,
+        "note": "Chippewa County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 102 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "clark-polling-places.json",
+        "min_keys": 72,
+        "note": "Clark County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 81 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "columbia-polling-places.json",
+        "min_keys": 81,
+        "note": "Columbia County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 90 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "crawford-polling-places.json",
+        "min_keys": 29,
+        "note": "Crawford County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 33 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "dane-polling-places.json",
+        "min_keys": 442,
+        "note": "Dane County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 492 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "dodge-polling-places.json",
+        "min_keys": 140,
+        "note": "Dodge County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 156 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "door-polling-places.json",
+        "min_keys": 56,
+        "note": "Door County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 63 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "douglas-polling-places.json",
+        "min_keys": 52,
+        "note": "Douglas County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 58 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "dunn-polling-places.json",
+        "min_keys": 58,
+        "note": "Dunn County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 65 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "eau-claire-polling-places.json",
+        "min_keys": 136,
+        "note": "Eau Claire County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 152 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "florence-polling-places.json",
+        "min_keys": 17,
+        "note": "Florence County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 19 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "fond-du-lac-polling-places.json",
+        "min_keys": 106,
+        "note": "Fond du Lac County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 118 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "forest-polling-places.json",
+        "min_keys": 30,
+        "note": "Forest County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 34 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "grant-polling-places.json",
+        "min_keys": 86,
+        "note": "Grant County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 96 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "green-polling-places.json",
+        "min_keys": 54,
+        "note": "Green County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 60 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "green-lake-polling-places.json",
+        "min_keys": 36,
+        "note": "Green Lake County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 41 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "iowa-polling-places.json",
+        "min_keys": 54,
+        "note": "Iowa County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 60 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "iron-polling-places.json",
+        "min_keys": 17,
+        "note": "Iron County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 19 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jackson-polling-places.json",
+        "min_keys": 45,
+        "note": "Jackson County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 51 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jefferson-polling-places.json",
+        "min_keys": 99,
+        "note": "Jefferson County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 110 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "juneau-polling-places.json",
+        "min_keys": 60,
+        "note": "Juneau County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 67 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "kenosha-polling-places.json",
+        "min_keys": 170,
+        "note": "Kenosha County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 189 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "kewaunee-polling-places.json",
+        "min_keys": 37,
+        "note": "Kewaunee County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 42 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "la-crosse-polling-places.json",
+        "min_keys": 104,
+        "note": "La Crosse County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 116 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "lafayette-polling-places.json",
+        "min_keys": 45,
+        "note": "Lafayette County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 51 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "langlade-polling-places.json",
+        "min_keys": 32,
+        "note": "Langlade County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 36 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "lincoln-polling-places.json",
+        "min_keys": 50,
+        "note": "Lincoln County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 56 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "manitowoc-polling-places.json",
+        "min_keys": 80,
+        "note": "Manitowoc County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 89 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marathon-polling-places.json",
+        "min_keys": 148,
+        "note": "Marathon County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 165 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marinette-polling-places.json",
+        "min_keys": 58,
+        "note": "Marinette County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 65 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marquette-polling-places.json",
+        "min_keys": 33,
+        "note": "Marquette County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 37 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "menominee-polling-places.json",
+        "min_keys": 4,
+        "note": "Menominee County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 5 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "milwaukee-polling-places.json",
+        "min_keys": 544,
+        "note": "Milwaukee County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 605 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "monroe-polling-places.json",
+        "min_keys": 77,
+        "note": "Monroe County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 86 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "oconto-polling-places.json",
+        "min_keys": 62,
+        "note": "Oconto County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 69 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "oneida-polling-places.json",
+        "min_keys": 57,
+        "note": "Oneida County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 64 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "outagamie-polling-places.json",
+        "min_keys": 189,
+        "note": "Outagamie County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 210 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "ozaukee-polling-places.json",
+        "min_keys": 90,
+        "note": "Ozaukee County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 101 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "pepin-polling-places.json",
+        "min_keys": 18,
+        "note": "Pepin County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 21 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "pierce-polling-places.json",
+        "min_keys": 53,
+        "note": "Pierce County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 59 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "polk-polling-places.json",
+        "min_keys": 63,
+        "note": "Polk County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 70 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "portage-polling-places.json",
+        "min_keys": 90,
+        "note": "Portage County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 100 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "price-polling-places.json",
+        "min_keys": 34,
+        "note": "Price County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 38 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "racine-polling-places.json",
+        "min_keys": 178,
+        "note": "Racine County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 198 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "richland-polling-places.json",
+        "min_keys": 45,
+        "note": "Richland County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 51 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "rock-polling-places.json",
+        "min_keys": 164,
+        "note": "Rock County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 183 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "rusk-polling-places.json",
+        "min_keys": 61,
+        "note": "Rusk County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 68 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "sauk-polling-places.json",
+        "min_keys": 109,
+        "note": "Sauk County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 122 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "sawyer-polling-places.json",
+        "min_keys": 36,
+        "note": "Sawyer County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 41 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "shawano-polling-places.json",
+        "min_keys": 68,
+        "note": "Shawano County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 76 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "sheboygan-polling-places.json",
+        "min_keys": 108,
+        "note": "Sheboygan County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 121 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "st-croix-polling-places.json",
+        "min_keys": 117,
+        "note": "St. Croix County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 131 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "taylor-polling-places.json",
+        "min_keys": 35,
+        "note": "Taylor County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 39 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "trempealeau-polling-places.json",
+        "min_keys": 49,
+        "note": "Trempealeau County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 55 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "vernon-polling-places.json",
+        "min_keys": 56,
+        "note": "Vernon County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 63 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "vilas-polling-places.json",
+        "min_keys": 39,
+        "note": "Vilas County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 44 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "walworth-polling-places.json",
+        "min_keys": 138,
+        "note": "Walworth County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 154 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "washburn-polling-places.json",
+        "min_keys": 33,
+        "note": "Washburn County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 37 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "washington-polling-places.json",
+        "min_keys": 158,
+        "note": "Washington County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 176 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "waukesha-polling-places.json",
+        "min_keys": 329,
+        "note": "Waukesha County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 366 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "waupaca-polling-places.json",
+        "min_keys": 88,
+        "note": "Waupaca County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 98 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "waushara-polling-places.json",
+        "min_keys": 40,
+        "note": "Waushara County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 45 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "winnebago-polling-places.json",
+        "min_keys": 142,
+        "note": "Winnebago County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 158 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "wood-polling-places.json",
+        "min_keys": 100,
+        "note": "Wood County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 112 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v28",
+    "cache_name": "districtry-wi-shell-v29",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1694,6 +2126,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "Where you vote, everywhere in Wisconsin",
+        "body": "The ward card now names your polling place — its building, its street address, and a pin on the map at the building itself — for 7,131 of Wisconsin's 7,161 wards. Until today it could do that in two cities only. The state aggregates the pairing behind a lookup whose every route refuses automated readers, and this project had spent a fortnight measuring that refusal from every angle: each measurement was true, and each was recorded as though it described the world. It described a website. Asked directly, the Wisconsin Elections Commission sent the whole list in an afternoon. What arrived is the Commission's working copy for the 3 November election rather than its published edition, so every card says so in plain words, names the election it belongs to, dates the day it was read, keeps the state's own lookup as the way to confirm — and stops showing the pairing once that election is past, because a list of polling places that outlives its election looks current and is not. Milwaukee's and Madison's own published pairings still come first, since it is the city that runs the election. Twenty-nine wards in twelve municipalities are missing from the state's list, and their cards say so rather than guess. Building the join also turned up a fault nobody had noticed: twenty-six Wisconsin wards carry a letter in their number, and the card had been dropping it — so seven pairs of distinct Wauwatosa wards had been sharing one name on screen."
+      },
       {
         "date": "2026-08-27",
         "title": "The data-gaps panel learns where you are standing",

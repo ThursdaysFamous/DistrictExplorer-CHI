@@ -95,3 +95,12 @@ pyogrio==0.13.0
 # "GOBLE". PyMuPDF's get_text("dict") returns the county's own cells directly,
 # which is the difference between a parsed name and half of one.
 pymupdf==1.28.2
+
+# The Wisconsin Elections Commission sends its statewide polling-place list as
+# an .xlsx workbook and publishes no URL for the provisional edition, so
+# wi/scripts/build_wi_polling_places.py reads the committed file directly
+# (wi/data/source/wec/). An .xlsx is a zip of XML and could be walked with the
+# stdlib; that hand-rolled reader would then own shared-string tables, inline
+# vs. referenced strings and cell-type coercion — the same reasoning that put
+# pyogrio and pymupdf on this list rather than a bespoke parser.
+openpyxl==3.1.5
