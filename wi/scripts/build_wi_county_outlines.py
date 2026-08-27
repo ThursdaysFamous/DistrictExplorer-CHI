@@ -26,10 +26,11 @@ from it. That is not merely cheaper; it makes a disagreement between the
 outline and the county card structurally impossible, the two-surfaces rule
 this project applies to counties elsewhere.
 
-SIMPLIFICATION IS SHARED, NEVER FORKED: `simplify` comes from
-scripts/build_metro_outline.py (Douglas-Peucker, 25 m — the same tolerance
-Illinois's outlines carry), imported rather than copied so a county outline and
-the metro outline can never disagree about what a boundary is.
+SIMPLIFICATION IS SHARED, NEVER FORKED: `simplify` comes from this
+instance's own wi/scripts/build_metro_outline.py (Douglas-Peucker, 25 m — the
+same tolerance Illinois's outlines carry), imported rather than copied so a
+county outline and the metro outline can never disagree about what a boundary
+is.
 
 FOUR GATES, and the middle two are the ones that matter — they prove
 simplification did not move a line far enough to change an answer:
@@ -56,11 +57,16 @@ import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 INSTANCE_ROOT = os.path.dirname(SCRIPT_DIR)
-REPO_ROOT = os.path.dirname(INSTANCE_ROOT)
 APP_DATA_DIR = os.path.join(INSTANCE_ROOT, "data", "app")
 COUNTIES_FILE = os.path.join(APP_DATA_DIR, "state-counties.json")
 
-sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
+# THIS INSTANCE'S copy of the shared machinery, never the root repo's: an
+# instance's scripts resolve against their own directory (the rule
+# validate_workflow_deps.py enforces, and the reason a cross-instance
+# sys.path insert here failed CI). Wisconsin carries its own
+# build_metro_outline with the same Douglas-Peucker and the same 25 m
+# tolerance; importing it means a county outline and this instance's metro
+# outline can never disagree about what a boundary is.
 from build_metro_outline import (  # noqa: E402  (shared machinery — do not fork)
     SIMPLIFY_TOLERANCE_M, point_in_rings, simplify,
 )
