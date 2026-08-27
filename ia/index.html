@@ -5973,7 +5973,8 @@ function initIowaExplorer() {
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
     "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
     "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
-    "county-subdivision" // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
+    "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
+    "municipality"       // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8745,10 +8746,81 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 8. City — live TIGERweb, incorporated places ----------
+   * Iowa incorporates only "cities" — no separate village or town legal
+   * class the way Wisconsin has — so this layer ships labelled "City" from
+   * day one rather than the mislabel-then-correct journey WI's own
+   * `municipality` layer went through (its LSADC is uniformly 25 across
+   * all 939 Iowa records, measured 2026-08-27, confirming there is no
+   * second class to distinguish on this card). Live TIGERweb fetch (no
+   * builder script, no committed data/app file), the same
+   * tigerStatewideLoader pattern as county-subdivision.
+   *
+   * Empty state reads as a fact about the place, not a failed lookup — a
+   * point outside every incorporated city is on unorganized/township
+   * land, and county-subdivision already names that township (its 1,600
+   * civil-township records plus the 62 "fictitious" city-placeholder
+   * records this layer's own 939 real city governments correspond to).
+   *
+   * No statewide municipal-officials source was found in the research
+   * pass: the Iowa League of Cities is a membership directory with no
+   * public officials export, and the state's own "Iowa Data Hub"
+   * (data.iowa.gov) is reachable (correcting an earlier sandbox-403
+   * reading) but is a client-rendered catalog of STATE AGENCY datasets,
+   * not a Socrata portal and not a municipal aggregator — its own
+   * description names state agencies, not the 939 separate city
+   * governments, and no other fleet instance has ever found a single
+   * state-level source of city council rosters either (Chicago's and
+   * Wisconsin's municipal-officials data is built city by city, never
+   * from one state aggregate). Per-city rosters are phase 3-4 work, not
+   * phase 1. ---------- */
+  var loadPlaces = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 4,
+    "GEOID,NAME,BASENAME,STATE", "incorporated places");
+
+  registerLayer({
+    id: "municipality",
+    group: "geography",
+    label: "City",
+    emptyNote: "This point is not in a city. Iowa's civil townships are " +
+      "unincorporated, so a point in one sits in no municipality of this " +
+      "kind — the County Subdivision card names the township it is in.",
+    overlay: {
+      load: loadPlaces,
+      // tight magenta dots, matching the WI/IL rendering of this same concept
+      style: { color: "#B0316E", weight: 1.5, fillColor: "#D06A9C", fillOpacity: 0.05, dashArray: "2 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // point-first (queryFeatureAt): one place polygon instead of the
+      // statewide incorporated-places download
+      return queryFeatureAt(loadPlaces, point).then(function (feature) {
+        if (!feature) return null; // unincorporated — the engine renders this layer's own emptyNote
+        var props = feature.properties || {};
+        return {
+          seq: seq,
+          name: findPropCI(props, ["name"]),
+          geoid: findPropCI(props, ["geoid"])
+        };
+      });
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown place",
+        note: result.geoid != null ? "FIPS " + String(result.geoid) : null
+      }));
+      return wrap;
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Next per docs/IA_EXPANSION_PLAN.md's phase
-   * 1: municipality, zip-code, post-office.
+   * 1: zip-code, post-office.
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9310,7 +9382,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "county-supervisor", "school-district-unified"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9410,7 +9482,7 @@ function initIowaExplorer() {
   var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B5E3F": "#5FB387", "#2E9E6B": "#5BEAA5",
     "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
     "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
-    "#A98B6C": "#F3CBA1"};
+    "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#D06A9C": "#FFBDDA"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

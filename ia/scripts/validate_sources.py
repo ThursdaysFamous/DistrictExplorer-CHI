@@ -227,6 +227,10 @@ ENDPOINTS = [
         "layer": "county-subdivision",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1/query?where=STATE%3D%2719%27&returnCountOnly=true&f=json",
     },
+    {
+        "layer": "municipality",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4/query?where=STATE%3D%2719%27&returnCountOnly=true&f=json",
+    },
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
