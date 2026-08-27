@@ -48,10 +48,18 @@ jobs:
 
       # TEMP (branch-only diagnostic): capture District 4's raw page once —
       # the scrape ships it null and only the page itself can say whether
-      # that is a vacancy or a markup shape the parser misses.
+      # that is a vacancy or a markup shape the parser misses. Uses the
+      # scraper's own fetch: a bare curl of the same URL draws a challenge
+      # page the requests client does not (measured on the first capture).
       - name: Capture District 4 page
         if: always()
-        run: curl -sSL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" https://city.milwaukee.gov/police/districts/District-4 -o /tmp/d4.html || true
+        run: |
+          python3 - <<'PYEOF'
+          import sys
+          sys.path.insert(0, 'wi/scripts')
+          from mpd_captains_scraper import fetch, DISTRICT_URL
+          open('/tmp/d4.html', 'w').write(fetch(DISTRICT_URL % 4))
+          PYEOF
 
       # the raw scrape rides each run as an artifact: it is the diagnostic
       # for a failed build, and it is how the FIRST roster reached the tree
