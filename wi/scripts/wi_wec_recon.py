@@ -83,11 +83,21 @@ WEC_FOLLOW_RE = re.compile(
     r"statistic|(?<![a-z])data(?![a-z])|result|polling|clerk|voter|absentee|"
     r"early.?voting|drop.?box|publication|report|election.?administration|"
     r"download", re.IGNORECASE)
-MPD_DISTRICT_RE = re.compile(r"/police[^\"']*(district|Districts)[^\"']*",
-                             re.IGNORECASE)
+MPD_DISTRICT_RE = re.compile(r"district", re.IGNORECASE)
 
+# Run 2's harvest named these exactly and its nav-order queue cut them off:
+# the statistics/data pages are where bulk files would live, and the clerk
+# directory is the municipal-clerks bulk question itself. Pinned to fetch
+# FIRST, before any harvest-derived queue.
+WEC_PRIORITY = (
+    "https://elections.wi.gov/statistics-data",
+    "https://elections.wi.gov/statistics-data/voter-registration-statistics",
+    "https://elections.wi.gov/statistics-data/absentee-statistics",
+    "https://elections.wi.gov/elections/election-results",
+    "https://elections.wi.gov/clerks/directory",
+)
 WEC_PAGE_CAP = 12
-MPD_PAGE_CAP = 9
+MPD_PAGE_CAP = 11
 BULK_PROBE_CAP = 8
 TEXT_EXCERPT_WEC = 2500
 TEXT_EXCERPT_MPD = 6000
@@ -216,11 +226,13 @@ class Recon:
             return rec, None
         page = self.browser.new_page()
         try:
-            start = time.time()
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            # after the host's first clear, its clearance cookie rides the
-            # context — later pages get a short wait, never the full window
-            wait_s = 15 if host in self.cleared_hosts else self.wait_s
+            # run 2 measured WEC re-challenging INTERIOR paths despite the
+            # front page's clearance, and its 15s cleared-host cap counted
+            # goto time too — so every page gets the full window, clocked
+            # from AFTER goto returns
+            start = time.time()
+            wait_s = self.wait_s
             while (time.time() - start < wait_s
                    and looks_like_challenge(page.content())):
                 page.wait_for_timeout(1000)
@@ -341,23 +353,37 @@ def main():
         for href, text in links_of(html, "https://city.milwaukee.gov/police"):
             if urlparse(href).netloc != "city.milwaukee.gov":
                 continue
-            if MPD_DISTRICT_RE.search(href) or re.search(
-                    r"district\s*(one|two|three|four|five|six|seven|\d)\b",
-                    text, re.IGNORECASE):
+            if MPD_DISTRICT_RE.search(href) or MPD_DISTRICT_RE.search(text):
                 if href not in mpd_queue:
                     mpd_queue.append(href)
+        print("MPD index links (same host): %s"
+              % [(h, x) for h, x in links_of(
+                  html, "https://city.milwaukee.gov/police")
+                 if urlparse(h).netloc == "city.milwaukee.gov"][:60],
+              flush=True)
     seen = {p["url"] for p in r.pages}
     fetched = 0
-    for href in mpd_queue:
+    qi = 0
+    while qi < len(mpd_queue):
+        href = mpd_queue[qi]
+        qi += 1
         if fetched >= MPD_PAGE_CAP:
             print("MPD follow cap reached — not fetched: %s"
-                  % mpd_queue[fetched:][:10], flush=True)
+                  % mpd_queue[qi - 1:][:10], flush=True)
             break
         if href in seen:
             continue
         seen.add(href)
-        r.capture(href, "mpd-district", TEXT_EXCERPT_MPD)
+        rec2, html2 = r.capture(href, "mpd-district", TEXT_EXCERPT_MPD)
         fetched += 1
+        if html2:
+            # one level deeper: a district INDEX page's own district links
+            for h2, t2 in links_of(html2, href):
+                if (urlparse(h2).netloc == "city.milwaukee.gov"
+                        and (MPD_DISTRICT_RE.search(h2)
+                             or MPD_DISTRICT_RE.search(t2))
+                        and h2 not in mpd_queue and h2 not in seen):
+                    mpd_queue.append(h2)
 
     # ---- WEC: front doors, then the data-ish nav ----
     wec_queue = []
@@ -372,6 +398,12 @@ def main():
                     if href not in wec_queue:
                         wec_queue.append(href)
     followed = 0
+    for href in WEC_PRIORITY:
+        if href in seen:
+            continue
+        seen.add(href)
+        r.capture(href, "wec-data", TEXT_EXCERPT_WEC)
+        followed += 1
     for href in wec_queue:
         if followed >= WEC_PAGE_CAP:
             print("WEC follow cap reached — %d candidate link(s) not fetched: %s"
