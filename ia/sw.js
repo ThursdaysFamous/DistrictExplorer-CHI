@@ -53,6 +53,7 @@ const GEOMETRY_URLS = [
   "./data/app/ia-house-districts.json",
   "./data/app/ia-supervisor-districts.json",
   "./data/app/jones-county-outline.json",
+  "./data/app/ia-school-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI

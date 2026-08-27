@@ -268,6 +268,17 @@ aware)"); `min_register_layer` → 5.
 
 ## PR 6 — `school-district-unified`: 325 (TIGER) reconciled against 324 (DE)
 
+> **Shipped 2026-08-27.** The one-district gap named itself precisely, and the plan's own guess at the
+> cause ("most likely a district consolidation TIGER's vintage hasn't caught") was right: diffing the
+> DE's current layer against last year's found **Orient-Macksburg Community School District** dissolved
+> into **Nodaway Valley Community School District** for 2026-2027 — confirmed by the DE's
+> `CurrentIowaSchoolDistricts` and newest year-versioned layer both being edited within two minutes of
+> each other on the day this shipped, and by spatially sampling ten points across Orient-Macksburg's old
+> boundary, all ten landing inside Nodaway Valley. TIGERweb's 325 dissolves to 324 in the builder
+> (mapshaper `-dissolve` on a shared key), carrying Nodaway Valley's own identity forward rather than
+> inventing a merged name. The DE layer's own naming needed one recorded exception rather than a
+> broader rule: it drops "Independent" for WEST BURLINGTON but keeps it for MARION INDEPENDENT.
+
 TIGERweb `School/MapServer/0`, `STATE='19'` — **VERIFIED, this session's research pass: 325.**
 Cross-witness: Iowa Dept. of Education's `CurrentIowaSchoolDistricts` layer on the same state ArcGIS
 organization — **VERIFIED, item touched the same day this document was written: 324.** The one-district

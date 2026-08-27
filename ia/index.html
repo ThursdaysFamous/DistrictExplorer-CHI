@@ -5971,7 +5971,8 @@ function initIowaExplorer() {
     "ia-senate",         // 50 Senate districts, each the union of two whole House districts
     "county",            // 99 counties, pre-built from TIGERweb; the fork's offline anchor layer
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
-    "county-supervisor"  // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
+    "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
+    "school-district-unified" // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8617,6 +8618,40 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 6. School District (Unified) ----------
+   * Pre-built from TIGERweb School layer 0, STATE=19, 325 districts — WITH
+   * ONE RECONCILIATION: Orient-Macksburg Community School District dissolved
+   * into Nodaway Valley Community School District for the 2026-2027 school
+   * year (measured against the Iowa Dept. of Education's own current GIS,
+   * updated the same day this layer was built — TIGERweb's federal vintage
+   * hadn't caught up yet), so this file ships 324 features, dissolved and
+   * witnessed by name against the DE's own list
+   * (ia/scripts/build_ia_school_districts.py). TIGER's elementary/secondary
+   * tilings (School layers 1/2) return zero features for Iowa — the state
+   * runs unified districts only, a measured n/a rather than a gap.
+   *
+   * Identity-only: boards are elected (at-large or by director district,
+   * varies by district — the director-district geometry itself is a later
+   * phase's `school-director-district`), and no statewide roster of
+   * school-board members exists, exactly the Wisconsin
+   * `school-district-unified` precedent this module mirrors. ---------- */
+  var loadSchoolDistrictsUnified = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-school-districts.json", {}, 2);
+  });
+
+  registerPolygonLayer({
+    id: "school-district-unified",
+    group: "schools",
+    label: "School District (Unified)",
+    loader: loadSchoolDistrictsUnified,
+    style: { color: "#2F6B3A", weight: 1.5, fillColor: "#4C8F59", fillOpacity: 0.05, dashArray: "8 3" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ],
+    compact: true, compactMetaField: "geoid" // 4b name-only card
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Next per docs/IA_EXPANSION_PLAN.md's phase
@@ -9184,7 +9219,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-supervisor"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-supervisor", "school-district-unified"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9282,8 +9317,8 @@ function initIowaExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B5E3F": "#5FB387", "#2E9E6B": "#5BEAA5",
-    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#6B7280": "#B1BBCE",
-    "#8C2E4A": "#F47294"};
+    "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
+    "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#8C2E4A": "#F47294"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

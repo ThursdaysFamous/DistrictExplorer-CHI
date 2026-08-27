@@ -49,11 +49,11 @@ const INSTANCE_DIR = dirname(dirname(fileURLToPath(import.meta.url)));
 const BASE = process.env.BASE_URL || "http://localhost:8000/";
 // ==== GENERATED:BEGIN smoke-config ====
 const POINT = "42.04940,-92.90710"; // downtown Marshalltown, Marshall County
-const OFFLINE = ["county", "us-house", "ia-senate", "ia-house", "county-supervisor"];
-const EXPECT_DISTRICT = { "county": "Marshall County", "us-house": "4", "ia-senate": "26", "ia-house": "52", "county-supervisor": "At-large" };
+const OFFLINE = ["county", "us-house", "ia-senate", "ia-house", "county-supervisor", "school-district-unified"];
+const EXPECT_DISTRICT = { "county": "Marshall County", "us-house": "4", "ia-senate": "26", "ia-house": "52", "county-supervisor": "At-large", "school-district-unified": "Marshalltown Community School District" };
 const NEGATIVE_POINT = "43.65000,-93.37000"; // inside Minnesota (near Albert Lea), north of the Iowa land border (~43.50) and inside permalink_gate's maxLat (43.70) so the point is still selectable
 const APP_NAME = "districtry Iowa";
-const EXPECT_LAYERS = 5;
+const EXPECT_LAYERS = 6;
 // ==== GENERATED:END smoke-config ====
 // Fork-specific smoke-test constants (the reference repo hoists its own set
 // here). The template's CHI-scenario checks are dropped at build time, so the
