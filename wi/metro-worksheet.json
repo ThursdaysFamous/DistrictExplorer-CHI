@@ -751,6 +751,510 @@
         "note": "Every county in the state, pre-built from TIGERweb by bootstrap_state.py (bounds tightened to the real count at bootstrap)."
       },
       {
+        "file": "adams-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Adams County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "ashland-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Ashland County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "barron-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Barron County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "bayfield-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Bayfield County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "brown-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Brown County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "buffalo-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Buffalo County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "burnett-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Burnett County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "calumet-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Calumet County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "chippewa-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Chippewa County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "clark-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Clark County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "columbia-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Columbia County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "crawford-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Crawford County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "dane-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Dane County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "dodge-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Dodge County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "door-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Door County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "douglas-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Douglas County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "dunn-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Dunn County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "eau-claire-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Eau Claire County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "florence-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Florence County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "fond-du-lac-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Fond du Lac County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "forest-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Forest County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "grant-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Grant County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "green-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Green County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "green-lake-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Green Lake County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "iowa-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Iowa County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "iron-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Iron County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jackson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jackson County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "jefferson-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Jefferson County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "juneau-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Juneau County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "kenosha-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Kenosha County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "kewaunee-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Kewaunee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "la-crosse-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "La Crosse County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "lafayette-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Lafayette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "langlade-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Langlade County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "lincoln-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Lincoln County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "manitowoc-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Manitowoc County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marathon-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Marathon County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marinette-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Marinette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "marquette-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Marquette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "menominee-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Menominee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "milwaukee-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Milwaukee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "monroe-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Monroe County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "oconto-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Oconto County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "oneida-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Oneida County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "outagamie-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Outagamie County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "ozaukee-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Ozaukee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "pepin-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Pepin County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "pierce-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Pierce County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "polk-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Polk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "portage-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Portage County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "price-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Price County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "racine-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Racine County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "richland-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Richland County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "rock-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Rock County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "rusk-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Rusk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "sauk-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Sauk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "sawyer-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Sawyer County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "shawano-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Shawano County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "sheboygan-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Sheboygan County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "st-croix-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "St. Croix County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "taylor-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Taylor County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "trempealeau-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Trempealeau County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "vernon-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Vernon County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "vilas-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Vilas County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "walworth-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Walworth County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "washburn-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Washburn County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "washington-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Washington County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "waukesha-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Waukesha County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "waupaca-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Waupaca County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "waushara-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Waushara County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "winnebago-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Winnebago County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "wood-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Wood County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
         "file": "congress-districts.json",
         "min_features": 8,
         "max_features": 8,
@@ -974,7 +1478,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v27",
+    "cache_name": "districtry-wi-shell-v28",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1190,6 +1694,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "The data-gaps panel learns where you are standing",
+        "body": "The panel that lists what this map cannot tell you now leads with the gaps that apply where you clicked, the way the Illinois deployment already did. It could not before, and the reason was invisible: every Wisconsin gap was recorded without the counties it applies to, and the county shapes needed to test a click against them were never built \u2014 so a reader standing on Milwaukee City Hall, having clicked, was told to click a spot on the map first. All seventy-two county shapes are now sliced from the county map this app already ships, so the two can never drift apart, and every gap names the counties it genuinely affects: the five with no fire-and-rescue filings, the fifty with no published board roster, the thirteen whose city ward filings are incomplete. Two statewide gaps are tagged to every county on purpose, because at county resolution it is better to mention a gap that does not quite reach your block than to tell you nothing is missing when something is. The misleading sentence was a fleet-wide fault and is fixed for every state at once."
+      },
       {
         "date": "2026-08-27",
         "title": "The police district card learns its captains' names",

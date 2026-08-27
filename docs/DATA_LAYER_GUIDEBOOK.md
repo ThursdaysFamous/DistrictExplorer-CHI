@@ -1662,31 +1662,54 @@ detail into `blocker`.
       "id": "county-officials",
       "concept": "County board supervisors",
       "area": "Wisconsin — statewide",
-      "counties": [],
+      "counties": [
+        "adams", "ashland", "barron", "buffalo", "calumet", "chippewa", "clark",
+        "columbia", "crawford", "dane", "dodge", "door", "douglas", "florence",
+        "fond-du-lac", "forest", "green-lake", "iowa", "iron", "jackson", "juneau",
+        "kenosha", "kewaunee", "la-crosse", "lafayette", "langlade", "lincoln",
+        "manitowoc", "marathon", "marinette", "menominee", "monroe", "oconto", "oneida",
+        "outagamie", "ozaukee", "pepin", "pierce", "price", "richland", "rock", "rusk",
+        "sauk", "sawyer", "shawano", "sheboygan", "st-croix", "taylor", "trempealeau",
+        "waupaca"
+      ],
       "kind": "no-source",
       "layer": "county-board",
       "summary": "In 50 of Wisconsin's 72 counties the card names your board district but not the supervisor holding it, and links the county board instead.",
       "why": "Wisconsin publishes every county's district lines in one file but no statewide roster of the people in them. Twenty-two counties publish a readable district-keyed list, and those ship; the rest publish maps, PDFs, or nothing readable.",
-      "blocker": "MEASURED 2026-08-25 by building it. Twenty counties publish a district-keyed member list and now ship: Bayfield, Brown, Burnett, Dunn, Eau Claire, Grant, Green, Jefferson, Marquette, Polk, Portage, Vernon, Vilas, Walworth, Washburn, Washington, Waukesha, Waushara, Winnebago, Wood — 437 seats, of which 435 are named and 2 are seats the counties themselves mark VACANT (Vilas 6, Winnebago 33). THE EARLIER FIGURE OF 23 WAS WRONG AND THE WAY IT WAS WRONG IS THE LESSON: it came from a sweep that tested whether a county page names DISTRICT NUMBERS, and Kenosha, Oconto and Ozaukee name district numbers on pages that are MAP INDEXES — a link per district to a PDF, with no person anywhere on them. All three were then checked three pages deep (their /County-Board, /County-Board-Supervisors and directory pages) and none carries a district-to-supervisor pairing. Test for the PEOPLE, never for the district numbers. The remaining 49 were unreadable in the same sweep, and the ten that answer 403 were RE-MEASURED 2026-08-25 and split into two classes rather than one. SIX ARE A FLAT AKAMAI WAF DENY — Marathon, Monroe, Outagamie, Racine, Rock and Sheboygan answer `server: AkamaiGHost` with a 369-415 byte Access-Denied body, invariant across a browser UA, this project's own UA, no UA at all, and plain http; that is the Adams (IL) shape exactly and no client-side change reaches them. FOUR SIT BEHIND A CLOUDFLARE INTERACTIVE CHALLENGE — La Crosse, Lafayette, Lincoln and Milwaukee return a 5.5 KB Just-a-moment challenge page, which is an access control and is not defeated here. TWO OF THE ORIGINAL ELEVEN WERE NOT BLOCKS AT ALL and the way that was missed is worth keeping: marathoncounty.gov and racinecounty.gov answer 301 to their www hosts, so a probe that followed redirects recorded the final 403 and a probe that did not would have recorded a redirect — check WHO answers and WITH WHAT before recording a block. The one route that might pass a Cloudflare challenge is a real browser, and Chromium cannot egress from this sandbox at all (it does not use the agent proxy), so it is unavailable rather than untried. 2 more counties answer 503, Taylor sits behind an sgcaptcha challenge, and the rest publish members as PDFs, images, or prose with no district column. A TRAP WORTH RECORDING FOR WHOEVER EXTENDS THIS: the three page shapes (name and district on ONE line; name BEFORE its district line; name AFTER it) are not cosmetic. before and after are the same extraction shifted by one, so reading a page the wrong way round yields a full, plausible, entirely wrong roster with every supervisor filed under their neighbour's district. Green County resolves 31 of 31 under both readings and they name different people; Waukesha and Wood do the same. Each county's direction is therefore PINNED in the scraper rather than detected at runtime, so a page reshaping fails the count guard loudly instead of shifting names silently. UPDATED 2026-08-26, TWO OF THE TEN BLOCKED COUNTIES RECOVERED AND THE ROUTE IS THE LESSON: a blocked county SITE is not a blocked county. MILWAUKEE (Cloudflare-challenged site) publishes its 18 supervisors as ATTRIBUTES on its own Land Information Office ArcGIS layer (services2.arcgis.com/s1wgJQKbKJihhhaT .../FeatureServer/46 — Sup_Name/Email_Addr/Website_Url, data-edited 2026-06-29, post-election), and ships WITNESSED against the county's own Legistar web API (webapi.legistar.com/v1/milwaukeecounty, body 138): the name sets must agree exactly per run. The witness caught four styling traps on its first live run — the layer packs 'Chairwoman' INTO the D10 name field, prints one name accented where Legistar does not, carries a middle initial Legistar drops, and Legistar's April-2026 term-ends read as current under a lax date cutoff — each now folded or stripped structurally. Legistar is a witness and never a source: its OData date filter is silently ignored server-side and its end dates can be aspirational. RACINE (Akamai-denied site) publishes 21/21 with e-mails on its own AGO org (County_Board_of_Supervisors_WFL1/0, REPNAME/Contact, edited 2026-04-23, post-election). OUTAGAMIE moved domains (outagamie.gov) and stays out on a measurement worth keeping: the new domain answered ONE probe on 2026-08-25 (36 districts, 36 e-mails read) and refused every later probe across user agents (HTTP 403) — a roster this client cannot re-verify weekly does not ship, and intermittent readability is recorded as its own class, distinct from a hard deny. The other seven (La Crosse, Lafayette, Lincoln, Marathon, Monroe, Rock, Sheboygan) were catalog-swept for AGO orgs the same day: zero board layers (Rock's GIS is LAN-only, its public host resets). ENUMERATE A COUNTY'S OWN GIS AND ITS AGENDA PLATFORM BEFORE WRITING ITS ROSTER OFF — one request each, and it returned two counties' rosters here.",
+      "blocker": "MEASURED 2026-08-25 by building it. Twenty counties publish a district-keyed member list and now ship: Bayfield, Brown, Burnett, Dunn, Eau Claire, Grant, Green, Jefferson, Marquette, Polk, Portage, Vernon, Vilas, Walworth, Washburn, Washington, Waukesha, Waushara, Winnebago, Wood — 437 seats, of which 435 are named and 2 are seats the counties themselves mark VACANT (Vilas 6, Winnebago 33). THE EARLIER FIGURE OF 23 WAS WRONG AND THE WAY IT WAS WRONG IS THE LESSON: it came from a sweep that tested whether a county page names DISTRICT NUMBERS, and Kenosha, Oconto and Ozaukee name district numbers on pages that are MAP INDEXES — a link per district to a PDF, with no person anywhere on them. All three were then checked three pages deep (their /County-Board, /County-Board-Supervisors and directory pages) and none carries a district-to-supervisor pairing. Test for the PEOPLE, never for the district numbers. The remaining 49 were unreadable in the same sweep, and the ten that answer 403 were RE-MEASURED 2026-08-25 and split into two classes rather than one. SIX ARE A FLAT AKAMAI WAF DENY — Marathon, Monroe, Outagamie, Racine, Rock and Sheboygan answer `server: AkamaiGHost` with a 369-415 byte Access-Denied body, invariant across a browser UA, this project's own UA, no UA at all, and plain http; that is the Adams (IL) shape exactly and no client-side change reaches them. FOUR SIT BEHIND A CLOUDFLARE INTERACTIVE CHALLENGE — La Crosse, Lafayette, Lincoln and Milwaukee return a 5.5 KB Just-a-moment challenge page, which is an access control and is not defeated here. TWO OF THE ORIGINAL ELEVEN WERE NOT BLOCKS AT ALL and the way that was missed is worth keeping: marathoncounty.gov and racinecounty.gov answer 301 to their www hosts, so a probe that followed redirects recorded the final 403 and a probe that did not would have recorded a redirect — check WHO answers and WITH WHAT before recording a block. The one route that might pass a Cloudflare challenge is a real browser, and Chromium cannot egress from this sandbox at all (it does not use the agent proxy), so it is unavailable rather than untried. 2 more counties answer 503, Taylor sits behind an sgcaptcha challenge, and the rest publish members as PDFs, images, or prose with no district column. A TRAP WORTH RECORDING FOR WHOEVER EXTENDS THIS: the three page shapes (name and district on ONE line; name BEFORE its district line; name AFTER it) are not cosmetic. before and after are the same extraction shifted by one, so reading a page the wrong way round yields a full, plausible, entirely wrong roster with every supervisor filed under their neighbour's district. Green County resolves 31 of 31 under both readings and they name different people; Waukesha and Wood do the same. Each county's direction is therefore PINNED in the scraper rather than detected at runtime, so a page reshaping fails the count guard loudly instead of shifting names silently. UPDATED 2026-08-26, TWO OF THE TEN BLOCKED COUNTIES RECOVERED AND THE ROUTE IS THE LESSON: a blocked county SITE is not a blocked county. MILWAUKEE (Cloudflare-challenged site) publishes its 18 supervisors as ATTRIBUTES on its own Land Information Office ArcGIS layer (services2.arcgis.com/s1wgJQKbKJihhhaT .../FeatureServer/46 — Sup_Name/Email_Addr/Website_Url, data-edited 2026-06-29, post-election), and ships WITNESSED against the county's own Legistar web API (webapi.legistar.com/v1/milwaukeecounty, body 138): the name sets must agree exactly per run. The witness caught four styling traps on its first live run — the layer packs 'Chairwoman' INTO the D10 name field, prints one name accented where Legistar does not, carries a middle initial Legistar drops, and Legistar's April-2026 term-ends read as current under a lax date cutoff — each now folded or stripped structurally. Legistar is a witness and never a source: its OData date filter is silently ignored server-side and its end dates can be aspirational. RACINE (Akamai-denied site) publishes 21/21 with e-mails on its own AGO org (County_Board_of_Supervisors_WFL1/0, REPNAME/Contact, edited 2026-04-23, post-election). OUTAGAMIE moved domains (outagamie.gov) and stays out on a measurement worth keeping: the new domain answered ONE probe on 2026-08-25 (36 districts, 36 e-mails read) and refused every later probe across user agents (HTTP 403) — a roster this client cannot re-verify weekly does not ship, and intermittent readability is recorded as its own class, distinct from a hard deny. The other seven (La Crosse, Lafayette, Lincoln, Marathon, Monroe, Rock, Sheboygan) were catalog-swept for AGO orgs the same day: zero board layers (Rock's GIS is LAN-only, its public host resets). ENUMERATE A COUNTY'S OWN GIS AND ITS AGENDA PLATFORM BEFORE WRITING ITS ROSTER OFF — one request each, and it returned two counties' rosters here. COUNTY TAGGING (2026-08-27) IS DERIVED, NOT TRANSCRIBED: the 50 named here are the 72 counties minus the 22 whose FIPS prefixes appear in the shipped county-board-members.json district keys. When a 23rd county's roster ships, that county leaves this list — re-derive rather than editing by hand.",
       "wanted": "For one of the 52 unnamed counties: a page listing each supervisory district beside the supervisor holding it. A district map, a PDF or an alphabetical list with no district column cannot be used."
     },
     {
       "id": "ward-polling-places",
       "concept": "Polling places",
       "area": "Wisconsin — statewide outside Milwaukee and Madison",
-      "counties": [],
+      "counties": [
+        "adams", "ashland", "barron", "bayfield", "brown", "buffalo", "burnett", "calumet",
+        "chippewa", "clark", "columbia", "crawford", "dane", "dodge", "door", "douglas",
+        "dunn", "eau-claire", "florence", "fond-du-lac", "forest", "grant", "green",
+        "green-lake", "iowa", "iron", "jackson", "jefferson", "juneau", "kenosha",
+        "kewaunee", "la-crosse", "lafayette", "langlade", "lincoln", "manitowoc",
+        "marathon", "marinette", "marquette", "menominee", "milwaukee", "monroe", "oconto",
+        "oneida", "outagamie", "ozaukee", "pepin", "pierce", "polk", "portage", "price",
+        "racine", "richland", "rock", "rusk", "sauk", "sawyer", "shawano", "sheboygan",
+        "st-croix", "taylor", "trempealeau", "vernon", "vilas", "walworth", "washburn",
+        "washington", "waukesha", "waupaca", "waushara", "winnebago", "wood"
+      ],
       "kind": "blocked",
       "layer": "ward",
       "summary": "Outside Milwaukee and Madison the ward card names your ward but not your polling place — the state publishes the pairing only through a per-address lookup, never as a dataset this project has located, so the card links that lookup instead.",
       "why": "Polling places are assigned per ward by each municipality, and no county or state source publishes the statewide ward-to-polling-place pairing as open data this project can read and verify.",
-      "blocker": "MEASURED 2026-08-25 from the development sandbox: elections.wi.gov and myvote.wi.gov sit behind a Cloudflare managed JS challenge — HTTP 403 with `Cf-Mitigated: challenge` on every path tried, including /media/<id>/download file URLs and MyVote's own API routes (/api/*, /DesktopModules/GabMyVoteModules/api/*), to curl with full browser headers and to WebFetch alike. A challenge is an access control and is not defeated here. RE-MEASURED 2026-08-27 FROM GITHUB ACTIONS — the queued CPD-style attempt ran (wi-wec-probe.yml run 33029087408, `wi/scripts/wi_wec_probe.py`) and THE BLOCK IS SANDBOX-SIDE, NOT WEC-SIDE: elections.wi.gov still hands a plain client the 403 challenge but a real headless Chromium clears it in 3.7 seconds, and myvote.wi.gov answers a plain client HTTP 200 with no challenge at all. Access is therefore no longer the blocker. What remains is the question the 2026-08-25 search already flagged: whether WEC publishes the statewide pairing as data anywhere — the last bulk statewide clerk/polling artifact visible in any index predates 2020, and neither front page links a bulk file (the probe's harvest found zero /media/download|csv|xlsx|zip anchors on either). THE SWEEP RAN 2026-08-27 (wi-wec-recon.yml runs 33035225999 and 33036310501, `wi/scripts/wi_wec_recon.py`) AND THE DATA FLOOR IS CLOSED EVEN THOUGH THE FRONT DOOR OPENS: the front page clears for the browser, but EVERY interior path — /clerks/directory, /statistics-data and its voter-registration/absentee children, /elections/election-results, twelve /clerks/* pages — re-challenges the SAME cleared browser session and does not clear within a 30-second window clocked after page load, across 17 interior page attempts in two runs; zero bulk-file anchors appeared on any page that did render. So the pre-2020 search-index finding stands unrefuted and unconfirmable: whether WEC publishes the pairing as data cannot be read from here, because the pages that would say so are the ones that stay shut. The reader-facing answer is unchanged (MyVote answers plain and the card links it); the ASK LEDGER takes over for the data question — WEC's elections@wi.gov is the standing ask route, and any future re-probe should extend the interior-page wait before concluding anything new (the front clears in ~4s; the interior did not clear in 30). THE CITY-SCOPED OPENING SHIPPED 2026-08-26 (phase 4 PR 3): data.milwaukee.gov's \"Voting Wards and Polling Places\" (CKAN, CC-BY) now pairs all 356 Milwaukee wards on the card — ward keys gated equal to LTSB's, every pair witnessed against the city's own REST layer, the pairing dated per dataset edition (wi/scripts/build_mke_polling_places.py). It narrows this gap to statewide-minus-Milwaukee and does not answer the statewide question this gap records. MADISON FOLLOWED 2026-08-27: the city's open-data server (maps.cityofmadison.com Public/OPEN_DATA MapServer layer 4 \"Polling Places\") publishes the pairing as ONE point layer — a polling point per ward, 137 rows carrying ward number, building name and street address — and it ships gated equal to LTSB's Madison ward set AND the city's own ward layer (layer 11), every point bbox-gated inside Madison (wi/scripts/build_madison_polling_places.py, madison-polling-places.json). The layer publishes no edition date (no editingInfo — measured), so the pairing is dated as the day each build reads it. The gap is now statewide minus Milwaukee AND Madison; the statewide question above is unchanged.",
+      "blocker": "MEASURED 2026-08-25 from the development sandbox: elections.wi.gov and myvote.wi.gov sit behind a Cloudflare managed JS challenge — HTTP 403 with `Cf-Mitigated: challenge` on every path tried, including /media/<id>/download file URLs and MyVote's own API routes (/api/*, /DesktopModules/GabMyVoteModules/api/*), to curl with full browser headers and to WebFetch alike. A challenge is an access control and is not defeated here. RE-MEASURED 2026-08-27 FROM GITHUB ACTIONS — the queued CPD-style attempt ran (wi-wec-probe.yml run 33029087408, `wi/scripts/wi_wec_probe.py`) and THE BLOCK IS SANDBOX-SIDE, NOT WEC-SIDE: elections.wi.gov still hands a plain client the 403 challenge but a real headless Chromium clears it in 3.7 seconds, and myvote.wi.gov answers a plain client HTTP 200 with no challenge at all. Access is therefore no longer the blocker. What remains is the question the 2026-08-25 search already flagged: whether WEC publishes the statewide pairing as data anywhere — the last bulk statewide clerk/polling artifact visible in any index predates 2020, and neither front page links a bulk file (the probe's harvest found zero /media/download|csv|xlsx|zip anchors on either). THE SWEEP RAN 2026-08-27 (wi-wec-recon.yml runs 33035225999 and 33036310501, `wi/scripts/wi_wec_recon.py`) AND THE DATA FLOOR IS CLOSED EVEN THOUGH THE FRONT DOOR OPENS: the front page clears for the browser, but EVERY interior path — /clerks/directory, /statistics-data and its voter-registration/absentee children, /elections/election-results, twelve /clerks/* pages — re-challenges the SAME cleared browser session and does not clear within a 30-second window clocked after page load, across 17 interior page attempts in two runs; zero bulk-file anchors appeared on any page that did render. So the pre-2020 search-index finding stands unrefuted and unconfirmable: whether WEC publishes the pairing as data cannot be read from here, because the pages that would say so are the ones that stay shut. The reader-facing answer is unchanged (MyVote answers plain and the card links it); the ASK LEDGER takes over for the data question — WEC's elections@wi.gov is the standing ask route, and any future re-probe should extend the interior-page wait before concluding anything new (the front clears in ~4s; the interior did not clear in 30). THE CITY-SCOPED OPENING SHIPPED 2026-08-26 (phase 4 PR 3): data.milwaukee.gov's \"Voting Wards and Polling Places\" (CKAN, CC-BY) now pairs all 356 Milwaukee wards on the card — ward keys gated equal to LTSB's, every pair witnessed against the city's own REST layer, the pairing dated per dataset edition (wi/scripts/build_mke_polling_places.py). It narrows this gap to statewide-minus-Milwaukee and does not answer the statewide question this gap records. MADISON FOLLOWED 2026-08-27: the city's open-data server (maps.cityofmadison.com Public/OPEN_DATA MapServer layer 4 \"Polling Places\") publishes the pairing as ONE point layer — a polling point per ward, 137 rows carrying ward number, building name and street address — and it ships gated equal to LTSB's Madison ward set AND the city's own ward layer (layer 11), every point bbox-gated inside Madison (wi/scripts/build_madison_polling_places.py, madison-polling-places.json). The layer publishes no edition date (no editingInfo — measured), so the pairing is dated as the day each build reads it. The gap is now statewide minus Milwaukee AND Madison; the statewide question above is unchanged. COUNTY TAGGING (2026-08-27), and the approximation it carries: this gap names ALL 72 counties, because it applies somewhere in every one of them — including Milwaukee and Dane, whose suburbs publish no pairing either. Inside the two cities that DO publish, the panel therefore over-claims by one row, which the gap's own area line corrects on the same row (\"statewide outside Milwaukee and Madison\"). That direction was chosen deliberately: county granularity cannot express \"everywhere except two cities\", and the engine's lede must never tell a reader in West Allis that nothing is missing where they clicked. Under-claiming would have done exactly that.",
       "wanted": "A statewide or per-county dataset pairing each ward with its polling place and street address, published as data rather than behind a lookup form — a per-election spreadsheet from the state or a county clerk would work."
     },
     {
       "id": "aldermanic-incomplete-filings",
       "concept": "Aldermanic districts",
       "area": "Appleton, Kaukauna, Bellevue, Berlin, Brillion, Cuba City, Durand, Edgerton, New London, Port Washington",
-      "counties": [],
+      "counties": [
+        "brown", "calumet", "dane", "grant", "green-lake", "lafayette", "outagamie",
+        "ozaukee", "pepin", "rock", "waupaca", "waushara", "winnebago"
+      ],
       "kind": "data-quality",
       "layer": "aldermanic-district",
       "summary": "Ten cities and villages have no aldermanic districts on the map because their counties' ward filings leave some or most wards unassigned, so their district lines cannot be drawn honestly.",
@@ -1698,19 +1721,29 @@ detail into `blocker`.
       "id": "alderperson-rosters",
       "concept": "City and village council members",
       "area": "Wisconsin — statewide",
-      "counties": [],
+      "counties": [
+        "adams", "ashland", "barron", "bayfield", "brown", "buffalo", "calumet",
+        "chippewa", "clark", "columbia", "crawford", "dane", "dodge", "door", "douglas",
+        "dunn", "eau-claire", "fond-du-lac", "forest", "grant", "green-lake", "iowa",
+        "iron", "jackson", "jefferson", "juneau", "kewaunee", "la-crosse", "langlade",
+        "lincoln", "manitowoc", "marathon", "marinette", "marquette", "milwaukee",
+        "monroe", "oconto", "oneida", "ozaukee", "pierce", "polk", "portage", "racine",
+        "richland", "sauk", "shawano", "sheboygan", "st-croix", "taylor", "vernon",
+        "vilas", "walworth", "washburn", "washington", "waukesha", "waupaca", "waushara",
+        "winnebago", "wood"
+      ],
       "kind": "no-source",
       "layer": "aldermanic-district",
       "summary": "In most of the 155 municipalities with districts on the map, the card names your district but not the council member holding it. Six big cities name their alderpersons; the rest link nothing yet.",
       "why": "Wisconsin has no statewide roster of municipal council members — the league of municipalities keeps its directory member-gated — so each city's roster must be read from its own site, one pinned scraper at a time.",
-      "blocker": "MEASURED 2026-08-26. Six of the ten biggest cities ship with verified, witnessed routes (Milwaukee via its own GIS + the Legistar witness; Madison via per-district pages — the index's flat pairing is an off-by-one trap around the vacant seat; Green Bay via its staff directory parsed per entry container; Kenosha via its GIS + the county's certified April 2026 canvass, which caught one stale seat, D14, now pinned as a canvass override; Racine and Waukesha via their council pages). Of the remaining big cities: Appleton's roster is readable but its geometry cannot ship (see aldermanic-incomplete-filings); Oshkosh and Janesville elect at large (verified — municipality-card facts, never aldermanic rows); Eau Claire and Janesville sit behind Akamai denies and kenosha.org/city.milwaukee.gov behind Cloudflare challenges (access controls, not defeated — both cities shipped through their GIS/data routes instead). The remaining ~149 municipalities are small cities and villages whose rosters would each need their own pinned reading; no bulk source exists.",
+      "blocker": "MEASURED 2026-08-26. Six of the ten biggest cities ship with verified, witnessed routes (Milwaukee via its own GIS + the Legistar witness; Madison via per-district pages — the index's flat pairing is an off-by-one trap around the vacant seat; Green Bay via its staff directory parsed per entry container; Kenosha via its GIS + the county's certified April 2026 canvass, which caught one stale seat, D14, now pinned as a canvass override; Racine and Waukesha via their council pages). Of the remaining big cities: Appleton's roster is readable but its geometry cannot ship (see aldermanic-incomplete-filings); Oshkosh and Janesville elect at large (verified — municipality-card facts, never aldermanic rows); Eau Claire and Janesville sit behind Akamai denies and kenosha.org/city.milwaukee.gov behind Cloudflare challenges (access controls, not defeated — both cities shipped through their GIS/data routes instead). The remaining ~149 municipalities are small cities and villages whose rosters would each need their own pinned reading; no bulk source exists. COUNTY TAGGING (2026-08-27): the 59 counties containing at least one of those 149, measured by point-in-polygon of the shipped aldermanic districts against the county outlines. The six rostered cities' own counties are among them — Milwaukee County holds eighteen other municipalities with districts and no roster — so at a point inside one of those six cities the panel over-claims by one row, the same county-granularity approximation the polling gap carries and for the same reason.",
       "wanted": "For any city or village with districts on the map: a page pairing each aldermanic or trustee district with the member holding it. A statewide open roster of municipal officials would close this gap wholesale."
     },
     {
       "id": "rusd-school-board",
       "concept": "Elected school board districts",
       "area": "Racine Unified School District",
-      "counties": [],
+      "counties": ["racine"],
       "kind": "no-source",
       "layer": "mps-school-board",
       "summary": "Racine Unified is the only Wisconsin school board besides Milwaukee's elected by geographic district, and its nine district boundaries aren't on the map — the district publishes them only as picture maps, not as data.",
@@ -1722,7 +1755,7 @@ detail into `blocker`.
       "id": "madison-tid-undrawn",
       "concept": "Tax incremental districts",
       "area": "City of Madison — TID 55 (Voit Farm)",
-      "counties": [],
+      "counties": ["dane"],
       "kind": "data-quality",
       "layer": "tid-district",
       "summary": "One of Madison's fifteen active tax districts is missing from the map — the state certified TID 55 as active in 2025, but the city has not yet published its boundary, so a reader inside it is told they are in no TID.",
@@ -1734,7 +1767,7 @@ detail into `blocker`.
       "id": "ng911-fire-filings",
       "concept": "Fire service areas",
       "area": "Iowa, Jefferson, Langlade, Vilas and Walworth counties",
-      "counties": [],
+      "counties": ["iowa", "jefferson", "langlade", "vilas", "walworth"],
       "kind": "data-quality",
       "layer": "fire-service",
       "summary": "In five counties the fire-service card can name no department, because their 911 authorities' fire-boundary filings are absent from the state's NG911 aggregate.",
@@ -1746,7 +1779,7 @@ detail into `blocker`.
       "id": "ng911-law-filings",
       "concept": "Law-enforcement service areas",
       "area": "Iowa, Langlade, Vilas and Walworth counties, plus part of Polk",
-      "counties": [],
+      "counties": ["iowa", "langlade", "polk", "vilas", "walworth"],
       "kind": "data-quality",
       "layer": "law-service",
       "summary": "In four counties the law-enforcement card can name no agency, and in part of Polk County only some agencies, because those 911 authorities' law-boundary filings are absent or partial in the state's NG911 aggregate.",
@@ -1758,7 +1791,7 @@ detail into `blocker`.
       "id": "ng911-psap-filings",
       "concept": "911 answering points",
       "area": "Iowa, Langlade, Vilas and Walworth counties",
-      "counties": [],
+      "counties": ["iowa", "langlade", "vilas", "walworth"],
       "kind": "data-quality",
       "layer": "psap-area",
       "summary": "In four counties the 911-answering-point card can name no dispatch center, because those 911 authorities' PSAP-boundary filings are absent from the state's NG911 aggregate.",
@@ -1770,7 +1803,7 @@ detail into `blocker`.
       "id": "ng911-ems-filings",
       "concept": "EMS service areas",
       "area": "Iowa, Jefferson, Langlade, Vilas and Walworth counties",
-      "counties": [],
+      "counties": ["iowa", "jefferson", "langlade", "vilas", "walworth"],
       "kind": "data-quality",
       "layer": "ems-service",
       "summary": "In five counties the EMS card can name no service, because their 911 authorities' EMS-boundary filings are absent from the state's NG911 aggregate.",
@@ -5593,6 +5626,22 @@ recorded as a candidate rather than made in passing.
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker.
+
+### NYC and SF gap panels cannot lead with local gaps (recorded 2026-08-27)
+
+Found while fixing Wisconsin's, and recorded rather than quietly left: `nyc`
+and `sf` each carry THREE gaps, none tagged with a county, and neither
+instance ships a single `<slug>-county-outline.json`. So their panels'
+`appliesHere` can never match, the "Where you clicked" section can never
+appear, and — until the engine fix that shipped with the Wisconsin repair —
+each told a reader who had already clicked to click. THE ENGINE HALF IS
+FIXED FLEET-WIDE; the data half is theirs to do, and it is small in both:
+each needs its counties sliced into outlines (Wisconsin's
+`build_wi_county_outlines.py` is the pattern — no live fetch, slice the
+county fabric the instance already ships) and its three gaps tagged. The
+gaps builder's new gate does NOT fire for them, correctly: it fails only
+when an instance ships outlines and references none, which is the
+regression case rather than the not-started one.
 
 ### Wisconsin phase-3 candidates, every source verified (recorded 2026-08-25)
 
