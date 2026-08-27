@@ -1587,7 +1587,13 @@ detail into `blocker`.
       "id": "nyc-school-zone-details",
       "concept": "School zones",
       "area": "New York City",
-      "counties": [],
+      "counties": [
+        "bronx",
+        "brooklyn",
+        "manhattan",
+        "queens",
+        "staten-island"
+      ],
       "kind": "data-quality",
       "layer": "es-zone",
       "summary": "School-zone cards name the zoned school but carry no school address or grade range.",
@@ -1599,7 +1605,13 @@ detail into `blocker`.
       "id": "nyc-amenity-phones",
       "concept": "Fire stations and libraries",
       "area": "New York City",
-      "counties": [],
+      "counties": [
+        "bronx",
+        "brooklyn",
+        "manhattan",
+        "queens",
+        "staten-island"
+      ],
       "kind": "data-quality",
       "layer": "fire-station",
       "summary": "Fire-station and library cards carry no phone number.",
@@ -1611,7 +1623,13 @@ detail into `blocker`.
       "id": "nyc-congress-district-offices",
       "concept": "U.S. House district",
       "area": "New York City",
-      "counties": [],
+      "counties": [
+        "bronx",
+        "brooklyn",
+        "manhattan",
+        "queens",
+        "staten-island"
+      ],
       "kind": "data-quality",
       "layer": "congress",
       "summary": "Congressional cards show the Washington D.C. office only, not the local district office.",
@@ -1625,7 +1643,9 @@ detail into `blocker`.
       "id": "sf-supervisor-contact",
       "concept": "Supervisor district",
       "area": "San Francisco",
-      "counties": [],
+      "counties": [
+        "san-francisco"
+      ],
       "kind": "data-quality",
       "layer": "supervisor-district",
       "summary": "Supervisor districts name the supervisor but the boundary source carries no contact fields.",
@@ -1637,7 +1657,9 @@ detail into `blocker`.
       "id": "sf-amenity-phones",
       "concept": "Fire stations and libraries",
       "area": "San Francisco",
-      "counties": [],
+      "counties": [
+        "san-francisco"
+      ],
       "kind": "data-quality",
       "layer": "fire-station",
       "summary": "Fire-station and library cards carry no phone number.",
@@ -1649,7 +1671,9 @@ detail into `blocker`.
       "id": "sf-congress-district-offices",
       "concept": "U.S. House district",
       "area": "San Francisco",
-      "counties": [],
+      "counties": [
+        "san-francisco"
+      ],
       "kind": "data-quality",
       "layer": "congress",
       "summary": "Congressional cards show the Washington D.C. office only, not the local district office.",
@@ -5833,7 +5857,7 @@ NOT YET DRAFTED, and each needs a verified address first: Racine Unified
 (gap `rusd-school-board`), the City of Madison (TID 55's geometry), and the
 five county 911 authorities whose NG911 filings are absent.
 
-### NYC and SF gap panels cannot lead with local gaps (recorded 2026-08-27)
+### NYC and SF gap panels cannot lead with local gaps (recorded 2026-08-27, CLOSED the same day)
 
 Found while fixing Wisconsin's, and recorded rather than quietly left: `nyc`
 and `sf` each carry THREE gaps, none tagged with a county, and neither
@@ -5848,6 +5872,41 @@ county fabric the instance already ships) and its three gaps tagged. The
 gaps builder's new gate does NOT fire for them, correctly: it fails only
 when an instance ships outlines and references none, which is the
 regression case rather than the not-started one.
+
+**CLOSED 2026-08-27.** Both halves now ship. NYC's five boroughs are SLICED
+from the `borough-boundaries.json` the borough card already renders
+(`ny/scripts/build_ny_borough_outlines.py`, 95 KB across five files at the
+fleet's 25 m tolerance, worst area drift 0.128%); San Francisco's single
+outline is the UNION of the eleven shipped supervisor districts
+(`ca/scripts/build_sf_county_outline.py`, 10 KB, drift 0.028%). All six gaps
+are tagged and both panels were verified in a real browser: a click in
+Brooklyn and a click in the Mission each open on **WHERE YOU CLICKED 3**,
+where neither could lead at all before. The negative cases hold too — a
+click in Newark reads "You clicked outside the area this app covers".
+
+**THE SLUG IS THE BOROUGH NAME, NOT THE COUNTY NAME.** Each borough is
+coextensive with a New York State county, so the fleet's "county outline"
+concept applies exactly — but `["brooklyn"]` reads as a place in a gap
+record where `["kings"]` reads as a puzzle, and the borough name is what
+the app's own card prints. The county name and FIPS ride in each file's
+properties so the identification is never lost.
+
+**SAN FRANCISCO'S UNION IS REAL GEOMETRY, NOT EDGE-CANCELLATION.** Wisconsin
+dissolves by cancelling shared segments, which needs neighbours' coordinates
+to match EXACTLY, and this repo's own `scripts/requirements.txt` records that
+approach leaving a spurious 3-segment ring on precinct data. The SF builder
+uses shapely's `unary_union`, at the 2.1.2 already pinned in two of this
+repo's requirements files. Its load-bearing gate is not the area drift but
+COVERAGE: every one of the eleven districts' own interior probe points must
+land inside the finished outline, so a union that dropped a district — or a
+tolerance that clipped one off — fails the build rather than shipping a panel
+that says "not here".
+
+**A `--check` THAT COMPARES STRUCTURES INSTEAD OF BYTES FAILS ON ITS OWN
+OUTPUT.** shapely hands back coordinate TUPLES and a reloaded JSON file has
+LISTS, so the SF builder's first `--check` failed against the file it had
+just written. It compares the serialized form now — worth remembering for any
+future builder that takes geometry from shapely rather than from `json.load`.
 
 ### Wisconsin phase-3 candidates, every source verified (recorded 2026-08-25)
 

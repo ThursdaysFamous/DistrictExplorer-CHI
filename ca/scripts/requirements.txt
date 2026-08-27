@@ -10,3 +10,12 @@
 # validate_index.py deliberately stays stdlib and does NOT import either.
 requests==2.33.1
 jsonschema==4.26.0
+
+# scripts/build_sf_county_outline.py unions the eleven shipped supervisor
+# districts into the city-and-county outline the Data gaps panel probes.
+# Edge-cancellation (Wisconsin's approach for counties that tile on exact
+# shared coordinates) is not safe here — the root repo's own requirements
+# record it leaving a spurious 3-segment ring on precinct data — so this
+# uses shapely's unary_union, at the version already pinned in scripts/
+# and wi/scripts/.
+shapely==2.1.2

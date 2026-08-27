@@ -629,6 +629,41 @@
   "data_files": {
     "geometry": [
       { "file": "borough-boundaries.json", "min_features": 5, "max_features": 5 },
+      {
+        "file": "bronx-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "The Bronx containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "brooklyn-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Brooklyn containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "manhattan-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Manhattan containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "queens-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Queens containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "staten-island-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "Staten Island containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
       { "file": "judicial-districts.json", "min_features": 5, "max_features": 5 },
       { "file": "municipal-court-districts.json", "min_features": 28, "max_features": 28 },
       { "file": "congress-districts.json", "min_features": 26, "max_features": 26, "note": "26 NY U.S. House districts; pre-built from TIGERweb by scripts/build_legislative_boundaries.py (R2-2)" },
@@ -651,7 +686,7 @@
     ]
   },
   "sw": {
-    "cache_name": "nyc-district-explorer-shell-v13",
+    "cache_name": "nyc-district-explorer-shell-v14",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
