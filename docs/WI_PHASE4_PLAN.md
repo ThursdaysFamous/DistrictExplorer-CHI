@@ -221,7 +221,7 @@ its open-data portal):
   text for the source block, the DPI-licence precedent), and a
   `madisonCoverage` test built from the city's corporate-limit layer.
 
-## PR 5 — The WEC Playwright-from-CI attempt (a measurement, not a layer)
+## PR 5 — The WEC Playwright-from-CI attempt (a measurement, not a layer) — WORKFLOW SHIPPED 2026-08-27, dispatch pending
 
 The standing follow-up phase 2 recorded and three gap records wait on: one
 CPD-style Playwright challenge attempt against elections.wi.gov / MyVote
@@ -234,6 +234,26 @@ EXPECTED_UNREACHABLE entries, the `ward-polling-places` blocker rewritten
 from "one attempt owed" to "attempted from CI on <date>, refused", and the
 ask ledger takes over. Either way a three-week-old "owed" comes off the
 books.
+
+SHIPPED: `wi/scripts/wi_wec_probe.py` + `.github/workflows/wi-wec-probe.yml`
+(workflow_dispatch only — deliberately absent from the worksheet's scheduled
+workflows[] list; a one-shot measurement is not a schedule). The probe is
+the CPD ladder verbatim in posture: plain requests first, then a REAL
+headless Chromium given a bounded challenge window (`WEC_CHALLENGE_WAIT_S`,
+default 120s per the CPD knob's history) — a challenge still on screen
+after the window is recorded as a refusal, never retried past, and refusal
+exits 0 because refusal IS the measurement (a red run means the probe
+failed to run). After a WEC page clears it harvests /media/<id>/download,
+.csv/.xlsx/.zip anchors and re-fetches up to five through the same browser
+session, because 2026-08-25 measured the file URLs blocked independently
+of the pages. Two secondary targets ride the run — this vantage is exactly
+what their records are owed: city.milwaukee.gov/police (gap
+`mpd-district-leadership`) and badgersheriffs.com (the appendix's "CI probe
+owed"). A local run reproduced the sandbox baseline exactly (403 challenge
+interstitials on all three Cloudflare fronts; proxy CONNECT 502 on
+badgersheriffs) and exercised both rungs. The outcome PR — gap blockers,
+matrix cells, backlog entry, history changelog — follows the dispatch,
+whichever way it measures.
 
 ## PR 6 (stretch) — Technical college districts, identity-only
 
