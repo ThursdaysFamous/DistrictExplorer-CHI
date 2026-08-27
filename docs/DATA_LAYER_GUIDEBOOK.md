@@ -5627,7 +5627,7 @@ recorded as a candidate rather than made in passing.
 
 Every entry cites where it's recorded and the blocker.
 
-### The Wisconsin ask ledger — opened 2026-08-27, nine asks DRAFTED, none sent
+### The Wisconsin ask ledger — opened 2026-08-27, nine asks SENT, awaiting replies
 
 Wisconsin's frontier is no longer software. Every remaining gap is a
 publisher question, and Illinois has repeatedly shown that a gap reading
@@ -5636,9 +5636,12 @@ simply writes to the office that holds it (Ogle's precinct shapefile
 arrived by return e-mail; Clay's split precinct was settled by two
 sentences from its Clerk). So the same ledger opens here.
 
-NINE DRAFTS SIT IN THE OPERATOR'S MAILBOX, UNSENT — they are drafted, not
-asked, and nothing below may be recorded as a measurement until a reply
-comes back:
+NINE ASKS WENT OUT 2026-08-27 (13:30-13:36 UTC), each from the operator's
+own mailbox and in his own final wording. THEY ARE ASKED, NOT ANSWERED:
+nothing below may be recorded as a measurement until a reply comes back,
+and SILENCE IS NOT A REFUSAL — it is silence, which is why the follow-up
+schedule at the end of this entry exists rather than a note saying the
+route was tried.
 
 - **WEC (elections@wi.gov)** — does the Commission publish the statewide
   ward-to-polling-place pairing as a file? This is the one the recon could
@@ -5665,6 +5668,32 @@ comes back:
   the state's sixth-largest city has no council districts on the map (gap
   `aldermanic-incomplete-filings`). Coding them at a future 15 Jan / 15 Jul
   filing would close it with no change at this end.
+
+FOLLOW-UP IS A RECOVERY MECHANISM, NOT A NUDGE, and Illinois paid to learn
+it: Clay County's Clerk answered the question that unblocked a whole build
+only after a THIRD attempt, because her spam folder had eaten the first
+two. So a silent ask is not a closed one. If a county has not replied by
+**2026-09-17** (three weeks), follow up once; if still silent two weeks
+after that, follow up a second time before the route is recorded as
+unresponsive — and record it as UNRESPONSIVE, never as "no source exists",
+which is a different claim about a different thing.
+
+WHAT A REPLY UNLOCKS, so a reader of this entry knows what to do with one:
+a district-to-supervisor pairing from any of the eight counties is a
+scraper plus a weekly workflow on the pattern the other 22 already use
+(`wi_county_board_scraper.py`, reading direction PINNED per county); a WEC
+bulk file is the statewide polling build the recon could not reach; and
+Appleton's ward codes need nothing at this end at all — the existing
+aldermanic dissolve picks the city up at the next filing window on its own,
+which is why that ask costs the county one field and this project zero
+work.
+
+ONE CAVEAT SURVIVES THE SENDING: WEC's address could not be verified from
+this project's vantage (elections.wi.gov answers 403 here; the Blue Book
+lists the commissioners without e-mail), and the ask went to the address
+this repo's own record carries. A BOUNCE IS THEREFORE A REAL POSSIBILITY
+and would be information, not a failure — it would mean the recorded
+address is wrong and the record needs correcting, not that WEC declined.
 
 The remaining 42 no-roster counties are ready to draft the same way and
 deliberately were not: a first tranche that gets answers teaches how to
