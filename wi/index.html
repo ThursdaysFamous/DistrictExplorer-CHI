@@ -8961,6 +8961,19 @@ function initWisconsinExplorer() {
     id: "county-subdivision",
     group: "geography",
     label: "County Subdivision",
+    // Every subdivision belongs to exactly one county BY CONSTRUCTION, which
+    // is measurable rather than assumed: Wisconsin's 608 incorporated
+    // municipalities occupy 671 subdivision records, because the 58 that cross
+    // a county line get one record per county (Wisconsin Dells has four). The
+    // reference instance nests the same TIGER layer the same way — il/'s
+    // `township`, labelled "Township / County Subdivision", subOf "county" —
+    // and both layers sit in `geography`, so the cross-group nesting ban
+    // (docs/EXPANSION_GUIDE.md Part 5) does not bite. The cost is stated
+    // rather than discovered: subOf hides a child whenever ANY ancestor is
+    // off, and `ward` is subOf this layer, so County off now takes the ward
+    // card and its polling place with it — the same three-deep chain the
+    // reference instance already ships as county -> township -> county-precinct.
+    subOf: "county",
     overlay: {
       load: loadCountySubdivisions,
       // long-dash brown — reads apart from Municipality's tight magenta dots

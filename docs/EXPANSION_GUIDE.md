@@ -1970,9 +1970,18 @@ query data when Search Console (or GoatCounter arrival) exports exist; the botto
 (ccbr / school-board / il-supreme-court) is statistically tied and ordered by
 recurrence of its seasonal spikes.**
 
-**Nesting determination (recorded 2026-07-28).** The `subOf` tree — County → Township →
-Voting Precinct, Ward → Ward Precinct, Police District → Beat — encodes genuine legal
-containment-plus-numbering hierarchies and is complete. Evaluated and deliberately kept
+**Nesting determination (recorded 2026-07-28; Wisconsin added 2026-08-27).** The `subOf`
+tree — County → Township → Voting Precinct, Ward → Ward Precinct, Police District → Beat —
+encodes genuine legal containment-plus-numbering hierarchies and is complete for the
+reference instance. **Wisconsin runs the same shape and was missing its top level until
+2026-08-27:** County → County Subdivision → Municipal Ward, plus Police District (Milwaukee)
+→ Squad Area. The county level was drift rather than a decision — `county-subdivision` is
+the same TIGER layer 1 the reference instance nests as `township` — and the containment is
+MEASURED, not assumed: Wisconsin's 608 incorporated municipalities occupy 671 subdivision
+records, because the 58 that cross a county line get one record per county (Wisconsin Dells
+has four). **Municipality/`City or Village` is deliberately NOT nested and cannot be:** a
+TIGER Place is one record for the whole municipality regardless of how many counties it
+spans, so it is the one municipal layer that does not sit inside a county. Evaluated and deliberately kept
 flat: **CCPSA District Council** under Police District (shares geometry 1:1, but it is
 an elected representation body — the app never gates an elected office behind a service
 toggle); **CPS zones/networks** under the unified school district (a toggle
