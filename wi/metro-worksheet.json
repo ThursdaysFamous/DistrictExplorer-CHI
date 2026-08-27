@@ -1100,6 +1100,11 @@
     ],
     "entries": [
       {
+        "date": "2026-08-27",
+        "title": "The state election site's refusal proves to be about where you ask from",
+        "body": "For three weeks the record said Wisconsin's election commission website refuses automated readers — the reason the ward card links the state's polling-place lookup instead of naming your polling place. One deliberate test settled what kind of refusal that is: a probe run from this project's own scheduled infrastructure, driving a genuine browser and doing nothing to evade or defeat any control, found the site answers there — the challenge page clears in under four seconds, and the MyVote lookup answers plain requests outright. The block was about the asking environment, not the site. That does not put statewide polling places on the map by itself: no bulk data file has been located yet, and access can be withdrawn as easily as it was granted, so every follow-up keeps checking rather than assuming. But three questions this deployment had filed as blocked — statewide polling places, early-voting sites, a statewide municipal clerk list — are now questions about what the state publishes, not about whether this project can look. The same run found Milwaukee's city site equally readable from there, which queues a weekly check of each police district's commanding officer."
+      },
+      {
         "date": "2026-08-26",
         "title": "Milwaukee wards learn where they vote",
         "body": "The ward card now names the polling place for every one of Milwaukee's 356 wards — the building, its address, and the city's own entrance and parking guidance — from the city's open ward-to-polling-place dataset, with the pairing's date stated on the card and the state's MyVote lookup linked for confirmation. The build only shipped because three surfaces agree: the city's spreadsheet, the city's own map layer stating the same pairing per ward, and the state ward file whose numbers turn out to match the city's exactly, 1 through 356. Outside Milwaukee the honest answer is unchanged: the state's lookup refuses automated readers, so the card links it rather than guessing, and that gap stays on the record."

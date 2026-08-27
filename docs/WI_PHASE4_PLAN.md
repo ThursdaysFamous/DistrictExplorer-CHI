@@ -221,7 +221,7 @@ its open-data portal):
   text for the source block, the DPI-licence precedent), and a
   `madisonCoverage` test built from the city's corporate-limit layer.
 
-## PR 5 — The WEC Playwright-from-CI attempt (a measurement, not a layer) — WORKFLOW SHIPPED 2026-08-27, dispatch pending
+## PR 5 — The WEC Playwright-from-CI attempt (a measurement, not a layer) — DELIVERED 2026-08-27, THE BLOCK WAS SANDBOX-SIDE
 
 The standing follow-up phase 2 recorded and three gap records wait on: one
 CPD-style Playwright challenge attempt against elections.wi.gov / MyVote
@@ -254,6 +254,30 @@ interstitials on all three Cloudflare fronts; proxy CONNECT 502 on
 badgersheriffs) and exercised both rungs. The outcome PR — gap blockers,
 matrix cells, backlog entry, history changelog — follows the dispatch,
 whichever way it measures.
+
+DISPATCHED 2026-08-27 (run 33029087408) AND THE MEASUREMENT IS DECISIVE
+THE OTHER WAY FROM EVERY EXPECTATION THE RECORD HELD: **the block is
+sandbox-side, not WEC-side.** elections.wi.gov still hands a plain client
+the 403 challenge interstitial from a GitHub runner — and a real headless
+Chromium clears it in 3.7 seconds, first try, nothing like the CPD
+job's unclearable-challenge history. myvote.wi.gov answers a PLAIN client
+HTTP 200 — the challenge never even fires. city.milwaukee.gov/police:
+plain-client HTTP 200 (gap `mpd-district-leadership` moves to
+build-queued — a weekly captains scrape is possible from the vantage every
+roster workflow already runs from). badgersheriffs.com: NXDOMAIN from CI
+too — the domain is dead, the sheriffs'-association route closed for
+real, not merely from here. The harvest found ZERO bulk-file anchors on
+either WEC front page, so the success unlocks a QUEUED CI-side sweep of
+WEC's data pages (statewide polling places, early-voting lists,
+municipal-clerks bulk file — each still its own follow-up build IF the
+sweep finds published data; the pre-2020 search-index finding stands
+until then). Every follow-up carries the CPD regression caveat: these
+same runners stopped clearing CPD's challenge on 2026-08-04, so engine
+ladders and refusal tracking, never an assumption of continued access.
+Outcome recorded in the guidebook (gap blockers for `ward-polling-places`
+and `mpd-district-leadership`, both matrix cells, the backlog entry, the
+county-officers cell's sheriffs note), the regenerated wisconsin
+coverage-gaps, and the history page's changelog.
 
 ## PR 6 (stretch) — Technical college districts, identity-only
 
@@ -296,7 +320,8 @@ supervisors)", executive typed CE/CA/AC; p22–23 "district attorney;
 sheriff; coroner (or alternative)" — parties per name, ME marks medical
 examiners, Menominee¹/Shawano¹ footnoted sharing DA Gregory Parker (R).
 **Second-source probes**: badgersheriffs.com — proxy CONNECT 502 bare, no
-DNS on www (CI probe owed); wdaa.org — 200, member-gated (MemberClicks);
+DNS on www (CI probe ran 2026-08-27: NXDOMAIN from GitHub's runners too —
+the domain is dead, record closed); wdaa.org — 200, member-gated (MemberClicks);
 wicountytreasurers.org — unreachable; doj.state.wi.us — 200 but the
 district-attorneys page is SharePoint with JS-rendered content (JSON API
 unprobed).
