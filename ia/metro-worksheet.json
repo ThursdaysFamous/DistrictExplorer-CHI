@@ -70,15 +70,31 @@
         "people": "ia-house-members.json, rebuilt weekly by CI — the Open States current-people export (name, party, e-mail) merged with each representative's own profile page at legis.iowa.gov (Capitol phone, and the Capitol's own address where the state publishes it).",
         "applies": "Iowa — statewide."
       }
+    },
+    {
+      "id": "county-supervisor", "label": "County Supervisor District", "group": "political", "area_rank": 5,
+      "rank_note": "The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)",
+      "source": {
+        "answers": "The county supervisor district covering the point (where drawn), the county's election plan (at-large, residence-district-elected-countywide, or single-member district), and the board's size.",
+        "boundary": [
+          { "label": "Iowa Legislature ArcGIS organization — CountySupervisorDistricts, pre-built for the state and shipped with the app (vintage 2024-01-30; licenseInfo not stated, attribution-only posture)", "url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CountySupervisorDistricts/FeatureServer/0" },
+          { "label": "Black Hawk County's own hosted GIS — its adopted Senate File 75 plan (5 districts, vintage 2026-02-24), shipped in place of the state layer's stale pre-SF75 at-large row for this county alone", "url": "https://services5.arcgis.com/ya62ECiavqTkK0wv/arcgis/rest/services/BlackHawkCoSupervisor_LSAplan1/FeatureServer/0" },
+          { "label": "Story County's own site — states its SOS-approved Senate File 75 plan's facts (3 districts, populations, approval dates); no GIS service found, so the county ships as one county-level feature pending real district geometry", "url": "https://www.storycountyiowa.gov/1172/Jurisdictional-Maps" },
+          { "label": "Johnson County's own site — states its SOS-approved Senate File 75 plan's facts (5 districts, ideal population); no GIS service found, so the county ships as one county-level feature pending real district geometry", "url": "https://johnsoncountyiowa.gov/supervisor-districts" }
+        ],
+        "people": "No statewide roster of Iowa county supervisors exists (measured, research pass) — every card links the county's own board page instead of naming anyone. ia-county-board-directory.json (board size read back from the shipped geometry + the county's own official site from the Iowa State Association of Counties' member directory) supplies that link; Jones County carries no row in either file — it is entirely absent from the state's own aggregate (measured by name and by FIPS), a recorded gap rather than a guess.",
+        "applies": "Iowa — 98 of 99 counties (Jones County is a recorded gap)."
+      }
     }
   ],
-  "min_register_layer": 4,
+  "min_register_layer": 5,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },
     { "layer": "us-house", "expected": "4" },
     { "layer": "ia-senate", "expected": "26" },
-    { "layer": "ia-house", "expected": "52" }
+    { "layer": "ia-house", "expected": "52" },
+    { "layer": "county-supervisor", "expected": "At-large" }
   ],
   "negative_point": { "lat": 43.65, "lng": -93.37, "note": "inside Minnesota (near Albert Lea), north of the Iowa land border (~43.50) and inside permalink_gate's maxLat (43.70) so the point is still selectable" },
   "coverage_key": { "outside": "Outside Iowa" },
@@ -88,13 +104,16 @@
       { "file": "state-counties.json", "min_features": 99, "max_features": 99, "note": "Every county, pre-built from TIGERweb State_County layer 1." },
       { "file": "congress-districts.json", "min_features": 4, "max_features": 4, "note": "U.S. House districts, pre-built from TIGERweb Legislative layer 0." },
       { "file": "ia-senate-districts.json", "min_features": 50, "max_features": 50, "note": "Iowa Senate districts, pre-built by ia/scripts/build_legislative_boundaries.py (2,000-point agreement gate)." },
-      { "file": "ia-house-districts.json", "min_features": 100, "max_features": 100, "note": "Iowa House districts, pre-built by ia/scripts/build_legislative_boundaries.py (2,000-point agreement gate)." }
+      { "file": "ia-house-districts.json", "min_features": 100, "max_features": 100, "note": "Iowa House districts, pre-built by ia/scripts/build_legislative_boundaries.py (2,000-point agreement gate)." },
+      { "file": "ia-supervisor-districts.json", "min_features": 270, "max_features": 270, "note": "Every county supervisor district across 98 of 99 counties (Jones County absent — a recorded gap), built by ia/scripts/build_ia_supervisor_districts.py: the state's own aggregate for 95 counties, Black Hawk's own hosted GIS (5 real districts), and Story/Johnson as one county-level TRANSITIONING feature each (5,000-in-state-point agreement gate)." },
+      { "file": "jones-county-outline.json", "min_features": 1, "max_features": 1, "dynamic_reference": true, "note": "Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html." }
     ],
     "rosters": [
       { "file": "congress-roster.json", "min_keys": 4, "note": "U.S. House roster, refreshed weekly by update-ia-congress-roster.yml." },
       { "file": "ia-senate-members.json", "min_keys": 45, "note": "Senate roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (50 seats)." },
       { "file": "ia-house-members.json", "min_keys": 93, "note": "House roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (100 seats)." },
-      { "file": "coverage-gaps.json", "min_keys": 0, "note": "The Data gaps panel's content; no gaps recorded yet among these four layers." }
+      { "file": "ia-county-board-directory.json", "min_keys": 98, "note": "One row per county covered by ia-supervisor-districts.json: board size read back from the shipped geometry, plus the county's own official page (Iowa State Association of Counties' member directory) for the card's footer link. Built by ia/scripts/build_ia_county_board_directory.py; not a roster of people — Iowa publishes none statewide." },
+      { "file": "coverage-gaps.json", "min_keys": 0, "note": "The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer)." }
     ]
   },
   "sw": {

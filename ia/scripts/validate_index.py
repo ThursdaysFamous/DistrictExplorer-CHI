@@ -88,14 +88,14 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 4
+MIN_REGISTER_LAYER = 5
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "ia-senate", "county", "ia-house",
+    "us-house", "ia-senate", "county", "ia-house", "county-supervisor",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -105,6 +105,8 @@ GEOMETRY_FILES = {
     "congress-districts.json": (4, 4),  # U.S. House districts, pre-built from TIGERweb Legislative layer 0.
     "ia-senate-districts.json": (50, 50),  # Iowa Senate districts, pre-built by ia/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "ia-house-districts.json": (100, 100),  # Iowa House districts, pre-built by ia/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
+    "ia-supervisor-districts.json": (270, 270),  # Every county supervisor district across 98 of 99 counties (Jones County absent — a recorded gap), built by ia/scripts/build_ia_supervisor_districts.py: the state's own aggregate for 95 counties, Black Hawk's own hosted GIS (5 real districts), and Story/Johnson as one county-level TRANSITIONING feature each (5,000-in-state-point agreement gate).
+    "jones-county-outline.json": (1, 1),  # Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -112,7 +114,8 @@ ROSTER_FILES = {
     "congress-roster.json": 4,  # U.S. House roster, refreshed weekly by update-ia-congress-roster.yml.
     "ia-senate-members.json": 45,  # Senate roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (50 seats).
     "ia-house-members.json": 93,  # House roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (100 seats).
-    "coverage-gaps.json": 0,  # The Data gaps panel's content; no gaps recorded yet among these four layers.
+    "ia-county-board-directory.json": 98,  # One row per county covered by ia-supervisor-districts.json: board size read back from the shipped geometry, plus the county's own official page (Iowa State Association of Counties' member directory) for the card's footer link. Built by ia/scripts/build_ia_county_board_directory.py; not a roster of people — Iowa publishes none statewide.
+    "coverage-gaps.json": 0,  # The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer).
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at
@@ -120,6 +123,7 @@ ROSTER_FILES = {
 # literal appears in index.html. Exempt from the reference check only;
 # existence, shape and the negative-point test still apply.
 DYNAMIC_REFERENCE = frozenset({
+    "jones-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 

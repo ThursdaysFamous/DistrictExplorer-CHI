@@ -197,7 +197,24 @@ whole repo, rather than confined to the new tree, returns false positives from
 
 ---
 
-## PR 5 — `county-supervisor`: the flagship, 266 features / 99 counties
+## PR 5 — `county-supervisor`: the flagship, 270 features / 98 of 99 counties
+
+> **Shipped 2026-08-27.** Re-verification at execution time found the plan's own count was an
+> ASSERTED estimate that didn't survive contact with the live layer: the state's aggregate carries
+> **266** features across **98**, not 99, counties — Jones County is entirely absent (measured by name
+> AND by its own FIPS code 105, not a naming mismatch), a gap this section's original text never
+> anticipated. Black Hawk's reconciliation found MORE than the plan asked for: not just an adopted
+> plan to cite, but a live, county-hosted ArcGIS feature service with real, current 5-district
+> geometry (`BlackHawkCoSupervisor_LSAplan1`), which ships as ordinary `PLAN 3` data rather than the
+> planned "currently effective at-large form with a dated note" fallback. Story and Johnson got that
+> fallback, refined: each ships as one county-level feature (PLANTYPE `TRANSITIONING`, not the at-large
+> plan-1 form — their old at-large rows are dropped entirely, not retained) carrying their SOS-approved
+> plan's real facts. Final shipped count: 270 features (263 kept from the state aggregate + Black
+> Hawk's 5 + Story's 1 + Johnson's 1), 98 counties, Jones recorded as gap `jones-county-supervisor` in
+> `docs/DATA_LAYER_GUIDEBOOK.md`. The board-size directory needed a source this section didn't specify
+> — Iowa counties share no domain convention, so `ia_county_directory_scraper.py` reads all 99 (including
+> Jones, whose own site is real even though its geometry isn't shipped) from the Iowa State Association
+> of Counties' member directory rather than guessing a pattern.
 
 **Geometry — VERIFIED and re-verified this session**:
 `services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CountySupervisorDistricts/FeatureServer/0`.

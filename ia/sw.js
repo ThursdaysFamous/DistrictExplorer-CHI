@@ -51,6 +51,8 @@ const GEOMETRY_URLS = [
   "./data/app/congress-districts.json",
   "./data/app/ia-senate-districts.json",
   "./data/app/ia-house-districts.json",
+  "./data/app/ia-supervisor-districts.json",
+  "./data/app/jones-county-outline.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -60,6 +62,7 @@ const ROSTER_URLS = [
   "./data/app/congress-roster.json",
   "./data/app/ia-senate-members.json",
   "./data/app/ia-house-members.json",
+  "./data/app/ia-county-board-directory.json",
   "./data/app/coverage-gaps.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
