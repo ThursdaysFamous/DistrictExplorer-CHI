@@ -401,9 +401,22 @@ try {
       });
     });
 
+    // One page task, not fill()+press(): those are two Playwright actions with
+    // real wall-clock between them, and when a loaded runner stretched that gap
+    // past the input handler's 400ms debounce, the type-ahead fired its own
+    // search ahead of Enter's — two bounded calls for one query, which the
+    // exact counts below read as a retry (bounded=2 total=3 on main runs
+    // 33029973722 and 33040783537, both in the WI copy of this same block).
+    // Dispatching input and submit in one synchronous task still runs both app
+    // handlers — input arms the debounce, submit cancels it and searches — but
+    // leaves the timer no gap to fire in.
     async function search(q) {
-      await page.fill("#geocode-input", q);
-      await page.press("#geocode-input", "Enter");
+      await page.evaluate((query) => {
+        const input = document.getElementById("geocode-input");
+        input.value = query;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        document.getElementById("geocode-form").requestSubmit();
+      }, q);
     }
 
     await search(GEOCODER_QUERY_RAW);
