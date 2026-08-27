@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""
+Build data/app/ia-county-board-directory.json — one row per Iowa county
+covered by ia-supervisor-districts.json, naming its board's size and its own
+official website, so the county-supervisor card can send a reader to the
+body that answers for them.
+
+WHY THIS FILE EXISTS SEPARATELY FROM THE GEOMETRY
+----------------------------------------------------
+Iowa publishes no statewide roster of county supervisors (this fork's own
+plan document confirms it, and no second source was found in the research
+pass), so a reader's actual supervisor is only ever published by their own
+county. The honesty rules say a card with no verifiable roster source links
+to the official body rather than inventing a name, and this file is that
+link — one verified URL per county, with the county's board size beside it.
+
+`seats` is read back from the SHIPPED geometry (ia-supervisor-districts.json)
+rather than restated here, so the two files can never disagree — the same
+invariant Wisconsin's build_wi_county_board_directory.py enforces. Jones
+County carries no row here because it carries no row in the geometry (a
+recorded gap, not an omission of this file's own).
+
+WHERE THE URLS CAME FROM
+--------------------------
+ia_county_directory_scraper.py reads every county's own website off the Iowa
+State Association of Counties' member directory (one detail page per county,
+each stating "Website: <url>" — verified 2026-08-27). That is the per-county
+source of truth; this builder only joins it to the geometry's board sizes.
+
+Usage:
+    python3 ia/scripts/ia_county_directory_scraper.py     # refresh the cache first
+    python3 ia/scripts/build_ia_county_board_directory.py
+    python3 ia/scripts/build_ia_county_board_directory.py --check
+"""
+
+import json
+import os
+import sys
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ia/
+APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
+GEOMETRY = os.path.join(APP_DATA_DIR, "ia-supervisor-districts.json")
+CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "ia_county_directory.json")
+OUT = os.path.join(APP_DATA_DIR, "ia-county-board-directory.json")
+
+
+def main():
+    check_only = "--check" in sys.argv[1:]
+
+    with open(GEOMETRY) as f:
+        geo = json.load(f)
+    seats = {}
+    fips_by_county = {}
+    for feat in geo["features"]:
+        p = feat["properties"]
+        county = p["COUNTY"]
+        if county in seats and seats[county] != p["NUMDISTRICTS"]:
+            raise RuntimeError(
+                "%s carries two different NUMDISTRICTS values (%d, %d) across its rows"
+                % (county, seats[county], p["NUMDISTRICTS"])
+            )
+        seats[county] = p["NUMDISTRICTS"]
+        fips_by_county[county] = p["FIPS"]
+
+    try:
+        with open(CACHE) as f:
+            directory_cache = json.load(f)
+    except OSError as e:
+        raise RuntimeError(
+            "no ISAC directory cache at %s (%s) — run "
+            "ia/scripts/ia_county_directory_scraper.py first" % (CACHE, e)
+        )
+    url_by_county_ci = {}
+    for rec in directory_cache:
+        name = rec["county_slug_name"].strip()
+        if not rec.get("website"):
+            continue
+        url_by_county_ci[name.lower()] = (name, rec["website"])
+
+    missing_url = sorted(c for c in seats if c.lower() not in url_by_county_ci)
+    if missing_url:
+        raise RuntimeError("no ISAC website found for: %s" % missing_url)
+
+    directory = {}
+    for county, fips in sorted(fips_by_county.items()):
+        _, url = url_by_county_ci[county.lower()]
+        directory[fips] = {"county": county, "seats": seats[county], "url": url}
+
+    total = sum(v["seats"] for v in directory.values())
+    print("ia-county-board-directory: %d counties, %d supervisor seats, %d official links"
+          % (len(directory), total, len(directory)), file=sys.stderr)
+
+    payload = json.dumps(directory, indent=1, sort_keys=True) + "\n"
+    if check_only:
+        try:
+            with open(OUT) as f:
+                shipped = f.read()
+        except OSError as e:
+            raise RuntimeError(
+                "data/app/ia-county-board-directory.json is missing (%s) — run this "
+                "script without --check" % e
+            )
+        if shipped != payload:
+            raise RuntimeError(
+                "data/app/ia-county-board-directory.json has drifted from the shipped "
+                "districts or the ISAC cache. Re-run: "
+                "python3 ia/scripts/build_ia_county_board_directory.py"
+            )
+        print("check: shipped directory matches the shipped districts", file=sys.stderr)
+        return
+
+    with open(OUT, "w") as f:
+        f.write(payload)
+    print("wrote data/app/ia-county-board-directory.json", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

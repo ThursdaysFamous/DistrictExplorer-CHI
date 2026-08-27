@@ -5970,7 +5970,8 @@ function initIowaExplorer() {
     "us-house",          // Congressional districts — the largest districts a state carries below the state itself
     "ia-senate",         // 50 Senate districts, each the union of two whole House districts
     "county",            // 99 counties, pre-built from TIGERweb; the fork's offline anchor layer
-    "ia-house"           // 100 House districts; two nest exactly inside each Senate district
+    "ia-house",          // 100 House districts; two nest exactly inside each Senate district
+    "county-supervisor"  // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8487,6 +8488,135 @@ function initIowaExplorer() {
     style: { color: "#8C2E4A", weight: 2, fillColor: "#8C2E4A", fillOpacity: 0.05, dashArray: "5 1 2 1" }
   });
 
+  /* ---------- 5. County Supervisor District — the flagship layer ----------
+   * Pre-built from the Iowa Legislature's own ArcGIS organization
+   * (ia/scripts/build_ia_supervisor_districts.py), PLANTYPE-aware: Iowa Code
+   * ch. 331 lets each county elect its board under plan 1 (at-large), plan 2
+   * (residence district, elected countywide) or plan 3 (single-member
+   * district), carried in the source's own PLANTYPE field rather than a
+   * fleet-wide assumption.
+   *
+   * SENATE FILE 75 RECONCILIATION: the state's aggregate is vintage
+   * 2024-01-30 and still carries Black Hawk, Story and Johnson under their
+   * pre-SF75 at-large form. Black Hawk ships REAL current geometry from its
+   * own hosted GIS (5 districts, adopted plan). Story and Johnson have
+   * SOS-approved adopted plans but no GIS service found for either, so each
+   * ships as ONE county-level feature (PLANTYPE "TRANSITIONING") carrying
+   * the adopted plan's known facts — the card says plainly that this app
+   * cannot yet resolve which specific district a point falls in. See the
+   * builder's docstring for the full measurement.
+   *
+   * No statewide supervisor roster exists (measured, research pass) — the
+   * card links to the county's own board page (ia-county-board-directory.json,
+   * built from the Iowa State Association of Counties' member directory)
+   * rather than naming anyone. Jones County carries no feature here at all:
+   * it is entirely absent from the state's own aggregate (measured by name
+   * and by FIPS), a recorded gap rather than a guess. ---------- */
+  var loadSupervisorDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-supervisor-districts.json", {}, 2);
+  });
+  var loadCountyBoardDirectory = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-county-board-directory.json", {}, 2);
+  });
+
+  registerLayer({
+    id: "county-supervisor",
+    group: "political",
+    label: "County Supervisor District",
+    overlay: {
+      load: loadSupervisorDistricts,
+      // deep green, light fill — the broadest political boundary drawn
+      // inside a county, so it reads apart from County's grey and the
+      // chambers' dashed/dotted strokes
+      style: { color: "#1B5E3F", weight: 1.5, fillColor: "#2E9E6B", fillOpacity: 0.06 }
+    },
+    hoverName: function (feature) {
+      var props = feature.properties || {};
+      var county = findPropCI(props, ["county"]);
+      if (county == null) return null;
+      var plantype = findPropCI(props, ["plantype"]);
+      if (plantype === "PLAN 1") return String(county) + " (at-large)";
+      if (plantype === "TRANSITIONING") return String(county) + " (districts pending)";
+      var district = findPropCI(props, ["district"]);
+      return district != null ? String(county) + " District " + String(district) : String(county);
+    },
+    query: function (point, seq) {
+      // The directory is a small same-origin file and its failure is not
+      // this layer's failure: a district with no link still answers the
+      // question the reader asked, so a directory miss degrades to a card
+      // with no footer link rather than an error card.
+      return Promise.all([
+        queryFeatureAt(loadSupervisorDistricts, point),
+        loadCountyBoardDirectory().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var fips = findPropCI(props, ["fips"]);
+        var entry = (parts[1] && fips != null) ? parts[1][String(fips)] : null;
+        return {
+          seq: seq,
+          county: findPropCI(props, ["county"]),
+          district: findPropCI(props, ["district"]),
+          plantype: findPropCI(props, ["plantype"]),
+          numDistricts: findPropCI(props, ["numdistricts"]),
+          population: findPropCI(props, ["population"]),
+          sourceUrl: findPropCI(props, ["source_url"]),
+          sourceNote: findPropCI(props, ["source_note"]),
+          seats: entry ? entry.seats : null,
+          countyUrl: entry ? entry.url : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      if (result.plantype === "PLAN 1") return "At-large";
+      if (result.plantype === "TRANSITIONING") return "Districts pending";
+      return result.district != null ? "District " + String(result.district) : "Unknown district";
+    },
+    render: function (result) {
+      var rows = [];
+      rows.push({
+        label: "County",
+        value: result.county != null ? String(result.county) + " County" : "Unknown county",
+        primary: true
+      });
+      if (result.plantype === "PLAN 1") {
+        rows.push({ label: "Election", value: "Supervisors are elected at large (countywide)." });
+      } else if (result.plantype === "PLAN 2") {
+        rows.push({
+          label: "Election",
+          value: "This district is drawn for residence; supervisors are elected countywide."
+        });
+      } else if (result.plantype === "PLAN 3") {
+        rows.push({ label: "Election", value: "Your district elects one supervisor." });
+      } else if (result.plantype === "TRANSITIONING") {
+        rows.push({
+          label: "Status",
+          value: result.sourceNote != null
+            ? String(result.sourceNote)
+            : "This county is transitioning to district-based elections; this app cannot yet " +
+              "identify a specific district."
+        });
+      }
+      var seats = result.seats != null ? result.seats : result.numDistricts;
+      if (seats != null) {
+        rows.push({ label: "Board", value: String(seats) + " supervisor" + (Number(seats) === 1 ? "" : "s") });
+      }
+      if (result.population != null) {
+        rows.push({ label: "2020 population", value: Number(result.population).toLocaleString() });
+      }
+      return renderFieldStack(rows);
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.sourceUrl || result.countyUrl);
+      if (!url) return null;
+      return {
+        label: result.county != null ? String(result.county) + " County board" : "County board",
+        url: url
+      };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Next per docs/IA_EXPANSION_PLAN.md's phase
@@ -9054,7 +9184,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-supervisor"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9151,8 +9281,9 @@ function initIowaExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
-    "#4A2E8C": "#9B7CFD", "#6B7280": "#B1BBCE", "#8C2E4A": "#F47294"};
+  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B5E3F": "#5FB387", "#2E9E6B": "#5BEAA5",
+    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#6B7280": "#B1BBCE",
+    "#8C2E4A": "#F47294"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

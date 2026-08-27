@@ -147,6 +147,59 @@ PROVENANCE = [
             "profile-page enrichment route as the senate row above."
         ),
     },
+    {
+        "layer": "county-supervisor",
+        "app_file": "ia-supervisor-districts.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CountySupervisorDistricts/FeatureServer/0",
+        "note": (
+            "The Iowa Legislature's own ArcGIS organization — county supervisor "
+            "districts for 95 of 99 counties (the other 3 SF-75-transitioning "
+            "counties and Jones's absence are handled separately below); "
+            "vintage 2024-01-30 (WATCH.md tracks whether it moves)."
+        ),
+    },
+    {
+        "layer": "county-supervisor",
+        "app_file": "ia-supervisor-districts.json",
+        "source_url": "https://services5.arcgis.com/ya62ECiavqTkK0wv/arcgis/rest/services/BlackHawkCoSupervisor_LSAplan1/FeatureServer/0",
+        "note": (
+            "Black Hawk County's own hosted GIS — its adopted Senate File 75 "
+            "plan (5 districts), shipped in place of the state layer's stale "
+            "pre-SF75 at-large row for this county alone."
+        ),
+    },
+    {
+        "layer": "county-supervisor",
+        "app_file": "ia-supervisor-districts.json",
+        "source_url": "https://www.storycountyiowa.gov/1172/Jurisdictional-Maps",
+        "note": (
+            "Story County's own site — states its SOS-approved Senate File 75 "
+            "plan's facts; no GIS service found, so the county ships as one "
+            "county-level TRANSITIONING feature pending real district geometry."
+        ),
+    },
+    {
+        "layer": "county-supervisor",
+        "app_file": "ia-supervisor-districts.json",
+        "source_url": "https://johnsoncountyiowa.gov/supervisor-districts",
+        "note": (
+            "Johnson County's own site — states its SOS-approved Senate File "
+            "75 plan's facts; no GIS service found, so the county ships as "
+            "one county-level TRANSITIONING feature pending real district "
+            "geometry."
+        ),
+    },
+    {
+        "layer": "county-supervisor",
+        "app_file": "ia-county-board-directory.json",
+        "source_url": "https://www.iowacounties.org/member-resources/county-directory/",
+        "note": (
+            "Iowa State Association of Counties' member directory — one "
+            "detail page per county naming its own official website, read by "
+            "ia_county_directory_scraper.py; not a roster of supervisors, "
+            "since Iowa publishes no statewide one."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime. Empty in this PR — every layer
