@@ -23,9 +23,12 @@ pattern tolerates whitespace BETWEEN ANY TWO LETTERS of the rank word
 and the parse is anchored to headings, never to a substring search of
 the page. The district index (/police/districts) and the city Directory
 page (/Directory/police/Police-Districts.htm) are the witnesses: the
-index must list all seven districts, and the Directory's tel: links
-carry ONE phone per district in the 414-935-72x2 block (measured:
-7212..7272), paired by the District heading each sits under.
+index must list all seven districts — it names them in H4 headings
+("District One".."District Seven", measured), one level below anything
+the district pages use, which cost the first dispatched run a refusal
+of a healthy page — and the Directory's tel: links carry ONE phone per
+district in the 414-935-72x2 block (measured: 7212..7272), paired by
+the "District <n>" H2 each sits under.
 
 HONESTY: a district whose heading parses no ranked name ships as null
 (the card keeps its link-only behavior there) — never a guess; the
@@ -118,8 +121,12 @@ def main():
     args = ap.parse_args()
 
     # ---- witness 1: the index must list all seven districts ----
+    # the index names them in H4 headings (recon 33036310501's capture:
+    # "h4: District One" .. "h4: District Seven") — the first dispatched
+    # run read only h1-h3 and refused a healthy page, so h4 is explicit
     index_html = fetch(INDEX)
-    index_heads = " ".join(t for _, t in headings_of(index_html))
+    index_heads = " ".join(
+        t for _, t in headings_of(index_html, tags=("h1", "h2", "h3", "h4")))
     for n, word in ORDINALS.items():
         if not re.search(r"District\s+%s\b" % word, index_heads,
                          re.IGNORECASE):
@@ -132,7 +139,10 @@ def main():
     # each "District N" h2 owns the tel: links that follow it, up to the next
     sections = re.split(r"(?i)(<h2[^>]*>\s*District\s+\d\s*</h2>)", dir_html)
     for i in range(1, len(sections) - 1, 2):
-        n = int(re.search(r"\d", sections[i]).group(0))
+        # the district number is the one in "District <n>" — a bare first-digit
+        # search reads the "2" of the "<h2" TAG and keys every phone to
+        # district 2 (caught by the fixture test before any CI run shipped it)
+        n = int(re.search(r"(?i)District\s+(\d)", sections[i]).group(1))
         m = re.search(r"""href=["']tel:\+?1?[-. ]?([\d\-. ()]{7,})""",
                       sections[i + 1], re.IGNORECASE)
         if m:
