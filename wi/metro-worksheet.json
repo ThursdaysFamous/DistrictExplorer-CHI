@@ -1023,6 +1023,11 @@
       "schedule": "Thu 15:30 UTC"
     },
     {
+      "file": "update-mpd-captains-roster.yml",
+      "purpose": "MPD district commanding officers from the city's own per-district pages (heading-anchored; the recon-measured 'Captai n' markup split is the pinned parse trap; runs from CI because the city refuses the dev sandbox's clients)",
+      "schedule": "Mon 16:30 UTC"
+    },
+    {
       "file": "wi-validate-sources.yml",
       "purpose": "source freshness (WI manifest: TIGERweb, LTSB supervisory + ward witness, rosters)",
       "schedule": "1st of month 13:00 UTC"
@@ -1175,6 +1180,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "Three careful visits to locked doors, and what each one proved",
+        "body": "A one-shot probe had shown the state election site's refusal was about the asking environment; a follow-up expedition went to see what the site actually holds, and came back with a harder truth: the front door opens, but every interior page that might carry data — the clerk directory, the statistics pages, the election results — challenges the visitor again and stays shut, seventeen attempts across two runs. So whether the state publishes the statewide polling-place pairing as data cannot be determined from here, and the question moves from software to people: it is now an ask to the commission itself. The same expedition delivered elsewhere — Milwaukee's police-district pages proved fully readable and name each district's commanding officer, so a weekly check of those names now runs, with the captains arriving on the police-district card once the first reviewed batch lands. Every visit obeyed the same rules: a genuine browser, bounded waits, and a refusal recorded as a refusal."
+      },
       {
         "date": "2026-08-27",
         "title": "The technical college district joins the map, honest about what nobody elects",
