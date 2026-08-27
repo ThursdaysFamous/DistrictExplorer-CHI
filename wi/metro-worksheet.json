@@ -518,10 +518,10 @@
       "id": "tid-district",
       "label": "Tax Incremental District (TID)",
       "group": "geography",
-      "area_rank": 24,
-      "rank_note": "79 active tax incremental districts — small finance-overlay slices, below the neighborhood fabric's average and above the amenity points; the one city layer that does not tile the city",
+      "area_rank": 25,
+      "rank_note": "93 active tax incremental districts across two cities (Milwaukee 79, Madison 14) — small finance-overlay slices, below the neighborhood fabrics' averages and above the amenity points; the one city layer that does not tile its cities",
       "source": {
-        "answers": "The active Tax Incremental District (Wis. Stat. 66.1105) containing the point, with its number and creation year — a municipal finance overlay that elects no one, the reference instance's tif-district concept under Wisconsin's own name. Most of Milwaukee is in no TID, and the card's standard empty state says exactly that; outside Milwaukee the layer hides.",
+        "answers": "The active Tax Incremental District (Wis. Stat. 66.1105) containing the point, with its number and creation year — a municipal finance overlay that elects no one, the reference instance's tif-district concept under Wisconsin's own name. Two cities share the toggle, each with its own builder witness. Most of Milwaukee and Madison is in no TID, and the card's standard empty state says exactly that; outside the two cities the layer hides.",
         "boundary": [
           {
             "label": "City of Milwaukee — Tax Incremental Districts, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py; the live layer serves only ACTIVE districts, and the builder drops any that gain a past dissolve date",
@@ -530,17 +530,47 @@
           {
             "label": "City of Milwaukee open data — the same districts as a shapefile (CC-BY), the build-time witness scoped to the city's own STATUS flag, because the shapefile keeps all 56 retired TIDs the live layer omits",
             "url": "https://data.milwaukee.gov/dataset/tax-incremental-districts-tid"
+          },
+          {
+            "label": "City of Madison — TIF Districts, the city's own open-data layer (Data Policy reference-use disclaimer, attribution 'City of Madison, Wisconsin'), pre-built by wi/scripts/build_madison_city_layers.py; the layer mixes district polygons with half-mile planning buffers (its HALFMILERULE flag separates the concepts) and still draws two districts the state closed, so what ships is the layer intersected with DOR's certified active list",
+            "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA_PLANNING/MapServer/8"
+          },
+          {
+            "label": "City of Madison Economic Development — the TIF program page, whose 'Current TIF Plans and Maps' listing supplies each Madison district's display name and must agree with DOR's active list exactly before anything ships",
+            "url": "https://www.cityofmadison.com/dpced/economic-development/tif"
+          },
+          {
+            "label": "Wisconsin DOR — the certified annual Active Tax Incremental Districts workbook (tid100wi), the authority on which districts exist: it closed the layer's TID 39 and 47 and carries TID 55 (Voit Farm), which is active with no published geometry — gap madison-tid-undrawn",
+            "url": "https://www.revenue.wi.gov/Pages/Report/tid-active.aspx"
           }
         ],
         "people": "None, deliberately: a TID elects no one — it is a finance overlay adopted by the Common Council, whose members the aldermanic layer already names.",
-        "applies": "City of Milwaukee only — the layer hides everywhere else, and inside the city most points are honestly in no TID."
+        "applies": "Cities of Milwaukee and Madison only — the layer hides everywhere else, and inside each city most points are honestly in no TID."
+      }
+    },
+    {
+      "id": "madison-neighborhood-assoc",
+      "label": "Neighborhood Association (Madison)",
+      "group": "geography",
+      "area_rank": 24,
+      "rank_note": "116 active city-registered association boundaries averaging 1.1 km² — just below Milwaukee's neighborhood fabric (1.3 km²) and above the TID slices; they nest and overlap by design, so the card collects every association at the point",
+      "source": {
+        "answers": "Every city-registered association whose boundary covers the point — Madison's official neighborhood fabric IS its registry, which also records condominium, resident, homeowners, business and property-owners associations in the same layer, so each row states its classification. Registrations genuinely nest (five condo/resident polygons sit wholly inside a neighborhood association's), which is why the card lists all of them rather than the first.",
+        "boundary": [
+          {
+            "label": "City of Madison — Neighborhood Associations, the city's own open-data layer (Data Policy reference-use disclaimer, attribution 'City of Madison, Wisconsin'), pre-built by wi/scripts/build_madison_city_layers.py; only the city's STATUS='Active' rows ship (116 of 141 — the 25 Inactive are lapsed registrations), names trimmed of the source's trailing whitespace",
+            "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/12"
+          }
+        ],
+        "people": "None, deliberately: an association is not a unit of government and elects no public officeholder — the card links each association's profile on the city's own site instead.",
+        "applies": "City of Madison only — the layer hides everywhere else; inside the city a point outside every registered boundary gets the standard empty state."
       }
     },
     {
       "id": "police-station",
       "label": "Police Station",
       "group": "safety",
-      "area_rank": 25,
+      "area_rank": 26,
       "rank_note": "Nearest-3 point layer (807 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations by straight-line distance — a proximity fact, never a jurisdictional claim about which agency serves the point.",
@@ -558,7 +588,7 @@
       "id": "fire-station",
       "label": "Fire Station",
       "group": "safety",
-      "area_rank": 26,
+      "area_rank": 27,
       "rank_note": "Nearest-3 point layer (1,743 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations by straight-line distance — a proximity fact, never a claim about which department responds to the point.",
@@ -576,7 +606,7 @@
       "id": "school-site",
       "label": "School Location, incl. private",
       "group": "schools",
-      "area_rank": 27,
+      "area_rank": 28,
       "rank_note": "Nearest-3 point layer (2,966 public + private school sites, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three schools nearest the point — public and private, each labeled with its kind and grade range — by straight-line distance. A proximity fact, never an enrollment claim: which school a child attends is the district's call (and the state's open-enrollment law reaches across districts), and no statewide attendance-zone publisher exists.",
@@ -598,7 +628,7 @@
       "id": "library",
       "label": "Library",
       "group": "geography",
-      "area_rank": 28,
+      "area_rank": 29,
       "rank_note": "Nearest-3 point layer (482 public library outlets, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three public library locations nearest the point — main libraries and branches both — by straight-line distance, with each outlet's address and phone. Statewide, where the fleet's reference instance answers this for one city only.",
@@ -616,7 +646,7 @@
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 29,
+      "area_rank": 30,
       "rank_note": "Nearest-3 point layer, straight-line distance — ranked last; not a containment boundary",
       "source": {
         "answers": "The three post offices nearest the point, by straight-line distance.",
@@ -631,7 +661,7 @@
       }
     }
   ],
-  "min_register_layer": 16,
+  "min_register_layer": 17,
   "anchor_point": {
     "lat": 44.89804,
     "lng": -89.75782,
@@ -813,6 +843,24 @@
         "note": "Milwaukee's 25 MPD squad areas — the city's own CC-BY layer server-reprojected, witnessed against the CKAN shapefile's area shares AND sample-verified inside their hundreds-digit districts (wi/scripts/build_milwaukee_city_layers.py). An operator rebuild; the monthly source report watches both endpoints."
       },
       {
+        "file": "madison-tid-districts.json",
+        "min_features": 14,
+        "max_features": 14,
+        "note": "Madison's active Tax Incremental Districts — the city's open-data layer intersected with DOR's certified active list under a three-surface agreement (the GIS layer's HALFMILERULE flag drops its 9 planning buffers, DOR closes the layer's two stale districts, the city program page supplies names; wi/scripts/build_madison_city_layers.py, operator rebuild). TID 55 (Voit Farm) is active with no published geometry — gap madison-tid-undrawn — so the count is 14, not DOR's 15."
+      },
+      {
+        "file": "madison-neighborhood-assocs.json",
+        "min_features": 100,
+        "max_features": 141,
+        "note": "Madison's ACTIVE city-registered association boundaries (116 at first build of the city's 141 rows — the city's own STATUS flag is the filter; the Inactive are lapsed registrations). Same builder, operator rebuild."
+      },
+      {
+        "file": "madison-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "The City of Madison corporate limits — the city's own 137-ward fabric dissolved to one MultiPolygon (4 parts, enclave holes kept: Maple Bluff, Shorewood Hills, the town islands). madisonCoverage's ground; same builder."
+      },
+      {
         "file": "tid-districts.json",
         "min_features": 79,
         "max_features": 79,
@@ -888,7 +936,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v23",
+    "cache_name": "districtry-wi-shell-v24",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -1099,6 +1147,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-27",
+        "title": "Madison joins the city tier, and the state closes two districts the city's map still draws",
+        "body": "The tax-district layer now answers in Madison too — its second city — and a new layer names every neighborhood association the city registers at a point. Both came with lessons the map alone would have gotten wrong. Madison's own boundary layer mixes real tax districts with half-mile planning buffers in one file, and it still draws two districts the state's certified active list says are closed, while missing the newest district entirely — so what ships is only what the city's map, the city's program page and the state's list agree on, fourteen districts, with the undrawn fifteenth recorded as a gap rather than silently absent. The association layer taught the opposite lesson: registrations genuinely nest, condominium and resident associations inside neighborhood associations, so the card lists every association covering a point instead of the first one found, each labeled as what it is."
+      },
       {
         "date": "2026-08-27",
         "title": "The state election site's refusal proves to be about where you ask from",
