@@ -88,7 +88,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 8
+MIN_REGISTER_LAYER = 10
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -97,6 +97,7 @@ MIN_REGISTER_LAYER = 8
 EXPECT_LAYER_IDS = [
     "us-house", "ia-senate", "county", "ia-house", "county-supervisor",
     "school-district-unified", "county-subdivision", "municipality",
+    "zip-code", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.

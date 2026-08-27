@@ -45,7 +45,7 @@ from the same shared engine blocks as every other instance via `scripts/compose_
 - Metro: Iowa (`iowa`) — https://districtry.com/ia/
 - Geocoders: address Photon (Iowa-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Iowa-bounded, serial >=1s queue)
 - Ground truth: 42.04940,-92.90710 (downtown Marshalltown, Marshall County) → county Marshall County; us-house 4; ia-senate 26; ia-house 52; county-supervisor At-large; school-district-unified Marshalltown Community School District. Negative point 43.65000,-93.37000 (inside Minnesota (near Albert Lea), north of the Iowa land border (~43.50) and inside permalink_gate's maxLat (43.70) so the point is still selectable).
-- Layers: 8 registered (political 4, schools 1, geography 3); `registerLayer(` floor 8. Debug namespace `window.IowaExplorer`.
+- Layers: 10 registered (political 4, schools 1, geography 5); `registerLayer(` floor 10. Debug namespace `window.IowaExplorer`.
 - Scheduled workflows: `update-ia-congress-roster.yml` (Mon 14:30 UTC); `update-ia-legislature-roster.yml` (Tue 14:30 UTC); `ia-validate-sources.yml` (1st of month 15:00 UTC).
 - Source registry: `ia/scripts/validate_sources.py` (machine-checked monthly)
 <!-- ==== GENERATED:END metro-facts ==== -->

@@ -121,9 +121,31 @@
         "people": "No statewide roster of Iowa city officials was found in the research pass. The Iowa League of Cities is a membership directory with no public officials export; the state's own Iowa Data Hub (data.iowa.gov) is reachable but is a client-rendered catalog of state-agency datasets, not a municipal aggregator. Per-city rosters are a later phase's city-by-city work, not this layer's.",
         "applies": "Iowa — statewide, all 939 incorporated cities."
       }
+    },
+    {
+      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 9,
+      "rank_note": "Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city",
+      "source": {
+        "answers": "The ZIP Code Tabulation Area (ZCTA) covering the point.",
+        "boundary": [
+          { "label": "U.S. Census TIGERweb — PUMA/TAD/TAZ/UGA/ZCTA, layer 11, queried live by an Iowa bounding envelope (ZCTAs cross state lines, so there is no STATE field to filter on)", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11" }
+        ],
+        "applies": "Iowa — the state's bounding envelope; a border ZCTA that straddles the line is included, which is correct for a reader near it."
+      }
+    },
+    {
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 10,
+      "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
+      "source": {
+        "answers": "The three nearest post offices, straight-line distance.",
+        "boundary": [
+          { "label": "USGS National Map — structures layer 38, queried live by an Iowa bounding envelope (deliberately catches border-state post offices near the line)", "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38" }
+        ],
+        "applies": "Iowa — the state's bounding envelope; nearest-3 is a proximity fact, not a jurisdictional claim."
+      }
     }
   ],
-  "min_register_layer": 8,
+  "min_register_layer": 10,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },

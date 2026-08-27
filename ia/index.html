@@ -5974,7 +5974,9 @@ function initIowaExplorer() {
     "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
     "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
-    "municipality"       // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
+    "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
+    "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
+    "post-office"        // Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8817,10 +8819,103 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 9. ZIP Code (statewide ZCTA) ----------
+   * The WI/IL statewide pattern: TIGERweb's ZCTA layer has NO STATE field
+   * (ZCTAs cross state lines), so it can't use the STATE='19' filter the
+   * other statewide loaders rely on — it's fetched by an Iowa bounding
+   * envelope instead, server-generalized with maxAllowableOffset (~55 m).
+   * Measured 2026-08-27: 1,443 features in Iowa's envelope (not a fixed
+   * count to gate on — the envelope clips ZCTAs that straddle the state
+   * line, which is correct: a reader near the border sees their real ZIP
+   * even if it's centered just across it). ZCTAs are the Census Bureau's
+   * approximation of USPS ZIP delivery areas, not the postal boundaries
+   * themselves — the caveat every ZCTA-based tool carries. ---------- */
+  var loadZipCodes = makeCached(function () {
+    var url = TIGERWEB_SERVICES + "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query" +
+      "?where=" + encodeURIComponent("1=1") +
+      "&geometry=" + encodeURIComponent(JSON.stringify(METRO_BBOX)) +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=ZCTA5&returnGeometry=true&outSR=4326&f=geojson" +
+      "&geometryPrecision=4&maxAllowableOffset=0.0005";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb ZCTA layer returned no usable geometry");
+        return geojson;
+      });
+  });
+  // point-first hook (queryFeatureAt): one ZCTA instead of the statewide
+  // envelope set. No STATE filter here for the same reason the full load
+  // can't use one — the point filter narrows harder than the envelope anyway.
+  loadZipCodes.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(TIGERWEB_SERVICES + "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11", point, "ZCTA5");
+  };
+
+  registerPolygonLayer({
+    id: "zip-code",
+    group: "geography",
+    label: "ZIP Code",
+    loader: loadZipCodes,
+    // dotted outline (distinct pattern from County Subdivision's long dash) + different hue
+    style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" },
+    fields: [
+      { name: "zip", label: "ZIP Code", keys: ["zcta5", "zip", "zip_code", "zipcode", "zcta5ce10"], primary: true }
+    ],
+    compact: true // 4b name-only card (no meta field — the ZIP is the value)
+  });
+
+  /* ---------- 10. Post Offices (nearest 3) — USGS National Map ----------
+   * structures layer 38, the fleet's post-office source. Country-wide, so the
+   * METRO_BBOX envelope (the whole state here) is mandatory; f=geojson serves
+   * lowercase property names (name/address/city/state/zipcode). CORS-open;
+   * public domain ("USGS The National Map"). Measured 2026-08-27: 1,170
+   * points in Iowa's envelope — deliberately catches border-state post
+   * offices near the line, the WI precedent (nearest-3 is a proximity fact,
+   * not a jurisdictional claim, and the intro says so). ---------- */
+  var USGS_POST_OFFICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38";
+  var loadPostOffices = makeCached(function () {
+    var url = USGS_POST_OFFICE_LAYER + "/query?geometry=" +
+      [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&where=1%3D1&outFields=NAME,ADDRESS,CITY,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+      if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from USGS structures layer 38");
+      return gj;
+    });
+  });
+
+  registerNearestPointLayer({
+    id: "post-office",
+    group: "geography",
+    color: "#4B2E83",
+    fill: "#B39DDB",
+    label: "Post Office",
+    loader: loadPostOffices,
+    intro: "Nearest post offices (USGS National Map structures data), straight-line distance:",
+    line: function (props) {
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      return (name ? String(name) : "Post office") +
+        (address ? " — " + String(address) : "") +
+        (city ? ", " + String(city) : "") +
+        (zip ? " " + String(zip) : "");
+    },
+    item: function (props) { // 4d two-line row: name over address
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      var note = (address ? String(address) : "") + (city ? (address ? ", " : "") + String(city) : "") + (zip ? " " + String(zip) : "");
+      return { name: name ? String(name) : "Post office", note: note || undefined };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
-   * and Part 4 (a new concept). Next per docs/IA_EXPANSION_PLAN.md's phase
-   * 1: zip-code, post-office.
+   * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
+   * fully shipped; phase 2 begins with precinct, ia-judicial-district and
+   * community-college.
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9382,7 +9477,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9479,10 +9574,11 @@ function initIowaExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B5E3F": "#5FB387", "#2E9E6B": "#5BEAA5",
-    "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
-    "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
-    "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#D06A9C": "#FFBDDA"};
+  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
+    "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
+    "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE",
+    "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
+    "#D06A9C": "#FFBDDA"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same
