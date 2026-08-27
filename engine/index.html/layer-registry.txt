@@ -295,7 +295,9 @@
   /* ---------- optional per-module "point of interest" pin (e.g. a school's
    * street address) — a small marker placed at a geocoded location,
    * independent of the polygon highlight above. A module opts in by
-   * exposing mod.pointOfInterest(result) => {label, address} | null. ---------- */
+   * exposing mod.pointOfInterest(result) => {label, address} | null. The
+ * return may also carry lat/lng, in which case the geocoder is skipped
+ * and the publisher's own coordinate places the pin. ---------- */
   // a layer's theme color — from its polygon style, its point-marker style
   // (police/fire stations, which use pointToLayer instead of a flat style
   // object), or an explicit mod.color fallback for anything with neither.
