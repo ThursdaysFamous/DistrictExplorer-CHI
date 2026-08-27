@@ -294,6 +294,24 @@ roster, exactly the WI `school-district-unified` precedent. Bookkeeping as above
 
 ## PR 7 — `county-subdivision`: 1,663
 
+> **Shipped 2026-08-27.** Re-verification at execution time confirmed the count exactly (1,663) and
+> found its composition: **1,600 civil townships** (`LSADC` 44, `FUNCSTAT` G — an active government),
+> **62 incorporated cities that double as their own subdivision record** (`LSADC` 25, `FUNCSTAT` F — the
+> Census Bureau's own term for a "fictitious" bookkeeping placeholder filling the MCD void under a city,
+> not a second government), and **one federal reservoir** carried as unorganized territory (`LSADC` 46,
+> `FUNCSTAT` S — a statistical entity, not a government at all; Saylorville Reservoir). This ships as a
+> **live** layer — no builder script, no committed `data/app/` file — reusing `tigerStatewideLoader`,
+> which PR 0 had already scaffolded and left unused for exactly this. Per the WI-precedent anchor policy
+> (pre-built, election-stable values only), it is deliberately **absent from `anchors[]`**. The card's
+> type row is read from what TIGER's own `NAME` carries beyond `BASENAME` ("Brighton" + " township"),
+> the same technique WI's `county-subdivision` card uses. Township trustees are elected (ASSERTED, Iowa
+> Code ch. 359) with no statewide roster found; per the precedent set by `county`'s and
+> `county-supervisor`'s own no-roster facts, this ships as **worksheet + card-copy prose**, not a formal
+> `coverage-gaps.json` entry — that mechanism is for a per-area/county peer-comparison absence (Jones
+> County's missing supervisor geometry), not a uniform, statewide "no source exists for this concept at
+> all" fact. The 62 city-type and 1 UT-type records carry no roster claim at all, since they are not
+> separate governments.
+
 TIGERweb `Places_CouSub_ConCity_SubMCD/MapServer/1`, `STATE='19'` — **VERIFIED, research pass: 1,663.**
 This is Iowa's civil-township fabric plus incorporated-place MCD records. Card carries an explicit type
 row (the WI "City or Village vs County Subdivision" label lesson applied from day one rather than

@@ -97,9 +97,21 @@
         ],
         "applies": "Iowa — statewide, all 324 current districts."
       }
+    },
+    {
+      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 7,
+      "rank_note": "1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory",
+      "source": {
+        "answers": "The civil township, or incorporated-city subdivision record, covering the point — and its type.",
+        "boundary": [
+          { "label": "U.S. Census TIGERweb — Places / county subdivisions, layer 1, queried live at runtime (no builder script, no committed data/app file)", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1" }
+        ],
+        "people": "Iowa's civil townships are governed by elected trustees, a clerk and an assessor (Iowa Code ch. 359, ASSERTED) — no statewide roster of township officers was found in the research pass, so the card states that plainly rather than guessing. The 62 incorporated-city subdivision records and the one unorganized-territory record are Census Bureau bookkeeping constructs, not separate governments, so no roster claim applies to them at all.",
+        "applies": "Iowa — statewide, all 1,663 records."
+      }
     }
   ],
-  "min_register_layer": 6,
+  "min_register_layer": 7,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },

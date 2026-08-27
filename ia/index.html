@@ -5972,7 +5972,8 @@ function initIowaExplorer() {
     "county",            // 99 counties, pre-built from TIGERweb; the fork's offline anchor layer
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
     "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
-    "school-district-unified" // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
+    "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
+    "county-subdivision" // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8652,12 +8653,102 @@ function initIowaExplorer() {
     compact: true, compactMetaField: "geoid" // 4b name-only card
   });
 
+  /* ---------- 7. County Subdivision — live TIGERweb ----------
+   * Iowa's civil-township fabric plus incorporated-place MCD records, live
+   * from TIGERweb (no builder script, no committed data/app file — the
+   * WI/IL pattern this fork's own loadTigerLayer/tigerStatewideLoader
+   * helpers were scaffolded for back in PR 0). Measured 2026-08-27: 1,663
+   * records tiling the state, matching docs/IA_EXPANSION_PLAN.md's
+   * verified count exactly — LSADC 44 x1,600 (civil townships, FUNCSTAT
+   * G: an active government), LSADC 25 x62 (incorporated cities that
+   * double as their own subdivision record, FUNCSTAT F: the Census
+   * Bureau's own term for a "fictitious" bookkeeping placeholder filling
+   * the MCD void under a city, not a second government) and LSADC 46 x1
+   * (Saylorville Reservoir, FUNCSTAT S: a statistical entity, not a
+   * government at all).
+   *
+   * Deliberately absent from anchors[] — docs/EXPANSION_GUIDE.md §2.5.1's
+   * anchor policy is pre-built, election-stable values only, and this
+   * layer ships neither pre-built nor election-stable (TIGER's MCD fabric
+   * moves as it does).
+   *
+   * The card's TYPE row is read from what TIGER's own NAME carries beyond
+   * BASENAME ("Brighton" + " township"), the same technique the WI
+   * `county-subdivision` card uses, so the card can never disagree with
+   * the name printed above it. Only the township kind names an elected
+   * office (trustees, clerk, assessor — Iowa Code ch. 359, ASSERTED); no
+   * statewide roster of township officers was found in the research pass,
+   * so the card states that plainly rather than guessing or staying
+   * silent — the fleet's honesty rule applied to a live-fetched layer
+   * exactly as it is to a pre-built one. ---------- */
+  var loadCountySubdivisions = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 1,
+    "GEOID,NAME,BASENAME,STATE,COUNTY,LSADC", "county subdivisions");
+
+  registerLayer({
+    id: "county-subdivision",
+    group: "geography",
+    label: "County Subdivision",
+    subOf: "county",
+    overlay: {
+      load: loadCountySubdivisions,
+      // long-dash brown, matching the WI/IL rendering of this same concept
+      style: { color: "#7A5C3E", weight: 1.5, fillColor: "#A98B6C", fillOpacity: 0.05, dashArray: "7 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // point-first (queryFeatureAt): one subdivision polygon instead of the
+      // statewide download gating the first click
+      return queryFeatureAt(loadCountySubdivisions, point).then(function (feature) {
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var name = findPropCI(props, ["name"]);
+        var base = findPropCI(props, ["basename"]);
+        return {
+          seq: seq,
+          name: name,
+          kind: (name != null && base != null &&
+                 String(name).indexOf(String(base)) === 0)
+            ? String(name).slice(String(base).length).trim().toLowerCase()
+            : null,
+          geoid: findPropCI(props, ["geoid"])
+        };
+      });
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown subdivision",
+        note: result.geoid != null ? "GEOID " + String(result.geoid) : null
+      }));
+      var KIND_NOTE = {
+        township: "Township — an active local government (elected trustees, " +
+          "clerk and assessor under Iowa Code ch. 359). No statewide roster " +
+          "of township officers was found in the research pass.",
+        city: "This is the Census Bureau's placeholder subdivision record for " +
+          "an incorporated city with no separate township surviving under it " +
+          "— not a second government distinct from the city itself.",
+        ut: "Unorganized territory — a Census statistical area belonging to " +
+          "no active civil division, not a government."
+      };
+      // no row rather than a guessed one for any future LSADC value this
+      // fetch hasn't seen — KIND_NOTE covers exactly the three measured today
+      if (result.kind && KIND_NOTE[result.kind]) {
+        wrap.appendChild(renderFieldStack([
+          { label: "Type", value: KIND_NOTE[result.kind] }
+        ]));
+      }
+      return wrap;
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Next per docs/IA_EXPANSION_PLAN.md's phase
-   * 1: the county-supervisor flagship (plan-type-aware, all 99 counties),
-   * then school-district-unified, county-subdivision, municipality,
-   * zip-code, post-office.
+   * 1: municipality, zip-code, post-office.
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9219,7 +9310,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-supervisor", "school-district-unified"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "county-supervisor", "school-district-unified"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9318,7 +9409,8 @@ function initIowaExplorer() {
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B5E3F": "#5FB387", "#2E9E6B": "#5BEAA5",
     "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
-    "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#8C2E4A": "#F47294"};
+    "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
+    "#A98B6C": "#F3CBA1"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same
