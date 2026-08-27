@@ -231,6 +231,14 @@ ENDPOINTS = [
         "layer": "municipality",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4/query?where=STATE%3D%2719%27&returnCountOnly=true&f=json",
     },
+    {
+        "layer": "zip-code",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11?f=json",
+    },
+    {
+        "layer": "post-office",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38?f=json",
+    },
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

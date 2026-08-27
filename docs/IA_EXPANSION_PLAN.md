@@ -353,6 +353,15 @@ are phase 3–4 work (Des Moines, Cedar Rapids) and a later per-county ladder, n
 
 ## PR 9 — `zip-code` and `post-office`
 
+> **Shipped 2026-08-27.** Both live endpoints re-verified exactly as planned, with nothing to correct:
+> the ZCTA envelope query measured **1,443** features in Iowa's bounding envelope and the USGS post-office
+> structures query measured **1,170** points in the same envelope, both fetched by `tigerStatewideLoader`-
+> and `makeCached`-based live loaders (no builder script, no committed `data/app/` file, deliberately
+> absent from `anchors[]` — neither is a fixed count worth gating on, since an envelope query legitimately
+> moves as ZCTA boundaries redraw or post offices open/close near the state line). Both layers ship at
+> the exact code shape WI's own `zip-code`/`post-office` blocks use, cloned nearly verbatim with only the
+> Iowa envelope substituted.
+
 `zip-code`: ZCTA layer by Iowa envelope, no `STATE` field on that TIGERweb layer — envelope query,
 verbatim the Wisconsin/Illinois pattern. `post-office`: USGS National Map
 `carto.nationalmap.gov/.../structures/MapServer/38`, nearest-3, envelope query (deliberately catches

@@ -834,7 +834,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">8 layers — 4 political and legislative, 1 schools, 3 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">10 layers — 4 political and legislative, 1 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#schools">Schools</a>
@@ -929,7 +929,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">3 layers</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">5 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -969,6 +969,28 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">No statewide roster of Iowa city officials was found in the research pass. The Iowa League of Cities is a membership directory with no public officials export; the state's own Iowa Data Hub (data.iowa.gov) is reachable but is a client-rendered catalog of state-agency datasets, not a municipal aggregator. Per-city rosters are a later phase's city-by-city work, not this layer's.</td>
                 <td data-label="Where it applies">Iowa — statewide, all 939 incorporated cities.</td>
+              </tr>
+              <tr id="layer-zip-code">
+                <th scope="row"><span class="layer-name">ZIP Code</span><code>zip-code</code></th>
+                <td data-label="What it answers">The ZIP Code Tabulation Area (ZCTA) covering the point.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11" target="_blank" rel="noopener">U.S. Census TIGERweb — PUMA/TAD/TAZ/UGA/ZCTA, layer 11, queried live by an Iowa bounding envelope (ZCTAs cross state lines, so there is no STATE field to filter on)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names"><span class="matrix-none">—</span></td>
+                <td data-label="Where it applies">Iowa — the state's bounding envelope; a border ZCTA that straddles the line is included, which is correct for a reader near it.</td>
+              </tr>
+              <tr id="layer-post-office">
+                <th scope="row"><span class="layer-name">Post Office</span><code>post-office</code></th>
+                <td data-label="What it answers">The three nearest post offices, straight-line distance.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38" target="_blank" rel="noopener">USGS National Map — structures layer 38, queried live by an Iowa bounding envelope (deliberately catches border-state post offices near the line)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names"><span class="matrix-none">—</span></td>
+                <td data-label="Where it applies">Iowa — the state's bounding envelope; nearest-3 is a proximity fact, not a jurisdictional claim.</td>
               </tr>
             </tbody>
           </table>
