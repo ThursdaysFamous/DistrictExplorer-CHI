@@ -355,9 +355,9 @@
       "label": "County Subdivision",
       "group": "geography",
       "area_rank": 16,
-      "rank_note": "Towns / county subdivisions (TIGERweb CouSub, live)",
+      "rank_note": "Towns / county subdivisions (TIGERweb CouSub, live) — 1,925 records tiling the state: 1,242 towns, 452 village and 219 city records, and 12 Great-Lakes water records; nested under County, which each subdivision belongs to by construction",
       "source": {
-        "answers": "The town or county subdivision containing the point.",
+        "answers": "The town, village or city containing the point — in Wisconsin the county subdivisions ARE the municipalities, so this layer answers everywhere while City or Village answers only inside the 608 incorporated ones. The card states each subdivision's type, which is what tells a reader why a city appears on both cards and a town on only this one.",
         "boundary": [
           {
             "label": "U.S. Census TIGERweb — Places / county subdivisions, layer 1",
@@ -370,12 +370,12 @@
     },
     {
       "id": "municipality",
-      "label": "Municipality",
+      "label": "City or Village",
       "group": "geography",
       "area_rank": 17,
-      "rank_note": "Incorporated places (TIGERweb Places, live); unincorporated points say so",
+      "rank_note": "Incorporated places (TIGERweb Places, live) — 608 in Wisconsin, 190 cities + 418 villages and not one of the state's 1,242 towns; a point in a town gets the layer's own words for unincorporated",
       "source": {
-        "answers": "The city, village or town containing the point — or that it sits in unincorporated county.",
+        "answers": "The incorporated city or village containing the point — or, when there is none, that the point sits on unincorporated town land, which is an answer rather than a miss. NOT every municipality: Wis. Stat. 5.02(11) makes a town a municipality too, and TIGER's Places layer carries none of Wisconsin's 1,242 towns, which is why this layer is labelled City or Village and County Subdivision is the one that answers everywhere.",
         "boundary": [
           {
             "label": "U.S. Census TIGERweb — Places, layer 4",
