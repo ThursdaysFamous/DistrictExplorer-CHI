@@ -1,0 +1,609 @@
+{
+ "fetched": "2026-08-26",
+ "precincts": {
+  "Belleville 1": {
+   "address": "1648 La Salle St. Belleville, IL 62221",
+   "place": "Apostolic Church"
+  },
+  "Belleville 10": {
+   "address": "7645 Magna Dr. Belleville, IL 62223",
+   "place": "CAVE-Center for Acedemic & Voc. Excellence"
+  },
+  "Belleville 11": {
+   "address": "1513 N. Belt West Belleville, IL 62226",
+   "place": "Northwest Fire Station #1"
+  },
+  "Belleville 12": {
+   "address": "820 Royal Heights Rd Belleville, IL 62223",
+   "place": "Abraham Lincoln School (New Gym)"
+  },
+  "Belleville 13": {
+   "address": "5301 W Main St Belleville, IL 62223",
+   "place": "St Henrys Grade School (Gym)"
+  },
+  "Belleville 14": {
+   "address": "5301 W Main St Belleville, IL 62223",
+   "place": "St Henrys Grade School (Gym)"
+  },
+  "Belleville 15": {
+   "address": "40 Signal Hill Pl Belleville, IL 62223",
+   "place": "Signal Hill Sch (Old Gym)"
+  },
+  "Belleville 16": {
+   "address": "118 Westhaven School Rd Belleville, IL 62220",
+   "place": "Westhaven School"
+  },
+  "Belleville 17": {
+   "address": "700 W. Cleveland Ave. Belleville, IL 62220",
+   "place": "Roosevelt School (Gym)"
+  },
+  "Belleville 18": {
+   "address": "7645 Magna Dr. Belleville, IL 62223",
+   "place": "CAVE-Center for Acedemic & Voc. Excellence"
+  },
+  "Belleville 19": {
+   "address": "20 S 27th St Belleville, IL 62226",
+   "place": "Union School"
+  },
+  "Belleville 2": {
+   "address": "1648 La Salle St. Belleville, IL 62221",
+   "place": "Apostolic Church"
+  },
+  "Belleville 20": {
+   "address": "8 Premier Drive Belleville, IL 62220",
+   "place": "Plumbers And Pipefitters Local #101"
+  },
+  "Belleville 21": {
+   "address": "400 S Charles St Belleville, IL 62220",
+   "place": "Washington School"
+  },
+  "Belleville 22": {
+   "address": "118 Westhaven School Rd Belleville, IL 62220",
+   "place": "Westhaven School"
+  },
+  "Belleville 23": {
+   "address": "125 Carlyle Av Belleville, IL 62220",
+   "place": "Douglas School (Gym)"
+  },
+  "Belleville 24": {
+   "address": "125 Carlyle Av Belleville, IL 62220",
+   "place": "Douglas School (Gym)"
+  },
+  "Belleville 25": {
+   "address": "1306 Wabash Av Belleville, IL 62220",
+   "place": "Illinois Center For Autism"
+  },
+  "Belleville 3": {
+   "address": "211 Sherman St Belleville, IL 62221",
+   "place": "Eastview Baptist Church"
+  },
+  "Belleville 4": {
+   "address": "515 E D St Belleville, IL 62220",
+   "place": "Charles E Nichols Center"
+  },
+  "Belleville 5": {
+   "address": "1499 Golf Course Dr Belleville, IL 62220",
+   "place": "Orchards Restaurant"
+  },
+  "Belleville 6": {
+   "address": "301 N 2nd St Belleville, IL 62220",
+   "place": "Franklin School (GYM)"
+  },
+  "Belleville 7": {
+   "address": "400 S. 13th St. Belleville, IL 62220",
+   "place": "Henry Raab School"
+  },
+  "Belleville 8": {
+   "address": "20 S 27th St Belleville, IL 62226",
+   "place": "Union School"
+  },
+  "Belleville 9": {
+   "address": "820 Royal Heights Rd Belleville, IL 62223",
+   "place": "Abraham Lincoln School (New Gym)"
+  },
+  "Canteen 1": {
+   "address": "4001 Cookson Rd Fairmont City, IL 62201",
+   "place": "Fairmont City Community Ctr"
+  },
+  "Canteen 2": {
+   "address": "2727 N. 89th St. Caseyville, IL 62232",
+   "place": "Sheet Metal Workers #268 (Lower Level)"
+  },
+  "Canteen 3": {
+   "address": "1915 N. 55th St. Washington Park, IL 62204",
+   "place": "Avant Elementary School (Gym)"
+  },
+  "Canteen 4": {
+   "address": "1915 N. 55th St. Washington Park, IL 62204",
+   "place": "Avant Elementary School (Gym)"
+  },
+  "Canteen 5": {
+   "address": "1 Paul St Collinsville, IL 62234",
+   "place": "Mounds Public Water District"
+  },
+  "Caseyville 1": {
+   "address": "1214 Hollywood Hgts Rd Caseyville, IL 62232",
+   "place": "Hollywood Hgts Fire"
+  },
+  "Caseyville 10": {
+   "address": "505 Fountains Parkway Fairview Heights, IL 62208",
+   "place": "Holy Trinity Cath Ch Parish Cntr"
+  },
+  "Caseyville 11": {
+   "address": "505 Fountains Parkway Fairview Heights, IL 62208",
+   "place": "Holy Trinity Cath Ch Parish Cntr"
+  },
+  "Caseyville 12": {
+   "address": "1215 Taylor Rd. O Fallon, IL 62269",
+   "place": "O'Fallon Fire Dept/Headquarters"
+  },
+  "Caseyville 13": {
+   "address": "50 Longacre Dr Fairview Heights, IL 62208",
+   "place": "Parkview Church Of The Nazarene"
+  },
+  "Caseyville 14": {
+   "address": "339 Frank Scott Parkway East Fairview Heights, IL 62208",
+   "place": "Christ Church"
+  },
+  "Caseyville 15": {
+   "address": "339 Frank Scott Parkway East Fairview Heights, IL 62208",
+   "place": "Christ Church"
+  },
+  "Caseyville 16": {
+   "address": "2201 S. Morrison Ave. Collinsville, IL 62234",
+   "place": "Collinsville H.S. (Fine Arts Center)"
+  },
+  "Caseyville 17": {
+   "address": "909 S. Main St. Caseyville, IL 62232",
+   "place": "Caseyville Community Center"
+  },
+  "Caseyville 18": {
+   "address": "505 Fountains Parkway Fairview Heights, IL 62208",
+   "place": "Holy Trinity Cath Ch Parish Cntr"
+  },
+  "Caseyville 19": {
+   "address": "400 Ashland Avenue Fairview Heights, IL 62208",
+   "place": "Pontiac School(Rear Entrance-Gym)"
+  },
+  "Caseyville 2": {
+   "address": "339 Frank Scott Parkway East Fairview Hgts, IL 62208",
+   "place": "Christ Church"
+  },
+  "Caseyville 20": {
+   "address": "10025 Bunkum Rd. Fairview Heights, IL 62208",
+   "place": "Municipal Building (Rear Recreation Room)"
+  },
+  "Caseyville 21": {
+   "address": "6990 Old Collinsville Rd Ofallon, IL 62269",
+   "place": "Caseyville Township Garage"
+  },
+  "Caseyville 22": {
+   "address": "400 Ashland Avenue Fairview Heights, IL 62208",
+   "place": "Pontiac School(Rear Entrance-Gym)"
+  },
+  "Caseyville 3": {
+   "address": "10025 Bunkum Rd. Fairview Heights, IL 62208",
+   "place": "Municipal Building (Rear Recreation Room)"
+  },
+  "Caseyville 4": {
+   "address": "9950 Bunkum Rd Fairview Heights, IL 62208",
+   "place": "The Rec Complex"
+  },
+  "Caseyville 5": {
+   "address": "2201 S. Morrison Ave. Collinsville, IL 62234",
+   "place": "Collinsville H.S. (Fine Arts Center)"
+  },
+  "Caseyville 6": {
+   "address": "650 Milburn School Rd. O'Fallon, IL 62269",
+   "place": "O'Fallon High School Milburn Campus"
+  },
+  "Caseyville 7": {
+   "address": "909 S. Main St. Caseyville, IL 62232",
+   "place": "Caseyville Community Center"
+  },
+  "Caseyville 8": {
+   "address": "9950 Bunkum Rd. Fairview Heights, IL 62208",
+   "place": "The Rec Complex"
+  },
+  "Caseyville 9": {
+   "address": "50 Longacre Dr Fairview Heights, IL 62208",
+   "place": "Parkview Church Of The Nazarene"
+  },
+  "Centreville 1": {
+   "address": "4822 McCasland Ave Cahokia Heights, IL 62207",
+   "place": "Community Center"
+  },
+  "Centreville 10": {
+   "address": "2348 Jerome Ln Cahokia Heights, IL 62206",
+   "place": "Power Of Change Church"
+  },
+  "Centreville 2": {
+   "address": "509 Camp Jackson Rd Cahokia Heights, IL 62206",
+   "note": "The County Clerk's office said on 2026-08-26 that this precinct is set to move to the new Cahokia High School, 805 Camp Jackson Rd, Cahokia Heights, once the County Board votes on the change — check before election day.",
+   "place": "Cahokia Fitness & Sports Complex"
+  },
+  "Centreville 3": {
+   "address": "6702 Bond Ave Cahokia Heights, IL 62207",
+   "place": "Lalumier Elementary School (Gym)"
+  },
+  "Centreville 4": {
+   "address": "329 Hazel Av Belleville, IL 62223",
+   "place": "Signal Hill Fire Dept"
+  },
+  "Centreville 5": {
+   "address": "800 Range Ln. Cahokia Heights, IL 62206",
+   "note": "The County Clerk's office said on 2026-08-26 that this precinct is set to move to the new Cahokia High School, 805 Camp Jackson Rd, Cahokia Heights, once the County Board votes on the change — check before election day.",
+   "place": "Cahokia High School (Gym)"
+  },
+  "Centreville 6": {
+   "address": "200 North 74th St Cahokia Heights, IL 62203",
+   "place": "Midway Fire Department"
+  },
+  "Centreville 7": {
+   "address": "535 State Route 3 Cahokia Heights, IL 62206",
+   "note": "The County Clerk's office said on 2026-08-26 that this precinct is set to move to the new Cahokia High School, 805 Camp Jackson Rd, Cahokia Heights, once the County Board votes on the change — check before election day.",
+   "place": "New Destiny Ministries"
+  },
+  "Centreville 8": {
+   "address": "190 Cahokia Park Dr. Cahokia Heights, IL 62206",
+   "note": "The County Clerk's office said on 2026-08-26 that this precinct is set to move to the new Cahokia High School, 805 Camp Jackson Rd, Cahokia Heights, once the County Board votes on the change — check before election day.",
+   "place": "Cahokia Nutrition Center"
+  },
+  "Centreville 9": {
+   "address": "800 Range Ln. Cahokia Heights, IL 62206",
+   "place": "Cahokia High School (Gym)"
+  },
+  "East St Louis": {
+   "note": "East St. Louis runs its own Board of Election Commissioners, so the County Clerk's polling-place list does not cover it; the city's election board assigns its polling places."
+  },
+  "Engelmann 1": {
+   "address": "7083 Highbanks Rd Mascoutah, IL 62258",
+   "place": "Engelmann Township Building"
+  },
+  "Fayetteville 1": {
+   "address": "2212 Main Ave. Fayetteville, IL 62258",
+   "place": "Fayetteville Village Hall"
+  },
+  "Fayetteville 2": {
+   "address": "1009 Lincoln St St Libory, IL 62282",
+   "place": "St Libory Multi Purpose Ctr"
+  },
+  "Freeburg 1": {
+   "address": "401 S. Monroe St. Freeburg, IL 62243",
+   "place": "Freeburg High School"
+  },
+  "Freeburg 2": {
+   "address": "401 S. Monroe St. Freeburg, IL 62243",
+   "place": "Freeburg High School"
+  },
+  "Freeburg 3": {
+   "address": "401 S. Monroe St. Freeburg, IL 62243",
+   "place": "Freeburg High School"
+  },
+  "Lebanon 1": {
+   "address": "610 Alton St. Lebanon, IL 62254",
+   "place": "McKendree Univ. Convocation Center (Gym)"
+  },
+  "Lebanon 2": {
+   "address": "610 Alton St. Lebanon, IL 62254",
+   "place": "McKendree Univ. Convocation Center (Gym)"
+  },
+  "Lebanon 3": {
+   "address": "10182 Summerfield South Rd. Trenton, IL 62293",
+   "place": "Lebanon Township Office"
+  },
+  "Lenzburg 1": {
+   "address": "215 N Charles St Lenzburg, IL 62255",
+   "place": "Lenzburg Community Center"
+  },
+  "Marissa 1": {
+   "address": "300 School View Dr. Marissa, IL 62257",
+   "place": "Marissa High School"
+  },
+  "Mascoutah 1": {
+   "address": "1313 W. Main St. Mascoutah, IL 62258",
+   "place": "Mascoutah H.S. (Gym)"
+  },
+  "Mascoutah 2": {
+   "address": "1313 W. Main St. Mascoutah, IL 62258",
+   "place": "Mascoutah H.S. (Gym)"
+  },
+  "Mascoutah 3": {
+   "address": "1313 W. Main St. Mascoutah, IL 62258",
+   "place": "Mascoutah H.S. (Gym)"
+  },
+  "Mascoutah 4": {
+   "address": "1313 W. Main St. Mascoutah, IL 62258",
+   "place": "Mascoutah H.S. (Gym)"
+  },
+  "Millstadt 1": {
+   "address": "102 S Jefferson St Millstadt, IL 62260",
+   "place": "Millstadt Community Center"
+  },
+  "Millstadt 2": {
+   "address": "820 S Jefferson St Millstadt, IL 62260",
+   "place": "Township Hall"
+  },
+  "Millstadt 3": {
+   "address": "4576 Buss Branch Rd Paderborn, IL 62298",
+   "place": "St Michaels Parish Hall (Convent)"
+  },
+  "Millstadt 4": {
+   "address": "111 W Laurel St Millstadt, IL 62260",
+   "place": "Village Hall"
+  },
+  "Millstadt 5": {
+   "address": "211 West Mill Street Millstadt, IL 62260",
+   "place": "Millstadt Consolidated School"
+  },
+  "New Athens 1": {
+   "address": "406 Chester St New Athens, IL 62264",
+   "place": "Community Hall"
+  },
+  "New Athens 2": {
+   "address": "406 Chester St New Athens, IL 62264",
+   "place": "Community Hall"
+  },
+  "Ofallon 1": {
+   "address": "801 E State St O Fallon, IL 62269",
+   "place": "O'Fallon Township Building"
+  },
+  "Ofallon 10": {
+   "address": "1411 Cross St O Fallon, IL 62269",
+   "place": "St Clare Catholic Church"
+  },
+  "Ofallon 11": {
+   "address": "689 Scott Troy Rd Lebanon, IL 62254",
+   "place": "New Life In Christ Church"
+  },
+  "Ofallon 12": {
+   "address": "1205 N Lincoln Ave O Fallon, IL 62269",
+   "place": "Blessed Savior Lutheran Ch"
+  },
+  "Ofallon 13": {
+   "address": "1215 Taylor Rd. O Fallon, IL 62269",
+   "place": "O'Fallon Fire Dept/Headquarters"
+  },
+  "Ofallon 14": {
+   "address": "309 E. 5th St. O Fallon, IL 62269",
+   "place": "Katy Cavins Community Center"
+  },
+  "Ofallon 15": {
+   "address": "689 Scott Troy Rd Lebanon, IL 62254",
+   "place": "New Life In Christ Church"
+  },
+  "Ofallon 16": {
+   "address": "111 O Fallon Troy Rd O Fallon, IL 62269",
+   "place": "St Michael's Episcopal Church"
+  },
+  "Ofallon 17": {
+   "address": "309 E. 5th St. O Fallon, IL 62269",
+   "place": "Katy Cavins Community Center"
+  },
+  "Ofallon 18": {
+   "address": "309 E. 5th St. O Fallon, IL 62269",
+   "place": "Katy Cavins Community Center"
+  },
+  "Ofallon 2": {
+   "address": "309 E. 5th St. O Fallon, IL 62269",
+   "place": "Katy Cavins Community Center"
+  },
+  "Ofallon 3": {
+   "address": "801 E State St O Fallon, IL 62269",
+   "place": "O'Fallon Township Building"
+  },
+  "Ofallon 4": {
+   "address": "610 Alton St. Lebanon, IL 62254",
+   "place": "McKendree Univ. Convocation Center (Gym)"
+  },
+  "Ofallon 5": {
+   "address": "206 W Adams St O Fallon, IL 62269",
+   "place": "United Church Of Christ"
+  },
+  "Ofallon 6": {
+   "address": "309 E. 5th St. O Fallon, IL 62269",
+   "place": "Katy Cavins Community Center"
+  },
+  "Ofallon 7": {
+   "address": "625 St Nicholas Dr O Fallon, IL 62269",
+   "place": "St Nicholas Catholic Church"
+  },
+  "Ofallon 8": {
+   "address": "625 St Nicholas Dr O Fallon, IL 62269",
+   "place": "St Nicholas Catholic Church"
+  },
+  "Ofallon 9": {
+   "address": "111 O Fallon Troy Rd O Fallon, IL 62269",
+   "place": "St Michael's Episcopal Church"
+  },
+  "Prairie Du Long 1": {
+   "address": "6733 Robinson School Rd New Athens, IL 62264",
+   "place": "Broad Hollow Grange"
+  },
+  "Prairie Du Long 2": {
+   "address": "711 S Main St Smithton, IL 62285",
+   "place": "Smithton Senior Citizens Ctr"
+  },
+  "Shiloh Valley 1": {
+   "address": "14 Park Dr Shiloh, IL 62269",
+   "place": "Village Of Shiloh (Klucker Hall)"
+  },
+  "Shiloh Valley 2": {
+   "address": "1370 Shiloh Station Rd Belleville, IL 62221",
+   "place": "Shiloh Valley Township Bldg"
+  },
+  "Shiloh Valley 3": {
+   "address": "6 Park Dr Shiloh, IL 62269",
+   "place": "Shiloh Valley Senior Ctr Bldg"
+  },
+  "Shiloh Valley 4": {
+   "address": "1370 Shiloh Station Rd Belleville, IL 62221",
+   "place": "Shiloh Valley Township Bldg"
+  },
+  "Shiloh Valley 5": {
+   "address": "704 N Green Mount Rd Shiloh, IL 62221",
+   "place": "Garden City Church"
+  },
+  "Smithton 1": {
+   "address": "711 S Main St Smithton, IL 62285",
+   "place": "Smithton Senior Citizens Ctr"
+  },
+  "Smithton 2": {
+   "address": "711 S Main St Smithton, IL 62285",
+   "place": "Smithton Senior Citizens Ctr"
+  },
+  "Smithton 3": {
+   "address": "3535 State Rt 159 Freeburg, IL 62243",
+   "place": "Catholic War Vets Post 370"
+  },
+  "St Clair 1": {
+   "address": "1501 Caseyville Ave Swansea, IL 62226",
+   "place": "Thompson Civic Center"
+  },
+  "St Clair 10": {
+   "address": "8 Premier Drive Belleville, IL 62220",
+   "place": "Plumbers And Pipefitters Local #101"
+  },
+  "St Clair 11": {
+   "address": "1609 N. Illinois St. Swansea, IL 62226",
+   "place": "Teamsters Local 50"
+  },
+  "St Clair 12": {
+   "address": "111 Warrior Way Belleville, IL 62221",
+   "place": "Whiteside Middle School"
+  },
+  "St Clair 13": {
+   "address": "3111 East B Street Rd Belleville, IL 62221",
+   "place": "East Side Fire House"
+  },
+  "St Clair 14": {
+   "address": "1901 Lebanon Av Belleville, IL 62221",
+   "place": "First Church Of The Nazarene"
+  },
+  "St Clair 15": {
+   "address": "339 Frank Scott Parkway East Fairview Hgts, IL 62208",
+   "place": "Christ Church"
+  },
+  "St Clair 16": {
+   "address": "111 Warrior Way Belleville, IL 62221",
+   "place": "Whiteside Middle School"
+  },
+  "St Clair 17": {
+   "address": "704 N Green Mount Rd Shiloh, IL 62221",
+   "place": "Garden City Church"
+  },
+  "St Clair 18": {
+   "address": "1901 Lebanon Av Belleville, IL 62221",
+   "place": "First Church Of The Nazarene"
+  },
+  "St Clair 19": {
+   "address": "2411 Pathways Crossing Belleville, IL 62221",
+   "place": "B.A.S.S.C. (Off Green Mount Rd)"
+  },
+  "St Clair 2": {
+   "address": "1000 S Illinois St Belleville, IL 62220",
+   "place": "Regional Office Of Education"
+  },
+  "St Clair 20": {
+   "address": "410 Huntwood Rd Swansea, IL 62226",
+   "place": "Wolf Branch Middle School"
+  },
+  "St Clair 21": {
+   "address": "111 Warrior Way Belleville, IL 62221",
+   "place": "Whiteside Middle School"
+  },
+  "St Clair 22": {
+   "address": "111 Warrior Way Belleville, IL 62221",
+   "place": "Whiteside Middle School"
+  },
+  "St Clair 23": {
+   "address": "704 N Green Mount Rd Shiloh, IL 62221",
+   "place": "Garden City Church"
+  },
+  "St Clair 24": {
+   "address": "410 Huntwood Rd. Swansea, IL 62226",
+   "place": "Wolf Branch Middle School"
+  },
+  "St Clair 3": {
+   "address": "1609 N. Illinois St. Swansea, IL 62226",
+   "place": "Teamsters Local 50"
+  },
+  "St Clair 4": {
+   "address": "1000 S Illinois St Belleville, IL 62220",
+   "place": "Regional Office Of Education"
+  },
+  "St Clair 5": {
+   "address": "3111 East B Street Rd Belleville, IL 62221",
+   "place": "East Side Fire House"
+  },
+  "St Clair 6": {
+   "address": "339 Frank Scott Parkway East Fairview Hgts, IL 62208",
+   "place": "Christ Church"
+  },
+  "St Clair 7": {
+   "address": "3407 S Belt West Belleville, IL 62226",
+   "place": "Northwest St Clair Cty Fire Dept"
+  },
+  "St Clair 8": {
+   "address": "410 Huntwood Rd Swansea, IL 62226",
+   "place": "Wolf Branch Middle School"
+  },
+  "St Clair 9": {
+   "address": "820 Royal Heights Rd Belleville, IL 62223",
+   "place": "Abraham Lincoln School (New Gym)"
+  },
+  "Stites 1": {
+   "address": "312 S 5th St Brooklyn, IL 62059",
+   "place": "Brooklyn Village Hall"
+  },
+  "Stookey 1": {
+   "address": "8303 Concordia Church Rd. Belleville, IL 62223",
+   "place": "Quail Club"
+  },
+  "Stookey 2": {
+   "address": "7401 Westchester Dr. Belleville, IL 62223",
+   "place": "Harmony-Emge School (Gym)"
+  },
+  "Stookey 3": {
+   "address": "40 Signal Hill Pl Belleville, IL 62223",
+   "place": "Signal Hill Sch (Old Gym)"
+  },
+  "Stookey 4": {
+   "address": "329 Hazel Av Belleville, IL 62223",
+   "place": "Signal Hill Fire Dept"
+  },
+  "Stookey 5": {
+   "address": "4063 Frank Scott Parkway West Belleville, IL 62223",
+   "place": "Belleville West HS (Performing Arts Cntr)"
+  },
+  "Stookey 6": {
+   "address": "100 Conniston Dr Belleville, IL 62223",
+   "place": "Villa Hills Fire Station"
+  },
+  "Stookey 7": {
+   "address": "7401 Westchester Dr. Belleville, IL 62223",
+   "place": "Harmony-Emge School (Gym)"
+  },
+  "Sugar Loaf 1": {
+   "address": "7508 Triple Lakes Rd East Carondelet, IL 62240",
+   "place": "Thermo Door Company"
+  },
+  "Sugar Loaf 2": {
+   "address": "950 State St East Carondelet, IL 62240",
+   "place": "East Carondelet Village Hall"
+  },
+  "Sugar Loaf 3": {
+   "address": "620 Godin Ave. Dupo, IL 62239",
+   "place": "First Baptist Church of Dupo"
+  },
+  "Sugar Loaf 4": {
+   "address": "620 Godin Ave. Dupo, IL 62239",
+   "place": "First Baptist Church of Dupo"
+  },
+  "Sugar Loaf 5": {
+   "address": "620 Godin Ave. Dupo, IL 62239",
+   "place": "First Baptist Church of Dupo"
+  }
+ },
+ "source": "St. Clair County Clerk's Office, Election Department, by e-mail 2026-08-26 (St Clair County IL Polling Places.xlsx, one row per precinct)"
+}

@@ -1037,8 +1037,13 @@
         "file": "clay-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Clay County outline — gap-location geometry only, not a dispatched county. Added by the pass-13 detached-counties research sweep (2026-08-04) so its gap entry attaches to ground.",
-        "dynamic_reference": true
+        "note": "Clay County coverage outline — the coverage test for the county's board dispatch entry (clayCountyCoverage). Shipped 2026-08-04 as gap-location geometry by the pass-13 detached-counties sweep, when Clay read as source-less; promoted to a coverage outline on 2026-08-26 when the county joined as the 91st served county, so index.html now names it literally and it is no longer a dynamic reference."
+      },
+      {
+        "file": "clay-county-board-districts.json",
+        "min_features": 14,
+        "max_features": 14,
+        "note": "Clay County's 14 LETTERED County Board districts (A-N), one member each, composed from Census 2020 voting districts per the composition the county's own board page states letter by letter — independently witnessed for seven letters by the county's certified 2026 General Primary, which ran single-member contests lettered B, C, D, G, I, K and N with no precinct in two districts. THE COUNTY SEAT IS SPLIT AND THE CLERK DREW THE LINE: the census carries ONE Clay City voting district (1,166 people) where the county runs districts A and B through it, and nothing published said where that line falls until Clerk Amy Britton answered directly (e-mail, 2026-08-24): District A is 'within the Village limits of Clay City', District B 'the unincorporated area of Clay City/Stanford'. That is a corporate-limits line the census draws exactly — intersected at the BLOCK level, 108 blocks matching the voting district's 1,166 people, EVERY block sorting cleanly to one side (none straddles), 833 in the village (A) and 333 outside (B, joining Stanford's 625). One measured margin rides the note rather than being absorbed: two blocks (14 people) inside the village limits lie in the STANFORD voting district and ship in District B with their precinct. WHY IT SAT PAST THE SPLIT ANSWER: population. District J (Harter V, one whole voting district) runs +39.8% against the 949 ideal and District L (Harter III) +33.3% — past the fleet's usual 30% ceiling and its largest accepted deviation — shipped only after the Clerk confirmed the plan itself (e-mail, 2026-08-26): 'These are the current maps.' The ceiling is raised for Clay alone with the measured value recorded (scripts/build_clay_boundaries.py; --check is the drift gate). NO PRECINCT FILE ships: the county's board page names 19 precinct-slots (Clay City twice) while ISBE's certified 2026 returns list 18 (one Clay City), and shipping either count would overstate what is known."
       },
       {
         "file": "clinton-county-outline.json",
@@ -2506,6 +2511,16 @@
         "file": "wayne-county-board-members.json",
         "min_keys": 7,
         "note": "Wayne County Board members keyed by district (7 districts x 2 members = 14 seats). Scraped weekly from the county's own board page — the SAME page the district composition was read from, so re-scraping it every week is this county's redistricting tripwire (the builder fails if a district's re-read precinct list stops matching the shipped composition; District 7 is checked as the known subset, since the page has never named Fairfield 1 or Fairfield 2). Each district's paragraph names two members with an optional Chairman or Vice Chairman title — Daryl Hargrave (D1) and Gene Kollak (D7) hold the two titles the page states. No e-mail, phone, party or term is published, so none ships."
+      },
+      {
+        "file": "clay-county-board-members.json",
+        "min_keys": 14,
+        "note": "Clay County Board members keyed by district LETTER (A-N, one member each = 14 seats; 14/14 with a phone, as the county prints it, dots and all). Scraped weekly from the county's own MEMBERS page — an Elementor team widget per member, the county's maintained list (the Alexander rule), each position line stating the district ('County Board - District K'; the Chair's card carries the office in the same line: 'County Board Chair - District C'). Each card prints its phone TWICE (an image-overlay copy and a content copy) and the scraper requires the two to agree. ROLES COME FROM TWO COUNTY SURFACES THAT MUST AGREE: the Chair is marked on his own card AND named in the county-board page's Chairman tab, and the build fails if they name different people. The VICE CHAIRMAN is named only in that prose, under a different form of her name — the board page writes 'Barbara McGrew', the members page prints 'Barb Mcgrew' — so the role joins by surname, required unique, with the join PRINTED on every run; the shipped name is the members page's exactly as printed, lowercase g included (the Fulton 'Karl WIlliams' rule). THE SAME WEEKLY RUN IS THE REDISTRICTING TRIPWIRE: it re-reads the county-board page's Districts section letter by letter and fails if it stops matching the composition compiled into build_clay_boundaries.py. What it cannot trip is stated in the builder: the village-limits line splitting Clay City between districts A and B came from the Clerk's e-mail, and no page re-read can check a line the page never draws. No e-mail, party or term ships because the county publishes none. District C's letter was the one omission on the county's pages for weeks — Clerk Britton named Joe Goodman for it by e-mail (2026-08-24), and the county's own members page now states it too, which is the version that ships."
+      },
+      {
+        "file": "st-clair-precinct-polling.json",
+        "min_keys": 3,
+        "note": "St. Clair's precinct -> polling place table — 149 precincts with a place and address, plus the county's one bare East St Louis feature carrying the Clerk's explanation that the city runs its own Board of Election Commissioners. THE SOURCE IS A CLERK-SENT DOCUMENT, NOT A PAGE: the county's published list groups precincts under combined human labels ('Belleville9,10, 12 & 16') that cannot be matched to single precincts without interpreting prose, which is what the st-clair-precinct-polling-places gap recorded since 31 Jul 2026. Asked for the same assignment one row per precinct, Sarah Hermsdorfer of the Clerk's Election Department sent 'St Clair County IL Polling Places.xlsx' on 2026-08-26; it is archived as a faithful CSV transcription under data/source/raw/ and joined by scripts/build_stclair_precinct_polling.py against the county's own precinct layer (prec_name2), so the shipped keys are exactly the strings the app looks up. THE SHEET'S HEADER IS A TRAP — its first column is titled POLLING PLACE and holds the PRECINCT name. One enumerated alias (the layer's 'Ofallon n' for the Clerk's 'O FALLON n'); the build fails on any other mismatch, any double-join, or any unmatched layer precinct besides East St Louis. FOUR ROWS CARRY THE CLERK'S ADVANCE NOTICE: Centreville 2, 5, 7 and 8 are set to move to the new Cahokia High School (805 Camp Jackson Rd) once the County Board votes on the change — the current assignment ships, the note rides those cards, and the file is stale for those four the day that vote passes. Operator step like Logan's and Carroll's: re-run when the Clerk sends an update."
       }
     ]
   },
@@ -2863,6 +2878,11 @@
       "file": "update-wayne-county-board-roster.yml",
       "purpose": "Wayne County Board roster (14 members across 7 districts) from the county's own board page + the redistricting tripwire: the same run re-reads the per-district precinct list from that page and fails if it stops matching the shipped dissolve (District 7 checked as the known page/canvass subset, since the page never names Fairfield 1 or Fairfield 2)",
       "schedule": "Fri 21:00 UTC"
+    },
+    {
+      "file": "update-clay-county-board-roster.yml",
+      "purpose": "Clay County Board roster (14 members across 14 lettered districts, 14/14 with a phone) from the county's own members page + the redistricting tripwire: the same run re-reads the county-board page's Districts section letter by letter and fails if it stops matching the shipped composition (the village-limits line splitting Clay City between districts A and B came from the Clerk's e-mail, and no page re-read can trip a line the page never draws)",
+      "schedule": "Sat 21:00 UTC"
     }
   ],
   "geocoder": {

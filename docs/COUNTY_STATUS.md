@@ -9,7 +9,7 @@
      CI drift gate (smoke-test.yml):
          python3 scripts/build_county_status.py --check -->
 
-**90 of 102 Illinois counties are served** — 78 through their own dispatch entries, 2 through a shipped judicial circuit, and 10 through the County card alone. 12 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
+**91 of 102 Illinois counties are served** — 79 through their own dispatch entries, 2 through a shipped judicial circuit, and 10 through the County card alone. 11 more are researched-but-unserved (every one carries a recorded gap saying why), leaving 0 unresearched.
 
 ## How to read this
 
@@ -19,7 +19,7 @@
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.
 - **"Complete"** here means: served, and `none` in the gaps column. A served county with open gaps is honest-but-unfinished; what each gap needs is the record's `wanted` line in the guidebook. One exception worth naming: a row reading **`no gap record`** in the Board column is NOT complete even though its gaps column says `none` — nobody has measured what it is missing, which is a weaker claim than having nothing missing.
 
-## Served counties (90)
+## Served counties (91)
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
@@ -32,6 +32,7 @@
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Cass | 17017 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Clark | 17023 | dispatch | districted | `county-board`, `county-precinct` | 2 — `clark-board-contact` (data-quality); `clark-precinct-polling` (data-quality) |
+| Clay | 17025 | dispatch | districted | `county-board` | none |
 | Clinton | 17027 | dispatch | districted | `county-board` | 2 — `clinton-precinct-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Coles | 17029 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Cook | 17031 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | none |
@@ -79,7 +80,7 @@
 | McLean | 17113 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `mclean-special-districts` (no-source) |
 | Menard | 17129 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Mercer | 17131 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
-| Monroe | 17133 | dispatch | at-large — County card | `county-precinct` | 1 — `monroe-fire-district-names` (no-source) |
+| Monroe | 17133 | dispatch | at-large — County card | `county-precinct`, `fire-district` | none |
 | Montgomery | 17135 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Morgan | 17137 | dispatch | at-large — County card | `county-precinct` | none |
 | Moultrie | 17139 | dispatch | at-large — County card | `county-precinct` | none |
@@ -97,7 +98,7 @@
 | Schuyler | 17169 | dispatch | at-large — County card | `county-precinct` | none |
 | Scott | 17171 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `scott-county-commissioners` (no-source) |
 | Shelby | 17173 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
-| St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source); `st-clair-precinct-polling-places` (data-quality) |
+| St. Clair | 17163 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `st-clair-board-contact` (data-quality); `st-clair-park-library-districts` (no-source) |
 | Stark | 17175 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 1 — `county-board-office-addresses` (no-source) |
 | Stephenson | 17177 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `stephenson-freeport-precincts` (data-quality); `stephenson-park-library-districts` (no-source) |
 | Tazewell | 17179 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
@@ -114,7 +115,7 @@
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
 | Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `woodford-special-districts` (no-source) |
 
-## Researched frontier (12) — gap-recorded, not yet served
+## Researched frontier (11) — gap-recorded, not yet served
 
 Counties outside the coverage ring that a research pass has already measured; each row's records say what blocks it and what a submission would need to contain.
 
@@ -123,7 +124,6 @@ Counties outside the coverage ring that a research pass has already measured; ea
 | Bureau | 17011 | 1 — `bureau-county-board-districts` (no-source) |
 | Champaign | 17019 | 1 — `champaign-piatt-ccgisc-license` (blocked) |
 | Christian | 17021 | 1 — `christian-county-board-districts` (no-source) |
-| Clay | 17025 | 1 — `clay-county-board` (no-source) |
 | Fayette | 17051 | 1 — `fayette-county-board-geometry` (no-source) |
 | Ford | 17053 | 1 — `ford-county-board-vintage` (no-source) |
 | Henderson | 17071 | 1 — `henderson-county-website` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 104 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 101 records in the Data gaps panel: `chicago-amenity-phones`.

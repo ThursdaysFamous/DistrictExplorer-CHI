@@ -88,6 +88,7 @@ const GEOMETRY_URLS = [
   "./data/app/calhoun-precincts.json",
   "./data/app/clark-precincts.json",
   "./data/app/clay-county-outline.json",
+  "./data/app/clay-county-board-districts.json",
   "./data/app/clinton-county-outline.json",
   "./data/app/coles-county-outline.json",
   "./data/app/congress-districts.json",
@@ -349,6 +350,8 @@ const ROSTER_URLS = [
   "./data/app/douglas-county-board-members.json",
   "./data/app/vermilion-county-board-members.json",
   "./data/app/wayne-county-board-members.json",
+  "./data/app/clay-county-board-members.json",
+  "./data/app/st-clair-precinct-polling.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

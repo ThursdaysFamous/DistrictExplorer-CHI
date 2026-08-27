@@ -10717,6 +10717,37 @@ function initChiExplorer() {
   var loadWayneBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/wayne-county-board-members.json", {}, 2);
   });
+  /* Clay (the 91st county, 2026-08-26) — 14 lettered districts of one member
+   * each, composed from the Census 2020 voting districts per the composition
+   * the county's own board page states letter by letter, and the first county
+   * in the fleet whose split precinct is drawn at a line the CLERK DESCRIBED
+   * IN WRITING: the census carries one Clay City voting district where the
+   * county runs districts A and B through it, and Clerk Amy Britton's e-mail
+   * of 2026-08-24 settles the line as the village's own corporate limits
+   * ("Clay City Dist A is located within the Village limits"), which the
+   * census place boundary draws exactly — 108 blocks, none straddling
+   * (build_clay_boundaries.py). Population held the build past that answer:
+   * District J (Harter V) runs +39.8% against the ideal, the fleet's largest
+   * accepted deviation, shipped only after the Clerk confirmed "These are
+   * the current maps" (2026-08-26). The roster is scraped weekly from the
+   * same pages the composition was read from, which re-verifies both at
+   * once. NO PRECINCT ENTRY: the county's two surfaces disagree on the
+   * precinct COUNT (its board page names Clay City twice, ISBE's certified
+   * 2026 returns once), so a precinct card would overstate what is known. */
+  var loadClayCountyOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clay-county-outline.json", {}, 2);
+  });
+  function clayCountyCoverage(point) {
+    return loadClayCountyOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  var loadClayBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clay-county-board-districts.json", {}, 2);
+  });
+  var loadClayBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/clay-county-board-members.json", {}, 2);
+  });
   /* Jackson (the 87th county, 2026-08-23) — the first county served whose board
    * districts SPLIT precincts. Its own certified 2024 General canvass reports
    * three of its 56 precincts TWICE, under two districts each with their
@@ -11798,9 +11829,11 @@ function initChiExplorer() {
    * What they do contribute is precincts. Monroe's polling list keys its 16
    * sites by a COMMA-SEPARATED precinct list ("1, 4, 35, 37"); every token is
    * a bare integer matching the precinct layer's own PRECINCT value exactly,
-   * so the expansion is deterministic — unlike St. Clair's prose labels, which
-   * remain a recorded gap. The list still names 12 precinct numbers the
-   * current 25-precinct layer no longer has (the county re-precincted); those
+   * so the expansion is deterministic — unlike St. Clair's prose labels,
+   * which stayed a recorded gap until the Clerk's office sent a per-precinct
+   * table on 2026-08-26 (see loadStClairPolling). The list still names 12
+   * precinct numbers the current 25-precinct layer no longer has (the
+   * county re-precincted); those
    * simply go unused, and every current precinct resolves (25/25 measured).
    *
    * Randolph publishes no polling assignment at all — its precinct layer's
@@ -11852,6 +11885,42 @@ function initChiExplorer() {
       }
       return precincts;
     });
+  });
+  /* Monroe's fire tiling (26 shapes over 8 districts, added 2026-08-26).
+   * The county's layer labels each shape only FIRE_DIST (an abbreviation)
+   * plus a Zone number — "MVFD 2" — which is why it sat recorded rather
+   * than shipped for three weeks. Both halves of the answer came from the
+   * county itself: its GIS/Mapping & Platting department confirmed by
+   * e-mail (2026-08-25) that the eight expansions below are correct AND
+   * that the shapes are the fire protection districts themselves, not
+   * response or dispatch zones. So the card names the DISTRICT and never
+   * the zone number, whose meaning the county did not state. Red Bud and
+   * New Athens are neighbouring-county departments whose territory reaches
+   * into Monroe — the Lee "BUREAU CO/OHIO FIRE" shape. An abbreviation
+   * outside this county-confirmed key ships as the county wrote it rather
+   * than as a guess. */
+  var MONROE_FIRE_NAMES = {
+    CVFD: "Columbia Volunteer Fire Department",
+    WVFD: "Waterloo Community Fire Protection District",
+    VVFD: "Valmeyer Volunteer Fire Department",
+    MVFD: "Maeystown Volunteer Fire Department",
+    HVFD: "Hecker Volunteer Fire Department",
+    PDRVFD: "Prairie du Rocher Community Fire Department",
+    RBVFD: "Red Bud Fire Department",
+    NAVFD: "New Athens Volunteer Fire Department"
+  };
+  var loadMonroeFire = makeCached(function () {
+    return loadSimpleFeatureLayer(MONROE_GIS, "Fire_Districts", 0, "FIRE_DIST",
+                                  "Monroe County fire districts")
+      .then(function (geojson) {
+        (geojson.features || []).forEach(function (f) {
+          var props = f.properties || {};
+          var abbrev = findPropCI(props, ["fire_dist"]);
+          var key = abbrev == null ? "" : String(abbrev).trim().toUpperCase();
+          props.dxFireName = MONROE_FIRE_NAMES[key] || (key || null);
+        });
+        return geojson;
+      });
   });
   var loadRandolphPrecincts = makeCached(function () {
     return loadSimpleFeatureLayer(RANDOLPH_GIS, "VotingPrecincts", 1, "name,precinctid",
@@ -13077,6 +13146,19 @@ function initChiExplorer() {
   });
   var loadStClairPrecincts = makeCached(function () {
     return loadStClairLayer(18, "prec_name2", "precincts");
+  });
+  /* St. Clair's polling assignment, added 2026-08-26 from the table the
+   * Clerk's Election Department sent by e-mail — one row per precinct, which
+   * the county's published grouped labels ("Belleville9,10, 12 & 16") never
+   * were (scripts/build_stclair_precinct_polling.py; the transcribed table is
+   * archived under data/source/raw/). Keys are the precinct layer's own
+   * prec_name2 strings, so the lookup is exact. Two Clerk caveats ride the
+   * rows as notes: East St. Louis runs its own Board of Elections (its one
+   * feature carries the explanation instead of a blank), and Centreville
+   * 2/5/7/8 are set to move to the new Cahokia High School pending a County
+   * Board vote. */
+  var loadStClairPolling = makeCached(function () {
+    return fetchJSONWithRetry("data/app/st-clair-precinct-polling.json", {}, 2);
   });
 
   /* ---------- DeKalb — the notch the ring had been wrapped around ---------
@@ -20364,6 +20446,79 @@ function initChiExplorer() {
           }
         }
       },
+      // Clay County — 14 LETTERED districts (A-N) electing ONE member each,
+      // composed from the Census 2020 voting districts per the county's own
+      // board page. Districts A and B divide the Clay City precinct at the
+      // Village of Clay City's corporate limits — the line the Clerk stated
+      // in writing (2026-08-24), drawn from the census place boundary with
+      // every block sorting cleanly to one side (build_clay_boundaries.py).
+      // District J (Harter V) runs +39.8% against the per-district ideal, the
+      // fleet's largest accepted deviation, shipped only after the Clerk
+      // confirmed the plan is current ("These are the current maps",
+      // 2026-08-26). The roster is scraped weekly from the same pages.
+      {
+        key: "clay",
+        coverage: clayCountyCoverage,
+        loadGeometry: loadClayBoardDistricts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["district"]);
+          return (v == null || v === "") ? null : String(v);
+        },
+        query: function (point, seq) {
+          return Promise.all([
+            loadClayBoardDistricts(),
+            loadClayBoardMembers().catch(function () { return {}; })
+          ]).then(function (results) {
+            var feature = findFeatureContaining(results[0], point);
+            if (!feature) return null;
+            var props = feature.properties || {};
+            var district = findPropCI(props, ["district"]);
+            return {
+              seq: seq,
+              district: district,
+              precincts: findPropCI(props, ["precincts"]),
+              entry: district != null ? results[1][String(district)] : null
+            };
+          });
+        },
+        render: function (result) {
+          var members = (result.entry && result.entry.members) || [];
+          var wrap = cardEl("div", "card-flush");
+          wrap.appendChild(renderBodyIntro({
+            title: "Clay County Board",
+            note: boardCountNote(members.length, null)
+          }));
+          if (members.length) {
+            wrap.appendChild(renderPersonRows(members.map(boardMemberPerson)));
+          }
+          var fields = [];
+          if (result.precincts && result.precincts.length) {
+            fields.push({ label: "Precincts", value: result.precincts.join(", ") });
+          }
+          if (result.district === "A" || result.district === "B") {
+            fields.push({ label: "Note", value: "Districts A and B divide the Clay City precinct at the Village of Clay City's corporate limits — District A is the village, District B the unincorporated remainder with Stanford, as the County Clerk described the line." });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
+          return wrap;
+        },
+        cardIdentifier: function (result) {
+          return result.district != null && result.district !== ""
+            ? "District " + String(result.district) : null;
+        },
+        primaryLink: function () {
+          return { label: "Clay County Board (official)", url: "https://claycounty.illinois.gov/county-board/" };
+        },
+        hoverOfficial: {
+          load: loadClayBoardMembers,
+          name: function (feature, roster) {
+            if (!roster) return null;
+            var d = findPropCI(feature.properties || {}, ["district"]);
+            var e = d != null ? roster[String(d)] : null;
+            if (!e || !e.members || !e.members.length) return null;
+            return e.members.map(function (m) { return m.name; }).join(", ");
+          }
+        }
+      },
       // Jackson County — 7 districts electing TWO members each (14 seats), and
       // the first county served whose districts SPLIT precincts. Fifty-three of
       // its 56 precincts take their district from the county's certified 2024
@@ -22472,6 +22627,23 @@ function initChiExplorer() {
           { name: "name", label: "Fire District", keys: ["name"], primary: true },
           { label: "County", value: "Hamilton County" }
         ]
+      }),
+      // Monroe — 26 shapes the county labels only by abbreviation + zone
+      // ("MVFD 2"). The county's GIS/Mapping department confirmed the eight
+      // abbreviation expansions by e-mail (2026-08-25) and that the shapes
+      // ARE the fire protection districts, not response zones — see
+      // MONROE_FIRE_NAMES beside the loader. Several shapes carry one
+      // district; the card and hover name the district, never the zone.
+      polygonCountyEntry({
+        key: "monroe",
+        coverage: monroeCountyCoverage,
+        loader: loadMonroeFire,
+        fields: [
+          // findPropCI candidates are LOWERCASE (it lowercases the feature's
+          // own keys before comparing) — this matches the loader's dxFireName
+          { name: "name", label: "Fire District", keys: ["dxfirename"], primary: true },
+          { label: "County", value: "Monroe County" }
+        ]
       })
     ]
   });
@@ -23816,12 +23988,14 @@ function initChiExplorer() {
           };
         }
       },
-      // St. Clair (150). Identity + board district only: the county publishes
-      // 103 polling places, but keyed by a COMBINED human label
-      // ("Belleville9,10, 12 & 16") rather than by precinct id, so joining them
-      // means parsing prose into a set — recorded as a gap rather than guessed
-      // at. `bdnum` on the precinct is NOT the board district (23/150 agreement,
-      // no better than chance), so the board row is the spatial join.
+      // St. Clair (150). Identity + board district + polling place — the
+      // polling half arrived 2026-08-26 as a one-row-per-precinct table from
+      // the Clerk's Election Department (see loadStClairPolling), which the
+      // county's published grouped labels ("Belleville9,10, 12 & 16") never
+      // safely supplied. `bdnum` on the precinct is NOT the board district
+      // (23/150 agreement, no better than chance), so the board row is the
+      // spatial join. The one East St Louis feature renders the Clerk's
+      // own-board-of-elections explanation instead of a blank polling row.
       {
         key: "st-clair",
         coverage: stClairCountyCoverage,
@@ -23833,7 +24007,8 @@ function initChiExplorer() {
         query: function (point, seq) {
           return Promise.all([
             loadStClairPrecincts(),
-            loadStClairCountyBoard().catch(function () { return null; })
+            loadStClairCountyBoard().catch(function () { return null; }),
+            loadStClairPolling().catch(function () { return null; })
           ]).then(function (results) {
             var feature = findFeatureContaining(results[0], point);
             if (!feature) return null;
@@ -23846,16 +24021,29 @@ function initChiExplorer() {
               }
             }
             var name = findPropCI(feature.properties || {}, ["prec_name2"]);
+            name = name != null && String(name).trim() ? String(name).trim() : null;
+            var polling = null;
+            if (results[2] && results[2].precincts && name != null) {
+              polling = results[2].precincts[name] || null;
+            }
             return {
               seq: seq,
-              name: name != null && String(name).trim() ? String(name).trim() : null,
-              boardDistrict: boardDistrict
+              name: name,
+              boardDistrict: boardDistrict,
+              pollingPlace: polling && polling.place,
+              pollingAddress: polling && polling.address,
+              pollingNote: polling && polling.note
             };
           });
         },
         render: function (result) {
           var fields = [];
           if (result.boardDistrict) fields.push({ label: "County Board District", value: result.boardDistrict });
+          if (result.pollingPlace) {
+            fields.push({ label: "Polling place", value: String(result.pollingPlace) +
+              (result.pollingAddress ? " — " + String(result.pollingAddress) : "") });
+          }
+          if (result.pollingNote) fields.push({ label: "Note", value: String(result.pollingNote) });
           fields.push({ label: "County", value: "St. Clair County" });
           return renderFieldStack(fields);
         },

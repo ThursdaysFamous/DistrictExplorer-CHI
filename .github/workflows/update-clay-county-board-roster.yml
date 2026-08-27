@@ -1,0 +1,110 @@
+name: Update Clay County Board roster
+
+# Weekly refresh of the Clay County Board District card's member roster
+# (il/data/app/clay-county-board-members.json), fetched by index.html.
+#
+# TWO JOBS IN ONE RUN, and the second is the important one.
+#
+# 1. THE ROSTER comes from the county's own members page — an Elementor team
+#    widget per member (the Alexander pattern: the widget is the county's
+#    maintained list), each carrying a name, a position line stating the
+#    district letter ("County Board - District K"; the Chair's card carries
+#    the office in the same line), and a phone printed twice per card, which
+#    the scraper requires to agree. The Vice Chairman is named only on the
+#    county-board page, under a different form of her name (board page
+#    "Barbara McGrew", members page "Barb Mcgrew"), so the role joins by
+#    surname, required unique, with the join printed on every run. No
+#    e-mail, party or term is published, so none ships.
+#
+# 2. THE REDISTRICTING TRIPWIRE. Clay's board districts are composed from
+#    the Census 2020 voting districts per the composition the SAME
+#    county-board page states letter by letter (scripts/build_clay_boundaries.py,
+#    including the split of Clay City at the village's corporate limits) —
+#    so the shipped boundary is correct only while that page keeps naming
+#    the same fourteen letters over the same precincts. The same run
+#    re-reads the Districts section and FAILS if it stops matching. A red
+#    run here means the county redistricted or re-precincted and a human
+#    must re-derive the composition before this county ships again.
+#
+#    WHAT THE CHECK CANNOT SEE: the village-limits LINE inside Clay City.
+#    The page names the two halves and never draws the line, which came from
+#    the Clerk's e-mail (2026-08-24); a change to the village's corporate
+#    limits would not show here. That is a stated limit, not an oversight.
+#
+# If anything changed, this opens a PR rather than committing to main:
+# officeholder data gets a human look before it ships.
+
+on:
+  schedule:
+    - cron: "0 21 * * 6"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install scraper dependencies
+        # Both pages are static server-rendered responses, so requests plus
+        # the stdlib re module reach them. The builder imports only the
+        # COMPOSITION constant from build_clay_boundaries.py, whose geometry
+        # stack is function-local (the De Witt seam), so no shapely here.
+        run: pip install -c scripts/requirements.txt requests
+
+      - name: Scrape the county's board pages
+        run: python3 scripts/clay_county_board_scraper.py -o /tmp/clay_board_raw.json
+
+      - name: Rebuild roster data file
+        run: python3 scripts/build_clay_county_board.py /tmp/clay_board_raw.json
+
+      # Gate the regenerated data before it can reach a PR.
+      - name: Validate app + data files
+        run: python3 scripts/validate_index.py il/index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- il/data/app/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR.
+          branch="bot/clay-county-board-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add il/data/app/clay-county-board-members.json
+          git commit -m "Update Clay County Board roster from claycounty.illinois.gov"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Clay County Board roster from claycounty.illinois.gov" \
+              --body "Automated weekly refresh of the Clay County Board District card's member roster, generated by \`scripts/clay_county_board_scraper.py\` + \`scripts/build_clay_county_board.py\`. Please review the diff before merging — this changes data about real officeholders. The same run re-reads the county-board page's Districts section letter by letter and fails if it stops matching the shipped composition; that failure would mean the county redistricted or re-precincted, and the geometry must be re-derived before it ships again (the village-limits line inside Clay City came from the Clerk's e-mail and no page re-read can trip it)." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi
