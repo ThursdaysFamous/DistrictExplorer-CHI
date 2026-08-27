@@ -497,7 +497,10 @@ def build():
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="%(canonical)s" />
 <meta name="theme-color" content="%(brand)s" />
-<link rel="icon" href="%(favicon)s" type="image/svg+xml" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="districtry" />
 <meta property="og:title" content="%(title)s" />
