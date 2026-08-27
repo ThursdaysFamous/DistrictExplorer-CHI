@@ -94,6 +94,7 @@ EXPECT_LAYER_IDS = [
 # file -> (min features, max features) for the boundary layers fetched by the app.
 GEOMETRY_FILES = {
     "supervisor-districts.json": (11, 11),
+    "san-francisco-county-outline.json": (1, 1),  # San Francisco containment outline (ca/scripts/build_sf_county_outline.py, the union of the eleven shipped supervisor districts) — lets a Data gaps record name the city so the panel leads with the gaps that apply here.
     "sf-neighborhoods.json": (41, 41),
     "police-districts.json": (10, 10),
     "congress-districts.json": (6, 6),
@@ -117,6 +118,7 @@ ROSTER_FILES = {
 # literal appears in index.html. Exempt from the reference check only;
 # existence, shape and the negative-point test still apply.
 DYNAMIC_REFERENCE = frozenset({
+    "san-francisco-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 

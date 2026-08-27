@@ -464,6 +464,13 @@
         "max_features": 11
       },
       {
+        "file": "san-francisco-county-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "San Francisco containment outline (ca/scripts/build_sf_county_outline.py, the union of the eleven shipped supervisor districts) — lets a Data gaps record name the city so the panel leads with the gaps that apply here.",
+        "dynamic_reference": true
+      },
+      {
         "file": "sf-neighborhoods.json",
         "min_features": 41,
         "max_features": 41
@@ -528,7 +535,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-sf-v8",
+    "cache_name": "district-explorer-shell-sf-v9",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

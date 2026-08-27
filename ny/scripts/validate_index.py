@@ -93,6 +93,11 @@ EXPECT_LAYER_IDS = [
 # file -> (min features, max features) for the boundary layers fetched by the app.
 GEOMETRY_FILES = {
     "borough-boundaries.json": (5, 5),
+    "bronx-county-outline.json": (1, 1),  # The Bronx containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.
+    "brooklyn-county-outline.json": (1, 1),  # Brooklyn containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.
+    "manhattan-county-outline.json": (1, 1),  # Manhattan containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.
+    "queens-county-outline.json": (1, 1),  # Queens containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.
+    "staten-island-county-outline.json": (1, 1),  # Staten Island containment outline (ny/scripts/build_ny_borough_outlines.py, sliced from borough-boundaries.json) — lets a Data gaps record name this borough so the panel leads with the gaps that apply here.
     "judicial-districts.json": (5, 5),
     "municipal-court-districts.json": (28, 28),
     "congress-districts.json": (26, 26),  # 26 NY U.S. House districts; pre-built from TIGERweb by scripts/build_legislative_boundaries.py (R2-2)
@@ -117,6 +122,11 @@ ROSTER_FILES = {
 # literal appears in index.html. Exempt from the reference check only;
 # existence, shape and the negative-point test still apply.
 DYNAMIC_REFERENCE = frozenset({
+    "bronx-county-outline.json",
+    "brooklyn-county-outline.json",
+    "manhattan-county-outline.json",
+    "queens-county-outline.json",
+    "staten-island-county-outline.json",
 })
 # ==== GENERATED:END validator-config ====
 
