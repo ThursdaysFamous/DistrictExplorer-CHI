@@ -560,6 +560,21 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "ward",
+        "app_file": "madison-polling-places.json",
+        "source_url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/4",
+        "note": (
+            "Madison's ward -> polling place pairing, pre-built by "
+            "build_madison_polling_places.py: the city's open-data layer is "
+            "ONE polling point per ward (137 rows — ward number, building "
+            "name, street address), gated EQUAL to LTSB's Madison wards AND "
+            "the city's own ward layer (OPEN_DATA/11), every point "
+            "bbox-gated inside Madison. The layer publishes no edition date "
+            "(no editingInfo — measured 2026-08-27), so records date as "
+            "read. Rebuilt per election (WATCH.md row), never weekly."
+        ),
+    },
+    {
         "layer": "tid-district",
         "app_file": "tid-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8",

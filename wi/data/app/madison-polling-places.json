@@ -1,0 +1,1098 @@
+{
+ "1": {
+  "name": "Westminster Senior Apartments",
+  "address": "6160 Dell Dr",
+  "lat": 43.076684,
+  "lng": -89.272941,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "2": {
+  "name": "Fire Station #14",
+  "address": "3201 Dairy Dr",
+  "lat": 43.052887,
+  "lng": -89.295605,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "3": {
+  "name": "Fire Station #14",
+  "address": "3201 Dairy Dr",
+  "lat": 43.052887,
+  "lng": -89.295605,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "4": {
+  "name": "City Church",
+  "address": "4909 E Buckeye Rd",
+  "lat": 43.072831,
+  "lng": -89.297224,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "5": {
+  "name": "Elvehjem Elementary School",
+  "address": "5106 Academy Dr",
+  "lat": 43.078554,
+  "lng": -89.292391,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "6": {
+  "name": "Elvehjem Elementary School",
+  "address": "5106 Academy Dr",
+  "lat": 43.078554,
+  "lng": -89.292391,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "7": {
+  "name": "Door Creek Park Shelter",
+  "address": "7035 Littlemore Dr",
+  "lat": 43.097042,
+  "lng": -89.253216,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "8": {
+  "name": "Door Creek Church",
+  "address": "6602 Dominion Dr",
+  "lat": 43.091999,
+  "lng": -89.264715,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "9": {
+  "name": "Oak Park Place",
+  "address": "718 Jupiter Dr",
+  "lat": 43.087826,
+  "lng": -89.28317,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "10": {
+  "name": "Messiah Lutheran Church",
+  "address": "5202 Cottage Grove Rd",
+  "lat": 43.085278,
+  "lng": -89.292252,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "11": {
+  "name": "New Beginnings Church",
+  "address": "602 Acewood Blvd",
+  "lat": 43.089398,
+  "lng": -89.302619,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "12": {
+  "name": "Kennedy Elementary School",
+  "address": "221 Meadowlark Dr",
+  "lat": 43.094272,
+  "lng": -89.297356,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "13": {
+  "name": "Hy-Vee",
+  "address": "3801 E Washington Ave",
+  "lat": 43.117842,
+  "lng": -89.318686,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "14": {
+  "name": "La Follette High School",
+  "address": "702 Pflaum Rd",
+  "lat": 43.062777,
+  "lng": -89.319076,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "15": {
+  "name": "Christ the Solid Rock Baptist / Lake Edge Lutheran",
+  "address": "4032 Monona Dr",
+  "lat": 43.081127,
+  "lng": -89.323595,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "16": {
+  "name": "Pinney Library",
+  "address": "516 Cottage Grove Rd",
+  "lat": 43.084159,
+  "lng": -89.317914,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "17": {
+  "name": "Whitehorse Middle School",
+  "address": "218 Schenk St",
+  "lat": 43.092491,
+  "lng": -89.323509,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "18": {
+  "name": "Hawthorne Library",
+  "address": "2707 E Washington Ave",
+  "lat": 43.101642,
+  "lng": -89.346467,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "19": {
+  "name": "Olbrich Gardens",
+  "address": "3330 Atwood Ave",
+  "lat": 43.09243,
+  "lng": -89.335642,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "20": {
+  "name": "Nakoosa Fleet Facility",
+  "address": "4151 Nakoosa Tr",
+  "lat": 43.108237,
+  "lng": -89.312888,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "21": {
+  "name": "Nakoosa Fleet Facility",
+  "address": "4151 Nakoosa Tr",
+  "lat": 43.108237,
+  "lng": -89.312888,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "22": {
+  "name": "Fire Station #11",
+  "address": "4011 Morgan Way",
+  "lat": 43.144286,
+  "lng": -89.279444,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "23": {
+  "name": "Oakwood Village Prairie Ridge",
+  "address": "5565 Tancho Dr",
+  "lat": 43.156424,
+  "lng": -89.283911,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "24": {
+  "name": "Sandburg Elementary School",
+  "address": "4114 Donald Dr",
+  "lat": 43.136281,
+  "lng": -89.313098,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "25": {
+  "name": "Fraternal Order of Eagles #623",
+  "address": "2109 Bartillon Dr",
+  "lat": 43.126854,
+  "lng": -89.32244,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "26": {
+  "name": "East Madison Community Center",
+  "address": "8 Straubel Ct",
+  "lat": 43.118349,
+  "lng": -89.328671,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "27": {
+  "name": "Hawthorne Elementary School",
+  "address": "3344 Concord Ave",
+  "lat": 43.112007,
+  "lng": -89.328186,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "28": {
+  "name": "James Reeb Unitarian Universalist Congregation",
+  "address": "2146 E Johnson St",
+  "lat": 43.098204,
+  "lng": -89.357436,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "29": {
+  "name": "East High School",
+  "address": "2222 E Washington Ave",
+  "lat": 43.097115,
+  "lng": -89.353969,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "30": {
+  "name": "Tenney Park Pavilion",
+  "address": "402 N Thornton Ave",
+  "lat": 43.09187,
+  "lng": -89.367087,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "31": {
+  "name": "Door Creek Church - Northside",
+  "address": "1181 N Sherman Ave",
+  "lat": 43.112277,
+  "lng": -89.362192,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "32": {
+  "name": "Lakeview Library",
+  "address": "2845 N Sherman Ave",
+  "lat": 43.127769,
+  "lng": -89.36243,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "33": {
+  "name": "Sherman Ave United Methodist Church",
+  "address": "3705 N Sherman Ave",
+  "lat": 43.134051,
+  "lng": -89.36274,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "34": {
+  "name": "Black Hawk Middle School",
+  "address": "1402 Wyoming Way",
+  "lat": 43.146459,
+  "lng": -89.370399,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "35": {
+  "name": "TPC Wisconsin",
+  "address": "1659 Players Dr",
+  "lat": 43.151737,
+  "lng": -89.364767,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "36": {
+  "name": "Warner Park Community Recreation Center",
+  "address": "1625 Northport Dr",
+  "lat": 43.13171,
+  "lng": -89.369418,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "37": {
+  "name": "Lindbergh Elementary School",
+  "address": "4500 Kennedy Rd",
+  "lat": 43.143187,
+  "lng": -89.388516,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "38": {
+  "name": "Mendota Elementary School",
+  "address": "4002 School Rd",
+  "lat": 43.136783,
+  "lng": -89.383512,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "39": {
+  "name": "Vera Court Neighborhood Center",
+  "address": "614 Vera Ct",
+  "lat": 43.136125,
+  "lng": -89.385101,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "40": {
+  "name": "Trinity Lutheran Church",
+  "address": "1904 Winnebago St",
+  "lat": 43.09078,
+  "lng": -89.356687,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "41": {
+  "name": "Lapham Elementary School",
+  "address": "1045 E Dayton St",
+  "lat": 43.08555,
+  "lng": -89.372097,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "42": {
+  "name": "O'Keeffe Middle School",
+  "address": "510 S Thornton Ave",
+  "lat": 43.086717,
+  "lng": -89.357239,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "43": {
+  "name": "Christ Presbyterian Church",
+  "address": "944 E Gorham St",
+  "lat": 43.086256,
+  "lng": -89.376559,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "44": {
+  "name": "Wil-Mar Neighborhood Center",
+  "address": "504 S Brearly St",
+  "lat": 43.079835,
+  "lng": -89.366966,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "45": {
+  "name": "Madison Municipal Building",
+  "address": "215 Martin Luther King Jr Blvd",
+  "lat": 43.073114,
+  "lng": -89.381456,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "46": {
+  "name": "Gates of Heaven",
+  "address": "302 E Gorham St",
+  "lat": 43.079963,
+  "lng": -89.384891,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "47": {
+  "name": "Bethel Lutheran Church",
+  "address": "312 Wisconsin Ave",
+  "lat": 43.076962,
+  "lng": -89.387894,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "48": {
+  "name": "Lowell Center",
+  "address": "610 Langdon St",
+  "lat": 43.076202,
+  "lng": -89.395567,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "49": {
+  "name": "Hillel at University of Wisconsin",
+  "address": "611 Langdon St",
+  "lat": 43.075603,
+  "lng": -89.395946,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "50": {
+  "name": "Hamel Music Center",
+  "address": "740 University Ave",
+  "lat": 43.073538,
+  "lng": -89.397976,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "51": {
+  "name": "Madison Municipal Building",
+  "address": "215 Martin Luther King Jr Blvd",
+  "lat": 43.073114,
+  "lng": -89.381456,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "52": {
+  "name": "Central Library",
+  "address": "201 W Mifflin St",
+  "lat": 43.073798,
+  "lng": -89.387436,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "53": {
+  "name": "Capitol Lakes",
+  "address": "333 W Main St",
+  "lat": 43.070826,
+  "lng": -89.386818,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "54": {
+  "name": "Madison Senior Center",
+  "address": "330 W Mifflin St",
+  "lat": 43.072905,
+  "lng": -89.389361,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "55": {
+  "name": "641 W Main St Apartments",
+  "address": "641 W Main St",
+  "lat": 43.066509,
+  "lng": -89.392515,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "56": {
+  "name": "Nicholas Recreation Center",
+  "address": "797 W Dayton St",
+  "lat": 43.070704,
+  "lng": -89.398909,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "57": {
+  "name": "Gordon Dining & Event Center",
+  "address": "770 W Dayton St",
+  "lat": 43.071153,
+  "lng": -89.398608,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "58": {
+  "name": "Smith Hall",
+  "address": "35 N Park St",
+  "lat": 43.069061,
+  "lng": -89.400499,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "59": {
+  "name": "Union South",
+  "address": "1308 W Dayton St",
+  "lat": 43.071878,
+  "lng": -89.408097,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "60": {
+  "name": "Memorial Union",
+  "address": "800 Langdon St",
+  "lat": 43.076249,
+  "lng": -89.399985,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "61": {
+  "name": "Holt Center",
+  "address": "1650 Kronshage Dr",
+  "lat": 43.077956,
+  "lng": -89.414371,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "62": {
+  "name": "Eagle Heights Community Center",
+  "address": "611 Eagle Heights Dr",
+  "lat": 43.088223,
+  "lng": -89.436553,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "63": {
+  "name": "First Congregational Church",
+  "address": "1609 University Ave",
+  "lat": 43.073237,
+  "lng": -89.414317,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "64": {
+  "name": "Blessed Sacrament Church",
+  "address": "2121 Rowley Ave",
+  "lat": 43.06671,
+  "lng": -89.422626,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "65": {
+  "name": "West High School",
+  "address": "30 Ash St",
+  "lat": 43.068755,
+  "lng": -89.426275,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "66": {
+  "name": "First Bapstist Church",
+  "address": "518 N Franklin Ave",
+  "lat": 43.073138,
+  "lng": -89.436799,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "67": {
+  "name": "Bethany United Methodist Church",
+  "address": "3910 Mineral Point Rd",
+  "lat": 43.061318,
+  "lng": -89.441166,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "68": {
+  "name": "Bayview Community Center",
+  "address": "103 La Mariposa Ln",
+  "lat": 43.06632,
+  "lng": -89.397668,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "69": {
+  "name": "St James Catholic School",
+  "address": "1204 St James Ct",
+  "lat": 43.066026,
+  "lng": -89.406012,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "70": {
+  "name": "Society of Friends (Quakers)",
+  "address": "1704 Roberts Ct",
+  "lat": 43.066682,
+  "lng": -89.416091,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "71": {
+  "name": "Wingra School",
+  "address": "718 Gilmore St",
+  "lat": 43.05485,
+  "lng": -89.434187,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "72": {
+  "name": "Trinity United Methodist Church",
+  "address": "1123 Vilas Ave",
+  "lat": 43.062801,
+  "lng": -89.405073,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "73": {
+  "name": "Goodman Parks Maintenance Facility",
+  "address": "1402 Wingra Creek Pkwy",
+  "lat": 43.050834,
+  "lng": -89.388402,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "74": {
+  "name": "Bridge-Lake Point Community Center",
+  "address": "1917 Lake Point Dr",
+  "lat": 43.048047,
+  "lng": -89.347103,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "75": {
+  "name": "Highland Manor Park Storm Shelter",
+  "address": "10 Manor Dr",
+  "lat": 43.031003,
+  "lng": -89.358254,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "76": {
+  "name": "Catholic Multicultural Center",
+  "address": "1862 Beld St",
+  "lat": 43.04605,
+  "lng": -89.393366,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "77": {
+  "name": "Village on Park",
+  "address": "2300 S Park St",
+  "lat": 43.041128,
+  "lng": -89.395249,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "78": {
+  "name": "Leopold Elementary School",
+  "address": "2602 Post Rd",
+  "lat": 43.027388,
+  "lng": -89.421971,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "79": {
+  "name": "Leopold Elementary School",
+  "address": "2602 Post Rd",
+  "lat": 43.027388,
+  "lng": -89.421971,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "80": {
+  "name": "Thoreau Elementary School",
+  "address": "3870 Nakoma Rd",
+  "lat": 43.045872,
+  "lng": -89.442481,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "81": {
+  "name": "Boys and Girls Club",
+  "address": "4619 Jenewein Rd",
+  "lat": 43.02857,
+  "lng": -89.457756,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "82": {
+  "name": "Toki Middle School",
+  "address": "5606 Russett Rd",
+  "lat": 43.033406,
+  "lng": -89.476034,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "83": {
+  "name": "Good Shepherd Lutheran Church",
+  "address": "5701 Raymond Rd",
+  "lat": 43.031185,
+  "lng": -89.477787,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "84": {
+  "name": "Meadowridge Library",
+  "address": "5726 Raymond Rd",
+  "lat": 43.032379,
+  "lng": -89.478542,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "85": {
+  "name": "Midvale Elementary School",
+  "address": "502 Caromar Dr",
+  "lat": 43.057032,
+  "lng": -89.449756,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "86": {
+  "name": "Sequoya Library",
+  "address": "4340 Tokay Blvd",
+  "lat": 43.053943,
+  "lng": -89.450447,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "87": {
+  "name": "Covenant Presbyterian Church",
+  "address": "326 S Segoe Rd",
+  "lat": 43.061401,
+  "lng": -89.45853,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "88": {
+  "name": "Covenant Presbyterian Church",
+  "address": "326 S Segoe Rd",
+  "lat": 43.061401,
+  "lng": -89.45853,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "89": {
+  "name": "Hamilton Middle School",
+  "address": "4801 Waukesha St",
+  "lat": 43.065198,
+  "lng": -89.458678,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "90": {
+  "name": "Stephens Elementary School",
+  "address": "120 S Rosa Rd",
+  "lat": 43.065501,
+  "lng": -89.47985,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "91": {
+  "name": "Asbury United Methodist Church",
+  "address": "6101 University Ave",
+  "lat": 43.088755,
+  "lng": -89.485549,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "92": {
+  "name": "Asbury United Methodist Church",
+  "address": "6101 University Ave",
+  "lat": 43.088755,
+  "lng": -89.485549,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "93": {
+  "name": "John Muir Elementary School",
+  "address": "6602 Inner Dr",
+  "lat": 43.06813,
+  "lng": -89.494847,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "94": {
+  "name": "Oakwood Village University Woods",
+  "address": "6205 Mineral Point Rd",
+  "lat": 43.059793,
+  "lng": -89.486899,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "95": {
+  "name": "Anana Elementary School",
+  "address": "6323 Woodington Way",
+  "lat": 43.040387,
+  "lng": -89.490142,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "96": {
+  "name": "Alicia Ashman Library",
+  "address": "733 N High Point Rd",
+  "lat": 43.076059,
+  "lng": -89.517656,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "97": {
+  "name": "Anana Elementary School",
+  "address": "6323 Woodington Way",
+  "lat": 43.040387,
+  "lng": -89.490142,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "98": {
+  "name": "Huegel Elementary School",
+  "address": "2601 Prairie Rd",
+  "lat": 43.024982,
+  "lng": -89.488351,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "99": {
+  "name": "Meadowridge Library",
+  "address": "5726 Raymond Rd",
+  "lat": 43.032379,
+  "lng": -89.478542,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "100": {
+  "name": "Urban League Southwest Employment Center",
+  "address": "1233 McKenna Blvd",
+  "lat": 43.039643,
+  "lng": -89.50377,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "101": {
+  "name": "Elver Park Shelter",
+  "address": "1250 McKenna Blvd",
+  "lat": 43.037922,
+  "lng": -89.503709,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "102": {
+  "name": "Wisconsin Youth Company",
+  "address": "1201 McKenna Blvd",
+  "lat": 43.04062,
+  "lng": -89.504413,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "103": {
+  "name": "Dwelling House Church",
+  "address": "3102 Prairie Rd",
+  "lat": 43.019896,
+  "lng": -89.4922,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "104": {
+  "name": "Verona Area School District Central Office",
+  "address": "5375 King James Way",
+  "lat": 43.017978,
+  "lng": -89.474222,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "105": {
+  "name": "Chavez Elementary School",
+  "address": "3502 Maple Grove Dr",
+  "lat": 43.009556,
+  "lng": -89.500319,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "106": {
+  "name": "Chavez Elementary School",
+  "address": "3502 Maple Grove Dr",
+  "lat": 43.009556,
+  "lng": -89.500319,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "107": {
+  "name": "Point of Grace Church",
+  "address": "7026 Raymond Rd",
+  "lat": 43.03211,
+  "lng": -89.504722,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "108": {
+  "name": "Timberlake Village Apartments Community Room",
+  "address": "7425 Timberlake Trl",
+  "lat": 43.051305,
+  "lng": -89.511723,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "109": {
+  "name": "Blackhawk Church",
+  "address": "9620 Brader Way",
+  "lat": 43.062126,
+  "lng": -89.55445,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "110": {
+  "name": "West Madison Agricultural Research Station",
+  "address": "8502 Mineral Point Rd",
+  "lat": 43.061167,
+  "lng": -89.532946,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "111": {
+  "name": "Point of Grace Church",
+  "address": "7026 Raymond Rd",
+  "lat": 43.03211,
+  "lng": -89.504722,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "112": {
+  "name": "Olson Elementary School",
+  "address": "801 Redan Dr",
+  "lat": 43.043137,
+  "lng": -89.545893,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "113": {
+  "name": "Olson Elementary School",
+  "address": "801 Redan Dr",
+  "lat": 43.043137,
+  "lng": -89.545893,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "114": {
+  "name": "Blackhawk Church",
+  "address": "9620 Brader Way",
+  "lat": 43.062126,
+  "lng": -89.55445,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "115": {
+  "name": "Lussier Community Education Center",
+  "address": "55 S Gammon Rd",
+  "lat": 43.066295,
+  "lng": -89.502024,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "116": {
+  "name": "High Point Church",
+  "address": "7702 Old Sauk Rd",
+  "lat": 43.076175,
+  "lng": -89.515995,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "117": {
+  "name": "Attic Angel Association",
+  "address": "640 Junction Rd",
+  "lat": 43.074322,
+  "lng": -89.527969,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "118": {
+  "name": "Middleton Crossing",
+  "address": "9401 Old Sauk Rd",
+  "lat": 43.074029,
+  "lng": -89.550568,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "119": {
+  "name": "Middleton United Church of Christ",
+  "address": "645 Schewe Rd",
+  "lat": 43.073964,
+  "lng": -89.561294,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "120": {
+  "name": "Elver Park Shelter",
+  "address": "1250 McKenna Blvd",
+  "lat": 43.037922,
+  "lng": -89.503709,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "121": {
+  "name": "Door Creek Park Shelter",
+  "address": "7035 Littlemore Dr",
+  "lat": 43.097042,
+  "lng": -89.253216,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "122": {
+  "name": "Sherman Ave United Methodist Church",
+  "address": "3705 N Sherman Ave",
+  "lat": 43.134051,
+  "lng": -89.36274,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "123": {
+  "name": "Door Creek Church",
+  "address": "6602 Dominion Dr",
+  "lat": 43.091999,
+  "lng": -89.264715,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "124": {
+  "name": "Point of Grace Church",
+  "address": "7026 Raymond Rd",
+  "lat": 43.03211,
+  "lng": -89.504722,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "125": {
+  "name": "Westminster Senior Apartments",
+  "address": "6160 Dell Dr",
+  "lat": 43.076684,
+  "lng": -89.272941,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "126": {
+  "name": "Madison Municipal Building",
+  "address": "215 Martin Luther King Jr Blvd",
+  "lat": 43.073114,
+  "lng": -89.381456,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "127": {
+  "name": "UW Arboretum Visitor Center",
+  "address": "2880 Longenecker Dr",
+  "lat": 43.041285,
+  "lng": -89.430323,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "128": {
+  "name": "East Madison Community Center",
+  "address": "8 Straubel Ct",
+  "lat": 43.118349,
+  "lng": -89.328671,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "129": {
+  "name": "Black Hawk Middle School",
+  "address": "1402 Wyoming Way",
+  "lat": 43.146459,
+  "lng": -89.370399,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "130": {
+  "name": "Anana Elementary School",
+  "address": "6323 Woodington Way",
+  "lat": 43.040387,
+  "lng": -89.490142,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "131": {
+  "name": "Vera Court Neighborhood Center",
+  "address": "614 Vera Ct",
+  "lat": 43.136125,
+  "lng": -89.385101,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "132": {
+  "name": "Badger Rock Middle School",
+  "address": "501 East Badger Rd",
+  "lat": 43.03779,
+  "lng": -89.377298,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "133": {
+  "name": "Sandburg Elementary School",
+  "address": "4114 Donald Dr",
+  "lat": 43.136281,
+  "lng": -89.313098,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "134": {
+  "name": "Middleton Crossing",
+  "address": "9401 Old Sauk Rd",
+  "lat": 43.074029,
+  "lng": -89.550568,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "135": {
+  "name": "Blackhawk Church",
+  "address": "9620 Brader Way",
+  "lat": 43.062126,
+  "lng": -89.55445,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "136": {
+  "name": "West Madison Agricultural Research Station",
+  "address": "8502 Mineral Point Rd",
+  "lat": 43.061167,
+  "lng": -89.532946,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ },
+ "137": {
+  "name": "Blackhawk Church",
+  "address": "9620 Brader Way",
+  "lat": 43.062126,
+  "lng": -89.55445,
+  "asOf": "2026-08-27",
+  "sourceUrl": "https://www.cityofmadison.com/clerk/elections-voting"
+ }
+}
