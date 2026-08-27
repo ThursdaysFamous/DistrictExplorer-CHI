@@ -73,6 +73,7 @@ HEADERS = {
 CHALLENGE_MARKERS = ("just a moment", "attention required",
                      "checking your browser", "cf-chl",
                      "challenges.cloudflare.com/turnstile")
+TITLE_MARKERS = ("just a moment", "attention required", "checking your browser")
 
 BULK_LINK_RE = re.compile(
     r"/media/\d+/download|\.csv(?:$|[?#])|\.xlsx?(?:$|[?#])|\.zip(?:$|[?#])",
@@ -93,8 +94,15 @@ TEXT_EXCERPT_MPD = 6000
 
 
 def looks_like_challenge(text):
+    """True only for a Cloudflare INTERSTITIAL, not for a real page that
+    merely embeds challenge-platform assets — Cloudflare injects those into
+    every proxied page, which is exactly how the first dispatch burned its
+    full challenge wait on genuine pages and timed out at 2 captures."""
     low = (text or "").lower()
-    return any(m in low for m in CHALLENGE_MARKERS)
+    m = re.search(r"<title[^>]*>(.*?)</title>", low, re.DOTALL)
+    if m and any(k in m.group(1) for k in TITLE_MARKERS):
+        return True
+    return len(low) < 8000 and any(k in low for k in CHALLENGE_MARKERS)
 
 
 def page_title(html):
@@ -153,6 +161,10 @@ class Recon:
         self.pages = []       # inventory rows
         self.counter = 0
         self.last_fetch = {}  # host -> time
+        self.plain_refused = set()   # hosts whose plain rung already failed
+        self.cleared_hosts = set()   # hosts whose challenge already cleared
+        self.deadline = time.time() + int(
+            os.environ.get("RECON_BUDGET_S", "900"))  # jump to output after
 
     def _polite(self, url):
         host = urlparse(url).netloc
@@ -175,19 +187,27 @@ class Recon:
         self.wait_s = int(os.environ.get("WEC_CHALLENGE_WAIT_S", "120"))
 
     def fetch(self, url):
-        """Plain first, browser fallback on refusal. Returns (record, html)."""
+        """Plain first, browser fallback on refusal. Returns (record, html).
+        A host that already refused the plain rung skips straight to the
+        browser; a host whose challenge already cleared gets a short wait."""
         self._polite(url)
         rec = {"url": url}
-        try:
-            resp = self.session.get(url, headers=HEADERS, timeout=45)
-            rec["status"] = resp.status_code
-            if resp.status_code == 200 and not looks_like_challenge(resp.text):
-                rec["engine"] = "requests"
-                return rec, resp.text
-            rec["plain"] = ("challenge" if looks_like_challenge(resp.text)
-                            else "HTTP %d" % resp.status_code)
-        except requests.RequestException as e:
-            rec["plain"] = str(e)[:200]
+        host = urlparse(url).netloc
+        if host not in self.plain_refused:
+            try:
+                resp = self.session.get(url, headers=HEADERS, timeout=30)
+                rec["status"] = resp.status_code
+                if (resp.status_code == 200
+                        and not looks_like_challenge(resp.text)):
+                    rec["engine"] = "requests"
+                    return rec, resp.text
+                rec["plain"] = ("challenge" if looks_like_challenge(resp.text)
+                                else "HTTP %d" % resp.status_code)
+            except requests.RequestException as e:
+                rec["plain"] = str(e)[:200]
+            self.plain_refused.add(host)
+        else:
+            rec["plain"] = "skipped (host already refused the plain rung)"
         try:
             self._ensure_browser()
         except Exception as e:  # noqa: BLE001
@@ -197,8 +217,11 @@ class Recon:
         page = self.browser.new_page()
         try:
             start = time.time()
-            page.goto(url, wait_until="domcontentloaded", timeout=45000)
-            while (time.time() - start < self.wait_s
+            page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            # after the host's first clear, its clearance cookie rides the
+            # context — later pages get a short wait, never the full window
+            wait_s = 15 if host in self.cleared_hosts else self.wait_s
+            while (time.time() - start < wait_s
                    and looks_like_challenge(page.content())):
                 page.wait_for_timeout(1000)
             try:
@@ -209,8 +232,9 @@ class Recon:
             rec["engine"] = "chromium"
             rec["seconds"] = round(time.time() - start, 1)
             if looks_like_challenge(html):
-                rec["error"] = "challenge did not clear in %ds" % self.wait_s
+                rec["error"] = "challenge did not clear in %ds" % wait_s
                 return rec, None
+            self.cleared_hosts.add(host)
             return rec, html
         except Exception as e:  # noqa: BLE001
             rec["engine"] = "chromium"
@@ -248,6 +272,12 @@ class Recon:
         return rec
 
     def capture(self, url, tag, excerpt_limit):
+        if time.time() > self.deadline:
+            rec = {"url": url, "tag": tag,
+                   "error": "skipped: recon time budget spent"}
+            self.pages.append(rec)
+            print("BUDGET: skipping %s" % url, flush=True)
+            return rec, None
         rec, html = self.fetch(url)
         rec["tag"] = tag
         if html is not None:
@@ -277,8 +307,15 @@ class Recon:
                 print("  tel: %s" % ", ".join(tels))
                 print("  mailto: %s" % ", ".join(mails))
             print("  text: %s" % strip_text(html, excerpt_limit))
-            print("===== END EXTRACT")
+            print("===== END EXTRACT", flush=True)
+        else:
+            print("NO CAPTURE [%s] %s -> %s" % (
+                tag, url, rec.get("error") or rec.get("plain")
+                or rec.get("status")), flush=True)
         self.pages.append(rec)
+        # incremental inventory: the artifact carries it even on a kill
+        with open(os.path.join(self.out_dir, "inventory.json"), "w") as f:
+            json.dump({"partial": True, "pages": self.pages}, f, indent=1)
         return rec, html
 
     def close(self):
@@ -295,6 +332,33 @@ def main():
     args = ap.parse_args()
     r = Recon(args.out_dir)
 
+    # ---- MPD first: a plain-answering host, so a WEC stall can never
+    # cost these captures (the first dispatch lost them to the timeout) ----
+    mpd_queue = []
+    rec, html = r.capture("https://city.milwaukee.gov/police", "mpd-index",
+                          TEXT_EXCERPT_MPD)
+    if html:
+        for href, text in links_of(html, "https://city.milwaukee.gov/police"):
+            if urlparse(href).netloc != "city.milwaukee.gov":
+                continue
+            if MPD_DISTRICT_RE.search(href) or re.search(
+                    r"district\s*(one|two|three|four|five|six|seven|\d)\b",
+                    text, re.IGNORECASE):
+                if href not in mpd_queue:
+                    mpd_queue.append(href)
+    seen = {p["url"] for p in r.pages}
+    fetched = 0
+    for href in mpd_queue:
+        if fetched >= MPD_PAGE_CAP:
+            print("MPD follow cap reached — not fetched: %s"
+                  % mpd_queue[fetched:][:10], flush=True)
+            break
+        if href in seen:
+            continue
+        seen.add(href)
+        r.capture(href, "mpd-district", TEXT_EXCERPT_MPD)
+        fetched += 1
+
     # ---- WEC: front doors, then the data-ish nav ----
     wec_queue = []
     for front in ("https://elections.wi.gov/", "https://myvote.wi.gov/en-us/"):
@@ -307,7 +371,6 @@ def main():
                 if WEC_FOLLOW_RE.search(href) or WEC_FOLLOW_RE.search(text):
                     if href not in wec_queue:
                         wec_queue.append(href)
-    seen = {p["url"] for p in r.pages}
     followed = 0
     for href in wec_queue:
         if followed >= WEC_PAGE_CAP:
@@ -323,31 +386,6 @@ def main():
 
     all_bulk = sorted({b for p in r.pages for b in p.get("bulk_links", [])})
     bulk_probes = [r.probe_link(b) for b in all_bulk[:BULK_PROBE_CAP]]
-
-    # ---- MPD: police index, then the district pages ----
-    mpd_queue = []
-    rec, html = r.capture("https://city.milwaukee.gov/police", "mpd-index",
-                          TEXT_EXCERPT_MPD)
-    if html:
-        for href, text in links_of(html, "https://city.milwaukee.gov/police"):
-            if urlparse(href).netloc != "city.milwaukee.gov":
-                continue
-            if MPD_DISTRICT_RE.search(href) or re.search(
-                    r"district\s*(one|two|three|four|five|six|seven|\d)\b",
-                    text, re.IGNORECASE):
-                if href not in mpd_queue:
-                    mpd_queue.append(href)
-    fetched = 0
-    for href in mpd_queue:
-        if fetched >= MPD_PAGE_CAP:
-            print("MPD follow cap reached — not fetched: %s"
-                  % mpd_queue[fetched:][:10])
-            break
-        if href in seen:
-            continue
-        seen.add(href)
-        r.capture(href, "mpd-district", TEXT_EXCERPT_MPD)
-        fetched += 1
 
     r.close()
 
