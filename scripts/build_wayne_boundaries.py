@@ -3,7 +3,7 @@
 Build data/app/wayne-precincts.json and
 data/app/wayne-county-board-districts.json — Wayne County's 27 voting
 precincts and the 7 County Board districts they compose (14 members, two per
-district; docs/EXPANSION_GUIDE.md Part 2; scripts/vtd_board_districts.py
+district; docs/EXPANSION_GUIDE.md Part 3; scripts/vtd_board_districts.py
 holds the machinery).
 
 THE COMPOSITION WAS SETTLED BY TWO SOURCES THAT AGREE, published five days

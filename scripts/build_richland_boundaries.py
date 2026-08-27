@@ -3,7 +3,7 @@
 Build data/app/richland-precincts.json and
 data/app/richland-county-board-districts.json — Richland County's 21 voting
 precincts and the 7 County Board districts they compose
-(docs/EXPANSION_GUIDE.md Part 2; scripts/vtd_board_districts.py holds the
+(docs/EXPANSION_GUIDE.md Part 3; scripts/vtd_board_districts.py holds the
 machinery).
 
 THE FIRST COUNTY IN THE FLEET WHOSE COMPOSITION CAME FROM GEOMETRY RATHER THAN

@@ -9,7 +9,7 @@ Alsip) because that is exactly the `GEOID` the app's TIGERweb places layer
 already carries on every municipality feature — so the card's join needs no
 name normalization at query time, and the 47 metro municipalities that span
 county lines resolve to ONE entry instead of one per county
-(docs/EXPANSION_GUIDE.md Part 2.4).
+(docs/EXPANSION_GUIDE.md §3.4).
 
 The name -> GEOID mapping comes from the Census 2020 place-by-county reference
 file committed at data/source/st17_il_place_by_county2020.txt. Lookup prefers

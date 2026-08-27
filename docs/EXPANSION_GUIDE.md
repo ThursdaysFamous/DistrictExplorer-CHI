@@ -1,30 +1,105 @@
-# Expansion Guide — the primary deployment guide for all future expansion
+# State Expansion Guide — the primary guide for growing districtry
 
-Status: **live — the single entry point for growing District Explorer.** Owner: CHI
-(reference implementation; forks carry a pointer stub).
-Consolidated 2026-07-27 from five docs — `METRO_EXPANSION_PLAYBOOK.md`,
+Status: **live — the single entry point for growing the fleet.** Owner: this repo (there
+are no forks to point at any more).
+
+**This is a rewrite, and the reframing is the point.** The previous edition was a *metro*
+expansion guide: its central path was "port the app to another city as a separate repo and
+site", and Illinois's county growth was a special case bolted beside it. Both halves of
+that framing are now wrong. The fleet consolidated into ONE repo where every instance is a
+folder served at its own path (R2.3, `docs/DEV_PROCESS_ASSESSMENT.md`), the per-metro forks
+and the engine release channel are retired, and — decisively — **the two deepest instances
+grew as STATES, not as cities.** Illinois reached 91 counties from a Chicago starting
+point; Wisconsin was built statewide from day one and grew city tiers downward. The unit of
+expansion is the state instance, so this guide is organized around it.
+
+Everything specific and dated — which county taught what, which publisher refused what —
+lives in `docs/DATA_LAYER_GUIDEBOOK.md` and the per-instance `CLAUDE.md`. **This guide holds
+the rules; the guidebook holds the record.** When they disagree, the guidebook is what was
+measured and this document is what somebody concluded.
+
+Consolidated 2026-07-27 from five docs (`METRO_EXPANSION_PLAYBOOK.md`,
 `STATEWIDE_EXPANSION_PLAYBOOK.md`, `COUNTY_LAYER_CONSOLIDATION.md`,
-`MUNICIPAL_COUNCILS_PLAYBOOK.md`, `ILLINOIS_LAYER_STANDARDIZATION.md` — whose full original
-texts are preserved verbatim under `docs/archive/` (pointer stubs remain at the old paths so
-existing references resolve). Live companions that deliberately stay separate: Appendix B.
+`MUNICIPAL_COUNCILS_PLAYBOOK.md`, `ILLINOIS_LAYER_STANDARDIZATION.md`), preserved verbatim
+under `docs/archive/`; rewritten around the state unit 2026-08-27 after Wisconsin's fourth
+phase, folding in the lessons of both deep instances.
 
 ---
 
 ## 0. Orientation
 
-### 0.1 The four expansion paths
+### 0.1 What a state instance is
+
+An instance is a **folder at the repo root named for its URL path**, serving at
+`districtry.com/<tag>/`. It owns its app, its data, its scripts, its worksheet and its
+operations calendar; it shares the engine, the fleet machinery and the docs.
+
+```
+<tag>/                     il/ ny/ ca/ wi/  — the tag is the URL segment
+  index.html               the whole app: styles, engine fences, layer modules
+  sw.js                    service worker; SHELL + GEOMETRY (cache-first) + ROSTER (network-first)
+  sources.html  faq.html   generated sub-pages
+  history.html             generated, opt-in (worksheet `history_page`)
+  metro-worksheet.json     every per-instance fact, ONCE — drives all GENERATED regions
+  data/app/*.json          runtime-fetched boundary + roster files
+  data/source/             build inputs; EXCLUDED from the Pages deploy
+  scripts/                 this instance's builders, scrapers, validate_index, smoke_test
+  WATCH.md                 the instance's operations calendar
+  CLAUDE.md                the instance's own agent brief
+```
+
+Repo root holds what is genuinely fleet-level: the landing page and `privacy.html` (both
+generated), `metros.json` (the fleet manifest), `engine/` (the single copy of the engine),
+`scripts/` (fleet tooling **and** Illinois's own), `docs/`, and the CI workflows.
+
+**One asymmetry to know before you copy anything.** Illinois is the reference instance and
+still runs out of the ROOT — root `metro-worksheet.json` is Chicago's, root `scripts/` holds
+both fleet tooling and Illinois's 260-odd builders, and there is no `il/scripts/`. NY, CA and
+WI each own `<tag>/scripts/` and `<tag>/metro-worksheet.json`. **A new state follows the WI
+shape, not the IL one.** `scripts/validate_workflow_deps.py` enforces it: an instance script
+must resolve its imports inside its own tree, so a `sys.path` insert reaching into another
+instance fails CI. When you need shared machinery, the instance carries its own copy or the
+helper moves to the root — never a cross-instance reach.
+
+### 0.2 The two arrival shapes — decide yours before the first layer
+
+The fleet has built states both ways, and the choice changes the roster, the coverage
+bands, and what "done" means.
+
+| | **Statewide-first** (Wisconsin) | **Metro-first** (Illinois, NYC, SF) |
+|---|---|---|
+| Day one | every layer a statewide publisher answers for | one city's full civic stack |
+| Growth | *downward* into city tiers (Milwaukee, then Madison) | *outward* county by county |
+| Coverage bands | two — in-state / out-of-state | three — deep coverage / wider region / outside |
+| Layers a metro can't have | PSAP + NG911 service areas, statewide court tiers, technical-college districts | — |
+| Layers a state can't cheaply have | neighborhood fabrics, city police beats, ward-level polling | — |
+| Risk | thin cards everywhere; identity-only layers dominate | a wash that greys out territory you came to serve |
+| Fastest to a useful app | yes — national publishers tile a whole state on day one | no — the depth is the point |
+
+**Prefer statewide-first for a new state.** Wisconsin reached twelve honest layers in a day
+from national and state publishers, then earned depth where publishers existed; Illinois
+spent its first year as one city and is still filling counties. Statewide-first also gets
+the coverage question right by construction: the instance answers everywhere in the state
+from the start, so there is no shrinking wash to maintain.
+
+The one thing statewide-first must not do is **fake depth**. A statewide instance whose
+county cards name nobody is honest; a statewide instance that invents a county board roster
+is not. Depth arrives per county, on evidence, exactly as in Part 3.
+
+### 0.3 The paths
 
 | Path | You are… | Part |
 |---|---|---|
-| **A — New Illinois county** | adding a county to this app's deep coverage (board, subcircuit, fire/park/library, precincts, municipal officials) | Part 2 |
-| **B — Statewide Illinois** | widening this app's shell/brand toward all 102 counties | Part 3 |
-| **C — New metro fork** | porting the app to another city (a separate repo + site) | Part 4 |
-| **D — New concept/layer** | adding a layer idea to any existing deployment | Part 5 |
+| **A — a new state instance** | standing up `<tag>/` for a state the fleet does not serve | Part 2 |
+| **B — deepening a state** | adding a county, a city tier, or a roster inside an existing instance | Part 3 |
+| **C — a new concept/layer** | adding a layer idea to any instance | Part 4 |
 
-Every path rides the same machinery — worksheet/generated regions, scraper→builder→PR
-pipelines, gates, engine releases — documented once in **Part 6**.
+Every path rides the same machinery — worksheet + generated regions, engine composition,
+scraper→builder→PR pipelines, gates — documented once in **Part 6**. **Part 5 is the
+lessons**: what Illinois's 91 counties and Wisconsin's four phases actually taught,
+organized by the question they answer rather than by the county that paid for them.
 
-### 0.2 The standing invariants (every path, non-negotiable)
+### 0.4 The standing invariants (every path, non-negotiable)
 
 1. **Honesty rules.** Officeholder data is never guessed; no verifiable source → the card
    links the official body and the gap is recorded. Honesty is **per-field** (a source that
@@ -36,28 +111,32 @@ pipelines, gates, engine releases — documented once in **Part 6**.
 2. **The expansion invariant** (Part 1): expanding coverage changes **which dispatch
    entries and roster rows exist — never which layers exist.** A new toggle is justified
    only by a governance function no current concept covers, and it launches consolidated.
-   Note the "or" in that sentence is real: some counties add **roster rows only**. An
-   at-large county has no district geometry to dispatch on, so it ships with no dispatch
-   entry, no coverage function and no toggle — the four counties of tranche 5 are served
-   entirely through the County card (§2.5.1).
+   The "or" is real: some counties add **roster rows only** — an at-large board has no
+   district geometry to dispatch on, so it ships with no dispatch entry, no coverage
+   function and no toggle, riding the county's identity card instead.
 3. **The at-large rule**: a body elected by the whole unit adds zero point-discrimination —
    it rides the unit's identity card, never a polygon layer.
-4. **Officeholder sourcing ships with the boundary** (rule 4, Part 2.3) — decided and
-   BUILT in the same change, never deferred.
-5. **Engine parity.** Code inside `ENGINE:BEGIN/END` fences is byte-identical across forks
-   and changes only via the release pipeline (`docs/ENGINE_SYNC.md`). Never inline a
-   city value in a fence — add a `METRO:BEGIN config` variable.
-6. **Gates green before merge** (Part 6.5) — and roster changes always land as
-   human-reviewed PRs, never direct commits to `main`.
+4. **Officeholder sourcing ships with the boundary** (rule 4, §3.3) — decided and BUILT in
+   the same change, never deferred.
+5. **Engine parity by construction.** Code inside `ENGINE:BEGIN/END` fences is composed from
+   the single copy under `engine/` by `scripts/compose_app.py`. **Never edit inside a fence
+   in an instance file** — edit the block under `engine/` and recompose. There is no release
+   channel and no per-instance copy to drift; the committed bytes are the deployed bytes.
+   Never inline an instance value in a fence — add a `METRO:BEGIN config` variable.
+6. **A measurement is not a conclusion.** Record what you observed and what it bounds,
+   separately. "This host refuses this client" is a measurement; "this agency publishes
+   nothing" is a claim about the world that the measurement does not support. §5.1 is
+   mostly this rule paying for itself.
+7. **Gates green before merge** (§6.5) — and roster changes always land as human-reviewed
+   PRs, never direct commits to `main`.
 
-### 0.3 Working style
+### 0.5 Working style
 
-Build in small, cheap, focused threads; paste only this guide's relevant contract/tables +
-the one module being worked on — never the whole app. Locate code by **grep anchor** (a
-symbol or distinctive substring), never by line number (line-number anchors went stale
-within weeks the one time they were tried). End every thread with handoff lines:
-`[module] DONE — exposes contract, tested against <point>` · `[module] STUB — <what's
-faked>` · `[module] SURPRISE — <any dataset quirk found>`.
+Build in small, cheap, focused threads; paste only this guide's relevant contract/tables
+plus the one module being worked on — never the whole app. Locate code by **grep anchor**
+(a symbol or distinctive substring), never by line number (line-number anchors went stale
+within weeks the one time they were tried). Record surprises as you find them, in the same
+change: an unrecorded surprise is one the next pass pays for again (§5.5).
 
 ---
 
@@ -99,7 +178,7 @@ concept, different election geometry, zero new layers. Worked example:
 | Place | Head of government | Governing body | Surface |
 |---|---|---|---|
 | Chicago | Mayor + City Clerk + City Treasurer on the `municipality` card (SHIPPED 2026-07-28) | 50 alderpersons by ward | body: `ward` layer; head + citywide officers: `municipality` card, whose council section points at the ward layer rather than listing 50 seats |
-| Berwyn (Cook) | Mayor on `municipality` card | full ward-badged council on the card; *your* alderperson from the consolidated `ward` layer (SHIPPED 2026-07, §2.4) | Pattern A card + Pattern B polygon, both live |
+| Berwyn (Cook) | Mayor on `municipality` card | full ward-badged council on the card; *your* alderperson from the consolidated `ward` layer (SHIPPED 2026-07, §3.4) | Pattern A card + Pattern B polygon, both live |
 | Alsip (Cook) | Village President on card | 6 at-large trustees on card | identity card only — correctly no polygon |
 
 ## 1.3 Sourcing dimension ≠ dispatch dimension
@@ -141,7 +220,7 @@ concept, different election geometry, zero new layers. Worked example:
   some township counties elect boards at-large): at-large → `county`-card roster rows, no
   polygon, no toggle change. Decide districted-vs-at-large per county at expansion — and
   decide it from a CERTIFIED ELECTION DOCUMENT, never from a board page that happens not
-  to mention districts (§2.5.1). Six counties ship this way as of 2026-08-02: Monroe and
+  to mention districts (§3.5.1). Six counties ship this way as of 2026-08-02: Monroe and
   Randolph (commission form, 3 each), Pike 9, Brown 7, Calhoun 5, Putnam 5.
 - **School governance:** every IL district board except Chicago's ERSB is elected
   whole-district → Pattern A enrichment on the `school-district-*` cards; attendance zones
@@ -185,18 +264,441 @@ Recorded candidates from the audit live in `docs/DATA_LAYER_GUIDEBOOK.md`'s back
 
 ---
 
-# PART 2 — Path A: a new Illinois county
 
-**Decided architecture: one layer per concept, holding a per-county dispatch table**
-(fork-level `registerCountyLayer` — no engine change; grep it in `index.html`). The
-per-county layers of one concept are mutually exclusive by construction, so per-county
-toggles buy nothing and scale hostilely (7 counties × 5 concepts ≈ 35 toggles vs 5;
-statewide would be impossible). Consolidation is **UI-level, not source-level** — there is
-no statewide GIS for boards/fire/park/precincts, so each county keeps its own loader,
-query, and card; one layer dispatches among them. **Adding a county is adding table
-entries, not layers.**
+---
 
-## 2.1 Dispatcher semantics (decided, shipped)
+# PART 2 — Path A: a new state instance
+
+**Wisconsin is the worked example.** It arrived 2026-08-25 as the first state to expand IN
+PLACE, and its import commits are the reference for state N+1. The template-repo route that
+briefly existed for this was built, proven end-to-end, and retired the same day in favour of
+in-place expansion — one deploy surface, no cross-repo sync (§2.8 is the decision record).
+
+**Scope, honestly.** This recipe targets US states with district-based elected civic
+geography. It leans hard on three national publishers that tile every state — Census
+TIGERweb, the USGS National Map, and the congressional/legislative roster projects — and
+then on whatever the state itself publishes. A state with no open GIS office is a thinner
+instance, not an impossible one; a state whose legislature publishes ward-level geography
+(Wisconsin's LTSB) is a much richer one.
+
+## 2.1 The state worksheet — fill this in first
+
+Every per-instance fact lives ONCE in `<tag>/metro-worksheet.json`, and the GENERATED
+regions in `index.html`, `sw.js`, `sources.html`, `validate_index.py`, `smoke_test.mjs`,
+`CLAUDE.md` and `README.md` are emitted from it. Fill it before writing a layer.
+
+| Parameter | Wisconsin | Derive yours |
+|---|---|---|
+| `this_metro` / `metro_name` | `wisconsin` / Wisconsin | the instance id and display name |
+| fleet `tag` | `wi` | the URL segment and folder name — postal code for a state |
+| `STATE_FIPS` | `55` | 2-digit Census FIPS; drives every TIGERweb query |
+| `metro_bbox` | state envelope | geocoder bias, POI viewbox, geolocation check |
+| `metro_center` + zooms | Wausau-ish, zoom 7 | frame the whole state, not a city |
+| `permalink_gate` | looser than the bbox | rejects absurd `#point=` values |
+| Geocoders | Photon (state-bounded) + Nominatim POI | §2.6; a state-authoritative geocoder wins if one exists |
+| Coverage bands | **two** — in-state / outside | §2.5.1; a statewide instance is usually two |
+| Ground truth | Marathon County point → 9 anchor layers; negative point off the NW corner | §2.5 |
+| Offline anchors | counties, school districts, chambers, congress | ≥3 static-file layers |
+| Legislature | Senate 33 / Assembly 99 | chamber sizes gate the roster floors |
+| Congressional seats | 8 | from `data/state/` at bootstrap |
+| Board/commission structure | 72 counties, 1,590 supervisory districts | the depth question Part 3 answers |
+| Domain / brand / analytics | districtry.com/wi/, own GoatCounter tag | never the reference's, never absent |
+
+## 2.2 What the instance inherits vs writes
+
+**Inherits, untouched:** every `ENGINE:BEGIN/END` block, composed from `engine/` by
+`scripts/compose_app.py`. Map boot, the layer registry and card framework, state/sequence,
+permalinks, the hover explorer, shared utilities, the ArcGIS/TIGER loaders, and the layer
+factories (`registerPolygonLayer`, `registerIlgaChamber`, `registerNearestPointLayer`,
+`registerSchoolZone`). You never edit these in the instance; you edit `engine/` and
+recompose, which changes every instance at once.
+
+**Writes:** the `METRO:BEGIN config` block (worksheet-generated), the layer modules, and the
+branding rows. A new instance's `index.html` lands around 7–9k lines before its own layers
+grow it.
+
+**Re-core surgery notes, paid for in a real port:** delete only the `registerXxx({…})` calls
+and their instance-specific preamble; keep every factory and loader. Then grep the ENTIRE
+surviving file for calls to now-undefined identifiers — dangling references run both
+directions, and a kept factory calling a deleted helper crashes only when the first REAL
+roster lands, because placeholder data never exercises the path. Instance vocabulary also
+hides in engine code as **feature-property name literals**: re-seed
+`HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS` from the new state's observed field names (stale lists
+fail silently — the hover popup degrades softly by design and no gate notices).
+
+**Test and gate constants are re-derived, never copied**: the smoke test's `POINT` /
+`OFFLINE` / `EXPECT_LAYERS` / `EXPECT_DISTRICT` and second point; `validate_index.py`'s
+`MIN_REGISTER_LAYER` / `GEOMETRY_FILES` / `ROSTER_FILES`; the `validate_sources.py`
+manifest; every count floor; `sw.js`'s `CACHE_NAME` and its three lists.
+
+## 2.2.1 The layer contract (identical in every instance)
+
+```js
+{
+  id, group,                    // political | safety | schools | geography
+  label,
+  overlay: { load, style | pointToLayer },   // lazy, cached
+  query(point, seq) -> Promise<Result|null>, // point-in-district + roster join; seq-tagged
+  render(result) -> HTMLElement,             // all external strings sanitized
+  pointOfInterest(result) -> {label,address}|null   // optional geocoded pin
+}
+```
+
+Optional fields the core honors: `subOf`, `color`, `onToggle(on)`, `hoverName(feature)`,
+`hoverOfficial{load?, name()}`, `coverage(point)`, `compact`, `primaryLink`. Five
+non-negotiable module rules: seq-tagged results; toggle-off clears the card; failures
+surface inside that card only; sanitize everything external; explicit honest
+no-result/no-match/slow states. **Hover-parity rule:** hover identity comes from the same
+properties the card reads (factories derive it; a bespoke block declares `hoverName`, plus
+`hoverOfficial` when the card joins a roster — prefetched on toggle-on so hover never
+fires a network request). An appointed official's hover name carries its role.
+
+**Factories before bespoke blocks:** `registerPolygonLayer` (declarative fields card) ·
+`registerSchoolZone` (zone → school + POI + profile link) · `registerCpsNetwork`
+(officeholder rides the boundary dataset's props) · `registerIlgaChamber` (boundary +
+same-origin roster keyed by district; the congress/state-chamber pattern, incl. office
+groups) · `registerNearestPointLayer` (nearest-N haversine). Non-factory patterns to
+copy: two-live-datasets join (`ward`); shared-geometry, one loader → N layers
+(`ccpsa-district-council`; NYC borough = county serving three offices); nearest-N bespoke
+(`school-site`, polygon campus footprints). Platform coupling: `registerSchoolZone` /
+`registerCpsNetwork` build loaders via the Socrata-only `makeCachedLoader` — on a
+non-Socrata portal convert them to an injected `loader` (follow `registerPolygonLayer`'s
+existing opt).
+
+**Cards** follow the fleet content order — layer name, district identifier, then wherever
+a verifiable source exists: representative(s), office location, contact, link — rendered
+through the card-helpers vocabulary (`docs/CARD_RENDER_API.md`; helpers are data-only by
+contract, never pass HTML).
+
+## 2.3 The bring-up checklist (in order)
+
+1. **Create `<tag>/`** from the reference shape and fill the §2.1 worksheet.
+2. **Register in the fleet** (§2.4) — this is day-one work, and every item on that list was
+   missed by a real port.
+3. **Compose and generate**: `scripts/compose_app.py` then
+   `scripts/generate_metro_files.py`. Never hand-edit a GENERATED region or a fence.
+4. **Ship the national tier first.** TIGERweb answers for every state on day one: counties,
+   county subdivisions, places, school districts (unified / elementary / secondary), ZCTAs,
+   and the legislative + congressional chambers. USGS National Map adds police stations,
+   fire stations and post offices as nearest-N. These are ~12 honest layers before you have
+   asked anybody for anything, and they are what makes a statewide instance useful in a day.
+5. **Decide the layer roster from the concept matrix** (`docs/DATA_LAYER_GUIDEBOOK.md`):
+   walk the reference layers, map each to the local equivalent, and **drop, never fake,
+   where no honest analog exists** — recording each drop with its structural reason.
+   Wisconsin's drops are the model: park districts are not a unit of government there;
+   library boards are appointed, so the concept ships as *points* rather than a taxing
+   district; the technical-college board is appointed by statute, so the layer is
+   identity-only and says so.
+6. **Write `LAYER_AREA_RANK` largest→smallest** — every registered id appears, no exceptions
+   (two consumers: restacking and hover profiles; a missing id is invisible to both), with
+   sub-layers ranked just before their parent. Then `LAYER_SIDEBAR_RANK` (§4).
+7. **Pick ≥3 offline anchors + ground truth** (§2.5), including the negative point.
+8. **Decide the coverage bands and name them** (§2.5.1).
+9. **Map the pipeline per roster** (§6.3): engine ladder rung, count floors — and land the
+   cheapest real roster during the module threads, not a later pipeline thread. Real data
+   flushes factory paths that placeholders never exercise.
+   **Officeholder sourcing ships with each layer** (rule 4, §3.3).
+10. **Re-derive every gate constant** and the three `sw.js` lists.
+11. **Cross-group parity audit**: for each field any group's card renders (address, pin,
+    phone, links), check every other card that could carry it. No gate catches this class;
+    only a side-by-side pass does. Second axis: toggle every polygon layer and hover the
+    ground-truth points, confirming real identities — the popup fails soft by design and
+    shipped label-only in a real port.
+12. **Run the localization sweep** (§2.7), write `<tag>/CLAUDE.md` and `<tag>/WATCH.md`, and
+    record the roster in the guidebook.
+
+## 2.4 Day-one registration
+
+In the **repo root**: (1) add the instance to `metros.json` with `id`, `tag`, `url`,
+`landing_name` and `blurb`, then run `generate_metro_files.py --sync-fleet` — `sync_fleet`
+projects a whitelist into each instance's `metro_explorers` and deliberately keeps the three
+landing fields fleet-level, so they never reach an app; (2) regenerate the root landing page
+(`build_landing_page.py`) and `privacy.html` (`build_privacy_page.py`) — the privacy page is
+**measured from each app's shipped `index.html`**, so a new instance appears there only once
+its analytics and geocoder posture are real; (3) add its `validate_index.py` and
+`smoke_test.mjs` invocations to `smoke-test.yml`; (4) add it to the guidebook (coverage map,
+inventory, matrix, drops included); (5) drop it from the deploy's EXCLUDES list — that is
+the switch that makes it live — and add its `data/source` and `scripts` to the excludes so
+build inputs and tooling never publish.
+
+In the **instance**: (6) its own `scripts/` with `validate_index.py`, `smoke_test.mjs`,
+`validate_sources.py` and its builders — imports resolving inside its own tree, which
+`validate_workflow_deps.py` enforces; (7) PWA icons and `manifest.webmanifest` (generated —
+`build_manifests.py`); (8) *(operator)* its own GoatCounter site and tag — `trackEvent`
+no-ops silently without one, and a real port shipped days of zero analytics; (9) *(operator)*
+any CI secrets its scrapers need.
+
+## 2.5 Offline anchors, ground truth, and the coverage wash
+
+Live civic APIs are flaky and CI-hostile, so the test strategy rests on ≥3 **API-free
+anchor layers** shipped as same-origin static files: the smoke test classifies ground
+truth against them; `validate_index.py` pins their feature counts; `sw.js` serves them
+cache-first (vs network-first rosters — never a stale officeholder). The wash marks
+*where deep coverage ends*, never "no data here" — regional layers still resolve under
+it, and it fails silent.
+
+**Draw the wash from a purpose-built metro outline, not from whichever anchor happens to
+tile something** (revised 2026-07-28; Chicago previously passed its school-board anchor).
+Two reasons, and the second is the one that bites:
+
+1. **The boundary must track coverage as it grows.** Chicago's wash was the *city* limits
+   because that is what the anchor tiled, so as the collar counties filled in it kept
+   greying out territory the app had come to serve — a Will or DuPage point resolves
+   17–21 of 39 layers against Chicago's 32 and suburban Cook's 25. Coverage thins across
+   a metro; it rarely stops at one layer's edge. Pick the boundary from what the app
+   *answers*, and re-check it after any county expansion. Removing the wash entirely is
+   the opposite error: the tiers are real, and a wash-free map claims a parity the data
+   does not support.
+2. **Per-county outline files will not dissolve.** The engine cancels an interior border
+   only where the two neighbours share EXACT coordinates. Chicago's six
+   `*-county-outline.json` files were simplified independently, so they share as few as
+   **2** vertices along a real border and would leave hairline seams or fail the closure
+   guard. Build one polygon from a **single** query against one source (a TIGERweb
+   multi-county fetch returns 2,034 shared vertices on Cook/DuPage) and dissolve it at
+   build time — `scripts/build_metro_outline.py` is the reference, mirroring the engine's
+   own algorithm so the shipped file is what the browser would have computed.
+
+Simplify hard and validate the *simplified* rings: metro outlines are mostly survey-grid
+straight lines, so Douglas-Peucker at 25 m took Chicago's from 2,665 vertices to **62**
+(2.5 KB), and the builder refuses to write unless one anchor per county still falls
+inside and known outside cities fall outside — ring closure alone does not prove a county
+wasn't dropped. The payoff is also a boot cost: the old anchor was an 83 KB fetch in PSI's
+669 ms initial-navigation chain for a decorative wash.
+
+Produce anchors with `scripts/build_embedded_boundaries.py`
+(pinned mapshaper, Visvalingam keep-shapes) and its validation: **≥99.5% agreement on
+2,000 seeded points AND zero double-classification**, counts/properties unchanged —
+register every anchor in its `LAYERS` dict so regeneration never regresses to manual.
+Pin a **negative point** where geography allows (water, enclaves, county slivers) and
+pick it against a shoreline-clipped layer — whether mid-water is a no-match depends on
+the dataset, and the water-inclusive layer's positive answer is legally correct.
+**Exactly-one-list invariant:** every `data/app/` file appears in exactly one of
+`GEOMETRY_URLS`/`ROSTER_URLS` (in neither = never cached; wrong list = wrong freshness) —
+machine-checked in `validate_index.py`; bump `CACHE_NAME` on any list change.
+
+### 2.5.1 The coverage key — decide the instance's BANDS, then name them
+
+The wash has a legend, and the legend is worksheet data. Two decisions, in this order.
+
+**First, how many bands does this instance have?** A wash is two bands by default —
+inside coverage, and outside it. It is **three** only when full coverage is a proper
+SUBSET of a wider region whose layers still answer throughout, and the middle band says
+"you still get something here" rather than "nothing here". Answer it by looking at what
+the instance's own layers cover, not by whether a state exists:
+
+| Instance | Coverage geometry | Bands | Why |
+|---|---|---|---|
+| Illinois | the served counties | **3** | county/township/municipality/school-district/ZIP answer statewide; the county layers do not |
+| Wisconsin | the counties whose supervisor ROSTER ships (`metro-outline.json`); `wi-state-outline.json` is the region ring | **3** | every layer answers statewide — the middle band means "district shown, supervisor not named", a narrower claim than the other three instances' middle/outer bands make (it was 2 bands at launch, when coverage *was* the state outline; #523 split them the day the roster shipped) |
+| San Francisco | the 11 supervisor districts | 2 | no wider region in play |
+| New York City | the 5 boroughs | 2 | same |
+
+A two-band key is not a degraded key. Until it shipped the grey was unexplained in every
+instance, and one row saying "Outside New York City" is the whole of what that map claims.
+
+**Second, name them.** Add `coverage_key` to the instance's worksheet — `outside` is
+required, `region` (`edge`, `label`, `sub`) only for a three-band instance — and
+regenerate; `generate_metro_files.py` emits `COVERAGE_KEY` into the metro-config region.
+**Do not try to derive the words.** Chicago's `METRO_NAME` is "Chicago" while its coverage
+is 89 Illinois counties, so `"Outside " + METRO_NAME` is wrong in exactly the instance
+that most needs the key. Omit the whole object and the engine's `typeof` guard draws the
+wash with no key, byte-identically to before — the same inertness rule `brand` and
+`poi_geocode_bbox` follow.
+
+**A three-band instance owes GEOMETRY as well as words.** The middle band needs the wider
+region's ring, passed as the second argument at boot —
+`drawOutOfScopeMask(loadCoverageGeometry, loadRegionGeometry)`. Build it, do not fetch it:
+Illinois' ring live from TIGERweb is **332 KB over 19,789 vertices**, four times the fetch
+§2.5 above exists to have removed for this same decorative wash. It is the second output
+of `build_metro_outline.py`, from layer 0 of the same MapServer as the county dissolve.
+**Simplify it at the same tolerance as the coverage outline** — where a served county
+fronts the region's edge the two rings trace the same line, and simplified apart they open
+slivers of a false middle band along it.
+
+The key renders only the bands the draw actually produced, so a declared `region` whose
+geometry fails to load degrades the wash and the key together rather than leaving a label
+over a band that is not on the map. Declaring `region` without wiring the geometry
+therefore gets you a two-band key and no error — check the map, not the worksheet.
+
+
+## 2.6 Platforms, sources, geocoding
+
+
+Identify the portal platform first — it changes how every layer queries:
+
+- **Socrata**: four-by-four ids, `/resource/{id}.json` SoQL; server-side
+  point-in-polygon via `intersects(geom, 'POINT(lng lat)')` (lng-first WKT) — a
+  *research/verification* tool here, not the runtime path (every layer downloads its
+  boundary once and classifies client-side; per-click portal calls would multiply
+  throttling exposure and break overlays/hover/anchors/failure isolation).
+- **ArcGIS Hub / REST FeatureServer**: `…/FeatureServer/<n>/query`; always request
+  `outSR=4326` (native projections are often State Plane); page past `maxRecordCount`
+  while `exceededTransferLimit` (`loadArcGISPaged`).
+- **CKAN**: a catalog, not a query engine — download once, convert, ship as a §2.5-style
+  static file (follow "GeoServices/WFS" links to any real live endpoint).
+
+**The federal/universal tier is free for any US metro**: TIGERweb
+(`Legislative/MapServer` 0/1/2 + county/place siblings, `STATE='<fips>'`; unicameral and
+council-only jurisdictions ride layer 1 — register one chamber, not two) +
+`unitedstates/congress-legislators` (`legislators-current.json`, CC0 — the reference
+builder re-parameterizes on state + count; the 2026-07 enrichment joins
+`legislators-district-offices.json` by bioguide id).
+
+**Geocoding decision rule:** (1) a city-authoritative keyless geocoder with real
+autocomplete replaces *both* reference geocoders (NYC GeoSearch is the exemplar); else
+(2) Photon for type-ahead; (3) Nominatim as debounced submit-time fallback ONLY (its
+policy forbids autocomplete; keep the serial ≥1s POI queue). **App tokens:** a Socrata
+app token is a public throttling identifier — front-end constant by design; a real API
+key (401s without it) is a repo secret, server-side only, never in `index.html`. No
+token analog exists for ArcGIS/TIGERweb/CKAN public reads — if a public endpoint
+throttles/WAFs, ship the layer as a static file instead.
+
+## 2.6.1 Dataset research & verification protocol
+
+1. Live-sample field names before wiring; seed `findPropCI` aliases with observed keys.
+2. Label every registry row VERIFIED / UNVERIFIED / **UNVERIFIED-fetch** (exists but
+   WAF/key-blocked — it changes the pipeline engine), with the fetch date.
+3. The portal-page id and the geometry-serving id can differ — record which of
+   `loadSocrataGeoJSON`'s three routes actually served geometry.
+4. Map-type Socrata datasets serve geometry only via the export or v3-view route — set
+   the per-dataset route override rather than burning failing routes per load.
+5. Probe server-side point-in-polygon once with a known landmark — validates endpoint,
+   operator, and geometry column in one query.
+6. Watch record caps (Socrata `$limit=1000`; ArcGIS transfer caps) — filter server-side
+   or page.
+7. Anchor simplification passes the 2,000-point protocol (§2.5), unmodified.
+8. A layer with no honest source gets an honest registry row — drop or link, never
+   invent.
+9. Point datasets may serve no geometry on the geojson route (coordinates only in
+   `latitude`/`longitude` properties) — `makeSocrataPointLoader` assembles the
+   FeatureCollection.
+10. Sample exact **values**, not just field names — SoQL string equality is
+    case-sensitive (`'Police Station'` matched 0 where `'POLICE STATION'` matched 80);
+    numeric-looking fields arrive as float strings. Normalize in the loader.
+11. **Verify coverage, not existence** — a pattern confirmed on one sample can cover a
+    fraction of the roster (Legistar carried district URLs for ~24/51 members; NYPD pages
+    resolve 74/78 COs). Count how many of N records carry the thing; set floors below
+    100%.
+12. **Soft-degrading surfaces ship broken — audit by hand**: the hover popup's fallback
+    keys, empty states, anything that renders em-dashes instead of erroring (§2.3 step 9).
+
+Registry columns: layer target (+ expected count) · source type · id/endpoint **+ the
+route that served geometry** · geometry column + observed fields · roster source ·
+CRS/paging/auth notes · status + date.
+
+## 2.6.2 Generic gotchas (each paid for in a real port)
+
+One boundary hosting several offices → one cached loader, N layers. Assume MultiPolygon;
+spot-check a gnarly one. Trust authoritative polygons over intuition (Marble Hill).
+In-bounds ≠ in-district — honest no-match, never snap; in multi-county metros register a
+county context layer and word county-office empty states to point at it. Nearest-N can
+cross water — keep N=3, label "as the crow flies". Non-residential polygons are real
+answers — surface the type field. Honesty is per-field (§0.4). Elected-but-superseded
+bodies exist (HISD's trustees under a state-appointed board): label the actual governance
+status, show both bodies, each labeled — never hide the elected roster, never present
+appointees as it.
+
+
+## 2.7 The localization sweep (leftover-reference-state gate)
+
+At assembly and again before launch, grep the new instance for the reference's
+fingerprints — `chidistricts`, `cityofchicago`, `ChiExplorer`, `chicago`, the reference's
+`data-goatcounter` tag — across `index.html sw.js README.md CLAUDE.md WATCH.md
+manifest.webmanifest scripts/ .github/`. Allowlist: fence comments naming the reference,
+the reference's own `metro_explorers` entry, deliberate doc citations. **Everything else is
+a leftover.** Past escapes include a Chicago-biased geocoder shipping through five threads
+of another instance, Chicago SEO metadata, stale `validate_sources.py` manifests and
+orphaned seal art.
+
+Two refinements the one live day of the retired template route paid for, and they
+generalize to any sweep:
+
+- **Anchor reference URLs to URL position** (`//chidistricts`), because the fleet's own
+  subdomains legitimately contain the bare string — found by Wisconsin's own domain within
+  minutes.
+- **Never police `data/`.** The real world contains the reference's vocabulary — found by
+  the School City of East Chicago, Indiana.
+
+## 2.8 The template-repo route (RETIRED 2026-08-24, decision record)
+
+**Decided shape: states expand IN PLACE — not as per-state forks.** A template repository
+GENERATED from this tree once existed, from which each state started via GitHub's "Use this
+template", bootstrapped by one command. It was built, merged, and proven end to end the same
+day: the generated template boot-tested as a real Indiana app in CI, and a real Wisconsin
+repo went from "Use this template" to green CI in minutes. The operator then retired the
+route in favour of in-place expansion — one deploy surface, no cross-repo sync — and
+Wisconsin, the state the route was proven on, shipped IN PLACE as `wi/` the following day.
+
+What survives deliberately: the `TEMPLATE:BEGIN/END` span markers in `index.html`/`sw.js`.
+They are inert comments AND the line-by-line map of what is instance-specific versus engine,
+which in-place multi-state work needs just as much. Do not sweep them. The builders
+themselves (`build_state_template.py`, `bootstrap_state.py`, `check_template_placeholders.py`,
+`templates/state/`) were deleted with the rest of the per-state fork machinery in R2.1.
+
+## 2.9 Verification
+
+Run in this order; each is cheap and each has caught a real regression:
+
+```bash
+python3 scripts/generate_metro_files.py --check     # generated-region drift
+python3 scripts/compose_app.py --check              # engine fences match engine/
+python3 scripts/build_coverage_gaps.py --check      # gap records match the guidebook
+python3 <tag>/scripts/validate_index.py <tag>/index.html
+python3 scripts/build_landing_page.py --check       # the fleet's front door lists you
+python3 scripts/build_privacy_page.py --check       # measured from your shipped app
+python3 scripts/build_manifests.py --check
+python3 scripts/build_dark_map_palette.py --check   # your layer colours have dark twins
+python3 scripts/validate_workflow_deps.py           # your scripts import inside your tree
+python3 <tag>/scripts/validate_sources.py           # every source row resolves
+# behaviour gate — serve the REPO ROOT, one server for every instance:
+python3 -m http.server 8000
+BASE_URL=http://localhost:8000/<tag>/ node <tag>/scripts/smoke_test.mjs
+```
+
+`EXPECT_LAYERS` is asserted exactly, ground truth classifies against the anchors, and the
+negative point must miss every anchor. **Sandbox note:** the SessionStart hook vendors
+Leaflet and MapLibre per instance (`scripts/vendor_leaflet.sh`) because headless Chromium
+cannot reach the CDN through the agent proxy. That is environmental, never a code
+regression — and the script exits 1 rather than skipping silently when it cannot find an
+instance's app file, because a silent skip once produced a smoke-test timeout 45 seconds
+later that looked exactly like an app bug.
+
+---
+
+# PART 3 — Path B: deepening a state
+
+Depth is added a **unit at a time**: a county, a city tier, or a roster. The unit differs by
+state — Illinois grows by county because its civic geography is county-organized; Wisconsin
+grows by county for boards and precincts and by CITY for the tiers only a municipality
+publishes (police districts, neighborhoods, TIF, ward-level polling). Both obey the same
+invariant: **a new unit adds dispatch entries and roster rows, never new layers.**
+
+**Before anything technical, ask what governs.** §1.6's taxonomy test resolves most
+proposals to a dispatch entry or an identity-card enrichment rather than a layer, and §5.1's
+sourcing questions decide whether the unit is buildable at all. A unit that is not buildable
+gets a MEASURED gap record (§5.5) — that is a completed piece of work, not a failure.
+
+## 3.0 The city tier — the statewide instance's version of depth
+
+A statewide instance's cities publish concepts the state does not: Wisconsin's Milwaukee and
+Madison tiers carry police districts, squad areas, neighborhood fabrics, tax-incremental
+districts and ward-level polling places, none of which any statewide publisher offers. The
+pattern:
+
+- **One coverage gate per city** (`milwaukeeCoverage`, `madisonCoverage`), built from the
+  city's own ward fabric dissolved to its corporate limits — not from a bbox.
+- **A concept that appears in a second city becomes a dispatched concept**, exactly as a
+  county concept does. Wisconsin's TIF toggle answers in both cities through one layer.
+- **The city's own publisher outranks the state's** for anything the city administers,
+  because the city runs it — but keep the state's answer as the fallback rather than
+  partitioning, so a city file failing to load degrades instead of dead-ending.
+- **Two surfaces, always**: the city's live service AND its open-data extract, with the
+  build-time witness comparing them. That witness has caught a service and a shapefile
+  spelling one neighborhood differently, a layer carrying retired districts the live service
+  omits, and a city GIS layer stale on one seat against certified returns.
+
+
+## 3.1 Dispatcher semantics (decided, shipped)
 
 - **Coverage = OR of the entries' coverages**, checked in table order (cached same-origin
   outline tests). Outside every sourced county the layer hides; a throwing check falls
@@ -216,7 +718,7 @@ entries, not layers.**
   retries; already-loaded counties resolve instantly from cache.
 - **One style + a generic toggle label** per concept. County identity moves into the card
   (a `Body`/`Court`/`County` row, or the clerk link) right after the district identifier.
-- **Permalinks keep working**: retired per-county ids are rewritten by the fork-side alias
+- **Permalinks keep working**: retired per-county ids are rewritten by the instance-side alias
   shim that runs before boot-time hash parsing; every consolidation appends its retired
   ids there.
 - An entry's coverage may be **narrower than its county**: `county-precinct`'s Cook entry
@@ -234,7 +736,7 @@ entries, not layers.**
   than the live services — the engine evaluates `coverage` for every declaring layer on
   every point selection.
 
-## 2.2 What consolidates, what doesn't
+## 3.2 What consolidates, what doesn't
 
 - Concepts consolidate; **bodies don't merge** — `ccbr` (property-tax appeals) is not
   Cook's legislature and stays its own layer.
@@ -244,13 +746,13 @@ entries, not layers.**
   county, but the dispatch dimension is the municipality — 284 metro municipalities tile
   from one statewide source and 47 span county lines, so a county-keyed table would
   resolve the wrong body at borders. They join the statewide `municipality` card by place
-  GEOID (§2.4).
+  GEOID (§3.4).
 - **Single-county concepts** stay dedicated until a second county ships (conversion
   triggers in §1.5).
 - A county-specific layer is only ever created for a concept no consolidated layer covers
   yet (as `dupage-county-special-police` remains).
 
-## 2.3 Rule 4 — officeholder sourcing is determined AT expansion, never deferred
+## 3.3 Rule 4 — officeholder sourcing is determined AT expansion, never deferred
 
 For every concept a new county brings in, the same change that ships the boundary decides
 — and builds — the officeholder story:
@@ -287,7 +789,7 @@ workflow attempts the ladder and converts total failure into a standing tracking
 (green run — the validate-sources pattern), a 45-day snapshot age guard ensures stale is
 never served as fresh, and automation resumes the moment any rung unblocks.
 
-## 2.4 Rule 5 — municipal governments ship with their county
+## 3.4 Rule 5 — municipal governments ship with their county
 
 A county brings its municipalities; rule 4 applies to them in the same expansion change.
 Status: **twelve counties SHIPPED** (2026-07-31) — 349 municipalities on one weekly-CI
@@ -377,7 +879,7 @@ one you have and therefore whether a rung can exist at all:
 | **Challenge** | Cloudflare; 403 or a 200 interstitial ("Just a moment", `cf-browser-verification`) | a browser rung — there is something to solve |
 | **Network deny** | same request, 200 from a developer machine and 403 from a CI runner | a browser rung **only if** a challenge sits underneath (DuPage: it did) |
 | **Hard WAF deny** | Akamai; small static body (~408 bytes) with `x-reference-error` | *nothing* — Joliet's browser rung fails identically to `requests` |
-| **Reputation score** | SiteGround; HTTP **202** (not an error status), ~220-byte body, `SG-Captcha: challenge`, refresh to `/.well-known/sgcaptcha/?…&y=ipr:<CALLER IP>` | changing the CALLER, not the request — see §2.5.1 |
+| **Reputation score** | SiteGround; HTTP **202** (not an error status), ~220-byte body, `SG-Captcha: challenge`, refresh to `/.well-known/sgcaptcha/?…&y=ipr:<CALLER IP>` | changing the CALLER, not the request — see §3.5.1 |
 
 A hard deny is rule-4 terminal: record it, keep whatever rungs exist so the source
 resumes automatically if the edge relaxes, and let preservation carry the data. Do NOT
@@ -488,7 +990,7 @@ officers under its own jurisdiction type (`CHIWD`), while the 50 ward seats sit 
 separate type (`CHICA`) and stay the `ward` layer's answer. The card renders the head +
 citywide officers and, in place of a 50-row council, a section that says the seats are
 elected by ward and points at that layer — an empty section there would read as "this
-city has no council". **Check this for every fork:** the reference city is the one
+city has no council". **Check this for every instance:** the reference city is the one
 municipality a metro build is most likely to skip, because its council already has a
 layer.
 
@@ -781,7 +1283,7 @@ already there. When adding a county's municipal roster, capture the ward numbers
 no geometry exists yet — that is the half that makes the other half free.
 
 **Tier B — suburban municipal wards (SHIPPED 2026-07).** Shipped as **entries of the
-existing `ward` layer**, keyed by municipality (§2.1) — one toggle, one concept, whether
+existing `ward` layer**, keyed by municipality (§3.1) — one toggle, one concept, whether
 Chicago calls it a ward or Joliet a council district. Sources: Cook GIS
 `politicalBoundary/MapServer/22` "Municipal Ward" (21 suburbs incl. Skokie's 2025
 trustee districts; joins the DOEO MUNIW roster — same publisher); Will GIS
@@ -793,7 +1295,7 @@ Verified negatives, standing for future counties: no county-level ward layers in
 Lake/DuPage/Kane/McHenry/Kendall (Waukegan is PDF-only) — a new county's ward-electing
 suburbs join as further `ward` entries when a polygon source appears.
 
-## 2.5 The county-N+1 checklist (one change-set)
+## 3.5 The county-N+1 checklist (one change-set)
 
 **STEP ZERO, ADDED 2026-08-08 AFTER GETTING IT WRONG TWICE IN ONE DAY: SEARCH THE WEB
 FOR THE COUNTY BEFORE PROBING ANYTHING.** Not a hostname sweep, not the ArcGIS Online
@@ -864,15 +1366,15 @@ about the world that is very often a claim about the search.
    and stayed washed out for two research passes with nothing failing.
 2. `county-board`: districted → dispatch entry + officeholder story; **at-large →
    county-card roster rows** (§1.5). Decide and record which, from a certified election
-   document rather than from the board page's silence (§2.5.1). The at-large path is
+   document rather than from the board page's silence (§3.5.1). The at-large path is
    implemented: add a `SITES` entry + parser to `scripts/il_county_commissioners_scraper.py`
    and a seat count to `EXPECT_MEMBERS` in `build_county_commissioners.py`, so the county
    lands in `data/app/il-county-commissioners.json`, which the COUNTY card already reads —
-   no dispatch entry, no toggle (§2.5.1; Monroe/Randolph are the reference pair, the
+   no dispatch entry, no toggle (§3.5.1; Monroe/Randolph are the reference pair, the
    tranche-5 four the larger case). If
    the board IS districted but the county publishes no boundary, check whether it
    publishes a COMPOSITION (whole townships or whole precincts) and derive from that, with
-   the §2.5.1 drift check wired if the composition lives on an HTML page.
+   the §3.5.1 drift check wired if the composition lives on an HTML page.
 3. `judicial-subcircuit`: entry if the circuit has PA 102-0693 subcircuits; structurally
    n/a otherwise (Kendall precedent — record it).
 4. `fire-district` / `park-district` / `library-district`: entries per available tilings
@@ -882,7 +1384,7 @@ about the world that is very often a claim about the search.
    where published (Kendall's GlobalID join is the model); carve out any municipal
    election commission the county contains.
 6. `tif-district` (post-conversion): entry where the county publishes a tiling.
-7. Municipal officials: the county's ladder rung (§2.4), keyed by place GEOID; township
+7. Municipal officials: the county's ladder rung (§3.4), keyed by place GEOID; township
    sections captured in the same scrape where the source prints them. Where the county
    or its cities publish suburban ward polygons, they join the consolidated `ward` layer
    as municipality-keyed entries (rebuild `municipal-ward-coverage.json` via
@@ -891,8 +1393,8 @@ about the world that is very often a claim about the search.
    rule 4.
 9. Statewide layers (`county`, `township`, `municipality`, `school-district-*`, chambers,
    `zip-code`): **nothing to do.**
-10. Bookkeeping + gates: Part 6.1 worksheet entries and regeneration, Part 6.3 pipeline
-    artifacts per new roster, Part 6.5 gates, guidebook coverage-map/inventory/matrix
+10. Bookkeeping + gates: §6.1 worksheet entries and regeneration, §6.3 pipeline
+    artifacts per new roster, §6.5 gates, guidebook coverage-map/inventory/matrix
     rows, smoke ground truth if the county adds an anchor — and regenerate the
     per-county completion table (`python3 scripts/build_county_status.py`, emitting
     `docs/COUNTY_STATUS.md`; its `--check` in smoke-test.yml fails the merge if the
@@ -900,10 +1402,12 @@ about the world that is very often a claim about the search.
 
 **Layer-count check: unchanged** — if a step wants a new toggle, run §1.6.
 
-### 2.5.1 Rules earned by the pass-7 tranches (2026-08-02 onward)
+### 3.5.1 Rules earned county by county (2026-08-02 onward)
 
-Each of these cost a real build. They apply to any county, not just the ones that
-taught them.
+Each of these cost a real build. They apply to any county in any state, not just the ones
+that taught them — the wording is Illinois's because Illinois paid for them. **Part 5 is
+the cross-state synthesis**; this section is the county-work detail behind it, and where
+the two overlap Part 5 is the shorter statement of the same rule.
 
 - **FETCHABLE IS NOT LICENSED. Read the publisher's terms before you build, and treat
   the answer as part of "is there a source?"** This is now step zero of county research,
@@ -1161,7 +1665,7 @@ taught them.
   (2) give the island an INSIDE anchor and anchor the gap between island and mainland
   OUTSIDE, so the unserved corridor is proven washed; (3) load the app and eyeball the
   wash at the island's edges — even-odd rendering is verified for holes, not yet for a
-  second outer; (4) run the §2.5 step-1 mechanics unchanged (`DISPATCH_COUNTY_FIPS` +
+  second outer; (4) run the §3.5 step-1 mechanics unchanged (`DISPATCH_COUNTY_FIPS` +
   `METRO_COUNTY_FIPS` + `validate_index.py` check 8); (5) `check_envelopes` will force
   `metro_bbox`/`permalink_gate` to widen around the island — that also widens the
   bounded geocoder's viewbox for the whole metro, so re-read the §6.1 worksheet
@@ -1330,7 +1834,7 @@ taught them.
   description — and the Census 2020 voting districts are the polygons, IF they still
   match the county's current precincts.** Clark's Clerk answered the standing ask on
   2026-08-18 with one sentence: *"The County Board is elected by districts. I do not
-  have maps available."* That settles §2.5 step 2 and refuses the geometry ask in the
+  have maps available."* That settles §3.5 step 2 and refuses the geometry ask in the
   same breath, and the county shipped four hours later as the 65th, with **no map
   involved at any stage** — a first for this fleet. The route, in order, and it is
   cheap enough to try on any districted county whose Clerk says no:
@@ -1372,7 +1876,7 @@ taught them.
   **The fleet-scale corollary, recorded in the guidebook backlog:** Clark's results
   vendor serves **34 Illinois counties** under `il-<county>.accessliberty.com` /
   `il-<county>.pollresults.net`, fourteen of them unserved — including both coverage
-  enclaves. Precinct-level certified returns answer §2.5 step 2 *and* supply the
+  enclaves. Precinct-level certified returns answer §3.5 step 2 *and* supply the
   composition, without waiting for a reply.
 
   **Two traps on this vendor, both paid for.** (a) The per-county DOWNLOAD HANDLER ids
@@ -1389,9 +1893,9 @@ taught them.
   ZERO download links, byte-identical from county to county. Counting `Download.aspx`
   links on `pastelections.aspx` is the cheapest reliable test: 0 means not carried.
 
-## 2.6 Verification
+## 3.6 Verification
 
-The standard gates (Part 6.5) plus: the Playwright smoke test's coverage-hide, permalink
+The standard gates (§6.5) plus: the Playwright smoke test's coverage-hide, permalink
 stability, and alias-shim assertions (an old-id `layers=` link must light the consolidated
 toggle); a live dispatch harness against the real county endpoints asserting (a) each test
 point matches exactly one county's geometry and (b) known ground-truth districts resolve
@@ -1403,517 +1907,11 @@ independent cross-check of a parsed council against the city's own published ros
 
 ---
 
-# PART 3 — Path B: statewide Illinois
-
-**Decided shape: expand this app in place, rebranded toward Illinois — not a separate
-statewide fork** (a separate deployment duplicates CI/SW surface and fragments the
-cross-county experience; more city forks can't host township/county/circuit concepts).
-The gating is practical — per-county data availability and careful evolution of the live
-reference app — not procedural.
-
-## 3.1 Already done (don't rebuild)
-
-- **Relevance-aware hiding** (`mod.coverage`, hide-only): outside a layer's coverage the
-  toggle block, card, overlay, hover row, and query are suppressed **without touching
-  `state.layersOn`** — permalinks survive and the layer reappears in coverage. Shipped
-  through the engine pipeline; a throwing coverage test fails open.
-- **The statewide identity set** resolves for any Illinois point today: `congress`,
-  `il-senate`, `il-house`, `il-supreme-court` (pre-built statewide geometry + rosters),
-  `county` (+ clerk), `township`, `municipality`, `school-district-{unified,secondary,
-  elementary}`, `zip-code`.
-- Structural empty states where a null is honest (Chicago townships, unincorporated
-  municipality clicks).
-
-## 3.2 The remaining shell/rebrand pass (fork config, no engine change)
-
-Map clicks resolve statewide already; the **input shell still stops at the greater-metro
-envelope**. The pass: widen `METRO_BBOX` (geocoder bias/viewbox) and `PERMALINK_GATE` to
-the state envelope; swap the scope-mask loader to a 102-county `STATE='17'` tiling so the
-wash marks only genuinely-outside-Illinois; audit `METRO_NAME`/brand copy (several strings
-compose as "the {METRO_NAME} District Explorer"); the name/domain question ("Illinois
-District Explorer" at chidistricts.com vs a neutral domain) is an operator product call.
-Verify per §3.5 and keep every Chicago ground-truth assertion green — the reference
-experience must not move.
-
-## 3.3 Downstate rollout rules
-
-Source classes (per family): **FREE** = one statewide GIS lights up all 102 counties
-(TIGERweb `STATE='17'` — counties, CouSub/townships, places, school districts ×3; already
-shipped). **DERIVE** = FREE layer + a lookup table (judicial circuit — **blocked**: no
-authoritative machine-readable county→circuit source; ROE regions — candidate, verify
-carve-outs; never hand-encode either). **PER-COUNTY** = no uniform source (boards,
-precincts, park/fire/library, subcircuits beyond the enacted shapefiles) → grow by data
-availability wherever it surfaces (collar-first historically; contiguity retired as a
-shipping gate 2026-08-04 — §2.5.1's island bullet), **hidden where unsourced** —
-relevance-hiding is what makes deep-in-some-places coverage honest and legible. All Part 2 rules apply per county;
-at-large boards land as county-card rows (§1.5).
-
-**Risks, ranked:** precinct sourcing statewide is hardest (102 clerks, non-uniform,
-frequently redrawn; Census VTD stale — never claim statewide, never block Phases on it);
-officeholder rosters beyond the metro have no keyed statewide source (identity +
-official-body link is the floor; the metro carve-out exists because seven clerks publish
-keyable directories); every step preserves Chicago byte-for-byte where fenced and
-behavior-identical where not.
-
-## 3.4 Verification
-
-Ground-truth a downstate point against every statewide layer (the shipped check: Homer
-Glen → Will County / Homer Township / Homer Glen village / Lockport Twp HSD 205 / Homer
-CCSD 33C / no unified district); confirm the Chicago Loop stack unchanged; confirm the
-scope mask washes only outside coverage; after the rebrand, grep the pre-rename brand
-strings (title, masthead, meta description, geolocation strings, manifest).
-
 ---
 
-# PART 4 — Path C: a new metro fork
+# PART 4 — Path C: a new concept or layer
 
-**Chicago is the reference implementation; each metro is its own fork** — separate repo
-and site, evolving independently in metro-specific code only; the fenced ENGINE blocks
-stay byte-identical via the release pipeline. The **metro-#3 gate is OPEN** (all three
-mechanization conversions DONE 2026-07-13; drill evidence in
-`docs/archive/MECHANIZATION_PLAYBOOK.md`) — new metros are unblocked procedurally.
-**Scope, honestly:** this recipe targets large US metros with district-based elected civic
-geography; non-US cities lose the federal/universal tier, and small towns may have no
-digitized boundaries at all. Completed-port worked examples: NYC
-(`docs/archive/METRO_EXPANSION_NYC.md` — thread log; registry/roster model in
-`docs/archive/METRO_EXPANSION_PLAYBOOK.md` Part II) and SF
-(`docs/archive/METRO_EXPANSION_SF_WORKSHEET.md` — a completed §0 worksheet).
-**Starting a NEW STATE?** That is no longer a fork at all — states expand IN PLACE
-inside the rebranded reference repo (the Part 3 model, generalized across state
-lines). §4.10 is the decision record of the template-repo route that briefly
-existed for this and was retired the same day it was proven.
-
-## 4.1 City Worksheet — fill this in first (Thread 0's first deliverable)
-
-| Parameter | Chicago (reference) | Derive yours |
-|---|---|---|
-| `CITY_NAME` | Chicago | title/masthead/meta/aria/geolocation strings |
-| `STATE_FIPS` | `'17'` | 2-digit Census FIPS — drives every TIGERweb query |
-| County structure | city ⊂ Cook (17031) | coterminous / inside / spread-across — "spread" means county-office layers cover part of the city: plan honest partial-coverage empty states + a county context layer (§4.8) |
-| School governance | one unified district (CPS), elected board | one entry per system serving the metro (Houston: HISD + ~10 ISDs); elected vs appointed board per system — shapes the whole schools group |
-| `BBOX` | tight city envelope | feeds geocoder bias, POI viewbox, geolocation check |
-| `CENTER` + zooms | downtown, zoom 11, minZoom 9 | frame the city; keep the metro reachable |
-| Permalink gate | greater-metro box, deliberately looser than BBOX | rejects absurd `#point=` values; independent of BBOX |
-| Portal(s) + platform | Socrata `data.cityofchicago.org` | host AND platform (Socrata/ArcGIS/CKAN) — changes how every layer queries (§4.6) |
-| App token? | anonymous OK | start anonymous; free token at first 403/429 |
-| Geocoders | Photon + Nominatim POI | §4.6 decision rule; city-authoritative instance wins if one exists |
-| School profile URL(s) | `cps.edu/schools/schoolprofiles/{id}` | per school system; lives in `schoolProfileHtml` |
-| Domain / email / repo / brand | chidistricts.com etc. | fork's own — grep `github.com/ThursdaysFamous` for all three link sites |
-| Offline anchors *(mid-port)* | school-board, il-supreme-court, ccbr | ≥3 static-file layers (§4.5) |
-| Ground truth *(mid-port)* | Loop point → 3 anchor districts; second point in different districts | + a negative point where geography allows (§4.5) |
-| `EXPECT_LAYERS` *(mid-port)* | (live count: CLAUDE.md metro-facts) | asserted exactly by the smoke test |
-
-## 4.2 What the fork keeps vs rewrites
-
-`index.html` is ~23% metro-agnostic engine by line count (5,871 of 25,717 as of
-2026-08-24 — the engine hasn't shrunk; Chicago's statewide growth diluted it: the
-same 53 fenced blocks were ~60–65% of the file before the county expansion) — map
-boot, registry + card framework, state/sequence, permalinks, hover explorer, shared
-utilities, loaders, factories — all fenced and machine-enforced
-(`check_engine_parity.py … --strict` passes when the re-core is done and stays a
-per-thread gate). The fork rewrites the **layer modules** (the THREAD banner spans)
-and the **METRO config + branding constants**. A stripped fork's `index.html` lands
-around 7–8k lines — which is exactly what the §4.10 template build produces
-mechanically.
-
-**Re-core surgery notes (paid for in NYC):** delete only the `registerXxx({…})` calls and
-their city-specific preamble; keep every factory and loader. Then grep the ENTIRE
-surviving file for calls to now-undefined identifiers — dangling references run both
-directions (a kept factory calling a deleted helper crashes only when the first REAL
-roster lands — placeholder data hides the path; kept core calling a deleted layer-span
-helper — Chicago's water-taxi easter egg — throws on every click). City vocabulary also
-hides in engine code as **feature-property name literals**: re-seed
-`HOVER_NUMBER_KEYS`/`HOVER_NAME_KEYS` from the new city's observed field names (stale
-lists fail silently — the hover popup degrades softly by design and no gate notices), and
-generalize city strings inside kept factories (`schoolProfileHtml`, the chamber factory's
-capitol/directory labels — parameterized opts exist).
-
-**Core constants to swap** (each by grep anchor; most live in the `METRO:BEGIN config`
-block): `THIS_METRO`/`METRO_NAME` · `METRO_BBOX` · `METRO_CENTER` + zooms ·
-`PERMALINK_GATE` · geocoder endpoints/bias (§4.6) · `GROUPS` (usually verbatim — the four
-buckets are city-agnostic) · `LAYER_AREA_RANK` (rewritten entirely; every registered id
-present — §4.4 step 4) · `SOCRATA_HOST`/`SOCRATA_APP_TOKEN` (or delete the Socrata stack
-if unused — fenced-block deletion reads as honest "unused", not drift) ·
-`arcgisServiceUrl` org id · TIGERweb `STATE='NN'` filter · school-profile URL builder ·
-"data last verified" date · debug namespace (twinned in `smoke_test.mjs`) · hover fallback
-key lists · preconnect/dns-prefetch set (≤4, aimed at your LCP — §4.9's performance-parity notes) · analytics tag
-(fork's own GoatCounter — never the reference's, never absent) · `METRO_EXPLORERS`
-(shared canonical list — a new metro's entry is added in EVERY sibling as the same config
-diff, with `emoji` + `bbox` for the metro-portal easter egg; `validate_index.py` lints
-entries).
-
-**Branding rows:** `<title>`/meta description, theme-color + favicon SVG, `:root` palette
-custom properties (grep the var prefix for downstream uses), masthead heading + emblem,
-city-named a11y strings, footer source attributions, feedback email, repo/sponsor links.
-**Sibling files:** `CNAME`, `manifest.webmanifest`, `icons/`, `README.md`, `CLAUDE.md`
-(rewrite for the fork or agents get steered wrong), `sw.js`'s three lists, everything
-under `data/`. Workflows carry over structurally (constants, dataset names, cron slots) —
-except the fleet machinery listed in §4.4 item 11. `docs/ENGINE_SYNC.md` +
-`scripts/check_engine_parity.py` ship **verbatim** — they are engine.
-
-**Test/gate constants are re-derived, never copied** (§4.9 + Part 6.5): smoke `POINT` /
-`OFFLINE` / `EXPECT_LAYERS` / `EXPECT_DISTRICT` + second point + kill target;
-`validate_index.py` `MIN_REGISTER_LAYER` / `GEOMETRY_FILES` / `ROSTER_FILES`; the
-`validate_sources.py` manifest; every count guard; `sw.js` `CACHE_NAME` + lists.
-
-## 4.3 The layer contract (verbatim across the fleet)
-
-```js
-{
-  id, group,                    // political | safety | schools | geography
-  label,
-  overlay: { load, style | pointToLayer },   // lazy, cached
-  query(point, seq) -> Promise<Result|null>, // point-in-district + roster join; seq-tagged
-  render(result) -> HTMLElement,             // all external strings sanitized
-  pointOfInterest(result) -> {label,address}|null   // optional geocoded pin
-}
-```
-
-Optional fields the core honors: `subOf`, `color`, `onToggle(on)`, `hoverName(feature)`,
-`hoverOfficial{load?, name()}`, `coverage(point)`, `compact`, `primaryLink`. Five
-non-negotiable module rules: seq-tagged results; toggle-off clears the card; failures
-surface inside that card only; sanitize everything external; explicit honest
-no-result/no-match/slow states. **Hover-parity rule:** hover identity comes from the same
-properties the card reads (factories derive it; a bespoke block declares `hoverName`, plus
-`hoverOfficial` when the card joins a roster — prefetched on toggle-on so hover never
-fires a network request). An appointed official's hover name carries its role.
-
-**Factories before bespoke blocks:** `registerPolygonLayer` (declarative fields card) ·
-`registerSchoolZone` (zone → school + POI + profile link) · `registerCpsNetwork`
-(officeholder rides the boundary dataset's props) · `registerIlgaChamber` (boundary +
-same-origin roster keyed by district; the congress/state-chamber pattern, incl. office
-groups) · `registerNearestPointLayer` (nearest-N haversine). Non-factory patterns to
-copy: two-live-datasets join (`ward`); shared-geometry, one loader → N layers
-(`ccpsa-district-council`; NYC borough = county serving three offices); nearest-N bespoke
-(`school-site`, polygon campus footprints). Platform coupling: `registerSchoolZone` /
-`registerCpsNetwork` build loaders via the Socrata-only `makeCachedLoader` — on a
-non-Socrata portal convert them to an injected `loader` (follow `registerPolygonLayer`'s
-existing opt).
-
-**Cards** follow the fleet content order — layer name, district identifier, then wherever
-a verifiable source exists: representative(s), office location, contact, link — rendered
-through the card-helpers vocabulary (`docs/CARD_RENDER_API.md`; helpers are data-only by
-contract, never pass HTML).
-
-## 4.4 The porting checklist (in order)
-
-1. **Fork** the reference repo (the engine, gates, and CI shape are the value).
-2. **Fill the §4.1 worksheet.**
-3. **Swap the METRO config + §4.2 constants/branding**; never edit inside a fence;
-   `check_engine_parity.py --against https://chidistricts.com/ --strict` passes at
-   re-core and stays a per-thread gate.
-4. **Decide the layer roster from the concept matrix** (`docs/DATA_LAYER_GUIDEBOOK.md`):
-   reuse siblings' recorded patterns and drop rationales; walk the reference layers and
-   map each to the local equivalent; **drop, never fake, where no honest analog exists**
-   and record each drop with its structural reason (the NYC drop table is the model).
-   Apply §1.2 to the two edge cases: elected citywide/at-large offices get an explicit,
-   recorded per-office decision (shared-loader city polygon, labeled At-Large rows, or a
-   recorded deferral — silence is the only wrong answer); multi-district school metros
-   register per-system layers or record the drop — never stitch. Add local layers the
-   reference lacks. Then write `LAYER_AREA_RANK` largest→smallest — **every registered id
-   appears, no exceptions** (two consumers: restacking + hover profiles; a missing id is
-   invisible to both), with sub-layers ranked just before their parent.
-5. **Build the data registry** (§4.7 template): one row per layer, VERIFIED only after a
-   live fetch *you* performed.
-6. **Pick ≥3 offline anchors + ground truth** (§4.5), including the scope-mask tiler and
-   the negative point.
-   6a. **Decide the wash's BANDS and name them** (§4.5.1): two bands or three, then a
-   `coverage_key` in the worksheet. A three-band instance also owes the wider region's
-   ring — built, not fetched — passed as the second argument to `drawOutOfScopeMask`.
-   Skipping this leaves the map's only claim about where the app stops answering stated
-   in a colour with nothing to read it against.
-7. **Map the pipeline** per roster (Part 6.3): engine ladder rung, count floors — and
-   **land the cheapest real roster during the module threads**, not the pipeline thread
-   (real data flushes factory paths placeholders never exercise).
-   7a. **Officeholder sourcing ships with each layer** (rule 4 — Part 2.3 verbatim).
-   7b. **Suburban municipal governments are a decided concept** — any metro whose
-   coverage passes the central city inherits Part 2.4 wholesale (GEOID join, depth
-   ladder, district captured at scrape time).
-8. **Re-derive every gate constant** and the three `sw.js` lists.
-9. **Cross-group parity audit**: for each field any group's card renders (address, pin,
-   phone, links), check every other card that could carry it — no gate catches this
-   class; only a side-by-side pass does. Second axis: **hover sweep** — toggle every
-   polygon layer, hover the ground-truth points, confirm real identities (the popup fails
-   soft by design and shipped label-only in NYC).
-10. **Swap deploy, register the fork in the fleet (§4.4.1), run the localization sweep
-    (§4.4.2)**, replace this guide with the fork's pointer stub, and record the final
-    roster in the guidebook.
-
-### 4.4.1 Day-one fork registration (every item was missed by a real port)
-
-In the **Chicago repo**: (1) add the fork to `metros.json` + `--sync-fleet` regeneration
-in every fork (regeneration PRs, never hand edits — a fork missing here is invisible to
-fleet-status); (2) add the repo to `release-engine.yml`'s fan-out list; (3) *(operator)*
-add it to the `ENGINE_DISPATCH_TOKEN` PAT; (4) add it to the guidebook (coverage map +
-inventory + matrix, drops included). In the **new fork**: (5) delete the producer
-`release-engine.yml`, carry the consumer `engine-bump.yml`; (6) deploy downloads the
-engine per `engine.lock.json`; (7) *(operator)* Pages source + custom domain + `CNAME`;
-(8) *(operator)* Actions → "Allow GitHub Actions to create and approve pull requests" =
-ON (bot PRs die silently without it); (9) *(operator)* CI secrets (tokens/keys); (10)
-replace PWA icons; (11) pointer-stub every CHI-mastered doc (`EXPANSION_GUIDE.md` and the
-legacy stub set — `METRO_EXPANSION_PLAYBOOK.md`, `BUILD_PLAYBOOK_1.md`,
-`OPTIMIZATION_PLAYBOOK.md`, `REDISTRICTING_RUNBOOK.md`, `MECHANIZATION_PLAYBOOK.md`; all
-stubs under `docs/`); `ENGINE_SYNC.md` stays a full copy; the guidebook and
-`docs/archive/` are CHI-master with no sibling copy; the fleet machinery (`metros.json`,
-`fleet_status.py`, `fleet-status.yml`, `engine-parity.yml`, `release-engine.yml`,
-`create-engine-tag.yml`, `docs/engine-changelog/`) stays Chicago-only; (12) localize
-`WATCH.md`; (13) re-derive `validate_sources.py` incl. `SOCRATA_DOMAIN`/`CATALOG_API`;
-(14) *(operator)* create the fork's own GoatCounter site and set the tag — `trackEvent`
-no-ops silently without one (SF shipped days of zero analytics).
-
-### 4.4.2 The localization sweep (leftover-reference-city gate)
-
-At assembly and again before launch, grep the fork for the reference city's fingerprints
-(`chidistricts.com`, `cityofchicago`, `ChiExplorer`, `chicago`, `data-goatcounter` across
-`index.html sw.js README.md CLAUDE.md WATCH.md manifest.webmanifest scripts/ .github/`).
-Allowlist: fence comments naming the reference, `engine.lock.json` `source_repo`, the
-reference's own `METRO_EXPLORERS` entry, deliberate doc citations. **Everything else is a
-leftover** — past escapes include a Chicago-biased geocoder shipping through five SF
-threads, Chicago SEO metadata, stale `validate_sources.py` manifests, orphaned seal art.
-
-## 4.5 Offline anchors, ground truth, and the scope mask
-
-Live civic APIs are flaky and CI-hostile, so the test strategy rests on ≥3 **API-free
-anchor layers** shipped as same-origin static files: the smoke test classifies ground
-truth against them; `validate_index.py` pins their feature counts; `sw.js` serves them
-cache-first (vs network-first rosters — never a stale officeholder). The wash marks
-*where deep coverage ends*, never "no data here" — regional layers still resolve under
-it, and it fails silent.
-
-**Draw the wash from a purpose-built metro outline, not from whichever anchor happens to
-tile something** (revised 2026-07-28; Chicago previously passed its school-board anchor).
-Two reasons, and the second is the one that bites:
-
-1. **The boundary must track coverage as it grows.** Chicago's wash was the *city* limits
-   because that is what the anchor tiled, so as the collar counties filled in it kept
-   greying out territory the app had come to serve — a Will or DuPage point resolves
-   17–21 of 39 layers against Chicago's 32 and suburban Cook's 25. Coverage thins across
-   a metro; it rarely stops at one layer's edge. Pick the boundary from what the app
-   *answers*, and re-check it after any county expansion. Removing the wash entirely is
-   the opposite error: the tiers are real, and a wash-free map claims a parity the data
-   does not support.
-2. **Per-county outline files will not dissolve.** The engine cancels an interior border
-   only where the two neighbours share EXACT coordinates. Chicago's six
-   `*-county-outline.json` files were simplified independently, so they share as few as
-   **2** vertices along a real border and would leave hairline seams or fail the closure
-   guard. Build one polygon from a **single** query against one source (a TIGERweb
-   multi-county fetch returns 2,034 shared vertices on Cook/DuPage) and dissolve it at
-   build time — `scripts/build_metro_outline.py` is the reference, mirroring the engine's
-   own algorithm so the shipped file is what the browser would have computed.
-
-Simplify hard and validate the *simplified* rings: metro outlines are mostly survey-grid
-straight lines, so Douglas-Peucker at 25 m took Chicago's from 2,665 vertices to **62**
-(2.5 KB), and the builder refuses to write unless one anchor per county still falls
-inside and known outside cities fall outside — ring closure alone does not prove a county
-wasn't dropped. The payoff is also a boot cost: the old anchor was an 83 KB fetch in PSI's
-669 ms initial-navigation chain for a decorative wash.
-
-Produce anchors with `scripts/build_embedded_boundaries.py`
-(pinned mapshaper, Visvalingam keep-shapes) and its validation: **≥99.5% agreement on
-2,000 seeded points AND zero double-classification**, counts/properties unchanged —
-register every anchor in its `LAYERS` dict so regeneration never regresses to manual.
-Pin a **negative point** where geography allows (water, enclaves, county slivers) and
-pick it against a shoreline-clipped layer — whether mid-water is a no-match depends on
-the dataset, and the water-inclusive layer's positive answer is legally correct.
-**Exactly-one-list invariant:** every `data/app/` file appears in exactly one of
-`GEOMETRY_URLS`/`ROSTER_URLS` (in neither = never cached; wrong list = wrong freshness) —
-machine-checked in `validate_index.py`; bump `CACHE_NAME` on any list change.
-
-### 4.5.1 The coverage key — decide the instance's BANDS, then name them
-
-The wash has a legend, and the legend is worksheet data. Two decisions, in this order.
-
-**First, how many bands does this instance have?** A wash is two bands by default —
-inside coverage, and outside it. It is **three** only when full coverage is a proper
-SUBSET of a wider region whose layers still answer throughout, and the middle band says
-"you still get something here" rather than "nothing here". Answer it by looking at what
-the instance's own layers cover, not by whether a state exists:
-
-| Instance | Coverage geometry | Bands | Why |
-|---|---|---|---|
-| Illinois | the served counties | **3** | county/township/municipality/school-district/ZIP answer statewide; the county layers do not |
-| Wisconsin | the counties whose supervisor ROSTER ships (`metro-outline.json`); `wi-state-outline.json` is the region ring | **3** | every layer answers statewide — the middle band means "district shown, supervisor not named", a narrower claim than the other three instances' middle/outer bands make (it was 2 bands at launch, when coverage *was* the state outline; #523 split them the day the roster shipped) |
-| San Francisco | the 11 supervisor districts | 2 | no wider region in play |
-| New York City | the 5 boroughs | 2 | same |
-
-A two-band key is not a degraded key. Until it shipped the grey was unexplained in every
-instance, and one row saying "Outside New York City" is the whole of what that map claims.
-
-**Second, name them.** Add `coverage_key` to the instance's worksheet — `outside` is
-required, `region` (`edge`, `label`, `sub`) only for a three-band instance — and
-regenerate; `generate_metro_files.py` emits `COVERAGE_KEY` into the metro-config region.
-**Do not try to derive the words.** Chicago's `METRO_NAME` is "Chicago" while its coverage
-is 89 Illinois counties, so `"Outside " + METRO_NAME` is wrong in exactly the instance
-that most needs the key. Omit the whole object and the engine's `typeof` guard draws the
-wash with no key, byte-identically to before — the same inertness rule `brand` and
-`poi_geocode_bbox` follow.
-
-**A three-band instance owes GEOMETRY as well as words.** The middle band needs the wider
-region's ring, passed as the second argument at boot —
-`drawOutOfScopeMask(loadCoverageGeometry, loadRegionGeometry)`. Build it, do not fetch it:
-Illinois' ring live from TIGERweb is **332 KB over 19,789 vertices**, four times the fetch
-§4.5 above exists to have removed for this same decorative wash. It is the second output
-of `build_metro_outline.py`, from layer 0 of the same MapServer as the county dissolve.
-**Simplify it at the same tolerance as the coverage outline** — where a served county
-fronts the region's edge the two rings trace the same line, and simplified apart they open
-slivers of a false middle band along it.
-
-The key renders only the bands the draw actually produced, so a declared `region` whose
-geometry fails to load degrades the wash and the key together rather than leaving a label
-over a band that is not on the map. Declaring `region` without wiring the geometry
-therefore gets you a two-band key and no error — check the map, not the worksheet.
-
-## 4.6 Platforms, sources, geocoding
-
-Identify the portal platform first — it changes how every layer queries:
-
-- **Socrata**: four-by-four ids, `/resource/{id}.json` SoQL; server-side
-  point-in-polygon via `intersects(geom, 'POINT(lng lat)')` (lng-first WKT) — a
-  *research/verification* tool here, not the runtime path (every layer downloads its
-  boundary once and classifies client-side; per-click portal calls would multiply
-  throttling exposure and break overlays/hover/anchors/failure isolation).
-- **ArcGIS Hub / REST FeatureServer**: `…/FeatureServer/<n>/query`; always request
-  `outSR=4326` (native projections are often State Plane); page past `maxRecordCount`
-  while `exceededTransferLimit` (`loadArcGISPaged`).
-- **CKAN**: a catalog, not a query engine — download once, convert, ship as a §4.5-style
-  static file (follow "GeoServices/WFS" links to any real live endpoint).
-
-**The federal/universal tier is free for any US metro**: TIGERweb
-(`Legislative/MapServer` 0/1/2 + county/place siblings, `STATE='<fips>'`; unicameral and
-council-only jurisdictions ride layer 1 — register one chamber, not two) +
-`unitedstates/congress-legislators` (`legislators-current.json`, CC0 — the reference
-builder re-parameterizes on state + count; the 2026-07 enrichment joins
-`legislators-district-offices.json` by bioguide id).
-
-**Geocoding decision rule:** (1) a city-authoritative keyless geocoder with real
-autocomplete replaces *both* reference geocoders (NYC GeoSearch is the exemplar); else
-(2) Photon for type-ahead; (3) Nominatim as debounced submit-time fallback ONLY (its
-policy forbids autocomplete; keep the serial ≥1s POI queue). **App tokens:** a Socrata
-app token is a public throttling identifier — front-end constant by design; a real API
-key (401s without it) is a repo secret, server-side only, never in `index.html`. No
-token analog exists for ArcGIS/TIGERweb/CKAN public reads — if a public endpoint
-throttles/WAFs, ship the layer as a static file instead.
-
-## 4.7 Dataset research & verification protocol
-
-1. Live-sample field names before wiring; seed `findPropCI` aliases with observed keys.
-2. Label every registry row VERIFIED / UNVERIFIED / **UNVERIFIED-fetch** (exists but
-   WAF/key-blocked — it changes the pipeline engine), with the fetch date.
-3. The portal-page id and the geometry-serving id can differ — record which of
-   `loadSocrataGeoJSON`'s three routes actually served geometry.
-4. Map-type Socrata datasets serve geometry only via the export or v3-view route — set
-   the per-dataset route override rather than burning failing routes per load.
-5. Probe server-side point-in-polygon once with a known landmark — validates endpoint,
-   operator, and geometry column in one query.
-6. Watch record caps (Socrata `$limit=1000`; ArcGIS transfer caps) — filter server-side
-   or page.
-7. Anchor simplification passes the 2,000-point protocol (§4.5), unmodified.
-8. A layer with no honest source gets an honest registry row — drop or link, never
-   invent.
-9. Point datasets may serve no geometry on the geojson route (coordinates only in
-   `latitude`/`longitude` properties) — `makeSocrataPointLoader` assembles the
-   FeatureCollection.
-10. Sample exact **values**, not just field names — SoQL string equality is
-    case-sensitive (`'Police Station'` matched 0 where `'POLICE STATION'` matched 80);
-    numeric-looking fields arrive as float strings. Normalize in the loader.
-11. **Verify coverage, not existence** — a pattern confirmed on one sample can cover a
-    fraction of the roster (Legistar carried district URLs for ~24/51 members; NYPD pages
-    resolve 74/78 COs). Count how many of N records carry the thing; set floors below
-    100%.
-12. **Soft-degrading surfaces ship broken — audit by hand**: the hover popup's fallback
-    keys, empty states, anything that renders em-dashes instead of erroring (§4.4 step 9).
-
-Registry columns: layer target (+ expected count) · source type · id/endpoint **+ the
-route that served geometry** · geometry column + observed fields · roster source ·
-CRS/paging/auth notes · status + date.
-
-## 4.8 Generic metro gotchas (each paid for in a real port)
-
-One boundary hosting several offices → one cached loader, N layers. Assume MultiPolygon;
-spot-check a gnarly one. Trust authoritative polygons over intuition (Marble Hill).
-In-bounds ≠ in-district — honest no-match, never snap; in multi-county metros register a
-county context layer and word county-office empty states to point at it. Nearest-N can
-cross water — keep N=3, label "as the crow flies". Non-residential polygons are real
-answers — surface the type field. Honesty is per-field (§0.2). Elected-but-superseded
-bodies exist (HISD's trustees under a state-appointed board): label the actual governance
-status, show both bodies, each labeled — never hide the elected roster, never present
-appointees as it.
-
-## 4.9 Thread sequence, operator steps, performance parity
-
-**Threads:** 0 fork & re-core (worksheet, constants, module delete + dangling-identifier
-grep, geocoder decision, `EXPECT_LAYERS=1`, parity green) → 1 anchors + geography (ground
-truth pinned, MultiPolygon check) → 2 safety → 3 schools (honest choice-based empty
-states; per-system profile URLs) → 4 political (heaviest; operator rosters arrive here)
-→ 5 pipeline & CI (all scraper/builder pairs + workflows + full gate re-derivation) → 6
-assembly & audit (rank visual check, `sw.js` lists, final `EXPECT_LAYERS`, step-9 parity
-audits, a11y, attribution, deploy).
-
-**Operator steps:** portal tokens; domain/CNAME/manifest/icons/README/CLAUDE.md;
-hand-verify operator-maintained rosters (a human checks each name); review anchor
-conversions and pin gate values; evaluate key-gated upgrades (record, don't block);
-work every *(Operator)* item of §4.4.1.
-
-**Performance parity:** engine-fenced wins ride along free (bbox pre-reject +
-point-query memo, incremental highlight, toggle rescale, graph release, scope-mask boot
-defer, pan-pause, SW handler discipline — confirm the anchors `featureBBox(features[i])`
-and `whenIdle(function () { drawOutOfScopeMask` survived the re-core). The fork
-**re-earns** the metro-specific set: kill `<head>` render-blocking (inline leaflet.css;
-self-host + subset fonts with metric-matched fallback; defer BOTH leaflet.js and the
-boot script — a bare defer on Leaflet alone breaks boot); preconnect ≤4 aimed at the
-basemap-tile LCP; **pre-build decadal legislative geometry** (live TIGERweb measured
-5.69s time-to-answer; `build_legislative_boundaries.py` re-parameterized, cache-first,
-tied to the redistricting runbook); keep boot lazy; per-layer precision budgets; SW
-freshness split; deploy exclude list. **Measure on production PSI mobile, never a
-sandbox proxy** (the sandbox stubs exactly the third parties that dominate delivery;
-the reference banked at 78 on an LCP-bound frontier — don't chase the last points).
-The canvas renderer stays a fleet-shared open item — inherit it, don't preempt.
-
-## 4.10 A new STATE — the template-repo route (RETIRED 2026-08-24, decision record)
-
-**Decided shape: states expand IN PLACE inside the rebranded reference repo — not as
-per-state forks.** This section briefly specified the opposite: a template repository
-GENERATED from this tree (`scripts/build_state_template.py`), from which each state
-started via GitHub's "Use this template", bootstrapped by one command
-(`scripts/bootstrap_state.py`). It was built, merged, and **proven end to end the same
-day** — the generated template boot-tested as a real Indiana app in CI (18/18 smoke
-checks), and a real Wisconsin repo went from "Use this template" to green CI in
-minutes (DistrictExplorer-WI#1, closed unmerged; both the template repo and WI are
-archived). The operator then retired the route in favor of in-place expansion: one
-deploy surface, no cross-repo sync, the same reasoning that decided Part 3 for
-Illinois, now applied to every state.
-
-**What remains in this tree, deliberately:** the `TEMPLATE:BEGIN/END` span markers in
-`index.html`/`sw.js` (inert comments — they are the line-by-line map of what is
-metro-specific vs engine, which in-place multi-state work needs just as much), the
-payloads under `templates/state/`, and `scripts/build_state_template.py` /
-`bootstrap_state.py` / `check_template_placeholders.py` (whose TIGERweb state
-derivations and localization sweep generalize to in-repo state onboarding). **What was
-removed:** the weekly `update-state-template.yml` workflow, its release-engine
-dispatch, and the `build_state_template.py --check` gate in smoke-test.yml — so note
-that the builder is now UNGATED: nothing fails a PR that breaks the template
-derivation, and the last-green state of the whole route is this section's merge
-(PR #469 + #474) in git history.
-
-The two lessons worth keeping from the route's one live day: a fingerprint sweep must
-anchor reference-fork URLs to URL position (`//chidistricts`), because the fleet's own
-`*.chidistricts.com` subdomains legitimately contain the bare string — found by
-Wisconsin's own domain within minutes; and a placeholder sweep must never police
-data/, because the real world contains the reference fork's vocabulary — found by the
-School City of EAST CHICAGO, Indiana.
-
-**Route closed out 2026-08-25: Wisconsin, the state this route was proven on, shipped IN PLACE
-as `wi/` — the archived fork's bootstrap branch imported as a folder, retrofitted to the
-composer/brand/sub-page architecture, grown to twelve layers by day's end (eleven from
-national publishers plus the LTSB county-board layer, #520/#522), and registered across the
-instance tables.** The in-place procedure this section deferred to now has a worked example:
-the `wi/` import commits on this repo's history are the reference for state N+1.
-
----
-
-# PART 5 — Path D: a new concept/layer in an existing deployment
-
-1. **Run the §1.6 taxonomy test.** Most proposals resolve to a dispatch entry (Part 2) or
+1. **Run the §1.6 taxonomy test.** Most proposals resolve to a dispatch entry (Part 3) or
    an identity-card enrichment, not a layer.
 2. **Consult the concept matrix** (`docs/DATA_LAYER_GUIDEBOOK.md`): if a sibling ships
    the concept, reuse its recorded pattern and source notes; if a sibling recorded a
@@ -1934,7 +1932,7 @@ the `wi/` import commits on this repo's history are the reference for state N+1.
    (nearest-N lists, no-officer geography/identity concepts, honesty-rule link-only
    judicial bodies) — and when identity, location, or contact data exists in a layer's
    source but isn't on the card yet, **record the gap in the guidebook backlog rather
-   than shipping it silently**. Hover identity follows the parity rule (§4.3): the
+   than shipping it silently**. Hover identity follows the parity rule (§2.2.1): the
    popup reads the same fields the card does.
 5. **Bookkeeping in the same change**: worksheet layer entry (+ rank, hover keys as
    needed) → regenerate; `LAYER_AREA_RANK` placement; a `LAYER_SIDEBAR_RANK` position
@@ -1943,7 +1941,7 @@ the `wi/` import commits on this repo's history are the reference for state N+1.
    is the only wrong answer); Appendix A row.
 
 **Sidebar placement standard (recorded 2026-07-28).** A layer's position in its sidebar
-group is set by the fork's explicit `LAYER_SIDEBAR_RANK` (grep it in `index.html` —
+group is set by the instance's explicit `LAYER_SIDEBAR_RANK` (grep it in `index.html` —
 applied by a boot-time sort; `validate_index.py` asserts the list matches the registered
 id set 1:1, exactly as it does for `LAYER_AREA_RANK`) — never by registration order,
 which had accreted by build thread rather than design (Early Voting led the Political
@@ -1997,26 +1995,269 @@ mere geometric overlap.
 
 ---
 
+---
+
+# PART 5 — What the two deep states taught
+
+Illinois reached 91 counties; Wisconsin reached 31 layers across four phases. The rules
+below are organized by the **question they answer**, not by the county that paid for them —
+the per-county record is `docs/DATA_LAYER_GUIDEBOOK.md` and the two `CLAUDE.md` narratives.
+Every one of these cost a real build, and every one applies to any state. **§3.5.1 carries
+the county-work detail** — the longer, Illinois-worded originals of the rules this part
+states once and generally.
+
+## 5.1 Is there a source? — the question that is answered wrong most often
+
+**This section exists because the fleet's single most repeated error is recording a
+measurement of a WEBSITE as a fact about an AGENCY.** It has now happened in both states,
+at county scale and at state scale, and it has been expensive every time.
+
+- **A blocked website is not a blocked agency.** Knox County's record said its site
+  "refuses every request" — true of the website, written as though it described the county.
+  Knox has four hosts: the site denies, its GIS server serves freely, its CMS serves the
+  same site's documents unblocked, and a fourth is simply dead. Johnson and Perry were
+  reached **without their own websites being read at all**, because a county's ELECTION
+  AUTHORITY is a separate publisher on a separate host. At state scale Wisconsin repeated
+  it exactly: elections.wi.gov sits behind a Cloudflare challenge, a fortnight of careful
+  measurement recorded the challenge accurately, and the conclusion drawn from it — that
+  the statewide polling list could not be had — was wrong. **Asked directly, the Elections
+  Commission sent the whole file in an afternoon**, and the ward card went from two cities
+  to 7,131 of 7,161 wards.
+- **The ask is a route, not a last resort.** Put it in the ladder beside the technical
+  probes. Its cost is one e-mail; its yield in this fleet includes a statewide polling
+  file, a licence-gated county's written permission, several precinct tables no county
+  publishes, and — as often — a clean, citable NO that closes a question for good. Draft
+  asks in batches, send them, and **record the send date**; a silent ask is not a closed
+  one. **A follow-up is a recovery mechanism, not a nudge:** one county's Clerk answered
+  the question that unblocked a whole build only on the THIRD attempt, because her spam
+  folder ate the first two. Follow up at ~3 weeks, again 2 weeks later, and only then
+  record the route UNRESPONSIVE — which is a different claim from "no source exists".
+- **Measure from the vantage that matters.** A block observed from a development sandbox
+  may not exist from CI. Wisconsin's WEC and Milwaukee's police pages both refuse the
+  sandbox and answer GitHub's runners plain; the scraper's vantage is CI, so a sandbox
+  probe failing is expected and proves nothing. Conversely a proxy's own 403 is not the
+  site's 403 — check who answered before recording a host as blocked.
+- **Some "unreachable" hosts are misconfigured, not absent.** An **incomplete TLS chain**
+  (leaf served without its intermediate) fails every automated client and no browser
+  notices, so it reads identically to a dead host. Two counties were written off this way
+  before the pattern was recognised; the fix is to supply the intermediate by AIA with a
+  **pinned hash**, never by disabling verification. Sweep for it
+  (`scripts/probe_incomplete_tls_chains.py`), and sweep `gis.<domain>` as well as the bare
+  and `www` hosts — the old host list could never have found the one host that mattered.
+- **HTTP 202 is never a document**, and a captcha is an access control. `202 Accepted` is
+  what several challenge fronts return; treat it as unreachable, not reachable, or a
+  validator will cheerfully report a blocked source as fine. **Nothing here defeats a
+  challenge.** A real browser executing a managed JS challenge is sanctioned where the
+  publisher clearly intends human access; CAPTCHA-solving, evasion and fingerprint-spoofing
+  are not, and a captcha'd county is reached by another publisher or not at all.
+- **FETCHABLE IS NOT LICENSED — read the terms before you build.** This is step zero,
+  ahead of every technical probe. Two counties were surveyed as build-ready because their
+  layers answer instantly once a `Referer` header is set, and they are not buildable at all:
+  their GIS consortium SELLS the data under signed agreement and its terms grant only
+  transitory personal viewing. The referer check was **the edge of a licence, not hotlink
+  protection to route around** — and the technical ease of setting a header is exactly what
+  makes this dangerous, because nothing breaks and nothing warns. When a source is gated by
+  anything, find out WHY before you find out how. A licensing block is a gap of kind
+  `blocked`, and the route out goes to whoever holds the underlying PUBLIC RECORD. **That
+  route works:** one licence-gated county was cleared by asking for written permission
+  BEFORE signing or paying, and its board districts ship under the county's authorization
+  with the licence's credit clause honoured on the card.
+- **Enumerate the ORG, not the viewer.** A county's web map shows what it *uses*; the
+  ArcGIS org behind it shows what the county *has*. One county's viewer names a single
+  parcel service while its org carries fifty-four services including board districts and
+  voting districts. Cheaper still, and now the FIRST check: an unauthenticated query to
+  `arcgis.com/sharing/rest/search` — one request, needs nothing from the county's own site,
+  and it found a 26-service GIS office at a county whose Clerk had written "our county does
+  not have shapefiles or GIS layers."
+- **A vendor's carriage is PER-ELECTION.** Election-results platforms serve many counties,
+  and sweeping one election slug is not sweeping the vendor: re-running one sweep across ten
+  slugs found two more counties previously recorded as uncarried. Test carriage by CONTENT
+  across every known vendor, never by a vendor's published county list — that list shows
+  only the election running right now.
+- **Two publishers can compose each other even when neither references the other.** One
+  county publishes a board-district layer and a precinct layer with no district attribute on
+  a precinct and no precinct list on a district; overlaid, every precinct sits 98.4–100%
+  inside a single district. Before writing a county off for want of a precinct-to-district
+  TABLE, check whether it publishes the two LAYERS.
+
+## 5.2 Is it the right source? — verification
+
+- **Currency is a measurement, not a reading of a name.** One county publishes three
+  board-district layers; the best-labelled one holds the superseded 2011 plan and the plan
+  in force sits in an undocumented layer with a typo in its own name. A plan drawn to a
+  census balances on that census: on 4,943 blocks the shipped layer runs 0.7% worst
+  deviation against the better-labelled one's 15.1%. **Gate the comparison in BOTH
+  directions** — refuse to write if the superseded layer ever comes into balance too.
+- **Two witnesses, and prefer witnesses of different kinds.** Geometry witnessed by
+  arithmetic beats geometry witnessed by another map. A confident, clean answer derived by
+  sampling a map's fill colours was WRONG — those fills were per-township decoration — and
+  what caught it was precinct-count arithmetic from certified returns. That arithmetic is
+  now a gate in the builder rather than a comment.
+- **Read the OBJECTS, never the pixels.** A vector PDF's districts are filled PATH objects
+  whose exact fill colours pair one-for-one with the legend; that is readable. A raster scan
+  is not, and colour-sampling a raster is forbidden. And **nothing traced ships**: where a
+  map was used to resolve split precincts, the map only ever chose between two options that
+  certified returns had already named, and the geometry came from census blocks.
+- **The whole-unit test before any dissolve** ("the Jasper test"): the composing units must
+  match the county's own current names one-for-one AND their populations must sum to the
+  county's exact total. A county whose census voting districts no longer match its current
+  precincts fails, and failing is the correct outcome — several counties are unbuilt for
+  exactly this reason and that is the guide working.
+- **Population deviation is a gate with an override that only the source can grant.** The
+  dissolve guard enforces a 30% worst-deviation ceiling. Two counties exceeded it with
+  their composition independently corroborated twice over; each shipped only after the
+  County Clerk confirmed in writing that the plan is current, with the measured deviation
+  recorded on the record rather than smoothed away. **The ceiling is raised for the county
+  alone, never widened for the fleet, and never on a derivation merely going
+  uncontradicted.**
+- **Check the balance the body actually elects.** A board whose districts elect DIFFERENT
+  numbers of members balances per MEMBER, not per district. One county's correctly
+  transcribed districts are 28.8% apart per district — reading exactly like a botched
+  transcription — and 12.3% apart per member, an ordinary rural apportionment. Get seats
+  per district from the county's own roster before writing any population check.
+- **A DERIVED boundary must watch the source it was derived from, or it rots silently.**
+  The county edits its composition, the compiled table does not, and the app keeps drawing
+  superseded lines with nothing failing. Where the composition lives on a page the roster is
+  already scraped from, wire the check: the scraper emits the composition it read and the
+  ROSTER builder fails on any difference, so the weekly job turns red on a redistricting.
+  Compare at the granularity the districts actually differ at — one first version compared
+  township names and passed a simulated change that moved precincts within a township — and
+  **prove it bites** with negative tests (a unit lost, gained, renumbered, a whole township
+  moved) before trusting it.
+- **Reconcile the two authorities' vocabularies before concluding a district is missing.**
+  A district nearly went unbuilt because four certified canvasses never named it; the cause
+  was that two election authorities NAME CONTESTS DIFFERENTLY (`COUNTY BOARD 8TH DISTRICT
+  MEMBER` vs `CO. BD. MEMBER D8`), so searching one vocabulary returned zero matches in a
+  report that carried three such contests. The plausible explanation already written into
+  this project's own docs was wrong, and measuring it was what showed that.
+
+## 5.3 What the card is allowed to say
+
+- **Provisional data ships only wearing every qualifier its source gave you.** Wisconsin's
+  statewide polling list arrived months before the Commission publishes it, and the operator
+  chose to display it. Five conditions, settled BEFORE the file arrived and every one a build
+  gate: (1) the election is NAMED on the card, because a polling place is per-election and a
+  date alone does not say which; (2) the word *provisional* appears in the reader's own
+  sentence — not a badge, not inside an expander; (3) the pull is dated and attributed;
+  (4) the authoritative lookup stays the prominent confirmation route; (5) **the file carries
+  its election date and the card RETIRES the pairing once that date passes.** The flag is per
+  FILE, never per record. Condition 5 is the one with no precedent elsewhere in the app: a
+  per-election list that outlives its election looks current and is not, so forgetting to
+  refresh must fail toward silence rather than toward last year's building.
+- **An empty result is sometimes an answer, and should say so.** "This point isn't inside
+  any district in this layer" reads as a lookup that failed. For a layer of incorporated
+  places, a point outside every one of them is in unincorporated territory — that IS the
+  answer. The engine's `emptyNote` lets a layer say what its own empty state means; layers
+  that declare nothing keep the generic wording.
+- **A layer's LABEL must match what the layer holds.** Wisconsin's "Municipality" layer
+  carried 608 incorporated places and not one of the state's 1,242 towns, while statute and
+  the state's own election vocabulary make a town a municipality. The app therefore
+  contradicted itself in two cards at once. The label now says "City or Village"; the layer
+  **id** did not change, because ids live in shipped `layers=` permalinks and renaming one
+  breaks other people's links.
+- **A shortfall is stated, never concealed.** A three-seat board whose county publishes two
+  names ships two names AND says a third seat is unlisted. This required adding `seats`
+  beside the members on the identity-card roster — the districted layers had been saying it
+  since early on, and the at-large card simply had no way to.
+- **Absence is content.** A gap record is the only thing that makes a missing dataset
+  visible to a reader, and the Data gaps panel leads with the gaps that apply where the
+  reader clicked — which requires every gap to name the COUNTIES it affects and the instance
+  to ship a containment outline per county. Wisconsin shipped ten gaps with empty county
+  lists and zero outlines, so its panel could never lead locally and told a reader who HAD
+  clicked to click first. Where county granularity cannot express the truth, **over-claim
+  rather than under-claim** and let the gap's own area line correct it: telling a reader
+  something might be missing near them is recoverable, telling them nothing is missing is
+  not.
+- **Never mirror a source's private data.** A state file offered for the map included two
+  entries whose voting location is a clerk's HOME, at a residential address. The agency may
+  publish that; committing it to a public repository indefinitely is a different act, and
+  this project does not make it. Run the check on every replacement file.
+
+## 5.4 Shape and structure
+
+- **Depth is dispatch entries and roster rows, never new layers.** This is the expansion
+  invariant, and 91 counties have not broken it once. A cross-county concept registers ONE
+  toggle holding a per-county entry table, with coverage = the OR of its counties' tests.
+- **An at-large body rides the identity card.** No geometry, no dispatch entry, no coverage
+  function, no toggle — and three knock-ons that were each learned the hard way: such a
+  county's precinct card must NOT carry a board-district row; it still needs its coverage
+  outline and INSIDE anchor, because a county-specific card DOES answer there; and it must
+  NOT be added to the dispatch-county list, which is now a two-directional gate that fails
+  on a listed county registering nothing.
+- **Nest only on containment the source enforces.** Wisconsin's county subdivisions nest
+  under County because 608 incorporated municipalities occupy 671 subdivision records — the
+  58 that cross a county line get one record per county. The Places layer is one record per
+  municipality however many counties it spans, so it is the one municipal layer that CANNOT
+  be nested. Note the cost before nesting: `subOf` hides a child whenever any ancestor is
+  off, transitively.
+- **Per-county files beat one statewide file for anything a reader consults pointwise.**
+  Wisconsin's polling pairing is 72 county files at ~9 KB rather than one at ~950 KB, keyed
+  by the same county slug the gaps panel already computes. It also gives each file its own
+  count floor in the validator, where a single envelope object would have floored at two.
+- **Contiguity is not a shipping gate.** A county joins whenever a county-keyed layer
+  answers in it, wherever it sits; the served area can be disjoint, and has been. Islands
+  and enclaves are recomputed from the data, never patched — and **read the ring count from
+  the builder's `--check`, never from a map in your head.** Predictions about which join
+  closes which hole have been wrong three times, each time by reasoning that was true of
+  every neighbour taken alone and false of the block taken together.
+
+## 5.5 Process — how knowledge is kept
+
+- **A measurement filed in a backlog and nowhere else is a measurement the next pass
+  repeats.** Two counties' board forms sat answered in a backlog for a day while their
+  records went on calling the question undeterminable. Findings go where the next reader
+  will look: the gap record, the builder's docstring, the WATCH row.
+- **A gap record is the only thing that makes an absence visible.** Four served counties
+  were missing their precinct layers for weeks with no refusal, no missing publisher and
+  every gate green — simply nothing on file to notice. The audit worth repeating is: which
+  units are served but lack layer X, AND lack a record explaining why?
+- **Record the blocker you MEASURED, not the one you inferred.** A sweep of twelve counties
+  shipped three and produced nine honest no's, and the nine were most of the value: each now
+  carries a measured blocker instead of a guess. "Unresponsive", "licence-gated",
+  "split-precinct", "raster-only" are different claims with different routes out; "no source
+  exists" is almost never one of them.
+- **Re-examine written-off units when the METHOD changes, rather than re-probing them.**
+  Five counties are shut because their districts split precincts. That is not a reason to
+  re-run the same probes; it is a reason to ask a different question — do they publish a
+  VECTOR map? — which is how a sixth shipped.
+- **Correct the record in the same change that disproves it.** Several records here were
+  wrong for weeks in ways nothing could catch, because the thing they described was a
+  website, a name, or an assumption. When a build disproves its own gap record, rewriting
+  that record is part of the build, not follow-up work.
+
+---
+
 # PART 6 — Shared machinery (every path)
 
 ## 6.1 Worksheet + generated regions
 
-Per-fork facts live ONCE in `metro-worksheet.json`; `GENERATED:BEGIN/END` regions in
-`index.html`, `sw.js`, `validate_index.py`, `smoke_test.mjs`, `CLAUDE.md`, `README.md`
-are emitted from it. **Never hand-edit a generated region** — edit the worksheet, run
+Per-instance facts live ONCE in `<tag>/metro-worksheet.json` (Illinois's is the root
+`metro-worksheet.json` — §0.1's asymmetry); `GENERATED:BEGIN/END` regions in `index.html`,
+`sw.js`, `sources.html`, `validate_index.py`, `smoke_test.mjs`, `CLAUDE.md` and `README.md`
+are emitted from it. **Never hand-edit a generated region** — edit the worksheet and run
 `python3 scripts/generate_metro_files.py` (`--check` is the CI drift gate; `--sync-fleet`
 propagates fleet-manifest changes).
 
-## 6.2 Engine releases
+A layer cannot ship without a worksheet `layers[]` row carrying a `source` block — the
+generator refuses otherwise, and that row is what puts the layer on `sources.html` and into
+every gate.
 
-Fenced engine code changes land in Chicago, ship as hash-verified release artifacts on
-`engine-v*` tags, and fan out to forks as gated bump PRs — parity is true by
-construction. Protocol, block inventory, new-block seeding, the tombstone convention for
-retiring helpers, and the fork-born-improvement definition of done (reverse-parity WARNs)
-live in **`docs/ENGINE_SYNC.md`** — the authoritative engine doc, shipped verbatim in
-every fork. Expansion work needs only: don't edit in fences outside that pipeline; add
-METRO config variables instead of inlining city values; when an expansion feature is
-genuinely metro-agnostic, land it as an engine release so siblings inherit it.
+## 6.2 The engine
+
+One copy, under `engine/`, spliced into every instance by `scripts/compose_app.py`
+(`--check` is the CI drift gate). **Edit the block under `engine/` and recompose**; never
+edit inside an `ENGINE:BEGIN/END` fence in an instance file. Parity holds because there is
+nothing to keep in sync, and the committed bytes are the deployed bytes — a fence edit now
+actually reaches production, where the retired release channel used to overwrite it at
+deploy time.
+
+Consequences worth stating: an engine change is a **fleet** change, so it must be right for
+every instance, and the instance-neutral way to add behaviour is an optional field a layer
+opts into (`emptyNote`, `coverage`, `subOf`, `pointOfInterest`'s optional coordinates) —
+layers that declare nothing behave exactly as before. `docs/ENGINE_SYNC.md` remains the
+authoritative engine document: block inventory, new-block seeding, the tombstone convention
+for retiring helpers.
+
 
 ## 6.3 The pipeline pattern (every roster)
 
@@ -2032,7 +2273,7 @@ stable key order for clean diffs. **Weekly workflow** → fixed `bot/*` branch, 
 requests (`ilga_scraper.py` template) → `--engine auto` requests+Playwright fallback
 (`cpd_district_scraper.py`) → Playwright day one (known bot-block) → Internet Archive
 SPN rung for total blocks (`kendall_county_board_scraper.py` — with the 45-day age guard
-and standing-issue conversion, Part 2.3) → **rejected** (key-gated AND WAF-hard),
+and standing-issue conversion, §3.3) → **rejected** (key-gated AND WAF-hard),
 documented with the alternative. When the official site is unscrapeable, a maintained
 open aggregator honestly supplies *structured* fields (Open States, congress-legislators)
 while the official site stays the card's link target. **Ship keyed enrichments dark** —
@@ -2051,52 +2292,69 @@ dataset swaps are schema-sensitive.
 Every datum a card surfaces has a determined route family. Work each column top-down —
 take the first route that honestly works, record the outcome, and never invent what no
 route provides. Fetch posture for anything scraped is always the §6.3 engine ladder;
-the verification bar for any source is §4.7 (VERIFIED means *you* fetched it and saw
+the verification bar for any source is §2.6.1 (VERIFIED means *you* fetched it and saw
 records); freshness watching is §6.3's chores.
 
 | Data | Routes, in preference order | Governing rule | Shipped precedents |
 |---|---|---|---|
-| **District boundary — statewide concept** | TIGERweb `STATE='NN'` live → pre-built statewide file (`build_legislative_boundaries.py`, cache-first) | FREE class (§3.3); 2,000-point simplification gate on pre-built (§4.5) | chambers + congress; county/township/municipality/school-district/ZCTA |
-| **District boundary — county/city concept** | county or city GIS service (dispatch entry) → pre-built static from the enacted shapefile or a one-time download (throttled/CKAN/permission-locked class) → county Clerk tax-agency tiling | one district per point (§2.1); municipal rows per the complete-tiling rule (§1.5); every id in the `validate_sources.py` manifest | county boards; Kane/McHenry subcircuits pre-built; Cook fire/park/library/TIF tilings |
-| **Officeholders (any elected body)** | boundary-GIS attributes verified against the published directory → official directory scrape (weekly review-PR) → maintained open aggregator for *structured* fields only → hand-verified transcription (terminal case: 45-day age guard + standing issue) → link-only floor | rule 4 (§2.3): decided and built with the boundary; never guessed; per-field honesty; count floors | Lake/Kane GIS attrs; ILGA/CPD/county-board scrapers; Open States + congress-legislators; Kendall/McHenry rosters; `il-supreme-court` link-only |
-| **Municipal governing bodies** | the five-rung ladder: clerk elected-officials API → clerk yearbook/directory → COG directory → county-GIS contact attributes → link-only | §2.4: GEOID-keyed, deepest-source precedence, statewide aggregators are a recorded dead end | Cook DOEO; Will directory; DMMC; Lake GIS |
-| **Office location + contact** | the roster's own source, never backfilled from a weaker one; unit-level contact renders once on the hall/office row; per-seat contact only where the source is per-member | §0.2 per-field honesty; §2.4 schema rules | congress district offices (congress-legislators join); Evanston per-seat contact |
+| **District boundary — statewide concept** | TIGERweb `STATE='NN'` live → pre-built statewide file (`build_legislative_boundaries.py`, cache-first) | FREE class (§3.3); 2,000-point simplification gate on pre-built (§2.5) | chambers + congress; county/township/municipality/school-district/ZCTA |
+| **District boundary — county/city concept** | county or city GIS service (dispatch entry) → pre-built static from the enacted shapefile or a one-time download (throttled/CKAN/permission-locked class) → county Clerk tax-agency tiling | one district per point (§3.1); municipal rows per the complete-tiling rule (§1.5); every id in the `validate_sources.py` manifest | county boards; Kane/McHenry subcircuits pre-built; Cook fire/park/library/TIF tilings |
+| **Officeholders (any elected body)** | boundary-GIS attributes verified against the published directory → official directory scrape (weekly review-PR) → maintained open aggregator for *structured* fields only → hand-verified transcription (terminal case: 45-day age guard + standing issue) → link-only floor | rule 4 (§3.3): decided and built with the boundary; never guessed; per-field honesty; count floors | Lake/Kane GIS attrs; ILGA/CPD/county-board scrapers; Open States + congress-legislators; Kendall/McHenry rosters; `il-supreme-court` link-only |
+| **Municipal governing bodies** | the five-rung ladder: clerk elected-officials API → clerk yearbook/directory → COG directory → county-GIS contact attributes → link-only | §3.4: GEOID-keyed, deepest-source precedence, statewide aggregators are a recorded dead end | Cook DOEO; Will directory; DMMC; Lake GIS |
+| **Office location + contact** | the roster's own source, never backfilled from a weaker one; unit-level contact renders once on the hall/office row; per-seat contact only where the source is per-member | §0.4 per-field honesty; §3.4 schema rules | congress district offices (congress-legislators join); Evanston per-seat contact |
 | **Election administration** | authority-keyed sources (ISBE's election-authority directory is the roster of authorities) → county polling-place joins where published → hand-curated per-election site files | §1.3 dispatch-by-authority; human-review PRs | county-clerk roster; Kendall's GlobalID polling join; `early-voting` |
 | **Amenity points (nearest-N)** | national USGS structures layers (bbox-widened) → city/portal point datasets (`makeSocrataPointLoader` class) | nearest-N honesty: N small, "as the crow flies" on the card | police/fire stations + post offices (USGS); CPL `library`, `school-site` |
 
+
+
 ## 6.5 The gates
 
-- `python3 scripts/validate_index.py index.html` — merge gate: parse check,
-  `registerLayer(` floor, layer-id/rank/worksheet cross-checks, no inline datasets,
-  `data/app/` presence + counts, sw exactly-one-list, `METRO_EXPLORERS` lint, engine
-  fence lint.
-- `BASE_URL=… node scripts/smoke_test.mjs` — behaviour gate (real Chromium): boot, all
-  layers register, ground-truth classification, re-highlight second point, roster-join
-  label render, failure isolation (killed source → isolated error card + Retry),
-  coverage-hide + permalink stability, alias shim. Sandbox note: the SessionStart hook
-  vendors Leaflet (`scripts/vendor_leaflet.sh`) because headless Chromium can't reach
-  the CDN through the agent proxy — environmental, never a code regression.
-- `python3 scripts/check_engine_parity.py index.html` — fence lint (also inside
-  validate_index); `--against <sibling> --strict` for byte comparison.
-- `python3 scripts/generate_metro_files.py --check` — generated-region drift.
-- `python3 scripts/validate_sources.py` — monthly freshness (see 6.3).
-- `scripts/fleet_status.py` (weekly, Chicago only) — deploy/engine-pin/roster state per
-  fork + guidebook coverage-map diff; WARNs on a standing issue.
+Run these before every merge; `smoke-test.yml` runs them on every PR and push to `main`.
+
+| Gate | What it catches |
+|---|---|
+| `generate_metro_files.py --check` | a hand-edited GENERATED region |
+| `compose_app.py --check` | an instance file whose fences drifted from `engine/` |
+| `<tag>/scripts/validate_index.py <tag>/index.html` | parse errors, `registerLayer(` floor, rank lists not 1:1 with registered ids, inline datasets, missing `data/app` files or wrong counts, sw exactly-one-list, dispatched counties outside the ring, a layer with no `sources.html` row |
+| `node <tag>/scripts/smoke_test.mjs` | boot, exact layer count, ground-truth classification, negative point, failure isolation, coverage-hide, permalink stability |
+| `build_coverage_gaps.py --check` | a gap record that drifted from the guidebook |
+| `check_roster_retention.py --base origin/main` | a roster field that silently stopped being published |
+| `validate_sources.py` | a superseded dataset, a dead source, a `blocked` source becoming reachable |
+| `validate_card_links.py` | a URL a reader would click that no longer resolves |
+| `validate_workflow_deps.py` | an instance script importing outside its own tree |
+| `build_landing_page.py` / `build_privacy_page.py` / `build_manifests.py` / `build_dark_map_palette.py` `--check` | root and per-instance generated pages, and a layer colour with no dark twin |
+| `landing_test.mjs` / `page_consistency_test.mjs` | the root's generated pages in a real browser |
+
+**Two gates deserve their reasoning.** `check_roster_retention.py` exists because every
+other roster guard floors a COUNT: a county's seven published e-mail addresses once went
+empty while seven rows in, seven rows out kept every floor satisfied. It measures **per
+source**, not per file — pooled across a shared roster file, one county's vanishing column
+reads as an 18% dip that passes everything. And `validate_sources.py` inverts for sources
+carrying `"blocked"`: unreachable is reported OK and **reachable-again is the WARN**, because
+that is the state a human can act on. Without the flag the monthly issue reopens with the
+same no-op warnings forever, which is how a report stops being read.
 
 ## 6.6 Post-expansion operations
 
-Every expansion leaves standing obligations: the weekly roster workflows it added
-(staggered cron slots; the live schedule is CLAUDE.md's generated metro-facts block);
-its `validate_sources.py` manifest rows; `WATCH.md` (the per-fork operations calendar —
-localize it in forks); guidebook rows kept current (fleet-status WARNs on drift); and
-**redistricting exposure** — every new boundary layer gets a blast-radius row in
-`docs/REDISTRICTING_RUNBOOK.md`'s inventory, and pre-built geometry ties its rebuild to
-that runbook's triggers (decennial, court-ordered, administrative, annual school-zone
-rotation).
+Every expansion leaves standing obligations, and they are the difference between a layer
+that stays true and one that quietly rots:
+
+- the **weekly roster workflows** it added (staggered cron slots; the live schedule is the
+  instance CLAUDE.md's generated metro-facts block) — always opening PRs, never committing
+  to `main`;
+- its `validate_sources.py` manifest rows;
+- **`<tag>/WATCH.md`** — the instance's operations calendar. Anything with a date, a filing
+  window, or a per-election refresh belongs here with its last-run value recorded, because
+  the calendar is the only thing that fires for data no gate can check;
+- guidebook rows kept current — coverage map, inventory, matrix, and the gap records with
+  their county lists;
+- **redistricting exposure**: every new boundary layer gets a blast-radius row in
+  `docs/REDISTRICTING_RUNBOOK.md`, and pre-built geometry ties its rebuild to that runbook's
+  triggers (decennial, court-ordered, administrative, annual school-zone rotation).
 
 ---
 
-# APPENDIX A — The 39-layer classification (audit of record, 2026-07-27)
+# APPENDIX A — Worked example: the reference instance's layer classification (2026-07-27)
 
 Classification is this guide's; **counts, sources, and roster provenance live in
 `docs/DATA_LAYER_GUIDEBOOK.md`** (machine-checked weekly). Statewide story: DONE =
@@ -2145,7 +2403,7 @@ different concept/card · UNIQUE = recorded Chicago/Cook-only.
 |---|---|---|---|---|
 | `county` | your county + clerk | County | clerk county-wide | DONE · officer-roster enrichment per rule 4; at-large boards land here |
 | `township` | your township / county subdivision | Township | officers township-wide | DONE (identity statewide + officers for Cook 2026-08-19, township-officials.json; further counties via clerk yearbooks/GIS — Tazewell next recorded); Chicago structural empty |
-| `municipality` | your municipality + its government | Municipal | head municipal-wide; board at-large or by ward | DONE (identity) · ROSTER per county (Part 2.4) · Chicago head + citywide officers SHIPPED |
+| `municipality` | your municipality + its government | Municipal | head municipal-wide; board at-large or by ward | DONE (identity) · ROSTER per county (§3.4) · Chicago head + citywide officers SHIPPED |
 | `county-precinct` | your voting precinct (+ polling place) | Election administration | n/a | ENTRY per authority · Kendall polling-place join is the model |
 | `park-district` | which park district serves you | Special district | elected commissioners | ENTRY · McHenry recorded gap |
 | `library-district` | which library body taxes you | Special district | district trustees elected; municipal funds appointed | ENTRY · complete-tiling rule |
@@ -2156,27 +2414,39 @@ different concept/card · UNIQUE = recorded Chicago/Cook-only.
 | `post-office` | nearest post offices | amenity | n/a | DONE-capable (USGS national) |
 | `library` | nearest library branches | amenity | n/a | Chicago (CPL) · statewide candidate recorded; `library-district` answers governance |
 
+
 # APPENDIX B — Doc map
 
 **This guide is the only entry point for expansion work.** Deliberately separate, live:
 
-- `docs/DATA_LAYER_GUIDEBOOK.md` — the fleet layer **registry**: coverage map
-  (machine-checked weekly), concept × metro matrix, recorded drops, backlog. Updated in
-  the same change as any layer add/rename/remove.
-- `docs/ENGINE_SYNC.md` — the engine parity **protocol** (ships verbatim in every fork).
+- `docs/DATA_LAYER_GUIDEBOOK.md` — the fleet layer **registry and record**: coverage map
+  (machine-checked weekly), concept × instance matrix, recorded drops, the gap records with
+  their county lists, and the backlog. Updated in the same change as any layer
+  add/rename/remove. **When this guide and the guidebook disagree, the guidebook is what
+  was measured.**
+- `docs/DEV_PROCESS_ASSESSMENT.md` — the consolidation decision record (R2.1/R2.3/R5): why
+  the forks, the template repo and the engine release channel are gone.
+- `docs/ENGINE_SYNC.md` — the engine **protocol**: block inventory, new-block seeding, the
+  tombstone convention for retiring helpers.
 - `docs/CARD_RENDER_API.md` — the card-helper **API reference**.
 - `docs/REDISTRICTING_RUNBOOK.md` — the boundary-change **ops runbook** (blast-radius
   inventory, decennial + off-cycle triggers).
-- `WATCH.md` — the per-fork operations calendar. `CLAUDE.md` — agent instructions + the
-  generated metro-facts block (live counts/schedules).
+- `docs/COUNTY_STATUS.md` — the generated per-county view for the reference instance
+  (service tier, board posture, dispatch entries, open gaps). Generated by
+  `scripts/build_county_status.py`; never hand-edited.
+- `<tag>/WATCH.md` — the instance's operations calendar. `<tag>/CLAUDE.md` — the instance's
+  agent brief plus the generated metro-facts block (live counts and workflow schedules).
+- `docs/WI_PHASE2_PLAN.md`, `docs/WI_PHASE4_PLAN.md` — worked phase plans for a
+  statewide-first instance; useful as shape, not as a checklist to re-run.
 
 **History & records** (frozen, provenance only): `docs/archive/` —
-`METRO_EXPANSION_PLAYBOOK.md` (original Part I + the NYC worked example Part II),
-`METRO_EXPANSION_NYC.md` (NYC thread log), `METRO_EXPANSION_SF_WORKSHEET.md` (completed
-SF worksheet), `STATEWIDE_EXPANSION_PLAYBOOK.md`, `COUNTY_LAYER_CONSOLIDATION.md`,
+`METRO_EXPANSION_PLAYBOOK.md` (original Part I plus the NYC worked example Part II),
+`METRO_EXPANSION_NYC.md` (NYC thread log), `METRO_EXPANSION_SF_WORKSHEET.md` (a completed
+port worksheet), `STATEWIDE_EXPANSION_PLAYBOOK.md`, `COUNTY_LAYER_CONSOLIDATION.md`,
 `MUNICIPAL_COUNCILS_PLAYBOOK.md` (decision records this guide absorbed),
 `MECHANIZATION_PLAYBOOK.md` (conversions 1–3, done). Root-level:
-`docs/BUILD_PLAYBOOK_1.md` (original build log; CLAUDE.md wins on contract language),
-`docs/OPTIMIZATION_PLAYBOOK.md` + `docs/PERFORMANCE_ANALYSIS_2026-07.md` (dated
+`docs/BUILD_PLAYBOOK_1.md` (original build log; the instance CLAUDE.md wins on contract
+language), `docs/OPTIMIZATION_PLAYBOOK.md` + `docs/PERFORMANCE_ANALYSIS_2026-07.md` (dated
 measurement records), `docs/COUNTY_SEALS_REVIEW.md` (marker-art tracker),
-`docs/engine-changelog/` (per-release notes), `docs/design_handoff_*/` (design records).
+`docs/engine-changelog/` (per-release notes from the retired channel),
+`docs/design_handoff_*/` (design records).

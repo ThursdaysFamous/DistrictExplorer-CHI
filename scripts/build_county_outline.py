@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build data/app/<slug>-county-outline.json — the coverage outline a county's
-dispatch entries test against (docs/EXPANSION_GUIDE.md §2.5 step 1).
+dispatch entries test against (docs/EXPANSION_GUIDE.md §3.5 step 1).
 
 Why this exists: the seven metro counties' outlines were each produced by a
 one-off run, so the first thing a new county needed was a procedure nobody had

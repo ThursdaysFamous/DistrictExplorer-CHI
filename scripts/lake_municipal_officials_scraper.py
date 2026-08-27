@@ -15,7 +15,7 @@ Municipal League publishes no member-municipality directory. That is a firm
 negative finding, not an unexplored gap.
 
 So this county takes rung 4 of the source ladder
-(docs/EXPANSION_GUIDE.md Part 2.4): the card answers WHICH municipality
+(docs/EXPANSION_GUIDE.md §3.4): the card answers WHICH municipality
 governs the point, WHERE its hall is, HOW to reach it, and links the
 municipality's own site — and names nobody, because no verifiable county
 source names anyone. Every record here carries `name: null` deliberately; the
@@ -83,7 +83,7 @@ def fetch_features():
     resp.raise_for_status()
     payload = resp.json()
     # An ArcGIS error is served as HTTP 200 with an error body — treat it as a
-    # failed fetch, never as an empty roster (docs/EXPANSION_GUIDE.md Part 6.3).
+    # failed fetch, never as an empty roster (docs/EXPANSION_GUIDE.md §6.3).
     if isinstance(payload, dict) and payload.get("error"):
         print("FATAL: service returned an error body: %s" % payload["error"], file=sys.stderr)
         sys.exit(1)

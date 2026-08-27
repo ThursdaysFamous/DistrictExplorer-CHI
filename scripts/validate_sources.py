@@ -334,7 +334,7 @@ PROVENANCE = [
              "reachability WARN here can be a bot filter rather than drift — "
              "confirm with a browser User-Agent before treating it as a source "
              "change. Cook is one of twelve counties shipped in this file, each "
-             "with its own entry below (see docs/EXPANSION_GUIDE.md Part 2 "
+             "with its own entry below (see docs/EXPANSION_GUIDE.md Part 3 "
              "rule 5). Six jurisdiction types "
              "are read: MUNIS (municipalities + citywide officers), MUNIW "
              "(suburban ward/district seats), CHIWD (Chicago citywide), "
