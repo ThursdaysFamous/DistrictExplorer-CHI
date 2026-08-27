@@ -5951,11 +5951,18 @@ token-free, with a `Library` name field. Verified directly: 642 features, and ov
 it returns exactly the seven library tax lines the county clerk's own report names, one
 for one.
 
-**Why it matters beyond one county.** Eight gap records across seven counties — Boone,
+**Why it matters beyond one county.** ~~Eight gap records across seven counties — Boone,
 Lee, Peoria, Randolph, Rock Island, Sangamon, St. Clair, Stephenson, plus Carroll — record
 a missing library-district boundary, and the app's `library-district` layer today
-dispatches only Cook, DuPage, Kane, Lake and Will. One public statewide layer bears on all
-of them at once, which is a different kind of find from a county-by-county unlock.
+dispatches only Cook, DuPage, Kane, Lake and Will.~~ **Narrower as of 2026-08-27: Peoria and
+Rock Island have since shipped their own library-district sources independently** (each
+county's own GIS, alongside its fire/park tilings), leaving **seven** counties on a recorded
+gap — Boone, Lee, Randolph, Sangamon, St. Clair, Stephenson, plus Carroll — and the layer now
+dispatches **fourteen** counties (Cook, DeKalb, DuPage, Effingham, Kane, Kankakee, Kendall,
+Lake, Macon, McHenry, Peoria, Rock Island, Stark, Will — see `docs/COUNTY_STATUS.md`), each
+built from its own county's source rather than this statewide one. One public statewide layer
+still bears on all seven remaining at once, which is a different kind of find from a
+county-by-county unlock.
 
 **What makes it trustworthy, measured on Carroll.** It is right on the NEGATIVES, which is
 the check a wrong layer fails: Shannon village and Lake Carroll land in no library district
@@ -6326,7 +6333,7 @@ the counties' own records:
 
 | county | vector district map? | outcome |
 |---|---|---|
-| **Douglas** | *not needed* | **BUILDABLE.** The county publishes `CountyBoardDistricts` and `VotingDistricts` as PUBLIC ArcGIS feature services. Seven polygons whose `TOTAL_POP` sums to its exact Census 2020 count of 19,740, tiling 99.97% of the county. Not built yet. |
+| **Douglas** | *not needed* | **BUILDABLE.** The county publishes `CountyBoardDistricts` and `VotingDistricts` as PUBLIC ArcGIS feature services. Seven polygons whose `TOTAL_POP` sums to its exact Census 2020 count of 19,740, tiling 99.97% of the county. ~~Not built yet.~~ **SHIPPED 2026-08-23, the 88th dispatched county**, hours after this table was written — see "Search the ArcGIS ONLINE CATALOG", below. |
 | Ford | no — hand-coloured raster | Still shut, but its adopted 2021 reapportionment resolution was found and says the districts are "To be determined". |
 | Bureau | no map of any kind, no GIS host | Still shut; the licensed shapefile remains the only route. |
 | Cumberland | no map; GIS is a parcel product | Still shut. |
@@ -6471,12 +6478,13 @@ both are method rules rather than trivia:
 The probe itself is cheap and unambiguous, which is what makes the narrow sweeps inexcusable
 rather than unlucky: a real report answers `Content-Type: application/pdf` with a
 `Content-Length`, and an uncarried slug answers chunked `text/html`. No parsing, no hashing, no
-judgement. FOUR of the 23 platinum counties are still frontier — Champaign, Fayette, Marion and
-Wayne — and every one of the four is already measured shut for a reason the platform cannot
-touch (Champaign's licensed data; Avena split; Marion's five voting districts spanning three
-board districts; Wayne's 32.4% deviation). Pulaski and Union were on this list until they
-shipped. So the wider sweep opens no new route; what it buys is that the next pass does not
-re-run it.
+judgement. ~~FOUR of the 23 platinum counties are still frontier — Champaign, Fayette, Marion and
+Wayne~~ **THREE, as of 2026-08-25 — Champaign, Fayette and Marion; Wayne shipped as the 90th
+county** on its own raised deviation ceiling (see `docs/COUNTY_STATUS.md`) — and each of the
+three is already measured shut for a reason the platform cannot touch (Champaign's licensed
+data; Avena split; Marion's five voting districts spanning three board districts). Pulaski and
+Union were on this list until they shipped. So the wider sweep opens no new route; what it buys
+is that the next pass does not re-run it.
 
 **What GBS gives is exactly bounded, and the bound is what makes it usable.** It NAMES a
 county's precincts (the committeeperson contests are one per precinct) and it SIZES its
@@ -6890,9 +6898,20 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 > **2026-08-02** (RESEARCH PASS 7 and its build tranches, below) the open items split
 > cleanly into work that is ready and gaps that need a publisher:
 >
+> **Updated 2026-08-27 — this table is itself now 25 days stale, which is exactly the
+> failure it warns about.** It was written when 33 counties were served; `docs/COUNTY_STATUS.md`
+> now counts **91 of 102**, and reviewing it line by line found the table had not kept up with
+> its own advice. Two rows below are corrected in place (Winnebago's precincts turned out to
+> have shipped 25 days before its row was written; the pass-7 ledger's own tranches are marked
+> as they clear). Read every row's Actionable column as of 2026-08-02, not of today — for
+> current status always cross-check `docs/COUNTY_STATUS.md` before acting on a row here. The
+> same staleness applies to the per-county tables elsewhere in this backlog that predate the
+> growth past ~70 counties (the board-form frontier classification and the results-vendor
+> carriage table both got one correction each this pass; neither got a full row-by-row redo).
+>
 > | Open item | Blocker | Actionable? |
 > |---|---|---|
-> | **Winnebago voting precincts, free and public** (found 2026-08-05 while measuring what Stephenson's Clerk meant by "GIS" — see the ask ledger) — `maps.wingis.org/public/rest/services/WardsAndDistricts/MapServer`, no token, layer 7 **WinCo Voting Precincts**, alongside Winnebago County Board, political townships and the Rockford/Loves Park/Machesney Park ward layers. Winnebago is a served county that ships **no precinct layer**. The same host's `ElectedOfficials` service carries per-municipality officeholder layers (already the source behind Winnebago's municipal roster) | none found — the service is open and answers unauthenticated | **yes — a build, not a research question** |
+> | ~~**Winnebago voting precincts, free and public**~~ **STALE ON ARRIVAL — ALREADY SHIPPED 2026-07-30, 25 days before this row was written** (found 2026-08-05 while measuring what Stephenson's Clerk meant by "GIS" — see the ask ledger) — `maps.wingis.org/public/rest/services/WardsAndDistricts/MapServer`, no token, layer 7 **WinCo Voting Precincts**, alongside Winnebago County Board, political townships and the Rockford/Loves Park/Machesney Park ward layers. This is the same service that shipped Winnebago's 94-precinct `county-precinct` dispatch entry (covering the county OUTSIDE the City of Rockford, which runs its own Board of Election Commissioners) — so "Winnebago is a served county that ships no precinct layer" was already false the day this row was written. The genuinely open remainder is narrower and already has its own gap record: `rockford-city-precincts`. The same host's `ElectedOfficials` service carries per-municipality officeholder layers (already the source behind Winnebago's municipal roster) | none found for Rockford's own precincts | **superseded — see gap `rockford-city-precincts`** |
 > | **The `pollresults.net` / `accessliberty.com` county pair** (found 2026-08-18 while building Clark) — one election-results vendor serving **34 Illinois counties**, each at `il-<county>.accessliberty.com` (the Clerk's site, one TEXT-LAYER certified canvass PDF per election back to ~2006) and `il-<county>.pollresults.net` (an AngularJS shell whose ENTIRE result set is embedded in the page as JSON — no API, no key, one GET). Its own navigation names them: Bond, Boone, Bureau, Carroll, Christian, Clark, Clay, Coles, Crawford, DeWitt, Douglas, Edgar, Ford, Hardin, Kankakee, LaSalle, Lee, Livingston, Logan, Macon, Macoupin, Marshall, Mason, Mercer, Montgomery, Moultrie, Ogle, Piatt, Putnam, Shelby, Stephenson, Tazewell, Vermilion, Whiteside. **EIGHT are unserved as of 2026-08-21 — Bureau, Christian, Clay, Douglas, Ford, Hardin, Piatt and Vermilion — down from fourteen as Clark, Coles, Crawford, Edgar, Macoupin, Mercer, Moultrie and Shelby shipped; two of the eight are enclaves (Bureau, Christian).** AND THE LIST OVERSTATES WHAT IS REACHABLE, measured 2026-08-21: probing `pastelections.aspx` across all thirty frontier counties, only BUREAU (68 canvasses) and CHRISTIAN (60) actually return an archive — every other frontier county 404s with a ~9.6 KB error page, and the two carried ones are already measured shut for reasons the vendor cannot fix (Bureau splits precincts between districts; Christian re-precincted, and its own download handler 404s on the pageid/mid pair its page advertises). So this route is EXHAUSTED for the current frontier rather than merely unworked.  A FOURTH VENDOR JOINS THIS BACKLOG (2026-08-21): **results.gbsvote.com** (GBS), neither the accessliberty/pollresults pair nor platinumelectionresults.com, carrying THIRTEEN Illinois counties — Cass, Cumberland, Fulton, Greene, Grundy, Jasper, Johnson, Knox, Morgan, Perry, Scott, Warren, Washington — five of them unserved (Cumberland, Jasper, Johnson, Knox, Perry). Archives run back to 2016 at /locations/county_results.asp?id=N and each county page names its election authority. It was found the way the others should have been: on a county's OWN Elections page, not by guessing a hostname. Its first yield was PERRY's board form, settled AT LARGE from three certified elections whose commissioner contests each span all 27 precincts — a county-card answer, not a geometry one. THE FLEET NOW HAS FOUR SUCH VENDORS AND THE LESSON IS THE SAME EACH TIME: read the county's Elections page first, because every one of these was linked from one. Clark proved what this is worth: precinct-level canvasses turn a "no map" county into a buildable one whenever its board districts are unions of whole precincts, and they answer §2.5 step 2 (districted or at-large) without anyone replying to an e-mail | none — the pages are public and static; the work is per-county, and each still needs the Jasper test (do the census VTDs match the county's CURRENT precincts?) before any dissolve ships | **yes — a research pass, unstarted** |
 > | **The ISBE precinct-map collection** (found 2026-08-05 via Hamilton's Clerk — see the ask ledger) — `elections.il.gov/PrecinctMaps/<County>/`, **98 of 102 counties**, open directory listings. A 14-county sample measured **3 vector / 11 scan**, so the lead is the vector subset (Knox, Menard, Williamson confirmed so far). Knox's and Menard's files were checked and CONFIRM their existing gap records (2011 content; raster) rather than closing them | needs a per-county download-and-extract pass to find which counties' maps are vector AND current | **yes — a cheap research pass, unstarted** |
 > | ~~**Pass-14 first fruit — Hamilton**~~ **SHIPPED 2026-08-05, the forty-fifth dispatched county and SECOND island**, four hours after its Clerk's four-minute reply settled the at-large question and surfaced the county's vendor-hosted GIS org: precincts 17 (one unnamed — `hamilton-unnamed-precinct`, asked back) + fire 3 named as dispatch entries; the five-member board rides the County card from the weekly commissioners scrape of the county's own new site. `hamilton-precinct-polling` CLOSED 2026-08-11 — the county's post-migration site published the Clerk's statutory GPE polling notice, all sixteen pairings (see the ask ledger). STILL OPEN: `hamilton-municipal-officials` | nothing | done — one live ask recorded |
@@ -6965,7 +6984,11 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   probed the day contiguity retired; one build-ready (Effingham — SHIPPED the same day as
   the first island, see the ledger row above), one districted-with-roster (Franklin,
   geometry ask only), two Knox-style refuse-all sites (Union, Williamson), ten live
-  websites, zero self-hosted GIS.** Full
+  websites, zero self-hosted GIS.** **Corrected 2026-08-27:** all three named counties have
+  since shipped — Franklin fully (70th county, `county-board` + `county-precinct`, no open
+  gaps per `docs/COUNTY_STATUS.md`), Union and Williamson onto the County card as at-large
+  boards proven from certified returns, their sites staying exactly as unreachable as
+  recorded here (see "Union and Williamson," earlier in this file). Full
   findings in the ask ledger's pass-13 section; per-county records in the gaps block
   (every one of the 29 now carries a gap record and an outline, so COUNTY_STATUS's
   unresearched tier is EMPTY — the whole state is now either served, or recorded with a
@@ -7135,6 +7158,18 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   Litchfield #1"), so a composition dissolve cannot be exact — needs the polygon layer
   Beacon locks away, or a Stephenson-style georeference of its vector PDF).
 
+  **Corrected 2026-08-27 — Fulton, Hancock and Montgomery all shipped since, each on a
+  route this paragraph didn't anticipate.** ~~Fulton~~ **SHIPPED** — `docs/COUNTY_STATUS.md`
+  confirms both `county-board` and `county-precinct` dispatch entries live, resolving the
+  "districted or at-large... UNDETERMINED" question this paragraph left open. ~~Hancock~~
+  **SHIPPED 2026-08-21 as the 75th county** — its board came from
+  `electionstats.hancockcounty-il.gov`, a county-run results database this paragraph's
+  client-side-rendering blocker never anticipated (see the ISBE-structure-table entry,
+  above). ~~Montgomery~~ **SHIPPED as the 47th county** (see "Montgomery answered with BOTH
+  halves," earlier in this file) — `county-board` and `county-precinct` both dispatch live.
+  McDonough's own correction already stands earlier in this file (SHIPPED 2026-08-03);
+  Stark's stands inline just above.
+
   **Blocked, each on a named artifact:** **Knox** (~50k — the county's ENTIRE web estate
   is Cloudflare-challenge-fronted, roster page included; Galesburg's city org publishes
   board districts 1-3 (= **3** features, adopted 2021-10-27 per the item) but the rural
@@ -7145,6 +7180,18 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   commissioner districts whose only map is a 2021-12 raster; boundaries run section-line
   roads, not precinct unions, so no composition route exists; the roster and
   TIGER-VTD precincts (**14/14** name match) are otherwise ready).
+
+  **Corrected 2026-08-27 — two of these three shipped since; the blocker recorded here
+  turned out not to be the last word for either.** ~~Knox~~ **SHIPPED 2026-08-22 as the
+  80th county** — the premise here was the same one this backlog corrects elsewhere: the
+  county's own SITE refuses, but a *different host* (`gis.knoxcountyil.gov`) serves the
+  district map live, with districts 4-5 read off the county's adopted map rather than
+  found in "no vector source" (see the KNOX entry earlier in this file, dated 2026-08-21/22,
+  and `scripts/build_knox_board_districts.py`). ~~Menard~~ **SHIPPED 2026-08-07 as the 48th
+  county** (see "Menard ships as the 48th county," above) — `menard-commissioner-districts.json`
+  and `menard-precincts.json` both dispatch live per `docs/COUNTY_STATUS.md`. **Christian is
+  the one row still accurate**: it remains an unserved single-county enclave, its
+  `christian-county-board-districts` gap unchanged.
 
   **Pass-wide findings:** (1) the ISBE precinct-maps mirror is PRE-2021-vintage for
   nearly everything here (Knox 2011, De Witt 2015, Piatt/Putnam 2015 scans, Montgomery
@@ -8009,6 +8056,16 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   county needs someone to publish something, and the four `wanted` fields say exactly
   what.
 
+  **Corrected 2026-08-27 — three of the four shipped since; only Bureau is still blocked
+  exactly as recorded.** ~~Henry~~ **SHIPPED as the 28th county** (`county-board` +
+  `county-precinct` both live per `docs/COUNTY_STATUS.md`). ~~Mercer~~ **SHIPPED**
+  (`county-board` + `county-precinct` live; its -14.6% population deviation was accepted
+  and recorded rather than hidden). ~~Jo Daviess~~ **SHIPPED as the 63rd county**, board
+  only, through the purchased licence this section's own follow-up describes — its
+  precinct geometry (shared with Jersey) remains the one open gap,
+  `jodaviess-jersey-precinct-geometry`. **Bureau remains exactly as blocked**: no map of
+  any kind, no GIS host, `bureau-county-board-districts` still open.
+
 - **RESEARCH PASS 5h (2026-07-31) — Rock Island SHIPPED; Bureau and Henry are
   recorded gaps with rosters and no boundary.** The three counties the previous pass
   left as the frontier, researched together.
@@ -8018,6 +8075,10 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
   | `county-board` | **SHIPPED** — 19 SINGLE-member districts, the most of any county here; GIS + weekly roster (party, term, Chair/Vice-Chair) | **gap** — 18 districts drawn nowhere public | **gap** — 2 districts, raster map only |
   | `county-precinct` | **SHIPPED** — 120 | none published | per-township PDFs only |
   | roster available? | yes (county page) | yes, 16 of 18 seats | yes, with e-mail + phone |
+
+  **Henry's column is now historical: it SHIPPED as the 28th county** (2026-08-27 check —
+  `county-board` and `county-precinct` both live per `docs/COUNTY_STATUS.md`). Bureau's
+  column is unchanged and still accurate.
 
   **Rock Island pushed the app past its own western edge.** It is the first served
   county on the Mississippi, reaching -91.07, and `build_metro_outline.py` refused to
