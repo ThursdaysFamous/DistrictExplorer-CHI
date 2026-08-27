@@ -189,6 +189,8 @@ jobs:
             ca/data/source ca/icons/source 'ca/data/*.geojson'
             ny/scripts ny/docs ny/.github ca/scripts ca/docs ca/.github
             wi/data/state wi/data/source wi/scripts 'wi/data/*.geojson'
+            ia   # dark until its own go-live PR (item 2 above) — excluded WHOLE,
+                 # not just data/source+scripts, since it isn't in metros.json yet
             fonts/barlow-fontface.css
             node_modules package.json package-lock.json
             engine metros.json metro-worksheet.json schema CLAUDE.md

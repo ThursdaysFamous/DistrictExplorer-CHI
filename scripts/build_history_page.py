@@ -57,7 +57,8 @@ from build_privacy_page import (  # noqa: E402
 INSTANCES = (("il", "metro-worksheet.json"),
              ("ca", "ca/metro-worksheet.json"),
              ("ny", "ny/metro-worksheet.json"),
-             ("wi", "wi/metro-worksheet.json"))
+             ("wi", "wi/metro-worksheet.json"),
+             ("ia", "ia/metro-worksheet.json"))
 
 METRIC_RE = re.compile(r"^(keys|features|sum:[A-Za-z]+|count-nonzero:[A-Za-z]+)$")
 GROUP_ORDER = ("political", "safety", "schools", "geography")

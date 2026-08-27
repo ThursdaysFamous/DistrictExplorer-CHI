@@ -1,0 +1,62 @@
+{
+  "1": {
+    "name": "Mariannette Miller-Meeks",
+    "party": "Republican",
+    "url": "https://millermeeks.house.gov",
+    "capitolOffice": [
+      "504 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-6576"
+    ],
+    "districtOffice": [
+      "126 N Howard Street",
+      "Indianola, IA 50125",
+      "Phone: 515-808-6040"
+    ]
+  },
+  "2": {
+    "name": "Ashley Hinson",
+    "party": "Republican",
+    "url": "https://hinson.house.gov",
+    "capitolOffice": [
+      "2458 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-2911"
+    ],
+    "districtOffice": [
+      "531 Commercial St., Suite 302",
+      "Waterloo, IA 50701",
+      "Phone: 319-266-6925"
+    ]
+  },
+  "3": {
+    "name": "Zachary Nunn",
+    "party": "Republican",
+    "url": "https://nunn.house.gov",
+    "capitolOffice": [
+      "1410 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-5476"
+    ],
+    "districtOffice": [
+      "400 Locust Street, Suite 250",
+      "Des Moines, IA 50309",
+      "Phone: 515-400-8180"
+    ]
+  },
+  "4": {
+    "name": "Randy Feenstra",
+    "party": "Republican",
+    "url": "https://feenstra.house.gov",
+    "capitolOffice": [
+      "2434 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4426"
+    ],
+    "districtOffice": [
+      "723 Central Avenue",
+      "Fort Dodge, IA 50501",
+      "Phone: 515-302-7060"
+    ]
+  }
+}
