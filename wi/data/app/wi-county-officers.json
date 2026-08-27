@@ -1344,7 +1344,8 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Timothy Cottingham",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 21
   },
   "executive": null,
@@ -2525,7 +2526,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Philip Unterschuetz",
+   "name": "Ron Freeman",
+   "source": "county-board-page",
+   "sourceUrl": "https://ruskcounty.org/supervisors",
    "seats": 19
   },
   "executive": {
@@ -2837,7 +2840,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "John Aasen",
+   "name": "Andy Todd",
+   "source": "county-board-page",
+   "sourceUrl": "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/trempealeau_county_board_of_supervisors.php",
    "seats": 17
   },
   "executive": {
@@ -3081,17 +3086,14 @@
   },
   "sheriff": {
    "name": "Dennis Stuart",
-   "party": "Republican",
-   "url": "https://www.washburnsheriff.org/",
-   "phone": "(715) 468-4700",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Angela Pank",
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 5
+  "contactChecked": 4
  },
  "55131": {
   "county": "Washington",
