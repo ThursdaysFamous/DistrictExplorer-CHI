@@ -320,6 +320,25 @@ re-learned). Township trustees are elected (ASSERTED, Iowa Code ch. 359) with no
 
 ## PR 8 — `municipality`, labeled "City": 939
 
+> **Shipped 2026-08-27.** Re-verification at execution time confirmed the count exactly (939) and the
+> single-legal-class claim: `LSADC` is uniformly `25` across all 939 records (no separate village/town
+> class to distinguish), so the layer ships labeled **"City"** with no type row needed, unlike
+> `county-subdivision`'s three-way split. This ships as a **live** layer, the same
+> `tigerStatewideLoader` pattern PR 7 established — no builder script, no committed `data/app/` file,
+> deliberately absent from `anchors[]`. The execution note's `data.iowa.gov` check was run: the host
+> does **not** 403 from this sandbox (that recorded block did not reproduce — corrected rather than
+> repeated), but the site itself, "Iowa Data Hub," turned out to be a **client-rendered Next.js catalog
+> of state-agency datasets**, not a Socrata portal (`api.us.socrata.com`'s catalog API returns "Domain
+> not found" for it) and not a municipal aggregator by its own description ("data collected, created,
+> and maintained by **state agencies**"). Its catalog listing is rendered client-side with no
+> discoverable backend API in its compiled JS, and this sandbox's Chromium cannot reach the host
+> directly to render/search it live (the same CDN-proxy gap documented for Leaflet and TIGERweb) — so
+> the search was not exhaustively completed, but the platform finding itself (not Socrata, not
+> municipal-scoped) plus the fleet's own precedent (no other instance has ever found a single
+> state-level source of city council rosters; Chicago's and Wisconsin's municipal-officials data are
+> both built city by city) is enough to record the same "no statewide source" conclusion the plan
+> predicted, now measured rather than assumed. Per-city rosters stay phase 3–4 work.
+
 TIGERweb `Places_CouSub_ConCity_SubMCD/MapServer/4`, `STATE='19'` — **VERIFIED, research pass: 939
 incorporated places.** Iowa incorporates only "cities" — no villages or towns as a separate legal
 class — so the layer label ships as **"City" from day one**, skipping the mislabel-then-correct journey

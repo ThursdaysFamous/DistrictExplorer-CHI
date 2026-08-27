@@ -109,9 +109,21 @@
         "people": "Iowa's civil townships are governed by elected trustees, a clerk and an assessor (Iowa Code ch. 359, ASSERTED) — no statewide roster of township officers was found in the research pass, so the card states that plainly rather than guessing. The 62 incorporated-city subdivision records and the one unorganized-territory record are Census Bureau bookkeeping constructs, not separate governments, so no roster claim applies to them at all.",
         "applies": "Iowa — statewide, all 1,663 records."
       }
+    },
+    {
+      "id": "municipality", "label": "City", "group": "geography", "area_rank": 8,
+      "rank_note": "939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records",
+      "source": {
+        "answers": "The incorporated city covering the point, if any.",
+        "boundary": [
+          { "label": "U.S. Census TIGERweb — Places / incorporated places, layer 4, queried live at runtime (no builder script, no committed data/app file)", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4" }
+        ],
+        "people": "No statewide roster of Iowa city officials was found in the research pass. The Iowa League of Cities is a membership directory with no public officials export; the state's own Iowa Data Hub (data.iowa.gov) is reachable but is a client-rendered catalog of state-agency datasets, not a municipal aggregator. Per-city rosters are a later phase's city-by-city work, not this layer's.",
+        "applies": "Iowa — statewide, all 939 incorporated cities."
+      }
     }
   ],
-  "min_register_layer": 7,
+  "min_register_layer": 8,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },
