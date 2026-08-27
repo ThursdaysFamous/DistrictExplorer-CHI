@@ -143,6 +143,7 @@
   "county": "Brown",
   "district": 11,
   "name": "Patrick Buckley",
+  "role": "Chair",
   "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
  },
  "5500912": {
@@ -173,6 +174,7 @@
   "county": "Brown",
   "district": 16,
   "name": "Dave Kaster",
+  "role": "Vice-Chair",
   "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
  },
  "5500917": {
@@ -1251,6 +1253,7 @@
   "county": "Jefferson",
   "district": 5,
   "name": "James Braughler",
+  "role": "First Vice Chair",
   "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
  },
  "5505506": {
@@ -1353,6 +1356,7 @@
   "county": "Jefferson",
   "district": 22,
   "name": "Blane Poulson",
+  "role": "Second Vice Chair",
   "sourceUrl": "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"
  },
  "5505523": {
@@ -1509,6 +1513,7 @@
   "county": "Juneau",
   "district": 18,
   "name": "Tamaya Loewe",
+  "role": "Second Vice-Chairperson",
   "sourceUrl": "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"
  },
  "5505719": {
@@ -1527,12 +1532,14 @@
   "county": "Juneau",
   "district": 21,
   "name": "Jim Cauley",
+  "role": "Chairperson",
   "sourceUrl": "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"
  },
  "5506101": {
   "county": "Kewaunee",
   "district": 1,
   "name": "Gerald Paape",
+  "role": "Vice-Chair",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506102": {
@@ -1563,6 +1570,7 @@
   "county": "Kewaunee",
   "district": 6,
   "name": "Daniel Olson",
+  "role": "Chairperson",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506107": {
@@ -1924,6 +1932,7 @@
   "county": "Oneida",
   "district": 5,
   "name": "Russ Fisher",
+  "role": "1st Vice Chair",
   "sourceUrl": "https://www.oneidacountywi.gov/government/cb/"
  },
  "5508506": {
@@ -1954,6 +1963,7 @@
   "county": "Oneida",
   "district": 10,
   "name": "Dan Hess",
+  "role": "2nd Vice Chair",
   "sourceUrl": "https://www.oneidacountywi.gov/government/cb/"
  },
  "5508511": {
@@ -1978,6 +1988,7 @@
   "county": "Oneida",
   "district": 14,
   "name": "Scott Holewinski",
+  "role": "Chairperson",
   "sourceUrl": "https://www.oneidacountywi.gov/government/cb/"
  },
  "5508515": {
@@ -3182,6 +3193,7 @@
   "county": "Vilas",
   "district": 12,
   "name": "Carolyn Ritter",
+  "role": "Vice-Chairman",
   "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
  },
  "5512513": {
@@ -3200,6 +3212,7 @@
   "county": "Vilas",
   "district": 15,
   "name": "Joe Muehlbach",
+  "role": "Second Vice-Chairman",
   "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
  },
  "5512516": {
@@ -3596,6 +3609,7 @@
   "county": "Waukesha",
   "district": 7,
   "name": "Jacob LaFontain",
+  "role": "2nd Vice Chair",
   "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
  },
  "5513308": {
@@ -3608,6 +3622,7 @@
   "county": "Waukesha",
   "district": 9,
   "name": "James A. Heinrich",
+  "role": "Chair",
   "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
  },
  "5513310": {
@@ -3692,6 +3707,7 @@
   "county": "Waukesha",
   "district": 23,
   "name": "Keith Hammitt",
+  "role": "Vice Chair",
   "sourceUrl": "https://www.waukeshacounty.gov/waukesha-county-board/county-board-supervisors/"
  },
  "5513324": {
@@ -3926,6 +3942,7 @@
   "county": "Winnebago",
   "district": 26,
   "name": "Conley Hanson",
+  "role": "Vice Chair",
   "sourceUrl": "https://www.winnebagocountywi.gov/703"
  },
  "5513927": {
@@ -3962,6 +3979,7 @@
   "county": "Winnebago",
   "district": 32,
   "name": "Frank Frassetto",
+  "role": "Chair",
   "sourceUrl": "https://www.winnebagocountywi.gov/703"
  },
  "5513933": {
@@ -4034,6 +4052,7 @@
   "county": "Wood",
   "district": 8,
   "name": "Jake Hahn",
+  "role": "1st Vice Chair",
   "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
  },
  "5514109": {
@@ -4082,12 +4101,14 @@
   "county": "Wood",
   "district": 16,
   "name": "Lance A. Pliml",
+  "role": "Chair",
   "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
  },
  "5514117": {
   "county": "Wood",
   "district": 17,
   "name": "Joseph H. Zurfluh",
+  "role": "2nd Vice Chair",
   "sourceUrl": "https://woodcountywi.gov/CountyBoard/"
  },
  "5514118": {

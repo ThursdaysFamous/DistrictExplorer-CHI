@@ -85,6 +85,24 @@ A COUNTY THAT DOES NOT FULLY RESOLVE YIELDS NOTHING. Partial output is worse
 than none here: a card showing 18 of 21 districts reads as a complete board
 with three empty seats.
 
+OFFICERS PUBLISHED ABOVE THE DISTRICT LIST (added 2026-08-27)
+--------------------------------------------------------------
+Seven counties name their chair and vice-chairs in a block of their own rather
+than beside the member's district row, so `split_role` — which only sees a role
+attached to the name it is reading — never reached them. That is not cosmetic:
+the county card's board chair is reconciled weekly against this roster, and a
+roster with NO marked chair makes the officer builder WITHHOLD the Blue Book's
+chair rather than supersede it. Attaching those roles took Juneau's and
+Winnebago's cards from a withheld chair to the right one (the book still had
+Timothy Cottingham and Thomas J Egan; their counties say Jim Cauley and Frank
+Frassetto), and cut the withheld count from three to one.
+
+`attach_officer_roles` joins on a UNIQUE FULL NAME and prints every join. It
+never overwrites a role a member's own row already carries, and it walks into
+the same before/after ambiguity the rest of this file pins per county — see
+its comment for the three cases and for Jefferson, which a forward-only first
+draft filed one seat off.
+
 Vacancies are DATA, not misses. Winnebago district 33 ("Vacant Vacant"),
 Shawano 5, Oneida 1 and Rusk 3 and 13 are seats the counties themselves say
 nobody holds; they ship as vacant, and a vacancy overrides any name the search
@@ -561,6 +579,82 @@ def scrape_arcgis_county(spec):
     return {str(d): rows[d] for d in sorted(rows)}
 
 
+# --- officers published ABOVE the district list ------------------------------
+# Juneau and Oneida name their chair and vice-chairs in a block of their own,
+# separate from the district rows, so the roles never reach a member through
+# `split_role` (which only sees a role attached to the name it is reading).
+# That is not cosmetic: the county card's board chair is reconciled weekly
+# against this roster, and a roster with NO marked chair makes the builder
+# WITHHOLD the Blue Book's chair rather than supersede it — which is how
+# Juneau's card lost a chair its own page names in plain text.
+#
+# THE JOIN IS ON A FULL NAME AND MUST BE UNIQUE, and every join PRINTS. A role
+# guessed onto the wrong supervisor is worse than no role at all.
+OFFICER_LINE = re.compile(r"^\s*(%s)\s*(?:[-–—:]\s*(.+))?$" % _ROLE, re.I)
+# str.title() turns "1st Vice Chair" into "1St Vice Chair" — it upper-cases the
+# letter after every digit. Ordinals keep their own casing.
+_ORDINAL = re.compile(r"^\d+(?:st|nd|rd|th)$", re.I)
+
+
+def role_case(text):
+    return " ".join(w.lower() if _ORDINAL.match(w) else w.title()
+                    for w in text.split())
+
+
+def attach_officer_roles(lines, districts, county):
+    """Give a member the role their county states in its officers block."""
+    by_name = {}
+    for d, row in districts.items():
+        if row.get("name"):
+            by_name.setdefault(row["name"], []).append(d)
+    for i, line in enumerate(lines):
+        m = OFFICER_LINE.match(line)
+        if not m:
+            continue
+        role = role_case(m.group(1))
+        # THE SAME BEFORE/AFTER AMBIGUITY THE WHOLE FILE PINS, one block over,
+        # and it is not hypothetical: a first draft scanned FORWARD only and
+        # filed Jefferson's Blane Poulson — its Second Vice Chair — as First,
+        # because Jefferson prints the NAME above the role ("James Braughler /
+        # First Vice Chair / phone") where Brown prints it below ("Chair /
+        # Buckley, Patrick"). Three cases, and only the first two attach:
+        #   * the role line carries its own name  -> use it, and never look
+        #     further; Juneau lists three officers in consecutive lines, so a
+        #     fall-through files each role under the NEXT officer's name;
+        #   * exactly ONE neighbouring line reads as a name -> that one;
+        #   * BOTH neighbours read as names -> ambiguous, attach nothing.
+        if m.group(2):
+            cands = [m.group(2)]
+        else:
+            before = lines[i - 1] if i > 0 else ""
+            after = lines[i + 1] if i + 1 < len(lines) else ""
+            b_ok, a_ok = is_name(before), is_name(after)
+            if b_ok and a_ok:
+                print("  note %-12s role %r sits between two names (%r, %r) — "
+                      "not attached" % (county, role, before, after), file=sys.stderr)
+                continue
+            cands = [after] if a_ok else ([before] if b_ok else [])
+        for cand in cands:
+            if not cand:
+                continue
+            who = clean(cand)[0]
+            hits = by_name.get(who)
+            if not hits:
+                continue
+            if len(hits) > 1:
+                print("  note %-12s %r holds %d districts — role %r not attached"
+                      % (county, who, len(hits), role), file=sys.stderr)
+                break
+            d = hits[0]
+            if districts[d].get("role"):
+                break                       # the row already said so
+            districts[d]["role"] = role
+            print("  role %-12s district %s: %s -> %s"
+                  % (county, d, who, role), file=sys.stderr)
+            break
+    return districts
+
+
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
     lines = to_lines(fetch(url))
@@ -595,7 +689,7 @@ def scrape_county(fips, name, seats, strategy, url):
         else:
             member, role = found[d]
             out[str(d)] = {"name": member, "vacant": False, "role": role}
-    return out
+    return attach_officer_roles(lines, out, name)
 
 
 def main():
