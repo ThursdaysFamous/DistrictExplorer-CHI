@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 22 of the 72 counties, the supervisor holding the district — 20 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. The other 50 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 31 of the 72 counties, the supervisor holding the district — 29 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. The other 41 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 455,
-        "note": "County board supervisors for the 22 counties that publish a district-keyed member list a client can read (476 seats) — 20 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 50 counties name nobody — their cards link the county board instead."
+        "min_keys": 645,
+        "note": "County board supervisors for the 31 counties that publish a district-keyed member list a client can read (672 seats) — 29 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 41 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -2116,7 +2116,7 @@
         "label": "county-board seats tracked weekly",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 22 counties that publish a district-keyed roster"
+        "note": "in the 31 counties that publish a district-keyed roster"
       },
       {
         "label": "circuit courts with their full bench named",

@@ -1,26 +1,53 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 20 Wisconsin counties that publish a
+Scrape county board supervisors from the 29 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY OF SEVENTY-TWO
-------------------------------
+WHY ONLY TWENTY-NINE OF SEVENTY-TWO
+-----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. A sweep of
-all 72 found 20 whose own page pairs a district with a person in a form a
-parser can read. The rest are not oversights and are recorded as such:
+nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
+pair a district with a person in a form a parser can read (plus Milwaukee and
+Racine off their own GIS layers, below). The rest are not oversights and are
+recorded as such:
 
-  * Kenosha, Oconto and Ozaukee publish district MAPS — a page per district
-    with a PDF and no name on it anywhere. They were checked three pages deep
-    apiece. This file used to claim 23 counties; that count came from a sweep
-    that tested district NUMBERS, and numbers are what a map index has.
-  * 44 more could not be read at all: 11 answer 403 to a datacenter client
-    while serving browsers normally, 2 answer 503, Taylor sits behind an
-    sgcaptcha challenge (an access control, not an obstacle to route around),
-    and the remainder publish their members as PDFs, images or prose with no
-    district column.
+  * Kenosha and Ozaukee publish district MAPS — a page per district with a PDF
+    and no name on it anywhere. They were checked three pages deep apiece.
+    This file used to claim 23 counties; that count came from a sweep that
+    tested district NUMBERS, and numbers are what a map index has.
+  * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
+    "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
+    would be an inference the county never wrote, so the county stays out.
+  * The rest could not be read: 9 answer 403 to a datacenter client and hold
+    it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
+    Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
+    sgcaptcha challenge answering 202 (an access control, not an obstacle to
+    route around), Forest does not resolve, and the remainder publish their
+    members as PDFs, images or prose with no district column.
+
+NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
+--------------------------------------------------------------------------
+Dane 37, Shawano 27, Juneau 21, Oneida 21, Richland 21, Kewaunee 20, Rusk 19,
+Trempealeau 17 and Price 13 — 196 seats — were recorded here as publishing
+nothing readable, and both causes were on this side of the wire.
+
+The re-sweep was provoked by one county: build_wi_supervisory_districts.py's
+docstring cites Trempealeau's own board page as the authority for its
+seventeen seats, that page was never wired into this scraper, and a cold-ask
+e-mail was being drafted to the county for a list it publishes.
+
+  CAUSE ONE, THE READER. `DIST` needs the literal word "district" beside the
+  number. A page that says it once in a COLUMN HEADER and then prints bare
+  numerals in the cells is invisible to all three original readings — so
+  Oneida, Price and Trempealeau were filed under "no district column" when
+  having one is exactly why they could not be read. `_column` reads the cell.
+
+  CAUSE TWO, THE SWEEP. It asked each COUNTY's site and never the BOARD's.
+  Dane's 37 supervisors are on board.danecounty.gov, a different host from the
+  countyofdane.com this project's own clerk file carries. ASK THE BOARD'S OWN
+  HOST BEFORE RECORDING THAT A COUNTY PUBLISHES NOTHING.
 
 THE READING DIRECTION IS PINNED PER COUNTY, NOT DETECTED
 --------------------------------------------------------
@@ -38,14 +65,33 @@ at runtime would mean a page tweak could silently flip it, so each county's
 direction is PINNED here and a mismatch fails the county's count guard loudly
 instead.
 
+Two more shapes joined in the 2026-08-27 re-sweep, and both are pinned the
+same way:
+
+    column      a District COLUMN of bare numerals (Oneida, Price,
+                Trempealeau) — see `_column`
+    -strict     as before/after, but the scan STOPS at the next district line
+                (Richland, Rusk, Shawano) — see `_windowed_strict`
+
+The strict readings exist because a district whose own row yields no readable
+name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
+nineteen bare "District #N" links above its roster, and Richland's rows end in
+an e-mail address. Both filed one person under two districts, both were caught
+by the duplicate-name guard below, and neither ships. They are a separate
+strategy rather than a change to `_windowed` so the twenty counties already
+shipping keep byte-identical behaviour.
+
 A COUNTY THAT DOES NOT FULLY RESOLVE YIELDS NOTHING. Partial output is worse
 than none here: a card showing 18 of 21 districts reads as a complete board
 with three empty seats.
 
-Vacancies are DATA, not misses. Vilas district 6 ("Supervisor vacancy Dist 6")
-and Winnebago district 33 ("Vacant Vacant") are seats the counties themselves
-say nobody holds; they ship as vacant, and a vacancy overrides any name the
-search window happens to reach.
+Vacancies are DATA, not misses. Winnebago district 33 ("Vacant Vacant"),
+Shawano 5, Oneida 1 and Rusk 3 and 13 are seats the counties themselves say
+nobody holds; they ship as vacant, and a vacancy overrides any name the search
+window happens to reach. `vacant_districts` only scans FORWARD from the word
+"district", which is why the strict and column readings report their own:
+Shawano prints "Vacant ." ABOVE its "- District 5", and a column page names no
+district beside a seat at all.
 
 Usage:
     python3 wi/scripts/wi_county_board_scraper.py [--out PATH] [--only FIPS]
@@ -110,7 +156,29 @@ COUNTIES = [
     ("55139", "Winnebago", 36, "after",
      "https://www.winnebagocountywi.gov/703"),
     ("55141", "Wood", 19, "after",
-     "https://woodcountywi.gov/CountyBoard/"),]
+     "https://woodcountywi.gov/CountyBoard/"),
+    # --- the 2026-08-27 re-sweep: ten counties that were publishing all along ---
+    # Dane's list is on the BOARD's host, not the county's — the county site was
+    # checked and board.danecounty.gov was not.
+    ("55025", "Dane", 37, "after",
+     "https://board.danecounty.gov/Supervisors"),
+    ("55057", "Juneau", 21, "same-line",
+     "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"),
+    ("55061", "Kewaunee", 20, "before",
+     "https://www.kewauneeco.org/government/boards_and_committees/"),
+    ("55085", "Oneida", 21, "column-after",
+     "https://www.oneidacountywi.gov/government/cb/"),
+    ("55099", "Price", 13, "column-after",
+     "https://co.price.wi.us/319/County-Board"),
+    ("55103", "Richland", 21, "after-strict",
+     "https://richlandcountywi.gov/index.asp?SEC=DB387A4E-E124-4584-B32C-2C95880C63F0"),
+    ("55107", "Rusk", 19, "after-strict",
+     "https://ruskcounty.org/supervisors"),
+    ("55115", "Shawano", 27, "before-strict",
+     "https://www.co.shawano.wi.us/county_board/"),
+    ("55121", "Trempealeau", 17, "column-before",
+     "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
+     "trempealeau_county_board_of_supervisors.php"),]
 
 # --- text shaping -------------------------------------------------------------
 # nav is NOT boilerplate everywhere: Grant County publishes its entire board in
@@ -231,11 +299,117 @@ def _windowed(lines, offsets):
     return out
 
 
+# --- the fourth shape: a district COLUMN ---------------------------------------
+# The three readings above all need the WORD "district" next to the number,
+# because that is how a page written as prose or as a list says it. A page
+# written as a TABLE says it once, in the column header, and then prints bare
+# numerals in the cells:
+#
+#     District | Name            | Phone        (Oneida: number then name)
+#     1        | Vacant          |
+#     2        | Sandy Hamburg   | 715-499-3129
+#
+#     Members          | Phone        | District   (Trempealeau: name then number)
+#     Andy Todd, Chair | 608-406-0616 | 5
+#
+# `DIST` cannot see either, so all three column counties were recorded as
+# publishing "no district column" — when having one is precisely why they were
+# unreadable. Found 2026-08-27 re-sweeping the 50 no-roster counties, after
+# Trempealeau turned out to publish the roster this project was drafting an
+# e-mail to ask it for.
+BARE_NUM = re.compile(r"^#?\s*(\d{1,2})\s*$")
+COLUMN_SPAN = 6
+# Richland publishes "Melvin (Bob) Frank" — a parenthesised nickname, which
+# `is_name`'s per-token test rejects. The nickname is stripped for the TEST
+# only: what ships is the county's own spelling, parentheses and all.
+NICKNAME = re.compile(r"\s*\([^)]{1,24}\)\s*")
+
+
+def _reads_as_name(cell):
+    return is_name(cell) or is_name(NICKNAME.sub(" ", cell).strip())
+
+
+def _column(lines, seats, forward):
+    """Pair a bare-numeral district cell with the nearest name cell.
+
+    The scan STOPS at the next bare numeral in range: without that, a district
+    whose own row carries no readable name would reach into its neighbour's row
+    and every seat below it would shift by one — the same failure the pinned
+    reading directions exist to prevent, one column over.
+    """
+    out, vacant = {}, set()
+    step = 1 if forward else -1
+    for i, line in enumerate(lines):
+        m = BARE_NUM.match(line.strip())
+        if not m:
+            continue
+        d = int(m.group(1))
+        if not (1 <= d <= seats) or d in out or d in vacant:
+            continue
+        for off in range(1, COLUMN_SPAN + 1):
+            j = i + off * step
+            if not (0 <= j < len(lines)):
+                break
+            cell = lines[j].strip()
+            if BARE_NUM.match(cell):
+                break                       # the next row: this one has no name
+            if VACANT.search(cell):
+                vacant.add(d)
+                break
+            if _reads_as_name(cell):
+                out[d] = clean(cell)
+                break
+    return out, vacant
+
+
+def _windowed_strict(lines, offsets):
+    """`_windowed`, but the scan STOPS at the next district line.
+
+    Rusk prints an INDEX of nineteen bare "District #N" links above its roster,
+    and Richland's rows end in an e-mail rather than a name. In both, a district
+    whose own row yields no readable name reaches past the next district heading
+    and takes ITS name — Rusk filed Alec Hampton under both 19 and 1, Richland
+    filed Kerry Severson under 15 and 16. The duplicate-name guard caught both,
+    which is what it is for; this reading removes the cause. It is a separate
+    pinned strategy rather than a change to `_windowed` so the twenty counties
+    already shipping keep byte-identical behaviour.
+    """
+    out, vacant = {}, set()
+    for i, line in enumerate(lines):
+        m = DIST.search(line)
+        if not m:
+            continue
+        d = int(m.group(1))
+        if d in out or d in vacant:
+            continue
+        for off in offsets:
+            j = i + off
+            if not (0 <= j < len(lines)):
+                break
+            if DIST.search(lines[j]):
+                break               # the next district's row: stop, never borrow
+            # A vacancy sits on the side the page reads from: Shawano prints
+            # "Vacant ." ABOVE its "- District 5", where the forward-only
+            # `vacant_districts` can never see it.
+            if VACANT.search(lines[j]):
+                vacant.add(d)
+                break
+            if _reads_as_name(lines[j]):
+                out[d] = clean(lines[j])
+                break
+    return out, vacant
+
+
 READINGS = {
     "same-line": _same_line,
     "before": lambda ls: _windowed(ls, WINDOW_BEFORE),
     "after": lambda ls: _windowed(ls, WINDOW_AFTER),
 }
+STRICT_READINGS = {
+    "before-strict": lambda ls: _windowed_strict(ls, WINDOW_BEFORE),
+    "after-strict": lambda ls: _windowed_strict(ls, WINDOW_AFTER),
+}
+COLUMN_READINGS = {"column-after": True, "column-before": False}
 
 
 def vacant_districts(lines, seats):
@@ -390,8 +564,16 @@ def scrape_arcgis_county(spec):
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
     lines = to_lines(fetch(url))
-    vacant = vacant_districts(lines, seats)
-    found = READINGS[strategy](lines)
+    if strategy in STRICT_READINGS:
+        found, vacant = STRICT_READINGS[strategy](lines)
+    elif strategy in COLUMN_READINGS:
+        # A column page names no district beside a seat, so `vacant_districts`
+        # (which keys off the WORD) can never see its vacancies; the column
+        # reader reports them from the cell it actually lands on instead.
+        found, vacant = _column(lines, seats, COLUMN_READINGS[strategy])
+    else:
+        vacant = vacant_districts(lines, seats)
+        found = READINGS[strategy](lines)
     for d in vacant:
         found.pop(d, None)          # the county says the seat is empty; believe it
     covered = set(found) | vacant
@@ -450,7 +632,7 @@ def main():
         json.dump({"counties": counties, "failures": failures}, f, indent=2, ensure_ascii=False)
     total = sum(c["seats"] for c in counties.values())
     print("wrote %s: %d/%d counties, %d seats%s"
-          % (out_path, len(counties), len(COUNTIES), total,
+          % (out_path, len(counties), len(COUNTIES) + len(ARCGIS_COUNTIES), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

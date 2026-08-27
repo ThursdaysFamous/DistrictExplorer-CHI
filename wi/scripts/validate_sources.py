@@ -275,13 +275,27 @@ PROVENANCE = [
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 20 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
+            "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
-            "One representative page is probed here — Brown, the largest launch-set "
-            "board at 26 seats — because the weekly scrape already fails loudly per "
+            "Two representative pages are probed — Brown, the largest launch-set "
+            "board at 26 seats, and Dane, the largest of all at 37, whose roster "
+            "lives on the BOARD's own host rather than the county's — because the "
+            "weekly scrape already fails loudly per "
             "county; this row exists so the FILE's disappearance is noticed and so "
             "the roster has a manifest row at all."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://board.danecounty.gov/Supervisors",
+        "note": (
+            "Dane's 37 supervisors on the COUNTY BOARD's own host — a different "
+            "host from the countyofdane.com this instance's clerk file carries, "
+            "which is why a sweep of county sites recorded Dane as publishing "
+            "nothing for a fortnight. Probed here so the distinction stays "
+            "measured rather than remembered."
         ),
     },
     {
