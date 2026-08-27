@@ -51,8 +51,15 @@ def main():
         raise SystemExit("only %d of 7 districts named — floor 6; the page "
                          "structure moved, re-measure" % named)
 
-    out = {"asOf": doc.get("scrapedAt", "")[:10],
-           "districts": districts}
+    # FLAT, keyed by district at the top level (the polling files' shape):
+    # validate_index floors the file on its top-level keys, so a wrapper
+    # object would read as 2 entries; the scrape date rides each record
+    as_of = doc.get("scrapedAt", "")[:10]
+    out = {}
+    for n in sorted(districts, key=int):
+        rec = dict(districts[n])
+        rec["asOf"] = as_of
+        out[n] = rec
     with open(OUT, "w") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)
         f.write("\n")

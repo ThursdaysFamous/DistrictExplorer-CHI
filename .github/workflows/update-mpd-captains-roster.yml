@@ -46,6 +46,20 @@ jobs:
       - name: Scrape the city's per-district pages
         run: python3 wi/scripts/mpd_captains_scraper.py --out /tmp/mpd_captains.json
 
+      # the raw scrape rides each run as an artifact: it is the diagnostic
+      # for a failed build, and it is how the FIRST roster reached the tree
+      # at all — the sandbox cannot fetch the city, so the initial data file
+      # was built locally from this artifact (the Johnson/Perry vantage
+      # split, applied to bootstrap)
+      - name: Upload scrape artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mpd-captains-scrape
+          path: /tmp/mpd_captains.json
+          if-no-files-found: ignore
+          retention-days: 30
+
       - name: Rebuild the captains roster
         run: python3 wi/scripts/build_mpd_captains_roster.py /tmp/mpd_captains.json
 

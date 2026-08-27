@@ -455,9 +455,25 @@ PROVENANCE = [
             "The city's own MPD districts layer (field POLICE, districts 1-7), "
             "server-reprojected and pre-built by "
             "wi/scripts/build_milwaukee_city_layers.py — the same measured-"
-            "flaky host as the MPS/alderman layers, build-time only, retried. "
-            "District CAPTAINS live only behind city.milwaukee.gov's "
-            "Cloudflare challenge, which is why the card names no one."
+            "flaky host as the MPS/alderman layers, build-time only, retried."
+        ),
+    },
+    {
+        "layer": "mpd-district",
+        "app_file": "mpd-district-captains.json",
+        "source_url": "https://city.milwaukee.gov/police/districts/District-1",
+        "note": (
+            "One of the seven per-district pages the weekly captains scrape "
+            "reads (mpd_captains_scraper.py carries all seven, plus the city "
+            "Directory page's per-district phones) — commanding officer + "
+            "district phone, refreshed by update-mpd-captains-roster.yml as "
+            "a reviewed bot PR. THE SCRAPER'S VANTAGE IS CI: this host "
+            "refuses the development sandbox and answers GitHub's runners "
+            "plain (measured 2026-08-27), so a probe of this row from a "
+            "sandbox failing is expected — the monthly workflow probes from "
+            "the vantage that matters. Two markup shapes are pinned: the "
+            "officer h3 (D2's split-word 'Captai n' tolerated) and D4's "
+            "empty-h3 contact-block paragraph."
         ),
     },
     {
