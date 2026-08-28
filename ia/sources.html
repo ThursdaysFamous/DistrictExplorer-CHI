@@ -834,7 +834,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">14 layers — 5 political and legislative, 2 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">15 layers — 6 political and legislative, 2 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -843,7 +843,7 @@ table.matrix code {
       </nav>
 
       <section class="matrix-group" id="political">
-        <h2>Political &amp; legislative <span class="matrix-count">5 layers</span></h2>
+        <h2>Political &amp; legislative <span class="matrix-count">6 layers</span></h2>
         <p class="matrix-blurb">Districts that elect somebody — from your ward to your seat in Congress.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -861,6 +861,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">congress-roster.json, rebuilt weekly by CI from the public-domain unitedstates/congress-legislators dataset — including each member's district office and Washington office.</td>
                 <td data-label="Where it applies">Iowa — statewide.</td>
+              </tr>
+              <tr id="layer-ia-judicial-district">
+                <th scope="row"><span class="layer-name">Judicial District</span><code>ia-judicial-district</code></th>
+                <td data-label="What it answers">The judicial election district covering the point, and its bench (district judges, district associate judges, and magistrates).</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://www.iowacourts.gov/iowa-courts/district-court/" target="_blank" rel="noopener">Iowa Code SS602.6107/602.6109 (Code 2003) county-to-district assignment, cross-verified against iowacourts.gov's own per-district county page and Ballotpedia, spatially double-witnessed at build time against the LSAFiscal organization's own published district polygons; dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">ia-judicial-judges.json, rebuilt weekly by CI from each district's own &quot;Judges and Magistrates&quot; roster page at iowacourts.gov. Judges are RETENTION, never elected: appointed by the Governor from a judicial nominating commission's list, then subject to periodic yes/no retention elections. No phone, e-mail, or courthouse address is published for any judge.</td>
+                <td data-label="Where it applies">Iowa — statewide, all 8 districts across all 99 counties.</td>
               </tr>
               <tr id="layer-ia-senate">
                 <th scope="row"><span class="layer-name">Iowa Senate District</span><code>ia-senate</code></th>

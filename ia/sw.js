@@ -56,6 +56,7 @@ const GEOMETRY_URLS = [
   "./data/app/ia-school-districts.json",
   "./data/app/ia-school-sites.json",
   "./data/app/ia-precincts.json",
+  "./data/app/ia-judicial-districts.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI
@@ -67,6 +68,7 @@ const ROSTER_URLS = [
   "./data/app/ia-house-members.json",
   "./data/app/ia-county-board-directory.json",
   "./data/app/ia-county-auditors.json",
+  "./data/app/ia-judicial-judges.json",
   "./data/app/coverage-gaps.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */

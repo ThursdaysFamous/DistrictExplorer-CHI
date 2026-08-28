@@ -88,17 +88,17 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 10
+MIN_REGISTER_LAYER = 11
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "ia-senate", "county", "ia-house", "county-supervisor",
-    "school-district-unified", "county-subdivision", "municipality",
-    "zip-code", "precinct", "police-station", "fire-station", "school-site",
-    "post-office",
+    "us-house", "ia-judicial-district", "ia-senate", "county", "ia-house",
+    "county-supervisor", "school-district-unified", "county-subdivision",
+    "municipality", "zip-code", "precinct", "police-station", "fire-station",
+    "school-site", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -113,6 +113,7 @@ GEOMETRY_FILES = {
     "ia-school-districts.json": (324, 324),  # 324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate).
     "ia-school-sites.json": (1321, 1321),  # 1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap).
     "ia-precincts.json": (1660, 1660),  # 1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched).
+    "ia-judicial-districts.json": (8, 8),  # 8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -122,6 +123,7 @@ ROSTER_FILES = {
     "ia-house-members.json": 93,  # House roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (100 seats).
     "ia-county-board-directory.json": 98,  # One row per county covered by ia-supervisor-districts.json: board size read back from the shipped geometry, plus the county's own official page (Iowa State Association of Counties' member directory) for the card's footer link. Built by ia/scripts/build_ia_county_board_directory.py; not a roster of people — Iowa publishes none statewide.
     "ia-county-auditors.json": 99,  # All 99 county auditors (name, party where published — 5 of 99 carry none, office address, phone; no e-mail is published), from the Iowa State Association of County Auditors' own directory. Built by ia/scripts/ia_county_auditor_scraper.py + build_ia_county_auditors.py, refreshed weekly by update-ia-county-auditor-roster.yml.
+    "ia-judicial-judges.json": 8,  # All 8 districts' benches (371 judges measured 2026-08-28), one entry per district keyed to the geometry's district number. From each district's own "Judges and Magistrates" page at iowacourts.gov (name + each judge's own role/title string, shipped verbatim — no phone/e-mail/address is published for any judge). Built by ia/scripts/ia_judicial_district_scraper.py + build_ia_judicial_district_roster.py, refreshed weekly by update-ia-judicial-district-roster.yml.
     "coverage-gaps.json": 0,  # The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer).
 }
 

@@ -5970,6 +5970,7 @@ function initIowaExplorer() {
   // GENERATED from the worksheet's layers[] (area_rank order + rank notes).
   var LAYER_AREA_RANK = [
     "us-house",          // Congressional districts — the largest districts a state carries below the state itself
+    "ia-judicial-district", // 8 districts averaging 12.4 counties apiece (5-22 counties) — smaller than the 4 U.S. House districts' ~25-county average, larger than every other layer
     "ia-senate",         // 50 Senate districts, each the union of two whole House districts
     "county",            // 99 counties, pre-built from TIGERweb; the fork's offline anchor layer
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
@@ -9087,13 +9088,121 @@ function initIowaExplorer() {
     compact: true, compactMetaField: "county" // 4b name-only card
   });
 
+  /* ---------- 15. Judicial District — Legislature geometry + iowacourts.gov bench, phase 2 PR 5 ----------
+   * 8 whole-county unions (Iowa Code §§602.6107/602.6109, Code 2003 — the
+   * current codified sections are process-only and carry no county list;
+   * the operative crosswalk is cross-verified from iowacourts.gov's own
+   * per-district county page and Ballotpedia, then spatially double-checked
+   * at build time against the LSAFiscal organization's own REAL published
+   * district polygons — ia/scripts/build_ia_judicial_district.py has the
+   * full derivation and every gate).
+   *
+   * JUDGES ARE RETENTION, NEVER "ELECTED": district judges, district
+   * associate judges, associate juvenile/probate judges and magistrates are
+   * appointed by the Governor from a nonpartisan judicial nominating
+   * commission's list, then stand periodically in yes/no retention
+   * elections — the card states this explicitly rather than ever calling
+   * anyone "elected".
+   *
+   * THE BENCH: iowacourts.gov's own per-district roster page (three
+   * different URL shapes — see ia_judicial_district_scraper.py), weekly. No
+   * phone, e-mail or courthouse address ships: none is published on either
+   * the roster page or a sampled individual profile page (measured
+   * 2026-08-28). Each judge's own role/title string ships VERBATIM rather
+   * than parsed into rank + sub-district — the source punctuates it at
+   * least four inconsistent ways (colon, semicolon, no separator at all,
+   * even a "Magisrate" typo), so guessing a split risks mis-parsing some of
+   * them; the scraper's docstring has the full record. A roster miss
+   * degrades to the district identity + the directory link — never an
+   * invented name. ---------- */
+  var loadIaJudicialDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-judicial-districts.json", {}, 2);
+  });
+  var loadIaJudicialJudges = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-judicial-judges.json", {}, 2);
+  });
+
+  registerLayer({
+    id: "ia-judicial-district",
+    group: "political",
+    label: "Judicial District",
+    overlay: {
+      load: loadIaJudicialDistricts,
+      // same deep-violet judicial hue the fleet's other court layers use
+      style: { color: "#4A2E8C", weight: 1.5, fillColor: "#4A2E8C", fillOpacity: 0.05, dashArray: "6 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // The roster is a small same-origin file and its failure is not this
+      // layer's failure: the district still answers, so a roster miss
+      // degrades to an identity card with the directory link.
+      return Promise.all([
+        queryFeatureAt(loadIaJudicialDistricts, point),
+        loadIaJudicialJudges().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var key = findPropCI(props, ["district"]);
+        var entry = (parts[1] && key != null) ? parts[1][String(key)] : null;
+        return {
+          seq: seq,
+          district: key,
+          name: findPropCI(props, ["name"]),
+          counties: findPropCI(props, ["counties"]),
+          entry: entry || null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.district != null ? "District " + String(result.district) : "Unknown district";
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderFieldStack([
+        { label: "Counties", value: String(result.counties), primary: true },
+        { label: "How judges reach the bench", value: "Iowa's district judges, district associate judges, associate juvenile/probate judges and magistrates are appointed by the Governor from a nonpartisan judicial nominating commission's list, then stand periodically in yes/no retention elections — never in a competitive election." }
+      ]));
+      var entry = result.entry;
+      if (entry && entry.judges && entry.judges.length) {
+        var people = entry.judges.map(function (j) {
+          return { name: String(j.name), badge: j.role ? String(j.role) : null };
+        });
+        if (people.length > 8) {
+          // districts run 31-77 judges — the bench goes behind one expander
+          // so the card stays a card (expanders default closed, fleet convention)
+          var det = cardEl("details", "card-row-b");
+          var summary = document.createElement("summary");
+          summary.appendChild(cardEl("span", null, String(people.length) + " judges"));
+          summary.appendChild(cardDetailsHint());
+          det.appendChild(summary);
+          det.appendChild(renderPersonRows(people));
+          wrap.appendChild(det);
+        } else {
+          wrap.appendChild(renderPersonRows(people));
+        }
+      }
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var entry = result.entry;
+      var url = safeHttpUrl(entry && entry.sourceUrl);
+      if (url) return { label: "Judges and Magistrates directory", url: url };
+      return { label: "Iowa district courts directory", url: "https://www.iowacourts.gov/iowa-courts/district-court/" };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
-   * fully shipped; phase 2 begins with police-station + fire-station (a live
+   * fully shipped; phase 2 began with police-station + fire-station (a live
    * re-verification pass on 2026-08-28 found the original "precinct first"
    * note undercounted those two by roughly 10x and corrected the sequencing
-   * — see docs/IA_EXPANSION_PLAN.md's Phase 2 roadmap section).
+   * — see docs/IA_EXPANSION_PLAN.md's Phase 2 roadmap section). Remaining:
+   * community-college (PR 6) and the library gap investigation.
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9655,7 +9764,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
